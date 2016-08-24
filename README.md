@@ -87,7 +87,7 @@ class MockHelloService implements IHelloService {
 
 describe('HelloComponent', () => {
 
-    it('should', () => {
+    it('should say "hello world!"', () => {
 
         let mockHelloService = new MockHelloService();
         let helloComponent = new HelloComponent(mockHelloService);
