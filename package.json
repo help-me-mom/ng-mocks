@@ -1,0 +1,24 @@
+{
+  "name": "karma-typescript",
+  "version": "1.0.8",
+  "description": "Preprocessor for transpiling Typescript files on the fly with sourcemaps for debugging.",
+  "main": "index.js",
+  "keywords": [
+    "Jasmine",
+    "CommonJS",
+    "Karma",
+    "Typescript",
+    "Unit test"
+  ],
+  "author": "monounity",
+  "contributors": [
+    {
+      "name": "erikbarke"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-typescript.git"
+  },
+  "license": "MIT"
+}
