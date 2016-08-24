@@ -1,11 +1,13 @@
 # karma-typescript
-This is a preprocessor for transpiling Typescript on the fly for unit testing with Karma.
+This is a preprocessor for transpiling [Typescript](https://www.typescriptlang.org/) on the fly for unit testing with Karma.
+
+The distribution includes runnable examples for unit testing Typescript files transpiled to the [CommonJS](https://en.wikipedia.org/wiki/CommonJS) and the [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) module format.
 
 ### Sourcemaps
 Sourcemaps can optionally be created for debugging the original Typescript code, instead of the transpiled code, when running tests in a web browser.
 
 ### Project tsconfig.json
-If specified, the preprocessor will load a tsconfig.json file, relative to the directory the test are run from, and merge the compiler options with the preprocessor options.
+If specified, the preprocessor will load a tsconfig.json file, relative to the directory the test are run from, and merge the Typescript compiler options with the preprocessor options.
 
 Note: the preprocessor options will override the tsconfig.json options.
 
@@ -55,24 +57,40 @@ karmaTypescript: {
 }
 ```
 
-### Example project using jasmine and commonjs + sourcemaps:
+### Example project using Jasmine with CommonJS + sourcemaps:
 
-There is a working example in the folder `example-project`.
+The runnable example for CommonJS is located in the folder `example-project-commonjs`.
 
-In the example, the .ts files are transpiled to `es5` format with sourcemaps, and then run through the karma-commonjs preprocessor for module loading.
+In the example, the .ts files are transpiled to the `es5` standard with CommonJS module format and sourcemaps, and then run through the karma-commonjs preprocessor for module loading.
 
 To run the example test, issue the following commands:
 
 ```
-cd example-project
+cd example-project-commonjs
 npm install
 npm test
 ```
 
 This should run the example unit test in Chrome, with sourcemaps available if you press the button `debug` in the browser window.
 
-### Example breakdown
-The unit test showcases module loading by using `import` but is still as simple as it gets; it imports the class to be tested and an interface required by the class. The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
+### Example project using Jasmine with AMD/RequireJS + sourcemaps:
+
+The runnable example for AMD is located in the folder `example-project-amd`.
+
+In the example, the .ts files are transpiled to the `es5` standard with AMD module format and sourcemaps, and then files and modules are loaded by the karma-requirejs preprocessor in `test-main.js`.
+
+To run the example test, issue the following commands:
+
+```
+cd example-project-amd
+npm install
+npm test
+```
+
+This should run the example unit test in Chrome, with sourcemaps available if you press the button `debug` in the browser window.
+
+### Examples breakdown
+The unit test (the same in both examples) showcases module loading by using `import` but is still as simple as it gets; it imports the class to be tested and an interface required by the class. The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
 
 ```javascript
 import { IHelloService } from './hello-service.interface';
@@ -96,7 +114,7 @@ describe('HelloComponent', () => {
     });
 });
 ```
-Essential parts of karma.conf.js:
+Essential parts of karma.conf.js for CommonJS module format:
 
 ```javascript
 frameworks: ['jasmine', 'commonjs'],
@@ -118,7 +136,33 @@ karmaTypescript: {
     }
 }
 ```
-If you inspect the tsconfig.json file you will see that the sourceMap option in karma.conf.js overrides the sourceMap option in the tsconfig.json.
+
+Essential parts of karma.conf.js for AMD module format:
+
+```javascript
+frameworks: ['jasmine', 'requirejs'],
+
+files: [
+    'test-main.js',
+    { pattern: 'src/**/*.ts', included: false }
+],
+
+preprocessors: {
+    '**/*.ts': ['karma-typescript']
+},
+
+karmaTypescript: {
+    tsconfigPath: 'tsconfig.json',
+    options: {
+        sourceMap: true,
+        target: 'es5',
+        module: 'amd'
+    }
+}
+}
+```
+
+If you inspect the tsconfig.json file you will see that the sourceMap option in karma.conf.js, in both examples, overrides the sourceMap option in the tsconfig.json.
 
 ### Licensing
 
