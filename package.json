@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Preprocessor for transpiling Typescript files on the fly with sourcemaps for debugging.",
   "main": "index.js",
   "keywords": [
