@@ -1,4 +1,4 @@
-# karma-typescript-example-project-commonjs
+# karma-typescript-example-project-amd
 
 ## Licensing
 
