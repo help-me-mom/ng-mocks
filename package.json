@@ -4,11 +4,17 @@
   "description": "Preprocessor for transpiling Typescript files on the fly with sourcemaps for debugging.",
   "main": "index.js",
   "keywords": [
-    "Jasmine",
-    "CommonJS",
-    "Karma",
-    "Typescript",
-    "Unit test"
+    "amd",
+    "commonjs",
+    "coverage",
+    "istanbul",
+    "jasmine",
+    "karma",
+    "karma plugin",
+    "requirejs",
+    "transpile",
+    "typescript",
+    "unit test"
   ],
   "author": "monounity",
   "contributors": [
