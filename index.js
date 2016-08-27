@@ -3,6 +3,7 @@ var path = require('path');
 
 var createTypescriptPreprocessor = function(args, config, logger, helper) {
 
+    global.remapIstanbulContent = global.remapIstanbulContent || {};
     config = config || {};
 
     var tsconfigPath;
@@ -45,15 +46,16 @@ var createTypescriptPreprocessor = function(args, config, logger, helper) {
         var transpileOutput,
             reportDiagnostics = false,
             moduleName = path.relative(process.cwd(), file.originalPath),
-            map;
+            map,
+            result;
 
         log.debug('Processing "%s".', file.originalPath);
 
         try {
 
             file.path = transformPath(file.originalPath);
-
             transpileOutput = tsc.transpileModule(content, { compilerOptions: compilerOptions }, reportDiagnostics, moduleName);
+            result = transpileOutput.outputText;
 
             if(transpileOutput.sourceMapText) {
 
@@ -64,11 +66,12 @@ var createTypescriptPreprocessor = function(args, config, logger, helper) {
                 file.sourceMap = map;
                 datauri = 'data:application/json;charset=utf-8;base64,' + new Buffer(JSON.stringify(map)).toString('base64');
 
-                done(null, transpileOutput.outputText + '\n//# sourceMappingURL=' + datauri + '\n')
+                result = transpileOutput.outputText.replace('//# sourceMappingURL=module.js.map', ''); // TODO: Is there an compiler option to disable this?
+                result += '\n//# sourceMappingURL=' + datauri + '\n';
             }
-            else {
-                done(null, transpileOutput.outputText);
-            }
+
+            global.remapIstanbulContent[file.originalPath] = result; // TODO: There must be a better way to share data between Karma plugins...
+            done(null, result);
         }
         catch(e) {
 
