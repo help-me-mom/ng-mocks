@@ -32,7 +32,8 @@ module.exports = function(config) {
             exclude: '.spec.ts',
             readFile: function(filepath) {
                 return global.remapIstanbulContent[filepath];
-            }
+            },
+            warn: function(message){}
         }
     },
 
