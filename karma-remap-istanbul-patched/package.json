@@ -1,0 +1,31 @@
+{
+  "name": "karma-remap-istanbul-tmpform",
+  "version": "0.2.1",
+  "description": "Temporary patched fork of https://github.com/marcules/karma-remap-istanbul, will be removed when PR #19 is merged",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-remap-istanbul-tmpfork.git"
+  },
+  "keywords": [
+    "remap-istanbul",
+    "karma-plugin",
+    "karma-reporter"
+  ],
+  "author": "Marc A. Harnos <mharnos@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/monounity/karma-remap-istanbul-tmpfork/issues"
+  },
+  "homepage": "https://github.com/monounity/karma-remap-istanbul-tmpfork#readme",
+  "dependencies": {
+    "istanbul": "^0.4.3",
+    "remap-istanbul": "^0.6.4"
+  },
+  "peerDependencies": {
+    "karma": ">=0.9"
+  }
+}
