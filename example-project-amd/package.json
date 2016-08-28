@@ -21,7 +21,7 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-requirejs": "^1.0.0",
-    "karma-typescript": "^1.0.3",
+    "karma-typescript": "../",
     "requirejs": "^2.2.0",
     "typescript": "^2.0.0"
   }
