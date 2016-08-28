@@ -1,7 +1,7 @@
 {
   "name": "karma-typescript",
   "version": "1.0.10",
-  "description": "Preprocessor for transpiling Typescript files on the fly with sourcemaps for debugging.",
+  "description": "Preprocessor for unit testing Typescript projects on the fly.",
   "main": "index.js",
   "keywords": [
     "amd",
@@ -11,6 +11,7 @@
     "jasmine",
     "karma",
     "karma plugin",
+    "remap",
     "requirejs",
     "transpile",
     "typescript",
