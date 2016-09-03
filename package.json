@@ -1,18 +1,20 @@
 {
   "name": "karma-typescript",
   "version": "1.0.11",
-  "description": "Preprocessor for unit testing Typescript projects on the fly.",
+  "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "index.js",
   "keywords": [
-    "amd",
     "commonjs",
     "coverage",
     "istanbul",
     "jasmine",
     "karma",
     "karma plugin",
+    "karma-commonjs",
+    "karma-coverage",
+    "karma-plugin",
     "remap",
-    "requirejs",
+    "remap-istanbul",
     "transpile",
     "typescript",
     "unit test"
@@ -27,5 +29,13 @@
     "type": "git",
     "url": "https://github.com/monounity/karma-typescript.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "karma-commonjs": "^1.0.0",
+    "karma-coverage": "^1.1.1",
+    "remap-istanbul": "https://github.com/SitePen/remap-istanbul.git#master"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0"
+  }
 }
