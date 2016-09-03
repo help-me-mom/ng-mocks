@@ -1,69 +1,113 @@
 # karma-typescript
-Run unit tests in-memory for a [Typescript](https://www.typescriptlang.org/) project, optionally including sourcemaps and chaining Istanbul with remap for test coverage.
 
-Changes are detected on the fly, no need for additional build steps or manually building the project when running the tests.
+## What the plugin does
 
-### Examples
+The plugin seamlessly runs your unit tests written in Typescript and creates coverage reports, eliminating the need for additional build steps or scripts.
 
-* [Runnable example with AMD/RequireJS format, sourcemaps and remapped Istanbul coverage](https://github.com/monounity/karma-typescript/tree/master/example-project-amd-coverage)
+Here's a screenshot of coverage created with `karma-typescript`:
 
-* [Runnable example with CommonJS format, sourcemaps and remapped Istanbul coverage](https://github.com/monounity/karma-typescript/tree/master/example-project-commonjs-coverage)
+<img src="http://i.imgur.com/amlDYdx.png" width="579" height="280" />
 
-### Installation
+## Installation and configuration
+
+First, install the plugin:
+
 `npm install karma-typescript --save-dev`
 
-### Configuration
-
-The `karmaTypescript` configuration section is optional, if left out the files will be transpiled using the compiler default options.
-
-There are runnable examples included
+Then put this in your Karma config:
 
 ```javascript
+frameworks: ["jasmine", "karma-typescript"],
+
+files: [
+    { pattern: "src/**/*.ts" }
+],
+
 preprocessors: {
-    '**/*.ts': ['karma-typescript']
+    "**/*.ts": ["karma-typescript"]
 },
 
-karmaTypescript: {
+reporters: ["progress", "karma-typescript"],
 
-    /*
-    Relative path to a tsconfig.json file, the
-    preprocessor will look for the file starting
-    from the directory where Karma was started.
-    This property is optional.
-    */
-    tsconfigPath: 'tsconfig.json',
+browsers: ["Chrome"]
+```
 
-    /*
-    A function for custom file path transformation.
-    This property is optional.
-    */
-    transformPath: function(filepath) {
-        return filepath.replace(/\.ts$/, '.js')
+Now run Karma and two things will happen:
+
+* Your tests written in Typescript will be executed on-the-fly.
+* You'll have html test coverage, remapped with `remap-istanbul` in the folder `./coverage` in the root of your project.
+
+
+[Runnable example](https://github.com/monounity/karma-typescript/tree/master/example-project)
+
+## Under the hood
+
+Under the hood, `karma-typescript` chains several other useful plugins and configures them with sensible defaults, in the following order:
+
+|Module|Step|Settings|
+|---|---|---|
+|`typescript`|Transpile to in-memory with inline sourcemaps|{ target: "es5", module: "commonjs", sourceMap: true}|
+|`karma-commonjs`|Add module loading for browsers||
+|`karma-coverage`|Instrument the code with Istanbul||
+|`remap-istanbul`|Create remapped coverage|{ html: "coverage" } (.spec.ts and .test.ts excluded)|
+
+## Advanced configuration
+
+If the defaults aren't enough, `karma-typescript` is both configurable and steps aside if it detects that you've added `karma-commonjs` or `karma-coverage` to the Karma config yourself.
+
+Here are the report and remapping options for karma-typescript:
+
+```javascript
+karmaTypescriptConfig: {
+    /* Report type options passed to remap-istanbul */
+    reports:
+    {
+        "clover": "coverage",
+        "cobertura": "coverage",
+        "html": "coverage",
+        "json-summary": "coverage",
+        "json": "coverage",
+        "lcovonly": "coverage",
+        "teamcity": "coverage",
+        "text-lcov": "coverage",
+        "text-summary": "coverage",
+        "text": "coverage"
     },
-
-    /*
-    These are options for the Typescript compiler.
-    They will override the options in the tsconfig.json
-    file specified in tsconfigPath above.
-    This property is optional.
-    */
-    options: {
-        sourceMap: true,
-        target: 'es5',
-        module: 'commonjs'
-        // ... More options are available at:
-        // https://www.typescriptlang.org/docs/handbook/compiler-options.html
+    /* Options passed to remap-istanbul */
+    remapOptions:
+    {
+        // Regex or string for excluding files, the example below is default
+        exclude: /\.(spec|test)\.ts/,
+        // Function for warning messages, these warnings are silent by default
+        warn: function(message){}
     }
 }
 ```
 
-### Additional examples
+It is also possible to add options for `karma-coverage` in the `coverageReporter` section. In the next example, a TeamCity report is created with `karma-coverage` and `karma-typescript` is used as an on-the-fly transpiler and reporter. The plugin doesn't run the `karma-commonjs` and `karma-coverage` plugins since they're specified in the configuration and will be run by Karma:
 
-* [Runnable example with AMD format + sourcemaps for debugging in a browser](https://github.com/monounity/karma-typescript/tree/master/example-project-amd)
+```javascript
+frameworks: ["jasmine", "commonjs"],
 
-* [Runnable example with CommonJS formatsourcemaps for debugging in a browser](https://github.com/monounity/karma-typescript/tree/master/example-project-commonjs)
+files: [
+    { pattern: "src/**/*.ts" }
+],
 
-### Licensing
+preprocessors: {
+    "**/*.ts": ["karma-typescript", "commonjs", "coverage"]
+},
+
+reporters: ["progress", "karma-typescript", "coverage"],
+
+// For more options, see https://github.com/karma-runner/karma-coverage
+coverageReporter: {
+    type: "teamcity", file: "teamcity.txt"
+},
+
+browsers: ["PhantomJS"]
+```
+
+## Licensing
 
 This software is licensed with the MIT license.
 
