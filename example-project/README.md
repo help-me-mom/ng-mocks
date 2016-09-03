@@ -1,42 +1,19 @@
-# Runnable example using Jasmine with CommonJS + sourcemaps:
-
-In this example, the Typescript files are transpiled to the `es5` standard with [CommonJS](https://en.wikipedia.org/wiki/CommonJS) module format and sourcemaps, and then run through the [karma-commonjs](https://github.com/karma-runner/karma-commonjs) preprocessor for module loading.
+# Runnable example of unit testing Typescript on the fly in Karma with Istanbul coverage
 
 To run the example test, issue the following commands:
 
 ```
 npm install karma-typescript
-cd node_modules/karma-typescript/example-project-commonjs
+cd node_modules/karma-typescript/example-project
 npm install
 npm test
 ```
 
-This should run the example unit test in Chrome, with sourcemaps available if you press the button `debug` in the browser window.
+The example unit test should now run in Karma and html test coverage should be created in the folder `coverage` in the project root:
 
-Essential parts of karma.conf.js:
+<img src="http://i.imgur.com/amlDYdx.png" width="579" height="280" />
 
-```javascript
-frameworks: ['jasmine', 'commonjs'],
-
-files: [
-    { pattern: 'src/**/*.ts' }
-],
-
-preprocessors: {
-    '**/*.ts': ['karma-typescript', 'commonjs']
-},
-
-karmaTypescript: {
-    tsconfigPath: 'tsconfig.json',
-    options: {
-        sourceMap: true,
-        target: 'es5',
-        module: 'commonjs'
-    }
-}
-```
-
-### Example breakdown
+### Example code breakdown
 The unit test module loading by using `import` but is still as simple as it gets; it imports the class to be tested and an interface required by the class. The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
 
 ```javascript
