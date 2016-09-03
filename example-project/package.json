@@ -1,5 +1,5 @@
 {
-  "name": "karma-typescript-example-project-amd",
+  "name": "karma-typescript-example-project",
   "version": "1.0.0",
   "description": "",
   "author": "monounity",
@@ -11,7 +11,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "karma start"
+    "test": "karma start karma.conf.js",
+    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp ../lib/* node_modules/karma-typescript/lib/ && karma start"
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.31",
@@ -19,10 +20,10 @@
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
-    "karma-requirejs": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.2",
     "karma-typescript": "../",
-    "requirejs": "^2.2.0",
     "typescript": "^2.0.0"
   }
 }
