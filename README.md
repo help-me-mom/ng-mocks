@@ -107,6 +107,10 @@ coverageReporter: {
 browsers: ["PhantomJS"]
 ```
 
+## Requirements
+
+Typescript >=1.6 is required.
+
 ## Licensing
 
 This software is licensed with the MIT license.
