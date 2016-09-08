@@ -6,7 +6,7 @@ The plugin seamlessly runs your unit tests written in Typescript and creates cov
 
 Here's a screenshot of coverage created with `karma-typescript`:
 
-<img src="http://i.imgur.com/amlDYdx.png" width="579" height="280" />
+<img src="http://i.imgur.com/sc4Mswh.png" width="580" height="280" />
 
 ## Installation and configuration
 
