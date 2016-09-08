@@ -1,4 +1,4 @@
-import { IHelloService } from './hello-service.interface';
+import { IHelloService } from "./hello-service.interface";
 
 export class HelloComponent {
 
