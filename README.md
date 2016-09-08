@@ -111,6 +111,8 @@ browsers: ["PhantomJS"]
 
 Typescript >=1.6 is required.
 
+Note: Typescript >= 1.8.10 produces more accurate test coverage remapping.
+
 ## Licensing
 
 This software is licensed with the MIT license.
