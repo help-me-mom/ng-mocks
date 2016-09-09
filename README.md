@@ -59,7 +59,10 @@ Here are the report and remapping options for karma-typescript:
 
 ```javascript
 karmaTypescriptConfig: {
-    /* Report type options passed to remap-istanbul */
+    /*
+        Report type options passed to remap-istanbul.
+        The key is the report type, the value is the destination path.
+    */
     reports:
     {
         "clover": "coverage",
@@ -68,8 +71,13 @@ karmaTypescriptConfig: {
         "json-summary": "coverage",
         "json": "coverage",
         "lcovonly": "coverage",
-        "teamcity": "coverage",
-        "text-lcov": "coverage",
+
+        /*
+            The following reporters can have the output written directly to the
+            console by setting the destination to "" or null, ie "text-summary": "".
+        */
+        "teamcity": "coverage", // "destination/path" or null or ""
+        "text-lcov": "coverage", // ...
         "text-summary": "coverage",
         "text": "coverage"
     },
