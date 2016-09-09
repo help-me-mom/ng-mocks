@@ -44,12 +44,12 @@ Now run Karma and two things will happen:
 
 Under the hood, `karma-typescript` chains several other useful plugins and configures them with sensible defaults, in the following order:
 
-|Module|Step|Settings|
+|Module|Step|Default settings|
 |---|---|---|
 |`typescript`|Transpile to in-memory with inline sourcemaps|{ target: "es5", module: "commonjs", sourceMap: true}|
 |`karma-commonjs`|Add module loading for browsers||
-|`karma-coverage`|Instrument the code with Istanbul||
-|`remap-istanbul`|Create remapped coverage|{ html: "coverage" } (.spec.ts and .test.ts excluded)|
+|`karma-coverage`|Instrument the code with Istanbul| coverageReporter: { instrumenterOptions: istanbul: { noCompact: true }}, *.spec.ts and &ast;.test.ts are excluded|
+|`remap-istanbul`|Create remapped coverage|karmaTypescriptConfig.reports :{{ html: "coverage" }}|
 
 ## Advanced configuration
 
@@ -76,9 +76,9 @@ karmaTypescriptConfig: {
     /* Options passed to remap-istanbul */
     remapOptions:
     {
-        // Regex or string for excluding files, the example below is default
+        // Regex or string for excluding files
         exclude: /\.(spec|test)\.ts/,
-        // Function for warning messages, these warnings are silent by default
+        // Function for handling warning messages
         warn: function(message){}
     }
 }
