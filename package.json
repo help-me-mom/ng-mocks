@@ -32,8 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "karma-commonjs": "^1.0.0",
-    "karma-coverage": "^1.1.1",
-    "remap-istanbul": "https://github.com/SitePen/remap-istanbul.git#master"
+    "karma-coverage": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^3.4.0"
