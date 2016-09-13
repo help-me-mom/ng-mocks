@@ -44,12 +44,18 @@ Now run Karma and two things will happen:
 
 Under the hood, `karma-typescript` chains several other useful plugins and configures them with sensible defaults, in the following order:
 
-|Module|Step|Default settings|
+|Module|Step|Note|
 |---|---|---|
 |`typescript`|Transpile to in-memory with inline sourcemaps|{ target: "es5", module: "commonjs", sourceMap: true}|
 |`karma-commonjs`|Add module loading for browsers||
 |`karma-coverage`|Instrument the code with Istanbul| coverageReporter: { instrumenterOptions: istanbul: { noCompact: true }}, *.spec.ts and &ast;.test.ts are excluded|
 |`remap-istanbul`|Create remapped coverage|karmaTypescriptConfig.reports :{{ html: "coverage" }}|
+
+## Importing stylesheets and bundling
+
+Style files (.css|.less|.sass|.scss) are served as dummy modules to the browser running the tests, allowing you to load styles using the Typescript `import` statement, ie `import "./style/app";`.
+
+This means you can import styles in order to let, for instance, `webpack` load the styles with  `sass-loader` or `less-loader` etc for bundling later on, without breaking the unit test runner.
 
 ## Advanced configuration
 
