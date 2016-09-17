@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "index.js",
   "keywords": [
@@ -34,7 +34,6 @@
     "glob": "^7.0.6",
     "karma-commonjs": "^1.0.0",
     "karma-coverage": "^1.1.1",
-
     "amdefine": "1.0.0",
     "gulp-util": "3.0.7",
     "istanbul": "0.4.3",
