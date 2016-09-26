@@ -8,4 +8,6 @@ export class HelloComponent {
 
         return this.helloService.sayHello();
     }
+
+    public greet(): string { return "Greetings!"; }
 }

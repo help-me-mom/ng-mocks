@@ -11,4 +11,9 @@ describe("Hello", () => {
 
         expect(result.props.children).toEqual(["Hello from ", "TypeScript", " and ", "React", "!" ]);
     });
+
+    it("should render", () => {
+
+        new Hello().greet();
+    });
 });

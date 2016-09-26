@@ -17,4 +17,12 @@ describe("HelloComponent", () => {
 
         expect(helloComponent.sayHello()).toEqual("Hello world!");
     });
+
+    it("should greet", () => {
+
+        let mockHelloService = new MockHelloService();
+        let helloComponent = new HelloComponent(mockHelloService);
+
+        expect(helloComponent.greet()).toEqual("Greetings!");
+    });
 });
