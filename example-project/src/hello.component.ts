@@ -9,5 +9,5 @@ export class HelloComponent {
         return this.helloService.sayHello();
     }
 
-    public greet(): string { return "Greetings!"; }
+    public oneliner(): string { let greeting = "Hello, I'm a one line function!"; return greeting; }
 }

@@ -7,13 +7,15 @@ describe("Hello", () => {
     it("should render", () => {
 
         let renderer = TestUtils.createRenderer();
-        let result = renderer.render((<Hello compiler="TypeScript" framework="React" />));
+        let result = renderer.render((<Hello compiler="Typescript" framework="React" />));
 
-        expect(result.props.children).toEqual(["Hello from ", "TypeScript", " and ", "React", "!" ]);
+        expect(result.props.children).toEqual(["Hello from ", "Typescript", " and ", "React", "!" ]);
     });
 
-    it("should render", () => {
+    it("should keep formatting when run through the ast parser", () => {
 
-        new Hello().greet();
+        let hello = new Hello();
+
+        expect(hello.oneliner()).toEqual("Hello, I'm a one line function!");
     });
 });
