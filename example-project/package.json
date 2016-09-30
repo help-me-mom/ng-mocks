@@ -15,6 +15,7 @@
     "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start"
   },
   "devDependencies": {
+    "@angular/core": "^2.0.1",
     "@types/jasmine": "^2.2.31",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
@@ -22,6 +23,8 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../",
-    "typescript": "^1.8.10"
+    "rxjs": "^5.0.0-beta.12",
+    "typescript": "^1.8.10",
+    "zone.js": "^0.6.25"
   }
 }

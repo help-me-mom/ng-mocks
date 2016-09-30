@@ -8,6 +8,7 @@
         "node_modules/@types/jasmine/index.d.ts",
         "node_modules/@types/react/index.d.ts",
         "node_modules/@types/react-dom/index.d.ts",
+        "node_modules/@types/react-addons-test-utils/index.d.ts",
         "src/hello.tsx",
         "tests/hello.spec.tsx"
     ]

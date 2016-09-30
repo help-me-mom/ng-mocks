@@ -7,9 +7,9 @@ describe("Hello", () => {
     it("should render", () => {
 
         let renderer = TestUtils.createRenderer();
-        let result = renderer.render((<Hello compiler="Typescript" framework="React" />));
+        renderer.render(<Hello compiler="Typescript" framework="React" />);
 
-        expect(result.props.children).toEqual(["Hello from ", "Typescript", " and ", "React", "!" ]);
+        expect(renderer.getRenderOutput().props.children).toEqual(["Hello from ", "Typescript", " and ", "React", "!" ]);
     });
 
     it("should keep formatting when run through the ast parser", () => {
