@@ -1,4 +1,4 @@
-import { StyleImportsComponent } from "./style-imports.component";
+import { StyleImportsComponent } from "./component";
 
 describe("StyleImportsComponent", () => {
 

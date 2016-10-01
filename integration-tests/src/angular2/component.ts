@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-export class NodeModulesImportComponent {
+export class Angular2Component {
 
     public sayHello(): string {
 

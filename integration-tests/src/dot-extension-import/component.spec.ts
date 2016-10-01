@@ -1,4 +1,4 @@
-import { DotExtensionImportComponent } from "./dot-extension-import.component.ts";
+import { DotExtensionImportComponent } from "./component.ts";
 
 describe("DotExtensionImportComponent", () => {
 

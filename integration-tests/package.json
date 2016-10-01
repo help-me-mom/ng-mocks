@@ -15,6 +15,7 @@
     "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start"
   },
   "devDependencies": {
+    "@angular/core": "^2.0.1",
     "@types/jasmine": "^2.2.31",
     "@types/react": "^0.14.35",
     "@types/react-addons-test-utils": "^0.14.15",
@@ -28,6 +29,8 @@
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.2",
-    "typescript": "^1.8.10"
+    "rxjs": "^5.0.0-beta.12",
+    "typescript": "^1.8.10",
+    "zone.js": "^0.6.25"
   }
 }

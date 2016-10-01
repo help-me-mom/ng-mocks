@@ -8,6 +8,4 @@ export class HelloComponent {
 
         return this.helloService.sayHello();
     }
-
-    public oneliner(): string { let greeting = "Hello, I'm a one line function!"; return greeting; }
 }

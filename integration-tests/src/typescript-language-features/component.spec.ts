@@ -1,4 +1,4 @@
-import { LanguageFeaturesComponent } from "./language-features.component";
+import { LanguageFeaturesComponent } from "./component";
 
 describe("LanguageFeaturesComponent", () => {
 

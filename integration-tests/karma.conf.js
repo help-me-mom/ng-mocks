@@ -4,12 +4,19 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/*.tsx" },
-            { pattern: "tests/*.tsx" }
+            { pattern: "src/**/*.+(ts|tsx)" }
         ],
 
         preprocessors: {
-            "**/*.+(ts|tsx)": ["karma-typescript"]
+            "src/**/*.+(ts|tsx)": ["karma-typescript"]
+        },
+
+        karmaTypescriptConfig: {
+            reports:
+            {
+                "html": "coverage",
+                "text-summary": ""
+            }
         },
 
         reporters: ["progress", "karma-typescript"],

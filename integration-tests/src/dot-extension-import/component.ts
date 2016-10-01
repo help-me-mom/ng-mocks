@@ -1,4 +1,4 @@
-import { LanguageFeaturesComponent } from "./language-features.component.ts";
+import { LanguageFeaturesComponent } from "../typescript-language-features/component";
 
 export class DotExtensionImportComponent {
 

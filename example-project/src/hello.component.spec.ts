@@ -17,12 +17,4 @@ describe("HelloComponent", () => {
 
         expect(helloComponent.sayHello()).toEqual("Hello world!");
     });
-
-    it("should keep formatting when run through the ast parser", () => {
-
-        let mockHelloService = new MockHelloService();
-        let helloComponent = new HelloComponent(mockHelloService);
-
-        expect(helloComponent.oneliner()).toEqual("Hello, I'm a one line function!");
-    });
 });
