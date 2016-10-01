@@ -26,5 +26,8 @@
     "rxjs": "^5.0.0-beta.12",
     "typescript": "^1.8.10",
     "zone.js": "^0.6.25"
+  },
+  "dependencies": {
+    "tmp": "0.0.29"
   }
 }
