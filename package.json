@@ -4,6 +4,8 @@
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "index.js",
   "keywords": [
+    "angular2",
+    "browserify",
     "commonjs",
     "coverage",
     "istanbul",
@@ -13,6 +15,7 @@
     "karma-commonjs",
     "karma-coverage",
     "karma-plugin",
+    "react",
     "remap",
     "remap-istanbul",
     "transpile",
@@ -22,7 +25,8 @@
   "author": "monounity",
   "contributors": [
     {
-      "name": "erikbarke"
+      "name": "erikbarke",
+      "name": "g00fy-"
     }
   ],
   "repository": {
