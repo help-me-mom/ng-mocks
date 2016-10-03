@@ -12,7 +12,12 @@
   "license": "MIT",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start"
+    "test-angular2": "karma start karma.conf.angular2.js",
+    "test-react": "karma start karma.conf.react.js",
+    "copy": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/",
+    "dev": "npm run copy && karma start karma.conf.js",
+    "dev-angular2": "npm run copy && karma start karma.conf.angular2.js",
+    "dev-react": "npm run copy && karma start karma.conf.react.js"
   },
   "devDependencies": {
     "@angular/common": "^2.0.1",

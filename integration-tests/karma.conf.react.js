@@ -4,11 +4,11 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/**/*.+(ts|tsx)" }
+            { pattern: "src/react-tsx/**/*.tsx" }
         ],
 
         preprocessors: {
-            "src/**/*.+(ts|tsx)": ["karma-typescript"]
+            "src/react-tsx/**/*.tsx": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {
