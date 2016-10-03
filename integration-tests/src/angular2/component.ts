@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
 
-export class Angular2Component {
+// From the official angular2 docs, https://angular.io/docs/ts/latest/guide/testing.html
 
-    public sayHello(): string {
+@Component({
+    selector: "app-banner",
+    template: "<h1>{{title}}</h1>"
+})
 
-        if (Component) {
-            return "I imported a module from node_modules!";
-        }
-
-        return "This path should not be taken and should be marked as uncovered";
-    }
+export class BannerComponent {
+    title = "Test Tour of Heroes";
 }
