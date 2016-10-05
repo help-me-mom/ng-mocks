@@ -12,7 +12,8 @@
   "license": "MIT",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start"
+    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start",
+    "dev-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls & karma start karma.conf.js"
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.31",
