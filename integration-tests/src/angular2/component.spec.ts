@@ -20,7 +20,7 @@ describe("BannerComponent", () => {
 
     TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 
-    let component;
+    let component: any;
 
     beforeEach(() => {
 
