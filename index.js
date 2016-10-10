@@ -1,13 +1,17 @@
-var NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
+var Compiler = require("./lib/compiler"),
+    NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
+    Project = require("./lib/project"),
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
     Reporter = require("./lib/reporter"),
 
     transpiledFiles = {},
 
+    compiler = new Compiler(),
     loader = new NodeModulesLoader(transformPath),
-    framework = new Framework(loader),
-    preprocessor = new Preprocessor(loader, transpiledFiles, transformPath),
+    project = new Project(),
+    framework = new Framework(compiler, loader, project),
+    preprocessor = new Preprocessor(compiler, loader, transpiledFiles, transformPath),
     reporter = new Reporter(transpiledFiles);
 
 function transformPath(filepath) {
