@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-example-project",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "",
   "author": "monounity",
   "contributors": [
@@ -14,16 +14,15 @@
     "test": "karma start karma.conf.js",
     "test-angular2": "karma start karma.conf.angular2.js",
     "test-react": "karma start karma.conf.react.js",
-
     "copy": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/",
     "dev": "npm run copy && karma start karma.conf.js",
     "dev-angular2": "npm run copy && karma start karma.conf.angular2.js",
     "dev-react": "npm run copy && karma start karma.conf.react.js",
-
     "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
     "dev-win": "npm run copy-win & karma start karma.conf.js",
     "dev-win-angular2": "npm run copy-win && karma start karma.conf.angular2.js",
-    "dev-win-react": "npm run copy-win && karma start karma.conf.react.js"
+    "dev-win-react": "npm run copy-win && karma start karma.conf.react.js",
+    "postinstall": "typings install"
   },
   "devDependencies": {
     "@angular/common": "^2.0.1",
@@ -32,9 +31,11 @@
     "@angular/platform-browser": "^2.0.1",
     "@angular/platform-browser-dynamic": "^2.0.1",
     "@types/jasmine": "^2.2.31",
+
     "@types/react": "^0.14.35",
     "@types/react-addons-test-utils": "^0.14.15",
     "@types/react-dom": "^0.14.17",
+
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
@@ -46,7 +47,8 @@
     "react-dom": "^15.3.2",
     "reflect-metadata": "^0.1.8",
     "rxjs": "^5.0.0-beta.12",
-    "typescript": "^1.8.10",
+    "typescript": "1.8.10",
+    "typings": "^1.4.0",
     "zone.js": "^0.6.25"
   }
 }
