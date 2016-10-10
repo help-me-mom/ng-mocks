@@ -8,4 +8,15 @@ export class HelloComponent {
 
         return this.helloService.sayHello();
     }
+
+    /*
+    public log(y) {
+
+        let x;
+
+        return y;
+
+        console.log(x);
+    }
+    //*/
 }
