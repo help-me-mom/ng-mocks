@@ -20,8 +20,8 @@
     "dev-react": "npm run copy && karma start karma.conf.react.js",
     "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
     "dev-win": "npm run copy-win & karma start karma.conf.js",
-    "dev-win-angular2": "npm run copy-win && karma start karma.conf.angular2.js",
-    "dev-win-react": "npm run copy-win && karma start karma.conf.react.js",
+    "dev-angular2-win": "npm run copy-win && karma start karma.conf.angular2.js",
+    "dev-react-win": "npm run copy-win && karma start karma.conf.react.js",
     "postinstall": "typings install"
   },
   "devDependencies": {
