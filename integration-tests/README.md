@@ -18,24 +18,8 @@ If you want to add new functionality or fix a bug you need to copy the plugin co
 * `npm run dev-angular2`
 * `npm run dev-react`
 
-# Regression testing
+For windows users there are corresponding scripts with a -win suffix:
 
-* Run all integrations tests using `npm test` or `npm run dev`.
-
-* Make sure a new coverage html file has been created and that it contains all the expected tests with remapped coverage.
-
-# Contributing
-
-Contributions are most welcome and will be accepted if the guidelines in this document are followed, so before creating a pull request, make sure you have done everything in this list:
-
-* Lint all files using the rules in `.eslintrc.js`, located in the root of the `karma-typescript` project.
-
-* Create as small and descriptive functions and classes as possible.
-
-* Comment your code where necessary, ie where it otherwise would be hard to understand *why* something is done in a certain way, not *what* is being done. Don't litter the code with comments like `// create a new array` or `// set the value`.
-
-* If possible, add new integration tests that covers the new feature or bug fix.
-
-* Run all the integration tests, no tests should fail.
-
-* Run all the manual regression tests listed in this document.
+* `npm run dev-win`
+* `npm run dev-angular2-win`
+* `npm run dev-react-win`
