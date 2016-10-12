@@ -24,10 +24,8 @@
   ],
   "author": "monounity",
   "contributors": [
-    {
-      "name": "erikbarke",
-      "name": "g00fy-"
-    }
+    "erikbarke",
+    "g00fy-"
   ],
   "repository": {
     "type": "git",
