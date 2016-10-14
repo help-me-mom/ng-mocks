@@ -34,12 +34,12 @@
   "license": "MIT",
   "dependencies": {
     "amdefine": "1.0.0",
+    "esprima": "^3.1.0",
     "glob": "^7.1.0",
     "gulp-util": "3.0.7",
     "istanbul": "0.4.3",
     "karma-commonjs": "^1.0.0",
     "karma-coverage": "^1.1.1",
-    "recast": "^0.11.14",
     "source-map": ">=0.5.6",
     "through2": "2.0.1",
     "tmp": "0.0.29"

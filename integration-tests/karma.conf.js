@@ -12,7 +12,7 @@ module.exports = function(config) {
             { pattern: "node_modules/zone.js/dist/jasmine-patch.js" },
             { pattern: "node_modules/zone.js/dist/async-test.js" },
             { pattern: "node_modules/zone.js/dist/fake-async-test.js" },
-            { pattern: "src/!(x-performance)/**/*.+(ts|tsx)" }
+            { pattern: "src/**/*.+(ts|tsx)" }
         ],
 
         preprocessors: {

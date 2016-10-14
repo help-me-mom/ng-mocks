@@ -1,6 +1,7 @@
 var Compiler = require("./lib/compiler"),
     NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
     Project = require("./lib/project"),
+
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
     Reporter = require("./lib/reporter"),
@@ -8,16 +9,12 @@ var Compiler = require("./lib/compiler"),
     transpiledFiles = {},
 
     compiler = new Compiler(),
-    loader = new NodeModulesLoader(transformPath),
+    loader = new NodeModulesLoader(),
     project = new Project(),
+
     framework = new Framework(compiler, loader, project),
-    preprocessor = new Preprocessor(compiler, loader, transpiledFiles, transformPath),
+    preprocessor = new Preprocessor(compiler, loader, transpiledFiles),
     reporter = new Reporter(transpiledFiles);
-
-function transformPath(filepath) {
-
-    return filepath.replace(/\.(ts|tsx)$/, ".js");
-}
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],
