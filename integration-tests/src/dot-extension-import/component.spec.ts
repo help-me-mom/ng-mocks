@@ -1,4 +1,5 @@
-import { DotExtensionImportComponent } from "./component.ts";
+// import { DotExtensionImportComponent } from "./component.ts"; // not allowed in Typescript 2+
+import { DotExtensionImportComponent } from "./component";
 
 describe("DotExtensionImportComponent", () => {
 
