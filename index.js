@@ -5,14 +5,14 @@ var Compiler = require("./lib/compiler"),
     Preprocessor = require("./lib/preprocessor"),
     Reporter = require("./lib/reporter"),
 
-    transpiledFiles = {},
+    sharedProcessedFiles = {},
 
     compiler = new Compiler(),
     loader = new NodeModulesLoader(),
 
     framework = new Framework(compiler, loader),
-    preprocessor = new Preprocessor(compiler, loader, transpiledFiles),
-    reporter = new Reporter(transpiledFiles);
+    preprocessor = new Preprocessor(compiler, loader, sharedProcessedFiles),
+    reporter = new Reporter(sharedProcessedFiles);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],
