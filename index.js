@@ -1,6 +1,5 @@
 var Compiler = require("./lib/compiler"),
     NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
-    Project = require("./lib/project"),
 
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
@@ -10,9 +9,8 @@ var Compiler = require("./lib/compiler"),
 
     compiler = new Compiler(),
     loader = new NodeModulesLoader(),
-    project = new Project(),
 
-    framework = new Framework(compiler, loader, project),
+    framework = new Framework(compiler, loader),
     preprocessor = new Preprocessor(compiler, loader, transpiledFiles),
     reporter = new Reporter(transpiledFiles);
 

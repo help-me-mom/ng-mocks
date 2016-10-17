@@ -21,6 +21,9 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
+            compilerOptions: {
+                sourceMap: true
+            },
             reports:
             {
                 "html": "coverage",

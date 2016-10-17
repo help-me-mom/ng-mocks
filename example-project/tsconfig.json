@@ -4,6 +4,7 @@
         "module": "commonjs",
         "target": "ES5",
         "noImplicitAny": true,
-        "outDir": "tmp"
+        "outDir": "tmp",
+        "sourceMap": true
     }
 }

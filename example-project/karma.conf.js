@@ -13,14 +13,6 @@ module.exports = function(config) {
 
         reporters: ["progress", "karma-typescript"],
 
-        karmaTypescriptConfig: {
-            reports:
-            {
-                "html": "coverage",
-                "text-summary": "" // destination "" will redirect output to the console
-            }
-        },
-
         browsers: ["Chrome"]
     });
 };
