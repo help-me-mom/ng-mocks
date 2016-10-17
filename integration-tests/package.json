@@ -31,11 +31,6 @@
     "@angular/platform-browser": "^2.0.1",
     "@angular/platform-browser-dynamic": "^2.0.1",
     "@types/jasmine": "^2.2.31",
-
-    "@types/react": "^0.14.35",
-    "@types/react-addons-test-utils": "^0.14.15",
-    "@types/react-dom": "^0.14.17",
-
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
