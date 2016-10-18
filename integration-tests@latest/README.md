@@ -1,4 +1,4 @@
-# Integration tests
+# Integration tests for Typescript 2.x
 
 This project contains a suite of integration tests that uses the `karma-typescript` plugin itself to test the its functionality.
 
