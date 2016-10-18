@@ -1,0 +1,1 @@
+{"version":3,"file":"component.spec.js","sourceRoot":"","sources":["component.spec.ts"],"names":[],"mappings":";AAAA,0BAAqC,aAAa,CAAC,CAAA;AAEnD,QAAQ,CAAC,sBAAsB,EAAE;IAE7B,EAAE,CAAC,YAAY,EAAE;QAEb,IAAI,oBAAoB,GAAG,IAAI,gCAAoB,EAAE,CAAC;QAEtD,MAAM,CAAC,oBAAoB,CAAC,GAAG,EAAE,CAAC,CAAC,OAAO,CAAC,mCAAmC,CAAC,CAAC;IACpF,CAAC,CAAC,CAAC;AACP,CAAC,CAAC,CAAC"}
