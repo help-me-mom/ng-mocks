@@ -1,12 +1,12 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "ES5",
-        "jsx": "react",
-        "noImplicitAny": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "outDir": "tmp"
+        "jsx": "react",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "tmp",
+        "target": "ES5"
     }
 }
