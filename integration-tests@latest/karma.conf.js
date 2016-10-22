@@ -20,6 +20,7 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
+            tsconfig: "./tsconfig.json",
             excludedFiles: /\.(d|spec|test)\.ts/,
             compilerOptions: {
                 sourceMap: true
