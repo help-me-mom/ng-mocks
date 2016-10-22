@@ -13,7 +13,10 @@ module.exports = function(config) {
 
         karmaTypescriptConfig: {
             compilerOptions: {
-                sourceMap: true
+                jsx: "react",
+                module: "commonjs",
+                sourceMap: true,
+                target: "ES5"
             },
             reports:
             {
