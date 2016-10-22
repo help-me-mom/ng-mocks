@@ -21,14 +21,17 @@ module.exports = function(config) {
 
         karmaTypescriptConfig: {
             tsconfig: "./tsconfig.json",
-            excludedFiles: /\.(d|spec|test)\.ts/,
             compilerOptions: {
                 sourceMap: true
             },
+            excludedFiles: /\.(d|spec|test)\.ts/,
             reports:
             {
                 "html": "coverage",
                 "text-summary": ""
+            },
+            transformPath: function(filepath) {
+                return filepath.replace(/\.(ts|tsx)$/, ".js");
             }
         },
 
