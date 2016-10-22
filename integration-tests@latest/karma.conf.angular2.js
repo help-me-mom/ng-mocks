@@ -22,7 +22,11 @@ module.exports = function(config) {
 
         karmaTypescriptConfig: {
             compilerOptions: {
-                sourceMap: true
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true,
+                module: "commonjs",
+                sourceMap: true,
+                target: "ES5"
             },
             reports:
             {
