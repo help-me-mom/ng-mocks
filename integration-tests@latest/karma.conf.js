@@ -22,7 +22,13 @@ module.exports = function(config) {
         karmaTypescriptConfig: {
             tsconfig: "./tsconfig.json",
             compilerOptions: {
-                sourceMap: true
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true,
+                jsx: "react",
+                noImplicitAny: true,
+                module: "commonjs",
+                sourceMap: true,
+                target: "ES5",
             },
             excludedFiles: /\.(d|spec|test)\.ts/,
             reports:
