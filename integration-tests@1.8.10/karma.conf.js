@@ -20,10 +20,6 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
-            excludedFiles: /\.(d|spec|test)\.ts/,
-            compilerOptions: {
-                sourceMap: true
-            },
             reports:
             {
                 "html": "coverage",
