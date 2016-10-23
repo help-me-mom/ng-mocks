@@ -30,7 +30,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5",
             },
-            excludedFiles: /\.(d|spec|test)\.ts/,
+            excludeFromCoverage: /\.(d|spec|test)\.ts/,
             reports:
             {
                 "html": "coverage",
