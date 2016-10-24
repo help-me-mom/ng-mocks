@@ -121,6 +121,14 @@ coverageReporter: {
 browsers: ["PhantomJS"]
 ```
 
+If you want to debug your code and see the original TypeScript code, you can disable code coverage instrumentation using this configuration:
+
+```javascript
+karmaTypescriptConfig: {
+    disableCodeCoverageInstrumentation: true
+}
+```
+
 ## Requirements
 
 Typescript >=1.6 is required.
