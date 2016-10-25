@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "2.0.6",
+  "version": "2.0.8",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "index.js",
   "keywords": [
@@ -21,10 +21,10 @@
   ],
   "author": "monounity",
   "contributors": [
-      "erikbarke",
-      "g00fy-",
-      "VilleSalonen"
-    ],
+    "erikbarke",
+    "g00fy-",
+    "VilleSalonen"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/monounity/karma-typescript.git"
