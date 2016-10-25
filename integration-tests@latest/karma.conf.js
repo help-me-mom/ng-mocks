@@ -30,6 +30,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5",
             },
+            disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,
             reports:
             {
