@@ -1,4 +1,5 @@
-var Compiler = require("./lib/compiler"),
+var Bundler = require("./lib/bundler"),
+    Compiler = require("./lib/compiler"),
     NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
 
     Framework = require("./lib/framework"),
@@ -7,11 +8,12 @@ var Compiler = require("./lib/compiler"),
 
     sharedProcessedFiles = {},
 
+    bundler = new Bundler(),
     compiler = new Compiler(),
     loader = new NodeModulesLoader(),
 
-    framework = new Framework(compiler, loader),
-    preprocessor = new Preprocessor(compiler, loader, sharedProcessedFiles),
+    framework = new Framework(bundler, compiler, loader),
+    preprocessor = new Preprocessor(bundler, compiler, loader, sharedProcessedFiles),
     reporter = new Reporter(sharedProcessedFiles);
 
 module.exports = {
