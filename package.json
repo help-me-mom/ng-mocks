@@ -24,10 +24,10 @@
   ],
   "author": "monounity",
   "contributors": [
-      "erikbarke",
-      "g00fy-",
-      "VilleSalonen"
-    ],
+    "erikbarke",
+    "g00fy-",
+    "VilleSalonen"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/monounity/karma-typescript.git"
@@ -41,6 +41,7 @@
     "istanbul": "0.4.3",
     "karma-commonjs": "^1.0.0",
     "karma-coverage": "^1.1.1",
+    "lodash.debounce": "^4.0.8",
     "source-map": ">=0.5.6",
     "through2": "2.0.1",
     "tmp": "0.0.29"
