@@ -1,6 +1,6 @@
 var Bundler = require("./lib/bundlers/browserify/bundler"),
     Compiler = require("./lib/compiler"),
-    NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
+    NodeModulesLoader = require("./lib/bundlers/builtin/node-modules-loader"),
 
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
