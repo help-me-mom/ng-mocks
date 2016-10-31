@@ -1,4 +1,4 @@
-var Bundler = require("./lib/bundler"),
+var Bundler = require("./lib/bundlers/browserify/bundler"),
     Compiler = require("./lib/compiler"),
     NodeModulesLoader = require("./lib/karma-wide-load/node-modules-loader"),
 
