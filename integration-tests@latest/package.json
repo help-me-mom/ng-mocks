@@ -31,6 +31,7 @@
     "@angular/platform-browser-dynamic": "^2.0.1",
     "@types/core-js": "^0.9.34",
     "@types/jasmine": "^2.5.35",
+    "@types/node": "^6.0.46",
     "@types/react": "^0.14.41",
     "@types/react-addons-test-utils": "^0.14.15",
     "@types/sinon": "^1.16.31",

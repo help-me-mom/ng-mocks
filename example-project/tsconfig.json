@@ -6,5 +6,8 @@
         "outDir": "tmp",
         "target": "ES5",
         "sourceMap": true
-    }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

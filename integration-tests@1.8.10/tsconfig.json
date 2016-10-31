@@ -8,5 +8,8 @@
         "noImplicitAny": true,
         "outDir": "tmp",
         "target": "ES5"
-    }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

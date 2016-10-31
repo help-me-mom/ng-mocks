@@ -7,6 +7,17 @@
         "module": "commonjs",
         "noImplicitAny": true,
         "outDir": "tmp",
-        "target": "ES5"
-    }
+        "target": "ES5",
+        "types" : [
+            "core-js",
+            "jasmine",
+            "node",
+            "react",
+            "react-addons-test-utils",
+            "sinon"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
