@@ -18,6 +18,7 @@
         ]
     },
     "exclude": [
+        "broken",
         "node_modules"
     ]
 }

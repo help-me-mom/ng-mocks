@@ -30,6 +30,8 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5",
             },
+            include: ["**/*.ts", "**/*.tsx"],
+            exclude: ["broken"],
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,
             reports:

@@ -28,6 +28,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5"
             },
+            include: ["src/angular2/*.ts"],
             reports:
             {
                 "html": "coverage",

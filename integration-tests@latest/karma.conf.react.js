@@ -18,6 +18,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5"
             },
+            include: ["**/*.tsx"],
             reports:
             {
                 "html": "coverage",
