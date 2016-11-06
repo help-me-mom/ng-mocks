@@ -139,4 +139,4 @@ Note: Typescript >= 1.8.10 produces more accurate test coverage remapping.
 
 This software is licensed with the MIT license.
 
-© 2016 Monounity
+© 2016 Erik Barke, Monounity
