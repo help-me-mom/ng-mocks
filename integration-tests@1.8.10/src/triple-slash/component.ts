@@ -1,5 +1,4 @@
 /// <reference path="../custom-typings/my-typings.d.ts" />
-/// <reference path="./reference" />
 
 export class TripleSlashComponent {
 
