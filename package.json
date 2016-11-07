@@ -4,6 +4,7 @@
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "index.js",
   "keywords": [
+    "angularjs",
     "angular2",
     "browserify",
     "commonjs",
@@ -12,7 +13,6 @@
     "jasmine",
     "karma",
     "karma plugin",
-    "karma-commonjs",
     "karma-coverage",
     "karma-plugin",
     "react",
