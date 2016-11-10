@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-example-project",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "",
   "author": "monounity",
   "contributors": [
@@ -12,16 +12,17 @@
   "license": "MIT",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start"
+    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start",
+    "dev-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls & karma start karma.conf.js"
   },
-  "devDependencies": {
-    "@types/jasmine": "^2.2.31",
+  "dependencies": {
+    "@types/jasmine": "^2.5.35",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../",
-    "typescript": "^1.8.10"
+    "typescript": "latest"
   }
 }

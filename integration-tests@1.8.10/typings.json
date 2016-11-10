@@ -1,0 +1,10 @@
+{
+  "globalDependencies": {
+    "core-js": "registry:dt/core-js",
+    "jasmine": "registry:dt/jasmine",
+    "node": "registry:dt/node",
+    "react": "registry:dt/react",
+    "react-addons-test-utils": "registry:dt/react-addons-test-utils",
+    "sinon": "registry:dt/sinon"
+  }
+}

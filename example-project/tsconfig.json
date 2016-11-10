@@ -2,19 +2,15 @@
     "compileOnSave": false,
     "compilerOptions": {
         "module": "commonjs",
-        "target": "ES5"
+        "noImplicitAny": true,
+        "outDir": "tmp",
+        "target": "ES5",
+        "sourceMap": true,
+        "types" : [
+            "jasmine"
+        ]
     },
-    "files": [
-        "node_modules/@types/jasmine/index.d.ts",
-
-        "src/hello.component.spec.ts",
-        "src/hello-service.interface.ts",
-        "src/hello.component.ts",
-
-        "src/language-features.component.ts",
-        "src/language-features.component.spec.ts",
-
-        "src/style-imports.component.ts",
-        "src/style-imports.component.spec.ts"
+    "exclude": [
+        "node_modules"
     ]
 }
