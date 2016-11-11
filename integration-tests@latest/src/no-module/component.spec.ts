@@ -8,7 +8,7 @@ class NoModuleComponent {
 
 describe("NoModuleComponent", () => {
 
-    it("should import builtin node modules without the bundler crashing and burning", () => {
+    it("should use no modules without the bundle loader crashing and burning", () => {
 
         expect(new NoModuleComponent().getBuffer()).toEqual(new Buffer("hello"));
     });
