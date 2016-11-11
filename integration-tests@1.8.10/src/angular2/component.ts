@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
 
-// From the official angular2 docs, https://angular.io/docs/ts/latest/guide/testing.html
-
 @Component({
     selector: "app-banner",
-    template: "<h1>{{title}}</h1>"
+    template: "<h1>{{title}}</h1>",
+    styles: [require("../../assets/style/main.css"), require("../style-import/test.css")]
 })
 
 export class BannerComponent {
