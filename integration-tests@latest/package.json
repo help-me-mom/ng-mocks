@@ -19,11 +19,13 @@
     "dev-angular2": "npm run copy && karma start karma.conf.angular2.js",
     "dev-react": "npm run copy && karma start karma.conf.react.js",
     "dev-core": "npm run copy && karma start karma.conf.core.js",
+    "dev-no-module": "npm run copy && karma start karma.conf.no.module.js",
     "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
     "dev-win": "npm run copy-win & karma start karma.conf.js",
     "dev-angular2-win": "npm run copy-win && karma start karma.conf.angular2.js",
     "dev-react-win": "npm run copy-win && karma start karma.conf.react.js",
-    "dev-core-win": "npm run copy-win && karma start karma.conf.core.js"
+    "dev-core-win": "npm run copy-win && karma start karma.conf.core.js",
+    "dev-no-module-win": "npm run copy-win && karma start karma.conf.no.module.js"
   },
   "dependencies": {
     "@angular/common": "^2.1.2",
