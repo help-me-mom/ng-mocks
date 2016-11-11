@@ -74,7 +74,7 @@ browsers: ["Chrome"]
 
 Example of the resulting coverage:
 
-<img src="http://i.imgur.com/jzxHaiW.png" width="579" height="264" />
+<img src="http://i.imgur.com/wqUamM2.png" width="580" height="281" />
 
 #### Configuration example for React
 
