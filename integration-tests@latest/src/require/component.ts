@@ -1,3 +1,5 @@
+require("../../assets/style/require.css");
+
 let numberRegexp = /^[0-9]+$/;
 class ZipCodeValidator {
     isAcceptable(s: string) {
