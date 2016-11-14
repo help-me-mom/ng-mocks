@@ -12,7 +12,21 @@ module.exports = function(config) {
             { pattern: "node_modules/zone.js/dist/jasmine-patch.js" },
             { pattern: "node_modules/zone.js/dist/async-test.js" },
             { pattern: "node_modules/zone.js/dist/fake-async-test.js" },
-            { pattern: "src/**/*.+(ts|tsx)" }
+            { pattern: "src/angular2/*.ts" },
+            { pattern: "src/core-modules/*.ts" },
+            { pattern: "src/cyclic/*.ts" },
+            { pattern: "src/angular2/*.ts" },
+            { pattern: "src/formatting/*.ts" },
+            { pattern: "src/interface-mocking/*.ts" },
+            { pattern: "src/no-module/*.ts" },
+            { pattern: "src/node-globals/*.ts" },
+            { pattern: "src/react-tsx/*.tsx" },
+            { pattern: "src/relative-import-path/*.ts" },
+            { pattern: "src/require/*.ts" },
+            { pattern: "src/sinon/*.ts" },
+            { pattern: "src/style-import/*.ts" },
+            { pattern: "src/typescript-language-features/*.ts" },
+            { pattern: "src/x-performance/**/*.ts" }
         ],
 
         preprocessors: {
