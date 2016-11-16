@@ -2,7 +2,7 @@ import { CyclicReferencesComponent } from "./component";
 
 describe("CyclicReferencesComponent", () => {
 
-    it("should crash the call stack", () => {
+    it("should not crash the call stack", () => {
 
         let cyclicReferencesComponent = new CyclicReferencesComponent();
 
