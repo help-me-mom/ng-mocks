@@ -213,6 +213,10 @@ karmaTypescriptConfig: {
 },
 ```
 
+## Stop on compilation error
+
+If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in the compiler options in `karmaTypescriptConfig`, the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
+
 ## Module loading and bundling for unit testing
 
 Modules imported in Typescript code, for example `import { Component } from "@angular/core";`, will be automatically loaded and bundled along with their dependencies.
