@@ -155,6 +155,8 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
 
+* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm modules to be ignored by the bundler. Useful if a module in node_modules conditionally requires deprecated modules.
+
 * `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests. Defaults to an html report in the directory `./coverage`.
 
     * Available report types:
@@ -195,6 +197,9 @@ karmaTypescriptConfig: {
     },
     include: ["**/*.ts"],
     exclude: ["broken"],
+    bundlerOptions: {
+        ignoredModuleNames: ["react/addons"],
+    },
     disableCodeCoverageInstrumentation: false,
     excludeFromCoverage: /\.(d|spec|test)\.ts/,
     remapOptions: {

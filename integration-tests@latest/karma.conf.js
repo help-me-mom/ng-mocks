@@ -46,6 +46,9 @@ module.exports = function(config) {
             },
             include: ["**/*.ts", "**/*.tsx"],
             exclude: ["broken"],
+            bundlerOptions: {
+                ignoredModuleNames: ["react/addons"]
+            },
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,
             reports:
