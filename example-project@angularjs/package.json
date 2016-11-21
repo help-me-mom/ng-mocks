@@ -1,0 +1,33 @@
+{
+  "name": "karma-typescript-example-project-angularjs",
+  "version": "2.1.3",
+  "description": "Example project for AngularJS 1.5",
+  "author": "monounity",
+  "contributors": [
+    {
+      "name": "erikbarke"
+    }
+  ],
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "karma start karma.conf.js",
+    "copy": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/",
+    "dev": "npm run copy && karma start karma.conf.js",
+    "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
+    "dev-win": "npm run copy-win & karma start karma.conf.js"
+  },
+  "dependencies": {
+    "@types/angular": "^1.5.20",
+    "@types/angular-mocks": "^1.5.6",
+    "@types/jasmine": "^2.5.38",
+    "angular": "^1.5.8",
+    "angular-mocks": "^1.5.8",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "../",
+    "typescript": "latest"
+  }
+}
