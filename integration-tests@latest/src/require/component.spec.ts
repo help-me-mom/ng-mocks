@@ -1,11 +1,11 @@
-import zip = require("./component");
+import r = require("./component");
 
-describe("ZipCodeValidator", () => {
+describe("RequireComponent", () => {
 
-    it("should be able to require, nodejs style", () => {
+    it("should be able to require dummy content and real modules", () => {
 
-        let validator = new zip();
+        let requireComponent = new r.RequireComponent();
 
-        expect(validator.isAcceptable("12345")).toBeTruthy();
+        expect(requireComponent.run()).toBeTruthy();
     });
 });

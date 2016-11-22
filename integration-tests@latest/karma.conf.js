@@ -17,6 +17,7 @@ module.exports = function(config) {
             { pattern: "src/cyclic/*.ts" },
             { pattern: "src/angular2/*.ts" },
             { pattern: "src/formatting/*.ts" },
+            { pattern: "src/index-require/**/*.ts" },
             { pattern: "src/interface-mocking/*.ts" },
             { pattern: "src/no-module/*.ts" },
             { pattern: "src/node-globals/*.ts" },
