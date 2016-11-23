@@ -41,9 +41,10 @@ Now run Karma and two things will happen:
 * Your tests written in Typescript will be compiled and executed on the fly.
 * You'll have html test coverage, remapped with `remap-istanbul` in the folder `./coverage` in the root of your project.
 
-
 [Runnable example for Typescript 1.8.10 - 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)<br/>
-[Runnable example for Typescript 1.6.2 - 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)
+[Runnable example for Typescript 1.6.2 - 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)<br/>
+[Runnable example for AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project@angularjs)<br/>
+[Runnable example using Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project@mocha)
 
 #### Configuration example for Angular2
 
