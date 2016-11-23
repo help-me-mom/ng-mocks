@@ -1,0 +1,17 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "tmp",
+        "target": "ES5",
+        "sourceMap": true,
+        "types" : [
+            "mocha",
+            "expect.js"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
