@@ -16,7 +16,7 @@ module.exports = function(config) {
                 module: "none",
                 sourceMap: true,
                 target: "ES5",
-                "types" : ["jasmine", "node"]
+                types : ["jasmine", "node"]
             },
             include: ["src/no-module/*.ts"],
             reports:
