@@ -42,6 +42,7 @@ module.exports = function(config) {
                 jsx: "react",
                 noImplicitAny: true,
                 module: "commonjs",
+                moduleResolution: "node",
                 sourceMap: true,
                 target: "ES5",
             },
