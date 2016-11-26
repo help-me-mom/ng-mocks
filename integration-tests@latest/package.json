@@ -30,11 +30,11 @@
     "dev-emptyfile-win": "npm run copy-win && karma start karma.conf.emptyfile.js"
   },
   "dependencies": {
-    "@angular/common": "^2.1.2",
-    "@angular/compiler": "^2.1.2",
-    "@angular/core": "^2.1.2",
-    "@angular/platform-browser": "^2.1.2",
-    "@angular/platform-browser-dynamic": "^2.1.2",
+    "@angular/common": "^2.2.3",
+    "@angular/compiler": "^2.2.3",
+    "@angular/core": "^2.2.3",
+    "@angular/platform-browser": "^2.2.3",
+    "@angular/platform-browser-dynamic": "^2.2.3",
     "@types/core-js": "^0.9.34",
     "@types/jasmine": "^2.5.37",
     "@types/node": "^6.0.46",
