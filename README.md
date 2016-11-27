@@ -43,29 +43,27 @@ Now run Karma and two things will happen:
 
 [Runnable example for Typescript 1.8.10 - 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)<br/>
 [Runnable example for Typescript 1.6.2 - 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)<br/>
+[Runnable example for Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project@angular2)<br/>
 [Runnable example for AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project@angularjs)<br/>
 [Runnable example using Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project@mocha)
 
 #### Configuration example for Angular2
 
+karma.conf.js:
 ```javascript
 frameworks: ["jasmine", "karma-typescript"],
 
 files: [
-    { pattern: "node_modules/reflect-metadata/Reflect.js" },
-    { pattern: "node_modules/zone.js/dist/zone.js" },
-    { pattern: "node_modules/zone.js/dist/long-stack-trace-zone.js" },
-    { pattern: "node_modules/zone.js/dist/proxy.js" },
-    { pattern: "node_modules/zone.js/dist/sync-test.js" },
-    { pattern: "node_modules/zone.js/dist/jasmine-patch.js" },
-    { pattern: "node_modules/zone.js/dist/async-test.js" },
-    { pattern: "node_modules/zone.js/dist/fake-async-test.js" },
-
-    { pattern: "src/**/*.ts" }
+    { pattern: "base.spec.ts" },
+    { pattern: "src/app/**/*.+(ts|html)" }
 ],
 
+proxies: {
+    "/app/": "/base/src/app/"
+},
+
 preprocessors: {
-    "src/**/*.ts": ["karma-typescript"]
+    "**/*.ts": ["karma-typescript"]
 },
 
 reporters: ["progress", "karma-typescript"],
@@ -73,9 +71,26 @@ reporters: ["progress", "karma-typescript"],
 browsers: ["Chrome"]
 ```
 
+base.spec.ts:
+```javascript
+import "reflect-metadata";
+import "zone.js/dist/zone";
+import "zone.js/dist/long-stack-trace-zone";
+import "zone.js/dist/proxy";
+import "zone.js/dist/sync-test";
+import "zone.js/dist/jasmine-patch";
+import "zone.js/dist/async-test";
+import "zone.js/dist/fake-async-test";
+
+import { TestBed } from "@angular/core/testing";
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+
+TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+```
+
 Example of the resulting coverage:
 
-<img src="http://i.imgur.com/wqUamM2.png" width="580" height="281" />
+<img src="http://i.imgur.com/KVGVyxr.png" width="579" height="280" />
 
 #### Configuration example for React
 
