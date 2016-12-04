@@ -1,4 +1,5 @@
 import * as angular from "angular";
+import "angular-mocks";
 import { Controller } from "./controller";
 
 describe("Controller", () => {

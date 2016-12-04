@@ -5,8 +5,6 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "node_modules/angular/angular.js" },
-            { pattern: "node_modules/angular-mocks/angular-mocks.js" },
             { pattern: "app/**/*.ts" }
         ],
 
