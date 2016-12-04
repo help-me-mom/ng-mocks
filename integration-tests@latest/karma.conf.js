@@ -13,6 +13,7 @@ module.exports = function(config) {
             { pattern: "node_modules/zone.js/dist/async-test.js" },
             { pattern: "node_modules/zone.js/dist/fake-async-test.js" },
             { pattern: "src/angular2/*.ts" },
+            { pattern: "src/codemirror/*.ts" },
             { pattern: "src/core-modules/*.ts" },
             { pattern: "src/cyclic/*.ts" },
             { pattern: "src/angular2/*.ts" },

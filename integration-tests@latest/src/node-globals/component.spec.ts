@@ -20,7 +20,7 @@ describe("NodeGlobalComponent", () => {
 
         let nodeGlobalComponent = new NodeGlobalComponent();
 
-        expect(nodeGlobalComponent.getFilename()).toContain("/src/node-globals/component.js");
+        expect(nodeGlobalComponent.getFilename()).toContain("/src/node-globals/component.ts");
     });
 
     it("should return __dirname", () => {
