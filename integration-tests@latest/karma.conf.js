@@ -14,6 +14,7 @@ module.exports = function(config) {
             { pattern: "node_modules/zone.js/dist/fake-async-test.js" },
             { pattern: "src/angular2/*.ts" },
             { pattern: "src/codemirror/*.ts" },
+            { pattern: "src/compiler-paths/*.ts" },
             { pattern: "src/core-modules/*.ts" },
             { pattern: "src/cyclic/*.ts" },
             { pattern: "src/default-exports/*.ts" },

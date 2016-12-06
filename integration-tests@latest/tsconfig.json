@@ -9,6 +9,10 @@
         "outDir": "tmp",
         "target": "ES5",
         "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "compilerpaths/*": [ "src/compiler-paths/*" ]
+        },
         "types" : [
             "codemirror",
             "core-js",
