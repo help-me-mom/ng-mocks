@@ -2,7 +2,7 @@ import { ExportsComponent } from "./component";
 
 describe("ExportsComponent", () => {
 
-    it("should ", () => {
+    it("should use default exported module", () => {
 
         let exportsComponent = new ExportsComponent();
 
