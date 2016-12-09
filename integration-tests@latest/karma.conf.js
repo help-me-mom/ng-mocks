@@ -22,7 +22,7 @@ module.exports = function(config) {
             { pattern: "src/formatting/*.ts" },
             { pattern: "src/index-require/**/*.ts" },
             { pattern: "src/interface-mocking/*.ts" },
-            { pattern: "src/json/*.+(ts|json)" },
+            { pattern: "src/json/*.ts" },
             { pattern: "src/no-module/*.ts" },
             { pattern: "src/node-globals/*.ts" },
             { pattern: "src/react-tsx/*.tsx" },
@@ -35,8 +35,7 @@ module.exports = function(config) {
         ],
 
         preprocessors: {
-            "src/**/*.+(ts|tsx)": ["karma-typescript"],
-            "src/**/*.json": ["karma-typescript-json"]
+            "src/**/*.+(ts|tsx)": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {

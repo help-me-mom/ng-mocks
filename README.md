@@ -285,21 +285,6 @@ Style files (.css|.less|.sass|.scss) are served as dummy modules to the browser 
 
 This means you can import styles in order to let, for instance, webpack load the styles with less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
 
-## Importing JSON
-
-If you `import` or `require` JSON in your Typescript code, you can use the preprocessor `karma-typescript-json` to load the content in your test run:
-
-```javascript
-files: [
-    { pattern: "src/**/*.+(ts|json)" },
-],
-
-preprocessors: {
-    "src/**/*.ts": ["karma-typescript"],
-    "src/**/*.json": ["karma-typescript-json"]
-},
-```
-
 Note: JSON required by modules in `node_modules` will be loaded automatically by the bundler.
 
 ## Requirements

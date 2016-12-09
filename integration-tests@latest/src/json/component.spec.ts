@@ -6,6 +6,6 @@ describe("JsonComponent", () => {
 
         let jsonComponent = new JsonComponent();
 
-        expect(jsonComponent.run()).toEqual("I didn't crash the bundler :)");
+        expect(jsonComponent.run()).toEqual([1, 2, 3, "a", "b", "c"]);
     });
 });
