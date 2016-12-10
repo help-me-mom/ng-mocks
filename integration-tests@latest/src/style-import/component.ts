@@ -4,6 +4,7 @@ import "./style/sass.sass";
 import "./style/scss.scss";
 import "./test.css";
 import "../../assets/style/main.css";
+import "flexboxgrid";
 
 export class StyleImportsComponent {
 
