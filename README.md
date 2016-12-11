@@ -307,7 +307,7 @@ There's a workaround reported by users, which is simply adding the missing depen
  * `npm install --save-dev process`
 
 
- You could also try running `npm install` twice or, if possible, upgrade to a newer version of `npm`.
+You could also try running `npm install` twice or, if possible, upgrade to a newer version of `npm`.
 
 These are the environments reported failing/working:
 
