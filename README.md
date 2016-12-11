@@ -293,8 +293,6 @@ Typescript 1.6.2^ is required.
 
 Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and up.
 
-Please also note that more accurate remapped test coverage is produced for Typescript 1.8.10^.
-
 ## Licensing
 
 This software is licensed with the MIT license.
