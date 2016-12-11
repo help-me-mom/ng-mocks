@@ -293,6 +293,35 @@ Typescript 1.6.2^ is required.
 
 Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and up.
 
+## Troubleshooting
+
+### Error: Cannot find module 'buffer/' from '.'
+
+This error seems to hit mostly users with older versions of `npm`, where all dependencies won't get pulled in automatically by `npm`.
+
+There's a workaround reported by users, which is simply adding the missing dependencies explicitly to `package.json`:
+
+ * `npm install --save-dev browser-resolve`
+ * `npm install --save-dev detective`
+ * `npm install --save-dev buffer`
+ * `npm install --save-dev process`
+
+
+ You could also try running `npm install` twice or, if possible, upgrade to a newer version of `npm`.
+
+These are the environments reported failing/working:
+
+|Npm|Node.js|OS|Works|
+|---|---|---|---|
+|2.5.18|4.4.7|Unknown|No|
+|2.14.12|4.2.6|OSX 10.11.3|No|
+|2.15.9|.5.0|OSX 10.11.6|No|
+|2.15.11|4.6.2|Ubuntu 14.04|No|
+|2.15.11|4.7.0|Ubuntu 14.04|Yes|
+|3.5.3|4.2.1|Windows 10|Yes|
+|3.10.3|6.4.0|OSX 10.11.6|Yes|
+|3.10.9|6.9.2|Ubuntu 14.04|Yes|
+
 ## Licensing
 
 This software is licensed with the MIT license.
