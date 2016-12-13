@@ -26,12 +26,12 @@
     "@types/core-js": "^0.9.34",
     "@types/jasmine": "^2.5.37",
     "@types/node": "^6.0.51",
+    "core-js": "^2.4.1",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../",
-    "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "typescript": "latest",
     "zone.js": "^0.6.26"
