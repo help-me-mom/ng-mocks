@@ -61,6 +61,6 @@ module.exports = function(config) {
 
         reporters: ["progress", "karma-typescript"],
 
-        browsers: ["Chrome"]
+        browsers: ["Chrome", "PhantomJS"]
     });
 };
