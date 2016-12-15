@@ -1,5 +1,6 @@
 import * as corejs from "core-js";
 import moment from "moment";
+require("./empty-export.js");
 
 export class ExportsComponent {
 

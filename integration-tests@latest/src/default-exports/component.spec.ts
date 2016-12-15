@@ -13,6 +13,6 @@ describe("ExportsComponent", () => {
 
         let exportsComponent = new ExportsComponent();
 
-        expect(exportsComponent.hasMap()).not.toBeUndefined();
+        expect(exportsComponent.hasMap()).toBeTruthy();
     });
 });
