@@ -1,121 +1,67 @@
 # karma-typescript
+> Run unit tests written in Typescript; Coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [istanbul](https://github.com/gotwarlost/istanbul)
 
-## What the plugin does
+### Installation
+The easiest way is to keep `karma-typescript` as a devDependency in your package.json.
+```json
+{
+  "devDependencies": {
+    "karma-typescript": "2.1.4"
+  }
+}
+```
+do this by issuing `npm install --save-dev karma-typescript`
 
-The plugin seamlessly runs your unit tests written in Typescript and creates coverage reports, eliminating the need for additional build steps or scripts.
+### Configuration
+bare minimum configuration can be achieved with the following `karma.conf.j´s` file:
 
-It compiles your Typescript code incrementally on the fly, with full type checking, and imported modules will be automatically loaded from node_modules and bundled along with nodejs globals and builtin core modules.
+```js
+module.exports = function(config) {
+  config.set({
+    frameworks: ["jasmine", "karma-typescript"],
+        files: [
+            { pattern: "src/**/*.ts" },
+            // { pattern: "src/**/*.tsx" }, /** glob for React Jsx */
+        ],
+        preprocessors: {
+            "**/*.ts": ["karma-typescript"],
+            // "**/*.tsx": ["karma-typescript"] /** glob for React Jsx */
+        },
+        reporters: ["progress", "karma-typescript"],
+  });
+};
+```
 
-Frameworks such as AngularJS, Angular2, React and Sinon (among others) are supported out of the box.
+### Usage
+the easiest way is, again, the package.json. Add a new "script" prop
+```json
+{
+    "scripts": {
+        "test": "karma start karma.conf.js",
+    }
+}
+```
+From a terminal, issue `npm run test`.
+If you installed Karma globally, you can issue `karma start karma.conf.js` directly instead.
 
-**Example screenshot**
+### Examples
 
+##### Frameworks and Integrations
+
+- [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
+- [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
+- [mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
+- [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
+
+##### other examples
+- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)
+- Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)
+- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)
+- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
+
+
+##### Example output
 <img src="http://i.imgur.com/sc4Mswh.png" width="580" height="280" />
-
-## Installation and configuration
-
-First, install the plugin:
-
-`npm install karma-typescript --save-dev`
-
-Then put this in your Karma config:
-
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "src/**/*.ts" }
-],
-
-preprocessors: {
-    "**/*.ts": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-Now run Karma and two things will happen:
-
-* Your tests written in Typescript will be compiled and executed on the fly.
-* You'll have html test coverage, remapped with `remap-istanbul` in the folder `./coverage` in the root of your project.
-
-[Runnable example for Typescript 1.8.10 - 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)<br/>
-[Runnable example for Typescript 1.6.2 - 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)<br/>
-[Runnable example for Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project@angular2)<br/>
-[Runnable example for AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project@angularjs)<br/>
-[Runnable example using Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project@mocha)
-
-#### Configuration example for Angular2
-
-karma.conf.js:
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "base.spec.ts" },
-    { pattern: "src/app/**/*.+(ts|html)" }
-],
-
-proxies: {
-    "/app/": "/base/src/app/"
-},
-
-preprocessors: {
-    "**/*.ts": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-base.spec.ts:
-```javascript
-import "reflect-metadata";
-import "zone.js/dist/zone";
-import "zone.js/dist/long-stack-trace-zone";
-import "zone.js/dist/proxy";
-import "zone.js/dist/sync-test";
-import "zone.js/dist/jasmine-patch";
-import "zone.js/dist/async-test";
-import "zone.js/dist/fake-async-test";
-
-import { TestBed } from "@angular/core/testing";
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-
-TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-```
-
-Example of the resulting coverage:
-
-<img src="http://i.imgur.com/KVGVyxr.png" width="579" height="280" />
-
-#### Configuration example for React
-
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "src/**/*.tsx" }
-],
-
-preprocessors: {
-    "src/**/*.tsx": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-Example of the resulting coverage:
-
-<img src="http://i.imgur.com/9khrBxw.png" width="685" height="312" />
-
-[All runnable examples and integration tests for Typescript 1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)<br/>
-[All runnable examples and integration tests for Typescript 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
 
 ## Under the hood
 
