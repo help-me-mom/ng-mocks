@@ -2,5 +2,3 @@ coverage
 node_modules
 npm-debug.log
 tmp
-example-project@1.6.2/typings
-integration-tests@1.8.10/typings
