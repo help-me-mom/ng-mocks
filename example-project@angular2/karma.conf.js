@@ -9,7 +9,8 @@ module.exports = function(config) {
         ],
 
         proxies: {
-            "/app/": "/base/src/app/"
+            "/src/app/": "/base/src/app/"
+            //"/app/": "/base/src/app/" // use this without moduleId + templateUrl: "app/hello.html"
         },
 
         preprocessors: {
