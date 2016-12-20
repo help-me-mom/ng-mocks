@@ -1,78 +1,85 @@
 # karma-typescript
-> Run unit tests written in Typescript; Coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [istanbul](https://github.com/gotwarlost/istanbul)
 
-### Installation
-The easiest way is to keep `karma-typescript` as a devDependency in your package.json.
+[![npm](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)]()
+
+> Karma :heart: Typescript
+
+* Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts
+* Create remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul)
+* Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice
+
+<!--
+
+This plugin seamlessly runs unit tests written in Typescript and creates coverage reports using [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul), eliminating the need for additional build steps or scripts.
+
+It compiles Typescript code incrementally on the fly (with full type checking!) and imported modules will be automatically loaded and bundled along with nodejs globals and builtin core modules.
+
+Frameworks such as AngularJS, Angular2, React and Sinon (among others) are supported out of the box.
+-->
+## Installation
+
+The easiest way is to keep `karma-typescript` as a devDependency in `package.json`:
+
 ```json
 {
   "devDependencies": {
-    "karma-typescript": "2.1.4"
+    "karma": "^1.3.0",
+    "karma-typescript": "2.1.6"
   }
 }
 ```
-do this by issuing `npm install --save-dev karma-typescript`
 
-### Configuration
-bare minimum configuration can be achieved with the following `karma.conf.j´s` file:
+Do this by installing the plugin via npm:
 
-```js
+```
+npm install --save-dev karma-typescript
+```
+
+## Configuration
+
+Bare minimum configuration can be achieved with the following `karma.conf.js` file:
+
+```javascript
 module.exports = function(config) {
-  config.set({
-    frameworks: ["jasmine", "karma-typescript"],
+    config.set({
+        frameworks: ["jasmine", "karma-typescript"],
         files: [
-            { pattern: "src/**/*.ts" },
-            // { pattern: "src/**/*.tsx" }, /** glob for React Jsx */
+            { pattern: "src/**/*.ts" }, // *.tsx for React Jsx
         ],
         preprocessors: {
-            "**/*.ts": ["karma-typescript"],
-            // "**/*.tsx": ["karma-typescript"] /** glob for React Jsx */
+            "**/*.ts": ["karma-typescript"], // *.tsx for React Jsx
         },
         reporters: ["progress", "karma-typescript"],
-  });
+        browsers: ["Chrome"]
+    });
 };
 ```
 
-### Usage
-the easiest way is, again, the package.json. Add a new "script" prop
-```json
-{
-    "scripts": {
-        "test": "karma start karma.conf.js",
-    }
-}
-```
-From a terminal, issue `npm run test`.
-If you installed Karma globally, you can issue `karma start karma.conf.js` directly instead.
+The above eaxample will compile all Typescript files and run the unit tests, producing remapped coverage in `./coverage`.
 
-### Examples
+## Examples
 
-##### Frameworks and Integrations
+### Frameworks and Integrations
 
 - [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
 - [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
-- [mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
+- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
 - [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
 
-##### other examples
+### Other examples
+
 - Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)
 - Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)
 - Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)
 - Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
 
+### Example output
 
-##### Example output
 <img src="http://i.imgur.com/sc4Mswh.png" width="580" height="280" />
 
-## Under the hood
-
-Under the hood, `karma-typescript` chains several other npm modules in the following order:
-
-|Module|Step|Note|
-|---|---|---|
-|`typescript`|Compile incrementally, in-memory with inline sourcemaps|Plain Typescript, Angular2 and React are included in the default compiler settings|
-|`browserify`|Add module loading for browsers|Uses parts of the browserify tool chain|
-|`karma-coverage`|Instrument the code with Istanbul|Instrumented code will not be compacted and &ast;.spec.ts and &ast;.test.ts are excluded|
-|`remap-istanbul`|Create remapped coverage|An html report will be created in the folder ./coverage|
+- [Angular2 screenshot](https://github.com/monounity/karma-typescript/blob/master/assets/angular2.png)
+- [React screenshot](https://github.com/monounity/karma-typescript/blob/master/assets/react.png)
 
 ## Advanced configuration
 
@@ -113,11 +120,11 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
 
-* `karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and you will see the original TypeScript code when debugging.
+* `karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.
 
 * `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
 
-* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm modules to be ignored by the bundler. Useful if a module in node_modules conditionally requires deprecated modules.
+* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be ignored by the bundler.
 
 * `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests. Defaults to an html report in the directory `./coverage`.
 
@@ -137,8 +144,6 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
         * `"text-lcov": "coverage", // ...`
         * `"text-summary": "coverage",`
         * `"text": "coverage"`
-
-* `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
 
 * `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
 
@@ -190,7 +195,23 @@ Modules imported in Typescript code, for example `import { Component } from "@an
 
 Also, a full Node.js environment will be provided with global variables and browser shims for builtin core modules:
 
-#### Globals
+### Module
+
+A module object will be injected by the bundler:
+
+```javascript
+module: {
+    exports: {},
+    id: "foo/bar.ts",
+    uri: "/users/home/dev/src/foo/bar.ts"
+}
+```
+
+The `module.id` will be calculated from the value of `module.uri`, relative to the Karma config `basePath` value.
+
+Modules exporting an extensible object such as a *function* or an *object literal* will also be decorated with a default export if `module.exports.default` is undefined.
+
+### Globals
 
 * &#95;&#95;dirname
 * &#95;&#95;filename
@@ -198,7 +219,7 @@ Also, a full Node.js environment will be provided with global variables and brow
 * global
 * process
 
-#### Browser shims
+### Browser shims
 * [assert](https://www.npmjs.com/package/assert)
 * [buffer](https://www.npmjs.com/package/buffer)
 * [console](https://www.npmjs.com/package/console-browserify)
@@ -227,11 +248,22 @@ Note: automatic bundling will only be performed if `compilerOptions.module` is s
 
 ## Importing stylesheets and bundling for production
 
-Style files (.css|.less|.sass|.scss) are served as dummy modules to the browser running the tests, allowing you to load styles using the Typescript import statement, ie `import "./style/app.scss";`.
+Style files (.css|.less|.sass|.scss) are served as JSON strings to the browser running the tests, allowing styles to be loaded using the Typescript import statement, ie `import "./style/app.scss";`.
 
-This means you can import styles in order to let, for instance, webpack load the styles with less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
+This means styles can be imported in order to let, for instance, webpack load the styles with less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
 
 Note: JSON required by modules in `node_modules` will be loaded automatically by the bundler.
+
+## Under the hood
+
+Under the hood, `karma-typescript` chains several other npm modules in the following order:
+
+|Module|Step|Note|
+|---|---|---|
+|`typescript`|Compile incrementally, in-memory with inline sourcemaps|Plain Typescript, Angular2 and React are included in the default compiler settings|
+|`browserify`|Add module loading for browsers|Uses parts of the browserify tool chain|
+|`karma-coverage`|Instrument the code with Istanbul|Instrumented code will not be compacted and &ast;.spec.ts and &ast;.test.ts are excluded|
+|`remap-istanbul`|Create remapped coverage|An html report will be created in the folder ./coverage|
 
 ## Requirements
 
@@ -252,8 +284,7 @@ There's a workaround reported by users, which is simply adding the missing depen
  * `npm install --save-dev buffer`
  * `npm install --save-dev process`
 
-
-You could also try running `npm install` twice or, if possible, upgrade to a newer version of `npm`.
+Other workarounds are running `npm install` twice or, if possible, upgrading to a newer version of `npm`.
 
 These are the environments reported failing/working:
 
