@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import * as util from "util";
 import * as http from "http";
+import * as util from "util";
 
 export class CoreModuleComponent {
 
