@@ -9,14 +9,6 @@
 * Create remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul)
 * Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice
 
-<!--
-
-This plugin seamlessly runs unit tests written in Typescript and creates coverage reports using [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul), eliminating the need for additional build steps or scripts.
-
-It compiles Typescript code incrementally on the fly (with full type checking!) and imported modules will be automatically loaded and bundled along with nodejs globals and builtin core modules.
-
-Frameworks such as AngularJS, Angular2, React and Sinon (among others) are supported out of the box.
--->
 ## Installation
 
 The easiest way is to keep `karma-typescript` as a devDependency in `package.json`:
