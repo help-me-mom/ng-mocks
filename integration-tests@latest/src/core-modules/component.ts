@@ -1,10 +1,14 @@
 import * as fs from "fs";
 import * as util from "util";
+import * as http from "http";
 
 export class CoreModuleComponent {
 
-    public isNumber(value: number): boolean {
+    public testHttp(): any {
+        return http.Agent;
+    }
 
-        return util.isNumber(value);
+    public testUtil(): boolean {
+        return util.isNumber(42);
     }
 }

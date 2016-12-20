@@ -2,10 +2,15 @@ import { CoreModuleComponent } from "./component";
 
 describe("CoreModuleComponent", () => {
 
-    it("should import builtin node modules without the bundler crashing and burning", () => {
+    let coreModuleComponent = new CoreModuleComponent();
 
-        let coreModuleComponent = new CoreModuleComponent();
+    it("should core module http", () => {
 
-        expect(coreModuleComponent.isNumber(42)).toBeTruthy();
+        expect(coreModuleComponent.testHttp()).not.toBeUndefined();
+    });
+
+    it("should core module util", () => {
+
+        expect(coreModuleComponent.testUtil()).toBeTruthy();
     });
 });
