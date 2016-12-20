@@ -1,8 +1,13 @@
 
 export class JsonComponent {
 
-    public run(): string {
+    public getLocalJson(): any {
 
         return require("./component.json");
+    }
+
+    public getPackageJson(): any {
+
+        return require("stream-http/package").version;
     }
 }
