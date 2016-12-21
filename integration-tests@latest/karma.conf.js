@@ -20,7 +20,7 @@ module.exports = function(config) {
             { pattern: "src/node-globals/*.ts" },
             { pattern: "src/react-tsx/*.tsx" },
             { pattern: "src/relative-import-path/*.ts" },
-            { pattern: "src/require/*.ts" },
+            { pattern: "src/require/**/*.ts" },
             { pattern: "src/sinon/*.ts" },
             { pattern: "src/socket.io/*.ts" },
             { pattern: "src/style-import/*.ts" },

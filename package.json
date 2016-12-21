@@ -49,6 +49,7 @@
     "detective": "^4.3.2",
     "domain-browser": "~1.1.0",
     "events": "~1.1.0",
+    "glob": "^7.1.1",
     "gulp-util": "3.0.7",
     "https-browserify": "~0.0.0",
     "istanbul": "0.4.3",
