@@ -13,7 +13,7 @@ module.exports = {
         "curly": ["error"],
         "dot-notation": ["error"],
         "eqeqeq": ["error"],
-        "indent": ["error", 4],
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "linebreak-style": ["error", "unix"],
         "no-alert": ["error"],
         "no-cond-assign": ["error", "always"],
