@@ -1,6 +1,6 @@
 import "negotiator";
 
-export class DynamicRequireComponent {
+export class DynamicRequire {
 
     public run(): boolean {
 

@@ -1,6 +1,6 @@
-require("../../assets/style/require.css");
+require("../../../assets/style/require.css");
 
-export class RequireComponent {
+export class Requiring {
 
     public run(): boolean {
 

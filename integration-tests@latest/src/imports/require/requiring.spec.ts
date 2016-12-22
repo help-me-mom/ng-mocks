@@ -1,11 +1,11 @@
-import r = require("./component");
+import r = require("./requiring");
 
-describe("RequireComponent", () => {
+describe("Requiring", () => {
 
     it("should be able to require dummy content and real modules", () => {
 
-        let requireComponent = new r.RequireComponent();
+        let requiring = new r.Requiring();
 
-        expect(requireComponent.run()).toBeTruthy();
+        expect(requiring.run()).toBeTruthy();
     });
 });

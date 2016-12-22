@@ -1,11 +1,11 @@
-import { DynamicRequireComponent } from "./component";
+import { DynamicRequire } from "./dynamic-require";
 
-describe("DynamicRequireComponent", () => {
+describe("DynamicRequire", () => {
 
     it("should be able to require dynamically", () => {
 
-        let dynamicRequireComponent = new DynamicRequireComponent();
+        let dynamicRequire = new DynamicRequire();
 
-        expect(dynamicRequireComponent.run()).toBeTruthy();
+        expect(dynamicRequire.run()).toBeTruthy();
     });
 });
