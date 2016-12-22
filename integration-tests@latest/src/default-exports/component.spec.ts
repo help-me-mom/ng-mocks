@@ -1,18 +1,21 @@
-import { ExportsComponent } from "./component";
+import { DefaultExportsTester } from "./component";
 
-describe("ExportsComponent", () => {
+describe("DefaultExportsTester", () => {
+
+    let defaultExportsTester = new DefaultExportsTester();
 
     it("should use default exported module", () => {
 
-        let exportsComponent = new ExportsComponent();
-
-        expect(exportsComponent.format(new Date(2014, 3, 23))).toEqual("2014-04-23");
+        expect(defaultExportsTester.testDefaultExportedModule()).toEqual("2014-04-23");
     });
 
     it("should extend modules without crashing on non-extensible objects", () => {
 
-        let exportsComponent = new ExportsComponent();
+        expect(defaultExportsTester.testNonExtensibleObject()).not.toBeUndefined();
+    });
 
-        expect(exportsComponent.hasMap()).toBeTruthy();
+    it("should extend modules and make default property non-enumerable", () => {
+
+        expect(defaultExportsTester.testModuleExportsKeys()).toEqual(["DefaultExportsTester"]);
     });
 });
