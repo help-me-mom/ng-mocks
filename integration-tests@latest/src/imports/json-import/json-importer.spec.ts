@@ -1,16 +1,16 @@
-import { JsonComponent } from "./component";
+import { JsonImporter } from "./json-importer";
 
-describe("JsonComponent", () => {
+describe("JsonImporter", () => {
 
-    let jsonComponent = new JsonComponent();
+    let jsonImporter = new JsonImporter();
 
     it("should require a local json file without crashing the bundler", () => {
 
-        expect(jsonComponent.getLocalJson()).toEqual([1, 2, 3, "a", "b", "c"]);
+        expect(jsonImporter.getLocalJson()).toEqual([1, 2, 3, "a", "b", "c"]);
     });
 
     it("should require a package.json file from node_modules without crashing the bundler", () => {
 
-        expect(jsonComponent.getPackageJson()).not.toBeUndefined();
+        expect(jsonImporter.getPackageJson()).not.toBeUndefined();
     });
 });

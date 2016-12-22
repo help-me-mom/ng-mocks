@@ -1,9 +1,9 @@
 
-export class JsonComponent {
+export class JsonImporter {
 
     public getLocalJson(): any {
 
-        return require("./component.json");
+        return require("./json-importer.json");
     }
 
     public getPackageJson(): any {

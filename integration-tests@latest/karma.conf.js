@@ -14,7 +14,6 @@ module.exports = function(config) {
             { pattern: "src/formatting/*.ts" },
             { pattern: "src/imports/**/*.ts" },
             { pattern: "src/interface-mocking/*.ts" },
-            { pattern: "src/json/*.ts" },
             { pattern: "src/module/*.ts" },
             { pattern: "src/no-module/*.ts" },
             { pattern: "src/node-globals/*.ts" },
