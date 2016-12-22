@@ -1,18 +1,16 @@
-import { IndexRequireComponent } from "./component";
+import { IndexImporter } from "./index-importer";
 
-describe("IndexRequireComponent", () => {
+describe("IndexImporter", () => {
+
+    let indexImporter = new IndexImporter();
 
     it("should import using index.ts", () => {
 
-        let indexRequireComponent = new IndexRequireComponent();
-
-        expect(indexRequireComponent.getMessageFromDependency()).toEqual("I'm in a file named index.ts");
+        expect(indexImporter.getMessageFromDependency()).toEqual("I'm in a file named index.ts");
     });
 
     it("should import using index.ts with a trailing slash", () => {
 
-        let indexRequireComponent = new IndexRequireComponent();
-
-        expect(indexRequireComponent.getMessageFromDependencyWithSlash()).toEqual("I was required using a trailing slash");
+        expect(indexImporter.getMessageFromDependencyWithSlash()).toEqual("I was required using a trailing slash");
     });
 });

@@ -1,7 +1,7 @@
 import { DependencyComponent } from "./dependency";
 import { DependencyComponentWithSlash } from "./dependency/";
 
-export class IndexRequireComponent {
+export class IndexImporter {
 
     public getMessageFromDependency(): string {
 
