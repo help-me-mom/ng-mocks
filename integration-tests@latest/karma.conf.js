@@ -12,6 +12,7 @@ module.exports = function(config) {
             { pattern: "src/default-exports/*.ts" },
             { pattern: "src/angular2/*.ts" },
             { pattern: "src/formatting/*.ts" },
+            { pattern: "src/imports/**/*.ts" },
             { pattern: "src/index-require/**/*.ts" },
             { pattern: "src/interface-mocking/*.ts" },
             { pattern: "src/json/*.ts" },
