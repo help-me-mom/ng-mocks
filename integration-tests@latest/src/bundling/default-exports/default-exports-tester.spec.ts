@@ -1,4 +1,4 @@
-import { DefaultExportsTester } from "./component";
+import { DefaultExportsTester } from "./default-exports-tester";
 
 describe("DefaultExportsTester", () => {
 
