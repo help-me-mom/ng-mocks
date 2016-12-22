@@ -8,7 +8,7 @@ module.exports = function(config) {
             { pattern: "src/codemirror/*.ts" },
             { pattern: "src/compiler-paths/*.ts" },
             { pattern: "src/core-modules/*.ts" },
-            { pattern: "src/cyclic/*.ts" },
+            { pattern: "src/bundling/**/*.ts" },
             { pattern: "src/default-exports/*.ts" },
             { pattern: "src/angular2/*.ts" },
             { pattern: "src/formatting/*.ts" },

@@ -1,11 +1,11 @@
-import { CyclicReferencesComponent } from "./component";
+import { CyclicDependency } from "./cyclic-dependency";
 
-describe("CyclicReferencesComponent", () => {
+describe("CyclicDependency", () => {
 
     it("should not crash the call stack", () => {
 
-        let cyclicReferencesComponent = new CyclicReferencesComponent();
+        let cyclicDependency = new CyclicDependency();
 
-        expect(cyclicReferencesComponent.run()).toEqual("I didn't crash the call stack :)");
+        expect(cyclicDependency.run()).toEqual("I didn't crash the call stack :)");
     });
 });

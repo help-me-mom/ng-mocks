@@ -4,7 +4,7 @@
 
 require("readable-stream");
 
-export class CyclicReferencesComponent {
+export class CyclicDependency {
 
     public run(): string {
 
