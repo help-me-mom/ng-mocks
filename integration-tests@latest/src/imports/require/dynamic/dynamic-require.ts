@@ -1,11 +1,9 @@
-import { DynamicRequireComponent } from "./component";
+import "negotiator";
 
-describe("DynamicRequireComponent", () => {
+export class DynamicRequireComponent {
 
-    it("should be able to require dynamically", () => {
+    public run(): boolean {
 
-        let dynamicRequireComponent = new DynamicRequireComponent();
-
-        expect(dynamicRequireComponent.run()).toBeTruthy();
-    });
-});
+        return true;
+    }
+}
