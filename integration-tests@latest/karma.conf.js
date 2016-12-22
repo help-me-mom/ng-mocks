@@ -7,7 +7,7 @@ module.exports = function(config) {
             { pattern: "src/bundling/**/*.ts" },
             { pattern: "src/compiler-paths/*.ts" },
             { pattern: "src/core-modules/*.ts" },
-            { pattern: "src/default-exports/*.ts" },
+            { pattern: "src/exports/*.ts" },
             { pattern: "src/formatting/*.ts" },
             { pattern: "src/frameworks/**/*.ts" },
             { pattern: "src/imports/**/*.ts" },
