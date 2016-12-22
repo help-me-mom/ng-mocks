@@ -1,11 +1,11 @@
 import * as sinon from "sinon";
-import { CalculatorComponent } from "./component";
+import { SinonComponent } from "./sinon-component";
 
-describe("CalculatorComponent", () => {
+describe("SinonComponent", () => {
 
-    it("should add numbers", () => {
+    it("should be able to spy", () => {
 
-        let calculatorComponent = new CalculatorComponent();
+        let calculatorComponent = new SinonComponent();
         let spy = sinon.spy(calculatorComponent, "add");
 
         let result = calculatorComponent.add(2, 2);

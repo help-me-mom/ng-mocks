@@ -12,23 +12,23 @@ import { DebugElement } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
 
-import { BannerComponent } from "./component";
+import { AngularComponent } from "./angular-component";
 
-describe("BannerComponent", () => {
+describe("AngularComponent", () => {
 
     TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 
-    let fixture: ComponentFixture<BannerComponent>;
+    let fixture: ComponentFixture<AngularComponent>;
 
     beforeEach(() => {
 
         TestBed.configureTestingModule({
-            declarations: [BannerComponent]
+            declarations: [AngularComponent]
         });
 
         TestBed.compileComponents();
 
-        fixture = TestBed.createComponent(BannerComponent);
+        fixture = TestBed.createComponent(AngularComponent);
     });
 
     it("should display original title", () => {
@@ -36,7 +36,7 @@ describe("BannerComponent", () => {
         let debugElement = fixture.debugElement.query(By.css("h1"));
         fixture.detectChanges();
 
-        expect(debugElement.nativeElement.textContent).toEqual("Test Tour of Heroes");
+        expect(debugElement.nativeElement.textContent).toEqual("Hello :)");
     });
 
     it("should display a different test title", () => {

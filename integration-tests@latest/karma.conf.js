@@ -4,21 +4,17 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/angular2/*.ts" },
-            { pattern: "src/codemirror/*.ts" },
+            { pattern: "src/bundling/**/*.ts" },
             { pattern: "src/compiler-paths/*.ts" },
             { pattern: "src/core-modules/*.ts" },
-            { pattern: "src/bundling/**/*.ts" },
             { pattern: "src/default-exports/*.ts" },
-            { pattern: "src/angular2/*.ts" },
             { pattern: "src/formatting/*.ts" },
+            { pattern: "src/frameworks/**/*.ts" },
             { pattern: "src/imports/**/*.ts" },
             { pattern: "src/interface-mocking/*.ts" },
             { pattern: "src/module/*.ts" },
             { pattern: "src/no-module/*.ts" },
             { pattern: "src/node-globals/*.ts" },
-            { pattern: "src/react-tsx/*.tsx" },
-            { pattern: "src/sinon/*.ts" },
             { pattern: "src/socket.io/*.ts" },
             { pattern: "src/typescript-language-features/*.ts" },
             { pattern: "src/x-performance/**/*.ts" }

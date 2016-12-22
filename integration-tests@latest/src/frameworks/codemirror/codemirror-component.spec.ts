@@ -1,4 +1,4 @@
-import { CodemirrorComponent } from "./component";
+import { CodemirrorComponent } from "./codemirror-component";
 
 describe("CodemirrorComponent", () => {
 

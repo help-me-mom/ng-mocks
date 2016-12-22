@@ -1,4 +1,4 @@
-export class CalculatorComponent {
+export class SinonComponent {
 
     public add(a: number, b: number): number {
 

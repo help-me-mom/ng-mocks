@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TestUtils from "react-addons-test-utils";
-import ReactComponent from "./component";
+import ReactComponent from "./react-component";
 
 describe("ReactComponent", () => {
 
