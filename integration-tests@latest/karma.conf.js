@@ -19,7 +19,6 @@ module.exports = function(config) {
             { pattern: "src/no-module/*.ts" },
             { pattern: "src/node-globals/*.ts" },
             { pattern: "src/react-tsx/*.tsx" },
-            { pattern: "src/relative-import-path/*.ts" },
             { pattern: "src/require/**/*.ts" },
             { pattern: "src/sinon/*.ts" },
             { pattern: "src/socket.io/*.ts" },

@@ -1,6 +1,6 @@
-import { LanguageFeaturesComponent } from "../typescript-language-features/component";
+import { LanguageFeaturesComponent } from "../../typescript-language-features/component";
 
-export class RelativeImportPathComponent {
+export class RelativePathImporter {
 
     public run(): string {
 

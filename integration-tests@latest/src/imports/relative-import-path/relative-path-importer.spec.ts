@@ -1,12 +1,12 @@
-import { RelativeImportPathComponent } from "./component";
+import { RelativePathImporter } from "./relative-path-importer";
 
-describe("RelativeImportPathComponent", () => {
+describe("RelativePathImporter", () => {
 
     it("should be able to import classes using filename extension", () => {
 
-        let relativeImportPathComponent = new RelativeImportPathComponent();
+        let relativePathImporter = new RelativePathImporter();
 
-        expect(relativeImportPathComponent.run())
+        expect(relativePathImporter.run())
             .toEqual("I imported [object Object], relative to the project!");
     });
 });
