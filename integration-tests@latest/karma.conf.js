@@ -23,7 +23,6 @@ module.exports = function(config) {
             { pattern: "src/require/**/*.ts" },
             { pattern: "src/sinon/*.ts" },
             { pattern: "src/socket.io/*.ts" },
-            { pattern: "src/style-import/*.ts" },
             { pattern: "src/typescript-language-features/*.ts" },
             { pattern: "src/x-performance/**/*.ts" }
         ],

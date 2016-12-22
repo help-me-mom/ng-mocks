@@ -1,11 +1,11 @@
-import { StyleImportsComponent } from "./component";
+import { StyleImporter } from "./style-importer";
 
 describe("StyleImportsComponent", () => {
 
     it("should import styles without the module loader crashing and burning", () => {
 
-        let styleImportsComponent = new StyleImportsComponent();
+        let styleImporter = new StyleImporter();
 
-        expect(styleImportsComponent.doSomething()).toEqual("I didn't crash and burn!");
+        expect(styleImporter.run()).toEqual("I didn't crash and burn!");
     });
 });

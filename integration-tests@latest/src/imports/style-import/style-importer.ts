@@ -3,12 +3,12 @@ import "./style/less.less";
 import "./style/sass.sass";
 import "./style/scss.scss";
 import "./test.css";
-import "../../assets/style/main.css";
+import "../../../assets/style/main.css";
 require("flexboxgrid");
 
-export class StyleImportsComponent {
+export class StyleImporter {
 
-    public doSomething(): string {
+    public run(): string {
 
         return "I didn't crash and burn!";
     }
