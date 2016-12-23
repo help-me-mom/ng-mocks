@@ -2,10 +2,10 @@ import { CyclicDependencyTester } from "./cyclic-dependency-tester";
 
 describe("CyclicDependencyTester", () => {
 
-    it("should not crash the call stack", () => {
+    it("should require cyclic dependency", () => {
 
         let cyclicDependencyTester = new CyclicDependencyTester();
 
-        expect(cyclicDependencyTester.run()).toEqual("I didn't crash the call stack :)");
+        expect(cyclicDependencyTester.testRequireCyclicDependency()).not.toBeUndefined();
     });
 });

@@ -1,15 +1,9 @@
-export class DependencyComponent {
+export class IndexComponent {
 
-    public dependOnMe(): string {
-
-        return "I'm in a file named index.ts";
-    }
+    public readonly Name: string = "IndexComponent";
 }
 
-export class DependencyComponentWithSlash {
+export class IndexComponentWithSlash {
 
-    public dependOnMe(): string {
-
-        return "I was required using a trailing slash";
-    }
+    public readonly Name: string = "IndexComponentWithSlash";
 }

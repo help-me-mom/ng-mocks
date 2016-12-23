@@ -1,15 +1,15 @@
-import { DependencyComponent } from "./dependency";
-import { DependencyComponentWithSlash } from "./dependency/";
+import { IndexComponent } from "./dependency";
+import { IndexComponentWithSlash } from "./dependency/";
 
-export class IndexImporter {
+export class IndexImportTester {
 
-    public getMessageFromDependency(): string {
+    public testImportIndex(): string {
 
-        return new DependencyComponent().dependOnMe();
+        return new IndexComponent().Name;
     }
 
-    public getMessageFromDependencyWithSlash(): string {
+    public testImportIndexWithSlash(): string {
 
-        return new DependencyComponentWithSlash().dependOnMe();
+        return new IndexComponentWithSlash().Name;
     }
 }
