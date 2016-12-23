@@ -2,14 +2,13 @@ import "./style/css.css";
 import "./style/less.less";
 import "./style/sass.sass";
 import "./style/scss.scss";
-import "./test.css";
+import "./style-import-tester.css";
 import "../../../assets/style/main.css";
-require("flexboxgrid");
 
-export class StyleImporter {
+export class StyleImportTester {
 
-    public run(): string {
+    public testRequireCssPackage(): string {
 
-        return "I didn't crash and burn!";
+        return require("flexboxgrid").toString();
     }
 }

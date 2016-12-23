@@ -1,11 +1,11 @@
-import { TypingsImporter } from "./typings-importer";
+import { TypingsImportTester } from "./typings-import-tester";
 
-describe("TypingsImporter", () => {
+describe("TypingsImportTester", () => {
 
-    it("should be able to import an interface from a typings file", () => {
+    let tester = new TypingsImportTester();
 
-        let typingsImporter = new TypingsImporter();
+    it("should import an interface from a typings file", () => {
 
-        expect(typingsImporter.value).not.toBeUndefined();
+        expect(tester.value).not.toBeUndefined();
     });
 });

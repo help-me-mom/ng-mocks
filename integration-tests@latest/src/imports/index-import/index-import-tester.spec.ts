@@ -4,15 +4,15 @@ import { IndexComponentWithSlash } from "./dependency/index";
 
 describe("IndexImporter", () => {
 
-    let indexImportTester = new IndexImportTester();
+    let tester = new IndexImportTester();
 
     it("should import using index.ts", () => {
 
-        expect(indexImportTester.testImportIndex()).toEqual("IndexComponent");
+        expect(tester.testImportIndex()).toEqual(new IndexComponent());
     });
 
     it("should import using index.ts with a trailing slash", () => {
 
-        expect(indexImportTester.testImportIndexWithSlash()).toEqual("IndexComponentWithSlash");
+        expect(tester.testImportIndexWithSlash()).toEqual(new IndexComponentWithSlash());
     });
 });

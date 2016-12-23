@@ -1,11 +1,28 @@
-import r = require("./requiring");
+import req = require("./node-require-tester");
 
-describe("Requiring", () => {
+describe("NodeRequireTester", () => {
 
-    it("should be able to require dummy content and real modules", () => {
+    let tester = new req.NodeRequireTester();
 
-        let requiring = new r.Requiring();
+    it("should require a local class", () => {
 
-        expect(requiring.run()).toBeTruthy();
+        let dependency = require("./dependency");
+
+        expect(tester.testRequireLocalClass()).toEqual(new dependency.DependencyComponent());
+    });
+
+    it("should require a package from node_modules", () => {
+
+        expect(tester.testRequirePackage()).toEqual(jasmine.any(Function));
+    });
+
+    it("should require a package from node_modules with dynamically required dependencies", () => {
+
+        expect(tester.testDynamicDependency()).toEqual(jasmine.any(Function));
+    });
+
+    it("should require a text file on a relative path", () => {
+
+        expect(tester.testRequireRelativeTextFile().indexOf("margin: 0;")).toBeGreaterThan(0);
     });
 });

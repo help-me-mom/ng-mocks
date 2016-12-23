@@ -2,10 +2,10 @@ import { NoModuleExportsTester } from "./no-module-exports-tester";
 
 describe("NoModuleExportsTester", () => {
 
+    let tester = new NoModuleExportsTester();
+
     it("should import module that requires dependency without module.exports", () => {
 
-        let noModuleExportsTester = new NoModuleExportsTester();
-
-        expect(noModuleExportsTester.testNoModuleExports()).not.toBeUndefined();
+        expect(tester.testNoModuleExports()).not.toBeUndefined();
     });
 });

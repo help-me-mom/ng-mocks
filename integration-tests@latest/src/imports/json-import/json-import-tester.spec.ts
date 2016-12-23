@@ -1,16 +1,16 @@
-import { JsonImporter } from "./json-importer";
+import { JsonImportTester } from "./json-import-tester";
 
 describe("JsonImporter", () => {
 
-    let jsonImporter = new JsonImporter();
+    let tester = new JsonImportTester();
 
-    it("should require a local json file without crashing the bundler", () => {
+    it("should require a local json file", () => {
 
-        expect(jsonImporter.getLocalJson()).toEqual([1, 2, 3, "a", "b", "c"]);
+        expect(tester.testLocalJSON()).toEqual([1, 2, 3, "a", "b", "c"]);
     });
 
-    it("should require a package.json file from node_modules without crashing the bundler", () => {
+    it("should require a package.json file from a node_modules package", () => {
 
-        expect(jsonImporter.getPackageJson()).not.toBeUndefined();
+        expect(tester.testPackageJSON()).not.toBeUndefined();
     });
 });

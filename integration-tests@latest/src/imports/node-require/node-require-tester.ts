@@ -1,13 +1,25 @@
-require("../../../assets/style/require.css");
+export class NodeRequireTester {
 
-export class Requiring {
+    public testRequireLocalClass(): Function {
 
-    public run(): boolean {
-
-        let util = require("util");
-        let req = require("./dependency");
-        let dep = new req.DependencyComponent();
-
-        return util !== undefined && dep.dependOnMe() === "I was required!";
+        let dependency = require("./dependency");
+        return new dependency.DependencyComponent();
     }
+
+    public testRequirePackage(): Function {
+
+        return require("util").isArray;
+    }
+
+    public testDynamicDependency(): Function {
+
+        // negotiator@0.4.9 uses dynamic require, ie require("./" + k + ".js");
+        return require("negotiator");
+    }
+
+    public testRequireRelativeTextFile(): string {
+
+        return require("../../../assets/style/require.css").toString();
+    }
+
 }

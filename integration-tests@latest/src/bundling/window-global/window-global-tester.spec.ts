@@ -2,10 +2,10 @@ import { WindowGlobalTester } from "./window-global-tester";
 
 describe("WindowGlobalTester", () => {
 
+    let tester = new WindowGlobalTester();
+
     it("should use the window object as global", () => {
 
-        let windowGlobalTester = new WindowGlobalTester();
-
-        expect(windowGlobalTester.testGlobalWindow()).toEqual(window);
+        expect(tester.testGlobalWindow()).toEqual(window);
     });
 });

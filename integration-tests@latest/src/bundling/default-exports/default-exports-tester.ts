@@ -1,6 +1,5 @@
 import * as corejs from "core-js";
 import moment from "moment";
-require("./empty-export.js"); // bundler shouldn't choke on undefined module.exports
 
 export class DefaultExportsTester {
 
@@ -17,5 +16,10 @@ export class DefaultExportsTester {
     public testModuleExportsKeys(): string[] {
 
         return Object.keys(module.exports);
+    }
+
+    public testUndefinedModuleExports(): any {
+
+        return require("./empty-export.js");
     }
 }

@@ -1,13 +1,13 @@
 
-export class JsonImporter {
+export class JsonImportTester {
 
-    public getLocalJson(): any {
+    public testLocalJSON(): Object {
 
-        return require("./json-importer.json");
+        return require("./json-import-tester.json");
     }
 
-    public getPackageJson(): any {
+    public testPackageJSON(): string {
 
-        return require("stream-http/package").version;
+        return require("stream-http/package").version.toString();
     }
 }

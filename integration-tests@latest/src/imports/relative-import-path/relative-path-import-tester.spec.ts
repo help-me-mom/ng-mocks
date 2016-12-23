@@ -1,12 +1,12 @@
-import { RelativePathImporter } from "./relative-path-importer";
+import { RelativePathImportTester } from "./relative-path-import-tester";
+import { LanguageFeaturesComponent } from "../../typescript-language-features/component";
 
-describe("RelativePathImporter", () => {
+describe("RelativePathImportTester", () => {
 
-    it("should be able to import classes using filename extension", () => {
+    let tester = new RelativePathImportTester();
 
-        let relativePathImporter = new RelativePathImporter();
+    it("should import a class from a relative path", () => {
 
-        expect(relativePathImporter.run())
-            .toEqual("I imported [object Object], relative to the project!");
+        expect(tester.testImportClassFromRelativePath()).toEqual(new LanguageFeaturesComponent());
     });
 });

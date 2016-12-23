@@ -1,11 +1,11 @@
-import { StyleImporter } from "./style-importer";
+import { StyleImportTester } from "./style-import-tester";
 
-describe("StyleImportsComponent", () => {
+describe("StyleImportTester", () => {
 
-    it("should import styles without the module loader crashing and burning", () => {
+    let tester = new StyleImportTester();
 
-        let styleImporter = new StyleImporter();
+    it("should import styles without", () => {
 
-        expect(styleImporter.run()).toEqual("I didn't crash and burn!");
+        expect(tester.testRequireCssPackage().indexOf("flexbox")).toBeGreaterThan(0);
     });
 });

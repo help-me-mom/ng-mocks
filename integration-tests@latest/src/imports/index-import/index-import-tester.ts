@@ -3,13 +3,13 @@ import { IndexComponentWithSlash } from "./dependency/";
 
 export class IndexImportTester {
 
-    public testImportIndex(): string {
+    public testImportIndex(): IndexComponent {
 
-        return new IndexComponent().Name;
+        return new IndexComponent();
     }
 
-    public testImportIndexWithSlash(): string {
+    public testImportIndexWithSlash(): IndexComponentWithSlash {
 
-        return new IndexComponentWithSlash().Name;
+        return new IndexComponentWithSlash();
     }
 }
