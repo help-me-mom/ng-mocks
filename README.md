@@ -201,7 +201,7 @@ module: {
 
 The `module.id` will be calculated from the value of `module.uri`, relative to the Karma config `basePath` value.
 
-Modules exporting an extensible object such as a *function* or an *object literal* will also be decorated with a default export if `module.exports.default` is undefined.
+Modules exporting an extensible object such as a *function* or an *object literal* will also be decorated with a non-enumerable `default` property if `module.exports.default` is undefined.
 
 ### Globals
 
