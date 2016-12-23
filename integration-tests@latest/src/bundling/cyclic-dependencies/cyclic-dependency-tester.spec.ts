@@ -1,11 +1,11 @@
-import { CyclicDependency } from "./cyclic-dependency";
+import { CyclicDependencyTester } from "./cyclic-dependency-tester";
 
-describe("CyclicDependency", () => {
+describe("CyclicDependencyTester", () => {
 
     it("should not crash the call stack", () => {
 
-        let cyclicDependency = new CyclicDependency();
+        let cyclicDependencyTester = new CyclicDependencyTester();
 
-        expect(cyclicDependency.run()).toEqual("I didn't crash the call stack :)");
+        expect(cyclicDependencyTester.run()).toEqual("I didn't crash the call stack :)");
     });
 });
