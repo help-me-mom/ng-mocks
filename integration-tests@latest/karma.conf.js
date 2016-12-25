@@ -45,6 +45,10 @@ module.exports = function(config) {
             excludeFromCoverage: /\.(d|spec|test)\.ts/,
             reports:
             {
+                "cobertura": {
+                    "directory": "coverage",
+                    "filename": "cobertura/coverage.xml"
+                },
                 "html": "coverage",
                 "text-summary": ""
             },

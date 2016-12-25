@@ -5,9 +5,9 @@
 
 > Karma :heart: Typescript
 
-* Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts
-* Create remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul)
-* Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice
+* Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
+* Create remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul).
+* Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
 
 ## Installation
 
@@ -118,24 +118,45 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be ignored by the bundler.
 
-* `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests. Defaults to an html report in the directory `./coverage`.
+* `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests, defaults to an html report in the directory `./coverage`.
+   Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
+    
+    * A `string` with a directory path, for example `"html": "coverage"`.
+    * An empty string or `null`. Writes the output to the console, for example `"text-summary": ""`. This is only possible for a subset of the reports available.
+    * An `object` with more fine-grained control over path and filename:
+    ```javascript
+    "cobertura": {
+        "directory": "coverage",
+        "filename": "cobertura/coverage.xml"
+    }
+    ```
 
     * Available report types:
+        * `"clover": destination`
+        * `"cobertura": destination`
+        * `"html": destination`
+        * `"json-summary": destination`
+        * `"json": destination`
+        * `"lcovonly": destination`
+        * `"teamcity": destination` (redirects to the console with destination "" or `null`)
+        * `"text-lcov": destination` (redirects to the console with destination "" or `null`)
+        * `"text-summary": destination` (redirects to the console with destination "" or `null`)
+        * `"text": destination` (redirects to the console with destination "" or `null`)
 
-        * `"clover": "coverage"`
-        * `"cobertura": "coverage"`
-        * `"html": "coverage"`
-        * `"json-summary": "coverage"`
-        * `"json": "coverage"`
-        * `"lcovonly": "coverage"`
-
-    * The following reporters can have their output written directly to the
-    console by setting the destination to "" or null, ie "text-summary": "":
-
-        * `"teamcity": "coverage", // "destination/path" or null or ""`
-        * `"text-lcov": "coverage", // ...`
-        * `"text-summary": "coverage",`
-        * `"text": "coverage"`
+    * Example of the three destination types:
+    ```javascript
+    karmaTypescriptConfig: {
+        reports:
+        {
+            "cobertura": {
+                "directory": "coverage",
+                "filename": "cobertura/coverage.xml"
+            },
+            "html": "coverage",
+            "text-summary": ""
+        }
+    }
+    ```
 
 * `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
 
@@ -168,13 +189,17 @@ karmaTypescriptConfig: {
     },
     reports:
     {
+        "cobertura": {
+            "directory": "coverage",
+            "filename": "cobertura/coverage.xml"
+        },
         "html": "coverage",
         "text-summary": ""
     },
     transformPath: function(filepath) {
         return filepath.replace(/\.(ts|tsx)$/, ".js");
     }
-},
+}
 ```
 
 ## Stop on compilation error
