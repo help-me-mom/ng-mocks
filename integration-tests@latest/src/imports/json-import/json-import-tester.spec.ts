@@ -9,8 +9,13 @@ describe("JsonImporter", () => {
         expect(tester.testLocalJSON()).toEqual([1, 2, 3, "a", "b", "c"]);
     });
 
-    it("should require a package.json file from a node_modules package", () => {
+    it("should require a package.json file from a node_modules module", () => {
 
         expect(tester.testPackageJSON()).not.toBeUndefined();
+    });
+
+    it("should require a node_modules module that requires JSON", () => {
+
+        expect(tester.testRequireModuleRequiringJSON()).not.toBeUndefined();
     });
 });
