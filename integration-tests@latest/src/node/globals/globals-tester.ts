@@ -1,27 +1,27 @@
-export class NodeGlobalComponent {
+export class GlobalsTester {
 
-    public getBuffer(): Buffer {
+    public testBuffer(): Buffer {
 
         return new Buffer("hello");
     }
 
-    public getCurrentDirectory(): string {
-
-        return process.cwd();
-    }
-
-    public getDirname(): string {
+    public testDirname(): string {
 
         return __dirname;
     }
 
-    public getFilename(): string {
+    public testFilename(): string {
 
         return __filename;
     }
 
-    public getGlobal(): NodeJS.Global {
+    public testGlobal(): NodeJS.Global {
 
         return global;
+    }
+
+    public testProcess(): string {
+
+        return process.cwd();
     }
 }

@@ -1,11 +1,11 @@
-import { LanguageFeaturesComponent } from "./component";
+import { LanguageFeaturesTester } from "./language-features-tester";
 
-describe("LanguageFeaturesComponent", () => {
+describe("LanguageFeaturesTester", () => {
 
-    it("should use Typescript features without the compiler crashing and burning", () => {
+    let tester = new LanguageFeaturesTester();
 
-        let languageFeaturesComponent = new LanguageFeaturesComponent();
+    it("should use Typescript features", () => {
 
-        expect(languageFeaturesComponent.trySomeLanguageFeatures()).toEqual("I'm alive!");
+        expect(tester.testForLoop()).toEqual("123");
     });
 });

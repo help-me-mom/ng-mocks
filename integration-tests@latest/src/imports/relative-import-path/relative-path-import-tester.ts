@@ -1,9 +1,9 @@
-import { LanguageFeaturesComponent } from "../../typescript-language-features/component";
+import { LanguageFeaturesTester } from "../../typescript/language-features/language-features-tester";
 
 export class RelativePathImportTester {
 
-    public testImportClassFromRelativePath(): LanguageFeaturesComponent {
+    public testImportClassFromRelativePath(): LanguageFeaturesTester {
 
-        return new LanguageFeaturesComponent();
+        return new LanguageFeaturesTester();
     }
 }

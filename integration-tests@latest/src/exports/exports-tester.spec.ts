@@ -1,4 +1,4 @@
-import { ExportedClass } from "./component";
+import { ExportedClass } from "./exports-tester";
 
 describe("ExportedClass", () => {
 

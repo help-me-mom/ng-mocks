@@ -1,5 +1,5 @@
 import { RelativePathImportTester } from "./relative-path-import-tester";
-import { LanguageFeaturesComponent } from "../../typescript-language-features/component";
+import { LanguageFeaturesTester } from "../../typescript/language-features/language-features-tester";
 
 describe("RelativePathImportTester", () => {
 
@@ -7,6 +7,6 @@ describe("RelativePathImportTester", () => {
 
     it("should import a class from a relative path", () => {
 
-        expect(tester.testImportClassFromRelativePath()).toEqual(new LanguageFeaturesComponent());
+        expect(tester.testImportClassFromRelativePath()).toEqual(new LanguageFeaturesTester());
     });
 });

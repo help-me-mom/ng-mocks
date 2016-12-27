@@ -10,7 +10,7 @@ import * as http from "http";
 import * as os from "os";
 import * as util from "util";
 
-export class CoreModuleComponent {
+export class CoreModuleTester {
 
     public testAssert(): Function {
         return assert.equal;

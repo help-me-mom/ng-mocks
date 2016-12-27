@@ -1,8 +1,8 @@
 
-export class CompilerPathComponent {
+export class CompilerPathsTester {
 
-    public run(): string {
+    public test(): string {
 
-        return "I didn't break the bundler :)";
+        return "compiler paths";
     }
 }

@@ -1,11 +1,11 @@
-import { CodemirrorComponent } from "./codemirror-component";
+import { CodemirrorTester } from "./codemirror-tester";
 
-describe("CodemirrorComponent", () => {
+describe("CodemirrorTester", () => {
 
-    it("should return modeInfo", () => {
+    let tester = new CodemirrorTester();
 
-        let codemirrorComponent = new CodemirrorComponent();
+    it("should test modeInfo", () => {
 
-        expect(codemirrorComponent.useMetaModeInfo()).not.toBeUndefined();
+        expect(tester.testMetaModeInfo()).not.toBeUndefined();
     });
 });

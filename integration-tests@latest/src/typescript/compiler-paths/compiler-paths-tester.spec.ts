@@ -1,11 +1,11 @@
-import { CompilerPathComponent } from "compilerpaths/component";
+import { CompilerPathsTester } from "compilerpaths/compiler-paths-tester";
 
-describe("CompilerPathComponent", () => {
+describe("CompilerPathsTester", () => {
 
-    it("should use paths option in tsconfig without crashing the bundler", () => {
+    let tester = new CompilerPathsTester();
 
-        let compilerPathComponent = new CompilerPathComponent();
+    it("should use paths option in tsconfig", () => {
 
-        expect(compilerPathComponent.run()).toEqual("I didn't break the bundler :)");
+        expect(tester.test()).toEqual("compiler paths");
     });
 });

@@ -1,39 +1,31 @@
-import { NodeGlobalComponent } from "./component";
+import { GlobalsTester } from "./globals-tester";
 
-describe("NodeGlobalComponent", () => {
+describe("GlobalsTester", () => {
 
-    it("should return process.cwd()", () => {
-
-        let nodeGlobalComponent = new NodeGlobalComponent();
-
-        expect(nodeGlobalComponent.getCurrentDirectory()).toEqual("/");
-    });
+    let tester = new GlobalsTester();
 
     it("should return Buffer", () => {
 
-        let nodeGlobalComponent = new NodeGlobalComponent();
-
-        expect(nodeGlobalComponent.getBuffer()).toEqual(new Buffer("hello"));
+        expect(tester.testBuffer()).toEqual(new Buffer("hello"));
     });
 
     it("should return __filename", () => {
 
-        let nodeGlobalComponent = new NodeGlobalComponent();
-
-        expect(nodeGlobalComponent.getFilename()).toContain("/src/node-globals/component.ts");
+        expect(tester.testFilename()).toContain("/src/node/globals/globals-tester.ts");
     });
 
     it("should return __dirname", () => {
 
-        let nodeGlobalComponent = new NodeGlobalComponent();
-
-        expect(nodeGlobalComponent.getDirname()).toContain("/src/node-globals");
+        expect(tester.testDirname()).toContain("/src/node/globals");
     });
 
     it("should return global", () => {
 
-        let nodeGlobalComponent = new NodeGlobalComponent();
+        expect(tester.testGlobal()).toEqual(global);
+    });
 
-        expect(nodeGlobalComponent.getGlobal()).toEqual(global);
+    it("should test process", () => {
+
+        expect(tester.testProcess()).toEqual("/");
     });
 });

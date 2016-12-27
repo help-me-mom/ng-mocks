@@ -1,9 +1,9 @@
 import * as CodeMirror from "codemirror";
 import "codemirror/mode/meta";
 
-export class CodemirrorComponent {
+export class CodemirrorTester {
 
-    public useMetaModeInfo(): any {
+    public testMetaModeInfo(): any {
 
         return (<any>CodeMirror).modeInfo;
     }

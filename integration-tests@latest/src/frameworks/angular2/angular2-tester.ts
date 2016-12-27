@@ -6,6 +6,6 @@ import { Component } from "@angular/core";
     styles: [require("../../../assets/style/main.css")]
 })
 
-export class AngularComponent {
+export class Angular2Tester {
     title = "Hello :)";
 }

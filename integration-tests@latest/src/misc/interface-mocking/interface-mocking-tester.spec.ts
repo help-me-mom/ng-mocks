@@ -1,20 +1,20 @@
-import { IComponentService } from "./component.interface";
-import { Component } from "./component";
+import { IInterfaceMockingTester } from "./interface-mocking-tester.interface";
+import { InterfaceMockingTester } from "./interface-mocking-tester";
 
-class MockComponentService implements IComponentService {
+class MockInterfaceMockingTester implements IInterfaceMockingTester {
 
-    public sayHello(): string {
+    public test(): string {
         return "Hello world!";
     }
 }
 
-describe("Component", () => {
+describe("InterfaceMockingTester", () => {
+
+    let mockComponentService = new MockInterfaceMockingTester();
+    let tester = new InterfaceMockingTester(mockComponentService);
 
     it("should say 'Hello world!'", () => {
 
-        let mockComponentService = new MockComponentService();
-        let component = new Component(mockComponentService);
-
-        expect(component.sayHello()).toEqual("Hello world!");
+        expect(tester.test()).toEqual("Hello world!");
     });
 });

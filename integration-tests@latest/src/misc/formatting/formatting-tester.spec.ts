@@ -1,11 +1,11 @@
-import { FormattingComponent } from "./component";
+import { FormattingTester } from "./formatting-tester";
 
-describe("FormattingComponent", () => {
+describe("FormattingTester", () => {
 
-    it("should keep formatting when run through the ast parser", () => {
+    let tester = new FormattingTester();
 
-        let formattingComponent = new FormattingComponent();
+    it("should keep formatting when bundled", () => {
 
-        expect(formattingComponent.oneliner()).toEqual("This one line function kept it's formatting!");
+        expect(tester.testOneliner()).toEqual("This one line function kept it's formatting!");
     });
 });

@@ -1,11 +1,11 @@
-import { IComponentService } from "./component.interface";
+import { IInterfaceMockingTester } from "./interface-mocking-tester.interface";
 
-export class Component {
+export class InterfaceMockingTester {
 
-    constructor(private componentService: IComponentService) {}
+    constructor(private interfaceMockingTester: IInterfaceMockingTester) {}
 
-    public sayHello(): string {
+    public test(): string {
 
-        return this.componentService.sayHello();
+        return this.interfaceMockingTester.test();
     }
 }

@@ -5,7 +5,7 @@ export interface ReactComponentProps {
     framework: string;
 }
 
-export default class ReactComponent extends React.Component<ReactComponentProps, {}> {
+export default class ReactTester extends React.Component<ReactComponentProps, {}> {
 
     render() {
         return <h1>Hello from {this.props.compiler} and {this.props.framework}!</h1>;

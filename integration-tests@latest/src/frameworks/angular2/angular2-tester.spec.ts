@@ -12,23 +12,23 @@ import { DebugElement } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
 
-import { AngularComponent } from "./angular-component";
+import { Angular2Tester } from "./angular2-tester";
 
-describe("AngularComponent", () => {
+describe("Angular2Tester", () => {
 
     TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 
-    let fixture: ComponentFixture<AngularComponent>;
+    let fixture: ComponentFixture<Angular2Tester>;
 
     beforeEach(() => {
 
         TestBed.configureTestingModule({
-            declarations: [AngularComponent]
+            declarations: [Angular2Tester]
         });
 
         TestBed.compileComponents();
 
-        fixture = TestBed.createComponent(AngularComponent);
+        fixture = TestBed.createComponent(Angular2Tester);
     });
 
     it("should display original title", () => {

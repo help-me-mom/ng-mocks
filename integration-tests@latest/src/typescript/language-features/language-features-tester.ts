@@ -1,12 +1,13 @@
-export class LanguageFeaturesComponent {
+export class LanguageFeaturesTester {
 
-    public trySomeLanguageFeatures(): string {
+    public testForLoop(): string {
 
-        let someArray = [1, 2, 3];
+        let result = "";
 
-        for (let item of someArray) {
+        for (let item of [1, 2, 3]) {
+            result += item;
         }
 
-        return "I'm alive!";
+        return result;
     }
 }

@@ -1,3 +1,3 @@
-export interface IComponentService {
-    sayHello(): string;
+export interface IInterfaceMockingTester {
+    test(): string;
 }

@@ -1,4 +1,4 @@
-class NoModuleComponent {
+class NoModuleTester {
 
     public getBuffer(): Buffer {
 
@@ -6,10 +6,10 @@ class NoModuleComponent {
     }
 }
 
-describe("NoModuleComponent", () => {
+describe("NoModuleTester", () => {
 
-    it("should use no modules without the bundle loader crashing and burning", () => {
+    it("should use no modules", () => {
 
-        expect(new NoModuleComponent().getBuffer()).toEqual(new Buffer("hello"));
+        expect(new NoModuleTester().getBuffer()).toEqual(new Buffer("hello"));
     });
 });

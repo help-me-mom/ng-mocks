@@ -4,11 +4,11 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/core-modules/**/*.ts" }
+            { pattern: "src/node/core/*.ts" }
         ],
 
         preprocessors: {
-            "src/core-modules/**/*.ts": ["karma-typescript"]
+            "src/node/core/*.ts": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {
@@ -19,7 +19,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5"
             },
-            include: ["src/core-modules/*.ts"],
+            include: ["src/node/core/*.ts"],
             reports:
             {
                 "html": "coverage",
