@@ -5,6 +5,7 @@ module.exports = function(config) {
 
         files: [
             { pattern: "src/bundling/**/*.ts" },
+            { pattern: "src/custom-typings/**/*.ts" },
             { pattern: "src/exports/*.ts" },
             { pattern: "src/frameworks/**/*.ts" },
             { pattern: "src/imports/**/*.ts" },
