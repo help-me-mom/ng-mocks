@@ -35,6 +35,7 @@ module.exports = function(config) {
             include: ["**/*.ts", "**/*.tsx"],
             exclude: ["broken"],
             bundlerOptions: {
+                nodeGlobals: true,
                 ignoredModuleNames: ["ws"]
             },
             disableCodeCoverageInstrumentation: false,

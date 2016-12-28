@@ -12,7 +12,10 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
-            include: ["src/misc/emptyfile/*.ts"]
+            include: ["src/misc/emptyfile/*.ts"],
+            bundlerOptions: {
+                nodeGlobals: false
+            }
         },
 
         reporters: ["progress", "karma-typescript"],
