@@ -120,6 +120,8 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
 
+* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.
+
 * `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests, defaults to an html report in the directory `./coverage`.
    Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
     
@@ -181,6 +183,7 @@ karmaTypescriptConfig: {
     exclude: ["broken"],
     bundlerOptions: {
         nodeGlobals: true,
+        noParse: "jquery",
         ignoredModuleNames: ["react/addons"],
     },
     disableCodeCoverageInstrumentation: false,

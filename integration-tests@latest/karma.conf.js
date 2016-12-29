@@ -37,6 +37,7 @@ module.exports = function(config) {
             exclude: ["broken"],
             bundlerOptions: {
                 nodeGlobals: true,
+                noParse: ["jquery"],
                 ignoredModuleNames: ["ws"]
             },
             disableCodeCoverageInstrumentation: false,
