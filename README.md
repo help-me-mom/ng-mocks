@@ -120,6 +120,8 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
 
+* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, `module.exports = {};`.
+
 * `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
 
 * `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.

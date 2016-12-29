@@ -12,7 +12,6 @@ module.exports = function(config) {
             { pattern: "src/misc/no-module-tester.spec.ts" },
             { pattern: "src/misc/!(emptyfile)/**/*.ts" },
             { pattern: "src/node/**/*.ts" },
-            { pattern: "src/socket.io/*.ts" },
             { pattern: "src/typescript/**/*.ts" },
             { pattern: "src/x-performance/**/*.ts" }
         ],
@@ -36,9 +35,10 @@ module.exports = function(config) {
             include: ["**/*.ts", "**/*.tsx"],
             exclude: ["broken"],
             bundlerOptions: {
+                exclude: ["react/addons"],
+                ignore: ["ws"],
                 nodeGlobals: true,
-                noParse: ["jquery"],
-                exclude: ["ws"]
+                noParse: ["jquery"]
             },
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,
