@@ -38,7 +38,7 @@ module.exports = function(config) {
             bundlerOptions: {
                 nodeGlobals: true,
                 noParse: ["jquery"],
-                ignoredModuleNames: ["ws"]
+                exclude: ["ws"]
             },
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,

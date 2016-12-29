@@ -116,7 +116,9 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
 
-* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be ignored by the bundler.
+* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle. **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead. 
+
+* `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
 
 * `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
 
@@ -184,7 +186,7 @@ karmaTypescriptConfig: {
     bundlerOptions: {
         nodeGlobals: true,
         noParse: "jquery",
-        ignoredModuleNames: ["react/addons"],
+        exclude: ["react/addons"],
     },
     disableCodeCoverageInstrumentation: false,
     excludeFromCoverage: /\.(d|spec|test)\.ts/,
