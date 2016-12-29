@@ -1,4 +1,4 @@
-export class jQueryTester {
+export class NoParseTester {
 
     public testRequire(): any {
 
