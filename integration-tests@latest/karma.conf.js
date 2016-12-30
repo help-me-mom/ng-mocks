@@ -38,7 +38,11 @@ module.exports = function(config) {
                 exclude: ["react/addons"],
                 ignore: ["ws"],
                 nodeGlobals: true,
-                noParse: ["jquery"]
+                noParse: ["jquery"],
+                resolve: {
+                    extensions: [".js", ".json"],
+                    directories: ["node_modules"]
+                }
             },
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,

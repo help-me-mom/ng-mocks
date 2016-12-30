@@ -113,6 +113,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.
 
+* `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules. Defaults to `[".js", ".json"]`,
+
+* `karmaTypescriptConfig.bundlerOptions.resolve.directories` - An array of directories in which to recursively look for modules. Defaults to `["node_modules"]`.
+
 * `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
 Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the exception of `outDir` and `outFile` which are ignored since the code is compiled in-memory.
 
@@ -183,6 +187,10 @@ karmaTypescriptConfig: {
         nodeGlobals: true,
         noParse: "jquery",
         exclude: ["react/addons"],
+        resolve: {
+            extensions: [".js", ".json"],
+            directories: ["node_modules"]
+        }
     },
     compilerOptions: {
         noImplicitAny: true,
