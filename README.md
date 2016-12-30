@@ -103,28 +103,33 @@ coverageReporter: {
 
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
-* `karmaTypescriptConfig.tsconfig` - A path to a `tsconfig.json` file. The default compiler options will be replaced by the options in this file.
+* `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
+
+* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, `module.exports = {};`.
+
+* ~~`karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead. 
+
+* `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
+
+* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.
 
 * `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
 Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the exception of `outDir` and `outFile` which are ignored since the code is compiled in-memory.
 
 * `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler. The values will be merged with existing options. The folder `node_modules` is excluded by default.
 
-* `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
+* `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
 
 * `karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.
 
-* `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
+* `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
 
-* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle. **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead. 
+* `karmaTypescriptConfig.remapOptions` - Pass options to `remap-istanbul`.
 
-* `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
+    * Available options:
 
-* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, `module.exports = {};`.
-
-* `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
-
-* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.
+        * `exclude`, a regex for excluding files from remapping
+        * `warn`, a function for handling error messages
 
 * `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests, defaults to an html report in the directory `./coverage`.
    Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
@@ -168,30 +173,24 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
 
-* `karmaTypescriptConfig.remapOptions` - Pass options to `remap-istanbul`.
-
-    * Available options:
-
-        * `exclude`, a regex for excluding files from remapping
-        * `warn`, a function for handling error messages
+* `karmaTypescriptConfig.tsconfig` - A path to a `tsconfig.json` file. The default compiler options will be replaced by the options in this file.
 
 Example of a full `karmaTypescriptConfig` configuration:
 
 ```javascript
 karmaTypescriptConfig: {
-    tsconfig: "./tsconfig.json",
-    compilerOptions: {
-        noImplicitAny: true,
-    },
-    include: ["**/*.ts"],
-    exclude: ["broken"],
     bundlerOptions: {
         nodeGlobals: true,
         noParse: "jquery",
         exclude: ["react/addons"],
     },
-    disableCodeCoverageInstrumentation: false,
+    compilerOptions: {
+        noImplicitAny: true,
+    },
+    exclude: ["broken"],
     excludeFromCoverage: /\.(d|spec|test)\.ts/,
+    disableCodeCoverageInstrumentation: false,
+    include: ["**/*.ts"],
     remapOptions: {
         warn: function(message){
             console.log(message);
@@ -208,7 +207,8 @@ karmaTypescriptConfig: {
     },
     transformPath: function(filepath) {
         return filepath.replace(/\.(ts|tsx)$/, ".js");
-    }
+    },
+    tsconfig: "./tsconfig.json"
 }
 ```
 
