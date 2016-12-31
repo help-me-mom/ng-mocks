@@ -42,7 +42,8 @@ module.exports = function(config) {
                 resolve: {
                     extensions: [".js", ".json"],
                     directories: ["node_modules"]
-                }
+                },
+                validateSyntax: false
             },
             disableCodeCoverageInstrumentation: false,
             excludeFromCoverage: /\.(d|spec|test)\.ts/,

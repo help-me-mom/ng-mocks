@@ -117,6 +117,8 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * `karmaTypescriptConfig.bundlerOptions.resolve.directories` - An array of directories in which to recursively look for modules. Defaults to `["node_modules"]`.
 
+* `karmaTypescriptConfig.bundlerOptions.validateSyntax` - A boolean indicating whether the syntax of the bundled code should be validated. Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`. Defaults to `true`.
+
 * `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
 Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the exception of `outDir` and `outFile` which are ignored since the code is compiled in-memory.
 
@@ -190,7 +192,8 @@ karmaTypescriptConfig: {
         resolve: {
             extensions: [".js", ".json"],
             directories: ["node_modules"]
-        }
+        },
+        validateSyntax: true
     },
     compilerOptions: {
         noImplicitAny: true,
