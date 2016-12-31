@@ -1,4 +1,4 @@
-var Bundler = require("./lib/bundlers/builtin/bundler"),
+var Bundler = require("./lib/bundler"),
     Compiler = require("./lib/compiler"),
 
     Framework = require("./lib/framework"),
