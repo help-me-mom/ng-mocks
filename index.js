@@ -1,6 +1,7 @@
 var Bundler = require("./lib/bundler"),
     Compiler = require("./lib/compiler"),
     Configuration = require("./lib/configuration"),
+    Coverage = require("./lib/coverage"),
 
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
@@ -9,11 +10,13 @@ var Bundler = require("./lib/bundler"),
     sharedProcessedFiles = {},
 
     configuration = new Configuration(),
-    bundler = new Bundler(configuration),
+    coverage = new Coverage(configuration),
+
+    bundler = new Bundler(configuration, coverage),
     compiler = new Compiler(),
 
-    framework = new Framework(bundler, compiler, configuration),
-    preprocessor = new Preprocessor(bundler, compiler, configuration, sharedProcessedFiles),
+    framework = new Framework(bundler, compiler, configuration, coverage),
+    preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles),
     reporter = new Reporter(configuration, sharedProcessedFiles);
 
 module.exports = {
