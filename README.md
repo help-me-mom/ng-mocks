@@ -103,15 +103,15 @@ coverageReporter: {
 
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
+* `karmaTypescriptConfig.bundlerOptions.addNodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be added to the bundle. Defaults to `true`.
+
 * `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
 
-* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, `module.exports = {};`.
+* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, ie `module.exports = {};`.
 
-* ~~`karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead. 
+* ~~`karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
 
-* `karmaTypescriptConfig.bundlerOptions.nodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be included in the bundle. Defaults to `true`.
-
-* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bunded as-is, without being parsed for dependencies.
+* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bundled without being parsed for dependencies.
 
 * `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules. Defaults to `[".js", ".json"]`,
 
@@ -122,11 +122,15 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
 Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the exception of `outDir` and `outFile` which are ignored since the code is compiled in-memory.
 
+* `karmaTypescriptConfig.coverageOptions.instrumentation` - A boolean indicating whether the code should be instrumented, set to `false` to see the original Typescript code when debugging. Defaults to true.
+
+* `karmaTypescriptConfig.coverageOptions.exclude` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
+
 * `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler. The values will be merged with existing options. The folder `node_modules` is excluded by default.
 
-* `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
+* ~~`karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.exclude` instead.
 
-* `karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.
+* ~~`karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
 
 * `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
 
@@ -186,7 +190,8 @@ Example of a full `karmaTypescriptConfig` configuration:
 ```javascript
 karmaTypescriptConfig: {
     bundlerOptions: {
-        nodeGlobals: true,
+        ignore: ["ws"],
+        includeNodeGlobals: true,
         noParse: "jquery",
         exclude: ["react/addons"],
         resolve: {
@@ -313,7 +318,7 @@ Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and 
 
 ### Error: Cannot find module 'buffer/' from '.'
 
-This error seems to hit mostly users with older versions of `npm`, where all dependencies won't get pulled in automatically by `npm`.
+This error seems to hit mostly users with older versions of `npm`, where all dependencies don't get pulled in automatically by `npm`.
 
 There's a workaround reported by users, which is simply adding the missing dependencies explicitly to `package.json`:
 
