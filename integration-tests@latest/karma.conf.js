@@ -31,6 +31,7 @@ module.exports = function(config) {
                 moduleResolution: "node",
                 sourceMap: true,
                 target: "ES5",
+                lib: ["DOM", "ES5", "ScriptHost"]
             },
             include: ["**/*.ts", "**/*.tsx"],
             exclude: ["broken"],
