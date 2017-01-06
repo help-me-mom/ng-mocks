@@ -190,8 +190,8 @@ Example of a full `karmaTypescriptConfig` configuration:
 ```javascript
 karmaTypescriptConfig: {
     bundlerOptions: {
+        addNodeGlobals: true,
         ignore: ["ws"],
-        includeNodeGlobals: true,
         noParse: "jquery",
         exclude: ["react/addons"],
         resolve: {
