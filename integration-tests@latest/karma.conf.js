@@ -21,7 +21,17 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
-            tsconfig: "./tsconfig.json",
+            bundlerOptions: {
+                addNodeGlobals: true,
+                exclude: ["react/addons"],
+                ignore: ["ws"],
+                noParse: ["jquery"],
+                resolve: {
+                    extensions: [".js", ".json"],
+                    directories: ["node_modules"]
+                },
+                validateSyntax: false
+            },
             compilerOptions: {
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
@@ -33,21 +43,12 @@ module.exports = function(config) {
                 target: "ES5",
                 lib: ["DOM", "ES5", "ScriptHost"]
             },
-            include: ["**/*.ts", "**/*.tsx"],
-            exclude: ["broken"],
-            bundlerOptions: {
-                exclude: ["react/addons"],
-                ignore: ["ws"],
-                nodeGlobals: true,
-                noParse: ["jquery"],
-                resolve: {
-                    extensions: [".js", ".json"],
-                    directories: ["node_modules"]
-                },
-                validateSyntax: false
+            coverageOptions: {
+                instrumenation: true,
+                exclude: /\.(d|spec|test)\.ts/
             },
-            disableCodeCoverageInstrumentation: false,
-            excludeFromCoverage: /\.(d|spec|test)\.ts/,
+            exclude: ["broken"],
+            include: ["**/*.ts", "**/*.tsx"],
             reports:
             {
                 "cobertura": {
@@ -59,7 +60,8 @@ module.exports = function(config) {
             },
             transformPath: function(filepath) {
                 return filepath.replace(/\.(ts|tsx)$/, ".js");
-            }
+            },
+            tsconfig: "./tsconfig.json"
         },
 
         reporters: ["progress", "karma-typescript"],
