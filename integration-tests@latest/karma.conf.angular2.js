@@ -12,6 +12,9 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
+            bundlerOptions: {
+                addNodeGlobals: false
+            },
             compilerOptions: {
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
