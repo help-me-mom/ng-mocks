@@ -212,8 +212,7 @@ karmaTypescriptConfig: {
             console.log(message);
         }
     },
-    reports:
-    {
+    reports: {
         "cobertura": {
             "directory": "coverage",
             "filename": "cobertura/coverage.xml"

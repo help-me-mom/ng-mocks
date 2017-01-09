@@ -49,11 +49,14 @@ module.exports = function(config) {
             },
             exclude: ["broken"],
             include: ["**/*.ts", "**/*.tsx"],
-            reports:
-            {
+            reports: {
                 "cobertura": {
                     "directory": "coverage",
                     "filename": "cobertura/coverage.xml"
+                },
+                "lcovonly": {
+                    "directory": "coverage",
+                    "filename": "lcovonly/lcov.info"
                 },
                 "html": "coverage",
                 "text-summary": ""
