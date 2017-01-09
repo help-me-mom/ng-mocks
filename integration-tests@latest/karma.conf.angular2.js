@@ -4,14 +4,17 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/angular2/**/*.ts" }
+            { pattern: "src/frameworks/angular2/**/*.ts" }
         ],
 
         preprocessors: {
-            "src/angular2/**/*.ts": ["karma-typescript"]
+            "src/frameworks/angular2/**/*.ts": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {
+            bundlerOptions: {
+                addNodeGlobals: false
+            },
             compilerOptions: {
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
@@ -19,7 +22,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 target: "ES5"
             },
-            include: ["src/angular2/*.ts"],
+            include: ["src/frameworks/angular2/**/*.ts"],
             reports:
             {
                 "html": "coverage",

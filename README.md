@@ -1,132 +1,77 @@
 # karma-typescript
 
-## What the plugin does
+[![npm](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)]()
 
-The plugin seamlessly runs your unit tests written in Typescript and creates coverage reports, eliminating the need for additional build steps or scripts.
+> Karma :heart: Typescript
 
-It compiles your Typescript code incrementally on the fly, with full type checking, and imported modules will be automatically loaded from node_modules and bundled along with nodejs globals and builtin core modules.
+* Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
+* Get remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul).
+* Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
 
-Frameworks such as AngularJS, Angular2, React and Sinon (among others) are supported out of the box.
+## Installation
 
-**Example screenshot**
+The easiest way is to keep `karma-typescript` as a devDependency in `package.json`:
+
+```json
+{
+  "devDependencies": {
+    "karma": "^1.3.0",
+    "karma-typescript": "2.1.6"
+  }
+}
+```
+
+Do this by installing the plugin via npm:
+
+```
+npm install --save-dev karma-typescript
+```
+
+## Configuration
+
+Bare minimum configuration can be achieved with the following `karma.conf.js` file:
+
+```javascript
+module.exports = function(config) {
+    config.set({
+        frameworks: ["jasmine", "karma-typescript"],
+        files: [
+            { pattern: "src/**/*.ts" }, // *.tsx for React Jsx
+        ],
+        preprocessors: {
+            "**/*.ts": ["karma-typescript"], // *.tsx for React Jsx
+        },
+        reporters: ["progress", "karma-typescript"],
+        browsers: ["Chrome"]
+    });
+};
+```
+
+The above eaxample will compile all Typescript files and run the unit tests, producing remapped coverage in `./coverage`.
+
+## Examples
+
+### Frameworks and Integrations
+
+- [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
+- [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
+- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
+- [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
+
+### Other examples
+
+- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)
+- Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)
+- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)
+- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
+
+### Example output
 
 <img src="http://i.imgur.com/sc4Mswh.png" width="580" height="280" />
 
-## Installation and configuration
-
-First, install the plugin:
-
-`npm install karma-typescript --save-dev`
-
-Then put this in your Karma config:
-
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "src/**/*.ts" }
-],
-
-preprocessors: {
-    "**/*.ts": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-Now run Karma and two things will happen:
-
-* Your tests written in Typescript will be compiled and executed on the fly.
-* You'll have html test coverage, remapped with `remap-istanbul` in the folder `./coverage` in the root of your project.
-
-[Runnable example for Typescript 1.8.10 - 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)<br/>
-[Runnable example for Typescript 1.6.2 - 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)<br/>
-[Runnable example for Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project@angular2)<br/>
-[Runnable example for AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project@angularjs)<br/>
-[Runnable example using Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project@mocha)
-
-#### Configuration example for Angular2
-
-karma.conf.js:
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "base.spec.ts" },
-    { pattern: "src/app/**/*.+(ts|html)" }
-],
-
-proxies: {
-    "/app/": "/base/src/app/"
-},
-
-preprocessors: {
-    "**/*.ts": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-base.spec.ts:
-```javascript
-import "reflect-metadata";
-import "zone.js/dist/zone";
-import "zone.js/dist/long-stack-trace-zone";
-import "zone.js/dist/proxy";
-import "zone.js/dist/sync-test";
-import "zone.js/dist/jasmine-patch";
-import "zone.js/dist/async-test";
-import "zone.js/dist/fake-async-test";
-
-import { TestBed } from "@angular/core/testing";
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-
-TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-```
-
-Example of the resulting coverage:
-
-<img src="http://i.imgur.com/KVGVyxr.png" width="579" height="280" />
-
-#### Configuration example for React
-
-```javascript
-frameworks: ["jasmine", "karma-typescript"],
-
-files: [
-    { pattern: "src/**/*.tsx" }
-],
-
-preprocessors: {
-    "src/**/*.tsx": ["karma-typescript"]
-},
-
-reporters: ["progress", "karma-typescript"],
-
-browsers: ["Chrome"]
-```
-
-Example of the resulting coverage:
-
-<img src="http://i.imgur.com/9khrBxw.png" width="685" height="312" />
-
-[All runnable examples and integration tests for Typescript 1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)<br/>
-[All runnable examples and integration tests for Typescript 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
-
-## Under the hood
-
-Under the hood, `karma-typescript` chains several other npm modules in the following order:
-
-|Module|Step|Note|
-|---|---|---|
-|`typescript`|Compile incrementally, in-memory with inline sourcemaps|Plain Typescript, Angular2 and React are included in the default compiler settings|
-|`browserify`|Add module loading for browsers|Uses parts of the browserify tool chain|
-|`karma-coverage`|Instrument the code with Istanbul|Instrumented code will not be compacted and &ast;.spec.ts and &ast;.test.ts are excluded|
-|`remap-istanbul`|Create remapped coverage|An html report will be created in the folder ./coverage|
+- [Angular2 screenshot](https://github.com/monounity/karma-typescript/blob/master/assets/angular2.png)
+- [React screenshot](https://github.com/monounity/karma-typescript/blob/master/assets/react.png)
 
 ## Advanced configuration
 
@@ -158,43 +103,36 @@ coverageReporter: {
 
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
-* `karmaTypescriptConfig.tsconfig` - A path to a `tsconfig.json` file. The default compiler options will be replaced by the options in this file.
+* `karmaTypescriptConfig.bundlerOptions.addNodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be added to the bundle. Defaults to `true`.
+
+* `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
+
+* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, ie `module.exports = {};`.
+
+* ~~`karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
+
+* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bundled without being parsed for dependencies.
+
+* `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules. Defaults to `[".js", ".json"]`,
+
+* `karmaTypescriptConfig.bundlerOptions.resolve.directories` - An array of directories in which to recursively look for modules. Defaults to `["node_modules"]`.
+
+* `karmaTypescriptConfig.bundlerOptions.validateSyntax` - A boolean indicating whether the syntax of the bundled code should be validated. Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`. Defaults to `true`.
 
 * `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
 Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the exception of `outDir` and `outFile` which are ignored since the code is compiled in-memory.
 
+* `karmaTypescriptConfig.coverageOptions.instrumentation` - A boolean indicating whether the code should be instrumented, set to `false` to see the original Typescript code when debugging. Defaults to true.
+
+* `karmaTypescriptConfig.coverageOptions.exclude` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
+
 * `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler. The values will be merged with existing options. The folder `node_modules` is excluded by default.
 
+* ~~`karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.exclude` instead.
+
+* ~~`karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
+
 * `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
-
-* `karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and you will see the original TypeScript code when debugging.
-
-* `karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
-
-* `karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm modules to be ignored by the bundler. Useful if a module in node_modules conditionally requires deprecated modules.
-
-* `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests. Defaults to an html report in the directory `./coverage`.
-
-    * Available report types:
-
-        * `"clover": "coverage"`
-        * `"cobertura": "coverage"`
-        * `"html": "coverage"`
-        * `"json-summary": "coverage"`
-        * `"json": "coverage"`
-        * `"lcovonly": "coverage"`
-
-    * The following reporters can have their output written directly to the
-    console by setting the destination to "" or null, ie "text-summary": "":
-
-        * `"teamcity": "coverage", // "destination/path" or null or ""`
-        * `"text-lcov": "coverage", // ...`
-        * `"text-summary": "coverage",`
-        * `"text": "coverage"`
-
-* `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
-
-* `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
 
 * `karmaTypescriptConfig.remapOptions` - Pass options to `remap-istanbul`.
 
@@ -203,35 +141,90 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
         * `exclude`, a regex for excluding files from remapping
         * `warn`, a function for handling error messages
 
+* `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests, defaults to an html report in the directory `./coverage`.
+   Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
+    
+    * A `string` with a directory path, for example `"html": "coverage"`.
+    * An empty string or `null`. Writes the output to the console, for example `"text-summary": ""`. This is only possible for a subset of the reports available.
+    * An `object` with more fine-grained control over path and filename:
+    ```javascript
+    "cobertura": {
+        "directory": "coverage",
+        "filename": "cobertura/coverage.xml"
+    }
+    ```
+
+    * Available report types:
+        * `"clover": destination`
+        * `"cobertura": destination`
+        * `"html": destination`
+        * `"json-summary": destination`
+        * `"json": destination`
+        * `"lcovonly": destination`
+        * `"teamcity": destination` (redirects to the console with destination "" or `null`)
+        * `"text-lcov": destination` (redirects to the console with destination "" or `null`)
+        * `"text-summary": destination` (redirects to the console with destination "" or `null`)
+        * `"text": destination` (redirects to the console with destination "" or `null`)
+
+    * Example of the three destination types:
+    ```javascript
+    karmaTypescriptConfig: {
+        reports:
+        {
+            "cobertura": {
+                "directory": "coverage",
+                "filename": "cobertura/coverage.xml"
+            },
+            "html": "coverage",
+            "text-summary": ""
+        }
+    }
+    ```
+
+* `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`. Defaults to renaming `.ts` and `.tsx` to `.js`.
+
+* `karmaTypescriptConfig.tsconfig` - A path to a `tsconfig.json` file. The default compiler options will be replaced by the options in this file.
+
 Example of a full `karmaTypescriptConfig` configuration:
 
 ```javascript
 karmaTypescriptConfig: {
-    tsconfig: "./tsconfig.json",
+    bundlerOptions: {
+        addNodeGlobals: true,
+        ignore: ["ws"],
+        noParse: "jquery",
+        exclude: ["react/addons"],
+        resolve: {
+            extensions: [".js", ".json"],
+            directories: ["node_modules"]
+        },
+        validateSyntax: true
+    },
     compilerOptions: {
         noImplicitAny: true,
     },
-    include: ["**/*.ts"],
     exclude: ["broken"],
-    bundlerOptions: {
-        ignoredModuleNames: ["react/addons"],
-    },
-    disableCodeCoverageInstrumentation: false,
     excludeFromCoverage: /\.(d|spec|test)\.ts/,
+    disableCodeCoverageInstrumentation: false,
+    include: ["**/*.ts"],
     remapOptions: {
         warn: function(message){
             console.log(message);
         }
     },
-    reports:
-    {
+    reports: {
+        "cobertura": {
+            "directory": "coverage",
+            "filename": "cobertura/coverage.xml"
+        },
         "html": "coverage",
         "text-summary": ""
     },
     transformPath: function(filepath) {
         return filepath.replace(/\.(ts|tsx)$/, ".js");
-    }
-},
+    },
+    tsconfig: "./tsconfig.json"
+}
 ```
 
 ## Stop on compilation error
@@ -244,7 +237,23 @@ Modules imported in Typescript code, for example `import { Component } from "@an
 
 Also, a full Node.js environment will be provided with global variables and browser shims for builtin core modules:
 
-#### Globals
+### Module
+
+A module object will be injected by the bundler:
+
+```javascript
+module: {
+    exports: {},
+    id: "foo/bar.ts",
+    uri: "/users/home/dev/src/foo/bar.ts"
+}
+```
+
+The `module.id` will be calculated from the value of `module.uri`, relative to the Karma config `basePath` value.
+
+Modules exporting an extensible object such as a *function* or an *object literal* will also be decorated with a non-enumerable `default` property if `module.exports.default` is undefined.
+
+### Globals
 
 * &#95;&#95;dirname
 * &#95;&#95;filename
@@ -252,7 +261,7 @@ Also, a full Node.js environment will be provided with global variables and brow
 * global
 * process
 
-#### Browser shims
+### Browser shims
 * [assert](https://www.npmjs.com/package/assert)
 * [buffer](https://www.npmjs.com/package/buffer)
 * [console](https://www.npmjs.com/package/console-browserify)
@@ -281,11 +290,22 @@ Note: automatic bundling will only be performed if `compilerOptions.module` is s
 
 ## Importing stylesheets and bundling for production
 
-Style files (.css|.less|.sass|.scss) are served as dummy modules to the browser running the tests, allowing you to load styles using the Typescript import statement, ie `import "./style/app.scss";`.
+Style files (.css|.less|.sass|.scss) are served as JSON strings to the browser running the tests, allowing styles to be loaded using the Typescript import statement, ie `import "./style/app.scss";`.
 
-This means you can import styles in order to let, for instance, webpack load the styles with less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
+This means styles can be imported in order to let, for instance, webpack load the styles with less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
 
 Note: JSON required by modules in `node_modules` will be loaded automatically by the bundler.
+
+## Under the hood
+
+Under the hood, `karma-typescript` chains several other npm modules in the following order:
+
+|Module|Step|Note|
+|---|---|---|
+|`typescript`|Compile incrementally, in-memory with inline sourcemaps|Plain Typescript, Angular2 and React are included in the default compiler settings|
+|`browserify`|Add module loading for browsers|Uses parts of the browserify tool chain|
+|`karma-coverage`|Instrument the code with Istanbul|Instrumented code will not be compacted and &ast;.spec.ts and &ast;.test.ts are excluded|
+|`remap-istanbul`|Create remapped coverage|An html report will be created in the folder ./coverage|
 
 ## Requirements
 
@@ -297,7 +317,7 @@ Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and 
 
 ### Error: Cannot find module 'buffer/' from '.'
 
-This error seems to hit mostly users with older versions of `npm`, where all dependencies won't get pulled in automatically by `npm`.
+This error seems to hit mostly users with older versions of `npm`, where all dependencies don't get pulled in automatically by `npm`.
 
 There's a workaround reported by users, which is simply adding the missing dependencies explicitly to `package.json`:
 
@@ -306,8 +326,7 @@ There's a workaround reported by users, which is simply adding the missing depen
  * `npm install --save-dev buffer`
  * `npm install --save-dev process`
 
-
-You could also try running `npm install` twice or, if possible, upgrade to a newer version of `npm`.
+Other workarounds are running `npm install` twice or, if possible, upgrading to a newer version of `npm`.
 
 These are the environments reported failing/working:
 

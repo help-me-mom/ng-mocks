@@ -21,8 +21,7 @@
     "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
     "dev-win": "npm run copy-win & karma start karma.conf.js",
     "dev-angular2-win": "npm run copy-win && karma start karma.conf.angular2.js",
-    "dev-react-win": "npm run copy-win && karma start karma.conf.react.js",
-    "postinstall": "typings install"
+    "dev-react-win": "npm run copy-win && karma start karma.conf.react.js"
   },
   "dependencies": {
     "@angular/common": "2.0.1",
@@ -44,7 +43,6 @@
     "rxjs": "5.0.0-beta.12",
     "sinon": "1.17.6",
     "typescript": "1.8.10",
-    "typings": "1.4.0",
     "zone.js": "0.6.25"
   }
 }

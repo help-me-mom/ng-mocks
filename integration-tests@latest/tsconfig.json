@@ -11,7 +11,7 @@
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
-            "compilerpaths/*": [ "src/compiler-paths/*" ]
+            "compilerpaths/*": [ "src/typescript/compiler-paths/*" ]
         },
         "types" : [
             "codemirror",

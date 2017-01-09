@@ -4,25 +4,15 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/angular2/*.ts" },
-            { pattern: "src/codemirror/*.ts" },
-            { pattern: "src/compiler-paths/*.ts" },
-            { pattern: "src/core-modules/*.ts" },
-            { pattern: "src/cyclic/*.ts" },
-            { pattern: "src/default-exports/*.ts" },
-            { pattern: "src/angular2/*.ts" },
-            { pattern: "src/formatting/*.ts" },
-            { pattern: "src/index-require/**/*.ts" },
-            { pattern: "src/interface-mocking/*.ts" },
-            { pattern: "src/json/*.ts" },
-            { pattern: "src/no-module/*.ts" },
-            { pattern: "src/node-globals/*.ts" },
-            { pattern: "src/react-tsx/*.tsx" },
-            { pattern: "src/relative-import-path/*.ts" },
-            { pattern: "src/require/*.ts" },
-            { pattern: "src/sinon/*.ts" },
-            { pattern: "src/style-import/*.ts" },
-            { pattern: "src/typescript-language-features/*.ts" },
+            { pattern: "src/bundling/**/*.ts" },
+            { pattern: "src/custom-typings/**/*.ts" },
+            { pattern: "src/exports/*.ts" },
+            { pattern: "src/frameworks/**/*.ts" },
+            { pattern: "src/imports/**/*.ts" },
+            { pattern: "src/misc/no-module-tester.spec.ts" },
+            { pattern: "src/misc/!(emptyfile)/**/*.ts" },
+            { pattern: "src/node/**/*.ts" },
+            { pattern: "src/typescript/**/*.ts" },
             { pattern: "src/x-performance/**/*.ts" }
         ],
 
@@ -31,7 +21,17 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
-            tsconfig: "./tsconfig.json",
+            bundlerOptions: {
+                addNodeGlobals: true,
+                exclude: ["react/addons"],
+                ignore: ["ws"],
+                noParse: ["jquery"],
+                resolve: {
+                    extensions: [".js", ".json"],
+                    directories: ["node_modules"]
+                },
+                validateSyntax: false
+            },
             compilerOptions: {
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
@@ -41,22 +41,30 @@ module.exports = function(config) {
                 moduleResolution: "node",
                 sourceMap: true,
                 target: "ES5",
+                lib: ["DOM", "ES5", "ScriptHost"]
             },
-            include: ["**/*.ts", "**/*.tsx"],
+            coverageOptions: {
+                instrumenation: true,
+                exclude: /\.(d|spec|test)\.ts/
+            },
             exclude: ["broken"],
-            bundlerOptions: {
-                ignoredModuleNames: ["react/addons"]
-            },
-            disableCodeCoverageInstrumentation: false,
-            excludeFromCoverage: /\.(d|spec|test)\.ts/,
-            reports:
-            {
+            include: ["**/*.ts", "**/*.tsx"],
+            reports: {
+                "cobertura": {
+                    "directory": "coverage",
+                    "filename": "cobertura/coverage.xml"
+                },
+                "lcovonly": {
+                    "directory": "coverage",
+                    "filename": "lcovonly/lcov.info"
+                },
                 "html": "coverage",
                 "text-summary": ""
             },
             transformPath: function(filepath) {
                 return filepath.replace(/\.(ts|tsx)$/, ".js");
-            }
+            },
+            tsconfig: "./tsconfig.json"
         },
 
         reporters: ["progress", "karma-typescript"],

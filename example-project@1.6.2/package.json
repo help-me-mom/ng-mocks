@@ -13,8 +13,7 @@
   "scripts": {
     "test": "karma start karma.conf.js",
     "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start",
-    "dev-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls & karma start karma.conf.js",
-    "postinstall": "typings install"
+    "dev-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls & karma start karma.conf.js"
   },
   "dependencies": {
     "@types/jasmine": "^2.5.35",
@@ -24,7 +23,6 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../",
-    "typescript": "1.6.2",
-    "typings": "^1.4.0"
+    "typescript": "1.6.2"
   }
 }

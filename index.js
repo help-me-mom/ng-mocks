@@ -1,5 +1,7 @@
-var Bundler = require("./lib/bundlers/builtin/bundler"),
+var Bundler = require("./lib/bundler"),
     Compiler = require("./lib/compiler"),
+    Configuration = require("./lib/configuration"),
+    Coverage = require("./lib/coverage"),
 
     Framework = require("./lib/framework"),
     Preprocessor = require("./lib/preprocessor"),
@@ -7,12 +9,15 @@ var Bundler = require("./lib/bundlers/builtin/bundler"),
 
     sharedProcessedFiles = {},
 
-    bundler = new Bundler(),
+    configuration = new Configuration(),
+    coverage = new Coverage(configuration),
+
+    bundler = new Bundler(configuration, coverage),
     compiler = new Compiler(),
 
-    framework = new Framework(bundler, compiler),
-    preprocessor = new Preprocessor(bundler, compiler, sharedProcessedFiles),
-    reporter = new Reporter(sharedProcessedFiles);
+    framework = new Framework(bundler, compiler, configuration, coverage),
+    preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles),
+    reporter = new Reporter(configuration, sharedProcessedFiles);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],

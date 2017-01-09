@@ -4,15 +4,18 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/emptyfile/*.ts" }
+            { pattern: "src/misc/emptyfile/*.ts" }
         ],
 
         preprocessors: {
-            "src/**/*.ts": ["karma-typescript"]
+            "src/misc/emptyfile/*.ts": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {
-            include: ["src/emptyfile/*.ts"]
+            include: ["src/misc/emptyfile/*.ts"],
+            bundlerOptions: {
+                nodeGlobals: false
+            }
         },
 
         reporters: ["progress", "karma-typescript"],
