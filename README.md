@@ -130,7 +130,7 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * ~~`karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.exclude` instead.
 
-* ~~`karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
+* ~~`karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be disabled and the original TypeScript code will be shown when debugging.~~ **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.instrumentation` instead.
 
 * `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options. This option is available in Typescript 2.0.0^.
 
