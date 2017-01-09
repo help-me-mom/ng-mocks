@@ -44,7 +44,7 @@ module.exports = function(config) {
                 lib: ["DOM", "ES5", "ScriptHost"]
             },
             coverageOptions: {
-                instrumenation: true,
+                instrumentation: true,
                 exclude: /\.(d|spec|test)\.ts/
             },
             exclude: ["broken"],

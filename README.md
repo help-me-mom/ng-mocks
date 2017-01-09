@@ -191,9 +191,9 @@ Example of a full `karmaTypescriptConfig` configuration:
 karmaTypescriptConfig: {
     bundlerOptions: {
         addNodeGlobals: true,
+        exclude: ["react/addons"],
         ignore: ["ws"],
         noParse: "jquery",
-        exclude: ["react/addons"],
         resolve: {
             extensions: [".js", ".json"],
             directories: ["node_modules"]
@@ -203,9 +203,11 @@ karmaTypescriptConfig: {
     compilerOptions: {
         noImplicitAny: true,
     },
+    coverageOptions: {
+        instrumentation: true,
+        exclude: /\.(d|spec|test)\.ts/
+    },
     exclude: ["broken"],
-    excludeFromCoverage: /\.(d|spec|test)\.ts/,
-    disableCodeCoverageInstrumentation: false,
     include: ["**/*.ts"],
     remapOptions: {
         warn: function(message){
