@@ -11,23 +11,14 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "karma start karma.conf.js",
-    "test-angular2": "karma start karma.conf.angular2.js",
-    "test-react": "karma start karma.conf.react.js",
-    "copy": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/",
-    "dev": "npm run copy && karma start karma.conf.js",
-    "dev-angular2": "npm run copy && karma start karma.conf.angular2.js",
-    "dev-react": "npm run copy && karma start karma.conf.react.js",
-    "dev-core": "npm run copy && karma start karma.conf.core.js",
-    "dev-no-module": "npm run copy && karma start karma.conf.no.module.js",
-    "dev-emptyfile": "npm run copy && karma start karma.conf.emptyfile.js",
-    "copy-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls",
-    "dev-win": "npm run copy-win & karma start karma.conf.js",
-    "dev-angular2-win": "npm run copy-win && karma start karma.conf.angular2.js",
-    "dev-react-win": "npm run copy-win && karma start karma.conf.react.js",
-    "dev-core-win": "npm run copy-win && karma start karma.conf.core.js",
-    "dev-no-module-win": "npm run copy-win && karma start karma.conf.no.module.js",
-    "dev-emptyfile-win": "npm run copy-win && karma start karma.conf.emptyfile.js"
+    "dev": "gulp dev --cwd . && karma start",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
+    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers PhantomJS --single-run",
+    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --browsers PhantomJS --single-run",
+    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --browsers PhantomJS --single-run",
+    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers PhantomJS --single-run",
+    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "test": "karma start"
   },
   "dependencies": {
     "@angular/common": "2.2.3",
@@ -68,5 +59,9 @@
     "text-encoding": "0.6.1",
     "typescript": "latest",
     "zone.js": "^0.6.26"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "karma-phantomjs-launcher": "^1.0.2"
   }
 }

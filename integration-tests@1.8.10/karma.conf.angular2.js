@@ -4,7 +4,7 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "node_modules/reflect-metadata/Reflect.js" },
+            { pattern: "node_modules/core-js/client/shim.js" },
             { pattern: "node_modules/zone.js/dist/zone.js" },
             { pattern: "node_modules/zone.js/dist/long-stack-trace-zone.js" },
             { pattern: "node_modules/zone.js/dist/proxy.js" },

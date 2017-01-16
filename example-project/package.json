@@ -11,9 +11,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "karma start karma.conf.js",
-    "dev": "clear && rm -rf coverage && cp ../index.js node_modules/karma-typescript && cp -R ../lib/* node_modules/karma-typescript/lib/ && karma start",
-    "dev-win": "rd /S /Q coverage & copy /Y ..\\index.js .\\node_modules\\karma-typescript\\index.js && xcopy /Y /R /S ..\\lib\\* node_modules\\karma-typescript\\lib\\ & cls & karma start karma.conf.js"
+    "dev": "gulp dev --cwd . && karma start",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
+    "test": "karma start"
   },
   "dependencies": {
     "@types/jasmine": "^2.5.35",
@@ -24,5 +24,9 @@
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../",
     "typescript": "latest"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "karma-phantomjs-launcher": "^1.0.2"
   }
 }
