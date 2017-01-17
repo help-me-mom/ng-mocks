@@ -1,5 +1,7 @@
 #/bin/sh
 
+set -e
+
 cd example-project
 npm run dev:ci
 
