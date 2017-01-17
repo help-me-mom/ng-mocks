@@ -1,8 +1,8 @@
 # karma-typescript
 
-[![npm](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)]()
-[![npm](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)]()
-[![Travis](https://img.shields.io/travis/monounity/karma-typescript.svg?style=flat-square)]()
+[![Npm version](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
+[![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
+[![Travis build status](https://img.shields.io/travis/monounity/karma-typescript.svg?style=flat-square)](https://travis-ci.org/monounity/karma-typescript)
 
 > Karma :heart: Typescript
 
