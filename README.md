@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)]()
 [![npm](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)]()
+[![Travis](https://img.shields.io/travis/monounity/karma-typescript.svg?style=flat-square)]()
 
 > Karma :heart: Typescript
 
