@@ -58,7 +58,7 @@
     "glob": "^7.1.1",
     "gulp-util": "3.0.7",
     "https-browserify": "~0.0.0",
-    "istanbul": "0.4.3",
+    "istanbul": "0.4.5",
     "karma-coverage": "^1.1.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
