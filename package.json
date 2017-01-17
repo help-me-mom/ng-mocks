@@ -38,8 +38,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "ci:unix": "./ci/install.sh && ./ci/run.sh",
-    "ci:windows": ".\\ci\\install.bat & .\\ci\\run.bat"
+    "lint": "eslint ./lib/*.js",
+    "test": "./ci/run.sh",
+    "test:unix": "./ci/install.sh && ./ci/run.sh",
+    "test:windows": ".\\ci\\install.bat & .\\ci\\run.bat"
   },
   "dependencies": {
     "acorn": "^4.0.4",
