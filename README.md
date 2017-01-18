@@ -150,8 +150,9 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
     * An `object` with more fine-grained control over path and filename:
     ```javascript
     "cobertura": {
-        "directory": "coverage",
-        "filename": "cobertura/coverage.xml"
+        "directory": "coverage",    // optional, defaults to 'coverage'
+        "subdirectory": "cobertura" // optional, defaults to the name of the browser running the tests
+        "filename": "coverage.xml", // optional, defaults to the report name
     }
     ```
 
@@ -174,7 +175,8 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
         {
             "cobertura": {
                 "directory": "coverage",
-                "filename": "cobertura/coverage.xml"
+                "filename": "coverage.xml",
+                "subdirectory": "cobertura"
             },
             "html": "coverage",
             "text-summary": ""
