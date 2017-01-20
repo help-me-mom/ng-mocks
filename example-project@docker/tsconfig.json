@@ -1,0 +1,16 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "tmp",
+        "target": "ES5",
+        "sourceMap": true,
+        "types" : [
+            "jasmine"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

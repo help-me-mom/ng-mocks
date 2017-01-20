@@ -57,8 +57,9 @@ The above eaxample will compile all Typescript files and run the unit tests, pro
 
 - [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
 - [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
-- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
 - [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
+- [Docker](https://github.com/monounity/karma-typescript/tree/master/example-project%40docker)
+- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
 
 ### Other examples
 
