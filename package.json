@@ -58,6 +58,7 @@
     "crypto-browserify": "^3.0.0",
     "detective": "^4.3.2",
     "domain-browser": "~1.1.0",
+    "es6-promise": "^4.0.5",
     "events": "~1.1.0",
     "glob": "^7.1.1",
     "gulp-util": "3.0.7",
