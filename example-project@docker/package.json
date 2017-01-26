@@ -21,7 +21,7 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.7",
+    "karma-typescript": "latest",
     "phantomjs-prebuilt": "^2.1.14",
     "typescript": "latest"
   }
