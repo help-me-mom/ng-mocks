@@ -2,24 +2,11 @@
 
 This project contains a suite of integration tests that uses the `karma-typescript` plugin itself to test the its functionality.
 
-### Running the tests
+* `npm test`, runs all tests with Chrome and watches for changes
 
-There are a handful of npm scripts defined in the package.json file to make life easier when developing:
+Each `dev` tests deletes the coverage folder and copies the `karma-typescript` source code to the `node_modules` folder.
 
-* `npm test`, runs all tests, including *lots* of tests used to check performance.
-* `npm run test-angular2`, runs just the Angular2 tests.
-* `npm run test-react`, runs just the React tests.
-
-### Developing
-
-If you want to add new functionality or fix a bug you need to copy the plugin code to node_modules before running the integration tests. On &ast;nix machines the following npm scripts will copy the code and then run the tests:
-
-* `npm run dev`
-* `npm run dev-angular2`
-* `npm run dev-react`
-
-For windows users there are corresponding scripts with a -win suffix:
-
-* `npm run dev-win`
-* `npm run dev-angular2-win`
-* `npm run dev-react-win`
+* `npm run dev`, runs all tests with Chrome and watches for changes
+* `npm run dev:ci`, runs all tests with PhantomJS once (continous integration)
+* `npm run dev:ci:angular2`, runs the Angular2 tests with PhantomJS once (continous integration)
+* `npm run dev:ci:react`, runs the React tests with PhantomJS once (continous integration)

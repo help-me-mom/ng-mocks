@@ -1,6 +1,6 @@
 {
-  "name": "karma-typescript-example-project",
-  "version": "2.1.6",
+  "name": "karma-typescript-example-project-docker",
+  "version": "2.1.7",
   "description": "",
   "author": "monounity",
   "contributors": [
@@ -11,22 +11,18 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
     "test": "karma start"
   },
   "dependencies": {
+    "express": "^4.13.3",
     "@types/jasmine": "^2.5.35",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "karma-phantomjs-launcher": "^1.0.2",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "karma-typescript": "../",
+    "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.7",
+    "phantomjs-prebuilt": "^2.1.14",
     "typescript": "latest"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
   }
 }

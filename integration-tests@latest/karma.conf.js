@@ -52,7 +52,8 @@ module.exports = function(config) {
             reports: {
                 "cobertura": {
                     "directory": "coverage",
-                    "filename": "cobertura/coverage.xml"
+                    "filename": "coverage.xml",
+                    "subdirectory": "cobertura"
                 },
                 "lcovonly": {
                     "directory": "coverage",

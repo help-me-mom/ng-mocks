@@ -4,6 +4,7 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
+            { pattern: "node_modules/core-js/client/shim.js" },
             { pattern: "src/react-tsx/**/*.tsx" }
         ],
 

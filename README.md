@@ -1,7 +1,8 @@
 # karma-typescript
 
-[![npm](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)]()
-[![npm](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)]()
+[![Npm version](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
+[![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
+[![Travis build status](https://img.shields.io/travis/monounity/karma-typescript.svg?style=flat-square)](https://travis-ci.org/monounity/karma-typescript)
 
 > Karma :heart: Typescript
 
@@ -56,8 +57,9 @@ The above eaxample will compile all Typescript files and run the unit tests, pro
 
 - [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
 - [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
-- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
 - [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
+- [Docker](https://github.com/monounity/karma-typescript/tree/master/example-project%40docker)
+- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
 
 ### Other examples
 
@@ -149,8 +151,9 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
     * An `object` with more fine-grained control over path and filename:
     ```javascript
     "cobertura": {
-        "directory": "coverage",
-        "filename": "cobertura/coverage.xml"
+        "directory": "coverage",    // optional, defaults to 'coverage'
+        "subdirectory": "cobertura" // optional, defaults to the name of the browser running the tests
+        "filename": "coverage.xml", // optional, defaults to the report name
     }
     ```
 
@@ -173,7 +176,8 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
         {
             "cobertura": {
                 "directory": "coverage",
-                "filename": "cobertura/coverage.xml"
+                "filename": "coverage.xml",
+                "subdirectory": "cobertura"
             },
             "html": "coverage",
             "text-summary": ""
