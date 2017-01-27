@@ -3,7 +3,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - .\ci\install.bat
+  - ci\install.bat
 
 test_script:
   - node --version
