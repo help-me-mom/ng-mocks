@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import "@angular/upgrade";
 
 @Component({
     selector: "angular-app",

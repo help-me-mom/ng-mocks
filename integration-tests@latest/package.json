@@ -21,11 +21,12 @@
     "test": "karma start"
   },
   "dependencies": {
-    "@angular/common": "2.2.3",
-    "@angular/compiler": "2.2.3",
-    "@angular/core": "2.2.3",
-    "@angular/platform-browser": "2.2.3",
-    "@angular/platform-browser-dynamic": "2.2.3",
+    "@angular/common": "^2.4.5",
+    "@angular/compiler": "^2.4.5",
+    "@angular/core": "^2.4.5",
+    "@angular/platform-browser": "^2.4.5",
+    "@angular/platform-browser-dynamic": "^2.4.5",
+    "@angular/upgrade": "^2.4.5",
     "@types/chai": "^3.4.34",
     "@types/chai-enzyme": "^0.5.6",
     "@types/codemirror": "0.0.35",
@@ -67,7 +68,7 @@
     "socket.io": "^1.7.2",
     "text-encoding": "0.6.1",
     "typescript": "latest",
-    "zone.js": "^0.6.26"
+    "zone.js": "^0.7.6"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
