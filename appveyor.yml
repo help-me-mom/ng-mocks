@@ -9,6 +9,6 @@ test_script:
   - node --version
   - npm --version
   - npm run lint
-  - npm test
+  - ci\run.bat
 
 build: off
