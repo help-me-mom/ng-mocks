@@ -116,7 +116,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bundled without being parsed for dependencies.
 
-* `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules. Defaults to `[".js", ".json"]`,
+* `karmaTypescriptConfig.bundlerOptions.resolve.alias` - A object literal where the key is a module name and the value is a path that will be used when resolving the module. The key is a regular expression.
+
+* `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules. Defaults to `[".js", ".json"]`.
 
 * `karmaTypescriptConfig.bundlerOptions.resolve.directories` - An array of directories in which to recursively look for modules. Defaults to `["node_modules"]`.
 
@@ -200,6 +202,9 @@ karmaTypescriptConfig: {
         ignore: ["ws"],
         noParse: "jquery",
         resolve: {
+            alias: {
+                "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"
+            },
             extensions: [".js", ".json"],
             directories: ["node_modules"]
         },

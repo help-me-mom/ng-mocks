@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import "@angular/upgrade";
+import "@angular/upgrade/static";
 
 @Component({
     selector: "angular-app",

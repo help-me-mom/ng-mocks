@@ -13,7 +13,12 @@ module.exports = function(config) {
 
         karmaTypescriptConfig: {
             bundlerOptions: {
-                addNodeGlobals: false
+                addNodeGlobals: false,
+                resolve: {
+                    alias: {
+                        "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"
+                    }
+                }
             },
             compilerOptions: {
                 emitDecoratorMetadata: true,

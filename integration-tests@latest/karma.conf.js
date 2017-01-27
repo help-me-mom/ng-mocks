@@ -31,6 +31,9 @@ module.exports = function(config) {
                 ignore: ["ws"],
                 noParse: ["jquery"],
                 resolve: {
+                    alias: {
+                        "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"
+                    },
                     extensions: [".js", ".json"],
                     directories: ["node_modules"]
                 },
