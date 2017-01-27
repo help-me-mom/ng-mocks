@@ -8,7 +8,7 @@ module.exports = function(config) {
             { pattern: "src/custom-typings/**/*.ts" },
             { pattern: "src/exports/*.ts" },
             { pattern: "src/frameworks/**/*.ts" },
-            { pattern: "src/imports/**/*.ts" },
+            { pattern: "src/imports/**/*.+(ts|tsx)" },
             { pattern: "src/misc/no-module-tester.spec.ts" },
             { pattern: "src/misc/!(emptyfile)/**/*.ts" },
             { pattern: "src/node/**/*.ts" },
@@ -23,7 +23,11 @@ module.exports = function(config) {
         karmaTypescriptConfig: {
             bundlerOptions: {
                 addNodeGlobals: true,
-                exclude: ["react/addons"],
+                exclude: [
+                    "react/addons",
+                    "react/lib/ExecutionEnvironment",
+                    "react/lib/ReactContext"
+                ],
                 ignore: ["ws"],
                 noParse: ["jquery"],
                 resolve: {
