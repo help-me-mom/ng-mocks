@@ -1,9 +1,9 @@
 # karma-typescript
 
-[![Npm version](https://img.shields.io/npm/v/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
-[![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg?style=flat-square)](https://www.npmjs.com/package/karma-typescript)
-[![Travis build status](https://img.shields.io/travis/monounity/karma-typescript/2.1.8.svg?style=flat-square)](https://travis-ci.org/monounity/karma-typescript)
-[![AppVeyor build status](https://img.shields.io/appveyor/ci/monounity/karma-typescript/2.1.8.svg?style=flat-square)](https://ci.appveyor.com/project/monounity/karma-typescript)
+[![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
+[![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
+[![Travis build status](https://img.shields.io/travis/monounity/karma-typescript/2.1.8.svg)](https://travis-ci.org/monounity/karma-typescript)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript)
 
 > Karma :heart: Typescript
 
