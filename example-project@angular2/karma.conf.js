@@ -17,6 +17,12 @@ module.exports = function(config) {
             "**/*.ts": ["karma-typescript"]
         },
 
+        karmaTypescriptConfig: {
+            bundlerOptions: {
+                entrypoints: /\.spec\.ts$/
+            }
+        },
+
         reporters: ["progress", "karma-typescript"],
 
         browsers: ["Chrome"]

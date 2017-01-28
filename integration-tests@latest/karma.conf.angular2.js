@@ -14,6 +14,7 @@ module.exports = function(config) {
         karmaTypescriptConfig: {
             bundlerOptions: {
                 addNodeGlobals: false,
+                entrypoints: /\.spec\.ts$/,
                 resolve: {
                     alias: {
                         "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"

@@ -12,6 +12,9 @@ module.exports = function(config) {
         },
 
         karmaTypescriptConfig: {
+            bundlerOptions: {
+                entrypoints: /\.spec\.tsx$/,
+            },
             compilerOptions: {
                 jsx: "react",
                 module: "commonjs",
