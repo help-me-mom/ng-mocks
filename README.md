@@ -129,7 +129,7 @@ Valid options are the same as for the `compilerOptions` section in `tsconfig.jso
 
 * `karmaTypescriptConfig.coverageOptions.instrumentation` - A boolean indicating whether the code should be instrumented, set to `false` to see the original Typescript code when debugging. Defaults to true.
 
-* `karmaTypescriptConfig.coverageOptions.exclude` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.
+* `karmaTypescriptConfig.coverageOptions.exclude` - A regex for filtering which files should be excluded from coverage instrumentation. Defaults to `/\.(d|spec|test)\.ts/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
 
 * `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler. The values will be merged with existing options. The folder `node_modules` is excluded by default.
 
@@ -215,7 +215,7 @@ karmaTypescriptConfig: {
     },
     coverageOptions: {
         instrumentation: true,
-        exclude: /\.(d|spec|test)\.ts/
+        exclude: /\.(d|spec|test)\.ts/i
     },
     exclude: ["broken"],
     include: ["**/*.ts"],
