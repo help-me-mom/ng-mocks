@@ -108,7 +108,11 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * `karmaTypescriptConfig.bundlerOptions.addNodeGlobals` - Boolean indicating whether the global variables `process` and `Buffer` should be added to the bundle. Defaults to `true`.
 
-* `karmaTypescriptConfig.bundlerOptions.entrypoints` - A regex filtering which files loaded by Karma should be executed in a test run, for example only filenames ending with ".spec.ts": `/\.spec\.ts$/`. Defaults to all files, `/.*/`.
+* `karmaTypescriptConfig.bundlerOptions.entrypoints` - A regex filtering which files loaded by Karma should be executed in
+   a test run, for example only filenames ending with ".spec.ts": `/\.spec\.ts$/`.
+   This setting can be used to make sure the specs have finished setting up the test environment before other code starts
+   requiring modules, which otherwise could lead to subtle bugs caused by race conditions.
+   Defaults to all files, `/.*/`.
 
 * `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
 
