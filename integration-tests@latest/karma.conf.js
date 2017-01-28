@@ -23,6 +23,7 @@ module.exports = function(config) {
         karmaTypescriptConfig: {
             bundlerOptions: {
                 addNodeGlobals: true,
+                entrypoints: /\.spec\.(ts|tsx)$/,
                 exclude: [
                     "react/addons",
                     "react/lib/ExecutionEnvironment",
