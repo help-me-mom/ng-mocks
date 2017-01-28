@@ -1,4 +1,5 @@
 import * as angular from "angular";
+import "angular-mocks";
 import { IRootScopeService } from "angular";
 import { Service } from "./service";
 
