@@ -2,7 +2,7 @@
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
 [![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Travis build status](https://img.shields.io/travis/monounity/karma-typescript/2.1.8.svg)](https://travis-ci.org/monounity/karma-typescript)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=2.1.8)](https://travis-ci.org/monounity/karma-typescript)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript)
 
 > Karma :heart: Typescript
