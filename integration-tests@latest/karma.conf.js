@@ -78,12 +78,14 @@ module.exports = function(config) {
 
         reporters: ["progress", "karma-typescript"],
 
-        browsers: ["Chrome", "PhantomJS"],
+        browsers: [process.env.TRAVIS ? "Chrome_travis_ci" : "Chrome"],
 
-        // ci settings...
-        captureTimeout: 60000,
-        browserDisconnectTimeout: 60000,
-        browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 60000,
+        // just some continous integration settings below, please disregard :)
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        }
     });
 };

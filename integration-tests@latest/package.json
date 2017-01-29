@@ -12,12 +12,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers PhantomJS --single-run",
-    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --browsers PhantomJS --single-run",
-    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --browsers PhantomJS --single-run",
-    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers PhantomJS --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
+    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --single-run",
+    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --single-run",
+    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --single-run",
+    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --single-run",
+    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
     "test": "karma start"
   },
   "dependencies": {
@@ -71,7 +71,6 @@
     "zone.js": "^0.7.6"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
+    "gulp": "^3.9.1"
   }
 }

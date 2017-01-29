@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
     "test": "karma start"
   },
   "dependencies": {

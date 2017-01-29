@@ -95,7 +95,6 @@
     "del": "^2.2.2",
     "eslint": "^3.4.0",
     "gulp": "^3.9.1",
-    "gulp-util": "^3.0.7",
-    "phantomjs-prebuilt": "^2.1.14"
+    "gulp-util": "^3.0.7"
   }
 }

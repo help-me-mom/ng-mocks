@@ -20,6 +20,14 @@ module.exports = function(config) {
 
         logLevel: config.LOG_INFO,
 
-        browsers: ["Chrome"],
+        browsers: [process.env.TRAVIS ? "Chrome_travis_ci" : "Chrome"],
+
+        // just some continous integration settings below, please disregard :)
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        }
     });
 };
