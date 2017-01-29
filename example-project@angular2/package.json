@@ -35,7 +35,6 @@
     "zone.js": "^0.6.26"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
+    "gulp": "^3.9.1"
   }
 }
