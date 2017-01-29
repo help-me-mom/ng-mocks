@@ -81,9 +81,9 @@ module.exports = function(config) {
         browsers: ["Chrome", "PhantomJS"],
 
         // ci settings...
-        captureTimeout: 2000,
-        browserDisconnectTimeout: 2000,
+        captureTimeout: 60000,
+        browserDisconnectTimeout: 60000,
         browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 10000,
+        browserNoActivityTimeout: 60000,
     });
 };
