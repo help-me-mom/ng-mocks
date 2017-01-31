@@ -29,13 +29,6 @@ module.exports = function(config) {
 
         reporters: ["progress", "karma-typescript"],
 
-        browsers: [process.env.TRAVIS ? "Chrome_travis_ci" : "Chrome"],
-
-        customLaunchers: {
-            Chrome_travis_ci: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
-            }
-        }
+        browsers: ["Chrome"]
     });
 };

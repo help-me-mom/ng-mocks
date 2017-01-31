@@ -12,7 +12,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --port 20003 --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
+    "dev:ci:phantomjs": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
     "test": "karma start"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "zone.js": "^0.6.26"
   },
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "karma-phantomjs-launcher": "^1.0.2"
   }
 }
