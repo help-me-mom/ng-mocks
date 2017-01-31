@@ -12,9 +12,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --port 20006 --single-run",
+    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --port 20007 --single-run",
+    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --port 20008 --single-run",
     "test": "karma start"
   },
   "dependencies": {

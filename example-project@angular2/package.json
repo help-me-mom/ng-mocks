@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --port 20003 --single-run",
     "test": "karma start"
   },
   "dependencies": {
