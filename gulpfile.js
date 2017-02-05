@@ -10,7 +10,7 @@ gulp.task("clear", function(cb) {
 });
 
 gulp.task("copy", function(cb) {
-    copy("../index.js", "./node_modules/karma-typescript", function() {
+    copy("../index.js", "./node_modules/karma-typescript/index.js", function() {
         copy("../lib/*.js", "./node_modules/karma-typescript/lib/", cb);
     });
 });
