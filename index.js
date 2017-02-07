@@ -13,7 +13,7 @@ var Bundler = require("./lib/bundler"),
     coverage = new Coverage(configuration),
 
     bundler = new Bundler(configuration, coverage),
-    compiler = new Compiler(),
+    compiler = new Compiler(configuration),
 
     framework = new Framework(bundler, compiler, configuration, coverage),
     preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles),
