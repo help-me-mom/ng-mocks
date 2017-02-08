@@ -13,12 +13,12 @@ call npm run dev:ci || exit /b
 cd ..\typescript-latest
 call npm run dev:ci || exit /b
 
-cd ..\..\tests\integration\1.8.10
+cd ..\..\tests\integration-1.8.10
 call npm run dev:ci || exit /b
 call npm run dev:ci:angular2 || exit /b
 call npm run dev:ci:react || exit /b
 
-cd ..\latest
+cd ..\integration-latest
 call npm run dev:ci || exit /b
 call npm run dev:ci:angular2 || exit /b
 call npm run dev:ci:core || exit /b

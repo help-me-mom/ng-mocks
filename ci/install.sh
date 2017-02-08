@@ -24,11 +24,11 @@ cd ../typescript-latest
 pwd
 npm i
 
-cd ../../tests/integration/1.8.10
+cd ../../tests/integration-1.8.10
 pwd
 npm i
 
-cd ../latest
+cd ../integration-latest
 pwd
 npm i
 

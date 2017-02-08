@@ -33,7 +33,7 @@
     "karma-chrome-launcher": "2.0.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.0.2",
-    "karma-typescript": "../",
+    "karma-typescript": "../../",
     "react": "15.3.2",
     "react-addons-test-utils": "15.3.2",
     "react-dom": "15.3.2",

@@ -17,12 +17,12 @@ npm run dev:ci:phantomjs
 cd ../typescript-latest
 npm run dev:ci:phantomjs
 
-cd ../../tests/integration/1.8.10
+cd ../../tests/integration-1.8.10
 npm run dev:ci:phantomjs
 npm run dev:ci:phantomjs:angular2
 npm run dev:ci:phantomjs:react
 
-cd ../latest
+cd ../integration-latest
 npm run dev:ci:phantomjs
 npm run dev:ci:phantomjs:angular2
 npm run dev:ci:phantomjs:core

@@ -16,10 +16,10 @@ call npm i
 cd ..\typescript-latest
 call npm i
 
-cd ..\..\tests\integration\1.8.10
+cd ..\..\tests\integration-1.8.10
 call npm i
 
-cd ..\latest
+cd ..\integration-latest
 call npm i
 
 cd ..\..
