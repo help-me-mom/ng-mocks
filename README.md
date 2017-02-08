@@ -56,18 +56,18 @@ The above eaxample will compile all Typescript files and run the unit tests, pro
 
 ### Frameworks and Integrations
 
-- [Angular2](https://github.com/monounity/karma-typescript/tree/master/example-project%40angular2)
-- [AngularJS](https://github.com/monounity/karma-typescript/tree/master/example-project%40angularjs)
-- [Gulp](https://github.com/monounity/karma-typescript/tree/master/integration-tests%40gulp)
-- [Docker](https://github.com/monounity/karma-typescript/tree/master/example-project%40docker)
-- [Mocha](https://github.com/monounity/karma-typescript/tree/master/example-project%40mocha)
+- [Angular2](https://github.com/monounity/karma-typescript/tree/master/examples/angular2)
+- [AngularJS](https://github.com/monounity/karma-typescript/tree/master/examples/angularjs)
+- [Docker](https://github.com/monounity/karma-typescript/tree/master/examples/docker)
+- [Gulp](https://github.com/monounity/karma-typescript/tree/master/examples/gulp)
+- [Mocha](https://github.com/monounity/karma-typescript/tree/master/examples/mocha)
 
 ### Other examples
 
-- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/example-project)
-- Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/example-project@1.6.2)
-- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/integration-tests@1.8.10/src)
-- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/integration-tests@latest/src)
+- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
+- Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
+- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
+- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
 
 ### Example output
 

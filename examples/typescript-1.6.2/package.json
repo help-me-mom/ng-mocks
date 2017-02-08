@@ -23,7 +23,7 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "karma-typescript": "../",
+    "karma-typescript": "../../",
     "typescript": "1.6.2"
   },
   "devDependencies": {
