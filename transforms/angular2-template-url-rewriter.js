@@ -2,7 +2,7 @@ var MagicString = require("magic-string"),
     path = require("path"),
     ts = require("typescript");
 
-function apply(context, callback) {
+module.exports = function angularTemplateUrlRewriter(context, callback) {
 
     var changed = false,
         magic = new MagicString(context.fullText);
@@ -34,8 +34,4 @@ function apply(context, callback) {
     }
 
     callback(changed);
-}
-
-module.exports = {
-    apply: apply
 };
