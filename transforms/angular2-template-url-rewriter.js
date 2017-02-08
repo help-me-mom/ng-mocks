@@ -22,7 +22,7 @@ module.exports = function angularTemplateUrlRewriter(context, callback) {
                                 relativeTemplateDir = path.relative(context.basePath, templateDir),
                                 templateUrl = path.join(context.urlRoot, "base", relativeTemplateDir, property.initializer.text);
 
-                            magic.overwrite(start, end, templateUrl);
+                            magic.overwrite(start, end, fixWindowsPath(templateUrl));
                             context.fullText = magic.toString();
                             changed = true;
                         }
@@ -35,3 +35,7 @@ module.exports = function angularTemplateUrlRewriter(context, callback) {
 
     callback(changed);
 };
+
+function fixWindowsPath(value) {
+    return value.replace(/\\/g, "/");
+}
