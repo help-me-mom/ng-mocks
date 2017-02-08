@@ -1,26 +1,26 @@
-cd example-project
+cd examples\angular2
 call npm i
 
-cd ..\example-project@1.6.2
+cd ..\angularjs
 call npm i
 
-cd ..\example-project@angular2
+cd ..\gulp
 call npm i
 
-cd ..\example-project@angularjs
+cd ..\mocha
 call npm i
 
-cd ..\example-project@mocha
+cd ..\typescript-1.6.2
 call npm i
 
-cd ..\integration-tests@1.8.10
+cd ..\typescript-latest
 call npm i
 
-cd ..\integration-tests@gulp
+cd ..\..\tests\integration\1.8.10
 call npm i
 
-cd ..\integration-tests@latest
+cd ..\latest
 call npm i
 
-cd ..
+cd ..\..
 call npm i

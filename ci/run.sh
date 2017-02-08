@@ -2,27 +2,27 @@
 
 set -e
 
-cd example-project
+cd examples/angular2
 npm run dev:ci:phantomjs
 
-cd ../example-project\@1.6.2
+cd ../angularjs
 npm run dev:ci:phantomjs
 
-cd ../example-project\@angular2
+cd ../mocha
 npm run dev:ci:phantomjs
 
-cd ../example-project\@angularjs
+cd ../typescript-1.6.2
 npm run dev:ci:phantomjs
 
-cd ../example-project\@mocha
+cd ../typescript-latest
 npm run dev:ci:phantomjs
 
-cd ../integration-tests\@1.8.10
+cd ../../tests/integration/1.8.10
 npm run dev:ci:phantomjs
 npm run dev:ci:phantomjs:angular2
 npm run dev:ci:phantomjs:react
 
-cd ../integration-tests\@latest
+cd ../latest
 npm run dev:ci:phantomjs
 npm run dev:ci:phantomjs:angular2
 npm run dev:ci:phantomjs:core

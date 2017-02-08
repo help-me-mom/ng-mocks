@@ -1,37 +1,37 @@
 #/bin/sh
 
-cd example-project
+cd examples/angular2
 pwd
 npm i
 
-cd ../example-project\@1.6.2
+cd ../angularjs
 pwd
 npm i
 
-cd ../example-project\@angular2
+cd ../gulp
 pwd
 npm i
 
-cd ../example-project\@angularjs
+cd ../mocha
 pwd
 npm i
 
-cd ../example-project\@mocha
+cd ../typescript-1.6.2
 pwd
 npm i
 
-cd ../integration-tests\@1.8.10
+cd ../typescript-latest
 pwd
 npm i
 
-cd ../integration-tests\@gulp
+cd ../../tests/integration/1.8.10
 pwd
 npm i
 
-cd ../integration-tests\@latest
+cd ../latest
 pwd
 npm i
 
-cd ..
+cd ../..
 pwd
 npm i
