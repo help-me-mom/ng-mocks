@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "dist",
+        "target": "ES5"
+    },
+    "include": [
+        "src/**/*.ts",
+        "typings/index.d.ts"
+    ]
+}

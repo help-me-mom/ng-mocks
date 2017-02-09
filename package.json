@@ -40,7 +40,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint ./lib/*.js",
+    "build": "tsc --noEmit --rootDir ./src",
+    "build:watch": "tsc -w --rootDir ./src",
+    "lint": "eslint ./lib/*.js && tslint --project tsconfig.json",
     "test": "./ci/run.sh",
     "test:unix": "./ci/install.sh && ./ci/run.sh",
     "test:windows": ".\\ci\\install.bat & .\\ci\\run.bat"
@@ -92,11 +94,16 @@
     "vm-browserify": "~0.0.1"
   },
   "devDependencies": {
+    "@types/karma": "^0.13.33",
+    "@types/node": "^7.0.5",
     "cli-clear": "^1.0.4",
     "copy": "^0.3.0",
     "del": "^2.2.2",
     "eslint": "^3.4.0",
     "gulp": "^3.9.1",
-    "gulp-util": "^3.0.7"
+    "gulp-util": "^3.0.7",
+    "tslint": "^4.4.2",
+    "tslint-eslint-rules": "^3.3.0",
+    "typescript": "^2.1.5"
   }
 }
