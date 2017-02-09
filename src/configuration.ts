@@ -1,204 +1,222 @@
-function Configuration() {
-    
-    var asserted = false,
-        karmaConfig,
-        karmaTypescriptConfig,
-        log,
-        self = this;
+import { ConfigOptions } from "karma";
+import { Logger } from "log4js";
 
-    function initialize(config, logger) {
+import {
+    BundlerOptions,
+    CompilerOptions,
+    CoverageOptions,
+    KarmaTypescriptConfig,
+    RemapOptions,
+    Reports,
+} from "../typings";
 
-        log = logger.create("configuration.karma-typescript");
+class Configuration {
 
-        karmaConfig = defaultTo(config, {});
-        karmaTypescriptConfig = defaultTo(config.karmaTypescriptConfig, {});
+    public karma: ConfigOptions;
+    public bundlerOptions: BundlerOptions;
+    public compilerOptions: CompilerOptions;
+    public coverageOptions: CoverageOptions;
+    public coverageReporter: any;
+    public defaultTsconfig: any;
+    public exclude: string[];
+    public include: string[];
+    public remapOptions: RemapOptions;
+    public reporters: string[];
+    public reports: Reports;
+    public transformPath: Function;
+    public transforms: Function[];
+    public tsconfig: string;
 
-        self.karma = karmaConfig;
+    private asserted: boolean;
+    private karmaTypescriptConfig: KarmaTypescriptConfig;
+    private log: Logger;
 
-        configureBundler();
-        configureFramework();
-        configurePreprocessor();
-        configureReporter();
-        configureTransforms();
-        configureKarmaCoverage();
-        assertConfiguration();
+    public initialize(config: ConfigOptions, logger: any) {
 
-        log.debug(self);
+        this.log = logger.create("configuration.karma-typescript");
+        this.karma = this.defaultTo(config, {});
+        this.karmaTypescriptConfig = this.defaultTo((<any> config).karmaTypescriptConfig, {});
+
+        this.configureBundler();
+        this.configureFramework();
+        this.configurePreprocessor();
+        this.configureReporter();
+        this.configureTransforms();
+        this.configureKarmaCoverage();
+        this.assertConfiguration();
+
+        this.log.debug(this.toString());
     }
 
-    function configureBundler() {
-
-        self.bundlerOptions = defaultTo(karmaTypescriptConfig.bundlerOptions, {});
-        self.bundlerOptions.addNodeGlobals = defaultTo(self.bundlerOptions.addNodeGlobals, true);
-        self.bundlerOptions.entrypoints = defaultTo(self.bundlerOptions.entrypoints, /.*/);
-        self.bundlerOptions.exclude = defaultTo(self.bundlerOptions.exclude, []);
-        self.bundlerOptions.ignore = defaultTo(self.bundlerOptions.ignore, []);
-        self.bundlerOptions.noParse = defaultTo(self.bundlerOptions.noParse, []);
-        self.bundlerOptions.resolve = defaultTo(self.bundlerOptions.resolve, {});
-        self.bundlerOptions.resolve.alias = defaultTo(self.bundlerOptions.resolve.alias, {});
-        self.bundlerOptions.resolve.extensions = defaultTo(self.bundlerOptions.resolve.extensions, [".js", ".json"]);
-        self.bundlerOptions.resolve.directories = defaultTo(self.bundlerOptions.resolve.directories, ["node_modules"]);
-        self.bundlerOptions.validateSyntax = defaultTo(self.bundlerOptions.validateSyntax, true);
+    public hasFramework(name: string): boolean {
+        return this.karma.frameworks.indexOf(name) !== -1;
     }
 
-    function configureFramework() {
-
-        self.compilerOptions = karmaTypescriptConfig.compilerOptions;
-
-        self.defaultTsconfig = {
-            compilerOptions: {
-                emitDecoratorMetadata: true,
-                experimentalDecorators: true,
-                jsx: "react",
-                module: "commonjs",
-                sourceMap: true,
-                target: "ES5"
-            },
-            exclude: ["node_modules"]
-        };
-
-        self.exclude = karmaTypescriptConfig.exclude;
-        self.include = karmaTypescriptConfig.include;
-        self.tsconfig = karmaTypescriptConfig.tsconfig;
-    }
-
-    function configureTransforms() {
-
-        self.transforms = defaultTo(karmaTypescriptConfig.transforms, []);
-    }
-
-    function configurePreprocessor() {
-
-        self.coverageOptions = defaultTo(karmaTypescriptConfig.coverageOptions, {});
-        self.coverageOptions.instrumentation = defaultTo(self.coverageOptions.instrumentation, true);
-        self.coverageOptions.exclude = defaultTo(
-					checkCoverageOptionExclude(self.coverageOptions.exclude),
-					/\.(d|spec|test)\.ts/i
-				);
-        self.transformPath = defaultTo(karmaTypescriptConfig.transformPath, function(filepath) {
-            return filepath.replace(/\.(ts|tsx)$/, ".js");
-        });
-    }
-
-    function configureReporter() {
-
-        self.reports = defaultTo(karmaTypescriptConfig.reports, { html: "coverage" });
-        self.remapOptions = defaultTo(karmaTypescriptConfig.remapOptions, {});
-    }
-
-    function configureKarmaCoverage() {
-
-        self.coverageReporter = defaultTo(karmaConfig.coverageReporter, {
-            instrumenterOptions: {
-                istanbul: { noCompact: true }
-            }
-        });
-
-        if(karmaConfig.reporters) {
-            self.reporters = karmaConfig.reporters.slice();
-            if(karmaConfig.reporters.indexOf("coverage") === -1){
-                self.reporters.push("coverage");
-            }
-        }
-        else {
-            self.reporters = ["coverage"];
-        }
-    }
-
-    function assertConfiguration() {
-
-        if(!asserted) {
-
-            asserted = true;
-            assertFrameworkConfiguration();
-            assertDeprecatedOptions();
-        }
-    }
-
-    function assertFrameworkConfiguration() {
-
-        if(hasPreprocessor("karma-typescript") &&
-          (!karmaConfig.frameworks || karmaConfig.frameworks.indexOf("karma-typescript") === -1)) {
-
-            throw new Error("Missing karma-typescript framework, please add 'frameworks: [\"karma-typescript\"]' to your Karma config");
-        }
-    }
-
-    function assertDeprecatedOptions() {
-
-        if(self.bundlerOptions.ignoredModuleNames) {
-            log.warn("The option 'karmaTypescriptConfig.bundlerOptions.ignoredModuleNames' " +
-                        "has been deprecated and will be removed in future versions, please " +
-                        "use 'karmaTypescriptConfig.bundlerOptions.exclude' instead");
-            self.bundlerOptions.exclude = self.bundlerOptions.ignoredModuleNames;
-        }
-
-        if(karmaTypescriptConfig.excludeFromCoverage !== undefined) {
-            log.warn("The option 'karmaTypescriptConfig.excludeFromCoverage' " +
-                        "has been deprecated and will be removed in future versions, please " +
-                        "use 'karmaTypescriptConfig.coverageOptions.exclude' instead");
-            self.coverageOptions.exclude = karmaTypescriptConfig.excludeFromCoverage;
-        }
-
-        if(karmaTypescriptConfig.disableCodeCoverageInstrumentation !== undefined) {
-            log.warn("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' " +
-                        "has been deprecated and will be removed in future versions, please " +
-                        "use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
-            self.coverageOptions.instrumentation = !karmaTypescriptConfig.disableCodeCoverageInstrumentation;
-        }
-    }
-
-    function hasFramework(name) {
-        return karmaConfig.frameworks.indexOf(name) !== -1;
-    }
-
-    function hasPreprocessor(name) {
-        for(var preprocessor in karmaConfig.preprocessors) {
-            if(karmaConfig.preprocessors[preprocessor] && 
-               karmaConfig.preprocessors[preprocessor].indexOf(name) !== -1) {
+    public hasPreprocessor(name: string): boolean {
+        for (let preprocessor in this.karma.preprocessors) {
+            if (this.karma.preprocessors[preprocessor] &&
+                this.karma.preprocessors[preprocessor].indexOf(name) !== -1) {
                 return true;
             }
         }
         return false;
     }
 
-    function hasReporter(name) {
-        return karmaConfig.reporters.indexOf(name) !== -1;
+    public hasReporter(name: string): boolean {
+        return this.karma.reporters.indexOf(name) !== -1;
     }
 
-    function defaultTo() {
-        for (var i = 0; i < arguments.length; i++) {
-            if (arguments[i] !== undefined) {
-                return arguments[i];
+    private configureBundler(): void {
+
+        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {});
+        this.bundlerOptions.addNodeGlobals = this.defaultTo(this.bundlerOptions.addNodeGlobals, true);
+        this.bundlerOptions.entrypoints = this.defaultTo(this.bundlerOptions.entrypoints, /.*/);
+        this.bundlerOptions.exclude = this.defaultTo(this.bundlerOptions.exclude, []);
+        this.bundlerOptions.ignore = this.defaultTo(this.bundlerOptions.ignore, []);
+        this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
+        this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
+        this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
+        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json"]);
+        this.bundlerOptions.resolve.directories = this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
+        this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
+    }
+
+    private configureFramework(): void {
+
+        this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
+
+        this.defaultTsconfig = {
+            compilerOptions: {
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true,
+                jsx: "react",
+                module: "commonjs",
+                sourceMap: true,
+                target: "ES5",
+            },
+            exclude: ["node_modules"],
+        };
+
+        this.exclude = this.karmaTypescriptConfig.exclude;
+        this.include = this.karmaTypescriptConfig.include;
+        this.tsconfig = this.karmaTypescriptConfig.tsconfig;
+    }
+
+    private configurePreprocessor() {
+
+        this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
+        this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
+        this.coverageOptions.exclude = this.defaultTo(
+            this.checkCoverageOptionExclude(this.coverageOptions.exclude),
+                /\.(d|spec|test)\.ts/i,
+            );
+        this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
+            return filepath.replace(/\.(ts|tsx)$/, ".js");
+        });
+    }
+
+    private configureReporter() {
+
+        this.reports = this.defaultTo(this.karmaTypescriptConfig.reports, { html: "coverage" });
+        this.remapOptions = this.defaultTo(this.karmaTypescriptConfig.remapOptions, {});
+    }
+
+    private configureTransforms() {
+
+        this.transforms = this.defaultTo(this.karmaTypescriptConfig.transforms, []);
+    }
+
+    private configureKarmaCoverage() {
+
+        this.coverageReporter = this.defaultTo((<any> this.karma).coverageReporter, {
+            instrumenterOptions: {
+                istanbul: { noCompact: true },
+            },
+        });
+
+        if (this.karma.reporters) {
+            this.reporters = this.karma.reporters.slice();
+            if (this.karma.reporters.indexOf("coverage") === -1){
+                this.reporters.push("coverage");
+            }
+        }
+        else {
+            this.reporters = ["coverage"];
+        }
+    }
+
+    private assertConfiguration() {
+
+        if (!this.asserted) {
+
+            this.asserted = true;
+            this.assertFrameworkConfiguration();
+            this.assertDeprecatedOptions();
+        }
+    }
+
+    private assertFrameworkConfiguration() {
+
+        if (this.hasPreprocessor("karma-typescript") &&
+          (!this.karma.frameworks || this.karma.frameworks.indexOf("karma-typescript") === -1)) {
+            throw new Error("Missing karma-typescript framework, please add" +
+                            "'frameworks: [\"karma-typescript\"]' to your Karma config");
+        }
+    }
+
+    private assertDeprecatedOptions() {
+
+        if ((<any> this.bundlerOptions).ignoredModuleNames) {
+            this.log.warn("The option 'karmaTypescriptConfig.bundlerOptions.ignoredModuleNames' " +
+                        "has been deprecated and will be removed in future versions, please " +
+                        "use 'karmaTypescriptConfig.bundlerOptions.exclude' instead");
+            this.bundlerOptions.exclude = (<any> this.bundlerOptions).ignoredModuleNames;
+        }
+
+        if ((<any> this.karmaTypescriptConfig).excludeFromCoverage !== undefined) {
+            this.log.warn("The option 'karmaTypescriptConfig.excludeFromCoverage' " +
+                        "has been deprecated and will be removed in future versions, please " +
+                        "use 'karmaTypescriptConfig.coverageOptions.exclude' instead");
+            this.coverageOptions.exclude = (<any> this.karmaTypescriptConfig).excludeFromCoverage;
+        }
+
+        if ((<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation !== undefined) {
+            this.log.warn("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' " +
+                        "has been deprecated and will be removed in future versions, please " +
+                        "use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
+            this.coverageOptions.instrumentation = !(<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation;
+        }
+    }
+
+    private checkCoverageOptionExclude(regex: any) {
+        if (regex instanceof RegExp || !regex) {
+            return regex;
+        }
+        else if (Array.isArray(regex)) {
+            regex.forEach((r) => {
+                if (!(r instanceof RegExp)) {
+                    this.throwRegexError(r);
+                }
+            });
+            return regex;
+        }
+
+        this.throwRegexError(regex);
+    }
+
+    private throwRegexError(regex: any) {
+        let baseErrorMsg = "karmaTypescriptConfig.coverageOptions.exclude" +
+            "must be a single RegExp or an Array of RegExp";
+        throw new Error(baseErrorMsg + " " + regex + " is not a regex");
+    }
+
+    private defaultTo<T>(...values: T[]) {
+        for (let value of values) {
+            if (value !== undefined) {
+                return value;
             }
         }
     }
-
-    function checkCoverageOptionExclude(regex) {
-        function throwRegexError(regex) {
-            var baseErrorMsg = "karmaTypescriptConfig.coverageOptions.exclude must be a single RegExp or an Array of RegExp";
-            throw new Error( baseErrorMsg +	" " + regex + " is not a regex");
-        }
-			
-        if (regex instanceof RegExp || !regex) { // if value passed is a regex or undefined, go ahead
-            return regex;
-        }
-        else if (Array.isArray(regex)) { // if value is an array, check each item
-            regex.forEach(function(r) {
-                if (!(r instanceof RegExp)) { // if some item is not a regex, throw an error
-                    throwRegexError(r);
-                }
-            });
-            return regex; // else: keep going
-        }
-			// if it's something other, throw an error
-        throwRegexError(regex);
-    }
-
-    self.initialize = initialize;
-    self.hasFramework = hasFramework;
-    self.hasPreprocessor = hasPreprocessor;
-    self.hasReporter = hasReporter;
 }
 
 module.exports = Configuration;
