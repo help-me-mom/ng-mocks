@@ -1,5 +1,5 @@
 var Bundler = require("./lib/bundler"),
-    Compiler = require("./lib/compiler"),
+    Compiler = require("./dist/compiler"),
     Configuration = require("./dist/configuration"),
     Coverage = require("./lib/coverage"),
 
