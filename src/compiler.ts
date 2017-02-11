@@ -5,13 +5,9 @@ import * as ts from "typescript";
 
 import Benchmark =  require("./benchmark");
 import { Configuration } from "./configuration";
+import { File } from "./file";
 
 type CompiledFiles = { [key: string]: string; };
-
-type File = {
-    originalPath: string,
-    path: string;
-};
 
 type Queued = {
     file: File;

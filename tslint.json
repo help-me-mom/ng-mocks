@@ -5,9 +5,8 @@
   ],
   "rules": {
     "brace-style": [true, "stroustrup"],
-    "max-line-length": [
-      130
-    ],
+    "interface-name": [true, "never-prefix"],
+    "max-line-length": [130],
     "no-consecutive-blank-lines": [true, 1],
     "one-line": [false],    
     "ter-indent": [true, 4],
