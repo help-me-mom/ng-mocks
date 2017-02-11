@@ -2,13 +2,13 @@
 var async = require("async");
 var lodash = require("lodash");
 var ts = require("typescript");
+var Benchmark = require("./benchmark");
 var Compiler = (function () {
     function Compiler(config) {
         var _this = this;
         this.COMPILE_DELAY = 200;
         this.compiledFiles = {};
         this.emitQueue = [];
-        this.benchmark = require("./benchmark");
         this.deferredCompile = lodash.debounce(function () {
             _this.compileProgram(_this.onProgramCompiled);
         }, this.COMPILE_DELAY);
@@ -60,7 +60,7 @@ var Compiler = (function () {
     };
     Compiler.prototype.compileProgram = function (onProgramCompiled) {
         var _this = this;
-        var start = this.benchmark();
+        var benchmark = new Benchmark();
         if (!this.cachedProgram) {
             this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
             this.hostGetSourceFile = this.compilerHost.getSourceFile;
@@ -74,7 +74,7 @@ var Compiler = (function () {
         this.runDiagnostics(this.program, this.compilerHost);
         this.program.emit();
         this.applyTransforms(function () {
-            _this.log.info("Compiled %s files in %s ms.", _this.tsconfig.fileNames.length, _this.benchmark(start));
+            _this.log.info("Compiled %s files in %s ms.", _this.tsconfig.fileNames.length, benchmark.elapsed());
             _this.collectRequiredModules();
             onProgramCompiled();
         });

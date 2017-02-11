@@ -3,6 +3,7 @@ import * as lodash from "lodash";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
+import Benchmark =  require("./benchmark");
 import { Configuration } from "./configuration";
 
 type CompiledFiles = { [key: string]: string; };
@@ -33,9 +34,6 @@ class Compiler {
     private program: ts.Program;
     private requiredModuleCounter: number;
     private tsconfig: ts.ParsedCommandLine;
-
-    private benchmark: any = require("./benchmark");
-
     private deferredCompile = lodash.debounce(() => {
 
         this.compileProgram(this.onProgramCompiled);
@@ -98,7 +96,7 @@ class Compiler {
 
     private compileProgram(onProgramCompiled: Function) {
 
-        let start = this.benchmark();
+        let benchmark = new Benchmark();
 
         if (!this.cachedProgram) {
             this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
@@ -117,7 +115,7 @@ class Compiler {
         this.program.emit();
 
         this.applyTransforms(() => {
-            this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, this.benchmark(start));
+            this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
             this.collectRequiredModules();
             onProgramCompiled();
         });
