@@ -8,7 +8,7 @@ var Compiler = (function () {
         this.COMPILE_DELAY = 200;
         this.compiledFiles = {};
         this.emitQueue = [];
-        this.benchmark = require("../lib/benchmark");
+        this.benchmark = require("./benchmark");
         this.deferredCompile = lodash.debounce(function () {
             _this.compileProgram(_this.onProgramCompiled);
         }, this.COMPILE_DELAY);

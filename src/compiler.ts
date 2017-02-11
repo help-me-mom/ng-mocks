@@ -34,7 +34,7 @@ class Compiler {
     private requiredModuleCounter: number;
     private tsconfig: ts.ParsedCommandLine;
 
-    private benchmark: any = require("../lib/benchmark");
+    private benchmark: any = require("./benchmark");
 
     private deferredCompile = lodash.debounce(() => {
 
