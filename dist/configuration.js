@@ -39,7 +39,7 @@ var Configuration = (function () {
         this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
         this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
         this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json"]);
+        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
         this.bundlerOptions.resolve.directories = this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     };
@@ -52,9 +52,9 @@ var Configuration = (function () {
                 jsx: "react",
                 module: "commonjs",
                 sourceMap: true,
-                target: "ES5",
+                target: "ES5"
             },
-            exclude: ["node_modules"],
+            exclude: ["node_modules"]
         };
         this.exclude = this.karmaTypescriptConfig.exclude;
         this.include = this.karmaTypescriptConfig.include;
@@ -78,8 +78,8 @@ var Configuration = (function () {
     Configuration.prototype.configureKarmaCoverage = function () {
         this.coverageReporter = this.defaultTo(this.karma.coverageReporter, {
             instrumenterOptions: {
-                istanbul: { noCompact: true },
-            },
+                istanbul: { noCompact: true }
+            }
         });
         if (this.karma.reporters) {
             this.reporters = this.karma.reporters.slice();
@@ -159,4 +159,5 @@ var Configuration = (function () {
     };
     return Configuration;
 }());
+exports.Configuration = Configuration;
 module.exports = Configuration;

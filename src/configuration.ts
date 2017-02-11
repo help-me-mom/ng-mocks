@@ -7,10 +7,10 @@ import {
     CoverageOptions,
     KarmaTypescriptConfig,
     RemapOptions,
-    Reports,
+    Reports
 } from "../typings";
 
-class Configuration {
+export class Configuration {
 
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
@@ -76,7 +76,7 @@ class Configuration {
         this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
         this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
         this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json"]);
+        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
         this.bundlerOptions.resolve.directories = this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     }
@@ -92,9 +92,9 @@ class Configuration {
                 jsx: "react",
                 module: "commonjs",
                 sourceMap: true,
-                target: "ES5",
+                target: "ES5"
             },
-            exclude: ["node_modules"],
+            exclude: ["node_modules"]
         };
 
         this.exclude = this.karmaTypescriptConfig.exclude;
@@ -108,7 +108,7 @@ class Configuration {
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
         this.coverageOptions.exclude = this.defaultTo(
             this.checkCoverageOptionExclude(this.coverageOptions.exclude),
-                /\.(d|spec|test)\.ts/i,
+                /\.(d|spec|test)\.ts/i
             );
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
@@ -130,8 +130,8 @@ class Configuration {
 
         this.coverageReporter = this.defaultTo((<any> this.karma).coverageReporter, {
             instrumenterOptions: {
-                istanbul: { noCompact: true },
-            },
+                istanbul: { noCompact: true }
+            }
         });
 
         if (this.karma.reporters) {

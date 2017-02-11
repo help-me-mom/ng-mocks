@@ -68,8 +68,8 @@
     "https-browserify": "~0.0.0",
     "istanbul": "0.4.5",
     "karma-coverage": "^1.1.1",
+    "lodash": "^4.17.4",
     "lodash.clonedeep": "^4.5.0",
-    "lodash.debounce": "^4.0.8",
     "lodash.isplainobject": "^4.0.6",
     "lodash.isstring": "^4.0.1",
     "lodash.union": "^4.6.0",
@@ -94,7 +94,9 @@
     "vm-browserify": "~0.0.1"
   },
   "devDependencies": {
+    "@types/async": "^2.0.38",
     "@types/karma": "^0.13.33",
+    "@types/lodash": "^4.14.52",
     "@types/node": "^7.0.5",
     "cli-clear": "^1.0.4",
     "copy": "^0.3.0",

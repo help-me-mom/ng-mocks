@@ -1,121 +1,137 @@
-function Compiler(config) {
-    var async = require("async"), debounce = require("lodash.debounce"), ts = require("typescript"), benchmark = require("./benchmark"), cachedProgram, compiledFiles = {}, compilerHost, emitQueue = [], hostGetSourceFile, log, program, requiredModuleCounter, tsconfig, COMPILE_DELAY = 200;
-    function initialize(logger, _tsconfig) {
-        tsconfig = _tsconfig;
-        log = logger.create("compiler.karma-typescript");
-        log.info("Compiling project using Typescript %s", ts.version);
-        outputDiagnostics(tsconfig.errors);
+"use strict";
+var async = require("async");
+var lodash = require("lodash");
+var ts = require("typescript");
+var Compiler = (function () {
+    function Compiler(config) {
+        var _this = this;
+        this.COMPILE_DELAY = 200;
+        this.compiledFiles = {};
+        this.emitQueue = [];
+        this.benchmark = require("../lib/benchmark");
+        this.deferredCompile = lodash.debounce(function () {
+            _this.compileProgram(_this.onProgramCompiled);
+        }, this.COMPILE_DELAY);
+        this.onProgramCompiled = function () {
+            _this.emitQueue.forEach(function (queued) {
+                var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
+                if (!sourceFile) {
+                    throw new Error("No source found for " + queued.file.originalPath + "!\n" +
+                        "Is there a mismatch between the Typescript compiler options and the Karma config?");
+                }
+                queued.callback({
+                    isDeclarationFile: ts.isDeclarationFile(sourceFile),
+                    outputText: _this.compiledFiles[queued.file.path],
+                    requiredModules: queued.requiredModules,
+                    sourceMapText: _this.compiledFiles[queued.file.path + ".map"]
+                });
+            });
+            _this.emitQueue.length = 0;
+        };
+        this.getSourceFile = function (filename, languageVersion) {
+            if (_this.cachedProgram && !_this.isQueued(filename)) {
+                var sourceFile = _this.cachedProgram.getSourceFile(filename);
+                if (sourceFile) {
+                    return sourceFile;
+                }
+            }
+            return _this.hostGetSourceFile(filename, languageVersion);
+        };
+        this.config = config;
     }
-    function getModuleFormat() {
-        return ts.ModuleKind[tsconfig.options.module] || "unknown";
-    }
-    function getRequiredModulesCount() {
-        return requiredModuleCounter;
-    }
-    function compile(file, callback) {
-        emitQueue.push({
+    Compiler.prototype.initialize = function (logger, tsconfig) {
+        this.tsconfig = tsconfig;
+        this.log = logger.create("compiler.karma-typescript");
+        this.log.info("Compiling project using Typescript %s", ts.version);
+        this.outputDiagnostics(tsconfig.errors);
+    };
+    Compiler.prototype.getModuleFormat = function () {
+        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
+    };
+    Compiler.prototype.getRequiredModulesCount = function () {
+        return this.requiredModuleCounter;
+    };
+    Compiler.prototype.compile = function (file, callback) {
+        this.emitQueue.push({
             file: file,
             callback: callback
         });
-        deferredCompile();
-    }
-    var deferredCompile = debounce(function () {
-        compileProgram(onProgramCompiled);
-    }, COMPILE_DELAY);
-    function onProgramCompiled() {
-        emitQueue.forEach(function (queued) {
-            var sourceFile = program.getSourceFile(queued.file.originalPath);
-            if (!sourceFile) {
-                throw new Error("No source found for " + queued.file.originalPath + "!\n" +
-                    "Is there a mismatch between the Typescript compiler options and the Karma config?");
-            }
-            queued.callback({
-                outputText: compiledFiles[queued.file.path],
-                sourceMapText: compiledFiles[queued.file.path + ".map"],
-                requiredModules: queued.requiredModules,
-                isDeclarationFile: ts.isDeclarationFile(sourceFile)
-            });
-        });
-        emitQueue.length = 0;
-    }
-    function compileProgram(onProgramCompiled) {
-        var start = benchmark();
-        if (!cachedProgram) {
-            compilerHost = ts.createCompilerHost(tsconfig.options);
-            hostGetSourceFile = compilerHost.getSourceFile;
-            compilerHost.getSourceFile = getSourceFile;
-            compilerHost.writeFile = function (filename, text) {
-                compiledFiles[filename] = text;
+        this.deferredCompile();
+    };
+    Compiler.prototype.compileProgram = function (onProgramCompiled) {
+        var _this = this;
+        var start = this.benchmark();
+        if (!this.cachedProgram) {
+            this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
+            this.hostGetSourceFile = this.compilerHost.getSourceFile;
+            this.compilerHost.getSourceFile = this.getSourceFile;
+            this.compilerHost.writeFile = function (filename, text) {
+                _this.compiledFiles[filename] = text;
             };
         }
-        program = ts.createProgram(tsconfig.fileNames, tsconfig.options, compilerHost);
-        cachedProgram = program;
-        runDiagnostics(program, compilerHost);
-        program.emit();
-        applyTransforms(function () {
-            log.info("Compiled %s files in %s ms.", tsconfig.fileNames.length, benchmark(start));
-            collectRequiredModules();
+        this.program = ts.createProgram(this.tsconfig.fileNames, this.tsconfig.options, this.compilerHost);
+        this.cachedProgram = this.program;
+        this.runDiagnostics(this.program, this.compilerHost);
+        this.program.emit();
+        this.applyTransforms(function () {
+            _this.log.info("Compiled %s files in %s ms.", _this.tsconfig.fileNames.length, _this.benchmark(start));
+            _this.collectRequiredModules();
             onProgramCompiled();
         });
-    }
-    function getSourceFile(filename, languageVersion) {
-        if (cachedProgram && !isQueued(filename)) {
-            var sourceFile = cachedProgram.getSourceFile(filename);
-            if (sourceFile) {
-                return sourceFile;
-            }
-        }
-        return hostGetSourceFile(filename, languageVersion);
-    }
-    function isQueued(filename) {
-        for (var i = 0; i < emitQueue.length; i++) {
-            if (emitQueue[i].file.originalPath === filename) {
+    };
+    Compiler.prototype.isQueued = function (filename) {
+        for (var _i = 0, _a = this.emitQueue; _i < _a.length; _i++) {
+            var queued = _a[_i];
+            if (queued.file.originalPath === filename) {
                 return true;
             }
         }
         return false;
-    }
-    function applyTransforms(onTransformssApplied) {
-        if (!config.transforms.length) {
+    };
+    Compiler.prototype.applyTransforms = function (onTransformssApplied) {
+        var _this = this;
+        if (!this.config.transforms.length) {
             process.nextTick(function () {
                 onTransformssApplied();
             });
             return;
         }
-        async.eachSeries(emitQueue, function (queued, onQueueProcessed) {
-            var sourceFile = program.getSourceFile(queued.file.originalPath), context = {
-                basePath: config.karma.basePath,
+        async.eachSeries(this.emitQueue, function (queued, onQueueProcessed) {
+            var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
+            var context = {
+                basePath: _this.config.karma.basePath,
                 filename: queued.file.originalPath,
                 fullText: sourceFile.getFullText(),
                 sourceFile: sourceFile,
-                urlRoot: config.karma.urlRoot
+                urlRoot: _this.config.karma.urlRoot
             };
-            async.eachSeries(config.transforms, function (transform, onTransformApplied) {
+            async.eachSeries(_this.config.transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
                     transform(context, function (changed) {
                         if (changed) {
                             var transpiled = ts.transpileModule(context.fullText, {
-                                compilerOptions: tsconfig.options,
+                                compilerOptions: _this.tsconfig.options,
                                 fileName: queued.file.originalPath
                             });
-                            compiledFiles[queued.file.path] = transpiled.outputText;
-                            compiledFiles[queued.file.path + ".map"] = transpiled.sourceMapText;
+                            _this.compiledFiles[queued.file.path] = transpiled.outputText;
+                            _this.compiledFiles[queued.file.path + ".map"] = transpiled.sourceMapText;
                         }
                         onTransformApplied();
                     });
                 });
             }, onQueueProcessed);
         }, onTransformssApplied);
-    }
-    function runDiagnostics(program, host) {
+    };
+    Compiler.prototype.runDiagnostics = function (program, host) {
         var diagnostics = ts.getPreEmitDiagnostics(program);
-        outputDiagnostics(diagnostics, host);
-    }
-    function outputDiagnostics(diagnostics, host) {
+        this.outputDiagnostics(diagnostics, host);
+    };
+    Compiler.prototype.outputDiagnostics = function (diagnostics, host) {
+        var _this = this;
         if (diagnostics && diagnostics.length > 0) {
             diagnostics.forEach(function (diagnostic) {
                 if (ts.formatDiagnostics) {
-                    log.error(ts.formatDiagnostics([diagnostic], host));
+                    _this.log.error(ts.formatDiagnostics([diagnostic], host));
                 }
                 else {
                     var output = "";
@@ -125,76 +141,72 @@ function Compiler(config) {
                     }
                     var category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
                     output += category + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
-                    log.error(output);
+                    _this.log.error(output);
                 }
             });
-            if (tsconfig.options.noEmitOnError) {
+            if (this.tsconfig.options.noEmitOnError) {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
-    }
-    function collectRequiredModules() {
-        requiredModuleCounter = 0;
-        emitQueue.forEach(function (queued) {
-            var sourceFile = program.getSourceFile(queued.file.originalPath);
-            queued.requiredModules = findUnresolvedRequires(sourceFile);
+    };
+    Compiler.prototype.collectRequiredModules = function () {
+        var _this = this;
+        this.requiredModuleCounter = 0;
+        this.emitQueue.forEach(function (queued) {
+            var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
+            queued.requiredModules = _this.findUnresolvedRequires(sourceFile);
             if (sourceFile.resolvedModules && !sourceFile.isDeclarationFile) {
                 Object.keys(sourceFile.resolvedModules).forEach(function (moduleName) {
                     var resolvedModule = sourceFile.resolvedModules[moduleName];
                     queued.requiredModules.push({
-                        moduleName: moduleName,
                         filename: resolvedModule && resolvedModule.resolvedFileName,
-                        isTypingsFile: isTypingsFile(resolvedModule),
-                        isTypescriptFile: isTypescriptFile(resolvedModule)
+                        isTypescriptFile: _this.isTypescriptFile(resolvedModule),
+                        isTypingsFile: _this.isTypingsFile(resolvedModule),
+                        moduleName: moduleName
                     });
                 });
             }
-            requiredModuleCounter += queued.requiredModules.length;
+            _this.requiredModuleCounter += queued.requiredModules.length;
         });
-    }
-    function findUnresolvedRequires(sourceFile) {
+    };
+    Compiler.prototype.findUnresolvedRequires = function (sourceFile) {
         var requiredModules = [];
         if (ts.isDeclarationFile(sourceFile)) {
             return requiredModules;
         }
-        visitNode(sourceFile);
-        function visitNode(node) {
-            switch (node.kind) {
-                case ts.SyntaxKind.CallExpression:
-                    if (node.expression && node.expression.text === "require" &&
-                        node.arguments && node.arguments.length &&
-                        typeof node.arguments[0].text === "string") {
-                        var resolvedModule;
-                        try {
-                            resolvedModule = ts.resolveModuleName(node.arguments[0].text, sourceFile.fileName, tsconfig.options, compilerHost).resolvedModule;
-                        }
-                        catch (error) {
-                            resolvedModule = undefined;
-                        }
-                        requiredModules.push({
-                            moduleName: node.arguments[0].text,
-                            filename: resolvedModule && resolvedModule.resolvedFileName,
-                            isTypingsFile: isTypingsFile(resolvedModule),
-                            isTypescriptFile: isTypescriptFile(resolvedModule)
-                        });
-                    }
+        var visitNode = function (node) {
+            if (node.kind === ts.SyntaxKind.CallExpression) {
+                var ce = node;
+                var expression = ce.expression ?
+                    ce.expression :
+                    undefined;
+                var argument = ce.arguments && ce.arguments.length ?
+                    ce.arguments[0] :
+                    undefined;
+                if (expression && expression.text === "require" &&
+                    argument && typeof argument.text === "string") {
+                    requiredModules.push({
+                        filename: undefined,
+                        isTypescriptFile: undefined,
+                        isTypingsFile: undefined,
+                        moduleName: argument.text
+                    });
+                }
             }
             ts.forEachChild(node, visitNode);
-        }
+        };
+        visitNode(sourceFile);
         return requiredModules;
-    }
-    function isTypingsFile(resolvedModule) {
-        return resolvedModule && ts.fileExtensionIs(resolvedModule.resolvedFileName, ".d.ts");
-    }
-    function isTypescriptFile(resolvedModule) {
+    };
+    Compiler.prototype.isTypingsFile = function (resolvedModule) {
         return resolvedModule &&
-            !isTypingsFile(resolvedModule) &&
-            (ts.fileExtensionIs(resolvedModule.resolvedFileName, ".ts") ||
-                ts.fileExtensionIs(resolvedModule.resolvedFileName, ".tsx"));
-    }
-    this.initialize = initialize;
-    this.compile = compile;
-    this.getModuleFormat = getModuleFormat;
-    this.getRequiredModulesCount = getRequiredModulesCount;
-}
+            /\.d\.ts$/.test(resolvedModule.resolvedFileName);
+    };
+    Compiler.prototype.isTypescriptFile = function (resolvedModule) {
+        return resolvedModule &&
+            !this.isTypingsFile(resolvedModule) &&
+            /\.(ts|tsx)$/.test(resolvedModule.resolvedFileName);
+    };
+    return Compiler;
+}());
 module.exports = Compiler;

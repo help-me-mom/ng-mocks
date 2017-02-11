@@ -35,7 +35,7 @@ module.exports = function(config) {
                     alias: {
                         "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"
                     },
-                    extensions: [".js", ".json"],
+                    extensions: [".js", ".json", ".ts"],
                     directories: ["node_modules"]
                 },
                 validateSyntax: false
