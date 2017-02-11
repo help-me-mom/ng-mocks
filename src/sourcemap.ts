@@ -1,12 +1,12 @@
-var path = require("path");
+let path = require("path");
 
 function create(file, source, emitOutput){
 
-    var result = emitOutput.outputText,
+    let result = emitOutput.outputText,
         map,
         datauri;
 
-    if(emitOutput.sourceMapText) {
+    if (emitOutput.sourceMapText) {
 
         map = JSON.parse(emitOutput.sourceMapText);
         map.sources[0] = path.basename(file.originalPath);
