@@ -7,6 +7,7 @@ var RequiredModule = require("./required-module");
 var Compiler = (function () {
     function Compiler(config) {
         var _this = this;
+        this.config = config;
         this.COMPILE_DELAY = 200;
         this.compiledFiles = {};
         this.emitQueue = [];
@@ -38,7 +39,6 @@ var Compiler = (function () {
             }
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
-        this.config = config;
     }
     Compiler.prototype.initialize = function (logger, tsconfig) {
         this.tsconfig = tsconfig;

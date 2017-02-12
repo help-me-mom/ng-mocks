@@ -1,3 +1,5 @@
-import { EmitOutput } from "./emit-output";
+import EmitOutput = require("./emit-output");
 
-export interface CompileCallback { (emitOutput: EmitOutput): void; }
+interface CompileCallback { (emitOutput: EmitOutput): void; }
+
+export = CompileCallback;

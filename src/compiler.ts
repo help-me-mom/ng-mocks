@@ -4,9 +4,9 @@ import { Logger } from "log4js";
 import * as ts from "typescript";
 
 import Benchmark = require("./benchmark");
-import { CompileCallback } from "./compile-callback";
-import { Configuration } from "./configuration";
-import { File } from "./file";
+import CompileCallback = require("./compile-callback");
+import Configuration = require("./configuration");
+import File = require("./file");
 import RequiredModule = require("./required-module");
 
 type CompiledFiles = { [key: string]: string; };
@@ -21,7 +21,6 @@ class Compiler {
 
     private readonly COMPILE_DELAY = 200;
 
-    private config: Configuration;
     private cachedProgram: ts.Program;
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
@@ -37,9 +36,7 @@ class Compiler {
         this.compileProgram(this.onProgramCompiled);
     }, this.COMPILE_DELAY);
 
-    constructor(config: Configuration) {
-        this.config = config;
-    }
+    constructor(private config: Configuration) { }
 
     public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
@@ -274,4 +271,4 @@ class Compiler {
     }
 }
 
-module.exports = Compiler;
+export = Compiler;

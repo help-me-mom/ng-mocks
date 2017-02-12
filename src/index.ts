@@ -1,23 +1,28 @@
-var Bundler = require("./lib/bundler"),
-    Compiler = require("./dist/compiler"),
-    Configuration = require("./dist/configuration"),
-    Coverage = require("./lib/coverage"),
+import Compiler = require("./compiler");
+import Configuration = require("./configuration");
 
-    Framework = require("./lib/framework"),
-    Preprocessor = require("./lib/preprocessor"),
-    Reporter = require("./lib/reporter"),
+// tslint:disable-next-line:no-var-requires
+let Bundler = require("../lib/bundler");
+// tslint:disable-next-line:no-var-requires
+let Coverage = require("../lib/coverage");
+// tslint:disable-next-line:no-var-requires
+let Framework = require("../lib/framework");
+// tslint:disable-next-line:no-var-requires
+let Preprocessor = require("../lib/preprocessor");
+// tslint:disable-next-line:no-var-requires
+let Reporter = require("../lib/reporter");
 
-    sharedProcessedFiles = {},
+let sharedProcessedFiles = {};
 
-    configuration = new Configuration(),
-    coverage = new Coverage(configuration),
+let configuration = new Configuration();
+let coverage = new Coverage(configuration);
 
-    bundler = new Bundler(configuration, coverage),
-    compiler = new Compiler(configuration),
+let bundler = new Bundler(configuration, coverage);
+let compiler = new Compiler(configuration);
 
-    framework = new Framework(bundler, compiler, configuration, coverage),
-    preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles),
-    reporter = new Reporter(configuration, sharedProcessedFiles);
+let framework = new Framework(bundler, compiler, configuration, coverage);
+let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
+let reporter = new Reporter(configuration, sharedProcessedFiles);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],

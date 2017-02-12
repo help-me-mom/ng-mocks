@@ -10,7 +10,7 @@ import {
     Reports
 } from "../typings";
 
-export class Configuration {
+class Configuration {
 
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
@@ -217,4 +217,4 @@ export class Configuration {
     }
 }
 
-module.exports = Configuration;
+export = Configuration;

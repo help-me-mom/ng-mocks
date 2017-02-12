@@ -19,9 +19,9 @@ var Configuration = (function () {
         return this.karma.frameworks.indexOf(name) !== -1;
     };
     Configuration.prototype.hasPreprocessor = function (name) {
-        for (var preprocessor_1 in this.karma.preprocessors) {
-            if (this.karma.preprocessors[preprocessor_1] &&
-                this.karma.preprocessors[preprocessor_1].indexOf(name) !== -1) {
+        for (var preprocessor in this.karma.preprocessors) {
+            if (this.karma.preprocessors[preprocessor] &&
+                this.karma.preprocessors[preprocessor].indexOf(name) !== -1) {
                 return true;
             }
         }
@@ -161,5 +161,4 @@ var Configuration = (function () {
     };
     return Configuration;
 }());
-exports.Configuration = Configuration;
 module.exports = Configuration;
