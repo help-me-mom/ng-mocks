@@ -39,8 +39,10 @@ var Configuration = (function () {
         this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
         this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
         this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
-        this.bundlerOptions.resolve.directories = this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
+        this.bundlerOptions.resolve.extensions =
+            this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
+        this.bundlerOptions.resolve.directories =
+            this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     };
     Configuration.prototype.configureFramework = function () {
@@ -63,7 +65,7 @@ var Configuration = (function () {
     Configuration.prototype.configurePreprocessor = function () {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
-        this.coverageOptions.exclude = this.defaultTo(this.checkCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts/i);
+        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts/i);
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, function (filepath) {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
         });
@@ -122,10 +124,11 @@ var Configuration = (function () {
             this.log.warn("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' " +
                 "has been deprecated and will be removed in future versions, please " +
                 "use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
-            this.coverageOptions.instrumentation = !this.karmaTypescriptConfig.disableCodeCoverageInstrumentation;
+            this.coverageOptions.instrumentation =
+                !this.karmaTypescriptConfig.disableCodeCoverageInstrumentation;
         }
     };
-    Configuration.prototype.checkCoverageOptionExclude = function (regex) {
+    Configuration.prototype.assertCoverageOptionExclude = function (regex) {
         var _this = this;
         if (regex instanceof RegExp || !regex) {
             return regex;
@@ -133,17 +136,16 @@ var Configuration = (function () {
         else if (Array.isArray(regex)) {
             regex.forEach(function (r) {
                 if (!(r instanceof RegExp)) {
-                    _this.throwRegexError(r);
+                    _this.throwCoverageOptionExcludeError(r);
                 }
             });
             return regex;
         }
-        this.throwRegexError(regex);
+        this.throwCoverageOptionExcludeError(regex);
     };
-    Configuration.prototype.throwRegexError = function (regex) {
-        var baseErrorMsg = "karmaTypescriptConfig.coverageOptions.exclude" +
-            "must be a single RegExp or an Array of RegExp";
-        throw new Error(baseErrorMsg + " " + regex + " is not a regex");
+    Configuration.prototype.throwCoverageOptionExcludeError = function (regex) {
+        throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
+            "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
     };
     Configuration.prototype.defaultTo = function () {
         var values = [];

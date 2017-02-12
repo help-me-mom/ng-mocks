@@ -3,6 +3,7 @@ var async = require("async");
 var lodash = require("lodash");
 var ts = require("typescript");
 var Benchmark = require("./benchmark");
+var RequiredModule = require("./required-module");
 var Compiler = (function () {
     function Compiler(config) {
         var _this = this;
@@ -28,14 +29,14 @@ var Compiler = (function () {
             });
             _this.emitQueue.length = 0;
         };
-        this.getSourceFile = function (filename, languageVersion) {
+        this.getSourceFile = function (filename, languageVersion, onError) {
             if (_this.cachedProgram && !_this.isQueued(filename)) {
                 var sourceFile = _this.cachedProgram.getSourceFile(filename);
                 if (sourceFile) {
                     return sourceFile;
                 }
             }
-            return _this.hostGetSourceFile(filename, languageVersion);
+            return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
         this.config = config;
     }
@@ -137,10 +138,12 @@ var Compiler = (function () {
                     var output = "";
                     if (diagnostic.file) {
                         var loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                        output += diagnostic.file.fileName.replace(process.cwd(), "") + "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
+                        output += diagnostic.file.fileName.replace(process.cwd(), "") +
+                            "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
                     }
                     var category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
-                    output += category + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
+                    output += category + " TS" + diagnostic.code + ": " +
+                        ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
                     _this.log.error(output);
                 }
             });
@@ -158,12 +161,7 @@ var Compiler = (function () {
             if (sourceFile.resolvedModules && !sourceFile.isDeclarationFile) {
                 Object.keys(sourceFile.resolvedModules).forEach(function (moduleName) {
                     var resolvedModule = sourceFile.resolvedModules[moduleName];
-                    queued.requiredModules.push({
-                        filename: resolvedModule && resolvedModule.resolvedFileName,
-                        isTypescriptFile: _this.isTypescriptFile(resolvedModule),
-                        isTypingsFile: _this.isTypingsFile(resolvedModule),
-                        moduleName: moduleName
-                    });
+                    queued.requiredModules.push(new RequiredModule(resolvedModule && resolvedModule.resolvedFileName, moduleName));
                 });
             }
             _this.requiredModuleCounter += queued.requiredModules.length;
@@ -185,27 +183,13 @@ var Compiler = (function () {
                     undefined;
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push({
-                        filename: undefined,
-                        isTypescriptFile: undefined,
-                        isTypingsFile: undefined,
-                        moduleName: argument.text
-                    });
+                    requiredModules.push(new RequiredModule(undefined, argument.text));
                 }
             }
             ts.forEachChild(node, visitNode);
         };
         visitNode(sourceFile);
         return requiredModules;
-    };
-    Compiler.prototype.isTypingsFile = function (resolvedModule) {
-        return resolvedModule &&
-            /\.d\.ts$/.test(resolvedModule.resolvedFileName);
-    };
-    Compiler.prototype.isTypescriptFile = function (resolvedModule) {
-        return resolvedModule &&
-            !this.isTypingsFile(resolvedModule) &&
-            /\.(ts|tsx)$/.test(resolvedModule.resolvedFileName);
     };
     return Compiler;
 }());

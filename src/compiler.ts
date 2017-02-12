@@ -3,16 +3,18 @@ import * as lodash from "lodash";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
-import Benchmark =  require("./benchmark");
+import Benchmark = require("./benchmark");
+import { CompileCallback } from "./compile-callback";
 import { Configuration } from "./configuration";
 import { File } from "./file";
+import RequiredModule = require("./required-module");
 
 type CompiledFiles = { [key: string]: string; };
 
 type Queued = {
     file: File;
-    callback: Function;
-    requiredModules?: any[];
+    callback: CompileCallback;
+    requiredModules?: RequiredModule[];
 };
 
 class Compiler {
@@ -20,33 +22,29 @@ class Compiler {
     private readonly COMPILE_DELAY = 200;
 
     private config: Configuration;
-
     private cachedProgram: ts.Program;
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
-    private hostGetSourceFile: Function;
+    private hostGetSourceFile:
+        {(filename: string, languageVersion: ts.ScriptTarget, onError?: (message: string) => void): ts.SourceFile};
     private log: Logger;
     private program: ts.Program;
     private requiredModuleCounter: number;
     private tsconfig: ts.ParsedCommandLine;
+
     private deferredCompile = lodash.debounce(() => {
-
         this.compileProgram(this.onProgramCompiled);
-
     }, this.COMPILE_DELAY);
 
     constructor(config: Configuration) {
         this.config = config;
     }
 
-    public initialize(logger: any, tsconfig: ts.ParsedCommandLine) {
-
+    public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
         this.log = logger.create("compiler.karma-typescript");
-
         this.log.info("Compiling project using Typescript %s", ts.version);
-
         this.outputDiagnostics(tsconfig.errors);
     }
 
@@ -58,7 +56,7 @@ class Compiler {
         return this.requiredModuleCounter;
     }
 
-    public compile(file: any, callback: Function) {
+    public compile(file: File, callback: CompileCallback): void {
 
         this.emitQueue.push({
             file,
@@ -68,7 +66,7 @@ class Compiler {
         this.deferredCompile();
     }
 
-    private onProgramCompiled = () => {
+    private onProgramCompiled = (): void => {
 
         this.emitQueue.forEach((queued) => {
 
@@ -90,7 +88,7 @@ class Compiler {
         this.emitQueue.length = 0;
     }
 
-    private compileProgram(onProgramCompiled: Function) {
+    private compileProgram(onProgramCompiled: Function): void {
 
         let benchmark = new Benchmark();
 
@@ -107,7 +105,6 @@ class Compiler {
         this.cachedProgram = this.program;
 
         this.runDiagnostics(this.program, this.compilerHost);
-
         this.program.emit();
 
         this.applyTransforms(() => {
@@ -117,7 +114,10 @@ class Compiler {
         });
     }
 
-    private getSourceFile = (filename: string, languageVersion: ts.ScriptTarget) => {
+    private getSourceFile = (
+        filename: string,
+        languageVersion: ts.ScriptTarget,
+        onError?: (message: string) => void): ts.SourceFile => {
 
         if (this.cachedProgram && !this.isQueued(filename)) {
             let sourceFile = this.cachedProgram.getSourceFile(filename);
@@ -126,10 +126,10 @@ class Compiler {
             }
         }
 
-        return this.hostGetSourceFile(filename, languageVersion);
+        return this.hostGetSourceFile(filename, languageVersion, onError);
     }
 
-    private isQueued(filename: string) {
+    private isQueued(filename: string): boolean {
         for (let queued of this.emitQueue) {
             if (queued.file.originalPath === filename) {
                 return true;
@@ -138,7 +138,7 @@ class Compiler {
         return false;
     }
 
-    private applyTransforms(onTransformssApplied: ErrorCallback<Error>) {
+    private applyTransforms(onTransformssApplied: ErrorCallback<Error>): void {
 
         if (!this.config.transforms.length) {
             process.nextTick(() => {
@@ -174,12 +174,12 @@ class Compiler {
         }, onTransformssApplied);
     }
 
-    private runDiagnostics(program: ts.Program, host: ts.CompilerHost) {
+    private runDiagnostics(program: ts.Program, host: ts.CompilerHost): void {
         let diagnostics = ts.getPreEmitDiagnostics(program);
         this.outputDiagnostics(diagnostics, host);
     }
 
-    private outputDiagnostics(diagnostics: ts.Diagnostic[], host?: ts.FormatDiagnosticsHost) {
+    private outputDiagnostics(diagnostics: ts.Diagnostic[], host?: ts.FormatDiagnosticsHost): void {
 
         if (diagnostics && diagnostics.length > 0) {
 
@@ -194,11 +194,13 @@ class Compiler {
 
                     if (diagnostic.file) {
                         let loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                        output += diagnostic.file.fileName.replace(process.cwd(), "") + "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
+                        output += diagnostic.file.fileName.replace(process.cwd(), "") +
+                                  "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
                     }
 
                     let category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
-                    output += category + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
+                    output += category + " TS" + diagnostic.code + ": " +
+                              ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
 
                     this.log.error(output);
                 }
@@ -210,7 +212,7 @@ class Compiler {
         }
     }
 
-    private collectRequiredModules() {
+    private collectRequiredModules(): void {
 
         this.requiredModuleCounter = 0;
 
@@ -225,12 +227,9 @@ class Compiler {
 
                     let resolvedModule = (<any> sourceFile).resolvedModules[moduleName];
 
-                    queued.requiredModules.push({
-                        filename: resolvedModule && resolvedModule.resolvedFileName,
-                        isTypescriptFile: this.isTypescriptFile(resolvedModule),
-                        isTypingsFile: this.isTypingsFile(resolvedModule),
-                        moduleName
-                    });
+                    queued.requiredModules.push(
+                        new RequiredModule(resolvedModule && resolvedModule.resolvedFileName, moduleName)
+                    );
                 });
             }
 
@@ -238,9 +237,9 @@ class Compiler {
         });
     }
 
-    private findUnresolvedRequires(sourceFile: ts.SourceFile) {
+    private findUnresolvedRequires(sourceFile: ts.SourceFile): RequiredModule[] {
 
-        let requiredModules: any[] = [];
+        let requiredModules: RequiredModule[] = [];
 
         if ((<any> ts).isDeclarationFile(sourceFile)) {
             return requiredModules;
@@ -262,13 +261,7 @@ class Compiler {
 
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-
-                    requiredModules.push({
-                        filename: undefined,
-                        isTypescriptFile: undefined,
-                        isTypingsFile: undefined,
-                        moduleName: argument.text
-                    });
+                    requiredModules.push(new RequiredModule(undefined, argument.text));
                 }
             }
 
@@ -278,17 +271,6 @@ class Compiler {
         visitNode(sourceFile);
 
         return requiredModules;
-    }
-
-    private isTypingsFile(resolvedModule: any) {
-        return resolvedModule &&
-               /\.d\.ts$/.test(resolvedModule.resolvedFileName);
-    }
-
-    private isTypescriptFile(resolvedModule: any) {
-        return resolvedModule &&
-               !this.isTypingsFile(resolvedModule) &&
-               /\.(ts|tsx)$/.test(resolvedModule.resolvedFileName);
     }
 }
 
