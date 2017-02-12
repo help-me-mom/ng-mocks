@@ -76,8 +76,10 @@ export class Configuration {
         this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
         this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
         this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions = this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
-        this.bundlerOptions.resolve.directories = this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
+        this.bundlerOptions.resolve.extensions =
+            this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
+        this.bundlerOptions.resolve.directories =
+            this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     }
 
@@ -107,9 +109,8 @@ export class Configuration {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
         this.coverageOptions.exclude = this.defaultTo(
-            this.checkCoverageOptionExclude(this.coverageOptions.exclude),
-                /\.(d|spec|test)\.ts/i
-            );
+            this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts/i
+        );
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
         });
@@ -146,9 +147,7 @@ export class Configuration {
     }
 
     private assertConfiguration() {
-
         if (!this.asserted) {
-
             this.asserted = true;
             this.assertFrameworkConfiguration();
             this.assertDeprecatedOptions();
@@ -156,7 +155,6 @@ export class Configuration {
     }
 
     private assertFrameworkConfiguration() {
-
         if (this.hasPreprocessor("karma-typescript") &&
           (!this.karma.frameworks || this.karma.frameworks.indexOf("karma-typescript") === -1)) {
             throw new Error("Missing karma-typescript framework, please add" +
@@ -184,30 +182,30 @@ export class Configuration {
             this.log.warn("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' " +
                           "has been deprecated and will be removed in future versions, please " +
                           "use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
-            this.coverageOptions.instrumentation = !(<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation;
+            this.coverageOptions.instrumentation =
+                !(<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation;
         }
     }
 
-    private checkCoverageOptionExclude(regex: any) {
+    private assertCoverageOptionExclude(regex: any) {
         if (regex instanceof RegExp || !regex) {
             return regex;
         }
         else if (Array.isArray(regex)) {
             regex.forEach((r) => {
                 if (!(r instanceof RegExp)) {
-                    this.throwRegexError(r);
+                    this.throwCoverageOptionExcludeError(r);
                 }
             });
             return regex;
         }
 
-        this.throwRegexError(regex);
+        this.throwCoverageOptionExcludeError(regex);
     }
 
-    private throwRegexError(regex: any) {
-        let baseErrorMsg = "karmaTypescriptConfig.coverageOptions.exclude" +
-            "must be a single RegExp or an Array of RegExp";
-        throw new Error(baseErrorMsg + " " + regex + " is not a regex");
+    private throwCoverageOptionExcludeError(regex: any) {
+        throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
+            "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
     }
 
     private defaultTo<T>(...values: T[]) {

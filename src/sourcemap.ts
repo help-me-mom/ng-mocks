@@ -2,7 +2,7 @@ import path = require("path");
 import { EmitOutput } from "./emit-output";
 import { File } from "./file";
 
-export function create(file: File, source: string, emitOutput: EmitOutput){
+export function create(file: File, source: string, emitOutput: EmitOutput) {
 
     let result: string = emitOutput.outputText;
     let map: any;
