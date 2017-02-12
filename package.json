@@ -2,7 +2,7 @@
   "name": "karma-typescript",
   "version": "2.1.7",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "keywords": [
     "angularjs",
     "angular2",
