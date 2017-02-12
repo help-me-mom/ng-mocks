@@ -1,7 +1,7 @@
-import { IComponentService } from "./component.interface";
 import { Component } from "./component";
+import { ComponentService } from "./component.interface";
 
-class MockComponentService implements IComponentService {
+class MockComponentService implements ComponentService {
 
     public sayHello(): string {
         return "Hello world!";

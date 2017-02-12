@@ -1,9 +1,9 @@
+import "../../assets/style/main.css";
 import "./style/css.css";
 import "./style/less.less";
 import "./style/sass.sass";
 import "./style/scss.scss";
 import "./test.css";
-import "../../assets/style/main.css";
 
 export class StyleImportsComponent {
 

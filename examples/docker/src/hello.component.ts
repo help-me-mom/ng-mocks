@@ -1,8 +1,8 @@
-import { IHelloService } from "./hello-service.interface";
+import { HelloService } from "./hello-service.interface";
 
 export class HelloComponent {
 
-    constructor(private helloService: IHelloService) {}
+    constructor(private helloService: HelloService) {}
 
     public sayHello(): string {
 

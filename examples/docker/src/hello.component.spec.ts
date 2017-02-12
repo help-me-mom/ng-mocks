@@ -1,7 +1,7 @@
-import { IHelloService } from "./hello-service.interface";
+import { HelloService } from "./hello-service.interface";
 import { HelloComponent } from "./hello.component";
 
-class MockHelloService implements IHelloService {
+class MockHelloService implements HelloService {
 
     public sayHello(): string {
         return "Hello world!";

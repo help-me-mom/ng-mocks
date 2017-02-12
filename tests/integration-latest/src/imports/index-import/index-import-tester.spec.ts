@@ -1,6 +1,6 @@
-import { IndexImportTester } from "./index-import-tester";
 import { IndexComponent } from "./dependency/index";
 import { IndexComponentWithSlash } from "./dependency/index";
+import { IndexImportTester } from "./index-import-tester";
 
 describe("IndexImporter", () => {
 

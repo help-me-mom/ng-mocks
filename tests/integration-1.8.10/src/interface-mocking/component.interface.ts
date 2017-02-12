@@ -1,3 +1,3 @@
-export interface IComponentService {
+export interface ComponentService {
     sayHello(): string;
 }

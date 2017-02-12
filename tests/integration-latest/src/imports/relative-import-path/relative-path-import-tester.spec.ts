@@ -1,5 +1,5 @@
-import { RelativePathImportTester } from "./relative-path-import-tester";
 import { LanguageFeaturesTester } from "../../typescript/language-features/language-features-tester";
+import { RelativePathImportTester } from "./relative-path-import-tester";
 
 describe("RelativePathImportTester", () => {
 

@@ -29,7 +29,7 @@ export class CoreModuleTester {
     }
 
     public testCrypto(): string {
-        return crypto.createHash('md5').update("string").digest('hex');
+        return crypto.createHash("md5").update("string").digest("hex");
     }
 
     public testDomain(): domain.Domain {

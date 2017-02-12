@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactCSSModules from "react-css-modules";
 
 import * as chai from "chai";
-import * as chaiEnzyme from "chai-enzyme"
+import * as chaiEnzyme from "chai-enzyme";
 
 import { expect } from "chai";
 import { shallow } from "enzyme";

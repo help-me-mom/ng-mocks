@@ -1,5 +1,5 @@
-import { IInterfaceMockingTester } from "./interface-mocking-tester.interface";
 import { InterfaceMockingTester } from "./interface-mocking-tester";
+import { IInterfaceMockingTester } from "./interface-mocking-tester.interface";
 
 class MockInterfaceMockingTester implements IInterfaceMockingTester {
 

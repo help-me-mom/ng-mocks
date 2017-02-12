@@ -1,7 +1,6 @@
 import * as angular from "angular";
-
-import { Service } from "./service";
 import { Controller } from "./controller";
+import { Service } from "./service";
 
 angular
   .module("app", [])

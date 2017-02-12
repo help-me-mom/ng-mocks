@@ -9,6 +9,7 @@ describe("ReactTester", () => {
         let renderer = TestUtils.createRenderer();
         renderer.render(<ReactTester compiler="Typescript" framework="React" />);
 
-        expect(renderer.getRenderOutput().props.children).toEqual(["Hello from ", "Typescript", " and ", "React", "!" ]);
+        expect(renderer.getRenderOutput().props.children)
+            .toEqual(["Hello from ", "Typescript", " and ", "React", "!" ]);
     });
 });

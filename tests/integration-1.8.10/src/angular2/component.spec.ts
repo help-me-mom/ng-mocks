@@ -1,6 +1,6 @@
-import { By } from "@angular/platform-browser";
 import { DebugElement } from "@angular/core";
-import { TestBed, async } from "@angular/core/testing";
+import { async, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
 
 import { BannerComponent } from "./component";

@@ -35,7 +35,7 @@ describe("CoreModuleComponent", () => {
         expect(tester.testDomain()).toEqual(jasmine.any(events.EventEmitter));
     });
 
-   it("should use core module events", () => {
+    it("should use core module events", () => {
 
         expect(tester.testEvents()).toEqual(jasmine.any(events.EventEmitter));
     });

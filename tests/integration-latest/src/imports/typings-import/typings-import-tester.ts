@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable'
+import { Observable } from  "rxjs/Observable";
 import { MyInterface } from "../../custom-typings/my-typings";
 
 export class TypingsImportTester implements MyInterface {

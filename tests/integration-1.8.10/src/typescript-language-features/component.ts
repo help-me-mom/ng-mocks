@@ -4,6 +4,7 @@ export class LanguageFeaturesComponent {
 
         let someArray = [1, 2, 3];
 
+        // tslint:disable-next-line:no-empty
         for (let item of someArray) {
         }
 

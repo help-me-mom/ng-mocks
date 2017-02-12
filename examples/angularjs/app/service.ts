@@ -5,8 +5,7 @@ export class Service {
     constructor(private $q: angular.IQService) {
     }
 
-    getMessage(): angular.IPromise<string> {
-
+    public getMessage(): angular.IPromise<string> {
         return this.$q.when("Like I promised :)");
     }
 }
