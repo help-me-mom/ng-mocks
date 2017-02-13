@@ -65,7 +65,7 @@ var Configuration = (function () {
     Configuration.prototype.configurePreprocessor = function () {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
-        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts/i);
+        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i);
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, function (filepath) {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
         });

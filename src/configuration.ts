@@ -109,7 +109,7 @@ class Configuration {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
         this.coverageOptions.exclude = this.defaultTo(
-            this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts/i
+            this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i
         );
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");

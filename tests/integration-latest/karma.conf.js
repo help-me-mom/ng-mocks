@@ -53,7 +53,7 @@ module.exports = function(config) {
             },
             coverageOptions: {
                 instrumentation: true,
-                exclude: /\.(d|spec|test)\.ts/
+                exclude: [/\.(d|spec|test)\.ts$/i]
             },
             exclude: ["broken"],
             include: ["**/*.ts", "**/*.tsx"],
