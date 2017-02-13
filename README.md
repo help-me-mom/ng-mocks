@@ -147,7 +147,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   set to `false` to see the original Typescript code when debugging.<br/>
   Defaults to true.
 
-* `karmaTypescriptConfig.coverageOptions.exclude` - A regex for filtering which files should be excluded from coverage instrumentation.<br/>
+* `karmaTypescriptConfig.coverageOptions.exclude` - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
   Defaults to `/\.(d|spec|test)\.ts/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
 
 * `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler.
