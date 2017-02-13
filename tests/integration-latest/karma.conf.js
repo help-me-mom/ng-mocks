@@ -25,6 +25,7 @@ module.exports = function(config) {
                 addNodeGlobals: true,
                 entrypoints: /\.spec\.(ts|tsx)$/,
                 exclude: [
+                    "indent-string",
                     "react/addons",
                     "react/lib/ExecutionEnvironment",
                     "react/lib/ReactContext"

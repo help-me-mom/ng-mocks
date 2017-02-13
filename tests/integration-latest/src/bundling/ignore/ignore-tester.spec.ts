@@ -6,6 +6,6 @@ describe("IgnoreTester", () => {
 
     it("should be required without ignored dependencies", () => {
 
-        expect(tester.testRequire()).not.toBeUndefined();
+        expect(tester.testRequire()).toBeTruthy();
     });
 });
