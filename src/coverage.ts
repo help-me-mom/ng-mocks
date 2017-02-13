@@ -1,75 +1,73 @@
-function Coverage(config) {
+import { Logger } from "log4js";
 
-    var coverage = require("karma-coverage/lib/preprocessor"),
-        sourcemap = require("../dist/sourcemap"),
-        coveragePreprocessor,
-        log;
+import Configuration = require("./configuration");
+import CoverageCallback = require("./coverage-callback");
+import EmitOutput = require("./emit-output");
+import File = require("./file");
+import SourceMap = require("./source-map");
 
-    function initialize(helper, logger) {
+class Coverage {
 
-        log = logger.create("coverage.karma-typescript");
+    private coverage = require("karma-coverage/lib/preprocessor");
+    private coveragePreprocessor: any;
+    private log: Logger;
 
-        coveragePreprocessor = coverage(
+    constructor(private config: Configuration) { }
+
+    public initialize(helper: any, logger: any): void {
+
+        this.log = logger.create("coverage.karma-typescript");
+
+        this.coveragePreprocessor = this.coverage(
             logger,
             helper,
-            config.karma.basePath,
-            config.reporters,
-            config.coverageReporter
+            this.config.karma.basePath,
+            this.config.reporters,
+            this.config.coverageReporter
         );
     }
 
-    function instrument(file, bundled, emitOutput, callback) {
+    public instrument(file: File, bundled: string, emitOutput: EmitOutput, callback: CoverageCallback): void {
 
-        if(config.hasPreprocessor("commonjs")) {
-            log.debug("karma-commonjs already configured");
+        if (this.config.hasPreprocessor("commonjs")) {
+            this.log.debug("karma-commonjs already configured");
             callback(bundled);
             return;
         }
 
-        if(config.hasPreprocessor("coverage")) {
-            log.debug("karma-coverage already configured");
+        if (this.config.hasPreprocessor("coverage")) {
+            this.log.debug("karma-coverage already configured");
             callback(bundled);
             return;
         }
 
-        function doesOneRegexMatch(regexes, value) {
-            var results = regexes.map(function(regex) {
-                return regex.test(value);
-            });
+        if (!this.config.coverageOptions.instrumentation ||
+            this.isExcluded(this.config.coverageOptions.exclude, file.originalPath) ||
+            this.hasNoOutput(file, emitOutput)) {
 
-            var matches = results.filter(function(result) {
-                return result;
-            });
-
-            return matches.length > 0;
+            this.log.debug("Excluding file %s from instrumentation", file.originalPath);
+            callback(bundled);
+            return;
         }
 
-        function checkRegex(regex, value) {
-            if (Array.isArray(regex)) {
-                return doesOneRegexMatch(regex, value);
+        this.coveragePreprocessor(bundled, file, callback);
+    }
+
+    private hasNoOutput(file: File, emitOutput: EmitOutput): boolean {
+        return emitOutput.outputText === SourceMap.getComment(file);
+    }
+
+    private isExcluded(regex: RegExp | RegExp[], path: string): boolean {
+        if (Array.isArray(regex)) {
+            for (let r of regex) {
+                if (r.test(path)) {
+                    return true;
+                }
             }
-            return regex.test(value);
+            return false;
         }
-
-        if(!config.coverageOptions.instrumentation ||
-           checkRegex(config.coverageOptions.exclude, file.originalPath) ||
-           hasNoOutput(file, emitOutput)) {
-
-            log.debug("Excluding file %s from instrumentation", file.originalPath);
-            callback(bundled);
-            return;
-        }
-
-        coveragePreprocessor(bundled, file, callback);
+        return regex.test(path);
     }
-
-    function hasNoOutput(file, emitOutput) {
-
-        return emitOutput.outputText === sourcemap.getComment(file);
-    }
-
-    this.initialize = initialize;
-    this.instrument = instrument;
 }
 
-module.exports = Coverage;
+export = Coverage;

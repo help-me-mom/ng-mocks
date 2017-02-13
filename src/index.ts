@@ -1,10 +1,9 @@
 import Compiler = require("./compiler");
 import Configuration = require("./configuration");
+import Coverage = require("./coverage");
 
 // tslint:disable-next-line:no-var-requires
 let Bundler = require("../lib/bundler");
-// tslint:disable-next-line:no-var-requires
-let Coverage = require("../lib/coverage");
 // tslint:disable-next-line:no-var-requires
 let Framework = require("../lib/framework");
 // tslint:disable-next-line:no-var-requires
@@ -15,8 +14,8 @@ let Reporter = require("../lib/reporter");
 let sharedProcessedFiles = {};
 
 let configuration = new Configuration();
-let coverage = new Coverage(configuration);
 
+let coverage = new Coverage(configuration);
 let bundler = new Bundler(configuration, coverage);
 let compiler = new Compiler(configuration);
 

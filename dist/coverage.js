@@ -1,48 +1,49 @@
-function Coverage(config) {
-    var coverage = require("karma-coverage/lib/preprocessor"), sourcemap = require("../dist/sourcemap"), coveragePreprocessor, log;
-    function initialize(helper, logger) {
-        log = logger.create("coverage.karma-typescript");
-        coveragePreprocessor = coverage(logger, helper, config.karma.basePath, config.reporters, config.coverageReporter);
+"use strict";
+var SourceMap = require("./source-map");
+var Coverage = (function () {
+    function Coverage(config) {
+        this.config = config;
+        this.coverage = require("karma-coverage/lib/preprocessor");
     }
-    function instrument(file, bundled, emitOutput, callback) {
-        if (config.hasPreprocessor("commonjs")) {
-            log.debug("karma-commonjs already configured");
+    Coverage.prototype.initialize = function (helper, logger) {
+        this.log = logger.create("coverage.karma-typescript");
+        this.coveragePreprocessor = this.coverage(logger, helper, this.config.karma.basePath, this.config.reporters, this.config.coverageReporter);
+    };
+    Coverage.prototype.instrument = function (file, bundled, emitOutput, callback) {
+        if (this.config.hasPreprocessor("commonjs")) {
+            this.log.debug("karma-commonjs already configured");
             callback(bundled);
             return;
         }
-        if (config.hasPreprocessor("coverage")) {
-            log.debug("karma-coverage already configured");
+        if (this.config.hasPreprocessor("coverage")) {
+            this.log.debug("karma-coverage already configured");
             callback(bundled);
             return;
         }
-        function doesOneRegexMatch(regexes, value) {
-            var results = regexes.map(function (regex) {
-                return regex.test(value);
-            });
-            var matches = results.filter(function (result) {
-                return result;
-            });
-            return matches.length > 0;
+        if (!this.config.coverageOptions.instrumentation ||
+            this.isExcluded(this.config.coverageOptions.exclude, file.originalPath) ||
+            this.hasNoOutput(file, emitOutput)) {
+            this.log.debug("Excluding file %s from instrumentation", file.originalPath);
+            callback(bundled);
+            return;
         }
-        function checkRegex(regex, value) {
-            if (Array.isArray(regex)) {
-                return doesOneRegexMatch(regex, value);
+        this.coveragePreprocessor(bundled, file, callback);
+    };
+    Coverage.prototype.hasNoOutput = function (file, emitOutput) {
+        return emitOutput.outputText === SourceMap.getComment(file);
+    };
+    Coverage.prototype.isExcluded = function (regex, path) {
+        if (Array.isArray(regex)) {
+            for (var _i = 0, regex_1 = regex; _i < regex_1.length; _i++) {
+                var r = regex_1[_i];
+                if (r.test(path)) {
+                    return true;
+                }
             }
-            return regex.test(value);
+            return false;
         }
-        if (!config.coverageOptions.instrumentation ||
-            checkRegex(config.coverageOptions.exclude, file.originalPath) ||
-            hasNoOutput(file, emitOutput)) {
-            log.debug("Excluding file %s from instrumentation", file.originalPath);
-            callback(bundled);
-            return;
-        }
-        coveragePreprocessor(bundled, file, callback);
-    }
-    function hasNoOutput(file, emitOutput) {
-        return emitOutput.outputText === sourcemap.getComment(file);
-    }
-    this.initialize = initialize;
-    this.instrument = instrument;
-}
+        return regex.test(path);
+    };
+    return Coverage;
+}());
 module.exports = Coverage;

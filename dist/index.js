@@ -1,10 +1,9 @@
 "use strict";
 var Compiler = require("./compiler");
 var Configuration = require("./configuration");
+var Coverage = require("./coverage");
 // tslint:disable-next-line:no-var-requires
 var Bundler = require("../lib/bundler");
-// tslint:disable-next-line:no-var-requires
-var Coverage = require("../lib/coverage");
 // tslint:disable-next-line:no-var-requires
 var Framework = require("../lib/framework");
 // tslint:disable-next-line:no-var-requires
