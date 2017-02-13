@@ -65,7 +65,7 @@ var Configuration = (function () {
     Configuration.prototype.configurePreprocessor = function () {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
-        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i);
+        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i);
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, function (filepath) {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
         });
@@ -128,7 +128,7 @@ var Configuration = (function () {
                 !this.karmaTypescriptConfig.disableCodeCoverageInstrumentation;
         }
     };
-    Configuration.prototype.assertCoverageOptionExclude = function (regex) {
+    Configuration.prototype.assertCoverageExclude = function (regex) {
         var _this = this;
         if (regex instanceof RegExp || !regex) {
             return regex;
@@ -136,14 +136,14 @@ var Configuration = (function () {
         else if (Array.isArray(regex)) {
             regex.forEach(function (r) {
                 if (!(r instanceof RegExp)) {
-                    _this.throwCoverageOptionExcludeError(r);
+                    _this.throwCoverageExcludeError(r);
                 }
             });
             return regex;
         }
-        this.throwCoverageOptionExcludeError(regex);
+        this.throwCoverageExcludeError(regex);
     };
-    Configuration.prototype.throwCoverageOptionExcludeError = function (regex) {
+    Configuration.prototype.throwCoverageExcludeError = function (regex) {
         throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
             "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
     };

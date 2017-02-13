@@ -109,7 +109,7 @@ class Configuration {
         this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
         this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
         this.coverageOptions.exclude = this.defaultTo(
-            this.assertCoverageOptionExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i
+            this.assertCoverageExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i
         );
         this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
@@ -187,23 +187,23 @@ class Configuration {
         }
     }
 
-    private assertCoverageOptionExclude(regex: any) {
+    private assertCoverageExclude(regex: any) {
         if (regex instanceof RegExp || !regex) {
             return regex;
         }
         else if (Array.isArray(regex)) {
             regex.forEach((r) => {
                 if (!(r instanceof RegExp)) {
-                    this.throwCoverageOptionExcludeError(r);
+                    this.throwCoverageExcludeError(r);
                 }
             });
             return regex;
         }
 
-        this.throwCoverageOptionExcludeError(regex);
+        this.throwCoverageExcludeError(regex);
     }
 
-    private throwCoverageOptionExcludeError(regex: any) {
+    private throwCoverageExcludeError(regex: any) {
         throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
             "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
     }
