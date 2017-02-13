@@ -1,63 +1,75 @@
-function Framework(bundler, compiler, config, coverage) {
-    var cloneDeep = require("lodash.clonedeep"), union = require("lodash.union"), path = require("path"), ts = require("typescript"), log, create = function (karmaConfig, helper, logger) {
-        config.initialize(karmaConfig, logger);
-        coverage.initialize(helper, logger);
-        log = logger.create("framework.karma-typescript");
-        bundler.initialize(logger);
-        compiler.initialize(logger, resolveTsconfig(config.karma.basePath));
-        if (!config.hasFramework("commonjs")) {
-            bundler.attach(karmaConfig.files);
-        }
-        log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
-    };
-    function getTsconfigFilename() {
+"use strict";
+var lodash = require("lodash");
+var path = require("path");
+var ts = require("typescript");
+var PathTool = require("../path-tool");
+var Framework = (function () {
+    function Framework(bundler, compiler, config, coverage) {
+        var _this = this;
+        this.config = config;
+        this.create = function (karmaConfig, helper, logger) {
+            config.initialize(karmaConfig, logger);
+            coverage.initialize(helper, logger);
+            _this.log = logger.create("framework.karma-typescript");
+            bundler.initialize(logger);
+            compiler.initialize(logger, _this.resolveTsconfig(config.karma.basePath));
+            if (!config.hasFramework("commonjs")) {
+                bundler.attach(karmaConfig.files);
+            }
+            _this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
+        };
+        this.create.$inject = ["config", "helper", "logger"];
+    }
+    Framework.prototype.getTsconfigFilename = function () {
         var configFileName = "";
-        if (config.tsconfig) {
-            configFileName = path.join(config.karma.basePath, config.tsconfig);
+        if (this.config.tsconfig) {
+            configFileName = path.join(this.config.karma.basePath, this.config.tsconfig);
             if (!ts.sys.fileExists(configFileName)) {
-                log.warn("Tsconfig '%s' configured in karmaTypescriptConfig.tsconfig does not exist", configFileName);
+                this.log.warn("Tsconfig '%s' configured in karmaTypescriptConfig.tsconfig does not exist", configFileName);
                 configFileName = "";
             }
         }
-        return fixWindowsPath(configFileName);
-    }
-    function getExistingOptions() {
-        convertOptions(config.compilerOptions);
-        return config.compilerOptions;
-    }
-    function resolveTsconfig(basePath) {
-        var configFileName = getTsconfigFilename(), configFileJson = getConfigFileJson(configFileName), existingOptions = getExistingOptions();
-        return parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
-    }
-    function getConfigFileJson(configFileName) {
-        var configFileJson, configFileText;
+        return PathTool.fixWindowsPath(configFileName);
+    };
+    Framework.prototype.getExistingOptions = function () {
+        this.convertOptions(this.config.compilerOptions);
+        return this.config.compilerOptions;
+    };
+    Framework.prototype.resolveTsconfig = function (basePath) {
+        var configFileName = this.getTsconfigFilename();
+        var configFileJson = this.getConfigFileJson(configFileName);
+        var existingOptions = this.getExistingOptions();
+        return this.parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
+    };
+    Framework.prototype.getConfigFileJson = function (configFileName) {
+        var configFileJson;
         if (ts.sys.fileExists(configFileName)) {
-            log.debug("Using %s", configFileName);
+            this.log.debug("Using %s", configFileName);
             if (ts.parseConfigFile) {
                 configFileJson = ts.readConfigFile(configFileName);
             }
             else if (ts.parseConfigFileTextToJson) {
-                configFileText = ts.sys.readFile(configFileName);
+                var configFileText = ts.sys.readFile(configFileName);
                 configFileJson = ts.parseConfigFileTextToJson(configFileName, configFileText);
             }
             else {
-                log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
+                this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
                 process.exit(1);
             }
         }
         else {
             configFileJson = {
-                config: cloneDeep(config.defaultTsconfig)
+                config: lodash.cloneDeep(this.config.defaultTsconfig)
             };
-            log.debug("Fallback to default compiler options");
+            this.log.debug("Fallback to default compiler options");
         }
-        log.debug("Resolved configFileJson:\n", JSON.stringify(configFileJson, null, 3));
+        this.log.debug("Resolved configFileJson:\n", JSON.stringify(configFileJson, null, 3));
         return configFileJson;
-    }
-    function parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions) {
+    };
+    Framework.prototype.parseConfigFileJson = function (basePath, configFileName, configFileJson, existingOptions) {
         var tsconfig;
-        extend("include", configFileJson.config, config);
-        extend("exclude", configFileJson.config, config);
+        this.extend("include", configFileJson.config, this.config);
+        this.extend("exclude", configFileJson.config, this.config);
         if (ts.parseConfigFile) {
             tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, basePath);
             tsconfig.options = ts.extend(existingOptions, tsconfig.options);
@@ -66,36 +78,33 @@ function Framework(bundler, compiler, config, coverage) {
             tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, basePath, existingOptions, configFileName);
         }
         if (!tsconfig) {
-            log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
+            this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
             process.exit(1);
         }
         delete tsconfig.options.outDir;
         delete tsconfig.options.outFile;
-        log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
+        this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
         return tsconfig;
-    }
-    function extend(key, a, b) {
-        var list = union(a[key], b[key]);
+    };
+    Framework.prototype.extend = function (key, a, b) {
+        var list = lodash.union(a[key], b[key]);
         if (list && list.length) {
             a[key] = list.map(function (item) {
-                return fixWindowsPath(item);
+                return PathTool.fixWindowsPath(item);
             });
         }
-    }
-    function fixWindowsPath(value) {
-        return value.replace(/\\/g, "/");
-    }
-    function convertOptions(options) {
+    };
+    Framework.prototype.convertOptions = function (options) {
         if (options) {
             var optionNameMap = ts.getOptionNameMap().optionNameMap;
-            setOption(options, optionNameMap, "jsx");
-            setOption(options, optionNameMap, "lib");
-            setOption(options, optionNameMap, "module");
-            setOption(options, optionNameMap, "moduleResolution");
-            setOption(options, optionNameMap, "target");
+            this.setOption(options, optionNameMap, "jsx");
+            this.setOption(options, optionNameMap, "lib");
+            this.setOption(options, optionNameMap, "module");
+            this.setOption(options, optionNameMap, "moduleResolution");
+            this.setOption(options, optionNameMap, "target");
         }
-    }
-    function setOption(options, optionNameMap, key) {
+    };
+    Framework.prototype.setOption = function (options, optionNameMap, key) {
         var entry = optionNameMap[key.toLowerCase()];
         if (options[key] && entry) {
             if (typeof options[key] === "string") {
@@ -107,8 +116,7 @@ function Framework(bundler, compiler, config, coverage) {
                 });
             }
         }
-    }
-    this.create = create;
-    this.create.$inject = ["config", "helper", "logger"];
-}
+    };
+    return Framework;
+}());
 module.exports = Framework;

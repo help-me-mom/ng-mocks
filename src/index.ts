@@ -1,11 +1,10 @@
 import Compiler = require("./compiler");
 import Configuration = require("./configuration");
 import Coverage = require("./coverage");
+import Framework = require("./karma/framework");
 
 // tslint:disable-next-line:no-var-requires
 let Bundler = require("../lib/bundler");
-// tslint:disable-next-line:no-var-requires
-let Framework = require("../lib/framework");
 // tslint:disable-next-line:no-var-requires
 let Preprocessor = require("../lib/preprocessor");
 // tslint:disable-next-line:no-var-requires

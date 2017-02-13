@@ -1,174 +1,185 @@
-function Framework(bundler, compiler, config, coverage) {
+import * as lodash from "lodash";
+import path = require("path");
+import * as ts from "typescript";
 
-    var cloneDeep = require("lodash.clonedeep"),
-        union = require("lodash.union"),
-        path = require("path"),
-        ts = require("typescript"),
-        log,
-        create = function(karmaConfig, helper, logger) {
+import { ConfigOptions } from "karma";
+import { Logger } from "log4js";
 
+import Compiler = require("../compiler");
+import Configuration = require("../configuration");
+import Coverage = require("../coverage");
+
+import { CompilerOptions } from "../../typings";
+import PathTool = require("../path-tool");
+
+type ConfigFileJson = {
+    config?: any; error?:
+    ts.Diagnostic;
+};
+
+class Framework {
+
+    public create: any;
+    private log: Logger;
+
+    constructor(bundler: any, compiler: Compiler, private config: Configuration, coverage: Coverage) {
+
+        this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
             config.initialize(karmaConfig, logger);
             coverage.initialize(helper, logger);
-
-            log = logger.create("framework.karma-typescript");
+            this.log = logger.create("framework.karma-typescript");
 
             bundler.initialize(logger);
-            compiler.initialize(logger, resolveTsconfig(config.karma.basePath));
+            compiler.initialize(logger, this.resolveTsconfig(config.karma.basePath));
 
-            if(!config.hasFramework("commonjs")) {
+            if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);
             }
 
-            log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
+            this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
         };
 
-    function getTsconfigFilename() {
+        this.create.$inject = ["config", "helper", "logger"];
+    }
 
-        var configFileName = "";
+    private getTsconfigFilename(): string {
 
-        if(config.tsconfig) {
+        let configFileName = "";
 
-            configFileName = path.join(config.karma.basePath, config.tsconfig);
+        if (this.config.tsconfig) {
 
-            if(!ts.sys.fileExists(configFileName)) {
-                log.warn("Tsconfig '%s' configured in karmaTypescriptConfig.tsconfig does not exist", configFileName);
+            configFileName = path.join(this.config.karma.basePath, this.config.tsconfig);
+
+            if (!ts.sys.fileExists(configFileName)) {
+                this.log.warn("Tsconfig '%s' configured in karmaTypescriptConfig.tsconfig does not exist",
+                    configFileName);
                 configFileName = "";
             }
         }
 
-        return fixWindowsPath(configFileName);
+        return PathTool.fixWindowsPath(configFileName);
     }
 
-    function getExistingOptions() {
+    private getExistingOptions(): CompilerOptions {
 
-        convertOptions(config.compilerOptions);
-        return config.compilerOptions;
+        this.convertOptions(this.config.compilerOptions);
+        return this.config.compilerOptions;
     }
 
-    function resolveTsconfig(basePath) {
+    private resolveTsconfig(basePath: string) {
 
-        var configFileName = getTsconfigFilename(),
-            configFileJson = getConfigFileJson(configFileName),
-            existingOptions = getExistingOptions();
+        let configFileName = this.getTsconfigFilename();
+        let configFileJson = this.getConfigFileJson(configFileName);
+        let existingOptions = this.getExistingOptions();
 
-        return parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
+        return this.parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
     }
 
-    function getConfigFileJson(configFileName) {
+    private getConfigFileJson(configFileName: string): ConfigFileJson {
 
-        var configFileJson,
-            configFileText;
+        let configFileJson: ConfigFileJson;
 
-        if(ts.sys.fileExists(configFileName)) {
+        if (ts.sys.fileExists(configFileName)) {
 
-            log.debug("Using %s", configFileName);
+            this.log.debug("Using %s", configFileName);
 
-            if(ts.parseConfigFile) { // v1.6
-
-                configFileJson = ts.readConfigFile(configFileName);
+            if ((<any> ts).parseConfigFile) { // v1.6
+                configFileJson = (<any> ts).readConfigFile(configFileName);
             }
-            else if(ts.parseConfigFileTextToJson) { // v1.7+
-
-                configFileText = ts.sys.readFile(configFileName);
+            else if (ts.parseConfigFileTextToJson) { // v1.7+
+                let configFileText = ts.sys.readFile(configFileName);
                 configFileJson = ts.parseConfigFileTextToJson(configFileName, configFileText);
             }
             else {
-                log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
+                this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
                 process.exit(1);
             }
         }
         else {
-
             configFileJson = {
-                config: cloneDeep(config.defaultTsconfig)
+                config: lodash.cloneDeep(this.config.defaultTsconfig)
             };
 
-            log.debug("Fallback to default compiler options");
+            this.log.debug("Fallback to default compiler options");
         }
 
-        log.debug("Resolved configFileJson:\n", JSON.stringify(configFileJson, null, 3));
+        this.log.debug("Resolved configFileJson:\n", JSON.stringify(configFileJson, null, 3));
 
         return configFileJson;
     }
 
-    function parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions) {
+    private parseConfigFileJson(basePath: string, configFileName: string,
+                                configFileJson: ConfigFileJson, existingOptions: CompilerOptions) {
 
-        var tsconfig;
+        let tsconfig: ts.ParsedCommandLine;
 
-        extend("include", configFileJson.config, config);
-        extend("exclude", configFileJson.config, config);
+        this.extend("include", configFileJson.config, this.config);
+        this.extend("exclude", configFileJson.config, this.config);
 
-        if(ts.parseConfigFile) {
-            tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, basePath);
-            tsconfig.options = ts.extend(existingOptions, tsconfig.options);
+        if ((<any> ts).parseConfigFile) {
+            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, basePath);
+            tsconfig.options = (<any> ts).extend(existingOptions, tsconfig.options);
         }
-        else if(ts.parseJsonConfigFileContent) {
-            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, basePath, existingOptions, configFileName);
+        else if (ts.parseJsonConfigFileContent) {
+            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys,
+                                                     basePath, (<any> existingOptions), configFileName);
         }
 
-        if(!tsconfig) {
-            log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
+        if (!tsconfig) {
+            this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
             process.exit(1);
         }
 
         delete tsconfig.options.outDir;
         delete tsconfig.options.outFile;
 
-        log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
+        this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
 
         return tsconfig;
     }
 
-    function extend(key, a, b) {
+    private extend(key: string, a: any, b: any): void {
 
-        var list = union(a[key], b[key]);
+        let list = lodash.union(a[key], b[key]);
 
-        if(list && list.length) {
-
-            a[key] = list.map(function(item){
-                return fixWindowsPath(item);
+        if (list && list.length) {
+            a[key] = list.map((item: string) => {
+                return PathTool.fixWindowsPath(item);
             });
         }
     }
 
-    function fixWindowsPath(value) {
-        return value.replace(/\\/g, "/");
-    }
+    private convertOptions(options: CompilerOptions) {
 
-    function convertOptions(options) {
+        if (options) {
 
-        if(options) {
+            let optionNameMap = (<any> ts).getOptionNameMap().optionNameMap;
 
-            var optionNameMap = ts.getOptionNameMap().optionNameMap;
-
-            setOption(options, optionNameMap, "jsx");
-            setOption(options, optionNameMap, "lib");
-            setOption(options, optionNameMap, "module");
-            setOption(options, optionNameMap, "moduleResolution");
-            setOption(options, optionNameMap, "target");
+            this.setOption(options, optionNameMap, "jsx");
+            this.setOption(options, optionNameMap, "lib");
+            this.setOption(options, optionNameMap, "module");
+            this.setOption(options, optionNameMap, "moduleResolution");
+            this.setOption(options, optionNameMap, "target");
         }
     }
 
-    function setOption(options, optionNameMap, key) {
+    private setOption(options: CompilerOptions, optionNameMap: any, key: string) {
 
-        var entry = optionNameMap[key.toLowerCase()];
+        let entry = optionNameMap[key.toLowerCase()];
 
-        if(options[key] && entry) {
+        if (options[key] && entry) {
 
-            if(typeof options[key] === "string") {
+            if (typeof options[key] === "string") {
                 options[key] = entry.type[options[key].toLowerCase()] || 0;
             }
 
-            if(Array.isArray(options[key])) {
-                options[key].forEach(function(option, index) {
+            if (Array.isArray(options[key])) {
+                options[key].forEach((option: string, index: number) => {
                     options[key][index] = entry.element.type[option.toLowerCase()];
                 });
             }
         }
     }
-
-    this.create = create;
-    this.create.$inject = ["config", "helper", "logger"];
 }
 
-module.exports = Framework;
+export = Framework;

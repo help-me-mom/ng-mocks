@@ -28,6 +28,7 @@ export interface Resolve {
 }
 
 export interface CompilerOptions {
+    [key:string]: any;
 }
 
 export interface CoverageOptions {
