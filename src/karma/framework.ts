@@ -66,7 +66,7 @@ class Framework {
         return this.config.compilerOptions;
     }
 
-    private resolveTsconfig(basePath: string) {
+    private resolveTsconfig(basePath: string): ts.ParsedCommandLine {
 
         let configFileName = this.getTsconfigFilename();
         let configFileJson = this.getConfigFileJson(configFileName);
@@ -108,8 +108,10 @@ class Framework {
         return configFileJson;
     }
 
-    private parseConfigFileJson(basePath: string, configFileName: string,
-                                configFileJson: ConfigFileJson, existingOptions: CompilerOptions) {
+    private parseConfigFileJson(basePath: string,
+                                configFileName: string,
+                                configFileJson: ConfigFileJson,
+                                existingOptions: CompilerOptions): ts.ParsedCommandLine {
 
         let tsconfig: ts.ParsedCommandLine;
 
@@ -149,7 +151,7 @@ class Framework {
         }
     }
 
-    private convertOptions(options: CompilerOptions) {
+    private convertOptions(options: CompilerOptions): void {
 
         if (options) {
 
@@ -163,7 +165,7 @@ class Framework {
         }
     }
 
-    private setOption(options: CompilerOptions, optionNameMap: any, key: string) {
+    private setOption(options: CompilerOptions, optionNameMap: any, key: string): void {
 
         let entry = optionNameMap[key.toLowerCase()];
 
