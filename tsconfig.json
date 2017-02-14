@@ -5,7 +5,10 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "outDir": "dist",
-        "target": "ES5"
+        "target": "ES5",
+        "lib": [
+            "dom","es5","es6","scripthost"
+        ]
     },
     "include": [
         "src/**/*.ts",

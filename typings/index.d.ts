@@ -38,6 +38,8 @@ export interface CoverageOptions {
 
 export interface RemapOptions {
     exclude?: RegExp;
+    readFile?: { (filepath: string): string };
+    sources?: any;
     warn?: Function;
 }
 
