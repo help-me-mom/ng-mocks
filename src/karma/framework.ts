@@ -19,7 +19,7 @@ type ConfigFileJson = {
 
 class Framework {
 
-    public create: any;
+    public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
 
     constructor(bundler: any, compiler: Compiler, private config: Configuration, coverage: Coverage) {
@@ -39,7 +39,7 @@ class Framework {
             this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
         };
 
-        this.create.$inject = ["config", "helper", "logger"];
+        (<any> this.create).$inject = ["config", "helper", "logger"];
     }
 
     private getTsconfigFilename(): string {
