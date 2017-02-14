@@ -1,3 +1,5 @@
-interface CoverageCallback { (result: string): void; }
+interface CoverageCallback {
+    (result: string): void;
+}
 
 export = CoverageCallback;
