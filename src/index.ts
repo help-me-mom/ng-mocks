@@ -6,7 +6,7 @@ import Framework = require("./karma/framework");
 // tslint:disable-next-line:no-var-requires
 let Bundler = require("../lib/bundler");
 // tslint:disable-next-line:no-var-requires
-let Preprocessor = require("../lib/preprocessor");
+let Preprocessor = require("./karma/preprocessor");
 // tslint:disable-next-line:no-var-requires
 let Reporter = require("../lib/reporter");
 

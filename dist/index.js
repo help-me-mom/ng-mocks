@@ -6,7 +6,7 @@ var Framework = require("./karma/framework");
 // tslint:disable-next-line:no-var-requires
 var Bundler = require("../lib/bundler");
 // tslint:disable-next-line:no-var-requires
-var Preprocessor = require("../lib/preprocessor");
+var Preprocessor = require("./karma/preprocessor");
 // tslint:disable-next-line:no-var-requires
 var Reporter = require("../lib/reporter");
 var sharedProcessedFiles = {};
