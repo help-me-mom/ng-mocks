@@ -3,10 +3,9 @@ var Compiler = require("./compiler");
 var Configuration = require("./configuration");
 var Coverage = require("./coverage");
 var Framework = require("./karma/framework");
+var Preprocessor = require("./karma/preprocessor");
 // tslint:disable-next-line:no-var-requires
 var Bundler = require("../lib/bundler");
-// tslint:disable-next-line:no-var-requires
-var Preprocessor = require("./karma/preprocessor");
 // tslint:disable-next-line:no-var-requires
 var Reporter = require("../lib/reporter");
 var sharedProcessedFiles = {};
