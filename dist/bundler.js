@@ -1,29 +1,73 @@
-function Bundler(config) {
-    var acorn = require("acorn"), builtins, browserResolve = require("browser-resolve"), lodash = require("lodash"), detective = require("detective"), async = require("async"), fs = require("fs"), glob = require("glob"), os = require("os"), path = require("path"), tmp = require("tmp"), Benchmark = require("../dist/benchmark"), PathTool = require("../dist/path-tool"), SourceMap = require("../dist/source-map"), BUNDLE_DELAY = 500, bundleBuffer = "", bundleFile = tmp.fileSync({
-        prefix: "karma-typescript-bundle-",
-        postfix: ".js"
-    }), bundleQueue = [], bundleQueuedModulesDeferred = lodash.debounce(bundleQueuedModules, BUNDLE_DELAY), bundleWithoutLoaderDeferred = lodash.debounce(bundleWithoutLoader, BUNDLE_DELAY), entrypoints = [], expandedFiles = [], filenameCache = [], log, lookupNameCache = {}, orderedEntrypoints = [];
-    function initialize(logger) {
-        log = logger.create("bundler.karma-typescript");
-        builtins = config.bundlerOptions.addNodeGlobals ?
-            require("browserify/lib/builtins") : undefined;
+"use strict";
+var acorn = require("acorn");
+var async = require("async");
+var browserResolve = require("browser-resolve");
+var fs = require("fs");
+var glob = require("glob");
+var lodash = require("lodash");
+var os = require("os");
+var path = require("path");
+var tmp = require("tmp");
+var Benchmark = require("./benchmark");
+var PathTool = require("./path-tool");
+var RequiredModule = require("./required-module");
+var SourceMap = require("./source-map");
+var Bundler = (function () {
+    function Bundler(config) {
+        this.config = config;
+        this.BUNDLE_DELAY = 500;
+        this.detective = require("detective");
+        this.bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
+        this.bundleWithoutLoaderDeferred = lodash.debounce(this.bundleWithoutLoader, this.BUNDLE_DELAY);
+        this.bundleBuffer = "";
+        this.bundleFile = tmp.fileSync({
+            postfix: ".js",
+            prefix: "karma-typescript-bundle-"
+        });
+        this.bundleQueue = [];
+        this.entrypoints = [];
+        this.expandedFiles = [];
+        this.filenameCache = [];
+        this.lookupNameCache = {};
+        this.orderedEntrypoints = [];
     }
-    function attach(files) {
+    Bundler.prototype.initialize = function (logger) {
+        this.log = logger.create("bundler.karma-typescript");
+        this.builtins = this.config.bundlerOptions.addNodeGlobals ?
+            require("browserify/lib/builtins") : undefined;
+    };
+    Bundler.prototype.attach = function (files) {
         files.unshift({
-            pattern: bundleFile.name,
             included: true,
+            pattern: this.bundleFile.name,
             served: true,
             watched: true
         });
         files.push({
-            pattern: path.join(__dirname, "../src/client/commonjs.js"),
             included: true,
+            pattern: path.join(__dirname, "../src/client/commonjs.js"),
             served: true,
             watched: false
         });
-        expandPatterns(files);
-    }
-    function expandPatterns(files) {
+        this.expandPatterns(files);
+    };
+    Bundler.prototype.bundle = function (file, source, emitOutput, shouldAddLoader, callback) {
+        this.bundleQueue.push({
+            callback: callback,
+            filename: file.originalPath,
+            moduleName: file.path,
+            requiredModules: emitOutput.requiredModules,
+            source: SourceMap.create(file, source, emitOutput)
+        });
+        if (shouldAddLoader) {
+            this.bundleQueuedModulesDeferred();
+        }
+        else {
+            this.bundleWithoutLoaderDeferred();
+        }
+    };
+    Bundler.prototype.expandPatterns = function (files) {
+        var _this = this;
         files.forEach(function (file) {
             var g = new glob.Glob(path.normalize(file.pattern), {
                 cwd: "/",
@@ -31,41 +75,18 @@ function Bundler(config) {
                 nodir: true,
                 sync: true
             });
-            Array.prototype.push.apply(expandedFiles, g.found);
+            Array.prototype.push.apply(_this.expandedFiles, g.found);
         });
-    }
-    function bundle(file, source, emitOutput, shouldAddLoader, callback) {
-        bundleQueue.push({
-            moduleName: file.path,
-            filename: file.originalPath,
-            source: SourceMap.create(file, source, emitOutput),
-            requiredModules: emitOutput.requiredModules,
-            callback: callback
-        });
-        if (shouldAddLoader) {
-            bundleQueuedModulesDeferred();
-        }
-        else {
-            bundleWithoutLoaderDeferred();
-        }
-    }
-    function bundleWithoutLoader() {
-        createGlobals(function onGlobalsCreated(globals) {
-            writeBundleFile(globals, function onBundleFileWritten() {
-                bundleQueue.forEach(function (queued) {
-                    queued.callback(queued.source);
-                });
-            });
-        });
-    }
-    function bundleQueuedModules() {
+    };
+    Bundler.prototype.bundleQueuedModules = function () {
+        var _this = this;
         var benchmark = new Benchmark();
-        async.each(bundleQueue, function (queued, onQueuedResolved) {
-            addEntrypointFilename(queued.filename);
+        async.each(this.bundleQueue, function (queued, onQueuedResolved) {
+            _this.addEntrypointFilename(queued.filename);
             async.each(queued.requiredModules, function (requiredModule, onRequiredModuleResolved) {
                 if (!requiredModule.isTypescriptFile &&
-                    !(requiredModule.isTypingsFile && !isNpmModule(requiredModule.moduleName))) {
-                    resolveModule(queued.moduleName, requiredModule, function () {
+                    !(requiredModule.isTypingsFile && !_this.isNpmModule(requiredModule.moduleName))) {
+                    _this.resolveModule(queued.moduleName, requiredModule, function () {
                         onRequiredModuleResolved();
                     });
                 }
@@ -76,27 +97,40 @@ function Bundler(config) {
                 }
             }, onQueuedResolved);
         }, function () {
-            onAllResolved(benchmark);
+            _this.onAllResolved(benchmark);
         });
-    }
-    function onAllResolved(benchmark) {
-        orderEntrypoints();
-        createGlobals(function onGlobalsCreated(globals) {
-            writeBundleFile(globals, function onBundleFileWritten() {
-                log.info("Bundled imports for %s file(s) in %s ms.", bundleQueue.length, benchmark.elapsed());
-                bundleQueue.forEach(function (queued) {
-                    queued.callback(addLoaderFunction(queued, true));
+    };
+    Bundler.prototype.bundleWithoutLoader = function () {
+        var _this = this;
+        this.createGlobals(function (globals) {
+            _this.writeBundleFile(globals, function () {
+                _this.bundleQueue.forEach(function (queued) {
+                    queued.callback(queued.source);
                 });
-                log.debug("Karma callbacks for %s file(s) in %s ms.", bundleQueue.length, benchmark.elapsed());
-                bundleQueue.length = 0;
             });
         });
-    }
-    function addLoaderFunction(module, standalone) {
-        var requiredModuleMap = {}, moduleId = path.relative(config.karma.basePath, module.filename);
+    };
+    Bundler.prototype.onAllResolved = function (benchmark) {
+        var _this = this;
+        this.orderEntrypoints();
+        this.createGlobals(function (globals) {
+            _this.writeBundleFile(globals, function () {
+                _this.log.info("Bundled imports for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
+                _this.bundleQueue.forEach(function (queued) {
+                    queued.callback(_this.addLoaderFunction(queued, true));
+                });
+                _this.log.debug("Karma callbacks for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
+                _this.bundleQueue.length = 0;
+            });
+        });
+    };
+    Bundler.prototype.addLoaderFunction = function (module, standalone) {
+        var _this = this;
+        var requiredModuleMap = {};
+        var moduleId = path.relative(this.config.karma.basePath, module.filename);
         module.requiredModules.forEach(function (requiredModule) {
             if (!requiredModule.filename) {
-                log.debug("No resolved filename for module [%s], required by [%s]", requiredModule.moduleName, module.filename);
+                _this.log.debug("No resolved filename for module [%s], required by [%s]", requiredModule.moduleName, module.filename);
             }
             else {
                 requiredModuleMap[requiredModule.moduleName] = PathTool.fixWindowsPath(requiredModule.filename);
@@ -109,107 +143,105 @@ function Bundler(config) {
             PathTool.fixWindowsPath(moduleId) + "'," +
             PathTool.fixWindowsPath(JSON.stringify(requiredModuleMap)) + "];" +
             (standalone ? "})(this);" : "") + os.EOL;
-    }
-    function createEntrypointFilenames() {
-        if (orderedEntrypoints.length > 0) {
-            return "global.entrypointFilenames=['" + orderedEntrypoints.join("','") + "'];" + os.EOL;
+    };
+    Bundler.prototype.createEntrypointFilenames = function () {
+        if (this.orderedEntrypoints.length > 0) {
+            return "global.entrypointFilenames=['" + this.orderedEntrypoints.join("','") + "'];" + os.EOL;
         }
         return "";
-    }
-    function addEntrypointFilename(filename) {
-        if (config.bundlerOptions.entrypoints.test(filename) &&
-            entrypoints.indexOf(filename) === -1) {
-            entrypoints.push(filename);
+    };
+    Bundler.prototype.addEntrypointFilename = function (filename) {
+        if (this.config.bundlerOptions.entrypoints.test(filename) &&
+            this.entrypoints.indexOf(filename) === -1) {
+            this.entrypoints.push(filename);
         }
-    }
-    function orderEntrypoints() {
-        expandedFiles.forEach(function (filename) {
-            if (entrypoints.indexOf(filename) !== -1) {
-                orderedEntrypoints.push(filename);
+    };
+    Bundler.prototype.orderEntrypoints = function () {
+        var _this = this;
+        this.expandedFiles.forEach(function (filename) {
+            if (_this.entrypoints.indexOf(filename) !== -1) {
+                _this.orderedEntrypoints.push(filename);
             }
         });
-    }
-    function writeBundleFile(globals, onBundleFileWritten) {
+    };
+    Bundler.prototype.writeBundleFile = function (globals, onBundleFileWritten) {
         var bundle = "(function(global){" + os.EOL +
             "global.wrappers={};" + os.EOL +
             globals +
-            bundleBuffer +
-            createEntrypointFilenames() +
+            this.bundleBuffer +
+            this.createEntrypointFilenames() +
             "})(this);";
-        if (config.bundlerOptions.validateSyntax) {
+        if (this.config.bundlerOptions.validateSyntax) {
             try {
                 acorn.parse(bundle);
             }
             catch (error) {
-                throw new Error("Invalid syntax in bundle: " + error.message + " in " + bundleFile.name);
+                throw new Error("Invalid syntax in bundle: " + error.message + " in " + this.bundleFile.name);
             }
         }
-        fs.writeFile(bundleFile.name, bundle, function (error) {
+        fs.writeFile(this.bundleFile.name, bundle, function (error) {
             if (error) {
                 throw error;
             }
             onBundleFileWritten();
         });
-    }
-    function createGlobals(onGlobalsCreated) {
-        if (!config.bundlerOptions.addNodeGlobals) {
+    };
+    Bundler.prototype.createGlobals = function (onGlobalsCreated) {
+        var _this = this;
+        if (!this.config.bundlerOptions.addNodeGlobals) {
             process.nextTick(function () {
                 onGlobalsCreated("");
             });
             return;
         }
-        var globals = {
-            filename: "globals.js",
-            source: os.EOL +
-                "global.process=require('process/browser');" + os.EOL +
-                "global.Buffer=require('buffer/').Buffer;",
-            requiredModules: [
-                { moduleName: "process/browser" },
-                { moduleName: "buffer/" }
-            ]
-        };
-        resolveModule(globals.filename, globals.requiredModules[0], function () {
-            resolveModule(globals.filename, globals.requiredModules[1], function () {
-                orderedEntrypoints.unshift(globals.filename);
-                onGlobalsCreated(addLoaderFunction(globals, false) + os.EOL);
+        var globals = new RequiredModule(undefined, "globals.js", os.EOL + "global.process=require('process/browser');" +
+            os.EOL + "global.Buffer=require('buffer/').Buffer;", [
+            new RequiredModule("process/browser"),
+            new RequiredModule("buffer/")
+        ]);
+        this.resolveModule(globals.filename, globals.requiredModules[0], function () {
+            _this.resolveModule(globals.filename, globals.requiredModules[1], function () {
+                _this.orderedEntrypoints.unshift(globals.filename);
+                onGlobalsCreated(_this.addLoaderFunction(globals, false) + os.EOL);
             });
         });
-    }
-    function resolveModule(requiringModule, requiredModule, onRequiredModuleResolved) {
-        requiredModule.lookupName = isNpmModule(requiredModule.moduleName) ?
+    };
+    Bundler.prototype.resolveModule = function (requiringModule, requiredModule, onRequiredModuleResolved) {
+        var _this = this;
+        requiredModule.lookupName = this.isNpmModule(requiredModule.moduleName) ?
             requiredModule.moduleName :
             path.join(path.dirname(requiringModule), requiredModule.moduleName);
-        if (lookupNameCache[requiredModule.lookupName]) {
-            requiredModule.filename = lookupNameCache[requiredModule.lookupName];
+        if (this.lookupNameCache[requiredModule.lookupName]) {
+            requiredModule.filename = this.lookupNameCache[requiredModule.lookupName];
             process.nextTick(function () {
                 onRequiredModuleResolved(requiredModule);
             });
             return;
         }
-        if (config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
-            log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
+        if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
+            this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
             process.nextTick(function () {
                 onRequiredModuleResolved();
             });
             return;
         }
-        resolveFilename(requiringModule, requiredModule, onFilenameResolved);
-        function onFilenameResolved() {
-            lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
-            if (filenameCache.indexOf(requiredModule.filename) !== -1 || requiredModule.filename.indexOf(".ts") !== -1) {
+        var onFilenameResolved = function () {
+            _this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
+            if (_this.filenameCache.indexOf(requiredModule.filename) !== -1 ||
+                requiredModule.filename.indexOf(".ts") !== -1) {
                 process.nextTick(function () {
                     onRequiredModuleResolved(requiredModule);
                 });
                 return;
             }
             else {
-                filenameCache.push(requiredModule.filename);
-                readSource(requiredModule, onSourceRead);
+                _this.filenameCache.push(requiredModule.filename);
+                _this.readSource(requiredModule, onSourceRead);
             }
-        }
-        function onSourceRead() {
-            if (!isScript(requiredModule.filename)) {
-                if (isJson(requiredModule.filename)) {
+        };
+        var onSourceRead = function () {
+            if (!_this.isScript(requiredModule.filename)) {
+                if (_this.isJson(requiredModule.filename)) {
                     requiredModule.source = os.EOL +
                         "module.isJSON = true;" + os.EOL +
                         "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
@@ -222,20 +254,21 @@ function Bundler(config) {
                     }
                 }
             }
-            resolveDependencies(requiredModule, onDependenciesResolved);
-        }
-        function onDependenciesResolved() {
-            bundleBuffer += addLoaderFunction(requiredModule, false);
+            _this.resolveDependencies(requiredModule, onDependenciesResolved);
+        };
+        var onDependenciesResolved = function () {
+            _this.bundleBuffer += _this.addLoaderFunction(requiredModule, false);
             return onRequiredModuleResolved(requiredModule);
-        }
-    }
-    function resolveFilename(requiringModule, requiredModule, onFilenameResolved) {
+        };
+        this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+    };
+    Bundler.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
         var bopts = {
-            extensions: config.bundlerOptions.resolve.extensions,
-            filename: isNpmModule(requiredModule.moduleName) ? undefined : requiringModule,
-            moduleDirectory: config.bundlerOptions.resolve.directories,
-            modules: builtins,
-            pathFilter: pathFilter
+            extensions: this.config.bundlerOptions.resolve.extensions,
+            filename: this.isNpmModule(requiredModule.moduleName) ? undefined : requiringModule,
+            moduleDirectory: this.config.bundlerOptions.resolve.directories,
+            modules: this.builtins,
+            pathFilter: this.pathFilter.bind(this)
         };
         browserResolve(requiredModule.moduleName, bopts, function (error, filename) {
             if (error) {
@@ -245,23 +278,25 @@ function Bundler(config) {
             requiredModule.filename = filename;
             onFilenameResolved();
         });
-    }
-    function pathFilter(package, fullPath) {
-        var filteredPath, normalizedPath = PathTool.fixWindowsPath(fullPath);
+    };
+    Bundler.prototype.pathFilter = function (pkg, fullPath, relativePath) {
+        var _this = this;
+        var filteredPath;
+        var normalizedPath = PathTool.fixWindowsPath(fullPath);
         Object
-            .keys(config.bundlerOptions.resolve.alias)
+            .keys(this.config.bundlerOptions.resolve.alias)
             .forEach(function (moduleName) {
             var regex = new RegExp(moduleName);
-            if (regex.test(normalizedPath)) {
-                filteredPath = path.join(fullPath, config.bundlerOptions.resolve.alias[moduleName]);
+            if (regex.test(normalizedPath) && pkg && relativePath) {
+                filteredPath = path.join(fullPath, _this.config.bundlerOptions.resolve.alias[moduleName]);
             }
         });
         if (filteredPath) {
             return filteredPath;
         }
-    }
-    function readSource(requiredModule, onSourceRead) {
-        if (config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
+    };
+    Bundler.prototype.readSource = function (requiredModule, onSourceRead) {
+        if (this.config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
             onSourceRead("module.exports={};");
         }
         else {
@@ -269,19 +304,22 @@ function Bundler(config) {
                 if (error) {
                     throw error;
                 }
-                requiredModule.source = removeSourceMapUrl(data.toString());
+                requiredModule.source = SourceMap.deleteComment(data.toString());
                 onSourceRead();
             });
         }
-    }
-    function resolveDependencies(requiredModule, onDependenciesResolved) {
+    };
+    Bundler.prototype.resolveDependencies = function (requiredModule, onDependenciesResolved) {
+        var _this = this;
         requiredModule.requiredModules = [];
-        if (isScript(requiredModule.filename) && config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
-            var found = detective.find(requiredModule.source), moduleNames = found.strings;
-            addDynamicDependencies(found.expressions, moduleNames, requiredModule);
+        if (this.isScript(requiredModule.filename) &&
+            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
+            var found = this.detective.find(requiredModule.source);
+            var moduleNames = found.strings;
+            this.addDynamicDependencies(found.expressions, moduleNames, requiredModule);
             async.each(moduleNames, function (moduleName, onModuleResolved) {
-                var dependency = { moduleName: moduleName };
-                resolveModule(requiredModule.filename, dependency, function (resolved) {
+                var dependency = new RequiredModule(moduleName);
+                _this.resolveModule(requiredModule.filename, dependency, function (resolved) {
                     if (resolved) {
                         requiredModule.requiredModules.push(resolved);
                     }
@@ -294,28 +332,32 @@ function Bundler(config) {
                 onDependenciesResolved();
             });
         }
-    }
-    function addDynamicDependencies(expressions, moduleNames, requiredModule) {
+    };
+    Bundler.prototype.addDynamicDependencies = function (expressions, moduleNames, requiredModule) {
+        var _this = this;
         expressions.forEach(function (expression) {
-            var dynamicModuleName = parseDynamicRequire(expression), directory = path.dirname(requiredModule.filename), pattern, files;
+            var dynamicModuleName = _this.parseDynamicRequire(expression);
+            var directory = path.dirname(requiredModule.filename);
+            var pattern;
+            var files;
             if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (isNpmModule(dynamicModuleName)) {
+                if (_this.isNpmModule(dynamicModuleName)) {
                     moduleNames.push(dynamicModuleName);
                 }
                 else {
                     pattern = path.join(directory, dynamicModuleName);
                     files = glob.sync(pattern);
                     files.forEach(function (filename) {
-                        log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s", expression, filename, requiredModule.filename, pattern);
+                        _this.log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s", expression, filename, requiredModule.filename, pattern);
                         moduleNames.push("./" + path.relative(directory, filename));
                     });
                 }
             }
         });
-    }
-    function parseDynamicRequire(requireStatement) {
+    };
+    Bundler.prototype.parseDynamicRequire = function (requireStatement) {
         var ast = acorn.parse(requireStatement);
-        function visit(node) {
+        var visit = function (node) {
             switch (node.type) {
                 case "BinaryExpression":
                     if (node.operator === "+") {
@@ -331,24 +373,19 @@ function Bundler(config) {
                 default:
                     return "";
             }
-        }
+        };
         return visit(ast.body[0]);
-    }
-    function isNpmModule(moduleName) {
+    };
+    Bundler.prototype.isNpmModule = function (moduleName) {
         return moduleName.charAt(0) !== "." &&
             moduleName.charAt(0) !== "/";
-    }
-    function isJson(resolvedModulePath) {
+    };
+    Bundler.prototype.isJson = function (resolvedModulePath) {
         return /\.json$/.test(resolvedModulePath);
-    }
-    function isScript(resolvedModulePath) {
+    };
+    Bundler.prototype.isScript = function (resolvedModulePath) {
         return /\.(js|jsx|ts|tsx)$/.test(resolvedModulePath);
-    }
-    function removeSourceMapUrl(source) {
-        return source.replace(/\/\/#\s?sourceMappingURL\s?=\s?.*\.map/g, "");
-    }
-    this.initialize = initialize;
-    this.attach = attach;
-    this.bundle = bundle;
-}
+    };
+    return Bundler;
+}());
 module.exports = Bundler;

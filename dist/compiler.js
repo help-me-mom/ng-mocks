@@ -161,7 +161,7 @@ var Compiler = (function () {
             if (sourceFile.resolvedModules && !sourceFile.isDeclarationFile) {
                 Object.keys(sourceFile.resolvedModules).forEach(function (moduleName) {
                     var resolvedModule = sourceFile.resolvedModules[moduleName];
-                    queued.requiredModules.push(new RequiredModule(resolvedModule && resolvedModule.resolvedFileName, moduleName));
+                    queued.requiredModules.push(new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                 });
             }
             _this.requiredModuleCounter += queued.requiredModules.length;
@@ -183,7 +183,7 @@ var Compiler = (function () {
                     undefined;
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(undefined, argument.text));
+                    requiredModules.push(new RequiredModule(argument.text));
                 }
             }
             ts.forEachChild(node, visitNode);

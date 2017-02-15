@@ -1,7 +1,9 @@
+import RequiredModule = require("./required-module");
+
 interface EmitOutput {
     isDeclarationFile: string;
     outputText: string;
-    requiredModules: any[];
+    requiredModules: RequiredModule[];
     sourceMapText: string;
 }
 

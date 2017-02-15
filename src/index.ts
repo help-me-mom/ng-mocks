@@ -1,3 +1,4 @@
+import Bundler = require("./bundler");
 import Compiler = require("./compiler");
 import Configuration = require("./configuration");
 import Coverage = require("./coverage");
@@ -6,15 +7,12 @@ import Preprocessor = require("./karma/preprocessor");
 import Reporter = require("./karma/reporter");
 import SharedProcessedFiles = require("./shared-processed-files");
 
-// tslint:disable-next-line:no-var-requires
-let Bundler = require("../lib/bundler");
-
 let sharedProcessedFiles: SharedProcessedFiles = {};
 
 let configuration = new Configuration();
 
 let coverage = new Coverage(configuration);
-let bundler = new Bundler(configuration, coverage);
+let bundler = new Bundler(configuration);
 let compiler = new Compiler(configuration);
 
 let framework = new Framework(bundler, compiler, configuration, coverage);

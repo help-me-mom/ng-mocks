@@ -18,7 +18,7 @@ export function create(file: File, source: string, emitOutput: EmitOutput) {
         datauri = "data:application/json;charset=utf-8;base64," + new Buffer(JSON.stringify(map)).toString("base64");
 
         result = result.replace(
-            this.getComment(file),
+            createComment(file),
             "//# sourceMappingURL=" + datauri
         );
     }
@@ -26,6 +26,10 @@ export function create(file: File, source: string, emitOutput: EmitOutput) {
     return result;
 }
 
-export function getComment(file: File) {
+export function createComment(file: File) {
     return "//# sourceMappingURL=" + path.basename(file.path) + ".map";
+}
+
+export function deleteComment(source: string) {
+    return source.replace(/\/\/#\s?sourceMappingURL\s?=\s?.*\.map/g, "");
 }

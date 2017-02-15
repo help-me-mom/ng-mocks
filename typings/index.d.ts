@@ -1,3 +1,5 @@
+import * as ts from "typescript";
+
 export interface KarmaTypescriptConfig {
     bundlerOptions?: BundlerOptions;
     compilerOptions?: CompilerOptions;
@@ -22,12 +24,14 @@ export interface BundlerOptions {
 }
 
 export interface Resolve {
-    alias?: {};
+    alias?: {
+        [key: string]: string;
+    };
     extensions?: string[];
     directories?: string[];
 }
 
-export interface CompilerOptions {
+export interface CompilerOptions extends ts.CompilerOptions {
     [key:string]: any;
 }
 

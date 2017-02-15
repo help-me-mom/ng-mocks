@@ -3,6 +3,7 @@ import path = require("path");
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
+import Bundler = require("../bundler");
 import Compiler = require("../compiler");
 import Configuration = require("../configuration");
 import Coverage = require("../coverage");
@@ -14,7 +15,7 @@ class Preprocessor {
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
 
-    constructor(bundler: any, private compiler: Compiler, private config: Configuration,
+    constructor(bundler: Bundler, private compiler: Compiler, private config: Configuration,
                 coverage: Coverage, sharedProcessedFiles: SharedProcessedFiles) {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
@@ -51,7 +52,7 @@ class Preprocessor {
         (<any> this.create).$inject = ["config", "helper", "logger"];
     }
 
-    private shouldAddLoader() {
+    private shouldAddLoader(): boolean {
         return this.compiler.getModuleFormat().toLowerCase() === "commonjs" &&
                this.compiler.getRequiredModulesCount() > 0 &&
                !this.config.hasPreprocessor("commonjs");

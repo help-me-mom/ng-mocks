@@ -225,7 +225,7 @@ class Compiler {
                     let resolvedModule = (<any> sourceFile).resolvedModules[moduleName];
 
                     queued.requiredModules.push(
-                        new RequiredModule(resolvedModule && resolvedModule.resolvedFileName, moduleName)
+                        new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName)
                     );
                 });
             }
@@ -258,7 +258,7 @@ class Compiler {
 
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(undefined, argument.text));
+                    requiredModules.push(new RequiredModule(argument.text));
                 }
             }
 

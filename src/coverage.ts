@@ -54,7 +54,7 @@ class Coverage {
     }
 
     private hasNoOutput(file: File, emitOutput: EmitOutput): boolean {
-        return emitOutput.outputText === SourceMap.getComment(file);
+        return emitOutput.outputText === SourceMap.createComment(file);
     }
 
     private isExcluded(regex: RegExp | RegExp[], path: string): boolean {

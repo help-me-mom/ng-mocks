@@ -30,7 +30,7 @@ var Coverage = (function () {
         this.coveragePreprocessor(bundled, file, callback);
     };
     Coverage.prototype.hasNoOutput = function (file, emitOutput) {
-        return emitOutput.outputText === SourceMap.getComment(file);
+        return emitOutput.outputText === SourceMap.createComment(file);
     };
     Coverage.prototype.isExcluded = function (regex, path) {
         if (Array.isArray(regex)) {
