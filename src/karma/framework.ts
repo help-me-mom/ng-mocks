@@ -134,6 +134,7 @@ class Framework {
 
         delete tsconfig.options.outDir;
         delete tsconfig.options.outFile;
+        (<any> tsconfig.options).suppressOutputPathCheck = true;
 
         this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
 
