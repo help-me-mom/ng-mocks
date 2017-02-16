@@ -14,9 +14,11 @@ import { Logger } from "log4js";
 import Benchmark = require("./benchmark");
 import BundleCallback = require("./bundle-callback");
 import Configuration = require("./configuration");
+import DependencyWalker = require("./dependency-walker");
 import EmitOutput = require("./emit-output");
 import File = require("./file");
 import PathTool = require("./path-tool");
+import Queued = require("./queued");
 import RequiredModule = require("./required-module");
 import SourceMap = require("./source-map");
 
@@ -27,7 +29,6 @@ class Bundler {
     private detective = require("detective");
 
     private bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
-    private bundleWithoutLoaderDeferred = lodash.debounce(this.bundleWithoutLoader, this.BUNDLE_DELAY);
 
     private builtins: any;
     private bundleBuffer = "";
@@ -35,7 +36,7 @@ class Bundler {
         postfix: ".js",
         prefix: "karma-typescript-bundle-"
     });
-    private bundleQueue: RequiredModule[] = [];
+    private bundleQueue: Queued[] = [];
     private entrypoints: string[] = [];
     private expandedFiles: string[] = [];
     private filenameCache: string[] = [];
@@ -70,23 +71,16 @@ class Bundler {
         this.expandPatterns(files);
     }
 
-    public bundle(file: File, source: string, emitOutput: EmitOutput,
-                  shouldAddLoader: boolean, callback: BundleCallback) {
+    public bundle(file: File, source: string, emitOutput: EmitOutput, callback: BundleCallback) {
 
         this.bundleQueue.push({
             callback,
-            filename: file.originalPath,
-            moduleName: file.path,
-            requiredModules: emitOutput.requiredModules,
-            source: SourceMap.create(file, source, emitOutput)
+            module: new RequiredModule(file.path, file.originalPath, SourceMap.create(file, source, emitOutput)),
+            moduleFormat: emitOutput.moduleFormat,
+            sourceFile: emitOutput.sourceFile
         });
 
-        if (shouldAddLoader) {
-            this.bundleQueuedModulesDeferred();
-        }
-        else {
-            this.bundleWithoutLoaderDeferred();
-        }
+        this.bundleQueuedModulesDeferred();
     }
 
     private expandPatterns(files: FilePattern[]) {
@@ -107,15 +101,26 @@ class Bundler {
     private bundleQueuedModules() {
 
         let benchmark = new Benchmark();
+        let requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
+
+        if (requiredModuleCount > 0) {
+            this.bundleWithLoader(benchmark);
+        }
+        else {
+            this.bundleWithoutLoader();
+        }
+    }
+
+    private bundleWithLoader(benchmark: Benchmark) {
 
         async.each(this.bundleQueue, (queued, onQueuedResolved) => {
 
-            this.addEntrypointFilename(queued.filename);
+            this.addEntrypointFilename(queued.module.filename);
 
-            async.each(queued.requiredModules, (requiredModule, onRequiredModuleResolved) => {
-                if (!requiredModule.isTypescriptFile &&
-                    !(requiredModule.isTypingsFile && !this.isNpmModule(requiredModule.moduleName))) {
-                    this.resolveModule(queued.moduleName, requiredModule, () => {
+            async.each(queued.module.requiredModules, (requiredModule, onRequiredModuleResolved) => {
+                if (!requiredModule.isTypescriptFile() &&
+                    !(requiredModule.isTypingsFile() && !requiredModule.isNpmModule())) {
+                    this.resolveModule(queued.module.moduleName, requiredModule, () => {
                         onRequiredModuleResolved();
                     });
                 }
@@ -134,7 +139,7 @@ class Bundler {
         this.createGlobals((globals) => {
             this.writeBundleFile(globals, () => {
                 this.bundleQueue.forEach((queued) => {
-                    queued.callback(queued.source);
+                    queued.callback(queued.module.source);
                 });
             });
         });
@@ -150,7 +155,7 @@ class Bundler {
                     this.bundleQueue.length, benchmark.elapsed());
 
                 this.bundleQueue.forEach((queued) => {
-                    queued.callback(this.addLoaderFunction(queued, true));
+                    queued.callback(this.addLoaderFunction(queued.module, true));
                 });
 
                 this.log.debug("Karma callbacks for %s file(s) in %s ms.",
@@ -260,7 +265,7 @@ class Bundler {
     private resolveModule(requiringModule: string, requiredModule: RequiredModule,
                           onRequiredModuleResolved: { (requiredModule?: RequiredModule): void }) {
 
-        requiredModule.lookupName = this.isNpmModule(requiredModule.moduleName) ?
+        requiredModule.lookupName = requiredModule.isNpmModule() ?
                 requiredModule.moduleName :
                 path.join(path.dirname(requiringModule), requiredModule.moduleName);
 
@@ -299,8 +304,8 @@ class Bundler {
 
         let onSourceRead = () => {
 
-            if (!this.isScript(requiredModule.filename)) {
-                if (this.isJson(requiredModule.filename)) {
+            if (!requiredModule.isScript()) {
+                if (requiredModule.isJson()) {
                     requiredModule.source = os.EOL +
                         "module.isJSON = true;" + os.EOL +
                         "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
@@ -330,7 +335,7 @@ class Bundler {
 
         let bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: this.isNpmModule(requiredModule.moduleName) ? undefined : requiringModule,
+            filename: requiredModule.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
             modules: this.builtins,
             pathFilter: this.pathFilter.bind(this)
@@ -385,7 +390,7 @@ class Bundler {
 
         requiredModule.requiredModules = [];
 
-        if (this.isScript(requiredModule.filename) &&
+        if (requiredModule.isScript() &&
            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
 
             let found = this.detective.find(requiredModule.source);
@@ -421,7 +426,7 @@ class Bundler {
 
             if (dynamicModuleName && dynamicModuleName !== "*") {
 
-                if (this.isNpmModule(dynamicModuleName)) {
+                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
                     moduleNames.push(dynamicModuleName);
                 }
                 else {
@@ -462,19 +467,6 @@ class Bundler {
         };
 
         return visit(ast.body[0]);
-    }
-
-    private isNpmModule(moduleName: string) {
-        return moduleName.charAt(0) !== "." &&
-               moduleName.charAt(0) !== "/";
-    }
-
-    private isJson(resolvedModulePath: string) {
-        return /\.json$/.test(resolvedModulePath);
-    }
-
-    private isScript(resolvedModulePath: string) {
-        return /\.(js|jsx|ts|tsx)$/.test(resolvedModulePath);
     }
 }
 

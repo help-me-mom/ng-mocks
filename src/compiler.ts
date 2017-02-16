@@ -7,14 +7,12 @@ import Benchmark = require("./benchmark");
 import CompileCallback = require("./compile-callback");
 import Configuration = require("./configuration");
 import File = require("./file");
-import RequiredModule = require("./required-module");
 
 type CompiledFiles = { [key: string]: string; };
 
 type Queued = {
     file: File;
     callback: CompileCallback;
-    requiredModules?: RequiredModule[];
 };
 
 class Compiler {
@@ -25,11 +23,10 @@ class Compiler {
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
-    private hostGetSourceFile:
-        {(filename: string, languageVersion: ts.ScriptTarget, onError?: (message: string) => void): ts.SourceFile};
+    private hostGetSourceFile: {(filename: string, languageVersion: ts.ScriptTarget,
+                                 onError?: (message: string) => void): ts.SourceFile};
     private log: Logger;
     private program: ts.Program;
-    private requiredModuleCounter: number;
     private tsconfig: ts.ParsedCommandLine;
 
     private deferredCompile = lodash.debounce(() => {
@@ -43,14 +40,6 @@ class Compiler {
         this.log = logger.create("compiler.karma-typescript");
         this.log.info("Compiling project using Typescript %s", ts.version);
         this.outputDiagnostics(tsconfig.errors);
-    }
-
-    public getModuleFormat(): string {
-        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
-    }
-
-    public getRequiredModulesCount(): number {
-        return this.requiredModuleCounter;
     }
 
     public compile(file: File, callback: CompileCallback): void {
@@ -76,8 +65,9 @@ class Compiler {
 
             queued.callback({
                 isDeclarationFile: (<any> ts).isDeclarationFile(sourceFile),
+                moduleFormat: ts.ModuleKind[this.tsconfig.options.module],
                 outputText: this.compiledFiles[queued.file.path],
-                requiredModules: queued.requiredModules,
+                sourceFile,
                 sourceMapText: this.compiledFiles[queued.file.path + ".map"]
             });
         });
@@ -106,7 +96,6 @@ class Compiler {
 
         this.applyTransforms(() => {
             this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
-            this.collectRequiredModules();
             onProgramCompiled();
         });
     }
@@ -207,67 +196,6 @@ class Compiler {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
-    }
-
-    private collectRequiredModules(): void {
-
-        this.requiredModuleCounter = 0;
-
-        this.emitQueue.forEach((queued) => {
-
-            let sourceFile = this.program.getSourceFile(queued.file.originalPath);
-            queued.requiredModules = this.findUnresolvedRequires(sourceFile);
-
-            if ((<any> sourceFile).resolvedModules && !sourceFile.isDeclarationFile) {
-
-                Object.keys((<any> sourceFile).resolvedModules).forEach((moduleName) => {
-
-                    let resolvedModule = (<any> sourceFile).resolvedModules[moduleName];
-
-                    queued.requiredModules.push(
-                        new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName)
-                    );
-                });
-            }
-
-            this.requiredModuleCounter += queued.requiredModules.length;
-        });
-    }
-
-    private findUnresolvedRequires(sourceFile: ts.SourceFile): RequiredModule[] {
-
-        let requiredModules: RequiredModule[] = [];
-
-        if ((<any> ts).isDeclarationFile(sourceFile)) {
-            return requiredModules;
-        }
-
-        let visitNode = (node: ts.Node) => {
-
-            if (node.kind === ts.SyntaxKind.CallExpression) {
-
-                let ce = (<ts.CallExpression> node);
-
-                let expression = ce.expression ?
-                    (<ts.LiteralExpression> ce.expression) :
-                    undefined;
-
-                let argument = ce.arguments && ce.arguments.length ?
-                    (<ts.LiteralExpression> ce.arguments[0]) :
-                    undefined;
-
-                if (expression && expression.text === "require" &&
-                    argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(argument.text));
-                }
-            }
-
-            ts.forEachChild(node, visitNode);
-        };
-
-        visitNode(sourceFile);
-
-        return requiredModules;
     }
 }
 

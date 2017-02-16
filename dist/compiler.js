@@ -3,7 +3,6 @@ var async = require("async");
 var lodash = require("lodash");
 var ts = require("typescript");
 var Benchmark = require("./benchmark");
-var RequiredModule = require("./required-module");
 var Compiler = (function () {
     function Compiler(config) {
         var _this = this;
@@ -23,8 +22,9 @@ var Compiler = (function () {
                 }
                 queued.callback({
                     isDeclarationFile: ts.isDeclarationFile(sourceFile),
+                    moduleFormat: ts.ModuleKind[_this.tsconfig.options.module],
                     outputText: _this.compiledFiles[queued.file.path],
-                    requiredModules: queued.requiredModules,
+                    sourceFile: sourceFile,
                     sourceMapText: _this.compiledFiles[queued.file.path + ".map"]
                 });
             });
@@ -45,12 +45,6 @@ var Compiler = (function () {
         this.log = logger.create("compiler.karma-typescript");
         this.log.info("Compiling project using Typescript %s", ts.version);
         this.outputDiagnostics(tsconfig.errors);
-    };
-    Compiler.prototype.getModuleFormat = function () {
-        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
-    };
-    Compiler.prototype.getRequiredModulesCount = function () {
-        return this.requiredModuleCounter;
     };
     Compiler.prototype.compile = function (file, callback) {
         this.emitQueue.push({
@@ -76,7 +70,6 @@ var Compiler = (function () {
         this.program.emit();
         this.applyTransforms(function () {
             _this.log.info("Compiled %s files in %s ms.", _this.tsconfig.fileNames.length, benchmark.elapsed());
-            _this.collectRequiredModules();
             onProgramCompiled();
         });
     };
@@ -151,45 +144,6 @@ var Compiler = (function () {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
-    };
-    Compiler.prototype.collectRequiredModules = function () {
-        var _this = this;
-        this.requiredModuleCounter = 0;
-        this.emitQueue.forEach(function (queued) {
-            var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
-            queued.requiredModules = _this.findUnresolvedRequires(sourceFile);
-            if (sourceFile.resolvedModules && !sourceFile.isDeclarationFile) {
-                Object.keys(sourceFile.resolvedModules).forEach(function (moduleName) {
-                    var resolvedModule = sourceFile.resolvedModules[moduleName];
-                    queued.requiredModules.push(new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
-                });
-            }
-            _this.requiredModuleCounter += queued.requiredModules.length;
-        });
-    };
-    Compiler.prototype.findUnresolvedRequires = function (sourceFile) {
-        var requiredModules = [];
-        if (ts.isDeclarationFile(sourceFile)) {
-            return requiredModules;
-        }
-        var visitNode = function (node) {
-            if (node.kind === ts.SyntaxKind.CallExpression) {
-                var ce = node;
-                var expression = ce.expression ?
-                    ce.expression :
-                    undefined;
-                var argument = ce.arguments && ce.arguments.length ?
-                    ce.arguments[0] :
-                    undefined;
-                if (expression && expression.text === "require" &&
-                    argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(argument.text));
-                }
-            }
-            ts.forEachChild(node, visitNode);
-        };
-        visitNode(sourceFile);
-        return requiredModules;
     };
     return Compiler;
 }());

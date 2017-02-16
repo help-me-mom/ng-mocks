@@ -15,7 +15,7 @@ class Preprocessor {
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
 
-    constructor(bundler: Bundler, private compiler: Compiler, private config: Configuration,
+    constructor(bundler: Bundler, compiler: Compiler, config: Configuration,
                 coverage: Coverage, sharedProcessedFiles: SharedProcessedFiles) {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
@@ -27,13 +27,13 @@ class Preprocessor {
                 try {
                     this.log.debug("Processing \"%s\".", file.originalPath);
                     file.path = config.transformPath(file.originalPath);
-                    this.compiler.compile(file, (emitOutput) => {
 
+                    compiler.compile(file, (emitOutput) => {
                         if (emitOutput.isDeclarationFile) {
                             done(null, " ");
                         }
                         else {
-                            bundler.bundle(file, content, emitOutput, this.shouldAddLoader(), (bundled: string) => {
+                            bundler.bundle(file, content, emitOutput, (bundled: string) => {
                                 sharedProcessedFiles[path.normalize(file.originalPath)] = bundled;
                                 coverage.instrument(file, bundled, emitOutput, (result) => {
                                     done(null, result);
@@ -50,12 +50,6 @@ class Preprocessor {
         };
 
         (<any> this.create).$inject = ["config", "helper", "logger"];
-    }
-
-    private shouldAddLoader(): boolean {
-        return this.compiler.getModuleFormat().toLowerCase() === "commonjs" &&
-               this.compiler.getRequiredModulesCount() > 0 &&
-               !this.config.hasPreprocessor("commonjs");
     }
 }
 

@@ -1,9 +1,10 @@
-import RequiredModule = require("./required-module");
+import * as ts from "typescript";
 
 interface EmitOutput {
     isDeclarationFile: string;
+    moduleFormat: string;
     outputText: string;
-    requiredModules: RequiredModule[];
+    sourceFile: ts.SourceFile;
     sourceMapText: string;
 }
 

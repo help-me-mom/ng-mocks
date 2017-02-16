@@ -5,9 +5,22 @@ var RequiredModule = (function () {
         this.filename = filename;
         this.source = source;
         this.requiredModules = requiredModules;
-        this.isTypingsFile = filename && /\.d\.ts$/.test(filename);
-        this.isTypescriptFile = filename && !this.isTypingsFile && /\.(ts|tsx)$/.test(filename);
     }
+    RequiredModule.prototype.isJson = function () {
+        return this.filename && /\.json$/.test(this.filename);
+    };
+    RequiredModule.prototype.isNpmModule = function () {
+        return this.moduleName.charAt(0) !== "." && this.moduleName.charAt(0) !== "/";
+    };
+    RequiredModule.prototype.isScript = function () {
+        return this.filename && /\.(js|jsx|ts|tsx)$/.test(this.filename);
+    };
+    RequiredModule.prototype.isTypingsFile = function () {
+        return this.filename && /\.d\.ts$/.test(this.filename);
+    };
+    RequiredModule.prototype.isTypescriptFile = function () {
+        return this.filename && !this.isTypingsFile() && /\.(ts|tsx)$/.test(this.filename);
+    };
     return RequiredModule;
 }());
 module.exports = RequiredModule;

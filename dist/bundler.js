@@ -9,6 +9,7 @@ var os = require("os");
 var path = require("path");
 var tmp = require("tmp");
 var Benchmark = require("./benchmark");
+var DependencyWalker = require("./dependency-walker");
 var PathTool = require("./path-tool");
 var RequiredModule = require("./required-module");
 var SourceMap = require("./source-map");
@@ -18,7 +19,6 @@ var Bundler = (function () {
         this.BUNDLE_DELAY = 500;
         this.detective = require("detective");
         this.bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
-        this.bundleWithoutLoaderDeferred = lodash.debounce(this.bundleWithoutLoader, this.BUNDLE_DELAY);
         this.bundleBuffer = "";
         this.bundleFile = tmp.fileSync({
             postfix: ".js",
@@ -51,20 +51,14 @@ var Bundler = (function () {
         });
         this.expandPatterns(files);
     };
-    Bundler.prototype.bundle = function (file, source, emitOutput, shouldAddLoader, callback) {
+    Bundler.prototype.bundle = function (file, source, emitOutput, callback) {
         this.bundleQueue.push({
             callback: callback,
-            filename: file.originalPath,
-            moduleName: file.path,
-            requiredModules: emitOutput.requiredModules,
-            source: SourceMap.create(file, source, emitOutput)
+            module: new RequiredModule(file.path, file.originalPath, SourceMap.create(file, source, emitOutput)),
+            moduleFormat: emitOutput.moduleFormat,
+            sourceFile: emitOutput.sourceFile
         });
-        if (shouldAddLoader) {
-            this.bundleQueuedModulesDeferred();
-        }
-        else {
-            this.bundleWithoutLoaderDeferred();
-        }
+        this.bundleQueuedModulesDeferred();
     };
     Bundler.prototype.expandPatterns = function (files) {
         var _this = this;
@@ -79,14 +73,23 @@ var Bundler = (function () {
         });
     };
     Bundler.prototype.bundleQueuedModules = function () {
-        var _this = this;
         var benchmark = new Benchmark();
+        var requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
+        if (requiredModuleCount > 0) {
+            this.bundleWithLoader(benchmark);
+        }
+        else {
+            this.bundleWithoutLoader();
+        }
+    };
+    Bundler.prototype.bundleWithLoader = function (benchmark) {
+        var _this = this;
         async.each(this.bundleQueue, function (queued, onQueuedResolved) {
-            _this.addEntrypointFilename(queued.filename);
-            async.each(queued.requiredModules, function (requiredModule, onRequiredModuleResolved) {
-                if (!requiredModule.isTypescriptFile &&
-                    !(requiredModule.isTypingsFile && !_this.isNpmModule(requiredModule.moduleName))) {
-                    _this.resolveModule(queued.moduleName, requiredModule, function () {
+            _this.addEntrypointFilename(queued.module.filename);
+            async.each(queued.module.requiredModules, function (requiredModule, onRequiredModuleResolved) {
+                if (!requiredModule.isTypescriptFile() &&
+                    !(requiredModule.isTypingsFile() && !requiredModule.isNpmModule())) {
+                    _this.resolveModule(queued.module.moduleName, requiredModule, function () {
                         onRequiredModuleResolved();
                     });
                 }
@@ -105,7 +108,7 @@ var Bundler = (function () {
         this.createGlobals(function (globals) {
             _this.writeBundleFile(globals, function () {
                 _this.bundleQueue.forEach(function (queued) {
-                    queued.callback(queued.source);
+                    queued.callback(queued.module.source);
                 });
             });
         });
@@ -117,7 +120,7 @@ var Bundler = (function () {
             _this.writeBundleFile(globals, function () {
                 _this.log.info("Bundled imports for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
                 _this.bundleQueue.forEach(function (queued) {
-                    queued.callback(_this.addLoaderFunction(queued, true));
+                    queued.callback(_this.addLoaderFunction(queued.module, true));
                 });
                 _this.log.debug("Karma callbacks for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
                 _this.bundleQueue.length = 0;
@@ -208,7 +211,7 @@ var Bundler = (function () {
     };
     Bundler.prototype.resolveModule = function (requiringModule, requiredModule, onRequiredModuleResolved) {
         var _this = this;
-        requiredModule.lookupName = this.isNpmModule(requiredModule.moduleName) ?
+        requiredModule.lookupName = requiredModule.isNpmModule() ?
             requiredModule.moduleName :
             path.join(path.dirname(requiringModule), requiredModule.moduleName);
         if (this.lookupNameCache[requiredModule.lookupName]) {
@@ -240,8 +243,8 @@ var Bundler = (function () {
             }
         };
         var onSourceRead = function () {
-            if (!_this.isScript(requiredModule.filename)) {
-                if (_this.isJson(requiredModule.filename)) {
+            if (!requiredModule.isScript()) {
+                if (requiredModule.isJson()) {
                     requiredModule.source = os.EOL +
                         "module.isJSON = true;" + os.EOL +
                         "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
@@ -265,7 +268,7 @@ var Bundler = (function () {
     Bundler.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
         var bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: this.isNpmModule(requiredModule.moduleName) ? undefined : requiringModule,
+            filename: requiredModule.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
             modules: this.builtins,
             pathFilter: this.pathFilter.bind(this)
@@ -312,7 +315,7 @@ var Bundler = (function () {
     Bundler.prototype.resolveDependencies = function (requiredModule, onDependenciesResolved) {
         var _this = this;
         requiredModule.requiredModules = [];
-        if (this.isScript(requiredModule.filename) &&
+        if (requiredModule.isScript() &&
             this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
             var found = this.detective.find(requiredModule.source);
             var moduleNames = found.strings;
@@ -341,7 +344,7 @@ var Bundler = (function () {
             var pattern;
             var files;
             if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (_this.isNpmModule(dynamicModuleName)) {
+                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
                     moduleNames.push(dynamicModuleName);
                 }
                 else {
@@ -375,16 +378,6 @@ var Bundler = (function () {
             }
         };
         return visit(ast.body[0]);
-    };
-    Bundler.prototype.isNpmModule = function (moduleName) {
-        return moduleName.charAt(0) !== "." &&
-            moduleName.charAt(0) !== "/";
-    };
-    Bundler.prototype.isJson = function (resolvedModulePath) {
-        return /\.json$/.test(resolvedModulePath);
-    };
-    Bundler.prototype.isScript = function (resolvedModulePath) {
-        return /\.(js|jsx|ts|tsx)$/.test(resolvedModulePath);
     };
     return Bundler;
 }());
