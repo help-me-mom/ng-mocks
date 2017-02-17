@@ -20,6 +20,7 @@ export interface BundlerOptions {
     ignore?: string[];
     noParse?: string[];
     resolve?: Resolve;
+    transforms?: Function[];
     validateSyntax?: boolean;
 }
 

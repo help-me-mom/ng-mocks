@@ -21,6 +21,7 @@ import PathTool = require("../shared/path-tool");
 import Queued = require("./queued");
 import RequiredModule = require("./required-module");
 import SourceMap = require("./source-map");
+import Transformer = require("./transformer");
 
 class Bundler {
 
@@ -44,7 +45,7 @@ class Bundler {
     private lookupNameCache: { [key: string]: string; } = {};
     private orderedEntrypoints: string[] = [];
 
-    constructor(private config: Configuration) { }
+    constructor(private config: Configuration, private transformer: Transformer) { }
 
     public initialize(logger: any) {
         this.log = logger.create("bundler.karma-typescript");
@@ -71,15 +72,8 @@ class Bundler {
         this.expandPatterns(files);
     }
 
-    public bundle(file: File, source: string, emitOutput: EmitOutput, callback: BundleCallback) {
-
-        this.bundleQueue.push({
-            callback,
-            module: new RequiredModule(file.path, file.originalPath, SourceMap.create(file, source, emitOutput)),
-            moduleFormat: emitOutput.moduleFormat,
-            sourceFile: emitOutput.sourceFile
-        });
-
+    public bundle(file: File, emitOutput: EmitOutput, callback: BundleCallback) {
+        this.bundleQueue.push({ callback, emitOutput, file });
         this.bundleQueuedModulesDeferred();
     }
 
@@ -101,14 +95,22 @@ class Bundler {
     private bundleQueuedModules() {
 
         let benchmark = new Benchmark();
-        let requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
 
-        if (requiredModuleCount > 0) {
-            this.bundleWithLoader(benchmark);
-        }
-        else {
-            this.bundleWithoutLoader();
-        }
+        this.transformer.applyTransforms(this.bundleQueue, () => {
+            this.bundleQueue.forEach((queued) => {
+                queued.module = new RequiredModule(queued.file.path, queued.file.originalPath,
+                    SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+            });
+
+            let requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
+
+            if (requiredModuleCount > 0) {
+                this.bundleWithLoader(benchmark);
+            }
+            else {
+                this.bundleWithoutLoader();
+            }
+        });
     }
 
     private bundleWithLoader(benchmark: Benchmark) {

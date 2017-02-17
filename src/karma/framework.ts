@@ -11,6 +11,7 @@ import Coverage = require("../istanbul/coverage");
 
 import { CompilerOptions } from "../../typings";
 import PathTool = require("../shared/path-tool");
+import Transformer = require("../bundler/transformer");
 
 type ConfigFileJson = {
     config?: any;
@@ -22,15 +23,19 @@ class Framework {
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
 
-    constructor(bundler: any, compiler: Compiler, private config: Configuration, coverage: Coverage) {
+    constructor(bundler: any, compiler: Compiler, private config: Configuration,
+                coverage: Coverage, transformer: Transformer) {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
             config.initialize(karmaConfig, logger);
             coverage.initialize(helper, logger);
             this.log = logger.create("framework.karma-typescript");
 
+            let tsconfig = this.resolveTsconfig(config.karma.basePath);
+
             bundler.initialize(logger);
-            compiler.initialize(logger, this.resolveTsconfig(config.karma.basePath));
+            compiler.initialize(logger, tsconfig);
+            transformer.initialize(logger, tsconfig);
 
             if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);

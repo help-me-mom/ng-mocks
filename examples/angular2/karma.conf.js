@@ -19,14 +19,14 @@ module.exports = function(config) {
 
         karmaTypescriptConfig: {
             bundlerOptions: {
-                entrypoints: /\.spec\.ts$/
+                entrypoints: /\.spec\.ts$/,
+                transforms: [
+                    require("karma-typescript/transforms/angular2-template-url-rewriter")
+                ]
             },
             coverageOptions: {
                 instrumentation: true
-            },
-            transforms: [
-                require("karma-typescript/transforms/angular2-template-url-rewriter")
-            ]
+            }
         },
 
         reporters: ["progress", "karma-typescript"],

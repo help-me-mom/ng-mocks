@@ -1,11 +1,9 @@
-import * as async from "async";
 import * as lodash from "lodash";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
 import Benchmark = require("../shared/benchmark");
 import CompileCallback = require("./compile-callback");
-import Configuration = require("../shared/configuration");
 import File = require("../shared/file");
 
 type CompiledFiles = { [key: string]: string; };
@@ -30,10 +28,8 @@ class Compiler {
     private tsconfig: ts.ParsedCommandLine;
 
     private deferredCompile = lodash.debounce(() => {
-        this.compileProgram(this.onProgramCompiled);
+        this.compileProgram();
     }, this.COMPILE_DELAY);
-
-    constructor(private config: Configuration) { }
 
     public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
@@ -52,30 +48,7 @@ class Compiler {
         this.deferredCompile();
     }
 
-    private onProgramCompiled = (): void => {
-
-        this.emitQueue.forEach((queued) => {
-
-            let sourceFile = this.program.getSourceFile(queued.file.originalPath);
-
-            if (!sourceFile) {
-                throw new Error("No source found for " + queued.file.originalPath + "!\n" +
-                                "Is there a mismatch between the Typescript compiler options and the Karma config?");
-            }
-
-            queued.callback({
-                isDeclarationFile: (<any> ts).isDeclarationFile(sourceFile),
-                moduleFormat: ts.ModuleKind[this.tsconfig.options.module],
-                outputText: this.compiledFiles[queued.file.path],
-                sourceFile,
-                sourceMapText: this.compiledFiles[queued.file.path + ".map"]
-            });
-        });
-
-        this.emitQueue.length = 0;
-    }
-
-    private compileProgram(onProgramCompiled: Function): void {
+    private compileProgram(): void {
 
         let benchmark = new Benchmark();
 
@@ -93,11 +66,30 @@ class Compiler {
 
         this.runDiagnostics(this.program, this.compilerHost);
         this.program.emit();
+        this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
+        this.onProgramCompiled();
+    }
 
-        this.applyTransforms(() => {
-            this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
-            onProgramCompiled();
+    private onProgramCompiled(): void {
+
+        this.emitQueue.forEach((queued) => {
+
+            let sourceFile = this.program.getSourceFile(queued.file.originalPath);
+
+            if (!sourceFile) {
+                throw new Error("No source found for " + queued.file.originalPath + "!\n" +
+                                "Is there a mismatch between the Typescript compiler options and the Karma config?");
+            }
+
+            queued.callback({
+                isDeclarationFile: (<any> ts).isDeclarationFile(sourceFile),
+                outputText: this.compiledFiles[queued.file.path],
+                sourceFile,
+                sourceMapText: this.compiledFiles[queued.file.path + ".map"]
+            });
         });
+
+        this.emitQueue.length = 0;
     }
 
     private getSourceFile = (
@@ -122,42 +114,6 @@ class Compiler {
             }
         }
         return false;
-    }
-
-    private applyTransforms(onTransformssApplied: ErrorCallback<Error>): void {
-
-        if (!this.config.transforms.length) {
-            process.nextTick(() => {
-                onTransformssApplied();
-            });
-            return;
-        }
-
-        async.eachSeries(this.emitQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
-            let sourceFile = this.program.getSourceFile(queued.file.originalPath);
-            let context = {
-                basePath: this.config.karma.basePath,
-                filename: queued.file.originalPath,
-                fullText: sourceFile.getFullText(),
-                sourceFile,
-                urlRoot: this.config.karma.urlRoot
-            };
-            async.eachSeries(this.config.transforms, (transform: Function, onTransformApplied: Function) => {
-                process.nextTick(() => {
-                    transform(context, (changed: boolean) => {
-                        if (changed) {
-                            let transpiled = ts.transpileModule(context.fullText, {
-                                compilerOptions: this.tsconfig.options,
-                                fileName: queued.file.originalPath
-                            });
-                            this.compiledFiles[queued.file.path] = transpiled.outputText;
-                            this.compiledFiles[queued.file.path + ".map"] = transpiled.sourceMapText;
-                        }
-                        onTransformApplied();
-                    });
-                });
-            }, onQueueProcessed);
-        }, onTransformssApplied);
     }
 
     private runDiagnostics(program: ts.Program, host: ts.CompilerHost): void {

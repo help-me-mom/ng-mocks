@@ -24,7 +24,6 @@ class Configuration {
     public reporters: string[];
     public reports: Reports;
     public transformPath: Function;
-    public transforms: Function[];
     public tsconfig: string;
 
     private asserted: boolean;
@@ -41,7 +40,6 @@ class Configuration {
         this.configureFramework();
         this.configurePreprocessor();
         this.configureReporter();
-        this.configureTransforms();
         this.configureKarmaCoverage();
         this.assertConfiguration();
 
@@ -80,6 +78,7 @@ class Configuration {
             this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
         this.bundlerOptions.resolve.directories =
             this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
+        this.bundlerOptions.transforms = this.defaultTo(this.bundlerOptions.transforms, []);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     }
 
@@ -120,11 +119,6 @@ class Configuration {
 
         this.reports = this.defaultTo(this.karmaTypescriptConfig.reports, { html: "coverage" });
         this.remapOptions = this.defaultTo(this.karmaTypescriptConfig.remapOptions, {});
-    }
-
-    private configureTransforms() {
-
-        this.transforms = this.defaultTo(this.karmaTypescriptConfig.transforms, []);
     }
 
     private configureKarmaCoverage() {

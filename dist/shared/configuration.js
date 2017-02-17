@@ -10,7 +10,6 @@ var Configuration = (function () {
         this.configureFramework();
         this.configurePreprocessor();
         this.configureReporter();
-        this.configureTransforms();
         this.configureKarmaCoverage();
         this.assertConfiguration();
         this.log.debug(this.toString());
@@ -43,6 +42,7 @@ var Configuration = (function () {
             this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
         this.bundlerOptions.resolve.directories =
             this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
+        this.bundlerOptions.transforms = this.defaultTo(this.bundlerOptions.transforms, []);
         this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
     };
     Configuration.prototype.configureFramework = function () {
@@ -73,9 +73,6 @@ var Configuration = (function () {
     Configuration.prototype.configureReporter = function () {
         this.reports = this.defaultTo(this.karmaTypescriptConfig.reports, { html: "coverage" });
         this.remapOptions = this.defaultTo(this.karmaTypescriptConfig.remapOptions, {});
-    };
-    Configuration.prototype.configureTransforms = function () {
-        this.transforms = this.defaultTo(this.karmaTypescriptConfig.transforms, []);
     };
     Configuration.prototype.configureKarmaCoverage = function () {
         this.coverageReporter = this.defaultTo(this.karma.coverageReporter, {

@@ -1,35 +1,16 @@
 "use strict";
-var async = require("async");
 var lodash = require("lodash");
 var ts = require("typescript");
 var Benchmark = require("../shared/benchmark");
 var Compiler = (function () {
-    function Compiler(config) {
+    function Compiler() {
         var _this = this;
-        this.config = config;
         this.COMPILE_DELAY = 200;
         this.compiledFiles = {};
         this.emitQueue = [];
         this.deferredCompile = lodash.debounce(function () {
-            _this.compileProgram(_this.onProgramCompiled);
+            _this.compileProgram();
         }, this.COMPILE_DELAY);
-        this.onProgramCompiled = function () {
-            _this.emitQueue.forEach(function (queued) {
-                var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
-                if (!sourceFile) {
-                    throw new Error("No source found for " + queued.file.originalPath + "!\n" +
-                        "Is there a mismatch between the Typescript compiler options and the Karma config?");
-                }
-                queued.callback({
-                    isDeclarationFile: ts.isDeclarationFile(sourceFile),
-                    moduleFormat: ts.ModuleKind[_this.tsconfig.options.module],
-                    outputText: _this.compiledFiles[queued.file.path],
-                    sourceFile: sourceFile,
-                    sourceMapText: _this.compiledFiles[queued.file.path + ".map"]
-                });
-            });
-            _this.emitQueue.length = 0;
-        };
         this.getSourceFile = function (filename, languageVersion, onError) {
             if (_this.cachedProgram && !_this.isQueued(filename)) {
                 var sourceFile = _this.cachedProgram.getSourceFile(filename);
@@ -53,7 +34,7 @@ var Compiler = (function () {
         });
         this.deferredCompile();
     };
-    Compiler.prototype.compileProgram = function (onProgramCompiled) {
+    Compiler.prototype.compileProgram = function () {
         var _this = this;
         var benchmark = new Benchmark();
         if (!this.cachedProgram) {
@@ -68,10 +49,25 @@ var Compiler = (function () {
         this.cachedProgram = this.program;
         this.runDiagnostics(this.program, this.compilerHost);
         this.program.emit();
-        this.applyTransforms(function () {
-            _this.log.info("Compiled %s files in %s ms.", _this.tsconfig.fileNames.length, benchmark.elapsed());
-            onProgramCompiled();
+        this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
+        this.onProgramCompiled();
+    };
+    Compiler.prototype.onProgramCompiled = function () {
+        var _this = this;
+        this.emitQueue.forEach(function (queued) {
+            var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
+            if (!sourceFile) {
+                throw new Error("No source found for " + queued.file.originalPath + "!\n" +
+                    "Is there a mismatch between the Typescript compiler options and the Karma config?");
+            }
+            queued.callback({
+                isDeclarationFile: ts.isDeclarationFile(sourceFile),
+                outputText: _this.compiledFiles[queued.file.path],
+                sourceFile: sourceFile,
+                sourceMapText: _this.compiledFiles[queued.file.path + ".map"]
+            });
         });
+        this.emitQueue.length = 0;
     };
     Compiler.prototype.isQueued = function (filename) {
         for (var _i = 0, _a = this.emitQueue; _i < _a.length; _i++) {
@@ -81,40 +77,6 @@ var Compiler = (function () {
             }
         }
         return false;
-    };
-    Compiler.prototype.applyTransforms = function (onTransformssApplied) {
-        var _this = this;
-        if (!this.config.transforms.length) {
-            process.nextTick(function () {
-                onTransformssApplied();
-            });
-            return;
-        }
-        async.eachSeries(this.emitQueue, function (queued, onQueueProcessed) {
-            var sourceFile = _this.program.getSourceFile(queued.file.originalPath);
-            var context = {
-                basePath: _this.config.karma.basePath,
-                filename: queued.file.originalPath,
-                fullText: sourceFile.getFullText(),
-                sourceFile: sourceFile,
-                urlRoot: _this.config.karma.urlRoot
-            };
-            async.eachSeries(_this.config.transforms, function (transform, onTransformApplied) {
-                process.nextTick(function () {
-                    transform(context, function (changed) {
-                        if (changed) {
-                            var transpiled = ts.transpileModule(context.fullText, {
-                                compilerOptions: _this.tsconfig.options,
-                                fileName: queued.file.originalPath
-                            });
-                            _this.compiledFiles[queued.file.path] = transpiled.outputText;
-                            _this.compiledFiles[queued.file.path + ".map"] = transpiled.sourceMapText;
-                        }
-                        onTransformApplied();
-                    });
-                });
-            }, onQueueProcessed);
-        }, onTransformssApplied);
     };
     Compiler.prototype.runDiagnostics = function (program, host) {
         var diagnostics = ts.getPreEmitDiagnostics(program);

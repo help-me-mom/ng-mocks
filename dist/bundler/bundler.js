@@ -14,8 +14,9 @@ var PathTool = require("../shared/path-tool");
 var RequiredModule = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
-    function Bundler(config) {
+    function Bundler(config, transformer) {
         this.config = config;
+        this.transformer = transformer;
         this.BUNDLE_DELAY = 500;
         this.detective = require("detective");
         this.bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
@@ -51,13 +52,8 @@ var Bundler = (function () {
         });
         this.expandPatterns(files);
     };
-    Bundler.prototype.bundle = function (file, source, emitOutput, callback) {
-        this.bundleQueue.push({
-            callback: callback,
-            module: new RequiredModule(file.path, file.originalPath, SourceMap.create(file, source, emitOutput)),
-            moduleFormat: emitOutput.moduleFormat,
-            sourceFile: emitOutput.sourceFile
-        });
+    Bundler.prototype.bundle = function (file, emitOutput, callback) {
+        this.bundleQueue.push({ callback: callback, emitOutput: emitOutput, file: file });
         this.bundleQueuedModulesDeferred();
     };
     Bundler.prototype.expandPatterns = function (files) {
@@ -73,14 +69,20 @@ var Bundler = (function () {
         });
     };
     Bundler.prototype.bundleQueuedModules = function () {
+        var _this = this;
         var benchmark = new Benchmark();
-        var requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
-        if (requiredModuleCount > 0) {
-            this.bundleWithLoader(benchmark);
-        }
-        else {
-            this.bundleWithoutLoader();
-        }
+        this.transformer.applyTransforms(this.bundleQueue, function () {
+            _this.bundleQueue.forEach(function (queued) {
+                queued.module = new RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+            });
+            var requiredModuleCount = DependencyWalker.collectRequiredModules(_this.bundleQueue);
+            if (requiredModuleCount > 0) {
+                _this.bundleWithLoader(benchmark);
+            }
+            else {
+                _this.bundleWithoutLoader();
+            }
+        });
     };
     Bundler.prototype.bundleWithLoader = function (benchmark) {
         var _this = this;

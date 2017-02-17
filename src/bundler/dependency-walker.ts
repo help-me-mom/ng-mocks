@@ -8,11 +8,13 @@ export function collectRequiredModules(queue: Queued[]): number {
 
     queue.forEach((queued) => {
 
-        queued.module.requiredModules = findUnresolvedRequires(queued.sourceFile);
+        queued.module.requiredModules = findUnresolvedRequires(queued.emitOutput.sourceFile);
 
-        if ((<any> queued.sourceFile).resolvedModules && !queued.sourceFile.isDeclarationFile) {
-            Object.keys((<any> queued.sourceFile).resolvedModules).forEach((moduleName) => {
-                let resolvedModule = (<any> queued.sourceFile).resolvedModules[moduleName];
+        if ((<any> queued.emitOutput.sourceFile).resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+
+            Object.keys((<any> queued.emitOutput.sourceFile).resolvedModules).forEach((moduleName) => {
+
+                let resolvedModule = (<any> queued.emitOutput.sourceFile).resolvedModules[moduleName];
                 queued.module.requiredModules.push(
                     new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
             });

@@ -25,7 +25,7 @@ class Preprocessor {
 
             return (content: string, file: File, done: { (e: any, c: string): void}) => {
                 try {
-                    this.log.debug("Processing \"%s\".", file.originalPath);
+                    this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);
                     file.path = config.transformPath(file.originalPath);
 
                     compiler.compile(file, (emitOutput) => {
@@ -33,7 +33,7 @@ class Preprocessor {
                             done(null, " ");
                         }
                         else {
-                            bundler.bundle(file, content, emitOutput, (bundled: string) => {
+                            bundler.bundle(file, emitOutput, (bundled: string) => {
                                 sharedProcessedFiles[path.normalize(file.originalPath)] = bundled;
                                 coverage.instrument(file, bundled, emitOutput, (result) => {
                                     done(null, result);

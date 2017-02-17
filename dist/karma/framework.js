@@ -4,15 +4,17 @@ var path = require("path");
 var ts = require("typescript");
 var PathTool = require("../shared/path-tool");
 var Framework = (function () {
-    function Framework(bundler, compiler, config, coverage) {
+    function Framework(bundler, compiler, config, coverage, transformer) {
         var _this = this;
         this.config = config;
         this.create = function (karmaConfig, helper, logger) {
             config.initialize(karmaConfig, logger);
             coverage.initialize(helper, logger);
             _this.log = logger.create("framework.karma-typescript");
+            var tsconfig = _this.resolveTsconfig(config.karma.basePath);
             bundler.initialize(logger);
-            compiler.initialize(logger, _this.resolveTsconfig(config.karma.basePath));
+            compiler.initialize(logger, tsconfig);
+            transformer.initialize(logger, tsconfig);
             if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);
             }

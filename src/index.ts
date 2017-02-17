@@ -6,16 +6,18 @@ import Framework = require("./karma/framework");
 import Preprocessor = require("./karma/preprocessor");
 import Reporter = require("./karma/reporter");
 import SharedProcessedFiles = require("./shared/shared-processed-files");
+import Transformer = require("./bundler/transformer");
 
 let sharedProcessedFiles: SharedProcessedFiles = {};
 
 let configuration = new Configuration();
+let transformer = new Transformer(configuration);
 
 let coverage = new Coverage(configuration);
-let bundler = new Bundler(configuration);
-let compiler = new Compiler(configuration);
+let bundler = new Bundler(configuration, transformer);
+let compiler = new Compiler();
 
-let framework = new Framework(bundler, compiler, configuration, coverage);
+let framework = new Framework(bundler, compiler, configuration, coverage, transformer);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
 let reporter = new Reporter(configuration, sharedProcessedFiles);
 

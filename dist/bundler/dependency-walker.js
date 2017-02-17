@@ -4,10 +4,10 @@ var RequiredModule = require("./required-module");
 function collectRequiredModules(queue) {
     var requiredModuleCount = 0;
     queue.forEach(function (queued) {
-        queued.module.requiredModules = findUnresolvedRequires(queued.sourceFile);
-        if (queued.sourceFile.resolvedModules && !queued.sourceFile.isDeclarationFile) {
-            Object.keys(queued.sourceFile.resolvedModules).forEach(function (moduleName) {
-                var resolvedModule = queued.sourceFile.resolvedModules[moduleName];
+        queued.module.requiredModules = findUnresolvedRequires(queued.emitOutput.sourceFile);
+        if (queued.emitOutput.sourceFile.resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+            Object.keys(queued.emitOutput.sourceFile.resolvedModules).forEach(function (moduleName) {
+                var resolvedModule = queued.emitOutput.sourceFile.resolvedModules[moduleName];
                 queued.module.requiredModules.push(new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
             });
         }
