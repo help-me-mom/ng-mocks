@@ -1,5 +1,5 @@
 "use strict";
-var SourceMap = require("./source-map");
+var SourceMap = require("../bundler/source-map");
 var Coverage = (function () {
     function Coverage(config) {
         this.config = config;

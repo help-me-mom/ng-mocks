@@ -2,7 +2,7 @@
 var lodash = require("lodash");
 var path = require("path");
 var ts = require("typescript");
-var PathTool = require("../path-tool");
+var PathTool = require("../shared/path-tool");
 var Framework = (function () {
     function Framework(bundler, compiler, config, coverage) {
         var _this = this;

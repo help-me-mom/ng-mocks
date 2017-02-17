@@ -3,12 +3,12 @@ import path = require("path");
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
-import Bundler = require("../bundler");
-import Compiler = require("../compiler");
-import Configuration = require("../configuration");
-import Coverage = require("../coverage");
-import File = require("../file");
-import SharedProcessedFiles = require("../shared-processed-files");
+import Bundler = require("../bundler/bundler");
+import Compiler = require("../compiler/compiler");
+import Configuration = require("../shared/configuration");
+import Coverage = require("../istanbul/coverage");
+import File = require("../shared/file");
+import SharedProcessedFiles = require("../shared/shared-processed-files");
 
 class Preprocessor {
 

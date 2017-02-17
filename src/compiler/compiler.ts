@@ -3,10 +3,10 @@ import * as lodash from "lodash";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
-import Benchmark = require("./benchmark");
+import Benchmark = require("../shared/benchmark");
 import CompileCallback = require("./compile-callback");
-import Configuration = require("./configuration");
-import File = require("./file");
+import Configuration = require("../shared/configuration");
+import File = require("../shared/file");
 
 type CompiledFiles = { [key: string]: string; };
 

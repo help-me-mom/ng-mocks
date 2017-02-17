@@ -1,8 +1,8 @@
 "use strict";
-var Bundler = require("./bundler");
-var Compiler = require("./compiler");
-var Configuration = require("./configuration");
-var Coverage = require("./coverage");
+var Bundler = require("./bundler/bundler");
+var Compiler = require("./compiler/compiler");
+var Configuration = require("./shared/configuration");
+var Coverage = require("./istanbul/coverage");
 var Framework = require("./karma/framework");
 var Preprocessor = require("./karma/preprocessor");
 var Reporter = require("./karma/reporter");

@@ -8,9 +8,9 @@ var lodash = require("lodash");
 var os = require("os");
 var path = require("path");
 var tmp = require("tmp");
-var Benchmark = require("./benchmark");
+var Benchmark = require("../shared/benchmark");
 var DependencyWalker = require("./dependency-walker");
-var PathTool = require("./path-tool");
+var PathTool = require("../shared/path-tool");
 var RequiredModule = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
@@ -45,7 +45,7 @@ var Bundler = (function () {
         });
         files.push({
             included: true,
-            pattern: path.join(__dirname, "../src/client/commonjs.js"),
+            pattern: path.join(__dirname, "../../src/client/commonjs.js"),
             served: true,
             watched: false
         });

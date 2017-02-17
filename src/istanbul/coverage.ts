@@ -1,10 +1,10 @@
 import { Logger } from "log4js";
 
-import Configuration = require("./configuration");
+import Configuration = require("../shared/configuration");
 import CoverageCallback = require("./coverage-callback");
-import EmitOutput = require("./emit-output");
-import File = require("./file");
-import SourceMap = require("./source-map");
+import EmitOutput = require("../compiler/emit-output");
+import File = require("../shared/file");
+import SourceMap = require("../bundler/source-map");
 
 class Coverage {
 

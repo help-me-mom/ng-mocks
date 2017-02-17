@@ -5,8 +5,8 @@ import { Logger } from "log4js";
 
 import path = require("path");
 
-import Configuration = require("../configuration");
-import SharedProcessedFiles = require("../shared-processed-files");
+import Configuration = require("../shared/configuration");
+import SharedProcessedFiles = require("../shared/shared-processed-files");
 
 class Reporter {
 

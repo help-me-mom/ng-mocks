@@ -2,7 +2,7 @@
 var async = require("async");
 var lodash = require("lodash");
 var ts = require("typescript");
-var Benchmark = require("./benchmark");
+var Benchmark = require("../shared/benchmark");
 var Compiler = (function () {
     function Compiler(config) {
         var _this = this;

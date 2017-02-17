@@ -5,16 +5,16 @@ import * as ts from "typescript";
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
-import Compiler = require("../compiler");
-import Configuration = require("../configuration");
-import Coverage = require("../coverage");
+import Compiler = require("../compiler/compiler");
+import Configuration = require("../shared/configuration");
+import Coverage = require("../istanbul/coverage");
 
 import { CompilerOptions } from "../../typings";
-import PathTool = require("../path-tool");
+import PathTool = require("../shared/path-tool");
 
 type ConfigFileJson = {
-    config?: any; error?:
-    ts.Diagnostic;
+    config?: any;
+    error?: ts.Diagnostic;
 };
 
 class Framework {

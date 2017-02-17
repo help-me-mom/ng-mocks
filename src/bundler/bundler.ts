@@ -11,13 +11,13 @@ import tmp = require("tmp");
 import { FilePattern } from "karma";
 import { Logger } from "log4js";
 
-import Benchmark = require("./benchmark");
+import Benchmark = require("../shared/benchmark");
 import BundleCallback = require("./bundle-callback");
-import Configuration = require("./configuration");
+import Configuration = require("../shared/configuration");
 import DependencyWalker = require("./dependency-walker");
-import EmitOutput = require("./emit-output");
-import File = require("./file");
-import PathTool = require("./path-tool");
+import EmitOutput = require("../compiler/emit-output");
+import File = require("../shared/file");
+import PathTool = require("../shared/path-tool");
 import Queued = require("./queued");
 import RequiredModule = require("./required-module");
 import SourceMap = require("./source-map");
@@ -63,7 +63,7 @@ class Bundler {
 
         files.push({
             included: true,
-            pattern: path.join(__dirname, "../src/client/commonjs.js"),
+            pattern: path.join(__dirname, "../../src/client/commonjs.js"),
             served: true,
             watched: false
         });

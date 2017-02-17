@@ -1,11 +1,11 @@
-import Bundler = require("./bundler");
-import Compiler = require("./compiler");
-import Configuration = require("./configuration");
-import Coverage = require("./coverage");
+import Bundler = require("./bundler/bundler");
+import Compiler = require("./compiler/compiler");
+import Configuration = require("./shared/configuration");
+import Coverage = require("./istanbul/coverage");
 import Framework = require("./karma/framework");
 import Preprocessor = require("./karma/preprocessor");
 import Reporter = require("./karma/reporter");
-import SharedProcessedFiles = require("./shared-processed-files");
+import SharedProcessedFiles = require("./shared/shared-processed-files");
 
 let sharedProcessedFiles: SharedProcessedFiles = {};
 
