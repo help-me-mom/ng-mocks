@@ -43,4 +43,4 @@ describe('HelloComponent', () => {
 
 This software is licensed with the MIT license.
 
-© 2016 Erik Barke, Monounity
+© 2016-2017 Erik Barke, Monounity

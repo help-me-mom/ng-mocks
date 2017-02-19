@@ -106,73 +106,73 @@ coverageReporter: {
 
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
-* `karmaTypescriptConfig.bundlerOptions.addNodeGlobals` - Boolean indicating whether the global variables
+* **karmaTypescriptConfig.bundlerOptions.addNodeGlobals** - Boolean indicating whether the global variables
   `process` and `Buffer` should be added to the bundle.<br/>
   Defaults to `true`.
 
-* `karmaTypescriptConfig.bundlerOptions.entrypoints` - A regex filtering which files loaded by Karma should be executed in
+* **karmaTypescriptConfig.bundlerOptions.entrypoints** - A regex filtering which files loaded by Karma should be executed in
    a test run, for example only filenames ending with ".spec.ts": `/\.spec\.ts$/`.<br/>
    This setting can be used to make sure the specs have finished setting up the test environment before other code starts
    requiring modules, which otherwise could lead to subtle bugs caused by race conditions.<br/>
    Defaults to all files, `/.*/`.
 
-* `karmaTypescriptConfig.bundlerOptions.exclude` - An array of npm module names that will be excluded from the bundle.
+* **karmaTypescriptConfig.bundlerOptions.exclude** - An array of npm module names that will be excluded from the bundle.
 
-* `karmaTypescriptConfig.bundlerOptions.ignore` - An array of npm module names that will be bundled as stubs, ie `module.exports = {};`.
+* **karmaTypescriptConfig.bundlerOptions.ignore** - An array of npm module names that will be bundled as stubs, ie `module.exports = {};`.
 
-* ~~`karmaTypescriptConfig.bundlerOptions.ignoredModuleNames` - An array of npm module names to be excluded from the bundle.~~<br/>
+* ~~**karmaTypescriptConfig.bundlerOptions.ignoredModuleNames** - An array of npm module names to be excluded from the bundle.~~<br/>
   **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
 
-* `karmaTypescriptConfig.bundlerOptions.noParse` - An array of module names that will be bundled without being parsed for dependencies.
+* **karmaTypescriptConfig.bundlerOptions.noParse** - An array of module names that will be bundled without being parsed for dependencies.
 
-* `karmaTypescriptConfig.bundlerOptions.resolve.alias` - An object literal where the key is a module name
+* **karmaTypescriptConfig.bundlerOptions.resolve.alias** - An object literal where the key is a module name
   and the value is a path that will be used when resolving the module.<br/>
   The key is a regular expression.
 
-* `karmaTypescriptConfig.bundlerOptions.resolve.extensions` - An array of file extensions to use, in order, when resolving modules.<br/>
+* **karmaTypescriptConfig.bundlerOptions.resolve.extensions** - An array of file extensions to use, in order, when resolving modules.<br/>
   Defaults to `[".js", ".json", ".ts", ".tsx"]`.
 
-* `karmaTypescriptConfig.bundlerOptions.resolve.directories` - An array of directories in which to recursively look for modules.<br/>
+* **karmaTypescriptConfig.bundlerOptions.resolve.directories** - An array of directories in which to recursively look for modules.<br/>
   Defaults to `["node_modules"]`.
 
-* `karmaTypescriptConfig.bundlerOptions.validateSyntax` - A boolean indicating whether the syntax ofthe bundled code should be validated.
+* **karmaTypescriptConfig.bundlerOptions.validateSyntax** - A boolean indicating whether the syntax ofthe bundled code should be validated.
   Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`.<br/>
   Defaults to `true`.
 
-* `karmaTypescriptConfig.compilerOptions` - This setting will override or add to existing compiler options.<br/>
+* **karmaTypescriptConfig.compilerOptions** - This setting will override or add to existing compiler options.<br/>
   Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the
   exception of `outDir`and `outFile` which are ignored since the code is compiled in-memory.
 
-* `karmaTypescriptConfig.coverageOptions.instrumentation` - A boolean indicating whether the code should be instrumented,
+* **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
   set to `false` to see the original Typescript code when debugging.<br/>
   Defaults to true.
 
-* `karmaTypescriptConfig.coverageOptions.exclude` - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
+* **karmaTypescriptConfig.coverageOptions.exclude** - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
   Defaults to `/\.(d|spec|test)\.ts$/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
 
-* `karmaTypescriptConfig.exclude` - An array of file patterns to be excluded by the compiler.
+* **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
   The values will be merged with existing options.<br/>
   Defaults to `["node_modules"]`.
 
-* ~~`karmaTypescriptConfig.excludeFromCoverage` - A regex for filtering which files should be excluded from coverage instrumentation.<br/>
+* ~~**karmaTypescriptConfig.excludeFromCoverage** - A regex for filtering which files should be excluded from coverage instrumentation.<br/>
   Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.~~<br/>
   **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.exclude` instead.
 
-* ~~`karmaTypescriptConfig.disableCodeCoverageInstrumentation` - If set to true, code coverage instrumentation will be
+* ~~**karmaTypescriptConfig.disableCodeCoverageInstrumentation** - If set to true, code coverage instrumentation will be
   disabledand the original TypeScript code will be shown when debugging.~~<br/>
   **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.instrumentation` instead.
 
-* `karmaTypescriptConfig.include` - An array of file patterns to be included by the compiler. The values will be merged with existing options.<br/>
+* **karmaTypescriptConfig.include** - An array of file patterns to be included by the compiler. The values will be merged with existing options.<br/>
   This option is available in Typescript 2.0.0^.
 
-* `karmaTypescriptConfig.remapOptions` - Pass options to `remap-istanbul`.
+* **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
 
     * Available options:
 
         * `exclude`, a regex for excluding files from remapping
         * `warn`, a function for handling error messages
 
-* `karmaTypescriptConfig.reports` - The types of coverage reports that should be created when running the tests,
+* **karmaTypescriptConfig.reports** - The types of coverage reports that should be created when running the tests,
   defaults to an html report in the directory `./coverage`.
   Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
     
@@ -215,10 +215,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
     }
     ```
 
-* `karmaTypescriptConfig.transformPath` - A function for renaming compiled file extensions to `.js`.<br/>
+* **karmaTypescriptConfig.transformPath** - A function for renaming compiled file extensions to `.js`.<br/>
   Defaults to renaming `.ts` and `.tsx` to `.js`.
 
-* `karmaTypescriptConfig.tsconfig` - A path to a `tsconfig.json` file.<br/>
+* **karmaTypescriptConfig.tsconfig** - A path to a `tsconfig.json` file.<br/>
   The default compiler options will be replaced by the options in this file.
 
 Example of a full `karmaTypescriptConfig` configuration:
@@ -329,10 +329,10 @@ a non-enumerable `default` property if `module.exports.default` is undefined.
 * [vm](https://www.npmjs.com/package/vm-browserify)
 * [zlib](https://www.npmjs.com/package/browserify-zlib)
 
-The plugin uses [detective](https://github.com/substack/node-detective) and [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to traverse the dependency tree and load the source code from node_modules.
+The plugin uses [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to load the source code from node_modules.
 
 Note: automatic bundling will only be performed if `compilerOptions.module` is set to `"commonjs"`,
-and there are importstatements in the Typescript source code.
+and there are import statements in the Typescript source code.
 
 ## Importing stylesheets and bundling for production
 
@@ -370,7 +370,6 @@ This error seems to hit mostly users with older versions of `npm`, where all dep
 There's a workaround reported by users, which is simply adding the missing dependencies explicitly to `package.json`:
 
  * `npm install --save-dev browser-resolve`
- * `npm install --save-dev detective`
  * `npm install --save-dev buffer`
  * `npm install --save-dev process`
 
@@ -393,4 +392,4 @@ These are the environments reported failing/working:
 
 This software is licensed with the MIT license.
 
-© 2016 Erik Barke, Monounity
+© 2016-2017 Erik Barke, Monounity
