@@ -11,19 +11,19 @@ import tmp = require("tmp");
 import { FilePattern } from "karma";
 import { Logger } from "log4js";
 
-import Benchmark = require("../shared/benchmark");
-import BundleCallback = require("./bundle-callback");
-import Configuration = require("../shared/configuration");
-import DependencyWalker = require("./dependency-walker");
-import EmitOutput = require("../compiler/emit-output");
-import File = require("../shared/file");
+import { EmitOutput } from "../compiler/emit-output";
+import { Benchmark } from "../shared/benchmark";
+import { Configuration } from "../shared/configuration";
+import { File } from "../shared/file";
 import PathTool = require("../shared/path-tool");
-import Queued = require("./queued");
-import RequiredModule = require("./required-module");
+import { BundleCallback } from "./bundle-callback";
+import { DependencyWalker } from "./dependency-walker";
+import { Queued } from "./queued";
+import { RequiredModule } from "./required-module";
 import SourceMap = require("./source-map");
-import Transformer = require("./transformer");
+import { Transformer } from "./transformer";
 
-class Bundler {
+export class Bundler {
 
     private readonly BUNDLE_DELAY = 500;
 
@@ -416,5 +416,3 @@ class Bundler {
         }
     }
 }
-
-export = Bundler;

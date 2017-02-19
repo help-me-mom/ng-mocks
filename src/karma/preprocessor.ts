@@ -3,14 +3,14 @@ import path = require("path");
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
-import Bundler = require("../bundler/bundler");
-import Compiler = require("../compiler/compiler");
-import Configuration = require("../shared/configuration");
-import Coverage = require("../istanbul/coverage");
-import File = require("../shared/file");
-import SharedProcessedFiles = require("../shared/shared-processed-files");
+import { Bundler } from "../bundler/bundler";
+import { Compiler } from "../compiler/compiler";
+import { Coverage } from "../istanbul/coverage";
+import { Configuration } from "../shared/configuration";
+import { File } from "../shared/file";
+import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
-class Preprocessor {
+export class Preprocessor {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
@@ -52,5 +52,3 @@ class Preprocessor {
         (<any> this.create).$inject = ["config", "helper", "logger"];
     }
 }
-
-export = Preprocessor;

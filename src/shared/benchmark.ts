@@ -1,4 +1,4 @@
-class Benchmark {
+export class Benchmark {
 
     private start = process.hrtime();
 
@@ -7,5 +7,3 @@ class Benchmark {
         return Math.round((end[0] * 1000) + (end[1] / 1000000));
     }
 }
-
-export = Benchmark;

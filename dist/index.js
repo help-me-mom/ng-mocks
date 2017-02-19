@@ -1,23 +1,23 @@
 "use strict";
-var Bundler = require("./bundler/bundler");
-var Compiler = require("./compiler/compiler");
-var Configuration = require("./shared/configuration");
-var Coverage = require("./istanbul/coverage");
-var DependencyWalker = require("./bundler/dependency-walker");
-var Framework = require("./karma/framework");
-var Preprocessor = require("./karma/preprocessor");
-var Reporter = require("./karma/reporter");
-var Transformer = require("./bundler/transformer");
+var bundler_1 = require("./bundler/bundler");
+var dependency_walker_1 = require("./bundler/dependency-walker");
+var transformer_1 = require("./bundler/transformer");
+var compiler_1 = require("./compiler/compiler");
+var coverage_1 = require("./istanbul/coverage");
+var framework_1 = require("./karma/framework");
+var preprocessor_1 = require("./karma/preprocessor");
+var reporter_1 = require("./karma/reporter");
+var configuration_1 = require("./shared/configuration");
 var sharedProcessedFiles = {};
-var configuration = new Configuration();
-var dependencyWalker = new DependencyWalker();
-var transformer = new Transformer(configuration);
-var coverage = new Coverage(configuration);
-var bundler = new Bundler(configuration, dependencyWalker, transformer);
-var compiler = new Compiler();
-var framework = new Framework(bundler, compiler, configuration, coverage, dependencyWalker, transformer);
-var preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
-var reporter = new Reporter(configuration, sharedProcessedFiles);
+var configuration = new configuration_1.Configuration();
+var dependencyWalker = new dependency_walker_1.DependencyWalker();
+var transformer = new transformer_1.Transformer(configuration);
+var coverage = new coverage_1.Coverage(configuration);
+var bundler = new bundler_1.Bundler(configuration, dependencyWalker, transformer);
+var compiler = new compiler_1.Compiler();
+var framework = new framework_1.Framework(bundler, compiler, configuration, coverage, dependencyWalker, transformer);
+var preprocessor = new preprocessor_1.Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
+var reporter = new reporter_1.Reporter(configuration, sharedProcessedFiles);
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],
     "preprocessor:karma-typescript": ["factory", preprocessor.create],

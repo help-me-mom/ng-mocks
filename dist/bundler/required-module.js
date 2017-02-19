@@ -23,4 +23,4 @@ var RequiredModule = (function () {
     };
     return RequiredModule;
 }());
-module.exports = RequiredModule;
+exports.RequiredModule = RequiredModule;

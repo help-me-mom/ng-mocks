@@ -1,12 +1,12 @@
 import { Logger } from "log4js";
 
-import Configuration = require("../shared/configuration");
-import CoverageCallback = require("./coverage-callback");
-import EmitOutput = require("../compiler/emit-output");
-import File = require("../shared/file");
+import { EmitOutput } from "../compiler/emit-output";
+import { Configuration } from "../shared/configuration";
+import { File } from "../shared/file";
+import { CoverageCallback } from "./coverage-callback";
 import SourceMap = require("../bundler/source-map");
 
-class Coverage {
+export class Coverage {
 
     private coverage = require("karma-coverage/lib/preprocessor");
     private coveragePreprocessor: any;
@@ -69,5 +69,3 @@ class Coverage {
         return regex.test(path);
     }
 }
-
-export = Coverage;

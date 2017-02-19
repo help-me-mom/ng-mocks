@@ -9,4 +9,4 @@ var Benchmark = (function () {
     };
     return Benchmark;
 }());
-module.exports = Benchmark;
+exports.Benchmark = Benchmark;

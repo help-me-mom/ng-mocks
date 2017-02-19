@@ -5,10 +5,10 @@ import * as ts from "typescript";
 
 import { Logger } from "log4js";
 
-import Queued = require("./queued");
-import RequiredModule = require("./required-module");
+import { Queued } from "./queued";
+import { RequiredModule } from "./required-module";
 
-class DependencyWalker {
+export class DependencyWalker {
 
     private log: Logger;
     private requireRegexp = /\brequire\b/;
@@ -168,5 +168,3 @@ class DependencyWalker {
         return visit(expression);
     }
 }
-
-export = DependencyWalker;

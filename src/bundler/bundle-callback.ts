@@ -1,5 +1,3 @@
-interface BundleCallback {
+export interface BundleCallback {
     (bundled: string): void;
 }
-
-export = BundleCallback;

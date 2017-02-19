@@ -35,4 +35,4 @@ var Preprocessor = (function () {
     }
     return Preprocessor;
 }());
-module.exports = Preprocessor;
+exports.Preprocessor = Preprocessor;

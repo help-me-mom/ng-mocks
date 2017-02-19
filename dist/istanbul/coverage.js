@@ -46,4 +46,4 @@ var Coverage = (function () {
     };
     return Coverage;
 }());
-module.exports = Coverage;
+exports.Coverage = Coverage;

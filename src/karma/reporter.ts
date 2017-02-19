@@ -1,14 +1,13 @@
+import path = require("path");
 import { Collector, Store } from "istanbul";
 import { ConfigOptions } from "karma";
 import * as lodash from "lodash";
 import { Logger } from "log4js";
 
-import path = require("path");
+import { Configuration } from "../shared/configuration";
+import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
-import Configuration = require("../shared/configuration");
-import SharedProcessedFiles = require("../shared/shared-processed-files");
-
-class Reporter {
+export class Reporter {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any): void };
 
@@ -111,5 +110,3 @@ class Reporter {
         return null;
     }
 }
-
-export = Reporter;

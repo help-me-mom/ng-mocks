@@ -73,4 +73,4 @@ var Transformer = (function () {
     };
     return Transformer;
 }());
-module.exports = Transformer;
+exports.Transformer = Transformer;

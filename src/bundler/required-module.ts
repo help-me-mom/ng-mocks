@@ -1,6 +1,6 @@
 import * as ESTree from "estree";
 
-class RequiredModule {
+export class RequiredModule {
 
     public ast?: ESTree.Program;
     public lookupName?: string;
@@ -28,5 +28,3 @@ class RequiredModule {
         return this.filename && !this.isTypingsFile() && /\.(ts|tsx)$/.test(this.filename);
     }
 }
-
-export = RequiredModule;

@@ -1,6 +1,4 @@
-interface File {
+export interface File {
     originalPath: string;
     path: string;
 };
-
-export = File;

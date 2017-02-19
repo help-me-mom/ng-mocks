@@ -1,7 +1,7 @@
 "use strict";
 var lodash = require("lodash");
 var ts = require("typescript");
-var Benchmark = require("../shared/benchmark");
+var benchmark_1 = require("../shared/benchmark");
 var Compiler = (function () {
     function Compiler() {
         var _this = this;
@@ -36,7 +36,7 @@ var Compiler = (function () {
     };
     Compiler.prototype.compileProgram = function () {
         var _this = this;
-        var benchmark = new Benchmark();
+        var benchmark = new benchmark_1.Benchmark();
         if (!this.cachedProgram) {
             this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
             this.hostGetSourceFile = this.compilerHost.getSourceFile;
@@ -109,4 +109,4 @@ var Compiler = (function () {
     };
     return Compiler;
 }());
-module.exports = Compiler;
+exports.Compiler = Compiler;

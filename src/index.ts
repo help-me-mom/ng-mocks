@@ -1,13 +1,13 @@
-import Bundler = require("./bundler/bundler");
-import Compiler = require("./compiler/compiler");
-import Configuration = require("./shared/configuration");
-import Coverage = require("./istanbul/coverage");
-import DependencyWalker = require("./bundler/dependency-walker");
-import Framework = require("./karma/framework");
-import Preprocessor = require("./karma/preprocessor");
-import Reporter = require("./karma/reporter");
-import SharedProcessedFiles = require("./shared/shared-processed-files");
-import Transformer = require("./bundler/transformer");
+import { Bundler } from "./bundler/bundler";
+import { DependencyWalker } from "./bundler/dependency-walker";
+import { Transformer } from "./bundler/transformer";
+import { Compiler } from "./compiler/compiler";
+import { Coverage } from "./istanbul/coverage";
+import { Framework } from "./karma/framework";
+import { Preprocessor } from "./karma/preprocessor";
+import { Reporter } from "./karma/reporter";
+import { Configuration } from "./shared/configuration";
+import { SharedProcessedFiles } from "./shared/shared-processed-files";
 
 let sharedProcessedFiles: SharedProcessedFiles = {};
 

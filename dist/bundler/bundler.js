@@ -8,9 +8,9 @@ var lodash = require("lodash");
 var os = require("os");
 var path = require("path");
 var tmp = require("tmp");
-var Benchmark = require("../shared/benchmark");
+var benchmark_1 = require("../shared/benchmark");
 var PathTool = require("../shared/path-tool");
-var RequiredModule = require("./required-module");
+var required_module_1 = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
     function Bundler(config, dependencyWalker, transformer) {
@@ -69,10 +69,10 @@ var Bundler = (function () {
     };
     Bundler.prototype.bundleQueuedModules = function () {
         var _this = this;
-        var benchmark = new Benchmark();
+        var benchmark = new benchmark_1.Benchmark();
         this.transformer.applyTsTransforms(this.bundleQueue, function () {
             _this.bundleQueue.forEach(function (queued) {
-                queued.module = new RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+                queued.module = new required_module_1.RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
             var requiredModuleCount = _this.dependencyWalker.collectRequiredTsModules(_this.bundleQueue);
             if (requiredModuleCount > 0) {
@@ -198,10 +198,10 @@ var Bundler = (function () {
             });
             return;
         }
-        var globals = new RequiredModule(undefined, "globals.js", os.EOL + "global.process=require('process/browser');" +
+        var globals = new required_module_1.RequiredModule(undefined, "globals.js", os.EOL + "global.process=require('process/browser');" +
             os.EOL + "global.Buffer=require('buffer/').Buffer;", [
-            new RequiredModule("process/browser"),
-            new RequiredModule("buffer/")
+            new required_module_1.RequiredModule("process/browser"),
+            new required_module_1.RequiredModule("buffer/")
         ]);
         this.resolveModule(globals.filename, globals.requiredModules[0], function () {
             _this.resolveModule(globals.filename, globals.requiredModules[1], function () {
@@ -323,7 +323,7 @@ var Bundler = (function () {
             this.dependencyWalker.hasRequire(requiredModule.source)) {
             var moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
             async.each(moduleNames, function (moduleName, onModuleResolved) {
-                var dependency = new RequiredModule(moduleName);
+                var dependency = new required_module_1.RequiredModule(moduleName);
                 _this.resolveModule(requiredModule.filename, dependency, function (resolved) {
                     if (resolved) {
                         requiredModule.requiredModules.push(resolved);
@@ -340,4 +340,4 @@ var Bundler = (function () {
     };
     return Bundler;
 }());
-module.exports = Bundler;
+exports.Bundler = Bundler;

@@ -123,4 +123,4 @@ var Framework = (function () {
     };
     return Framework;
 }());
-module.exports = Framework;
+exports.Framework = Framework;

@@ -1,6 +1,6 @@
 import path = require("path");
-import EmitOutput = require("../compiler/emit-output");
-import File = require("../shared/file");
+import { EmitOutput } from "../compiler/emit-output";
+import { File } from "../shared/file";
 
 export function create(file: File, source: string, emitOutput: EmitOutput) {
 

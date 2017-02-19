@@ -10,7 +10,7 @@ import {
     Reports
 } from "../api";
 
-class Configuration {
+export class Configuration {
 
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
@@ -210,5 +210,3 @@ class Configuration {
         }
     }
 }
-
-export = Configuration;

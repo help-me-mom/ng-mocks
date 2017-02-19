@@ -1,7 +1,7 @@
 "use strict";
+var path = require("path");
 var istanbul_1 = require("istanbul");
 var lodash = require("lodash");
-var path = require("path");
 var Reporter = (function () {
     function Reporter(config, sharedProcessedFiles) {
         this.coverageReporter = require("karma-coverage/lib/reporter");
@@ -74,4 +74,4 @@ var Reporter = (function () {
     };
     return Reporter;
 }());
-module.exports = Reporter;
+exports.Reporter = Reporter;

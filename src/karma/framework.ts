@@ -5,12 +5,12 @@ import * as ts from "typescript";
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
-import Compiler = require("../compiler/compiler");
-import Configuration = require("../shared/configuration");
-import Coverage = require("../istanbul/coverage");
-import DependencyWalker = require("../bundler/dependency-walker");
+import { DependencyWalker } from "../bundler/dependency-walker";
+import { Compiler } from "../compiler/compiler";
+import { Coverage } from "../istanbul/coverage";
+import { Configuration } from "../shared/configuration";
 import PathTool = require("../shared/path-tool");
-import Transformer = require("../bundler/transformer");
+import { Transformer } from "../bundler/transformer";
 
 import { CompilerOptions } from "../api";
 
@@ -19,7 +19,7 @@ type ConfigFileJson = {
     error?: ts.Diagnostic;
 };
 
-class Framework {
+export class Framework {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
@@ -191,5 +191,3 @@ class Framework {
         }
     }
 }
-
-export = Framework;

@@ -158,4 +158,4 @@ var Configuration = (function () {
     };
     return Configuration;
 }());
-module.exports = Configuration;
+exports.Configuration = Configuration;

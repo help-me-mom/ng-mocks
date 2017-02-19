@@ -2,13 +2,12 @@ import * as async from "async";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
-import Configuration = require("../shared/configuration");
-import Queued = require("./queued");
-import RequiredModule = require("./required-module");
-
 import { Transform, TransformContext } from "../api";
+import { Configuration } from "../shared/configuration";
+import { Queued } from "./queued";
+import { RequiredModule } from "./required-module";
 
-class Transformer {
+export class Transformer {
 
     private log: Logger;
     private tsconfig: ts.ParsedCommandLine;
@@ -90,5 +89,3 @@ class Transformer {
         }, onTransformssApplied);
     }
 }
-
-export = Transformer;

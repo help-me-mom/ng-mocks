@@ -2,9 +2,9 @@ import * as lodash from "lodash";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
-import Benchmark = require("../shared/benchmark");
-import CompileCallback = require("./compile-callback");
-import File = require("../shared/file");
+import { Benchmark } from "../shared/benchmark";
+import { File } from "../shared/file";
+import { CompileCallback } from "./compile-callback";
 
 type CompiledFiles = { [key: string]: string; };
 
@@ -13,7 +13,7 @@ type Queued = {
     callback: CompileCallback;
 };
 
-class Compiler {
+export class Compiler {
 
     private readonly COMPILE_DELAY = 200;
 
@@ -154,5 +154,3 @@ class Compiler {
         }
     }
 }
-
-export = Compiler;

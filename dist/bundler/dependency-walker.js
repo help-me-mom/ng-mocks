@@ -2,7 +2,7 @@
 var glob = require("glob");
 var path = require("path");
 var ts = require("typescript");
-var RequiredModule = require("./required-module");
+var required_module_1 = require("./required-module");
 var DependencyWalker = (function () {
     function DependencyWalker() {
         this.requireRegexp = /\brequire\b/;
@@ -23,7 +23,7 @@ var DependencyWalker = (function () {
                 !queued.emitOutput.sourceFile.isDeclarationFile) {
                 Object.keys(queued.emitOutput.sourceFile.resolvedModules).forEach(function (moduleName) {
                     var resolvedModule = queued.emitOutput.sourceFile.resolvedModules[moduleName];
-                    queued.module.requiredModules.push(new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                    queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                 });
             }
             requiredModuleCount += queued.module.requiredModules.length;
@@ -76,7 +76,7 @@ var DependencyWalker = (function () {
                     undefined;
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(argument.text));
+                    requiredModules.push(new required_module_1.RequiredModule(argument.text));
                 }
             }
             ts.forEachChild(node, visitNode);
@@ -92,7 +92,7 @@ var DependencyWalker = (function () {
             var pattern;
             var files;
             if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
+                if (new required_module_1.RequiredModule(dynamicModuleName).isNpmModule()) {
                     moduleNames.push(dynamicModuleName);
                 }
                 else {
@@ -128,4 +128,4 @@ var DependencyWalker = (function () {
     };
     return DependencyWalker;
 }());
-module.exports = DependencyWalker;
+exports.DependencyWalker = DependencyWalker;
