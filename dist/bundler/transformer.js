@@ -8,7 +8,6 @@ var Transformer = (function () {
     Transformer.prototype.initialize = function (logger, tsconfig) {
         this.tsconfig = tsconfig;
         this.log = logger.create("transformer.karma-typescript");
-        this.log.info("Beep, boop");
     };
     Transformer.prototype.applyTransforms = function (bundleQueue, onTransformssApplied) {
         var _this = this;

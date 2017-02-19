@@ -15,7 +15,6 @@ class Transformer {
     public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
         this.log = logger.create("transformer.karma-typescript");
-        this.log.info("Beep, boop");
     }
 
     public applyTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
