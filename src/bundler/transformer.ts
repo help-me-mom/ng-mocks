@@ -4,6 +4,9 @@ import * as ts from "typescript";
 
 import Configuration = require("../shared/configuration");
 import Queued = require("./queued");
+import RequiredModule = require("./required-module");
+
+import { Transform, TransformContext } from "../api";
 
 class Transformer {
 
@@ -17,7 +20,7 @@ class Transformer {
         this.log = logger.create("transformer.karma-typescript");
     }
 
-    public applyTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
+    public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
@@ -30,20 +33,21 @@ class Transformer {
 
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
-            let context = {
+            let context: TransformContext = {
+                ast: queued.emitOutput.sourceFile,
                 basePath: this.config.karma.basePath,
                 filename: queued.file.originalPath,
-                fullText: queued.emitOutput.sourceFile.getFullText(),
-                sourceFile: queued.emitOutput.sourceFile,
+                module: queued.file.originalPath,
+                source: queued.emitOutput.sourceFile.getFullText(),
                 urlRoot: this.config.karma.urlRoot
             };
-            async.eachSeries(transforms, (transform: Function, onTransformApplied: Function) => {
+            async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
                 process.nextTick(() => {
                     transform(context, (changed: boolean) => {
                         if (changed) {
-                            let transpiled = ts.transpileModule(context.fullText, {
+                            let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.tsconfig.options,
-                                fileName: queued.file.originalPath
+                                fileName: context.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;
                             queued.emitOutput.sourceMapText = transpiled.sourceMapText;
@@ -52,6 +56,37 @@ class Transformer {
                     });
                 });
             }, onQueueProcessed);
+        }, onTransformssApplied);
+    }
+
+    public applyTransforms(requiredModule: RequiredModule, onTransformssApplied: ErrorCallback<Error>): void {
+
+        let transforms = this.config.bundlerOptions.transforms;
+
+        if (!transforms.length) {
+            process.nextTick(() => {
+                onTransformssApplied();
+            });
+            return;
+        }
+
+        let context: TransformContext = {
+            ast: requiredModule.ast,
+            basePath: this.config.karma.basePath,
+            filename: requiredModule.filename,
+            module: requiredModule.moduleName,
+            source: requiredModule.source,
+            urlRoot: this.config.karma.urlRoot
+        };
+        async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
+            process.nextTick(() => {
+                transform(context, () => {
+                    if (context.source !== requiredModule.source) {
+                        requiredModule.source = context.source;
+                    }
+                    onTransformApplied();
+                });
+            });
         }, onTransformssApplied);
     }
 }

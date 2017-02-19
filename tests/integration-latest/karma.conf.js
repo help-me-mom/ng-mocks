@@ -39,6 +39,15 @@ module.exports = function(config) {
                     extensions: [".js", ".json", ".ts"],
                     directories: ["node_modules"]
                 },
+                transforms: [
+                    // transform to make tests for Css Modules work, ReactCSSModulesTester, #66
+                    function(context, callback) {
+                        if(context.module === "./style-import-tester.css") {
+                            context.source = "module.exports = { color: '#f1a' };";
+                        }
+                        callback();
+                    }
+                ],
                 validateSyntax: false
             },
             compilerOptions: {

@@ -5,9 +5,9 @@ var MagicString = require("magic-string"),
 module.exports = function angularTemplateUrlRewriter(context, callback) {
 
     var changed = false,
-        magic = new MagicString(context.fullText);
+        magic = new MagicString(context.source);
 
-    visitNode(context.sourceFile);
+    visitNode(context.ast);
 
     function visitNode(node) {
         switch (node.kind) {
@@ -23,7 +23,7 @@ module.exports = function angularTemplateUrlRewriter(context, callback) {
                                 templateUrl = path.join(context.urlRoot, "base", relativeTemplateDir, property.initializer.text);
 
                             magic.overwrite(start, end, fixWindowsPath(templateUrl));
-                            context.fullText = magic.toString();
+                            context.source = magic.toString();
                             changed = true;
                         }
                     });

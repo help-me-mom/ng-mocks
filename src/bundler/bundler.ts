@@ -96,7 +96,7 @@ class Bundler {
 
         let benchmark = new Benchmark();
 
-        this.transformer.applyTransforms(this.bundleQueue, () => {
+        this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
                 queued.module = new RequiredModule(queued.file.path, queued.file.originalPath,
                     SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
@@ -314,16 +314,16 @@ class Bundler {
                 }
                 else {
                     requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
-
-                    // temporary hack to make tests for #66 work
-                    if (requiredModule.moduleName === "./style-import-tester.css") {
-                        requiredModule.source = os.EOL + "module.exports = { color: '#f1a' };";
-                    }
                 }
             }
 
             requiredModule.ast = acorn.parse(requiredModule.source);
-            this.resolveDependencies(requiredModule, onDependenciesResolved);
+            this.transformer.applyTransforms(requiredModule, (error: Error) => {
+                if (error) {
+                    throw Error;
+                }
+                this.resolveDependencies(requiredModule, onDependenciesResolved);
+            });
         };
 
         let onDependenciesResolved = () => {

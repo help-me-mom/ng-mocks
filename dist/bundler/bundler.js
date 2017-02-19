@@ -70,7 +70,7 @@ var Bundler = (function () {
     Bundler.prototype.bundleQueuedModules = function () {
         var _this = this;
         var benchmark = new Benchmark();
-        this.transformer.applyTransforms(this.bundleQueue, function () {
+        this.transformer.applyTsTransforms(this.bundleQueue, function () {
             _this.bundleQueue.forEach(function (queued) {
                 queued.module = new RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
@@ -252,14 +252,15 @@ var Bundler = (function () {
                 }
                 else {
                     requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
-                    // temporary hack to make tests for #66 work
-                    if (requiredModule.moduleName === "./style-import-tester.css") {
-                        requiredModule.source = os.EOL + "module.exports = { color: '#f1a' };";
-                    }
                 }
             }
             requiredModule.ast = acorn.parse(requiredModule.source);
-            _this.resolveDependencies(requiredModule, onDependenciesResolved);
+            _this.transformer.applyTransforms(requiredModule, function (error) {
+                if (error) {
+                    throw Error;
+                }
+                _this.resolveDependencies(requiredModule, onDependenciesResolved);
+            });
         };
         var onDependenciesResolved = function () {
             _this.bundleBuffer += _this.addLoaderFunction(requiredModule, false);

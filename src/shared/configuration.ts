@@ -8,7 +8,7 @@ import {
     KarmaTypescriptConfig,
     RemapOptions,
     Reports
-} from "../../typings";
+} from "../api";
 
 class Configuration {
 

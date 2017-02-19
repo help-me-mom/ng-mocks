@@ -1,4 +1,22 @@
+import * as ESTree from "estree";
 import * as ts from "typescript";
+
+export interface TransformCallback {
+    (changed?: boolean): void;
+};
+
+export interface TransformContext {
+    ast: ESTree.Program | ts.SourceFile;
+    basePath: string;
+    filename: string;
+    module: string;
+    source: string;
+    urlRoot: string;
+}
+
+export interface Transform {
+    (context: TransformContext, callback: TransformCallback): void;
+};
 
 export interface KarmaTypescriptConfig {
     bundlerOptions?: BundlerOptions;
@@ -9,7 +27,6 @@ export interface KarmaTypescriptConfig {
     remapOptions?: RemapOptions;
     reports?: Reports;
     transformPath?: Function;
-    transforms?: Function[];
     tsconfig: string;
 }
 
@@ -20,7 +37,7 @@ export interface BundlerOptions {
     ignore?: string[];
     noParse?: string[];
     resolve?: Resolve;
-    transforms?: Function[];
+    transforms?: Transform[];
     validateSyntax?: boolean;
 }
 
@@ -33,7 +50,7 @@ export interface Resolve {
 }
 
 export interface CompilerOptions extends ts.CompilerOptions {
-    [key:string]: any;
+    [key: string]: any;
 }
 
 export interface CoverageOptions {

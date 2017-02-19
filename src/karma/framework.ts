@@ -12,7 +12,7 @@ import DependencyWalker = require("../bundler/dependency-walker");
 import PathTool = require("../shared/path-tool");
 import Transformer = require("../bundler/transformer");
 
-import { CompilerOptions } from "../../typings";
+import { CompilerOptions } from "../api";
 
 type ConfigFileJson = {
     config?: any;
