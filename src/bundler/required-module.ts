@@ -1,5 +1,8 @@
+import * as ESTree from "estree";
+
 class RequiredModule {
 
+    public ast?: ESTree.Program;
     public lookupName?: string;
 
     constructor(public moduleName: string, public filename?: string,

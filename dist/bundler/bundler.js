@@ -9,16 +9,15 @@ var os = require("os");
 var path = require("path");
 var tmp = require("tmp");
 var Benchmark = require("../shared/benchmark");
-var DependencyWalker = require("./dependency-walker");
 var PathTool = require("../shared/path-tool");
 var RequiredModule = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
-    function Bundler(config, transformer) {
+    function Bundler(config, dependencyWalker, transformer) {
         this.config = config;
+        this.dependencyWalker = dependencyWalker;
         this.transformer = transformer;
         this.BUNDLE_DELAY = 500;
-        this.detective = require("detective");
         this.bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
         this.bundleBuffer = "";
         this.bundleFile = tmp.fileSync({
@@ -75,7 +74,7 @@ var Bundler = (function () {
             _this.bundleQueue.forEach(function (queued) {
                 queued.module = new RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
-            var requiredModuleCount = DependencyWalker.collectRequiredModules(_this.bundleQueue);
+            var requiredModuleCount = _this.dependencyWalker.collectRequiredTsModules(_this.bundleQueue);
             if (requiredModuleCount > 0) {
                 _this.bundleWithLoader(benchmark);
             }
@@ -259,6 +258,7 @@ var Bundler = (function () {
                     }
                 }
             }
+            requiredModule.ast = acorn.parse(requiredModule.source);
             _this.resolveDependencies(requiredModule, onDependenciesResolved);
         };
         var onDependenciesResolved = function () {
@@ -318,10 +318,9 @@ var Bundler = (function () {
         var _this = this;
         requiredModule.requiredModules = [];
         if (requiredModule.isScript() &&
-            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
-            var found = this.detective.find(requiredModule.source);
-            var moduleNames = found.strings;
-            this.addDynamicDependencies(found.expressions, moduleNames, requiredModule);
+            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 &&
+            this.dependencyWalker.hasRequire(requiredModule.source)) {
+            var moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
             async.each(moduleNames, function (moduleName, onModuleResolved) {
                 var dependency = new RequiredModule(moduleName);
                 _this.resolveModule(requiredModule.filename, dependency, function (resolved) {
@@ -337,49 +336,6 @@ var Bundler = (function () {
                 onDependenciesResolved();
             });
         }
-    };
-    Bundler.prototype.addDynamicDependencies = function (expressions, moduleNames, requiredModule) {
-        var _this = this;
-        expressions.forEach(function (expression) {
-            var dynamicModuleName = _this.parseDynamicRequire(expression);
-            var directory = path.dirname(requiredModule.filename);
-            var pattern;
-            var files;
-            if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
-                    moduleNames.push(dynamicModuleName);
-                }
-                else {
-                    pattern = path.join(directory, dynamicModuleName);
-                    files = glob.sync(pattern);
-                    files.forEach(function (filename) {
-                        _this.log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s", expression, filename, requiredModule.filename, pattern);
-                        moduleNames.push("./" + path.relative(directory, filename));
-                    });
-                }
-            }
-        });
-    };
-    Bundler.prototype.parseDynamicRequire = function (requireStatement) {
-        var ast = acorn.parse(requireStatement);
-        var visit = function (node) {
-            switch (node.type) {
-                case "BinaryExpression":
-                    if (node.operator === "+") {
-                        return visit(node.left) + visit(node.right);
-                    }
-                    break;
-                case "ExpressionStatement":
-                    return visit(node.expression);
-                case "Literal":
-                    return node.value + "";
-                case "Identifier":
-                    return "*";
-                default:
-                    return "";
-            }
-        };
-        return visit(ast.body[0]);
     };
     return Bundler;
 }());

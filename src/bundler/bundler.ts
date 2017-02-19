@@ -27,8 +27,6 @@ class Bundler {
 
     private readonly BUNDLE_DELAY = 500;
 
-    private detective = require("detective");
-
     private bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
 
     private builtins: any;
@@ -45,7 +43,9 @@ class Bundler {
     private lookupNameCache: { [key: string]: string; } = {};
     private orderedEntrypoints: string[] = [];
 
-    constructor(private config: Configuration, private transformer: Transformer) { }
+    constructor(private config: Configuration,
+                private dependencyWalker: DependencyWalker,
+                private transformer: Transformer) { }
 
     public initialize(logger: any) {
         this.log = logger.create("bundler.karma-typescript");
@@ -102,7 +102,7 @@ class Bundler {
                     SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
 
-            let requiredModuleCount = DependencyWalker.collectRequiredModules(this.bundleQueue);
+            let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
 
             if (requiredModuleCount > 0) {
                 this.bundleWithLoader(benchmark);
@@ -322,6 +322,7 @@ class Bundler {
                 }
             }
 
+            requiredModule.ast = acorn.parse(requiredModule.source);
             this.resolveDependencies(requiredModule, onDependenciesResolved);
         };
 
@@ -393,12 +394,10 @@ class Bundler {
         requiredModule.requiredModules = [];
 
         if (requiredModule.isScript() &&
-           this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1) {
+            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 &&
+            this.dependencyWalker.hasRequire(requiredModule.source)) {
 
-            let found = this.detective.find(requiredModule.source);
-            let moduleNames: string[] = found.strings;
-
-            this.addDynamicDependencies(found.expressions, moduleNames, requiredModule);
+            let moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
 
             async.each(moduleNames, (moduleName, onModuleResolved) => {
                 let dependency = new RequiredModule(moduleName);
@@ -415,60 +414,6 @@ class Bundler {
                 onDependenciesResolved();
             });
         }
-    }
-
-    private addDynamicDependencies(expressions: string[], moduleNames: string[], requiredModule: RequiredModule) {
-
-        expressions.forEach((expression) => {
-
-            let dynamicModuleName = this.parseDynamicRequire(expression);
-            let directory = path.dirname(requiredModule.filename);
-            let pattern: string;
-            let files: string[];
-
-            if (dynamicModuleName && dynamicModuleName !== "*") {
-
-                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
-                    moduleNames.push(dynamicModuleName);
-                }
-                else {
-
-                    pattern = path.join(directory, dynamicModuleName);
-                    files = glob.sync(pattern);
-
-                    files.forEach((filename) => {
-                        this.log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s",
-                                 expression, filename, requiredModule.filename, pattern);
-                        moduleNames.push("./" + path.relative(directory, filename));
-                    });
-                }
-            }
-        });
-    }
-
-    private parseDynamicRequire(requireStatement: string): string {
-
-        let ast = acorn.parse(requireStatement);
-
-        let visit = (node: any): string => {
-            switch (node.type) {
-            case "BinaryExpression":
-                if (node.operator === "+") {
-                    return visit(node.left) + visit(node.right);
-                }
-                break;
-            case "ExpressionStatement":
-                return visit(node.expression);
-            case "Literal":
-                return node.value + "";
-            case "Identifier":
-                return "*";
-            default:
-                return "";
-            }
-        };
-
-        return visit(ast.body[0]);
     }
 }
 

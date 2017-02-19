@@ -8,10 +8,11 @@ import { Logger } from "log4js";
 import Compiler = require("../compiler/compiler");
 import Configuration = require("../shared/configuration");
 import Coverage = require("../istanbul/coverage");
-
-import { CompilerOptions } from "../../typings";
+import DependencyWalker = require("../bundler/dependency-walker");
 import PathTool = require("../shared/path-tool");
 import Transformer = require("../bundler/transformer");
+
+import { CompilerOptions } from "../../typings";
 
 type ConfigFileJson = {
     config?: any;
@@ -24,7 +25,7 @@ class Framework {
     private log: Logger;
 
     constructor(bundler: any, compiler: Compiler, private config: Configuration,
-                coverage: Coverage, transformer: Transformer) {
+                coverage: Coverage, dependencyWalker: DependencyWalker, transformer: Transformer) {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
             config.initialize(karmaConfig, logger);
@@ -35,6 +36,7 @@ class Framework {
 
             bundler.initialize(logger);
             compiler.initialize(logger, tsconfig);
+            dependencyWalker.initialize(logger);
             transformer.initialize(logger, tsconfig);
 
             if (!config.hasFramework("commonjs")) {

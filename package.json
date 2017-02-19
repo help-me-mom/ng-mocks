@@ -60,7 +60,6 @@
     "console-browserify": "^1.1.0",
     "constants-browserify": "~1.0.0",
     "crypto-browserify": "^3.0.0",
-    "detective": "^4.3.2",
     "domain-browser": "~1.1.0",
     "es6-promise": "^4.0.5",
     "events": "~1.1.0",
