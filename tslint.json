@@ -9,7 +9,7 @@
     "no-consecutive-blank-lines": [true, 1],
     "object-curly-spacing": [true, "always"],
     "one-line": [false],    
-    "ter-indent": [true, 4],
+    "ter-indent": [true, 4, { "SwitchCase": 1 }],
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
   }
 }

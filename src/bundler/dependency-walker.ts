@@ -149,19 +149,19 @@ export class DependencyWalker {
 
         let visit = (node: any): string => {
             switch (node.type) {
-            case "BinaryExpression":
-                if (node.operator === "+") {
-                    return visit(node.left) + visit(node.right);
-                }
-                break;
-            case "ExpressionStatement":
-                return visit(node.expression);
-            case "Literal":
-                return node.value + "";
-            case "Identifier":
-                return "*";
-            default:
-                return "";
+                case "BinaryExpression":
+                    if (node.operator === "+") {
+                        return visit(node.left) + visit(node.right);
+                    }
+                    break;
+                case "ExpressionStatement":
+                    return visit(node.expression);
+                case "Literal":
+                    return node.value + "";
+                case "Identifier":
+                    return "*";
+                default:
+                    return "";
             }
         };
 
