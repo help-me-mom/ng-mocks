@@ -29,8 +29,8 @@ var Transformer = (function () {
             };
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
-                    transform(context, function (changed) {
-                        if (changed) {
+                    transform(context, function (dirty) {
+                        if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: _this.tsconfig.options,
                                 fileName: context.filename
@@ -62,8 +62,9 @@ var Transformer = (function () {
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
-                transform(context, function () {
-                    if (context.source !== requiredModule.source) {
+                transform(context, function (dirty) {
+                    if (dirty) {
+                        requiredModule.ast = context.ast;
                         requiredModule.source = context.source;
                     }
                     onTransformApplied();

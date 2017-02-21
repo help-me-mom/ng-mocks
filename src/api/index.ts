@@ -2,7 +2,7 @@ import * as ESTree from "estree";
 import * as ts from "typescript";
 
 export interface TransformCallback {
-    (changed?: boolean): void;
+    (dirty?: boolean): void;
 };
 
 export interface TransformContext {

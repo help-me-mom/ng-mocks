@@ -44,9 +44,11 @@ module.exports = function(config) {
                     function(context, callback) {
                         if(context.module === "./style-import-tester.css") {
                             context.source = "module.exports = { color: '#f1a' };";
+                            return callback(true);
                         }
-                        callback();
-                    }
+                        return callback(false);
+                    },
+                    require("karma-typescript/transforms/es6-transform")({presets: ["es2015"]})
                 ],
                 validateSyntax: false
             },

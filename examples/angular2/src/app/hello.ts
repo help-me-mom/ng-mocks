@@ -6,7 +6,8 @@ import { Component } from "@angular/core";
     // moduleId: module.id,
     selector: "app-hello",
 
-    styles: [require("../assets/style/main.css")],
+    // styles: [require("../assets/style/main.css")]
+    // styleUrls: ["../assets/style/main.css"],
 
     // use templateUrl without moduleId + karma-typescript/transforms/angular2-template-url-rewriter in karma.conf.js
     templateUrl: "hello.html"

@@ -1,4 +1,5 @@
 import * as async from "async";
+import * as ESTree from "estree";
 import { Logger } from "log4js";
 import * as ts from "typescript";
 
@@ -42,8 +43,8 @@ export class Transformer {
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
                 process.nextTick(() => {
-                    transform(context, (changed: boolean) => {
-                        if (changed) {
+                    transform(context, (dirty: boolean) => {
+                        if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.tsconfig.options,
                                 fileName: context.filename
@@ -79,8 +80,9 @@ export class Transformer {
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
             process.nextTick(() => {
-                transform(context, () => {
-                    if (context.source !== requiredModule.source) {
+                transform(context, (dirty) => {
+                    if (dirty) {
+                        requiredModule.ast = (<ESTree.Program> context.ast);
                         requiredModule.source = context.source;
                     }
                     onTransformApplied();

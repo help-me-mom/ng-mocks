@@ -4,7 +4,7 @@ var MagicString = require("magic-string"),
 
 module.exports = function angularTemplateUrlRewriter(context, callback) {
 
-    var changed = false,
+    var dirty = false,
         magic = new MagicString(context.source);
 
     visitNode(context.ast);
@@ -24,7 +24,7 @@ module.exports = function angularTemplateUrlRewriter(context, callback) {
 
                             magic.overwrite(start, end, fixWindowsPath(templateUrl));
                             context.source = magic.toString();
-                            changed = true;
+                            dirty = true;
                         }
                     });
                 }
@@ -33,7 +33,7 @@ module.exports = function angularTemplateUrlRewriter(context, callback) {
         ts.forEachChild(node, visitNode);
     }
 
-    callback(changed);
+    callback(dirty);
 };
 
 function fixWindowsPath(value) {
