@@ -21,7 +21,7 @@ module.exports = function(config) {
             bundlerOptions: {
                 entrypoints: /\.spec\.ts$/,
                 transforms: [
-                    require("karma-typescript/transforms/angular2-template-url-rewriter")
+                    require("karma-typescript/transforms/angular2-transform")
                 ]
             },
             coverageOptions: {
