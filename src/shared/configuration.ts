@@ -1,3 +1,4 @@
+import * as acorn from "acorn";
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
@@ -66,7 +67,15 @@ export class Configuration {
 
     private configureBundler(): void {
 
-        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {});
+        let defaultAcornOptions: acorn.Options = {
+            ecmaVersion: 6,
+            sourceType: "module"
+        };
+
+        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {
+            acornOptions: defaultAcornOptions
+        });
+        this.bundlerOptions.acornOptions = this.defaultTo(this.bundlerOptions.acornOptions, defaultAcornOptions);
         this.bundlerOptions.addNodeGlobals = this.defaultTo(this.bundlerOptions.addNodeGlobals, true);
         this.bundlerOptions.entrypoints = this.defaultTo(this.bundlerOptions.entrypoints, /.*/);
         this.bundlerOptions.exclude = this.defaultTo(this.bundlerOptions.exclude, []);

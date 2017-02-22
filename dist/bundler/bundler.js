@@ -249,8 +249,7 @@ var Bundler = (function () {
                     requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
                 }
             }
-            // TODO: public config setting for parse options
-            requiredModule.ast = acorn.parse(requiredModule.source, { ecmaVersion: 6, sourceType: "module" });
+            requiredModule.ast = acorn.parse(requiredModule.source, _this.config.bundlerOptions.acornOptions);
             _this.transformer.applyTransforms(requiredModule, function (error) {
                 if (error) {
                     throw Error;

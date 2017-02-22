@@ -313,8 +313,7 @@ export class Bundler {
                 }
             }
 
-            // TODO: public config setting for parse options
-            requiredModule.ast = acorn.parse(requiredModule.source, { ecmaVersion: 6, sourceType: "module" });
+            requiredModule.ast = acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
             this.transformer.applyTransforms(requiredModule, (error: Error) => {
                 if (error) {
                     throw Error;

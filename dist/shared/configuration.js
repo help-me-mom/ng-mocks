@@ -30,7 +30,14 @@ var Configuration = (function () {
         return this.karma.reporters.indexOf(name) !== -1;
     };
     Configuration.prototype.configureBundler = function () {
-        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {});
+        var defaultAcornOptions = {
+            ecmaVersion: 6,
+            sourceType: "module"
+        };
+        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {
+            acornOptions: defaultAcornOptions
+        });
+        this.bundlerOptions.acornOptions = this.defaultTo(this.bundlerOptions.acornOptions, defaultAcornOptions);
         this.bundlerOptions.addNodeGlobals = this.defaultTo(this.bundlerOptions.addNodeGlobals, true);
         this.bundlerOptions.entrypoints = this.defaultTo(this.bundlerOptions.entrypoints, /.*/);
         this.bundlerOptions.exclude = this.defaultTo(this.bundlerOptions.exclude, []);
