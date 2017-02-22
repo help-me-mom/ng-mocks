@@ -1,6 +1,5 @@
-import glob = require("glob");
-import path = require("path");
-
+import * as glob from "glob";
+import * as path from "path";
 import * as ts from "typescript";
 
 import { Logger } from "log4js";

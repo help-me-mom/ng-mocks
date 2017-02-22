@@ -1,7 +1,8 @@
-import path = require("path");
+import * as lodash from "lodash";
+import * as path from "path";
+
 import { Collector, Store } from "istanbul";
 import { ConfigOptions } from "karma";
-import * as lodash from "lodash";
 import { Logger } from "log4js";
 
 import { Configuration } from "../shared/configuration";

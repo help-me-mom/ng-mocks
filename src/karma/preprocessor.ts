@@ -1,4 +1,4 @@
-import path = require("path");
+import * as path from "path";
 
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";

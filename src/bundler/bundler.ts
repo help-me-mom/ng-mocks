@@ -1,12 +1,12 @@
-import acorn = require("acorn");
-import async = require("async");
-import browserResolve = require("browser-resolve");
-import fs = require("fs");
-import glob = require("glob");
-import lodash = require("lodash");
-import os = require("os");
-import path = require("path");
-import tmp = require("tmp");
+import * as acorn from "acorn";
+import * as async from "async";
+import * as browserResolve from "browser-resolve";
+import * as fs from "fs";
+import * as glob from "glob";
+import * as lodash from "lodash";
+import * as os from "os";
+import * as path from "path";
+import * as tmp from "tmp";
 
 import { FilePattern } from "karma";
 import { Logger } from "log4js";

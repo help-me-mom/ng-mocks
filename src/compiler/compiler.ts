@@ -1,6 +1,7 @@
 import * as lodash from "lodash";
-import { Logger } from "log4js";
 import * as ts from "typescript";
+
+import { Logger } from "log4js";
 
 import { Benchmark } from "../shared/benchmark";
 import { File } from "../shared/file";

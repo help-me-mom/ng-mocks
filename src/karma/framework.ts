@@ -1,5 +1,5 @@
 import * as lodash from "lodash";
-import path = require("path");
+import * as path from "path";
 import * as ts from "typescript";
 
 import { ConfigOptions } from "karma";

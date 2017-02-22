@@ -1,4 +1,4 @@
-import path = require("path");
+import * as path from "path";
 import { EmitOutput } from "../compiler/emit-output";
 import { File } from "../shared/file";
 
