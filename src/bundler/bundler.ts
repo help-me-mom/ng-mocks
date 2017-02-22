@@ -22,6 +22,7 @@ import { Queued } from "./queued";
 import { RequiredModule } from "./required-module";
 import SourceMap = require("./source-map");
 import { Transformer } from "./transformer";
+import { Validator } from "./validator";
 
 export class Bundler {
 
@@ -45,7 +46,8 @@ export class Bundler {
 
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
-                private transformer: Transformer) { }
+                private transformer: Transformer,
+                private validator: Validator) { }
 
     public initialize(logger: any) {
         this.log = logger.create("bundler.karma-typescript");
@@ -223,19 +225,13 @@ export class Bundler {
                     this.createEntrypointFilenames() +
                     "})(this);";
 
-        if (this.config.bundlerOptions.validateSyntax) {
-            try {
-                acorn.parse(bundle);
-            }
-            catch (error) {
-                throw new Error("Invalid syntax in bundle: " + error.message + " in " + this.bundleFile.name);
-            }
-        }
-
         fs.writeFile(this.bundleFile.name, bundle, (error) => {
             if (error) {
                 throw error;
             }
+
+            this.validator.validate(bundle, this.bundleFile.name);
+
             onBundleFileWritten();
         });
     }

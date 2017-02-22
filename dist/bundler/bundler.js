@@ -13,10 +13,11 @@ var PathTool = require("../shared/path-tool");
 var required_module_1 = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
-    function Bundler(config, dependencyWalker, transformer) {
+    function Bundler(config, dependencyWalker, transformer, validator) {
         this.config = config;
         this.dependencyWalker = dependencyWalker;
         this.transformer = transformer;
+        this.validator = validator;
         this.BUNDLE_DELAY = 500;
         this.bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
         this.bundleBuffer = "";
@@ -169,24 +170,18 @@ var Bundler = (function () {
         });
     };
     Bundler.prototype.writeBundleFile = function (globals, onBundleFileWritten) {
+        var _this = this;
         var bundle = "(function(global){" + os.EOL +
             "global.wrappers={};" + os.EOL +
             globals +
             this.bundleBuffer +
             this.createEntrypointFilenames() +
             "})(this);";
-        if (this.config.bundlerOptions.validateSyntax) {
-            try {
-                acorn.parse(bundle);
-            }
-            catch (error) {
-                throw new Error("Invalid syntax in bundle: " + error.message + " in " + this.bundleFile.name);
-            }
-        }
         fs.writeFile(this.bundleFile.name, bundle, function (error) {
             if (error) {
                 throw error;
             }
+            _this.validator.validate(bundle, _this.bundleFile.name);
             onBundleFileWritten();
         });
     };

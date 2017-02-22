@@ -1,3 +1,4 @@
+import * as acorn from "acorn";
 import * as ESTree from "estree";
 import * as ts from "typescript";
 
@@ -31,6 +32,7 @@ export interface KarmaTypescriptConfig {
 }
 
 export interface BundlerOptions {
+    acornOptions: acorn.Options;
     addNodeGlobals?: boolean;
     entrypoints?: RegExp;
     exclude?: string[];
