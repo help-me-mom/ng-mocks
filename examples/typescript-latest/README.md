@@ -4,7 +4,7 @@ To run the example tests, issue the following commands:
 
 ```
 npm install karma-typescript
-cd node_modules/karma-typescript/example-project
+cd node_modules/karma-typescript/examples/typescript-latest
 npm install
 npm test
 ```
@@ -14,7 +14,9 @@ The example unit tests should now run in Karma and html test coverage should be 
 <img src="http://i.imgur.com/sc4Mswh.png" width="580" height="280" />
 
 ### Example code breakdown
-The `hello.component.spec.ts` unit test showcases module loading by using `import` but is still as simple as it gets; it imports the class to be tested and an interface required by the class. The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
+The `hello.component.spec.ts` unit test showcases module loading by using `import` but is still as simple as it gets;
+it imports the class to be tested and an interface required by the class.
+The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
 
 ```javascript
 import { IHelloService } from "./hello-service.interface";

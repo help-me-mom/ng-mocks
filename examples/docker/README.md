@@ -7,7 +7,7 @@
 First, install `karma-typescript` and change to the docker example directory:
 ```
 npm install karma-typescript
-cd node_modules/karma-typescript/example-project@docker
+cd node_modules/karma-typescript/examples/docker
 ```
 
 Build the example image and check that the local registry contains the images `node` and `karma-typescript/example`:

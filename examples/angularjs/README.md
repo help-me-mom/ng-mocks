@@ -4,7 +4,7 @@ To run the example tests, issue the following commands:
 
 ```
 npm install karma-typescript
-cd node_modules/karma-typescript/example-project@angularjs
+cd node_modules/karma-typescript/examples/angularjs
 npm install
 npm test
 ```
