@@ -4,6 +4,7 @@ import { Transformer } from "./bundler/transformer";
 import { Validator } from "./bundler/validator";
 
 import { Compiler } from "./compiler/compiler";
+import { Project } from "./compiler/project";
 
 import { Coverage } from "./istanbul/coverage";
 
@@ -24,8 +25,9 @@ let validator = new Validator(configuration);
 let coverage = new Coverage(configuration);
 let bundler = new Bundler(configuration, dependencyWalker, transformer, validator);
 let compiler = new Compiler();
+let project = new Project(configuration);
 
-let framework = new Framework(bundler, compiler, configuration, coverage, dependencyWalker, transformer);
+let framework = new Framework(bundler, compiler, configuration, coverage, dependencyWalker, project, transformer);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
 let reporter = new Reporter(configuration, sharedProcessedFiles);
 
