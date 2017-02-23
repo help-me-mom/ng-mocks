@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var lodash = require("lodash");
 var ts = require("typescript");
 var benchmark_1 = require("../shared/benchmark");

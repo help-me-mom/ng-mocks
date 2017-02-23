@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
 var async = require("async");
 var browserResolve = require("browser-resolve");

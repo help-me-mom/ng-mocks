@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var RequiredModule = (function () {
     function RequiredModule(moduleName, filename, source, requiredModules) {
         this.moduleName = moduleName;

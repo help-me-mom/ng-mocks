@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SourceMap = require("../bundler/source-map");
 var Coverage = (function () {
     function Coverage(config) {

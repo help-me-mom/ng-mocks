@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Benchmark = (function () {
     function Benchmark() {
         this.start = process.hrtime();

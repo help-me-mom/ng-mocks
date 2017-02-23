@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var ts = require("typescript");
 var Transformer = (function () {

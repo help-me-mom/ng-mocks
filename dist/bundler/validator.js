@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
 var os = require("os");
 var Validator = (function () {

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Framework = (function () {
     function Framework(bundler, compiler, config, coverage, dependencyWalker, project, transformer) {
         var _this = this;

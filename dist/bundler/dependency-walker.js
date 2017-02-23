@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var glob = require("glob");
 var lodash = require("lodash");
 var path = require("path");

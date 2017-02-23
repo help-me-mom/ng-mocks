@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var bundler_1 = require("./bundler/bundler");
 var dependency_walker_1 = require("./bundler/dependency-walker");
 var transformer_1 = require("./bundler/transformer");

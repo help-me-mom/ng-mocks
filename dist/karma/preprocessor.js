@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
 var Preprocessor = (function () {
     function Preprocessor(bundler, compiler, config, coverage, sharedProcessedFiles) {

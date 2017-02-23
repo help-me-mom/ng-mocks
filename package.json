@@ -109,6 +109,6 @@
     "gulp-util": "^3.0.7",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",
-    "typescript": "^2.1.5"
+    "typescript": "latest"
   }
 }
