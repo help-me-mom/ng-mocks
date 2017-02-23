@@ -1,5 +1,6 @@
 "use strict";
 var glob = require("glob");
+var lodash = require("lodash");
 var path = require("path");
 var ts = require("typescript");
 var required_module_1 = require("./required-module");
@@ -19,12 +20,19 @@ var DependencyWalker = (function () {
         var requiredModuleCount = 0;
         queue.forEach(function (queued) {
             queued.module.requiredModules = _this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
-            if (queued.emitOutput.sourceFile.resolvedModules &&
-                !queued.emitOutput.sourceFile.isDeclarationFile) {
-                Object.keys(queued.emitOutput.sourceFile.resolvedModules).forEach(function (moduleName) {
-                    var resolvedModule = queued.emitOutput.sourceFile.resolvedModules[moduleName];
-                    queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
-                });
+            var resolvedModules = queued.emitOutput.sourceFile.resolvedModules;
+            if (resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+                if (lodash.isMap(resolvedModules)) {
+                    resolvedModules.forEach(function (resolvedModule, moduleName) {
+                        queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                    });
+                }
+                else {
+                    Object.keys(resolvedModules).forEach(function (moduleName) {
+                        var resolvedModule = resolvedModules[moduleName];
+                        queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                    });
+                }
             }
             requiredModuleCount += queued.module.requiredModules.length;
         });

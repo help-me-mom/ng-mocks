@@ -109,15 +109,30 @@ var Framework = (function () {
         }
     };
     Framework.prototype.setOption = function (options, optionNameMap, key) {
-        var entry = optionNameMap[key.toLowerCase()];
-        if (options[key] && entry) {
-            if (typeof options[key] === "string") {
-                options[key] = entry.type[options[key].toLowerCase()] || 0;
+        if (lodash.isMap(optionNameMap)) {
+            var entry_1 = optionNameMap.get(key.toLowerCase());
+            if (options[key] && entry_1) {
+                if (typeof options[key] === "string" && lodash.isMap(entry_1.type)) {
+                    options[key] = entry_1.type.get(options[key].toLowerCase()) || 0;
+                }
+                if (Array.isArray(options[key]) && lodash.isString(entry_1.type)) {
+                    options[key].forEach(function (option, index) {
+                        options[key][index] = entry_1.element.type.get(option.toLowerCase());
+                    });
+                }
             }
-            if (Array.isArray(options[key])) {
-                options[key].forEach(function (option, index) {
-                    options[key][index] = entry.element.type[option.toLowerCase()];
-                });
+        }
+        else {
+            var entry_2 = optionNameMap[key.toLowerCase()];
+            if (options[key] && entry_2) {
+                if (typeof options[key] === "string") {
+                    options[key] = entry_2.type[options[key].toLowerCase()] || 0;
+                }
+                if (Array.isArray(options[key])) {
+                    options[key].forEach(function (option, index) {
+                        options[key][index] = entry_2.element.type[option.toLowerCase()];
+                    });
+                }
             }
         }
     };

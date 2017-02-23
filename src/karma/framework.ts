@@ -19,6 +19,24 @@ type ConfigFileJson = {
     error?: ts.Diagnostic;
 };
 
+// // Typescript 2.1.6 and older
+type OptionNameMapTs1x = {
+    name: string;
+    type: { [key: string]: number; };
+    element: {
+        type: { [key: string]: string; }
+    };
+};
+
+// Typescript 2.2 and newer
+type OptionNameMapTs2x = {
+    name: string;
+    type: string | Map<string, number>;
+    element: {
+        type: Map<string, string>
+    };
+};
+
 export class Framework {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
@@ -70,6 +88,7 @@ export class Framework {
     private getExistingOptions(): CompilerOptions {
 
         this.convertOptions(this.config.compilerOptions);
+
         return this.config.compilerOptions;
     }
 
@@ -175,18 +194,36 @@ export class Framework {
 
     private setOption(options: CompilerOptions, optionNameMap: any, key: string): void {
 
-        let entry = optionNameMap[key.toLowerCase()];
+        if (lodash.isMap(optionNameMap)) {
+            let entry = (<OptionNameMapTs2x> optionNameMap.get(key.toLowerCase()));
 
-        if (options[key] && entry) {
+            if (options[key] && entry) {
 
-            if (typeof options[key] === "string") {
-                options[key] = entry.type[options[key].toLowerCase()] || 0;
+                if (typeof options[key] === "string" && lodash.isMap(entry.type)) {
+                    options[key] = entry.type.get(options[key].toLowerCase()) || 0;
+                }
+
+                if (Array.isArray(options[key]) && lodash.isString(entry.type)) {
+                    options[key].forEach((option: string, index: number) => {
+                        options[key][index] = entry.element.type.get(option.toLowerCase());
+                    });
+                }
             }
+        }
+        else {
+            let entry = (<OptionNameMapTs1x> optionNameMap[key.toLowerCase()]);
 
-            if (Array.isArray(options[key])) {
-                options[key].forEach((option: string, index: number) => {
-                    options[key][index] = entry.element.type[option.toLowerCase()];
-                });
+            if (options[key] && entry) {
+
+                if (typeof options[key] === "string") {
+                    options[key] = entry.type[options[key].toLowerCase()] || 0;
+                }
+
+                if (Array.isArray(options[key])) {
+                    options[key].forEach((option: string, index: number) => {
+                        options[key][index] = entry.element.type[option.toLowerCase()];
+                    });
+                }
             }
         }
     }

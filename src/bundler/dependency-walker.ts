@@ -1,4 +1,5 @@
 import * as glob from "glob";
+import * as lodash from "lodash";
 import * as path from "path";
 import * as ts from "typescript";
 
@@ -29,14 +30,23 @@ export class DependencyWalker {
 
             queued.module.requiredModules = this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
 
-            if ((<any> queued.emitOutput.sourceFile).resolvedModules &&
-                !queued.emitOutput.sourceFile.isDeclarationFile) {
+            let resolvedModules = (<any> queued.emitOutput.sourceFile).resolvedModules;
 
-                Object.keys((<any> queued.emitOutput.sourceFile).resolvedModules).forEach((moduleName) => {
-                    let resolvedModule = (<any> queued.emitOutput.sourceFile).resolvedModules[moduleName];
-                    queued.module.requiredModules.push(
-                        new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
-                });
+            if (resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+
+                if (lodash.isMap(resolvedModules)) { // Typescript 2.2+
+                    resolvedModules.forEach((resolvedModule: any, moduleName: string) => {
+                        queued.module.requiredModules.push(
+                            new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                    });
+                }
+                else { // Typescript 1.6.2 - 2.1.6
+                    Object.keys(resolvedModules).forEach((moduleName: string) => {
+                        let resolvedModule = resolvedModules[moduleName];
+                        queued.module.requiredModules.push(
+                            new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                    });
+                }
             }
 
             requiredModuleCount += queued.module.requiredModules.length;
