@@ -24,10 +24,10 @@ function initialize(options) {
         if(isEs6(context.ast)) {
             context.source = babel.transform(context.source, options).code;
             context.ast = acorn.parse(context.source, { sourceType: "module" });
-            return callback(true);
+            return callback(undefined, true);
         }
         else {
-            return callback(false);
+            return callback(undefined, false);
         }
     };
 }

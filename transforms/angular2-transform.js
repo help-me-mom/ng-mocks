@@ -22,7 +22,9 @@ module.exports = function angular2Transform(context, callback) {
                             }
     
                             if(property.name.text === "styleUrls") {
+                                
                                 property.initializer.elements.forEach(function(e) {
+
                                     rewriteUrl(e);
                                 });
                             }
@@ -50,7 +52,7 @@ module.exports = function angular2Transform(context, callback) {
         context.source = magic.toString();
     }
 
-    callback(dirty);
+    callback(undefined, dirty);
 };
 
 function fixWindowsPath(value) {

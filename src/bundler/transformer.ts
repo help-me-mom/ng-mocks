@@ -1,7 +1,9 @@
 import * as async from "async";
 import * as ESTree from "estree";
-import { Logger } from "log4js";
+import * as os from "os";
 import * as ts from "typescript";
+
+import { Logger } from "log4js";
 
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
@@ -43,7 +45,8 @@ export class Transformer {
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
                 process.nextTick(() => {
-                    transform(context, (dirty: boolean) => {
+                    transform(context, (error: Error, dirty: boolean) => {
+                        this.handleError(error, transform);
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.tsconfig.options,
@@ -80,7 +83,8 @@ export class Transformer {
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
             process.nextTick(() => {
-                transform(context, (dirty) => {
+                transform(context, (error: Error, dirty: boolean) => {
+                    this.handleError(error, transform);
                     if (dirty) {
                         requiredModule.ast = (<ESTree.Program> context.ast);
                         requiredModule.source = context.source;
@@ -89,5 +93,13 @@ export class Transformer {
                 });
             });
         }, onTransformssApplied);
+    }
+
+    private handleError(error: Error, transform: Transform): void {
+        if (error) {
+            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
+                transform + os.EOL + os.EOL +
+                "callback error parameter: " + error + os.EOL);
+        }
     }
 }

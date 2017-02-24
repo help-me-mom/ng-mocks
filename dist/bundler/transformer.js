@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
+var os = require("os");
 var ts = require("typescript");
 var Transformer = (function () {
     function Transformer(config) {
@@ -30,7 +31,8 @@ var Transformer = (function () {
             };
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
-                    transform(context, function (dirty) {
+                    transform(context, function (error, dirty) {
+                        _this.handleError(error, transform);
                         if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: _this.tsconfig.options,
@@ -46,6 +48,7 @@ var Transformer = (function () {
         }, onTransformssApplied);
     };
     Transformer.prototype.applyTransforms = function (requiredModule, onTransformssApplied) {
+        var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
             process.nextTick(function () {
@@ -63,7 +66,8 @@ var Transformer = (function () {
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
-                transform(context, function (dirty) {
+                transform(context, function (error, dirty) {
+                    _this.handleError(error, transform);
                     if (dirty) {
                         requiredModule.ast = context.ast;
                         requiredModule.source = context.source;
@@ -72,6 +76,13 @@ var Transformer = (function () {
                 });
             });
         }, onTransformssApplied);
+    };
+    Transformer.prototype.handleError = function (error, transform) {
+        if (error) {
+            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
+                transform + os.EOL + os.EOL +
+                "callback error parameter: " + error + os.EOL);
+        }
     };
     return Transformer;
 }());
