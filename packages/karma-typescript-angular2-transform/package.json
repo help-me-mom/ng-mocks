@@ -1,7 +1,7 @@
 {
   "name": "karma-typescript-angular2-transform",
   "version": "1.0.0-beta.1",
-  "description": "karma-typescript transform for rewriting template and style urls in angular 2 components",
+  "description": "karma-typescript plugin for transforming template and style urls in Angular2 components.",
   "main": "dist/transform.js",
   "keywords": [
     "angular2",
