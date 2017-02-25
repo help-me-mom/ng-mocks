@@ -4,7 +4,7 @@
 [![Travis build status](https://travis-ci.org/monounity/karma-typescript-angular2-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-angular2-transform)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xn2ndi7r1bs7dyha/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-angular2-transform/branch/master)
 
-> :rocket: [karma-typescript](https://github.com/monounity/karma-typescript) plugin for transforming template and style urls in Angular2 components.
+> Karma-Typescript :heart: Angular
 
 This plugin rewrites relative urls in the `templateUrl` and `styleUrls` properties of Angular2 components,
 making sure that the Angular framework can resolve the urls when running tests with [karma-typescript](https://github.com/monounity/karma-typescript), eliminating the need to use `module.id` for resolving paths.
