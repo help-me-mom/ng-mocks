@@ -1,0 +1,44 @@
+{
+  "name": "karma-typescript-angular2-transform",
+  "version": "1.0.0-beta.1",
+  "description": "karma-typescript transform for rewriting template and style urls in angular 2 components",
+  "main": "dist/transform.js",
+  "keywords": [
+    "angular2",
+    "karma-typescript",
+    "typescript"
+  ],
+  "author": "monounity",
+  "contributors": [
+    "erikbarke"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-typescript-angular2-transform.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --noEmit --rootDir ./src",
+    "build:watch": "tsc -w --rootDir ./src",
+    "lint": "tslint --project tsconfig.json",
+    "test": "tape dist/test/*.spec.js | tap-spec"
+  },
+  "dependencies": {
+    "acorn": "^4.0.11",
+    "magic-string": "^0.19.0",
+    "typescript": "^2.2.1"
+  },
+  "devDependencies": {
+    "@angular/core": "^2.4.8",
+    "@types/acorn": "^4.0.0",
+    "@types/node": "^7.0.5",
+    "@types/tape": "^4.2.29",
+    "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.8",
+    "rxjs": "^5.2.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
+    "tslint": "^4.4.2",
+    "tslint-eslint-rules": "^3.3.0",
+    "zone.js": "^0.7.7"
+  }
+}
