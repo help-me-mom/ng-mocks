@@ -1,7 +1,7 @@
 # karma-typescript-angular2-transform
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript-angular2-transform.svg?branch=2.1.8)](https://travis-ci.org/monounity/karma-typescript-angular2-transform)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript-angular2-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-angular2-transform)
 
 > :rocket: [karma-typescript](https://github.com/monounity/karma-typescript) plugin for transforming template and style urls in Angular2 components.
 
