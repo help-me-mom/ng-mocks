@@ -10,7 +10,6 @@ making sure that the Angular framework can resolve the urls when running tests w
 
 The absolute urls are calculated using the `basePath` and `urlRoot` properties in `karma.conf.js`.
 
-
 ## Installation
 
 ```
