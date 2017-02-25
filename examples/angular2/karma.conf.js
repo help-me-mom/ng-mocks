@@ -8,11 +8,6 @@ module.exports = function(config) {
             { pattern: "src/app/**/*.+(ts|html)" }
         ],
 
-        //proxies: {
-            //"/src/app/": "/base/src/app/" // use this with moduleId + templateUrl: "hello.html"
-            //"/app/": "/base/src/app/" // use this without moduleId + templateUrl: "app/hello.html"
-        //},
-
         preprocessors: {
             "**/*.ts": ["karma-typescript"]
         },
@@ -21,7 +16,7 @@ module.exports = function(config) {
             bundlerOptions: {
                 entrypoints: /\.spec\.ts$/,
                 transforms: [
-                    require("karma-typescript/transforms/angular2-transform")
+                    require("karma-typescript-angular2-transform")
                 ]
             },
             coverageOptions: {
