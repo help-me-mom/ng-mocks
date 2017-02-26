@@ -1,0 +1,48 @@
+{
+  "name": "karma-typescript-es6-transform",
+  "version": "1.0.0-beta.1",
+  "description": "Plugin for transforming ES2015 javascript code to to ES5 syntax.",
+  "main": "dist/transform.js",
+  "keywords": [
+    "babel",
+    "ES2015",
+    "ES6",
+    "karma-typescript",
+    "typescript"
+  ],
+  "author": "monounity",
+  "contributors": [
+    "erikbarke"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-typescript-es6-transform.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --noEmit --rootDir ./src",
+    "build:watch": "tsc -w --rootDir ./src",
+    "lint": "tslint --project tsconfig.json",
+    "test": "tape dist/*.spec.js | tap-spec"
+  },
+  "dependencies": {
+    "acorn": "^4.0.11",
+    "babel-core": "^6.23.1",
+    "babel-preset-es2015": "^6.22.0",
+    "magic-string": "^0.19.0",
+    "typescript": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/acorn": "^4.0.0",
+    "@types/babel-core": "^6.7.14",
+    "@types/estree": "0.0.34",
+    "@types/node": "^7.0.5",
+    "@types/tape": "^4.2.29",
+    "babel-preset-es2016": "^6.22.0",
+    "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.8",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
+    "tslint": "^4.4.2",
+    "tslint-eslint-rules": "^3.3.0"
+  }
+}
