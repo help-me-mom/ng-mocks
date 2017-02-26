@@ -48,7 +48,7 @@ module.exports = function(config) {
                         }
                         return callback(undefined, false);
                     },
-                    require("karma-typescript/transforms/es6-transform")({presets: ["es2015"]})
+                    require("karma-typescript-es6-transform")({presets: ["es2015"]})
                 ],
                 validateSyntax: false
             },

@@ -66,6 +66,7 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
+    "karma-typescript-es6-transform": "latest",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
     "moment": "^2.17.1",
