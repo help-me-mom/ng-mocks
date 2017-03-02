@@ -10,6 +10,7 @@ var Transformer = (function () {
     }
     Transformer.prototype.initialize = function (tsconfig) {
         this.tsconfig = tsconfig;
+        this.log.debug("initialize");
     };
     Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformssApplied) {
         var _this = this;
@@ -20,7 +21,6 @@ var Transformer = (function () {
             });
             return;
         }
-        this.log.debug("Applying %s Typescript transform(s)", transforms.length);
         async.eachSeries(bundleQueue, function (queued, onQueueProcessed) {
             var context = {
                 ast: queued.emitOutput.sourceFile,
@@ -58,7 +58,6 @@ var Transformer = (function () {
             });
             return;
         }
-        this.log.debug("Applying %s Javascript transform(s)", transforms.length);
         var context = {
             ast: requiredModule.ast,
             basePath: this.config.karma.basePath,

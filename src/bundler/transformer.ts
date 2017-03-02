@@ -18,6 +18,7 @@ export class Transformer {
 
     public initialize(tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
+        this.log.debug("initialize");
     }
 
     public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
@@ -30,8 +31,6 @@ export class Transformer {
             });
             return;
         }
-
-        this.log.debug("Applying %s Typescript transform(s)", transforms.length);
 
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
@@ -73,8 +72,6 @@ export class Transformer {
             });
             return;
         }
-
-        this.log.debug("Applying %s Javascript transform(s)", transforms.length);
 
         let context: TransformContext = {
             ast: requiredModule.ast,
