@@ -151,36 +151,35 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   Defaults to `/\.(d|spec|test)\.ts$/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
 
 * **karmaTypescriptConfig.coverageOptions.threshold** - An object with minimum coverage thresholds. The threshold values can be set on
-  a global level and on a per-file level, with options to exclude files and directories, and override settings on a per-file basis using globbing patterns.
-    * A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.
-    * A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.
-    * Full threshold configuration:
-    ```javascript
-    threshhold: {
-        global: {
-            statements: 100,
-            branches: 100,
-            functions: -10,
-            lines: 100,
-            excludes: [
-                "src/foo/**/*.js"
-            ]
-        },
-        file: {
-            statements: -10,
-            branches: 100,
-            functions: 100,
-            lines: 100,
-            excludes: [
-                "src/bar/**/*.js"
-            ],
-            overrides: {
-                "src/file.js": {
-                    statements: 90
-                }
+  a global level and on a per-file level, with options to exclude files and directories, and override settings on a per-file basis using globbing patterns.<br/>
+  A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.<br/>
+  A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.
+```javascript
+threshhold: {
+    global: {
+        statements: 100,
+        branches: 100,
+        functions: -10,
+        lines: 100,
+        excludes: [
+            "src/foo/**/*.js"
+        ]
+    },
+    file: {
+        statements: -10,
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        excludes: [
+            "src/bar/**/*.js"
+        ],
+        overrides: {
+            "src/file.js": {
+                statements: 90
             }
         }
     }
+}
     ```
 
 * **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
