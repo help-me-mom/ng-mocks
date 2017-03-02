@@ -13,6 +13,7 @@ let createContext = (source: string): TransformContext => {
         filename: "file.js",
         module: "module",
         source,
+        tsVersion: "0.0.0",
         urlRoot: "/"
     };
 };
@@ -107,6 +108,7 @@ test("transformer should use custom compiler options", (t) => {
         filename: "file.js",
         module: "module",
         source,
+        tsVersion: "0.0.0",
         urlRoot: "/"
     };
 

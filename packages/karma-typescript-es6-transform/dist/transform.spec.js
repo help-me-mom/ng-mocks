@@ -10,6 +10,7 @@ var createContext = function (source) {
         filename: "file.js",
         module: "module",
         source: source,
+        tsVersion: "0.0.0",
         urlRoot: "/"
     };
 };
@@ -77,6 +78,7 @@ test("transformer should use custom compiler options", function (t) {
         filename: "file.js",
         module: "module",
         source: source,
+        tsVersion: "0.0.0",
         urlRoot: "/"
     };
     transform({ presets: ["es2016"] })(context, function () {
