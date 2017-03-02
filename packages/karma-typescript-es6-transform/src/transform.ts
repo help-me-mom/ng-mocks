@@ -1,8 +1,16 @@
 import * as acorn from "acorn";
 import * as babel from "babel-core";
 import * as ESTree from "estree";
+import * as fs from "fs";
+import * as log4js from "log4js";
 
 import { Transform, TransformCallback, TransformContext } from "karma-typescript/src/api";
+
+let config = "./log4js.json";
+if (fs.existsSync(config)) {
+    log4js.configure(config);
+}
+let log = log4js.getLogger("es6-transform.karma-typescript");
 
 let isEs6 = (ast: ESTree.Program): boolean => {
     if (ast.body) {
@@ -31,6 +39,8 @@ let initialize = (options?: babel.TransformOptions) => {
     let transform: Transform = (context: TransformContext, callback: TransformCallback) => {
 
         if (isEs6((<ESTree.Program> context.ast))) {
+
+            log.debug("Transforming %s", context.filename);
 
             if (!options.filename) {
                 options.filename = context.filename;
