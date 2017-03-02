@@ -27,6 +27,7 @@ var Transformer = (function () {
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),
+                tsVersion: ts.version,
                 urlRoot: _this.config.karma.urlRoot
             };
             async.eachSeries(transforms, function (transform, onTransformApplied) {
@@ -62,6 +63,7 @@ var Transformer = (function () {
             filename: requiredModule.filename,
             module: requiredModule.moduleName,
             source: requiredModule.source,
+            tsVersion: ts.version,
             urlRoot: this.config.karma.urlRoot
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {

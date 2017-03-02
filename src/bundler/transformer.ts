@@ -41,6 +41,7 @@ export class Transformer {
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),
+                tsVersion: ts.version,
                 urlRoot: this.config.karma.urlRoot
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
@@ -79,6 +80,7 @@ export class Transformer {
             filename: requiredModule.filename,
             module: requiredModule.moduleName,
             source: requiredModule.source,
+            tsVersion: ts.version,
             urlRoot: this.config.karma.urlRoot
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {

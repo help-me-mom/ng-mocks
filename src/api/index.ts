@@ -12,6 +12,7 @@ export interface TransformContext {
     filename: string;
     module: string;
     source: string;
+    tsVersion: string;
     urlRoot: string;
 }
 
