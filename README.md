@@ -180,7 +180,7 @@ threshhold: {
         }
     }
 }
-    ```
+```
 
 * **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
   The values will be merged with existing options.<br/>
