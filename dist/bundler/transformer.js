@@ -4,12 +4,12 @@ var async = require("async");
 var os = require("os");
 var ts = require("typescript");
 var Transformer = (function () {
-    function Transformer(config) {
+    function Transformer(config, log) {
         this.config = config;
+        this.log = log;
     }
-    Transformer.prototype.initialize = function (logger, tsconfig) {
+    Transformer.prototype.initialize = function (tsconfig) {
         this.tsconfig = tsconfig;
-        this.log = logger.create("transformer.karma-typescript");
     };
     Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformssApplied) {
         var _this = this;
@@ -20,6 +20,7 @@ var Transformer = (function () {
             });
             return;
         }
+        this.log.debug("Applying %s Typescript transform(s)", transforms.length);
         async.eachSeries(bundleQueue, function (queued, onQueueProcessed) {
             var context = {
                 ast: queued.emitOutput.sourceFile,
@@ -57,6 +58,7 @@ var Transformer = (function () {
             });
             return;
         }
+        this.log.debug("Applying %s Javascript transform(s)", transforms.length);
         var context = {
             ast: requiredModule.ast,
             basePath: this.config.karma.basePath,

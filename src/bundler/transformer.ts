@@ -12,14 +12,12 @@ import { RequiredModule } from "./required-module";
 
 export class Transformer {
 
-    private log: Logger;
     private tsconfig: ts.ParsedCommandLine;
 
-    constructor(private config: Configuration) { }
+    constructor(private config: Configuration, private log: Logger) { }
 
-    public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
+    public initialize(tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
-        this.log = logger.create("transformer.karma-typescript");
     }
 
     public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
@@ -32,6 +30,8 @@ export class Transformer {
             });
             return;
         }
+
+        this.log.debug("Applying %s Typescript transform(s)", transforms.length);
 
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
@@ -73,6 +73,8 @@ export class Transformer {
             });
             return;
         }
+
+        this.log.debug("Applying %s Javascript transform(s)", transforms.length);
 
         let context: TransformContext = {
             ast: requiredModule.ast,

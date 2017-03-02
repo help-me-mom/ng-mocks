@@ -6,7 +6,7 @@ var Preprocessor = (function () {
         var _this = this;
         this.create = function (karmaConfig, helper, logger) {
             _this.log = logger.create("preprocessor.karma-typescript");
-            config.initialize(karmaConfig, logger);
+            config.initialize(karmaConfig);
             coverage.initialize(helper, logger);
             return function (content, file, done) {
                 try {

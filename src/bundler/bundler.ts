@@ -40,17 +40,16 @@ export class Bundler {
     private entrypoints: string[] = [];
     private expandedFiles: string[] = [];
     private filenameCache: string[] = [];
-    private log: Logger;
     private lookupNameCache: { [key: string]: string; } = {};
     private orderedEntrypoints: string[] = [];
 
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
+                private log: Logger,
                 private transformer: Transformer,
                 private validator: Validator) { }
 
-    public initialize(logger: any) {
-        this.log = logger.create("bundler.karma-typescript");
+    public initialize() {
         this.builtins = this.config.bundlerOptions.addNodeGlobals ?
             require("browserify/lib/builtins") : undefined;
     }

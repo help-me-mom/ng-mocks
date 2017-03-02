@@ -10,13 +10,10 @@ import { RequiredModule } from "./required-module";
 
 export class DependencyWalker {
 
-    private log: Logger;
     private requireRegexp = /\brequire\b/;
     private walk = require("acorn/dist/walk");
 
-    public initialize(logger: any) {
-        this.log = logger.create("dependency-walker.karma-typescript");
-    }
+    constructor(private log: Logger) {}
 
     public hasRequire(s: string): boolean {
         return this.requireRegexp.test(s);

@@ -4,14 +4,13 @@ var istanbul = require("istanbul");
 var minimatch = require("minimatch");
 var path = require("path");
 var lodash_1 = require("lodash");
-var log4js = require("log4js");
 var Threshold = (function () {
-    function Threshold(config) {
+    function Threshold(config, log) {
         this.config = config;
+        this.log = log;
     }
     Threshold.prototype.check = function (browser, collector) {
         var _this = this;
-        this.log = this.log || log4js.getLogger("threshold.karma-typescript");
         var thresholdConfig = this.config.coverageOptions.threshold;
         var finalCoverage = collector.getFinalCoverage();
         var globalCoverage = this.excludeFiles(finalCoverage, thresholdConfig.global.excludes);

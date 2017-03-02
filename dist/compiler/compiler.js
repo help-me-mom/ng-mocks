@@ -4,8 +4,9 @@ var lodash = require("lodash");
 var ts = require("typescript");
 var benchmark_1 = require("../shared/benchmark");
 var Compiler = (function () {
-    function Compiler() {
+    function Compiler(log) {
         var _this = this;
+        this.log = log;
         this.COMPILE_DELAY = 200;
         this.compiledFiles = {};
         this.emitQueue = [];
@@ -22,9 +23,8 @@ var Compiler = (function () {
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
     }
-    Compiler.prototype.initialize = function (logger, tsconfig) {
+    Compiler.prototype.initialize = function (tsconfig) {
         this.tsconfig = tsconfig;
-        this.log = logger.create("compiler.karma-typescript");
         this.log.info("Compiling project using Typescript %s", ts.version);
         this.outputDiagnostics(tsconfig.errors);
     };

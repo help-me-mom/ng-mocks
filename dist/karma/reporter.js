@@ -14,7 +14,7 @@ var Reporter = (function () {
             var coverageMap;
             var remapOptions = config.remapOptions;
             self.log = logger.create("reporter.karma-typescript");
-            config.initialize(karmaConfig, logger);
+            config.initialize(karmaConfig);
             if (!config.hasReporter("coverage")) {
                 self.coverageReporter(karmaConfig, helper, logger, emitter);
             }

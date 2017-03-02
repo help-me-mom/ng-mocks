@@ -4,19 +4,14 @@ import * as path from "path";
 
 import { merge } from "lodash";
 import { Logger } from "log4js";
-import * as log4js from "log4js";
 
 import { Configuration } from "../shared/configuration";
 
 export class Threshold {
 
-    private log: Logger;
-
-    constructor(private config: Configuration) {}
+    constructor(private config: Configuration, private log: Logger) { }
 
     public check(browser: any, collector: any) {
-
-        this.log = this.log || log4js.getLogger("threshold.karma-typescript");
 
         let thresholdConfig = this.config.coverageOptions.threshold;
         let finalCoverage = collector.getFinalCoverage();

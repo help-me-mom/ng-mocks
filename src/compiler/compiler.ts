@@ -24,7 +24,6 @@ export class Compiler {
     private emitQueue: Queued[] = [];
     private hostGetSourceFile: {(filename: string, languageVersion: ts.ScriptTarget,
                                  onError?: (message: string) => void): ts.SourceFile};
-    private log: Logger;
     private program: ts.Program;
     private tsconfig: ts.ParsedCommandLine;
 
@@ -32,9 +31,10 @@ export class Compiler {
         this.compileProgram();
     }, this.COMPILE_DELAY);
 
-    public initialize(logger: any, tsconfig: ts.ParsedCommandLine): void {
+    constructor(private log: Logger) { }
+
+    public initialize(tsconfig: ts.ParsedCommandLine): void {
         this.tsconfig = tsconfig;
-        this.log = logger.create("compiler.karma-typescript");
         this.log.info("Compiling project using Typescript %s", ts.version);
         this.outputDiagnostics(tsconfig.errors);
     }

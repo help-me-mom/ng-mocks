@@ -5,12 +5,10 @@ var path = require("path");
 var ts = require("typescript");
 var PathTool = require("../shared/path-tool");
 var Project = (function () {
-    function Project(config) {
+    function Project(config, log) {
         this.config = config;
+        this.log = log;
     }
-    Project.prototype.initialize = function (logger) {
-        this.log = logger.create("project.karma-typescript");
-    };
     Project.prototype.resolveTsconfig = function (basePath) {
         var configFileName = this.getTsconfigFilename();
         var configFileJson = this.getConfigFileJson(configFileName);

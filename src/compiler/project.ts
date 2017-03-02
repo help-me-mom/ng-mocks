@@ -34,13 +34,7 @@ type OptionNameMapTs2x = {
 
 export class Project {
 
-    private log: Logger;
-
-    constructor(private config: Configuration) { }
-
-    public initialize(logger: any ): void {
-        this.log = logger.create("project.karma-typescript");
-    }
+    constructor(private config: Configuration, private log: Logger) { }
 
     public resolveTsconfig(basePath: string): ts.ParsedCommandLine {
         let configFileName = this.getTsconfigFilename();

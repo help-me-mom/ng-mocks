@@ -6,13 +6,11 @@ var path = require("path");
 var ts = require("typescript");
 var required_module_1 = require("./required-module");
 var DependencyWalker = (function () {
-    function DependencyWalker() {
+    function DependencyWalker(log) {
+        this.log = log;
         this.requireRegexp = /\brequire\b/;
         this.walk = require("acorn/dist/walk");
     }
-    DependencyWalker.prototype.initialize = function (logger) {
-        this.log = logger.create("dependency-walker.karma-typescript");
-    };
     DependencyWalker.prototype.hasRequire = function (s) {
         return this.requireRegexp.test(s);
     };

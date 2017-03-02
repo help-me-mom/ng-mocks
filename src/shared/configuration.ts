@@ -31,11 +31,11 @@ export class Configuration {
 
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
-    private log: Logger;
 
-    public initialize(config: ConfigOptions, logger: any) {
+    constructor(private log: Logger) { }
 
-        this.log = logger.create("configuration.karma-typescript");
+    public initialize(config: ConfigOptions) {
+
         this.karma = config || {};
         this.karmaTypescriptConfig = (<any> config).karmaTypescriptConfig || {};
 

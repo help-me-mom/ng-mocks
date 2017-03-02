@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
 var Configuration = (function () {
-    function Configuration() {
+    function Configuration(log) {
+        this.log = log;
     }
-    Configuration.prototype.initialize = function (config, logger) {
-        this.log = logger.create("configuration.karma-typescript");
+    Configuration.prototype.initialize = function (config) {
         this.karma = config || {};
         this.karmaTypescriptConfig = config.karmaTypescriptConfig || {};
         this.configureBundler();

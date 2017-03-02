@@ -14,9 +14,10 @@ var PathTool = require("../shared/path-tool");
 var required_module_1 = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
-    function Bundler(config, dependencyWalker, transformer, validator) {
+    function Bundler(config, dependencyWalker, log, transformer, validator) {
         this.config = config;
         this.dependencyWalker = dependencyWalker;
+        this.log = log;
         this.transformer = transformer;
         this.validator = validator;
         this.BUNDLE_DELAY = 500;
@@ -33,8 +34,7 @@ var Bundler = (function () {
         this.lookupNameCache = {};
         this.orderedEntrypoints = [];
     }
-    Bundler.prototype.initialize = function (logger) {
-        this.log = logger.create("bundler.karma-typescript");
+    Bundler.prototype.initialize = function () {
         this.builtins = this.config.bundlerOptions.addNodeGlobals ?
             require("browserify/lib/builtins") : undefined;
     };

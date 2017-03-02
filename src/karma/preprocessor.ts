@@ -20,7 +20,7 @@ export class Preprocessor {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
             this.log = logger.create("preprocessor.karma-typescript");
-            config.initialize(karmaConfig, logger);
+            config.initialize(karmaConfig);
             coverage.initialize(helper, logger);
 
             return (content: string, file: File, done: { (e: any, c: string): void}) => {
