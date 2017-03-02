@@ -65,7 +65,30 @@ module.exports = function(config) {
             },
             coverageOptions: {
                 instrumentation: true,
-                exclude: [/\.(d|spec|test)\.ts$/i]
+                exclude: [/\.(d|spec|test)\.ts$/i],
+                threshold: {
+                    global: {
+                        statements: 100,
+                        branches: 100,
+                        functions: 100,
+                        lines: 100,
+                        excludes: [
+                            "src/bundling/exclude/exclude-tester.ts"
+                        ]
+                    },
+                    file: {
+                        statements: 100,
+                        branches: 100,
+                        functions: 100,
+                        lines: 100,
+                        overrides: {
+                            "src/bundling/exclude/exclude-tester.ts": {
+                                lines: 85,
+                                statements: 85
+                            }
+                        }
+                    }
+                },
             },
             exclude: ["broken"],
             include: ["**/*.ts", "**/*.tsx"],

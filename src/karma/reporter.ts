@@ -5,6 +5,7 @@ import { Collector, Store } from "istanbul";
 import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
+import { Threshold } from "../istanbul/threshold";
 import { Configuration } from "../shared/configuration";
 import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
@@ -17,7 +18,7 @@ export class Reporter {
     private remap = require("remap-istanbul/lib/remap");
     private writeReport = require("remap-istanbul/lib/writeReport");
 
-    constructor(config: Configuration, sharedProcessedFiles: SharedProcessedFiles) {
+    constructor(config: Configuration, sharedProcessedFiles: SharedProcessedFiles, threshold: Threshold) {
 
         let self = this;
 
@@ -48,7 +49,7 @@ export class Reporter {
                 coverageMap.set(browser, result.coverage);
             };
 
-            this.onRunComplete = (browsers: any[]) => {
+            this.onRunComplete = (browsers: any[], results: any) => {
 
                 browsers.forEach((browser: any) => {
 
@@ -67,6 +68,10 @@ export class Reporter {
                         return sharedProcessedFiles[filepath];
                     };
                     let collector = self.remap((<any> unmappedCollector).getFinalCoverage(), remapOptions);
+
+                    if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
+                        results.exitCode = 1;
+                    }
 
                     Promise
                         .all(Object.keys(config.reports)

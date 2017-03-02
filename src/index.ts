@@ -7,6 +7,7 @@ import { Compiler } from "./compiler/compiler";
 import { Project } from "./compiler/project";
 
 import { Coverage } from "./istanbul/coverage";
+import { Threshold } from "./istanbul/threshold";
 
 import { Framework } from "./karma/framework";
 import { Preprocessor } from "./karma/preprocessor";
@@ -26,10 +27,11 @@ let coverage = new Coverage(configuration);
 let bundler = new Bundler(configuration, dependencyWalker, transformer, validator);
 let compiler = new Compiler();
 let project = new Project(configuration);
+let threshold = new Threshold(configuration);
 
 let framework = new Framework(bundler, compiler, configuration, coverage, dependencyWalker, project, transformer);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
-let reporter = new Reporter(configuration, sharedProcessedFiles);
+let reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],

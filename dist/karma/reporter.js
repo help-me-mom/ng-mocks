@@ -4,7 +4,7 @@ var lodash = require("lodash");
 var path = require("path");
 var istanbul_1 = require("istanbul");
 var Reporter = (function () {
-    function Reporter(config, sharedProcessedFiles) {
+    function Reporter(config, sharedProcessedFiles, threshold) {
         this.coverageReporter = require("karma-coverage/lib/reporter");
         this.remap = require("remap-istanbul/lib/remap");
         this.writeReport = require("remap-istanbul/lib/writeReport");
@@ -28,7 +28,7 @@ var Reporter = (function () {
                 }
                 coverageMap.set(browser, result.coverage);
             };
-            this.onRunComplete = function (browsers) {
+            this.onRunComplete = function (browsers, results) {
                 browsers.forEach(function (browser) {
                     var coverage = coverageMap.get(browser);
                     var unmappedCollector = new istanbul_1.Collector();
@@ -42,6 +42,9 @@ var Reporter = (function () {
                         return sharedProcessedFiles[filepath];
                     };
                     var collector = self.remap(unmappedCollector.getFinalCoverage(), remapOptions);
+                    if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
+                        results.exitCode = 1;
+                    }
                     Promise
                         .all(Object.keys(config.reports)
                         .map(function (reportType) {

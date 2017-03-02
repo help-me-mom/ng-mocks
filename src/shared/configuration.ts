@@ -1,6 +1,5 @@
-import * as acorn from "acorn";
-
 import { ConfigOptions } from "karma";
+import { merge } from "lodash";
 import { Logger } from "log4js";
 
 import {
@@ -28,6 +27,8 @@ export class Configuration {
     public transformPath: Function;
     public tsconfig: string;
 
+    public hasCoverageThreshold: boolean;
+
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
     private log: Logger;
@@ -35,10 +36,11 @@ export class Configuration {
     public initialize(config: ConfigOptions, logger: any) {
 
         this.log = logger.create("configuration.karma-typescript");
-        this.karma = this.defaultTo(config, {});
-        this.karmaTypescriptConfig = this.defaultTo((<any> config).karmaTypescriptConfig, {});
+        this.karma = config || {};
+        this.karmaTypescriptConfig = (<any> config).karmaTypescriptConfig || {};
 
         this.configureBundler();
+        this.configureCoverage();
         this.configureFramework();
         this.configurePreprocessor();
         this.configureReporter();
@@ -68,28 +70,57 @@ export class Configuration {
 
     private configureBundler(): void {
 
-        let defaultAcornOptions: acorn.Options = {
-            ecmaVersion: 6,
-            sourceType: "module"
+        let defaultBundlerOptions: BundlerOptions = {
+            acornOptions: {
+                ecmaVersion: 6,
+                sourceType: "module"
+            },
+            addNodeGlobals: true,
+            entrypoints: /.*/,
+            exclude: [],
+            ignore: [],
+            noParse: [],
+            resolve: {
+                alias: {},
+                directories: ["node_modules"],
+                extensions: [".js", ".json", ".ts", ".tsx"]
+
+            },
+            transforms: [],
+            validateSyntax: true
         };
 
-        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {
-            acornOptions: defaultAcornOptions
-        });
-        this.bundlerOptions.acornOptions = this.defaultTo(this.bundlerOptions.acornOptions, defaultAcornOptions);
-        this.bundlerOptions.addNodeGlobals = this.defaultTo(this.bundlerOptions.addNodeGlobals, true);
-        this.bundlerOptions.entrypoints = this.defaultTo(this.bundlerOptions.entrypoints, /.*/);
-        this.bundlerOptions.exclude = this.defaultTo(this.bundlerOptions.exclude, []);
-        this.bundlerOptions.ignore = this.defaultTo(this.bundlerOptions.ignore, []);
-        this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
-        this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
-        this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions =
-            this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
-        this.bundlerOptions.resolve.directories =
-            this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
-        this.bundlerOptions.transforms = this.defaultTo(this.bundlerOptions.transforms, []);
-        this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
+        this.bundlerOptions = merge(defaultBundlerOptions, this.karmaTypescriptConfig.bundlerOptions);
+    }
+
+    private configureCoverage() {
+
+        let defaultCoverageOptions: CoverageOptions = {
+            exclude: /\.(d|spec|test)\.ts$/i,
+            instrumentation: true,
+            threshold: {
+                file: {
+                    branches: 0,
+                    excludes: [],
+                    functions: 0,
+                    lines: 0,
+                    overrides: {},
+                    statements: 0
+                },
+                global: {
+                    branches: 0,
+                    excludes: [],
+                    functions: 0,
+                    lines: 0,
+                    statements: 0
+                }
+            }
+        };
+
+        this.hasCoverageThreshold = !!this.karmaTypescriptConfig.coverageOptions &&
+            !!this.karmaTypescriptConfig.coverageOptions.threshold;
+        this.coverageOptions = merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
+        this.assertCoverageExclude(this.coverageOptions.exclude);
     }
 
     private configureFramework(): void {
@@ -115,31 +146,29 @@ export class Configuration {
 
     private configurePreprocessor() {
 
-        this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
-        this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
-        this.coverageOptions.exclude = this.defaultTo(
-            this.assertCoverageExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i
-        );
-        this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, (filepath: string) => {
+        let transformPath = (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
-        });
+        };
+
+        this.transformPath = this.karmaTypescriptConfig.transformPath || transformPath;
     }
 
     private configureReporter() {
-
-        this.reports = this.defaultTo(this.karmaTypescriptConfig.reports, { html: "coverage" });
-        this.remapOptions = this.defaultTo(this.karmaTypescriptConfig.remapOptions, {});
+        this.reports = this.karmaTypescriptConfig.reports || { html: "coverage" };
+        this.remapOptions = this.karmaTypescriptConfig.remapOptions || {};
     }
 
     private configureKarmaCoverage() {
 
-        this.coverageReporter = this.defaultTo((<any> this.karma).coverageReporter, {
+        let defaultCoverageReporter = {
             instrumenterOptions: {
                 istanbul: { noCompact: true }
             }
-        });
+        };
 
-        if (this.karma.reporters) {
+        this.coverageReporter = merge(defaultCoverageReporter, (<any> this.karma).coverageReporter);
+
+        if (Array.isArray(this.karma.reporters)) {
             this.reporters = this.karma.reporters.slice();
             if (this.karma.reporters.indexOf("coverage") === -1){
                 this.reporters.push("coverage");
@@ -210,13 +239,5 @@ export class Configuration {
     private throwCoverageExcludeError(regex: any) {
         throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
             "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
-    }
-
-    private defaultTo<T>(...values: T[]) {
-        for (let value of values) {
-            if (value !== undefined) {
-                return value;
-            }
-        }
     }
 }

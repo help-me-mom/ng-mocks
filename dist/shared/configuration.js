@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = require("lodash");
 var Configuration = (function () {
     function Configuration() {
     }
     Configuration.prototype.initialize = function (config, logger) {
         this.log = logger.create("configuration.karma-typescript");
-        this.karma = this.defaultTo(config, {});
-        this.karmaTypescriptConfig = this.defaultTo(config.karmaTypescriptConfig, {});
+        this.karma = config || {};
+        this.karmaTypescriptConfig = config.karmaTypescriptConfig || {};
         this.configureBundler();
+        this.configureCoverage();
         this.configureFramework();
         this.configurePreprocessor();
         this.configureReporter();
@@ -31,27 +33,52 @@ var Configuration = (function () {
         return this.karma.reporters.indexOf(name) !== -1;
     };
     Configuration.prototype.configureBundler = function () {
-        var defaultAcornOptions = {
-            ecmaVersion: 6,
-            sourceType: "module"
+        var defaultBundlerOptions = {
+            acornOptions: {
+                ecmaVersion: 6,
+                sourceType: "module"
+            },
+            addNodeGlobals: true,
+            entrypoints: /.*/,
+            exclude: [],
+            ignore: [],
+            noParse: [],
+            resolve: {
+                alias: {},
+                directories: ["node_modules"],
+                extensions: [".js", ".json", ".ts", ".tsx"]
+            },
+            transforms: [],
+            validateSyntax: true
         };
-        this.bundlerOptions = this.defaultTo(this.karmaTypescriptConfig.bundlerOptions, {
-            acornOptions: defaultAcornOptions
-        });
-        this.bundlerOptions.acornOptions = this.defaultTo(this.bundlerOptions.acornOptions, defaultAcornOptions);
-        this.bundlerOptions.addNodeGlobals = this.defaultTo(this.bundlerOptions.addNodeGlobals, true);
-        this.bundlerOptions.entrypoints = this.defaultTo(this.bundlerOptions.entrypoints, /.*/);
-        this.bundlerOptions.exclude = this.defaultTo(this.bundlerOptions.exclude, []);
-        this.bundlerOptions.ignore = this.defaultTo(this.bundlerOptions.ignore, []);
-        this.bundlerOptions.noParse = this.defaultTo(this.bundlerOptions.noParse, []);
-        this.bundlerOptions.resolve = this.defaultTo(this.bundlerOptions.resolve, {});
-        this.bundlerOptions.resolve.alias = this.defaultTo(this.bundlerOptions.resolve.alias, {});
-        this.bundlerOptions.resolve.extensions =
-            this.defaultTo(this.bundlerOptions.resolve.extensions, [".js", ".json", ".ts", ".tsx"]);
-        this.bundlerOptions.resolve.directories =
-            this.defaultTo(this.bundlerOptions.resolve.directories, ["node_modules"]);
-        this.bundlerOptions.transforms = this.defaultTo(this.bundlerOptions.transforms, []);
-        this.bundlerOptions.validateSyntax = this.defaultTo(this.bundlerOptions.validateSyntax, true);
+        this.bundlerOptions = lodash_1.merge(defaultBundlerOptions, this.karmaTypescriptConfig.bundlerOptions);
+    };
+    Configuration.prototype.configureCoverage = function () {
+        var defaultCoverageOptions = {
+            exclude: /\.(d|spec|test)\.ts$/i,
+            instrumentation: true,
+            threshold: {
+                file: {
+                    branches: 0,
+                    excludes: [],
+                    functions: 0,
+                    lines: 0,
+                    overrides: {},
+                    statements: 0
+                },
+                global: {
+                    branches: 0,
+                    excludes: [],
+                    functions: 0,
+                    lines: 0,
+                    statements: 0
+                }
+            }
+        };
+        this.hasCoverageThreshold = !!this.karmaTypescriptConfig.coverageOptions &&
+            !!this.karmaTypescriptConfig.coverageOptions.threshold;
+        this.coverageOptions = lodash_1.merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
+        this.assertCoverageExclude(this.coverageOptions.exclude);
     };
     Configuration.prototype.configureFramework = function () {
         this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
@@ -71,24 +98,23 @@ var Configuration = (function () {
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
     };
     Configuration.prototype.configurePreprocessor = function () {
-        this.coverageOptions = this.defaultTo(this.karmaTypescriptConfig.coverageOptions, {});
-        this.coverageOptions.instrumentation = this.defaultTo(this.coverageOptions.instrumentation, true);
-        this.coverageOptions.exclude = this.defaultTo(this.assertCoverageExclude(this.coverageOptions.exclude), /\.(d|spec|test)\.ts$/i);
-        this.transformPath = this.defaultTo(this.karmaTypescriptConfig.transformPath, function (filepath) {
+        var transformPath = function (filepath) {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
-        });
+        };
+        this.transformPath = this.karmaTypescriptConfig.transformPath || transformPath;
     };
     Configuration.prototype.configureReporter = function () {
-        this.reports = this.defaultTo(this.karmaTypescriptConfig.reports, { html: "coverage" });
-        this.remapOptions = this.defaultTo(this.karmaTypescriptConfig.remapOptions, {});
+        this.reports = this.karmaTypescriptConfig.reports || { html: "coverage" };
+        this.remapOptions = this.karmaTypescriptConfig.remapOptions || {};
     };
     Configuration.prototype.configureKarmaCoverage = function () {
-        this.coverageReporter = this.defaultTo(this.karma.coverageReporter, {
+        var defaultCoverageReporter = {
             instrumenterOptions: {
                 istanbul: { noCompact: true }
             }
-        });
-        if (this.karma.reporters) {
+        };
+        this.coverageReporter = lodash_1.merge(defaultCoverageReporter, this.karma.coverageReporter);
+        if (Array.isArray(this.karma.reporters)) {
             this.reporters = this.karma.reporters.slice();
             if (this.karma.reporters.indexOf("coverage") === -1) {
                 this.reporters.push("coverage");
@@ -151,18 +177,6 @@ var Configuration = (function () {
     Configuration.prototype.throwCoverageExcludeError = function (regex) {
         throw new Error("karmaTypescriptConfig.coverageOptions.exclude " +
             "must be a single RegExp or an Array of RegExp, got [" + typeof regex + "]: " + regex);
-    };
-    Configuration.prototype.defaultTo = function () {
-        var values = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            values[_i] = arguments[_i];
-        }
-        for (var _a = 0, values_1 = values; _a < values_1.length; _a++) {
-            var value = values_1[_a];
-            if (value !== undefined) {
-                return value;
-            }
-        }
     };
     return Configuration;
 }());

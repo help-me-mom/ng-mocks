@@ -32,7 +32,7 @@ export interface KarmaTypescriptConfig {
 }
 
 export interface BundlerOptions {
-    acornOptions: acorn.Options;
+    acornOptions?: acorn.Options;
     addNodeGlobals?: boolean;
     entrypoints?: RegExp;
     exclude?: string[];
@@ -55,9 +55,35 @@ export interface CompilerOptions extends ts.CompilerOptions {
     [key: string]: any;
 }
 
+export interface ThresholdOptions {
+    file?: {
+        branches?: number;
+        excludes?: string[];
+        functions?: number;
+        lines?: number;
+        overrides?: {
+            [key: string]: {
+                branches?: number;
+                functions?: number;
+                lines?: number;
+                statements: number;
+            }
+        },
+        statements?: number;
+    };
+    global?: {
+        branches?: number;
+        excludes?: string[];
+        functions?: number;
+        lines?: number;
+        statements?: number;
+    };
+};
+
 export interface CoverageOptions {
     instrumentation?: boolean;
     exclude?: RegExp | RegExp[];
+    threshold?: ThresholdOptions;
 }
 
 export interface RemapOptions {
