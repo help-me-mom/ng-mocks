@@ -11,6 +11,7 @@ let createContext = () => {
         basePath: process.cwd(),
         filename, module: filename,
         source: fs.readFileSync(filename).toString(),
+        tsVersion: ts.version,
         urlRoot: "/custom-root/"
     };
 };
@@ -34,6 +35,25 @@ let compile = (filename: string): ts.SourceFile => {
 
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 let ast = compile(filename);
+
+test("transformer should check Typescript version", (t) => {
+
+    t.plan(2);
+
+    let context = createContext();
+    context.tsVersion = "0.0.0";
+
+    transform(context, (error: Error, dirty: boolean) => {
+        if (error) {
+            t.equal("Typescript version of karma-typescript (0.0.0) does not match " +
+                    "karma-typescript-angular2-transform Typescript version (" + ts.version + ")", error.message);
+            t.false(dirty);
+        }
+        else {
+            t.fail();
+        }
+    });
+});
 
 test("transformer should set dirty flag to true", (t) => {
 

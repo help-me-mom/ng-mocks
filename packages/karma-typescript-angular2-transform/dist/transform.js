@@ -5,6 +5,11 @@ var fixWindowsPath = function (value) {
     return value.replace(/\\/g, "/");
 };
 var transform = function (context, callback) {
+    if (ts.version !== context.tsVersion) {
+        return callback(new Error("Typescript version of karma-typescript (" +
+            context.tsVersion + ") does not match karma-typescript-angular2-transform Typescript version (" +
+            ts.version + ")"), false);
+    }
     var dirty = false;
     var MagicString = require("magic-string");
     var magic = new MagicString(context.source);

@@ -9,6 +9,12 @@ let fixWindowsPath = (value: string): string => {
 
 let transform: Transform = (context: TransformContext, callback: TransformCallback) => {
 
+    if (ts.version !== context.tsVersion) {
+        return callback(new Error("Typescript version of karma-typescript (" +
+            context.tsVersion + ") does not match karma-typescript-angular2-transform Typescript version (" +
+            ts.version + ")"), false);
+    }
+
     let dirty = false;
     let MagicString = require("magic-string");
     let magic = new MagicString(context.source);
