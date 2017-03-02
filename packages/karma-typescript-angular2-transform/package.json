@@ -26,11 +26,13 @@
   },
   "dependencies": {
     "acorn": "^4.0.11",
+    "log4js": "^1.1.1",
     "magic-string": "^0.19.0"
   },
   "devDependencies": {
     "@angular/core": "^2.4.8",
     "@types/acorn": "^4.0.0",
+    "@types/log4js": "0.0.32",
     "@types/node": "^7.0.5",
     "@types/tape": "^4.2.29",
     "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.8",

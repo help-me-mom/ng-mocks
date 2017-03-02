@@ -1,6 +1,13 @@
 "use strict";
+var fs = require("fs");
+var log4js = require("log4js");
 var path = require("path");
 var ts = require("typescript");
+var config = "./log4js.json";
+if (fs.existsSync(config)) {
+    log4js.configure(config);
+}
+var log = log4js.getLogger("angular2-transform.karma-typescript");
 var fixWindowsPath = function (value) {
     return value.replace(/\\/g, "/");
 };
@@ -19,6 +26,7 @@ var transform = function (context, callback) {
         var templateDir = path.dirname(context.filename);
         var relativeTemplateDir = path.relative(context.basePath, templateDir);
         var styleUrl = path.join(context.urlRoot, "base", relativeTemplateDir, node.text);
+        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.filename);
         magic.overwrite(start, end, fixWindowsPath(styleUrl));
         dirty = true;
     };
