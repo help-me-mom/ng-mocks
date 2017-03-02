@@ -18,7 +18,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsc --noEmit --rootDir ./src",
+    "build": "tsc --rootDir ./src",
+    "build:ci": "tsc --noEmit --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "tslint --project tsconfig.json",
     "test": "tape dist/test/*.spec.js | tap-spec"
