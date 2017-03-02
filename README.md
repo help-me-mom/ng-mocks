@@ -152,8 +152,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * **karmaTypescriptConfig.coverageOptions.threshold** - An object with minimum coverage thresholds. The threshold values can be set on
   a global level and on a per-file level, with options to exclude files and directories, and override settings on a per-file basis using globbing patterns.
-  * A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.
-  * A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.<br/><br/>
+    * A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.
+    * A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.
+    * Full threshold configuration:
     ```javascript
     threshhold: {
         global: {
