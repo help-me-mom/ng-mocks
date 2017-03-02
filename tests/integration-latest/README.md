@@ -10,6 +10,6 @@ Each `dev` tests deletes the coverage folder and copies the `karma-typescript` s
 * `npm run dev:ci`, runs all tests once (continous integration)
 * `npm run dev:ci:angular2`, runs the Angular2 tests once (continous integration)
 * `npm run dev:ci:core`, runs the core tests once (continous integration)
-* `npm run dev:ci:core`, runs the empty file tests once (continous integration)
-* `npm run dev:ci:core`, runs the no module tests once (continous integration)
+* `npm run dev:ci:emptyfile`, runs the empty file tests once (continous integration)
+* `npm run dev:ci:no-module`, runs the no module tests once (continous integration)
 * `npm run dev:ci:react`, runs the React tests once (continous integration)
