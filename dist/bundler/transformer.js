@@ -23,13 +23,21 @@ var Transformer = (function () {
         }
         async.eachSeries(bundleQueue, function (queued, onQueueProcessed) {
             var context = {
-                ast: queued.emitOutput.sourceFile,
-                basePath: _this.config.karma.basePath,
-                filename: queued.file.originalPath,
+                log: {
+                    appenders: _this.config.karma.loggers,
+                    level: _this.config.karma.logLevel
+                },
                 module: queued.file.originalPath,
+                paths: {
+                    basepath: _this.config.karma.basePath,
+                    filename: queued.file.originalPath,
+                    urlroot: _this.config.karma.urlRoot
+                },
                 source: queued.emitOutput.sourceFile.getFullText(),
-                tsVersion: ts.version,
-                urlRoot: _this.config.karma.urlRoot
+                ts: {
+                    ast: queued.emitOutput.sourceFile,
+                    version: ts.version
+                }
             };
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
@@ -38,7 +46,7 @@ var Transformer = (function () {
                         if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: _this.tsconfig.options,
-                                fileName: context.filename
+                                fileName: context.paths.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;
                             queued.emitOutput.sourceMapText = transpiled.sourceMapText;
@@ -59,20 +67,27 @@ var Transformer = (function () {
             return;
         }
         var context = {
-            ast: requiredModule.ast,
-            basePath: this.config.karma.basePath,
-            filename: requiredModule.filename,
+            js: {
+                ast: requiredModule.ast
+            },
+            log: {
+                appenders: this.config.karma.loggers,
+                level: this.config.karma.logLevel
+            },
             module: requiredModule.moduleName,
-            source: requiredModule.source,
-            tsVersion: ts.version,
-            urlRoot: this.config.karma.urlRoot
+            paths: {
+                basepath: this.config.karma.basePath,
+                filename: requiredModule.filename,
+                urlroot: this.config.karma.urlRoot
+            },
+            source: requiredModule.source
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
                 transform(context, function (error, dirty) {
                     _this.handleError(error, transform);
                     if (dirty) {
-                        requiredModule.ast = context.ast;
+                        requiredModule.ast = context.js.ast;
                         requiredModule.source = context.source;
                     }
                     onTransformApplied();

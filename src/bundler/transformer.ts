@@ -1,5 +1,4 @@
 import * as async from "async";
-import * as ESTree from "estree";
 import * as os from "os";
 import * as ts from "typescript";
 
@@ -35,13 +34,21 @@ export class Transformer {
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
             let context: TransformContext = {
-                ast: queued.emitOutput.sourceFile,
-                basePath: this.config.karma.basePath,
-                filename: queued.file.originalPath,
+                log: {
+                    appenders: this.config.karma.loggers,
+                    level: this.config.karma.logLevel
+                },
                 module: queued.file.originalPath,
+                paths: {
+                    basepath: this.config.karma.basePath,
+                    filename: queued.file.originalPath,
+                    urlroot: this.config.karma.urlRoot
+                },
                 source: queued.emitOutput.sourceFile.getFullText(),
-                tsVersion: ts.version,
-                urlRoot: this.config.karma.urlRoot
+                ts: {
+                    ast: queued.emitOutput.sourceFile,
+                    version: ts.version
+                }
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
                 process.nextTick(() => {
@@ -50,7 +57,7 @@ export class Transformer {
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.tsconfig.options,
-                                fileName: context.filename
+                                fileName: context.paths.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;
                             queued.emitOutput.sourceMapText = transpiled.sourceMapText;
@@ -74,20 +81,27 @@ export class Transformer {
         }
 
         let context: TransformContext = {
-            ast: requiredModule.ast,
-            basePath: this.config.karma.basePath,
-            filename: requiredModule.filename,
+            js: {
+                ast: requiredModule.ast
+            },
+            log: {
+                appenders: this.config.karma.loggers,
+                level: this.config.karma.logLevel
+            },
             module: requiredModule.moduleName,
-            source: requiredModule.source,
-            tsVersion: ts.version,
-            urlRoot: this.config.karma.urlRoot
+            paths: {
+                basepath: this.config.karma.basePath,
+                filename: requiredModule.filename,
+                urlroot: this.config.karma.urlRoot
+            },
+            source: requiredModule.source
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
             process.nextTick(() => {
                 transform(context, (error: Error, dirty: boolean) => {
                     this.handleError(error, transform);
                     if (dirty) {
-                        requiredModule.ast = (<ESTree.Program> context.ast);
+                        requiredModule.ast = context.js.ast;
                         requiredModule.source = context.source;
                     }
                     onTransformApplied();

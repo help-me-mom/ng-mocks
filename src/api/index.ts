@@ -1,19 +1,39 @@
 import * as acorn from "acorn";
 import * as ESTree from "estree";
+import * as log4js from "log4js";
 import * as ts from "typescript";
 
 export interface TransformCallback {
     (error: Error, dirty: boolean): void;
 };
 
-export interface TransformContext {
-    ast: ESTree.Program | ts.SourceFile;
-    basePath: string;
+export interface TransformContextLogOptions {
+    appenders: log4js.AppenderConfigBase[];
+    level: string;
+}
+
+export interface TransformContextPaths {
+    basepath: string;
     filename: string;
+    urlroot: string;
+}
+
+export interface TransformContextJs{
+    ast: ESTree.Program;
+}
+
+export interface TransformContextTs{
+    version: string;
+    ast: ts.SourceFile;
+}
+
+export interface TransformContext {
+    paths: TransformContextPaths;
+    js?: TransformContextJs;
+    log: TransformContextLogOptions;
     module: string;
     source: string;
-    tsVersion: string;
-    urlRoot: string;
+    ts?: TransformContextTs;
 }
 
 export interface Transform {
