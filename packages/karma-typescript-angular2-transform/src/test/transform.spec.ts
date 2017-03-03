@@ -3,18 +3,9 @@ import * as path from "path";
 import * as test from "tape";
 import * as ts from "typescript";
 
-import * as transform from "../transform";
+import { TransformContext } from "karma-typescript/src/api";
 
-let createContext = () => {
-    return {
-        ast,
-        basePath: process.cwd(),
-        filename, module: filename,
-        source: fs.readFileSync(filename).toString(),
-        tsVersion: ts.version,
-        urlRoot: "/custom-root/"
-    };
-};
+import * as transform from "../transform";
 
 let compile = (filename: string): ts.SourceFile => {
     let options: ts.CompilerOptions = {
@@ -36,12 +27,55 @@ let compile = (filename: string): ts.SourceFile => {
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 let ast = compile(filename);
 
+let createContext = (): TransformContext => {
+    return {
+        log: {
+            appenders: [{
+                layout: {
+                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                    type: "pattern"
+                },
+                type: "console"
+            }],
+            level: "INFO"
+        },
+        module: filename,
+        paths: {
+            basepath: process.cwd(),
+            filename,
+            urlroot: "/custom-root/"
+        },
+        source: fs.readFileSync(filename).toString(),
+        ts: {
+            ast,
+            version: ts.version
+        }
+    };
+};
+
+test("transformer should check ts property", (t) => {
+
+    t.plan(1);
+
+    let context = createContext();
+    context.ts = undefined;
+
+    transform(context, (error: Error, dirty: boolean) => {
+        if (error) {
+            t.fail();
+        }
+        else {
+            t.false(dirty);
+        }
+    });
+});
+
 test("transformer should check Typescript version", (t) => {
 
     t.plan(2);
 
     let context = createContext();
-    context.tsVersion = "0.0.0";
+    context.ts.version = "0.0.0";
 
     transform(context, (error: Error, dirty: boolean) => {
         if (error) {

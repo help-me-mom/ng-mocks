@@ -5,16 +5,6 @@ var path = require("path");
 var test = require("tape");
 var ts = require("typescript");
 var transform = require("../transform");
-var createContext = function () {
-    return {
-        ast: ast,
-        basePath: process.cwd(),
-        filename: filename, module: filename,
-        source: fs.readFileSync(filename).toString(),
-        tsVersion: ts.version,
-        urlRoot: "/custom-root/"
-    };
-};
 var compile = function (filename) {
     var options = {
         experimentalDecorators: true,
@@ -33,10 +23,48 @@ var compile = function (filename) {
 };
 var filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 var ast = compile(filename);
+var createContext = function () {
+    return {
+        log: {
+            appenders: [{
+                    layout: {
+                        pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                        type: "pattern"
+                    },
+                    type: "console"
+                }],
+            level: "INFO"
+        },
+        module: filename,
+        paths: {
+            basepath: process.cwd(),
+            filename: filename,
+            urlroot: "/custom-root/"
+        },
+        source: fs.readFileSync(filename).toString(),
+        ts: {
+            ast: ast,
+            version: ts.version
+        }
+    };
+};
+test("transformer should check ts property", function (t) {
+    t.plan(1);
+    var context = createContext();
+    context.ts = undefined;
+    transform(context, function (error, dirty) {
+        if (error) {
+            t.fail();
+        }
+        else {
+            t.false(dirty);
+        }
+    });
+});
 test("transformer should check Typescript version", function (t) {
     t.plan(2);
     var context = createContext();
-    context.tsVersion = "0.0.0";
+    context.ts.version = "0.0.0";
     transform(context, function (error, dirty) {
         if (error) {
             t.equal("Typescript version of karma-typescript (0.0.0) does not match " +
