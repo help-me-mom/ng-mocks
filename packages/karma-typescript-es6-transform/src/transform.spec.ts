@@ -8,15 +8,43 @@ import * as transform from "./transform";
 
 let createContext = (source: string): TransformContext => {
     return {
-        ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" }),
-        basePath: process.cwd(),
-        filename: "file.js",
+        js: {
+            ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" })
+        },
+        log: {
+            appenders: [{
+                layout: {
+                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                    type: "pattern"
+                },
+                type: "console"
+            }],
+            level: "INFO"
+        },
         module: "module",
-        source,
-        tsVersion: "0.0.0",
-        urlRoot: "/"
+        paths: {
+            basepath: process.cwd(),
+            filename: "file.js",
+            urlroot: "/"
+        },
+        source
     };
 };
+
+test("transformer should check js property", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("export * from './foo.js';");
+    context.js = undefined;
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.false(dirty);
+    });
+});
 
 test("transformer should detect es6 wildcard export", (t) => {
 
@@ -93,7 +121,7 @@ test("transformer should compile and set new ast", (t) => {
     let context = createContext("export default function(){}");
 
     transform()(context, () => {
-        t.equal((<ESTree.Program> context.ast).body[0].type, "ExpressionStatement");
+        t.equal((<ESTree.Program> context.js.ast).body[0].type, "ExpressionStatement");
     });
 });
 
@@ -102,14 +130,27 @@ test("transformer should use custom compiler options", (t) => {
     t.plan(1);
 
     let source = "let x = 2; x **= 3; export default x;";
-    let context = {
-        ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" }),
-        basePath: process.cwd(),
-        filename: "file.js",
+    let context: TransformContext = {
+        js: {
+            ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" })
+        },
+        log: {
+            appenders: [{
+                layout: {
+                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                    type: "pattern"
+                },
+                type: "console"
+            }],
+            level: "INFO"
+        },
         module: "module",
-        source,
-        tsVersion: "0.0.0",
-        urlRoot: "/"
+        paths: {
+            basepath: process.cwd(),
+            filename: "file.js",
+            urlroot: "/"
+        },
+        source
     };
 
     transform({ presets: ["es2016"] })(context, () => {

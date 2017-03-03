@@ -1,13 +1,8 @@
 "use strict";
 var acorn = require("acorn");
 var babel = require("babel-core");
-var fs = require("fs");
 var log4js = require("log4js");
-var config = "./log4js.json";
-if (fs.existsSync(config)) {
-    log4js.configure(config);
-}
-var log = log4js.getLogger("es6-transform.karma-typescript");
+var log;
 var isEs6 = function (ast) {
     if (ast.body) {
         for (var _i = 0, _a = ast.body; _i < _a.length; _i++) {
@@ -30,13 +25,21 @@ var initialize = function (options) {
         options.presets = ["es2015"];
     }
     var transform = function (context, callback) {
-        if (isEs6(context.ast)) {
-            log.debug("Transforming %s", context.filename);
+        if (!context.js) {
+            return callback(undefined, false);
+        }
+        if (!log) {
+            log4js.setGlobalLogLevel(context.log.level);
+            log4js.configure({ appenders: context.log.appenders });
+            log = log4js.getLogger("es6-transform.karma-typescript");
+        }
+        if (isEs6(context.js.ast)) {
+            log.debug("Transforming %s", context.paths.filename);
             if (!options.filename) {
-                options.filename = context.filename;
+                options.filename = context.paths.filename;
             }
             context.source = babel.transform(context.source, options).code;
-            context.ast = acorn.parse(context.source, { sourceType: "module" });
+            context.js.ast = acorn.parse(context.source, { sourceType: "module" });
             return callback(undefined, true);
         }
         else {
