@@ -35,7 +35,7 @@
     "@types/log4js": "0.0.32",
     "@types/node": "^7.0.5",
     "@types/tape": "^4.2.29",
-    "karma-typescript": "https://github.com/monounity/karma-typescript.git#2.1.8",
+    "karma-typescript": "beta",
     "rxjs": "^5.2.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
