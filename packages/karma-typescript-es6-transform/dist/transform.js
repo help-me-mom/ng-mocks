@@ -19,7 +19,7 @@ var isEs6 = function (ast) {
     }
     return false;
 };
-var initialize = function (options) {
+var configure = function (options) {
     options = options || {};
     if (!options.presets || options.presets.length === 0) {
         options.presets = ["es2015"];
@@ -27,11 +27,6 @@ var initialize = function (options) {
     var transform = function (context, callback) {
         if (!context.js) {
             return callback(undefined, false);
-        }
-        if (!log) {
-            log4js.setGlobalLogLevel(context.log.level);
-            log4js.configure({ appenders: context.log.appenders });
-            log = log4js.getLogger("es6-transform.karma-typescript");
         }
         if (isEs6(context.js.ast)) {
             log.debug("Transforming %s", context.paths.filename);
@@ -46,6 +41,11 @@ var initialize = function (options) {
             return callback(undefined, false);
         }
     };
-    return transform;
+    var initialize = function (logOptions) {
+        log4js.setGlobalLogLevel(logOptions.level);
+        log4js.configure({ appenders: logOptions.appenders });
+        log = log4js.getLogger("es6-transform.karma-typescript");
+    };
+    return Object.assign(transform, { initialize: initialize });
 };
-module.exports = initialize;
+module.exports = configure;

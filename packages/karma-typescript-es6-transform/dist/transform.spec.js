@@ -3,20 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
 var test = require("tape");
 var transform = require("./transform");
+var logOptions = {
+    appenders: [{
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }],
+    level: "INFO"
+};
+transform().initialize(logOptions);
 var createContext = function (source) {
     return {
         js: {
             ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" })
-        },
-        log: {
-            appenders: [{
-                    layout: {
-                        pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                        type: "pattern"
-                    },
-                    type: "console"
-                }],
-            level: "INFO"
         },
         module: "module",
         paths: {
@@ -99,16 +100,6 @@ test("transformer should use custom compiler options", function (t) {
     var context = {
         js: {
             ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" })
-        },
-        log: {
-            appenders: [{
-                    layout: {
-                        pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                        type: "pattern"
-                    },
-                    type: "console"
-                }],
-            level: "INFO"
         },
         module: "module",
         paths: {

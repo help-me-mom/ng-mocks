@@ -3,7 +3,7 @@ import * as babel from "babel-core";
 import * as ESTree from "estree";
 import * as log4js from "log4js";
 
-import { Transform, TransformCallback, TransformContext } from "karma-typescript/src/api";
+import * as kt from "karma-typescript/src/api/transforms";
 
 let log: log4js.Logger;
 
@@ -23,7 +23,7 @@ let isEs6 = (ast: ESTree.Program): boolean => {
     return false;
 };
 
-let initialize = (options?: babel.TransformOptions) => {
+let configure = (options?: babel.TransformOptions) => {
 
     options = options || {};
 
@@ -31,16 +31,10 @@ let initialize = (options?: babel.TransformOptions) => {
         options.presets = ["es2015"];
     }
 
-    let transform: Transform = (context: TransformContext, callback: TransformCallback) => {
+    let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
 
         if (!context.js) {
             return callback(undefined, false);
-        }
-
-        if (!log) {
-            log4js.setGlobalLogLevel(context.log.level);
-            log4js.configure({ appenders: context.log.appenders });
-            log = log4js.getLogger("es6-transform.karma-typescript");
         }
 
         if (isEs6(context.js.ast)) {
@@ -61,7 +55,13 @@ let initialize = (options?: babel.TransformOptions) => {
         }
     };
 
-    return transform;
+    let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
+        log4js.setGlobalLogLevel(logOptions.level);
+        log4js.configure({ appenders: logOptions.appenders });
+        log = log4js.getLogger("es6-transform.karma-typescript");
+    };
+
+    return Object.assign(transform, { initialize });
 };
 
-export = initialize;
+export = configure;

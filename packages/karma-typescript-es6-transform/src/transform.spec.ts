@@ -1,25 +1,27 @@
 import * as acorn from "acorn";
 import * as ESTree from "estree";
+import * as kt from "karma-typescript/src/api/transforms";
 import * as test from "tape";
-
-import { TransformContext } from "karma-typescript/src/api";
 
 import * as transform from "./transform";
 
-let createContext = (source: string): TransformContext => {
+let logOptions: kt.TransformInitializeLogOptions = {
+    appenders: [{
+        layout: {
+            pattern: "%[%d{DATE}:%p [%c]: %]%m",
+            type: "pattern"
+        },
+        type: "console"
+    }],
+    level: "INFO"
+};
+
+transform().initialize(logOptions);
+
+let createContext = (source: string): kt.TransformContext => {
     return {
         js: {
             ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" })
-        },
-        log: {
-            appenders: [{
-                layout: {
-                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                    type: "pattern"
-                },
-                type: "console"
-            }],
-            level: "INFO"
         },
         module: "module",
         paths: {
@@ -130,19 +132,9 @@ test("transformer should use custom compiler options", (t) => {
     t.plan(1);
 
     let source = "let x = 2; x **= 3; export default x;";
-    let context: TransformContext = {
+    let context: kt.TransformContext = {
         js: {
             ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" })
-        },
-        log: {
-            appenders: [{
-                layout: {
-                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                    type: "pattern"
-                },
-                type: "console"
-            }],
-            level: "INFO"
         },
         module: "module",
         paths: {
