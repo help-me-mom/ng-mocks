@@ -1,0 +1,33 @@
+{
+  "name": "karma-typescript-example-project-1-6-2",
+  "version": "2.1.7",
+  "description": "",
+  "author": "monounity",
+  "contributors": [
+    {
+      "name": "erikbarke"
+    }
+  ],
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "gulp dev --cwd . && karma start",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
+    "dev:ci:phantomjs": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
+    "test": "karma start"
+  },
+  "dependencies": {
+    "@types/jasmine": "^2.5.35",
+    "jasmine-core": "^2.4.1",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "../../",
+    "typescript": "1.6.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "karma-phantomjs-launcher": "^1.0.2"
+  }
+}

@@ -3,4 +3,5 @@ node_js: node
 install: ./ci/install.sh
 script:
   - npm run lint
+  - npm run build:ci
   - npm test

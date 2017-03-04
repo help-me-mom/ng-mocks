@@ -10,8 +10,14 @@ gulp.task("clear", function(cb) {
 });
 
 gulp.task("copy", function(cb) {
-    copy("../index.js", "./node_modules/karma-typescript", function() {
-        copy("../lib/*.js", "./node_modules/karma-typescript/lib/", cb);
+    copy("../../*.js", "./node_modules/karma-typescript/", function() {
+        copy("../../dist/**/*.js", "./node_modules/karma-typescript/dist/", function() {
+            copy("../../lib/*.js", "./node_modules/karma-typescript/lib/", function() {
+                copy("../../src/client/*.js", "./node_modules/karma-typescript/src/client/", function() {
+                    copy("../../transforms/*.js", "./node_modules/karma-typescript/transforms/", cb);
+                });
+            });
+        });
     });
 });
 
