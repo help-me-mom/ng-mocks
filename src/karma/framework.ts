@@ -32,6 +32,15 @@ export class Framework {
                 bundler.attach((<any> karmaConfig.files));
             }
 
+            config.bundlerOptions.transforms.forEach((t) => {
+                if (t.initialize) {
+                    t.initialize({
+                        appenders: karmaConfig.loggers,
+                        level: karmaConfig.logLevel
+                    });
+                }
+            });
+
             this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
         };
 

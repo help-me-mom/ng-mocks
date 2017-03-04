@@ -14,6 +14,14 @@ var Framework = (function () {
             if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);
             }
+            config.bundlerOptions.transforms.forEach(function (t) {
+                if (t.initialize) {
+                    t.initialize({
+                        appenders: karmaConfig.loggers,
+                        level: karmaConfig.logLevel
+                    });
+                }
+            });
             _this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
         };
         this.create.$inject = ["config", "helper", "logger"];

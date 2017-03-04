@@ -34,10 +34,6 @@ export class Transformer {
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
             let context: TransformContext = {
-                log: {
-                    appenders: this.config.karma.loggers,
-                    level: this.config.karma.logLevel
-                },
                 module: queued.file.originalPath,
                 paths: {
                     basepath: this.config.karma.basePath,
@@ -83,10 +79,6 @@ export class Transformer {
         let context: TransformContext = {
             js: {
                 ast: requiredModule.ast
-            },
-            log: {
-                appenders: this.config.karma.loggers,
-                level: this.config.karma.logLevel
             },
             module: requiredModule.moduleName,
             paths: {

@@ -23,10 +23,6 @@ var Transformer = (function () {
         }
         async.eachSeries(bundleQueue, function (queued, onQueueProcessed) {
             var context = {
-                log: {
-                    appenders: _this.config.karma.loggers,
-                    level: _this.config.karma.logLevel
-                },
                 module: queued.file.originalPath,
                 paths: {
                     basepath: _this.config.karma.basePath,
@@ -69,10 +65,6 @@ var Transformer = (function () {
         var context = {
             js: {
                 ast: requiredModule.ast
-            },
-            log: {
-                appenders: this.config.karma.loggers,
-                level: this.config.karma.logLevel
             },
             module: requiredModule.moduleName,
             paths: {
