@@ -5,6 +5,17 @@ var path = require("path");
 var test = require("tape");
 var ts = require("typescript");
 var transform = require("../transform");
+var logOptions = {
+    appenders: [{
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }],
+    level: "INFO"
+};
+transform.initialize(logOptions);
 var compile = function (filename) {
     var options = {
         experimentalDecorators: true,
@@ -25,16 +36,6 @@ var filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 var ast = compile(filename);
 var createContext = function () {
     return {
-        log: {
-            appenders: [{
-                    layout: {
-                        pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                        type: "pattern"
-                    },
-                    type: "console"
-                }],
-            level: "INFO"
-        },
         module: filename,
         paths: {
             basepath: process.cwd(),

@@ -15,9 +15,6 @@ var transform = function (context, callback) {
             context.ts.version + ") does not match karma-typescript-angular2-transform Typescript version (" +
             ts.version + ")"), false);
     }
-    log4js.setGlobalLogLevel(context.log.level);
-    log4js.configure({ appenders: context.log.appenders });
-    log = log4js.getLogger("angular2-transform.karma-typescript");
     var dirty = false;
     var MagicString = require("magic-string");
     var magic = new MagicString(context.source);
@@ -66,4 +63,10 @@ var transform = function (context, callback) {
     }
     callback(undefined, dirty);
 };
-module.exports = transform;
+var initialize = function (logOptions) {
+    log4js.setGlobalLogLevel(logOptions.level);
+    log4js.configure({ appenders: logOptions.appenders });
+    log = log4js.getLogger("angular2-transform.karma-typescript");
+};
+var exp = Object.assign(transform, { initialize: initialize });
+module.exports = exp;

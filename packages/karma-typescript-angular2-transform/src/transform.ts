@@ -1,8 +1,7 @@
+import * as kt from "karma-typescript/src/api/transforms";
 import * as log4js from "log4js";
 import * as path from "path";
 import * as ts from "typescript";
-
-import { Transform, TransformCallback, TransformContext } from "karma-typescript/src/api";
 
 let log: log4js.Logger;
 
@@ -10,7 +9,7 @@ let fixWindowsPath = (value: string): string => {
     return value.replace(/\\/g, "/");
 };
 
-let transform: Transform = (context: TransformContext, callback: TransformCallback) => {
+let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
 
     if (!context.ts) {
         return callback(undefined, false);
@@ -20,12 +19,6 @@ let transform: Transform = (context: TransformContext, callback: TransformCallba
         return callback(new Error("Typescript version of karma-typescript (" +
             context.ts.version + ") does not match karma-typescript-angular2-transform Typescript version (" +
             ts.version + ")"), false);
-    }
-
-    if (!log) {
-        log4js.setGlobalLogLevel(context.log.level);
-        log4js.configure({ appenders: context.log.appenders });
-        log = log4js.getLogger("angular2-transform.karma-typescript");
     }
 
     let dirty = false;
@@ -94,4 +87,11 @@ let transform: Transform = (context: TransformContext, callback: TransformCallba
     callback(undefined, dirty);
 };
 
-export = transform;
+let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
+    log4js.setGlobalLogLevel(logOptions.level);
+    log4js.configure({ appenders: logOptions.appenders });
+    log = log4js.getLogger("angular2-transform.karma-typescript");
+};
+
+let exp = Object.assign(transform, { initialize });
+export = exp;

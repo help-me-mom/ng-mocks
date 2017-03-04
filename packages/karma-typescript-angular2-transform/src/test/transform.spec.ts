@@ -1,11 +1,23 @@
 import * as fs from "fs";
+import * as kt from "karma-typescript/src/api/transforms";
 import * as path from "path";
 import * as test from "tape";
 import * as ts from "typescript";
 
-import { TransformContext } from "karma-typescript/src/api";
-
 import * as transform from "../transform";
+
+let logOptions: kt.TransformInitializeLogOptions = {
+    appenders: [{
+        layout: {
+            pattern: "%[%d{DATE}:%p [%c]: %]%m",
+            type: "pattern"
+        },
+        type: "console"
+    }],
+    level: "INFO"
+};
+
+transform.initialize(logOptions);
 
 let compile = (filename: string): ts.SourceFile => {
     let options: ts.CompilerOptions = {
@@ -27,18 +39,8 @@ let compile = (filename: string): ts.SourceFile => {
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 let ast = compile(filename);
 
-let createContext = (): TransformContext => {
+let createContext = (): kt.TransformContext => {
     return {
-        log: {
-            appenders: [{
-                layout: {
-                    pattern: "%[%d{DATE}:%p [%c]: %]%m",
-                    type: "pattern"
-                },
-                type: "console"
-            }],
-            level: "INFO"
-        },
         module: filename,
         paths: {
             basepath: process.cwd(),
