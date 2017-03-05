@@ -1,5 +1,5 @@
 {
-  "name": "integration-tests-1-8-10",
+  "name": "tests-integration-1-8-10",
   "version": "2.1.7",
   "description": "Integration tests for Typescript 1.8.10",
   "author": "monounity",
