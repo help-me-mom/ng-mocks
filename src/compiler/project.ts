@@ -34,13 +34,23 @@ type OptionNameMapTs2x = {
 
 export class Project {
 
-    constructor(private config: Configuration, private log: Logger) { }
+    private tsconfig: ts.ParsedCommandLine;
 
-    public resolveTsconfig(basePath: string): ts.ParsedCommandLine {
+    constructor(private config: Configuration, private log: Logger) {}
+
+    public initialize(): void {
         let configFileName = this.getTsconfigFilename();
         let configFileJson = this.getConfigFileJson(configFileName);
         let existingOptions = this.getExistingOptions();
-        return this.parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
+        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
+    }
+
+    public getTsconfig(): ts.ParsedCommandLine {
+        return this.tsconfig;
+    }
+
+    public getModuleFormat(): string {
+        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
     }
 
     private getTsconfigFilename(): string {
@@ -97,8 +107,7 @@ export class Project {
         return configFileJson;
     }
 
-    private parseConfigFileJson(basePath: string,
-                                configFileName: string,
+    private parseConfigFileJson(configFileName: string,
                                 configFileJson: ConfigFileJson,
                                 existingOptions: CompilerOptions): ts.ParsedCommandLine {
 
@@ -108,12 +117,12 @@ export class Project {
         this.extend("exclude", configFileJson.config, this.config);
 
         if ((<any> ts).parseConfigFile) {
-            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, basePath);
+            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, this.config.karma.basePath);
             tsconfig.options = (<any> ts).extend(existingOptions, tsconfig.options);
         }
         else if (ts.parseJsonConfigFileContent) {
             tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys,
-                                                     basePath, (<any> existingOptions), configFileName);
+                this.config.karma.basePath, (<any> existingOptions), configFileName);
         }
 
         if (!tsconfig) {

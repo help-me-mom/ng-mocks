@@ -41,6 +41,7 @@ export class Bundler {
     private expandedFiles: string[] = [];
     private filenameCache: string[] = [];
     private lookupNameCache: { [key: string]: string; } = {};
+    private moduleFormat: string;
     private orderedEntrypoints: string[] = [];
 
     constructor(private config: Configuration,
@@ -49,9 +50,10 @@ export class Bundler {
                 private transformer: Transformer,
                 private validator: Validator) { }
 
-    public initialize() {
+    public initialize(moduleFormat: string) {
         this.builtins = this.config.bundlerOptions.addNodeGlobals ?
             require("browserify/lib/builtins") : undefined;
+        this.moduleFormat = moduleFormat;
     }
 
     public attach(files: FilePattern[]) {
@@ -103,15 +105,20 @@ export class Bundler {
                     SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
 
-            let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
-
-            if (requiredModuleCount > 0) {
+            if (this.shouldBundle()) {
                 this.bundleWithLoader(benchmark);
             }
             else {
                 this.bundleWithoutLoader();
             }
         });
+    }
+
+    private shouldBundle(): boolean {
+        let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
+        return requiredModuleCount > 0 &&
+               this.moduleFormat.toLowerCase() === "commonjs" &&
+               !this.config.hasPreprocessor("commonjs");
     }
 
     private bundleWithLoader(benchmark: Benchmark) {

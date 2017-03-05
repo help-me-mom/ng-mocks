@@ -6,11 +6,11 @@ var Framework = (function () {
         this.create = function (karmaConfig, helper, logger) {
             _this.log = logger.create("framework.karma-typescript");
             config.initialize(karmaConfig);
-            var tsconfig = project.resolveTsconfig(config.karma.basePath);
-            bundler.initialize();
-            compiler.initialize(tsconfig);
+            project.initialize();
+            bundler.initialize(project.getModuleFormat());
+            compiler.initialize(project.getTsconfig());
             coverage.initialize(helper, logger);
-            transformer.initialize(tsconfig);
+            transformer.initialize(project.getTsconfig());
             if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);
             }

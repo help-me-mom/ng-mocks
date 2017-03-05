@@ -9,11 +9,17 @@ var Project = (function () {
         this.config = config;
         this.log = log;
     }
-    Project.prototype.resolveTsconfig = function (basePath) {
+    Project.prototype.initialize = function () {
         var configFileName = this.getTsconfigFilename();
         var configFileJson = this.getConfigFileJson(configFileName);
         var existingOptions = this.getExistingOptions();
-        return this.parseConfigFileJson(basePath, configFileName, configFileJson, existingOptions);
+        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
+    };
+    Project.prototype.getTsconfig = function () {
+        return this.tsconfig;
+    };
+    Project.prototype.getModuleFormat = function () {
+        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
     };
     Project.prototype.getTsconfigFilename = function () {
         var configFileName = "";
@@ -55,16 +61,16 @@ var Project = (function () {
         this.log.debug("Resolved configFileJson:\n", JSON.stringify(configFileJson, null, 3));
         return configFileJson;
     };
-    Project.prototype.parseConfigFileJson = function (basePath, configFileName, configFileJson, existingOptions) {
+    Project.prototype.parseConfigFileJson = function (configFileName, configFileJson, existingOptions) {
         var tsconfig;
         this.extend("include", configFileJson.config, this.config);
         this.extend("exclude", configFileJson.config, this.config);
         if (ts.parseConfigFile) {
-            tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, basePath);
+            tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, this.config.karma.basePath);
             tsconfig.options = ts.extend(existingOptions, tsconfig.options);
         }
         else if (ts.parseJsonConfigFileContent) {
-            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, basePath, existingOptions, configFileName);
+            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, this.config.karma.basePath, existingOptions, configFileName);
         }
         if (!tsconfig) {
             this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);

@@ -34,9 +34,10 @@ var Bundler = (function () {
         this.lookupNameCache = {};
         this.orderedEntrypoints = [];
     }
-    Bundler.prototype.initialize = function () {
+    Bundler.prototype.initialize = function (moduleFormat) {
         this.builtins = this.config.bundlerOptions.addNodeGlobals ?
             require("browserify/lib/builtins") : undefined;
+        this.moduleFormat = moduleFormat;
     };
     Bundler.prototype.attach = function (files) {
         files.unshift({
@@ -76,14 +77,19 @@ var Bundler = (function () {
             _this.bundleQueue.forEach(function (queued) {
                 queued.module = new required_module_1.RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
-            var requiredModuleCount = _this.dependencyWalker.collectRequiredTsModules(_this.bundleQueue);
-            if (requiredModuleCount > 0) {
+            if (_this.shouldBundle()) {
                 _this.bundleWithLoader(benchmark);
             }
             else {
                 _this.bundleWithoutLoader();
             }
         });
+    };
+    Bundler.prototype.shouldBundle = function () {
+        var requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
+        return requiredModuleCount > 0 &&
+            this.moduleFormat.toLowerCase() === "commonjs" &&
+            !this.config.hasPreprocessor("commonjs");
     };
     Bundler.prototype.bundleWithLoader = function (benchmark) {
         var _this = this;
