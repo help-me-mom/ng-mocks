@@ -2,8 +2,8 @@
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
 [![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=2.1.8)](https://travis-ci.org/monounity/karma-typescript)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
 
 > Karma :heart: Typescript
 
@@ -18,8 +18,8 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 ```json
 {
   "devDependencies": {
-    "karma": "^1.3.0",
-    "karma-typescript": "2.1.7"
+    "karma": "^1.5.0",
+    "karma-typescript": "3.0.0"
   }
 }
 ```

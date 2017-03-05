@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "2.1.7",
+  "version": "3.0.0",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "dist/index.js",
   "keywords": [
