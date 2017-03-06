@@ -1,9 +1,13 @@
+import * as diff from "diff";
 import * as glob from "glob";
 import * as lodash from "lodash";
+import * as os from "os";
 import * as path from "path";
 import * as ts from "typescript";
 
 import { Logger } from "log4js";
+
+import pad = require("pad");
 
 import { Queued } from "./queued";
 import { RequiredModule } from "./required-module";
@@ -48,6 +52,8 @@ export class DependencyWalker {
 
             requiredModuleCount += queued.module.requiredModules.length;
         });
+
+        this.validateCase(queue);
 
         return requiredModuleCount;
     }
@@ -172,5 +178,46 @@ export class DependencyWalker {
         };
 
         return visit(expression);
+    }
+
+    private validateCase(queue: Queued[]) {
+
+        let files = queue.map((q) => {
+            return q.file.originalPath;
+        });
+
+        let fileslower = queue.map((q) => {
+            return q.file.originalPath.toLowerCase();
+        });
+
+        queue.forEach((queued) => {
+            if (queued.module.requiredModules) {
+                queued.module.requiredModules.forEach((requiredModule) => {
+                    if (requiredModule.filename && files.indexOf(requiredModule.filename) === -1) {
+                        let lowerIndex = fileslower.indexOf(requiredModule.filename.toLowerCase());
+                        if (lowerIndex !== -1) {
+
+                            let result = diff.diffChars(files[lowerIndex], requiredModule.filename);
+                            let arrows = "";
+                            result.forEach((part) => {
+                                if (part.added) {
+                                    arrows += "^";
+                                }
+                                else if (!part.removed){
+                                    arrows += pad("", part.count);
+                                }
+                            });
+
+                            throw new Error("Uppercase/lowercase mismatch importing " +
+                                requiredModule.moduleName + " from " + queued.file.originalPath +
+                                ":" + os.EOL + os.EOL +
+                                "filename:    " + files[lowerIndex] + os.EOL +
+                                "module name: " + requiredModule.filename + os.EOL +
+                                "             " + arrows + os.EOL);
+                        }
+                    }
+                });
+            }
+        });
     }
 }

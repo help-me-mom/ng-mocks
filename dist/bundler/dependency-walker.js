@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var diff = require("diff");
 var glob = require("glob");
 var lodash = require("lodash");
+var os = require("os");
 var path = require("path");
 var ts = require("typescript");
+var pad = require("pad");
 var required_module_1 = require("./required-module");
 var DependencyWalker = (function () {
     function DependencyWalker(log) {
@@ -35,6 +38,7 @@ var DependencyWalker = (function () {
             }
             requiredModuleCount += queued.module.requiredModules.length;
         });
+        this.validateCase(queue);
         return requiredModuleCount;
     };
     DependencyWalker.prototype.collectRequiredJsModules = function (requiredModule) {
@@ -132,6 +136,41 @@ var DependencyWalker = (function () {
             }
         };
         return visit(expression);
+    };
+    DependencyWalker.prototype.validateCase = function (queue) {
+        var files = queue.map(function (q) {
+            return q.file.originalPath;
+        });
+        var fileslower = queue.map(function (q) {
+            return q.file.originalPath.toLowerCase();
+        });
+        queue.forEach(function (queued) {
+            if (queued.module.requiredModules) {
+                queued.module.requiredModules.forEach(function (requiredModule) {
+                    if (requiredModule.filename && files.indexOf(requiredModule.filename) === -1) {
+                        var lowerIndex = fileslower.indexOf(requiredModule.filename.toLowerCase());
+                        if (lowerIndex !== -1) {
+                            var result = diff.diffChars(files[lowerIndex], requiredModule.filename);
+                            var arrows_1 = "";
+                            result.forEach(function (part) {
+                                if (part.added) {
+                                    arrows_1 += "^";
+                                }
+                                else if (!part.removed) {
+                                    arrows_1 += pad("", part.count);
+                                }
+                            });
+                            throw new Error("Uppercase/lowercase mismatch importing " +
+                                requiredModule.moduleName + " from " + queued.file.originalPath +
+                                ":" + os.EOL + os.EOL +
+                                "filename:    " + files[lowerIndex] + os.EOL +
+                                "module name: " + requiredModule.filename + os.EOL +
+                                "             " + arrows_1 + os.EOL);
+                        }
+                    }
+                });
+            }
+        });
     };
     return DependencyWalker;
 }());
