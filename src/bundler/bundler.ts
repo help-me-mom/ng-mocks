@@ -146,8 +146,8 @@ export class Bundler {
     }
 
     private bundleWithoutLoader() {
-        this.createGlobals((globals) => {
-            this.writeBundleFile(globals, () => {
+        this.createGlobals((globals, constants) => {
+            this.writeBundleFile(globals, constants, () => {
                 this.bundleQueue.forEach((queued) => {
                     queued.callback(queued.module.source);
                 });
@@ -159,8 +159,8 @@ export class Bundler {
 
         this.orderEntrypoints();
 
-        this.createGlobals((globals) => {
-            this.writeBundleFile(globals, () => {
+        this.createGlobals((globals, constants) => {
+            this.writeBundleFile(globals, constants, () => {
                 this.log.info("Bundled imports for %s file(s) in %s ms.",
                     this.bundleQueue.length, benchmark.elapsed());
 
@@ -222,11 +222,12 @@ export class Bundler {
         });
     }
 
-    private writeBundleFile(globals: string, onBundleFileWritten: { (): void } ) {
+    private writeBundleFile(globals: string, constants: string, onBundleFileWritten: { (): void } ) {
 
         let bundle = "(function(global){" + os.EOL +
                     "global.wrappers={};" + os.EOL +
-                    globals +
+                    globals + os.EOL +
+                    constants + os.EOL +
                     this.bundleBuffer +
                     this.createEntrypointFilenames() +
                     "})(this);";
@@ -237,16 +238,17 @@ export class Bundler {
             }
 
             this.validator.validate(bundle, this.bundleFile.name);
-
             onBundleFileWritten();
         });
     }
 
-    private createGlobals(onGlobalsCreated: { (globals: string): void }) {
+    private createGlobals(onGlobalsCreated: { (globals: string, constants: string): void }) {
+
+        let constants = this.createConstants();
 
         if (!this.config.bundlerOptions.addNodeGlobals) {
             process.nextTick(() => {
-                onGlobalsCreated("");
+                onGlobalsCreated("", constants);
             });
             return;
         }
@@ -261,9 +263,27 @@ export class Bundler {
         this.resolveModule(globals.filename, globals.requiredModules[0], () => {
             this.resolveModule(globals.filename, globals.requiredModules[1], () => {
                 this.orderedEntrypoints.unshift(globals.filename);
-                onGlobalsCreated(this.addLoaderFunction(globals, false) + os.EOL);
+                onGlobalsCreated(this.addLoaderFunction(globals, false), constants);
             });
         });
+    }
+
+    private createConstants(): string {
+
+        let source = "";
+
+        Object.keys(this.config.bundlerOptions.constants).forEach((key) => {
+            let value = this.config.bundlerOptions.constants[key];
+            if (!lodash.isString(value)) {
+                value = JSON.stringify(value);
+            }
+            source += os.EOL + "global." + key + "=" + value + ";";
+        });
+
+        let constants = new RequiredModule(undefined, "constants.js", source, []);
+        this.orderedEntrypoints.unshift(constants.filename);
+
+        return this.addLoaderFunction(constants, false);
     }
 
     private resolveModule(requiringModule: string, requiredModule: RequiredModule,

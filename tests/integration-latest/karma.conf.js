@@ -23,6 +23,13 @@ module.exports = function(config) {
         karmaTypescriptConfig: {
             bundlerOptions: {
                 addNodeGlobals: true,
+                constants: {
+                    __STRING__: JSON.stringify("abc" + 123),
+                    __BOOLEAN__: true,
+                    "process.env": {
+                        "VARIABLE": "value"
+                    }
+                },
                 entrypoints: /\.spec\.(ts|tsx)$/,
                 exclude: [
                     "indent-string",

@@ -76,6 +76,7 @@ export class Configuration {
                 sourceType: "module"
             },
             addNodeGlobals: true,
+            constants: {},
             entrypoints: /.*/,
             exclude: [],
             ignore: [],

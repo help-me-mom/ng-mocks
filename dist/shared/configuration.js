@@ -39,6 +39,7 @@ var Configuration = (function () {
                 sourceType: "module"
             },
             addNodeGlobals: true,
+            constants: {},
             entrypoints: /.*/,
             exclude: [],
             ignore: [],

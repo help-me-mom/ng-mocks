@@ -18,6 +18,7 @@ export interface KarmaTypescriptConfig {
 export interface BundlerOptions {
     acornOptions?: acorn.Options;
     addNodeGlobals?: boolean;
+    constants: { [key: string]: any };
     entrypoints?: RegExp;
     exclude?: string[];
     ignore?: string[];
