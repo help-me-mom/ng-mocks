@@ -196,27 +196,19 @@ export class Configuration {
     }
 
     private assertDeprecatedOptions() {
-
         if ((<any> this.bundlerOptions).ignoredModuleNames) {
-            this.log.warn("The option 'karmaTypescriptConfig.bundlerOptions.ignoredModuleNames' " +
-                          "has been deprecated and will be removed in future versions, please " +
-                          "use 'karmaTypescriptConfig.bundlerOptions.exclude' instead");
-            this.bundlerOptions.exclude = (<any> this.bundlerOptions).ignoredModuleNames;
+            throw new Error("The option 'karmaTypescriptConfig.bundlerOptions.ignoredModuleNames' has been " +
+                            "removed, please use 'karmaTypescriptConfig.bundlerOptions.exclude' instead");
         }
 
         if ((<any> this.karmaTypescriptConfig).excludeFromCoverage !== undefined) {
-            this.log.warn("The option 'karmaTypescriptConfig.excludeFromCoverage' " +
-                          "has been deprecated and will be removed in future versions, please " +
-                          "use 'karmaTypescriptConfig.coverageOptions.exclude' instead");
-            this.coverageOptions.exclude = (<any> this.karmaTypescriptConfig).excludeFromCoverage;
+            throw new Error("The option 'karmaTypescriptConfig.excludeFromCoverage' has been " +
+                            "removed, please use 'karmaTypescriptConfig.coverageOptions.exclude' instead");
         }
 
         if ((<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation !== undefined) {
-            this.log.warn("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' " +
-                          "has been deprecated and will be removed in future versions, please " +
-                          "use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
-            this.coverageOptions.instrumentation =
-                !(<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation;
+            throw new Error("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' has been " +
+                            "removed, please use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
         }
     }
 

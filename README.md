@@ -120,9 +120,6 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * **karmaTypescriptConfig.bundlerOptions.ignore** - An array of npm module names that will be bundled as stubs, ie `module.exports = {};`.
 
-* ~~**karmaTypescriptConfig.bundlerOptions.ignoredModuleNames** - An array of npm module names to be excluded from the bundle.~~<br/>
-  **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.bundlerOptions.exclude` instead.
-
 * **karmaTypescriptConfig.bundlerOptions.noParse** - An array of module names that will be bundled without being parsed for dependencies.
 
 * **karmaTypescriptConfig.bundlerOptions.resolve.alias** - An object literal where the key is a module name
@@ -154,45 +151,37 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   a global level and on a per-file level, with options to exclude files and directories, and override settings on a per-file basis using globbing patterns.<br/>
   A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.<br/>
   A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.
-```javascript
-threshhold: {
-    global: {
-        statements: 100,
-        branches: 100,
-        functions: -10,
-        lines: 100,
-        excludes: [
-            "src/foo/**/*.js"
-        ]
-    },
-    file: {
-        statements: -10,
-        branches: 100,
-        functions: 100,
-        lines: 100,
-        excludes: [
-            "src/bar/**/*.js"
-        ],
-        overrides: {
-            "src/file.js": {
-                statements: 90
+    ```javascript
+    threshhold: {
+        global: {
+            statements: 100,
+            branches: 100,
+            functions: -10,
+            lines: 100,
+            excludes: [
+                "src/foo/**/*.js"
+            ]
+        },
+        file: {
+            statements: -10,
+            branches: 100,
+            functions: 100,
+            lines: 100,
+            excludes: [
+                "src/bar/**/*.js"
+            ],
+            overrides: {
+                "src/file.js": {
+                    statements: 90
+                }
             }
         }
     }
-}
-```
+    ```
 
 * **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
   The values will be merged with existing options.<br/>
   Defaults to `["node_modules"]`.
-
-* ~~**karmaTypescriptConfig.excludeFromCoverage** - A regex for filtering which files should be excluded from coverage instrumentation.<br/>
-  Defaults to `/\.(d|spec|test)\.ts/` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts.~~<br/>
-  **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.exclude` instead.
-
-* ~~**karmaTypescriptConfig.disableCodeCoverageInstrumentation** - If set to true, code coverage instrumentation will be
-  disabledand the original TypeScript code will be shown when debugging.~~<br/>
-  **Deprecated**, will be removed in future versions. Please use `karmaTypescriptConfig.coverageOptions.instrumentation` instead.
 
 * **karmaTypescriptConfig.include** - An array of file patterns to be included by the compiler. The values will be merged with existing options.<br/>
   This option is available in Typescript 2.0.0^.
