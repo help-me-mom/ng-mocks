@@ -196,7 +196,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.reports** - The types of coverage reports that should be created when running the tests,
   defaults to an html report in the directory `./coverage`.
   Reporters are configured as `"reporttype": destination` where the destination can be specified in three ways:
-    
+
     * A `string` with a directory path, for example `"html": "coverage"`.
     * An empty string or `null`. Writes the output to the console, for example `"text-summary": ""`. This is only possible for a subset of the reports available.
     * An `object` with more fine-grained control over path and filename:
@@ -315,27 +315,79 @@ karmaTypescriptConfig: {
 }
 ```
 
-## Stop on compilation error
+## Automatic bundling
 
-If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in the compiler options in `karmaTypescriptConfig`,
-the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
+Files executed in the test run are bundled into a main bundle, containing dependencies required from node_modules,
+and several smaller standalone bundles containing the Typescript files. All these bundles are tied together by `commonjs.js`,
+which acts as a hub, loading modules when they are required by other modules.
 
-## Module loading and bundling for unit testing
+All files are bundled by being wrapped in a custom [CommonJS](https://en.wikipedia.org/wiki/CommonJS) wrapper,
+which emulates the Node.js module system by injecting the require function, the module object, the exports object,
+the &#95;&#95;dirname variable and the &#95;&#95;filename variable.
 
-Modules imported in Typescript code, for example `import { Component } from "@angular/core";`, will be automatically
-loaded and bundled along with their dependencies.
+For instance, this Typescript sample:
 
-Also, a full Node.js environment will be provided with global variables and browser shims for builtin core modules:
+```javascript
+export function exportedFunction(): string {
+    return "";
+}
+```
 
-### Module
+Would be compiled to the following javascript (assuming the compiler option `module` is set to `commonjs`):
 
-A module object will be injected by the bundler:
+```javascript
+function exportedFunction() {
+    return "";
+}
+exports.exportedFunction = exportedFunction;
+```
+
+It would then be wrapped in a `CommonJS` wrapper by the bundler:
+
+```javascript
+(function(global){
+    global.wrappers['/absolutepath/app/src/file.ts']=[function(require,module,exports,__dirname,__filename){
+        function exportedFunction() {
+            return "";
+        }
+        exports.exportedFunction = exportedFunction;
+    },'src/file.ts',{}];
+})(this);
+```
+
+*(In this example, the source map and a few other statements have been omitted for brevity and the wrapper has been formatted for readability)*
+
+After compilation, a simple static analysis is performed to find "import" and "require" statements in the code and if any
+dependencies are found, for instance `import { Component } from "@angular/core";`, it is added to the main bundle file along
+with its dependencies.
+
+If no import or require statements are found in any Typescript file included in the test run, or the compiler option `module`
+is set to another value than `commonjs`, *automatic bundling will not occur*.
+
+This means that no Typescript file will be wrapped in the CommonJS wrapper and the reason behind this is the encapsulation that
+the Node.js module system provides. If no module requests any other module, the test run would contain only isolated islands of
+code unreachable from the global scope, there would be nothing to execute.
+
+However, this intentional behavior makes it possible to use karma-typescript for projects that use the Typescript module system,
+or have the compiler option `module` set to another value than `commonjs`, or simply put everything on the global scope.
+
+### Importing stylesheets and bundling for production
+
+Style files (.css|.less|.sass|.scss) are served as JSON strings to the browser running the tests,
+allowing styles to be loaded using the Typescript import statement, ie `import "./style/app.scss";`.
+
+This means styles can be imported in order to let, for instance, webpack load the styles with
+less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
+
+Note: JSON required by modules in node_modules will be loaded automatically by the bundler.
+
+### The module object
 
 ```javascript
 module: {
     exports: {},
-    id: "foo/bar.ts",
-    uri: "/users/home/dev/src/foo/bar.ts"
+    id: "project-relative-path/bar.ts",
+    uri: "/absolute-path/project-relative-path/bar.ts"
 }
 ```
 
@@ -345,6 +397,8 @@ Modules exporting an extensible object such as a *function* or an *object litera
 a non-enumerable `default` property if `module.exports.default` is undefined.
 
 ### Globals
+
+A full Node.js environment will be provided with global variables and browser shims for builtin core modules:
 
 * &#95;&#95;dirname
 * &#95;&#95;filename
@@ -377,18 +431,10 @@ a non-enumerable `default` property if `module.exports.default` is undefined.
 
 The plugin uses [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to load the source code from node_modules.
 
-Note: automatic bundling will only be performed if `compilerOptions.module` is set to `"commonjs"`,
-and there are import statements in the Typescript source code.
+## Stop on compilation error
 
-## Importing stylesheets and bundling for production
-
-Style files (.css|.less|.sass|.scss) are served as JSON strings to the browser running the tests,
-allowing styles to be loaded using the Typescript import statement, ie `import "./style/app.scss";`.
-
-This means styles can be imported in order to let, for instance, webpack load the styles with
-less-loader or scss-loader etc for bundling later on, without breaking the unit test runner.
-
-Note: JSON required by modules in `node_modules` will be loaded automatically by the bundler.
+If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in the compiler options in `karmaTypescriptConfig`,
+the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
 
 ## Under the hood
 
