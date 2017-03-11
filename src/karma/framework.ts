@@ -2,6 +2,7 @@ import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
 import { Bundler } from "../bundler/bundler";
+import { Resolver } from "../bundler/resolver";
 import { Transformer } from "../bundler/transformer";
 import { Compiler } from "../compiler/compiler";
 import { Project } from "../compiler/project";
@@ -14,7 +15,8 @@ export class Framework {
     private log: Logger;
 
     constructor(bundler: Bundler, compiler: Compiler, config: Configuration,
-                coverage: Coverage, project: Project, transformer: Transformer) {
+                coverage: Coverage, project: Project, resolver: Resolver,
+                transformer: Transformer) {
 
         this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
             this.log = logger.create("framework.karma-typescript");
@@ -24,6 +26,7 @@ export class Framework {
             bundler.initialize(project.getModuleFormat());
             compiler.initialize(project.getTsconfig());
             coverage.initialize(helper, logger);
+            resolver.initialize();
             transformer.initialize(project.getTsconfig());
 
             if (!config.hasFramework("commonjs")) {

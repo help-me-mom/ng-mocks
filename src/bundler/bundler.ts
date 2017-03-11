@@ -1,6 +1,4 @@
-import * as acorn from "acorn";
 import * as async from "async";
-import * as browserResolve from "browser-resolve";
 import * as fs from "fs";
 import * as glob from "glob";
 import * as lodash from "lodash";
@@ -15,11 +13,13 @@ import { EmitOutput } from "../compiler/emit-output";
 import { Benchmark } from "../shared/benchmark";
 import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
+import { Globals } from "./globals";
 import PathTool = require("../shared/path-tool");
 import { BundleCallback } from "./bundle-callback";
 import { DependencyWalker } from "./dependency-walker";
 import { Queued } from "./queued";
 import { RequiredModule } from "./required-module";
+import { Resolver } from "./resolver";
 import SourceMap = require("./source-map");
 import { Transformer } from "./transformer";
 import { Validator } from "./validator";
@@ -30,8 +30,7 @@ export class Bundler {
 
     private bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
 
-    private builtins: any;
-    private bundleBuffer = "";
+    private bundleBuffer: RequiredModule[] = [];
     private bundleFile = tmp.fileSync({
         postfix: ".js",
         prefix: "karma-typescript-bundle-"
@@ -39,20 +38,17 @@ export class Bundler {
     private bundleQueue: Queued[] = [];
     private entrypoints: string[] = [];
     private expandedFiles: string[] = [];
-    private filenameCache: string[] = [];
-    private lookupNameCache: { [key: string]: string; } = {};
     private moduleFormat: string;
-    private orderedEntrypoints: string[] = [];
 
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
+                private globals: Globals,
                 private log: Logger,
+                private resolver: Resolver,
                 private transformer: Transformer,
                 private validator: Validator) { }
 
     public initialize(moduleFormat: string) {
-        this.builtins = this.config.bundlerOptions.addNodeGlobals ?
-            require("browserify/lib/builtins") : undefined;
         this.moduleFormat = moduleFormat;
     }
 
@@ -130,7 +126,7 @@ export class Bundler {
             async.each(queued.module.requiredModules, (requiredModule, onRequiredModuleResolved) => {
                 if (!requiredModule.isTypescriptFile() &&
                     !(requiredModule.isTypingsFile() && !requiredModule.isNpmModule())) {
-                    this.resolveModule(queued.module.moduleName, requiredModule, () => {
+                    this.resolver.resolveModule(queued.module.moduleName, requiredModule, this.bundleBuffer, () => {
                         onRequiredModuleResolved();
                     });
                 }
@@ -146,8 +142,8 @@ export class Bundler {
     }
 
     private bundleWithoutLoader() {
-        this.createGlobals((globals, constants) => {
-            this.writeBundleFile(globals, constants, () => {
+        this.globals.add(this.bundleBuffer, this.entrypoints, () => {
+            this.writeMainBundleFile(() => {
                 this.bundleQueue.forEach((queued) => {
                     queued.callback(queued.module.source);
                 });
@@ -159,8 +155,8 @@ export class Bundler {
 
         this.orderEntrypoints();
 
-        this.createGlobals((globals, constants) => {
-            this.writeBundleFile(globals, constants, () => {
+        this.globals.add(this.bundleBuffer, this.entrypoints, () => {
+            this.writeMainBundleFile(() => {
                 this.log.info("Bundled imports for %s file(s) in %s ms.",
                     this.bundleQueue.length, benchmark.elapsed());
 
@@ -201,8 +197,8 @@ export class Bundler {
     }
 
     private createEntrypointFilenames() {
-        if (this.orderedEntrypoints.length > 0) {
-            return "global.entrypointFilenames=['" + this.orderedEntrypoints.join("','") + "'];" + os.EOL;
+        if (this.entrypoints.length > 0) {
+            return "global.entrypointFilenames=['" + this.entrypoints.join("','") + "'];" + os.EOL;
         }
         return "";
     }
@@ -215,226 +211,32 @@ export class Bundler {
     }
 
     private orderEntrypoints() {
+        let orderedEntrypoints: string[] = [];
         this.expandedFiles.forEach((filename) => {
             if (this.entrypoints.indexOf(filename) !== -1) {
-                this.orderedEntrypoints.push(filename);
+                orderedEntrypoints.push(filename);
             }
         });
+        this.entrypoints = orderedEntrypoints;
     }
 
-    private writeBundleFile(globals: string, constants: string, onBundleFileWritten: { (): void } ) {
+    private writeMainBundleFile(onMainBundleFileWritten: { (): void } ) {
 
         let bundle = "(function(global){" + os.EOL +
-                    "global.wrappers={};" + os.EOL +
-                    globals + os.EOL +
-                    constants + os.EOL +
-                    this.bundleBuffer +
-                    this.createEntrypointFilenames() +
-                    "})(this);";
+                    "global.wrappers={};" + os.EOL;
+
+        this.bundleBuffer.forEach((requiredModule) => {
+            bundle += this.addLoaderFunction(requiredModule, false);
+        });
+
+        bundle += this.createEntrypointFilenames() + "})(this);";
 
         fs.writeFile(this.bundleFile.name, bundle, (error) => {
             if (error) {
                 throw error;
             }
-
             this.validator.validate(bundle, this.bundleFile.name);
-            onBundleFileWritten();
+            onMainBundleFileWritten();
         });
-    }
-
-    private createGlobals(onGlobalsCreated: { (globals: string, constants: string): void }) {
-
-        let constants = this.createConstants();
-
-        if (!this.config.bundlerOptions.addNodeGlobals) {
-            process.nextTick(() => {
-                onGlobalsCreated("", constants);
-            });
-            return;
-        }
-
-        let globals = new RequiredModule(undefined, "globals.js",
-            os.EOL + "global.process=require('process/browser');" +
-            os.EOL + "global.Buffer=require('buffer/').Buffer;", [
-                new RequiredModule("process/browser"),
-                new RequiredModule("buffer/")
-            ]);
-
-        this.resolveModule(globals.filename, globals.requiredModules[0], () => {
-            this.resolveModule(globals.filename, globals.requiredModules[1], () => {
-                this.orderedEntrypoints.unshift(globals.filename);
-                onGlobalsCreated(this.addLoaderFunction(globals, false), constants);
-            });
-        });
-    }
-
-    private createConstants(): string {
-
-        let source = "";
-
-        Object.keys(this.config.bundlerOptions.constants).forEach((key) => {
-            let value = this.config.bundlerOptions.constants[key];
-            if (!lodash.isString(value)) {
-                value = JSON.stringify(value);
-            }
-            source += os.EOL + "global." + key + "=" + value + ";";
-        });
-
-        let constants = new RequiredModule(undefined, "constants.js", source, []);
-        this.orderedEntrypoints.unshift(constants.filename);
-
-        return this.addLoaderFunction(constants, false);
-    }
-
-    private resolveModule(requiringModule: string, requiredModule: RequiredModule,
-                          onRequiredModuleResolved: { (requiredModule?: RequiredModule): void }) {
-
-        requiredModule.lookupName = requiredModule.isNpmModule() ?
-                requiredModule.moduleName :
-                path.join(path.dirname(requiringModule), requiredModule.moduleName);
-
-        if (this.lookupNameCache[requiredModule.lookupName]) {
-            requiredModule.filename = this.lookupNameCache[requiredModule.lookupName];
-            process.nextTick(() => {
-                onRequiredModuleResolved(requiredModule);
-            });
-            return;
-        }
-
-        if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
-            this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
-            process.nextTick(() => {
-                onRequiredModuleResolved();
-            });
-            return;
-        }
-
-        let onFilenameResolved = () => {
-
-            this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
-
-            if (this.filenameCache.indexOf(requiredModule.filename) !== -1 ||
-                requiredModule.filename.indexOf(".ts") !== -1) {
-                process.nextTick(() => {
-                    onRequiredModuleResolved(requiredModule);
-                });
-                return;
-            }
-            else {
-                this.filenameCache.push(requiredModule.filename);
-                this.readSource(requiredModule, onSourceRead);
-            }
-        };
-
-        let onSourceRead = () => {
-
-            if (!requiredModule.isScript()) {
-                if (requiredModule.isJson()) {
-                    requiredModule.source = os.EOL +
-                        "module.isJSON = true;" + os.EOL +
-                        "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
-                }
-                else {
-                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
-                }
-            }
-
-            requiredModule.ast = acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
-            this.transformer.applyTransforms(requiredModule, (error: Error) => {
-                if (error) {
-                    throw Error;
-                }
-                this.resolveDependencies(requiredModule, onDependenciesResolved);
-            });
-        };
-
-        let onDependenciesResolved = () => {
-            this.bundleBuffer += this.addLoaderFunction(requiredModule, false);
-            return onRequiredModuleResolved(requiredModule);
-        };
-
-        this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
-    }
-
-    private resolveFilename(requiringModule: string, requiredModule: RequiredModule, onFilenameResolved: { (): void }) {
-
-        let bopts = {
-            extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: requiredModule.isNpmModule() ? undefined : requiringModule,
-            moduleDirectory: this.config.bundlerOptions.resolve.directories,
-            modules: this.builtins,
-            pathFilter: this.pathFilter.bind(this)
-        };
-
-        browserResolve(requiredModule.moduleName, bopts, (error, filename) => {
-            if (error) {
-                throw new Error("Unable to resolve module [" +
-                    requiredModule.moduleName + "] from [" + requiringModule + "]");
-            }
-            requiredModule.filename = filename;
-            onFilenameResolved();
-        });
-    }
-
-    private pathFilter(pkg: any, fullPath: string, relativePath: string): string {
-
-        let filteredPath;
-        let normalizedPath = PathTool.fixWindowsPath(fullPath);
-
-        Object
-            .keys(this.config.bundlerOptions.resolve.alias)
-            .forEach((moduleName) => {
-                let regex = new RegExp(moduleName);
-                if (regex.test(normalizedPath) && pkg && relativePath) {
-                    filteredPath = path.join(fullPath, this.config.bundlerOptions.resolve.alias[moduleName]);
-                }
-            });
-
-        if (filteredPath) {
-            return filteredPath;
-        }
-    }
-
-    private readSource(requiredModule: RequiredModule, onSourceRead: { (source?: string): void }) {
-
-        if (this.config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
-            onSourceRead("module.exports={};");
-        }
-        else {
-            fs.readFile(requiredModule.filename, (error, data) => {
-                if (error) {
-                    throw error;
-                }
-                requiredModule.source = SourceMap.deleteComment(data.toString());
-                onSourceRead();
-            });
-        }
-    }
-
-    private resolveDependencies(requiredModule: RequiredModule, onDependenciesResolved: { (): void }) {
-
-        requiredModule.requiredModules = [];
-
-        if (requiredModule.isScript() &&
-            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 &&
-            this.dependencyWalker.hasRequire(requiredModule.source)) {
-
-            let moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
-
-            async.each(moduleNames, (moduleName, onModuleResolved) => {
-                let dependency = new RequiredModule(moduleName);
-                this.resolveModule(requiredModule.filename, dependency, (resolved) => {
-                    if (resolved) {
-                        requiredModule.requiredModules.push(resolved);
-                    }
-                    onModuleResolved();
-                });
-            }, onDependenciesResolved);
-        }
-        else {
-            process.nextTick(() => {
-                onDependenciesResolved();
-            });
-        }
     }
 }
