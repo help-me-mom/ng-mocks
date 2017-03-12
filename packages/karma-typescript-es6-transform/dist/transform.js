@@ -29,9 +29,9 @@ var configure = function (options) {
             return callback(undefined, false);
         }
         if (isEs6(context.js.ast)) {
-            log.debug("Transforming %s", context.paths.filename);
+            log.debug("Transforming %s", context.filename);
             if (!options.filename) {
-                options.filename = context.paths.filename;
+                options.filename = context.filename;
             }
             context.source = babel.transform(context.source, options).code;
             context.js.ast = acorn.parse(context.source, { sourceType: "module" });

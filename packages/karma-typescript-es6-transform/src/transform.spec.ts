@@ -18,17 +18,15 @@ let logOptions: kt.TransformInitializeLogOptions = {
 
 transform().initialize(logOptions);
 
-let createContext = (source: string): kt.TransformContext => {
+// kt.TransformContext
+let createContext = (source: string): any => {
     return {
+        config: {},
+        filename: "file.js",
         js: {
             ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" })
         },
         module: "module",
-        paths: {
-            basepath: process.cwd(),
-            filename: "file.js",
-            urlroot: "/"
-        },
         source
     };
 };
@@ -132,16 +130,14 @@ test("transformer should use custom compiler options", (t) => {
     t.plan(1);
 
     let source = "let x = 2; x **= 3; export default x;";
-    let context: kt.TransformContext = {
+    // kt.TransformContext
+    let context: any = {
+        config: {},
+        filename: "file.js",
         js: {
             ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" })
         },
         module: "module",
-        paths: {
-            basepath: process.cwd(),
-            filename: "file.js",
-            urlroot: "/"
-        },
         source
     };
 

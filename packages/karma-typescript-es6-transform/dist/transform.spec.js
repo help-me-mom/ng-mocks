@@ -14,17 +14,15 @@ var logOptions = {
     level: "INFO"
 };
 transform().initialize(logOptions);
+// kt.TransformContext
 var createContext = function (source) {
     return {
+        config: {},
+        filename: "file.js",
         js: {
             ast: acorn.parse(source, { ecmaVersion: 6, sourceType: "module" })
         },
         module: "module",
-        paths: {
-            basepath: process.cwd(),
-            filename: "file.js",
-            urlroot: "/"
-        },
         source: source
     };
 };
@@ -97,16 +95,14 @@ test("transformer should compile and set new ast", function (t) {
 test("transformer should use custom compiler options", function (t) {
     t.plan(1);
     var source = "let x = 2; x **= 3; export default x;";
+    // kt.TransformContext
     var context = {
+        config: {},
+        filename: "file.js",
         js: {
             ast: acorn.parse(source, { ecmaVersion: 7, sourceType: "module" })
         },
         module: "module",
-        paths: {
-            basepath: process.cwd(),
-            filename: "file.js",
-            urlroot: "/"
-        },
         source: source
     };
     transform({ presets: ["es2016"] })(context, function () {
