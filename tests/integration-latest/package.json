@@ -39,7 +39,7 @@
     "@types/chai": "^3.4.34",
     "@types/chai-enzyme": "^0.5.6",
     "@types/codemirror": "0.0.35",
-    "@types/core-js": "^0.9.34",
+    "@types/core-js": "0.9.36",
     "@types/enzyme": "^2.7.2",
     "@types/jasmine": "^2.5.37",
     "@types/lodash-es": "^4.14.4",
