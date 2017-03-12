@@ -34,12 +34,9 @@ export class Transformer {
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
             let context: TransformContext = {
+                config: this.config,
+                filename: queued.file.originalPath,
                 module: queued.file.originalPath,
-                paths: {
-                    basepath: this.config.karma.basePath,
-                    filename: queued.file.originalPath,
-                    urlroot: this.config.karma.urlRoot
-                },
                 source: queued.emitOutput.sourceFile.getFullText(),
                 ts: {
                     ast: queued.emitOutput.sourceFile,
@@ -53,7 +50,7 @@ export class Transformer {
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.tsconfig.options,
-                                fileName: context.paths.filename
+                                fileName: context.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;
                             queued.emitOutput.sourceMapText = transpiled.sourceMapText;
@@ -77,15 +74,12 @@ export class Transformer {
         }
 
         let context: TransformContext = {
+            config: this.config,
+            filename: requiredModule.filename,
             js: {
                 ast: requiredModule.ast
             },
             module: requiredModule.moduleName,
-            paths: {
-                basepath: this.config.karma.basePath,
-                filename: requiredModule.filename,
-                urlroot: this.config.karma.urlRoot
-            },
             source: requiredModule.source
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {

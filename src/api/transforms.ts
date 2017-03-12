@@ -2,15 +2,11 @@ import * as ESTree from "estree";
 import * as log4js from "log4js";
 import * as ts from "typescript";
 
+import { Configuration } from "../shared/configuration";
+
 export interface TransformCallback {
     (error: Error, dirty: boolean): void;
 };
-
-export interface TransformContextPaths {
-    basepath: string;
-    filename: string;
-    urlroot: string;
-}
 
 export interface TransformContextJs{
     ast: ESTree.Program;
@@ -22,8 +18,9 @@ export interface TransformContextTs{
 }
 
 export interface TransformContext {
-    paths: TransformContextPaths;
+    config: Configuration;
     js?: TransformContextJs;
+    filename: string;
     module: string;
     source: string;
     ts?: TransformContextTs;
