@@ -29,7 +29,7 @@
     "@types/jasmine": "2.2.31",
     "core-js": "^2.4.1",
     "jasmine-core": "2.4.1",
-    "karma": "1.2.0",
+    "karma": "1.5.0",
     "karma-chrome-launcher": "2.0.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.0.2",
