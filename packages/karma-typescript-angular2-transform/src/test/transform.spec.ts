@@ -39,14 +39,17 @@ let compile = (filename: string): ts.SourceFile => {
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 let ast = compile(filename);
 
-let createContext = (): kt.TransformContext => {
+// kt.TransformContext...
+let createContext = (): any => {
     return {
-        module: filename,
-        paths: {
-            basepath: process.cwd(),
-            filename,
-            urlroot: "/custom-root/"
+        config: {
+            karma: {
+                basePath: process.cwd(),
+                urlRoot: "/custom-root/"
+            }
         },
+        filename,
+        module: filename,
         source: fs.readFileSync(filename).toString(),
         ts: {
             ast,

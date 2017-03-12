@@ -29,11 +29,11 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
 
         let start = node.getStart() + 1;
         let end = start + node.text.length;
-        let templateDir = path.dirname(context.paths.filename);
-        let relativeTemplateDir = path.relative(context.paths.basepath, templateDir);
-        let styleUrl = path.join(context.paths.urlroot, "base", relativeTemplateDir, node.text);
+        let templateDir = path.dirname(context.filename);
+        let relativeTemplateDir = path.relative(context.config.karma.basePath, templateDir);
+        let styleUrl = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, node.text);
 
-        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.paths.filename);
+        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.filename);
 
         magic.overwrite(start, end, fixWindowsPath(styleUrl));
         dirty = true;

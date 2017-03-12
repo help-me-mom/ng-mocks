@@ -34,14 +34,17 @@ var compile = function (filename) {
 };
 var filename = path.join(process.cwd(), "./src/test/mock-component.ts");
 var ast = compile(filename);
+// kt.TransformContext...
 var createContext = function () {
     return {
-        module: filename,
-        paths: {
-            basepath: process.cwd(),
-            filename: filename,
-            urlroot: "/custom-root/"
+        config: {
+            karma: {
+                basePath: process.cwd(),
+                urlRoot: "/custom-root/"
+            }
         },
+        filename: filename,
+        module: filename,
         source: fs.readFileSync(filename).toString(),
         ts: {
             ast: ast,

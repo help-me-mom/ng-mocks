@@ -21,10 +21,10 @@ var transform = function (context, callback) {
     var rewriteUrl = function (node) {
         var start = node.getStart() + 1;
         var end = start + node.text.length;
-        var templateDir = path.dirname(context.paths.filename);
-        var relativeTemplateDir = path.relative(context.paths.basepath, templateDir);
-        var styleUrl = path.join(context.paths.urlroot, "base", relativeTemplateDir, node.text);
-        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.paths.filename);
+        var templateDir = path.dirname(context.filename);
+        var relativeTemplateDir = path.relative(context.config.karma.basePath, templateDir);
+        var styleUrl = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, node.text);
+        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.filename);
         magic.overwrite(start, end, fixWindowsPath(styleUrl));
         dirty = true;
     };
