@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
 var Configuration = (function () {
-    function Configuration(log) {
-        this.log = log;
+    function Configuration() {
     }
     Configuration.prototype.initialize = function (config) {
         this.karma = config || {};
@@ -15,7 +14,6 @@ var Configuration = (function () {
         this.configureReporter();
         this.configureKarmaCoverage();
         this.assertConfiguration();
-        this.log.debug(this.toString());
     };
     Configuration.prototype.hasFramework = function (name) {
         return this.karma.frameworks.indexOf(name) !== -1;

@@ -23,7 +23,7 @@ var Framework = (function () {
                     });
                 }
             });
-            _this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
+            _this.log.debug("Configuration:\n", JSON.stringify(config, null, 3));
         };
         this.create.$inject = ["config", "helper", "logger"];
     }

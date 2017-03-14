@@ -1,6 +1,5 @@
 import { ConfigOptions } from "karma";
 import { merge } from "lodash";
-import { Logger } from "log4js";
 
 import {
     BundlerOptions,
@@ -32,8 +31,6 @@ export class Configuration {
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
 
-    constructor(private log: Logger) { }
-
     public initialize(config: ConfigOptions) {
 
         this.karma = config || {};
@@ -46,8 +43,6 @@ export class Configuration {
         this.configureReporter();
         this.configureKarmaCoverage();
         this.assertConfiguration();
-
-        this.log.debug(this.toString());
     }
 
     public hasFramework(name: string): boolean {

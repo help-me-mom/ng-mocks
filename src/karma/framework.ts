@@ -42,7 +42,7 @@ export class Framework {
                 }
             });
 
-            this.log.debug("Karma config:\n", JSON.stringify(karmaConfig, null, 3));
+            this.log.debug("Configuration:\n", JSON.stringify(config, null, 3));
         };
 
         (<any> this.create).$inject = ["config", "helper", "logger"];

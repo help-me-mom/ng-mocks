@@ -22,7 +22,7 @@ import { SharedProcessedFiles } from "./shared/shared-processed-files";
 
 let sharedProcessedFiles: SharedProcessedFiles = {};
 
-let configuration = new Configuration(log4js.getLogger("configuration.karma-typescript"));
+let configuration = new Configuration();
 let dependencyWalker = new DependencyWalker(log4js.getLogger("dependency-walker.karma-typescript"));
 let transformer = new Transformer(configuration, log4js.getLogger("transformer.karma-typescript"));
 let validator = new Validator(configuration);
