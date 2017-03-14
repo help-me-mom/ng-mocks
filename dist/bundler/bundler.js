@@ -30,6 +30,7 @@ var Bundler = (function () {
         this.bundleQueue = [];
         this.entrypoints = [];
         this.expandedFiles = [];
+        this.projectImportCountOnFirstRun = undefined;
     }
     Bundler.prototype.initialize = function (moduleFormat) {
         this.moduleFormat = moduleFormat;
@@ -72,7 +73,8 @@ var Bundler = (function () {
             _this.bundleQueue.forEach(function (queued) {
                 queued.module = new required_module_1.RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
-            if (_this.shouldBundle()) {
+            var requiredModuleCount = _this.dependencyWalker.collectRequiredTsModules(_this.bundleQueue);
+            if (_this.shouldBundle(requiredModuleCount)) {
                 _this.bundleWithLoader(benchmark);
             }
             else {
@@ -80,9 +82,12 @@ var Bundler = (function () {
             }
         });
     };
-    Bundler.prototype.shouldBundle = function () {
-        var requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
-        return requiredModuleCount > 0 &&
+    Bundler.prototype.shouldBundle = function (requiredModuleCount) {
+        if (this.projectImportCountOnFirstRun === undefined) {
+            this.projectImportCountOnFirstRun = requiredModuleCount;
+            this.log.debug("Project has %s import/require statements, code will be%sbundled", this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
+        }
+        return this.projectImportCountOnFirstRun > 0 &&
             this.moduleFormat.toLowerCase() === "commonjs" &&
             !this.config.hasPreprocessor("commonjs");
     };

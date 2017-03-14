@@ -29,6 +29,6 @@
         return (typeof obj === "function" || typeof obj === "object") && Object.isExtensible(obj);
     }
     (global.entrypointFilenames || []).forEach(function(filename) {
-        require(filename, filename, filename);
+        require(filename, "commonjs.js", "entrypoint");
     });
 })(this);

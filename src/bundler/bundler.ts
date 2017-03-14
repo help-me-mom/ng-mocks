@@ -39,6 +39,7 @@ export class Bundler {
     private entrypoints: string[] = [];
     private expandedFiles: string[] = [];
     private moduleFormat: string;
+    private projectImportCountOnFirstRun: number = undefined;
 
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
@@ -101,7 +102,9 @@ export class Bundler {
                     SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
 
-            if (this.shouldBundle()) {
+            let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
+
+            if (this.shouldBundle(requiredModuleCount)) {
                 this.bundleWithLoader(benchmark);
             }
             else {
@@ -110,9 +113,13 @@ export class Bundler {
         });
     }
 
-    private shouldBundle(): boolean {
-        let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
-        return requiredModuleCount > 0 &&
+    private shouldBundle(requiredModuleCount: number): boolean {
+        if (this.projectImportCountOnFirstRun === undefined) {
+            this.projectImportCountOnFirstRun = requiredModuleCount;
+            this.log.debug("Project has %s import/require statements, code will be%sbundled",
+                this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
+        }
+        return this.projectImportCountOnFirstRun > 0 &&
                this.moduleFormat.toLowerCase() === "commonjs" &&
                !this.config.hasPreprocessor("commonjs");
     }
