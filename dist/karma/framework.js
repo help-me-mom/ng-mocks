@@ -1,17 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Framework = (function () {
-    function Framework(bundler, compiler, config, coverage, project, resolver, transformer) {
+    function Framework(bundler, config, coverage, resolver) {
         var _this = this;
         this.create = function (karmaConfig, helper, logger) {
             _this.log = logger.create("framework.karma-typescript");
             config.initialize(karmaConfig);
-            project.initialize();
-            bundler.initialize(project.getModuleFormat());
-            compiler.initialize(project.getTsconfig());
             coverage.initialize(helper, logger);
             resolver.initialize();
-            transformer.initialize(project.getTsconfig());
             if (!config.hasFramework("commonjs")) {
                 bundler.attach(karmaConfig.files);
             }

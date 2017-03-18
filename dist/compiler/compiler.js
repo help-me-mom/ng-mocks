@@ -3,15 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var lodash = require("lodash");
 var ts = require("typescript");
 var benchmark_1 = require("../shared/benchmark");
+var project_1 = require("../shared/project");
 var Compiler = (function () {
-    function Compiler(log) {
+    function Compiler(log, project) {
         var _this = this;
         this.log = log;
-        this.COMPILE_DELAY = 200;
+        this.project = project;
+        this.COMPILE_DELAY = 250;
         this.compiledFiles = {};
         this.emitQueue = [];
-        this.deferredCompile = lodash.debounce(function () {
-            _this.compileProgram();
+        this.compileDeferred = lodash.debounce(function () {
+            _this.compileProject();
         }, this.COMPILE_DELAY);
         this.getSourceFile = function (filename, languageVersion, onError) {
             if (_this.cachedProgram && !_this.isQueued(filename)) {
@@ -23,35 +25,37 @@ var Compiler = (function () {
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
     }
-    Compiler.prototype.initialize = function (tsconfig) {
-        this.tsconfig = tsconfig;
-        this.log.info("Compiling project using Typescript %s", ts.version);
-        this.outputDiagnostics(tsconfig.errors);
-    };
     Compiler.prototype.compile = function (file, callback) {
         this.emitQueue.push({
             file: file,
             callback: callback
         });
-        this.deferredCompile();
+        this.compileDeferred();
     };
-    Compiler.prototype.compileProgram = function () {
-        var _this = this;
-        var benchmark = new benchmark_1.Benchmark();
-        if (!this.cachedProgram) {
-            this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
-            this.hostGetSourceFile = this.compilerHost.getSourceFile;
-            this.compilerHost.getSourceFile = this.getSourceFile;
-            this.compilerHost.writeFile = function (filename, text) {
-                _this.compiledFiles[filename] = text;
-            };
+    Compiler.prototype.compileProject = function () {
+        this.log.info("Compiling project using Typescript %s", ts.version);
+        if (this.project.handleFileEvent() === project_1.EventType.FileSystemChanged) {
+            this.setupRecompile();
         }
-        this.program = ts.createProgram(this.tsconfig.fileNames, this.tsconfig.options, this.compilerHost);
+        var benchmark = new benchmark_1.Benchmark();
+        var tsconfig = this.project.getTsconfig();
+        this.outputDiagnostics(tsconfig.errors);
+        this.program = ts.createProgram(tsconfig.fileNames, tsconfig.options, this.compilerHost);
         this.cachedProgram = this.program;
         this.runDiagnostics(this.program, this.compilerHost);
         this.program.emit();
-        this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
+        this.log.info("Compiled %s files in %s ms.", tsconfig.fileNames.length, benchmark.elapsed());
         this.onProgramCompiled();
+    };
+    Compiler.prototype.setupRecompile = function () {
+        var _this = this;
+        this.cachedProgram = undefined;
+        this.compilerHost = ts.createCompilerHost(this.project.getTsconfig().options);
+        this.hostGetSourceFile = this.compilerHost.getSourceFile;
+        this.compilerHost.getSourceFile = this.getSourceFile;
+        this.compilerHost.writeFile = function (filename, text) {
+            _this.compiledFiles[filename] = text;
+        };
     };
     Compiler.prototype.onProgramCompiled = function () {
         var _this = this;
@@ -103,7 +107,7 @@ var Compiler = (function () {
                     _this.log.error(output);
                 }
             });
-            if (this.tsconfig.options.noEmitOnError) {
+            if (this.project.getTsconfig().options.noEmitOnError) {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }

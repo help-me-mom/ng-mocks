@@ -38,7 +38,7 @@ export class Configuration {
 
         this.configureBundler();
         this.configureCoverage();
-        this.configureFramework();
+        this.configureProject();
         this.configurePreprocessor();
         this.configureReporter();
         this.configureKarmaCoverage();
@@ -119,7 +119,7 @@ export class Configuration {
         this.assertCoverageExclude(this.coverageOptions.exclude);
     }
 
-    private configureFramework(): void {
+    private configureProject(): void {
 
         this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
 

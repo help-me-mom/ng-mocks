@@ -5,6 +5,7 @@ import { Logger } from "log4js";
 
 import { Benchmark } from "../shared/benchmark";
 import { File } from "../shared/file";
+import { EventType, Project } from "../shared/project";
 import { CompileCallback } from "./compile-callback";
 
 type CompiledFiles = { [key: string]: string; };
@@ -16,7 +17,7 @@ type Queued = {
 
 export class Compiler {
 
-    private readonly COMPILE_DELAY = 200;
+    private readonly COMPILE_DELAY = 250;
 
     private cachedProgram: ts.Program;
     private compiledFiles: CompiledFiles = {};
@@ -25,19 +26,12 @@ export class Compiler {
     private hostGetSourceFile: {(filename: string, languageVersion: ts.ScriptTarget,
                                  onError?: (message: string) => void): ts.SourceFile};
     private program: ts.Program;
-    private tsconfig: ts.ParsedCommandLine;
 
-    private deferredCompile = lodash.debounce(() => {
-        this.compileProgram();
+    private compileDeferred = lodash.debounce(() => {
+        this.compileProject();
     }, this.COMPILE_DELAY);
 
-    constructor(private log: Logger) { }
-
-    public initialize(tsconfig: ts.ParsedCommandLine): void {
-        this.tsconfig = tsconfig;
-        this.log.info("Compiling project using Typescript %s", ts.version);
-        this.outputDiagnostics(tsconfig.errors);
-    }
+    constructor(private log: Logger, private project: Project) { }
 
     public compile(file: File, callback: CompileCallback): void {
 
@@ -46,29 +40,39 @@ export class Compiler {
             callback
         });
 
-        this.deferredCompile();
+        this.compileDeferred();
     }
 
-    private compileProgram(): void {
+    private compileProject(): void {
 
-        let benchmark = new Benchmark();
+        this.log.info("Compiling project using Typescript %s", ts.version);
 
-        if (!this.cachedProgram) {
-            this.compilerHost = ts.createCompilerHost(this.tsconfig.options);
-            this.hostGetSourceFile = this.compilerHost.getSourceFile;
-            this.compilerHost.getSourceFile = this.getSourceFile;
-            this.compilerHost.writeFile = (filename, text) => {
-                this.compiledFiles[filename] = text;
-            };
+        if (this.project.handleFileEvent() === EventType.FileSystemChanged) {
+            this.setupRecompile();
         }
 
-        this.program = ts.createProgram(this.tsconfig.fileNames, this.tsconfig.options, this.compilerHost);
+        let benchmark = new Benchmark();
+        let tsconfig = this.project.getTsconfig();
+
+        this.outputDiagnostics(tsconfig.errors);
+
+        this.program = ts.createProgram(tsconfig.fileNames, tsconfig.options, this.compilerHost);
         this.cachedProgram = this.program;
 
         this.runDiagnostics(this.program, this.compilerHost);
         this.program.emit();
-        this.log.info("Compiled %s files in %s ms.", this.tsconfig.fileNames.length, benchmark.elapsed());
+        this.log.info("Compiled %s files in %s ms.", tsconfig.fileNames.length, benchmark.elapsed());
         this.onProgramCompiled();
+    }
+
+    private setupRecompile(): void {
+        this.cachedProgram = undefined;
+        this.compilerHost = ts.createCompilerHost(this.project.getTsconfig().options);
+        this.hostGetSourceFile = this.compilerHost.getSourceFile;
+        this.compilerHost.getSourceFile = this.getSourceFile;
+        this.compilerHost.writeFile = (filename, text) => {
+            this.compiledFiles[filename] = text;
+        };
     }
 
     private onProgramCompiled(): void {
@@ -149,7 +153,7 @@ export class Compiler {
                 }
             });
 
-            if (this.tsconfig.options.noEmitOnError) {
+            if (this.project.getTsconfig().options.noEmitOnError) {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }

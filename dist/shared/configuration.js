@@ -9,7 +9,7 @@ var Configuration = (function () {
         this.karmaTypescriptConfig = config.karmaTypescriptConfig || {};
         this.configureBundler();
         this.configureCoverage();
-        this.configureFramework();
+        this.configureProject();
         this.configurePreprocessor();
         this.configureReporter();
         this.configureKarmaCoverage();
@@ -79,7 +79,7 @@ var Configuration = (function () {
         this.coverageOptions = lodash_1.merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
         this.assertCoverageExclude(this.coverageOptions.exclude);
     };
-    Configuration.prototype.configureFramework = function () {
+    Configuration.prototype.configureProject = function () {
         this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
         this.defaultTsconfig = {
             compilerOptions: {

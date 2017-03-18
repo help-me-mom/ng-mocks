@@ -1,25 +1,59 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var glob = require("glob");
 var lodash = require("lodash");
 var path = require("path");
 var ts = require("typescript");
-var PathTool = require("../shared/path-tool");
+var PathTool = require("./path-tool");
+var EventType;
+(function (EventType) {
+    EventType[EventType["FileSystemChanged"] = 0] = "FileSystemChanged";
+    EventType[EventType["FileContentChanged"] = 1] = "FileContentChanged";
+})(EventType = exports.EventType || (exports.EventType = {}));
 var Project = (function () {
     function Project(config, log) {
         this.config = config;
         this.log = log;
+        this.karmaFiles = [];
     }
-    Project.prototype.initialize = function () {
-        var configFileName = this.getTsconfigFilename();
-        var configFileJson = this.getConfigFileJson(configFileName);
-        var existingOptions = this.getExistingOptions();
-        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
+    Project.prototype.getKarmaFiles = function () {
+        return this.karmaFiles;
     };
     Project.prototype.getTsconfig = function () {
         return this.tsconfig;
     };
     Project.prototype.getModuleFormat = function () {
         return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
+    };
+    Project.prototype.handleFileEvent = function () {
+        var oldKarmaFiles = lodash.cloneDeep(this.karmaFiles || []);
+        this.expandKarmaFilePatterns();
+        if (!lodash.isEqual(oldKarmaFiles, this.karmaFiles)) {
+            this.log.debug("File system changed, resolving tsconfig");
+            this.resolveTsConfig();
+            return EventType.FileSystemChanged;
+        }
+        return EventType.FileContentChanged;
+    };
+    Project.prototype.expandKarmaFilePatterns = function () {
+        var _this = this;
+        var files = this.config.karma.files;
+        this.karmaFiles.length = 0;
+        files.forEach(function (file) {
+            var g = new glob.Glob(path.normalize(file.pattern), {
+                cwd: "/",
+                follow: true,
+                nodir: true,
+                sync: true
+            });
+            Array.prototype.push.apply(_this.karmaFiles, g.found);
+        });
+    };
+    Project.prototype.resolveTsConfig = function () {
+        var configFileName = this.getTsconfigFilename();
+        var configFileJson = this.getConfigFileJson(configFileName);
+        var existingOptions = this.getExistingOptions();
+        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
     };
     Project.prototype.getTsconfigFilename = function () {
         var configFileName = "";
@@ -33,8 +67,9 @@ var Project = (function () {
         return PathTool.fixWindowsPath(configFileName);
     };
     Project.prototype.getExistingOptions = function () {
-        this.convertOptions(this.config.compilerOptions);
-        return this.config.compilerOptions;
+        var compilerOptions = lodash.cloneDeep(this.config.compilerOptions);
+        this.convertOptions(compilerOptions);
+        return compilerOptions;
     };
     Project.prototype.getConfigFileJson = function (configFileName) {
         var configFileJson;

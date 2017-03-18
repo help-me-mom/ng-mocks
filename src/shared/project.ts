@@ -1,13 +1,15 @@
+import * as glob from "glob";
 import * as lodash from "lodash";
 import * as path from "path";
 import * as ts from "typescript";
 
+import { FilePattern } from "karma";
 import { Logger } from "log4js";
 
-import PathTool = require("../shared/path-tool");
+import PathTool = require("./path-tool");
 
 import { CompilerOptions } from "../api";
-import { Configuration } from "../shared/configuration";
+import { Configuration } from "./configuration";
 
 type ConfigFileJson = {
     config?: any;
@@ -32,17 +34,20 @@ type OptionNameMapTs2x = {
     };
 };
 
+export enum EventType {
+    FileSystemChanged,
+    FileContentChanged
+}
+
 export class Project {
 
+    private karmaFiles: string[] = [];
     private tsconfig: ts.ParsedCommandLine;
 
     constructor(private config: Configuration, private log: Logger) {}
 
-    public initialize(): void {
-        let configFileName = this.getTsconfigFilename();
-        let configFileJson = this.getConfigFileJson(configFileName);
-        let existingOptions = this.getExistingOptions();
-        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
+    public getKarmaFiles(): string[] {
+        return this.karmaFiles;
     }
 
     public getTsconfig(): ts.ParsedCommandLine {
@@ -51,6 +56,46 @@ export class Project {
 
     public getModuleFormat(): string {
         return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
+    }
+
+    public handleFileEvent(): EventType {
+
+        let oldKarmaFiles = lodash.cloneDeep(this.karmaFiles || []);
+        this.expandKarmaFilePatterns();
+
+        if (!lodash.isEqual(oldKarmaFiles, this.karmaFiles)) {
+
+            this.log.debug("File system changed, resolving tsconfig");
+            this.resolveTsConfig();
+            return EventType.FileSystemChanged;
+        }
+
+        return EventType.FileContentChanged;
+    }
+
+    private expandKarmaFilePatterns() {
+
+        let files = (<FilePattern[]> this.config.karma.files);
+        this.karmaFiles.length = 0;
+
+        files.forEach((file) => {
+
+            let g = new glob.Glob(path.normalize(file.pattern), {
+                cwd: "/",
+                follow: true,
+                nodir: true,
+                sync: true
+            });
+
+            Array.prototype.push.apply(this.karmaFiles, g.found);
+        });
+    }
+
+    private resolveTsConfig() {
+        let configFileName = this.getTsconfigFilename();
+        let configFileJson = this.getConfigFileJson(configFileName);
+        let existingOptions = this.getExistingOptions();
+        this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
     }
 
     private getTsconfigFilename(): string {
@@ -72,8 +117,9 @@ export class Project {
     }
 
     private getExistingOptions(): CompilerOptions {
-        this.convertOptions(this.config.compilerOptions);
-        return this.config.compilerOptions;
+        let compilerOptions = lodash.cloneDeep(this.config.compilerOptions);
+        this.convertOptions(compilerOptions);
+        return compilerOptions;
     }
 
     private getConfigFileJson(configFileName: string): ConfigFileJson {

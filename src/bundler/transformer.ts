@@ -2,23 +2,15 @@ import * as async from "async";
 import * as os from "os";
 import * as ts from "typescript";
 
-import { Logger } from "log4js";
-
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
+import { Project } from "../shared/project";
 import { Queued } from "./queued";
 import { RequiredModule } from "./required-module";
 
 export class Transformer {
 
-    private tsconfig: ts.ParsedCommandLine;
-
-    constructor(private config: Configuration, private log: Logger) { }
-
-    public initialize(tsconfig: ts.ParsedCommandLine): void {
-        this.tsconfig = tsconfig;
-        this.log.debug("initialize");
-    }
+    constructor(private config: Configuration, private project: Project) { }
 
     public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
 
@@ -49,7 +41,7 @@ export class Transformer {
                         this.handleError(error, transform);
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
-                                compilerOptions: this.tsconfig.options,
+                                compilerOptions: this.project.getTsconfig().options,
                                 fileName: context.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var fs = require("fs");
-var glob = require("glob");
 var lodash = require("lodash");
 var os = require("os");
 var path = require("path");
@@ -12,11 +11,12 @@ var PathTool = require("../shared/path-tool");
 var required_module_1 = require("./required-module");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
-    function Bundler(config, dependencyWalker, globals, log, resolver, transformer, validator) {
+    function Bundler(config, dependencyWalker, globals, log, project, resolver, transformer, validator) {
         this.config = config;
         this.dependencyWalker = dependencyWalker;
         this.globals = globals;
         this.log = log;
+        this.project = project;
         this.resolver = resolver;
         this.transformer = transformer;
         this.validator = validator;
@@ -29,12 +29,8 @@ var Bundler = (function () {
         });
         this.bundleQueue = [];
         this.entrypoints = [];
-        this.expandedFiles = [];
         this.projectImportCountOnFirstRun = undefined;
     }
-    Bundler.prototype.initialize = function (moduleFormat) {
-        this.moduleFormat = moduleFormat;
-    };
     Bundler.prototype.attach = function (files) {
         files.unshift({
             included: true,
@@ -48,23 +44,10 @@ var Bundler = (function () {
             served: true,
             watched: false
         });
-        this.expandPatterns(files);
     };
     Bundler.prototype.bundle = function (file, emitOutput, callback) {
         this.bundleQueue.push({ callback: callback, emitOutput: emitOutput, file: file });
         this.bundleQueuedModulesDeferred();
-    };
-    Bundler.prototype.expandPatterns = function (files) {
-        var _this = this;
-        files.forEach(function (file) {
-            var g = new glob.Glob(path.normalize(file.pattern), {
-                cwd: "/",
-                follow: true,
-                nodir: true,
-                sync: true
-            });
-            Array.prototype.push.apply(_this.expandedFiles, g.found);
-        });
     };
     Bundler.prototype.bundleQueuedModules = function () {
         var _this = this;
@@ -88,7 +71,7 @@ var Bundler = (function () {
             this.log.debug("Project has %s import/require statements, code will be%sbundled", this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
         }
         return this.projectImportCountOnFirstRun > 0 &&
-            this.moduleFormat.toLowerCase() === "commonjs" &&
+            this.project.getModuleFormat().toLowerCase() === "commonjs" &&
             !this.config.hasPreprocessor("commonjs");
     };
     Bundler.prototype.bundleWithLoader = function (benchmark) {
@@ -171,7 +154,7 @@ var Bundler = (function () {
     Bundler.prototype.orderEntrypoints = function () {
         var _this = this;
         var orderedEntrypoints = [];
-        this.expandedFiles.forEach(function (filename) {
+        this.project.getKarmaFiles().forEach(function (filename) {
             if (_this.entrypoints.indexOf(filename) !== -1) {
                 orderedEntrypoints.push(filename);
             }

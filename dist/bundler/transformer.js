@@ -4,14 +4,10 @@ var async = require("async");
 var os = require("os");
 var ts = require("typescript");
 var Transformer = (function () {
-    function Transformer(config, log) {
+    function Transformer(config, project) {
         this.config = config;
-        this.log = log;
+        this.project = project;
     }
-    Transformer.prototype.initialize = function (tsconfig) {
-        this.tsconfig = tsconfig;
-        this.log.debug("initialize");
-    };
     Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformssApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
@@ -38,7 +34,7 @@ var Transformer = (function () {
                         _this.handleError(error, transform);
                         if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
-                                compilerOptions: _this.tsconfig.options,
+                                compilerOptions: _this.project.getTsconfig().options,
                                 fileName: context.filename
                             });
                             queued.emitOutput.outputText = transpiled.outputText;

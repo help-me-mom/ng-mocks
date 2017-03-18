@@ -1,6 +1,5 @@
 import * as async from "async";
 import * as fs from "fs";
-import * as glob from "glob";
 import * as lodash from "lodash";
 import * as os from "os";
 import * as path from "path";
@@ -13,6 +12,7 @@ import { EmitOutput } from "../compiler/emit-output";
 import { Benchmark } from "../shared/benchmark";
 import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
+import { Project } from "../shared/project";
 import { Globals } from "./globals";
 import PathTool = require("../shared/path-tool");
 import { BundleCallback } from "./bundle-callback";
@@ -37,21 +37,16 @@ export class Bundler {
     });
     private bundleQueue: Queued[] = [];
     private entrypoints: string[] = [];
-    private expandedFiles: string[] = [];
-    private moduleFormat: string;
     private projectImportCountOnFirstRun: number = undefined;
 
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
                 private globals: Globals,
                 private log: Logger,
+                private project: Project,
                 private resolver: Resolver,
                 private transformer: Transformer,
                 private validator: Validator) { }
-
-    public initialize(moduleFormat: string) {
-        this.moduleFormat = moduleFormat;
-    }
 
     public attach(files: FilePattern[]) {
 
@@ -68,28 +63,11 @@ export class Bundler {
             served: true,
             watched: false
         });
-
-        this.expandPatterns(files);
     }
 
     public bundle(file: File, emitOutput: EmitOutput, callback: BundleCallback) {
         this.bundleQueue.push({ callback, emitOutput, file });
         this.bundleQueuedModulesDeferred();
-    }
-
-    private expandPatterns(files: FilePattern[]) {
-
-        files.forEach((file) => {
-
-            let g = new glob.Glob(path.normalize(file.pattern), {
-                cwd: "/",
-                follow: true,
-                nodir: true,
-                sync: true
-            });
-
-            Array.prototype.push.apply(this.expandedFiles, g.found);
-        });
     }
 
     private bundleQueuedModules() {
@@ -120,7 +98,7 @@ export class Bundler {
                 this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
         }
         return this.projectImportCountOnFirstRun > 0 &&
-               this.moduleFormat.toLowerCase() === "commonjs" &&
+               this.project.getModuleFormat().toLowerCase() === "commonjs" &&
                !this.config.hasPreprocessor("commonjs");
     }
 
@@ -219,7 +197,7 @@ export class Bundler {
 
     private orderEntrypoints() {
         let orderedEntrypoints: string[] = [];
-        this.expandedFiles.forEach((filename) => {
+        this.project.getKarmaFiles().forEach((filename) => {
             if (this.entrypoints.indexOf(filename) !== -1) {
                 orderedEntrypoints.push(filename);
             }
