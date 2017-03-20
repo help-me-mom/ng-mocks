@@ -112,6 +112,27 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   `process` and `Buffer` should be added to the bundle.<br/>
   Defaults to `true`.
 
+* **karmaTypescriptConfig.bundlerOptions.constants** - An object literal with keys/values which will be availabe as global
+  variables in the bundle. The keys are expected to be strings and any non-string value will be stringified with `JSON.stringify`.
+
+  Configuration example:
+    ```javascript
+    constants: {
+        __STRING__: JSON.stringify("abc" + 123),
+        __BOOLEAN__: true,
+        "process.env": {
+            "VARIABLE": "value"
+        }
+    }
+    ```
+  Code example:
+    ```javascript
+    declare var __STRING__: string;
+    declare var __BOOLEAN__: boolean;
+
+    console.log(__STRING__, __BOOLEAN__, process.env.VARIABLE);
+    ```
+
 * **karmaTypescriptConfig.bundlerOptions.entrypoints** - A regex filtering which files loaded by Karma should be executed in
    a test run, for example only filenames ending with ".spec.ts": `/\.spec\.ts$/`.<br/>
    This setting can be used to make sure the specs have finished setting up the test environment before other code starts
@@ -250,6 +271,9 @@ Example of a full `karmaTypescriptConfig` configuration:
 karmaTypescriptConfig: {
     bundlerOptions: {
         addNodeGlobals: true,
+        constants: {
+            __PRODUCTION__: false
+        },
         entrypoints: /\.spec\.(ts|tsx)$/,
         exclude: ["react/addons"],
         ignore: ["ws"],
