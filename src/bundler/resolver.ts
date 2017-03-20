@@ -115,7 +115,9 @@ export class Resolver {
         browserResolve(requiredModule.moduleName, bopts, (error, filename) => {
             if (error) {
                 throw new Error("Unable to resolve module [" +
-                    requiredModule.moduleName + "] from [" + requiringModule + "]");
+                    requiredModule.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                    JSON.stringify(bopts, undefined, 2) + os.EOL +
+                    error);
             }
             requiredModule.filename = filename;
             onFilenameResolved();
