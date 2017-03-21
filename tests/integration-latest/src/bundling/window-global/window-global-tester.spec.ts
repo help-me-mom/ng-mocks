@@ -6,6 +6,6 @@ describe("WindowGlobalTester", () => {
 
     it("should use the window object as global", () => {
 
-        expect(tester.testGlobalWindow()).toEqual(window);
+        expect((<any> tester.testGlobalWindow())).toEqual(window);
     });
 });
