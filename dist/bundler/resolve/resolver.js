@@ -6,9 +6,9 @@ var browserResolve = require("browser-resolve");
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
-var PathTool = require("../shared/path-tool");
-var required_module_1 = require("./required-module");
-var SourceMap = require("./source-map");
+var PathTool = require("../../shared/path-tool");
+var required_module_1 = require("../required-module");
+var SourceMap = require("../source-map");
 var Resolver = (function () {
     function Resolver(config, dependencyWalker, log, transformer) {
         this.config = config;
@@ -19,8 +19,8 @@ var Resolver = (function () {
         this.lookupNameCache = {};
     }
     Resolver.prototype.initialize = function () {
-        this.builtins = this.config.bundlerOptions.addNodeGlobals ?
-            require("browserify/lib/builtins") : undefined;
+        this.shims = this.config.bundlerOptions.addNodeGlobals ?
+            require("./shims") : undefined;
     };
     Resolver.prototype.resolveModule = function (requiringModule, requiredModule, buffer, onRequiredModuleResolved) {
         var _this = this;
@@ -85,7 +85,7 @@ var Resolver = (function () {
             extensions: this.config.bundlerOptions.resolve.extensions,
             filename: requiredModule.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
-            modules: this.builtins,
+            modules: this.shims,
             pathFilter: this.pathFilter.bind(this)
         };
         browserResolve(requiredModule.moduleName, bopts, function (error, filename) {

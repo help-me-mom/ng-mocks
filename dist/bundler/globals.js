@@ -31,10 +31,10 @@ var Globals = (function () {
     Globals.prototype.addNodeGlobals = function (items) {
         if (this.config.bundlerOptions.addNodeGlobals) {
             var name_1 = "bundle/node-globals";
-            items.push(new required_module_1.RequiredModule(name_1, name_1, os.EOL + "global.process=require('process/browser');" +
-                os.EOL + "global.Buffer=require('buffer/').Buffer;", [
-                new required_module_1.RequiredModule("process/browser"),
-                new required_module_1.RequiredModule("buffer/")
+            items.push(new required_module_1.RequiredModule(name_1, name_1, os.EOL + "global.process=require('_process');" +
+                os.EOL + "global.Buffer=require('buffer').Buffer;", [
+                new required_module_1.RequiredModule("_process"),
+                new required_module_1.RequiredModule("buffer")
             ]));
         }
     };

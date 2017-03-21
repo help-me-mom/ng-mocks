@@ -7,16 +7,16 @@ import * as path from "path";
 
 import { Logger } from "log4js";
 
-import { Configuration } from "../shared/configuration";
-import PathTool = require("../shared/path-tool");
-import { DependencyWalker } from "./dependency-walker";
-import { RequiredModule } from "./required-module";
-import SourceMap = require("./source-map");
-import { Transformer } from "./transformer";
+import { Configuration } from "../../shared/configuration";
+import PathTool = require("../../shared/path-tool");
+import { DependencyWalker } from "../dependency-walker";
+import { RequiredModule } from "../required-module";
+import SourceMap = require("../source-map");
+import { Transformer } from "../transformer";
 
 export class Resolver {
 
-    private builtins: any;
+    private shims: any;
     private filenameCache: string[] = [];
     private lookupNameCache: { [key: string]: string; } = {};
 
@@ -26,8 +26,8 @@ export class Resolver {
                 private transformer: Transformer) { }
 
     public initialize() {
-        this.builtins = this.config.bundlerOptions.addNodeGlobals ?
-            require("browserify/lib/builtins") : undefined;
+        this.shims = this.config.bundlerOptions.addNodeGlobals ?
+            require("./shims") : undefined;
     }
 
     public resolveModule(requiringModule: string,
@@ -108,7 +108,7 @@ export class Resolver {
             extensions: this.config.bundlerOptions.resolve.extensions,
             filename: requiredModule.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
-            modules: this.builtins,
+            modules: this.shims,
             pathFilter: this.pathFilter.bind(this)
         };
 

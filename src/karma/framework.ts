@@ -2,7 +2,7 @@ import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
 import { Bundler } from "../bundler/bundler";
-import { Resolver } from "../bundler/resolver";
+import { Resolver } from "../bundler/resolve/resolver";
 import { Coverage } from "../istanbul/coverage";
 import { Configuration } from "../shared/configuration";
 

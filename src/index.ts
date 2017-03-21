@@ -3,7 +3,7 @@ import * as log4js from "log4js";
 import { Bundler } from "./bundler/bundler";
 import { DependencyWalker } from "./bundler/dependency-walker";
 import { Globals } from "./bundler/globals";
-import { Resolver } from "./bundler/resolver";
+import { Resolver } from "./bundler/resolve/resolver";
 import { Transformer } from "./bundler/transformer";
 import { Validator } from "./bundler/validator";
 

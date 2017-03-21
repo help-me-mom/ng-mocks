@@ -19,7 +19,7 @@ import { BundleCallback } from "./bundle-callback";
 import { DependencyWalker } from "./dependency-walker";
 import { Queued } from "./queued";
 import { RequiredModule } from "./required-module";
-import { Resolver } from "./resolver";
+import { Resolver } from "./resolve/resolver";
 import SourceMap = require("./source-map");
 import { Transformer } from "./transformer";
 import { Validator } from "./validator";

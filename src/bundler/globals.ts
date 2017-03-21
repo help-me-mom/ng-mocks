@@ -4,7 +4,7 @@ import * as os from "os";
 
 import { Configuration } from "../shared/configuration";
 import { RequiredModule } from "./required-module";
-import { Resolver } from "./resolver";
+import { Resolver } from "./resolve/resolver";
 
 export class Globals {
 
@@ -39,10 +39,10 @@ export class Globals {
             let name = "bundle/node-globals";
 
             items.push(new RequiredModule(name, name,
-                os.EOL + "global.process=require('process/browser');" +
-                os.EOL + "global.Buffer=require('buffer/').Buffer;", [
-                    new RequiredModule("process/browser"),
-                    new RequiredModule("buffer/")
+                os.EOL + "global.process=require('_process');" +
+                os.EOL + "global.Buffer=require('buffer').Buffer;", [
+                    new RequiredModule("_process"),
+                    new RequiredModule("buffer")
                 ])
             );
         }
