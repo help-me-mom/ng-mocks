@@ -499,12 +499,17 @@ These are the environments reported failing/working:
 |---|---|---|---|
 |2.5.18|4.4.7|Unknown|No|
 |2.14.12|4.2.6|OSX 10.11.3|No|
-|2.15.9|.5.0|OSX 10.11.6|No|
+|2.15.9|4.5.0|OSX 10.11.6|No|
+|2.15.9|4.6.0|OSX 10.12.3|No|
 |2.15.11|4.6.2|Ubuntu 14.04|No|
 |2.15.11|4.7.0|Ubuntu 14.04|Yes|
 |3.5.3|4.2.1|Windows 10|Yes|
+|3.8.6|6.10.0|Windows Server 2012 R2|Yes|
 |3.10.3|6.4.0|OSX 10.11.6|Yes|
 |3.10.9|6.9.2|Ubuntu 14.04|Yes|
+|4.0.5|6.4.0|OSX 10.11.6|Yes|
+|4.1.2|7.5.0|OSX 10.12.2|No|
+|4.1.2|7.7.3|Ubuntu 14.04|Yes|
 
 ## Licensing
 
