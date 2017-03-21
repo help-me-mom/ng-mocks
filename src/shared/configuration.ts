@@ -1,3 +1,5 @@
+import * as log4js from "log4js";
+
 import { ConfigOptions } from "karma";
 import { merge } from "lodash";
 
@@ -9,6 +11,10 @@ import {
     RemapOptions,
     Reports
 } from "../api";
+
+export interface LoggerList {
+    [key: string]: log4js.Logger;
+}
 
 export class Configuration {
 
@@ -31,11 +37,14 @@ export class Configuration {
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
 
+    constructor(private loggers: LoggerList) {}
+
     public initialize(config: ConfigOptions) {
 
         this.karma = config || {};
         this.karmaTypescriptConfig = (<any> config).karmaTypescriptConfig || {};
 
+        this.configureLogging();
         this.configureBundler();
         this.configureCoverage();
         this.configureProject();
@@ -61,6 +70,15 @@ export class Configuration {
 
     public hasReporter(name: string): boolean {
         return this.karma.reporters.indexOf(name) !== -1;
+    }
+
+    private configureLogging() {
+
+        log4js.configure({ appenders: this.karma.loggers });
+
+        Object.keys(this.loggers).forEach((key) => {
+            this.loggers[key].setLevel(this.karma.logLevel);
+        });
     }
 
     private configureBundler(): void {

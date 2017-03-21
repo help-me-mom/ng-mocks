@@ -16,37 +16,36 @@ import { Framework } from "./karma/framework";
 import { Preprocessor } from "./karma/preprocessor";
 import { Reporter } from "./karma/reporter";
 
-import { Configuration } from "./shared/configuration";
+import { Configuration, LoggerList } from "./shared/configuration";
 import { Project } from "./shared/project";
 import { SharedProcessedFiles } from "./shared/shared-processed-files";
 
+let loggers: LoggerList = {
+    bundler: log4js.getLogger("bundler.karma-typescript"),
+    compiler: log4js.getLogger("compiler.karma-typescript"),
+    dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
+    project: log4js.getLogger("project.karma-typescript"),
+    resolver: log4js.getLogger("resolver.karma-typescript"),
+    threshold: log4js.getLogger("threshold.karma-typescript")
+};
+
 let sharedProcessedFiles: SharedProcessedFiles = {};
 
-let configuration = new Configuration();
-let project = new Project(configuration, log4js.getLogger("project.karma-typescript"));
-let dependencyWalker = new DependencyWalker(log4js.getLogger("dependency-walker.karma-typescript"));
+let configuration = new Configuration(loggers);
+let project = new Project(configuration, loggers.project);
+let dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 
-let compiler = new Compiler(log4js.getLogger("compiler.karma-typescript"), project);
+let compiler = new Compiler(loggers.compiler, project);
 let coverage = new Coverage(configuration);
 let transformer = new Transformer(configuration, project);
-let threshold = new Threshold(configuration, log4js.getLogger("threshold.karma-typescript"));
+let threshold = new Threshold(configuration, loggers.threshold);
 let validator = new Validator(configuration);
 
-let resolver = new Resolver(configuration,
-                            dependencyWalker,
-                            log4js.getLogger("resolver.karma-typescript"),
-                            transformer);
-
+let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, transformer);
 let globals = new Globals(configuration, resolver);
 
-let bundler = new Bundler(configuration,
-                          dependencyWalker,
-                          globals,
-                          log4js.getLogger("bundler.karma-typescript"),
-                          project,
-                          resolver,
-                          transformer,
-                          validator);
+let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
+                          project, resolver, transformer, validator);
 
 let framework = new Framework(bundler, configuration, coverage, resolver);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);

@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var log4js = require("log4js");
 var lodash_1 = require("lodash");
 var Configuration = (function () {
-    function Configuration() {
+    function Configuration(loggers) {
+        this.loggers = loggers;
     }
     Configuration.prototype.initialize = function (config) {
         this.karma = config || {};
         this.karmaTypescriptConfig = config.karmaTypescriptConfig || {};
+        this.configureLogging();
         this.configureBundler();
         this.configureCoverage();
         this.configureProject();
@@ -29,6 +32,13 @@ var Configuration = (function () {
     };
     Configuration.prototype.hasReporter = function (name) {
         return this.karma.reporters.indexOf(name) !== -1;
+    };
+    Configuration.prototype.configureLogging = function () {
+        var _this = this;
+        log4js.configure({ appenders: this.karma.loggers });
+        Object.keys(this.loggers).forEach(function (key) {
+            _this.loggers[key].setLevel(_this.karma.logLevel);
+        });
     };
     Configuration.prototype.configureBundler = function () {
         var defaultBundlerOptions = {
