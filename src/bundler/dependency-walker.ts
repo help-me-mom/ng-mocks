@@ -65,12 +65,11 @@ export class DependencyWalker {
 
         let isRequire = (node: any) => {
             return node.type === "CallExpression" &&
-                    node.callee.type === "Identifier" &&
-                    node.callee.name === "require"
-            ;
+                   node.callee.type === "Identifier" &&
+                   node.callee.name === "require";
         };
 
-        let visit = (node: any, state: any, c: any)  => {
+        let visitNode = (node: any, state: any, c: any)  => {
             if (!this.hasRequire(requiredModule.source.slice(node.start, node.end))) {
                 return;
             }
@@ -86,8 +85,8 @@ export class DependencyWalker {
         };
 
         this.walk.recursive(requiredModule.ast, null, {
-            Expression: visit,
-            Statement: visit
+            Expression: visitNode,
+            Statement: visitNode
         });
 
         this.addDynamicDependencies(expressions, moduleNames, requiredModule);

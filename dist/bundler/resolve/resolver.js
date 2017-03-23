@@ -66,7 +66,7 @@ var Resolver = (function () {
                     requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
                 }
             }
-            requiredModule.ast = acorn.parse(requiredModule.source, _this.config.bundlerOptions.acornOptions);
+            requiredModule.ast = _this.createAbstractSyntaxTree(requiredModule);
             _this.transformer.applyTransforms(requiredModule, function (error) {
                 if (error) {
                     throw Error;
@@ -79,6 +79,14 @@ var Resolver = (function () {
             return onRequiredModuleResolved(requiredModule);
         };
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+    };
+    Resolver.prototype.createAbstractSyntaxTree = function (requiredModule) {
+        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
+            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) : {
+            body: undefined,
+            sourceType: "script",
+            type: "Program"
+        };
     };
     Resolver.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
         var bopts = {
@@ -131,10 +139,7 @@ var Resolver = (function () {
     };
     Resolver.prototype.resolveDependencies = function (requiredModule, buffer, onDependenciesResolved) {
         var _this = this;
-        requiredModule.requiredModules = [];
-        if (requiredModule.isScript() &&
-            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 &&
-            this.dependencyWalker.hasRequire(requiredModule.source)) {
+        if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
             var moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
             async.each(moduleNames, function (moduleName, onModuleResolved) {
                 var dependency = new required_module_1.RequiredModule(moduleName);

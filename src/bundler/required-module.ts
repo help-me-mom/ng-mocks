@@ -6,7 +6,7 @@ export class RequiredModule {
     public lookupName?: string;
 
     constructor(public moduleName: string, public filename?: string,
-                public source?: string, public requiredModules?: RequiredModule[]) {}
+                public source?: string, public requiredModules: RequiredModule[] = []) {}
 
     public isJson(): boolean {
         return this.filename && /\.json$/.test(this.filename);

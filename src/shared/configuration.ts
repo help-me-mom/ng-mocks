@@ -98,7 +98,6 @@ export class Configuration {
                 alias: {},
                 directories: ["node_modules"],
                 extensions: [".js", ".json", ".ts", ".tsx"]
-
             },
             transforms: [],
             validateSyntax: true

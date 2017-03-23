@@ -1,6 +1,7 @@
 import * as acorn from "acorn";
 import * as async from "async";
 import * as browserResolve from "browser-resolve";
+import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
@@ -85,7 +86,8 @@ export class Resolver {
                 }
             }
 
-            requiredModule.ast = acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
+            requiredModule.ast = this.createAbstractSyntaxTree(requiredModule);
+
             this.transformer.applyTransforms(requiredModule, (error: Error) => {
                 if (error) {
                     throw Error;
@@ -100,6 +102,15 @@ export class Resolver {
         };
 
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+    }
+
+    private createAbstractSyntaxTree(requiredModule: RequiredModule): ESTree.Program {
+        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
+            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) : {
+                body: undefined,
+                sourceType: "script",
+                type: "Program"
+            };
     }
 
     private resolveFilename(requiringModule: string, requiredModule: RequiredModule, onFilenameResolved: { (): void }) {
@@ -163,11 +174,7 @@ export class Resolver {
                                 buffer: RequiredModule[],
                                 onDependenciesResolved: { (): void }) {
 
-        requiredModule.requiredModules = [];
-
-        if (requiredModule.isScript() &&
-            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 &&
-            this.dependencyWalker.hasRequire(requiredModule.source)) {
+        if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
 
             let moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
 

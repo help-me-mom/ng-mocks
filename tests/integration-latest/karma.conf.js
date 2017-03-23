@@ -38,7 +38,7 @@ module.exports = function(config) {
                     "react/lib/ReactContext"
                 ],
                 ignore: ["ws"],
-                noParse: ["jquery"],
+                noParse: ["clear"],
                 resolve: {
                     alias: {
                         "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"

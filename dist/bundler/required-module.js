@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var RequiredModule = (function () {
     function RequiredModule(moduleName, filename, source, requiredModules) {
+        if (requiredModules === void 0) { requiredModules = []; }
         this.moduleName = moduleName;
         this.filename = filename;
         this.source = source;

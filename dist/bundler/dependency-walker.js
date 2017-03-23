@@ -50,7 +50,7 @@ var DependencyWalker = (function () {
                 node.callee.type === "Identifier" &&
                 node.callee.name === "require";
         };
-        var visit = function (node, state, c) {
+        var visitNode = function (node, state, c) {
             if (!_this.hasRequire(requiredModule.source.slice(node.start, node.end))) {
                 return;
             }
@@ -65,8 +65,8 @@ var DependencyWalker = (function () {
             }
         };
         this.walk.recursive(requiredModule.ast, null, {
-            Expression: visit,
-            Statement: visit
+            Expression: visitNode,
+            Statement: visitNode
         });
         this.addDynamicDependencies(expressions, moduleNames, requiredModule);
         return moduleNames;
