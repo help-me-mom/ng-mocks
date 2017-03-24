@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var diff = require("diff");
+var fs = require("fs");
 var glob = require("glob");
 var lodash = require("lodash");
 var os = require("os");
@@ -117,16 +118,23 @@ var DependencyWalker = (function () {
                 }
                 else {
                     pattern = path.join(directory, dynamicModuleName);
-                    glob(pattern, function (error, matches) {
-                        if (error) {
-                            throw error;
+                    glob(pattern, function (globError, matches) {
+                        if (globError) {
+                            throw globError;
                         }
-                        matches.forEach(function (match) {
-                            _this.log.debug("Dynamic require: \nexpression: [%s]" +
-                                "\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
-                            dynamicDependencies.push("./" + path.relative(directory, match));
-                        });
-                        onExpressionResolved();
+                        async.each(matches, function (match, onMatchResolved) {
+                            fs.stat(match, function (statError, stats) {
+                                if (statError) {
+                                    throw statError;
+                                }
+                                if (stats.isFile()) {
+                                    _this.log.debug("Dynamic require: \nexpression: [%s]" +
+                                        "\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
+                                    dynamicDependencies.push("./" + path.relative(directory, match));
+                                }
+                                onMatchResolved();
+                            });
+                        }, onExpressionResolved);
                     });
                 }
             }

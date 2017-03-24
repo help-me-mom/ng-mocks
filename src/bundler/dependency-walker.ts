@@ -1,5 +1,6 @@
 import * as async from "async";
 import * as diff from "diff";
+import * as fs from "fs";
 import * as glob from "glob";
 import * as lodash from "lodash";
 import * as os from "os";
@@ -158,17 +159,25 @@ export class DependencyWalker {
                 }
                 else {
                     pattern = path.join(directory, dynamicModuleName);
-                    glob(pattern, (error, matches) => {
-                        if (error) {
-                            throw error;
+                    glob(pattern, (globError, matches) => {
+                        if (globError) {
+                            throw globError;
                         }
-                        matches.forEach((match) => {
-                            this.log.debug("Dynamic require: \nexpression: [%s]" +
-                                        "\nfilename: %s\nrequired by %s\nglob: %s",
-                                JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
-                            dynamicDependencies.push("./" + path.relative(directory, match));
-                        });
-                        onExpressionResolved();
+                        async.each(matches, (match, onMatchResolved) => {
+                            fs.stat(match, (statError, stats) => {
+                                if (statError) {
+                                    throw statError;
+                                }
+                                if (stats.isFile()) {
+                                    this.log.debug("Dynamic require: \nexpression: [%s]" +
+                                                  "\nfilename: %s\nrequired by %s\nglob: %s",
+                                                  JSON.stringify(expression, undefined, 3),
+                                                  match, requiredModule.filename, pattern);
+                                    dynamicDependencies.push("./" + path.relative(directory, match));
+                                }
+                                onMatchResolved();
+                            });
+                        }, onExpressionResolved);
                     });
                 }
             }
