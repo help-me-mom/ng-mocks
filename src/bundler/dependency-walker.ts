@@ -1,3 +1,4 @@
+import * as async from "async";
 import * as diff from "diff";
 import * as glob from "glob";
 import * as lodash from "lodash";
@@ -58,7 +59,8 @@ export class DependencyWalker {
         return requiredModuleCount;
     }
 
-    public collectRequiredJsModules(requiredModule: RequiredModule): string[] {
+    public collectRequiredJsModules(requiredModule: RequiredModule,
+                                    onRequiredModulesCollected: { (moduleNames: string[]): void }): void {
 
         let moduleNames: string[] = [];
         let expressions: any[] = [];
@@ -89,9 +91,9 @@ export class DependencyWalker {
             Statement: visitNode
         });
 
-        this.addDynamicDependencies(expressions, moduleNames, requiredModule);
-
-        return moduleNames;
+        this.addDynamicDependencies(expressions, requiredModule, (dynamicDependencies) => {
+            onRequiredModulesCollected(moduleNames.concat(dynamicDependencies));
+        });
     }
 
     private findUnresolvedTsRequires(sourceFile: ts.SourceFile): RequiredModule[] {
@@ -130,43 +132,65 @@ export class DependencyWalker {
         return requiredModules;
     }
 
-    private addDynamicDependencies(expressions: any[], moduleNames: string[], requiredModule: RequiredModule) {
+    private addDynamicDependencies(expressions: any[],
+                                   requiredModule: RequiredModule,
+                                   onDynamicDependenciesAdded: { (dynamicDependencies: string[]): void }) {
 
-        expressions.forEach((expression) => {
+        let dynamicDependencies: string[] = [];
+
+        if (expressions.length === 0) {
+            process.nextTick(() => {
+                onDynamicDependenciesAdded(dynamicDependencies);
+            });
+            return;
+        }
+
+        async.each(expressions, (expression, onExpressionResolved) => {
 
             let dynamicModuleName = this.parseDynamicRequire(expression);
             let directory = path.dirname(requiredModule.filename);
             let pattern: string;
-            let files: string[];
 
             if (dynamicModuleName && dynamicModuleName !== "*") {
                 if (new RequiredModule(dynamicModuleName).isNpmModule()) {
-                    moduleNames.push(dynamicModuleName);
+                    dynamicDependencies.push(dynamicModuleName);
+                    onExpressionResolved();
                 }
                 else {
                     pattern = path.join(directory, dynamicModuleName);
-                    files = glob.sync(pattern);
-                    files.forEach((filename) => {
-                        this.log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s",
-                            JSON.stringify(expression, undefined, 3), filename, requiredModule.filename, pattern);
-                        moduleNames.push("./" + path.relative(directory, filename));
+                    glob(pattern, (error, matches) => {
+                        if (error) {
+                            throw error;
+                        }
+                        matches.forEach((match) => {
+                            this.log.debug("Dynamic require: \nexpression: [%s]" +
+                                        "\nfilename: %s\nrequired by %s\nglob: %s",
+                                JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
+                            dynamicDependencies.push("./" + path.relative(directory, match));
+                        });
+                        onExpressionResolved();
                     });
                 }
             }
+            else {
+                onExpressionResolved();
+            }
+        }, () => {
+            onDynamicDependenciesAdded(dynamicDependencies);
         });
     }
 
     private parseDynamicRequire(expression: any): string {
 
-        let visit = (node: any): string => {
+        let visitNode = (node: any): string => {
             switch (node.type) {
                 case "BinaryExpression":
                     if (node.operator === "+") {
-                        return visit(node.left) + visit(node.right);
+                        return visitNode(node.left) + visitNode(node.right);
                     }
                     break;
                 case "ExpressionStatement":
-                    return visit(node.expression);
+                    return visitNode(node.expression);
                 case "Literal":
                     return node.value + "";
                 case "Identifier":
@@ -176,7 +200,7 @@ export class DependencyWalker {
             }
         };
 
-        return visit(expression);
+        return visitNode(expression);
     }
 
     private validateCase(queue: Queued[]) {

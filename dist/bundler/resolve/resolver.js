@@ -140,16 +140,17 @@ var Resolver = (function () {
     Resolver.prototype.resolveDependencies = function (requiredModule, buffer, onDependenciesResolved) {
         var _this = this;
         if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
-            var moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
-            async.each(moduleNames, function (moduleName, onModuleResolved) {
-                var dependency = new required_module_1.RequiredModule(moduleName);
-                _this.resolveModule(requiredModule.filename, dependency, buffer, function (resolved) {
-                    if (resolved) {
-                        requiredModule.requiredModules.push(resolved);
-                    }
-                    onModuleResolved();
-                });
-            }, onDependenciesResolved);
+            this.dependencyWalker.collectRequiredJsModules(requiredModule, function (moduleNames) {
+                async.each(moduleNames, function (moduleName, onModuleResolved) {
+                    var dependency = new required_module_1.RequiredModule(moduleName);
+                    _this.resolveModule(requiredModule.filename, dependency, buffer, function (resolved) {
+                        if (resolved) {
+                            requiredModule.requiredModules.push(resolved);
+                        }
+                        onModuleResolved();
+                    });
+                }, onDependenciesResolved);
+            });
         }
         else {
             process.nextTick(function () {

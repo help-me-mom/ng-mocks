@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var async = require("async");
 var diff = require("diff");
 var glob = require("glob");
 var lodash = require("lodash");
@@ -41,7 +42,7 @@ var DependencyWalker = (function () {
         this.validateCase(queue);
         return requiredModuleCount;
     };
-    DependencyWalker.prototype.collectRequiredJsModules = function (requiredModule) {
+    DependencyWalker.prototype.collectRequiredJsModules = function (requiredModule, onRequiredModulesCollected) {
         var _this = this;
         var moduleNames = [];
         var expressions = [];
@@ -68,8 +69,9 @@ var DependencyWalker = (function () {
             Expression: visitNode,
             Statement: visitNode
         });
-        this.addDynamicDependencies(expressions, moduleNames, requiredModule);
-        return moduleNames;
+        this.addDynamicDependencies(expressions, requiredModule, function (dynamicDependencies) {
+            onRequiredModulesCollected(moduleNames.concat(dynamicDependencies));
+        });
     };
     DependencyWalker.prototype.findUnresolvedTsRequires = function (sourceFile) {
         var requiredModules = [];
@@ -95,38 +97,56 @@ var DependencyWalker = (function () {
         visitNode(sourceFile);
         return requiredModules;
     };
-    DependencyWalker.prototype.addDynamicDependencies = function (expressions, moduleNames, requiredModule) {
+    DependencyWalker.prototype.addDynamicDependencies = function (expressions, requiredModule, onDynamicDependenciesAdded) {
         var _this = this;
-        expressions.forEach(function (expression) {
+        var dynamicDependencies = [];
+        if (expressions.length === 0) {
+            process.nextTick(function () {
+                onDynamicDependenciesAdded(dynamicDependencies);
+            });
+            return;
+        }
+        async.each(expressions, function (expression, onExpressionResolved) {
             var dynamicModuleName = _this.parseDynamicRequire(expression);
             var directory = path.dirname(requiredModule.filename);
             var pattern;
-            var files;
             if (dynamicModuleName && dynamicModuleName !== "*") {
                 if (new required_module_1.RequiredModule(dynamicModuleName).isNpmModule()) {
-                    moduleNames.push(dynamicModuleName);
+                    dynamicDependencies.push(dynamicModuleName);
+                    onExpressionResolved();
                 }
                 else {
                     pattern = path.join(directory, dynamicModuleName);
-                    files = glob.sync(pattern);
-                    files.forEach(function (filename) {
-                        _this.log.debug("Dynamic require: \nexpression: [%s]\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), filename, requiredModule.filename, pattern);
-                        moduleNames.push("./" + path.relative(directory, filename));
+                    glob(pattern, function (error, matches) {
+                        if (error) {
+                            throw error;
+                        }
+                        matches.forEach(function (match) {
+                            _this.log.debug("Dynamic require: \nexpression: [%s]" +
+                                "\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
+                            dynamicDependencies.push("./" + path.relative(directory, match));
+                        });
+                        onExpressionResolved();
                     });
                 }
             }
+            else {
+                onExpressionResolved();
+            }
+        }, function () {
+            onDynamicDependenciesAdded(dynamicDependencies);
         });
     };
     DependencyWalker.prototype.parseDynamicRequire = function (expression) {
-        var visit = function (node) {
+        var visitNode = function (node) {
             switch (node.type) {
                 case "BinaryExpression":
                     if (node.operator === "+") {
-                        return visit(node.left) + visit(node.right);
+                        return visitNode(node.left) + visitNode(node.right);
                     }
                     break;
                 case "ExpressionStatement":
-                    return visit(node.expression);
+                    return visitNode(node.expression);
                 case "Literal":
                     return node.value + "";
                 case "Identifier":
@@ -135,7 +155,7 @@ var DependencyWalker = (function () {
                     return "";
             }
         };
-        return visit(expression);
+        return visitNode(expression);
     };
     DependencyWalker.prototype.validateCase = function (queue) {
         var files = queue.map(function (q) {

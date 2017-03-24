@@ -175,18 +175,17 @@ export class Resolver {
                                 onDependenciesResolved: { (): void }) {
 
         if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
-
-            let moduleNames = this.dependencyWalker.collectRequiredJsModules(requiredModule);
-
-            async.each(moduleNames, (moduleName, onModuleResolved) => {
-                let dependency = new RequiredModule(moduleName);
-                this.resolveModule(requiredModule.filename, dependency, buffer, (resolved) => {
-                    if (resolved) {
-                        requiredModule.requiredModules.push(resolved);
-                    }
-                    onModuleResolved();
-                });
-            }, onDependenciesResolved);
+            this.dependencyWalker.collectRequiredJsModules(requiredModule, (moduleNames) => {
+                async.each(moduleNames, (moduleName, onModuleResolved) => {
+                    let dependency = new RequiredModule(moduleName);
+                    this.resolveModule(requiredModule.filename, dependency, buffer, (resolved) => {
+                        if (resolved) {
+                            requiredModule.requiredModules.push(resolved);
+                        }
+                        onModuleResolved();
+                    });
+                }, onDependenciesResolved);
+            });
         }
         else {
             process.nextTick(() => {
