@@ -155,6 +155,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.bundlerOptions.resolve.directories** - An array of directories where modules will be recursively looked up.<br/>
   Defaults to `["node_modules"]`.
 
+* **karmaTypescriptConfig.bundlerOptions.transforms** - An array of functions transforming the bundled code.
+  For more detailed documentation, please see the Transforms API section in this document.<br/>
+
 * **karmaTypescriptConfig.bundlerOptions.validateSyntax** - A boolean indicating whether the syntax ofthe bundled code should be validated.
   Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`.<br/>
   Defaults to `true`.
@@ -285,6 +288,7 @@ karmaTypescriptConfig: {
             extensions: [".js", ".json"],
             directories: ["node_modules"]
         },
+        transforms: [require("karma-typescript-es6-transform")()],
         validateSyntax: true
     },
     compilerOptions: {
@@ -359,7 +363,7 @@ export function exportedFunction(): string {
 }
 ```
 
-Would be compiled to the following javascript (assuming the compiler option `module` is set to `commonjs`):
+Would be compiled to the following JavaScript (assuming the compiler option `module` is set to `commonjs`):
 
 ```javascript
 function exportedFunction() {
@@ -456,6 +460,58 @@ A full Node.js environment will be provided with global variables and browser sh
 * [zlib](https://www.npmjs.com/package/browserify-zlib)
 
 The plugin uses [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to load the source code from node_modules.
+
+## Transforms API
+
+The bundler has a public API which lets plugins alter or completely replace code before adding it to the bundle.
+For example, a plugin could compile ES2015 JavaScript code to to ES5 syntax, making it possible to import an `npm` module
+written in ES2015 syntax from a Typescript module directly.
+
+The interface between the bundler and the plugins is a plain array of functions, specified in the configuration property `karmaTypescriptConfig.bundlerOptions.transforms`, where each function is considered a transforming plugin.
+
+The plugin functions in the transforms array are asynchronous and adhere to the Node.js callback convention where the first
+argument of the callback function is an `Error` object or `undefined` and the second argument is the result. However, although
+each function is asynchronous, all functions will be called *synchronously* one by one in the order they were added to the array,
+and each function will be called with the result of the previous function, enabling transforms plugin chaining.
+
+Transforms will be executed at two points in the bundling process: right after compilation of the project Typescript files
+and when resolving `import` and `require` statements. This means each transforming function will be called for both
+Typescript files and JavaScript files from `node_modules`, making each plugin implementation responsible for validating the
+context before performing any logic, for example by checking the file name, module name or the existence of an ast object etc.
+
+Each transforming function will be executed before resolving dependencies, which means paths in `import` or `require` statements
+or anywhere in the code can be rewritten before bundling, to fit the Karma execution environment. 
+
+Example of a simple inline transforming function replacing the contents of a `.css` file, mimicking the behavior of Css Modules:
+
+```javascript
+karmaTypescriptConfig: {
+    bundlerOptions: {
+        transforms: [
+            function(context, callback) {
+                if(context.module === "./main.css") {
+                    context.source = "module.exports = { color: red };";
+                    return callback(undefined, true);
+                }
+                return callback(undefined, false);
+            }
+        ]
+    }
+}
+```
+
+### Context
+The context object is defined [here](https://github.com/monounity/karma-typescript/blob/master/src/api/transforms.ts).
+
+### Callback
+
+The callback function has two arguments:
+1. An `Error` object or `undefined``
+2. A boolean indicating whether the value of `context.source` has changed or not.
+
+### Existing transforms plugins:
+- [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
+- [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
 
 ## Stop on compilation error
 
