@@ -155,8 +155,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.bundlerOptions.resolve.directories** - An array of directories where modules will be recursively looked up.<br/>
   Defaults to `["node_modules"]`.
 
-* **karmaTypescriptConfig.bundlerOptions.transforms** - An array of functions transforming the bundled code.
-  For more detailed documentation, please see the Transforms API section in this document.<br/>
+* **karmaTypescriptConfig.bundlerOptions.transforms** - An array of functions altering or replacing compiled Typescript code/Javascript
+  code loaded from `node_modules` before bundling it.
+  For more detailed documentation on transforms, please refer to the [Transforms API section](#transforms-api) in this document.<br/>
 
 * **karmaTypescriptConfig.bundlerOptions.validateSyntax** - A boolean indicating whether the syntax ofthe bundled code should be validated.
   Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`.<br/>
@@ -165,6 +166,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.compilerOptions** - This setting will override or add to existing compiler options.<br/>
   Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the
   exception of `outDir`and `outFile` which are ignored since the code is compiled in-memory.
+
+  If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in `karmaTypescriptConfig.compilerOptions`,
+  the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
 
 * **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
   set to `false` to see the original Typescript code when debugging.<br/>
@@ -501,7 +505,7 @@ karmaTypescriptConfig: {
 ```
 
 ### Context
-The context object is defined [here](https://github.com/monounity/karma-typescript/blob/master/src/api/transforms.ts).
+The context object, `TransformContext`, is defined [here](https://github.com/monounity/karma-typescript/blob/master/src/api/transforms.ts).
 
 ### Callback
 
@@ -513,22 +517,6 @@ The callback function has two arguments:
 - [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
 - [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
 
-## Stop on compilation error
-
-If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in the compiler options in `karmaTypescriptConfig`,
-the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
-
-## Under the hood
-
-Under the hood, `karma-typescript` chains several other npm modules in the following order:
-
-|Module|Step|Note|
-|---|---|---|
-|`typescript`|Compile incrementally, in-memory with inline sourcemaps|Plain Typescript, Angular2 and Reactare included in the default compiler settings|
-|`browserify`|Add module loading for browsers|Uses parts of the browserify tool chain|
-|`karma-coverage`|Instrument the code with Istanbul|Instrumented code will not be compacted and &ast;.spec.ts and &ast;.test.ts are excluded|
-|`remap-istanbul`|Create remapped coverage|An html report will be created in the folder ./coverage|
-
 ## Requirements
 
 Typescript 1.6.2^ is required.
@@ -537,9 +525,15 @@ Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and 
 
 ## Troubleshooting
 
+### Error: Can not load "karma-typescript", it is not registered!
+
+Users have reported succes by simply deleting the `node_modules` folder and then running `nmp install` again.
+
 ### Error: Cannot find module 'buffer/' from '.'
 
-This error seems to hit mostly users with older versions of `npm`, where all dependencies don't get pulled in automatically by `npm`.
+*Note: this error has been fixed in karma-typescript@^3.0.0`.*
+
+This error seems to hit mostly users of with older versions of `npm`, where all dependencies don't get pulled in automatically by `npm`.
 
 There's a workaround reported by users, which is simply adding the missing dependencies explicitly to `package.json`:
 
