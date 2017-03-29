@@ -40,11 +40,9 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
         files: [
             { pattern: "src/**/*.ts" }, // *.tsx for React Jsx
-            { pattern: "test/**/*.ts" }
         ],
         preprocessors: {
-            "src/**/*.ts": ["karma-typescript", "coverage"], // *.tsx for React Jsx
-            "test/**/*.ts": ["karma-typescript"]
+            "**/*.ts": ["karma-typescript"], // *.tsx for React Jsx
         },
         reporters: ["progress", "karma-typescript"],
         browsers: ["Chrome"]
@@ -55,6 +53,8 @@ module.exports = function(config) {
 The above eaxample will compile all Typescript files and run the unit tests, producing remapped coverage in `./coverage`.
 
 ## Examples
+
+[Cookbook](https://github.com/monounity/karma-typescript/tree/master/cookbook.md)
 
 ### Frameworks and Integrations
 
