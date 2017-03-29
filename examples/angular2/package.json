@@ -22,7 +22,7 @@
     "@angular/core": "2.2.3",
     "@angular/platform-browser": "2.2.3",
     "@angular/platform-browser-dynamic": "2.2.3",
-    "@types/core-js": "0.9.36",
+    "@types/core-js": "^0.9.39",
     "@types/jasmine": "^2.5.37",
     "@types/node": "^6.0.51",
     "core-js": "^2.4.1",

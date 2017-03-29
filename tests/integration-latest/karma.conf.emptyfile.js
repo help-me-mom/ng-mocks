@@ -15,6 +15,9 @@ module.exports = function(config) {
             include: ["src/misc/emptyfile/*.ts"],
             bundlerOptions: {
                 nodeGlobals: false
+            },
+            compilerOptions: {
+                lib: ["DOM", "ES2015"]
             }
         },
 

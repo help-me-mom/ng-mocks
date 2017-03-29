@@ -105,7 +105,7 @@
     "@types/glob": "^5.0.30",
     "@types/istanbul": "^0.4.29",
     "@types/karma": "^0.13.33",
-    "@types/lodash": "^4.14.52",
+    "@types/lodash": "^4.14.59",
     "@types/minimatch": "^2.0.29",
     "@types/node": "^7.0.5",
     "@types/pad": "^1.0.0",

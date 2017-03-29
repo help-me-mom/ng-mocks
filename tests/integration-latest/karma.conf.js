@@ -68,7 +68,7 @@ module.exports = function(config) {
                 moduleResolution: "node",
                 sourceMap: true,
                 target: "ES5",
-                lib: ["DOM", "ES5", "ScriptHost"]
+                lib: ["DOM", "ES2015"]
             },
             coverageOptions: {
                 instrumentation: true,

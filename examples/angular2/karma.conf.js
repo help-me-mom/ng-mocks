@@ -19,6 +19,9 @@ module.exports = function(config) {
                     require("karma-typescript-angular2-transform")
                 ]
             },
+            compilerOptions: {
+                lib: ["ES2015", "DOM"]
+            },
             coverageOptions: {
                 instrumentation: true
             }

@@ -17,7 +17,8 @@ module.exports = function(config) {
                 experimentalDecorators: true,
                 module: "commonjs",
                 sourceMap: true,
-                target: "ES5"
+                target: "ES5",
+                lib: ["DOM", "ES2015"]
             },
             include: ["src/node/core/*.ts"],
             reports:
