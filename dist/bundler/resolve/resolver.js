@@ -44,12 +44,10 @@ var Resolver = (function () {
         }
         var onFilenameResolved = function () {
             _this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
-            if (_this.filenameCache.indexOf(requiredModule.filename) !== -1 ||
-                requiredModule.filename.indexOf(".ts") !== -1) {
+            if (_this.isInFilenameCache(requiredModule) || requiredModule.isTypescriptFile()) {
                 process.nextTick(function () {
                     onRequiredModuleResolved(requiredModule);
                 });
-                return;
             }
             else {
                 _this.filenameCache.push(requiredModule.filename);
@@ -81,6 +79,9 @@ var Resolver = (function () {
             return onRequiredModuleResolved(requiredModule);
         };
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+    };
+    Resolver.prototype.isInFilenameCache = function (requiredModule) {
+        return this.filenameCache.indexOf(requiredModule.filename) !== -1;
     };
     Resolver.prototype.createAbstractSyntaxTree = function (requiredModule) {
         return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?

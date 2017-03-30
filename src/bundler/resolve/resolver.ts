@@ -61,12 +61,10 @@ export class Resolver {
 
             this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
 
-            if (this.filenameCache.indexOf(requiredModule.filename) !== -1 ||
-                requiredModule.filename.indexOf(".ts") !== -1) {
+            if (this.isInFilenameCache(requiredModule) || requiredModule.isTypescriptFile()) {
                 process.nextTick(() => {
                     onRequiredModuleResolved(requiredModule);
                 });
-                return;
             }
             else {
                 this.filenameCache.push(requiredModule.filename);
@@ -105,6 +103,10 @@ export class Resolver {
         };
 
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+    }
+
+    private isInFilenameCache(requiredModule: RequiredModule): boolean {
+        return this.filenameCache.indexOf(requiredModule.filename) !== -1;
     }
 
     private createAbstractSyntaxTree(requiredModule: RequiredModule): ESTree.Program {
