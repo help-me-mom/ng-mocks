@@ -24,9 +24,7 @@ var Globals = (function () {
                 entrypoints.unshift(item.filename);
                 onGlobalResolved();
             });
-        }, function () {
-            onGlobalsAdded();
-        });
+        }, onGlobalsAdded);
     };
     Globals.prototype.addNodeGlobals = function (items) {
         if (this.config.bundlerOptions.addNodeGlobals) {

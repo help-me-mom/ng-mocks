@@ -27,9 +27,7 @@ export class Globals {
                 entrypoints.unshift(item.filename);
                 onGlobalResolved();
             });
-        }, () => {
-            onGlobalsAdded();
-        });
+        }, onGlobalsAdded);
     }
 
     private addNodeGlobals(items: RequiredModule[]): void {
