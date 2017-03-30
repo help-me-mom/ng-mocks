@@ -4,8 +4,13 @@ describe("IgnoreTester", () => {
 
     let tester = new IgnoreTester();
 
-    it("should be required without ignored dependencies", () => {
+    it("should import without ignored dependencies", () => {
 
-        expect(tester.testRequire()).toBeTruthy();
+        expect(tester.testRequireIo()).toBeTruthy();
+    });
+
+    it("should require ignored module", () => {
+
+        expect(tester.testRequireWs()).toEqual({});
     });
 });

@@ -74,16 +74,18 @@ export class Resolver {
             }
         };
 
-        let onSourceRead = () => {
+        let onSourceRead = (source: string) => {
+
+            requiredModule.source = SourceMap.deleteComment(source);
 
             if (!requiredModule.isScript()) {
                 if (requiredModule.isJson()) {
                     requiredModule.source = os.EOL +
                         "module.isJSON = true;" + os.EOL +
-                        "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
+                        "module.exports = JSON.parse(" + JSON.stringify(source) + ");";
                 }
                 else {
-                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
+                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(source) + ";";
                 }
             }
 
@@ -155,7 +157,7 @@ export class Resolver {
         }
     }
 
-    private readSource(requiredModule: RequiredModule, onSourceRead: { (source?: string): void }) {
+    private readSource(requiredModule: RequiredModule, onSourceRead: { (source: string): void }) {
 
         if (this.config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
             onSourceRead("module.exports={};");
@@ -165,8 +167,7 @@ export class Resolver {
                 if (error) {
                     throw error;
                 }
-                requiredModule.source = SourceMap.deleteComment(data.toString());
-                onSourceRead();
+                onSourceRead(data.toString());
             });
         }
     }

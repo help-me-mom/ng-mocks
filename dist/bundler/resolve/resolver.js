@@ -56,15 +56,16 @@ var Resolver = (function () {
                 _this.readSource(requiredModule, onSourceRead);
             }
         };
-        var onSourceRead = function () {
+        var onSourceRead = function (source) {
+            requiredModule.source = SourceMap.deleteComment(source);
             if (!requiredModule.isScript()) {
                 if (requiredModule.isJson()) {
                     requiredModule.source = os.EOL +
                         "module.isJSON = true;" + os.EOL +
-                        "module.exports = JSON.parse(" + JSON.stringify(requiredModule.source) + ");";
+                        "module.exports = JSON.parse(" + JSON.stringify(source) + ");";
                 }
                 else {
-                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(requiredModule.source) + ";";
+                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(source) + ";";
                 }
             }
             requiredModule.ast = _this.createAbstractSyntaxTree(requiredModule);
@@ -133,8 +134,7 @@ var Resolver = (function () {
                 if (error) {
                     throw error;
                 }
-                requiredModule.source = SourceMap.deleteComment(data.toString());
-                onSourceRead();
+                onSourceRead(data.toString());
             });
         }
     };
