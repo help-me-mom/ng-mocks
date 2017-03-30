@@ -182,7 +182,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   A positive value will be used as a minimum percentage, for example `statements: 50` means that at least 50% of the statements should be covered by a test.<br/>
   A negative value will be used as a maximum number of uncovered items, for example `lines: 10` means that no more than 10 uncovered lines are allowed.
     ```javascript
-    threshhold: {
+    threshold: {
         global: {
             statements: 100,
             branches: 100,
@@ -301,7 +301,7 @@ karmaTypescriptConfig: {
     coverageOptions: {
         instrumentation: true,
         exclude: /\.(d|spec|test)\.ts/i,
-        threshhold: {
+        threshold: {
             global: {
                 statements: 100,
                 branches: 100,
