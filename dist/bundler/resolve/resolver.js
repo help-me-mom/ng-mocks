@@ -38,7 +38,7 @@ var Resolver = (function () {
         if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
             this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
             process.nextTick(function () {
-                onRequiredModuleResolved();
+                onRequiredModuleResolved(requiredModule);
             });
             return;
         }

@@ -35,7 +35,7 @@ export class Resolver {
     public resolveModule(requiringModule: string,
                          requiredModule: RequiredModule,
                          buffer: RequiredModule[],
-                         onRequiredModuleResolved: { (requiredModule?: RequiredModule): void }) {
+                         onRequiredModuleResolved: { (requiredModule: RequiredModule): void }) {
 
         requiredModule.lookupName = requiredModule.isNpmModule() ?
                 requiredModule.moduleName :
@@ -52,7 +52,7 @@ export class Resolver {
         if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
             this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
             process.nextTick(() => {
-                onRequiredModuleResolved();
+                onRequiredModuleResolved(requiredModule);
             });
             return;
         }
