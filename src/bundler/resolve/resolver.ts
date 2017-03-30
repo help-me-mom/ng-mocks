@@ -29,6 +29,7 @@ export class Resolver {
     public initialize() {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
             require("./shims") : undefined;
+        this.log.debug(this.shims);
     }
 
     public resolveModule(requiringModule: string,

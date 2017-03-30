@@ -21,6 +21,7 @@ var Resolver = (function () {
     Resolver.prototype.initialize = function () {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
             require("./shims") : undefined;
+        this.log.debug(this.shims);
     };
     Resolver.prototype.resolveModule = function (requiringModule, requiredModule, buffer, onRequiredModuleResolved) {
         var _this = this;
