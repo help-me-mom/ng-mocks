@@ -158,17 +158,18 @@ export class Project {
                                 existingOptions: CompilerOptions): ts.ParsedCommandLine {
 
         let tsconfig: ts.ParsedCommandLine;
+        let basePath = this.resolveBasepath(configFileName);
 
         this.extend("include", configFileJson.config, this.config);
         this.extend("exclude", configFileJson.config, this.config);
 
         if ((<any> ts).parseConfigFile) {
-            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, this.config.karma.basePath);
+            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, basePath);
             tsconfig.options = (<any> ts).extend(existingOptions, tsconfig.options);
         }
         else if (ts.parseJsonConfigFileContent) {
             tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys,
-                this.config.karma.basePath, (<any> existingOptions), configFileName);
+                basePath, (<any> existingOptions), configFileName);
         }
 
         if (!tsconfig) {
@@ -183,6 +184,17 @@ export class Project {
         this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
 
         return tsconfig;
+    }
+
+    private resolveBasepath(configFileName: string): string {
+
+        if (!configFileName) {
+            return this.config.karma.basePath;
+        }
+
+        let relativePath = path.relative(this.config.karma.basePath, configFileName);
+        let absolutePath = path.join(this.config.karma.basePath, relativePath);
+        return path.dirname(absolutePath);
     }
 
     private extend(key: string, a: any, b: any): void {

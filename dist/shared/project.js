@@ -98,14 +98,15 @@ var Project = (function () {
     };
     Project.prototype.parseConfigFileJson = function (configFileName, configFileJson, existingOptions) {
         var tsconfig;
+        var basePath = this.resolveBasepath(configFileName);
         this.extend("include", configFileJson.config, this.config);
         this.extend("exclude", configFileJson.config, this.config);
         if (ts.parseConfigFile) {
-            tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, this.config.karma.basePath);
+            tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, basePath);
             tsconfig.options = ts.extend(existingOptions, tsconfig.options);
         }
         else if (ts.parseJsonConfigFileContent) {
-            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, this.config.karma.basePath, existingOptions, configFileName);
+            tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys, basePath, existingOptions, configFileName);
         }
         if (!tsconfig) {
             this.log.error("karma-typescript doesn't know how to use Typescript %s :(", ts.version);
@@ -116,6 +117,14 @@ var Project = (function () {
         tsconfig.options.suppressOutputPathCheck = true;
         this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
         return tsconfig;
+    };
+    Project.prototype.resolveBasepath = function (configFileName) {
+        if (!configFileName) {
+            return this.config.karma.basePath;
+        }
+        var relativePath = path.relative(this.config.karma.basePath, configFileName);
+        var absolutePath = path.join(this.config.karma.basePath, relativePath);
+        return path.dirname(absolutePath);
     };
     Project.prototype.extend = function (key, a, b) {
         var list = lodash.union(a[key], b[key]);

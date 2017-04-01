@@ -270,7 +270,9 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   Defaults to renaming `.ts` and `.tsx` to `.js`.
 
 * **karmaTypescriptConfig.tsconfig** - A path to a `tsconfig.json` file.<br/>
-  The default compiler options will be replaced by the options in this file.
+  The default compiler options will be replaced by the options in this file.<br/>
+  The directory of the `tsconfig.json` file will be used as the base path for the Typescript compiler, and if `karmaTypescriptConfig.tsconfig` isn't set, the `basePath` property of the Karma config will be used as the
+  compiler base path instead.
 
 Example of a full `karmaTypescriptConfig` configuration:
 
