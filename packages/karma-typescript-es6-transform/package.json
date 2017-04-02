@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-es6-transform",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0",
   "description": "Plugin for transforming ES2015 javascript code to to ES5 syntax.",
   "main": "dist/transform.js",
   "keywords": [
@@ -43,7 +43,7 @@
     "@types/node": "^7.0.5",
     "@types/tape": "^4.2.29",
     "babel-preset-es2016": "^6.22.0",
-    "karma-typescript": "beta",
+    "karma-typescript": "latest",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
