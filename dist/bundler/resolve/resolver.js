@@ -1,20 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var acorn = require("acorn");
 var async = require("async");
 var browserResolve = require("browser-resolve");
-var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var PathTool = require("../../shared/path-tool");
 var required_module_1 = require("../required-module");
-var SourceMap = require("../source-map");
 var Resolver = (function () {
-    function Resolver(config, dependencyWalker, log, transformer) {
+    function Resolver(config, dependencyWalker, log, sourceReader) {
         this.config = config;
         this.dependencyWalker = dependencyWalker;
         this.log = log;
-        this.transformer = transformer;
+        this.sourceReader = sourceReader;
         this.filenameCache = [];
         this.lookupNameCache = {};
     }
@@ -51,16 +48,10 @@ var Resolver = (function () {
             }
             else {
                 _this.filenameCache.push(requiredModule.filename);
-                _this.readSource(requiredModule, onSourceRead);
+                _this.sourceReader.read(requiredModule, function () {
+                    _this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
+                });
             }
-        };
-        var onSourceRead = function (source) {
-            requiredModule.source = SourceMap.deleteComment(source);
-            requiredModule.ast = _this.createAbstractSyntaxTree(requiredModule);
-            _this.transformer.applyTransforms(requiredModule, function () {
-                _this.assertModuleExports(requiredModule);
-                _this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
-            });
         };
         var onDependenciesResolved = function () {
             buffer.push(requiredModule);
@@ -68,29 +59,8 @@ var Resolver = (function () {
         };
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
     };
-    Resolver.prototype.assertModuleExports = function (requiredModule) {
-        if (!requiredModule.isScript()) {
-            requiredModule.source = os.EOL +
-                "module.exports = " + (requiredModule.isJson() ?
-                requiredModule.source :
-                JSON.stringify(requiredModule.source));
-        }
-    };
     Resolver.prototype.isInFilenameCache = function (requiredModule) {
         return this.filenameCache.indexOf(requiredModule.filename) !== -1;
-    };
-    Resolver.prototype.createAbstractSyntaxTree = function (requiredModule) {
-        var dummyAst = {
-            body: undefined,
-            sourceType: "script",
-            type: "Program"
-        };
-        if (!requiredModule.isScript()) {
-            return dummyAst;
-        }
-        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
-            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) :
-            dummyAst;
     };
     Resolver.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
         var bopts = {
@@ -125,19 +95,6 @@ var Resolver = (function () {
         });
         if (filteredPath) {
             return filteredPath;
-        }
-    };
-    Resolver.prototype.readSource = function (requiredModule, onSourceRead) {
-        if (this.config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
-            onSourceRead("module.exports={};");
-        }
-        else {
-            fs.readFile(requiredModule.filename, function (error, data) {
-                if (error) {
-                    throw error;
-                }
-                onSourceRead(data.toString());
-            });
         }
     };
     Resolver.prototype.resolveDependencies = function (requiredModule, buffer, onDependenciesResolved) {

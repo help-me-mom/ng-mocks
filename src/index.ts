@@ -4,6 +4,7 @@ import { Bundler } from "./bundler/bundler";
 import { DependencyWalker } from "./bundler/dependency-walker";
 import { Globals } from "./bundler/globals";
 import { Resolver } from "./bundler/resolve/resolver";
+import { SourceReader } from "./bundler/resolve/source-reader";
 import { Transformer } from "./bundler/transformer";
 import { Validator } from "./bundler/validator";
 
@@ -42,7 +43,8 @@ let transformer = new Transformer(configuration, loggers.transformer, project);
 let threshold = new Threshold(configuration, loggers.threshold);
 let validator = new Validator(configuration);
 
-let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, transformer);
+let sourceReader = new SourceReader(configuration, transformer);
+let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
 let globals = new Globals(configuration, resolver);
 
 let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,

@@ -1,19 +1,15 @@
-import * as acorn from "acorn";
 import * as async from "async";
 import * as browserResolve from "browser-resolve";
-import * as ESTree from "estree";
-import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
 import { Logger } from "log4js";
 
 import { Configuration } from "../../shared/configuration";
+import { SourceReader } from "./source-reader";
 import PathTool = require("../../shared/path-tool");
 import { DependencyWalker } from "../dependency-walker";
 import { RequiredModule } from "../required-module";
-import SourceMap = require("../source-map");
-import { Transformer } from "../transformer";
 
 export class Resolver {
 
@@ -24,7 +20,7 @@ export class Resolver {
     constructor(private config: Configuration,
                 private dependencyWalker: DependencyWalker,
                 private log: Logger,
-                private transformer: Transformer) { }
+                private sourceReader: SourceReader) { }
 
     public initialize() {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
@@ -68,19 +64,10 @@ export class Resolver {
             }
             else {
                 this.filenameCache.push(requiredModule.filename);
-                this.readSource(requiredModule, onSourceRead);
+                this.sourceReader.read(requiredModule, () => {
+                    this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
+                });
             }
-        };
-
-        let onSourceRead = (source: string) => {
-
-            requiredModule.source = SourceMap.deleteComment(source);
-            requiredModule.ast = this.createAbstractSyntaxTree(requiredModule);
-
-            this.transformer.applyTransforms(requiredModule, () => {
-                this.assertModuleExports(requiredModule);
-                this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
-            });
         };
 
         let onDependenciesResolved = () => {
@@ -91,34 +78,8 @@ export class Resolver {
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
     }
 
-    private assertModuleExports(requiredModule: RequiredModule): void {
-        if (!requiredModule.isScript()) {
-            requiredModule.source = os.EOL +
-                "module.exports = " + (requiredModule.isJson() ?
-                    requiredModule.source :
-                    JSON.stringify(requiredModule.source));
-        }
-    }
-
     private isInFilenameCache(requiredModule: RequiredModule): boolean {
         return this.filenameCache.indexOf(requiredModule.filename) !== -1;
-    }
-
-    private createAbstractSyntaxTree(requiredModule: RequiredModule): ESTree.Program {
-
-        let dummyAst: ESTree.Program = {
-            body: undefined,
-            sourceType: "script",
-            type: "Program"
-        };
-
-        if (!requiredModule.isScript()) {
-            return dummyAst;
-        }
-
-        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
-            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) :
-            dummyAst;
     }
 
     private resolveFilename(requiringModule: string, requiredModule: RequiredModule, onFilenameResolved: { (): void }) {
@@ -159,21 +120,6 @@ export class Resolver {
 
         if (filteredPath) {
             return filteredPath;
-        }
-    }
-
-    private readSource(requiredModule: RequiredModule, onSourceRead: { (source: string): void }) {
-
-        if (this.config.bundlerOptions.ignore.indexOf(requiredModule.moduleName) !== -1) {
-            onSourceRead("module.exports={};");
-        }
-        else {
-            fs.readFile(requiredModule.filename, (error, data) => {
-                if (error) {
-                    throw error;
-                }
-                onSourceRead(data.toString());
-            });
         }
     }
 
