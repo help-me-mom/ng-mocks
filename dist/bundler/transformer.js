@@ -4,16 +4,17 @@ var async = require("async");
 var os = require("os");
 var ts = require("typescript");
 var Transformer = (function () {
-    function Transformer(config, project) {
+    function Transformer(config, log, project) {
         this.config = config;
+        this.log = log;
         this.project = project;
     }
-    Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformssApplied) {
+    Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformsApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
             process.nextTick(function () {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -44,14 +45,14 @@ var Transformer = (function () {
                     });
                 });
             }, onQueueProcessed);
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     };
-    Transformer.prototype.applyTransforms = function (requiredModule, onTransformssApplied) {
+    Transformer.prototype.applyTransforms = function (requiredModule, onTransformsApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
             process.nextTick(function () {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -75,13 +76,15 @@ var Transformer = (function () {
                     onTransformApplied();
                 });
             });
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     };
     Transformer.prototype.handleError = function (error, transform) {
         if (error) {
-            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
+            var errorMessage = "Unable to run transform: " + os.EOL + os.EOL +
                 transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL);
+                "callback error parameter: " + error + os.EOL;
+            this.log.error(errorMessage);
+            throw new Error(errorMessage);
         }
     };
     return Transformer;

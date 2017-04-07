@@ -2,6 +2,8 @@ import * as async from "async";
 import * as os from "os";
 import * as ts from "typescript";
 
+import { Logger } from "log4js";
+
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
 import { Project } from "../shared/project";
@@ -10,15 +12,15 @@ import { RequiredModule } from "./required-module";
 
 export class Transformer {
 
-    constructor(private config: Configuration, private project: Project) { }
+    constructor(private config: Configuration, private log: Logger, private project: Project) { }
 
-    public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
+    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: () => void): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -35,7 +37,7 @@ export class Transformer {
                     version: ts.version
                 }
             };
-            async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
+            async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
                     transform(context, (error: Error, dirty: boolean) => {
                         this.handleError(error, transform);
@@ -51,16 +53,16 @@ export class Transformer {
                     });
                 });
             }, onQueueProcessed);
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     }
 
-    public applyTransforms(requiredModule: RequiredModule, onTransformssApplied: ErrorCallback<Error>): void {
+    public applyTransforms(requiredModule: RequiredModule, onTransformsApplied: () => void): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -74,7 +76,7 @@ export class Transformer {
             module: requiredModule.moduleName,
             source: requiredModule.source
         };
-        async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
+        async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
             process.nextTick(() => {
                 transform(context, (error: Error, dirty: boolean) => {
                     this.handleError(error, transform);
@@ -85,14 +87,16 @@ export class Transformer {
                     onTransformApplied();
                 });
             });
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     }
 
     private handleError(error: Error, transform: Transform): void {
         if (error) {
-            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
+            let errorMessage = "Unable to run transform: " + os.EOL + os.EOL +
                 transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL);
+                "callback error parameter: " + error + os.EOL;
+            this.log.error(errorMessage);
+            throw new Error(errorMessage);
         }
     }
 }

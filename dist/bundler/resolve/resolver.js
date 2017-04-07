@@ -56,21 +56,9 @@ var Resolver = (function () {
         };
         var onSourceRead = function (source) {
             requiredModule.source = SourceMap.deleteComment(source);
-            if (!requiredModule.isScript()) {
-                if (requiredModule.isJson()) {
-                    requiredModule.source = os.EOL +
-                        "module.isJSON = true;" + os.EOL +
-                        "module.exports = JSON.parse(" + JSON.stringify(source) + ");";
-                }
-                else {
-                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(source) + ";";
-                }
-            }
             requiredModule.ast = _this.createAbstractSyntaxTree(requiredModule);
-            _this.transformer.applyTransforms(requiredModule, function (error) {
-                if (error) {
-                    throw Error;
-                }
+            _this.transformer.applyTransforms(requiredModule, function () {
+                _this.assertModuleExports(requiredModule);
                 _this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
             });
         };
@@ -80,16 +68,29 @@ var Resolver = (function () {
         };
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
     };
+    Resolver.prototype.assertModuleExports = function (requiredModule) {
+        if (!requiredModule.isScript()) {
+            requiredModule.source = os.EOL +
+                "module.exports = " + (requiredModule.isJson() ?
+                requiredModule.source :
+                JSON.stringify(requiredModule.source));
+        }
+    };
     Resolver.prototype.isInFilenameCache = function (requiredModule) {
         return this.filenameCache.indexOf(requiredModule.filename) !== -1;
     };
     Resolver.prototype.createAbstractSyntaxTree = function (requiredModule) {
-        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
-            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) : {
+        var dummyAst = {
             body: undefined,
             sourceType: "script",
             type: "Program"
         };
+        if (!requiredModule.isScript()) {
+            return dummyAst;
+        }
+        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
+            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) :
+            dummyAst;
     };
     Resolver.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
         var bopts = {

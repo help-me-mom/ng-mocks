@@ -75,24 +75,10 @@ export class Resolver {
         let onSourceRead = (source: string) => {
 
             requiredModule.source = SourceMap.deleteComment(source);
-
-            if (!requiredModule.isScript()) {
-                if (requiredModule.isJson()) {
-                    requiredModule.source = os.EOL +
-                        "module.isJSON = true;" + os.EOL +
-                        "module.exports = JSON.parse(" + JSON.stringify(source) + ");";
-                }
-                else {
-                    requiredModule.source = os.EOL + "module.exports = " + JSON.stringify(source) + ";";
-                }
-            }
-
             requiredModule.ast = this.createAbstractSyntaxTree(requiredModule);
 
-            this.transformer.applyTransforms(requiredModule, (error: Error) => {
-                if (error) {
-                    throw Error;
-                }
+            this.transformer.applyTransforms(requiredModule, () => {
+                this.assertModuleExports(requiredModule);
                 this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
             });
         };
@@ -105,17 +91,34 @@ export class Resolver {
         this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
     }
 
+    private assertModuleExports(requiredModule: RequiredModule): void {
+        if (!requiredModule.isScript()) {
+            requiredModule.source = os.EOL +
+                "module.exports = " + (requiredModule.isJson() ?
+                    requiredModule.source :
+                    JSON.stringify(requiredModule.source));
+        }
+    }
+
     private isInFilenameCache(requiredModule: RequiredModule): boolean {
         return this.filenameCache.indexOf(requiredModule.filename) !== -1;
     }
 
     private createAbstractSyntaxTree(requiredModule: RequiredModule): ESTree.Program {
+
+        let dummyAst: ESTree.Program = {
+            body: undefined,
+            sourceType: "script",
+            type: "Program"
+        };
+
+        if (!requiredModule.isScript()) {
+            return dummyAst;
+        }
+
         return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
-            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) : {
-                body: undefined,
-                sourceType: "script",
-                type: "Program"
-            };
+            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) :
+            dummyAst;
     }
 
     private resolveFilename(requiringModule: string, requiredModule: RequiredModule, onFilenameResolved: { (): void }) {
