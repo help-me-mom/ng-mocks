@@ -14,7 +14,7 @@ export class Transformer {
 
     constructor(private config: Configuration, private log: Logger, private project: Project) { }
 
-    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: () => void): void {
+    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: { (): void }): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
@@ -56,7 +56,7 @@ export class Transformer {
         }, onTransformsApplied);
     }
 
-    public applyTransforms(requiredModule: RequiredModule, onTransformsApplied: () => void): void {
+    public applyTransforms(requiredModule: RequiredModule, onTransformsApplied: { (): void }): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
