@@ -42,17 +42,15 @@ var SourceReader = (function () {
         }
     };
     SourceReader.prototype.createAbstractSyntaxTree = function (requiredModule) {
-        var dummyAst = {
-            body: undefined,
-            sourceType: "script",
-            type: "Program"
-        };
-        if (!requiredModule.isScript()) {
-            return dummyAst;
+        if (!requiredModule.isScript() ||
+            this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) !== -1) {
+            return {
+                body: undefined,
+                sourceType: "script",
+                type: "Program"
+            };
         }
-        return this.config.bundlerOptions.noParse.indexOf(requiredModule.moduleName) === -1 ?
-            acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions) :
-            dummyAst;
+        return acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
     };
     return SourceReader;
 }());
