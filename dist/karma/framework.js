@@ -19,10 +19,16 @@ var Framework = (function () {
                     });
                 }
             });
-            _this.log.debug("Configuration:\n", JSON.stringify(config, null, 3));
+            _this.log.debug("Configuration:\n", JSON.stringify(config, _this.replacer, 3));
         };
         this.create.$inject = ["config", "helper", "logger"];
     }
+    Framework.prototype.replacer = function (key, value) {
+        if (key && typeof value === "function") {
+            return (value + "").substr(0, 100) + "...";
+        }
+        return value;
+    };
     return Framework;
 }());
 exports.Framework = Framework;

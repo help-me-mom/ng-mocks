@@ -54,8 +54,12 @@ export class Project {
         return this.tsconfig;
     }
 
-    public getModuleFormat(): string {
-        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
+    public hasCompatibleModuleKind(): boolean {
+        return this.tsconfig.options.module === ts.ModuleKind.CommonJS;
+    }
+
+    public getModuleKind(): string {
+        return ts.ModuleKind[this.tsconfig.options.module];
     }
 
     public handleFileEvent(): EventType {
@@ -181,9 +185,19 @@ export class Project {
         delete tsconfig.options.outFile;
         (<any> tsconfig.options).suppressOutputPathCheck = true;
 
+        this.assertModuleKind(tsconfig);
+
         this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
 
         return tsconfig;
+    }
+
+    private assertModuleKind(tsconfig: ts.ParsedCommandLine): void {
+
+        if (typeof tsconfig.options.module !== "number" &&
+            tsconfig.options.target === ts.ScriptTarget.ES5) {
+            tsconfig.options.module = ts.ModuleKind.CommonJS;
+        }
     }
 
     private resolveBasepath(configFileName: string): string {

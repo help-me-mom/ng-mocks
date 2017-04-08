@@ -33,9 +33,16 @@ export class Framework {
                 }
             });
 
-            this.log.debug("Configuration:\n", JSON.stringify(config, null, 3));
+            this.log.debug("Configuration:\n", JSON.stringify(config, this.replacer, 3));
         };
 
         (<any> this.create).$inject = ["config", "helper", "logger"];
+    }
+
+    private replacer(key: string, value: string) {
+        if (key && typeof value === "function") {
+            return (value + "").substr(0, 100) + "...";
+        }
+        return value;
     }
 }

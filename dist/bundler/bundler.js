@@ -66,13 +66,19 @@ var Bundler = (function () {
         });
     };
     Bundler.prototype.shouldBundle = function (requiredModuleCount) {
+        if (this.config.hasPreprocessor("commonjs")) {
+            this.log.debug("Preprocessor 'commonjs' detected, code will NOT be bundled");
+            return false;
+        }
+        if (!this.project.hasCompatibleModuleKind()) {
+            this.log.debug("Module kind set to '%s', code will NOT be bundled", this.project.getModuleKind());
+            return false;
+        }
         if (this.projectImportCountOnFirstRun === undefined) {
             this.projectImportCountOnFirstRun = requiredModuleCount;
-            this.log.debug("Project has %s import/require statements, code will be%sbundled", this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
         }
-        return this.projectImportCountOnFirstRun > 0 &&
-            this.project.getModuleFormat().toLowerCase() === "commonjs" &&
-            !this.config.hasPreprocessor("commonjs");
+        this.log.debug("Project has %s import/require statements, code will be%sbundled", this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
+        return this.projectImportCountOnFirstRun > 0;
     };
     Bundler.prototype.bundleWithLoader = function (benchmark) {
         var _this = this;

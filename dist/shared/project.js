@@ -22,8 +22,11 @@ var Project = (function () {
     Project.prototype.getTsconfig = function () {
         return this.tsconfig;
     };
-    Project.prototype.getModuleFormat = function () {
-        return ts.ModuleKind[this.tsconfig.options.module] || "unknown";
+    Project.prototype.hasCompatibleModuleKind = function () {
+        return this.tsconfig.options.module === ts.ModuleKind.CommonJS;
+    };
+    Project.prototype.getModuleKind = function () {
+        return ts.ModuleKind[this.tsconfig.options.module];
     };
     Project.prototype.handleFileEvent = function () {
         var oldKarmaFiles = lodash.cloneDeep(this.karmaFiles || []);
@@ -115,8 +118,15 @@ var Project = (function () {
         delete tsconfig.options.outDir;
         delete tsconfig.options.outFile;
         tsconfig.options.suppressOutputPathCheck = true;
+        this.assertModuleKind(tsconfig);
         this.log.debug("Resolved tsconfig:\n", JSON.stringify(tsconfig, null, 3));
         return tsconfig;
+    };
+    Project.prototype.assertModuleKind = function (tsconfig) {
+        if (typeof tsconfig.options.module !== "number" &&
+            tsconfig.options.target === ts.ScriptTarget.ES5) {
+            tsconfig.options.module = ts.ModuleKind.CommonJS;
+        }
     };
     Project.prototype.resolveBasepath = function (configFileName) {
         if (!configFileName) {
