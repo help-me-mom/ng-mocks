@@ -1,8 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var log4js = require("log4js");
-var mockfs = require("mock-fs");
+var mock = require("mock-require");
+var os = require("os");
 var test = require("tape");
+mock("fs", {
+    readFile: function (filename, callback) {
+        switch (filename) {
+            case "dummy.js":
+                callback(undefined, new Buffer("var x;"));
+                break;
+            case "json.json":
+                callback(undefined, new Buffer(JSON.stringify([1, 2, 3, "a", "b", "c"])));
+                break;
+            default: callback(undefined, new Buffer(""));
+        }
+    }
+});
 var configuration_1 = require("../../shared/configuration");
 var project_1 = require("../../shared/project");
 var required_module_1 = require("../required-module");
@@ -21,12 +35,6 @@ var karmaTypescriptConfig = {
 var karma = {};
 karma.karmaTypescriptConfig = karmaTypescriptConfig;
 configuration.initialize(karma);
-mockfs({
-    "dummy.js": new Buffer("var x;"),
-    "ignored.js": new Buffer(""),
-    "noparse.js": new Buffer(""),
-    "style.css": new Buffer("")
-});
 test("source-reader should return an empty object literal for ignored modules", function (t) {
     t.plan(1);
     var requiredModule = new required_module_1.RequiredModule("ignored", "ignored.js");
@@ -68,5 +76,12 @@ test("source-reader should create an empty dummy AST for modules specified in th
             sourceType: "script",
             type: "Program"
         });
+    });
+});
+test("source-reader should prepend JSON source with 'module.exports ='", function (t) {
+    t.plan(1);
+    var requiredModule = new required_module_1.RequiredModule("json", "json.json");
+    sourceReader.read(requiredModule, function () {
+        t.equal(requiredModule.source, os.EOL + "module.exports = [1,2,3,\"a\",\"b\",\"c\"]");
     });
 });

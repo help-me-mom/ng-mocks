@@ -1,6 +1,21 @@
 import * as log4js from "log4js";
-import * as mockfs from "mock-fs";
+import * as mock from "mock-require";
+import * as os from "os";
 import * as test from "tape";
+
+mock("fs", {
+    readFile: (filename: string, callback: Function) => {
+        switch(filename) {
+            case "dummy.js":
+                callback(undefined, new Buffer("var x;"));
+                break;
+            case "json.json":
+                callback(undefined, new Buffer(JSON.stringify([1, 2, 3, "a", "b", "c"])));
+                break;
+            default: callback(undefined, new Buffer(""));
+        }
+    }
+});
 
 import { ConfigOptions } from "karma";
 
@@ -27,13 +42,6 @@ let karma: ConfigOptions = {};
 (<any> karma).karmaTypescriptConfig = karmaTypescriptConfig;
 
 configuration.initialize(karma);
-
-mockfs({
-    "dummy.js" : new Buffer("var x;"),
-    "ignored.js" : new Buffer(""),
-    "noparse.js" : new Buffer(""),
-    "style.css" : new Buffer("")
-});
 
 test("source-reader should return an empty object literal for ignored modules", (t) => {
 
@@ -95,5 +103,16 @@ test("source-reader should create an empty dummy AST for modules specified in th
             sourceType: "script",
             type: "Program"
         });
+    });
+});
+
+test("source-reader should prepend JSON source with 'module.exports ='", (t) => {
+
+    t.plan(1);
+
+    let requiredModule = new RequiredModule("json", "json.json");
+
+    sourceReader.read(requiredModule, () => {
+        t.equal(requiredModule.source, os.EOL + "module.exports = [1,2,3,\"a\",\"b\",\"c\"]");
     });
 });
