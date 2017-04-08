@@ -5,7 +5,7 @@ import * as test from "tape";
 
 mock("fs", {
     readFile: (filename: string, callback: Function) => {
-        switch(filename) {
+        switch (filename) {
             case "dummy.js":
                 callback(undefined, new Buffer("var x;"));
                 break;
