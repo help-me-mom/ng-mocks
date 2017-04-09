@@ -1,7 +1,5 @@
 var postcss = require("postcss");
-// var precss = require("precss");
-// var autoprefixer = require("autoprefixer");
-var log = require("log4js").getLogger("dev");
+var postcssModules = require("postcss-modules");
 
 module.exports = function(config) {
     config.set({
@@ -54,16 +52,26 @@ module.exports = function(config) {
                 transforms: [
                     function(context, callback) {
                         if(context.module.match(/style-import-tester\.css$/)) {
-                            postcss(require("postcss-modules")({
+                            postcss(postcssModules({
                                 getJSON: function(cssFileName, json) {
-                                    log.warn(context.source, json);
                                     context.source = JSON.stringify(json);
                                     callback(undefined, true);
                                 }
                             }))
                             .process(context.source, { from: context.module, to: context.module })
+                            .then(function(result){
+                                result.warnings().forEach(function (warning) {
+                                    process.stderr.write(warning.toString());
+                                });
+                            })
                             .catch(function(error) {
-                                callback(error, false);
+                                if (error.name === "CssSyntaxError") {
+                                    process.stderr.write(error.message + error.showSourceCode());
+                                    callback(undefined, false);
+                                }
+                                else {
+                                    callback(error, false);
+                                }
                             });
                         }
                         else {

@@ -71,6 +71,8 @@
     "lodash-es": "^4.17.4",
     "moment": "^2.17.1",
     "negotiator": "0.4.9",
+    "postcss": "^5.2.16",
+    "postcss-modules": "^0.6.4",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-css-modules": "^4.1.0",
