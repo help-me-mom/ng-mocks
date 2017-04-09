@@ -3,26 +3,12 @@ import * as mock from "mock-require";
 import * as os from "os";
 import * as test from "tape";
 
+let readFileCallback = [undefined, new Buffer("")];
+
 mock("fs", {
     readFile: (filename: string, callback: Function) => {
-        switch (filename) {
-            case "dummy.js":
-                callback(undefined, new Buffer("var x;"));
-                break;
-            case "json.json":
-                callback(undefined, new Buffer(JSON.stringify([1, 2, 3, "a", "b", "c"])));
-                break;
-            case "style.css":
-                callback(undefined, new Buffer(".color { color: red; }"));
-                break;
-            case "transformed.css":
-                callback(undefined, new Buffer(JSON.stringify({ color: "_color_xkpkl_5" })));
-                break;
-            case "redundant.css":
-                callback(undefined, new Buffer("module.exports = '';"));
-                break;
-            default: callback(undefined, new Buffer(""));
-        }
+        filename = filename;
+        return callback(...readFileCallback);
     }
 });
 
@@ -67,6 +53,7 @@ test("source-reader should read source for module", (t) => {
 
     t.plan(1);
 
+    readFileCallback = [undefined, new Buffer("var x;")];
     let requiredModule = new RequiredModule("dummy", "dummy.js");
 
     sourceReader.read(requiredModule, () => {
@@ -119,6 +106,7 @@ test("source-reader should prepend JSON source with 'module.exports ='", (t) => 
 
     t.plan(1);
 
+    readFileCallback = [undefined, new Buffer(JSON.stringify([1, 2, 3, "a", "b", "c"]))];
     let requiredModule = new RequiredModule("json", "json.json");
 
     sourceReader.read(requiredModule, () => {
@@ -130,6 +118,7 @@ test("source-reader should prepend stylesheet source (original CSS) with 'module
 
     t.plan(1);
 
+    readFileCallback = [undefined, new Buffer(".color { color: red; }")];
     let requiredModule = new RequiredModule("style", "style.css");
 
     sourceReader.read(requiredModule, () => {
@@ -141,6 +130,7 @@ test("source-reader should prepend transformed stylesheet source (now JSON) with
 
     t.plan(1);
 
+    readFileCallback = [undefined, new Buffer(JSON.stringify({ color: "_color_xkpkl_5" }))];
     let requiredModule = new RequiredModule("transformed", "transformed.css");
 
     sourceReader.read(requiredModule, () => {
@@ -148,13 +138,26 @@ test("source-reader should prepend transformed stylesheet source (now JSON) with
     });
 });
 
-test("source-reader should remove redundant 'module.exports ='", (t) => {
+test("source-reader should not prepend redundant 'module.exports ='", (t) => {
 
     t.plan(1);
 
+    readFileCallback = [undefined, new Buffer("module.exports = '';")];
     let requiredModule = new RequiredModule("redundant", "redundant.css");
 
     sourceReader.read(requiredModule, () => {
         t.equal(requiredModule.source, "module.exports = '';");
+    });
+});
+
+test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension", (t) => {
+
+    t.plan(1);
+
+    readFileCallback = [undefined, new Buffer("{ color: '_color_xkpkl_5'; }")];
+    let requiredModule = new RequiredModule("valid-js", "valid-js.css");
+
+    sourceReader.read(requiredModule, () => {
+        t.equal(requiredModule.source, os.EOL + "module.exports = { color: '_color_xkpkl_5'; };");
     });
 });

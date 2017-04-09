@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
 var fs = require("fs");
 var os = require("os");
-var validator = require("validator");
 var SourceMap = require("../source-map");
 var SourceReader = (function () {
     function SourceReader(config, transformer) {
@@ -16,7 +15,7 @@ var SourceReader = (function () {
             requiredModule.source = SourceMap.deleteComment(source);
             requiredModule.ast = _this.createAbstractSyntaxTree(requiredModule);
             _this.transformer.applyTransforms(requiredModule, function () {
-                _this.assertModuleExports(requiredModule);
+                _this.assertValidNonScriptSource(requiredModule);
                 onSourceRead();
             });
         });
@@ -34,13 +33,22 @@ var SourceReader = (function () {
             });
         }
     };
-    SourceReader.prototype.assertModuleExports = function (requiredModule) {
+    SourceReader.prototype.assertValidNonScriptSource = function (requiredModule) {
         if (!requiredModule.isScript() &&
             !requiredModule.source.match(/^\s*module\.exports\s*=/)) {
-            requiredModule.source = os.EOL +
-                "module.exports = " + (validator.isJSON(requiredModule.source) ?
-                requiredModule.source :
-                JSON.stringify(requiredModule.source)) + ";";
+            var source = requiredModule.source;
+            try {
+                JSON.parse(requiredModule.source);
+            }
+            catch (jsonError) {
+                try {
+                    acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
+                }
+                catch (acornError) {
+                    source = JSON.stringify(requiredModule.source);
+                }
+            }
+            requiredModule.source = os.EOL + "module.exports = " + source + ";";
         }
     };
     SourceReader.prototype.createAbstractSyntaxTree = function (requiredModule) {

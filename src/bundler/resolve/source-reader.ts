@@ -2,7 +2,6 @@ import * as acorn from "acorn";
 import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
-import * as validator from "validator";
 
 import { Configuration } from "../../shared/configuration";
 import { RequiredModule } from "../required-module";
@@ -22,7 +21,7 @@ export class SourceReader {
             requiredModule.ast = this.createAbstractSyntaxTree(requiredModule);
 
             this.transformer.applyTransforms(requiredModule, () => {
-                this.assertModuleExports(requiredModule);
+                this.assertValidNonScriptSource(requiredModule);
                 onSourceRead();
             });
         });
@@ -43,14 +42,25 @@ export class SourceReader {
         }
     }
 
-    private assertModuleExports(requiredModule: RequiredModule): void {
+    private assertValidNonScriptSource(requiredModule: RequiredModule): void {
         if (!requiredModule.isScript() &&
             !requiredModule.source.match(/^\s*module\.exports\s*=/)) {
 
-            requiredModule.source = os.EOL +
-                "module.exports = " + (validator.isJSON(requiredModule.source) ?
-                    requiredModule.source :
-                    JSON.stringify(requiredModule.source)) + ";";
+            let source = requiredModule.source;
+
+            try{
+                JSON.parse(requiredModule.source);
+            }
+            catch (jsonError) {
+                try {
+                    acorn.parse(requiredModule.source, this.config.bundlerOptions.acornOptions);
+                }
+                catch (acornError) {
+                    source = JSON.stringify(requiredModule.source);
+                }
+            }
+
+            requiredModule.source = os.EOL + "module.exports = " + source + ";";
         }
     }
 
