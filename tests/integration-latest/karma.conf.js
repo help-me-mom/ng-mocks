@@ -1,3 +1,8 @@
+var postcss = require("postcss");
+// var precss = require("precss");
+// var autoprefixer = require("autoprefixer");
+var log = require("log4js").getLogger("dev");
+
 module.exports = function(config) {
     config.set({
 
@@ -47,13 +52,23 @@ module.exports = function(config) {
                     directories: ["node_modules"]
                 },
                 transforms: [
-                    // transform to make tests for Css Modules work, ReactCSSModulesTester, #66
                     function(context, callback) {
-                        if(context.module === "./style-import-tester.css") {
-                            context.source = "module.exports = { color: '#f1a' };";
-                            return callback(undefined, true);
+                        if(context.module.match(/style-import-tester\.css$/)) {
+                            postcss(require("postcss-modules")({
+                                getJSON: function(cssFileName, json) {
+                                    log.warn(context.source, json);
+                                    context.source = JSON.stringify(json);
+                                    callback(undefined, true);
+                                }
+                            }))
+                            .process(context.source, { from: context.module, to: context.module })
+                            .catch(function(error) {
+                                callback(error, false);
+                            });
                         }
-                        return callback(undefined, false);
+                        else {
+                            return callback(undefined, false);
+                        }
                     },
                     require("karma-typescript-es6-transform")({presets: ["es2015"]})
                 ],
