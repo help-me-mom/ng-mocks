@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
 var fs = require("fs");
 var os = require("os");
+var validator = require("validator");
 var SourceMap = require("../source-map");
 var SourceReader = (function () {
     function SourceReader(config, transformer) {
@@ -34,11 +35,12 @@ var SourceReader = (function () {
         }
     };
     SourceReader.prototype.assertModuleExports = function (requiredModule) {
-        if (!requiredModule.isScript()) {
+        if (!requiredModule.isScript() &&
+            !requiredModule.source.match(/^\s*module\.exports\s*=/)) {
             requiredModule.source = os.EOL +
-                "module.exports = " + (requiredModule.isJson() ?
+                "module.exports = " + (validator.isJSON(requiredModule.source) ?
                 requiredModule.source :
-                JSON.stringify(requiredModule.source));
+                JSON.stringify(requiredModule.source)) + ";";
         }
     };
     SourceReader.prototype.createAbstractSyntaxTree = function (requiredModule) {

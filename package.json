@@ -113,6 +113,7 @@
     "@types/pad": "^1.0.0",
     "@types/tape": "^4.2.29",
     "@types/tmp": "0.0.32",
+    "@types/validator": "^6.2.0",
     "cli-clear": "^1.0.4",
     "copy": "^0.3.0",
     "del": "^2.2.2",
@@ -124,6 +125,7 @@
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",
-    "typescript": "latest"
+    "typescript": "latest",
+    "validator": "^7.0.0"
   }
 }

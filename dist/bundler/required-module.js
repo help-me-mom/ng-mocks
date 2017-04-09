@@ -8,9 +8,6 @@ var RequiredModule = (function () {
         this.source = source;
         this.requiredModules = requiredModules;
     }
-    RequiredModule.prototype.isJson = function () {
-        return this.filename && /\.json$/.test(this.filename);
-    };
     RequiredModule.prototype.isNpmModule = function () {
         return this.moduleName.charAt(0) !== "." && this.moduleName.charAt(0) !== "/";
     };

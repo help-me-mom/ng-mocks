@@ -8,10 +8,6 @@ export class RequiredModule {
     constructor(public moduleName: string, public filename?: string,
                 public source?: string, public requiredModules: RequiredModule[] = []) {}
 
-    public isJson(): boolean {
-        return this.filename && /\.json$/.test(this.filename);
-    }
-
     public isNpmModule(): boolean {
         return this.moduleName.charAt(0) !== "." && this.moduleName.charAt(0) !== "/";
     }

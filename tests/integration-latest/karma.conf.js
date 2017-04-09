@@ -50,7 +50,7 @@ module.exports = function(config) {
                     // transform to make tests for Css Modules work, ReactCSSModulesTester, #66
                     function(context, callback) {
                         if(context.module === "./style-import-tester.css") {
-                            context.source = { color: "#f1a" };
+                            context.source = "module.exports = { color: '#f1a' };";
                             return callback(undefined, true);
                         }
                         return callback(undefined, false);

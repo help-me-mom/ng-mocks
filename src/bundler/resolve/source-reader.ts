@@ -2,6 +2,7 @@ import * as acorn from "acorn";
 import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
+import * as validator from "validator";
 
 import { Configuration } from "../../shared/configuration";
 import { RequiredModule } from "../required-module";
@@ -43,11 +44,13 @@ export class SourceReader {
     }
 
     private assertModuleExports(requiredModule: RequiredModule): void {
-        if (!requiredModule.isScript()) {
+        if (!requiredModule.isScript() &&
+            !requiredModule.source.match(/^\s*module\.exports\s*=/)) {
+
             requiredModule.source = os.EOL +
-                "module.exports = " + (requiredModule.isJson() ?
+                "module.exports = " + (validator.isJSON(requiredModule.source) ?
                     requiredModule.source :
-                    JSON.stringify(requiredModule.source));
+                    JSON.stringify(requiredModule.source)) + ";";
         }
     }
 
