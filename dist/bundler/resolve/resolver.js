@@ -5,7 +5,7 @@ var browserResolve = require("browser-resolve");
 var os = require("os");
 var path = require("path");
 var PathTool = require("../../shared/path-tool");
-var required_module_1 = require("../required-module");
+var bundle_item_1 = require("../bundle-item");
 var Resolver = (function () {
     function Resolver(config, dependencyWalker, log, sourceReader) {
         this.config = config;
@@ -20,64 +20,64 @@ var Resolver = (function () {
             require("./shims") : undefined;
         this.log.debug(this.shims);
     };
-    Resolver.prototype.resolveModule = function (requiringModule, requiredModule, buffer, onRequiredModuleResolved) {
+    Resolver.prototype.resolveModule = function (requiringModule, bundleItem, buffer, onModuleResolved) {
         var _this = this;
-        requiredModule.lookupName = requiredModule.isNpmModule() ?
-            requiredModule.moduleName :
-            path.join(path.dirname(requiringModule), requiredModule.moduleName);
-        if (this.lookupNameCache[requiredModule.lookupName]) {
-            requiredModule.filename = this.lookupNameCache[requiredModule.lookupName];
+        bundleItem.lookupName = bundleItem.isNpmModule() ?
+            bundleItem.moduleName :
+            path.join(path.dirname(requiringModule), bundleItem.moduleName);
+        if (this.lookupNameCache[bundleItem.lookupName]) {
+            bundleItem.filename = this.lookupNameCache[bundleItem.lookupName];
             process.nextTick(function () {
-                onRequiredModuleResolved(requiredModule);
+                onModuleResolved(bundleItem);
             });
             return;
         }
-        if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
-            this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
+        if (this.config.bundlerOptions.exclude.indexOf(bundleItem.moduleName) !== -1) {
+            this.log.debug("Excluding module %s from %s", bundleItem.moduleName, requiringModule);
             process.nextTick(function () {
-                onRequiredModuleResolved(requiredModule);
+                onModuleResolved(bundleItem);
             });
             return;
         }
         var onFilenameResolved = function () {
-            _this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
-            if (_this.isInFilenameCache(requiredModule) || requiredModule.isTypescriptFile()) {
+            _this.lookupNameCache[bundleItem.lookupName] = bundleItem.filename;
+            if (_this.isInFilenameCache(bundleItem) || bundleItem.isTypescriptFile()) {
                 process.nextTick(function () {
-                    onRequiredModuleResolved(requiredModule);
+                    onModuleResolved(bundleItem);
                 });
             }
             else {
-                _this.filenameCache.push(requiredModule.filename);
-                _this.sourceReader.read(requiredModule, function () {
-                    _this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
+                _this.filenameCache.push(bundleItem.filename);
+                _this.sourceReader.read(bundleItem, function () {
+                    _this.resolveDependencies(bundleItem, buffer, onDependenciesResolved);
                 });
             }
         };
         var onDependenciesResolved = function () {
-            buffer.push(requiredModule);
-            return onRequiredModuleResolved(requiredModule);
+            buffer.push(bundleItem);
+            return onModuleResolved(bundleItem);
         };
-        this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+        this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
     };
-    Resolver.prototype.isInFilenameCache = function (requiredModule) {
-        return this.filenameCache.indexOf(requiredModule.filename) !== -1;
+    Resolver.prototype.isInFilenameCache = function (bundleItem) {
+        return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     };
-    Resolver.prototype.resolveFilename = function (requiringModule, requiredModule, onFilenameResolved) {
+    Resolver.prototype.resolveFilename = function (requiringModule, bundleItem, onFilenameResolved) {
         var bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: requiredModule.isNpmModule() ? undefined : requiringModule,
+            filename: bundleItem.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
             modules: this.shims,
             pathFilter: this.pathFilter.bind(this)
         };
-        browserResolve(requiredModule.moduleName, bopts, function (error, filename) {
+        browserResolve(bundleItem.moduleName, bopts, function (error, filename) {
             if (error) {
                 throw new Error("Unable to resolve module [" +
-                    requiredModule.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                    bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
                     JSON.stringify(bopts, undefined, 2) + os.EOL +
                     error);
             }
-            requiredModule.filename = filename;
+            bundleItem.filename = filename;
             onFilenameResolved();
         });
     };
@@ -97,15 +97,15 @@ var Resolver = (function () {
             return filteredPath;
         }
     };
-    Resolver.prototype.resolveDependencies = function (requiredModule, buffer, onDependenciesResolved) {
+    Resolver.prototype.resolveDependencies = function (bundleItem, buffer, onDependenciesResolved) {
         var _this = this;
-        if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
-            this.dependencyWalker.collectRequiredJsModules(requiredModule, function (moduleNames) {
+        if (bundleItem.isScript() && this.dependencyWalker.hasRequire(bundleItem.source)) {
+            this.dependencyWalker.collectJavascriptDependencies(bundleItem, function (moduleNames) {
                 async.each(moduleNames, function (moduleName, onModuleResolved) {
-                    var dependency = new required_module_1.RequiredModule(moduleName);
-                    _this.resolveModule(requiredModule.filename, dependency, buffer, function (resolved) {
+                    var dependency = new bundle_item_1.BundleItem(moduleName);
+                    _this.resolveModule(bundleItem.filename, dependency, buffer, function (resolved) {
                         if (resolved) {
-                            requiredModule.requiredModules.push(resolved);
+                            bundleItem.dependencies.push(resolved);
                         }
                         onModuleResolved();
                     });

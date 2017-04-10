@@ -3,24 +3,24 @@ import * as lodash from "lodash";
 import * as os from "os";
 
 import { Configuration } from "../shared/configuration";
-import { RequiredModule } from "./required-module";
+import { BundleItem } from "./bundle-item";
 import { Resolver } from "./resolve/resolver";
 
 export class Globals {
 
     constructor(private config: Configuration, private resolver: Resolver) { }
 
-    public add(buffer: RequiredModule[], entrypoints: string[], onGlobalsAdded: { (): void }) {
+    public add(buffer: BundleItem[], entrypoints: string[], onGlobalsAdded: { (): void }) {
 
-        let items: RequiredModule[] = [];
+        let items: BundleItem[] = [];
 
         this.addConstants(items);
         this.addNodeGlobals(items);
 
-        async.eachSeries(items, (item: RequiredModule, onGlobalResolved) => {
-            async.eachSeries(item.requiredModules, (dependency, onRequiredModuleResolved) => {
+        async.eachSeries(items, (item: BundleItem, onGlobalResolved) => {
+            async.eachSeries(item.dependencies, (dependency, onModuleResolved) => {
                 this.resolver.resolveModule(item.filename, dependency, buffer, () => {
-                    onRequiredModuleResolved();
+                    onModuleResolved();
                 });
             }, () => {
                 buffer.unshift(item);
@@ -30,23 +30,23 @@ export class Globals {
         }, onGlobalsAdded);
     }
 
-    private addNodeGlobals(items: RequiredModule[]): void {
+    private addNodeGlobals(items: BundleItem[]): void {
 
         if (this.config.bundlerOptions.addNodeGlobals) {
 
             let name = "bundle/node-globals";
 
-            items.push(new RequiredModule(name, name,
+            items.push(new BundleItem(name, name,
                 os.EOL + "global.process=require('_process');" +
                 os.EOL + "global.Buffer=require('buffer').Buffer;", [
-                    new RequiredModule("_process"),
-                    new RequiredModule("buffer")
+                    new BundleItem("_process"),
+                    new BundleItem("buffer")
                 ])
             );
         }
     }
 
-    private addConstants(items: RequiredModule[]): void {
+    private addConstants(items: BundleItem[]): void {
 
         let source = "";
         let name = "bundle/constants";
@@ -60,7 +60,7 @@ export class Globals {
         });
 
         if (source) {
-            items.push(new RequiredModule(name, name, source, []));
+            items.push(new BundleItem(name, name, source, []));
         }
     }
 }

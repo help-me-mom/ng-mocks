@@ -13,7 +13,7 @@ mock("fs", {
 });
 var configuration_1 = require("../../shared/configuration");
 var project_1 = require("../../shared/project");
-var required_module_1 = require("../required-module");
+var bundle_item_1 = require("../bundle-item");
 var transformer_1 = require("../transformer");
 var source_reader_1 = require("./source-reader");
 var configuration = new configuration_1.Configuration({});
@@ -31,31 +31,31 @@ karma.karmaTypescriptConfig = karmaTypescriptConfig;
 configuration.initialize(karma);
 test("source-reader should return an empty object literal for ignored modules", function (t) {
     t.plan(1);
-    var requiredModule = new required_module_1.RequiredModule("ignored", "ignored.js");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, "module.exports={};");
+    var bundleItem = new bundle_item_1.BundleItem("ignored", "ignored.js");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, "module.exports={};");
     });
 });
 test("source-reader should read source for module", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer("var x;")];
-    var requiredModule = new required_module_1.RequiredModule("dummy", "dummy.js");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, "var x;");
+    var bundleItem = new bundle_item_1.BundleItem("dummy", "dummy.js");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, "var x;");
     });
 });
 test("source-reader should create an AST", function (t) {
     t.plan(1);
-    var requiredModule = new required_module_1.RequiredModule("dummy", "dummy.js");
-    sourceReader.read(requiredModule, function () {
-        t.notEqual(requiredModule.ast.body, undefined);
+    var bundleItem = new bundle_item_1.BundleItem("dummy", "dummy.js");
+    sourceReader.read(bundleItem, function () {
+        t.notEqual(bundleItem.ast.body, undefined);
     });
 });
 test("source-reader should create an empty dummy AST for non-script files (css, JSON...)", function (t) {
     t.plan(1);
-    var requiredModule = new required_module_1.RequiredModule("style", "style.css");
-    sourceReader.read(requiredModule, function () {
-        t.deepEqual(requiredModule.ast, {
+    var bundleItem = new bundle_item_1.BundleItem("style", "style.css");
+    sourceReader.read(bundleItem, function () {
+        t.deepEqual(bundleItem.ast, {
             body: undefined,
             sourceType: "script",
             type: "Program"
@@ -64,9 +64,9 @@ test("source-reader should create an empty dummy AST for non-script files (css, 
 });
 test("source-reader should create an empty dummy AST for modules specified in the bundler option 'noParse'", function (t) {
     t.plan(1);
-    var requiredModule = new required_module_1.RequiredModule("noparse", "noparse.js");
-    sourceReader.read(requiredModule, function () {
-        t.deepEqual(requiredModule.ast, {
+    var bundleItem = new bundle_item_1.BundleItem("noparse", "noparse.js");
+    sourceReader.read(bundleItem, function () {
+        t.deepEqual(bundleItem.ast, {
             body: undefined,
             sourceType: "script",
             type: "Program"
@@ -76,40 +76,40 @@ test("source-reader should create an empty dummy AST for modules specified in th
 test("source-reader should prepend JSON source with 'module.exports ='", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer(JSON.stringify([1, 2, 3, "a", "b", "c"]))];
-    var requiredModule = new required_module_1.RequiredModule("json", "json.json");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, os.EOL + "module.exports = [1,2,3,\"a\",\"b\",\"c\"];");
+    var bundleItem = new bundle_item_1.BundleItem("json", "json.json");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, os.EOL + "module.exports = [1,2,3,\"a\",\"b\",\"c\"];");
     });
 });
 test("source-reader should prepend stylesheet source (original CSS) with 'module.exports ='", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer(".color { color: red; }")];
-    var requiredModule = new required_module_1.RequiredModule("style", "style.css");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, os.EOL + "module.exports = \".color { color: red; }\";");
+    var bundleItem = new bundle_item_1.BundleItem("style", "style.css");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, os.EOL + "module.exports = \".color { color: red; }\";");
     });
 });
 test("source-reader should prepend transformed stylesheet source (now JSON) with 'module.exports ='", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer(JSON.stringify({ color: "_color_xkpkl_5" }))];
-    var requiredModule = new required_module_1.RequiredModule("transformed", "transformed.css");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, os.EOL + "module.exports = {\"color\":\"_color_xkpkl_5\"};");
+    var bundleItem = new bundle_item_1.BundleItem("transformed", "transformed.css");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, os.EOL + "module.exports = {\"color\":\"_color_xkpkl_5\"};");
     });
 });
 test("source-reader should not prepend redundant 'module.exports ='", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer("module.exports = '';")];
-    var requiredModule = new required_module_1.RequiredModule("redundant", "redundant.css");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, "module.exports = '';");
+    var bundleItem = new bundle_item_1.BundleItem("redundant", "redundant.css");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, "module.exports = '';");
     });
 });
 test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer("{ color: '_color_xkpkl_5'; }")];
-    var requiredModule = new required_module_1.RequiredModule("valid-js", "valid-js.css");
-    sourceReader.read(requiredModule, function () {
-        t.equal(requiredModule.source, os.EOL + "module.exports = { color: '_color_xkpkl_5'; };");
+    var bundleItem = new bundle_item_1.BundleItem("valid-js", "valid-js.css");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, os.EOL + "module.exports = { color: '_color_xkpkl_5'; };");
     });
 });

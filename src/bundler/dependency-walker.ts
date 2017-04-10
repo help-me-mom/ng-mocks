@@ -11,8 +11,8 @@ import { Logger } from "log4js";
 
 import pad = require("pad");
 
+import { BundleItem } from "./bundle-item";
 import { Queued } from "./queued";
-import { RequiredModule } from "./required-module";
 
 export class DependencyWalker {
 
@@ -25,13 +25,13 @@ export class DependencyWalker {
         return this.requireRegexp.test(s);
     }
 
-    public collectRequiredTsModules(queue: Queued[]): number {
+    public collectTypescriptDependencies(queue: Queued[]): number {
 
-        let requiredModuleCount: number = 0;
+        let dependencyCount: number = 0;
 
         queue.forEach((queued) => {
 
-            queued.module.requiredModules = this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
+            queued.item.dependencies = this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
 
             let resolvedModules = (<any> queued.emitOutput.sourceFile).resolvedModules;
 
@@ -39,29 +39,29 @@ export class DependencyWalker {
 
                 if (lodash.isMap(resolvedModules)) { // Typescript 2.2+
                     resolvedModules.forEach((resolvedModule: any, moduleName: string) => {
-                        queued.module.requiredModules.push(
-                            new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        queued.item.dependencies.push(
+                            new BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                     });
                 }
                 else { // Typescript 1.6.2 - 2.1.6
                     Object.keys(resolvedModules).forEach((moduleName: string) => {
                         let resolvedModule = resolvedModules[moduleName];
-                        queued.module.requiredModules.push(
-                            new RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        queued.item.dependencies.push(
+                            new BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                     });
                 }
             }
 
-            requiredModuleCount += queued.module.requiredModules.length;
+            dependencyCount += queued.item.dependencies.length;
         });
 
         this.validateCase(queue);
 
-        return requiredModuleCount;
+        return dependencyCount;
     }
 
-    public collectRequiredJsModules(requiredModule: RequiredModule,
-                                    onRequiredModulesCollected: { (moduleNames: string[]): void }): void {
+    public collectJavascriptDependencies(bundleItem: BundleItem,
+                                         onDependenciesCollected: { (moduleNames: string[]): void }): void {
 
         let moduleNames: string[] = [];
         let expressions: any[] = [];
@@ -73,7 +73,7 @@ export class DependencyWalker {
         };
 
         let visitNode = (node: any, state: any, c: any)  => {
-            if (!this.hasRequire(requiredModule.source.slice(node.start, node.end))) {
+            if (!this.hasRequire(bundleItem.source.slice(node.start, node.end))) {
                 return;
             }
             this.walk.base[node.type](node, state, c);
@@ -87,22 +87,22 @@ export class DependencyWalker {
             }
         };
 
-        this.walk.recursive(requiredModule.ast, null, {
+        this.walk.recursive(bundleItem.ast, null, {
             Expression: visitNode,
             Statement: visitNode
         });
 
-        this.addDynamicDependencies(expressions, requiredModule, (dynamicDependencies) => {
-            onRequiredModulesCollected(moduleNames.concat(dynamicDependencies));
+        this.addDynamicDependencies(expressions, bundleItem, (dynamicDependencies) => {
+            onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
     }
 
-    private findUnresolvedTsRequires(sourceFile: ts.SourceFile): RequiredModule[] {
+    private findUnresolvedTsRequires(sourceFile: ts.SourceFile): BundleItem[] {
 
-        let requiredModules: RequiredModule[] = [];
+        let dependencies: BundleItem[] = [];
 
         if ((<any> ts).isDeclarationFile(sourceFile)) {
-            return requiredModules;
+            return dependencies;
         }
 
         let visitNode = (node: ts.Node) => {
@@ -121,7 +121,7 @@ export class DependencyWalker {
 
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push(new RequiredModule(argument.text));
+                    dependencies.push(new BundleItem(argument.text));
                 }
             }
 
@@ -130,11 +130,11 @@ export class DependencyWalker {
 
         visitNode(sourceFile);
 
-        return requiredModules;
+        return dependencies;
     }
 
     private addDynamicDependencies(expressions: any[],
-                                   requiredModule: RequiredModule,
+                                   bundleItem: BundleItem,
                                    onDynamicDependenciesAdded: { (dynamicDependencies: string[]): void }) {
 
         let dynamicDependencies: string[] = [];
@@ -149,11 +149,11 @@ export class DependencyWalker {
         async.each(expressions, (expression, onExpressionResolved) => {
 
             let dynamicModuleName = this.parseDynamicRequire(expression);
-            let directory = path.dirname(requiredModule.filename);
+            let directory = path.dirname(bundleItem.filename);
             let pattern: string;
 
             if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (new RequiredModule(dynamicModuleName).isNpmModule()) {
+                if (new BundleItem(dynamicModuleName).isNpmModule()) {
                     dynamicDependencies.push(dynamicModuleName);
                     onExpressionResolved();
                 }
@@ -172,7 +172,7 @@ export class DependencyWalker {
                                     this.log.debug("Dynamic require: \nexpression: [%s]" +
                                                   "\nfilename: %s\nrequired by %s\nglob: %s",
                                                   JSON.stringify(expression, undefined, 3),
-                                                  match, requiredModule.filename, pattern);
+                                                  match, bundleItem.filename, pattern);
                                     dynamicDependencies.push("./" + path.relative(directory, match));
                                 }
                                 onMatchResolved();
@@ -223,13 +223,13 @@ export class DependencyWalker {
         });
 
         queue.forEach((queued) => {
-            if (queued.module.requiredModules) {
-                queued.module.requiredModules.forEach((requiredModule) => {
-                    if (requiredModule.filename && files.indexOf(requiredModule.filename) === -1) {
-                        let lowerIndex = fileslower.indexOf(requiredModule.filename.toLowerCase());
+            if (queued.item.dependencies) {
+                queued.item.dependencies.forEach((dependency) => {
+                    if (dependency.filename && files.indexOf(dependency.filename) === -1) {
+                        let lowerIndex = fileslower.indexOf(dependency.filename.toLowerCase());
                         if (lowerIndex !== -1) {
 
-                            let result = diff.diffChars(files[lowerIndex], requiredModule.filename);
+                            let result = diff.diffChars(files[lowerIndex], dependency.filename);
                             let arrows = "";
                             result.forEach((part) => {
                                 if (part.added) {
@@ -241,10 +241,10 @@ export class DependencyWalker {
                             });
 
                             throw new Error("Uppercase/lowercase mismatch importing " +
-                                requiredModule.moduleName + " from " + queued.file.originalPath +
+                                dependency.moduleName + " from " + queued.file.originalPath +
                                 ":" + os.EOL + os.EOL +
                                 "filename:    " + files[lowerIndex] + os.EOL +
-                                "module name: " + requiredModule.filename + os.EOL +
+                                "module name: " + dependency.filename + os.EOL +
                                 "             " + arrows + os.EOL);
                         }
                     }

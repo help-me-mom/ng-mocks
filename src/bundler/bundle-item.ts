@@ -1,12 +1,12 @@
 import * as ESTree from "estree";
 
-export class RequiredModule {
+export class BundleItem {
 
     public ast?: ESTree.Program;
     public lookupName?: string;
 
     constructor(public moduleName: string, public filename?: string,
-                public source?: string, public requiredModules: RequiredModule[] = []) {}
+                public source?: string, public dependencies: BundleItem[] = []) {}
 
     public isNpmModule(): boolean {
         return this.moduleName.charAt(0) !== "." && this.moduleName.charAt(0) !== "/";

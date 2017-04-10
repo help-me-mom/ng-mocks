@@ -1,11 +1,11 @@
 import { EmitOutput } from "../compiler/emit-output";
 import { File } from "../shared/file";
 import { BundleCallback } from "./bundle-callback";
-import { RequiredModule } from "./required-module";
+import { BundleItem } from "./bundle-item";
 
 export interface Queued {
     callback: BundleCallback;
     emitOutput: EmitOutput;
     file: File;
-    module?: RequiredModule;
+    item?: BundleItem;
 }

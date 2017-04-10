@@ -47,7 +47,7 @@ var Transformer = (function () {
             }, onQueueProcessed);
         }, onTransformsApplied);
     };
-    Transformer.prototype.applyTransforms = function (requiredModule, onTransformsApplied) {
+    Transformer.prototype.applyTransforms = function (bundleItem, onTransformsApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
@@ -58,20 +58,20 @@ var Transformer = (function () {
         }
         var context = {
             config: this.config,
-            filename: requiredModule.filename,
+            filename: bundleItem.filename,
             js: {
-                ast: requiredModule.ast
+                ast: bundleItem.ast
             },
-            module: requiredModule.moduleName,
-            source: requiredModule.source
+            module: bundleItem.moduleName,
+            source: bundleItem.source
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
                 transform(context, function (error, dirty) {
                     _this.handleError(error, transform);
                     if (dirty) {
-                        requiredModule.ast = context.js.ast;
-                        requiredModule.source = context.source;
+                        bundleItem.ast = context.js.ast;
+                        bundleItem.source = context.source;
                     }
                     onTransformApplied();
                 });

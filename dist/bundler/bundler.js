@@ -8,7 +8,7 @@ var path = require("path");
 var tmp = require("tmp");
 var benchmark_1 = require("../shared/benchmark");
 var PathTool = require("../shared/path-tool");
-var required_module_1 = require("./required-module");
+var bundle_item_1 = require("./bundle-item");
 var SourceMap = require("./source-map");
 var Bundler = (function () {
     function Bundler(config, dependencyWalker, globals, log, project, resolver, transformer, validator) {
@@ -54,10 +54,10 @@ var Bundler = (function () {
         var benchmark = new benchmark_1.Benchmark();
         this.transformer.applyTsTransforms(this.bundleQueue, function () {
             _this.bundleQueue.forEach(function (queued) {
-                queued.module = new required_module_1.RequiredModule(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+                queued.item = new bundle_item_1.BundleItem(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
-            var requiredModuleCount = _this.dependencyWalker.collectRequiredTsModules(_this.bundleQueue);
-            if (_this.shouldBundle(requiredModuleCount)) {
+            var dependencyCount = _this.dependencyWalker.collectTypescriptDependencies(_this.bundleQueue);
+            if (_this.shouldBundle(dependencyCount)) {
                 _this.bundleWithLoader(benchmark);
             }
             else {
@@ -65,7 +65,7 @@ var Bundler = (function () {
             }
         });
     };
-    Bundler.prototype.shouldBundle = function (requiredModuleCount) {
+    Bundler.prototype.shouldBundle = function (dependencyCount) {
         if (this.config.hasPreprocessor("commonjs")) {
             this.log.debug("Preprocessor 'commonjs' detected, code will NOT be bundled");
             return false;
@@ -75,7 +75,7 @@ var Bundler = (function () {
             return false;
         }
         if (this.projectImportCountOnFirstRun === undefined) {
-            this.projectImportCountOnFirstRun = requiredModuleCount;
+            this.projectImportCountOnFirstRun = dependencyCount;
         }
         this.log.debug("Project has %s import/require statements, code will be%sbundled", this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
         return this.projectImportCountOnFirstRun > 0;
@@ -83,17 +83,17 @@ var Bundler = (function () {
     Bundler.prototype.bundleWithLoader = function (benchmark) {
         var _this = this;
         async.each(this.bundleQueue, function (queued, onQueuedResolved) {
-            _this.addEntrypointFilename(queued.module.filename);
-            async.each(queued.module.requiredModules, function (requiredModule, onRequiredModuleResolved) {
-                if (!requiredModule.isTypescriptFile() &&
-                    !(requiredModule.isTypingsFile() && !requiredModule.isNpmModule())) {
-                    _this.resolver.resolveModule(queued.module.moduleName, requiredModule, _this.bundleBuffer, function () {
-                        onRequiredModuleResolved();
+            _this.addEntrypointFilename(queued.item.filename);
+            async.each(queued.item.dependencies, function (bundleItem, onDependencyResolved) {
+                if (!bundleItem.isTypescriptFile() &&
+                    !(bundleItem.isTypingsFile() && !bundleItem.isNpmModule())) {
+                    _this.resolver.resolveModule(queued.item.moduleName, bundleItem, _this.bundleBuffer, function () {
+                        onDependencyResolved();
                     });
                 }
                 else {
                     process.nextTick(function () {
-                        onRequiredModuleResolved();
+                        onDependencyResolved();
                     });
                 }
             }, onQueuedResolved);
@@ -106,7 +106,7 @@ var Bundler = (function () {
         this.globals.add(this.bundleBuffer, this.entrypoints, function () {
             _this.writeMainBundleFile(function () {
                 _this.bundleQueue.forEach(function (queued) {
-                    queued.callback(queued.module.source);
+                    queued.callback(queued.item.source);
                 });
             });
         });
@@ -118,31 +118,31 @@ var Bundler = (function () {
             _this.writeMainBundleFile(function () {
                 _this.log.info("Bundled imports for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
                 _this.bundleQueue.forEach(function (queued) {
-                    queued.callback(_this.addLoaderFunction(queued.module, true));
+                    queued.callback(_this.addLoaderFunction(queued.item, true));
                 });
                 _this.log.debug("Karma callbacks for %s file(s) in %s ms.", _this.bundleQueue.length, benchmark.elapsed());
                 _this.bundleQueue.length = 0;
             });
         });
     };
-    Bundler.prototype.addLoaderFunction = function (module, standalone) {
+    Bundler.prototype.addLoaderFunction = function (bundleItem, standalone) {
         var _this = this;
-        var requiredModuleMap = {};
-        var moduleId = path.relative(this.config.karma.basePath, module.filename);
-        module.requiredModules.forEach(function (requiredModule) {
-            if (!requiredModule.filename) {
-                _this.log.debug("No resolved filename for module [%s], required by [%s]", requiredModule.moduleName, module.filename);
+        var dependencyMap = {};
+        var moduleId = path.relative(this.config.karma.basePath, bundleItem.filename);
+        bundleItem.dependencies.forEach(function (dependency) {
+            if (!dependency.filename) {
+                _this.log.debug("No resolved filename for module [%s], required by [%s]", dependency.moduleName, bundleItem.filename);
             }
             else {
-                requiredModuleMap[requiredModule.moduleName] = PathTool.fixWindowsPath(requiredModule.filename);
+                dependencyMap[dependency.moduleName] = PathTool.fixWindowsPath(dependency.filename);
             }
         });
         return (standalone ? "(function(global){" : "") +
-            "global.wrappers['" + PathTool.fixWindowsPath(module.filename) + "']=" +
-            "[function(require,module,exports,__dirname,__filename){ " + module.source +
+            "global.wrappers['" + PathTool.fixWindowsPath(bundleItem.filename) + "']=" +
+            "[function(require,module,exports,__dirname,__filename){ " + bundleItem.source +
             os.EOL + "},'" +
             PathTool.fixWindowsPath(moduleId) + "'," +
-            PathTool.fixWindowsPath(JSON.stringify(requiredModuleMap)) + "];" +
+            PathTool.fixWindowsPath(JSON.stringify(dependencyMap)) + "];" +
             (standalone ? "})(this);" : "") + os.EOL;
     };
     Bundler.prototype.createEntrypointFilenames = function () {
@@ -171,8 +171,8 @@ var Bundler = (function () {
         var _this = this;
         var bundle = "(function(global){" + os.EOL +
             "global.wrappers={};" + os.EOL;
-        this.bundleBuffer.forEach(function (requiredModule) {
-            bundle += _this.addLoaderFunction(requiredModule, false);
+        this.bundleBuffer.forEach(function (bundleItem) {
+            bundle += _this.addLoaderFunction(bundleItem, false);
         });
         bundle += this.createEntrypointFilenames() + "})(this);";
         fs.writeFile(this.bundleFile.name, bundle, function (error) {

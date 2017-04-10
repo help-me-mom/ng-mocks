@@ -7,8 +7,8 @@ import { Logger } from "log4js";
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
 import { Project } from "../shared/project";
+import { BundleItem } from "./bundle-item";
 import { Queued } from "./queued";
-import { RequiredModule } from "./required-module";
 
 export class Transformer {
 
@@ -56,7 +56,7 @@ export class Transformer {
         }, onTransformsApplied);
     }
 
-    public applyTransforms(requiredModule: RequiredModule, onTransformsApplied: { (): void }): void {
+    public applyTransforms(bundleItem: BundleItem, onTransformsApplied: { (): void }): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
@@ -69,20 +69,20 @@ export class Transformer {
 
         let context: TransformContext = {
             config: this.config,
-            filename: requiredModule.filename,
+            filename: bundleItem.filename,
             js: {
-                ast: requiredModule.ast
+                ast: bundleItem.ast
             },
-            module: requiredModule.moduleName,
-            source: requiredModule.source
+            module: bundleItem.moduleName,
+            source: bundleItem.source
         };
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
             process.nextTick(() => {
                 transform(context, (error: Error, dirty: boolean) => {
                     this.handleError(error, transform);
                     if (dirty) {
-                        requiredModule.ast = context.js.ast;
-                        requiredModule.source = context.source;
+                        bundleItem.ast = context.js.ast;
+                        bundleItem.source = context.source;
                     }
                     onTransformApplied();
                 });

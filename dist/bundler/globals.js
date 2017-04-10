@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var lodash = require("lodash");
 var os = require("os");
-var required_module_1 = require("./required-module");
+var bundle_item_1 = require("./bundle-item");
 var Globals = (function () {
     function Globals(config, resolver) {
         this.config = config;
@@ -15,9 +15,9 @@ var Globals = (function () {
         this.addConstants(items);
         this.addNodeGlobals(items);
         async.eachSeries(items, function (item, onGlobalResolved) {
-            async.eachSeries(item.requiredModules, function (dependency, onRequiredModuleResolved) {
+            async.eachSeries(item.dependencies, function (dependency, onModuleResolved) {
                 _this.resolver.resolveModule(item.filename, dependency, buffer, function () {
-                    onRequiredModuleResolved();
+                    onModuleResolved();
                 });
             }, function () {
                 buffer.unshift(item);
@@ -29,10 +29,10 @@ var Globals = (function () {
     Globals.prototype.addNodeGlobals = function (items) {
         if (this.config.bundlerOptions.addNodeGlobals) {
             var name_1 = "bundle/node-globals";
-            items.push(new required_module_1.RequiredModule(name_1, name_1, os.EOL + "global.process=require('_process');" +
+            items.push(new bundle_item_1.BundleItem(name_1, name_1, os.EOL + "global.process=require('_process');" +
                 os.EOL + "global.Buffer=require('buffer').Buffer;", [
-                new required_module_1.RequiredModule("_process"),
-                new required_module_1.RequiredModule("buffer")
+                new bundle_item_1.BundleItem("_process"),
+                new bundle_item_1.BundleItem("buffer")
             ]));
         }
     };
@@ -48,7 +48,7 @@ var Globals = (function () {
             source += os.EOL + "global." + key + "=" + value + ";";
         });
         if (source) {
-            items.push(new required_module_1.RequiredModule(name, name, source, []));
+            items.push(new bundle_item_1.BundleItem(name, name, source, []));
         }
     };
     return Globals;

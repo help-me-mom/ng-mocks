@@ -8,8 +8,8 @@ import { Logger } from "log4js";
 import { Configuration } from "../../shared/configuration";
 import { SourceReader } from "./source-reader";
 import PathTool = require("../../shared/path-tool");
+import { BundleItem } from "../bundle-item";
 import { DependencyWalker } from "../dependency-walker";
-import { RequiredModule } from "../required-module";
 
 export class Resolver {
 
@@ -29,77 +29,77 @@ export class Resolver {
     }
 
     public resolveModule(requiringModule: string,
-                         requiredModule: RequiredModule,
-                         buffer: RequiredModule[],
-                         onRequiredModuleResolved: { (requiredModule: RequiredModule): void }) {
+                         bundleItem: BundleItem,
+                         buffer: BundleItem[],
+                         onModuleResolved: { (bundleItem: BundleItem): void }) {
 
-        requiredModule.lookupName = requiredModule.isNpmModule() ?
-                requiredModule.moduleName :
-                path.join(path.dirname(requiringModule), requiredModule.moduleName);
+        bundleItem.lookupName = bundleItem.isNpmModule() ?
+                bundleItem.moduleName :
+                path.join(path.dirname(requiringModule), bundleItem.moduleName);
 
-        if (this.lookupNameCache[requiredModule.lookupName]) {
-            requiredModule.filename = this.lookupNameCache[requiredModule.lookupName];
+        if (this.lookupNameCache[bundleItem.lookupName]) {
+            bundleItem.filename = this.lookupNameCache[bundleItem.lookupName];
             process.nextTick(() => {
-                onRequiredModuleResolved(requiredModule);
+                onModuleResolved(bundleItem);
             });
             return;
         }
 
-        if (this.config.bundlerOptions.exclude.indexOf(requiredModule.moduleName) !== -1) {
-            this.log.debug("Excluding module %s from %s", requiredModule.moduleName, requiringModule);
+        if (this.config.bundlerOptions.exclude.indexOf(bundleItem.moduleName) !== -1) {
+            this.log.debug("Excluding module %s from %s", bundleItem.moduleName, requiringModule);
             process.nextTick(() => {
-                onRequiredModuleResolved(requiredModule);
+                onModuleResolved(bundleItem);
             });
             return;
         }
 
         let onFilenameResolved = () => {
 
-            this.lookupNameCache[requiredModule.lookupName] = requiredModule.filename;
+            this.lookupNameCache[bundleItem.lookupName] = bundleItem.filename;
 
-            if (this.isInFilenameCache(requiredModule) || requiredModule.isTypescriptFile()) {
+            if (this.isInFilenameCache(bundleItem) || bundleItem.isTypescriptFile()) {
                 process.nextTick(() => {
-                    onRequiredModuleResolved(requiredModule);
+                    onModuleResolved(bundleItem);
                 });
             }
             else {
-                this.filenameCache.push(requiredModule.filename);
-                this.sourceReader.read(requiredModule, () => {
-                    this.resolveDependencies(requiredModule, buffer, onDependenciesResolved);
+                this.filenameCache.push(bundleItem.filename);
+                this.sourceReader.read(bundleItem, () => {
+                    this.resolveDependencies(bundleItem, buffer, onDependenciesResolved);
                 });
             }
         };
 
         let onDependenciesResolved = () => {
-            buffer.push(requiredModule);
-            return onRequiredModuleResolved(requiredModule);
+            buffer.push(bundleItem);
+            return onModuleResolved(bundleItem);
         };
 
-        this.resolveFilename(requiringModule, requiredModule, onFilenameResolved);
+        this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
     }
 
-    private isInFilenameCache(requiredModule: RequiredModule): boolean {
-        return this.filenameCache.indexOf(requiredModule.filename) !== -1;
+    private isInFilenameCache(bundleItem: BundleItem): boolean {
+        return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     }
 
-    private resolveFilename(requiringModule: string, requiredModule: RequiredModule, onFilenameResolved: { (): void }) {
+    private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: { (): void }) {
 
         let bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: requiredModule.isNpmModule() ? undefined : requiringModule,
+            filename: bundleItem.isNpmModule() ? undefined : requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
             modules: this.shims,
             pathFilter: this.pathFilter.bind(this)
         };
 
-        browserResolve(requiredModule.moduleName, bopts, (error, filename) => {
+        browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
             if (error) {
                 throw new Error("Unable to resolve module [" +
-                    requiredModule.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                    bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
                     JSON.stringify(bopts, undefined, 2) + os.EOL +
                     error);
             }
-            requiredModule.filename = filename;
+            bundleItem.filename = filename;
             onFilenameResolved();
         });
     }
@@ -123,17 +123,17 @@ export class Resolver {
         }
     }
 
-    private resolveDependencies(requiredModule: RequiredModule,
-                                buffer: RequiredModule[],
+    private resolveDependencies(bundleItem: BundleItem,
+                                buffer: BundleItem[],
                                 onDependenciesResolved: { (): void }) {
 
-        if (requiredModule.isScript() && this.dependencyWalker.hasRequire(requiredModule.source)) {
-            this.dependencyWalker.collectRequiredJsModules(requiredModule, (moduleNames) => {
+        if (bundleItem.isScript() && this.dependencyWalker.hasRequire(bundleItem.source)) {
+            this.dependencyWalker.collectJavascriptDependencies(bundleItem, (moduleNames) => {
                 async.each(moduleNames, (moduleName, onModuleResolved) => {
-                    let dependency = new RequiredModule(moduleName);
-                    this.resolveModule(requiredModule.filename, dependency, buffer, (resolved) => {
+                    let dependency = new BundleItem(moduleName);
+                    this.resolveModule(bundleItem.filename, dependency, buffer, (resolved) => {
                         if (resolved) {
-                            requiredModule.requiredModules.push(resolved);
+                            bundleItem.dependencies.push(resolved);
                         }
                         onModuleResolved();
                     });
