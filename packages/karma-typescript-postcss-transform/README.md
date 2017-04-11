@@ -1,5 +1,9 @@
 # karma-typescript-postcss-transform
 
+[![Npm version](https://img.shields.io/npm/v/karma-typescript-postcss-transform.svg)](https://www.npmjs.com/package/karma-typescript-postcss-transform)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript-postcss-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-postcss-transform)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/ltvwtsvegjnocqdk/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-postcss-transform/branch/master)
+
 > Karma-Typescript :heart: PostCSS
 
 This plugin is a generic [PostCSS runner](http://postcss.org/), which transforms CSS with JavaScript on the fly when running tests with [karma-typescript](https://github.com/monounity/karma-typescript).
@@ -45,8 +49,6 @@ karmaTypescriptConfig: {
     }
 }
 ```
-
-The PostCSS options `to` and `from` are automatically set to the filename of CSS file.
 
 ## Licensing
 
