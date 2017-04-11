@@ -22,6 +22,7 @@ var loggers = {
     dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
     project: log4js.getLogger("project.karma-typescript"),
     resolver: log4js.getLogger("resolver.karma-typescript"),
+    sourceReader: log4js.getLogger("source-reader.karma-typescript"),
     threshold: log4js.getLogger("threshold.karma-typescript"),
     transformer: log4js.getLogger("transformer.karma-typescript")
 };
@@ -34,7 +35,7 @@ var coverage = new coverage_1.Coverage(configuration);
 var transformer = new transformer_1.Transformer(configuration, loggers.transformer, project);
 var threshold = new threshold_1.Threshold(configuration, loggers.threshold);
 var validator = new validator_1.Validator(configuration);
-var sourceReader = new source_reader_1.SourceReader(configuration, transformer);
+var sourceReader = new source_reader_1.SourceReader(configuration, loggers.sourceReader, transformer);
 var resolver = new resolver_1.Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
 var globals = new globals_1.Globals(configuration, resolver);
 var bundler = new bundler_1.Bundler(configuration, dependencyWalker, globals, loggers.bundler, project, resolver, transformer, validator);

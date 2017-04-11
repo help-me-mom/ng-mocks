@@ -3,6 +3,8 @@ import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
 
+import { Logger } from "log4js";
+
 import { Configuration } from "../../shared/configuration";
 import { BundleItem } from "../bundle-item";
 import SourceMap = require("../source-map");
@@ -11,6 +13,7 @@ import { Transformer } from "../transformer";
 export class SourceReader {
 
     constructor(private config: Configuration,
+                private log: Logger,
                 private transformer: Transformer) { }
 
     public read(bundleItem: BundleItem, onSourceRead: { (): void }) {
@@ -75,6 +78,15 @@ export class SourceReader {
             };
         }
 
-        return acorn.parse(bundleItem.source, this.config.bundlerOptions.acornOptions);
+        try {
+            return acorn.parse(bundleItem.source, this.config.bundlerOptions.acornOptions);
+        }
+        catch (error) {
+            this.log.error("Error parsing code: " + error.message + os.EOL +
+                           "in " + bundleItem.filename + os.EOL +
+                           "at line " + error.loc.line + ", column " + error.loc.column + ":" + os.EOL + os.EOL +
+                           "... " + bundleItem.source.slice(error.pos, error.pos + 50) + " ...");
+            process.exit(1);
+        }
     }
 }

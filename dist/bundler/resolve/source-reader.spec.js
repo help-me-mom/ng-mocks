@@ -19,7 +19,7 @@ var source_reader_1 = require("./source-reader");
 var configuration = new configuration_1.Configuration({});
 var project = new project_1.Project(configuration, log4js.getLogger("project"));
 var transformer = new transformer_1.Transformer(configuration, log4js.getLogger("transformer"), project);
-var sourceReader = new source_reader_1.SourceReader(configuration, transformer);
+var sourceReader = new source_reader_1.SourceReader(configuration, log4js.getLogger("sourceReader"), transformer);
 var karmaTypescriptConfig = {
     bundlerOptions: {
         ignore: ["ignored"],

@@ -5,8 +5,9 @@ var fs = require("fs");
 var os = require("os");
 var SourceMap = require("../source-map");
 var SourceReader = (function () {
-    function SourceReader(config, transformer) {
+    function SourceReader(config, log, transformer) {
         this.config = config;
+        this.log = log;
         this.transformer = transformer;
     }
     SourceReader.prototype.read = function (bundleItem, onSourceRead) {
@@ -60,7 +61,16 @@ var SourceReader = (function () {
                 type: "Program"
             };
         }
-        return acorn.parse(bundleItem.source, this.config.bundlerOptions.acornOptions);
+        try {
+            return acorn.parse(bundleItem.source, this.config.bundlerOptions.acornOptions);
+        }
+        catch (error) {
+            this.log.error("Error parsing code: " + error.message + os.EOL +
+                "in " + bundleItem.filename + os.EOL +
+                "at line " + error.loc.line + ", column " + error.loc.column + ":" + os.EOL + os.EOL +
+                "... " + bundleItem.source.slice(error.pos, error.pos + 50) + " ...");
+            process.exit(1);
+        }
     };
     return SourceReader;
 }());
