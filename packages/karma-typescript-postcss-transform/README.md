@@ -22,7 +22,7 @@ In the `karma-typescript` section of `karma.conf.js`:
 karmaTypescriptConfig: {
     bundlerOptions: {
         transforms: [
-            require("karma-typescript-postcss-transform")([plugin1, plugin2])
+            require("karma-typescript-postcss-transform")([require("some-plugin")])
         ]
     }
 }
@@ -36,14 +36,16 @@ Custom options can be passed to the runner in the first argument when calling th
 - [PostCSS options](https://github.com/postcss/postcss). Optional, but the properties `to`
   and `from` are _always_ set to the filename of the CSS file automatically.
 - A `RegExp` object to filter which files should be processed.<br/>
-  Optional, defaults to `/.css$/`.
+  Optional, defaults to `/\.css$/`.
+
+An example using the plugin `autoprefixer` with inline sourcemaps and a `RegExp` filter:
 
 ```javascript
 karmaTypescriptConfig: {
     bundlerOptions: {
         transforms: [
             require("karma-typescript-postcss-transform")(
-                [plugin1, plugin2], { opt1: ..., opt2: ... }, /pattern/
+                [require("autoprefixer")], { map: { inline: true } }, /\.css$/
             )
         ]
     }
