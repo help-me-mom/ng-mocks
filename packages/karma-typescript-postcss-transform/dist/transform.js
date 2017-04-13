@@ -40,3 +40,4 @@ var configure = function (plugins, options, filter) {
     return Object.assign(transform, { initialize: initialize });
 };
 module.exports = configure;
+//# sourceMappingURL=transform.js.map
