@@ -22,7 +22,7 @@
     "build:ci": "tsc --noEmit --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "tslint --project tsconfig.json",
-    "test": "istanbul cover -x \"*.spec.js\" tape dist/*.js | faucet && istanbul report --root coverage text-summary"
+    "test": "istanbul cover -x \"*.spec.js\" node_modules/tape/bin/tape dist/*.js | faucet && istanbul report --root coverage text-summary"
   },
   "dependencies": {
     "log4js": "^1.1.1"

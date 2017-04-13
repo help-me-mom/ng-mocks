@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var log4js = require("log4js");
+var os = require("os");
+var path = require("path");
 var postcss = require("postcss");
 var sinon = require("sinon");
 var test = require("tape");
@@ -117,8 +119,8 @@ test("transformer should log warnings", function (t) {
         }
         t.true(dirty);
         t.deepEqual(mockLogger.warn.lastCall.args[0], "mock-warning-plugin: " +
-            process.cwd() +
-            "/style.css:1:1: warning");
+            path.join(process.cwd(), "/style.css") +
+            ":1:1: warning");
     });
 });
 test("transformer should catch CssSyntaxError and only log as a warning", function (t) {
@@ -129,7 +131,8 @@ test("transformer should catch CssSyntaxError and only log as a warning", functi
             t.fail();
         }
         t.false(dirty);
-        t.deepEqual(stripConsoleColors(mockLogger.warn.lastCall.args[0]), process.cwd() + "/file.css:1:1: Unknown word\n> 1 | export *\n    | ^");
+        t.deepEqual(stripConsoleColors(mockLogger.warn.lastCall.args[0]), path.join(process.cwd(), "/file.css") +
+            ":1:1: Unknown word" + os.EOL + "> 1 | export *\n    | ^");
     });
 });
 test("transformer should handle errors other than CssSyntaxError", function (t) {

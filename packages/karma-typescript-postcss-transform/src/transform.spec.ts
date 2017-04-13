@@ -1,5 +1,7 @@
 import * as kt from "karma-typescript/src/api/transforms";
 import * as log4js from "log4js";
+import * as os from "os";
+import * as path from "path";
 import * as postcss from "postcss";
 import * as sinon from "sinon";
 import * as test from "tape";
@@ -147,8 +149,8 @@ test("transformer should log warnings", (t) => {
         t.true(dirty);
         t.deepEqual(mockLogger.warn.lastCall.args[0],
             "mock-warning-plugin: " +
-            process.cwd() +
-            "/style.css:1:1: warning");
+            path.join(process.cwd(), "/style.css") +
+            ":1:1: warning");
     });
 });
 
@@ -164,7 +166,8 @@ test("transformer should catch CssSyntaxError and only log as a warning", (t) =>
         }
         t.false(dirty);
         t.deepEqual(stripConsoleColors(mockLogger.warn.lastCall.args[0]),
-            process.cwd() + "/file.css:1:1: Unknown word\n> 1 | export *\n    | ^");
+            path.join(process.cwd(), "/file.css") +
+            ":1:1: Unknown word" + os.EOL + "> 1 | export *\n    | ^");
     });
 });
 
