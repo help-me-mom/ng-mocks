@@ -45,9 +45,11 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
 
                 let expression = (<ts.ObjectLiteralExpression> node);
 
+                /* istanbul ignore else */
                 if (expression.properties) {
                     expression.properties.forEach((p) => {
 
+                        /* istanbul ignore else */
                         if (p.name && p.kind === ts.SyntaxKind.PropertyAssignment) {
 
                             let property = (<ts.PropertyAssignment> p);
@@ -64,6 +66,7 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
 
                                 let initializer = (<ts.ArrayLiteralExpression> property.initializer);
                                 initializer.elements.forEach((element) => {
+                                    /* istanbul ignore else */
                                     if (element.kind === ts.SyntaxKind.StringLiteral) {
                                         rewriteUrl((<ts.StringLiteral> element));
                                     }
@@ -78,7 +81,9 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
         ts.forEachChild(node, visitNode);
     };
 
-    visitNode(context.ts.ast);
+    if (context.source.indexOf("templateUrl") > 0 || context.source.indexOf("styleUrls") > 0) {
+        visitNode(context.ts.ast);
+    }
 
     if (dirty) {
         context.source = magic.toString();

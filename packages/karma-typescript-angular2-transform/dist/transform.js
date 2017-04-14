@@ -32,8 +32,10 @@ var transform = function (context, callback) {
         switch (node.kind) {
             case ts.SyntaxKind.ObjectLiteralExpression:
                 var expression = node;
+                /* istanbul ignore else */
                 if (expression.properties) {
                     expression.properties.forEach(function (p) {
+                        /* istanbul ignore else */
                         if (p.name && p.kind === ts.SyntaxKind.PropertyAssignment) {
                             var property = p;
                             var identifier = property.name;
@@ -45,6 +47,7 @@ var transform = function (context, callback) {
                                 property.initializer.kind === ts.SyntaxKind.ArrayLiteralExpression) {
                                 var initializer = property.initializer;
                                 initializer.elements.forEach(function (element) {
+                                    /* istanbul ignore else */
                                     if (element.kind === ts.SyntaxKind.StringLiteral) {
                                         rewriteUrl(element);
                                     }
@@ -57,7 +60,9 @@ var transform = function (context, callback) {
         }
         ts.forEachChild(node, visitNode);
     };
-    visitNode(context.ts.ast);
+    if (context.source.indexOf("templateUrl") > 0 || context.source.indexOf("styleUrls") > 0) {
+        visitNode(context.ts.ast);
+    }
     if (dirty) {
         context.source = magic.toString();
     }
@@ -70,3 +75,4 @@ var initialize = function (logOptions) {
 };
 var exp = Object.assign(transform, { initialize: initialize });
 module.exports = exp;
+//# sourceMappingURL=transform.js.map

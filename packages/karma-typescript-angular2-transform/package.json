@@ -22,7 +22,7 @@
     "build:ci": "tsc --noEmit --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "tslint --project tsconfig.json",
-    "test": "tape dist/test/*.spec.js | tap-spec"
+    "test": "istanbul cover -x \"*.spec.js\" node_modules/tape/bin/tape dist/test/*.spec.js | faucet && istanbul report --root coverage text-summary"
   },
   "dependencies": {
     "acorn": "^4.0.11",
@@ -36,10 +36,13 @@
     "@types/lodash": "^4.14.55",
     "@types/log4js": "0.0.32",
     "@types/node": "^7.0.5",
+    "@types/sinon": "^2.1.2",
     "@types/tape": "^4.2.29",
+    "faucet": "0.0.1",
+    "istanbul": "^1.1.0-alpha.1",
     "karma-typescript": "latest",
     "rxjs": "^5.2.0",
-    "tap-spec": "^4.1.1",
+    "sinon": "^2.1.0",
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",

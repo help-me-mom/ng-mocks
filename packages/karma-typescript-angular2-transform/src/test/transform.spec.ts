@@ -1,6 +1,8 @@
 import * as fs from "fs";
 import * as kt from "karma-typescript/src/api/transforms";
+import * as log4js from "log4js";
 import * as path from "path";
+import * as sinon from "sinon";
 import * as test from "tape";
 import * as ts from "typescript";
 
@@ -16,6 +18,14 @@ let logOptions: kt.TransformInitializeLogOptions = {
     }],
     level: "INFO"
 };
+
+let mockLogger = {
+    debug: sinon.spy()
+};
+
+let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
+let configureSpy = sinon.spy(log4js, "configure");
 
 transform.initialize(logOptions);
 
@@ -57,6 +67,21 @@ let createContext = (): any => {
         }
     };
 };
+
+test("transformer should initialize log level", (t) => {
+    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
+    t.end();
+});
+
+test("transformer should initialize log appenders", (t) => {
+    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.end();
+});
+
+test("transformer should initialize log category", (t) => {
+    t.deepEqual(getLoggerSpy.args[0][0], "angular2-transform.karma-typescript");
+    t.end();
+});
 
 test("transformer should check ts property", (t) => {
 
@@ -130,5 +155,38 @@ test("transformer should transform style urls", (t) => {
             "[\"/custom-root/base/src/test/style.css\", " +
             "\"/custom-root/base/src/test/style.less\", " +
             "\"/custom-root/base/src/style.scss\"]") > 0);
+    });
+});
+
+test("transformer should log activity with level debug", (t) => {
+
+    t.plan(1);
+
+    let context = createContext();
+
+    transform(context, () => {
+        t.deepEqual(mockLogger.debug.lastCall.args, [
+            "Rewriting %s to %s in %s",
+            "mock.html",
+            "/custom-root/base/src/test/mock.html",
+            path.join(process.cwd(), "/src/test/mock-component.ts")
+        ]);
+    });
+});
+
+test("transformer should skip files without the properties 'templateUrl' and/or 'styleUrls'", (t) => {
+
+    t.plan(1);
+
+    filename = path.join(process.cwd(), "./src/test/mock-service.ts");
+    ast = compile(filename);
+
+    let context = createContext();
+
+    transform(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.false(dirty);
     });
 });

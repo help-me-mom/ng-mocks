@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
+var log4js = require("log4js");
 var path = require("path");
+var sinon = require("sinon");
 var test = require("tape");
 var ts = require("typescript");
 var transform = require("../transform");
@@ -15,6 +17,12 @@ var logOptions = {
         }],
     level: "INFO"
 };
+var mockLogger = {
+    debug: sinon.spy()
+};
+var getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+var setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
+var configureSpy = sinon.spy(log4js, "configure");
 transform.initialize(logOptions);
 var compile = function (filename) {
     var options = {
@@ -52,6 +60,18 @@ var createContext = function () {
         }
     };
 };
+test("transformer should initialize log level", function (t) {
+    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
+    t.end();
+});
+test("transformer should initialize log appenders", function (t) {
+    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.end();
+});
+test("transformer should initialize log category", function (t) {
+    t.deepEqual(getLoggerSpy.args[0][0], "angular2-transform.karma-typescript");
+    t.end();
+});
 test("transformer should check ts property", function (t) {
     t.plan(1);
     var context = createContext();
@@ -107,3 +127,28 @@ test("transformer should transform style urls", function (t) {
             "\"/custom-root/base/src/style.scss\"]") > 0);
     });
 });
+test("transformer should log activity with level debug", function (t) {
+    t.plan(1);
+    var context = createContext();
+    transform(context, function () {
+        t.deepEqual(mockLogger.debug.lastCall.args, [
+            "Rewriting %s to %s in %s",
+            "mock.html",
+            "/custom-root/base/src/test/mock.html",
+            path.join(process.cwd(), "/src/test/mock-component.ts")
+        ]);
+    });
+});
+test("transformer should skip files without the properties 'templateUrl' and/or 'styleUrls'", function (t) {
+    t.plan(1);
+    filename = path.join(process.cwd(), "./src/test/mock-service.ts");
+    ast = compile(filename);
+    var context = createContext();
+    transform(context, function (error, dirty) {
+        if (error) {
+            t.fail();
+        }
+        t.false(dirty);
+    });
+});
+//# sourceMappingURL=transform.spec.js.map

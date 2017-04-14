@@ -1,0 +1,1 @@
+{"version":3,"file":"mock-component.js","sourceRoot":"","sources":["../../src/test/mock-component.ts"],"names":[],"mappings":";;;;;;;;AAAA,sCAA0C;AAO1C,IAAa,aAAa;IAA1B;IAA4B,CAAC;IAAD,oBAAC;AAAD,CAAC,AAA7B,IAA6B;AAAhB,aAAa;IALzB,gBAAS,CAAC;QACP,QAAQ,EAAE,UAAU;QACpB,SAAS,EAAE,CAAC,WAAW,EAAE,cAAc,EAAE,eAAe,CAAC;QACzD,WAAW,EAAE,WAAW;KAC3B,CAAC;GACW,aAAa,CAAG;AAAhB,sCAAa"}

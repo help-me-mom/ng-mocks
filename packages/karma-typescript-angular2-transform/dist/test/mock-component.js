@@ -20,3 +20,4 @@ MockComponent = __decorate([
     })
 ], MockComponent);
 exports.MockComponent = MockComponent;
+//# sourceMappingURL=mock-component.js.map
