@@ -146,6 +146,17 @@ test("transformer should log activity with level debug", (t) => {
     });
 });
 
+test("transformer should not process empty files", (t) => {
+    t.plan(2);
+
+    let context = createContext("");
+
+    transform(require("autoprefixer"))(context, (error, dirty) => {
+        t.isEqual(error.message, "File is empty");
+        t.false(dirty);
+    });
+});
+
 test("transformer should log warnings", (t) => {
     t.plan(2);
 

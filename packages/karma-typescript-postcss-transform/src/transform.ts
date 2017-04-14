@@ -20,6 +20,10 @@ let configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOp
 
             log.debug("Transforming %s", context.filename);
 
+            if (!context.source) {
+                return callback(new Error("File is empty"), false);
+            }
+
             postcss(plugins)
                 .process(context.source, options)
                 .then((result) => {
