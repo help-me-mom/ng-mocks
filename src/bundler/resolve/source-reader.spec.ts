@@ -23,7 +23,7 @@ import { SourceReader } from "./source-reader";
 
 let configuration = new Configuration({});
 let project = new Project(configuration, log4js.getLogger("project"));
-let transformer = new Transformer(configuration, log4js.getLogger("transformer"), project);
+let transformer = new Transformer(configuration, project);
 let sourceReader = new SourceReader(configuration, log4js.getLogger("sourceReader"), transformer);
 
 let karmaTypescriptConfig: KarmaTypescriptConfig = {

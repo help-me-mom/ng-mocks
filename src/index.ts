@@ -28,8 +28,7 @@ let loggers: LoggerList = {
     project: log4js.getLogger("project.karma-typescript"),
     resolver: log4js.getLogger("resolver.karma-typescript"),
     sourceReader: log4js.getLogger("source-reader.karma-typescript"),
-    threshold: log4js.getLogger("threshold.karma-typescript"),
-    transformer: log4js.getLogger("transformer.karma-typescript")
+    threshold: log4js.getLogger("threshold.karma-typescript")
 };
 
 let sharedProcessedFiles: SharedProcessedFiles = {};
@@ -40,7 +39,7 @@ let dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 
 let compiler = new Compiler(loggers.compiler, project);
 let coverage = new Coverage(configuration);
-let transformer = new Transformer(configuration, loggers.transformer, project);
+let transformer = new Transformer(configuration, project);
 let threshold = new Threshold(configuration, loggers.threshold);
 let validator = new Validator(configuration);
 

@@ -2,8 +2,6 @@ import * as async from "async";
 import * as os from "os";
 import * as ts from "typescript";
 
-import { Logger } from "log4js";
-
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
 import { Project } from "../shared/project";
@@ -12,7 +10,7 @@ import { Queued } from "./queued";
 
 export class Transformer {
 
-    constructor(private config: Configuration, private log: Logger, private project: Project) { }
+    constructor(private config: Configuration, private project: Project) { }
 
     public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: { (): void }): void {
 
@@ -40,7 +38,7 @@ export class Transformer {
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
                     transform(context, (error: Error, dirty: boolean) => {
-                        this.handleError(error, transform);
+                        this.handleError(error, transform, context);
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.project.getTsconfig().options,
@@ -79,7 +77,7 @@ export class Transformer {
         async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
             process.nextTick(() => {
                 transform(context, (error: Error, dirty: boolean) => {
-                    this.handleError(error, transform);
+                    this.handleError(error, transform, context);
                     if (dirty) {
                         bundleItem.ast = context.js.ast;
                         bundleItem.source = context.source;
@@ -90,12 +88,11 @@ export class Transformer {
         }, onTransformsApplied);
     }
 
-    private handleError(error: Error, transform: Transform): void {
+    private handleError(error: Error, transform: Transform, context: TransformContext): void {
         if (error) {
-            let errorMessage = "Unable to run transform: " + os.EOL + os.EOL +
-                transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL;
-            this.log.error(errorMessage);
+            let errorMessage = context.filename + ": " + error.message + os.EOL +
+                "Transform function: " + os.EOL + os.EOL +
+                transform + os.EOL;
             throw new Error(errorMessage);
         }
     }

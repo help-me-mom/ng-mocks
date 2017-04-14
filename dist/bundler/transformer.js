@@ -4,9 +4,8 @@ var async = require("async");
 var os = require("os");
 var ts = require("typescript");
 var Transformer = (function () {
-    function Transformer(config, log, project) {
+    function Transformer(config, project) {
         this.config = config;
-        this.log = log;
         this.project = project;
     }
     Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformsApplied) {
@@ -32,7 +31,7 @@ var Transformer = (function () {
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
                     transform(context, function (error, dirty) {
-                        _this.handleError(error, transform);
+                        _this.handleError(error, transform, context);
                         if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: _this.project.getTsconfig().options,
@@ -68,7 +67,7 @@ var Transformer = (function () {
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
                 transform(context, function (error, dirty) {
-                    _this.handleError(error, transform);
+                    _this.handleError(error, transform, context);
                     if (dirty) {
                         bundleItem.ast = context.js.ast;
                         bundleItem.source = context.source;
@@ -78,12 +77,11 @@ var Transformer = (function () {
             });
         }, onTransformsApplied);
     };
-    Transformer.prototype.handleError = function (error, transform) {
+    Transformer.prototype.handleError = function (error, transform, context) {
         if (error) {
-            var errorMessage = "Unable to run transform: " + os.EOL + os.EOL +
-                transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL;
-            this.log.error(errorMessage);
+            var errorMessage = context.filename + ": " + error.message + os.EOL +
+                "Transform function: " + os.EOL + os.EOL +
+                transform + os.EOL;
             throw new Error(errorMessage);
         }
     };
