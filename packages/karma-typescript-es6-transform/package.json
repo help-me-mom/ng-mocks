@@ -45,7 +45,7 @@
     "@types/tape": "^4.2.29",
     "babel-preset-es2016": "^6.22.0",
     "faucet": "0.0.1",
-    "istanbul": "^0.4.5",
+    "istanbul": "^1.1.0-alpha.1",
     "karma-typescript": "latest",
     "sinon": "^2.1.0",
     "tape": "^4.6.3",
