@@ -19,7 +19,6 @@ var logOptions = {
 };
 var mockLogger = {
     debug: sinon.spy(),
-    error: sinon.spy(),
     warn: sinon.spy()
 };
 var getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
