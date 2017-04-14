@@ -17,6 +17,9 @@ let configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOp
         options.to = context.filename;
 
         if (context.filename.match(filter)) {
+
+            log.debug("Transforming %s", context.filename);
+
             postcss(plugins)
                 .process(context.source, options)
                 .then((result) => {

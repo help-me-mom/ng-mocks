@@ -20,6 +20,7 @@ let logOptions: kt.TransformInitializeLogOptions = {
 };
 
 let mockLogger = {
+    debug: sinon.spy(),
     error: sinon.spy(),
     warn: sinon.spy()
 };
@@ -133,6 +134,16 @@ test("transformer should use custom filter on the module filename", (t) => {
             t.fail();
         }
         t.true(dirty);
+    });
+});
+
+test("transformer should log activity with level debug", (t) => {
+    t.plan(1);
+
+    let context = createContext(".box { display: flex; }");
+
+    transform(require("autoprefixer"))(context, () => {
+        t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.css" ]);
     });
 });
 

@@ -18,6 +18,7 @@ var logOptions = {
     level: "INFO"
 };
 var mockLogger = {
+    debug: sinon.spy(),
     error: sinon.spy(),
     warn: sinon.spy()
 };
@@ -107,6 +108,13 @@ test("transformer should use custom filter on the module filename", function (t)
             t.fail();
         }
         t.true(dirty);
+    });
+});
+test("transformer should log activity with level debug", function (t) {
+    t.plan(1);
+    var context = createContext(".box { display: flex; }");
+    transform(require("autoprefixer"))(context, function () {
+        t.deepEqual(mockLogger.debug.lastCall.args, ["Transforming %s", "file.css"]);
     });
 });
 test("transformer should log warnings", function (t) {
