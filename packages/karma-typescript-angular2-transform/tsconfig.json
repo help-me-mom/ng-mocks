@@ -6,7 +6,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "outDir": "dist",
-        "sourceMap": true,
+        "inlineSourceMap": true,
         "target": "ES5",
         "lib": [
             "dom","es5","es6","scripthost"
