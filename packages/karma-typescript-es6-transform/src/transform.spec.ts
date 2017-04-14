@@ -223,3 +223,16 @@ test("transformer should use custom compiler options", (t) => {
         t.equal(context.source, "let x = 2;x = Math.pow(x, 3);\nexport default x;");
     });
 });
+
+test("transformer should handle syntax errors", (t) => {
+
+    t.plan(2);
+
+    let context = createContext("export default function(){}");
+    context.source = ".x";
+
+    transform()(context, (error, dirty) => {
+        t.isEqual(error.message, "file.js: Unexpected token (1:0)");
+        t.false(dirty);
+    });
+});
