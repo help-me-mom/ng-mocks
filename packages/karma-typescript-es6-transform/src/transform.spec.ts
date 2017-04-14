@@ -19,9 +19,7 @@ let logOptions: kt.TransformInitializeLogOptions = {
 };
 
 let mockLogger = {
-    debug: sinon.spy(),
-    error: sinon.spy(),
-    warn: sinon.spy()
+    debug: sinon.spy()
 };
 
 let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);

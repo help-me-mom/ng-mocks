@@ -16,9 +16,7 @@ var logOptions = {
     level: "INFO"
 };
 var mockLogger = {
-    debug: sinon.spy(),
-    error: sinon.spy(),
-    warn: sinon.spy()
+    debug: sinon.spy()
 };
 var getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
 var setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
