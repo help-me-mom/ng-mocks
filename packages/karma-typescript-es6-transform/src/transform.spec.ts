@@ -1,6 +1,8 @@
 import * as acorn from "acorn";
 import * as ESTree from "estree";
 import * as kt from "karma-typescript/src/api/transforms";
+import * as log4js from "log4js";
+import * as sinon from "sinon";
 import * as test from "tape";
 
 import * as transform from "./transform";
@@ -16,6 +18,16 @@ let logOptions: kt.TransformInitializeLogOptions = {
     level: "INFO"
 };
 
+let mockLogger = {
+    debug: sinon.spy(),
+    error: sinon.spy(),
+    warn: sinon.spy()
+};
+
+let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
+let configureSpy = sinon.spy(log4js, "configure");
+
 transform().initialize(logOptions);
 
 // kt.TransformContext
@@ -30,6 +42,21 @@ let createContext = (source: string): any => {
         source
     };
 };
+
+test("transformer should initialize log level", (t) => {
+    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
+    t.end();
+});
+
+test("transformer should initialize log appenders", (t) => {
+    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.end();
+});
+
+test("transformer should initialize log category", (t) => {
+    t.deepEqual(getLoggerSpy.args[0][0], "es6-transform.karma-typescript");
+    t.end();
+});
 
 test("transformer should check js property", (t) => {
 
@@ -56,7 +83,7 @@ test("transformer should detect es6 wildcard export", (t) => {
         if (error) {
             t.fail();
         }
-        t.assert(dirty);
+        t.true(dirty);
     });
 });
 
@@ -70,7 +97,7 @@ test("transformer should detect es6 default export", (t) => {
         if (error) {
             t.fail();
         }
-        t.assert(dirty);
+        t.true(dirty);
     });
 });
 
@@ -84,7 +111,7 @@ test("transformer should detect es6 named export", (t) => {
         if (error) {
             t.fail();
         }
-        t.assert(dirty);
+        t.true(dirty);
     });
 });
 
@@ -98,7 +125,58 @@ test("transformer should detect es6 import", (t) => {
         if (error) {
             t.fail();
         }
-        t.assert(dirty);
+        t.true(dirty);
+    });
+});
+
+test("transformer should skip ast without body", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("let x = 0;");
+    context.js.ast.body = undefined;
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.false(dirty);
+    });
+});
+
+test("transformer should skip ast without import/export", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("let x = 0;");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.false(dirty);
+    });
+});
+
+test("transformer should log activity with level debug", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("export default function(){}");
+
+    transform()(context, () => {
+        t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.js" ]);
+    });
+});
+
+test("transformer should prefer options.filename over context.filename", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("export default function(){}");
+
+    transform({ filename: "xxx.js" })(context, () => {
+        t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "xxx.js" ]);
     });
 });
 

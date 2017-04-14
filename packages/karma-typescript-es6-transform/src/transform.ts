@@ -39,11 +39,11 @@ let configure = (options?: babel.TransformOptions) => {
 
         if (isEs6(context.js.ast)) {
 
-            log.debug("Transforming %s", context.filename);
-
             if (!options.filename) {
                 options.filename = context.filename;
             }
+
+            log.debug("Transforming %s", options.filename);
 
             context.source = babel.transform(context.source, options).code;
             context.js.ast = acorn.parse(context.source, { sourceType: "module" });
