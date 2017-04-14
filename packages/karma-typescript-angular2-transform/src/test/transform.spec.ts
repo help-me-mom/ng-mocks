@@ -168,7 +168,7 @@ test("transformer should log activity with level debug", (t) => {
         t.deepEqual(mockLogger.debug.lastCall.args, [
             "Rewriting %s to %s in %s",
             "mock.html",
-            "/custom-root/base/src/test/mock.html",
+            path.normalize("/custom-root/base/src/test/mock.html"),
             path.join(process.cwd(), "/src/test/mock-component.ts")
         ]);
     });
