@@ -58,7 +58,7 @@ module.exports = function(config) {
                                     callback(undefined, true);
                                 }
                             }))
-                            .process(context.source, { from: context.module, to: context.module })
+                            .process(context.source, { from: context.filename, to: context.filename })
                             .then(function(result){
                                 result.warnings().forEach(function (warning) {
                                     process.stderr.write(warning.toString());
@@ -78,7 +78,10 @@ module.exports = function(config) {
                             return callback(undefined, false);
                         }
                     },
-                    require("karma-typescript-es6-transform")({presets: ["es2015"]})
+                    require("karma-typescript-es6-transform")({presets: ["es2015"]}),
+                    require("karma-typescript-postcss-transform")(
+                        [require("autoprefixer")], { map: { inline: true } }, /postcss\/style\.css$/
+                    )
                 ],
                 validateSyntax: false
             },
