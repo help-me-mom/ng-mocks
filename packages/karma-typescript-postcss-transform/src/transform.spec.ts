@@ -21,7 +21,6 @@ let logOptions: kt.TransformInitializeLogOptions = {
 
 let mockLogger = {
     debug: sinon.spy(),
-    error: sinon.spy(),
     warn: sinon.spy()
 };
 
