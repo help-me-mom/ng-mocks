@@ -7,14 +7,8 @@ describe("PostCssTester", () => {
 
     it("should test transforming css with autoprefixer", () => {
 
-        expect(tester.testTransformCss()).toEqual(".box {" + os.EOL +
-"    display: -webkit-box;" + os.EOL +
-"    display: -ms-flexbox;" + os.EOL +
-"    display: flex;" + os.EOL +
-"}" + os.EOL + os.EOL +
-
-"/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0eWxlLmNzcyJd" +
-"LCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLHFCQUFjO0lBQWQscUJBQWM7SUFBZCxjQUFjO0NBQ2pCIiwiZmlsZS" +
-"I6InN0eWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5ib3gge1xuICAgIGRpc3BsYXk6IGZsZXg7XG59XG4iXX0= */");
+        let processed = tester.testTransformCss();
+        expect(processed.indexOf("display: -webkit-box;")).toBeGreaterThan(0);
+        expect(processed.indexOf("/*# sourceMappingURL=data:application/json;base64")).toBeGreaterThan(0);
     });
 });

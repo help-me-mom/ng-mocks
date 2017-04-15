@@ -1,7 +1,7 @@
 
 export class PostCssTester {
 
-    public testTransformCss(): any {
+    public testTransformCss(): string {
 
         return require("./style.css");
     }

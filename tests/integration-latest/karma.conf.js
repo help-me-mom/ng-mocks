@@ -80,7 +80,7 @@ module.exports = function(config) {
                     },
                     require("karma-typescript-es6-transform")({presets: ["es2015"]}),
                     require("karma-typescript-postcss-transform")(
-                        [require("autoprefixer")], { map: { inline: true } }, /postcss\/style\.css$/
+                        [require("autoprefixer")], { map: { inline: true } }, /postcss.style\.css$/
                     )
                 ],
                 validateSyntax: false
