@@ -1,5 +1,7 @@
 # karma-typescript
 
+[![Backers on Open Collective](https://opencollective.com/karma-typescript/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/karma-typescript/sponsors/badge.svg)](#sponsors)
 [![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
 [![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
 [![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
@@ -564,8 +566,83 @@ These are the environments reported failing/working:
 |4.1.2|7.5.0|OSX 10.12.2|No|
 |4.1.2|7.7.3|Ubuntu 14.04|Yes|
 
+
+## Backers
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/karma-typescript#backer)]
+
+<a href="https://opencollective.com/karma-typescript/backer/0/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/1/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/2/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/3/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/4/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/5/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/6/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/7/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/8/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/9/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/10/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/11/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/12/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/13/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/14/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/15/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/16/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/17/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/18/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/19/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/20/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/21/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/22/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/23/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/24/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/25/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/26/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/27/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/28/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/backer/29/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/29/avatar.svg"></a>
+
+
+## Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/karma-typescript#sponsor)]
+
+<a href="https://opencollective.com/karma-typescript/sponsor/0/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/1/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/2/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/3/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/4/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/5/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/6/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/7/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/8/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/9/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/10/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/11/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/12/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/13/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/14/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/15/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/16/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/17/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/18/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/19/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/20/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/21/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/22/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/23/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/24/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/25/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/26/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/27/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/28/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/karma-typescript/sponsor/29/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/29/avatar.svg"></a>
+
+
 ## Licensing
 
 This software is licensed with the MIT license.
 
 © 2016-2017 Erik Barke, Monounity
+
+
