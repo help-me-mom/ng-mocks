@@ -54,6 +54,30 @@ karmaTypescriptConfig: {
 }
 ```
 
+## PostCSS runner with a plugin
+
+In this recipe we set up `karma-typescript` to run the PostCSS `autoprefixer` plugin on all `.css` files.
+
+First, install the PostCSS transforms plugin and the `autoprefixer` package as dev dependencies:
+
+```bash
+npm install --save-dev karma-typescript-postcss-transform autoprefixer
+```
+
+And then in the Karma configuration, configure the bundler to use the runner with a plugin and custom options:
+
+```javascript
+karmaTypescriptConfig: {
+    bundlerOptions: {
+        transforms: [
+            require("karma-typescript-postcss-transform")(
+                [require("autoprefixer")], { map: { inline: true } }, /\.css$/
+            )
+        ]
+    }
+}
+```
+
 ## Emulating Css Modules
 
 This recipe emulates the behavior of Css Modules by replacing the contents of a `.css` file with an object literal

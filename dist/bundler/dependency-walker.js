@@ -9,7 +9,7 @@ var os = require("os");
 var path = require("path");
 var ts = require("typescript");
 var pad = require("pad");
-var required_module_1 = require("./required-module");
+var bundle_item_1 = require("./bundle-item");
 var DependencyWalker = (function () {
     function DependencyWalker(log) {
         this.log = log;
@@ -19,31 +19,31 @@ var DependencyWalker = (function () {
     DependencyWalker.prototype.hasRequire = function (s) {
         return this.requireRegexp.test(s);
     };
-    DependencyWalker.prototype.collectRequiredTsModules = function (queue) {
+    DependencyWalker.prototype.collectTypescriptDependencies = function (queue) {
         var _this = this;
-        var requiredModuleCount = 0;
+        var dependencyCount = 0;
         queue.forEach(function (queued) {
-            queued.module.requiredModules = _this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
+            queued.item.dependencies = _this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
             var resolvedModules = queued.emitOutput.sourceFile.resolvedModules;
             if (resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
                 if (lodash.isMap(resolvedModules)) {
                     resolvedModules.forEach(function (resolvedModule, moduleName) {
-                        queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                     });
                 }
                 else {
                     Object.keys(resolvedModules).forEach(function (moduleName) {
                         var resolvedModule = resolvedModules[moduleName];
-                        queued.module.requiredModules.push(new required_module_1.RequiredModule(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
                     });
                 }
             }
-            requiredModuleCount += queued.module.requiredModules.length;
+            dependencyCount += queued.item.dependencies.length;
         });
         this.validateCase(queue);
-        return requiredModuleCount;
+        return dependencyCount;
     };
-    DependencyWalker.prototype.collectRequiredJsModules = function (requiredModule, onRequiredModulesCollected) {
+    DependencyWalker.prototype.collectJavascriptDependencies = function (bundleItem, onDependenciesCollected) {
         var _this = this;
         var moduleNames = [];
         var expressions = [];
@@ -53,7 +53,7 @@ var DependencyWalker = (function () {
                 node.callee.name === "require";
         };
         var visitNode = function (node, state, c) {
-            if (!_this.hasRequire(requiredModule.source.slice(node.start, node.end))) {
+            if (!_this.hasRequire(bundleItem.source.slice(node.start, node.end))) {
                 return;
             }
             _this.walk.base[node.type](node, state, c);
@@ -66,18 +66,18 @@ var DependencyWalker = (function () {
                 }
             }
         };
-        this.walk.recursive(requiredModule.ast, null, {
+        this.walk.recursive(bundleItem.ast, null, {
             Expression: visitNode,
             Statement: visitNode
         });
-        this.addDynamicDependencies(expressions, requiredModule, function (dynamicDependencies) {
-            onRequiredModulesCollected(moduleNames.concat(dynamicDependencies));
+        this.addDynamicDependencies(expressions, bundleItem, function (dynamicDependencies) {
+            onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
     };
     DependencyWalker.prototype.findUnresolvedTsRequires = function (sourceFile) {
-        var requiredModules = [];
+        var dependencies = [];
         if (ts.isDeclarationFile(sourceFile)) {
-            return requiredModules;
+            return dependencies;
         }
         var visitNode = function (node) {
             if (node.kind === ts.SyntaxKind.CallExpression) {
@@ -90,15 +90,15 @@ var DependencyWalker = (function () {
                     undefined;
                 if (expression && expression.text === "require" &&
                     argument && typeof argument.text === "string") {
-                    requiredModules.push(new required_module_1.RequiredModule(argument.text));
+                    dependencies.push(new bundle_item_1.BundleItem(argument.text));
                 }
             }
             ts.forEachChild(node, visitNode);
         };
         visitNode(sourceFile);
-        return requiredModules;
+        return dependencies;
     };
-    DependencyWalker.prototype.addDynamicDependencies = function (expressions, requiredModule, onDynamicDependenciesAdded) {
+    DependencyWalker.prototype.addDynamicDependencies = function (expressions, bundleItem, onDynamicDependenciesAdded) {
         var _this = this;
         var dynamicDependencies = [];
         if (expressions.length === 0) {
@@ -109,10 +109,10 @@ var DependencyWalker = (function () {
         }
         async.each(expressions, function (expression, onExpressionResolved) {
             var dynamicModuleName = _this.parseDynamicRequire(expression);
-            var directory = path.dirname(requiredModule.filename);
+            var directory = path.dirname(bundleItem.filename);
             var pattern;
             if (dynamicModuleName && dynamicModuleName !== "*") {
-                if (new required_module_1.RequiredModule(dynamicModuleName).isNpmModule()) {
+                if (new bundle_item_1.BundleItem(dynamicModuleName).isNpmModule()) {
                     dynamicDependencies.push(dynamicModuleName);
                     onExpressionResolved();
                 }
@@ -129,7 +129,7 @@ var DependencyWalker = (function () {
                                 }
                                 if (stats.isFile()) {
                                     _this.log.debug("Dynamic require: \nexpression: [%s]" +
-                                        "\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), match, requiredModule.filename, pattern);
+                                        "\nfilename: %s\nrequired by %s\nglob: %s", JSON.stringify(expression, undefined, 3), match, bundleItem.filename, pattern);
                                     dynamicDependencies.push("./" + path.relative(directory, match));
                                 }
                                 onMatchResolved();
@@ -173,12 +173,12 @@ var DependencyWalker = (function () {
             return q.file.originalPath.toLowerCase();
         });
         queue.forEach(function (queued) {
-            if (queued.module.requiredModules) {
-                queued.module.requiredModules.forEach(function (requiredModule) {
-                    if (requiredModule.filename && files.indexOf(requiredModule.filename) === -1) {
-                        var lowerIndex = fileslower.indexOf(requiredModule.filename.toLowerCase());
+            if (queued.item.dependencies) {
+                queued.item.dependencies.forEach(function (dependency) {
+                    if (dependency.filename && files.indexOf(dependency.filename) === -1) {
+                        var lowerIndex = fileslower.indexOf(dependency.filename.toLowerCase());
                         if (lowerIndex !== -1) {
-                            var result = diff.diffChars(files[lowerIndex], requiredModule.filename);
+                            var result = diff.diffChars(files[lowerIndex], dependency.filename);
                             var arrows_1 = "";
                             result.forEach(function (part) {
                                 if (part.added) {
@@ -189,10 +189,10 @@ var DependencyWalker = (function () {
                                 }
                             });
                             throw new Error("Uppercase/lowercase mismatch importing " +
-                                requiredModule.moduleName + " from " + queued.file.originalPath +
+                                dependency.moduleName + " from " + queued.file.originalPath +
                                 ":" + os.EOL + os.EOL +
                                 "filename:    " + files[lowerIndex] + os.EOL +
-                                "module name: " + requiredModule.filename + os.EOL +
+                                "module name: " + dependency.filename + os.EOL +
                                 "             " + arrows_1 + os.EOL);
                         }
                     }

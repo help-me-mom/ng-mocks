@@ -5,6 +5,7 @@ var bundler_1 = require("./bundler/bundler");
 var dependency_walker_1 = require("./bundler/dependency-walker");
 var globals_1 = require("./bundler/globals");
 var resolver_1 = require("./bundler/resolve/resolver");
+var source_reader_1 = require("./bundler/resolve/source-reader");
 var transformer_1 = require("./bundler/transformer");
 var validator_1 = require("./bundler/validator");
 var compiler_1 = require("./compiler/compiler");
@@ -21,6 +22,7 @@ var loggers = {
     dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
     project: log4js.getLogger("project.karma-typescript"),
     resolver: log4js.getLogger("resolver.karma-typescript"),
+    sourceReader: log4js.getLogger("source-reader.karma-typescript"),
     threshold: log4js.getLogger("threshold.karma-typescript")
 };
 var sharedProcessedFiles = {};
@@ -32,7 +34,8 @@ var coverage = new coverage_1.Coverage(configuration);
 var transformer = new transformer_1.Transformer(configuration, project);
 var threshold = new threshold_1.Threshold(configuration, loggers.threshold);
 var validator = new validator_1.Validator(configuration);
-var resolver = new resolver_1.Resolver(configuration, dependencyWalker, loggers.resolver, transformer);
+var sourceReader = new source_reader_1.SourceReader(configuration, loggers.sourceReader, transformer);
+var resolver = new resolver_1.Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
 var globals = new globals_1.Globals(configuration, resolver);
 var bundler = new bundler_1.Bundler(configuration, dependencyWalker, globals, loggers.bundler, project, resolver, transformer, validator);
 var framework = new framework_1.Framework(bundler, configuration, coverage, resolver);

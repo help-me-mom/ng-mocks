@@ -5,20 +5,20 @@ import * as ts from "typescript";
 import { Transform, TransformContext } from "../api";
 import { Configuration } from "../shared/configuration";
 import { Project } from "../shared/project";
+import { BundleItem } from "./bundle-item";
 import { Queued } from "./queued";
-import { RequiredModule } from "./required-module";
 
 export class Transformer {
 
     constructor(private config: Configuration, private project: Project) { }
 
-    public applyTsTransforms(bundleQueue: Queued[], onTransformssApplied: ErrorCallback<Error>): void {
+    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: { (): void }): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -35,10 +35,10 @@ export class Transformer {
                     version: ts.version
                 }
             };
-            async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
+            async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
                     transform(context, (error: Error, dirty: boolean) => {
-                        this.handleError(error, transform);
+                        this.handleError(error, transform, context);
                         if (dirty) {
                             let transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: this.project.getTsconfig().options,
@@ -51,48 +51,49 @@ export class Transformer {
                     });
                 });
             }, onQueueProcessed);
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     }
 
-    public applyTransforms(requiredModule: RequiredModule, onTransformssApplied: ErrorCallback<Error>): void {
+    public applyTransforms(bundleItem: BundleItem, onTransformsApplied: { (): void }): void {
 
         let transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
 
         let context: TransformContext = {
             config: this.config,
-            filename: requiredModule.filename,
+            filename: bundleItem.filename,
             js: {
-                ast: requiredModule.ast
+                ast: bundleItem.ast
             },
-            module: requiredModule.moduleName,
-            source: requiredModule.source
+            module: bundleItem.moduleName,
+            source: bundleItem.source
         };
-        async.eachSeries(transforms, (transform: Transform, onTransformApplied: Function) => {
+        async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
             process.nextTick(() => {
                 transform(context, (error: Error, dirty: boolean) => {
-                    this.handleError(error, transform);
+                    this.handleError(error, transform, context);
                     if (dirty) {
-                        requiredModule.ast = context.js.ast;
-                        requiredModule.source = context.source;
+                        bundleItem.ast = context.js.ast;
+                        bundleItem.source = context.source;
                     }
                     onTransformApplied();
                 });
             });
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     }
 
-    private handleError(error: Error, transform: Transform): void {
+    private handleError(error: Error, transform: Transform, context: TransformContext): void {
         if (error) {
-            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
-                transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL);
+            let errorMessage = context.filename + ": " + error.message + os.EOL +
+                "Transform function: " + os.EOL + os.EOL +
+                transform + os.EOL;
+            throw new Error(errorMessage);
         }
     }
 }

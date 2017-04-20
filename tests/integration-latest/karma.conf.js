@@ -1,3 +1,6 @@
+var postcss = require("postcss");
+var postcssModules = require("postcss-modules");
+
 module.exports = function(config) {
     config.set({
 
@@ -47,15 +50,38 @@ module.exports = function(config) {
                     directories: ["node_modules"]
                 },
                 transforms: [
-                    // transform to make tests for Css Modules work, ReactCSSModulesTester, #66
                     function(context, callback) {
-                        if(context.module === "./style-import-tester.css") {
-                            context.source = "module.exports = { color: '#f1a' };";
-                            return callback(undefined, true);
+                        if(context.module.match(/style-import-tester\.css$/)) {
+                            postcss(postcssModules({
+                                getJSON: function(cssFileName, json) {
+                                    context.source = JSON.stringify(json);
+                                    callback(undefined, true);
+                                }
+                            }))
+                            .process(context.source, { from: context.filename, to: context.filename })
+                            .then(function(result){
+                                result.warnings().forEach(function (warning) {
+                                    process.stderr.write(warning.toString());
+                                });
+                            })
+                            .catch(function(error) {
+                                if (error.name === "CssSyntaxError") {
+                                    process.stderr.write(error.message + error.showSourceCode());
+                                    callback(undefined, false);
+                                }
+                                else {
+                                    callback(error, false);
+                                }
+                            });
                         }
-                        return callback(undefined, false);
+                        else {
+                            return callback(undefined, false);
+                        }
                     },
-                    require("karma-typescript-es6-transform")({presets: ["es2015"]})
+                    require("karma-typescript-es6-transform")({presets: ["es2015"]}),
+                    require("karma-typescript-postcss-transform")(
+                        [require("autoprefixer")], { map: { inline: true } }, /postcss.style\.css$/
+                    )
                 ],
                 validateSyntax: false
             },

@@ -16,9 +16,9 @@ import { Project } from "../shared/project";
 import { Globals } from "./globals";
 import PathTool = require("../shared/path-tool");
 import { BundleCallback } from "./bundle-callback";
+import { BundleItem } from "./bundle-item";
 import { DependencyWalker } from "./dependency-walker";
 import { Queued } from "./queued";
-import { RequiredModule } from "./required-module";
 import { Resolver } from "./resolve/resolver";
 import SourceMap = require("./source-map");
 import { Transformer } from "./transformer";
@@ -30,7 +30,7 @@ export class Bundler {
 
     private bundleQueuedModulesDeferred = lodash.debounce(this.bundleQueuedModules, this.BUNDLE_DELAY);
 
-    private bundleBuffer: RequiredModule[] = [];
+    private bundleBuffer: BundleItem[] = [];
     private bundleFile = tmp.fileSync({
         postfix: ".js",
         prefix: "karma-typescript-bundle-"
@@ -76,13 +76,13 @@ export class Bundler {
 
         this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
-                queued.module = new RequiredModule(queued.file.path, queued.file.originalPath,
+                queued.item = new BundleItem(queued.file.path, queued.file.originalPath,
                     SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
             });
 
-            let requiredModuleCount = this.dependencyWalker.collectRequiredTsModules(this.bundleQueue);
+            let dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
 
-            if (this.shouldBundle(requiredModuleCount)) {
+            if (this.shouldBundle(dependencyCount)) {
                 this.bundleWithLoader(benchmark);
             }
             else {
@@ -91,7 +91,7 @@ export class Bundler {
         });
     }
 
-    private shouldBundle(requiredModuleCount: number): boolean {
+    private shouldBundle(dependencyCount: number): boolean {
         if (this.config.hasPreprocessor("commonjs")) {
             this.log.debug("Preprocessor 'commonjs' detected, code will NOT be bundled");
             return false;
@@ -101,7 +101,7 @@ export class Bundler {
             return false;
         }
         if (this.projectImportCountOnFirstRun === undefined) {
-            this.projectImportCountOnFirstRun = requiredModuleCount;
+            this.projectImportCountOnFirstRun = dependencyCount;
         }
         this.log.debug("Project has %s import/require statements, code will be%sbundled",
             this.projectImportCountOnFirstRun, this.projectImportCountOnFirstRun > 0 ? " " : " NOT ");
@@ -112,18 +112,18 @@ export class Bundler {
 
         async.each(this.bundleQueue, (queued, onQueuedResolved) => {
 
-            this.addEntrypointFilename(queued.module.filename);
+            this.addEntrypointFilename(queued.item.filename);
 
-            async.each(queued.module.requiredModules, (requiredModule, onRequiredModuleResolved) => {
-                if (!requiredModule.isTypescriptFile() &&
-                    !(requiredModule.isTypingsFile() && !requiredModule.isNpmModule())) {
-                    this.resolver.resolveModule(queued.module.moduleName, requiredModule, this.bundleBuffer, () => {
-                        onRequiredModuleResolved();
+            async.each(queued.item.dependencies, (bundleItem, onDependencyResolved) => {
+                if (!bundleItem.isTypescriptFile() &&
+                    !(bundleItem.isTypingsFile() && !bundleItem.isNpmModule())) {
+                    this.resolver.resolveModule(queued.item.moduleName, bundleItem, this.bundleBuffer, () => {
+                        onDependencyResolved();
                     });
                 }
                 else {
                     process.nextTick(() => {
-                        onRequiredModuleResolved();
+                        onDependencyResolved();
                     });
                 }
             }, onQueuedResolved);
@@ -136,7 +136,7 @@ export class Bundler {
         this.globals.add(this.bundleBuffer, this.entrypoints, () => {
             this.writeMainBundleFile(() => {
                 this.bundleQueue.forEach((queued) => {
-                    queued.callback(queued.module.source);
+                    queued.callback(queued.item.source);
                 });
             });
         });
@@ -152,7 +152,7 @@ export class Bundler {
                     this.bundleQueue.length, benchmark.elapsed());
 
                 this.bundleQueue.forEach((queued) => {
-                    queued.callback(this.addLoaderFunction(queued.module, true));
+                    queued.callback(this.addLoaderFunction(queued.item, true));
                 });
 
                 this.log.debug("Karma callbacks for %s file(s) in %s ms.",
@@ -163,27 +163,27 @@ export class Bundler {
         });
     }
 
-    private addLoaderFunction(module: RequiredModule, standalone: boolean): string {
+    private addLoaderFunction(bundleItem: BundleItem, standalone: boolean): string {
 
-        let requiredModuleMap: { [key: string]: string; } = {};
-        let moduleId = path.relative(this.config.karma.basePath, module.filename);
+        let dependencyMap: { [key: string]: string; } = {};
+        let moduleId = path.relative(this.config.karma.basePath, bundleItem.filename);
 
-        module.requiredModules.forEach((requiredModule) => {
-            if (!requiredModule.filename) {
+        bundleItem.dependencies.forEach((dependency) => {
+            if (!dependency.filename) {
                 this.log.debug("No resolved filename for module [%s], required by [%s]",
-                    requiredModule.moduleName, module.filename);
+                    dependency.moduleName, bundleItem.filename);
             }
             else {
-                requiredModuleMap[requiredModule.moduleName] = PathTool.fixWindowsPath(requiredModule.filename);
+                dependencyMap[dependency.moduleName] = PathTool.fixWindowsPath(dependency.filename);
             }
         });
 
         return (standalone ? "(function(global){" : "") +
-            "global.wrappers['" + PathTool.fixWindowsPath(module.filename) + "']=" +
-            "[function(require,module,exports,__dirname,__filename){ " + module.source +
+            "global.wrappers['" + PathTool.fixWindowsPath(bundleItem.filename) + "']=" +
+            "[function(require,module,exports,__dirname,__filename){ " + bundleItem.source +
             os.EOL + "},'" +
             PathTool.fixWindowsPath(moduleId) + "'," +
-            PathTool.fixWindowsPath(JSON.stringify(requiredModuleMap)) + "];" +
+            PathTool.fixWindowsPath(JSON.stringify(dependencyMap)) + "];" +
             (standalone ? "})(this);" : "") + os.EOL;
     }
 
@@ -216,8 +216,8 @@ export class Bundler {
         let bundle = "(function(global){" + os.EOL +
                     "global.wrappers={};" + os.EOL;
 
-        this.bundleBuffer.forEach((requiredModule) => {
-            bundle += this.addLoaderFunction(requiredModule, false);
+        this.bundleBuffer.forEach((bundleItem) => {
+            bundle += this.addLoaderFunction(bundleItem, false);
         });
 
         bundle += this.createEntrypointFilenames() + "})(this);";

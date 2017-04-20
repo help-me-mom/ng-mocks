@@ -8,12 +8,12 @@ var Transformer = (function () {
         this.config = config;
         this.project = project;
     }
-    Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformssApplied) {
+    Transformer.prototype.applyTsTransforms = function (bundleQueue, onTransformsApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
             process.nextTick(function () {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
@@ -31,7 +31,7 @@ var Transformer = (function () {
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
                     transform(context, function (error, dirty) {
-                        _this.handleError(error, transform);
+                        _this.handleError(error, transform, context);
                         if (dirty) {
                             var transpiled = ts.transpileModule(context.source, {
                                 compilerOptions: _this.project.getTsconfig().options,
@@ -44,44 +44,45 @@ var Transformer = (function () {
                     });
                 });
             }, onQueueProcessed);
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     };
-    Transformer.prototype.applyTransforms = function (requiredModule, onTransformssApplied) {
+    Transformer.prototype.applyTransforms = function (bundleItem, onTransformsApplied) {
         var _this = this;
         var transforms = this.config.bundlerOptions.transforms;
         if (!transforms.length) {
             process.nextTick(function () {
-                onTransformssApplied();
+                onTransformsApplied();
             });
             return;
         }
         var context = {
             config: this.config,
-            filename: requiredModule.filename,
+            filename: bundleItem.filename,
             js: {
-                ast: requiredModule.ast
+                ast: bundleItem.ast
             },
-            module: requiredModule.moduleName,
-            source: requiredModule.source
+            module: bundleItem.moduleName,
+            source: bundleItem.source
         };
         async.eachSeries(transforms, function (transform, onTransformApplied) {
             process.nextTick(function () {
                 transform(context, function (error, dirty) {
-                    _this.handleError(error, transform);
+                    _this.handleError(error, transform, context);
                     if (dirty) {
-                        requiredModule.ast = context.js.ast;
-                        requiredModule.source = context.source;
+                        bundleItem.ast = context.js.ast;
+                        bundleItem.source = context.source;
                     }
                     onTransformApplied();
                 });
             });
-        }, onTransformssApplied);
+        }, onTransformsApplied);
     };
-    Transformer.prototype.handleError = function (error, transform) {
+    Transformer.prototype.handleError = function (error, transform, context) {
         if (error) {
-            throw new Error("Unable to run transform: " + os.EOL + os.EOL +
-                transform + os.EOL + os.EOL +
-                "callback error parameter: " + error + os.EOL);
+            var errorMessage = context.filename + ": " + error.message + os.EOL +
+                "Transform function: " + os.EOL + os.EOL +
+                transform + os.EOL;
+            throw new Error(errorMessage);
         }
     };
     return Transformer;

@@ -17,7 +17,7 @@
             wrapper[fn].call(module.exports, function (dependency) {
                 return require(wrapper[map][dependency], filename, dependency);
             }, module, module.exports, filename.slice(0, filename.lastIndexOf("/")), filename);
-            if(module.exports && !module.exports.default && !module.isJSON && isExtensible(module.exports)) {
+            if(module.exports && !module.exports.default && isExtensible(module.exports)) {
                 Object.defineProperty(module.exports, "default", {
                     enumerable: false, configurable: true, writable: true, value: module.exports
                 });

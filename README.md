@@ -19,7 +19,7 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 {
   "devDependencies": {
     "karma": "^1.5.0",
-    "karma-typescript": "3.0.0"
+    "karma-typescript": "3.0.1"
   }
 }
 ```
@@ -70,6 +70,11 @@ The above eaxample will compile all Typescript files and run the unit tests, pro
 - Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
 - Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
 - Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
+
+## Transforms:
+- [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
+- [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
+- [karma-typescript-postcss-transform](https://github.com/monounity/karma-typescript-postcss-transform)
 
 ### Example output
 
@@ -514,10 +519,6 @@ The context object, `TransformContext`, is defined [here](https://github.com/mon
 The callback function has two arguments:
 1. An `Error` object or `undefined``
 2. A boolean indicating whether the value of `context.source` has changed or not.
-
-### Existing transforms plugins:
-- [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
-- [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
 
 ## Requirements
 
