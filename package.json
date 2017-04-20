@@ -50,7 +50,7 @@
     "test:unix": "./ci/install.sh && ./ci/run.sh",
     "test:windows": ".\\ci\\install.bat & .\\ci\\run.bat",
     "test:unit": "tape dist/**/*.spec.js | faucet",
-    "postinstall": "./node_modules/.bin/opencollective-postinstall || exit 0"
+    "postinstall": "node node_modules/.bin/opencollective-postinstall || exit"
   },
   "dependencies": {
     "acorn": "^4.0.4",
@@ -124,7 +124,7 @@
     "gulp-util": "^3.0.7",
     "istanbul": "^1.1.0-alpha.1",
     "mock-require": "^2.0.2",
-    "opencollective-postinstall": "^1.0.17",
+    "opencollective-postinstall": "^1.0.18",
     "sinon": "^2.1.0",
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
