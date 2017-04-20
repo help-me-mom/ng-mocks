@@ -1,6 +1,6 @@
 {
   "name": "tests-integration-latest",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Integration tests for the latest version of Typescript",
   "author": "monounity",
   "contributors": [
@@ -68,7 +68,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
     "karma-typescript-es6-transform": "latest",
-    "karma-typescript-postcss-transform": "github:monounity/karma-typescript-postcss-transform",
+    "karma-typescript-postcss-transform": "latest",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
     "moment": "^2.17.1",
