@@ -79,7 +79,7 @@
     "log4js": "^1.1.1",
     "magic-string": "^0.19.0",
     "minimatch": "^3.0.3",
-    "opencollective-postinstall": "^1.1.0",
+    "opencollective-postinstall": "^1.1.1",
     "os-browserify": "~0.1.1",
     "pad": "^1.1.0",
     "path-browserify": "~0.0.0",
