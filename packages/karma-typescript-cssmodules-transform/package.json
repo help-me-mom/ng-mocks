@@ -1,12 +1,12 @@
 {
   "name": "karma-typescript-cssmodules-transform",
   "version": "1.0.0",
-  "description": "CSS Modules transform",
+  "description": "PostCSS runner plugin for CSS Modules",
   "main": "dist/transform.js",
   "keywords": [
     "CSS Modules",
     "karma-typescript",
-    "postcss",
+    "postcss runner",
     "typescript"
   ],
   "author": "monounity",
