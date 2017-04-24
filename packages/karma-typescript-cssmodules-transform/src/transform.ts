@@ -6,7 +6,7 @@ import * as kt from "karma-typescript/src/api/transforms";
 
 let log: log4js.Logger;
 let json: { [key: string]: string; } = {};
-let exportsPlugin = postcss.plugin("karma-typescript-cssmodules-transform-parser", () => {
+let parser = postcss.plugin("karma-typescript-cssmodules-transform-parser", () => {
     return (css) => {
         css.walkRules((rule) => {
             if (rule.selector === ":export") {
@@ -48,7 +48,7 @@ let configure = (postcssOptions?: postcss.ProcessOptions, options?: any, filter?
                     context: context.filename
                 })}),
                 require("postcss-modules-values"),
-                exportsPlugin
+                parser
             ];
 
             postcss(plugins)
