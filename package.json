@@ -51,8 +51,7 @@
     "test": "./ci/run.sh",
     "test:unix": "./ci/install.sh && ./ci/run.sh",
     "test:windows": ".\\ci\\install.bat & .\\ci\\run.bat",
-    "test:unit": "tape dist/**/*.spec.js | faucet",
-    "postinstall": "opencollective-postinstall || exit 0"
+    "test:unit": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
     "acorn": "^4.0.4",
