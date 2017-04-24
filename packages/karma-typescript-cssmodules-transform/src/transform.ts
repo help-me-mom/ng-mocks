@@ -13,7 +13,6 @@ let parser = postcss.plugin("karma-typescript-cssmodules-transform-parser", () =
                 rule.walkDecls((decl) => {
                     json[decl.prop] = decl.value;
                 });
-                rule.remove();
             }
         });
     };
