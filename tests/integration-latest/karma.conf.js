@@ -7,7 +7,7 @@ module.exports = function(config) {
             { pattern: "src/bundling/**/*.ts" },
             { pattern: "src/custom-typings/**/*.ts" },
             { pattern: "src/exports/*.ts" },
-            { pattern: "src/frameworks/**/*.ts" },
+            { pattern: "src/frameworks/**/*.+(ts|tsx)" },
             { pattern: "src/imports/**/*.+(ts|tsx)" },
             { pattern: "src/misc/no-module-tester.spec.ts" },
             { pattern: "src/misc/!(emptyfile)/**/*.ts" },
