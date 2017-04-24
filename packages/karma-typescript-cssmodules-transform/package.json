@@ -1,0 +1,55 @@
+{
+  "name": "karma-typescript-cssmodules-transform",
+  "version": "1.0.0",
+  "description": "CSS Modules transform",
+  "main": "dist/transform.js",
+  "keywords": [
+    "CSS Modules",
+    "karma-typescript",
+    "postcss",
+    "typescript"
+  ],
+  "author": "monounity",
+  "contributors": [
+    "erikbarke"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-typescript-cssmodules-transform.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --rootDir ./src",
+    "build:ci": "tsc --noEmit --rootDir ./src",
+    "build:watch": "tsc -w --rootDir ./src",
+    "lint": "tslint --project tsconfig.json",
+    "test": "istanbul cover -x \"*.spec.js\" node_modules/tape/bin/tape dist/*.js | faucet && istanbul report --root coverage text-summary"
+  },
+  "dependencies": {
+    "log4js": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/acorn": "^4.0.1",
+    "@types/estree": "0.0.34",
+    "@types/karma": "^0.13.33",
+    "@types/lodash": "^4.14.62",
+    "@types/log4js": "0.0.32",
+    "@types/node": "^7.0.5",
+    "@types/sinon": "^2.1.2",
+    "@types/tape": "^4.2.29",
+    "faucet": "0.0.1",
+    "generic-names": "^1.0.2",
+    "istanbul": "^1.1.0-alpha.1",
+    "karma-typescript": "latest",
+    "postcss": "^5.2.16",
+    "postcss-modules-extract-imports": "^1.0.1",
+    "postcss-modules-local-by-default": "^1.1.1",
+    "postcss-modules-scope": "^1.0.2",
+    "postcss-modules-values": "^1.2.2",
+    "sinon": "^2.1.0",
+    "tape": "^4.6.3",
+    "tslint": "^4.4.2",
+    "tslint-eslint-rules": "^3.3.0",
+    "typescript": "latest"
+  }
+}
