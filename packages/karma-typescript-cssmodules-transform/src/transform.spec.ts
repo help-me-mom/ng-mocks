@@ -140,6 +140,22 @@ test("transformer should not process empty files", (t) => {
     });
 });
 
+test("transformer should log warnings", (t) => {
+
+    t.plan(2);
+
+    let context = createContext("@value red blue @value green yellow");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+        t.deepEqual(mockLogger.warn.lastCall.args[0],
+            "Invalid value definition: red blue @value green yellow");
+    });
+});
+
 test("transformer should catch CssSyntaxError and only log as a warning", (t) => {
 
     t.plan(2);
@@ -154,5 +170,18 @@ test("transformer should catch CssSyntaxError and only log as a warning", (t) =>
         t.deepEqual(stripConsoleColors(mockLogger.warn.lastCall.args[0]),
             path.join(process.cwd(), "/file.css") +
             ":1:1: Unknown word" + os.EOL + "> 1 | export *\n    | ^");
+    });
+});
+
+test("transformer should catch errors other than CssSyntaxError", (t) => {
+
+    t.plan(2);
+
+    let context = createContext(".box > * { composes: x from \"./y.css\"; }");
+
+    transform()(context, (error, dirty) => {
+        t.isEqual(error.message, "composition is only allowed when selector is single " +
+                                 ":local class name not in \":local(.box) > *\"");
+        t.false(dirty);
     });
 });
