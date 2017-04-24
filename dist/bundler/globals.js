@@ -30,6 +30,7 @@ var Globals = (function () {
         if (this.config.bundlerOptions.addNodeGlobals) {
             var name_1 = "bundle/node-globals";
             items.push(new bundle_item_1.BundleItem(name_1, name_1, os.EOL + "global.process=require('_process');" +
+                os.EOL + "global.process.listeners=function(){return[];};" +
                 os.EOL + "global.Buffer=require('buffer').Buffer;", [
                 new bundle_item_1.BundleItem("_process"),
                 new bundle_item_1.BundleItem("buffer")
