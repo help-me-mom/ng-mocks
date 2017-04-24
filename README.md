@@ -75,6 +75,7 @@ The above eaxample will compile all Typescript files and run the unit tests, pro
 
 ## Transforms:
 - [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
+- [karma-typescript-cssmodules-transform](https://github.com/monounity/karma-typescript-cssmodules-transform)
 - [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
 - [karma-typescript-postcss-transform](https://github.com/monounity/karma-typescript-postcss-transform)
 

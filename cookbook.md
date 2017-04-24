@@ -56,7 +56,8 @@ karmaTypescriptConfig: {
 
 ## PostCSS runner with a plugin
 
-In this recipe we set up `karma-typescript` to run the PostCSS `autoprefixer` plugin on all `.css` files.
+In this recipe we set up `karma-typescript` to run the PostCSS `autoprefixer` plugin on all `.css` files
+with the PostCSS runner [karma-typescript-postcss-transform](https://github.com/monounity/karma-typescript-postcss-transform).
 
 First, install the PostCSS transforms plugin and the `autoprefixer` package as dev dependencies:
 
@@ -78,22 +79,26 @@ karmaTypescriptConfig: {
 }
 ```
 
-## Emulating Css Modules
+## Css Modules
 
-This recipe emulates the behavior of Css Modules by replacing the contents of a `.css` file with an object literal
-in the bundle. It uses the bundler transforms API and implementents an inline transforms function in the Karma config:
+When using (for instance) [React CSS Modules](https://github.com/gajus/react-css-modules), style sheets must
+be loaded as JSON objects by the bundler. This can be achieved by using the CSS Modules transforms plugin
+[karma-typescript-cssmodules-transform](https://github.com/monounity/karma-typescript-cssmodules-transform),
+which will transform style sheets to JSON on the fly each test run.
+
+First, install the CSS Modules transforms plugin as a dev dependency:
+
+```bash
+npm install --save-dev karma-typescript-cssmodules-transform
+```
+
+And then in the Karma configuration, configure the bundler to use the transform with custom options:
 
 ```javascript
 karmaTypescriptConfig: {
     bundlerOptions: {
         transforms: [
-            function(context, callback) {
-                if(context.module === "./main.css") {
-                    context.source = "module.exports = { color: red };";
-                    return callback(undefined, true);
-                }
-                return callback(undefined, false);
-            }
+            require("karma-typescript-cssmodules-transform")({}, {}, /\.css$/),
         ]
     }
 }
