@@ -1,5 +1,8 @@
 # karma-typescript-cssmodules-transform
 
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript-cssmodules-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-cssmodules-transform)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/sgpptj5737i9po49/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-cssmodules-transform/branch/master)
+
 > Karma-Typescript :heart: CSS Modules
 
 This plugin is a specialized [PostCSS runner](http://postcss.org/), which transforms CSS `:exports` blocks to JSON on the fly when running tests with [karma-typescript](https://github.com/monounity/karma-typescript).
