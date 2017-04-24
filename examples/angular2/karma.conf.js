@@ -21,9 +21,6 @@ module.exports = function(config) {
             },
             compilerOptions: {
                 lib: ["ES2015", "DOM"]
-            },
-            coverageOptions: {
-                instrumentation: true
             }
         },
 
