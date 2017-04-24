@@ -17,24 +17,24 @@
     "test": "karma start"
   },
   "dependencies": {
-    "@angular/common": "2.2.3",
-    "@angular/compiler": "2.2.3",
-    "@angular/core": "2.2.3",
-    "@angular/platform-browser": "2.2.3",
-    "@angular/platform-browser-dynamic": "2.2.3",
+    "@angular/common": "^4.0.3",
+    "@angular/compiler": "^4.0.3",
+    "@angular/core": "^4.0.3",
+    "@angular/platform-browser": "^4.0.3",
+    "@angular/platform-browser-dynamic": "^4.0.3",
     "@types/core-js": "^0.9.39",
     "@types/jasmine": "^2.5.37",
-    "@types/node": "^6.0.51",
+    "@types/node": "^7.0.13",
     "core-js": "^2.4.1",
-    "jasmine-core": "^2.5.2",
+    "jasmine-core": "^2.6.0",
     "karma": "^1.5.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
     "karma-typescript-angular2-transform": "latest",
-    "rxjs": "5.0.0-beta.12",
+    "rxjs": "^5.3.0",
     "typescript": "latest",
-    "zone.js": "^0.6.26"
+    "zone.js": "^0.8.8"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
