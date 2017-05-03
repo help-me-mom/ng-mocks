@@ -38,7 +38,6 @@ export class Globals {
 
             items.push(new BundleItem(name, name,
                 os.EOL + "global.process=require('_process');" +
-                os.EOL + "global.process.listeners=function(){return[];};" + // monkey patch for jasmine-core 2.6.0
                 os.EOL + "global.Buffer=require('buffer').Buffer;", [
                     new BundleItem("_process"),
                     new BundleItem("buffer")
