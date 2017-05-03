@@ -17,7 +17,7 @@ type Queued = {
 
 export class Compiler {
 
-    private readonly COMPILE_DELAY = 250;
+    private readonly COMPILE_DELAY = 500;
 
     private cachedProgram: ts.Program;
     private compiledFiles: CompiledFiles = {};
