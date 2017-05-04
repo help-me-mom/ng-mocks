@@ -4,10 +4,11 @@ var path = require("path");
 var Preprocessor = (function () {
     function Preprocessor(bundler, compiler, config, coverage, sharedProcessedFiles) {
         var _this = this;
-        this.create = function (karmaConfig, helper, logger) {
+        this.create = function (helper, logger) {
             _this.log = logger.create("preprocessor.karma-typescript");
-            config.initialize(karmaConfig);
-            coverage.initialize(helper, logger);
+            config.whenReady(function () {
+                coverage.initialize(helper, logger);
+            });
             return function (content, file, done) {
                 try {
                     _this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);
@@ -32,7 +33,7 @@ var Preprocessor = (function () {
                 }
             };
         };
-        this.create.$inject = ["config", "helper", "logger"];
+        this.create.$inject = ["helper", "logger"];
     }
     return Preprocessor;
 }());

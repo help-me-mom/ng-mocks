@@ -1,6 +1,5 @@
 import * as path from "path";
 
-import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
 import { Bundler } from "../bundler/bundler";
@@ -12,16 +11,18 @@ import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
 export class Preprocessor {
 
-    public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
+    public create: { (helper: any, logger: any): void };
     private log: Logger;
 
     constructor(bundler: Bundler, compiler: Compiler, config: Configuration,
                 coverage: Coverage, sharedProcessedFiles: SharedProcessedFiles) {
 
-        this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
+        this.create = (helper: any, logger: any) => {
             this.log = logger.create("preprocessor.karma-typescript");
-            config.initialize(karmaConfig);
-            coverage.initialize(helper, logger);
+
+            config.whenReady(() => {
+                coverage.initialize(helper, logger);
+            });
 
             return (content: string, file: File, done: { (e: any, c: string): void}) => {
                 try {
@@ -49,6 +50,6 @@ export class Preprocessor {
             };
         };
 
-        (<any> this.create).$inject = ["config", "helper", "logger"];
+        (<any> this.create).$inject = ["helper", "logger"];
     }
 }
