@@ -4,6 +4,7 @@ import * as ts from "typescript";
 import { Logger } from "log4js";
 
 import { Benchmark } from "../shared/benchmark";
+import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
 import { EventType, Project } from "../shared/project";
 import { CompileCallback } from "./compile-callback";
@@ -17,9 +18,8 @@ type Queued = {
 
 export class Compiler {
 
-    private readonly COMPILE_DELAY = 500;
-
     private cachedProgram: ts.Program;
+    private compilerDelay: number;
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
@@ -29,9 +29,13 @@ export class Compiler {
 
     private compileDeferred = lodash.debounce(() => {
         this.compileProject();
-    }, this.COMPILE_DELAY);
+    }, this.compilerDelay);
 
-    constructor(private log: Logger, private project: Project) { }
+    constructor(private config: Configuration, private log: Logger, private project: Project) {
+        config.whenReady(() => {
+            this.compilerDelay = this.config.compilerDelay;
+        });
+    }
 
     public compile(file: File, callback: CompileCallback): void {
 

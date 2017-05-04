@@ -171,6 +171,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`.<br/>
   Defaults to `true`.
 
+* **karmaTypescriptConfig.compilerDelay** - The number of milliseconds the compiler waits before compiling the project on each run.</br>
+  For projects with a large number of files it might be necessary to increase this value to make sure the compiler has collected all files before firing.</br>
+  Defaults to 250 ms.
+
 * **karmaTypescriptConfig.compilerOptions** - This setting will override or add to existing compiler options.<br/>
   Valid options are the same as for the `compilerOptions` section in `tsconfig.json`, with the
   exception of `outDir`and `outFile` which are ignored since the code is compiled in-memory.

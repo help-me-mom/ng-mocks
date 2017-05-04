@@ -20,6 +20,7 @@ export class Configuration {
 
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
+    public compilerDelay: number;
     public compilerOptions: CompilerOptions;
     public coverageOptions: CoverageOptions;
     public coverageReporter: any;
@@ -36,6 +37,7 @@ export class Configuration {
 
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
+    private callbacks: Array<() => void> = [];
 
     constructor(private loggers: LoggerList) {}
 
@@ -52,6 +54,14 @@ export class Configuration {
         this.configureReporter();
         this.configureKarmaCoverage();
         this.assertConfiguration();
+
+        for (let callback of this.callbacks) {
+            callback();
+        }
+    }
+
+    public whenReady(callback: () => void) {
+        this.callbacks.push(callback);
     }
 
     public hasFramework(name: string): boolean {
@@ -138,6 +148,7 @@ export class Configuration {
 
     private configureProject(): void {
 
+        this.compilerDelay = this.karmaTypescriptConfig.compilerDelay || 250;
         this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
 
         this.defaultTsconfig = {

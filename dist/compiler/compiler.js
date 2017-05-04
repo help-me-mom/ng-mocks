@@ -5,16 +5,16 @@ var ts = require("typescript");
 var benchmark_1 = require("../shared/benchmark");
 var project_1 = require("../shared/project");
 var Compiler = (function () {
-    function Compiler(log, project) {
+    function Compiler(config, log, project) {
         var _this = this;
+        this.config = config;
         this.log = log;
         this.project = project;
-        this.COMPILE_DELAY = 500;
         this.compiledFiles = {};
         this.emitQueue = [];
         this.compileDeferred = lodash.debounce(function () {
             _this.compileProject();
-        }, this.COMPILE_DELAY);
+        }, this.compilerDelay);
         this.getSourceFile = function (filename, languageVersion, onError) {
             if (_this.cachedProgram && !_this.isQueued(filename)) {
                 var sourceFile = _this.cachedProgram.getSourceFile(filename);
@@ -24,6 +24,9 @@ var Compiler = (function () {
             }
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
+        config.whenReady(function () {
+            _this.compilerDelay = _this.config.compilerDelay;
+        });
     }
     Compiler.prototype.compile = function (file, callback) {
         this.emitQueue.push({

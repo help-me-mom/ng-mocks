@@ -5,6 +5,7 @@ import { Transform }  from "./transforms";
 
 export interface KarmaTypescriptConfig {
     bundlerOptions?: BundlerOptions;
+    compilerDelay?: number;
     compilerOptions?: CompilerOptions;
     coverageOptions?: CoverageOptions;
     exclude?: string[];

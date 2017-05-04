@@ -55,6 +55,7 @@ module.exports = function(config) {
                 ],
                 validateSyntax: false
             },
+            compilerDelay: 500,
             compilerOptions: {
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,

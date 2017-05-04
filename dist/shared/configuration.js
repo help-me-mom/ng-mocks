@@ -5,6 +5,7 @@ var lodash_1 = require("lodash");
 var Configuration = (function () {
     function Configuration(loggers) {
         this.loggers = loggers;
+        this.callbacks = [];
     }
     Configuration.prototype.initialize = function (config) {
         this.karma = config || {};
@@ -17,6 +18,13 @@ var Configuration = (function () {
         this.configureReporter();
         this.configureKarmaCoverage();
         this.assertConfiguration();
+        for (var _i = 0, _a = this.callbacks; _i < _a.length; _i++) {
+            var callback = _a[_i];
+            callback();
+        }
+    };
+    Configuration.prototype.whenReady = function (callback) {
+        this.callbacks.push(callback);
     };
     Configuration.prototype.hasFramework = function (name) {
         return this.karma.frameworks.indexOf(name) !== -1;
@@ -90,6 +98,7 @@ var Configuration = (function () {
         this.assertCoverageExclude(this.coverageOptions.exclude);
     };
     Configuration.prototype.configureProject = function () {
+        this.compilerDelay = this.karmaTypescriptConfig.compilerDelay || 250;
         this.compilerOptions = this.karmaTypescriptConfig.compilerOptions;
         this.defaultTsconfig = {
             compilerOptions: {

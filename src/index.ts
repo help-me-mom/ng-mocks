@@ -37,7 +37,7 @@ let configuration = new Configuration(loggers);
 let project = new Project(configuration, loggers.project);
 let dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 
-let compiler = new Compiler(loggers.compiler, project);
+let compiler = new Compiler(configuration, loggers.compiler, project);
 let coverage = new Coverage(configuration);
 let transformer = new Transformer(configuration, project);
 let threshold = new Threshold(configuration, loggers.threshold);
