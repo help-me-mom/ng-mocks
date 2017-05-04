@@ -307,6 +307,7 @@ karmaTypescriptConfig: {
         transforms: [require("karma-typescript-es6-transform")()],
         validateSyntax: true
     },
+    compilerDelay: 500,
     compilerOptions: {
         noImplicitAny: true,
     },
