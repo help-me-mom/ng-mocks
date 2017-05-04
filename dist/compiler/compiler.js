@@ -12,9 +12,6 @@ var Compiler = (function () {
         this.project = project;
         this.compiledFiles = {};
         this.emitQueue = [];
-        this.compileDeferred = lodash.debounce(function () {
-            _this.compileProject();
-        }, this.compilerDelay);
         this.getSourceFile = function (filename, languageVersion, onError) {
             if (_this.cachedProgram && !_this.isQueued(filename)) {
                 var sourceFile = _this.cachedProgram.getSourceFile(filename);
@@ -25,7 +22,9 @@ var Compiler = (function () {
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
         config.whenReady(function () {
-            _this.compilerDelay = _this.config.compilerDelay;
+            _this.compileDeferred = lodash.debounce(function () {
+                _this.compileProject();
+            }, _this.config.compilerDelay);
         });
     }
     Compiler.prototype.compile = function (file, callback) {

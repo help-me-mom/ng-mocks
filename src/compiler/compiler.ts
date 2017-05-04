@@ -19,7 +19,6 @@ type Queued = {
 export class Compiler {
 
     private cachedProgram: ts.Program;
-    private compilerDelay: number;
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
@@ -27,13 +26,13 @@ export class Compiler {
                                  onError?: (message: string) => void): ts.SourceFile};
     private program: ts.Program;
 
-    private compileDeferred = lodash.debounce(() => {
-        this.compileProject();
-    }, this.compilerDelay);
+    private compileDeferred: () => void;
 
     constructor(private config: Configuration, private log: Logger, private project: Project) {
         config.whenReady(() => {
-            this.compilerDelay = this.config.compilerDelay;
+            this.compileDeferred = lodash.debounce(() => {
+                this.compileProject();
+            }, this.config.compilerDelay);
         });
     }
 
