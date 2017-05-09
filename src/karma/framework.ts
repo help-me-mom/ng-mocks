@@ -3,7 +3,6 @@ import { Logger } from "log4js";
 
 import { Bundler } from "../bundler/bundler";
 import { Resolver } from "../bundler/resolve/resolver";
-import { Coverage } from "../istanbul/coverage";
 import { Configuration } from "../shared/configuration";
 
 export class Framework {
@@ -11,13 +10,12 @@ export class Framework {
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
 
-    constructor(bundler: Bundler, config: Configuration, coverage: Coverage, resolver: Resolver) {
+    constructor(bundler: Bundler, config: Configuration, resolver: Resolver) {
 
-        this.create = (karmaConfig: ConfigOptions, helper: any, logger: any) => {
+        this.create = (karmaConfig: ConfigOptions, logger: any) => {
             this.log = logger.create("framework.karma-typescript");
 
             config.initialize(karmaConfig);
-            coverage.initialize(helper, logger);
             resolver.initialize();
 
             if (!config.hasFramework("commonjs")) {
@@ -36,7 +34,7 @@ export class Framework {
             this.log.debug("Configuration:\n", JSON.stringify(config, this.replacer, 3));
         };
 
-        (<any> this.create).$inject = ["config", "helper", "logger"];
+        (<any> this.create).$inject = ["config", "logger"];
     }
 
     private replacer(key: string, value: string) {

@@ -50,7 +50,7 @@ let globals = new Globals(configuration, resolver);
 let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
                           project, resolver, transformer, validator);
 
-let framework = new Framework(bundler, configuration, coverage, resolver);
+let framework = new Framework(bundler, configuration, resolver);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
 let reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
 
