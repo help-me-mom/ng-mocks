@@ -50,7 +50,7 @@ module.exports = function(config) {
 };
 ```
 
-The above eaxample will compile all Typescript files and run the unit tests, producing remapped coverage in `./coverage`.
+The above example will compile all Typescript files and run the unit tests, producing remapped coverage in `./coverage`.
 
 ## Examples
 
