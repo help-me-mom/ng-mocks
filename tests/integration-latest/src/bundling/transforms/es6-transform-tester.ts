@@ -24,4 +24,10 @@ export class Es6TransformTester {
 
         return last;
     }
+
+    public testDelay(): string {
+        // delay has classes and consts, requires 'p-defer' which has nested consts
+        let delay = require("delay");
+        return typeof delay;
+    }
 }
