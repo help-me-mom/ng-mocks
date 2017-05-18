@@ -71,6 +71,90 @@ test("transformer should check js property", (t) => {
     });
 });
 
+test("transformer should detect es6 class", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("class Foo {}");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 const", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("const x = 1;");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 let", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("let x = 1;");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 variables mixed with var", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("var a = 1; const x = 1;");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 nested const", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("module.exports = () => { const x = 1; const y = 2; };");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 nested let", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("module.exports = () => { let x = 1; };");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
 test("transformer should detect es6 wildcard export", (t) => {
 
     t.plan(1);
@@ -142,11 +226,11 @@ test("transformer should skip ast without body", (t) => {
     });
 });
 
-test("transformer should skip ast without import/export", (t) => {
+test("transformer should skip ast without keywords", (t) => {
 
     t.plan(1);
 
-    let context = createContext("let x = 0;");
+    let context = createContext("var x = 0;");
 
     transform()(context, (error, dirty) => {
         if (error) {
