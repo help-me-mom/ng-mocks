@@ -15,6 +15,7 @@ let isEs6 = (ast: ESTree.Program): boolean => {
             if (!es6NodeFound) {
                 walk.base[node.type](node, state, c);
                 switch (node.type) {
+                    case "ArrowFunctionExpression":
                     case "ClassDeclaration":
                     case "ExportAllDeclaration":
                     case "ExportDefaultDeclaration":

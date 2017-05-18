@@ -131,7 +131,7 @@ test("transformer should detect es6 nested const", (t) => {
 
     t.plan(1);
 
-    let context = createContext("module.exports = () => { const x = 1; const y = 2; };");
+    let context = createContext("module.exports = () => { const x = 1; };");
 
     transform()(context, (error, dirty) => {
         if (error) {
@@ -146,6 +146,20 @@ test("transformer should detect es6 nested let", (t) => {
     t.plan(1);
 
     let context = createContext("module.exports = () => { let x = 1; };");
+
+    transform()(context, (error, dirty) => {
+        if (error) {
+            t.fail();
+        }
+        t.true(dirty);
+    });
+});
+
+test("transformer should detect es6 fat arrow function", (t) => {
+
+    t.plan(1);
+
+    let context = createContext("module.exports = () => { return 'test'; }");
 
     transform()(context, (error, dirty) => {
         if (error) {
