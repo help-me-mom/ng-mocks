@@ -69,7 +69,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
     "karma-typescript-cssmodules-transform": "latest",
-    "karma-typescript-es6-transform": "latest",
+    "karma-typescript-es6-transform": "github:monounity/karma-typescript-es6-transform",
     "karma-typescript-postcss-transform": "latest",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
