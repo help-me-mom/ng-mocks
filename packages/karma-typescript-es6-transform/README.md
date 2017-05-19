@@ -48,8 +48,9 @@ Passing custom `presets` or `filename` options will override the default setting
 
 ## ES2015 syntax detection
 
-The javascript code passed to the plugin is statically analyzed by traversing the AST,
-and if any `export` or `import` statements are found the code will be transformed to ES5 syntax.
+The javascript code passed to the plugin is statically analyzed by recursively traversing
+the AST, looking for these ES2015 keywords: `class`, `const`, `export`, `import`, `let`.
+If any keyword or a fat arrow function is found the code will be transformed to ES5 syntax.
 
 
 ## Licensing
