@@ -58,7 +58,7 @@ var DependencyWalker = (function () {
             }
             _this.walk.base[node.type](node, state, c);
             if (isRequire(node) && node.arguments.length > 0) {
-                if (node.arguments[0].type === "Literal") {
+                if (node.arguments[0].type === "Literal" && node.arguments[0].value) {
                     moduleNames.push(node.arguments[0].value);
                 }
                 else {
