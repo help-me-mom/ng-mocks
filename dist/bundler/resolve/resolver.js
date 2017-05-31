@@ -22,6 +22,9 @@ var Resolver = (function () {
     };
     Resolver.prototype.resolveModule = function (requiringModule, bundleItem, buffer, onModuleResolved) {
         var _this = this;
+        if (!bundleItem.moduleName) {
+            this.log.error("Dependency required by %s has no module name", requiringModule);
+        }
         bundleItem.lookupName = bundleItem.isNpmModule() ?
             bundleItem.moduleName :
             path.join(path.dirname(requiringModule), bundleItem.moduleName);

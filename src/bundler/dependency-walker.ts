@@ -78,7 +78,11 @@ export class DependencyWalker {
             }
             this.walk.base[node.type](node, state, c);
             if (isRequire(node) && node.arguments.length > 0) {
-                if (node.arguments[0].type === "Literal" && node.arguments[0].value) {
+                if (node.arguments[0].type === "Literal") {
+                    if (!lodash.isString(node.arguments[0].value)) {
+                        this.log.error("Unexpected literal value: %s%sRequired by: %s",
+                            node.arguments[0].value, os.EOL, bundleItem.filename);
+                    }
                     moduleNames.push(node.arguments[0].value);
                 }
                 else {
