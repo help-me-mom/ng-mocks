@@ -145,40 +145,30 @@ var Project = (function () {
         }
     };
     Project.prototype.convertOptions = function (options) {
+        var _this = this;
+        var names = ["jsx", "lib", "module", "moduleResolution", "target"];
         if (options) {
-            var optionNameMap = ts.getOptionNameMap().optionNameMap;
-            this.setOption(options, optionNameMap, "jsx");
-            this.setOption(options, optionNameMap, "lib");
-            this.setOption(options, optionNameMap, "module");
-            this.setOption(options, optionNameMap, "moduleResolution");
-            this.setOption(options, optionNameMap, "target");
+            ts.optionDeclarations.forEach(function (declaration) {
+                if (names.indexOf(declaration.name) !== -1) {
+                    _this.setOptions(options, declaration);
+                }
+            });
         }
     };
-    Project.prototype.setOption = function (options, optionNameMap, key) {
-        if (lodash.isMap(optionNameMap)) {
-            var entry_1 = optionNameMap.get(key.toLowerCase());
-            if (options[key] && entry_1) {
-                if (typeof options[key] === "string" && lodash.isMap(entry_1.type)) {
-                    options[key] = entry_1.type.get(options[key].toLowerCase()) || 0;
-                }
-                if (Array.isArray(options[key]) && lodash.isString(entry_1.type)) {
-                    options[key].forEach(function (option, index) {
-                        options[key][index] = entry_1.element.type.get(option.toLowerCase());
-                    });
-                }
+    Project.prototype.setOptions = function (options, declaration) {
+        var name = declaration.name;
+        if (options[name]) {
+            if (Array.isArray(options[name])) {
+                options[name].forEach(function (option, index) {
+                    var key = option.toLowerCase();
+                    options[name][index] = lodash.isMap(declaration.element.type) ?
+                        declaration.element.type.get(key) : declaration.type[key];
+                });
             }
-        }
-        else {
-            var entry_2 = optionNameMap[key.toLowerCase()];
-            if (options[key] && entry_2) {
-                if (typeof options[key] === "string") {
-                    options[key] = entry_2.type[options[key].toLowerCase()] || 0;
-                }
-                if (Array.isArray(options[key])) {
-                    options[key].forEach(function (option, index) {
-                        options[key][index] = entry_2.element.type[option.toLowerCase()];
-                    });
-                }
+            else {
+                var key = options[name].toLowerCase();
+                options[name] = lodash.isMap(declaration.type) ?
+                    declaration.type.get(key) : declaration.type[key];
             }
         }
     };

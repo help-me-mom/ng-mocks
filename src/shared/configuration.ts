@@ -5,7 +5,6 @@ import { merge } from "lodash";
 
 import {
     BundlerOptions,
-    CompilerOptions,
     CoverageOptions,
     KarmaTypescriptConfig,
     RemapOptions,
@@ -21,7 +20,7 @@ export class Configuration {
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
     public compilerDelay: number;
-    public compilerOptions: CompilerOptions;
+    public compilerOptions: any;
     public coverageOptions: CoverageOptions;
     public coverageReporter: any;
     public defaultTsconfig: any;
