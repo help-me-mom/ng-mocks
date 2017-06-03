@@ -1,6 +1,6 @@
 {
   "name": "tests-integration-latest",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Integration tests for the latest version of Typescript",
   "author": "monounity",
   "contributors": [
@@ -56,6 +56,7 @@
     "codemirror": "^5.25.2",
     "core-js": "^2.4.1",
     "d3-ng2-service": "^1.9.0",
+    "delay": "^2.0.0",
     "enzyme": "^2.7.1",
     "flexboxgrid": "^6.3.1",
     "globals": "^9.17.0",
@@ -68,7 +69,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
     "karma-typescript-cssmodules-transform": "latest",
-    "karma-typescript-es6-transform": "latest",
+    "karma-typescript-es6-transform": "github:monounity/karma-typescript-es6-transform",
     "karma-typescript-postcss-transform": "latest",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",

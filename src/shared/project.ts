@@ -16,24 +16,6 @@ type ConfigFileJson = {
     error?: ts.Diagnostic;
 };
 
-// Typescript 2.1.6 and older
-type OptionNameMapTs1x = {
-    name: string;
-    type: { [key: string]: number; };
-    element: {
-        type: { [key: string]: string; }
-    };
-};
-
-// Typescript 2.2 and newer
-type OptionNameMapTs2x = {
-    name: string;
-    type: string | Map<string, number>;
-    element: {
-        type: Map<string, string>
-    };
-};
-
 export enum EventType {
     FileSystemChanged,
     FileContentChanged
@@ -222,54 +204,34 @@ export class Project {
         }
     }
 
-    private convertOptions(options: CompilerOptions): void {
+    private convertOptions(options: any): void {
+
+        const names = ["jsx", "lib", "module", "moduleResolution", "target"];
 
         if (options) {
-
-            let optionNameMap = (<any> ts).getOptionNameMap().optionNameMap;
-
-            this.setOption(options, optionNameMap, "jsx");
-            this.setOption(options, optionNameMap, "lib");
-            this.setOption(options, optionNameMap, "module");
-            this.setOption(options, optionNameMap, "moduleResolution");
-            this.setOption(options, optionNameMap, "target");
+            (<any> ts).optionDeclarations.forEach((declaration: any) => {
+                if (names.indexOf(declaration.name) !== -1) {
+                    this.setOptions(options, declaration);
+                }
+            });
         }
     }
 
-    private setOption(options: CompilerOptions, optionNameMap: any, key: string): void {
-
-        if (lodash.isMap(optionNameMap)) {
-            let entry = (<OptionNameMapTs2x> optionNameMap.get(key.toLowerCase()));
-
-            if (options[key] && entry) {
-
-                if (typeof options[key] === "string" && lodash.isMap(entry.type)) {
-                    options[key] = entry.type.get(options[key].toLowerCase()) || 0;
-                }
-
-                if (Array.isArray(options[key]) && lodash.isString(entry.type)) {
-                    options[key].forEach((option: string, index: number) => {
-                        options[key][index] = entry.element.type.get(option.toLowerCase());
-                    });
-                }
+    private setOptions(options: any, declaration: any) {
+        let name = declaration.name;
+        if (options[name]) {
+            if (Array.isArray(options[name])) {
+                options[name].forEach((option: string, index: number) => {
+                    let key = option.toLowerCase();
+                    options[name][index] = lodash.isMap(declaration.element.type) ?
+                        declaration.element.type.get(key) : declaration.type[key];
+                });
             }
-        }
-        else {
-            let entry = (<OptionNameMapTs1x> optionNameMap[key.toLowerCase()]);
-
-            if (options[key] && entry) {
-
-                if (typeof options[key] === "string") {
-                    options[key] = entry.type[options[key].toLowerCase()] || 0;
-                }
-
-                if (Array.isArray(options[key])) {
-                    options[key].forEach((option: string, index: number) => {
-                        options[key][index] = entry.element.type[option.toLowerCase()];
-                    });
-                }
+            else {
+                let key = options[name].toLowerCase();
+                options[name] = lodash.isMap(declaration.type) ?
+                    declaration.type.get(key) : declaration.type[key];
             }
         }
     }
-
 }

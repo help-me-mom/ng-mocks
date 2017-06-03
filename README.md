@@ -19,7 +19,7 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 {
   "devDependencies": {
     "karma": "^1.5.0",
-    "karma-typescript": "3.0.2"
+    "karma-typescript": "3.0.3"
   }
 }
 ```
@@ -118,7 +118,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   `process` and `Buffer` should be added to the bundle.<br/>
   Defaults to `true`.
 
-* **karmaTypescriptConfig.bundlerOptions.constants** - An object literal with keys/values which will be availabe as global
+* **karmaTypescriptConfig.bundlerOptions.constants** - An object literal with keys/values which will be available as global
   variables in the bundle. The keys are expected to be strings and any non-string value will be stringified with `JSON.stringify`.
 
   Configuration example:
@@ -165,7 +165,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   code loaded from `node_modules` before bundling it.
   For more detailed documentation on transforms, please refer to the [Transforms API section](#transforms-api) in this document.<br/>
 
-* **karmaTypescriptConfig.bundlerOptions.validateSyntax** - A boolean indicating whether the syntax ofthe bundled code should be validated.
+* **karmaTypescriptConfig.bundlerOptions.validateSyntax** - A boolean indicating whether the syntax of the bundled code should be validated.
   Setting this to `false` may speed up bundling for large projects with lots of imports from `node_modules`.<br/>
   Defaults to `true`.
 
@@ -523,7 +523,7 @@ The context object, `TransformContext`, is defined [here](https://github.com/mon
 ### Callback
 
 The callback function has two arguments:
-1. An `Error` object or `undefined``
+1. An `Error` object or `undefined`
 2. A boolean indicating whether the value of `context.source` has changed or not.
 
 ## Requirements

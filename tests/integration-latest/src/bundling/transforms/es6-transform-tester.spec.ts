@@ -15,4 +15,8 @@ describe("Es6TransformTester", () => {
     it("should import lodash-es", () => {
         expect(tester.testLodashEs()).toEqual(3);
     });
+
+    it("should require delay", () => {
+        expect(tester.testDelay()).toEqual("function");
+    });
 });
