@@ -13,7 +13,6 @@ export class Reporter {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any): void };
 
-    private coverageReporter = require("karma-coverage/lib/reporter");
     private log: Logger;
     private remap = require("remap-istanbul/lib/remap");
     private writeReport = require("remap-istanbul/lib/writeReport");
@@ -23,17 +22,11 @@ export class Reporter {
         let self = this;
 
         // tslint:disable-next-line:only-arrow-functions
-        this.create = function (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any) {
+        this.create = function (logger: any) {
 
             let coverageMap: WeakMap<any, any>;
-            let remapOptions = config.remapOptions;
 
             self.log = logger.create("reporter.karma-typescript");
-
-            if (!config.hasReporter("coverage")) {
-                self.coverageReporter(karmaConfig, helper, logger, emitter);
-            }
-
             this.adapters = [];
 
             this.onRunStart = () => {
@@ -61,11 +54,11 @@ export class Reporter {
                     unmappedCollector.add(coverage);
 
                     let sourceStore = (<any> Store).create("memory");
-                    remapOptions.sources = sourceStore;
-                    remapOptions.readFile = (filepath: string) => {
+                    config.remapOptions.sources = sourceStore;
+                    config.remapOptions.readFile = (filepath: string) => {
                         return sharedProcessedFiles[filepath];
                     };
-                    let collector = self.remap((<any> unmappedCollector).getFinalCoverage(), remapOptions);
+                    let collector = self.remap((<any> unmappedCollector).getFinalCoverage(), config.remapOptions);
 
                     if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
                         results.exitCode = 1;
@@ -94,7 +87,7 @@ export class Reporter {
             };
         };
 
-        (<any> this.create).$inject = ["config", "helper", "logger", "emitter"];
+        (<any> this.create).$inject = ["logger"];
     }
 
     private getReportDestination(browser: any, reports: any, reportType: any) {

@@ -5,18 +5,13 @@ var path = require("path");
 var istanbul_1 = require("istanbul");
 var Reporter = (function () {
     function Reporter(config, sharedProcessedFiles, threshold) {
-        this.coverageReporter = require("karma-coverage/lib/reporter");
         this.remap = require("remap-istanbul/lib/remap");
         this.writeReport = require("remap-istanbul/lib/writeReport");
         var self = this;
         // tslint:disable-next-line:only-arrow-functions
-        this.create = function (karmaConfig, helper, logger, emitter) {
+        this.create = function (logger) {
             var coverageMap;
-            var remapOptions = config.remapOptions;
             self.log = logger.create("reporter.karma-typescript");
-            if (!config.hasReporter("coverage")) {
-                self.coverageReporter(karmaConfig, helper, logger, emitter);
-            }
             this.adapters = [];
             this.onRunStart = function () {
                 coverageMap = new WeakMap();
@@ -36,11 +31,11 @@ var Reporter = (function () {
                     }
                     unmappedCollector.add(coverage);
                     var sourceStore = istanbul_1.Store.create("memory");
-                    remapOptions.sources = sourceStore;
-                    remapOptions.readFile = function (filepath) {
+                    config.remapOptions.sources = sourceStore;
+                    config.remapOptions.readFile = function (filepath) {
                         return sharedProcessedFiles[filepath];
                     };
-                    var collector = self.remap(unmappedCollector.getFinalCoverage(), remapOptions);
+                    var collector = self.remap(unmappedCollector.getFinalCoverage(), config.remapOptions);
                     if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
                         results.exitCode = 1;
                     }
@@ -63,7 +58,7 @@ var Reporter = (function () {
                 });
             };
         };
-        this.create.$inject = ["config", "helper", "logger", "emitter"];
+        this.create.$inject = ["logger"];
     }
     Reporter.prototype.getReportDestination = function (browser, reports, reportType) {
         var reportConfig = reports[reportType];
