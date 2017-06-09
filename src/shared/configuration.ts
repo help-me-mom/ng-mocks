@@ -1,3 +1,4 @@
+import * as lodash from "lodash";
 import * as log4js from "log4js";
 
 import { ConfigOptions } from "karma";
@@ -165,6 +166,7 @@ export class Configuration {
         this.exclude = this.karmaTypescriptConfig.exclude;
         this.include = this.karmaTypescriptConfig.include;
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
+        this.assertExclude();
     }
 
     private configurePreprocessor() {
@@ -215,6 +217,21 @@ export class Configuration {
           (!this.karma.frameworks || this.karma.frameworks.indexOf("karma-typescript") === -1)) {
             throw new Error("Missing karma-typescript framework, please add" +
                             "'frameworks: [\"karma-typescript\"]' to your Karma config");
+        }
+    }
+
+    private assertExclude() {
+        if (this.exclude !== undefined) {
+            if (!Array.isArray(this.exclude)) {
+                throw new Error("The option 'karmaTypescriptConfig.exclude' must be an array of strings, got [" +
+                    typeof this.exclude + "]: " + this.exclude);
+            }
+            this.exclude.forEach((item) => {
+                if (!lodash.isString(item)) {
+                    throw new Error("Expected a string in 'karmaTypescriptConfig.exclude', got [" +
+                        typeof item + "]: " + item);
+                }
+            });
         }
     }
 
