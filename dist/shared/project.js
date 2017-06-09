@@ -102,6 +102,9 @@ var Project = (function () {
     Project.prototype.parseConfigFileJson = function (configFileName, configFileJson, existingOptions) {
         var tsconfig;
         var basePath = this.resolveBasepath(configFileName);
+        if (existingOptions && existingOptions.baseUrl === ".") {
+            existingOptions.baseUrl = basePath;
+        }
         this.extend("include", configFileJson.config, this.config);
         this.extend("exclude", configFileJson.config, this.config);
         if (ts.parseConfigFile) {

@@ -57,6 +57,7 @@ module.exports = function(config) {
             },
             compilerDelay: 500,
             compilerOptions: {
+                baseUrl: ".",
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
                 jsx: "react",

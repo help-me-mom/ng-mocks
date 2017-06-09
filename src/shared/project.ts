@@ -146,6 +146,10 @@ export class Project {
         let tsconfig: ts.ParsedCommandLine;
         let basePath = this.resolveBasepath(configFileName);
 
+        if (existingOptions && existingOptions.baseUrl === ".") {
+            existingOptions.baseUrl = basePath;
+        }
+
         this.extend("include", configFileJson.config, this.config);
         this.extend("exclude", configFileJson.config, this.config);
 
