@@ -68,7 +68,7 @@ var Compiler = (function () {
                     "Is there a mismatch between the Typescript compiler options and the Karma config?");
             }
             queued.callback({
-                isDeclarationFile: ts.isDeclarationFile(sourceFile),
+                isDeclarationFile: _this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: _this.compiledFiles[queued.file.path],
                 sourceFile: sourceFile,
                 sourceMapText: _this.compiledFiles[queued.file.path + ".map"]
@@ -113,6 +113,13 @@ var Compiler = (function () {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
+    };
+    Compiler.prototype.fileExtensionIs = function (path, extension) {
+        return path.length > extension.length && this.endsWith(path, extension);
+    };
+    Compiler.prototype.endsWith = function (str, suffix) {
+        var expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     };
     return Compiler;
 }());

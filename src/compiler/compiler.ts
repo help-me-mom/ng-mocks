@@ -90,7 +90,7 @@ export class Compiler {
             }
 
             queued.callback({
-                isDeclarationFile: (<any> ts).isDeclarationFile(sourceFile),
+                isDeclarationFile: this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: this.compiledFiles[queued.file.path],
                 sourceFile,
                 sourceMapText: this.compiledFiles[queued.file.path + ".map"]
@@ -160,5 +160,14 @@ export class Compiler {
                 ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
+    }
+
+    private fileExtensionIs(path: string, extension: string) {
+        return path.length > extension.length && this.endsWith(path, extension);
+    }
+
+    private endsWith(str: string, suffix: string) {
+        let expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 }

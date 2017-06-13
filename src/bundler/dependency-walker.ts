@@ -11,6 +11,7 @@ import { Logger } from "log4js";
 
 import pad = require("pad");
 
+import { EmitOutput } from "../compiler/emit-output";
 import { BundleItem } from "./bundle-item";
 import { Queued } from "./queued";
 
@@ -31,11 +32,11 @@ export class DependencyWalker {
 
         queue.forEach((queued) => {
 
-            queued.item.dependencies = this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
+            queued.item.dependencies = this.findUnresolvedTsRequires(queued.emitOutput);
 
             let resolvedModules = (<any> queued.emitOutput.sourceFile).resolvedModules;
 
-            if (resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+            if (resolvedModules && !queued.emitOutput.isDeclarationFile) {
 
                 if (lodash.isMap(resolvedModules)) { // Typescript 2.2+
                     resolvedModules.forEach((resolvedModule: any, moduleName: string) => {
@@ -101,11 +102,11 @@ export class DependencyWalker {
         });
     }
 
-    private findUnresolvedTsRequires(sourceFile: ts.SourceFile): BundleItem[] {
+    private findUnresolvedTsRequires(emitOutput: EmitOutput): BundleItem[] {
 
         let dependencies: BundleItem[] = [];
 
-        if ((<any> ts).isDeclarationFile(sourceFile)) {
+        if (emitOutput.isDeclarationFile) {
             return dependencies;
         }
 
@@ -132,7 +133,7 @@ export class DependencyWalker {
             ts.forEachChild(node, visitNode);
         };
 
-        visitNode(sourceFile);
+        visitNode(emitOutput.sourceFile);
 
         return dependencies;
     }
