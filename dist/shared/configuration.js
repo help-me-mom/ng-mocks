@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash = require("lodash");
 var log4js = require("log4js");
 var lodash_1 = require("lodash");
 var Configuration = (function () {
@@ -114,6 +115,7 @@ var Configuration = (function () {
         this.exclude = this.karmaTypescriptConfig.exclude;
         this.include = this.karmaTypescriptConfig.include;
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
+        this.assertExclude();
     };
     Configuration.prototype.configurePreprocessor = function () {
         var transformPath = function (filepath) {
@@ -154,6 +156,20 @@ var Configuration = (function () {
             (!this.karma.frameworks || this.karma.frameworks.indexOf("karma-typescript") === -1)) {
             throw new Error("Missing karma-typescript framework, please add" +
                 "'frameworks: [\"karma-typescript\"]' to your Karma config");
+        }
+    };
+    Configuration.prototype.assertExclude = function () {
+        if (this.exclude !== undefined) {
+            if (!Array.isArray(this.exclude)) {
+                throw new Error("The option 'karmaTypescriptConfig.exclude' must be an array of strings, got [" +
+                    typeof this.exclude + "]: " + this.exclude);
+            }
+            this.exclude.forEach(function (item) {
+                if (!lodash.isString(item)) {
+                    throw new Error("Expected a string in 'karmaTypescriptConfig.exclude', got [" +
+                        typeof item + "]: " + item);
+                }
+            });
         }
     };
     Configuration.prototype.assertDeprecatedOptions = function () {

@@ -19,7 +19,7 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 {
   "devDependencies": {
     "karma": "^1.5.0",
-    "karma-typescript": "3.0.3"
+    "karma-typescript": "3.0.4"
   }
 }
 ```
@@ -557,6 +557,7 @@ These are the environments reported failing/working:
 |Npm|Node.js|OS|Works|
 |---|---|---|---|
 |2.5.18|4.4.7|Unknown|No|
+|2.14.7|4.2.1|Ubuntu 14.04|No|
 |2.14.12|4.2.6|OSX 10.11.3|No|
 |2.15.9|4.5.0|OSX 10.11.6|No|
 |2.15.9|4.6.0|OSX 10.12.3|No|

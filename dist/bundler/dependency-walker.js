@@ -23,9 +23,9 @@ var DependencyWalker = (function () {
         var _this = this;
         var dependencyCount = 0;
         queue.forEach(function (queued) {
-            queued.item.dependencies = _this.findUnresolvedTsRequires(queued.emitOutput.sourceFile);
+            queued.item.dependencies = _this.findUnresolvedTsRequires(queued.emitOutput);
             var resolvedModules = queued.emitOutput.sourceFile.resolvedModules;
-            if (resolvedModules && !queued.emitOutput.sourceFile.isDeclarationFile) {
+            if (resolvedModules && !queued.emitOutput.isDeclarationFile) {
                 if (lodash.isMap(resolvedModules)) {
                     resolvedModules.forEach(function (resolvedModule, moduleName) {
                         queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
@@ -77,9 +77,9 @@ var DependencyWalker = (function () {
             onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
     };
-    DependencyWalker.prototype.findUnresolvedTsRequires = function (sourceFile) {
+    DependencyWalker.prototype.findUnresolvedTsRequires = function (emitOutput) {
         var dependencies = [];
-        if (ts.isDeclarationFile(sourceFile)) {
+        if (emitOutput.isDeclarationFile) {
             return dependencies;
         }
         var visitNode = function (node) {
@@ -98,7 +98,7 @@ var DependencyWalker = (function () {
             }
             ts.forEachChild(node, visitNode);
         };
-        visitNode(sourceFile);
+        visitNode(emitOutput.sourceFile);
         return dependencies;
     };
     DependencyWalker.prototype.addDynamicDependencies = function (expressions, bundleItem, onDynamicDependenciesAdded) {
