@@ -1,12 +1,10 @@
 import { Component } from "@angular/core";
-import "@angular/upgrade/static";
 
 @Component({
     selector: "angular-app",
-    template: "<h1>{{title}}</h1>",
-    styles: [require("../../../assets/style/main.css")]
+    styles: [require("../../../assets/style/main.css")],
+    template: "<h1>{{title}}</h1>"
 })
-
 export class Angular2Tester {
-    title = "Hello :)";
+    public title = "Hello :)";
 }
