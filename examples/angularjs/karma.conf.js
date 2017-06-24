@@ -12,7 +12,7 @@ module.exports = function(config) {
             "app/**/*.ts": ["karma-typescript"]
         },
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
 
         karmaTypescriptConfig: {
             tsconfig: "./tsconfig.json"

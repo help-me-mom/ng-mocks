@@ -20,7 +20,7 @@ module.exports = function(config) {
             }
         },
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
 
         browsers: ["Chrome"]
     });
