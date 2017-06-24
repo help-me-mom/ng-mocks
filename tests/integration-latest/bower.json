@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "canvg": "https://github.com/gabelerner/canvg.git#v1.4",
     "rgb-color": "https://github.com/yetzt/node-rgbcolor.git"
   }
 }
