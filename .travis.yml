@@ -4,10 +4,9 @@ node_js: 6
 
 before_install:
   - npm install -g npm@4
+  - npm --version
 
 install:
-  - node -v
-  - npm -v
   - ./ci/install.sh
 
 script:
