@@ -1,5 +1,5 @@
 language: node_js
-node_js: node
+node_js: 6
 install: ./ci/install.sh
 script:
   - npm run lint
