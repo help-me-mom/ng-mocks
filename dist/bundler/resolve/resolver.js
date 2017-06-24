@@ -83,18 +83,21 @@ var Resolver = (function () {
                         }
                     }
                     files.forEach(function (file) {
-                        var main = path.join(pkg.canonicalDir, file);
-                        fs.stat(main, function (err) {
-                            if (!err) {
-                                _this.bowerPackages[moduleName] = main;
-                            }
-                        });
+                        try {
+                            var main = path.join(pkg.canonicalDir, file);
+                            fs.statSync(main);
+                            _this.bowerPackages[moduleName] = main;
+                        }
+                        catch (error) {
+                            // noop
+                        }
                     });
                 });
+                _this.log.debug("Cached bower packages: %s %s", os.EOL, JSON.stringify(_this.bowerPackages, null, 2));
             });
         }
         catch (error) {
-            // bower isn't installed
+            this.log.debug("No bower detected, skipping");
         }
     };
     Resolver.prototype.isInFilenameCache = function (bundleItem) {

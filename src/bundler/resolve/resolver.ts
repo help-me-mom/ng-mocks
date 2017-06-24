@@ -105,18 +105,21 @@ export class Resolver {
                         }
 
                         files.forEach((file) => {
-                            let main = path.join(pkg.canonicalDir, file);
-                            fs.stat(main, (err) => {
-                                if (!err) {
-                                    this.bowerPackages[moduleName] = main;
-                                }
-                            });
+                            try {
+                                let main = path.join(pkg.canonicalDir, file);
+                                fs.statSync(main);
+                                this.bowerPackages[moduleName] = main;
+                            }
+                            catch (error) {
+                                // noop
+                            }
                         });
                     });
+                    this.log.debug("Cached bower packages: %s %s", os.EOL, JSON.stringify(this.bowerPackages, null, 2));
                 });
         }
         catch (error) {
-            // bower isn't installed
+            this.log.debug("No bower detected, skipping");
         }
     }
 
