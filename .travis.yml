@@ -1,6 +1,12 @@
+sudo: required
 language: node_js
 node_js: 6
-install: ./ci/install.sh
+before_install:
+  - npm install -g npm@4
+install:
+  - node -v
+  - npm -v
+  -./ci/install.sh
 script:
   - npm run lint
   - npm run build:ci

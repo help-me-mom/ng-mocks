@@ -3,6 +3,10 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm -g install npm@4
+  - set PATH=%APPDATA%\npm;%PATH%
+  - node -v
+  - npm -v
   - ci\install.bat
 
 test_script:
