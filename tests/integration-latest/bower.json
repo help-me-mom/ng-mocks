@@ -1,0 +1,10 @@
+{
+  "name": "tests-integration-latest",
+  "version": "3.0.4",
+  "description": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "rgb-color": "https://github.com/yetzt/node-rgbcolor.git"
+  }
+}

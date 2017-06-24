@@ -1,5 +1,6 @@
 import * as async from "async";
 import * as browserResolve from "browser-resolve";
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
@@ -14,6 +15,7 @@ import { DependencyWalker } from "../dependency-walker";
 export class Resolver {
 
     private shims: any;
+    private bowerPackages: { [key: string]: string; } = {};
     private filenameCache: string[] = [];
     private lookupNameCache: { [key: string]: string; } = {};
 
@@ -26,6 +28,7 @@ export class Resolver {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
             require("./shims") : undefined;
         this.log.debug(this.shims);
+        this.cacheBowerPackages();
     }
 
     public resolveModule(requiringModule: string,
@@ -78,11 +81,64 @@ export class Resolver {
         this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
     }
 
+    private cacheBowerPackages(): void {
+        try {
+            let bower = require("bower");
+            bower.commands
+                .list({ map: true }, { offline: true })
+                .on("end", (map: any) => {
+
+                    Object.keys(map.dependencies).forEach((moduleName) => {
+
+                        let pkg = map.dependencies[moduleName];
+                        let files = ["index.js", moduleName + ".js"];
+
+                        if (pkg.pkgMeta && pkg.pkgMeta.main) {
+                            if (Array.isArray(pkg.pkgMeta.main)) {
+                                pkg.pkgMeta.main.forEach((file: any) => {
+                                    files.push(file);
+                                });
+                            }
+                            else {
+                                files.push(pkg.pkgMeta.main);
+                            }
+                        }
+
+                        files.forEach((file) => {
+                            let main = path.join(pkg.canonicalDir, file);
+                            fs.stat(main, (err) => {
+                                if (!err) {
+                                    this.bowerPackages[moduleName] = main;
+                                }
+                            });
+                        });
+                    });
+                });
+        }
+        catch (error) {
+            // bower isn't installed
+        }
+    }
+
     private isInFilenameCache(bundleItem: BundleItem): boolean {
         return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     }
 
     private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: { (): void }) {
+
+        if (this.bowerPackages[bundleItem.moduleName]) {
+            bundleItem.filename = this.bowerPackages[bundleItem.moduleName];
+            this.log.debug("Resolved [%s] to bower package: %s", bundleItem.moduleName, bundleItem.filename);
+            return onFilenameResolved();
+        }
+
+        if (this.config.bundlerOptions.resolve.alias[bundleItem.moduleName]) {
+            let alias = this.config.bundlerOptions.resolve.alias[bundleItem.moduleName];
+            let relativePath = path.relative(this.config.karma.basePath, alias);
+            bundleItem.filename = path.join(this.config.karma.basePath, relativePath);
+            this.log.debug("Resolved [%s] to alias: %s", bundleItem.moduleName, bundleItem.filename);
+            return onFilenameResolved();
+        }
 
         let bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,

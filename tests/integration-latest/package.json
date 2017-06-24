@@ -24,6 +24,7 @@
     "dev:ci:phantomjs:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers PhantomJS --single-run",
     "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
     "dev:ci:phantomjs:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "prepare": "bower install",
     "test": "karma start"
   },
   "dependencies": {
@@ -91,6 +92,7 @@
     "zone.js": "^0.8.8"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "gulp": "^3.9.1",
     "karma-phantomjs-launcher": "^1.0.2"
   }

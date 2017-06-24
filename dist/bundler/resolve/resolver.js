@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var browserResolve = require("browser-resolve");
+var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var PathTool = require("../../shared/path-tool");
@@ -12,6 +13,7 @@ var Resolver = (function () {
         this.dependencyWalker = dependencyWalker;
         this.log = log;
         this.sourceReader = sourceReader;
+        this.bowerPackages = {};
         this.filenameCache = [];
         this.lookupNameCache = {};
     }
@@ -19,6 +21,7 @@ var Resolver = (function () {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
             require("./shims") : undefined;
         this.log.debug(this.shims);
+        this.cacheBowerPackages();
     };
     Resolver.prototype.resolveModule = function (requiringModule, bundleItem, buffer, onModuleResolved) {
         var _this = this;
@@ -59,10 +62,57 @@ var Resolver = (function () {
         };
         this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
     };
+    Resolver.prototype.cacheBowerPackages = function () {
+        var _this = this;
+        try {
+            var bower = require("bower");
+            bower.commands
+                .list({ map: true }, { offline: true })
+                .on("end", function (map) {
+                Object.keys(map.dependencies).forEach(function (moduleName) {
+                    var pkg = map.dependencies[moduleName];
+                    var files = ["index.js", moduleName + ".js"];
+                    if (pkg.pkgMeta && pkg.pkgMeta.main) {
+                        if (Array.isArray(pkg.pkgMeta.main)) {
+                            pkg.pkgMeta.main.forEach(function (file) {
+                                files.push(file);
+                            });
+                        }
+                        else {
+                            files.push(pkg.pkgMeta.main);
+                        }
+                    }
+                    files.forEach(function (file) {
+                        var main = path.join(pkg.canonicalDir, file);
+                        fs.stat(main, function (err) {
+                            if (!err) {
+                                _this.bowerPackages[moduleName] = main;
+                            }
+                        });
+                    });
+                });
+            });
+        }
+        catch (error) {
+            // bower isn't installed
+        }
+    };
     Resolver.prototype.isInFilenameCache = function (bundleItem) {
         return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     };
     Resolver.prototype.resolveFilename = function (requiringModule, bundleItem, onFilenameResolved) {
+        if (this.bowerPackages[bundleItem.moduleName]) {
+            bundleItem.filename = this.bowerPackages[bundleItem.moduleName];
+            this.log.debug("Resolved [%s] to bower package: %s", bundleItem.moduleName, bundleItem.filename);
+            return onFilenameResolved();
+        }
+        if (this.config.bundlerOptions.resolve.alias[bundleItem.moduleName]) {
+            var alias = this.config.bundlerOptions.resolve.alias[bundleItem.moduleName];
+            var relativePath = path.relative(this.config.karma.basePath, alias);
+            bundleItem.filename = path.join(this.config.karma.basePath, relativePath);
+            this.log.debug("Resolved [%s] to alias: %s", bundleItem.moduleName, bundleItem.filename);
+            return onFilenameResolved();
+        }
         var bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
             filename: bundleItem.isNpmModule() ? undefined : requiringModule,
