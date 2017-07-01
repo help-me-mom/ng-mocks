@@ -135,7 +135,7 @@ export class Compiler {
 
             diagnostics.forEach((diagnostic) => {
 
-                if (ts.formatDiagnostics) { // v1.8+
+                if (ts.formatDiagnostics && host) { // v1.8+
                     this.log.error(ts.formatDiagnostics([diagnostic], host));
                 }
                 else { // v1.6, v1.7

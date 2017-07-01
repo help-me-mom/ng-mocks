@@ -93,7 +93,7 @@ var Compiler = (function () {
         var _this = this;
         if (diagnostics && diagnostics.length > 0) {
             diagnostics.forEach(function (diagnostic) {
-                if (ts.formatDiagnostics) {
+                if (ts.formatDiagnostics && host) {
                     _this.log.error(ts.formatDiagnostics([diagnostic], host));
                 }
                 else {
