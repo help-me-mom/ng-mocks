@@ -222,7 +222,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.exclude** - File string patterns to be excluded by the compiler. This property May be an `array` or an `object` for more fine-grained control.
   * Array: The string values will be merged with existing options.
   * Object: The string values will be merged with or replace existing options:
-  ```js
+  ```javascript
   {
       mode: "merge|replace",
       values: ["foo", "bar"]
@@ -233,7 +233,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.include** - File string patterns to be included by the compiler. This property May be an `array` or an `object` for more fine-grained control.
   * Array: The string values will be merged with existing options.
   * Object: The string values will be merged with or replace existing options:
-  ```js
+  ```javascript
   {
       mode: "merge|replace",
       values: ["foo", "bar"]
