@@ -219,11 +219,26 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
     }
     ```
 
-* **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
-  The values will be merged with existing options.<br/>
+* **karmaTypescriptConfig.exclude** - File string patterns to be excluded by the compiler. This property May be an `array` or an `object` for more fine-grained control.
+  * Array: The string values will be merged with existing options.
+  * Object: The string values will be merged with or replace existing options:
+  ```js
+  {
+      mode: "merge|replace",
+      values: ["foo", "bar"]
+  }
+  ```
   Defaults to `["node_modules"]`.
 
-* **karmaTypescriptConfig.include** - An array of file patterns to be included by the compiler. The values will be merged with existing options.<br/>
+* **karmaTypescriptConfig.include** - File string patterns to be included by the compiler. This property May be an `array` or an `object` for more fine-grained control.
+  * Array: The string values will be merged with existing options.
+  * Object: The string values will be merged with or replace existing options:
+  ```js
+  {
+      mode: "merge|replace",
+      values: ["foo", "bar"]
+  }
+  ```
   This option is available in Typescript 2.0.0^.
 
 * **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
@@ -341,7 +356,10 @@ karmaTypescriptConfig: {
         },
     },
     exclude: ["broken"],
-    include: ["**/*.ts"],
+    include: {
+        mode: "replace",
+        values: ["**/*.ts"]
+    },
     remapOptions: {
         warn: function(message){
             console.log(message);

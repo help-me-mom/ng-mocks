@@ -7,6 +7,7 @@ import { merge } from "lodash";
 import {
     BundlerOptions,
     CoverageOptions,
+    Extendable,
     KarmaTypescriptConfig,
     RemapOptions,
     Reports
@@ -16,7 +17,11 @@ export interface LoggerList {
     [key: string]: log4js.Logger;
 }
 
-export class Configuration {
+export interface Configuration {
+    [key: string]: any;
+}
+
+export class Configuration implements KarmaTypescriptConfig {
 
     public karma: ConfigOptions;
     public bundlerOptions: BundlerOptions;
@@ -25,8 +30,8 @@ export class Configuration {
     public coverageOptions: CoverageOptions;
     public coverageReporter: any;
     public defaultTsconfig: any;
-    public exclude: string[];
-    public include: string[];
+    public exclude: string[] | Extendable;
+    public include: string[] | Extendable;
     public remapOptions: RemapOptions;
     public reporters: string[];
     public reports: Reports;
@@ -166,7 +171,8 @@ export class Configuration {
         this.exclude = this.karmaTypescriptConfig.exclude;
         this.include = this.karmaTypescriptConfig.include;
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
-        this.assertExclude();
+        this.assertExtendable("exclude");
+        this.assertExtendable("include");
     }
 
     private configurePreprocessor() {
@@ -220,19 +226,42 @@ export class Configuration {
         }
     }
 
-    private assertExclude() {
-        if (this.exclude !== undefined) {
-            if (!Array.isArray(this.exclude)) {
-                throw new Error("The option 'karmaTypescriptConfig.exclude' must be an array of strings, got [" +
-                    typeof this.exclude + "]: " + this.exclude);
-            }
-            this.exclude.forEach((item) => {
+    private assertExtendable(key: string) {
+        let extendable = (<Extendable> this[key]);
+
+        if (extendable === undefined) {
+            return;
+        }
+
+        if (Array.isArray(extendable)) {
+            extendable.forEach((item) => {
                 if (!lodash.isString(item)) {
-                    throw new Error("Expected a string in 'karmaTypescriptConfig.exclude', got [" +
+                    throw new Error("Expected a string in 'karmaTypescriptConfig." + key + "', got [" +
                         typeof item + "]: " + item);
                 }
             });
+            return;
         }
+
+        if (lodash.isObject(extendable)) {
+            if (["merge", "replace"].indexOf(extendable.mode) === -1) {
+                throw new Error("Expected 'karmaTypescriptConfig." + key + ".mode' to be 'merge|replace', got '" +
+                    extendable.mode + "'");
+            }
+            if (Array.isArray(extendable.values)) {
+                extendable.values.forEach((item) => {
+                    if (!lodash.isString(item)) {
+                        throw new Error("Expected a string in 'karmaTypescriptConfig." + key + ".values', got [" +
+                            typeof item + "]: " + item);
+                    }
+                });
+            }
+            return;
+        }
+
+        throw new Error("The option 'karmaTypescriptConfig." + key +
+                        "' must be an array of strings or { mode: \"replace|extend\", values: [string, string], got [" +
+                    typeof this.exclude + "]: " + this.exclude);
     }
 
     private assertDeprecatedOptions() {

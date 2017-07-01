@@ -96,7 +96,10 @@ module.exports = function(config) {
                 },
             },
             exclude: ["broken"],
-            include: ["**/*.ts", "**/*.tsx"],
+            include: {
+                mode: "replace",
+                values: ["**/*.ts", "**/*.tsx"]
+            },
             reports: {
                 "cobertura": {
                     "directory": "coverage",

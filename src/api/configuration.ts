@@ -4,12 +4,13 @@ import * as ts from "typescript";
 import { Transform }  from "./transforms";
 
 export interface KarmaTypescriptConfig {
+    [key: string]: any;
     bundlerOptions?: BundlerOptions;
     compilerDelay?: number;
     compilerOptions?: any;
     coverageOptions?: CoverageOptions;
-    exclude?: string[];
-    include?: string[];
+    exclude?: string[] | Extendable;
+    include?: string[] | Extendable;
     remapOptions?: RemapOptions;
     reports?: Reports;
     transformPath?: Function;
@@ -27,6 +28,11 @@ export interface BundlerOptions {
     resolve?: Resolve;
     transforms?: Transform[];
     validateSyntax?: boolean;
+}
+
+export interface Extendable {
+    mode: "merge" | "replace";
+    values: string[];
 }
 
 export interface Resolve {
