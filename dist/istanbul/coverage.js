@@ -7,8 +7,13 @@ var Coverage = (function () {
         this.coverage = require("karma-coverage/lib/preprocessor");
     }
     Coverage.prototype.initialize = function (helper, logger) {
+        var _this = this;
         this.log = logger.create("coverage.karma-typescript");
-        this.coveragePreprocessor = this.coverage(logger, helper, this.config.karma.basePath, this.config.reporters, this.config.coverageReporter);
+        this.log.debug("Initializing");
+        this.config.whenReady(function () {
+            _this.log.debug("Configuring coverage preprocessor");
+            _this.coveragePreprocessor = _this.coverage(logger, helper, _this.config.karma.basePath, _this.config.reporters, _this.config.coverageReporter);
+        });
     };
     Coverage.prototype.instrument = function (file, bundled, emitOutput, callback) {
         if (this.config.hasPreprocessor("commonjs")) {

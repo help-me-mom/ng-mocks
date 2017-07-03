@@ -30,6 +30,7 @@ export class Compiler {
 
     constructor(private config: Configuration, private log: Logger, private project: Project) {
         config.whenReady(() => {
+            this.log.debug("Setting up deferred project compilation");
             this.compileDeferred = lodash.debounce(() => {
                 this.compileProject();
             }, this.config.compilerDelay);

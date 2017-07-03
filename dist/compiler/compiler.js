@@ -22,6 +22,7 @@ var Compiler = (function () {
             return _this.hostGetSourceFile(filename, languageVersion, onError);
         };
         config.whenReady(function () {
+            _this.log.debug("Setting up deferred project compilation");
             _this.compileDeferred = lodash.debounce(function () {
                 _this.compileProject();
             }, _this.config.compilerDelay);
