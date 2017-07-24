@@ -2,8 +2,8 @@ import * as ESTree from "estree";
 import * as log4js from "log4js";
 import * as ts from "typescript";
 
-import { Configuration } from "../shared/configuration";
 import { EmitOutput } from "../compiler/emit-output";
+import { Configuration } from "../shared/configuration";
 
 export interface TransformCallback {
     (error: Error, dirty: boolean): void;
