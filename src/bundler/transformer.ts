@@ -30,6 +30,7 @@ export class Transformer {
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),
+                emitOutput: queued.emitOutput,
                 ts: {
                     ast: queued.emitOutput.sourceFile,
                     version: ts.version
