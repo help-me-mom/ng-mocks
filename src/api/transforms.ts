@@ -3,6 +3,7 @@ import * as log4js from "log4js";
 import * as ts from "typescript";
 
 import { Configuration } from "../shared/configuration";
+import { EmitOutput } from "../compiler/emit-output";
 
 export interface TransformCallback {
     (error: Error, dirty: boolean): void;
@@ -23,6 +24,7 @@ export interface TransformContext {
     filename: string;
     module: string;
     source: string;
+    emitOutput:  EmitOutput;
     ts?: TransformContextTs;
 }
 
