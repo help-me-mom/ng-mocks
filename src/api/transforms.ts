@@ -24,7 +24,7 @@ export interface TransformContext {
     filename: string;
     module: string;
     source: string;
-    emitOutput:  EmitOutput;
+    emitOutput: EmitOutput;
     ts?: TransformContextTs;
 }
 
