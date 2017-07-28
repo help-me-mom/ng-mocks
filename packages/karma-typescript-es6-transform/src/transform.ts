@@ -57,10 +57,7 @@ let configure = (options?: babel.TransformOptions) => {
 
         if (isEs6(context.js.ast)) {
 
-            if (!options.filename) {
-                options.filename = context.filename;
-            }
-
+            options.filename = context.filename;
             log.debug("Transforming %s", options.filename);
 
             try {

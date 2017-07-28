@@ -265,14 +265,14 @@ test("transformer should log activity with level debug", (t) => {
     });
 });
 
-test("transformer should prefer options.filename over context.filename", (t) => {
+test("transformer should override options.filename with context.filename", (t) => {
 
     t.plan(1);
 
     let context = createContext("export default function(){}");
 
     transform({ filename: "xxx.js" })(context, () => {
-        t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "xxx.js" ]);
+        t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.js" ]);
     });
 });
 
