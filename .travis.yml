@@ -1,6 +1,13 @@
 language: node_js
-node_js: node
-install: ./ci/install.sh
+
+node_js: 6
+
+before_install:
+  - npm install -g npm@4
+
+install:
+  - ./ci/install.sh
+
 script:
   - npm run lint
   - npm run build:ci

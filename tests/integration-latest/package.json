@@ -1,6 +1,6 @@
 {
   "name": "tests-integration-latest",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Integration tests for the latest version of Typescript",
   "author": "monounity",
   "contributors": [
@@ -24,15 +24,15 @@
     "dev:ci:phantomjs:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers PhantomJS --single-run",
     "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
     "dev:ci:phantomjs:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "prepare": "bower install",
     "test": "karma start"
   },
   "dependencies": {
-    "@angular/common": "^4.0.3",
-    "@angular/compiler": "^4.0.3",
-    "@angular/core": "^4.0.3",
-    "@angular/platform-browser": "^4.0.3",
-    "@angular/platform-browser-dynamic": "^4.0.3",
-    "@angular/upgrade": "^4.0.3",
+    "@angular/common": "^4.2.3",
+    "@angular/compiler": "^4.2.3",
+    "@angular/core": "^4.2.3",
+    "@angular/platform-browser": "^4.2.3",
+    "@angular/platform-browser-dynamic": "^4.2.3",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.3",
     "@ngrx/store": "^2.2.2",
@@ -91,6 +91,7 @@
     "zone.js": "^0.8.8"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "gulp": "^3.9.1",
     "karma-phantomjs-launcher": "^1.0.2"
   }

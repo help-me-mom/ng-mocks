@@ -26,7 +26,7 @@ module.exports = function (config) {
         singleRun: true,
         port: 9876,
         colors: true,
-        reporters: ["nyan", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
         browsers: ["PhantomJS"],
         logLevel: config.LOG_INFO, //config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         autoWatch: false,

@@ -41,7 +41,7 @@ module.exports = function(config) {
                 noParse: ["clear"],
                 resolve: {
                     alias: {
-                        "@angular/upgrade/static$": "../bundles/upgrade-static.umd.js"
+                        "stackblur": "bower_components/canvg/StackBlur.js"
                     },
                     extensions: [".js", ".json", ".ts"],
                     directories: ["node_modules"]
@@ -96,7 +96,10 @@ module.exports = function(config) {
                 },
             },
             exclude: ["broken"],
-            include: ["**/*.ts", "**/*.tsx"],
+            include: {
+                mode: "replace",
+                values: ["**/*.ts", "**/*.tsx"]
+            },
             reports: {
                 "cobertura": {
                     "directory": "coverage",
@@ -116,7 +119,7 @@ module.exports = function(config) {
             tsconfig: "./tsconfig.json"
         },
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
 
         browserNoActivityTimeout : 60000,
 

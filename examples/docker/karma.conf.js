@@ -24,7 +24,7 @@ module.exports = function(config) {
 
         logLevel: config.LOG_INFO,
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
 
         browsers: ["PhantomJS"]
     });

@@ -27,7 +27,7 @@ module.exports = function(config) {
             }
         },
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["dots", "karma-typescript"],
 
         browserNoActivityTimeout : 60000,
 

@@ -17,14 +17,18 @@ export class Coverage {
     public initialize(helper: any, logger: any): void {
 
         this.log = logger.create("coverage.karma-typescript");
+        this.log.debug("Initializing");
 
-        this.coveragePreprocessor = this.coverage(
-            logger,
-            helper,
-            this.config.karma.basePath,
-            this.config.reporters,
-            this.config.coverageReporter
-        );
+        this.config.whenReady(() => {
+            this.log.debug("Configuring coverage preprocessor");
+            this.coveragePreprocessor = this.coverage(
+                logger,
+                helper,
+                this.config.karma.basePath,
+                this.config.reporters,
+                this.config.coverageReporter
+            );
+        });
     }
 
     public instrument(file: File, bundled: string, emitOutput: EmitOutput, callback: CoverageCallback): void {

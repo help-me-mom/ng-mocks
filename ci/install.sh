@@ -1,5 +1,8 @@
 #/bin/sh
 
+echo "npm -v"
+npm -v
+
 cd examples/angular2
 pwd
 npm i

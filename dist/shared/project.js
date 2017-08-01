@@ -5,6 +5,7 @@ var lodash = require("lodash");
 var path = require("path");
 var ts = require("typescript");
 var PathTool = require("./path-tool");
+var extender_1 = require("./extender");
 var EventType;
 (function (EventType) {
     EventType[EventType["FileSystemChanged"] = 0] = "FileSystemChanged";
@@ -105,8 +106,8 @@ var Project = (function () {
         if (existingOptions && existingOptions.baseUrl === ".") {
             existingOptions.baseUrl = basePath;
         }
-        this.extend("include", configFileJson.config, this.config);
-        this.extend("exclude", configFileJson.config, this.config);
+        extender_1.Extender.extend("include", configFileJson.config, this.config);
+        extender_1.Extender.extend("exclude", configFileJson.config, this.config);
         if (ts.parseConfigFile) {
             tsconfig = ts.parseConfigFile(configFileJson.config, ts.sys, basePath);
             tsconfig.options = ts.extend(existingOptions, tsconfig.options);
@@ -138,14 +139,6 @@ var Project = (function () {
         var relativePath = path.relative(this.config.karma.basePath, configFileName);
         var absolutePath = path.join(this.config.karma.basePath, relativePath);
         return path.dirname(absolutePath);
-    };
-    Project.prototype.extend = function (key, a, b) {
-        var list = lodash.union(a[key], b[key]);
-        if (list && list.length) {
-            a[key] = list.map(function (item) {
-                return PathTool.fixWindowsPath(item);
-            });
-        }
     };
     Project.prototype.convertOptions = function (options) {
         var _this = this;

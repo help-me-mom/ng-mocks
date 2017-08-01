@@ -30,6 +30,7 @@ export class Compiler {
 
     constructor(private config: Configuration, private log: Logger, private project: Project) {
         config.whenReady(() => {
+            this.log.debug("Setting up deferred project compilation");
             this.compileDeferred = lodash.debounce(() => {
                 this.compileProject();
             }, this.config.compilerDelay);
@@ -135,7 +136,7 @@ export class Compiler {
 
             diagnostics.forEach((diagnostic) => {
 
-                if (ts.formatDiagnostics) { // v1.8+
+                if (ts.formatDiagnostics && host) { // v1.8+
                     this.log.error(ts.formatDiagnostics([diagnostic], host));
                 }
                 else { // v1.6, v1.7

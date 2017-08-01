@@ -24,7 +24,7 @@
         ]
     },
     "exclude": [
-        "broken",
         "node_modules"
-    ]
+    ],
+    "include": ["mode_noodles"]
 }

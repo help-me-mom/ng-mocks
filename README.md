@@ -19,7 +19,7 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 {
   "devDependencies": {
     "karma": "^1.5.0",
-    "karma-typescript": "3.0.4"
+    "karma-typescript": "3.0.5"
   }
 }
 ```
@@ -66,7 +66,7 @@ The above example will compile all Typescript files and run the unit tests, prod
 
 ### Other examples
 
-- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
+- Typescript [1.8.10 to ^2.0.0](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
 - Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
 - Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
 - Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
@@ -219,12 +219,27 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
     }
     ```
 
-* **karmaTypescriptConfig.exclude** - An array of file patterns to be excluded by the compiler.
-  The values will be merged with existing options.<br/>
+* **karmaTypescriptConfig.exclude** - File string patterns to be excluded by the compiler. This property may be an `array` or an `object` for more fine-grained control.
+  * Array: The string values will be merged with existing options.
+  * Object: The string values will be merged with or replace existing options:
+  ```javascript
+  {
+      mode: "merge|replace",
+      values: ["foo", "bar"]
+  }
+  ```
   Defaults to `["node_modules"]`.
 
-* **karmaTypescriptConfig.include** - An array of file patterns to be included by the compiler. The values will be merged with existing options.<br/>
-  This option is available in Typescript 2.0.0^.
+* **karmaTypescriptConfig.include** - File string patterns to be included by the compiler. This property may be an `array` or an `object` for more fine-grained control.
+  * Array: The string values will be merged with existing options.
+  * Object: The string values will be merged with or replace existing options:
+  ```javascript
+  {
+      mode: "merge|replace",
+      values: ["foo", "bar"]
+  }
+  ```
+  This option is available in Typescript ^2.0.0.
 
 * **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
 
@@ -341,7 +356,10 @@ karmaTypescriptConfig: {
         },
     },
     exclude: ["broken"],
-    include: ["**/*.ts"],
+    include: {
+        mode: "replace",
+        values: ["**/*.ts"]
+    },
     remapOptions: {
         warn: function(message){
             console.log(message);
@@ -478,6 +496,9 @@ A full Node.js environment will be provided with global variables and browser sh
 
 The plugin uses [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to load the source code from node_modules.
 
+### Mocking
+Imported modules, local or npm packages, can be mocked using [karma-typescript-mock](https://www.npmjs.com/package/karma-typescript-mock). This feature is available in `karma-typescript@^3.0.5`.
+
 ## Transforms API
 
 The bundler has a public API which lets plugins alter or completely replace code before adding it to the bundle.
@@ -528,7 +549,7 @@ The callback function has two arguments:
 
 ## Requirements
 
-Typescript 1.6.2^ is required.
+Typescript ^1.6.2 is required.
 
 Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and up.
 

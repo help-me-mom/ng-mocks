@@ -6,9 +6,7 @@ var Preprocessor = (function () {
         var _this = this;
         this.create = function (helper, logger) {
             _this.log = logger.create("preprocessor.karma-typescript");
-            config.whenReady(function () {
-                coverage.initialize(helper, logger);
-            });
+            coverage.initialize(helper, logger);
             return function (content, file, done) {
                 try {
                     _this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);

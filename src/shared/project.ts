@@ -10,6 +10,7 @@ import PathTool = require("./path-tool");
 
 import { CompilerOptions } from "../api";
 import { Configuration } from "./configuration";
+import { Extender } from "./extender";
 
 type ConfigFileJson = {
     config?: any;
@@ -150,8 +151,8 @@ export class Project {
             existingOptions.baseUrl = basePath;
         }
 
-        this.extend("include", configFileJson.config, this.config);
-        this.extend("exclude", configFileJson.config, this.config);
+        Extender.extend("include", configFileJson.config, this.config);
+        Extender.extend("exclude", configFileJson.config, this.config);
 
         if ((<any> ts).parseConfigFile) {
             tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, basePath);
@@ -195,17 +196,6 @@ export class Project {
         let relativePath = path.relative(this.config.karma.basePath, configFileName);
         let absolutePath = path.join(this.config.karma.basePath, relativePath);
         return path.dirname(absolutePath);
-    }
-
-    private extend(key: string, a: any, b: any): void {
-
-        let list = lodash.union(a[key], b[key]);
-
-        if (list && list.length) {
-            a[key] = list.map((item: string) => {
-                return PathTool.fixWindowsPath(item);
-            });
-        }
     }
 
     private convertOptions(options: any): void {
