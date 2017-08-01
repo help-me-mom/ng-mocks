@@ -66,7 +66,7 @@ The above example will compile all Typescript files and run the unit tests, prod
 
 ### Other examples
 
-- Typescript [1.8.10 to 2.0.0^](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
+- Typescript [1.8.10 to ^2.0.0](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
 - Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
 - Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
 - Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
@@ -239,7 +239,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
       values: ["foo", "bar"]
   }
   ```
-  This option is available in Typescript 2.0.0^.
+  This option is available in Typescript ^2.0.0.
 
 * **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
 
@@ -546,7 +546,7 @@ The callback function has two arguments:
 
 ## Requirements
 
-Typescript 1.6.2^ is required.
+Typescript ^1.6.2 is required.
 
 Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and up.
 
