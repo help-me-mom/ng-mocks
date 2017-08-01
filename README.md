@@ -496,6 +496,9 @@ A full Node.js environment will be provided with global variables and browser sh
 
 The plugin uses [browser-resolve](https://github.com/defunctzombie/node-browser-resolve) from the [browserify](https://github.com/substack/node-browserify) tool chain to load the source code from node_modules.
 
+### Mocking
+Imported modules, local or npm packages, can be mocked using [karma-typescript-mock](https://www.npmjs.com/package/karma-typescript-mock). This feature is available in `karma-typescript@^3.0.5`.
+
 ## Transforms API
 
 The bundler has a public API which lets plugins alter or completely replace code before adding it to the bundle.
