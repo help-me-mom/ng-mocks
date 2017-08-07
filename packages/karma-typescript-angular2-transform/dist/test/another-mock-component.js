@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var MockComponent = (function () {
-    function MockComponent() {
+var AnotherMockComponent = (function () {
+    function AnotherMockComponent() {
     }
-    MockComponent = __decorate([
+    AnotherMockComponent = __decorate([
         core_1.Component({
             selector: "app-mock",
             styleUrls: ["style.css", "./style.less", "../style.scss"],
             templateUrl: "mock.html"
         })
-    ], MockComponent);
-    return MockComponent;
+    ], AnotherMockComponent);
+    return AnotherMockComponent;
 }());
-exports.MockComponent = MockComponent;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9jay1jb21wb25lbnQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvdGVzdC9tb2NrLWNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUFBLHNDQUEwQztBQU8xQztJQUFBO0lBQTRCLENBQUM7SUFBaEIsYUFBYTtRQUx6QixnQkFBUyxDQUFDO1lBQ1AsUUFBUSxFQUFFLFVBQVU7WUFDcEIsU0FBUyxFQUFFLENBQUMsV0FBVyxFQUFFLGNBQWMsRUFBRSxlQUFlLENBQUM7WUFDekQsV0FBVyxFQUFFLFdBQVc7U0FDM0IsQ0FBQztPQUNXLGFBQWEsQ0FBRztJQUFELG9CQUFDO0NBQUEsQUFBN0IsSUFBNkI7QUFBaEIsc0NBQWEifQ==
+exports.AnotherMockComponent = AnotherMockComponent;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYW5vdGhlci1tb2NrLWNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy90ZXN0L2Fub3RoZXItbW9jay1jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBQSxzQ0FBMEM7QUFPMUM7SUFBQTtJQUFtQyxDQUFDO0lBQXZCLG9CQUFvQjtRQUxoQyxnQkFBUyxDQUFDO1lBQ1AsUUFBUSxFQUFFLFVBQVU7WUFDcEIsU0FBUyxFQUFFLENBQUMsV0FBVyxFQUFFLGNBQWMsRUFBRSxlQUFlLENBQUM7WUFDekQsV0FBVyxFQUFFLFdBQVc7U0FDM0IsQ0FBQztPQUNXLG9CQUFvQixDQUFHO0lBQUQsMkJBQUM7Q0FBQSxBQUFwQyxJQUFvQztBQUF2QixvREFBb0IifQ==

@@ -190,3 +190,34 @@ test("transformer should skip files without the properties 'templateUrl' and/or 
         t.false(dirty);
     });
 });
+
+test("transformer should transform template url when defined with a template literal", (t) => {
+
+    t.plan(1);
+
+    filename = path.join(process.cwd(), "./src/test/another-mock-component.ts");
+    ast = compile(filename);
+
+    let context = createContext();
+
+    transform(context, () => {
+        t.assert(context.source.indexOf("templateUrl: `/custom-root/base/src/test/mock.html`") > 0);
+    });
+});
+
+test("transformer should transform style urls when defined with template literals", (t) => {
+
+    t.plan(1);
+
+    filename = path.join(process.cwd(), "./src/test/another-mock-component.ts");
+    ast = compile(filename);
+
+    let context = createContext();
+
+    transform(context, () => {
+        t.assert(context.source.indexOf("styleUrls: " +
+            "[`/custom-root/base/src/test/style.css`, " +
+            "`/custom-root/base/src/test/style.less`, " +
+            "`/custom-root/base/src/style.scss`]") > 0);
+    });
+});

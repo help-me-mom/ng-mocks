@@ -25,6 +25,10 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
     let MagicString = require("magic-string");
     let magic = new MagicString(context.source);
 
+    let isString = (kind: ts.SyntaxKind): boolean => {
+        return kind === ts.SyntaxKind.StringLiteral || kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral;
+    };
+
     let rewriteUrl = (node: ts.StringLiteral): void => {
 
         let start = node.getStart() + 1;
@@ -56,18 +60,18 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
                             let identifier = (<ts.Identifier> property.name);
 
                             if (identifier.text === "templateUrl" &&
-                                    property.initializer.kind === ts.SyntaxKind.StringLiteral) {
+                                isString(property.initializer.kind)) {
 
                                 rewriteUrl((<ts.StringLiteral> property.initializer));
                             }
 
                             if (identifier.text === "styleUrls" &&
-                                    property.initializer.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                                property.initializer.kind === ts.SyntaxKind.ArrayLiteralExpression) {
 
                                 let initializer = (<ts.ArrayLiteralExpression> property.initializer);
                                 initializer.elements.forEach((element) => {
                                     /* istanbul ignore else */
-                                    if (element.kind === ts.SyntaxKind.StringLiteral) {
+                                    if (isString(element.kind)) {
                                         rewriteUrl((<ts.StringLiteral> element));
                                     }
                                 });
