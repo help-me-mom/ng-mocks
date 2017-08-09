@@ -2,11 +2,10 @@ import * as ESTree from "estree";
 import * as log4js from "log4js";
 import * as ts from "typescript";
 
-import { EmitOutput } from "../compiler/emit-output";
 import { Configuration } from "../shared/configuration";
 
 export interface TransformCallback {
-    (error: Error, dirty: boolean): void;
+    (error: Error, dirty: boolean, transpile?: boolean): void;
 };
 
 export interface TransformContextJs{
@@ -16,6 +15,7 @@ export interface TransformContextJs{
 export interface TransformContextTs{
     version: string;
     ast: ts.SourceFile;
+    transpiled: string;
 }
 
 export interface TransformContext {
@@ -24,7 +24,6 @@ export interface TransformContext {
     filename: string;
     module: string;
     source: string;
-    emitOutput?: EmitOutput;
     ts?: TransformContextTs;
 }
 

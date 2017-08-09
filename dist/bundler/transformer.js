@@ -23,23 +23,29 @@ var Transformer = (function () {
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),
-                emitOutput: queued.emitOutput,
                 ts: {
                     ast: queued.emitOutput.sourceFile,
+                    transpiled: queued.emitOutput.outputText,
                     version: ts.version
                 }
             };
             async.eachSeries(transforms, function (transform, onTransformApplied) {
                 process.nextTick(function () {
-                    transform(context, function (error, dirty) {
+                    transform(context, function (error, dirty, transpile) {
+                        if (transpile === void 0) { transpile = true; }
                         _this.handleError(error, transform, context);
                         if (dirty) {
-                            var transpiled = ts.transpileModule(context.source, {
-                                compilerOptions: _this.project.getTsconfig().options,
-                                fileName: context.filename
-                            });
-                            queued.emitOutput.outputText = transpiled.outputText;
-                            queued.emitOutput.sourceMapText = transpiled.sourceMapText;
+                            if (transpile) {
+                                var transpiled = ts.transpileModule(context.source, {
+                                    compilerOptions: _this.project.getTsconfig().options,
+                                    fileName: context.filename
+                                });
+                                queued.emitOutput.outputText = transpiled.outputText;
+                                queued.emitOutput.sourceMapText = transpiled.sourceMapText;
+                            }
+                            else {
+                                queued.emitOutput.outputText = context.ts.transpiled;
+                            }
                         }
                         onTransformApplied();
                     });

@@ -27,26 +27,31 @@ export class Transformer {
 
             let context: TransformContext = {
                 config: this.config,
-                emitOutput: queued.emitOutput,
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),
                 ts: {
                     ast: queued.emitOutput.sourceFile,
+                    transpiled: queued.emitOutput.outputText,
                     version: ts.version
                 }
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
-                    transform(context, (error: Error, dirty: boolean) => {
+                    transform(context, (error: Error, dirty: boolean, transpile: boolean = true) => {
                         this.handleError(error, transform, context);
                         if (dirty) {
-                            let transpiled = ts.transpileModule(context.source, {
-                                compilerOptions: this.project.getTsconfig().options,
-                                fileName: context.filename
-                            });
-                            queued.emitOutput.outputText = transpiled.outputText;
-                            queued.emitOutput.sourceMapText = transpiled.sourceMapText;
+                            if (transpile) {
+                                let transpiled = ts.transpileModule(context.source, {
+                                    compilerOptions: this.project.getTsconfig().options,
+                                    fileName: context.filename
+                                });
+                                queued.emitOutput.outputText = transpiled.outputText;
+                                queued.emitOutput.sourceMapText = transpiled.sourceMapText;
+                            }
+                            else {
+                                queued.emitOutput.outputText = context.ts.transpiled;
+                            }
                         }
                         onTransformApplied();
                     });

@@ -51,7 +51,14 @@ module.exports = function(config) {
                     require("karma-typescript-es6-transform")({presets: ["es2015"]}),
                     require("karma-typescript-postcss-transform")(
                         [require("autoprefixer")], { map: { inline: true } }, /postcss.style\.css$/
-                    )
+                    ),
+                    function(context, callback) {
+                        if(context.ts && context.module.endsWith("es6-transform-tester.ts")) {
+                            context.ts.transpiled = "\n/* istanbul ignore next */\n" + context.ts.transpiled;                                      
+                            return callback(undefined, true, false);
+                        }
+                        return callback(undefined, false);
+                    } 
                 ],
                 validateSyntax: false
             },

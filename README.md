@@ -508,9 +508,8 @@ written in ES2015 syntax from a Typescript module directly.
 The interface between the bundler and the plugins is a plain array of functions, specified in the configuration property `karmaTypescriptConfig.bundlerOptions.transforms`, where each function is considered a transforming plugin.
 
 The plugin functions in the transforms array are asynchronous and adhere to the Node.js callback convention where the first
-argument of the callback function is an `Error` object or `undefined` and the second argument is the result. However, although
-each function is asynchronous, all functions will be called *synchronously* one by one in the order they were added to the array,
-and each function will be called with the result of the previous function, enabling transforms plugin chaining.
+argument of the callback function is an `Error` object or `undefined` and the following parameters contains the result.
+However, although each function is asynchronous, all functions will be called *synchronously* one by one in the order they were added to the array, and each function will be called with the result of the previous function, enabling transforms plugin chaining.
 
 Transforms will be executed at two points in the bundling process: right after compilation of the project Typescript files
 and when resolving `import` and `require` statements. This means each transforming function will be called for both
@@ -538,14 +537,33 @@ karmaTypescriptConfig: {
 }
 ```
 
+It is also possible to change the transpiled Typescript (ie the plain JavaScript code) code by using the third callback parameter to tell the Transforms API not to recompile the transpiled code:
+
+```javascript
+karmaTypescriptConfig: {
+    bundlerOptions: {
+        transforms: [
+            function(context, callback) {
+                if(context.ts) {
+                    context.ts.transpiled = "\n/* istanbul ignore next */\n" + context.ts.transpiled;
+                    return callback(undefined, true, false);
+                }
+                return callback(undefined, false);
+            }
+        ]
+    }
+}
+```
+
 ### Context
 The context object, `TransformContext`, is defined [here](https://github.com/monounity/karma-typescript/blob/master/src/api/transforms.ts).
 
 ### Callback
 
-The callback function has two arguments:
+The callback function has three arguments:
 1. An `Error` object or `undefined`
 2. A boolean indicating whether the value of `context.source` has changed or not.
+3. A boolean indicating whether the transformed source should be recompiled. Defaults to true and can be omitted.
 
 ## Requirements
 
