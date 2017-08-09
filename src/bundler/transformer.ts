@@ -27,6 +27,7 @@ export class Transformer {
 
             let context: TransformContext = {
                 config: this.config,
+                emitOutput: queued.emitOutput,
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
                 source: queued.emitOutput.sourceFile.getFullText(),

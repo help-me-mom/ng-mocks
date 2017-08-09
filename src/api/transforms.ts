@@ -2,6 +2,7 @@ import * as ESTree from "estree";
 import * as log4js from "log4js";
 import * as ts from "typescript";
 
+import { EmitOutput } from "../compiler/emit-output";
 import { Configuration } from "../shared/configuration";
 
 export interface TransformCallback {
@@ -23,6 +24,7 @@ export interface TransformContext {
     filename: string;
     module: string;
     source: string;
+    emitOutput?: EmitOutput;
     ts?: TransformContextTs;
 }
 
