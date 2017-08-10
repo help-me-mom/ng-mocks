@@ -9,6 +9,7 @@ export class Framework {
 
     public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
     private log: Logger;
+    private stringify = require("json-stringify-safe");
 
     constructor(bundler: Bundler, config: Configuration, resolver: Resolver) {
 
@@ -31,7 +32,7 @@ export class Framework {
                 }
             });
 
-            this.log.debug("Configuration:\n", JSON.stringify(config, this.replacer, 3));
+            this.log.debug("Configuration:\n", this.stringify(config, this.replacer, 3));
         };
 
         (<any> this.create).$inject = ["config", "logger"];

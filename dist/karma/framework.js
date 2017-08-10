@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Framework = (function () {
     function Framework(bundler, config, resolver) {
         var _this = this;
+        this.stringify = require("json-stringify-safe");
         this.create = function (karmaConfig, logger) {
             _this.log = logger.create("framework.karma-typescript");
             config.initialize(karmaConfig);
@@ -18,7 +19,7 @@ var Framework = (function () {
                     });
                 }
             });
-            _this.log.debug("Configuration:\n", JSON.stringify(config, _this.replacer, 3));
+            _this.log.debug("Configuration:\n", _this.stringify(config, _this.replacer, 3));
         };
         this.create.$inject = ["config", "logger"];
     }
