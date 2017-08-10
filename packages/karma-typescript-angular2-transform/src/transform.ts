@@ -1,7 +1,6 @@
 import * as kt from "karma-typescript/src/api/transforms";
 import * as log4js from "log4js";
 import * as path from "path";
-import * as ts from "typescript";
 
 let log: log4js.Logger;
 
@@ -15,85 +14,46 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
         return callback(undefined, false);
     }
 
-    if (ts.version !== context.ts.version) {
-        return callback(new Error("Typescript version of karma-typescript (" +
-            context.ts.version + ") does not match karma-typescript-angular2-transform Typescript version (" +
-            ts.version + ")"), false);
-    }
-
     let dirty = false;
-    let MagicString = require("magic-string");
-    let magic = new MagicString(context.source);
 
-    let isStringKind = (kind: ts.SyntaxKind): boolean => {
-        return kind === ts.SyntaxKind.StringLiteral || kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral;
-    };
+    const templateUrlRegex = /templateUrl:\s(['"][^"']*['"])/g;
+    const styleUrlsRegex = /styleUrls:\s\[(.*)\]/g;
+    const quotedStringRegex = /["'](.*?)["']/g;
 
-    let rewriteUrl = (node: ts.StringLiteral): void => {
+    const rewriteUrl = (regexp: RegExp) => {
 
-        let start = node.getStart() + 1;
-        let end = start + node.text.length;
-        let templateDir = path.dirname(context.filename);
-        let relativeTemplateDir = path.relative(context.config.karma.basePath, templateDir);
-        let styleUrl = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, node.text);
+        const match = regexp.exec(context.ts.transpiled);
 
-        log.debug("Rewriting %s to %s in %s", node.text, styleUrl, context.filename);
+        if (!match) {
+            return;
+        }
 
-        magic.overwrite(start, end, fixWindowsPath(styleUrl));
+        const original = match[0];
+        const value = match[1];
+        const templateDir = path.dirname(context.filename);
+        const relativeTemplateDir = path.relative(context.config.karma.basePath, templateDir);
+
+        let pattern = original;
+        let quotedStringMatch = quotedStringRegex.exec(value);
+
+        while (quotedStringMatch) {
+
+            let unquotedString = quotedStringMatch[1];
+            let url = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, unquotedString);
+            log.debug("Rewriting %s to %s in %s", unquotedString, url, context.filename);
+
+            pattern = pattern.replace(unquotedString, fixWindowsPath(url));
+            quotedStringMatch = quotedStringRegex.exec(value);
+        }
+
+        context.ts.transpiled = context.ts.transpiled.replace(original, pattern);
         dirty = true;
     };
 
-    let visitNode = (node: ts.Node) => {
-        switch (node.kind) {
-            case ts.SyntaxKind.ObjectLiteralExpression:
+    rewriteUrl(styleUrlsRegex);
+    rewriteUrl(templateUrlRegex);
 
-                let expression = (<ts.ObjectLiteralExpression> node);
-
-                /* istanbul ignore else */
-                if (expression.properties) {
-                    expression.properties.forEach((p) => {
-
-                        /* istanbul ignore else */
-                        if (p.name && p.kind === ts.SyntaxKind.PropertyAssignment) {
-
-                            let property = (<ts.PropertyAssignment> p);
-                            let identifier = (<ts.Identifier> property.name);
-
-                            if (identifier.text === "templateUrl" &&
-                                    isStringKind(property.initializer.kind)) {
-
-                                rewriteUrl((<ts.StringLiteral> property.initializer));
-                            }
-
-                            if (identifier.text === "styleUrls" &&
-                                    property.initializer.kind === ts.SyntaxKind.ArrayLiteralExpression) {
-
-                                let initializer = (<ts.ArrayLiteralExpression> property.initializer);
-                                initializer.elements.forEach((element) => {
-                                    /* istanbul ignore else */
-                                    if (isStringKind(element.kind)) {
-                                        rewriteUrl((<ts.StringLiteral> element));
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            default:
-        }
-
-        ts.forEachChild(node, visitNode);
-    };
-
-    if (context.source.indexOf("templateUrl") > 0 || context.source.indexOf("styleUrls") > 0) {
-        visitNode(context.ts.ast);
-    }
-
-    if (dirty) {
-        context.source = magic.toString();
-    }
-
-    callback(undefined, dirty);
+    return callback(undefined, dirty, false);
 };
 
 let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {

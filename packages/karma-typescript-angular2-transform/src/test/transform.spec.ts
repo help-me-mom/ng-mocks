@@ -43,10 +43,16 @@ let compile = (filename: string): ts.SourceFile => {
     let program = ts.createProgram([filename], options, host);
     // tslint:disable-next-line: no-console
     console.log(ts.formatDiagnostics(ts.getPreEmitDiagnostics(program), host));
+    host.writeFile = (name, text) => {
+        transpiled = text;
+        return name; // shut up, ts
+    };
+    program.emit();
     return program.getSourceFile(filename);
 };
 
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
+let transpiled: string;
 let ast = compile(filename);
 
 // kt.TransformContext...
@@ -63,6 +69,7 @@ let createContext = (): any => {
         source: fs.readFileSync(filename).toString(),
         ts: {
             ast,
+            transpiled,
             version: ts.version
         }
     };
@@ -100,25 +107,6 @@ test("transformer should check ts property", (t) => {
     });
 });
 
-test("transformer should check Typescript version", (t) => {
-
-    t.plan(2);
-
-    let context = createContext();
-    context.ts.version = "0.0.0";
-
-    transform(context, (error: Error, dirty: boolean) => {
-        if (error) {
-            t.equal("Typescript version of karma-typescript (0.0.0) does not match " +
-                    "karma-typescript-angular2-transform Typescript version (" + ts.version + ")", error.message);
-            t.false(dirty);
-        }
-        else {
-            t.fail();
-        }
-    });
-});
-
 test("transformer should set dirty flag to true", (t) => {
 
     t.plan(1);
@@ -140,7 +128,7 @@ test("transformer should transform template url", (t) => {
     let context = createContext();
 
     transform(context, () => {
-        t.assert(context.source.indexOf("templateUrl: \"/custom-root/base/src/test/mock.html\"") > 0);
+        t.assert(context.ts.transpiled.indexOf("templateUrl: '/custom-root/base/src/test/mock.html'") > 0);
     });
 });
 
@@ -151,7 +139,7 @@ test("transformer should transform style urls", (t) => {
     let context = createContext();
 
     transform(context, () => {
-        t.assert(context.source.indexOf("styleUrls: " +
+        t.assert(context.ts.transpiled.indexOf("styleUrls: " +
             "[\"/custom-root/base/src/test/style.css\", " +
             "\"/custom-root/base/src/test/style.less\", " +
             "\"/custom-root/base/src/style.scss\"]") > 0);
@@ -201,7 +189,7 @@ test("transformer should transform template url when defined with a template lit
     let context = createContext();
 
     transform(context, () => {
-        t.assert(context.source.indexOf("templateUrl: `/custom-root/base/src/test/mock.html`") > 0);
+        t.assert(context.ts.transpiled.indexOf("templateUrl: \"/custom-root/base/src/test/mock.html\"") > 0);
     });
 });
 
@@ -215,9 +203,9 @@ test("transformer should transform style urls when defined with template literal
     let context = createContext();
 
     transform(context, () => {
-        t.assert(context.source.indexOf("styleUrls: " +
-            "[`/custom-root/base/src/test/style.css`, " +
-            "`/custom-root/base/src/test/style.less`, " +
-            "`/custom-root/base/src/style.scss`]") > 0);
+        t.assert(context.ts.transpiled.indexOf("styleUrls: " +
+            "[\"/custom-root/base/src/test/style.css\", " +
+            "\"/custom-root/base/src/test/style.less\", " +
+            "\"/custom-root/base/src/style.scss\"]") > 0);
     });
 });
