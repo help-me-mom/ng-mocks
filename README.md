@@ -161,6 +161,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 * **karmaTypescriptConfig.bundlerOptions.resolve.directories** - An array of directories where modules will be recursively looked up.<br/>
   Defaults to `["node_modules"]`.
 
+* **karmaTypescriptConfig.bundlerOptions.sourceMap** - A boolean indicating whether source maps should be generated for imported modules in the bundle, useful for debugging in a browser.
+  For more debugging options, please see `karmaTypescriptConfig.coverageOptions.instrumentation`.</br>
+  Defaults to `false`.
+
 * **karmaTypescriptConfig.bundlerOptions.transforms** - An array of functions altering or replacing compiled Typescript code/Javascript
   code loaded from `node_modules` before bundling it.
   For more detailed documentation on transforms, please refer to the [Transforms API section](#transforms-api) in this document.<br/>
@@ -181,8 +185,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
 
 * **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
-  set to `false` to see the original Typescript code when debugging.<br/>
-  Defaults to true.
+  set this property to `false` to see the original Typescript code when debugging.
+  Please note that setting this property to `true` requires the Typescript compiler option `sourceMap` to also be set to `true`.
+  For more debugging options, please see `karmaTypescriptConfig.coverageOptions.sourceMap`.<br/>
+  Defaults to `true`.
 
 * **karmaTypescriptConfig.coverageOptions.exclude** - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
   Defaults to `/\.(d|spec|test)\.ts$/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
@@ -319,6 +325,7 @@ karmaTypescriptConfig: {
             extensions: [".js", ".json"],
             directories: ["node_modules"]
         },
+        sourceMap: false,
         transforms: [require("karma-typescript-es6-transform")()],
         validateSyntax: true
     },

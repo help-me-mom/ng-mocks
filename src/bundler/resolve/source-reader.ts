@@ -1,4 +1,5 @@
 import * as acorn from "acorn";
+import * as combineSourceMap from "combine-source-map";
 import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
@@ -7,7 +8,6 @@ import { Logger } from "log4js";
 
 import { Configuration } from "../../shared/configuration";
 import { BundleItem } from "../bundle-item";
-import SourceMap = require("../source-map");
 import { Transformer } from "../transformer";
 
 export class SourceReader {
@@ -20,7 +20,7 @@ export class SourceReader {
 
         this.readFile(bundleItem, (source: string) => {
 
-            bundleItem.source = SourceMap.deleteComment(source);
+            bundleItem.source = combineSourceMap.removeComments(source);
             bundleItem.ast = this.createAbstractSyntaxTree(bundleItem);
 
             this.transformer.applyTransforms(bundleItem, () => {

@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
+var combineSourceMap = require("combine-source-map");
+var convertSourceMap = require("convert-source-map");
 var fs = require("fs");
 var lodash = require("lodash");
 var os = require("os");
@@ -9,7 +11,6 @@ var tmp = require("tmp");
 var benchmark_1 = require("../shared/benchmark");
 var PathTool = require("../shared/path-tool");
 var bundle_item_1 = require("./bundle-item");
-var SourceMap = require("./source-map");
 var Bundler = (function () {
     function Bundler(config, dependencyWalker, globals, log, project, resolver, transformer, validator) {
         this.config = config;
@@ -54,7 +55,7 @@ var Bundler = (function () {
         var benchmark = new benchmark_1.Benchmark();
         this.transformer.applyTsTransforms(this.bundleQueue, function () {
             _this.bundleQueue.forEach(function (queued) {
-                queued.item = new bundle_item_1.BundleItem(queued.file.path, queued.file.originalPath, SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+                queued.item = new bundle_item_1.BundleItem(queued.file.path, queued.file.originalPath, _this.createInlineSourceMap(queued));
             });
             var dependencyCount = _this.dependencyWalker.collectTypescriptDependencies(_this.bundleQueue);
             if (_this.shouldBundle(dependencyCount)) {
@@ -64,6 +65,18 @@ var Bundler = (function () {
                 _this.bundleWithoutLoader();
             }
         });
+    };
+    Bundler.prototype.createInlineSourceMap = function (queued) {
+        var inlined = queued.emitOutput.outputText;
+        if (queued.emitOutput.sourceMapText) {
+            var map = convertSourceMap
+                .fromJSON(queued.emitOutput.sourceMapText)
+                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
+            inlined = convertSourceMap.removeMapFileComments(queued.emitOutput.outputText) + map.toComment();
+            // used by Karma to log errors with original source code line numbers
+            queued.file.sourceMap = map.toObject();
+        }
+        return inlined;
     };
     Bundler.prototype.shouldBundle = function (dependencyCount) {
         if (this.config.hasPreprocessor("commonjs")) {
@@ -169,12 +182,24 @@ var Bundler = (function () {
     };
     Bundler.prototype.writeMainBundleFile = function (onMainBundleFileWritten) {
         var _this = this;
-        var bundle = "(function(global){" + os.EOL +
-            "global.wrappers={};" + os.EOL;
+        var bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
+        var sourcemap = combineSourceMap.create();
+        var line = this.getNumberOfNewlines(bundle);
         this.bundleBuffer.forEach(function (bundleItem) {
-            bundle += _this.addLoaderFunction(bundleItem, false);
+            if (_this.config.bundlerOptions.sourceMap) {
+                var sourceFile = path.relative(_this.config.karma.basePath, bundleItem.filename);
+                sourcemap.addFile({ sourceFile: path.join("/base", sourceFile), source: bundleItem.source }, { line: line });
+            }
+            var wrapped = _this.addLoaderFunction(bundleItem, false);
+            bundle += wrapped;
+            if (_this.config.bundlerOptions.sourceMap) {
+                line += _this.getNumberOfNewlines(wrapped);
+            }
         });
-        bundle += this.createEntrypointFilenames() + "})(this);";
+        bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
+        if (this.config.bundlerOptions.sourceMap) {
+            bundle += sourcemap.comment();
+        }
         fs.writeFile(this.bundleFile.name, bundle, function (error) {
             if (error) {
                 throw error;
@@ -182,6 +207,10 @@ var Bundler = (function () {
             _this.validator.validate(bundle, _this.bundleFile.name);
             onMainBundleFileWritten();
         });
+    };
+    Bundler.prototype.getNumberOfNewlines = function (source) {
+        var newlines = source.match(/\n/g);
+        return newlines ? newlines.length : 0;
     };
     return Bundler;
 }());

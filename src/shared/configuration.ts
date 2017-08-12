@@ -114,6 +114,7 @@ export class Configuration implements KarmaTypescriptConfig {
                 directories: ["node_modules"],
                 extensions: [".js", ".json", ".ts", ".tsx"]
             },
+            sourceMap: false,
             transforms: [],
             validateSyntax: true
         };

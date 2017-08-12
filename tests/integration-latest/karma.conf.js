@@ -46,6 +46,7 @@ module.exports = function(config) {
                     extensions: [".js", ".json", ".ts"],
                     directories: ["node_modules"]
                 },
+                sourceMap: true,
                 transforms: [
                     require("karma-typescript-cssmodules-transform")({}, {}, /style-import-tester\.css$/),
                     require("karma-typescript-es6-transform")({presets: ["es2015"]}),
@@ -76,7 +77,7 @@ module.exports = function(config) {
                 lib: ["DOM", "ES2015"]
             },
             coverageOptions: {
-                instrumentation: true,
+                instrumentation: false,
                 exclude: [/\.(d|spec|test)\.ts$/i],
                 threshold: {
                     global: {

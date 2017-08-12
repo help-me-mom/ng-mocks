@@ -4,7 +4,6 @@ import { EmitOutput } from "../compiler/emit-output";
 import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
 import { CoverageCallback } from "./coverage-callback";
-import SourceMap = require("../bundler/source-map");
 
 export class Coverage {
 
@@ -47,7 +46,7 @@ export class Coverage {
 
         if (!this.config.coverageOptions.instrumentation ||
             this.isExcluded(this.config.coverageOptions.exclude, file.originalPath) ||
-            this.hasNoOutput(file, emitOutput)) {
+            this.hasNoOutput(emitOutput)) {
 
             this.log.debug("Excluding file %s from instrumentation", file.originalPath);
             callback(bundled);
@@ -57,8 +56,8 @@ export class Coverage {
         this.coveragePreprocessor(bundled, file, callback);
     }
 
-    private hasNoOutput(file: File, emitOutput: EmitOutput): boolean {
-        return emitOutput.outputText === SourceMap.createComment(file);
+    private hasNoOutput(emitOutput: EmitOutput): boolean {
+        return emitOutput.outputText.startsWith("//# sourceMappingURL=");
     }
 
     private isExcluded(regex: RegExp | RegExp[], path: string): boolean {

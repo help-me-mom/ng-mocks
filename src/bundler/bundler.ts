@@ -1,4 +1,6 @@
 import * as async from "async";
+import * as combineSourceMap from "combine-source-map";
+import * as convertSourceMap from "convert-source-map";
 import * as fs from "fs";
 import * as lodash from "lodash";
 import * as os from "os";
@@ -20,7 +22,6 @@ import { BundleItem } from "./bundle-item";
 import { DependencyWalker } from "./dependency-walker";
 import { Queued } from "./queued";
 import { Resolver } from "./resolve/resolver";
-import SourceMap = require("./source-map");
 import { Transformer } from "./transformer";
 import { Validator } from "./validator";
 
@@ -76,8 +77,8 @@ export class Bundler {
 
         this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
-                queued.item = new BundleItem(queued.file.path, queued.file.originalPath,
-                    SourceMap.create(queued.file, queued.emitOutput.sourceFile.text, queued.emitOutput));
+                queued.item = new BundleItem(
+                    queued.file.path, queued.file.originalPath, this.createInlineSourceMap(queued));
             });
 
             let dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
@@ -89,6 +90,21 @@ export class Bundler {
                 this.bundleWithoutLoader();
             }
         });
+    }
+
+    private createInlineSourceMap(queued: Queued): string {
+        let inlined = queued.emitOutput.outputText;
+        if (queued.emitOutput.sourceMapText) {
+
+            let map = convertSourceMap
+                .fromJSON(queued.emitOutput.sourceMapText)
+                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
+            inlined = convertSourceMap.removeMapFileComments(queued.emitOutput.outputText) + map.toComment();
+
+            // used by Karma to log errors with original source code line numbers
+            queued.file.sourceMap = map.toObject();
+        }
+        return inlined;
     }
 
     private shouldBundle(dependencyCount: number): boolean {
@@ -213,14 +229,31 @@ export class Bundler {
 
     private writeMainBundleFile(onMainBundleFileWritten: { (): void } ) {
 
-        let bundle = "(function(global){" + os.EOL +
-                    "global.wrappers={};" + os.EOL;
+        let bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
+        let sourcemap = combineSourceMap.create();
+        let line = this.getNumberOfNewlines(bundle);
 
         this.bundleBuffer.forEach((bundleItem) => {
-            bundle += this.addLoaderFunction(bundleItem, false);
+
+            if (this.config.bundlerOptions.sourceMap) {
+                let sourceFile = path.relative(this.config.karma.basePath, bundleItem.filename);
+                sourcemap.addFile(
+                    { sourceFile: path.join("/base", sourceFile), source: bundleItem.source },
+                    { line }
+                );
+            }
+
+            let wrapped = this.addLoaderFunction(bundleItem, false);
+            bundle += wrapped;
+            if (this.config.bundlerOptions.sourceMap) {
+                line += this.getNumberOfNewlines(wrapped);
+            }
         });
 
-        bundle += this.createEntrypointFilenames() + "})(this);";
+        bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
+        if (this.config.bundlerOptions.sourceMap) {
+            bundle += sourcemap.comment();
+        }
 
         fs.writeFile(this.bundleFile.name, bundle, (error) => {
             if (error) {
@@ -229,5 +262,10 @@ export class Bundler {
             this.validator.validate(bundle, this.bundleFile.name);
             onMainBundleFileWritten();
         });
+    }
+
+    private getNumberOfNewlines(source: any) {
+        let newlines = source.match(/\n/g);
+        return newlines ? newlines.length : 0;
     }
 }

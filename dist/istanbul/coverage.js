@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var SourceMap = require("../bundler/source-map");
 var Coverage = (function () {
     function Coverage(config) {
         this.config = config;
@@ -28,15 +27,15 @@ var Coverage = (function () {
         }
         if (!this.config.coverageOptions.instrumentation ||
             this.isExcluded(this.config.coverageOptions.exclude, file.originalPath) ||
-            this.hasNoOutput(file, emitOutput)) {
+            this.hasNoOutput(emitOutput)) {
             this.log.debug("Excluding file %s from instrumentation", file.originalPath);
             callback(bundled);
             return;
         }
         this.coveragePreprocessor(bundled, file, callback);
     };
-    Coverage.prototype.hasNoOutput = function (file, emitOutput) {
-        return emitOutput.outputText === SourceMap.createComment(file);
+    Coverage.prototype.hasNoOutput = function (emitOutput) {
+        return emitOutput.outputText.startsWith("//# sourceMappingURL=");
     };
     Coverage.prototype.isExcluded = function (regex, path) {
         if (Array.isArray(regex)) {

@@ -66,6 +66,7 @@ var Configuration = (function () {
                 directories: ["node_modules"],
                 extensions: [".js", ".json", ".ts", ".tsx"]
             },
+            sourceMap: false,
             transforms: [],
             validateSyntax: true
         };

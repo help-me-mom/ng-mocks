@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var acorn = require("acorn");
+var combineSourceMap = require("combine-source-map");
 var fs = require("fs");
 var os = require("os");
-var SourceMap = require("../source-map");
 var SourceReader = (function () {
     function SourceReader(config, log, transformer) {
         this.config = config;
@@ -13,7 +13,7 @@ var SourceReader = (function () {
     SourceReader.prototype.read = function (bundleItem, onSourceRead) {
         var _this = this;
         this.readFile(bundleItem, function (source) {
-            bundleItem.source = SourceMap.deleteComment(source);
+            bundleItem.source = combineSourceMap.removeComments(source);
             bundleItem.ast = _this.createAbstractSyntaxTree(bundleItem);
             _this.transformer.applyTransforms(bundleItem, function () {
                 _this.assertValidNonScriptSource(bundleItem);
