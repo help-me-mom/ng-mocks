@@ -152,7 +152,7 @@ test("transformer should log warnings", (t) => {
         }
         t.true(dirty);
         t.deepEqual(mockLogger.warn.lastCall.args[0],
-            "Invalid value definition: red blue @value green yellow");
+            "postcss-modules-values: Invalid value definition: red blue @value green yellow");
     });
 });
 
