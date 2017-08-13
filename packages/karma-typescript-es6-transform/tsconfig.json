@@ -10,5 +10,11 @@
         "lib": [
             "dom","es5","es6","scripthost"
         ]
-    }
+    },
+    "include": [
+        "src/*.ts"
+    ],
+    "exclude": [
+        "src/*.spec.ts"
+    ]
 }

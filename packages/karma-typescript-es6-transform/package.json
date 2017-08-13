@@ -24,7 +24,19 @@
     "build:ci": "tsc --noEmit --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "tslint --project tsconfig.json",
-    "test": "istanbul cover -x \"*.spec.js\" node_modules/tape/bin/tape dist/*.js | faucet && istanbul report --root coverage text-summary"
+    "test": "nyc --require ts-node/register tape src/*.spec.ts | faucet"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "temp-directory": "./coverage/.nyc_output"
   },
   "dependencies": {
     "acorn": "^4.0.11",
@@ -45,10 +57,11 @@
     "@types/tape": "^4.2.29",
     "babel-preset-es2016": "^6.22.0",
     "faucet": "0.0.1",
-    "istanbul": "^1.1.0-alpha.1",
     "karma-typescript": "latest",
+    "nyc": "^11.1.0",
     "sinon": "^2.1.0",
     "tape": "^4.6.3",
+    "ts-node": "^3.3.0",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",
     "typescript": "latest"
