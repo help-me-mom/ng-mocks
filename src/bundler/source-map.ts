@@ -1,0 +1,92 @@
+import * as combineSourceMap from "combine-source-map";
+import * as convertSourceMap from "convert-source-map";
+import * as fs from "fs";
+import * as path from "path";
+
+import { Configuration } from "../shared/configuration";
+import { BundleItem } from "./bundle-item";
+import { Queued } from "./queued";
+
+export class SourceMap {
+
+    private combiner: Combiner;
+    private line: number = 0;
+
+    constructor(private config: Configuration) {}
+
+    public initialize(bundle: string) {
+        this.combiner = combineSourceMap.create();
+        this.line = this.getNumberOfNewlines(bundle);
+    }
+
+    public createInlineSourceMap(queued: Queued): string {
+        let inlined = queued.emitOutput.outputText;
+        if (queued.emitOutput.sourceMapText) {
+
+            let map = convertSourceMap
+                .fromJSON(queued.emitOutput.sourceMapText)
+                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
+            inlined = combineSourceMap.removeComments(queued.emitOutput.outputText) + map.toComment();
+
+            // used by Karma to log errors with original source code line numbers
+            queued.file.sourceMap = map.toObject();
+        }
+        return inlined;
+    }
+
+    public addFile(bundleItem: BundleItem) {
+
+        if (this.config.bundlerOptions.sourceMap) {
+
+            this.loadFileFromComment(bundleItem);
+
+            let sourceFile = path.relative(this.config.karma.basePath, bundleItem.filename);
+            this.combiner.addFile(
+                { sourceFile: path.join("/base", sourceFile), source: bundleItem.source },
+                { line: this.line }
+            );
+        }
+
+        bundleItem.source = combineSourceMap.removeComments(bundleItem.source);
+    }
+
+    public offsetLineNumber(wrappedSource: string) {
+        if (this.config.bundlerOptions.sourceMap) {
+            this.line += this.getNumberOfNewlines(wrappedSource);
+        }
+    }
+
+    public getComment() {
+        return this.config.bundlerOptions.sourceMap ? this.combiner.comment() : "";
+    }
+
+    public loadFileFromComment(bundleItem: BundleItem) {
+
+        let commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
+
+        if (commentMatch && !commentMatch[1].startsWith("data:")) {
+            let dirname = path.dirname(bundleItem.filename);
+            let mapFilename = path.join(dirname, commentMatch[1]);
+            let mapJson = fs.readFileSync(mapFilename, "utf-8");
+            let map = convertSourceMap.fromJSON(mapJson);
+
+            if (!map.getProperty("sourcesContent")) {
+
+                let sourcesContent: string[] = [];
+                map.getProperty("sources").forEach((source: string) => {
+                    let sourceFilename = path.join(dirname, source);
+                    let sourceContent = fs.readFileSync(sourceFilename, "utf-8");
+                    sourcesContent.push(sourceContent);
+                });
+                map.addProperty("sourcesContent", sourcesContent);
+            }
+
+            bundleItem.source = combineSourceMap.removeComments(bundleItem.source) + map.toComment();
+        }
+    }
+
+    private getNumberOfNewlines(source: any) {
+        let newlines = source.match(/\n/g);
+        return newlines ? newlines.length : 0;
+    }
+}

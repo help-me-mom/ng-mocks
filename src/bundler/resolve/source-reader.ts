@@ -1,5 +1,4 @@
 import * as acorn from "acorn";
-import * as combineSourceMap from "combine-source-map";
 import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
@@ -20,7 +19,7 @@ export class SourceReader {
 
         this.readFile(bundleItem, (source: string) => {
 
-            bundleItem.source = combineSourceMap.removeComments(source);
+            bundleItem.source = source;
             bundleItem.ast = this.createAbstractSyntaxTree(bundleItem);
 
             this.transformer.applyTransforms(bundleItem, () => {

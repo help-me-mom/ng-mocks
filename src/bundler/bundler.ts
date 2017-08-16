@@ -1,6 +1,4 @@
 import * as async from "async";
-import * as combineSourceMap from "combine-source-map";
-import * as convertSourceMap from "convert-source-map";
 import * as fs from "fs";
 import * as lodash from "lodash";
 import * as os from "os";
@@ -16,6 +14,7 @@ import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
 import { Project } from "../shared/project";
 import { Globals } from "./globals";
+import { SourceMap } from "./source-map";
 import PathTool = require("../shared/path-tool");
 import { BundleCallback } from "./bundle-callback";
 import { BundleItem } from "./bundle-item";
@@ -46,6 +45,7 @@ export class Bundler {
                 private log: Logger,
                 private project: Project,
                 private resolver: Resolver,
+                private sourceMap: SourceMap,
                 private transformer: Transformer,
                 private validator: Validator) { }
 
@@ -78,7 +78,7 @@ export class Bundler {
         this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
                 queued.item = new BundleItem(
-                    queued.file.path, queued.file.originalPath, this.createInlineSourceMap(queued));
+                    queued.file.path, queued.file.originalPath, this.sourceMap.createInlineSourceMap(queued));
             });
 
             let dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
@@ -90,21 +90,6 @@ export class Bundler {
                 this.bundleWithoutLoader();
             }
         });
-    }
-
-    private createInlineSourceMap(queued: Queued): string {
-        let inlined = queued.emitOutput.outputText;
-        if (queued.emitOutput.sourceMapText) {
-
-            let map = convertSourceMap
-                .fromJSON(queued.emitOutput.sourceMapText)
-                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
-            inlined = convertSourceMap.removeMapFileComments(queued.emitOutput.outputText) + map.toComment();
-
-            // used by Karma to log errors with original source code line numbers
-            queued.file.sourceMap = map.toObject();
-        }
-        return inlined;
     }
 
     private shouldBundle(dependencyCount: number): boolean {
@@ -230,42 +215,28 @@ export class Bundler {
     private writeMainBundleFile(onMainBundleFileWritten: { (): void } ) {
 
         let bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
-        let sourcemap = combineSourceMap.create();
-        let line = this.getNumberOfNewlines(bundle);
+        this.sourceMap.initialize(bundle);
 
         this.bundleBuffer.forEach((bundleItem) => {
 
-            if (this.config.bundlerOptions.sourceMap) {
-                let sourceFile = path.relative(this.config.karma.basePath, bundleItem.filename);
-                sourcemap.addFile(
-                    { sourceFile: path.join("/base", sourceFile), source: bundleItem.source },
-                    { line }
-                );
-            }
+            this.sourceMap.addFile(bundleItem);
 
             let wrapped = this.addLoaderFunction(bundleItem, false);
             bundle += wrapped;
-            if (this.config.bundlerOptions.sourceMap) {
-                line += this.getNumberOfNewlines(wrapped);
-            }
+
+            this.sourceMap.offsetLineNumber(wrapped);
         });
 
         bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
-        if (this.config.bundlerOptions.sourceMap) {
-            bundle += sourcemap.comment();
-        }
+        bundle += this.sourceMap.getComment();
+
+        this.validator.validate(bundle, this.bundleFile.name);
 
         fs.writeFile(this.bundleFile.name, bundle, (error) => {
             if (error) {
                 throw error;
             }
-            this.validator.validate(bundle, this.bundleFile.name);
             onMainBundleFileWritten();
         });
-    }
-
-    private getNumberOfNewlines(source: any) {
-        let newlines = source.match(/\n/g);
-        return newlines ? newlines.length : 0;
     }
 }

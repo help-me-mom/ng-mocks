@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
-var combineSourceMap = require("combine-source-map");
-var convertSourceMap = require("convert-source-map");
 var fs = require("fs");
 var lodash = require("lodash");
 var os = require("os");
@@ -12,13 +10,14 @@ var benchmark_1 = require("../shared/benchmark");
 var PathTool = require("../shared/path-tool");
 var bundle_item_1 = require("./bundle-item");
 var Bundler = (function () {
-    function Bundler(config, dependencyWalker, globals, log, project, resolver, transformer, validator) {
+    function Bundler(config, dependencyWalker, globals, log, project, resolver, sourceMap, transformer, validator) {
         this.config = config;
         this.dependencyWalker = dependencyWalker;
         this.globals = globals;
         this.log = log;
         this.project = project;
         this.resolver = resolver;
+        this.sourceMap = sourceMap;
         this.transformer = transformer;
         this.validator = validator;
         this.BUNDLE_DELAY = 500;
@@ -55,7 +54,7 @@ var Bundler = (function () {
         var benchmark = new benchmark_1.Benchmark();
         this.transformer.applyTsTransforms(this.bundleQueue, function () {
             _this.bundleQueue.forEach(function (queued) {
-                queued.item = new bundle_item_1.BundleItem(queued.file.path, queued.file.originalPath, _this.createInlineSourceMap(queued));
+                queued.item = new bundle_item_1.BundleItem(queued.file.path, queued.file.originalPath, _this.sourceMap.createInlineSourceMap(queued));
             });
             var dependencyCount = _this.dependencyWalker.collectTypescriptDependencies(_this.bundleQueue);
             if (_this.shouldBundle(dependencyCount)) {
@@ -65,18 +64,6 @@ var Bundler = (function () {
                 _this.bundleWithoutLoader();
             }
         });
-    };
-    Bundler.prototype.createInlineSourceMap = function (queued) {
-        var inlined = queued.emitOutput.outputText;
-        if (queued.emitOutput.sourceMapText) {
-            var map = convertSourceMap
-                .fromJSON(queued.emitOutput.sourceMapText)
-                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
-            inlined = convertSourceMap.removeMapFileComments(queued.emitOutput.outputText) + map.toComment();
-            // used by Karma to log errors with original source code line numbers
-            queued.file.sourceMap = map.toObject();
-        }
-        return inlined;
     };
     Bundler.prototype.shouldBundle = function (dependencyCount) {
         if (this.config.hasPreprocessor("commonjs")) {
@@ -183,34 +170,22 @@ var Bundler = (function () {
     Bundler.prototype.writeMainBundleFile = function (onMainBundleFileWritten) {
         var _this = this;
         var bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
-        var sourcemap = combineSourceMap.create();
-        var line = this.getNumberOfNewlines(bundle);
+        this.sourceMap.initialize(bundle);
         this.bundleBuffer.forEach(function (bundleItem) {
-            if (_this.config.bundlerOptions.sourceMap) {
-                var sourceFile = path.relative(_this.config.karma.basePath, bundleItem.filename);
-                sourcemap.addFile({ sourceFile: path.join("/base", sourceFile), source: bundleItem.source }, { line: line });
-            }
+            _this.sourceMap.addFile(bundleItem);
             var wrapped = _this.addLoaderFunction(bundleItem, false);
             bundle += wrapped;
-            if (_this.config.bundlerOptions.sourceMap) {
-                line += _this.getNumberOfNewlines(wrapped);
-            }
+            _this.sourceMap.offsetLineNumber(wrapped);
         });
         bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
-        if (this.config.bundlerOptions.sourceMap) {
-            bundle += sourcemap.comment();
-        }
+        bundle += this.sourceMap.getComment();
+        this.validator.validate(bundle, this.bundleFile.name);
         fs.writeFile(this.bundleFile.name, bundle, function (error) {
             if (error) {
                 throw error;
             }
-            _this.validator.validate(bundle, _this.bundleFile.name);
             onMainBundleFileWritten();
         });
-    };
-    Bundler.prototype.getNumberOfNewlines = function (source) {
-        var newlines = source.match(/\n/g);
-        return newlines ? newlines.length : 0;
     };
     return Bundler;
 }());

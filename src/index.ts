@@ -5,6 +5,7 @@ import { DependencyWalker } from "./bundler/dependency-walker";
 import { Globals } from "./bundler/globals";
 import { Resolver } from "./bundler/resolve/resolver";
 import { SourceReader } from "./bundler/resolve/source-reader";
+import { SourceMap } from "./bundler/source-map";
 import { Transformer } from "./bundler/transformer";
 import { Validator } from "./bundler/validator";
 
@@ -46,9 +47,10 @@ let validator = new Validator(configuration);
 let sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
 let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
 let globals = new Globals(configuration, resolver);
+let sourceMap = new SourceMap(configuration);
 
 let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
-                          project, resolver, transformer, validator);
+                          project, resolver, sourceMap, transformer, validator);
 
 let framework = new Framework(bundler, configuration, resolver);
 let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
