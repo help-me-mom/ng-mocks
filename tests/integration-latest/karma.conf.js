@@ -4,7 +4,7 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            { pattern: "src/bundling/**/*.ts" },
+            { pattern: "src/bundling/**/*.+(js|ts)" },
             { pattern: "src/custom-typings/**/*.ts" },
             { pattern: "src/exports/*.ts" },
             { pattern: "src/frameworks/**/*.+(ts|tsx)" },
@@ -17,7 +17,7 @@ module.exports = function(config) {
         ],
 
         preprocessors: {
-            "src/**/*.+(ts|tsx)": ["karma-typescript"]
+            "src/**/*.+(js|ts|tsx)": ["karma-typescript"]
         },
 
         karmaTypescriptConfig: {
@@ -77,7 +77,7 @@ module.exports = function(config) {
                 lib: ["DOM", "ES2015"]
             },
             coverageOptions: {
-                instrumentation: false,
+                instrumentation: true,
                 exclude: [/\.(d|spec|test)\.ts$/i],
                 threshold: {
                     global: {
@@ -106,7 +106,7 @@ module.exports = function(config) {
             exclude: ["broken"],
             include: {
                 mode: "replace",
-                values: ["**/*.ts", "**/*.tsx"]
+                values: ["**/*.js", "**/*.ts", "**/*.tsx"]
             },
             reports: {
                 "cobertura": {

@@ -116,17 +116,9 @@ export class Bundler {
             this.addEntrypointFilename(queued.item.filename);
 
             async.each(queued.item.dependencies, (bundleItem, onDependencyResolved) => {
-                if (!bundleItem.isTypescriptFile() &&
-                    !(bundleItem.isTypingsFile() && !bundleItem.isNpmModule())) {
-                    this.resolver.resolveModule(queued.item.moduleName, bundleItem, this.bundleBuffer, () => {
-                        onDependencyResolved();
-                    });
-                }
-                else {
-                    process.nextTick(() => {
-                        onDependencyResolved();
-                    });
-                }
+                this.resolver.resolveModule(queued.item.moduleName, bundleItem, this.bundleBuffer, () => {
+                    onDependencyResolved();
+                });
             }, onQueuedResolved);
         }, () => {
             this.onAllResolved(benchmark);

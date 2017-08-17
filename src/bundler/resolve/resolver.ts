@@ -36,6 +36,18 @@ export class Resolver {
                          buffer: BundleItem[],
                          onModuleResolved: { (bundleItem: BundleItem): void }) {
 
+        if (bundleItem.isTypescriptFile()) {
+            process.nextTick(() => {
+                onModuleResolved(bundleItem);
+            });
+            return;
+        }
+
+        if (bundleItem.isTypingsFile() && !bundleItem.isNpmModule()) {
+            this.tryResolveTypingAsJavascript(bundleItem, onModuleResolved);
+            return;
+        }
+
         bundleItem.lookupName = bundleItem.isNpmModule() ?
                 bundleItem.moduleName :
                 path.join(path.dirname(requiringModule), bundleItem.moduleName);
@@ -79,6 +91,18 @@ export class Resolver {
         };
 
         this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
+    }
+
+    private tryResolveTypingAsJavascript(bundleItem: BundleItem,
+                                         onModuleResolved: { (bundleItem: BundleItem): void }): void {
+        let jsfile = bundleItem.filename.replace(/.d.ts$/i, ".js");
+        fs.stat(jsfile, (error: Error, stats: fs.Stats) => {
+            if (!error && stats) {
+                this.log.debug("Resolving %s to %s", bundleItem.filename, jsfile);
+                bundleItem.filename = jsfile;
+            }
+            onModuleResolved(bundleItem);
+        });
     }
 
     private cacheBowerPackages(): void {

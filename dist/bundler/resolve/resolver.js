@@ -25,6 +25,16 @@ var Resolver = (function () {
     };
     Resolver.prototype.resolveModule = function (requiringModule, bundleItem, buffer, onModuleResolved) {
         var _this = this;
+        if (bundleItem.isTypescriptFile()) {
+            process.nextTick(function () {
+                onModuleResolved(bundleItem);
+            });
+            return;
+        }
+        if (bundleItem.isTypingsFile() && !bundleItem.isNpmModule()) {
+            this.tryResolveTypingAsJavascript(bundleItem, onModuleResolved);
+            return;
+        }
         bundleItem.lookupName = bundleItem.isNpmModule() ?
             bundleItem.moduleName :
             path.join(path.dirname(requiringModule), bundleItem.moduleName);
@@ -61,6 +71,17 @@ var Resolver = (function () {
             return onModuleResolved(bundleItem);
         };
         this.resolveFilename(requiringModule, bundleItem, onFilenameResolved);
+    };
+    Resolver.prototype.tryResolveTypingAsJavascript = function (bundleItem, onModuleResolved) {
+        var _this = this;
+        var jsfile = bundleItem.filename.replace(/.d.ts$/i, ".js");
+        fs.stat(jsfile, function (error, stats) {
+            if (!error && stats) {
+                _this.log.debug("Resolving %s to %s", bundleItem.filename, jsfile);
+                bundleItem.filename = jsfile;
+            }
+            onModuleResolved(bundleItem);
+        });
     };
     Resolver.prototype.cacheBowerPackages = function () {
         var _this = this;

@@ -85,17 +85,9 @@ var Bundler = (function () {
         async.each(this.bundleQueue, function (queued, onQueuedResolved) {
             _this.addEntrypointFilename(queued.item.filename);
             async.each(queued.item.dependencies, function (bundleItem, onDependencyResolved) {
-                if (!bundleItem.isTypescriptFile() &&
-                    !(bundleItem.isTypingsFile() && !bundleItem.isNpmModule())) {
-                    _this.resolver.resolveModule(queued.item.moduleName, bundleItem, _this.bundleBuffer, function () {
-                        onDependencyResolved();
-                    });
-                }
-                else {
-                    process.nextTick(function () {
-                        onDependencyResolved();
-                    });
-                }
+                _this.resolver.resolveModule(queued.item.moduleName, bundleItem, _this.bundleBuffer, function () {
+                    onDependencyResolved();
+                });
             }, onQueuedResolved);
         }, function () {
             _this.onAllResolved(benchmark);
