@@ -2,6 +2,39 @@
 
 > Recipes for configuring `karma-typescript`
 
+## Hybrid application with coverage
+
+To get code coverage for both plain JavaScript modules and Typescript modules in a hybrid application,
+simply use `allowJs` in the Typescript compiler options and then pipe all `.js` and `.ts` files through
+`karma-typescript`:
+
+```javascript
+module.exports = function(config) {
+    config.set({
+
+        frameworks: ["jasmine", "karma-typescript"],
+
+        files: [
+            { pattern: "src/**/*.+(js|ts)" },
+        ],
+
+        preprocessors: {
+            "src/**/*.+(js|ts)": ["karma-typescript"],
+        },
+
+        reporters: ["progress", "karma-typescript"],
+
+        karmaTypescriptConfig: {
+            compilerOptions: {
+                allowJs: true,
+            },
+        },
+
+        browsers: ["Chrome"]
+    });
+};
+```
+
 ## Code and tests in separate directories
 
 There are two ways to configure `karma-typescript` when you keep the application code and its unit tests in
@@ -17,16 +50,21 @@ coverage automatically by `karma-typescript`, giving you full control over which
 ```javascript
 module.exports = function(config) {
     config.set({
+
         frameworks: ["jasmine", "karma-typescript"],
+
         files: [
             { pattern: "src/**/*.ts" },
             { pattern: "test/**/*.ts" }
         ],
+
         preprocessors: {
             "src/**/*.ts": ["karma-typescript", "coverage"],
             "test/**/*.ts": ["karma-typescript"]
         },
+
         reporters: ["progress", "karma-typescript"],
+
         browsers: ["Chrome"]
     });
 };
