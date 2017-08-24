@@ -70,10 +70,12 @@ var DependencyWalker = (function () {
                 }
             }
         };
-        this.walk.recursive(bundleItem.ast, null, {
-            Expression: visitNode,
-            Statement: visitNode
-        });
+        if (bundleItem.ast.body) {
+            this.walk.recursive(bundleItem.ast, null, {
+                Expression: visitNode,
+                Statement: visitNode
+            });
+        }
         this.addDynamicDependencies(expressions, bundleItem, function (dynamicDependencies) {
             onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
