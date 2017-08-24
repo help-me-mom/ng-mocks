@@ -68,7 +68,10 @@ var Compiler = (function () {
                 throw new Error("No source found for " + queued.file.originalPath + "!\n" +
                     "Is there a mismatch between the Typescript compiler options and the Karma config?");
             }
+            var ambientModuleNames = sourceFile.ambientModuleNames;
             queued.callback({
+                ambientModuleNames: ambientModuleNames,
+                isAmbientModule: ambientModuleNames && ambientModuleNames.length > 0,
                 isDeclarationFile: _this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: _this.compiledFiles[queued.file.path],
                 sourceFile: sourceFile,

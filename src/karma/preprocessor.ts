@@ -28,7 +28,7 @@ export class Preprocessor {
                     file.path = config.transformPath(file.originalPath);
 
                     compiler.compile(file, (emitOutput) => {
-                        if (emitOutput.isDeclarationFile) {
+                        if (emitOutput.isDeclarationFile && !emitOutput.isAmbientModule) {
                             done(null, " ");
                         }
                         else {

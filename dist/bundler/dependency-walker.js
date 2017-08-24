@@ -22,19 +22,20 @@ var DependencyWalker = (function () {
     DependencyWalker.prototype.collectTypescriptDependencies = function (queue) {
         var _this = this;
         var dependencyCount = 0;
+        var ambientModuleNames = this.collectAmbientModules(queue);
         queue.forEach(function (queued) {
             queued.item.dependencies = _this.findUnresolvedTsRequires(queued.emitOutput);
             var resolvedModules = queued.emitOutput.sourceFile.resolvedModules;
             if (resolvedModules && !queued.emitOutput.isDeclarationFile) {
                 if (lodash.isMap(resolvedModules)) {
                     resolvedModules.forEach(function (resolvedModule, moduleName) {
-                        queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        _this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
                 else {
                     Object.keys(resolvedModules).forEach(function (moduleName) {
                         var resolvedModule = resolvedModules[moduleName];
-                        queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        _this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
             }
@@ -76,6 +77,20 @@ var DependencyWalker = (function () {
         this.addDynamicDependencies(expressions, bundleItem, function (dynamicDependencies) {
             onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
+    };
+    DependencyWalker.prototype.collectAmbientModules = function (queue) {
+        var ambientModuleNames = [];
+        queue.forEach(function (queued) {
+            if (queued.emitOutput.ambientModuleNames) {
+                ambientModuleNames.push.apply(ambientModuleNames, queued.emitOutput.ambientModuleNames);
+            }
+        });
+        return ambientModuleNames;
+    };
+    DependencyWalker.prototype.addBundleItem = function (queued, resolvedModule, moduleName, ambientModuleNames) {
+        if (ambientModuleNames.indexOf(moduleName) === -1) {
+            queued.item.dependencies.push(new bundle_item_1.BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+        }
     };
     DependencyWalker.prototype.findUnresolvedTsRequires = function (emitOutput) {
         var dependencies = [];

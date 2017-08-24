@@ -12,7 +12,7 @@ var Preprocessor = (function () {
                     _this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);
                     file.path = config.transformPath(file.originalPath);
                     compiler.compile(file, function (emitOutput) {
-                        if (emitOutput.isDeclarationFile) {
+                        if (emitOutput.isDeclarationFile && !emitOutput.isAmbientModule) {
                             done(null, " ");
                         }
                         else {

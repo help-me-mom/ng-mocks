@@ -90,7 +90,11 @@ export class Compiler {
                                 "Is there a mismatch between the Typescript compiler options and the Karma config?");
             }
 
+            let ambientModuleNames = (<any> sourceFile).ambientModuleNames;
+
             queued.callback({
+                ambientModuleNames,
+                isAmbientModule: ambientModuleNames && ambientModuleNames.length > 0,
                 isDeclarationFile: this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: this.compiledFiles[queued.file.path],
                 sourceFile,

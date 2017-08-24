@@ -29,6 +29,7 @@ export class DependencyWalker {
     public collectTypescriptDependencies(queue: Queued[]): number {
 
         let dependencyCount: number = 0;
+        let ambientModuleNames = this.collectAmbientModules(queue);
 
         queue.forEach((queued) => {
 
@@ -40,15 +41,13 @@ export class DependencyWalker {
 
                 if (lodash.isMap(resolvedModules)) { // Typescript 2.2+
                     resolvedModules.forEach((resolvedModule: any, moduleName: string) => {
-                        queued.item.dependencies.push(
-                            new BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
                 else { // Typescript 1.6.2 - 2.1.6
                     Object.keys(resolvedModules).forEach((moduleName: string) => {
                         let resolvedModule = resolvedModules[moduleName];
-                        queued.item.dependencies.push(
-                            new BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName));
+                        this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
             }
@@ -100,6 +99,27 @@ export class DependencyWalker {
         this.addDynamicDependencies(expressions, bundleItem, (dynamicDependencies) => {
             onDependenciesCollected(moduleNames.concat(dynamicDependencies));
         });
+    }
+
+    private collectAmbientModules(queue: Queued[]): string[] {
+
+        let ambientModuleNames: string[] = [];
+
+        queue.forEach((queued) => {
+            if (queued.emitOutput.ambientModuleNames) {
+                ambientModuleNames.push(...queued.emitOutput.ambientModuleNames);
+            }
+        });
+
+        return ambientModuleNames;
+    }
+
+    private addBundleItem(queued: Queued, resolvedModule: any, moduleName: string, ambientModuleNames: string[]) {
+        if (ambientModuleNames.indexOf(moduleName) === -1) {
+            queued.item.dependencies.push(
+                new BundleItem(moduleName, resolvedModule && resolvedModule.resolvedFileName)
+            );
+        }
     }
 
     private findUnresolvedTsRequires(emitOutput: EmitOutput): BundleItem[] {
