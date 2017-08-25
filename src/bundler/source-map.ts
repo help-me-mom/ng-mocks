@@ -64,11 +64,20 @@ export class SourceMap {
 
         let commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
 
-        if (commentMatch && !commentMatch[1].startsWith("data:")) {
+        if (commentMatch && commentMatch[1]) {
+
+            let map;
             let dirname = path.dirname(bundleItem.filename);
-            let mapFilename = path.join(dirname, commentMatch[1]);
-            let mapJson = fs.readFileSync(mapFilename, "utf-8");
-            let map = convertSourceMap.fromJSON(mapJson);
+
+            if (!commentMatch[1].startsWith("data:")) {
+
+                let mapFilename = path.join(dirname, commentMatch[1]);
+                let mapJson = fs.readFileSync(mapFilename, "utf-8");
+                map = convertSourceMap.fromJSON(mapJson);
+            }
+            else {
+                map = convertSourceMap.fromComment(commentMatch[0]);
+            }
 
             if (!map.getProperty("sourcesContent")) {
 

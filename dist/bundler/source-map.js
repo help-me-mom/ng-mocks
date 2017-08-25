@@ -43,11 +43,17 @@ var SourceMap = (function () {
     };
     SourceMap.prototype.loadFileFromComment = function (bundleItem) {
         var commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
-        if (commentMatch && !commentMatch[1].startsWith("data:")) {
+        if (commentMatch && commentMatch[1]) {
+            var map = void 0;
             var dirname_1 = path.dirname(bundleItem.filename);
-            var mapFilename = path.join(dirname_1, commentMatch[1]);
-            var mapJson = fs.readFileSync(mapFilename, "utf-8");
-            var map = convertSourceMap.fromJSON(mapJson);
+            if (!commentMatch[1].startsWith("data:")) {
+                var mapFilename = path.join(dirname_1, commentMatch[1]);
+                var mapJson = fs.readFileSync(mapFilename, "utf-8");
+                map = convertSourceMap.fromJSON(mapJson);
+            }
+            else {
+                map = convertSourceMap.fromComment(commentMatch[0]);
+            }
             if (!map.getProperty("sourcesContent")) {
                 var sourcesContent_1 = [];
                 map.getProperty("sources").forEach(function (source) {
