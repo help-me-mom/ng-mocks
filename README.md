@@ -71,6 +71,9 @@ The above example will compile all Typescript files and run the unit tests, prod
 - Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
 - Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
 
+### Sample applications by users
+- [Hybrid app, code in JavaScript and tests in Typescript](https://github.com/adrianmarinica/karma-typescript-angularjs-sample)
+
 ## Transforms:
 - [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
 - [karma-typescript-cssmodules-transform](https://github.com/monounity/karma-typescript-cssmodules-transform)
