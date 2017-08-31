@@ -19,10 +19,10 @@ it imports the class to be tested and an interface required by the class.
 The interface is mocked, the class is instantiated and then the method `sayHello` is tested:
 
 ```javascript
-import { IHelloService } from "./hello-service.interface";
+import { HelloService } from "./hello-service.interface";
 import { HelloComponent } from "./hello.component";
 
-class MockHelloService implements IHelloService {
+class MockHelloService implements HelloService {
 
     public sayHello(): string {
         return "hello world!";
