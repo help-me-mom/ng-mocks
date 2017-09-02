@@ -557,7 +557,7 @@ Versions 1.6.2 - 1.7.5 work but aren't as heavily tested as versions 1.8.10 and 
 
 ### Error: Can not load "karma-typescript", it is not registered!
 
-Users have reported succes by simply deleting the `node_modules` folder and then running `nmp install` again.
+Users have reported success by simply deleting the `node_modules` folder and then running `npm install` again.
 
 ### Error: Cannot find module 'buffer/' from '.'
 
