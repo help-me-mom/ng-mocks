@@ -18,8 +18,6 @@ module.exports = function(config) {
             tsconfig: "./tsconfig.json"
         },
 
-        logLevel: config.LOG_INFO,
-
         browsers: ["Chrome"]
     });
 };
