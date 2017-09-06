@@ -105,11 +105,19 @@ test("source-reader should not prepend redundant 'module.exports ='", function (
         t.equal(bundleItem.source, "module.exports = '';");
     });
 });
-test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension", function (t) {
+test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension, css", function (t) {
     t.plan(1);
     readFileCallback = [undefined, new Buffer("{ color: '_color_xkpkl_5'; }")];
     var bundleItem = new bundle_item_1.BundleItem("valid-js", "valid-js.css");
     sourceReader.read(bundleItem, function () {
-        t.equal(bundleItem.source, os.EOL + "module.exports = { color: '_color_xkpkl_5'; };");
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"{ color: \'_color_xkpkl_5\'; }\";");
+    });
+});
+test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension, txt", function (t) {
+    t.plan(1);
+    readFileCallback = [undefined, new Buffer("(function() {return {foo: 'baz',bork: true}})();")];
+    var bundleItem = new bundle_item_1.BundleItem("valid-js", "valid-js.txt");
+    sourceReader.read(bundleItem, function () {
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"(function() {return {foo: \'baz\',bork: true}})();\";");
     });
 });

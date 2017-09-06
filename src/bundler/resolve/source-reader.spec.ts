@@ -150,7 +150,7 @@ test("source-reader should not prepend redundant 'module.exports ='", (t) => {
     });
 });
 
-test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension", (t) => {
+test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension, css", (t) => {
 
     t.plan(1);
 
@@ -158,6 +158,18 @@ test("source-reader should prepend 'module.exports =' to valid javascript with n
     let bundleItem = new BundleItem("valid-js", "valid-js.css");
 
     sourceReader.read(bundleItem, () => {
-        t.equal(bundleItem.source, os.EOL + "module.exports = { color: '_color_xkpkl_5'; };");
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"{ color: \'_color_xkpkl_5\'; }\";");
+    });
+});
+
+test("source-reader should prepend 'module.exports =' to valid javascript with non-script extension, txt", (t) => {
+
+    t.plan(1);
+
+    readFileCallback = [undefined, new Buffer("(function() {return {foo: 'baz',bork: true}})();")];
+    let bundleItem = new BundleItem("valid-js", "valid-js.txt");
+
+    sourceReader.read(bundleItem, () => {
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"(function() {return {foo: \'baz\',bork: true}})();\";");
     });
 });

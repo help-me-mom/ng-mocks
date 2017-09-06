@@ -41,12 +41,7 @@ var SourceReader = (function () {
                 JSON.parse(bundleItem.source);
             }
             catch (jsonError) {
-                try {
-                    acorn.parse(bundleItem.source, this.config.bundlerOptions.acornOptions);
-                }
-                catch (acornError) {
-                    source = JSON.stringify(bundleItem.source);
-                }
+                source = JSON.stringify(bundleItem.source);
             }
             bundleItem.source = os.EOL + "module.exports = " + source + ";";
         }
