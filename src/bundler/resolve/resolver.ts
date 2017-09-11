@@ -169,10 +169,9 @@ export class Resolver {
 
         let bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: bundleItem.isNpmModule() ? undefined : requiringModule,
+            filename: requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
-            modules: this.shims,
-            pathFilter: this.pathFilter.bind(this)
+            modules: this.shims
         };
 
         browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
@@ -185,25 +184,6 @@ export class Resolver {
             bundleItem.filename = filename;
             onFilenameResolved();
         });
-    }
-
-    private pathFilter(pkg: any, fullPath: string, relativePath: string): string {
-
-        let filteredPath;
-        let normalizedPath = PathTool.fixWindowsPath(fullPath);
-
-        Object
-            .keys(this.config.bundlerOptions.resolve.alias)
-            .forEach((moduleName) => {
-                let regex = new RegExp(moduleName);
-                if (regex.test(normalizedPath) && pkg && relativePath) {
-                    filteredPath = path.join(fullPath, this.config.bundlerOptions.resolve.alias[moduleName]);
-                }
-            });
-
-        if (filteredPath) {
-            return filteredPath;
-        }
     }
 
     private resolveDependencies(bundleItem: BundleItem,

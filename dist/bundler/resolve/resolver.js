@@ -5,7 +5,6 @@ var browserResolve = require("browser-resolve");
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
-var PathTool = require("../../shared/path-tool");
 var bundle_item_1 = require("../bundle-item");
 var Resolver = (function () {
     function Resolver(config, dependencyWalker, log, sourceReader) {
@@ -139,10 +138,9 @@ var Resolver = (function () {
         }
         var bopts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
-            filename: bundleItem.isNpmModule() ? undefined : requiringModule,
+            filename: requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
-            modules: this.shims,
-            pathFilter: this.pathFilter.bind(this)
+            modules: this.shims
         };
         browserResolve(bundleItem.moduleName, bopts, function (error, filename) {
             if (error) {
@@ -154,22 +152,6 @@ var Resolver = (function () {
             bundleItem.filename = filename;
             onFilenameResolved();
         });
-    };
-    Resolver.prototype.pathFilter = function (pkg, fullPath, relativePath) {
-        var _this = this;
-        var filteredPath;
-        var normalizedPath = PathTool.fixWindowsPath(fullPath);
-        Object
-            .keys(this.config.bundlerOptions.resolve.alias)
-            .forEach(function (moduleName) {
-            var regex = new RegExp(moduleName);
-            if (regex.test(normalizedPath) && pkg && relativePath) {
-                filteredPath = path.join(fullPath, _this.config.bundlerOptions.resolve.alias[moduleName]);
-            }
-        });
-        if (filteredPath) {
-            return filteredPath;
-        }
     };
     Resolver.prototype.resolveDependencies = function (bundleItem, buffer, onDependenciesResolved) {
         var _this = this;
