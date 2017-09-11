@@ -7,10 +7,9 @@ import * as path from "path";
 import { Logger } from "log4js";
 
 import { Configuration } from "../../shared/configuration";
-import { SourceReader } from "./source-reader";
-import PathTool = require("../../shared/path-tool");
 import { BundleItem } from "../bundle-item";
 import { DependencyWalker } from "../dependency-walker";
+import { SourceReader } from "./source-reader";
 
 export class Resolver {
 
