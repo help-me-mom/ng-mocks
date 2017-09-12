@@ -66,7 +66,7 @@ export class SourceMap {
 
         if (commentMatch && commentMatch[1]) {
 
-            let map;
+            let map: convertSourceMap.SourceMapConverter;
             let dirname = path.dirname(bundleItem.filename);
 
             if (!commentMatch[1].startsWith("data:")) {
@@ -90,8 +90,16 @@ export class SourceMap {
                 map.addProperty("sourcesContent", sourcesContent);
             }
 
+            this.cleanupSources(map);
+
             bundleItem.source = combineSourceMap.removeComments(bundleItem.source) + map.toComment();
         }
+    }
+
+    private cleanupSources(map: convertSourceMap.SourceMapConverter) {
+        map.sourcemap.sources.forEach((source: string, index: number) => {
+            map.sourcemap.sources[index] = source.replace("webpack:///", "");
+        });
     }
 
     private getNumberOfNewlines(source: any) {

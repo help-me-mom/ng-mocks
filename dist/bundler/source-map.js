@@ -63,8 +63,14 @@ var SourceMap = (function () {
                 });
                 map.addProperty("sourcesContent", sourcesContent_1);
             }
+            this.cleanupSources(map);
             bundleItem.source = combineSourceMap.removeComments(bundleItem.source) + map.toComment();
         }
+    };
+    SourceMap.prototype.cleanupSources = function (map) {
+        map.sourcemap.sources.forEach(function (source, index) {
+            map.sourcemap.sources[index] = source.replace("webpack:///", "");
+        });
     };
     SourceMap.prototype.getNumberOfNewlines = function (source) {
         var newlines = source.match(/\n/g);
