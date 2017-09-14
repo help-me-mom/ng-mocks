@@ -1,7 +1,6 @@
 import * as async from "async";
 import * as fs from "fs";
 import * as lodash from "lodash";
-import * as os from "os";
 import * as path from "path";
 import * as tmp from "tmp";
 
@@ -174,15 +173,15 @@ export class Bundler {
         return (standalone ? "(function(global){" : "") +
             "global.wrappers['" + PathTool.fixWindowsPath(bundleItem.filename) + "']=" +
             "[function(require,module,exports,__dirname,__filename){ " + bundleItem.source +
-            os.EOL + "},'" +
+            "\n},'" +
             PathTool.fixWindowsPath(moduleId) + "'," +
             PathTool.fixWindowsPath(JSON.stringify(dependencyMap)) + "];" +
-            (standalone ? "})(this);" : "") + os.EOL;
+            (standalone ? "})(this);" : "") + "\n";
     }
 
     private createEntrypointFilenames() {
         if (this.entrypoints.length > 0) {
-            return "global.entrypointFilenames=['" + this.entrypoints.join("','") + "'];" + os.EOL;
+            return "global.entrypointFilenames=['" + this.entrypoints.join("','") + "'];\n";
         }
         return "";
     }
@@ -206,7 +205,7 @@ export class Bundler {
 
     private writeMainBundleFile(onMainBundleFileWritten: { (): void } ) {
 
-        let bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
+        let bundle = "(function(global){\nglobal.wrappers={};\n";
         this.sourceMap.initialize(bundle);
 
         this.bundleBuffer.forEach((bundleItem) => {
@@ -219,7 +218,7 @@ export class Bundler {
             this.sourceMap.offsetLineNumber(wrapped);
         });
 
-        bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
+        bundle += this.createEntrypointFilenames() + "})(this);\n";
         bundle += this.sourceMap.getComment();
 
         this.validator.validate(bundle, this.bundleFile.name);

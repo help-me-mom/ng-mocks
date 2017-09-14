@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var async = require("async");
 var fs = require("fs");
 var lodash = require("lodash");
-var os = require("os");
 var path = require("path");
 var tmp = require("tmp");
 var benchmark_1 = require("../shared/benchmark");
@@ -132,14 +131,14 @@ var Bundler = (function () {
         return (standalone ? "(function(global){" : "") +
             "global.wrappers['" + PathTool.fixWindowsPath(bundleItem.filename) + "']=" +
             "[function(require,module,exports,__dirname,__filename){ " + bundleItem.source +
-            os.EOL + "},'" +
+            "\n},'" +
             PathTool.fixWindowsPath(moduleId) + "'," +
             PathTool.fixWindowsPath(JSON.stringify(dependencyMap)) + "];" +
-            (standalone ? "})(this);" : "") + os.EOL;
+            (standalone ? "})(this);" : "") + "\n";
     };
     Bundler.prototype.createEntrypointFilenames = function () {
         if (this.entrypoints.length > 0) {
-            return "global.entrypointFilenames=['" + this.entrypoints.join("','") + "'];" + os.EOL;
+            return "global.entrypointFilenames=['" + this.entrypoints.join("','") + "'];\n";
         }
         return "";
     };
@@ -161,7 +160,7 @@ var Bundler = (function () {
     };
     Bundler.prototype.writeMainBundleFile = function (onMainBundleFileWritten) {
         var _this = this;
-        var bundle = "(function(global){" + os.EOL + "global.wrappers={};" + os.EOL;
+        var bundle = "(function(global){\nglobal.wrappers={};\n";
         this.sourceMap.initialize(bundle);
         this.bundleBuffer.forEach(function (bundleItem) {
             _this.sourceMap.addFile(bundleItem);
@@ -169,7 +168,7 @@ var Bundler = (function () {
             bundle += wrapped;
             _this.sourceMap.offsetLineNumber(wrapped);
         });
-        bundle += this.createEntrypointFilenames() + "})(this);" + os.EOL;
+        bundle += this.createEntrypointFilenames() + "})(this);\n";
         bundle += this.sourceMap.getComment();
         this.validator.validate(bundle, this.bundleFile.name);
         fs.writeFile(this.bundleFile.name, bundle, function (error) {
