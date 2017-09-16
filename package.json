@@ -27,10 +27,12 @@
   },
   "homepage": "https://github.com/ike18t/wiremock_mapper_node#readme",
   "devDependencies": {
+    "@angular/platform-browser": "^4.4.1",
     "@types/jasmine": "^2.5.53",
     "@types/nock": "^8.2.1",
     "@types/node": "^8.0.17",
     "codeclimate-test-reporter": "^0.5.0",
+    "core-js": "^2.5.1",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-istanbul": "^1.1.2",
@@ -49,6 +51,7 @@
   },
   "dependencies": {
     "@angular/core": "^4.4.1",
+    "ng2-mock-component": "^0.1.0",
     "reflect-metadata": "^0.1.10"
   }
 }
