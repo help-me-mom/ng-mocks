@@ -1,0 +1,18 @@
+{
+  "extends": "tslint:all",
+  "rules": {
+    "comment-format": false,
+    "interface-name": false,
+    "member-access": false,
+    "newline-before-return": false,
+    "no-any": false,
+    "no-magic-numbers": false,
+    "no-parameter-properties": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "trailing-comma": false,
+    "typedef": false
+  }
+}
