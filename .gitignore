@@ -2,3 +2,4 @@ coverage
 definitions
 node_modules
 **/tags*
+dist
