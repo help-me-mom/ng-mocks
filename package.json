@@ -1,45 +1,46 @@
 {
-  "name": "wiremock-mapper",
-  "version": "0.0.2",
-  "description": "DSL for setting up WireMock mappings.",
+  "name": "mock-component",
+  "version": "0.0.1",
+  "description": "Function creating a mock based on a passed in component for test",
   "main": "dist/index.js",
   "typings": "definitions/index",
   "typescript": {
     "definition": "definitions/index"
   },
   "scripts": {
-    "coverage": "gulp coverage",
     "lint": "gulp lint",
     "release": "standard-version",
     "test": "jasmine-ts \"lib/**/*.spec.ts\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ike18t/wiremock_mapper_node.git"
+    "url": "git+https://github.com/ike18t/mock_component.git"
   },
   "keywords": [
-    "wiremock"
+    "Angular",
+    "Component",
+    "Mock",
+    "TestBed",
+    "Testing"
   ],
   "author": "Isaac Datlof <ike18t@gmail.com>",
+  "constributors": [
+    "Rohit Sinha <rohit@therrsgroup.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ike18t/wiremock_mapper_node/issues"
+    "url": "https://github.com/ike18t/mock_component/issues"
   },
-  "homepage": "https://github.com/ike18t/wiremock_mapper_node#readme",
+  "homepage": "https://github.com/ike18t/mock_component#readme",
   "devDependencies": {
     "@angular/platform-browser": "^4.4.1",
     "@types/jasmine": "^2.5.53",
-    "@types/nock": "^8.2.1",
     "@types/node": "^8.0.17",
-    "codeclimate-test-reporter": "^0.5.0",
     "core-js": "^2.5.1",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
-    "gulp-istanbul": "^1.1.2",
-    "gulp-jasmine": "^2.4.2",
     "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^3.2.1",
-    "jasmine": "^2.6.0",
     "jasmine-ts": "^0.2.1",
     "merge2": "^1.1.0",
     "run-sequence": "^2.1.0",
