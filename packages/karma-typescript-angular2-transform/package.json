@@ -51,7 +51,7 @@
     "@types/sinon": "^2.1.2",
     "@types/tape": "^4.2.29",
     "faucet": "0.0.1",
-    "karma-typescript": "git://github.com/monounity/karma-typescript.git#next",
+    "karma-typescript": "latest",
     "nyc": "^11.1.0",
     "rxjs": "^5.2.0",
     "sinon": "^2.1.0",
