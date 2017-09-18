@@ -6,8 +6,10 @@
     "member-access": false,
     "newline-before-return": false,
     "no-any": false,
+    "no-import-side-effect": false,
     "no-magic-numbers": false,
     "no-parameter-properties": false,
+    "only-arrow-functions": false,
     "quotemark": [
       true,
       "single"
