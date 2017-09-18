@@ -1,6 +1,6 @@
 {
   "name": "tests-integration-1-8-10",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Integration tests for Typescript 1.8.10",
   "author": "monounity",
   "contributors": [
