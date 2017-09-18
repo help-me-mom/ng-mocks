@@ -1,21 +1,21 @@
-import 'reflect-metadata';
 import { Component } from '@angular/core';
 import { MockComponent as Ng2MockComponent } from 'ng2-mock-component';
+import 'reflect-metadata';
 
 export function MockComponent(component: any) {
-  const annotations = Reflect.getMetadata('annotations', component),
-    propertyMetadata = Reflect.getMetadata('propMetadata', component),
-    inputs: string[] = [],
-    outputs: string[] = [];
+  const annotations = Reflect.getMetadata('annotations', component);
+  const propertyMetadata = Reflect.getMetadata('propMetadata', component);
+  const inputs: string[] = [];
+  const outputs: string[] = [];
 
-  let options: Component = {
-    selector: annotations[0].selector,
-    template: 'MOCK',
+  const options: Component = {
     inputs,
-    outputs
+    outputs,
+    selector: annotations[0].selector,
+    template: '<ng-content></ng-content>'
   };
 
-  for (var property in propertyMetadata) {
+  for (const property of Object.keys(propertyMetadata)) {
     const prop = propertyMetadata[property];
     if (prop[0].toString() === '@Input') {
       inputs.push(property);

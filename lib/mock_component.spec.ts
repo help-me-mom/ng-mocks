@@ -1,43 +1,33 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import 'reflect-metadata';
 import { MockComponent } from './mock_component';
-import { TestBed, async } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 @Component({
-  selector: 'parent',
-  template: '<child [a]="a"></child>'
+  selector: 'example-component',
+  template: 'some template'
 })
-export class ParentComponent {
-  a = 'Unit Testing';
+export class ExampleComponent {
+  @Input() someInput: string;
+  @Output() someOutput: EventEmitter<boolean>;
 }
 
-@Component({
-  selector: 'child',
-  template: '{{a}}'
-})
-export class ChildComponent {
-  @Input()
-  a: String;
-}
+describe('MockComponent', () => {
+  it('the mock should have the same selector as the passed in component', () => {
+    const mockedComponent = MockComponent(ExampleComponent);
+    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
+    expect(annotations.selector).toEqual('example-component');
+  });
 
-describe('ParentComponent', () => {
-  let fixture: any,
-    element: any;
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ParentComponent,
-        MockComponent(ChildComponent)
-      ]
-    });
+  it('the mock should have the same inputs and outputs as the passed in component', () => {
+    const mockedComponent = MockComponent(ExampleComponent);
+    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
+    expect(annotations.inputs).toEqual(['someInput']);
+    expect(annotations.outputs).toEqual(['someOutput']);
+  });
 
-    fixture = TestBed.createComponent(ParentComponent);
-    element = fixture.debugElement;
-  }));
-
-  it('should mock the child component', () => {
-    fixture.detectChanges();
-    expect(element.query(By.css('child'))).not.toBeNull();
-    console.log(element);
+  it('the mock should have an ng-content body', () => {
+    const mockedComponent = MockComponent(ExampleComponent);
+    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
+    expect(annotations.template).toEqual('<ng-content></ng-content>');
   });
 });
