@@ -63,7 +63,7 @@ module.exports = function(config) {
             "test/**/*.ts": ["karma-typescript"]
         },
 
-        reporters: ["progress", "karma-typescript"],
+        reporters: ["progress", "coverage", "karma-typescript"],
 
         browsers: ["Chrome"]
     });
