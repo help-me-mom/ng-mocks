@@ -33,13 +33,12 @@ import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
-  const mockedComponent = MockComponent(DependencyComponent);
   let fixture: ComponentFixture<TestedComponent>;
     
   beforeEach(async() => {
     TestBed.configureTestingModule({
       declarations: [
-        mockedComponent
+        MockComponent(DependencyComponent)
       ]
     }).compileComponents();
   }));
@@ -49,7 +48,7 @@ describe('TestedComponent', () => {
   });
     
   it('should test something', (fakeAsync(() => {
-    const childComponent = fixture.debugElement.find(By.directive(mockedComponent));
+    const childComponent = fixture.debugElement.query(By.css('dependency-component-selector'));
     // let's pretend Dependency Component has someOutput as an output so I don't have to do more setup 😉
     let retVal = undefined;
     childComponent.someOutput.subscribe((someValue) => {
