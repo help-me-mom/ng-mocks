@@ -1,6 +1,6 @@
 {
   "name": "tests-integration-latest",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Integration tests for the latest version of Typescript",
   "author": "monounity",
   "contributors": [
