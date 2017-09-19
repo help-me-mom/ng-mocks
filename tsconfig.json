@@ -17,7 +17,10 @@
     "types" : ["node", "jasmine"],
     "strictNullChecks": true
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
-    "lib/**/*"
+    "**/*"
   ]
 }
