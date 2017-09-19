@@ -49,6 +49,7 @@
     "gulp-typescript": "^3.2.1",
     "jasmine-ts": "^0.2.1",
     "merge2": "^1.1.0",
+    "reflect-metadata": "^0.1.10",
     "run-sequence": "^2.1.0",
     "rxjs": "^5.1.0",
     "standard-version": "^4.2.0",
@@ -57,8 +58,6 @@
     "zone.js": "^0.8.4"
   },
   "dependencies": {
-    "@angular/core": "^4.4.1",
-    "ng2-mock-component": "^0.1.0",
-    "reflect-metadata": "^0.1.10"
+    "@angular/core": "^4.4.1"
   }
 }

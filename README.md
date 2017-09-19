@@ -4,7 +4,7 @@
 # mock_component
 Helper function for creating angular component mocks for test.
 
-It does this by using reflect-metadata to get the component argument's selector, inputs, and outputs.  Afterwards it delegates the work to [Ng2MockComponent](https://github.com/cnunciato/ng2-mock-component) to create the mock component with event emitters for the outputs.
+It does this by leveraging reflect-metadata to get the component argument's selector, inputs, and outputs.
 
 ## Usage
 ```typescript
