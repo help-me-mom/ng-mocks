@@ -8,24 +8,6 @@ It does this by leveraging reflect-metadata to get the component argument's sele
 
 ## Usage
 ```typescript
-import { async, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'mock-component';
-import { DependencyComponent } from './dependency.component';
-import { TestedComponent } from './tested.component';
-
-describe('TestedComponent', () => {
-  beforeEach(async() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        MockComponent(DependencyComponent)
-      ]
-    }).compileComponents();
-  }));
-});
-```
-
-###### Another Example
-```typescript
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MockComponent } from 'mock-component';
@@ -34,7 +16,7 @@ import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
-    
+
   beforeEach(async() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -42,24 +24,25 @@ describe('TestedComponent', () => {
       ]
     }).compileComponents();
   }));
-    
+
   beforeEach(() => {
     fixture = TestBed.createComponent(TestedComponent);
   });
-    
-  it('should test something', (fakeAsync(() => {
+
+  it('should send the correct value to the dependency component input', () => {
+    // let's pretend Dependency Component (unmocked) has 'someInput' as an  input
+    // the input value will be passed into the mocked component so you can assert on it
     const childComponent = fixture.debugElement.query(By.css('dependency-component-selector'));
-    // let's pretend Dependency Component has someOutput as an output so I don't have to do more setup 😉
-    let retVal = undefined;
-    childComponent.someOutput.subscribe((someValue) => {
-      retVal = someValue;
-    });
-    fixture.debugElement.find(By.css('button')).nativeElement.click();
+    expect(childComponent.someInput).toEqual('foo');
+  });
+
+  it('should do something when the dependency component emits', () => {
+    const childComponent = fixture.debugElement.query(By.css('dependency-component-selector'));
+    // again, let's pretend Dependency Component (unmocked) has 'someOutput' as an output
+    // emit using the output that MockComponent setup when generating the mock
+    childComponent.someOutput.emit(new Foo());
     fixture.detectChanges();
-    tick();
-    expect(retVal).toEqual('foo');
-    // imagining childComponent has an input you want to assert on as well
-    expect(childComponent.someInput).toEqual('bar');
-  }));
+    // assert on some behavior
+  });
 });
 ```
