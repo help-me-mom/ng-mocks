@@ -5,6 +5,7 @@ declare var Reflect: any;
 export function MockComponent(component: any): Component {
   const annotations = Reflect.getMetadata('annotations', component);
   const propertyMetadata = Reflect.getMetadata('propMetadata', component);
+  const stringProperty = (meta: string) => propertyMetadata[meta][0].toString();
 
   const options = {
     inputs: new Array<string>(),
@@ -13,14 +14,8 @@ export function MockComponent(component: any): Component {
     template: '<ng-content></ng-content>'
   };
 
-  for (const property of Object.keys(propertyMetadata)) {
-    const prop = propertyMetadata[property];
-    if (prop[0].toString() === '@Input') {
-      options.inputs.push(property);
-    } else if (prop[0].toString() === '@Output') {
-      options.outputs.push(property);
-    }
-  }
+  options.inputs = Object.keys(propertyMetadata).filter((meta) => stringProperty(meta) === '@Input');
+  options.outputs = Object.keys(propertyMetadata).filter((meta) => stringProperty(meta) === '@Output');
 
   class ComponentMock {}
 
