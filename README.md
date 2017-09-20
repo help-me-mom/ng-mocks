@@ -142,10 +142,11 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
     console.log(__STRING__, __BOOLEAN__, process.env.VARIABLE);
     ```
 
-* **karmaTypescriptConfig.bundlerOptions.entrypoints** - A regex filtering which files loaded by Karma should be executed in
+* **karmaTypescriptConfig.bundlerOptions.entrypoints** - A `RegExp` filtering which files loaded by Karma should be executed in
    a test run, for example only filenames ending with ".spec.ts": `/\.spec\.ts$/`.<br/>
    This setting can be used to make sure the specs have finished setting up the test environment before other code starts
    requiring modules, which otherwise could lead to subtle bugs caused by race conditions.<br/>
+   When filtering file paths, beware that Windows uses `\` while UNIX-like systems use `/` as path separator.<br/>
    Defaults to all files, `/.*/`.
 
 * **karmaTypescriptConfig.bundlerOptions.exclude** - An array of npm module names that will be excluded from the bundle.
@@ -194,6 +195,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   Defaults to `true`.
 
 * **karmaTypescriptConfig.coverageOptions.exclude** - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
+  When filtering file paths, beware that Windows uses `\` while UNIX-like systems use `/` as path separator.<br/>
   Defaults to `/\.(d|spec|test)\.ts$/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
 
 * **karmaTypescriptConfig.coverageOptions.threshold** - An object with minimum coverage thresholds. The threshold values can be set on
