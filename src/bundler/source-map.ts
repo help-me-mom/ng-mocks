@@ -24,7 +24,7 @@ export class SourceMap {
         if (queued.emitOutput.sourceMapText) {
 
             let map = convertSourceMap.fromJSON(queued.emitOutput.sourceMapText);
-            if(!map.getProperty("sourcesContent")) {
+            if (!map.getProperty("sourcesContent")) {
                 map.addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
             }
             inlined = combineSourceMap.removeComments(queued.emitOutput.outputText) + map.toComment();
