@@ -23,9 +23,10 @@ export class SourceMap {
         let inlined = queued.emitOutput.outputText;
         if (queued.emitOutput.sourceMapText) {
 
-            let map = convertSourceMap
-                .fromJSON(queued.emitOutput.sourceMapText)
-                .addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
+            let map = convertSourceMap.fromJSON(queued.emitOutput.sourceMapText);
+            if(!map.getProperty("sourcesContent")) {
+                map.addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
+            }
             inlined = combineSourceMap.removeComments(queued.emitOutput.outputText) + map.toComment();
 
             // used by Karma to log errors with original source code line numbers
