@@ -124,6 +124,7 @@ var Resolver = (function () {
         return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     };
     Resolver.prototype.resolveFilename = function (requiringModule, bundleItem, onFilenameResolved) {
+        var _this = this;
         if (this.bowerPackages[bundleItem.moduleName]) {
             bundleItem.filename = this.bowerPackages[bundleItem.moduleName];
             this.log.debug("Resolved [%s] to bower package: %s", bundleItem.moduleName, bundleItem.filename);
@@ -143,14 +144,26 @@ var Resolver = (function () {
             modules: this.shims
         };
         browserResolve(bundleItem.moduleName, bopts, function (error, filename) {
-            if (error) {
-                throw new Error("Unable to resolve module [" +
-                    bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
-                    JSON.stringify(bopts, undefined, 2) + os.EOL +
-                    error);
+            if (!error) {
+                bundleItem.filename = filename;
+                return onFilenameResolved();
             }
-            bundleItem.filename = filename;
-            onFilenameResolved();
+            bopts = {
+                basedir: _this.config.karma.basePath,
+                extensions: _this.config.bundlerOptions.resolve.extensions,
+                moduleDirectory: _this.config.bundlerOptions.resolve.directories,
+                modules: _this.shims
+            };
+            browserResolve(bundleItem.moduleName, bopts, function (error2, filename2) {
+                if (error2) {
+                    throw new Error("Unable to resolve module [" +
+                        bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                        JSON.stringify(bopts, undefined, 2) + os.EOL +
+                        error);
+                }
+                bundleItem.filename = filename2;
+                onFilenameResolved();
+            });
         });
     };
     Resolver.prototype.resolveDependencies = function (bundleItem, buffer, onDependenciesResolved) {

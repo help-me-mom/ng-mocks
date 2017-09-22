@@ -166,7 +166,7 @@ export class Resolver {
             return onFilenameResolved();
         }
 
-        let bopts = {
+        let bopts: browserResolve.AsyncOpts = {
             extensions: this.config.bundlerOptions.resolve.extensions,
             filename: requiringModule,
             moduleDirectory: this.config.bundlerOptions.resolve.directories,
@@ -174,14 +174,27 @@ export class Resolver {
         };
 
         browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
-            if (error) {
-                throw new Error("Unable to resolve module [" +
-                    bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
-                    JSON.stringify(bopts, undefined, 2) + os.EOL +
-                    error);
+            if (!error) {
+                bundleItem.filename = filename;
+                return onFilenameResolved();
             }
-            bundleItem.filename = filename;
-            onFilenameResolved();
+            bopts = {
+                basedir: this.config.karma.basePath,
+                extensions: this.config.bundlerOptions.resolve.extensions,
+                moduleDirectory: this.config.bundlerOptions.resolve.directories,
+                modules: this.shims
+            };
+
+            browserResolve(bundleItem.moduleName, bopts, (error2, filename2) => {
+                if (error2) {
+                    throw new Error("Unable to resolve module [" +
+                        bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                        JSON.stringify(bopts, undefined, 2) + os.EOL +
+                        error);
+                }
+                bundleItem.filename = filename2;
+                onFilenameResolved();
+            });
         });
     }
 
