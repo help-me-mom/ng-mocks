@@ -1,3 +1,5 @@
+npm run build
+
 cd examples\angular2
 call npm run dev:ci || exit /b
 
