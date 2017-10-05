@@ -21,6 +21,7 @@ call npm i
 
 cd ..\integration-latest
 call npm i
+call npm run prepare
 
 cd ..\..
 call npm i
