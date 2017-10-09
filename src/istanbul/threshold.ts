@@ -1,15 +1,14 @@
 import * as istanbul from "istanbul";
 import * as minimatch from "minimatch";
-import * as path from "path";
-
-import { merge } from "lodash";
-import { Logger } from "log4js";
-
-import { Configuration } from "../shared/configuration";
+import {merge} from "lodash";
+import {Logger} from "log4js";
+import {Configuration} from "../shared/configuration";
+import {FileUtils} from "../shared/file-utils";
 
 export class Threshold {
 
-    constructor(private config: Configuration, private log: Logger) { }
+    constructor(private config: Configuration, private log: Logger) {
+    }
 
     public check(browser: any, collector: any) {
 
@@ -44,7 +43,7 @@ export class Threshold {
 
         Object.keys(finalCoverage).forEach((filename) => {
 
-            let relativeFilename = this.getRelativePath(filename);
+            let relativeFilename = FileUtils.getRelativePath(filename, this.config.karma.basePath);
             let excludes = this.config.coverageOptions.threshold.file.excludes;
 
             if (!this.isExcluded(relativeFilename, excludes)) {
@@ -60,7 +59,7 @@ export class Threshold {
     private excludeFiles(coverage: any, excludes: string[]) {
         let result: { [key: string]: any } = {};
         Object.keys(coverage).forEach((filename) => {
-            if (!this.isExcluded(this.getRelativePath(filename), excludes)) {
+            if (!this.isExcluded(FileUtils.getRelativePath(filename, this.config.karma.basePath), excludes)) {
                 result[filename] = coverage[filename];
             }
         });
@@ -69,7 +68,7 @@ export class Threshold {
 
     private isExcluded(relativeFilename: string, excludes: string[]) {
         return excludes.some((pattern) => {
-            return minimatch(relativeFilename, pattern, { dot: true });
+            return minimatch(relativeFilename, pattern, {dot: true});
         });
     }
 
@@ -77,17 +76,10 @@ export class Threshold {
         let thresholds = {};
         let overrides = this.config.coverageOptions.threshold.file.overrides;
         Object.keys(overrides).forEach((pattern) => {
-            if (minimatch(relativeFilename, pattern, { dot: true })) {
+            if (minimatch(relativeFilename, pattern, {dot: true})) {
                 thresholds = overrides[pattern];
             }
         });
         return thresholds;
-    }
-
-    private getRelativePath(filename: string) {
-        let relativePath = path.isAbsolute(filename) ?
-            path.relative(this.config.karma.basePath, filename) :
-            filename;
-        return path.normalize(relativePath);
     }
 }
