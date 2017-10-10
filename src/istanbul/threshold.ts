@@ -1,9 +1,9 @@
 import * as istanbul from "istanbul";
+import { merge } from "lodash";
+import { Logger } from "log4js";
 import * as minimatch from "minimatch";
-import {merge} from "lodash";
-import {Logger} from "log4js";
-import {Configuration} from "../shared/configuration";
-import {FileUtils} from "../shared/file-utils";
+import { Configuration } from "../shared/configuration";
+import { FileUtils } from "../shared/file-utils";
 
 export class Threshold {
 
@@ -68,7 +68,7 @@ export class Threshold {
 
     private isExcluded(relativeFilename: string, excludes: string[]) {
         return excludes.some((pattern) => {
-            return minimatch(relativeFilename, pattern, {dot: true});
+            return minimatch(relativeFilename, pattern, { dot: true });
         });
     }
 
@@ -76,7 +76,7 @@ export class Threshold {
         let thresholds = {};
         let overrides = this.config.coverageOptions.threshold.file.overrides;
         Object.keys(overrides).forEach((pattern) => {
-            if (minimatch(relativeFilename, pattern, {dot: true})) {
+            if (minimatch(relativeFilename, pattern, { dot: true })) {
                 thresholds = overrides[pattern];
             }
         });

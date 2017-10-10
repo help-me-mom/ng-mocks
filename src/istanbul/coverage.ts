@@ -1,9 +1,9 @@
-import {Logger} from "log4js";
+import { Logger } from "log4js";
 
-import {EmitOutput} from "../compiler/emit-output";
-import {Configuration} from "../shared/configuration";
-import {File} from "../shared/file";
-import {CoverageCallback} from "./coverage-callback";
+import { EmitOutput } from "../compiler/emit-output";
+import { Configuration } from "../shared/configuration";
+import { File } from "../shared/file";
+import { CoverageCallback } from "./coverage-callback";
 
 export class Coverage {
 

@@ -1,14 +1,12 @@
+import { Logger } from "log4js";
 import * as path from "path";
-
-import {Logger} from "log4js";
-
-import {Bundler} from "../bundler/bundler";
-import {Compiler} from "../compiler/compiler";
-import {Coverage} from "../istanbul/coverage";
-import {Configuration} from "../shared/configuration";
-import {File} from "../shared/file";
-import {SharedProcessedFiles} from "../shared/shared-processed-files";
-import {FileUtils} from "../shared/file-utils";
+import { Bundler } from "../bundler/bundler";
+import { Compiler } from "../compiler/compiler";
+import { Coverage } from "../istanbul/coverage";
+import { Configuration } from "../shared/configuration";
+import { File } from "../shared/file";
+import { FileUtils } from "../shared/file-utils";
+import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
 export class Preprocessor {
 
