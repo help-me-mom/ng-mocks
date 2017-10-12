@@ -106,7 +106,7 @@
   },
   "devDependencies": {
     "@types/acorn": "^4.0.0",
-    "@types/async": "^2.0.38",
+    "@types/async": "^2.0.44",
     "@types/browser-resolve": "0.0.4",
     "@types/combine-source-map": "^0.8.0",
     "@types/convert-source-map": "^1.3.33",
