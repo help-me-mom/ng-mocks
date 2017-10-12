@@ -28,7 +28,7 @@ let loggers: LoggerList = {
     dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
     project: log4js.getLogger("project.karma-typescript"),
     resolver: log4js.getLogger("resolver.karma-typescript"),
-    sourceMap: log4js.getLogger("source-map.karma-typescript"), ,
+    sourceMap: log4js.getLogger("source-map.karma-typescript"),
     sourceReader: log4js.getLogger("source-reader.karma-typescript"),
     threshold: log4js.getLogger("threshold.karma-typescript")
 };
