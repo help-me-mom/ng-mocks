@@ -28,6 +28,7 @@ let loggers: LoggerList = {
     dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
     project: log4js.getLogger("project.karma-typescript"),
     resolver: log4js.getLogger("resolver.karma-typescript"),
+    sourceMap: log4js.getLogger("source-map.karma-typescript"), ,
     sourceReader: log4js.getLogger("source-reader.karma-typescript"),
     threshold: log4js.getLogger("threshold.karma-typescript")
 };
@@ -47,7 +48,7 @@ let validator = new Validator(configuration);
 let sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
 let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
 let globals = new Globals(configuration, resolver);
-let sourceMap = new SourceMap(configuration);
+let sourceMap = new SourceMap(configuration, loggers.sourceMap);
 
 let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
                           project, resolver, sourceMap, transformer, validator);

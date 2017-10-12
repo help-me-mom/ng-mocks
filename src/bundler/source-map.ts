@@ -3,6 +3,7 @@ import * as convertSourceMap from "convert-source-map";
 import * as fs from "fs";
 import * as path from "path";
 
+import { Logger } from "log4js";
 import { Configuration } from "../shared/configuration";
 import { BundleItem } from "./bundle-item";
 import { Queued } from "./queued";
@@ -12,7 +13,7 @@ export class SourceMap {
     private combiner: Combiner;
     private line: number = 0;
 
-    constructor(private config: Configuration) {}
+    constructor(private config: Configuration, private log: Logger) {}
 
     public initialize(bundle: string) {
         this.combiner = combineSourceMap.create();
@@ -71,13 +72,22 @@ export class SourceMap {
             let dirname = path.dirname(bundleItem.filename);
 
             if (!commentMatch[1].startsWith("data:")) {
-
                 let mapFilename = path.join(dirname, commentMatch[1]);
-                let mapJson = fs.readFileSync(mapFilename, "utf-8");
-                map = convertSourceMap.fromJSON(mapJson);
+                try {
+                    let mapJson = fs.readFileSync(mapFilename, "utf-8");
+                    map = convertSourceMap.fromJSON(mapJson);
+                }
+                catch (error) {
+                    this.log.debug("Source map %s doesn't exist", mapFilename);
+                }
             }
             else {
                 map = convertSourceMap.fromComment(commentMatch[0]);
+            }
+
+            if (!map) {
+                this.log.debug("Unable to resolve source map for %s", bundleItem.filename);
+                return;
             }
 
             if (!map.getProperty("sourcesContent")) {
