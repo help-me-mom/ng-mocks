@@ -10,6 +10,6 @@ install:
 
 script:
   - npm run lint
-  - npm run build:ci
+  - npm run build
   - npm run test:unit
   - npm test

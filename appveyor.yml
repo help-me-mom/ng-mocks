@@ -11,7 +11,7 @@ install:
 
 test_script:
   - npm run lint
-  - npm run build:ci
+  - npm run build
   - npm run test:unit
   - ci\run.bat
 
