@@ -1,4 +1,5 @@
 import * as async from "async";
+import { ErrorCallback } from "async";
 import * as os from "os";
 import * as ts from "typescript";
 
