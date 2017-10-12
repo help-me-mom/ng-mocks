@@ -34,7 +34,6 @@ npm i
 cd ../integration-latest
 pwd
 npm i
-npm run prepare
 
 cd ../..
 pwd
