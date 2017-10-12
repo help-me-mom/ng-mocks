@@ -1,7 +1,6 @@
 #/bin/sh
 
 set -e
-npm run build
 
 cd examples/angular2
 npm run dev:ci:phantomjs
