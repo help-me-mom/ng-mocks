@@ -6,6 +6,7 @@
         "noUnusedParameters": true,
         "outDir": "dist",
         "skipLibCheck": true,
+        "sourceMap": true,
         "target": "ES5",
         "lib": [
             "dom","es5","es6","scripthost"
