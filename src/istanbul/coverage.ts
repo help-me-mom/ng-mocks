@@ -11,7 +11,8 @@ export class Coverage {
     private coveragePreprocessor: any;
     private log: Logger;
 
-    constructor(private config: Configuration) { }
+    constructor(private config: Configuration) {
+    }
 
     public initialize(helper: any, logger: any): void {
 
@@ -45,7 +46,7 @@ export class Coverage {
         }
 
         if (!this.config.coverageOptions.instrumentation ||
-            this.isExcluded(this.config.coverageOptions.exclude, file.originalPath) ||
+            this.isExcluded(this.config.coverageOptions.exclude, file.relativePath) ||
             this.hasNoOutput(emitOutput)) {
 
             this.log.debug("Excluding file %s from instrumentation", file.originalPath);
