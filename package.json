@@ -51,8 +51,6 @@
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "eslint ./lib/*.js && tslint --project tsconfig.json",
     "test": "./ci/run.sh",
-    "test:unix": "./ci/install.sh && ./ci/run.sh",
-    "test:windows": ".\\ci\\install.bat & .\\ci\\run.bat",
     "test:unit": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
