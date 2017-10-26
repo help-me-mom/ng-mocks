@@ -51,7 +51,7 @@
     "build": "tsc --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
     "lint": "eslint ./lib/*.js && tslint --project tsconfig.json",
-    "test": "./ci/run.sh",
+    "test": "node ./ci/run.js",
     "test:unit": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
@@ -134,7 +134,8 @@
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",
-    "typescript": "latest"
+    "typescript": "latest",
+    "wait.for": "^0.6.6"
   },
   "collective": {
     "type": "opencollective",
