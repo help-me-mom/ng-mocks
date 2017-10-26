@@ -1,4 +1,4 @@
-var spawn = require("child_process").spawn;
+var spawn = require("cross-spawn");
 
 // The pyramid of doom :( If you have a better idea, (which doesn't
 // involve wait.for / node-gyp / fibers) please create a pull request,
