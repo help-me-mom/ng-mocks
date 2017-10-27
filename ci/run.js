@@ -1,7 +1,7 @@
 var spawn = require("cross-spawn");
 var os = require("os");
 
-var browser = os.platform === "win32" ? "" : ":phantomjs";
+var browser = os.platform() === "win32" ? "" : ":phantomjs";
 
 // The pyramid of doom :( If you have a better idea, (which doesn't
 // involve wait.for / node-gyp / fibers) please create a pull request,
