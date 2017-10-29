@@ -52,7 +52,7 @@
     "build:watch": "tsc -w --rootDir ./src",
     "ci": "npm run lint && npm run build && npm test",
     "lint": "eslint ./lib/*.js && tslint --project tsconfig.json",
-    "test": "./ci/run.sh",
+    "test": "node ci/run.js",
     "test:unit": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
@@ -125,6 +125,7 @@
     "@types/tmp": "0.0.32",
     "cli-clear": "^1.0.4",
     "copy": "^0.3.0",
+    "cross-spawn": "^5.1.0",
     "del": "^2.2.2",
     "eslint": "^3.4.0",
     "faucet": "0.0.1",

@@ -12,6 +12,6 @@ test_script:
   - npm run lint
   - npm run build
   - npm run test:unit
-  - ci\run.bat
+  - npm test
 
 build: off
