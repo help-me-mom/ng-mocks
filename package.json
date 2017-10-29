@@ -50,6 +50,7 @@
   "scripts": {
     "build": "tsc --rootDir ./src",
     "build:watch": "tsc -w --rootDir ./src",
+    "ci": "npm run lint && npm run build && npm test",
     "lint": "eslint ./lib/*.js && tslint --project tsconfig.json",
     "test": "./ci/run.sh",
     "test:unit": "tape dist/**/*.spec.js | faucet"
