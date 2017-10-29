@@ -11,13 +11,12 @@ gulp.task("clear", function(cb) {
     cb();
 });
 
-gulp.task("clean", function(cb) {
-    del("./coverage")
+gulp.task("clean", function() {
+    return del("./coverage")
     .then(function(files) {
         if(files.length > 0) {
             gutil.log("Deleted %s", files);
         }
-        cb();
     });
 });
 
