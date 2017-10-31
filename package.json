@@ -128,6 +128,8 @@
     "eslint": "^3.4.0",
     "faucet": "0.0.1",
     "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-typescript": "^3.2.3",
     "gulp-util": "^3.0.7",
     "mock-require": "^2.0.2",
     "run-sequence": "^2.2.0",
