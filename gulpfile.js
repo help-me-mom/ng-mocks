@@ -2,7 +2,6 @@ var copy = require("copy"),
     clear = require("cli-clear"),
     del = require("del"),
     gulp = require("gulp"),
-    gutil = require("gulp-util"),
     runSequence = require("run-sequence"),
     sourcemaps = require("gulp-sourcemaps"),
     ts = require("gulp-typescript"),
@@ -14,12 +13,7 @@ gulp.task("clear", function(cb) {
 });
 
 gulp.task("clean", function() {
-    return del("./coverage")
-        .then(function(files) {
-            if(files.length > 0) {
-                gutil.log("Deleted %s", files);
-            }
-        });
+    return del("./coverage");
 });
 
 gulp.task("build", function() {
