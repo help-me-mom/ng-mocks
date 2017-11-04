@@ -17,10 +17,9 @@ gulp.task("clean", function() {
 });
 
 gulp.task("build", function() {
-    var tsResult = tsProject.src()
+    return tsProject.src()
         .pipe(sourcemaps.init())
-        .pipe(tsProject());
-    return tsResult.js
+        .pipe(tsProject())
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(tsProject.options.outDir));
 });
