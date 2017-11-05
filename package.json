@@ -138,7 +138,11 @@
     "tape": "^4.6.3",
     "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.3.0",
-    "typescript": "latest"
+    "typescript": "2"
+  },
+  "peerDependencies": {
+    "karma": "1",
+    "typescript": "2"
   },
   "collective": {
     "type": "opencollective",
