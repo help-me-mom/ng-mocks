@@ -50,5 +50,5 @@ function getPropertyMetadata(component: any): any {
   if (Reflect.hasMetadata('propMetadata', component)) {
     return Reflect.getMetadata('propMetadata', component);
   }
-  throw new Error('No property metadata on your component');
+  return {};
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import 'reflect-metadata';
 import { MockComponent } from './mock_component';
 
+/* tslint:disable:max-classes-per-file */
 @Component({
   selector: 'example-component',
   template: 'some template'
@@ -10,6 +11,13 @@ export class ExampleComponent {
   @Input() someInput: string;
   @Output() someOutput: EventEmitter<boolean>;
 }
+
+@Component({
+  selector: 'empty-component',
+  template: 'some template'
+})
+export class EmptyComponent {}
+/* tslint:enable:max-classes-per-file */
 
 describe('MockComponent', () => {
   let exampleComponent: any;
@@ -73,15 +81,10 @@ describe('MockComponent', () => {
     });
   });
 
-  it('should throw error if component doesn\'t have annotations', () => {
-    delete exampleComponent.decorators;
-    expect(() => MockComponent(exampleComponent))
-      .toThrowError(Error, 'No annotation or decoration metadata on your component');
-  });
-
-  it('should throw error if component doesn\'t have property metadata', () => {
-    delete exampleComponent.propDecorators;
-    expect(() => MockComponent(exampleComponent))
-      .toThrowError(Error, 'No property metadata on your component');
+  it('should work with a component w/o inputs or outputs', () => {
+    const mockedComponent = MockComponent(EmptyComponent);
+    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
+    expect(annotations.inputs).toEqual([]);
+    expect(annotations.outputs).toEqual([]);
   });
 });
