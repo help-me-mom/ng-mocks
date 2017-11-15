@@ -22,6 +22,7 @@ export class Compiler {
     private compiledFiles: CompiledFiles = {};
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
+    private errors: string[] = [];
     private hostGetSourceFile: {(filename: string, languageVersion: ts.ScriptTarget,
                                  onError?: (message: string) => void): ts.SourceFile};
     private program: ts.Program;
@@ -94,6 +95,7 @@ export class Compiler {
 
             queued.callback({
                 ambientModuleNames,
+                hasError: this.errors.indexOf(queued.file.originalPath) !== -1,
                 isAmbientModule: ambientModuleNames && ambientModuleNames.length > 0,
                 isDeclarationFile: this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: this.compiledFiles[queued.file.path],
@@ -130,40 +132,44 @@ export class Compiler {
     }
 
     private runDiagnostics(program: ts.Program, host: ts.CompilerHost): void {
+        this.errors = [];
         let diagnostics = ts.getPreEmitDiagnostics(program);
         this.outputDiagnostics(diagnostics, host);
     }
 
     private outputDiagnostics(diagnostics: ts.Diagnostic[], host?: ts.FormatDiagnosticsHost): void {
 
-        if (diagnostics && diagnostics.length > 0) {
+        if (!diagnostics) {
+            return;
+        }
 
-            diagnostics.forEach((diagnostic) => {
+        diagnostics.forEach((diagnostic) => {
 
-                if (ts.formatDiagnostics && host) { // v1.8+
-                    this.log.error(ts.formatDiagnostics([diagnostic], host));
-                }
-                else { // v1.6, v1.7
+            this.errors.push(diagnostic.file.fileName);
 
-                    let output = "";
+            if (ts.formatDiagnostics && host) { // v1.8+
+                this.log.error(ts.formatDiagnostics([diagnostic], host));
+            }
+            else { // v1.6, v1.7
 
-                    if (diagnostic.file) {
-                        let loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                        output += diagnostic.file.fileName.replace(process.cwd(), "") +
+                let output = "";
+
+                if (diagnostic.file) {
+                    let loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+                    output += diagnostic.file.fileName.replace(process.cwd(), "") +
                                   "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
-                    }
+                }
 
-                    let category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
-                    output += category + " TS" + diagnostic.code + ": " +
+                let category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
+                output += category + " TS" + diagnostic.code + ": " +
                               ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
 
-                    this.log.error(output);
-                }
-            });
-
-            if (this.project.getTsconfig().options.noEmitOnError) {
-                ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                this.log.error(output);
             }
+        });
+
+        if (this.project.getTsconfig().options.noEmitOnError) {
+            ts.sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
     }
 
