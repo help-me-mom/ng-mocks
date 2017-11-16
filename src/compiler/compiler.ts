@@ -139,7 +139,7 @@ export class Compiler {
 
     private outputDiagnostics(diagnostics: ts.Diagnostic[], host?: ts.FormatDiagnosticsHost): void {
 
-        if (!diagnostics) {
+        if (!diagnostics || diagnostics.length === 0) {
             return;
         }
 
