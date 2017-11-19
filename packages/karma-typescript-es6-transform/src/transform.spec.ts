@@ -315,8 +315,15 @@ test("transformer should use custom compiler options", (t) => {
         source
     };
 
-    transform({ presets: ["es2016"] })(context, () => {
-        t.equal(context.source, "let x = 2;x = Math.pow(x, 3);\nexport default x;");
+    transform({ presets: [
+        ["env", {
+            targets: {
+                chrome: "60"
+            }
+        }]
+    ] })(context, () => {
+        t.equal(context.source, "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", " +
+                                "{\n  value: true\n});\nlet x = 2;x **= 3;exports.default = x;");
     });
 });
 

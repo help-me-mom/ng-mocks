@@ -46,7 +46,7 @@ let configure = (options?: babel.TransformOptions) => {
     options = options || {};
 
     if (!options.presets || options.presets.length === 0) {
-        options.presets = ["es2015"];
+        options.presets = [["env"]];
     }
 
     let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {

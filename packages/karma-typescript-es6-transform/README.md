@@ -30,7 +30,7 @@ karmaTypescriptConfig: {
 
 ## Babel core options
 
-By default, the options `presets: ["es2015"]` and `filename: TransformContext.filename` are passed to the [Babel compiler](https://www.npmjs.com/package/babel-core).
+By default, the options `presets: [["env"]]` and `filename: TransformContext.filename` are passed to the [Babel compiler](https://www.npmjs.com/package/babel-core).
 
 Custom options can be passed to the compiler in the first argument when calling the plugin:
 
