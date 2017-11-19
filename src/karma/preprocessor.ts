@@ -21,24 +21,25 @@ export class Preprocessor {
 
             coverage.initialize(helper, logger);
 
-            return (content: string, file: File, done: { (e: any, c: string): void }) => {
+            return (content: string, file: File, done: { (e: any, c?: string): void }) => {
                 try {
                     this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);
                     file.path = config.transformPath(file.originalPath);
                     file.relativePath = FileUtils.getRelativePath(file.originalPath, this.config.karma.basePath);
 
                     compiler.compile(file, (emitOutput) => {
+                        if (emitOutput.hasError) {
+                            return done("COMPILATION ERROR", content);
+                        }
                         if (emitOutput.isDeclarationFile && !emitOutput.isAmbientModule) {
-                            done(null, " ");
+                            return done(null, " ");
                         }
-                        else {
-                            bundler.bundle(file, emitOutput, (bundled: string) => {
-                                sharedProcessedFiles[path.normalize(file.originalPath)] = bundled;
-                                coverage.instrument(file, bundled, emitOutput, (result) => {
-                                    done(null, result);
-                                });
+                        bundler.bundle(file, emitOutput, (bundled: string) => {
+                            sharedProcessedFiles[path.normalize(file.originalPath)] = bundled;
+                            coverage.instrument(file, bundled, emitOutput, (result) => {
+                                done(null, result);
                             });
-                        }
+                        });
                     });
                 }
                 catch (e) {

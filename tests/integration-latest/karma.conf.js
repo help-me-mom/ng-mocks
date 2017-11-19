@@ -72,6 +72,7 @@ module.exports = function(config) {
                 noImplicitAny: true,
                 module: "commonjs",
                 moduleResolution: "node",
+                noEmitOnError: true,
                 sourceMap: true,
                 target: "ES5",
                 lib: ["DOM", "ES2015"]
