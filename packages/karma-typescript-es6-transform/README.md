@@ -38,7 +38,7 @@ Custom options can be passed to the compiler in the first argument when calling 
 karmaTypescriptConfig: {
     bundlerOptions: {
         transforms: [
-            require("karma-typescript-es6-transform")({presets: ["es2016"]})
+            require("karma-typescript-es6-transform")({presets: [["env", { targets: { chrome: "60" } } ]] })
         ]
     }
 }
