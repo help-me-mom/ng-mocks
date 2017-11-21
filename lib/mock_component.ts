@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Type } from '@angular/core';
 
 declare var Reflect: any;
 
-export function MockComponent(component: any): Component {
+export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
   const propertyMetadata = getPropertyMetadata(component);
 
   const options = {
@@ -21,7 +21,7 @@ export function MockComponent(component: any): Component {
     (ComponentMock as any).prototype[output] = new EventEmitter<any>();
   });
 
-  return Component(options as Component)(ComponentMock as any);
+  return Component(options as Component)(ComponentMock as Type<TComponent>);
 }
 
 function isInput(propertyMetadata: any): boolean {
