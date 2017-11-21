@@ -1,6 +1,6 @@
 {
   "name": "mock-component",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Function creating a mock based on a passed in component for test",
   "main": "dist/index.js",
   "files": [
