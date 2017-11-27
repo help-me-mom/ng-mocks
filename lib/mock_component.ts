@@ -15,11 +15,15 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   options.inputs = Object.keys(propertyMetadata).filter((meta) => isInput(propertyMetadata[meta]));
   options.outputs = Object.keys(propertyMetadata).filter((meta) => isOutput(propertyMetadata[meta]));
 
-  class ComponentMock {}
-
-  options.outputs.forEach((output) => {
-    (ComponentMock as any).prototype[output] = new EventEmitter<any>();
-  });
+  /* tslint:disable:no-unnecessary-class */
+  class ComponentMock {
+    constructor() {
+      options.outputs.forEach((output) => {
+        (ComponentMock as any).prototype[output] = new EventEmitter<any>();
+      });
+    }
+  }
+  /* tslint:enable:no-unnecessary-class */
 
   return Component(options as Component)(ComponentMock as Type<TComponent>);
 }

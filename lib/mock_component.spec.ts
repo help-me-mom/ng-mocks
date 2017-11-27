@@ -60,6 +60,13 @@ describe('MockComponent', () => {
     expect(annotations.template).toEqual('<ng-content></ng-content>');
   });
 
+  // make pass when testbed is brought in
+  xit('each instance of a mocked component should have its own event emitter', () => {
+    const mockedComponent1 = MockComponent(ExampleComponent);
+    const mockedComponent2 = MockComponent(ExampleComponent);
+    expect((mockedComponent1 as any).someOutput).not.toEqual((mockedComponent2 as any).someOutput);
+  });
+
   describe('sometimes components are built like this, not sure why', () => {
     it('the mock should have the same selector as the passed in component', () => {
       const mockedComponent = MockComponent(exampleComponent);
