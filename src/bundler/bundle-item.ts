@@ -4,6 +4,7 @@ export class BundleItem {
 
     public ast?: ESTree.Program;
     public lookupName?: string;
+    public transformedScript = false;
 
     constructor(public moduleName: string, public filename?: string,
                 public source?: string, public dependencies: BundleItem[] = []) {}
@@ -13,7 +14,8 @@ export class BundleItem {
     }
 
     public isScript(): boolean {
-        return this.filename && /\.(js|jsx|ts|tsx)$/.test(this.filename);
+        return (this.filename && /\.(js|jsx|ts|tsx)$/.test(this.filename))
+            || this.transformedScript;
     }
 
     public isTypingsFile(): boolean {
