@@ -79,7 +79,7 @@
     "log4js": "^1.1.1",
     "minimatch": "^3.0.3",
     "os-browserify": "^0.3.0",
-    "pad": "^1.1.0",
+    "pad": "^2.0.0",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",
     "punycode": "^1.4.1",
