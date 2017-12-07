@@ -4,8 +4,15 @@ import * as ts from "typescript";
 
 import { Configuration } from "../shared/configuration";
 
+export interface TransformResult {
+    dirty?: boolean;
+    transpile?: boolean;
+    transformedScript?: boolean;
+}
+
 export interface TransformCallback {
     (error: Error, dirty: boolean, transpile?: boolean): void;
+    (error: Error, result: TransformResult): void;
 };
 
 export interface TransformContextJs{
