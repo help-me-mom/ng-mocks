@@ -19,7 +19,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   class ComponentMock {
     constructor() {
       options.outputs.forEach((output) => {
-        (ComponentMock as any).prototype[output] = new EventEmitter<any>();
+        (this as any)[output] = new EventEmitter<any>();
       });
     }
   }
