@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, Type } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, Type } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 declare var Reflect: any;
 
@@ -8,6 +9,11 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   const options = {
     inputs: new Array<string>(),
     outputs: new Array<string>(),
+    providers: [{
+      multi: true,
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ComponentMock)
+    }],
     selector: getComponentSelector(component),
     template: '<ng-content></ng-content>'
   };
@@ -15,17 +21,23 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   options.inputs = Object.keys(propertyMetadata).filter((meta) => isInput(propertyMetadata[meta]));
   options.outputs = Object.keys(propertyMetadata).filter((meta) => isOutput(propertyMetadata[meta]));
 
-  /* tslint:disable:no-unnecessary-class */
-  class ComponentMock {
+  class ComponentMock implements ControlValueAccessor {
     constructor() {
       options.outputs.forEach((output) => {
         (this as any)[output] = new EventEmitter<any>();
       });
     }
-  }
-  /* tslint:enable:no-unnecessary-class */
 
-  return Component(options as Component)(ComponentMock as Type<TComponent>);
+    /* tslint:disable:no-empty */
+    registerOnChange = (fn: (value: any) => void) => {};
+    registerOnTouched = (fn: (value: any) => void) => {};
+    writeValue = (value: any) => {};
+    /* tslint:enable:no-empty */
+  }
+
+  /* tslint:disable:no-angle-bracket-type-assertion */
+  return Component(options as Component)(<any> ComponentMock as Type<TComponent>);
+  /* tslint:enable:no-angle-bracket-type-assertion */
 }
 
 function isInput(propertyMetadata: any): boolean {
