@@ -572,10 +572,20 @@ The context object, `TransformContext`, is defined [here](https://github.com/mon
 
 ### Callback
 
-The callback function has three arguments:
+The callback has two signatures, the "boolean" and the "object".
+
+The boolean callback function has three arguments:
 1. An `Error` object or `undefined`
 2. A boolean indicating whether the value of `context.source` has changed or not.
 3. A boolean indicating whether the transformed source should be recompiled. Defaults to true and can be omitted.
+
+The object callback function has two arguments:
+
+1. An `Error` object or `undefined`
+2. An object literal, which has the following properties:
+    1. A boolean indicating whether the value of `context.source` has changed or not.
+    2. A boolean indicating whether the transformed source should be recompiled (Typescript only!).
+    3. A boolean indicating whether a new AST should be created for the transformed source (JavaScript only!).
 
 ## Requirements
 
