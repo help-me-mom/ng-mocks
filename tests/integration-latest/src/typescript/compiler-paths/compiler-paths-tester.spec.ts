@@ -1,3 +1,4 @@
+import "compilerpaths-js/api/index";
 import { CompilerPathsTester } from "compilerpaths/compiler-paths-tester";
 
 describe("CompilerPathsTester", () => {
