@@ -1,7 +1,5 @@
-import { Component, EventEmitter, forwardRef, Input, Output, Type } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-declare var Reflect: any;
 
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
   const propertyMetadata = getPropertyMetadata(component);
@@ -41,30 +39,20 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
 }
 
 function isInput(propertyMetadata: any): boolean {
-  return propertyMetadata[0].type === Input || propertyMetadata[0].toString() === '@Input';
+  return propertyMetadata[0].ngMetadataName === 'Input';
 }
 
 function isOutput(propertyMetadata: any): boolean {
-  return propertyMetadata[0].type === Output || propertyMetadata[0].toString() === '@Output';
+  return propertyMetadata[0].ngMetadataName === 'Output';
 }
 
 function getComponentSelector(component: any): string {
-  if (component.decorators) {
-    return component.decorators[0].args[0].selector;
-  }
-  if (Reflect.hasMetadata('annotations', component)) {
-    const metadata = Reflect.getMetadata('annotations', component);
-    return metadata[0].selector;
+  if (component.__annotations__) {
+    return component.__annotations__[0].selector;
   }
   throw new Error('No annotation or decoration metadata on your component');
 }
 
 function getPropertyMetadata(component: any): any {
-  if (component.propDecorators) {
-    return component.propDecorators;
-  }
-  if (Reflect.hasMetadata('propMetadata', component)) {
-    return Reflect.getMetadata('propMetadata', component);
-  }
-  return {};
+  return component.__prop__metadata__ || {};
 }

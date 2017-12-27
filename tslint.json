@@ -6,10 +6,13 @@
     "member-access": false,
     "newline-before-return": false,
     "no-any": false,
+    "no-implicit-dependencies": false,
     "no-import-side-effect": false,
     "no-magic-numbers": false,
     "no-parameter-properties": false,
+    "no-submodule-imports": false,
     "only-arrow-functions": false,
+    "ordered-imports": false,
     "quotemark": [
       true,
       "single"

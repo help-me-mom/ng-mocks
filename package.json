@@ -16,7 +16,7 @@
   "scripts": {
     "lint": "gulp lint",
     "release": "gulp lint && npm run test && gulp build && standard-version",
-    "test": "jasmine-ts \"lib/**/*.spec.ts\""
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -39,15 +39,17 @@
   },
   "homepage": "https://github.com/ike18t/mock_component#readme",
   "peerDependencies": {
-    "@angular/core": "2.0.0 - 4.x",
-    "@angular/forms": "2.0.0 - 4.x",
-    "reflect-metadata": ">= 0.1.2"
+    "@angular/core": "5.x",
+    "@angular/forms": "5.x"
   },
   "devDependencies": {
-    "@angular/core": "2.0.0 - 4.x",
-    "@angular/forms": "2.0.0 - 4.x",
-    "@angular/common": "2.0.0 - 4.x",
-    "@angular/platform-browser": "2.0.0 - 4.x",
+    "@angular/common": "5.x",
+    "@angular/compiler": "5.x",
+    "@angular/core": "5.x",
+    "@angular/forms": "5.x",
+    "@angular/platform-browser": "5.x",
+    "@angular/platform-browser-dynamic": "5.x",
+    "@types/core-js": "^0.9.43",
     "@types/jasmine": "^2.5.53",
     "@types/node": "^8.0.17",
     "core-js": "^2.5.1",
@@ -56,13 +58,20 @@
     "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^3.2.1",
     "jasmine-ts": "^0.2.1",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-sourcemap-loader": "^0.3.7",
     "merge2": "^1.1.0",
-    "reflect-metadata": ">= 0.1.2",
     "run-sequence": "^2.1.0",
-    "rxjs": ">= 5.0.0-beta.12",
+    "rxjs": "5.5.5",
     "standard-version": "^4.2.0",
     "tslint": "^5.5.0",
-    "typescript": "~2.3.3",
-    "zone.js": ">= 0.6.25"
+    "typescript": "2.6.x",
+    "zone.js": "^0.8.14"
+  },
+  "dependencies": {
+    "karma-typescript": "^3.0.9"
   }
 }

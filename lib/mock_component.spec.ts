@@ -1,97 +1,102 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import 'reflect-metadata';
+import { Component } from '@angular/core';
+import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import {
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting
+} from '@angular/platform-browser-dynamic/testing';
+import { EmptyComponent } from './test_components/empty_component.component';
+import { SimpleComponent } from './test_components/simple_component.component';
 import { MockComponent } from './mock_component';
 
-/* tslint:disable:max-classes-per-file */
 @Component({
-  selector: 'example-component',
-  template: 'some template'
+  selector: 'example-component-container',
+  template: `
+    <simple-component [someInput]="\'hi\'" (someOutput1)="someOutputHasEmitted = true"></simple-component>
+    <simple-component [someInput]="\'hi again\'"></simple-component>
+    <empty-component></empty-component>
+    <empty-component id="ng-content-component">doh</empty-component>
+    <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
+  `
 })
-export class ExampleComponent {
-  @Input() someInput: string;
-  @Output() someOutput: EventEmitter<boolean>;
+export class ExampleComponentContainer {
+  someOutputHasEmitted = false;
 }
 
-@Component({
-  selector: 'empty-component',
-  template: 'some template'
-})
-export class EmptyComponent {}
-/* tslint:enable:max-classes-per-file */
-
 describe('MockComponent', () => {
-  let exampleComponent: any;
+  let component: ExampleComponentContainer;
+  let fixture: ComponentFixture<ExampleComponentContainer>;
+  const mockedSimpleComponent = MockComponent(SimpleComponent);
+  const mockedEmptyComponent = MockComponent(EmptyComponent);
+
+  getTestBed().initTestEnvironment(
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting()
+  );
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        ExampleComponentContainer,
+        mockedEmptyComponent,
+        mockedSimpleComponent
+      ],
+      imports: [
+        FormsModule
+      ]
+    })
+    .compileComponents();
+  }));
 
   beforeEach(() => {
-    exampleComponent = {
-      decorators: [
-        {
-          args: [{
-            selector: 'example-component',
-            template: 'some template',
-
-          }],
-          type: Component
-        }
-      ],
-      propDecorators: {
-        someInput: [{ type: Input }],
-        someOutput: [{ type: Output }]
-      }
-    };
+    fixture = TestBed.createComponent(ExampleComponentContainer);
+    component = fixture.componentInstance;
   });
 
-  it('the mock should have the same selector as the passed in component', () => {
-    const mockedComponent = MockComponent(ExampleComponent);
-    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-    expect(annotations.selector).toEqual('example-component');
+  it('should have use the original component\'s selector', () => {
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement.query(By.css('simple-component'));
+    expect(mockedComponent).not.toBeNull();
   });
 
-  it('the mock should have the same inputs and outputs as the passed in component', () => {
-    const mockedComponent = MockComponent(ExampleComponent);
-    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-    expect(annotations.inputs).toEqual(['someInput']);
-    expect(annotations.outputs).toEqual(['someOutput']);
+  it('should have the input set on the mock component', () => {
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(mockedSimpleComponent))
+                                   .componentInstance as SimpleComponent;
+    expect(mockedComponent.someInput).toEqual('hi');
+  });
+
+  it('should trigger output bound behavior', () => {
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(mockedSimpleComponent))
+                                   .componentInstance as SimpleComponent;
+    mockedComponent.someOutput1.emit();
+    expect(component.someOutputHasEmitted).toBeTruthy();
   });
 
   it('the mock should have an ng-content body', () => {
-    const mockedComponent = MockComponent(ExampleComponent);
-    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-    expect(annotations.template).toEqual('<ng-content></ng-content>');
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement.query(By.css('#ng-content-component'));
+    expect(mockedComponent.nativeElement.innerText).toContain('doh');
   });
 
-  // make pass when testbed is brought in
-  xit('each instance of a mocked component should have its own event emitter', () => {
-    const mockedComponent1 = MockComponent(ExampleComponent);
-    const mockedComponent2 = MockComponent(ExampleComponent);
-    expect((mockedComponent1 as any).someOutput).not.toEqual((mockedComponent2 as any).someOutput);
+  it('should give each instance of a mocked component its own event emitter', () => {
+    const mockedComponents = fixture.debugElement.queryAll(By.directive(mockedSimpleComponent));
+    const mockedComponent1 = mockedComponents[0].componentInstance as SimpleComponent;
+    const mockedComponent2 = mockedComponents[1].componentInstance as SimpleComponent;
+    expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
   });
 
-  describe('sometimes components are built like this, not sure why', () => {
-    it('the mock should have the same selector as the passed in component', () => {
-      const mockedComponent = MockComponent(exampleComponent);
-      const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-      expect(annotations.selector).toEqual('example-component');
-    });
-
-    it('the mock should have the same inputs and outputs as the passed in component', () => {
-      const mockedComponent = MockComponent(exampleComponent);
-      const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-      expect(annotations.inputs).toEqual(['someInput']);
-      expect(annotations.outputs).toEqual(['someOutput']);
-    });
-
-    it('the mock should have an ng-content body', () => {
-      const mockedComponent = MockComponent(exampleComponent);
-      const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-      expect(annotations.template).toEqual('<ng-content></ng-content>');
-    });
+  it('should work with components w/o inputs or outputs', () => {
+    const mockedComponent = fixture.debugElement.query(By.directive(mockedEmptyComponent));
+    expect(mockedComponent).not.toBeNull();
   });
 
-  it('should work with a component w/o inputs or outputs', () => {
-    const mockedComponent = MockComponent(EmptyComponent);
-    const annotations = Reflect.getMetadata('annotations', mockedComponent)[0];
-    expect(annotations.inputs).toEqual([]);
-    expect(annotations.outputs).toEqual([]);
+  it('should allow ngModel bindings', () => {
+    const mockedComponent = fixture.debugElement.query(By.css('#ngmodel-component'));
+    expect(mockedComponent).not.toBeNull();
   });
 });
