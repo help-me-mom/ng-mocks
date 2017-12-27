@@ -63,6 +63,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
+    "karma-typescript": "^3.0.9",
     "merge2": "^1.1.0",
     "run-sequence": "^2.1.0",
     "rxjs": "5.5.5",
@@ -70,8 +71,5 @@
     "tslint": "^5.5.0",
     "typescript": "2.6.x",
     "zone.js": "^0.8.14"
-  },
-  "dependencies": {
-    "karma-typescript": "^3.0.9"
   }
 }
