@@ -3,7 +3,9 @@
 
 module.exports = (config: any) => {
   config.set({
-    frameworks: ['jasmine', 'karma-typescript'],
+    autoWatch: false,
+    browsers: ['ChromeHeadless'],
+    colors: true,
     files: [
       'node_modules/zone.js/dist/zone.js',
       'node_modules/zone.js/dist/long-stack-trace-zone.js',
@@ -14,15 +16,13 @@ module.exports = (config: any) => {
       'node_modules/zone.js/dist/fake-async-test.js',
       { pattern: 'lib/**/*.ts' }
     ],
+    frameworks: ['jasmine', 'karma-typescript'],
+    logLevel: config.LOG_INFO,
+    port: 9876,
     preprocessors: {
       '**/*.ts': ['karma-typescript']
     },
     reporters: ['dots', 'karma-typescript', 'kjhtml'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: false,
-    browsers: ['ChromeHeadless'],
     singleRun: true,
 
     karmaTypescriptConfig: {
@@ -30,5 +30,5 @@ module.exports = (config: any) => {
         lib: ['ES2015', 'DOM']
       }
     }
-  })
-}
+  });
+};
