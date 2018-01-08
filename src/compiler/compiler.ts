@@ -145,7 +145,9 @@ export class Compiler {
 
         diagnostics.forEach((diagnostic) => {
 
-            this.errors.push(diagnostic.file.fileName);
+            if (diagnostic.file) {
+                this.errors.push(diagnostic.file.fileName);
+            }
 
             if (ts.formatDiagnostics && host) { // v1.8+
                 this.log.error(ts.formatDiagnostics([diagnostic], host));
