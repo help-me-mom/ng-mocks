@@ -175,7 +175,7 @@ export class Resolver {
 
         browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
             if (!error) {
-                bundleItem.filename = filename;
+                bundleItem.filename = fs.realpathSync(filename);
                 return onFilenameResolved();
             }
             bopts = {
@@ -192,7 +192,7 @@ export class Resolver {
                         JSON.stringify(bopts, undefined, 2) + os.EOL +
                         error);
                 }
-                bundleItem.filename = filename2;
+                bundleItem.filename = fs.realpathSync(filename2);
                 onFilenameResolved();
             });
         });
