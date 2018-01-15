@@ -135,7 +135,7 @@
     "typescript": "2"
   },
   "peerDependencies": {
-    "karma": "1",
+    "karma": "1 || 2",
     "typescript": "2"
   },
   "collective": {
