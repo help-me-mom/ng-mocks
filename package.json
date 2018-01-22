@@ -86,7 +86,7 @@
     "querystring-es3": "^0.2.1",
     "readable-stream": "^2.3.3",
     "remap-istanbul": "^0.8.4",
-    "source-map": ">=0.5.6",
+    "source-map": "0.6.1",
     "stream-browserify": "^2.0.1",
     "stream-http": "^2.7.2",
     "string_decoder": "^1.0.3",
