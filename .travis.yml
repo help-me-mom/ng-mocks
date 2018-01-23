@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "v6.11.1"
+  - "v7.10.1"
+  - "v8.0.0"
+before_install:
+  - npm cache clean --force
+matrix:
+  notifications:
+    email:
+      recipients:
+        - ike18t@gmail.com
+      on_success: change
+      on_failure: change

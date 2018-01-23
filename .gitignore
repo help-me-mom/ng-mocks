@@ -1,0 +1,7 @@
+coverage
+definitions
+node_modules
+dist
+.DS_Store
+.idea/
+tags

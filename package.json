@@ -1,0 +1,73 @@
+{
+  "name": "mock-pipe",
+  "version": "5.0.0-rc.1",
+  "description": "Function creating a mock based on a passed in pipe for test",
+  "main": "dist/index.js",
+  "files": [
+    "definitions",
+    "dist",
+    "LICENSE",
+    "README"
+  ],
+  "typings": "definitions/index",
+  "typescript": {
+    "definition": "definitions/index"
+  },
+  "scripts": {
+    "lint": "gulp lint",
+    "release": "gulp lint && npm run test && gulp build && standard-version",
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ike18t/mock_pipe.git"
+  },
+  "keywords": [
+    "Angular",
+    "Pipe",
+    "Mock",
+    "TestBed",
+    "Testing"
+  ],
+  "author": "Isaac Datlof <ike18t@gmail.com>",
+  "contributors": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ike18t/mock_pipe/issues"
+  },
+  "homepage": "https://github.com/ike18t/mock_pipe#readme",
+  "peerDependencies": {
+    "@angular/core": "5.x",
+    "@angular/forms": "5.x"
+  },
+  "devDependencies": {
+    "@angular/common": "5.x",
+    "@angular/compiler": "5.x",
+    "@angular/core": "5.x",
+    "@angular/forms": "5.x",
+    "@angular/platform-browser": "5.x",
+    "@angular/platform-browser-dynamic": "5.x",
+    "@types/core-js": "^0.9.43",
+    "@types/jasmine": "^2.5.53",
+    "@types/node": "^8.0.17",
+    "core-js": "^2.5.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-tslint": "^8.1.1",
+    "gulp-typescript": "^3.2.1",
+    "jasmine-ts": "^0.2.1",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-typescript": "^3.0.9",
+    "merge2": "^1.1.0",
+    "run-sequence": "^2.1.0",
+    "rxjs": "5.5.5",
+    "standard-version": "^4.2.0",
+    "tslint": "^5.5.0",
+    "typescript": "2.6.x",
+    "zone.js": "^0.8.14"
+  }
+}
