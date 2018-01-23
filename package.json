@@ -30,7 +30,9 @@
     "Testing"
   ],
   "author": "Isaac Datlof <ike18t@gmail.com>",
-  "contributors": [],
+  "contributors": [
+    "Brandon Domingue <getsaf@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ike18t/mock_pipe/issues"

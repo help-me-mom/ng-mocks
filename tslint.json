@@ -3,6 +3,7 @@
   "rules": {
     "comment-format": false,
     "interface-name": false,
+    "max-classes-per-file": false,
     "member-access": false,
     "newline-before-return": false,
     "no-any": false,

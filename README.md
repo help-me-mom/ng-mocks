@@ -4,4 +4,4 @@
 # mock_pipe
 Helper function for creating angular pipe mocks for test.
 
-Usage Example: [mock_pipe.spec.ts](lib/mock_pipe.spec.ts#L36)
+Usage Examples: [mock_pipe.spec.ts](lib/mock_pipe.spec.ts#L43-L44)
