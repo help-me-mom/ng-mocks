@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.0-rc.1"></a>
+# 5.0.0-rc.1 (2017-12-28)
+
+
+### Features
+
+* Upgrade to angular 5 and pull in testbed for tests ([7df64a8](https://github.com/ike18t/mock_component/commit/7df64a8))
+
+
+
 <a name="0.7.0"></a>
 # 0.7.0 (2017-12-08)
 
