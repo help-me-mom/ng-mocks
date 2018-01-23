@@ -1,7 +1,5 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
@@ -24,7 +22,6 @@ export class ExampleComponent {
 /* tslint:enable:max-classes-per-file */
 
 describe('MockPipe', () => {
-  let component: ExampleComponent;
   let fixture: ComponentFixture<ExampleComponent>;
 
   getTestBed().initTestEnvironment(
@@ -44,7 +41,6 @@ describe('MockPipe', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExampleComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
