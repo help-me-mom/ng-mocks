@@ -37,14 +37,12 @@
   },
   "homepage": "https://github.com/ike18t/mock_pipe#readme",
   "peerDependencies": {
-    "@angular/core": "5.x",
-    "@angular/forms": "5.x"
+    "@angular/core": "5.x"
   },
   "devDependencies": {
     "@angular/common": "5.x",
     "@angular/compiler": "5.x",
     "@angular/core": "5.x",
-    "@angular/forms": "5.x",
     "@angular/platform-browser": "5.x",
     "@angular/platform-browser-dynamic": "5.x",
     "@types/core-js": "^0.9.43",
