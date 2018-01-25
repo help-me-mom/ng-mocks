@@ -12,7 +12,8 @@
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
-            "compilerpaths/*": [ "src/typescript/compiler-paths/*" ]
+            "compilerpaths/*": [ "src/typescript/compiler-paths/*" ],
+            "compilerpaths-js/*": [ "node_modules/karma-typescript/dist/*" ]
         },
         "types" : [
             "codemirror",

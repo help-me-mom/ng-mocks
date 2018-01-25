@@ -175,7 +175,7 @@ export class Resolver {
 
         browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
             if (!error) {
-                bundleItem.filename = filename;
+                bundleItem.filename = fs.realpathSync(filename);
                 return onFilenameResolved();
             }
             bopts = {
@@ -187,12 +187,16 @@ export class Resolver {
 
             browserResolve(bundleItem.moduleName, bopts, (error2, filename2) => {
                 if (error2) {
+                    if (bundleItem.filename) {
+                        // This is probably a compiler path module (.js)
+                        return onFilenameResolved();
+                    }
                     throw new Error("Unable to resolve module [" +
                         bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
                         JSON.stringify(bopts, undefined, 2) + os.EOL +
                         error);
                 }
-                bundleItem.filename = filename2;
+                bundleItem.filename = fs.realpathSync(filename2);
                 onFilenameResolved();
             });
         });

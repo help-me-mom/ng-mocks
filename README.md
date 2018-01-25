@@ -157,7 +157,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * **karmaTypescriptConfig.bundlerOptions.resolve.alias** - An object literal where the key is a module name
   and the value is a path that will be used when resolving the module.<br/>
-  The key is a regular expression.
+  The key is a string.
 
 * **karmaTypescriptConfig.bundlerOptions.resolve.extensions** - An array of file extensions to use, in order, when resolving modules.<br/>
   Defaults to `[".js", ".json", ".ts", ".tsx"]`.
