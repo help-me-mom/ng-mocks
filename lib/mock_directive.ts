@@ -6,21 +6,12 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
 
   const options: any = {
     exportAs: annotations.exportAs,
-    selector: annotations.selector,
+    selector: annotations.selector
   };
 
   options.inputs = Object.keys(propertyMetadata)
                          .filter((meta) => isInput(propertyMetadata[meta]))
                          .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':'));
-
-  const compactReducer = (acc: any, option: any) => {
-    if (options[option]) {
-      acc[option] = options[option];
-    }
-    return acc;
-  };
-
-  Object.keys(options).reduce(compactReducer, {});
 
   class DirectiveMock {}
 
