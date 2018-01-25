@@ -95,8 +95,13 @@ export class SourceMap {
                 let sourcesContent: string[] = [];
                 map.getProperty("sources").forEach((source: string) => {
                     let sourceFilename = path.join(dirname, source);
-                    let sourceContent = fs.readFileSync(sourceFilename, "utf-8");
-                    sourcesContent.push(sourceContent);
+                    try {
+                        let sourceContent = fs.readFileSync(sourceFilename, "utf-8");
+                        sourcesContent.push(sourceContent);
+                    }
+                    catch (error) {
+                        this.log.debug("Source file %s doesn't exist", sourceFilename);
+                    }
                 });
                 map.addProperty("sourcesContent", sourcesContent);
             }
