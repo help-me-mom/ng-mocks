@@ -8,17 +8,18 @@ import {
 import { MockDirective } from './mock_directive';
 
 @Directive({
+  exportAs: 'foo',
   selector: '[exampleDirective]'
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
-  @Input() something: string;
+  @Input('bah') something: string;
 }
 
 @Component({
   selector: 'example-component-container',
   template: `
-    <div [exampleDirective]="'bye'" [something]="'hi'"></div>
+    <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo"></div>
   `
 })
 export class ExampleComponentContainer {}

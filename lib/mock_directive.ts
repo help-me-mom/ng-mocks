@@ -1,14 +1,26 @@
 import { Directive, Type } from '@angular/core';
 
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDirective> {
-  const propertyMetadata = getPropertyMetadata(directive);
+  const propertyMetadata = (directive as any).__prop__metadata__ || {};
+  const annotations = (directive as any).__annotations__[0] || {};
 
-  const options = {
-    inputs: new Array<string>(),
-    selector: getSelector(directive),
+  const options: any = {
+    exportAs: annotations.exportAs,
+    selector: annotations.selector,
   };
 
-  options.inputs = Object.keys(propertyMetadata).filter((meta) => isInput(propertyMetadata[meta]));
+  options.inputs = Object.keys(propertyMetadata)
+                         .filter((meta) => isInput(propertyMetadata[meta]))
+                         .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':'));
+
+  const compactReducer = (acc: any, option: any) => {
+    if (options[option]) {
+      acc[option] = options[option];
+      return acc;
+    }
+  };
+
+  Object.keys(options).reduce(compactReducer, {});
 
   class DirectiveMock {}
 
@@ -19,15 +31,4 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
 
 function isInput(propertyMetadata: any): boolean {
   return propertyMetadata[0].ngMetadataName === 'Input';
-}
-
-function getSelector(directive: any): string {
-  if (directive.__annotations__) {
-    return directive.__annotations__[0].selector;
-  }
-  throw new Error('No annotation or decoration metadata on your directive');
-}
-
-function getPropertyMetadata(directive: any): any {
-  return directive.__prop__metadata__ || {};
 }
