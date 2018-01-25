@@ -1,23 +1,18 @@
 import { Directive, Type } from '@angular/core';
 
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDirective> {
-  const propertyMetadata = (directive as any).__prop__metadata__ || {};
   const annotations = (directive as any).__annotations__[0] || {};
+  const propertyMetadata = (directive as any).__prop__metadata__ || {};
 
-  const options: any = {
+  const options: Directive = {
     exportAs: annotations.exportAs,
+    inputs: Object.keys(propertyMetadata)
+                  .filter((meta) => isInput(propertyMetadata[meta]))
+                  .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':')),
     selector: annotations.selector
   };
 
-  options.inputs = Object.keys(propertyMetadata)
-                         .filter((meta) => isInput(propertyMetadata[meta]))
-                         .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':'));
-
-  class DirectiveMock {}
-
-  /* tslint:disable:no-angle-bracket-type-assertion */
-  return Directive(options as Directive)(<any> DirectiveMock as Type<TDirective>);
-  /* tslint:enable:no-angle-bracket-type-assertion */
+  return Directive(options)(class DirectiveMock {} as Type<TDirective>);
 }
 
 function isInput(propertyMetadata: any): boolean {
