@@ -16,8 +16,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
   const compactReducer = (acc: any, option: any) => {
     if (options[option]) {
       acc[option] = options[option];
-      return acc;
     }
+    return acc;
   };
 
   Object.keys(options).reduce(compactReducer, {});

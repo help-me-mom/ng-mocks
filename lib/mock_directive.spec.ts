@@ -20,6 +20,7 @@ export class ExampleDirective {
   selector: 'example-component-container',
   template: `
     <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo"></div>
+    <div exampleDirective></div>
   `
 })
 export class ExampleComponentContainer {}
