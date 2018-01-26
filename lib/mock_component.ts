@@ -2,27 +2,30 @@ import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
-  const propertyMetadata = getPropertyMetadata(component);
+  const annotations = (component as any).__annotations__[0] || {};
+  const propertyMetadata = (component as any).__prop__metadata__ || {};
 
-  const options = {
-    inputs: new Array<string>(),
-    outputs: new Array<string>(),
+  const options: Component = {
+    exportAs: annotations.exportAs,
+    inputs: Object.keys(propertyMetadata)
+                  .filter((meta) => isInput(propertyMetadata[meta]))
+                  .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':')),
+    outputs: Object.keys(propertyMetadata)
+                   .filter((meta) => isOutput(propertyMetadata[meta]))
+                   .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':')),
     providers: [{
       multi: true,
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ComponentMock)
     }],
-    selector: getComponentSelector(component),
+    selector: annotations.selector,
     template: '<ng-content></ng-content>'
   };
 
-  options.inputs = Object.keys(propertyMetadata).filter((meta) => isInput(propertyMetadata[meta]));
-  options.outputs = Object.keys(propertyMetadata).filter((meta) => isOutput(propertyMetadata[meta]));
-
   class ComponentMock implements ControlValueAccessor {
     constructor() {
-      options.outputs.forEach((output) => {
-        (this as any)[output] = new EventEmitter<any>();
+      (options.outputs || []).forEach((output) => {
+        (this as any)[output.split(':')[0]] = new EventEmitter<any>();
       });
     }
 
@@ -34,7 +37,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   }
 
   /* tslint:disable:no-angle-bracket-type-assertion */
-  return Component(options as Component)(<any> ComponentMock as Type<TComponent>);
+  return Component(options)(<any> ComponentMock as Type<TComponent>);
   /* tslint:enable:no-angle-bracket-type-assertion */
 }
 
@@ -44,15 +47,4 @@ function isInput(propertyMetadata: any): boolean {
 
 function isOutput(propertyMetadata: any): boolean {
   return propertyMetadata[0].ngMetadataName === 'Output';
-}
-
-function getComponentSelector(component: any): string {
-  if (component.__annotations__) {
-    return component.__annotations__[0].selector;
-  }
-  throw new Error('No annotation or decoration metadata on your component');
-}
-
-function getPropertyMetadata(component: any): any {
-  return component.__prop__metadata__ || {};
 }

@@ -6,15 +6,18 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import { MockComponent } from './mock_component';
 import { EmptyComponent } from './test_components/empty_component.component';
 import { SimpleComponent } from './test_components/simple_component.component';
-import { MockComponent } from './mock_component';
 
 @Component({
   selector: 'example-component-container',
   template: `
-    <simple-component [someInput]="\'hi\'" (someOutput1)="someOutputHasEmitted = true"></simple-component>
-    <simple-component [someInput]="\'hi again\'"></simple-component>
+    <simple-component [someInput]="\'hi\'"
+                      [someOtherInput]="\'bye\'"
+                      (someOutput1)="someOutputHasEmitted = true">
+    </simple-component>
+    <simple-component [someInput]="\'hi again\'" #f='seeimple'></simple-component>
     <empty-component></empty-component>
     <empty-component id="ng-content-component">doh</empty-component>
     <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
@@ -46,13 +49,12 @@ describe('MockComponent', () => {
         FormsModule
       ]
     })
-    .compileComponents();
+    .compileComponents()
+    .then(() => {
+      fixture = TestBed.createComponent(ExampleComponentContainer);
+      component = fixture.componentInstance;
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ExampleComponentContainer);
-    component = fixture.componentInstance;
-  });
 
   it('should have use the original component\'s selector', () => {
     fixture.detectChanges();
@@ -66,6 +68,7 @@ describe('MockComponent', () => {
                                    .query(By.directive(mockedSimpleComponent))
                                    .componentInstance as SimpleComponent;
     expect(mockedComponent.someInput).toEqual('hi');
+    expect(mockedComponent.someInput2).toEqual('bye');
   });
 
   it('should trigger output bound behavior', () => {

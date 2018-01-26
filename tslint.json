@@ -1,22 +1,20 @@
 {
   "extends": "tslint:all",
   "rules": {
-    "comment-format": false,
-    "interface-name": false,
+    "completed-docs": false,
     "member-access": false,
-    "newline-before-return": false,
     "no-any": false,
-    "no-implicit-dependencies": false,
-    "no-import-side-effect": false,
-    "no-magic-numbers": false,
-    "no-parameter-properties": false,
+    "no-implicit-dependencies": [true, "dev"],
+    "no-floating-promises": false,
     "no-submodule-imports": false,
+    "no-unsafe-any": false,
+    "no-use-before-declare": false,
     "only-arrow-functions": false,
-    "ordered-imports": false,
     "quotemark": [
       true,
       "single"
     ],
+    "strict-boolean-expressions": false,
     "trailing-comma": false,
     "typedef": false
   }
