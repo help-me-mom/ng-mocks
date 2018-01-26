@@ -3,7 +3,8 @@ const ts = require('gulp-typescript');
 const clean = require('gulp-clean');
 const runSequence = require('run-sequence');
 const merge = require('merge2');
-const tslint = require('gulp-tslint');
+const gulpTslint = require("gulp-tslint");
+const tslint = require("tslint");
 
 gulp.task('build', function() {
     const tsProject = ts.createProject('tsconfig.json');
@@ -23,9 +24,10 @@ gulp.task('clean', function () {
 });
 
 gulp.task('lint', function() {
+  var program = tslint.Linter.createProgram("./tsconfig.json");
   return gulp.src(['lib/**', 'spec/**'])
-    .pipe(tslint({ formatter: 'stylish' }))
-    .pipe(tslint.report());
+    .pipe(gulpTslint({ formatter: 'stylish', program }))
+    .pipe(gulpTslint.report());
 });
 
 gulp.task('default', [], function(cb) {
