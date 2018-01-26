@@ -3,6 +3,7 @@
   "rules": {
     "completed-docs": false,
     "member-access": false,
+    "newline-per-chained-call": false,
     "no-any": false,
     "no-implicit-dependencies": [true, "dev"],
     "no-floating-promises": false,
