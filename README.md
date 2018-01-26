@@ -4,8 +4,6 @@
 # mock_component
 Helper function for creating angular component mocks for test.
 
-It does this by leveraging reflect-metadata to get the component argument's selector, inputs, and outputs.
-
 ## Usage
 ```typescript
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
