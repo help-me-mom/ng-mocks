@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.0-rc.3"></a>
+# 5.0.0-rc.3 (2018-01-28)
+
+
+
 <a name="5.0.0-rc.2"></a>
 # 5.0.0-rc.2 (2018-01-26)
 
@@ -9,15 +14,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * add exportAs and alias support ([14a1474](https://github.com/ike18t/mock_component/commit/14a1474))
-
-
-
-<a name="5.0.0-rc.1"></a>
-# 5.0.0-rc.1 (2017-12-28)
-
-
-### Features
-
 * Upgrade to angular 5 and pull in testbed for tests ([7df64a8](https://github.com/ike18t/mock_component/commit/7df64a8))
 
 
@@ -75,3 +71,13 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * Adding angular 2 compatibility and moving to peerDependency ([#3](https://github.com/ike18t/mock_component/issues/3)) ([4bd93db](https://github.com/ike18t/mock_component/commit/4bd93db))
+
+
+
+<a name="0.0.5"></a>
+## 0.0.5 (2017-09-19)
+
+
+
+<a name="0.0.4"></a>
+## 0.0.4 (2017-09-19)
