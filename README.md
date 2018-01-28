@@ -4,7 +4,11 @@
 # mock_component
 Helper function for creating angular component mocks for test.
 
-## Usage
+## Why use this?
+Sure, you could flip a flag on schema errors to make your component dependencies not matter.  Or you could use this to mock
+them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+
+## Usage Example
 ```typescript
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -14,33 +18,50 @@ import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
+  const mockedDependencyComponent = MockComponent(DependencyComponent); // do this if you want to select By.directive
 
   beforeEach(async() => {
     TestBed.configureTestingModule({
       declarations: [
-        MockComponent(DependencyComponent)
+        mockedDependencyComponent, // to add your already mocked component if you went the by directive route
+        // or
+        MockComponent(DependencyComponent) // you can do this if you don't mind selecting by css selector
       ]
-    }).compileComponents();
+    })
+    .compileComponents();
+    .then(() => {
+      fixture = TestBed.createComponent(ExampleComponentContainer);
+      component = fixture.componentInstance;
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TestedComponent);
-  });
 
   it('should send the correct value to the dependency component input', () => {
     // let's pretend Dependency Component (unmocked) has 'someInput' as an  input
     // the input value will be passed into the mocked component so you can assert on it
-    const childComponent = fixture.debugElement.query(By.css('dependency-component-selector'));
-    expect(childComponent.someInput).toEqual('foo');
+    const mockedComponent = fixture.debugElement
+                                  .query(By.css('dependency-component-selector'))
+                                  .componentInstance as DependencyComponent; // casting to retain type safety
+    expect(mockedComponent.someInput).toEqual('foo'); if you casted mockedComponent as the original component type then this is type safe
   });
 
-  it('should do something when the dependency component emits', () => {
-    const childComponent = fixture.debugElement.query(By.css('dependency-component-selector'));
-    // again, let's pretend Dependency Component (unmocked) has 'someOutput' as an output
-    // emit using the output that MockComponent setup when generating the mock
-    childComponent.someOutput.emit(new Foo());
+  it('should do something when the dependency component emits on its output', () => {
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(mockedDependencyComponent))
+                                   .componentInstance as DependencyComponent; // casting to retain type safety
+    // again, let's pretend DependencyComponent has an output called 'someOutput'
+    // emit on the output that MockComponent setup when generating the mock of Dependency Component
+    mockedComponent.someOutput.emit(new Foo()); if you casted mockedComponent as the original component type then this is type safe
     fixture.detectChanges();
-    // assert on some behavior
+    // assert on some side effect
   });
 });
 ```
+
+## Find an issue or have a request?
+Report it as an issue or submit at PR.  I'm open to contributions.
+
+## You may also like:
+
+[https://www.npmjs.com/package/mock-directive](https://www.npmjs.com/package/mock-directive)
+
+[https://www.npmjs.com/package/mock-pipe](https://www.npmjs.com/package/mock-pipe)

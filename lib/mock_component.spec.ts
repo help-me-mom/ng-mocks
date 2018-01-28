@@ -15,7 +15,7 @@ import { SimpleComponent } from './test_components/simple_component.component';
   template: `
     <simple-component [someInput]="\'hi\'"
                       [someOtherInput]="\'bye\'"
-                      (someOutput1)="someOutputHasEmitted = true">
+                      (someOutput1)="emitted = $event">
     </simple-component>
     <simple-component [someInput]="\'hi again\'" #f='seeimple'></simple-component>
     <empty-component></empty-component>
@@ -24,7 +24,7 @@ import { SimpleComponent } from './test_components/simple_component.component';
   `
 })
 export class ExampleComponentContainer {
-  someOutputHasEmitted = false;
+  emitted: string;
 }
 
 describe('MockComponent', () => {
@@ -76,8 +76,8 @@ describe('MockComponent', () => {
     const mockedComponent = fixture.debugElement
                                    .query(By.directive(mockedSimpleComponent))
                                    .componentInstance as SimpleComponent;
-    mockedComponent.someOutput1.emit();
-    expect(component.someOutputHasEmitted).toBeTruthy();
+    mockedComponent.someOutput1.emit('hi');
+    expect(component.emitted).toEqual('hi');
   });
 
   it('the mock should have an ng-content body', () => {
