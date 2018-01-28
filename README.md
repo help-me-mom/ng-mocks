@@ -8,6 +8,13 @@ Helper function for creating angular component mocks for test.
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.  Or you could use this to mock
 them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
+* Mocked component with the same selector.
+* Inputs and Outputs with alias support
+* Each component instance has its own EventEmitter instances for outputs
+* Mocked component templates are ng-content tags to allow transclusion
+* Allows ng-model binding (You will have to add FormsModule to TestBed imports)
+* exportAs support
+
 ## Usage Example
 ```typescript
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
