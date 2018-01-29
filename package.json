@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "dist/index.js",
   "keywords": [
@@ -40,7 +40,10 @@
     "yugi03",
     "Hobart2967",
     "gempain",
-    "mitchhentges"
+    "mitchhentges",
+    "alan-agius4",
+    "jods4",
+    "abraham"
   ],
   "repository": {
     "type": "git",

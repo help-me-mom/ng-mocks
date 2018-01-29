@@ -18,8 +18,8 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 ```json
 {
   "devDependencies": {
-    "karma": "^1.5.0",
-    "karma-typescript": "3.0.9"
+    "karma": "^2.0.0",
+    "karma-typescript": "3.0.10"
   }
 }
 ```
