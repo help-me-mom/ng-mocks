@@ -137,7 +137,9 @@ export class Bundler {
         this.globals.add(this.bundleBuffer, this.entrypoints, () => {
             this.writeMainBundleFile(() => {
                 this.bundleQueue.forEach((queued) => {
-                    queued.callback(queued.item.source);
+                    let source = queued.item.source + "\n" +
+                        (queued.item.sourceMap ? queued.item.sourceMap.toComment() + "\n" : "");
+                    queued.callback(source);
                 });
             });
         });
