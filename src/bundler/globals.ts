@@ -38,7 +38,8 @@ export class Globals {
 
             items.push(new BundleItem(name, name,
                 os.EOL + "global.process=require('_process');" +
-                os.EOL + "global.Buffer=require('buffer').Buffer;", [
+                os.EOL + "global.Buffer=require('buffer').Buffer;",
+                undefined, [
                     new BundleItem("_process"),
                     new BundleItem("buffer")
                 ])
@@ -60,7 +61,7 @@ export class Globals {
         });
 
         if (source) {
-            items.push(new BundleItem(name, name, source, []));
+            items.push(new BundleItem(name, name, source, undefined, []));
         }
     }
 }

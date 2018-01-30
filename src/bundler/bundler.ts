@@ -76,8 +76,17 @@ export class Bundler {
 
         this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
+
+                let source = this.sourceMap.removeSourceMapComment(queued);
+                let map = this.sourceMap.getSourceMap(queued);
+
+                if (map) {
+                    // used by Karma to log errors with original source code line numbers
+                    queued.file.sourceMap = map.toObject();
+                }
+
                 queued.item = new BundleItem(
-                    queued.file.path, queued.file.originalPath, this.sourceMap.createInlineSourceMap(queued));
+                    queued.file.path, queued.file.originalPath, source, map);
             });
 
             let dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
@@ -176,7 +185,8 @@ export class Bundler {
             "\n},'" +
             PathTool.fixWindowsPath(moduleId) + "'," +
             PathTool.fixWindowsPath(JSON.stringify(dependencyMap)) + "];" +
-            (standalone ? "})(this);" : "") + "\n";
+            (standalone ? "})(this);" : "") + "\n" +
+            (bundleItem.sourceMap ? bundleItem.sourceMap.toComment() + "\n" : "");
     }
 
     private createEntrypointFilenames() {
