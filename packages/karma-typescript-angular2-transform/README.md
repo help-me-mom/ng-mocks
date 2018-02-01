@@ -1,6 +1,7 @@
 # karma-typescript-angular2-transform
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
+[![npm](https://img.shields.io/npm/dt/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
 [![Travis build status](https://travis-ci.org/monounity/karma-typescript-angular2-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-angular2-transform)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xn2ndi7r1bs7dyha/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-angular2-transform/branch/master)
 
