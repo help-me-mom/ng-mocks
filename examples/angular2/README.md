@@ -49,33 +49,6 @@ Component decorator:
 })
 ```
 
-### Using relative paths + module.id + Karma proxies:
-
-In `karma.conf.js`:
-
-```javascript
-proxies: {
-    "/src/app/": "/base/src/app/"
-}
-```
-
-Component decorator:
-```javascript
-@Component({
-    moduleId: module.id,
-    templateUrl: "hello.html"
-    // ...other properties
-})
-```
-
-This approach works when running the tests with `karma-typescript` but doesn't work when
-bundling with `webpack` because `module.id` is a number in `webpack` and a string in `Angular`,
-effectively making these frameworks incompatible regarding the use of `module.id`.
-
-One way to solve this problem is using [angular2-moduleid-loader](https://www.npmjs.com/package/angular2-moduleid-loader)
-by Kevin Doyon, which simply removes the `module.id` property from the component when bundling with
-`webpack`.
-
 ### Using absolute paths + Karma proxies:
 
 In `karma.conf.js`:
