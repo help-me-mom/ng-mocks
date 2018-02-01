@@ -19,7 +19,7 @@ The easiest way is to keep `karma-typescript` as a devDependency in `package.jso
 {
   "devDependencies": {
     "karma": "^2.0.0",
-    "karma-typescript": "3.0.11"
+    "karma-typescript": "3.0.12"
   }
 }
 ```
