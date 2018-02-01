@@ -20,20 +20,24 @@ export class SourceMap {
         this.line = this.getNumberOfNewlines(bundle);
     }
 
-    public createInlineSourceMap(queued: Queued): string {
-        let inlined = queued.emitOutput.outputText;
+    public removeSourceMapComment(queued: Queued): string {
+        return queued.emitOutput.sourceMapText ?
+            combineSourceMap.removeComments(queued.emitOutput.outputText) :
+            queued.emitOutput.outputText;
+    }
+
+    public getSourceMap(queued: Queued): convertSourceMap.SourceMapConverter {
         if (queued.emitOutput.sourceMapText) {
 
             let map = convertSourceMap.fromJSON(queued.emitOutput.sourceMapText);
             if (!map.getProperty("sourcesContent")) {
                 map.addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
             }
-            inlined = combineSourceMap.removeComments(queued.emitOutput.outputText) + map.toComment();
 
-            // used by Karma to log errors with original source code line numbers
-            queued.file.sourceMap = map.toObject();
+            return map;
         }
-        return inlined;
+
+        return undefined;
     }
 
     public addFile(bundleItem: BundleItem) {
