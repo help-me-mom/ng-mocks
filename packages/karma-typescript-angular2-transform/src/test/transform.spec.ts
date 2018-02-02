@@ -97,11 +97,12 @@ test("transformer should check ts property", (t) => {
     let context = createContext();
     context.ts = undefined;
 
-    transform(context, (error: Error, dirty: boolean) => {
+    transform(context, (error: Error, result: kt.TransformResult | boolean) => {
         if (error) {
             t.fail();
         }
         else {
+            let dirty: boolean = !!result;
             t.false(dirty);
         }
     });
@@ -113,10 +114,11 @@ test("transformer should set dirty flag to true", (t) => {
 
     let context = createContext();
 
-    transform(context, (error: Error, dirty: boolean) => {
+    transform(context, (error: Error, result: kt.TransformResult | boolean) => {
         if (error) {
             t.fail();
         }
+        let dirty: boolean = !!result;
         t.assert(dirty);
     });
 });
@@ -171,10 +173,11 @@ test("transformer should skip files without the properties 'templateUrl' and/or 
 
     let context = createContext();
 
-    transform(context, (error, dirty) => {
+    transform(context, (error: Error, result: kt.TransformResult | boolean) => {
         if (error) {
             t.fail();
         }
+        let dirty: boolean = !!result;
         t.false(dirty);
     });
 });
