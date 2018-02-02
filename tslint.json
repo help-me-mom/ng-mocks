@@ -9,6 +9,7 @@
     "newline-before-return": false,
     "newline-per-chained-call": false,
     "no-any": false,
+    "no-empty": false,
     "no-implicit-dependencies": false,
     "no-import-side-effect": false,
     "no-magic-numbers": false,
