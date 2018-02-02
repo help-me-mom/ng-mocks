@@ -18,10 +18,8 @@ const mockProvider = (provider: any) => ({
   provide: provider, useValue: {}
 });
 
-class MockedModule {}
-
 export function MockModule<TModule>(module: Type<TModule>): any {
-  return NgModule(MockIt(module))(MockedModule);
+  return NgModule(MockIt(module))(class MockedModule {});
 }
 
 function MockIt(module: any): any {
@@ -29,17 +27,18 @@ function MockIt(module: any): any {
                          exports: [] as any[],
                          providers: [] as any[] };
   const declarations = (module as any).__annotations__[0].declarations || [];
-  const exports = (module as any).__annotations__[0].exports || [];
   const imports = (module as any).__annotations__[0].imports || [];
   const providers = (module as any).__annotations__[0].providers || [];
-  mockedModule.declarations = [...declarations.map(mockDeclaration)];
-  mockedModule.exports = exports;
+
+  mockedModule.exports = mockedModule.declarations = [...declarations.map(mockDeclaration)];
   mockedModule.providers = providers.map(mockProvider);
-  imports.reduce((acc: any, im: any) => {
-    const result = MockIt(im);
+
+  imports.reduce((acc: any, imPort: any) => {
+    const result = MockIt(imPort);
     acc.declarations.push(...result.declarations);
     acc.providers.push(...result.providers);
     acc.exports.push(...result.declarations);
   }, mockedModule);
+
   return mockedModule;
 }
