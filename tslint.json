@@ -1,6 +1,7 @@
 {
   "extends": "tslint:all",
   "rules": {
+    "align": false,
     "comment-format": false,
     "completed-docs": false,
     "interface-name": false,
@@ -10,11 +11,15 @@
     "newline-per-chained-call": false,
     "no-any": false,
     "no-empty": false,
+    "no-floating-promises": false,
     "no-implicit-dependencies": false,
     "no-import-side-effect": false,
     "no-magic-numbers": false,
+    "no-unnecessary-type-assertion": false,
     "no-parameter-properties": false,
+    "no-shadowed-variable": false,
     "no-submodule-imports": false,
+    "no-unsafe-any": false,
     "only-arrow-functions": false,
     "ordered-imports": false,
     "prefer-function-over-method": false,

@@ -1,6 +1,6 @@
 import { NgModule, Component, Injectable, Directive, Pipe, PipeTransform } from '@angular/core';
 
-@Directive({selector: 'example-directive'})
+@Directive({selector: '[example-directive]'})
 export class ExampleDirective {}
 
 @Pipe({name: 'examplePipe'})
@@ -18,13 +18,19 @@ export class ExampleService {
 }
 
 @Component({
+  selector: 'example-private-component',
+  template: '<span>Private thing</span>'
+})
+export class ExamplePrivateComponent { }
+
+@Component({
   selector: 'example-component',
   template: '<span>My Example</span>'
 })
 export class ExampleComponent { }
 
 @NgModule({
-  declarations: [ ExampleComponent, ExamplePipe, ExampleDirective ],
+  declarations: [ ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective ],
   exports: [ ExampleComponent, ExamplePipe, ExampleDirective ],
   providers: [ ExampleService ]
 })

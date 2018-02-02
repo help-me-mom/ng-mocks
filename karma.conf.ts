@@ -4,9 +4,16 @@
 module.exports = (config: any) => {
   config.set({
     autoWatch: false,
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
     colors: true,
     files: [
+      'node_modules/zone.js/dist/zone.js',
+      'node_modules/zone.js/dist/long-stack-trace-zone.js',
+      'node_modules/zone.js/dist/proxy.js',
+      'node_modules/zone.js/dist/sync-test.js',
+      'node_modules/zone.js/dist/jasmine-patch.js',
+      'node_modules/zone.js/dist/async-test.js',
+      'node_modules/zone.js/dist/fake-async-test.js',
       { pattern: 'lib/**/*.ts' }
     ],
     frameworks: ['jasmine', 'karma-typescript'],
@@ -16,7 +23,7 @@ module.exports = (config: any) => {
       '**/*.ts': ['karma-typescript']
     },
     reporters: ['dots', 'karma-typescript', 'kjhtml'],
-    singleRun: false,
+    singleRun: true,
 
     karmaTypescriptConfig: {
       compilerOptions: {
