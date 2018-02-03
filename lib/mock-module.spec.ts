@@ -5,7 +5,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
-
+import { MockComponent } from 'mock-component';
 import { ExampleComponent, ParentModule } from './test-fixtures';
 import { MockModule } from './mock-module';
 
@@ -47,7 +47,7 @@ describe('MockModule', () => {
 
   it('should do stuff', () => {
     const mockedComponent = fixture.debugElement
-                                   .query(By.css('example-component'))
+                                   .query(By.directive(MockComponent(ExampleComponent)))
                                    .componentInstance as ExampleComponent;
     expect(mockedComponent).not.toBeNull();
   });
