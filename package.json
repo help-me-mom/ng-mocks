@@ -72,8 +72,8 @@
     "zone.js": "^0.8.14"
   },
   "dependencies": {
-    "mock-component": "^5.0.0-rc.3",
-    "mock-directive": "^5.0.0-rc.3",
+    "mock-component": "^5.0.0",
+    "mock-directive": "^5.0.0",
     "mock-pipe": "^5.0.0-rc.3"
   }
 }
