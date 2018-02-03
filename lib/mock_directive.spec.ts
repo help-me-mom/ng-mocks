@@ -27,7 +27,6 @@ export class ExampleComponentContainer {}
 
 describe('MockComponent', () => {
   let fixture: ComponentFixture<ExampleComponentContainer>;
-  let directive: Type<ExampleDirective>;
 
   getTestBed().initTestEnvironment(
     BrowserDynamicTestingModule,
@@ -38,7 +37,7 @@ describe('MockComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
-        directive = MockDirective(ExampleDirective)
+        MockDirective(ExampleDirective)
       ]
     })
     .compileComponents();
@@ -50,14 +49,19 @@ describe('MockComponent', () => {
   });
 
   it('should have use the original component\'s selector', () => {
-    const element = fixture.debugElement.query(By.directive(directive));
+    const element = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
     expect(element).not.toBeNull();
   });
 
   it('should have the input set on the mock component', () => {
-    const debugElement = fixture.debugElement.query(By.directive(directive));
-    const element = debugElement.injector.get(directive);
+    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
+    const element = debugElement.injector.get(MockDirective(ExampleDirective));
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
+  });
+
+  it('should memoize the return value by argument', () => {
+    expect(MockDirective(ExampleDirective)).toEqual(MockDirective(ExampleDirective));
+    expect(MockDirective(ExampleDirective)).not.toEqual(ExampleDirective);
   });
 });
