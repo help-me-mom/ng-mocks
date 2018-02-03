@@ -1,7 +1,14 @@
 import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+const cache = new Map<Type<Component>, Type<Component>>();
+
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
+  const cacheHit = cache.get(component);
+  if (cacheHit) {
+    return cacheHit as Type<TComponent>;
+  }
+
   const annotations = (component as any).__annotations__[0] || {};
   const propertyMetadata = (component as any).__prop__metadata__ || {};
 
@@ -37,8 +44,12 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   }
 
   /* tslint:disable:no-angle-bracket-type-assertion */
-  return Component(options)(<any> ComponentMock as Type<TComponent>);
+  const mockedComponent = Component(options)(<any> ComponentMock as Type<TComponent>);
   /* tslint:enable:no-angle-bracket-type-assertion */
+
+  cache.set(component, mockedComponent);
+
+  return mockedComponent;
 }
 
 function isInput(propertyMetadata: any): boolean {

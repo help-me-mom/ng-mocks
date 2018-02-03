@@ -30,8 +30,6 @@ export class ExampleComponentContainer {
 describe('MockComponent', () => {
   let component: ExampleComponentContainer;
   let fixture: ComponentFixture<ExampleComponentContainer>;
-  const mockedSimpleComponent = MockComponent(SimpleComponent);
-  const mockedEmptyComponent = MockComponent(EmptyComponent);
 
   getTestBed().initTestEnvironment(
     BrowserDynamicTestingModule,
@@ -42,8 +40,8 @@ describe('MockComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
-        mockedEmptyComponent,
-        mockedSimpleComponent
+        MockComponent(EmptyComponent),
+        MockComponent(SimpleComponent)
       ],
       imports: [
         FormsModule
@@ -65,7 +63,7 @@ describe('MockComponent', () => {
   it('should have the input set on the mock component', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(mockedSimpleComponent))
+                                   .query(By.directive(MockComponent(SimpleComponent)))
                                    .componentInstance as SimpleComponent;
     expect(mockedComponent.someInput).toEqual('hi');
     expect(mockedComponent.someInput2).toEqual('bye');
@@ -74,7 +72,7 @@ describe('MockComponent', () => {
   it('should trigger output bound behavior', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(mockedSimpleComponent))
+                                   .query(By.directive(MockComponent(SimpleComponent)))
                                    .componentInstance as SimpleComponent;
     mockedComponent.someOutput1.emit('hi');
     expect(component.emitted).toEqual('hi');
@@ -87,19 +85,27 @@ describe('MockComponent', () => {
   });
 
   it('should give each instance of a mocked component its own event emitter', () => {
-    const mockedComponents = fixture.debugElement.queryAll(By.directive(mockedSimpleComponent));
+    const mockedComponents = fixture.debugElement
+                                    .queryAll(By.directive(MockComponent(SimpleComponent)));
     const mockedComponent1 = mockedComponents[0].componentInstance as SimpleComponent;
     const mockedComponent2 = mockedComponents[1].componentInstance as SimpleComponent;
     expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
   });
 
   it('should work with components w/o inputs or outputs', () => {
-    const mockedComponent = fixture.debugElement.query(By.directive(mockedEmptyComponent));
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(MockComponent(EmptyComponent)));
     expect(mockedComponent).not.toBeNull();
   });
 
   it('should allow ngModel bindings', () => {
     const mockedComponent = fixture.debugElement.query(By.css('#ngmodel-component'));
     expect(mockedComponent).not.toBeNull();
+  });
+
+  it('should memoize the return value by argument', () => {
+    expect(MockComponent(EmptyComponent)).toBe(MockComponent(EmptyComponent));
+    expect(MockComponent(SimpleComponent)).toBe(MockComponent(SimpleComponent));
+    expect(MockComponent(EmptyComponent)).not.toBe(MockComponent(SimpleComponent));
   });
 });

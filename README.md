@@ -25,14 +25,11 @@ import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
-  const mockedDependencyComponent = MockComponent(DependencyComponent); // do this if you want to select By.directive
 
   beforeEach(async() => {
     TestBed.configureTestingModule({
       declarations: [
-        mockedDependencyComponent, // to add your already mocked component if you went the by directive route
-        // or
-        MockComponent(DependencyComponent) // you can do this if you don't mind selecting by css selector
+        MockComponent(DependencyComponent)
       ]
     })
     .compileComponents();
@@ -53,7 +50,7 @@ describe('TestedComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(mockedDependencyComponent))
+                                   .query(By.directive(MockComponent(DependencyComponent)))
                                    .componentInstance as DependencyComponent; // casting to retain type safety
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
