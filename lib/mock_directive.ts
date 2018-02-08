@@ -8,15 +8,25 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
     return cacheHit as Type<TDirective>;
   }
 
-  const annotations = (directive as any).__annotations__[0] || {};
+  let annotation: any = {};
+  const annotations: any[] = (directive as any).__annotations__;
+  if (annotations) {
+    annotation = annotations[0];
+  } else {
+    if (!directive.hasOwnProperty('decorators')) {
+      throw new Error(`Cannot find the annotations/decorators for directive ${directive.name}`);
+    }
+    return (directive as any).decorators[0].args[0];
+  }
+
   const propertyMetadata = (directive as any).__prop__metadata__ || {};
 
   const options: Directive = {
-    exportAs: annotations.exportAs,
+    exportAs: annotation.exportAs,
     inputs: Object.keys(propertyMetadata)
                   .filter((meta) => isInput(propertyMetadata[meta]))
                   .map((meta) => [meta, propertyMetadata[meta][0].bindingPropertyName || meta].join(':')),
-    selector: annotations.selector
+    selector: annotation.selector
   };
 
   const mockedDirective =  Directive(options)(class DirectiveMock {} as Type<TDirective>);
