@@ -1,4 +1,5 @@
 import { Component, Directive, Input } from '@angular/core';
+import { FormControlDirective } from '@angular/forms';
 import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
@@ -63,5 +64,15 @@ describe('MockComponent', () => {
   it('should memoize the return value by argument', () => {
     expect(MockDirective(ExampleDirective)).toEqual(MockDirective(ExampleDirective));
     expect(MockDirective(ExampleDirective)).not.toEqual(ExampleDirective);
+  });
+
+  it('can mock formControlDirective from angular', () => {
+    // Some angular directives set up their metadata in a different way than @Directive does
+    // I found that FormControlDirective is one of those weird directives.
+    // Since I don't know how they did it, I don't know how to test it except to write this
+    // test around a known-odd directive.
+    expect(() => {
+      MockDirective(FormControlDirective);
+    }).not.toThrow();
   });
 });

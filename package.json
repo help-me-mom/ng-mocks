@@ -44,6 +44,7 @@
     "@angular/common": "5.x",
     "@angular/compiler": "5.x",
     "@angular/core": "5.x",
+    "@angular/forms": "5.x",
     "@angular/platform-browser": "5.x",
     "@angular/platform-browser-dynamic": "5.x",
     "@types/core-js": "^0.9.43",
