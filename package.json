@@ -1,0 +1,48 @@
+{
+  "name": "ng-mocks",
+  "version": "5.0.0-rc1",
+  "description": "Functions for creating angular mocks",
+  "main": "dist/index.js",
+  "files": [
+    "definitions",
+    "dist",
+    "LICENSE",
+    "README"
+  ],
+  "typings": "definitions/index",
+  "typescript": {
+    "definition": "definitions/index"
+  },
+  "scripts": {
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ike18t/ng-mocks.git"
+  },
+  "keywords": [
+    "Angular",
+    "Component",
+    "Mock",
+    "TestBed",
+    "Testing"
+  ],
+  "author": "Isaac Datlof <ike18t@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ike18t/ng-mocks/issues"
+  },
+  "homepage": "https://github.com/ike18t/ng-mocks#readme",
+  "peerDependencies": {
+    "@angular/core": "5.x",
+    "@angular/forms": "5.x"
+  },
+  "dependencies": {
+    "mock-component": "5.0.0",
+    "mock-directive": "5.0.1",
+    "mock-pipe": "5.0.0-rc.3"
+  },
+  "devDependencies": {
+    "standard-version": "^4.2.0"
+  }
+}
