@@ -1,1 +1,1 @@
-export { MockDirective } from './mock_directive';
+export { MockDirective } from './mock-directive';

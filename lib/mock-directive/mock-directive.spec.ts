@@ -2,7 +2,7 @@ import { Component, Directive, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockDirective } from './mock_directive';
+import { MockDirective } from './mock-directive';
 
 @Directive({
   exportAs: 'foo',
