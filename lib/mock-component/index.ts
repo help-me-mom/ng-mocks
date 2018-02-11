@@ -1,1 +1,1 @@
-export { MockComponent } from './mock_component';
+export { MockComponent } from './mock-component';

@@ -6,9 +6,9 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
-import { MockComponent } from './mock_component';
-import { EmptyComponent } from './test_components/empty_component.component';
-import { SimpleComponent } from './test_components/simple_component.component';
+import { MockComponent } from './mock-component';
+import { EmptyComponent } from './test-components/empty-component.component';
+import { SimpleComponent } from './test-components/simple-component.component';
 
 @Component({
   selector: 'example-component-container',
