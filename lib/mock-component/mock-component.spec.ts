@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
 import { MockComponent } from './mock-component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { SimpleComponent } from './test-components/simple-component.component';
@@ -30,11 +26,6 @@ export class ExampleComponentContainer {
 describe('MockComponent', () => {
   let component: ExampleComponentContainer;
   let fixture: ComponentFixture<ExampleComponentContainer>;
-
-  getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-  );
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

@@ -1,11 +1,7 @@
 import { Component, Directive, Input } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControlDirective } from '@angular/forms';
-import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
 import { MockDirective } from './mock_directive';
 
 @Directive({
@@ -24,15 +20,10 @@ export class ExampleDirective {
     <div exampleDirective></div>
   `
 })
-export class ExampleComponentContainer {}
+export class ExampleComponentContainer {} // tslint:disable-line:max-classes-per-file
 
 describe('MockComponent', () => {
   let fixture: ComponentFixture<ExampleComponentContainer>;
-
-  getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-  );
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -70,7 +61,7 @@ describe('MockComponent', () => {
     // Some angular directives set up their metadata in a different way than @Directive does
     // I found that FormControlDirective is one of those weird directives.
     // Since I don't know how they did it, I don't know how to test it except to write this
-    // test around a known-odd directive.
+    // Test around a known-odd directive.
     expect(() => {
       MockDirective(FormControlDirective);
     }).not.toThrow();
