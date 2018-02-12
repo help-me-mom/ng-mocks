@@ -8,7 +8,5 @@ export function MockPipe<TPipe extends PipeTransform>(pipe: Type<TPipe>, transfo
     transform = transform || defaultTransform;
   }
 
-  /* tslint:disable:no-angle-bracket-type-assertion */
-  return Pipe({ name: pipeName })(<any> PipeMock as Type<TPipe>);
-  /* tslint:enable:no-angle-bracket-type-assertion */
+  return Pipe({ name: pipeName })(PipeMock as Type<TPipe>);
 }
