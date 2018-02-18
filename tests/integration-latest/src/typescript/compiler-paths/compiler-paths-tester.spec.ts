@@ -7,6 +7,6 @@ describe("CompilerPathsTester", () => {
 
     it("should use paths option in tsconfig", () => {
 
-        expect(tester.test()).toEqual("compiler paths");
+        expect(tester.test()).toEqual("function");
     });
 });

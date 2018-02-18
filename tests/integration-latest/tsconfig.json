@@ -13,7 +13,8 @@
         "baseUrl": ".",
         "paths": {
             "compilerpaths/*": [ "src/typescript/compiler-paths/*" ],
-            "compilerpaths-js/*": [ "node_modules/karma-typescript/dist/*" ]
+            "compilerpaths-js/*": [ "node_modules/karma-typescript/dist/*" ],
+            "@custom/*": ["./node_modules/*"]
         },
         "types" : [
             "codemirror",

@@ -1,8 +1,9 @@
+import { Subject } from "@custom/rxjs";
 
 export class CompilerPathsTester {
 
     public test(): string {
 
-        return "compiler paths";
+        return typeof Subject;
     }
 }

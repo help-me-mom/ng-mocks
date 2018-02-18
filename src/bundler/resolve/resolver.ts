@@ -11,6 +11,8 @@ import { BundleItem } from "../bundle-item";
 import { DependencyWalker } from "../dependency-walker";
 import { SourceReader } from "./source-reader";
 
+import PathTool = require("../../shared/path-tool");
+
 export class Resolver {
 
     private shims: any;
@@ -150,19 +152,40 @@ export class Resolver {
         return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     }
 
+    private resolveCompilerPathModulename(bundleItem: BundleItem): string {
+
+        let moduleName = bundleItem.moduleName;
+
+        if (bundleItem.isNpmModule() && bundleItem.isTypingsFile() &&
+            bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
+
+            let filename = PathTool.fixWindowsPath(bundleItem.filename);
+            let matches = filename.match(/\/node_modules\/(.*)\//);
+
+            if (matches && matches[1]) {
+                moduleName = matches[1];
+                this.log.debug("Resolved module name [%s] to [%s]", bundleItem.moduleName, moduleName);
+            }
+        }
+
+        return moduleName;
+    }
+
     private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: { (): void }) {
 
-        if (this.bowerPackages[bundleItem.moduleName]) {
-            bundleItem.filename = this.bowerPackages[bundleItem.moduleName];
-            this.log.debug("Resolved [%s] to bower package: %s", bundleItem.moduleName, bundleItem.filename);
+        const moduleName = this.resolveCompilerPathModulename(bundleItem);
+
+        if (this.bowerPackages[moduleName]) {
+            bundleItem.filename = this.bowerPackages[moduleName];
+            this.log.debug("Resolved [%s] to bower package: %s", moduleName, bundleItem.filename);
             return onFilenameResolved();
         }
 
-        if (this.config.bundlerOptions.resolve.alias[bundleItem.moduleName]) {
-            let alias = this.config.bundlerOptions.resolve.alias[bundleItem.moduleName];
+        if (this.config.bundlerOptions.resolve.alias[moduleName]) {
+            let alias = this.config.bundlerOptions.resolve.alias[moduleName];
             let relativePath = path.relative(this.config.karma.basePath, alias);
             bundleItem.filename = path.join(this.config.karma.basePath, relativePath);
-            this.log.debug("Resolved [%s] to alias: %s", bundleItem.moduleName, bundleItem.filename);
+            this.log.debug("Resolved [%s] to alias: %s", moduleName, bundleItem.filename);
             return onFilenameResolved();
         }
 
@@ -173,7 +196,7 @@ export class Resolver {
             modules: this.shims
         };
 
-        browserResolve(bundleItem.moduleName, bopts, (error, filename) => {
+        browserResolve(moduleName, bopts, (error, filename) => {
             if (!error) {
                 bundleItem.filename = fs.realpathSync(filename);
                 return onFilenameResolved();
@@ -185,14 +208,14 @@ export class Resolver {
                 modules: this.shims
             };
 
-            browserResolve(bundleItem.moduleName, bopts, (error2, filename2) => {
+            browserResolve(moduleName, bopts, (error2, filename2) => {
                 if (error2) {
-                    if (bundleItem.filename) {
+                    if (bundleItem.filename && !bundleItem.isTypingsFile()) {
                         // This is probably a compiler path module (.js)
                         return onFilenameResolved();
                     }
                     throw new Error("Unable to resolve module [" +
-                        bundleItem.moduleName + "] from [" + requiringModule + "]" + os.EOL +
+                        moduleName + "] from [" + requiringModule + "]" + os.EOL +
                         JSON.stringify(bopts, undefined, 2) + os.EOL +
                         error);
                 }
