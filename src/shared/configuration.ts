@@ -100,7 +100,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
         let defaultBundlerOptions: BundlerOptions = {
             acornOptions: {
-                ecmaVersion: 6,
+                ecmaVersion: 7,
                 sourceType: "module"
             },
             addNodeGlobals: true,
