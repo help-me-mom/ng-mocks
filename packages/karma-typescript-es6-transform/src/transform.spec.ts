@@ -7,7 +7,7 @@ import * as test from "tape";
 
 import * as transform from "./transform";
 
-let logOptions: kt.TransformInitializeLogOptions = {
+const logOptions: kt.TransformInitializeLogOptions = {
     appenders: [{
         layout: {
             pattern: "%[%d{DATE}:%p [%c]: %]%m",
@@ -18,18 +18,18 @@ let logOptions: kt.TransformInitializeLogOptions = {
     level: "INFO"
 };
 
-let mockLogger = {
+const mockLogger = {
     debug: sinon.spy()
 };
 
-let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
-let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
-let configureSpy = sinon.spy(log4js, "configure");
+const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+const setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
+const configureSpy = sinon.spy(log4js, "configure");
 
 transform().initialize(logOptions);
 
 // kt.TransformContext
-let createContext = (source: string): any => {
+const createContext = (source: string): any => {
     return {
         config: {},
         filename: "file.js",
@@ -60,7 +60,7 @@ test("transformer should check js property", (t) => {
 
     t.plan(1);
 
-    let context = createContext("export * from './foo.js';");
+    const context = createContext("export * from './foo.js';");
     context.js = undefined;
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
@@ -75,7 +75,7 @@ test("transformer should detect es6 class", (t) => {
 
     t.plan(1);
 
-    let context = createContext("class Foo {}");
+    const context = createContext("class Foo {}");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -89,7 +89,7 @@ test("transformer should detect es6 const", (t) => {
 
     t.plan(1);
 
-    let context = createContext("const x = 1;");
+    const context = createContext("const x = 1;");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -103,7 +103,7 @@ test("transformer should detect es6 let", (t) => {
 
     t.plan(1);
 
-    let context = createContext("let x = 1;");
+    const context = createContext("let x = 1;");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -117,7 +117,7 @@ test("transformer should detect es6 variables mixed with var", (t) => {
 
     t.plan(1);
 
-    let context = createContext("var a = 1; const x = 1;");
+    const context = createContext("var a = 1; const x = 1;");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -131,7 +131,7 @@ test("transformer should detect es6 nested const", (t) => {
 
     t.plan(1);
 
-    let context = createContext("module.exports = () => { const x = 1; };");
+    const context = createContext("module.exports = () => { const x = 1; };");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -145,7 +145,7 @@ test("transformer should detect es6 nested let", (t) => {
 
     t.plan(1);
 
-    let context = createContext("module.exports = () => { let x = 1; };");
+    const context = createContext("module.exports = () => { let x = 1; };");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -159,7 +159,7 @@ test("transformer should detect es6 fat arrow function", (t) => {
 
     t.plan(1);
 
-    let context = createContext("module.exports = () => { return 'test'; }");
+    const context = createContext("module.exports = () => { return 'test'; }");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -173,7 +173,7 @@ test("transformer should detect es6 wildcard export", (t) => {
 
     t.plan(1);
 
-    let context = createContext("export * from './foo.js';");
+    const context = createContext("export * from './foo.js';");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -187,7 +187,7 @@ test("transformer should detect es6 default export", (t) => {
 
     t.plan(1);
 
-    let context = createContext("export default function(){}");
+    const context = createContext("export default function(){}");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -201,7 +201,7 @@ test("transformer should detect es6 named export", (t) => {
 
     t.plan(1);
 
-    let context = createContext("const x = 1; export { x };");
+    const context = createContext("const x = 1; export { x };");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -215,7 +215,7 @@ test("transformer should detect es6 import", (t) => {
 
     t.plan(1);
 
-    let context = createContext("import foo from './bar.js';");
+    const context = createContext("import foo from './bar.js';");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -229,7 +229,7 @@ test("transformer should skip ast without body", (t) => {
 
     t.plan(1);
 
-    let context = createContext("let x = 0;");
+    const context = createContext("let x = 0;");
     context.js.ast.body = undefined;
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
@@ -244,7 +244,7 @@ test("transformer should skip ast without keywords", (t) => {
 
     t.plan(1);
 
-    let context = createContext("var x = 0;");
+    const context = createContext("var x = 0;");
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
@@ -258,7 +258,7 @@ test("transformer should log activity with level debug", (t) => {
 
     t.plan(1);
 
-    let context = createContext("export default function(){}");
+    const context = createContext("export default function(){}");
 
     transform()(context, () => {
         t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.js" ]);
@@ -269,7 +269,7 @@ test("transformer should override options.filename with context.filename", (t) =
 
     t.plan(1);
 
-    let context = createContext("export default function(){}");
+    const context = createContext("export default function(){}");
 
     transform({ filename: "xxx.js" })(context, () => {
         t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.js" ]);
@@ -280,7 +280,7 @@ test("transformer should compile and set new source", (t) => {
 
     t.plan(1);
 
-    let context = createContext("let x = 1; export default x");
+    const context = createContext("let x = 1; export default x");
 
     transform()(context, () => {
         t.equal(context.source, "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n" +
@@ -292,10 +292,10 @@ test("transformer should compile and set new ast", (t) => {
 
     t.plan(1);
 
-    let context = createContext("export default function(){}");
+    const context = createContext("export default function(){}");
 
     transform()(context, () => {
-        t.equal((<ESTree.Program> context.js.ast).body[0].type, "ExpressionStatement");
+        t.equal((context.js.ast as ESTree.Program).body[0].type, "ExpressionStatement");
     });
 });
 
@@ -303,9 +303,9 @@ test("transformer should use custom compiler options", (t) => {
 
     t.plan(1);
 
-    let source = "let x = 2; x **= 3; export default x;";
+    const source = "let x = 2; x **= 3; export default x;";
     // kt.TransformContext
-    let context: any = {
+    const context: any = {
         config: {},
         filename: "file.js",
         js: {
@@ -331,7 +331,7 @@ test("transformer should handle syntax errors", (t) => {
 
     t.plan(2);
 
-    let context = createContext("export default function(){}");
+    const context = createContext("export default function(){}");
     context.source = ".x";
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {

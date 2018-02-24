@@ -8,10 +8,10 @@ import * as kt from "karma-typescript/src/api/transforms";
 let log: log4js.Logger;
 let walk: any;
 
-let isEs6 = (ast: ESTree.Program): boolean => {
+const isEs6 = (ast: ESTree.Program): boolean => {
     let es6NodeFound = false;
     if (ast.body) {
-        let visitNode = (node: any, state: any, c: any)  => {
+        const visitNode = (node: any, state: any, c: any)  => {
             if (!es6NodeFound) {
                 walk.base[node.type](node, state, c);
                 switch (node.type) {
@@ -24,7 +24,7 @@ let isEs6 = (ast: ESTree.Program): boolean => {
                         es6NodeFound = true;
                         break;
                     case "VariableDeclaration":
-                        let variableDeclaration = (<ESTree.VariableDeclaration> node);
+                        const variableDeclaration = (node as ESTree.VariableDeclaration);
                         if (variableDeclaration.kind === "const" || variableDeclaration.kind === "let") {
                             es6NodeFound = true;
                             break;
@@ -41,7 +41,7 @@ let isEs6 = (ast: ESTree.Program): boolean => {
     return es6NodeFound;
 };
 
-let configure = (options?: babel.TransformOptions) => {
+const configure = (options?: babel.TransformOptions) => {
 
     options = options || {};
 
@@ -49,7 +49,7 @@ let configure = (options?: babel.TransformOptions) => {
         options.presets = [["env"]];
     }
 
-    let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
+    const transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
 
         if (!context.js) {
             return callback(undefined, false);
@@ -74,7 +74,7 @@ let configure = (options?: babel.TransformOptions) => {
         }
     };
 
-    let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
+    const initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
         log4js.setGlobalLogLevel(logOptions.level);
         log4js.configure({ appenders: logOptions.appenders });
         log = log4js.getLogger("es6-transform.karma-typescript");
