@@ -8,7 +8,7 @@ describe("PostCssTester", () => {
     it("should test transforming css with autoprefixer", () => {
 
         let processed = tester.testTransformCss();
-        expect(processed.indexOf("display: -webkit-box;")).toBeGreaterThan(0);
+        expect(processed.indexOf("display: -ms-flexbox;")).toBeGreaterThan(0);
         expect(processed.indexOf("/*# sourceMappingURL=data:application/json;base64")).toBeGreaterThan(0);
     });
 });
