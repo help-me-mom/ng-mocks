@@ -63,7 +63,7 @@ test("transformer should check js property", (t) => {
     let context = createContext("export * from './foo.js';");
     context.js = undefined;
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -77,7 +77,7 @@ test("transformer should detect es6 class", (t) => {
 
     let context = createContext("class Foo {}");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -91,7 +91,7 @@ test("transformer should detect es6 const", (t) => {
 
     let context = createContext("const x = 1;");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -105,7 +105,7 @@ test("transformer should detect es6 let", (t) => {
 
     let context = createContext("let x = 1;");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -119,7 +119,7 @@ test("transformer should detect es6 variables mixed with var", (t) => {
 
     let context = createContext("var a = 1; const x = 1;");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -133,7 +133,7 @@ test("transformer should detect es6 nested const", (t) => {
 
     let context = createContext("module.exports = () => { const x = 1; };");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -147,7 +147,7 @@ test("transformer should detect es6 nested let", (t) => {
 
     let context = createContext("module.exports = () => { let x = 1; };");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -161,7 +161,7 @@ test("transformer should detect es6 fat arrow function", (t) => {
 
     let context = createContext("module.exports = () => { return 'test'; }");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -175,7 +175,7 @@ test("transformer should detect es6 wildcard export", (t) => {
 
     let context = createContext("export * from './foo.js';");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -189,7 +189,7 @@ test("transformer should detect es6 default export", (t) => {
 
     let context = createContext("export default function(){}");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -203,7 +203,7 @@ test("transformer should detect es6 named export", (t) => {
 
     let context = createContext("const x = 1; export { x };");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -217,7 +217,7 @@ test("transformer should detect es6 import", (t) => {
 
     let context = createContext("import foo from './bar.js';");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -232,7 +232,7 @@ test("transformer should skip ast without body", (t) => {
     let context = createContext("let x = 0;");
     context.js.ast.body = undefined;
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -246,7 +246,7 @@ test("transformer should skip ast without keywords", (t) => {
 
     let context = createContext("var x = 0;");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -334,7 +334,7 @@ test("transformer should handle syntax errors", (t) => {
     let context = createContext("export default function(){}");
     context.source = ".x";
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         t.isEqual(error.message, "file.js: Unexpected token (1:0)");
         t.false(dirty);
     });
