@@ -94,6 +94,7 @@
   "devDependencies": {
     "bower": "^1.8.0",
     "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
+    "karma-phantomjs-launcher": "^1.0.2",
+    "phantomjs-prebuilt": "^2.1.16"
   }
 }
