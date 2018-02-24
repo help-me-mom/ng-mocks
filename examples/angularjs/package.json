@@ -12,8 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --port 20004 --single-run",
-    "dev:ci:phantomjs": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
     "test": "karma start"
   },
   "dependencies": {
@@ -23,14 +22,13 @@
     "angular": "^1.6.4",
     "angular-mocks": "^1.6.4",
     "jasmine-core": "^2.6.4",
-    "karma": "^1.7.0",
+    "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-typescript": "../../",
     "typescript": "latest"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
+    "gulp": "^3.9.1"
   }
 }

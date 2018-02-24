@@ -1,7 +1,6 @@
 var spawn = require("cross-spawn");
-var os = require("os");
 
-var command = os.platform() === "win32" ? "npm run dev:ci" : "npm run dev:ci:phantomjs";
+var command = "npm run dev:ci";
 
 // The pyramid of doom :( If you have a better idea, (which doesn't
 // involve wait.for / node-gyp / fibers) please create a pull request,

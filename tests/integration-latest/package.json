@@ -12,18 +12,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
-    "dev:ci:phantomjs": "gulp dev:ci --cwd . && karma --browsers PhantomJS start --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --single-run",
-    "dev:ci:phantomjs:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers PhantomJS --single-run",
-    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --single-run",
-    "dev:ci:phantomjs:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --browsers PhantomJS --single-run",
-    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --single-run",
-    "dev:ci:phantomjs:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --browsers PhantomJS --single-run",
-    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --single-run",
-    "dev:ci:phantomjs:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers PhantomJS --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
-    "dev:ci:phantomjs:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
+    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers ChromeHeadless --single-run",
+    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --browsers ChromeHeadless --single-run",
+    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --browsers ChromeHeadless --single-run",
+    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers ChromeHeadless --single-run",
+    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers ChromeHeadless --single-run",
     "prepare": "bower install",
     "test": "karma start"
   },
@@ -65,7 +59,7 @@
     "jasmine-core": "^2.6.0",
     "jsonld": "^0.4.12",
     "karma": "^2.0.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "../../",
@@ -93,8 +87,6 @@
   },
   "devDependencies": {
     "bower": "^1.8.0",
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "phantomjs-prebuilt": "^2.1.16"
+    "gulp": "^3.9.1"
   }
 }

@@ -12,12 +12,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --single-run",
-    "dev:ci:phantomjs": "gulp dev:ci --cwd . && karma start --browsers PhantomJS --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --single-run",
-    "dev:ci:phantomjs:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers PhantomJS --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --single-run",
-    "dev:ci:phantomjs:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers PhantomJS --single-run",
+    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
+    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers ChromeHeadless --single-run",
+    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers ChromeHeadless --single-run",
     "test": "karma start"
   },
   "dependencies": {
@@ -29,8 +26,8 @@
     "@types/jasmine": "2.2.31",
     "core-js": "^2.4.1",
     "jasmine-core": "2.4.1",
-    "karma": "1.5.0",
-    "karma-chrome-launcher": "2.0.0",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.0.2",
     "karma-typescript": "../../",
@@ -44,7 +41,6 @@
     "zone.js": "0.6.25"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "karma-phantomjs-launcher": "^1.0.2"
+    "gulp": "^3.9.1"
   }
 }
