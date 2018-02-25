@@ -1,9 +1,15 @@
-import { Subject } from "@custom/rxjs";
+import { Subject } from "@nodeModules/rxjs";
+import * as acorn from "@outsideProject/acorn";
 
 export class CompilerPathsTester {
 
-    public test(): string {
+    public testNodeModules(): string {
 
         return typeof Subject;
+    }
+
+    public testOutsideProject(): string {
+
+        return typeof acorn;
     }
 }
