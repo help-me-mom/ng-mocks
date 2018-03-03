@@ -14,7 +14,8 @@
         "paths": {
             "compilerpaths/*": [ "src/typescript/compiler-paths/*" ],
             "compilerpaths-js/*": [ "node_modules/karma-typescript/dist/*" ],
-            "@custom/*": ["./node_modules/*"]
+            "@nodeModules/*": ["node_modules/*"],
+            "@outsideProject/*": ["../../node_modules/*"]
         },
         "types" : [
             "codemirror",
@@ -28,5 +29,8 @@
     "exclude": [
         "node_modules"
     ],
-    "include": ["mode_noodles"]
+    "include": [
+        "mode_noodles",
+        "src/bundling"
+    ]
 }

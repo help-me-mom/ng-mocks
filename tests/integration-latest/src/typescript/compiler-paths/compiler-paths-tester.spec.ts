@@ -7,6 +7,12 @@ describe("CompilerPathsTester", () => {
 
     it("should use paths option in tsconfig", () => {
 
-        expect(tester.test()).toEqual("function");
+        expect(tester.testNodeModules()).toEqual("function");
+    });
+
+    // TODO: does ths also cover #175, https://github.com/MasterCassim/karma-typescript-175?
+    it("should use paths option in tsconfig, path outside the project", () => {
+
+        expect(tester.testOutsideProject()).toEqual("object");
     });
 });
