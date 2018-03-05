@@ -1,13 +1,22 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+  selector: 'base-simple-component',
+  template: 'some template'
+})
+export class BaseSimpleComponent {
+  @Output() someOutput2: EventEmitter<string>;
+}
+
+/* tslint:disable:max-classes-per-file */
+@Component({
   exportAs: 'seeimple',
   selector: 'simple-component',
   template: 'some template'
 })
-export class SimpleComponent {
+export class SimpleComponent extends BaseSimpleComponent {
   @Input() someInput: string;
   @Input('someOtherInput') someInput2: string;
   @Output() someOutput1: EventEmitter<string>;
-  @Output() someOutput2: EventEmitter<string>;
 }
+/* tslint:enable:max-classes-per-file */

@@ -11,7 +11,8 @@ import { SimpleComponent } from './test-components/simple-component.component';
   template: `
     <simple-component [someInput]="\'hi\'"
                       [someOtherInput]="\'bye\'"
-                      (someOutput1)="emitted = $event">
+                      (someOutput1)="emitted = $event"
+                      (someOutput2)="emitted = $event">
     </simple-component>
     <simple-component [someInput]="\'hi again\'" #f='seeimple'></simple-component>
     <empty-component></empty-component>
@@ -55,7 +56,7 @@ describe('MockComponent', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
                                    .query(By.directive(MockComponent(SimpleComponent)))
-                                   .componentInstance as SimpleComponent;
+                                   .componentInstance;
     expect(mockedComponent.someInput).toEqual('hi');
     expect(mockedComponent.someInput2).toEqual('bye');
   });
@@ -64,8 +65,17 @@ describe('MockComponent', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
                                    .query(By.directive(MockComponent(SimpleComponent)))
-                                   .componentInstance as SimpleComponent;
+                                   .componentInstance;
     mockedComponent.someOutput1.emit('hi');
+    expect(component.emitted).toEqual('hi');
+  });
+
+  it('should trigger output bound behavior for extended outputs', () => {
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(MockComponent(SimpleComponent)))
+                                   .componentInstance;
+    mockedComponent.someOutput2.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
@@ -78,8 +88,8 @@ describe('MockComponent', () => {
   it('should give each instance of a mocked component its own event emitter', () => {
     const mockedComponents = fixture.debugElement
                                     .queryAll(By.directive(MockComponent(SimpleComponent)));
-    const mockedComponent1 = mockedComponents[0].componentInstance as SimpleComponent;
-    const mockedComponent2 = mockedComponents[1].componentInstance as SimpleComponent;
+    const mockedComponent1 = mockedComponents[0].componentInstance;
+    const mockedComponent2 = mockedComponents[1].componentInstance;
     expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
   });
 
