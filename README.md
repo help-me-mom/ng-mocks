@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/mock-component.svg)](https://badge.fury.io/js/mock-component)
 
 # mock_component
-Helper function for creating angular component mocks for test.
+Helper function for creating angular mocks for test.
 
 ## Why use this?
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.  Or you could use this to mock
