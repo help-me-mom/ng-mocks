@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
-import { MockComponent } from 'mock-component';
-import { ExampleComponent, ParentModule } from './test-fixtures';
+import { MockComponent } from '../mock-component';
 import { MockModule } from './mock-module';
+import { ExampleComponent, ParentModule } from './test-fixtures';
 
 @Component({
   selector: 'component-subject',
@@ -23,11 +19,6 @@ class ComponentSubject {
 
 describe('MockModule', () => {
   let fixture: ComponentFixture<ComponentSubject>;
-
-  getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-  );
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

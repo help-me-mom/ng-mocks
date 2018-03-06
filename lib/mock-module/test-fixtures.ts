@@ -1,20 +1,18 @@
-import { NgModule, Component, Injectable, Directive, Pipe, PipeTransform } from '@angular/core';
+/* tslint:disable:max-classes-per-file */
+
+import { Component, Directive, Injectable, NgModule, Pipe, PipeTransform } from '@angular/core';
 
 @Directive({selector: '[example-directive]'})
 export class ExampleDirective {}
 
 @Pipe({name: 'examplePipe'})
 export class ExamplePipe implements PipeTransform {
-  transform(text: string) {
-    return `Example: ${text}`;
-  }
+  transform = (text: string) => `Example: ${text}`;
 }
 
 @Injectable()
 export class ExampleService {
-  get(id: number) {
-    return `Got: ${id}`;
-  }
+  get = (id: number) => `Got: ${id}`;
 }
 
 @Component({

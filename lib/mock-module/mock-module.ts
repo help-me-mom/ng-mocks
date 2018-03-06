@@ -1,13 +1,16 @@
-import { NgModule, Type, Component, Pipe, Directive } from '@angular/core';
-import { MockComponent } from 'mock-component';
-import { MockDirective } from 'mock-directive';
-import { MockPipe } from 'mock-pipe';
+import { Component, Directive, NgModule, Pipe, Type } from '@angular/core';
+import { MockComponent } from '../mock-component';
+import { MockDirective } from '../mock-directive';
+import { MockPipe } from '../mock-pipe';
 
 type Declaration = Type<Component | Directive | Pipe>;
-type moduleOptions = { declarations: Declaration[];
-                       exports: Declaration[];
-                       providers: Array<{ provide: any; useValue: {} }>; };
+interface IModuleOptions {
+  declarations: Declaration[];
+  exports: Declaration[];
+  providers: Array<{ provide: any; useValue: {} }>;
+}
 
+/* tslint:disable-next-line:ban-types */
 const mockLookup: { [key: string]: Function } = {
   Component: MockComponent,
   Directive: MockDirective,
@@ -27,10 +30,10 @@ export function MockModule(module: Type<NgModule>): Type<NgModule> {
   return NgModule(MockIt(module))(class MockedModule {});
 }
 
-function MockIt(module: Type<NgModule>): moduleOptions {
-  const mockedModule: moduleOptions = { declarations: [],
-                                        exports: [],
-                                        providers: [] };
+function MockIt(module: Type<NgModule>): IModuleOptions {
+  const mockedModule: IModuleOptions = { declarations: [],
+                                         exports: [],
+                                         providers: [] };
   const declarations = (module as any).__annotations__[0].declarations || [];
   const imports = (module as any).__annotations__[0].imports || [];
   const providers = (module as any).__annotations__[0].providers || [];
@@ -38,7 +41,7 @@ function MockIt(module: Type<NgModule>): moduleOptions {
   mockedModule.exports = mockedModule.declarations = [...declarations.map(mockDeclaration)];
   mockedModule.providers = providers.map(mockProvider);
 
-  imports.reduce((acc: moduleOptions, imPort: Type<NgModule>) => {
+  imports.reduce((acc: IModuleOptions, imPort: Type<NgModule>) => {
     const result = MockIt(imPort);
     acc.declarations.push(...result.declarations);
     acc.providers.push(...result.providers);

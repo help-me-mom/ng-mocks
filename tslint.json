@@ -1,6 +1,7 @@
 {
   "extends": "tslint:all",
   "rules": {
+    "align": false,
     "completed-docs": false,
     "member-access": false,
     "newline-before-return": false,
