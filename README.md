@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/ike18t/mock_component.png?branch=master)](https://travis-ci.org/ike18t/mock_component)
-[![npm version](https://badge.fury.io/js/mock-component.svg)](https://badge.fury.io/js/mock-component)
+[![Build Status](https://travis-ci.org/ike18t/ng-mocks.png?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
+[![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 
 # mock_component
 Helper function for creating angular mocks for test.

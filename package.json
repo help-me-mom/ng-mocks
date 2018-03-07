@@ -3,16 +3,13 @@
   "version": "5.0.0-rc4",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "definitions",
+    "CHANGELOG",
     "dist",
     "LICENSE",
     "README"
   ],
-  "typings": "definitions/index",
-  "typescript": {
-    "definition": "definitions/index"
-  },
   "scripts": {
     "clean": "rm -rf dist coverage",
     "lint": "tslint --project tsconfig.json",
