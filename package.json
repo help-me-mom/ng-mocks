@@ -1,6 +1,6 @@
 {
   "name": "ng-mocks",
-  "version": "5.0.0-rc4",
+  "version": "5.0.0-rc5",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
