@@ -1,6 +1,6 @@
 {
   "name": "ng-mocks",
-  "version": "5.0.0-rc3",
+  "version": "5.0.0-rc4",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
   "files": [
@@ -27,7 +27,9 @@
   "keywords": [
     "Angular",
     "Component",
+    "Directive",
     "Mock",
+    "Pipe",
     "TestBed",
     "Testing"
   ],
@@ -40,10 +42,6 @@
   "peerDependencies": {
     "@angular/core": "5.x",
     "@angular/forms": "5.x"
-  },
-  "dependencies": {
-    "mock-directive": "5.0.1",
-    "mock-pipe": "5.0.0-rc.3"
   },
   "devDependencies": {
     "@angular/common": "5.x",
