@@ -1,1 +1,1 @@
-export { MockModule } from './mock-module';
+export * from './mock-module';
