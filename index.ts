@@ -1,4 +1,4 @@
-export { MockComponent } from './lib/mock-component';
-export { MockDirective } from './lib/mock-directive';
-export { MockModule } from './lib/mock-module';
-export { MockPipe } from './lib/mock-pipe';
+export * from './lib/mock-component';
+export * from './lib/mock-directive';
+export * from './lib/mock-module';
+export * from './lib/mock-pipe';

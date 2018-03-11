@@ -3,7 +3,7 @@ import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockPipe } from '../mock-pipe';
 
-type Declaration = Type<Component | Directive | Pipe>;
+export type Declaration = Type<Component | Directive | Pipe>;
 interface IModuleOptions {
   declarations: Declaration[];
   exports: Declaration[];
@@ -17,10 +17,10 @@ const mockLookup: { [key: string]: Function } = {
   Pipe: MockPipe
 };
 
-const mockDeclaration = (declaration: Declaration) => {
+export function MockDeclaration(declaration: Declaration) {
   const type = (declaration as any).__annotations__[0].__proto__.ngMetadataName;
   return mockLookup[type](declaration);
-};
+}
 
 const mockProvider = (provider: any) => ({
   provide: provider, useValue: {}
@@ -38,7 +38,7 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
   const imports = (module as any).__annotations__[0].imports || [];
   const providers = (module as any).__annotations__[0].providers || [];
 
-  mockedModule.exports = mockedModule.declarations = [...declarations.map(mockDeclaration)];
+  mockedModule.exports = mockedModule.declarations = [...declarations.map(MockDeclaration)];
   mockedModule.providers = providers.map(mockProvider);
 
   imports.reduce((acc: IModuleOptions, imPort: Type<NgModule>) => {
