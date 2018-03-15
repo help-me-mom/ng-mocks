@@ -17,7 +17,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
     if (!directive.hasOwnProperty('decorators')) {
       throw new Error(`Cannot find the annotations/decorators for directive ${directive.name}`);
     }
-    return (directive as any).decorators[0].args[0];
+    annotation = (directive as any).decorators[0].args[0];
   }
 
   const options: Directive = {
