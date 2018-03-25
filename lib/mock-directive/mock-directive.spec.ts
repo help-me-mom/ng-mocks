@@ -1,6 +1,6 @@
 import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControlDirective } from '@angular/forms';
+import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockDirective } from './mock-directive';
 
@@ -19,10 +19,12 @@ export class ExampleDirective {
   template: `
     <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo" (someOutput)="emitted = $event"></div>
     <div exampleDirective></div>
+    <input [formControl]="fooControl"/>
   `
 })
 export class ExampleComponentContainer {
   emitted = false;
+  foo = new FormControl('');
 } // tslint:disable-line:max-classes-per-file
 
 describe('MockDirective', () => {
@@ -32,6 +34,7 @@ describe('MockDirective', () => {
     TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
+        MockDirective(FormControlDirective),
         MockDirective(ExampleDirective)
       ]
     })
@@ -73,8 +76,7 @@ describe('MockDirective', () => {
     // I found that FormControlDirective is one of those weird directives.
     // Since I don't know how they did it, I don't know how to test it except to write this
     // Test around a known-odd directive.
-    expect(() => {
-      MockDirective(FormControlDirective);
-    }).not.toThrow();
+    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
+    expect(debugElement).not.toBeNull();
   });
 });
