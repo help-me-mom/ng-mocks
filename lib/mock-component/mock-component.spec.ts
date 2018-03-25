@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockComponent } from './mock-component';
+import { MockComponent, MockComponents } from './mock-component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { SimpleComponent } from './test-components/simple-component.component';
 
@@ -33,8 +33,8 @@ describe('MockComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
-        MockComponent(EmptyComponent),
-        MockComponent(SimpleComponent)
+        MockComponents(EmptyComponent,
+                       SimpleComponent),
       ],
       imports: [
         FormsModule

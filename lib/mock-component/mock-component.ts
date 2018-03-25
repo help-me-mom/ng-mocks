@@ -4,6 +4,10 @@ import { getInputsOutputs } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
+export function MockComponents<TComponent>(...components: Array<Type<TComponent>>): Array<Type<TComponent>> {
+  return components.map(MockComponent);
+}
+
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
   const cacheHit = cache.get(component);
   if (cacheHit) {

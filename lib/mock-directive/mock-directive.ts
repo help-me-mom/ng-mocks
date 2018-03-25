@@ -3,6 +3,10 @@ import { getInputsOutputs } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
 
+export function MockDirectives<TDirective>(...directives: Array<Type<TDirective>>): Array<Type<TDirective>> {
+  return directives.map(MockDirective);
+}
+
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDirective> {
   const cacheHit = cache.get(directive);
   if (cacheHit) {
