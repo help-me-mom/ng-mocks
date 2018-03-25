@@ -25,7 +25,7 @@ export class ExampleComponentContainer {
   emitted = false;
 } // tslint:disable-line:max-classes-per-file
 
-describe('MockComponent', () => {
+describe('MockDirective', () => {
   let fixture: ComponentFixture<ExampleComponentContainer>;
 
   beforeEach(async(() => {
