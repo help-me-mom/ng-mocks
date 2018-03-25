@@ -1,4 +1,4 @@
-import { Directive, Type } from '@angular/core';
+import { Directive, EventEmitter, Type } from '@angular/core';
 import { getInputsOutputs } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
@@ -31,7 +31,16 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
     selector: annotation.selector
   };
 
-  const mockedDirective =  Directive(options)(class DirectiveMock {} as Type<TDirective>);
+  // tslint:disable-next-line:no-unnecessary-class
+  class DirectiveMock {
+    constructor() {
+      (options.outputs || []).forEach((output) => {
+        (this as any)[output.split(':')[0]] = new EventEmitter<any>();
+      });
+    }
+  }
+
+  const mockedDirective =  Directive(options)(DirectiveMock as Type<TDirective>);
   cache.set(directive, mockedDirective);
 
   return mockedDirective;

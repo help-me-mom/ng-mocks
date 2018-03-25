@@ -1,4 +1,4 @@
-import { Component, Directive, Input } from '@angular/core';
+import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,17 +10,20 @@ import { MockDirective } from './mock-directive';
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
+  @Output() someOutput = new EventEmitter<boolean>();
   @Input('bah') something: string;
 }
 
 @Component({
   selector: 'example-component-container',
   template: `
-    <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo"></div>
+    <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo" (someOutput)="emitted = $event"></div>
     <div exampleDirective></div>
   `
 })
-export class ExampleComponentContainer {} // tslint:disable-line:max-classes-per-file
+export class ExampleComponentContainer {
+  emitted = false;
+} // tslint:disable-line:max-classes-per-file
 
 describe('MockComponent', () => {
   let fixture: ComponentFixture<ExampleComponentContainer>;
@@ -50,6 +53,14 @@ describe('MockComponent', () => {
     const element = debugElement.injector.get(MockDirective(ExampleDirective));
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
+  });
+
+  it('triggers output bound behavior for extended outputs', () => {
+    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
+    const element = debugElement.injector.get(MockDirective(ExampleDirective));
+
+    element.someOutput.emit(true);
+    expect(fixture.componentInstance.emitted).toEqual(true);
   });
 
   it('should memoize the return value by argument', () => {
