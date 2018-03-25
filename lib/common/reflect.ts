@@ -27,7 +27,7 @@ function getPropDecorators(directive: any, type: 'Input' | 'Output') {
     (decorators[propName] as any[])
       .filter((decorator: any) => decorator.type.prototype.ngMetadataName === type)
       .forEach((decorator: any) =>
-        fields.push(`${propName}:${decorator.args[0] || propName}`));
+        fields.push(`${propName}:${decorator.args && decorator.args[0] || propName}`));
   });
   return fields;
 }
