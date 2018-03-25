@@ -11,6 +11,7 @@ import { SimpleComponent } from './test-components/simple-component.component';
   template: `
     <simple-component [someInput]="\'hi\'"
                       [someOtherInput]="\'bye\'"
+                      [someInput3]=true
                       (someOutput1)="emitted = $event"
                       (someOutput2)="emitted = $event">
     </simple-component>
@@ -59,6 +60,13 @@ describe('MockComponent', () => {
                                    .componentInstance;
     expect(mockedComponent.someInput).toEqual('hi');
     expect(mockedComponent.someInput2).toEqual('bye');
+  });
+
+  it('has no issues with multiple decorators on an input', () => {
+    fixture.detectChanges();
+    const mockedComponent = fixture.debugElement
+                                   .query(By.directive(MockComponent(SimpleComponent)));
+    expect(mockedComponent.componentInstance.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {
