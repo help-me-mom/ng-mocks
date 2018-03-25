@@ -15,7 +15,9 @@
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
     "release": "npm run lint && npm run test && npm run build && standard-version",
-    "test": "karma start"
+    "test": "karma start",
+    "test:watch": "karma start --auto-watch --single-run=false",
+    "test:debug": "npm run test:watch -- --browsers=Chrome"
   },
   "repository": {
     "type": "git",
