@@ -1,5 +1,6 @@
 import { NgModule, Type } from '@angular/core';
 import { Declaration } from '../common';
+import { ngModuleResolver } from '../common/reflect';
 import { MockDeclaration } from '../mock-declaration';
 
 interface IModuleOptions {
@@ -20,19 +21,17 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
   const mockedModule: IModuleOptions = { declarations: [],
                                          exports: [],
                                          providers: [] };
-  const declarations = (module as any).__annotations__[0].declarations || [];
-  const imports = (module as any).__annotations__[0].imports || [];
-  const providers = (module as any).__annotations__[0].providers || [];
+  const {declarations = [], imports = [], providers = []} = ngModuleResolver.resolve(module);
 
   mockedModule.exports = mockedModule.declarations = [...declarations.map(MockDeclaration)];
   mockedModule.providers = providers.map(mockProvider);
 
-  imports.reduce((acc: IModuleOptions, imPort: Type<NgModule>) => {
+  imports.forEach((imPort: Type<NgModule>) => {
     const result = MockIt(imPort);
-    acc.declarations.push(...result.declarations);
-    acc.providers.push(...result.providers);
-    acc.exports.push(...result.declarations);
-  }, mockedModule);
+    mockedModule.declarations.push(...result.declarations);
+    mockedModule.providers.push(...result.providers);
+    mockedModule.exports.push(...result.declarations);
+  });
 
   return mockedModule;
 }

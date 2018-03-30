@@ -1,20 +1,22 @@
 import { Declaration } from '../common';
+import { jitReflector, pipeResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockPipe } from '../mock-pipe';
-
-/* tslint:disable-next-line:ban-types */
-const mockLookup: { [key: string]: Function } = {
-  Component: MockComponent,
-  Directive: MockDirective,
-  Pipe: MockPipe
-};
 
 export function MockDeclarations(...declarations: Declaration[]): Declaration[] {
   return declarations.map(MockDeclaration);
 }
 
 export function MockDeclaration(declaration: Declaration): Declaration {
-  const type = (declaration as any).__annotations__[0].__proto__.ngMetadataName;
-  return mockLookup[type](declaration);
+  if (pipeResolver.isPipe(declaration)) {
+    return MockPipe(declaration as any) as any;
+  }
+
+  const annotations = jitReflector.annotations(declaration);
+  if (annotations.find((annotation) => annotation.template || annotation.templateUrl)) {
+    return MockComponent(declaration) as any;
+  }
+
+  return MockDirective(declaration) as any;
 }
