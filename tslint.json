@@ -19,6 +19,7 @@
     ],
     "strict-boolean-expressions": false,
     "trailing-comma": false,
-    "typedef": false
+    "typedef": false,
+    "variable-name": [true, "allow-leading-underscore"] 
   }
 }

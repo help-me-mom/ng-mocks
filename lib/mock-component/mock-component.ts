@@ -1,6 +1,6 @@
 import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { getInputsOutputs } from '../common/reflect';
+import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
@@ -14,18 +14,18 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     return cacheHit as Type<TComponent>;
   }
 
-  const annotations = (component as any).__annotations__[0] || {};
+  const {exportAs, inputs, outputs, selector} = directiveResolver.resolve(component);
 
   const options: Component = {
-    exportAs: annotations.exportAs,
-    inputs: getInputsOutputs(component, 'Input'),
-    outputs: getInputsOutputs(component, 'Output'),
+    exportAs,
+    inputs,
+    outputs,
     providers: [{
       multi: true,
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ComponentMock)
     }],
-    selector: annotations.selector,
+    selector,
     template: '<ng-content></ng-content>'
   };
 
