@@ -3,6 +3,7 @@
   "rules": {
     "align": false,
     "completed-docs": false,
+    "comment-format": false,
     "member-access": false,
     "newline-before-return": false,
     "newline-per-chained-call": false,

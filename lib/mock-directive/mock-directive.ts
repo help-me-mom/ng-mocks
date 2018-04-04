@@ -1,4 +1,5 @@
 import { Directive, EventEmitter, Type } from '@angular/core';
+import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
@@ -16,6 +17,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
   const options: Directive = { exportAs, inputs, outputs, selector };
 
+  @MockOf(directive)
   // tslint:disable-next-line:no-unnecessary-class
   class DirectiveMock {
     constructor() {

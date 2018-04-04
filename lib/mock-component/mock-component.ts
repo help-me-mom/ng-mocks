@@ -1,5 +1,6 @@
 import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<Component>>();
@@ -29,6 +30,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     template: '<ng-content></ng-content>'
   };
 
+  @MockOf(component)
   class ComponentMock implements ControlValueAccessor {
     constructor() {
       (options.outputs || []).forEach((output) => {
