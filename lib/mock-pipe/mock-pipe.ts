@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform, Type } from '@angular/core';
+import { MockOf } from '../common';
 import { pipeResolver } from '../common/reflect';
 
 export function MockPipes<TPipe extends PipeTransform>(...pipes: Array<Type<TPipe>>): Array<Type<TPipe>> {
@@ -9,6 +10,7 @@ export function MockPipe<TPipe extends PipeTransform>(pipe: Type<TPipe>, transfo
   const pipeName = pipeResolver.resolve(pipe).name;
   const defaultTransform = (...args: any[]): void => undefined;
 
+  @MockOf(pipe)
   class PipeMock implements PipeTransform {
     transform = transform || defaultTransform;
   }

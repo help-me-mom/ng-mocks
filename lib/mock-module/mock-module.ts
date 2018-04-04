@@ -1,11 +1,10 @@
 import { NgModule, Type } from '@angular/core';
-import { Declaration } from '../common';
 import { ngModuleResolver } from '../common/reflect';
 import { MockDeclaration } from '../mock-declaration';
 
 interface IModuleOptions {
-  declarations: Declaration[];
-  exports: Declaration[];
+  declarations: Array<Type<any>>;
+  exports: Array<Type<any>>;
   providers: Array<{ provide: any; useValue: {} }>;
 }
 

@@ -1,1 +1,1 @@
-export { Declaration } from './declaration';
+export * from './mock-of.decorator';
