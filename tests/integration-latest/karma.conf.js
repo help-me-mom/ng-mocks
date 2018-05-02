@@ -55,11 +55,11 @@ module.exports = function(config) {
                     ),
                     function(context, callback) {
                         if(context.ts && context.module.endsWith("es6-transform-tester.ts")) {
-                            context.ts.transpiled = "\n/* istanbul ignore next */\n" + context.ts.transpiled;                                      
+                            context.ts.transpiled = "\n/* istanbul ignore next */\n" + context.ts.transpiled;
                             return callback(undefined, true, false);
                         }
                         return callback(undefined, false);
-                    } 
+                    }
                 ],
                 validateSyntax: false
             },
@@ -118,6 +118,13 @@ module.exports = function(config) {
                 "lcovonly": {
                     "directory": "coverage",
                     "filename": "lcovonly/lcov.info"
+                },
+                "json": {
+                    "directory": "coverage",
+                    "subdirectory": function(browser) {
+                        return browser.name.toLowerCase().split(" ")[0];
+                    },
+                    "filename": "coverage.json"
                 },
                 "html": "coverage",
                 "text-summary": ""
