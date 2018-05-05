@@ -102,5 +102,5 @@ export interface Reports {
 export interface Destination {
     directory?: string;
     filename?: string;
-    subdirectory?: string;
+    subdirectory?: string | Function;
 }

@@ -272,6 +272,17 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
         "subdirectory": "cobertura" // optional, defaults to the name of the browser running the tests
         "filename": "coverage.xml", // optional, defaults to the report name
     }
+
+    // "subdirectory" may also be a function that returns a directory from a given browser
+    "cobertura": {
+        "directory": "coverage",
+        "subdirectory": function(browser) {
+            // normalizes browser name directories to lowercase without version
+            // ex: coverage/chrome/coverage.xml
+            return browser.name.toLowerCase().split(' ')[0];
+        },
+        "filename": "coverage.xml"
+    }
     ```
 
     * Available report types:

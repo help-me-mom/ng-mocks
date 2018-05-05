@@ -95,8 +95,13 @@ export class Reporter {
         let reportConfig = reports[reportType];
 
         if (lodash.isPlainObject(reportConfig)) {
+            let subdirectory = reportConfig.subdirectory || browser.name;
+            if (typeof subdirectory === "function") {
+                subdirectory = subdirectory(browser);
+            }
+
             return path.join(reportConfig.directory || "coverage",
-                             reportConfig.subdirectory || browser.name,
+                             subdirectory,
                              reportConfig.filename || reportType);
         }
 
