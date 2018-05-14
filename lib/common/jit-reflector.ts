@@ -36,4 +36,10 @@ export class JitReflector implements CompileReflector {
   resolveExternalReference(ref: ExternalReference): any { /* tslint:disable-line prefer-function-over-method */
     return ref.runtime;
   }
+
+  shallowAnnotations = (typeOrFunc: any): any[] => { throw new Error('Not supported in JIT mode'); };
+
+  tryAnnotations(typeOrFunc: any): any[] {
+    return this.annotations(typeOrFunc);
+  }
 }

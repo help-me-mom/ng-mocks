@@ -12,7 +12,7 @@ before_script:
     - "sudo chmod 4755 /opt/google/chrome/chrome-sandbox"
 before_install:
   - npm cache clean --force
-script: npm run lint && npm test
+script: npm run test:angular-versions
 matrix:
   notifications:
     email:
