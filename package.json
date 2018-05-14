@@ -63,7 +63,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-typescript": "^3.0.9",
     "rxjs": "^6.0.0",
-    "standard-version": "^4.2.0",
+    "standard-version": "^4.3.0",
     "tslint": "^5.5.0",
     "typescript": "2.6.x",
     "zone.js": "^0.8.26"
