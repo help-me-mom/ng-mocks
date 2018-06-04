@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Type } from '@angular/core';
+import { Directive, EventEmitter, Inject, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
@@ -15,20 +15,24 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
   }
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
-  const options: Directive = { exportAs, inputs, outputs, selector };
-
+  // tslint:disable:no-unnecessary-class
   @MockOf(directive)
-  // tslint:disable-next-line:no-unnecessary-class
+  @Directive({ exportAs, inputs, outputs, selector })
   class DirectiveMock {
-    constructor() {
-      (options.outputs || []).forEach((output) => {
+    constructor(@Optional() @Inject(TemplateRef) templateRef?: TemplateRef<any>,
+                @Optional() @Inject(ViewContainerRef) viewContainer?: ViewContainerRef) {
+      (outputs || []).forEach((output) => {
         (this as any)[output.split(':')[0]] = new EventEmitter<any>();
       });
+
+      if (templateRef && viewContainer) {
+        viewContainer.createEmbeddedView(templateRef);
+      }
     }
   }
+  // tslint:enable:no-unnecessary-class
 
-  const mockedDirective =  Directive(options)(DirectiveMock as Type<TDirective>);
-  cache.set(directive, mockedDirective);
+  cache.set(directive, DirectiveMock);
 
-  return mockedDirective;
+  return DirectiveMock as Type<TDirective>;
 }

@@ -4,6 +4,7 @@ import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockDirective } from './mock-directive';
 
+// tslint:disable:max-classes-per-file
 @Directive({
   exportAs: 'foo',
   selector: '[exampleDirective]'
@@ -14,18 +15,29 @@ export class ExampleDirective {
   @Input('bah') something: string;
 }
 
+@Directive({
+  selector: '[exampleStructuralDirective]'
+})
+export class ExampleStructuralDirective {
+  @Input() exampleStructuralDirective = true;
+}
+
 @Component({
   selector: 'example-component-container',
   template: `
     <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo" (someOutput)="emitted = $event"></div>
     <div exampleDirective></div>
+    <div id="example-structural-directive" *exampleStructuralDirective="true">
+      hi
+    </div>
     <input [formControl]="fooControl"/>
   `
 })
 export class ExampleComponentContainer {
   emitted = false;
   foo = new FormControl('');
-} // tslint:disable-line:max-classes-per-file
+}
+// tslint:enable:max-classes-per-file
 
 describe('MockDirective', () => {
   let fixture: ComponentFixture<ExampleComponentContainer>;
@@ -35,7 +47,8 @@ describe('MockDirective', () => {
       declarations: [
         ExampleComponentContainer,
         MockDirective(FormControlDirective),
-        MockDirective(ExampleDirective)
+        MockDirective(ExampleDirective),
+        MockDirective(ExampleStructuralDirective)
       ]
     })
     .compileComponents();
@@ -78,5 +91,10 @@ describe('MockDirective', () => {
     // Test around a known-odd directive.
     const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
     expect(debugElement).not.toBeNull();
+  });
+
+  it('should display structural directive content', () => {
+    const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
+    expect(debugElement.nativeElement.innerHTML).toContain('hi');
   });
 });
