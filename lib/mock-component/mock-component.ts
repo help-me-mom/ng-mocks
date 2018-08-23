@@ -38,9 +38,20 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       });
     }
 
+    /* tslint:disable:no-empty variable-name */
+    __simulateChange = (param: any) => {};
+    __simulateTouch = () => {};
+    /* tslint:enable:no-empty variable-name */
+
+    registerOnChange = (fn: (value: any) => void) => {
+      this.__simulateChange = fn;
+    }
+
+    registerOnTouched(fn: () => void): void {
+      this.__simulateTouch = fn;
+    }
+
     /* tslint:disable:no-empty */
-    registerOnChange = (fn: (value: any) => void) => {};
-    registerOnTouched = (fn: (value: any) => void) => {};
     writeValue = (value: any) => {};
     /* tslint:enable:no-empty */
   }
