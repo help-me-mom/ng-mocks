@@ -21,7 +21,6 @@ import { SimpleComponent } from './test-components/simple-component.component';
       <custom-form-control [formControl]="formControl"></custom-form-control>
       <empty-component id="ng-content-component">doh</empty-component>
       <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
-      <
   `
 })
 export class ExampleComponentContainer {
@@ -38,20 +37,19 @@ describe('MockComponent', () => {
       declarations: [
         ExampleComponentContainer,
         MockComponents(EmptyComponent,
-          SimpleComponent,
-          CustomFormControlComponent,
-        ),
+                       SimpleComponent,
+                       CustomFormControlComponent),
       ],
       imports: [
         FormsModule,
         ReactiveFormsModule
       ]
     })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ExampleComponentContainer);
-        component = fixture.componentInstance;
-      });
+    .compileComponents()
+    .then(() => {
+      fixture = TestBed.createComponent(ExampleComponentContainer);
+      component = fixture.componentInstance;
+    });
   }));
 
   it('should have use the original component\'s selector', () => {
