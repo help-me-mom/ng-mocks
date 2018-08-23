@@ -15,7 +15,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     return cacheHit as Type<TComponent>;
   }
 
-  const {exportAs, inputs, outputs, selector} = directiveResolver.resolve(component);
+  const { exportAs, inputs, outputs, selector } = directiveResolver.resolve(component);
 
   const options: Component = {
     exportAs,
@@ -38,10 +38,8 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       });
     }
 
-    /* tslint:disable:no-empty variable-name */
-    __simulateChange = (param: any) => {};
-    __simulateTouch = () => {};
-    /* tslint:enable:no-empty variable-name */
+    __simulateChange = (param: any) => {}; // tslint:disable-line:variable-name
+    __simulateTouch = () => {}; // tslint:disable-line:variable-name
 
     registerOnChange = (fn: (value: any) => void) => {
       this.__simulateChange = fn;
@@ -51,14 +49,11 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       this.__simulateTouch = fn;
     }
 
-    /* tslint:disable:no-empty */
     writeValue = (value: any) => {};
-    /* tslint:enable:no-empty */
   }
 
-  /* tslint:disable:no-angle-bracket-type-assertion */
+  // tslint:disable-next-line:no-angle-bracket-type-assertion
   const mockedComponent = Component(options)(<any> ComponentMock as Type<TComponent>);
-  /* tslint:enable:no-angle-bracket-type-assertion */
 
   cache.set(component, mockedComponent);
 

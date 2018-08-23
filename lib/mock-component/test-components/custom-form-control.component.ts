@@ -11,8 +11,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
   selector: 'custom-form-control',
   template: `
-      <span>{{value}}</span>
-      <button (click)="this.onChange('changed')">Change value</button>
+    <span>{{value}}</span>
+    <button (click)="this.onChange('changed')">Change value</button>
   `,
 })
 export class CustomFormControlComponent implements ControlValueAccessor {
@@ -20,10 +20,8 @@ export class CustomFormControlComponent implements ControlValueAccessor {
   @Input() disabled = false;
   public value = '';
 
-  /* tslint:disable:no-empty */
   onChange = (value: string) => {};
   onTouched = () => {};
-  /* tslint:enable:no-empty */
 
   registerOnChange(fn: (rating: string) => void): void {
     this.onChange = fn;
