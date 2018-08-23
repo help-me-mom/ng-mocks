@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-VERSIONS="5.0 5.1 5 6"
+VERSIONS="5 6"
 PACKAGES="common compiler core forms platform-browser platform-browser-dynamic"
 
 for version in $VERSIONS
@@ -14,7 +14,7 @@ do
     NEW="$NEW @angular/$package@$version"
   done
 
-  echo $version | grep -Eq "^5" && NEW="$NEW rxjs@5.5.5 zone.js@0.8.14" || NEW="$NEW rxjs@6.0.0 zone.js@0.8.26"
+  echo $version | grep -Eq "^5" && NEW="$NEW rxjs@5.5.5 zone.js@0.8.14 typescript@2.4" || NEW="$NEW rxjs@6.0.0 zone.js@0.8.26 typescript@2.7"
 
   npm uninstall --no-save $OLD
   npm install --no-save $NEW
