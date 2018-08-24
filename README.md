@@ -9,12 +9,15 @@ Sure, you could flip a flag on schema errors to make your component dependencies
 
 ## MockComponent(s)
 
-* Mocked component with the same selector
-* Inputs and Outputs with alias support
-* Each component instance has its own EventEmitter instances for outputs
-* Mocked component templates are ng-content tags to allow transclusion
-* Allows ng-model binding (You will have to add FormsModule to TestBed imports)
-* exportAs support
+- Mocked component with the same selector
+- Inputs and Outputs with alias support
+- Each component instance has its own EventEmitter instances for outputs
+- Mocked component templates are ng-content tags to allow transclusion
+- Allows ng-model binding (You will have to add FormsModule to TestBed imports)
+- Mocks Reactive Forms (You will have to add ReactiveFormsModule to TestBed imports)
+    - __simulateChange - calls `onChanged` on the mocked component bound to a FormControl
+    - __simulateTouch - calls `onToched` on the mocked component bound to a FormControl
+- exportAs support
 
 ### Usage Example
 ```typescript
@@ -159,6 +162,50 @@ describe('TestedComponent', () => {
   });
 });
 ```
+
+## Mocked Reactive Forms Components
+
+- Set value on the formControl by calling __simulateChange
+- Set touched on the formControl by calling __simulateTouch
+- Use the `MockedComponent` type to stay typesafe: `MockedComponent<YourReactiveFormComponent>`
+
+### Usage Example
+```typescript
+import { async, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { MockComponent, MockedComponent } from 'ng-mocks';
+import { ReactiveFormComponent } from './dependency.component';
+import { TestedComponent } from './tested.component';
+
+describe('TestedComponent', () => {
+  let fixture: ComponentFixture<TestedComponent>;
+
+  beforeEach(async() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        TestedComponent,
+        MockComponent(DependencyComponent)
+      ]
+    })
+    .compileComponents();
+    .then(() => {
+      fixture = TestBed.createComponent(TestedComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+  }));
+
+  it('should send the correct value to the dependency component input', () => {
+    const mockedReactiveFormComponent = fixture.debugElement
+                                   .query(By.css('dependency-component-selector'))
+                                   .componentInstance as MockedComponent<ReactiveFormComponent>; // casting to retain type safety
+                                   
+    mockedReactiveFormComponent.__simulateChange('foo');                               
+    expect(component.formControl.value).toBe('foo')
+  });
+});
+```
+
 ## MockDelcaration(s)
 It figures out if it is a component, directive, or pipe and mocks it for you
 
