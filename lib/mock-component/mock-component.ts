@@ -5,6 +5,11 @@ import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
+export type MockedComponent<T> = T & {
+  __simulateChange(value: any): void;
+  __simulateTouch(): void;
+};
+
 export function MockComponents<TComponent>(...components: Array<Type<TComponent>>): Array<Type<TComponent>> {
   return components.map(MockComponent);
 }

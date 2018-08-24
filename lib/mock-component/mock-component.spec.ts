@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockComponent, MockComponents } from './mock-component';
+import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { SimpleComponent } from './test-components/simple-component.component';
@@ -126,14 +126,16 @@ describe('MockComponent', () => {
   describe('ReactiveForms - ControlValueAccessor', () => {
     it('should allow you simulate the component being touched', () => {
       fixture.detectChanges();
-      const customFormControl = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent> =
+        fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
       customFormControl.__simulateTouch();
       expect(component.formControl.touched).toBe(true);
     });
 
     it('should allow you simulate a value being set', () => {
       fixture.detectChanges();
-      const customFormControl = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent>
+        = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
     });
