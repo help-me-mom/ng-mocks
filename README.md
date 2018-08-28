@@ -197,8 +197,8 @@ describe('TestedComponent', () => {
 
   it('should send the correct value to the dependency component input', () => {
     const mockedReactiveFormComponent = fixture.debugElement
-                                   .query(By.css('dependency-component-selector'))
-                                   .componentInstance as MockedComponent<ReactiveFormComponent>; // casting to retain type safety
+                                               .query(By.css('dependency-component-selector'))
+                                               .componentInstance as MockedComponent<ReactiveFormComponent>; // casting to retain type safety
                                    
     mockedReactiveFormComponent.__simulateChange('foo');                               
     expect(component.formControl.value).toBe('foo')
@@ -206,7 +206,7 @@ describe('TestedComponent', () => {
 });
 ```
 
-## MockDelcaration(s)
+## MockDeclaration(s)
 It figures out if it is a component, directive, or pipe and mocks it for you
 
 ## MockModule
