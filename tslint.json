@@ -9,6 +9,7 @@
     "newline-per-chained-call": false,
     "no-any": false,
     "no-empty": false,
+    "no-implicit-dependencies": [true, "dev"],
     "no-floating-promises": false,
     "no-submodule-imports": false,
     "no-unsafe-any": false,
