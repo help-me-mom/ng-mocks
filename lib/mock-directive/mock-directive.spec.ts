@@ -66,14 +66,14 @@ describe('MockDirective', () => {
 
   it('should have the input set on the mock component', () => {
     const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
-    const element = debugElement.injector.get(MockDirective(ExampleDirective));
+    const element = debugElement.injector.get(MockDirective(ExampleDirective)); // tslint:disable-line
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
   });
 
   it('triggers output bound behavior for extended outputs', () => {
     const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
-    const element = debugElement.injector.get(MockDirective(ExampleDirective));
+    const element = debugElement.injector.get(MockDirective(ExampleDirective)); // tslint:disable-line
 
     element.someOutput.emit(true);
     expect(fixture.componentInstance.emitted).toEqual(true);

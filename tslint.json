@@ -9,7 +9,6 @@
     "newline-per-chained-call": false,
     "no-any": false,
     "no-empty": false,
-    "no-implicit-dependencies": [true, "dev"],
     "no-floating-promises": false,
     "no-submodule-imports": false,
     "no-unsafe-any": false,
@@ -22,6 +21,6 @@
     "strict-boolean-expressions": false,
     "trailing-comma": false,
     "typedef": false,
-    "variable-name": [true, "allow-leading-underscore"] 
+    "variable-name": [true, "allow-leading-underscore"]
   }
 }
