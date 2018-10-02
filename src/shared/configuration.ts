@@ -88,11 +88,24 @@ export class Configuration implements KarmaTypescriptConfig {
     }
 
     private configureLogging() {
+        const appenders = this.karma.loggers instanceof Array
+            ? this.karma.loggers.reduce((acc, logger, index) => Object.assign(acc, { ["index" + index]: logger }), {})
+            : this.karma.loggers;
 
-        log4js.configure({ appenders: this.karma.loggers });
+        if (appenders != null) {
+            log4js.configure({
+                appenders,
+                categories: {
+                    default: {
+                        appenders: Object.keys(appenders),
+                        level: this.karma.logLevel
+                    }
+                }
+            });
+        }
 
         Object.keys(this.loggers).forEach((key) => {
-            this.loggers[key].setLevel(this.karma.logLevel);
+            this.loggers[key].level = this.karma.logLevel;
         });
     }
 
