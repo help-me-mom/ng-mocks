@@ -2,6 +2,7 @@ import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
+import { MockedComponent } from './mock-component';
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
@@ -30,6 +31,10 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       multi: true,
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ComponentMock)
+    },
+    {
+      provide: component,
+      useExisting: forwardRef(() => ComponentMock)
     }],
     selector,
     template: '<ng-content></ng-content>'
@@ -38,6 +43,12 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   @MockOf(component)
   class ComponentMock implements ControlValueAccessor {
     constructor() {
+      Object.keys(component.prototype).forEach((method) => {
+        if (!(this as any)[method]) {
+          (this as any)[method] = () => {};
+        }
+      });
+
       (options.outputs || []).forEach((output) => {
         (this as any)[output.split(':')[0]] = new EventEmitter<any>();
       });
