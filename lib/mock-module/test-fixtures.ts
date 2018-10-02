@@ -1,5 +1,6 @@
 /* tslint:disable:max-classes-per-file */
 
+import { CommonModule } from '@angular/common';
 import { Component, Directive, Injectable, NgModule, Pipe, PipeTransform } from '@angular/core';
 
 @Directive({selector: '[example-directive]'})
@@ -30,6 +31,7 @@ export class ExampleComponent { }
 @NgModule({
   declarations: [ ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective ],
   exports: [ ExampleComponent, ExamplePipe, ExampleDirective ],
+  imports: [ CommonModule ],
   providers: [ ExampleService ]
 })
 export class ChildModule {}

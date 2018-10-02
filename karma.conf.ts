@@ -28,7 +28,7 @@ module.exports = (config: any) => {
 
     karmaTypescriptConfig: {
       compilerOptions: {
-        lib: ['ES2015', 'DOM']
+        lib: ['ES2016', 'DOM']
       }
     }
   });
