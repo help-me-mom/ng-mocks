@@ -2,7 +2,7 @@ import { Pipe, PipeTransform, Type } from '@angular/core';
 import { MockOf } from '../common';
 import { pipeResolver } from '../common/reflect';
 
-export function MockPipes<TPipe extends PipeTransform>(...pipes: Array<Type<TPipe>>): Array<Type<TPipe>> {
+export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<PipeTransform>> {
   return pipes.map((pipe) => MockPipe(pipe, undefined));
 }
 

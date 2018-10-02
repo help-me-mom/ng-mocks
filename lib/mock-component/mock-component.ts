@@ -11,7 +11,7 @@ export type MockedComponent<T> = T & {
   __simulateTouch(): void;
 };
 
-export function MockComponents<TComponent>(...components: Array<Type<TComponent>>): Array<Type<TComponent>> {
+export function MockComponents(...components: Array<Type<any>>): Array<Type<any>> {
   return components.map(MockComponent);
 }
 

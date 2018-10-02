@@ -4,7 +4,7 @@ import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
 
-export function MockDirectives<TDirective>(...directives: Array<Type<TDirective>>): Array<Type<TDirective>> {
+export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>> {
   return directives.map(MockDirective);
 }
 
