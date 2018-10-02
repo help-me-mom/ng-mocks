@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
+import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { SimpleComponent } from './test-components/simple-component.component';
@@ -21,11 +22,17 @@ import { SimpleComponent } from './test-components/simple-component.component';
     <custom-form-control [formControl]="formControl"></custom-form-control>
     <empty-component id="ng-content-component">doh</empty-component>
     <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
+    <child-component></child-component>
   `
 })
 export class ExampleComponentContainer {
+  @ViewChild(ChildComponent) childComponent: ChildComponent;
   emitted: string;
   formControl = new FormControl('');
+
+  performActionOnChild(s: string): void {
+    this.childComponent.performAction(s);
+  }
 }
 
 describe('MockComponent', () => {
@@ -38,6 +45,7 @@ describe('MockComponent', () => {
         ExampleComponentContainer,
         MockComponents(EmptyComponent,
                        SimpleComponent,
+                       ChildComponent,
                        CustomFormControlComponent),
       ],
       imports: [
@@ -121,6 +129,17 @@ describe('MockComponent', () => {
     expect(MockComponent(EmptyComponent)).toBe(MockComponent(EmptyComponent));
     expect(MockComponent(SimpleComponent)).toBe(MockComponent(SimpleComponent));
     expect(MockComponent(EmptyComponent)).not.toBe(MockComponent(SimpleComponent));
+  });
+
+  it('should set ViewChild components correctly', () => {
+    fixture.detectChanges();
+    expect(component.childComponent).toBeTruthy();
+  });
+
+  it('should allow spying of viewchild component methods', () => {
+    const spy = spyOn(component.childComponent, 'performAction');
+    component.performActionOnChild('test');
+    expect(spy).toHaveBeenCalledWith('test');
   });
 
   describe('ReactiveForms - ControlValueAccessor', () => {
