@@ -13,7 +13,7 @@ export interface TransformResult {
 export interface TransformCallback {
     (error: Error, dirty: boolean, transpile?: boolean): void;
     (error: Error, result: TransformResult): void;
-};
+}
 
 export interface TransformContextJs{
     ast: ESTree.Program;
@@ -35,7 +35,7 @@ export interface TransformContext {
 }
 
 export interface TransformInitializeLogOptions {
-    appenders: log4js.AppenderConfigBase[];
+    appenders: { [name: string]: log4js.Appender } | log4js.Appender[];
     level: string;
 }
 
@@ -46,4 +46,4 @@ export interface TransformInitialize {
 export interface Transform {
     (context: TransformContext, callback: TransformCallback): void;
     initialize?: TransformInitialize;
-};
+}
