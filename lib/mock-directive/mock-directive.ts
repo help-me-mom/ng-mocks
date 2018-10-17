@@ -1,4 +1,6 @@
-import { Directive, EventEmitter, Inject, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
+import {
+  Directive, EventEmitter, forwardRef, Inject, Optional, TemplateRef, Type, ViewContainerRef
+} from '@angular/core';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
@@ -15,12 +17,29 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
   }
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
+
   // tslint:disable:no-unnecessary-class
   @MockOf(directive)
-  @Directive({ exportAs, inputs, outputs, selector })
+  @Directive({
+    exportAs,
+    inputs,
+    outputs,
+    providers: [{
+      provide: directive,
+      useExisting: forwardRef(() => DirectiveMock)
+    }],
+    selector
+  })
   class DirectiveMock {
     constructor(@Optional() @Inject(TemplateRef) templateRef?: TemplateRef<any>,
                 @Optional() @Inject(ViewContainerRef) viewContainer?: ViewContainerRef) {
+
+      Object.keys(directive.prototype).forEach((method) => {
+        if (!(this as any)[method]) {
+          (this as any)[method] = () => {};
+        }
+      });
+
       (outputs || []).forEach((output) => {
         (this as any)[output.split(':')[0]] = new EventEmitter<any>();
       });
