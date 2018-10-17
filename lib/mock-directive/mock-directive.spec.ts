@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -13,6 +13,10 @@ export class ExampleDirective {
   @Input() exampleDirective: string;
   @Output() someOutput = new EventEmitter<boolean>();
   @Input('bah') something: string;
+
+  performAction(s: string) {
+    return this;
+  }
 }
 
 @Directive({
@@ -34,12 +38,18 @@ export class ExampleStructuralDirective {
   `
 })
 export class ExampleComponentContainer {
+  @ViewChild(ExampleDirective) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
+
+  performActionOnChild(s: string): void {
+    this.childDirective.performAction(s);
+  }
 }
 // tslint:enable:max-classes-per-file
 
 describe('MockDirective', () => {
+  let component: ExampleComponentContainer;
   let fixture: ComponentFixture<ExampleComponentContainer>;
 
   beforeEach(async(() => {
@@ -56,6 +66,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExampleComponentContainer);
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -76,7 +87,7 @@ describe('MockDirective', () => {
     const element = debugElement.injector.get(MockDirective(ExampleDirective)); // tslint:disable-line
 
     element.someOutput.emit(true);
-    expect(fixture.componentInstance.emitted).toEqual(true);
+    expect(component.emitted).toEqual(true);
   });
 
   it('should memoize the return value by argument', () => {
@@ -96,5 +107,16 @@ describe('MockDirective', () => {
   it('should display structural directive content', () => {
     const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
+  });
+
+  it('should set ViewChild directives correctly', () => {
+    fixture.detectChanges();
+    expect(component.childDirective).toBeTruthy();
+  });
+
+  it('should allow spying of viewchild directive methods', () => {
+    const spy = spyOn(component.childDirective, 'performAction');
+    component.performActionOnChild('test');
+    expect(spy).toHaveBeenCalledWith('test');
   });
 });
