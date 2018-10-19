@@ -41,9 +41,9 @@
   },
   "homepage": "https://github.com/ike18t/ng-mocks#readme",
   "peerDependencies": {
-    "@angular/compiler": ">=5.x <=6.x",
-    "@angular/core": ">=5.x <=6.x",
-    "@angular/forms": ">=5.x <=6.x"
+    "@angular/compiler": ">=5.x <=7.x",
+    "@angular/core": ">=5.x <=7.x",
+    "@angular/forms": ">=5.x <=7.x"
   },
   "devDependencies": {
     "@angular/common": "6.x",
