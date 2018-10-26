@@ -4,6 +4,7 @@
     "align": false,
     "completed-docs": false,
     "comment-format": false,
+    "file-name-casing": false,
     "member-access": false,
     "newline-before-return": false,
     "newline-per-chained-call": false,

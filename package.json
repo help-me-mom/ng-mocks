@@ -41,17 +41,17 @@
   },
   "homepage": "https://github.com/ike18t/ng-mocks#readme",
   "peerDependencies": {
-    "@angular/compiler": ">=5.x <=6.x",
-    "@angular/core": ">=5.x <=6.x",
-    "@angular/forms": ">=5.x <=6.x"
+    "@angular/compiler": ">=5.x <=7.x",
+    "@angular/core": ">=5.x <=7.x",
+    "@angular/forms": ">=5.x <=7.x"
   },
   "devDependencies": {
-    "@angular/common": "6.x",
-    "@angular/compiler": "6.x",
-    "@angular/core": "6.x",
-    "@angular/forms": "6.x",
-    "@angular/platform-browser": "6.x",
-    "@angular/platform-browser-dynamic": "6.x",
+    "@angular/common": "7.x",
+    "@angular/compiler": "7.x",
+    "@angular/core": "7.x",
+    "@angular/forms": "7.x",
+    "@angular/platform-browser": "7.x",
+    "@angular/platform-browser-dynamic": "7.x",
     "@types/core-js": "^0.9.43",
     "@types/jasmine": "^2.5.53",
     "@types/node": "^8.0.17",
@@ -66,7 +66,7 @@
     "rxjs": "^6.0.0",
     "standard-version": "^4.3.0",
     "tslint": "^5.5.0",
-    "typescript": "2.6.x",
+    "typescript": "3.1.x",
     "zone.js": "^0.8.26"
   }
 }
