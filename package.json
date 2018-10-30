@@ -82,7 +82,7 @@
     "test:examples:typescript-1.6.2": "npm --prefix examples/typescript-1.6.2 test",
     "dev:examples:typescript-1.6.2": "npm run build && npm run setup:kt:examples:typescript-1.6.2 && npm run test:examples:typescript-1.6.2",
     "setup:examples:typescript-latest": "cd examples/typescript-latest && npm install && cd ../..",
-    "setup:kt:examples:typescript-latest": "npm --prefix examples/typescript-latest karma-typescript-3.0.13.tgz",
+    "setup:kt:examples:typescript-latest": "npm --prefix examples/typescript-latest install karma-typescript-3.0.13.tgz",
     "test:examples:typescript-latest": "npm --prefix examples/typescript-latest test",
     "dev:examples:typescript-latest": "npm run build && npm run setup:kt:examples:typescript-latest && npm run test:examples:typescript-latest",
     "setup:tests:integration-1.8.10": "cd tests/integration-1.8.10 && npm install && cd ../..",
