@@ -11,11 +11,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers ChromeHeadless --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers ChromeHeadless --single-run",
-    "test": "karma start"
+    "test": "karma start",
+    "test:angular2": "karma start karma.conf.angular2.js",
+    "test:react": "karma start karma.conf.react.js"
   },
   "dependencies": {
     "@angular/common": "2.0.1",
@@ -30,7 +28,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.0.2",
-    "karma-typescript": "../../",
+    "karma-typescript": "file:../../karma-typescript-3.0.13.tgz",
     "react": "15.3.2",
     "react-addons-test-utils": "15.3.2",
     "react-dom": "15.3.2",
@@ -39,8 +37,5 @@
     "sinon": "1.17.6",
     "typescript": "1.8.10",
     "zone.js": "0.6.25"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1"
   }
 }

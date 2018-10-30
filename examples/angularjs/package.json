@@ -11,8 +11,6 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
     "test": "karma start"
   },
   "dependencies": {
@@ -25,10 +23,7 @@
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
-    "karma-typescript": "../../",
+    "karma-typescript": "file:../../karma-typescript-3.0.13.tgz",
     "typescript": "latest"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1"
   }
 }

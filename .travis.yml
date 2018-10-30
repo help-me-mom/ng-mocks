@@ -2,7 +2,7 @@ sudo: required
 
 language: node_js
 
-node_js: 6
+node_js: 8
 
 before_script:
   - "sudo chown root /opt/google/chrome/chrome-sandbox"
@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 install:
-  - ./ci/install.sh
+  - npm run setup
 
 script:
   - npm run ci

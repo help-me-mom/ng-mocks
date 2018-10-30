@@ -1,11 +1,18 @@
 # Runnable example of unit testing Typescript on the fly in Karma with Istanbul coverage and Mocha
 
-To run the example tests, issue the following commands:
+## Installation
 
 ```
-npm install karma-typescript
-cd node_modules/karma-typescript/examples/mocha
+git clone https://github.com/monounity/karma-typescript.git
+cd karma-typescript
+npm run build
+cd examples/mocha
 npm install
+```
+
+## Running
+
+```
 npm test
 ```
 
@@ -15,4 +22,4 @@ The example unit tests should now run in Karma and html test coverage should be 
 
 This software is licensed with the MIT license.
 
-© 2016-2017 Erik Barke, Monounity
+© 2016-2018 Erik Barke, Monounity

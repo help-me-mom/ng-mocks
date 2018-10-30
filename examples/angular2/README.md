@@ -6,8 +6,10 @@ Typescript on the fly in Karma with Angular2 and Istanbul coverage.
 ## Installation
 
 ```
-npm install karma-typescript
-cd node_modules/karma-typescript/examples/angular2
+git clone https://github.com/monounity/karma-typescript.git
+cd karma-typescript
+npm run build
+cd examples/angular2
 npm install
 ```
 
@@ -91,4 +93,4 @@ karmaTypescriptConfig: {
 
 This software is licensed with the MIT license.
 
-© 2016-2017 Erik Barke, Monounity
+© 2016-2018 Erik Barke, Monounity

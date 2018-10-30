@@ -31,6 +31,8 @@ module.exports = function(config) {
 
         browserNoActivityTimeout : 60000,
 
-        browsers: ["Chrome"]
+        browsers: ["ChromeHeadless"],
+
+        singleRun: true
     });
 };

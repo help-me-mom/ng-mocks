@@ -1,11 +1,18 @@
 # Runnable example of unit testing Typescript (version 1.6 - 1.7) on the fly in Karma with Istanbul coverage
 
-To run the example tests, issue the following commands:
+## Installation
 
 ```
-npm install karma-typescript
-cd node_modules/karma-typescript/examples/typescript-1.6.2
+git clone https://github.com/monounity/karma-typescript.git
+cd karma-typescript
+npm run build
+cd examples/typescript-1.6.2
 npm install
+```
+
+## Running
+
+```
 npm test
 ```
 
@@ -45,4 +52,4 @@ describe('HelloComponent', () => {
 
 This software is licensed with the MIT license.
 
-© 2016-2017 Erik Barke, Monounity
+© 2016-2018 Erik Barke, Monounity

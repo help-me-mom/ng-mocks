@@ -14,7 +14,7 @@
     "karma": "1.5.0",
     "karma-jasmine": "^1.0.2",
     "karma-nyan-reporter": "0.2.4",
-    "karma-typescript": "../../",
+    "karma-typescript": "file:../../karma-typescript-3.0.13.tgz",
     "karma-phantomjs-launcher": "1.0.2",
     "run-sequence": "1.2.2",
     "gulp": "3.9.1",

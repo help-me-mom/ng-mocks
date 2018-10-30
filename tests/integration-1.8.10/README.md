@@ -1,12 +1,16 @@
-# Integration tests for Typescript 1.8.10
+# Integration tests for Typescript@1.8.10
 
-This project contains a suite of integration tests that uses the `karma-typescript` plugin itself to test the its functionality.
+This project contains integration tests that uses the `karma-typescript` plugin itself to test the its functionality.
+The project isn't actively maintained, it only exists for historical reasons to make sure projects using Typescript@1.8.10 don't break.
 
-* `npm test`, runs all tests with Chrome and watches for changes
+## Test suites
 
-Each `dev` tests deletes the coverage folder and copies the `karma-typescript` source code to the `node_modules` folder.
+* `npm run test` - Main test suite for testing frameworks, performance etc.
+* `npm run test:angular2` - A targeted test suite for testing code using the Angular2 framework. Also included in the main test suite.
+* `npm run test:react` - A targeted test suite for testing code using the React framework. Also included in the main test suite.
 
-* `npm run dev`, runs all tests and watches for changes
-* `npm run dev:ci`, runs all tests once (continous integration)
-* `npm run dev:ci:angular2`, runs the Angular2 tests once (continous integration)
-* `npm run dev:ci:react`, runs the React tests once (continous integration)
+## Licensing
+
+This software is licensed with the MIT license.
+
+© 2016-2018 Erik Barke, Monounity

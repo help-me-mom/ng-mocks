@@ -28,6 +28,8 @@ module.exports = function(config) {
 
         reporters: ["dots", "karma-typescript"],
 
-        browsers: ["Chrome"]
+        browsers: ["ChromeHeadless"],
+
+        singleRun: true
     });
 };

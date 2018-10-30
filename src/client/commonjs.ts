@@ -1,34 +1,34 @@
-(function(global) {
+((global) => {
     "use strict";
     global.__karmaTypescriptModules__ =  {};
-    var fn = 0,
-        id = 1,
-        map = 2;
-    function require(filename, requiring, required) {
-        var wrapper,
-            module = global.__karmaTypescriptModules__ [filename];
+    const fn = 0;
+    const id = 1;
+    const map = 2;
+    const require = (filename: any, requiring: any, required: any) => {
+        let wrapper: any;
+        let module = global.__karmaTypescriptModules__ [filename];
         if (!module) {
             wrapper = global.wrappers[filename];
-            if(!wrapper) {
+            if (!wrapper) {
                 throw new Error("Can't find " + required + " [" + filename + "] (required by " + requiring + ")");
             }
             module = { exports: {}, id: wrapper[id], uri: filename };
             global.__karmaTypescriptModules__ [filename] = module;
-            wrapper[fn].call(module.exports, function (dependency) {
+            wrapper[fn].call(module.exports, (dependency: any) => {
                 return require(wrapper[map][dependency], filename, dependency);
             }, module, module.exports, filename.slice(0, filename.lastIndexOf("/")), filename);
-            if(module.exports && !module.exports.default && isExtensible(module.exports)) {
+            if (module.exports && !module.exports.default && isExtensible(module.exports)) {
                 Object.defineProperty(module.exports, "default", {
-                    enumerable: false, configurable: true, writable: true, value: module.exports
+                    configurable: true, enumerable: false, value: module.exports, writable: true
                 });
             }
         }
         return module.exports;
-    }
-    function isExtensible(obj) {
+    };
+    const isExtensible = (obj: any) => {
         return (typeof obj === "function" || typeof obj === "object") && Object.isExtensible(obj);
-    }
-    (global.entrypointFilenames || []).forEach(function(filename) {
+    };
+    (global.entrypointFilenames || []).forEach((filename: any) => {
         require(filename, "commonjs.js", "entrypoint");
     });
 })(this);

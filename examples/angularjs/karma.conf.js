@@ -18,6 +18,8 @@ module.exports = function(config) {
             tsconfig: "./tsconfig.json"
         },
 
-        browsers: ["Chrome"]
+        browsers: ["ChromeHeadless"],
+
+        singleRun: true
     });
 };

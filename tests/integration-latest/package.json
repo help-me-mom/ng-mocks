@@ -11,15 +11,19 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "gulp dev --cwd . && karma start",
-    "dev:ci": "gulp dev:ci --cwd . && karma start --browsers ChromeHeadless --single-run",
-    "dev:ci:angular2": "gulp dev:ci --cwd . && karma start karma.conf.angular2.js --browsers ChromeHeadless --single-run",
-    "dev:ci:core": "gulp dev:ci --cwd . && karma start karma.conf.core.js --browsers ChromeHeadless --single-run",
-    "dev:ci:emptyfile": "gulp dev:ci --cwd . && karma start karma.conf.emptyfile.js --browsers ChromeHeadless --single-run",
-    "dev:ci:no-module": "gulp dev:ci --cwd . && karma start karma.conf.no.module.js --browsers ChromeHeadless --single-run",
-    "dev:ci:react": "gulp dev:ci --cwd . && karma start karma.conf.react.js --browsers ChromeHeadless --single-run",
     "prepare": "bower install",
-    "test": "karma start"
+    "test": "karma start",
+    "test:debug": "karma start --browsers Chrome --no-single-run",
+    "test:angular2": "karma start karma.conf.angular2.js",
+    "test:angular2:debug": "karma start karma.conf.angular2.js --browsers Chrome --no-single-run",
+    "test:core": "karma start karma.conf.core.js",
+    "test:core:debug": "karma start karma.conf.core.js --browsers Chrome --no-single-run",
+    "test:emptyfile": "karma start karma.conf.emptyfile.js",
+    "test:emptyfile:debug": "karma start karma.conf.emptyfile.js --browsers Chrome --no-single-run",
+    "test:no-module": "karma start karma.conf.no.module.js",
+    "test:no-module:debug": "karma start karma.conf.no.module.js --browsers Chrome --no-single-run",
+    "test:react": "karma start karma.conf.react.js",
+    "test:react:debug": "karma start karma.conf.react.js --browsers Chrome --no-single-run"
   },
   "dependencies": {
     "@angular/common": "^4.2.3",
@@ -62,7 +66,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "karma-typescript": "../../",
+    "karma-typescript": "file:../../karma-typescript-3.0.13.tgz",
     "karma-typescript-cssmodules-transform": "latest",
     "karma-typescript-es6-transform": "latest",
     "karma-typescript-postcss-transform": "latest",
@@ -86,7 +90,6 @@
     "zone.js": "^0.8.8"
   },
   "devDependencies": {
-    "bower": "^1.8.0",
-    "gulp": "^3.9.1"
+    "bower": "^1.8.0"
   }
 }
