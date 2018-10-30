@@ -1,7 +1,8 @@
 # karma-typescript
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Npmjs downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
+[![Npmjs total downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
+[![Npmjs weekly downloads](https://img.shields.io/npm/dw/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
 [![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
 
