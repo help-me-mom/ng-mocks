@@ -7,6 +7,7 @@ import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { SimpleComponent } from './test-components/simple-component.component';
+import { TemplateOutletComponent } from './test-components/template-outlet.component';
 
 @Component({
   selector: 'example-component-container',
@@ -23,6 +24,12 @@ import { SimpleComponent } from './test-components/simple-component.component';
     <empty-component id="ng-content-component">doh</empty-component>
     <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
     <child-component></child-component>
+    <template-outlet-component>
+      ng-content body header
+      <ng-template #block1><div>block 1 body</div></ng-template>
+      <ng-template #block2><span>block 2 body</span></ng-template>
+      ng-content body footer
+    </template-outlet-component>
   `
 })
 export class ExampleComponentContainer {
@@ -45,6 +52,7 @@ describe('MockComponent', () => {
         ExampleComponentContainer,
         MockComponents(EmptyComponent,
                        SimpleComponent,
+                       TemplateOutletComponent,
                        ChildComponent,
                        CustomFormControlComponent),
       ],
@@ -157,6 +165,29 @@ describe('MockComponent', () => {
         = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
+    });
+  });
+
+  describe('NgTemplateOutlet', () => {
+    it('renders all @ContentChild properties and ngContent too', () => {
+      fixture.detectChanges();
+      const templateOutlet = fixture.debugElement.query(By.directive(MockComponent(TemplateOutletComponent)));
+      expect(templateOutlet).toBeDefined();
+
+      // looking for ng-content.
+      const ngContent = templateOutlet.query(By.css('[data-key="ng-content"]'));
+      expect(ngContent).toBeTruthy();
+      expect(ngContent.nativeElement.innerText).toEqual('ng-content body header ng-content body footer');
+
+      // looking for 1st templateRef.
+      const block1 = templateOutlet.query(By.css('[data-key="block1"]'));
+      expect(block1).toBeTruthy();
+      expect(block1.nativeElement.innerText).toEqual('block 1 body');
+
+      // looking for 2nd templateRef.
+      const block2 = templateOutlet.query(By.css('[data-key="block2"]'));
+      expect(block2).toBeTruthy();
+      expect(block2.nativeElement.innerText).toEqual('block 2 body');
     });
   });
 });

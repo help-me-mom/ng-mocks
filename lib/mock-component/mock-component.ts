@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Type } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Query, Type } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
@@ -21,7 +21,16 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     return cacheHit as Type<TComponent>;
   }
 
-  const { exportAs, inputs, outputs, selector } = directiveResolver.resolve(component);
+  const { exportAs, inputs, outputs, queries, selector } = directiveResolver.resolve(component);
+
+  let template = '<div data-key="ng-content"><ng-content></ng-content></div>';
+  if (queries) {
+    template += Object.keys(queries)
+      .map((key: string) => {
+        const query: Query = queries[key];
+        return `<div data-key="${query.selector}"><template [ngTemplateOutlet]="${key}"></template></div>`;
+      }).join('');
+  }
 
   const options: Component = {
     exportAs,
@@ -36,8 +45,9 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       provide: component,
       useExisting: forwardRef(() => ComponentMock)
     }],
+    queries,
     selector,
-    template: '<ng-content></ng-content>'
+    template,
   };
 
   @MockOf(component)
