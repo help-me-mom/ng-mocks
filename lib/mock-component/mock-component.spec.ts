@@ -182,7 +182,7 @@ describe('MockComponent', () => {
       // looking for 1st templateRef.
       const block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeTruthy();
-      expect(block1.nativeElement.innerText).toEqual('block 1 body');
+      expect(block1.nativeElement.innerText.trim()).toEqual('block 1 body');
 
       // looking for 2nd templateRef.
       const block2 = templateOutlet.query(By.css('[data-key="block2"]'));
