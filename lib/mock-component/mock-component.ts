@@ -28,6 +28,12 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     template += Object.keys(queries)
       .map((key: string) => {
         const query: Query = queries[key];
+        if (query.isViewQuery) {
+          return ''; // ignoring all internal @ViewChild.
+        }
+        if (typeof query.selector !== 'string') {
+          return ''; // in case of mocked component, Type based selector doesn't work properly anyway.
+        }
         return `<div data-key="${query.selector}"><template [ngTemplateOutlet]="${key}"></template></div>`;
       }).join('');
   }

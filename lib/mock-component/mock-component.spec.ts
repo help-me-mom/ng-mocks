@@ -171,13 +171,15 @@ describe('MockComponent', () => {
   describe('NgTemplateOutlet', () => {
     it('renders all @ContentChild properties and ngContent too', () => {
       fixture.detectChanges();
+
+      // mocked component with @ViewChild was created without errors.
       const templateOutlet = fixture.debugElement.query(By.directive(MockComponent(TemplateOutletComponent)));
-      expect(templateOutlet).toBeDefined();
+      expect(templateOutlet).toBeTruthy();
 
       // looking for ng-content.
       const ngContent = templateOutlet.query(By.css('[data-key="ng-content"]'));
       expect(ngContent).toBeTruthy();
-      expect(ngContent.nativeElement.innerText).toEqual('ng-content body header ng-content body footer');
+      expect(ngContent.nativeElement.innerText.trim()).toEqual('ng-content body header ng-content body footer');
 
       // looking for 1st templateRef.
       const block1 = templateOutlet.query(By.css('[data-key="block1"]'));
@@ -187,7 +189,7 @@ describe('MockComponent', () => {
       // looking for 2nd templateRef.
       const block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
-      expect(block2.nativeElement.innerText).toEqual('block 2 body');
+      expect(block2.nativeElement.innerText.trim()).toEqual('block 2 body');
     });
   });
 });
