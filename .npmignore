@@ -1,10 +1,8 @@
 .editorconfig
-.eslintrc.js
 *.tgz
 *.yml
 assets
 bower_components
-ci
 coverage
 examples
 node_modules
