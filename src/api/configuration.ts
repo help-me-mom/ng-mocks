@@ -1,7 +1,7 @@
 import * as acorn from "acorn";
 import * as ts from "typescript";
 
-import { Transform }  from "./transforms";
+import { Transform } from "./transforms";
 
 export interface KarmaTypescriptConfig {
     [key: string]: any;
@@ -13,7 +13,7 @@ export interface KarmaTypescriptConfig {
     include?: string[] | Extendable;
     remapOptions?: RemapOptions;
     reports?: Reports;
-    transformPath?: Function;
+    transformPath?: (filepath: string) => string;
     tsconfig?: string;
 }
 
@@ -71,7 +71,7 @@ export interface ThresholdOptions {
         lines?: number;
         statements?: number;
     };
-};
+}
 
 export interface CoverageOptions {
     instrumentation?: boolean;
@@ -81,9 +81,9 @@ export interface CoverageOptions {
 
 export interface RemapOptions {
     exclude?: RegExp;
-    readFile?: { (filepath: string): string };
+    readFile?: (filepath: string) => string;
     sources?: any;
-    warn?: Function;
+    warn?: () => void;
 }
 
 export interface Reports {
@@ -102,5 +102,5 @@ export interface Reports {
 export interface Destination {
     directory?: string;
     filename?: string;
-    subdirectory?: string | Function;
+    subdirectory?: string | (() => void);
 }

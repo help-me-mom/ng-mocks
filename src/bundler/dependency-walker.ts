@@ -18,7 +18,7 @@ import { Queued } from "./queued";
 export class DependencyWalker {
 
     private requireRegexp = /\brequire\b/;
-    private walk = require("acorn/dist/walk");
+    private walk = require("acorn-walk");
 
     constructor(private log: Logger) {}
 
@@ -29,13 +29,13 @@ export class DependencyWalker {
     public collectTypescriptDependencies(queue: Queued[]): number {
 
         let dependencyCount: number = 0;
-        let ambientModuleNames = this.collectAmbientModules(queue);
+        const ambientModuleNames = this.collectAmbientModules(queue);
 
         queue.forEach((queued) => {
 
             queued.item.dependencies = this.findUnresolvedTsRequires(queued.emitOutput);
 
-            let resolvedModules = (<any> queued.emitOutput.sourceFile).resolvedModules;
+            const resolvedModules = (queued.emitOutput.sourceFile as any).resolvedModules;
 
             if (resolvedModules && !queued.emitOutput.isDeclarationFile) {
 
@@ -46,7 +46,7 @@ export class DependencyWalker {
                 }
                 else { // Typescript 1.6.2 - 2.1.6
                     Object.keys(resolvedModules).forEach((moduleName: string) => {
-                        let resolvedModule = resolvedModules[moduleName];
+                        const resolvedModule = resolvedModules[moduleName];
                         this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
@@ -61,18 +61,18 @@ export class DependencyWalker {
     }
 
     public collectJavascriptDependencies(bundleItem: BundleItem,
-                                         onDependenciesCollected: { (moduleNames: string[]): void }): void {
+                                         onDependenciesCollected: (moduleNames: string[]) => void): void {
 
-        let moduleNames: string[] = [];
-        let expressions: any[] = [];
+        const moduleNames: string[] = [];
+        const expressions: any[] = [];
 
-        let isRequire = (node: any) => {
+        const isRequire = (node: any) => {
             return node.type === "CallExpression" &&
                    node.callee.type === "Identifier" &&
                    node.callee.name === "require";
         };
 
-        let visitNode = (node: any, state: any, c: any)  => {
+        const visitNode = (node: any, state: any, c: any)  => {
             if (!this.hasRequire(bundleItem.source.slice(node.start, node.end))) {
                 return;
             }
@@ -91,7 +91,7 @@ export class DependencyWalker {
             }
         };
 
-        if (bundleItem.ast.body) {
+        if (bundleItem.ast) {
             this.walk.recursive(bundleItem.ast, null, {
                 Expression: visitNode,
                 Statement: visitNode
@@ -105,7 +105,7 @@ export class DependencyWalker {
 
     private collectAmbientModules(queue: Queued[]): string[] {
 
-        let ambientModuleNames: string[] = [];
+        const ambientModuleNames: string[] = [];
 
         queue.forEach((queued) => {
             if (queued.emitOutput.ambientModuleNames) {
@@ -126,24 +126,24 @@ export class DependencyWalker {
 
     private findUnresolvedTsRequires(emitOutput: EmitOutput): BundleItem[] {
 
-        let dependencies: BundleItem[] = [];
+        const dependencies: BundleItem[] = [];
 
         if (emitOutput.isDeclarationFile) {
             return dependencies;
         }
 
-        let visitNode = (node: ts.Node) => {
+        const visitNode = (node: ts.Node) => {
 
             if (node.kind === ts.SyntaxKind.CallExpression) {
 
-                let ce = (<ts.CallExpression> node);
+                const ce = (node as ts.CallExpression);
 
-                let expression = ce.expression ?
-                    (<ts.LiteralExpression> ce.expression) :
+                const expression = ce.expression ?
+                    (ce.expression as ts.LiteralExpression) :
                     undefined;
 
-                let argument = ce.arguments && ce.arguments.length ?
-                    (<ts.LiteralExpression> ce.arguments[0]) :
+                const argument = ce.arguments && ce.arguments.length ?
+                    (ce.arguments[0] as ts.LiteralExpression) :
                     undefined;
 
                 if (expression && expression.text === "require" &&
@@ -162,9 +162,9 @@ export class DependencyWalker {
 
     private addDynamicDependencies(expressions: any[],
                                    bundleItem: BundleItem,
-                                   onDynamicDependenciesAdded: { (dynamicDependencies: string[]): void }) {
+                                   onDynamicDependenciesAdded: (dynamicDependencies: string[]) => void) {
 
-        let dynamicDependencies: string[] = [];
+        const dynamicDependencies: string[] = [];
 
         if (expressions.length === 0) {
             process.nextTick(() => {
@@ -175,8 +175,8 @@ export class DependencyWalker {
 
         async.each(expressions, (expression, onExpressionResolved) => {
 
-            let dynamicModuleName = this.parseDynamicRequire(expression);
-            let directory = path.dirname(bundleItem.filename);
+            const dynamicModuleName = this.parseDynamicRequire(expression);
+            const directory = path.dirname(bundleItem.filename);
             let pattern: string;
 
             if (dynamicModuleName && dynamicModuleName !== "*") {
@@ -218,7 +218,7 @@ export class DependencyWalker {
 
     private parseDynamicRequire(expression: any): string {
 
-        let visitNode = (node: any): string => {
+        const visitNode = (node: any): string => {
             switch (node.type) {
                 case "BinaryExpression":
                     if (node.operator === "+") {
@@ -241,11 +241,11 @@ export class DependencyWalker {
 
     private validateCase(queue: Queued[]) {
 
-        let files = queue.map((q) => {
+        const files = queue.map((q) => {
             return q.file.originalPath;
         });
 
-        let fileslower = queue.map((q) => {
+        const fileslower = queue.map((q) => {
             return q.file.originalPath.toLowerCase();
         });
 
@@ -253,10 +253,10 @@ export class DependencyWalker {
             if (queued.item.dependencies) {
                 queued.item.dependencies.forEach((dependency) => {
                     if (dependency.filename && files.indexOf(dependency.filename) === -1) {
-                        let lowerIndex = fileslower.indexOf(dependency.filename.toLowerCase());
+                        const lowerIndex = fileslower.indexOf(dependency.filename.toLowerCase());
                         if (lowerIndex !== -1) {
 
-                            let result = diff.diffChars(files[lowerIndex], dependency.filename);
+                            const result = diff.diffChars(files[lowerIndex], dependency.filename);
                             let arrows = "";
                             result.forEach((part) => {
                                 if (part.added) {

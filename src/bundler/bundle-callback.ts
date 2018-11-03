@@ -1,3 +1,1 @@
-export interface BundleCallback {
-    (bundled: string): void;
-}
+export type BundleCallback = (bundled: string) => void;

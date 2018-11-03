@@ -11,7 +11,7 @@ import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
 export class Reporter {
 
-    public create: { (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any): void };
+    public create: (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any) => void;
 
     private log: Logger;
     private remap = require("remap-istanbul/lib/remap");
@@ -19,10 +19,10 @@ export class Reporter {
 
     constructor(config: Configuration, sharedProcessedFiles: SharedProcessedFiles, threshold: Threshold) {
 
-        let self = this;
+        const self = this;
 
         // tslint:disable-next-line:only-arrow-functions
-        this.create = function (logger: any) {
+        this.create = function(logger: any) {
 
             let coverageMap: WeakMap<any, any>;
 
@@ -44,8 +44,8 @@ export class Reporter {
 
                 browsers.forEach((browser: any) => {
 
-                    let coverage = coverageMap.get(browser);
-                    let unmappedCollector = new Collector();
+                    const coverage = coverageMap.get(browser);
+                    const unmappedCollector = new Collector();
 
                     if (!coverage) {
                         return;
@@ -53,12 +53,12 @@ export class Reporter {
 
                     unmappedCollector.add(coverage);
 
-                    let sourceStore = (<any> Store).create("memory");
+                    const sourceStore = (Store as any).create("memory");
                     config.remapOptions.sources = sourceStore;
                     config.remapOptions.readFile = (filepath: string) => {
                         return sharedProcessedFiles[filepath];
                     };
-                    let collector = self.remap((<any> unmappedCollector).getFinalCoverage(), config.remapOptions);
+                    const collector = self.remap((unmappedCollector as any).getFinalCoverage(), config.remapOptions);
 
                     if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
                         results.exitCode = 1;
@@ -68,7 +68,7 @@ export class Reporter {
                         .all(Object.keys(config.reports)
                         .map((reportType) => {
 
-                            let destination = self.getReportDestination(browser, config.reports, reportType);
+                            const destination = self.getReportDestination(browser, config.reports, reportType);
 
                             if (destination) {
                                 self.log.debug("Writing coverage to %s", destination);
@@ -87,12 +87,12 @@ export class Reporter {
             };
         };
 
-        (<any> this.create).$inject = ["logger"];
+        (this.create as any).$inject = ["logger"];
     }
 
     private getReportDestination(browser: any, reports: any, reportType: any) {
 
-        let reportConfig = reports[reportType];
+        const reportConfig = reports[reportType];
 
         if (lodash.isPlainObject(reportConfig)) {
             let subdirectory = reportConfig.subdirectory || browser.name;

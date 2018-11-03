@@ -11,10 +11,10 @@ export class Extender {
 
     public static extend(key: string, tsconfig: any, karmaTypescriptConfig: KarmaTypescriptConfig): void {
 
-        let extendable = <Extendable> karmaTypescriptConfig[key];
+        const extendable = karmaTypescriptConfig[key] as Extendable;
 
         if (Array.isArray(extendable)) {
-            let list = lodash.union(tsconfig[key], <string[]> extendable);
+            const list = lodash.union(tsconfig[key], extendable as string[]);
             tsconfig[key] = this.fixWindowsPaths(list);
         }
 
@@ -23,7 +23,7 @@ export class Extender {
                 tsconfig[key] = extendable.values;
             }
             if (extendable.mode === "merge") {
-                let list = lodash.union(tsconfig[key], extendable.values);
+                const list = lodash.union(tsconfig[key], extendable.values);
                 tsconfig[key] = this.fixWindowsPaths(list);
             }
             return;

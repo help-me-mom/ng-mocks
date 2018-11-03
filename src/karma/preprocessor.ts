@@ -10,7 +10,7 @@ import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
 export class Preprocessor {
 
-    public create: { (helper: any, logger: any): void };
+    public create: (helper: any, logger: any) => void;
     private log: Logger;
 
     constructor(bundler: Bundler, compiler: Compiler, private config: Configuration,
@@ -21,7 +21,7 @@ export class Preprocessor {
 
             coverage.initialize(helper, logger);
 
-            return (content: string, file: File, done: { (e: any, c?: string): void }) => {
+            return (content: string, file: File, done: (e: any, c?: string) => void) => {
                 try {
                     this.log.debug("Processing \"%s\". %s", file.originalPath, content.length);
                     file.path = config.transformPath(file.originalPath);
@@ -49,6 +49,6 @@ export class Preprocessor {
             };
         };
 
-        (<any> this.create).$inject = ["helper", "logger"];
+        (this.create as any).$inject = ["helper", "logger"];
     }
 }

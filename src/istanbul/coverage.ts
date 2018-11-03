@@ -63,7 +63,7 @@ export class Coverage {
 
     private isExcluded(regex: RegExp | RegExp[], path: string): boolean {
         if (Array.isArray(regex)) {
-            for (let r of regex) {
+            for (const r of regex) {
                 if (r.test(path)) {
                     return true;
                 }

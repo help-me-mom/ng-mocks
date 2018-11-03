@@ -1,9 +1,10 @@
 import "compilerpaths-js/api/index";
+// @ts-ignore
 import { CompilerPathsTester } from "compilerpaths/compiler-paths-tester";
 
 describe("CompilerPathsTester", () => {
 
-    let tester = new CompilerPathsTester();
+    const tester = new CompilerPathsTester();
 
     it("should use paths option in tsconfig", () => {
 

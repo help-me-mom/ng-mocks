@@ -12,19 +12,19 @@ export class Threshold {
 
     public check(browser: any, collector: any) {
 
-        let thresholdConfig = this.config.coverageOptions.threshold;
-        let finalCoverage = collector.getFinalCoverage();
-        let globalCoverage = this.excludeFiles(finalCoverage, thresholdConfig.global.excludes);
-        let globalResults = (<any> istanbul.utils).summarizeCoverage(globalCoverage);
+        const thresholdConfig = this.config.coverageOptions.threshold;
+        const finalCoverage = collector.getFinalCoverage();
+        const globalCoverage = this.excludeFiles(finalCoverage, thresholdConfig.global.excludes);
+        const globalResults = (istanbul.utils as any).summarizeCoverage(globalCoverage);
         let passedThreshold = true;
 
-        let checkThresholds = (name: string, thresholds: any, results: any) => {
+        const checkThresholds = (name: string, thresholds: any, results: any) => {
 
             ["branches", "functions", "lines", "statements"].forEach((key) => {
 
-                let result = results[key];
-                let uncovered = result.total - result.covered;
-                let threshold = thresholds[key];
+                const result = results[key];
+                const uncovered = result.total - result.covered;
+                const threshold = thresholds[key];
 
                 if (threshold < 0 && threshold * -1 < uncovered) {
                     passedThreshold = false;
@@ -43,12 +43,12 @@ export class Threshold {
 
         Object.keys(finalCoverage).forEach((filename) => {
 
-            let relativeFilename = FileUtils.getRelativePath(filename, this.config.karma.basePath);
-            let excludes = this.config.coverageOptions.threshold.file.excludes;
+            const relativeFilename = FileUtils.getRelativePath(filename, this.config.karma.basePath);
+            const excludes = this.config.coverageOptions.threshold.file.excludes;
 
             if (!this.isExcluded(relativeFilename, excludes)) {
-                let fileResult = (<any> istanbul.utils).summarizeFileCoverage(finalCoverage[filename]);
-                let thresholds = merge(thresholdConfig.file, this.getFileOverrides(relativeFilename));
+                const fileResult = (istanbul.utils as any).summarizeFileCoverage(finalCoverage[filename]);
+                const thresholds = merge(thresholdConfig.file, this.getFileOverrides(relativeFilename));
                 checkThresholds(filename, thresholds, fileResult);
             }
         });
@@ -57,7 +57,7 @@ export class Threshold {
     }
 
     private excludeFiles(coverage: any, excludes: string[]) {
-        let result: { [key: string]: any } = {};
+        const result: { [key: string]: any } = {};
         Object.keys(coverage).forEach((filename) => {
             if (!this.isExcluded(FileUtils.getRelativePath(filename, this.config.karma.basePath), excludes)) {
                 result[filename] = coverage[filename];
@@ -74,7 +74,7 @@ export class Threshold {
 
     private getFileOverrides(relativeFilename: string) {
         let thresholds = {};
-        let overrides = this.config.coverageOptions.threshold.file.overrides;
+        const overrides = this.config.coverageOptions.threshold.file.overrides;
         Object.keys(overrides).forEach((pattern) => {
             if (minimatch(relativeFilename, pattern, { dot: true })) {
                 thresholds = overrides[pattern];

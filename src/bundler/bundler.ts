@@ -11,15 +11,15 @@ import { EmitOutput } from "../compiler/emit-output";
 import { Benchmark } from "../shared/benchmark";
 import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
-import { Project } from "../shared/project";
-import { Globals } from "./globals";
-import { SourceMap } from "./source-map";
 import PathTool = require("../shared/path-tool");
+import { Project } from "../shared/project";
 import { BundleCallback } from "./bundle-callback";
 import { BundleItem } from "./bundle-item";
 import { DependencyWalker } from "./dependency-walker";
+import { Globals } from "./globals";
 import { Queued } from "./queued";
 import { Resolver } from "./resolve/resolver";
+import { SourceMap } from "./source-map";
 import { Transformer } from "./transformer";
 import { Validator } from "./validator";
 
@@ -74,13 +74,13 @@ export class Bundler {
 
     private bundleQueuedModules() {
 
-        let benchmark = new Benchmark();
+        const benchmark = new Benchmark();
 
         this.transformer.applyTsTransforms(this.bundleQueue, () => {
             this.bundleQueue.forEach((queued) => {
 
-                let source = this.sourceMap.removeSourceMapComment(queued);
-                let map = this.sourceMap.getSourceMap(queued);
+                const source = this.sourceMap.removeSourceMapComment(queued);
+                const map = this.sourceMap.getSourceMap(queued);
 
                 if (map) {
                     // used by Karma to log errors with original source code line numbers
@@ -91,7 +91,7 @@ export class Bundler {
                     queued.file.path, queued.file.originalPath, source, map);
             });
 
-            let dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
+            const dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
 
             if (this.shouldBundle(dependencyCount)) {
                 this.bundleWithLoader(benchmark);
@@ -139,7 +139,7 @@ export class Bundler {
         this.globals.add(this.bundleBuffer, this.entrypoints, () => {
             this.writeMainBundleFile(() => {
                 this.bundleQueue.forEach((queued) => {
-                    let source = queued.item.source + "\n" +
+                    const source = queued.item.source + "\n" +
                         (queued.item.sourceMap ? queued.item.sourceMap.toComment() + "\n" : "");
                     queued.callback(source);
                 });
@@ -170,8 +170,8 @@ export class Bundler {
 
     private addLoaderFunction(bundleItem: BundleItem, standalone: boolean): string {
 
-        let dependencyMap: { [key: string]: string; } = {};
-        let moduleId = path.relative(this.config.karma.basePath, bundleItem.filename);
+        const dependencyMap: { [key: string]: string; } = {};
+        const moduleId = path.relative(this.config.karma.basePath, bundleItem.filename);
 
         bundleItem.dependencies.forEach((dependency) => {
             if (!dependency.filename) {
@@ -208,7 +208,7 @@ export class Bundler {
     }
 
     private orderEntrypoints() {
-        let orderedEntrypoints: string[] = [];
+        const orderedEntrypoints: string[] = [];
         this.project.getKarmaFiles().forEach((filename) => {
             if (this.entrypoints.indexOf(filename) !== -1) {
                 orderedEntrypoints.push(filename);
@@ -217,7 +217,7 @@ export class Bundler {
         this.entrypoints = orderedEntrypoints;
     }
 
-    private writeMainBundleFile(onMainBundleFileWritten: { (): void } ) {
+    private writeMainBundleFile(onMainBundleFileWritten: () => void ) {
 
         let bundle = "(function(global){\nglobal.wrappers={};\n";
         this.sourceMap.initialize(bundle);
@@ -226,7 +226,7 @@ export class Bundler {
 
             this.sourceMap.addFile(bundleItem);
 
-            let wrapped = this.addLoaderFunction(bundleItem, false);
+            const wrapped = this.addLoaderFunction(bundleItem, false);
             bundle += wrapped;
 
             this.sourceMap.offsetLineNumber(wrapped);

@@ -35,7 +35,7 @@ export class Configuration implements KarmaTypescriptConfig {
     public remapOptions: RemapOptions;
     public reporters: string[];
     public reports: Reports;
-    public transformPath: Function;
+    public transformPath: (filepath: string) => string;
     public tsconfig: string;
 
     public hasCoverageThreshold: boolean;
@@ -49,7 +49,7 @@ export class Configuration implements KarmaTypescriptConfig {
     public initialize(config: ConfigOptions) {
 
         this.karma = config || {};
-        this.karmaTypescriptConfig = (<any> config).karmaTypescriptConfig || {};
+        this.karmaTypescriptConfig = (config as any).karmaTypescriptConfig || {};
 
         this.configureLogging();
         this.configureBundler();
@@ -60,7 +60,7 @@ export class Configuration implements KarmaTypescriptConfig {
         this.configureKarmaCoverage();
         this.assertConfiguration();
 
-        for (let callback of this.callbacks) {
+        for (const callback of this.callbacks) {
             callback();
         }
     }
@@ -74,7 +74,7 @@ export class Configuration implements KarmaTypescriptConfig {
     }
 
     public hasPreprocessor(name: string): boolean {
-        for (let preprocessor in this.karma.preprocessors) {
+        for (const preprocessor in this.karma.preprocessors) {
             if (this.karma.preprocessors[preprocessor] &&
                 this.karma.preprocessors[preprocessor].indexOf(name) !== -1) {
                 return true;
@@ -111,7 +111,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private configureBundler(): void {
 
-        let defaultBundlerOptions: BundlerOptions = {
+        const defaultBundlerOptions: BundlerOptions = {
             acornOptions: {
                 ecmaVersion: 7,
                 sourceType: "module"
@@ -137,7 +137,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private configureCoverage() {
 
-        let defaultCoverageOptions: CoverageOptions = {
+        const defaultCoverageOptions: CoverageOptions = {
             exclude: /\.(d|spec|test)\.ts$/i,
             instrumentation: true,
             threshold: {
@@ -191,7 +191,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private configurePreprocessor() {
 
-        let transformPath = (filepath: string) => {
+        const transformPath = (filepath: string) => {
             return filepath.replace(/\.(ts|tsx)$/, ".js");
         };
 
@@ -205,13 +205,13 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private configureKarmaCoverage() {
 
-        let defaultCoverageReporter = {
+        const defaultCoverageReporter = {
             instrumenterOptions: {
                 istanbul: { noCompact: true }
             }
         };
 
-        this.coverageReporter = merge(defaultCoverageReporter, (<any> this.karma).coverageReporter);
+        this.coverageReporter = merge(defaultCoverageReporter, (this.karma as any).coverageReporter);
 
         if (Array.isArray(this.karma.reporters)) {
             this.reporters = this.karma.reporters.slice();
@@ -241,7 +241,7 @@ export class Configuration implements KarmaTypescriptConfig {
     }
 
     private assertExtendable(key: string) {
-        let extendable = (<Extendable> this[key]);
+        const extendable = (this[key] as Extendable);
 
         if (extendable === undefined) {
             return;
@@ -279,17 +279,17 @@ export class Configuration implements KarmaTypescriptConfig {
     }
 
     private assertDeprecatedOptions() {
-        if ((<any> this.bundlerOptions).ignoredModuleNames) {
+        if ((this.bundlerOptions as any).ignoredModuleNames) {
             throw new Error("The option 'karmaTypescriptConfig.bundlerOptions.ignoredModuleNames' has been " +
                             "removed, please use 'karmaTypescriptConfig.bundlerOptions.exclude' instead");
         }
 
-        if ((<any> this.karmaTypescriptConfig).excludeFromCoverage !== undefined) {
+        if ((this.karmaTypescriptConfig as any).excludeFromCoverage !== undefined) {
             throw new Error("The option 'karmaTypescriptConfig.excludeFromCoverage' has been " +
                             "removed, please use 'karmaTypescriptConfig.coverageOptions.exclude' instead");
         }
 
-        if ((<any> this.karmaTypescriptConfig).disableCodeCoverageInstrumentation !== undefined) {
+        if ((this.karmaTypescriptConfig as any).disableCodeCoverageInstrumentation !== undefined) {
             throw new Error("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' has been " +
                             "removed, please use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
         }

@@ -12,10 +12,10 @@ import { CompilerOptions } from "../api";
 import { Configuration } from "./configuration";
 import { Extender } from "./extender";
 
-type ConfigFileJson = {
+interface ConfigFileJson {
     config?: any;
     error?: ts.Diagnostic;
-};
+}
 
 export enum EventType {
     FileSystemChanged,
@@ -47,7 +47,7 @@ export class Project {
 
     public handleFileEvent(): EventType {
 
-        let oldKarmaFiles = lodash.cloneDeep(this.karmaFiles || []);
+        const oldKarmaFiles = lodash.cloneDeep(this.karmaFiles || []);
         this.expandKarmaFilePatterns();
 
         if (!lodash.isEqual(oldKarmaFiles, this.karmaFiles)) {
@@ -62,12 +62,12 @@ export class Project {
 
     private expandKarmaFilePatterns() {
 
-        let files = (<FilePattern[]> this.config.karma.files);
+        const files = (this.config.karma.files as FilePattern[]);
         this.karmaFiles.length = 0;
 
         files.forEach((file) => {
 
-            let g = new glob.Glob(path.normalize(file.pattern), {
+            const g = new glob.Glob(path.normalize(file.pattern), {
                 cwd: "/",
                 follow: true,
                 nodir: true,
@@ -79,9 +79,9 @@ export class Project {
     }
 
     private resolveTsConfig() {
-        let configFileName = this.getTsconfigFilename();
-        let configFileJson = this.getConfigFileJson(configFileName);
-        let existingOptions = this.getExistingOptions();
+        const configFileName = this.getTsconfigFilename();
+        const configFileJson = this.getConfigFileJson(configFileName);
+        const existingOptions = this.getExistingOptions();
         this.tsconfig = this.parseConfigFileJson(configFileName, configFileJson, existingOptions);
     }
 
@@ -104,7 +104,7 @@ export class Project {
     }
 
     private getExistingOptions(): CompilerOptions {
-        let compilerOptions = lodash.cloneDeep(this.config.compilerOptions);
+        const compilerOptions = lodash.cloneDeep(this.config.compilerOptions);
         this.convertOptions(compilerOptions);
         return compilerOptions;
     }
@@ -117,11 +117,11 @@ export class Project {
 
             this.log.debug("Using %s", configFileName);
 
-            if ((<any> ts).parseConfigFile) { // v1.6
-                configFileJson = (<any> ts).readConfigFile(configFileName);
+            if ((ts as any).parseConfigFile) { // v1.6
+                configFileJson = (ts as any).readConfigFile(configFileName);
             }
             else if (ts.parseConfigFileTextToJson) { // v1.7+
-                let configFileText = ts.sys.readFile(configFileName);
+                const configFileText = ts.sys.readFile(configFileName);
                 configFileJson = ts.parseConfigFileTextToJson(configFileName, configFileText);
             }
             else {
@@ -145,7 +145,7 @@ export class Project {
                                 existingOptions: CompilerOptions): ts.ParsedCommandLine {
 
         let tsconfig: ts.ParsedCommandLine;
-        let basePath = this.resolveBasepath(configFileName);
+        const basePath = this.resolveBasepath(configFileName);
 
         if (existingOptions && existingOptions.baseUrl === ".") {
             existingOptions.baseUrl = basePath;
@@ -154,13 +154,13 @@ export class Project {
         Extender.extend("include", configFileJson.config, this.config);
         Extender.extend("exclude", configFileJson.config, this.config);
 
-        if ((<any> ts).parseConfigFile) {
-            tsconfig = (<any> ts).parseConfigFile(configFileJson.config, ts.sys, basePath);
-            tsconfig.options = (<any> ts).extend(existingOptions, tsconfig.options);
+        if ((ts as any).parseConfigFile) {
+            tsconfig = (ts as any).parseConfigFile(configFileJson.config, ts.sys, basePath);
+            tsconfig.options = (ts as any).extend(existingOptions, tsconfig.options);
         }
         else if (ts.parseJsonConfigFileContent) {
             tsconfig = ts.parseJsonConfigFileContent(configFileJson.config, ts.sys,
-                basePath, (<any> existingOptions), configFileName);
+                basePath, (existingOptions as any), configFileName);
         }
 
         if (!tsconfig) {
@@ -170,7 +170,7 @@ export class Project {
 
         delete tsconfig.options.outDir;
         delete tsconfig.options.outFile;
-        (<any> tsconfig.options).suppressOutputPathCheck = true;
+        (tsconfig.options as any).suppressOutputPathCheck = true;
 
         this.assertModuleKind(tsconfig);
 
@@ -193,8 +193,8 @@ export class Project {
             return this.config.karma.basePath;
         }
 
-        let relativePath = path.relative(this.config.karma.basePath, configFileName);
-        let absolutePath = path.join(this.config.karma.basePath, relativePath);
+        const relativePath = path.relative(this.config.karma.basePath, configFileName);
+        const absolutePath = path.join(this.config.karma.basePath, relativePath);
         return path.dirname(absolutePath);
     }
 
@@ -203,7 +203,7 @@ export class Project {
         const names = ["jsx", "lib", "module", "moduleResolution", "target"];
 
         if (options) {
-            (<any> ts).optionDeclarations.forEach((declaration: any) => {
+            (ts as any).optionDeclarations.forEach((declaration: any) => {
                 if (names.indexOf(declaration.name) !== -1) {
                     this.setOptions(options, declaration);
                 }
@@ -212,17 +212,17 @@ export class Project {
     }
 
     private setOptions(options: any, declaration: any) {
-        let name = declaration.name;
+        const name = declaration.name;
         if (options[name]) {
             if (Array.isArray(options[name])) {
                 options[name].forEach((option: string, index: number) => {
-                    let key = option.toLowerCase();
+                    const key = option.toLowerCase();
                     options[name][index] = lodash.isMap(declaration.element.type) ?
                         declaration.element.type.get(key) : declaration.type[key];
                 });
             }
             else {
-                let key = options[name].toLowerCase();
+                const key = options[name].toLowerCase();
                 options[name] = lodash.isMap(declaration.type) ?
                     declaration.type.get(key) : declaration.type[key];
             }

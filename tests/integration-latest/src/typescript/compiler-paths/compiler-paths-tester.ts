@@ -1,7 +1,7 @@
-import { Subject } from "@nodeModules/rxjs";
-// Ignore implicit any error on the module without type definitions.
 // @ts-ignore
-import * as acorn from "@outsideProject/acorn";
+import { Subject } from "@nodeModules/rxjs";
+// @ts-ignore
+import * as acorn from "@outsideProject/acorn-walk";
 
 export class CompilerPathsTester {
 

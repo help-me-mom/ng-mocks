@@ -35,7 +35,7 @@ export class Resolver {
     public resolveModule(requiringModule: string,
                          bundleItem: BundleItem,
                          buffer: BundleItem[],
-                         onModuleResolved: { (bundleItem: BundleItem): void }) {
+                         onModuleResolved: (bundleItem: BundleItem) => void) {
 
         if (bundleItem.isTypescriptFile()) {
             process.nextTick(() => {
@@ -69,7 +69,7 @@ export class Resolver {
             return;
         }
 
-        let onFilenameResolved = () => {
+        const onFilenameResolved = () => {
 
             this.lookupNameCache[bundleItem.lookupName] = bundleItem.filename;
 
@@ -86,7 +86,7 @@ export class Resolver {
             }
         };
 
-        let onDependenciesResolved = () => {
+        const onDependenciesResolved = () => {
             buffer.push(bundleItem);
             return onModuleResolved(bundleItem);
         };
@@ -95,8 +95,8 @@ export class Resolver {
     }
 
     private tryResolveTypingAsJavascript(bundleItem: BundleItem,
-                                         onModuleResolved: { (bundleItem: BundleItem): void }): void {
-        let jsfile = bundleItem.filename.replace(/.d.ts$/i, ".js");
+                                         onModuleResolved: (bundleItem: BundleItem) => void): void {
+        const jsfile = bundleItem.filename.replace(/.d.ts$/i, ".js");
         fs.stat(jsfile, (error: Error, stats: fs.Stats) => {
             if (!error && stats) {
                 this.log.debug("Resolving %s to %s", bundleItem.filename, jsfile);
@@ -108,15 +108,15 @@ export class Resolver {
 
     private cacheBowerPackages(): void {
         try {
-            let bower = require("bower");
+            const bower = require("bower");
             bower.commands
                 .list({ map: true }, { offline: true })
                 .on("end", (map: any) => {
 
                     Object.keys(map.dependencies).forEach((moduleName) => {
 
-                        let pkg = map.dependencies[moduleName];
-                        let files = ["index.js", moduleName + ".js"];
+                        const pkg = map.dependencies[moduleName];
+                        const files = ["index.js", moduleName + ".js"];
 
                         if (pkg.pkgMeta && pkg.pkgMeta.main) {
                             if (Array.isArray(pkg.pkgMeta.main)) {
@@ -131,7 +131,7 @@ export class Resolver {
 
                         files.forEach((file) => {
                             try {
-                                let main = path.join(pkg.canonicalDir, file);
+                                const main = path.join(pkg.canonicalDir, file);
                                 fs.statSync(main);
                                 this.bowerPackages[moduleName] = main;
                             }
@@ -159,8 +159,8 @@ export class Resolver {
         if (bundleItem.isNpmModule() && bundleItem.isTypingsFile() &&
             bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
 
-            let filename = PathTool.fixWindowsPath(bundleItem.filename);
-            let matches = filename.match(/\/node_modules\/(.*)\//);
+            const filename = PathTool.fixWindowsPath(bundleItem.filename);
+            const matches = filename.match(/\/node_modules\/(.*)\//);
 
             if (matches && matches[1]) {
                 moduleName = matches[1];
@@ -171,7 +171,7 @@ export class Resolver {
         return moduleName;
     }
 
-    private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: { (): void }) {
+    private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: () => void) {
 
         const moduleName = this.resolveCompilerPathModulename(bundleItem);
 
@@ -182,8 +182,8 @@ export class Resolver {
         }
 
         if (this.config.bundlerOptions.resolve.alias[moduleName]) {
-            let alias = this.config.bundlerOptions.resolve.alias[moduleName];
-            let relativePath = path.relative(this.config.karma.basePath, alias);
+            const alias = this.config.bundlerOptions.resolve.alias[moduleName];
+            const relativePath = path.relative(this.config.karma.basePath, alias);
             bundleItem.filename = path.join(this.config.karma.basePath, relativePath);
             this.log.debug("Resolved [%s] to alias: %s", moduleName, bundleItem.filename);
             return onFilenameResolved();
@@ -227,12 +227,12 @@ export class Resolver {
 
     private resolveDependencies(bundleItem: BundleItem,
                                 buffer: BundleItem[],
-                                onDependenciesResolved: { (): void }) {
+                                onDependenciesResolved: () => void) {
 
         if (bundleItem.isScript() && this.dependencyWalker.hasRequire(bundleItem.source)) {
             this.dependencyWalker.collectJavascriptDependencies(bundleItem, (moduleNames) => {
                 async.each(moduleNames, (moduleName, onModuleResolved) => {
-                    let dependency = new BundleItem(moduleName);
+                    const dependency = new BundleItem(moduleName);
                     this.resolveModule(bundleItem.filename, dependency, buffer, (resolved) => {
                         if (resolved) {
                             bundleItem.dependencies.push(resolved);

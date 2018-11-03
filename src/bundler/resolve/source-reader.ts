@@ -1,5 +1,4 @@
 import * as acorn from "acorn";
-import * as ESTree from "estree";
 import * as fs from "fs";
 import * as os from "os";
 
@@ -15,7 +14,7 @@ export class SourceReader {
                 private log: Logger,
                 private transformer: Transformer) { }
 
-    public read(bundleItem: BundleItem, onSourceRead: { (): void }) {
+    public read(bundleItem: BundleItem, onSourceRead: () => void) {
 
         this.readFile(bundleItem, (source: string) => {
 
@@ -29,7 +28,7 @@ export class SourceReader {
         });
     }
 
-    private readFile(bundleItem: BundleItem, onSourceRead: { (source: string): void }) {
+    private readFile(bundleItem: BundleItem, onSourceRead: (source: string) => void) {
 
         if (this.config.bundlerOptions.ignore.indexOf(bundleItem.moduleName) !== -1) {
             onSourceRead("module.exports={};");
@@ -61,15 +60,11 @@ export class SourceReader {
         }
     }
 
-    private createAbstractSyntaxTree(bundleItem: BundleItem): ESTree.Program {
+    private createAbstractSyntaxTree(bundleItem: BundleItem): acorn.Node {
 
         if (!bundleItem.isScript() ||
             this.config.bundlerOptions.noParse.indexOf(bundleItem.moduleName) !== -1) {
-            return {
-                body: undefined,
-                sourceType: "script",
-                type: "Program"
-            };
+            return undefined;
         }
 
         try {

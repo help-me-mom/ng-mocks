@@ -10,9 +10,9 @@ export class Globals {
 
     constructor(private config: Configuration, private resolver: Resolver) { }
 
-    public add(buffer: BundleItem[], entrypoints: string[], onGlobalsAdded: { (): void }) {
+    public add(buffer: BundleItem[], entrypoints: string[], onGlobalsAdded: () => void) {
 
-        let items: BundleItem[] = [];
+        const items: BundleItem[] = [];
 
         this.addConstants(items);
         this.addNodeGlobals(items);
@@ -34,7 +34,7 @@ export class Globals {
 
         if (this.config.bundlerOptions.addNodeGlobals) {
 
-            let name = "bundle/node-globals";
+            const name = "bundle/node-globals";
 
             items.push(new BundleItem(name, name,
                 os.EOL + "global.process=require('_process');" +
@@ -50,7 +50,7 @@ export class Globals {
     private addConstants(items: BundleItem[]): void {
 
         let source = "";
-        let name = "bundle/constants";
+        const name = "bundle/constants";
 
         Object.keys(this.config.bundlerOptions.constants).forEach((key) => {
             let value = this.config.bundlerOptions.constants[key];

@@ -1,5 +1,3 @@
 import { EmitOutput } from "./emit-output";
 
-export interface CompileCallback {
-    (emitOutput: EmitOutput): void;
-}
+export type CompileCallback = (emitOutput: EmitOutput) => void;

@@ -22,7 +22,7 @@ import { Configuration, LoggerList } from "./shared/configuration";
 import { Project } from "./shared/project";
 import { SharedProcessedFiles } from "./shared/shared-processed-files";
 
-let loggers: LoggerList = {
+const loggers: LoggerList = {
     bundler: log4js.getLogger("bundler.karma-typescript"),
     compiler: log4js.getLogger("compiler.karma-typescript"),
     dependencyWalker: log4js.getLogger("dependency-walker.karma-typescript"),
@@ -33,29 +33,29 @@ let loggers: LoggerList = {
     threshold: log4js.getLogger("threshold.karma-typescript")
 };
 
-let sharedProcessedFiles: SharedProcessedFiles = {};
+const sharedProcessedFiles: SharedProcessedFiles = {};
 
-let configuration = new Configuration(loggers);
-let project = new Project(configuration, loggers.project);
-let dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
+const configuration = new Configuration(loggers);
+const project = new Project(configuration, loggers.project);
+const dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 
-let compiler = new Compiler(configuration, loggers.compiler, project);
-let coverage = new Coverage(configuration);
-let transformer = new Transformer(configuration, project);
-let threshold = new Threshold(configuration, loggers.threshold);
-let validator = new Validator(configuration);
+const compiler = new Compiler(configuration, loggers.compiler, project);
+const coverage = new Coverage(configuration);
+const transformer = new Transformer(configuration, project);
+const threshold = new Threshold(configuration, loggers.threshold);
+const validator = new Validator(configuration);
 
-let sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
-let resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
-let globals = new Globals(configuration, resolver);
-let sourceMap = new SourceMap(configuration, loggers.sourceMap);
+const sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
+const resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
+const globals = new Globals(configuration, resolver);
+const sourceMap = new SourceMap(configuration, loggers.sourceMap);
 
-let bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
+const bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bundler,
                           project, resolver, sourceMap, transformer, validator);
 
-let framework = new Framework(bundler, configuration, resolver);
-let preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
-let reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
+const framework = new Framework(bundler, configuration, resolver);
+const preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
+const reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],

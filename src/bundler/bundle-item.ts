@@ -1,9 +1,8 @@
 import * as convertSourceMap from "convert-source-map";
-import * as ESTree from "estree";
 
 export class BundleItem {
 
-    public ast?: ESTree.Program;
+    public ast?: acorn.Node;
     public lookupName?: string;
     public transformedScript = false;
 

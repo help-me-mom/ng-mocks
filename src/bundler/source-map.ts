@@ -29,7 +29,7 @@ export class SourceMap {
     public getSourceMap(queued: Queued): convertSourceMap.SourceMapConverter {
         if (queued.emitOutput.sourceMapText) {
 
-            let map = convertSourceMap.fromJSON(queued.emitOutput.sourceMapText);
+            const map = convertSourceMap.fromJSON(queued.emitOutput.sourceMapText);
             if (!map.getProperty("sourcesContent")) {
                 map.addProperty("sourcesContent", [queued.emitOutput.sourceFile.text]);
             }
@@ -46,7 +46,7 @@ export class SourceMap {
 
             this.loadFileFromComment(bundleItem);
 
-            let sourceFile = path.relative(this.config.karma.basePath, bundleItem.filename);
+            const sourceFile = path.relative(this.config.karma.basePath, bundleItem.filename);
             this.combiner.addFile(
                 { sourceFile: path.join("/base", sourceFile), source: bundleItem.source },
                 { line: this.line }
@@ -68,17 +68,17 @@ export class SourceMap {
 
     public loadFileFromComment(bundleItem: BundleItem) {
 
-        let commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
+        const commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
 
         if (commentMatch && commentMatch[1]) {
 
             let map: convertSourceMap.SourceMapConverter;
-            let dirname = path.dirname(bundleItem.filename);
+            const dirname = path.dirname(bundleItem.filename);
 
             if (!commentMatch[1].startsWith("data:")) {
-                let mapFilename = path.join(dirname, commentMatch[1]);
+                const mapFilename = path.join(dirname, commentMatch[1]);
                 try {
-                    let mapJson = fs.readFileSync(mapFilename, "utf-8");
+                    const mapJson = fs.readFileSync(mapFilename, "utf-8");
                     map = convertSourceMap.fromJSON(mapJson);
                 }
                 catch (error) {
@@ -96,11 +96,11 @@ export class SourceMap {
 
             if (!map.getProperty("sourcesContent")) {
 
-                let sourcesContent: string[] = [];
+                const sourcesContent: string[] = [];
                 map.getProperty("sources").forEach((source: string) => {
-                    let sourceFilename = path.join(dirname, source);
+                    const sourceFilename = path.join(dirname, source);
                     try {
-                        let sourceContent = fs.readFileSync(sourceFilename, "utf-8");
+                        const sourceContent = fs.readFileSync(sourceFilename, "utf-8");
                         sourcesContent.push(sourceContent);
                     }
                     catch (error) {
@@ -123,7 +123,7 @@ export class SourceMap {
     }
 
     private getNumberOfNewlines(source: any) {
-        let newlines = source.match(/\n/g);
+        const newlines = source.match(/\n/g);
         return newlines ? newlines.length : 0;
     }
 }

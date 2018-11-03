@@ -14,9 +14,9 @@ export class Transformer {
 
     constructor(private config: Configuration, private project: Project) { }
 
-    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: { (): void }): void {
+    public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: () => void): void {
 
-        let transforms = this.config.bundlerOptions.transforms;
+        const transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
@@ -27,7 +27,7 @@ export class Transformer {
 
         async.eachSeries(bundleQueue, (queued: Queued, onQueueProcessed: ErrorCallback<Error>) => {
 
-            let context: TransformContext = {
+            const context: TransformContext = {
                 config: this.config,
                 filename: queued.file.originalPath,
                 module: queued.file.originalPath,
@@ -50,7 +50,7 @@ export class Transformer {
                         this.handleError(error, transform, context);
                         if (result.dirty) {
                             if (result.transpile) {
-                                let transpiled = ts.transpileModule(context.source, {
+                                const transpiled = ts.transpileModule(context.source, {
                                     compilerOptions: this.project.getTsconfig().options,
                                     fileName: context.filename
                                 });
@@ -68,9 +68,9 @@ export class Transformer {
         }, onTransformsApplied);
     }
 
-    public applyTransforms(bundleItem: BundleItem, onTransformsApplied: { (): void }): void {
+    public applyTransforms(bundleItem: BundleItem, onTransformsApplied: () => void): void {
 
-        let transforms = this.config.bundlerOptions.transforms;
+        const transforms = this.config.bundlerOptions.transforms;
 
         if (!transforms.length) {
             process.nextTick(() => {
@@ -79,11 +79,11 @@ export class Transformer {
             return;
         }
 
-        let context: TransformContext = {
+        const context: TransformContext = {
             config: this.config,
             filename: bundleItem.filename,
             js: {
-                ast: bundleItem.ast
+                ast: bundleItem.ast || { end: 0, start: 0, type: "" }
             },
             module: bundleItem.moduleName,
             source: bundleItem.source
@@ -101,7 +101,7 @@ export class Transformer {
                         bundleItem.ast = context.js.ast;
                         bundleItem.source = context.source;
                         bundleItem.transformedScript = result.transformedScript;
-                        if (result.transformedScript && bundleItem.ast && bundleItem.ast.body === undefined) {
+                        if (result.transformedScript && bundleItem.ast) {
                             bundleItem.ast = acorn.parse(context.source, this.config.bundlerOptions.acornOptions);
                         }
                     }
@@ -113,7 +113,7 @@ export class Transformer {
 
     private handleError(error: Error, transform: Transform, context: TransformContext): void {
         if (error) {
-            let errorMessage = context.filename + ": " + error.message + os.EOL +
+            const errorMessage = context.filename + ": " + error.message + os.EOL +
                 "Transform function: " + os.EOL + os.EOL +
                 transform + os.EOL;
             throw new Error(errorMessage);

@@ -1,3 +1,1 @@
-export interface CoverageCallback {
-    (result: string): void;
-}
+export type CoverageCallback = (result: string) => void;

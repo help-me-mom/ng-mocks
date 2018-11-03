@@ -7,7 +7,7 @@ import { Configuration } from "../shared/configuration";
 
 export class Framework {
 
-    public create: { (karmaConfig: ConfigOptions, helper: any, logger: any): void };
+    public create: (karmaConfig: ConfigOptions, helper: any, logger: any) => void;
     private log: Logger;
     private stringify = require("json-stringify-safe");
 
@@ -20,7 +20,7 @@ export class Framework {
             resolver.initialize();
 
             if (!config.hasFramework("commonjs")) {
-                bundler.attach((<any> karmaConfig.files));
+                bundler.attach((karmaConfig.files as any));
             }
 
             config.bundlerOptions.transforms.forEach((t) => {
@@ -35,7 +35,7 @@ export class Framework {
             this.log.debug("Configuration:\n", this.stringify(config, this.replacer, 3));
         };
 
-        (<any> this.create).$inject = ["config", "logger"];
+        (this.create as any).$inject = ["config", "logger"];
     }
 
     private replacer(key: string, value: string) {

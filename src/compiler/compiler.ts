@@ -9,12 +9,12 @@ import { File } from "../shared/file";
 import { EventType, Project } from "../shared/project";
 import { CompileCallback } from "./compile-callback";
 
-type CompiledFiles = { [key: string]: string; };
+interface CompiledFiles { [key: string]: string; }
 
-type Queued = {
+interface Queued {
     file: File;
     callback: CompileCallback;
-};
+}
 
 export class Compiler {
 
@@ -23,8 +23,8 @@ export class Compiler {
     private compilerHost: ts.CompilerHost;
     private emitQueue: Queued[] = [];
     private errors: string[] = [];
-    private hostGetSourceFile: {(filename: string, languageVersion: ts.ScriptTarget,
-                                 onError?: (message: string) => void): ts.SourceFile};
+    private hostGetSourceFile: (filename: string, languageVersion: ts.ScriptTarget,
+                                onError?: (message: string) => void) => ts.SourceFile;
     private program: ts.Program;
 
     private compileDeferred: () => void;
@@ -41,8 +41,8 @@ export class Compiler {
     public compile(file: File, callback: CompileCallback): void {
 
         this.emitQueue.push({
-            file,
-            callback
+            callback,
+            file
         });
 
         this.compileDeferred();
@@ -56,8 +56,8 @@ export class Compiler {
             this.setupRecompile();
         }
 
-        let benchmark = new Benchmark();
-        let tsconfig = this.project.getTsconfig();
+        const benchmark = new Benchmark();
+        const tsconfig = this.project.getTsconfig();
 
         this.outputDiagnostics(tsconfig.errors);
 
@@ -84,14 +84,14 @@ export class Compiler {
 
         this.emitQueue.forEach((queued) => {
 
-            let sourceFile = this.program.getSourceFile(queued.file.originalPath);
+            const sourceFile = this.program.getSourceFile(queued.file.originalPath);
 
             if (!sourceFile) {
                 throw new Error("No source found for " + queued.file.originalPath + "!\n" +
                                 "Is there a mismatch between the Typescript compiler options and the Karma config?");
             }
 
-            let ambientModuleNames = (<any> sourceFile).ambientModuleNames;
+            const ambientModuleNames = (sourceFile as any).ambientModuleNames;
 
             queued.callback({
                 ambientModuleNames,
@@ -113,7 +113,7 @@ export class Compiler {
         onError?: (message: string) => void): ts.SourceFile => {
 
         if (this.cachedProgram && !this.isQueued(filename)) {
-            let sourceFile = this.cachedProgram.getSourceFile(filename);
+            const sourceFile = this.cachedProgram.getSourceFile(filename);
             if (sourceFile) {
                 return sourceFile;
             }
@@ -123,7 +123,7 @@ export class Compiler {
     }
 
     private isQueued(filename: string): boolean {
-        for (let queued of this.emitQueue) {
+        for (const queued of this.emitQueue) {
             if (queued.file.originalPath === filename) {
                 return true;
             }
@@ -133,7 +133,7 @@ export class Compiler {
 
     private runDiagnostics(program: ts.Program, host: ts.CompilerHost): void {
         this.errors = [];
-        let diagnostics = ts.getPreEmitDiagnostics(program);
+        const diagnostics = ts.getPreEmitDiagnostics(program);
         this.outputDiagnostics(diagnostics, host);
     }
 
@@ -157,12 +157,12 @@ export class Compiler {
                 let output = "";
 
                 if (diagnostic.file) {
-                    let loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+                    const loc = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
                     output += diagnostic.file.fileName.replace(process.cwd(), "") +
                                   "(" + (loc.line + 1) + "," + (loc.character + 1) + "): ";
                 }
 
-                let category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
+                const category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
                 output += category + " TS" + diagnostic.code + ": " +
                               ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
 
@@ -180,7 +180,7 @@ export class Compiler {
     }
 
     private endsWith(str: string, suffix: string) {
-        let expectedPos = str.length - suffix.length;
+        const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 }
