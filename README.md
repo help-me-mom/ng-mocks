@@ -95,23 +95,27 @@ The plugin has default settings for the compiler, instrumenting files and creati
 These are the default compiler settings:
 
 ```javascript
-compilerOptions: {
-    emitDecoratorMetadata: true,
-    experimentalDecorators: true,
-    jsx: "react",
-    module: "commonjs",
-    sourceMap: true,
-    target: "ES5"
-},
-exclude: ["node_modules"]
+karmaTypescriptConfig: {
+    compilerOptions: {
+        emitDecoratorMetadata: true,
+        experimentalDecorators: true,
+        jsx: "react",
+        module: "commonjs",
+        sourceMap: true,
+        target: "ES5"
+    },
+    exclude: ["node_modules"]
+}
 ```
 
 The default `karma-coverage` instrumentation settings:
 
 ```javascript
-coverageReporter: {
-    instrumenterOptions: {
-        istanbul: { noCompact: true }
+karmaTypescriptConfig: {
+    coverageReporter: {
+        instrumenterOptions: {
+            istanbul: { noCompact: true }
+        }
     }
 }
 ```
