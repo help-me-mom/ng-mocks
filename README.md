@@ -16,7 +16,7 @@ Sure, you could flip a flag on schema errors to make your component dependencies
 - Allows ng-model binding (You will have to add FormsModule to TestBed imports)
 - Mocks Reactive Forms (You will have to add ReactiveFormsModule to TestBed imports)
     - __simulateChange - calls `onChanged` on the mocked component bound to a FormControl
-    - __simulateTouch - calls `onToched` on the mocked component bound to a FormControl
+    - __simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
 - exportAs support
 
 ### Usage Example
@@ -51,7 +51,7 @@ describe('TestedComponent', () => {
     const mockedComponent = fixture.debugElement
                                    .query(By.css('dependency-component-selector'))
                                    .componentInstance as DependencyComponent; // casting to retain type safety
-    expect(mockedComponent.someInput).toEqual('foo'); if you casted mockedComponent as the original component type then this is type safe
+    expect(mockedComponent.someInput).toEqual('foo'); // if you casted mockedComponent as the original component type then this is type safe
   });
 
   it('should do something when the dependency component emits on its output', () => {
@@ -60,7 +60,7 @@ describe('TestedComponent', () => {
                                    .componentInstance as DependencyComponent; // casting to retain type safety
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
-    mockedComponent.someOutput.emit(new Foo()); if you casted mockedComponent as the original component type then this is type safe
+    mockedComponent.someOutput.emit(new Foo()); // if you casted mockedComponent as the original component type then this is type safe
     fixture.detectChanges();
     // assert on some side effect
   });
@@ -115,7 +115,7 @@ describe('TestedComponent', () => {
                                                 .get(MockDirective(DependencyDirective)) as DependencyDirective; // casting to retain type safety
     // again, let's pretend DependencyDirective has an output called 'someOutput'
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
-    mockedDirectiveInstance.someOutput.emit(new Foo()); if you casted mockedDirective as the original component type then this is type safe
+    mockedDirectiveInstance.someOutput.emit(new Foo()); // if you casted mockedDirective as the original component type then this is type safe
     fixture.detectChanges();
     // assert on some side effect
   });
@@ -240,6 +240,6 @@ describe('MockModule', () => {
 ```
 
 ## Find an issue or have a request?
-Report it as an issue or submit at PR.  I'm open to contributions.
+Report it as an issue or submit a PR.  I'm open to contributions.
 
 <https://github.com/ike18t/ng-mocks>
