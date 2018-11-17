@@ -34,7 +34,7 @@ export interface TransformContext {
 }
 
 export interface TransformInitializeLogOptions {
-    appenders: { [name: string]: log4js.Appender } | log4js.Appender[];
+    appenders: { [name: string]: log4js.Appender };
     level: string;
 }
 
