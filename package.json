@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "bootstrap": "npm install && lerna bootstrap --hoist",
+    "bootstrap": "npm install && lerna bootstrap --hoist --no-ci",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test",
