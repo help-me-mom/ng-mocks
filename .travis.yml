@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 install:
-  - npm run setup
+  - npm run bootstrap
 
 script:
   - npm run ci
