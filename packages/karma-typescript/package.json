@@ -3,6 +3,7 @@
   "version": "4.0.0",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "main": "dist/index.js",
+  "types": "./dist/api/index.d.ts",
   "keywords": [
     "angularjs",
     "angular2",
