@@ -1,13 +1,13 @@
 # karma-typescript-angular2-transform
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
-[![npm](https://img.shields.io/npm/dt/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript-angular2-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-angular2-transform)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/xn2ndi7r1bs7dyha/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-angular2-transform/branch/master)
+[![Npm total downloads](https://img.shields.io/npm/dt/karma-typescript-angular2-transform.svg)](https://www.npmjs.com/package/karma-typescript-angular2-transform)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
 
 > Karma-Typescript :heart: Angular
 
-This plugin rewrites relative urls in the `templateUrl` and `styleUrls` properties of Angular2 components,
+This plugin rewrites relative urls in the `templateUrl` and `styleUrls` properties of Angular components,
 making sure that the Angular framework can resolve the urls when running tests with [karma-typescript](https://github.com/monounity/karma-typescript), eliminating the need to use `module.id` for resolving paths.
 
 The absolute urls are calculated using the `basePath` and `urlRoot` properties in `karma.conf.js`.
@@ -49,4 +49,4 @@ export class MockComponent {}
 
 This software is licensed with the MIT license.
 
-© 2016-2017 Erik Barke, Monounity
+© 2016-2018 Erik Barke, Monounity

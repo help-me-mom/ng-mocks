@@ -1,17 +1,16 @@
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as os from "os";
 import * as postcss from "postcss";
 
-import * as kt from "karma-typescript/src/api/transforms";
-
 let log: log4js.Logger;
 
-let configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOptions, filter?: RegExp) => {
+const configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOptions, filter?: RegExp) => {
 
     options = options || {};
     filter = (filter instanceof RegExp) ? filter : /\.css$/;
 
-    let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
+    const transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
 
         options.from = context.filename;
         options.to = context.filename;
@@ -34,7 +33,7 @@ let configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOp
                     callback(undefined, true);
                 }, (error) => {
                     if (error.name === "CssSyntaxError") {
-                        log.warn(error.message + os.EOL + (<postcss.CssSyntaxError> error).showSourceCode());
+                        log.warn(error.message + os.EOL + (error as postcss.CssSyntaxError).showSourceCode());
                         callback(undefined, false);
                     }
                     else {
@@ -47,9 +46,16 @@ let configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOp
         }
     };
 
-    let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
-        log4js.setGlobalLogLevel(logOptions.level);
-        log4js.configure({ appenders: logOptions.appenders });
+    const initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
+        log4js.configure({
+            appenders: logOptions.appenders,
+            categories: {
+                default: {
+                    appenders: Object.keys(logOptions.appenders),
+                    level: logOptions.level
+                }
+            }
+        });
         log = log4js.getLogger("postcss-transform.karma-typescript");
     };
 

@@ -1,16 +1,14 @@
 import * as acorn from "acorn";
 import * as babel from "babel-core";
-import * as ESTree from "estree";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
-
-import * as kt from "karma-typescript/src/api/transforms";
 
 let log: log4js.Logger;
 let walk: any;
 
-const isEs6 = (ast: ESTree.Program): boolean => {
+const isEs6 = (ast: acorn.Node): boolean => {
     let es6NodeFound = false;
-    if (ast.body) {
+    if ((ast as any).body) {
         const visitNode = (node: any, state: any, c: any)  => {
             if (!es6NodeFound) {
                 walk.base[node.type](node, state, c);
@@ -24,8 +22,7 @@ const isEs6 = (ast: ESTree.Program): boolean => {
                         es6NodeFound = true;
                         break;
                     case "VariableDeclaration":
-                        const variableDeclaration = (node as ESTree.VariableDeclaration);
-                        if (variableDeclaration.kind === "const" || variableDeclaration.kind === "let") {
+                        if (node.kind === "const" || node.kind === "let") {
                             es6NodeFound = true;
                             break;
                         }
@@ -75,10 +72,17 @@ const configure = (options?: babel.TransformOptions) => {
     };
 
     const initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
-        log4js.setGlobalLogLevel(logOptions.level);
-        log4js.configure({ appenders: logOptions.appenders });
+        log4js.configure({
+            appenders: logOptions.appenders,
+            categories: {
+                default: {
+                    appenders: Object.keys(logOptions.appenders),
+                    level: logOptions.level
+                }
+            }
+        });
         log = log4js.getLogger("es6-transform.karma-typescript");
-        walk = require("acorn/dist/walk");
+        walk = require("acorn-walk");
     };
 
     return Object.assign(transform, { initialize });

@@ -1,7 +1,8 @@
 # karma-typescript-cssmodules-transform
 
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript-cssmodules-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-cssmodules-transform)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/sgpptj5737i9po49/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-cssmodules-transform/branch/master)
+[![Npm version](https://img.shields.io/npm/v/karma-typescript-cssmodules-transform.svg)](https://www.npmjs.com/package/karma-typescript-cssmodules-transform)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
 
 > Karma-Typescript :heart: CSS Modules
 

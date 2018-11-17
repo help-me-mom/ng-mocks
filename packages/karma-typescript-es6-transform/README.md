@@ -1,8 +1,9 @@
 # karma-typescript-es6-transform
 
 [![Npm version](https://img.shields.io/npm/v/karma-typescript-es6-transform.svg)](https://www.npmjs.com/package/karma-typescript-es6-transform)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript-es6-transform.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript-es6-transform)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/xxj96uxqhf8la0bo/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript-es6-transform/branch/master)
+[![Npm total downloads](https://img.shields.io/npm/dt/karma-typescript-es6-transform.svg)](https://www.npmjs.com/package/karma-typescript-es6-transform)
+[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
 
 > Karma-Typescript :heart: ES2015
 
@@ -65,4 +66,4 @@ If any keyword or a fat arrow function is found the code will be transformed to 
 
 This software is licensed with the MIT license.
 
-© 2016-2017 Erik Barke, Monounity
+© 2016-2018 Erik Barke, Monounity

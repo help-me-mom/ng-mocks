@@ -1,4 +1,4 @@
-import * as kt from "karma-typescript/src/api/transforms";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as os from "os";
 import * as path from "path";
@@ -8,30 +8,31 @@ import * as test from "tape";
 
 import * as transform from "./transform";
 
-let logOptions: kt.TransformInitializeLogOptions = {
-    appenders: [{
-        layout: {
-            pattern: "%[%d{DATE}:%p [%c]: %]%m",
-            type: "pattern"
-        },
-        type: "console"
-    }],
+const logOptions: kt.TransformInitializeLogOptions = {
+    appenders: {
+        console1: {
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }
+    },
     level: "INFO"
 };
 
-let mockLogger = {
+const mockLogger = {
     debug: sinon.spy(),
     warn: sinon.spy()
 };
 
-let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
-let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
-let configureSpy = sinon.spy(log4js, "configure");
+const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+const configureSpy = sinon.spy(log4js, "configure");
 
 transform().initialize(logOptions);
 
 // kt.TransformContext
-let createContext = (source: string): any => {
+const createContext = (source: string): any => {
     return {
         config: {},
         filename: "file.css",
@@ -40,29 +41,27 @@ let createContext = (source: string): any => {
     };
 };
 
-let stripConsoleColors = (s: string) => {
+const stripConsoleColors = (s: string) => {
     return s.replace(/.\[\d\d*m/g, "");
 };
 
-let mockWarningPlugin = postcss.plugin("mock-warning-plugin", () => {
+const mockWarningPlugin = postcss.plugin("mock-warning-plugin", () => {
     return (css, result) => {
         css.warn(result, "warning");
     };
 });
 
-let mockErrorPlugin = postcss.plugin("mock-error-plugin", () => {
+const mockErrorPlugin = postcss.plugin("mock-error-plugin", () => {
     return () => {
         throw new Error("error");
     };
 });
 
-test("transformer should initialize log level", (t) => {
-    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
-    t.end();
-});
-
 test("transformer should initialize log appenders", (t) => {
-    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.deepEqual(configureSpy.args[0][0], {
+        appenders: logOptions.appenders,
+        categories: { default: { appenders: [ "console1" ], level: "INFO" } }
+    });
     t.end();
 });
 
@@ -74,9 +73,9 @@ test("transformer should initialize log category", (t) => {
 test("transformer should set the dirty flag", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
 
-    transform(require("autoprefixer"))(context, (error, dirty) => {
+    transform(require("autoprefixer"))(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -87,34 +86,40 @@ test("transformer should set the dirty flag", (t) => {
 test("transformer should set the source property to the processed value", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext("::placeholder {}");
 
     transform(require("autoprefixer"))(context, () => {
-        t.isEqual(".box { display: -webkit-box; display: -ms-flexbox; display: flex; }", context.source);
+        t.isEqual(context.source, "::-webkit-input-placeholder {}\n" +
+                                  ":-ms-input-placeholder {}\n" +
+                                  "::-ms-input-placeholder {}\n::placeholder {}");
     });
 });
 
 test("transformer should use custom options", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext("::placeholder {}");
 
     transform(require("autoprefixer"), { map: { inline: true } })(context, () => {
-        t.isEqual(".box { display: -webkit-box; display: -ms-flexbox; display: flex; }\n/*# " +
-            "sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm" +
-            "ZpbGUuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8scUJBQWMsQ0FBZCxxQkFBYyx" +
-            "DQUFkLGNBQWMsRUFBRSIsImZpbGUiOiJmaWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5ib3ggeyBka" +
-            "XNwbGF5OiBmbGV4OyB9Il19 */", context.source);
+        t.isEqual(context.source, "::-webkit-input-placeholder {}" +
+                                  "\n:-ms-input-placeholder {}\n" +
+                                  "::-ms-input-placeholder {}" +
+                                  "\n::placeholder {}" +
+                                  "\n/*# sourceMappingURL=data:application/json;base64," +
+                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hbWVz" +
+                                  "IjpbXSwibWFwcGluZ3MiOiJBQUFBLDhCQUFnQjtBQUFoQix5QkFBZ0I7" +
+                                  "QUFBaEIsMEJBQWdCO0FBQWhCLGdCQUFnQiIsImZpbGUiOiJmaWxlLmNz" +
+                                  "cyIsInNvdXJjZXNDb250ZW50IjpbIjo6cGxhY2Vob2xkZXIge30iXX0= */");
     });
 });
 
 test("transformer should use default filter on the module filename", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
     context.filename = "style.less";
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -125,10 +130,10 @@ test("transformer should use default filter on the module filename", (t) => {
 test("transformer should use custom filter on the module filename", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
     context.filename = "style.cssx";
 
-    transform(require("autoprefixer"), {}, /\.cssx$/)(context, (error, dirty) => {
+    transform(require("autoprefixer"), {}, /\.cssx$/)(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -139,7 +144,7 @@ test("transformer should use custom filter on the module filename", (t) => {
 test("transformer should log activity with level debug", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
 
     transform(require("autoprefixer"))(context, () => {
         t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.css" ]);
@@ -149,9 +154,9 @@ test("transformer should log activity with level debug", (t) => {
 test("transformer should not process empty files", (t) => {
     t.plan(2);
 
-    let context = createContext("");
+    const context = createContext("");
 
-    transform(require("autoprefixer"))(context, (error, dirty) => {
+    transform(require("autoprefixer"))(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         t.isEqual(error.message, "File is empty");
         t.false(dirty);
     });
@@ -160,10 +165,10 @@ test("transformer should not process empty files", (t) => {
 test("transformer should log warnings", (t) => {
     t.plan(2);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
     context.filename = "style.css";
 
-    transform([mockWarningPlugin])(context, (error, dirty) => {
+    transform([mockWarningPlugin])(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -179,9 +184,9 @@ test("transformer should catch CssSyntaxError and only log as a warning", (t) =>
 
     t.plan(2);
 
-    let context = createContext("export *");
+    const context = createContext("export *");
 
-    transform(require("autoprefixer"))(context, (error, dirty) => {
+    transform(require("autoprefixer"))(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -195,10 +200,10 @@ test("transformer should catch CssSyntaxError and only log as a warning", (t) =>
 test("transformer should handle errors other than CssSyntaxError", (t) => {
     t.plan(2);
 
-    let context = createContext(".box { display: flex; }");
+    const context = createContext(".box { display: flex; }");
     context.filename = "style.css";
 
-    transform([mockErrorPlugin])(context, (error, dirty) => {
+    transform([mockErrorPlugin])(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         t.isEqual(error.message, "error");
         t.false(dirty);
     });

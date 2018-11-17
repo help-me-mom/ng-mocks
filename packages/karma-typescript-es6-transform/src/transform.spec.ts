@@ -1,6 +1,5 @@
 import * as acorn from "acorn";
-import * as ESTree from "estree";
-import * as kt from "karma-typescript/src/api/transforms";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as sinon from "sinon";
 import * as test from "tape";
@@ -8,13 +7,15 @@ import * as test from "tape";
 import * as transform from "./transform";
 
 const logOptions: kt.TransformInitializeLogOptions = {
-    appenders: [{
-        layout: {
-            pattern: "%[%d{DATE}:%p [%c]: %]%m",
-            type: "pattern"
-        },
-        type: "console"
-    }],
+    appenders: {
+        console1: {
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }
+    },
     level: "INFO"
 };
 
@@ -23,7 +24,6 @@ const mockLogger = {
 };
 
 const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
-const setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
 const configureSpy = sinon.spy(log4js, "configure");
 
 transform().initialize(logOptions);
@@ -41,13 +41,11 @@ const createContext = (source: string): any => {
     };
 };
 
-test("transformer should initialize log level", (t) => {
-    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
-    t.end();
-});
-
 test("transformer should initialize log appenders", (t) => {
-    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.deepEqual(configureSpy.args[0][0], {
+        appenders: logOptions.appenders,
+        categories: { default: { appenders: [ "console1" ], level: "INFO" } }
+    });
     t.end();
 });
 
@@ -295,7 +293,7 @@ test("transformer should compile and set new ast", (t) => {
     const context = createContext("export default function(){}");
 
     transform()(context, () => {
-        t.equal((context.js.ast as ESTree.Program).body[0].type, "ExpressionStatement");
+        t.equal((context.js.ast as any).body[0].type, "ExpressionStatement");
     });
 });
 

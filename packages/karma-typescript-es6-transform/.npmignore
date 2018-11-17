@@ -1,3 +1,7 @@
+*.tgz
 coverage
 node_modules
 npm-debug.log
+src
+tsconfig.json
+tslint.json

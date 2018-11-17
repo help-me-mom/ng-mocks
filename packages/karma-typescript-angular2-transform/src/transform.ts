@@ -1,14 +1,14 @@
-import * as kt from "karma-typescript/src/api/transforms";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as path from "path";
 
 let log: log4js.Logger;
 
-let fixWindowsPath = (value: string): string => {
+const fixWindowsPath = (value: string): string => {
     return value.replace(/\\/g, "/");
 };
 
-let transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
+const transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {
 
     if (!context.ts) {
         return callback(undefined, false);
@@ -38,8 +38,8 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
 
         while (quotedStringMatch) {
 
-            let unquotedString = quotedStringMatch[1];
-            let url = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, unquotedString);
+            const unquotedString = quotedStringMatch[1];
+            const url = path.join(context.config.karma.urlRoot, "base", relativeTemplateDir, unquotedString);
             log.debug("Rewriting %s to %s in %s", unquotedString, url, context.filename);
 
             pattern = pattern.replace(unquotedString, fixWindowsPath(url));
@@ -56,11 +56,18 @@ let transform: kt.Transform = (context: kt.TransformContext, callback: kt.Transf
     return callback(undefined, dirty, false);
 };
 
-let initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
-    log4js.setGlobalLogLevel(logOptions.level);
-    log4js.configure({ appenders: logOptions.appenders });
+const initialize: kt.TransformInitialize = (logOptions: kt.TransformInitializeLogOptions) => {
+    log4js.configure({
+        appenders: logOptions.appenders,
+        categories: {
+            default: {
+                appenders: Object.keys(logOptions.appenders),
+                level: logOptions.level
+            }
+        }
+    });
     log = log4js.getLogger("angular2-transform.karma-typescript");
 };
 
-let exp = Object.assign(transform, { initialize });
+const exp = Object.assign(transform, { initialize });
 export = exp;

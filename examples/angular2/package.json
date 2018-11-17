@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^7.0.1",
     "@types/core-js": "^2.5.0",
     "@types/jasmine": "^2.5.37",
-    "@types/node": "^10.12.1",
+    "@types/node": "^10.12.2",
     "core-js": "^2.4.1",
     "jasmine-core": "^3.3.0",
     "karma": "^3.1.1",

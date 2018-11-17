@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as kt from "karma-typescript/src/api/transforms";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as path from "path";
 import * as sinon from "sinon";
@@ -8,29 +8,30 @@ import * as ts from "typescript";
 
 import * as transform from "../transform";
 
-let logOptions: kt.TransformInitializeLogOptions = {
-    appenders: [{
-        layout: {
-            pattern: "%[%d{DATE}:%p [%c]: %]%m",
-            type: "pattern"
-        },
-        type: "console"
-    }],
+const logOptions: kt.TransformInitializeLogOptions = {
+    appenders: {
+        console1: {
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }
+    },
     level: "INFO"
 };
 
-let mockLogger = {
+const mockLogger = {
     debug: sinon.spy()
 };
 
-let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
-let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
-let configureSpy = sinon.spy(log4js, "configure");
+const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+const configureSpy = sinon.spy(log4js, "configure");
 
 transform.initialize(logOptions);
 
-let compile = (filename: string): ts.SourceFile => {
-    let options: ts.CompilerOptions = {
+const compile = (file: string): ts.SourceFile => {
+    const options: ts.CompilerOptions = {
         experimentalDecorators: true,
         lib: [
             "lib.dom.d.ts",
@@ -39,8 +40,8 @@ let compile = (filename: string): ts.SourceFile => {
             "lib.scripthost.d.ts"
         ]
     };
-    let host = ts.createCompilerHost(options);
-    let program = ts.createProgram([filename], options, host);
+    const host = ts.createCompilerHost(options);
+    const program = ts.createProgram([file], options, host);
     // tslint:disable-next-line: no-console
     console.log(ts.formatDiagnostics(ts.getPreEmitDiagnostics(program), host));
     host.writeFile = (name, text) => {
@@ -48,7 +49,7 @@ let compile = (filename: string): ts.SourceFile => {
         return name; // shut up, ts
     };
     program.emit();
-    return program.getSourceFile(filename);
+    return program.getSourceFile(file);
 };
 
 let filename = path.join(process.cwd(), "./src/test/mock-component.ts");
@@ -56,7 +57,7 @@ let transpiled: string;
 let ast = compile(filename);
 
 // kt.TransformContext...
-let createContext = (): any => {
+const createContext = (): any => {
     return {
         config: {
             karma: {
@@ -75,13 +76,11 @@ let createContext = (): any => {
     };
 };
 
-test("transformer should initialize log level", (t) => {
-    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
-    t.end();
-});
-
 test("transformer should initialize log appenders", (t) => {
-    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.deepEqual(configureSpy.args[0][0], {
+        appenders: logOptions.appenders,
+        categories: { default: { appenders: [ "console1" ], level: "INFO" } }
+    });
     t.end();
 });
 
@@ -94,7 +93,7 @@ test("transformer should check ts property", (t) => {
 
     t.plan(1);
 
-    let context = createContext();
+    const context = createContext();
     context.ts = undefined;
 
     transform(context, (error: Error, result: kt.TransformResult | boolean) => {
@@ -102,7 +101,7 @@ test("transformer should check ts property", (t) => {
             t.fail();
         }
         else {
-            let dirty: boolean = !!result;
+            const dirty: boolean = !!result;
             t.false(dirty);
         }
     });
@@ -112,13 +111,13 @@ test("transformer should set dirty flag to true", (t) => {
 
     t.plan(1);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, (error: Error, result: kt.TransformResult | boolean) => {
         if (error) {
             t.fail();
         }
-        let dirty: boolean = !!result;
+        const dirty: boolean = !!result;
         t.assert(dirty);
     });
 });
@@ -127,7 +126,7 @@ test("transformer should transform template url", (t) => {
 
     t.plan(1);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, () => {
         t.assert(context.ts.transpiled.indexOf("templateUrl: '/custom-root/base/src/test/mock.html'") > 0);
@@ -138,7 +137,7 @@ test("transformer should transform style urls", (t) => {
 
     t.plan(1);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, () => {
         t.assert(context.ts.transpiled.indexOf("styleUrls: " +
@@ -152,7 +151,7 @@ test("transformer should log activity with level debug", (t) => {
 
     t.plan(1);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, () => {
         t.deepEqual(mockLogger.debug.lastCall.args, [
@@ -171,13 +170,13 @@ test("transformer should skip files without the properties 'templateUrl' and/or 
     filename = path.join(process.cwd(), "./src/test/mock-service.ts");
     ast = compile(filename);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, (error: Error, result: kt.TransformResult | boolean) => {
         if (error) {
             t.fail();
         }
-        let dirty: boolean = !!result;
+        const dirty: boolean = !!result;
         t.false(dirty);
     });
 });
@@ -189,7 +188,7 @@ test("transformer should transform template url when defined with a template lit
     filename = path.join(process.cwd(), "./src/test/another-mock-component.ts");
     ast = compile(filename);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, () => {
         t.assert(context.ts.transpiled.indexOf("templateUrl: \"/custom-root/base/src/test/mock.html\"") > 0);
@@ -203,7 +202,7 @@ test("transformer should transform style urls when defined with template literal
     filename = path.join(process.cwd(), "./src/test/another-mock-component.ts");
     ast = compile(filename);
 
-    let context = createContext();
+    const context = createContext();
 
     transform(context, () => {
         t.assert(context.ts.transpiled.indexOf("styleUrls: " +

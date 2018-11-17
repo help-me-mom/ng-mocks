@@ -1,4 +1,4 @@
-import * as kt from "karma-typescript/src/api/transforms";
+import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as os from "os";
 import * as path from "path";
@@ -7,30 +7,31 @@ import * as test from "tape";
 
 import * as transform from "./transform";
 
-let logOptions: kt.TransformInitializeLogOptions = {
-    appenders: [{
-        layout: {
-            pattern: "%[%d{DATE}:%p [%c]: %]%m",
-            type: "pattern"
-        },
-        type: "console"
-    }],
+const logOptions: kt.TransformInitializeLogOptions = {
+    appenders: {
+        console1: {
+            layout: {
+                pattern: "%[%d{DATE}:%p [%c]: %]%m",
+                type: "pattern"
+            },
+            type: "console"
+        }
+    },
     level: "INFO"
 };
 
-let mockLogger = {
+const mockLogger = {
     debug: sinon.spy(),
     warn: sinon.spy()
 };
 
-let getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
-let setGlobalLogLevelSpy = sinon.spy(log4js, "setGlobalLogLevel");
-let configureSpy = sinon.spy(log4js, "configure");
+const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+const configureSpy = sinon.spy(log4js, "configure");
 
 transform().initialize(logOptions);
 
 // kt.TransformContext
-let createContext = (source: string): any => {
+const createContext = (source: string): any => {
     return {
         config: {},
         filename: "file.css",
@@ -39,17 +40,15 @@ let createContext = (source: string): any => {
     };
 };
 
-let stripConsoleColors = (s: string) => {
+const stripConsoleColors = (s: string) => {
     return s.replace(/.\[\d\d*m/g, "");
 };
 
-test("transformer should initialize log level", (t) => {
-    t.isEqual(setGlobalLogLevelSpy.args[0][0], logOptions.level);
-    t.end();
-});
-
 test("transformer should initialize log appenders", (t) => {
-    t.deepEqual(configureSpy.args[0][0], { appenders: logOptions.appenders });
+    t.deepEqual(configureSpy.args[0][0], {
+        appenders: logOptions.appenders,
+        categories: { default: { appenders: [ "console1" ], level: "INFO" } }
+    });
     t.end();
 });
 
@@ -61,9 +60,9 @@ test("transformer should initialize log category", (t) => {
 test("transformer should set the dirty flag", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -74,7 +73,7 @@ test("transformer should set the dirty flag", (t) => {
 test("transformer should set the source property to the processed value", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
 
     transform()(context, () => {
         t.isEqual(context.source, "{\"box\":\"file_box_tFmNy\"}");
@@ -84,7 +83,7 @@ test("transformer should set the source property to the processed value", (t) =>
 test("transformer should use custom options", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
 
     transform({}, { generateScopedName: "[name]__[local]___[hash:base64:5]"  })(context, () => {
         t.isEqual(context.source, "{\"box\":\"file__box___tFmNy\"}");
@@ -94,10 +93,10 @@ test("transformer should use custom options", (t) => {
 test("transformer should use default filter on the module filename", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
     context.filename = "style.less";
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -108,10 +107,10 @@ test("transformer should use default filter on the module filename", (t) => {
 test("transformer should use custom filter on the module filename", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
     context.filename = "style.cssx";
 
-    transform({}, {}, /\.cssx$/)(context, (error, dirty) => {
+    transform({}, {}, /\.cssx$/)(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -122,7 +121,7 @@ test("transformer should use custom filter on the module filename", (t) => {
 test("transformer should log activity with level debug", (t) => {
     t.plan(1);
 
-    let context = createContext(".box { color: red; }");
+    const context = createContext(".box { color: red; }");
 
     transform()(context, () => {
         t.deepEqual(mockLogger.debug.lastCall.args, [ "Transforming %s", "file.css" ]);
@@ -132,9 +131,9 @@ test("transformer should log activity with level debug", (t) => {
 test("transformer should not process empty files", (t) => {
     t.plan(2);
 
-    let context = createContext("");
+    const context = createContext("");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         t.isEqual(error.message, "File is empty");
         t.false(dirty);
     });
@@ -144,9 +143,9 @@ test("transformer should log warnings", (t) => {
 
     t.plan(2);
 
-    let context = createContext("@value red blue @value green yellow");
+    const context = createContext("@value red blue @value green yellow");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -160,9 +159,9 @@ test("transformer should catch CssSyntaxError and only log as a warning", (t) =>
 
     t.plan(2);
 
-    let context = createContext("export *");
+    const context = createContext("export *");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         if (error) {
             t.fail();
         }
@@ -177,9 +176,9 @@ test("transformer should catch errors other than CssSyntaxError", (t) => {
 
     t.plan(2);
 
-    let context = createContext(".box > * { composes: x from \"./y.css\"; }");
+    const context = createContext(".box > * { composes: x from \"./y.css\"; }");
 
-    transform()(context, (error, dirty) => {
+    transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
         t.isEqual(error.message, "composition is only allowed when selector is single " +
                                  ":local class name not in \":local(.box) > *\"");
         t.false(dirty);
