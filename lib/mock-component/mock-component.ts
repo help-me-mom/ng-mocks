@@ -34,8 +34,8 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
         if (typeof query.selector !== 'string') {
           return ''; // in case of mocked component, Type based selector doesn't work properly anyway.
         }
-        return `<div *ngIf="${key}" data-key="${query.selector}">
-          <template [ngTemplateOutlet]="${key}"></template>
+        return `<div data-key="${query.selector}">
+          <ng-container *ngTemplateOutlet="${key}"></ng-container>
         </div>`;
       }).join('');
   }
