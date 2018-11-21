@@ -190,6 +190,10 @@ describe('MockComponent', () => {
       const block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
       expect(block2.nativeElement.innerText.trim()).toEqual('block 2 body');
+
+      // looking for 3rd templateRef. It shouldn't be present because wasn't passed.
+      const block3 = templateOutlet.query(By.css('[data-key="block3"]'));
+      expect(block3).toBeFalsy();
     });
   });
 });
