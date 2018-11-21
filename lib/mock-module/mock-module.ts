@@ -6,6 +6,7 @@ import { MockDeclaration } from '../mock-declaration';
 interface IModuleOptions {
   declarations: Array<Type<any>>;
   exports: Array<Type<any>>;
+  imports: Array<Type<any>>;
   providers: Array<{ provide: any; useValue: {} }>;
 }
 
@@ -25,17 +26,23 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
   }
   const mockedModule: IModuleOptions = { declarations: [],
                                          exports: [],
+                                         imports: [],
                                          providers: [] };
   const { declarations = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
 
   mockedModule.exports = mockedModule.declarations = [...declarations.map(MockDeclaration)];
   mockedModule.providers = providers.map(mockProvider);
+  mockedModule.imports = [];
 
   imports.forEach((imPort: Type<NgModule>) => {
     const result = MockIt(imPort);
-    mockedModule.declarations.push(...result.declarations);
-    mockedModule.providers.push(...result.providers);
-    mockedModule.exports.push(...result.declarations);
+    if ((result as any) === imPort) {
+      mockedModule.imports.push(imPort);
+    } else {
+      mockedModule.declarations.push(...result.declarations);
+      mockedModule.providers.push(...result.providers);
+      mockedModule.exports.push(...result.declarations);
+    }
   });
 
   return mockedModule;
