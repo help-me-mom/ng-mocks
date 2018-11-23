@@ -14,6 +14,15 @@ const mockProvider = (provider: any) => ({
   provide: provider, useValue: {}
 });
 
+const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
+    if (Array.isArray(values)) {
+        values.forEach((value: T | T[]) => flatten(value, result));
+    } else {
+        result.push(values);
+    }
+    return result;
+};
+
 export function MockModule(module: Type<NgModule>): Type<NgModule> {
   return NgModule(MockIt(module))(class MockedModule {});
 }
@@ -30,11 +39,10 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
                                          providers: [] };
   const { declarations = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
 
-  mockedModule.exports = mockedModule.declarations = [...declarations.map(MockDeclaration)];
-  mockedModule.providers = providers.map(mockProvider);
-  mockedModule.imports = [];
+  mockedModule.exports = mockedModule.declarations = flatten(declarations).map(MockDeclaration);
+  mockedModule.providers = flatten(providers).map(mockProvider);
 
-  imports.forEach((imPort: Type<NgModule>) => {
+  flatten(imports).forEach((imPort: Type<NgModule>) => {
     const result = MockIt(imPort);
     if ((result as any) === imPort) {
       mockedModule.imports.push(imPort);
