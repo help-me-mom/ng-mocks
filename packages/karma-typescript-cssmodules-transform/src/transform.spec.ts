@@ -25,7 +25,7 @@ const mockLogger = {
     warn: sinon.spy()
 };
 
-const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger);
+const getLoggerSpy = sinon.stub(log4js, "getLogger").returns(mockLogger as any);
 const configureSpy = sinon.spy(log4js, "configure");
 
 transform().initialize(logOptions);
