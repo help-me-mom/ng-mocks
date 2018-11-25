@@ -4,22 +4,28 @@
   "description": "Monorepo for karma-typescript packages",
   "private": true,
   "author": "monounity",
-  "contributors": [
-    "erikbarke"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/monounity/karma-typescript.git"
   },
   "license": "MIT",
   "scripts": {
-    "bootstrap": "npm install && lerna bootstrap --hoist --no-ci",
+    "setup": "npm run setup:packages && npm run setup:examples",
+    "setup:packages": "npm install && lerna bootstrap --hoist --no-ci",
+    "setup:examples": "npm i --prefix examples/angular2",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "ci": "npm run lint && npm run build && npm run test"
+    "test:examples": "npm --prefix examples/angular2/ test",
+    "ci": "npm run lint && npm run build && npm run test && node ci-install.js && npm run test:examples"
   },
   "dependencies": {
+    "fs-extra": "^7.0.1",
     "lerna": "^3.4.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/karma-typescript",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

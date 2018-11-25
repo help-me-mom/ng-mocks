@@ -53,7 +53,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc --rootDir ./src && npm pack",
+    "build": "tsc --rootDir ./srcnpm n",
     "test": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
@@ -128,10 +128,5 @@
   "peerDependencies": {
     "karma": "1 || 2 || 3",
     "typescript": "1 || 2 || 3"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/karma-typescript",
-    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

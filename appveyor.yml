@@ -6,7 +6,7 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - node -v
   - npm -v
-  - npm run bootstrap
+  - npm run setup
 
 test_script:
   - npm run ci
