@@ -10,6 +10,7 @@ const packages = [
 
 const projects = [
     "examples/angular2",
+    "tests/integration-1.8.10",
     "tests/integration-latest"
 ];
 
