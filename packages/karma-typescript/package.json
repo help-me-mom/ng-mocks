@@ -2,6 +2,10 @@
   "name": "karma-typescript",
   "version": "4.0.0",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
+  "files": [
+    "dist/**",
+    "cookbook.md"
+  ],
   "main": "dist/index.js",
   "types": "./dist/api/index.d.ts",
   "keywords": [

@@ -2,6 +2,9 @@
   "name": "karma-typescript-postcss-transform",
   "version": "4.0.0",
   "description": "PostCSS runner plugin",
+  "files": [
+    "dist/**"
+  ],
   "main": "dist/transform.js",
   "keywords": [
     "karma-typescript",
