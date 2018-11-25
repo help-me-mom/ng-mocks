@@ -12,7 +12,7 @@
   "scripts": {
     "setup": "npm run setup:packages && npm run setup:examples",
     "setup:packages": "npm install && lerna bootstrap --hoist --no-ci",
-    "setup:examples": "npm i --prefix examples/angular2",
+    "setup:examples": "cd examples/angular2 && npm i && cd ../..",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test",
