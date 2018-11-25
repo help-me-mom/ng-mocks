@@ -1,15 +1,23 @@
 const fse = require("fs-extra");
 
-for (const project of ["examples/angular2"]) {
-    console.log(`Copying packages/karma-typescript to ${project}`);
-    fse.emptyDirSync(`${project}/node_modules/karma-typescript/`);
-    fse.copySync("packages/karma-typescript/dist/", `${project}/node_modules/karma-typescript/dist/`);
-    fse.copyFileSync("packages/karma-typescript/package.json", `${project}/node_modules/karma-typescript/package.json`);
-}
+const packages = [
+    "packages/karma-typescript",
+    "packages/karma-typescript-angular2-transform",
+    "packages/karma-typescript-cssmodules-transform",
+    "packages/karma-typescript-es6-transform",
+    "packages/karma-typescript-postcss-transform"
+];
 
-for (const project of ["examples/angular2"]) {
-    console.log(`Copying packages/karma-typescript-angular2-transform to ${project}`);
-    fse.emptyDirSync(`${project}/node_modules/karma-typescript-angular2-transform/`);
-    fse.copySync("packages/karma-typescript-angular2-transform/dist/", `${project}/node_modules/karma-typescript-angular2-transform/dist/`);
-    fse.copyFileSync("packages/karma-typescript-angular2-transform/package.json", `${project}/node_modules/karma-typescript-angular2-transform/package.json`);
+const projects = [
+    "examples/angular2",
+    "tests/integration-latest"
+];
+
+for (const package of packages) {
+    for (const project of projects) {
+        console.log(`Copying ${package} to ${project}`);
+        fse.emptyDirSync(`${project}/node_modules/${package}`);
+        fse.copySync(`${package}/dist/`, `${project}/node_modules/${package}/dist/`);
+        fse.copyFileSync(`${package}/package.json`, `${project}/node_modules/${package}/package.json`);
+    }
 }
