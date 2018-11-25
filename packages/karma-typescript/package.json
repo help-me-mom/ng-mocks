@@ -53,7 +53,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "tsc --rootDir ./srcnpm n",
+    "build": "tsc --rootDir ./src",
     "test": "tape dist/**/*.spec.js | faucet"
   },
   "dependencies": {
