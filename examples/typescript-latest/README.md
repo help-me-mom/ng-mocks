@@ -4,9 +4,7 @@
 
 ```
 git clone https://github.com/monounity/karma-typescript.git
-cd karma-typescript
-npm run build
-cd examples/typescript-latest
+cd karma-typescript/examples/typescript-latest
 npm install
 ```
 

@@ -7,9 +7,7 @@ Typescript on the fly in Karma with Angular2 and Istanbul coverage.
 
 ```
 git clone https://github.com/monounity/karma-typescript.git
-cd karma-typescript
-npm run build
-cd examples/angular2
+cd karma-typescript/examples/angular2
 npm install
 ```
 

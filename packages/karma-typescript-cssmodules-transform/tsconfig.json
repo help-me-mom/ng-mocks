@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "dist",
+        "sourceMap": true,
+        "inlineSources": true,
+        "target": "ES5",
+        "lib": [
+            "dom","es5","es6","scripthost"
+        ]
+    },
+    "include": [
+        "src/*.ts"
+    ],
+    "exclude": [
+        "src/*.spec.ts"
+    ]
+}

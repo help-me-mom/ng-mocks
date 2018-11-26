@@ -32,6 +32,7 @@ export class Configuration implements KarmaTypescriptConfig {
     public defaultTsconfig: any;
     public exclude: string[] | Extendable;
     public include: string[] | Extendable;
+    public logAppenders: { [name: string]: log4js.Appender };
     public remapOptions: RemapOptions;
     public reporters: string[];
     public reports: Reports;
@@ -88,16 +89,17 @@ export class Configuration implements KarmaTypescriptConfig {
     }
 
     private configureLogging() {
-        const appenders = this.karma.loggers instanceof Array
-            ? this.karma.loggers.reduce((acc, logger, index) => Object.assign(acc, { ["index" + index]: logger }), {})
+        this.logAppenders = this.karma.loggers instanceof Array
+            ? this.karma.loggers.reduce((logAppenders, logger, index) =>
+                Object.assign(logAppenders, { [logger.type + index]: logger }), {})
             : this.karma.loggers;
 
-        if (appenders != null) {
+        if (this.logAppenders != null) {
             log4js.configure({
-                appenders,
+                appenders: this.logAppenders,
                 categories: {
                     default: {
-                        appenders: Object.keys(appenders),
+                        appenders: Object.keys(this.logAppenders),
                         level: this.karma.logLevel
                     }
                 }

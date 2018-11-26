@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules"
+  ],
+  "rules": {
+    "brace-style": [true, "stroustrup"],
+    "interface-name": [true, "never-prefix"],
+    "no-consecutive-blank-lines": [true, 1],
+    "object-curly-spacing": [true, "always"],
+    "one-line": [false],    
+    "ter-indent": [true, 4, { "SwitchCase": 1 }],
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+  }
+}

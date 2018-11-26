@@ -26,7 +26,7 @@ export class Framework {
             config.bundlerOptions.transforms.forEach((t) => {
                 if (t.initialize) {
                     t.initialize({
-                        appenders: karmaConfig.loggers,
+                        appenders: config.logAppenders,
                         level: karmaConfig.logLevel
                     });
                 }

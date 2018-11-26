@@ -1,0 +1,66 @@
+{
+  "name": "karma-typescript-cssmodules-transform",
+  "version": "4.0.0",
+  "description": "PostCSS runner plugin for CSS Modules",
+  "files": [
+    "dist/**"
+  ],
+  "main": "dist/transform.js",
+  "keywords": [
+    "CSS Modules",
+    "karma-typescript",
+    "postcss runner",
+    "typescript"
+  ],
+  "author": "monounity",
+  "contributors": [
+    "erikbarke"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monounity/karma-typescript.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "tslint --project tsconfig.json",
+    "test": "nyc --require ts-node/register tape src/*.spec.ts | faucet"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "tempDir": "./coverage/.nyc_output"
+  },
+  "dependencies": {
+    "log4js": "^3.0.6"
+  },
+  "devDependencies": {
+    "@types/karma": "^3.0.0",
+    "@types/lodash": "^4.14.117",
+    "@types/node": "^10.12.2",
+    "@types/sinon": "^5.0.5",
+    "@types/tape": "^4.2.32",
+    "faucet": "0.0.1",
+    "generic-names": "^2.0.1",
+    "karma-typescript": "4.0.0",
+    "nyc": "^13.1.0",
+    "postcss": "^7.0.5",
+    "postcss-modules-extract-imports": "^2.0.0",
+    "postcss-modules-local-by-default": "^1.2.0",
+    "postcss-modules-scope": "^1.1.0",
+    "postcss-modules-values": "^1.3.0",
+    "sinon": "^7.1.1",
+    "tape": "^4.6.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "latest"
+  }
+}
