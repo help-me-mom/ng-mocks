@@ -1,8 +1,8 @@
 # karma-typescript-postcss-transform
 
-[![Npm version](https://img.shields.io/npm/v/karma-typescript-postcss-transform.svg)](https://www.npmjs.com/package/karma-typescript-postcss-transform)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
+<a href="https://www.npmjs.com/package/karma-typescript-postcss-transform"><img alt="Npm Version" src="https://img.shields.io/npm/v/karma-typescript-postcss-transform.svg"></a>
+<a href="https://travis-ci.org/monounity/karma-typescript"><img alt="Travis Status" src="https://img.shields.io/travis/monounity/karma-typescript/master.svg?label=travis"></a>
+<a href="https://ci.appveyor.com/project/monounity/karma-typescript"><img alt="Appveyor Status" src="https://img.shields.io/appveyor/ci/monounity/karma-typescript/master.svg?label=appveyor"></a>
 
 > Karma-Typescript :heart: PostCSS
 

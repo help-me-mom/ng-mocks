@@ -1,10 +1,10 @@
 # karma-typescript
 
-[![Npm version](https://img.shields.io/npm/v/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Npmjs total downloads](https://img.shields.io/npm/dt/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Npmjs weekly downloads](https://img.shields.io/npm/dw/karma-typescript.svg)](https://www.npmjs.com/package/karma-typescript)
-[![Travis build status](https://travis-ci.org/monounity/karma-typescript.svg?branch=master)](https://travis-ci.org/monounity/karma-typescript)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/00jpjueuxw4auaqb/branch/master?svg=true)](https://ci.appveyor.com/project/monounity/karma-typescript/branch/master)
+<a href="https://www.npmjs.com/package/karma-typescript"><img alt="Npm Version" src="https://img.shields.io/npm/v/karma-typescript.svg"></a>
+<a href="https://www.npmjs.com/package/karma-typescript"><img alt="Npm Total Downloads" src="https://img.shields.io/npm/dt/karma-typescript.svg"></a>
+<a href="https://www.npmjs.com/package/karma-typescript"><img alt="Npm Monthly Downloads" src="https://img.shields.io/npm/dm/karma-typescript.svg"></a>
+<a href="https://travis-ci.org/monounity/karma-typescript"><img alt="Travis Status" src="https://img.shields.io/travis/monounity/karma-typescript/master.svg?label=travis"></a>
+<a href="https://ci.appveyor.com/project/monounity/karma-typescript"><img alt="Appveyor Status" src="https://img.shields.io/appveyor/ci/monounity/karma-typescript/master.svg?label=appveyor"></a>
 
 > Karma :heart: Typescript
 
@@ -76,10 +76,10 @@ The above example will compile all Typescript files and run the unit tests, prod
 - [Hybrid app, code in JavaScript and tests in Typescript](https://github.com/adrianmarinica/karma-typescript-angularjs-sample)
 
 ## Transforms:
-- [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript-angular2-transform)
-- [karma-typescript-cssmodules-transform](https://github.com/monounity/karma-typescript-cssmodules-transform)
-- [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript-es6-transform)
-- [karma-typescript-postcss-transform](https://github.com/monounity/karma-typescript-postcss-transform)
+- [karma-typescript-angular2-transform](https://github.com/monounity/karma-typescript/tree/master/packages/karma-typescript-angular2-transform)
+- [karma-typescript-cssmodules-transform](https://github.com/monounity/karma-typescript/tree/master/packages/karma-typescript-cssmodules-transform)
+- [karma-typescript-es6-transform](https://github.com/monounity/karma-typescript/tree/master/packages/karma-typescript-es6-transform)
+- [karma-typescript-postcss-transform](https://github.com/monounity/karma-typescript/tree/master/packages/karma-typescript-postcss-transform)
 
 ### Example output
 

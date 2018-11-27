@@ -1,13 +1,8 @@
 {
   "name": "karma-typescript-monorepo",
-  "version": "1.0.0",
   "description": "Monorepo for karma-typescript packages",
   "private": true,
   "author": "monounity",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/monounity/karma-typescript.git"
-  },
   "license": "MIT",
   "scripts": {
     "setup": "npm run setup:packages && npm run setup:examples && npm run setup:integration",
