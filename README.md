@@ -32,7 +32,7 @@ npm install --save-dev karma-typescript
 
 ## Contributors
 
-<a href="https://github.com/monounity/karma-tyescript/graphs/contributors"><img src="https://opencollective.com/karma-typescript/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/monounity/karma-typescript/graphs/contributors"><img src="https://opencollective.com/karma-typescript/contributors.svg?width=890&button=false" /></a>
 
 ## Backers
 
