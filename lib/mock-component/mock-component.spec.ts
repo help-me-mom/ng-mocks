@@ -24,12 +24,14 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
     <empty-component id="ng-content-component">doh</empty-component>
     <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
     <child-component></child-component>
-    <template-outlet-component>
+    <template-outlet-component id="element-with-content-and-template">
       ng-content body header
       <ng-template #block1><div>block 1 body</div></ng-template>
       <ng-template #block2><span>block 2 body</span></ng-template>
       ng-content body footer
     </template-outlet-component>
+    <empty-component id="element-without-content-and-template"></empty-component>
+    <empty-component id="element-with-content-only">child of element-with-content-only</empty-component>
   `
 })
 export class ExampleComponentContainer {
@@ -169,11 +171,11 @@ describe('MockComponent', () => {
   });
 
   describe('NgTemplateOutlet', () => {
-    it('renders all @ContentChild properties and ngContent too', () => {
+    it('renders all @ContentChild properties and ngContent in wrappers too', () => {
       fixture.detectChanges();
 
       // mocked component with @ViewChild was created without errors.
-      const templateOutlet = fixture.debugElement.query(By.directive(MockComponent(TemplateOutletComponent)));
+      const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-and-template'));
       expect(templateOutlet).toBeTruthy();
 
       // looking for ng-content.
@@ -195,6 +197,27 @@ describe('MockComponent', () => {
       const block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
       expect(block3.nativeElement.innerText.trim()).toEqual('');
+    });
+
+    it('renders nothing if no @ContentChild in component and ng-content is empty', () => {
+      fixture.detectChanges();
+
+      // mocked component was created without errors.
+      const templateOutlet = fixture.debugElement.query(By.css('#element-without-content-and-template'));
+      expect(templateOutlet).toBeTruthy();
+      expect(templateOutlet.nativeElement.innerHTML).toBeFalsy();
+    });
+
+    it('renders ng-content without wrapper if no @ContentChild in component', () => {
+      fixture.detectChanges();
+
+      // mocked component was created without errors.
+      const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-only'));
+      expect(templateOutlet).toBeTruthy();
+
+      // content has right value
+      expect(templateOutlet.nativeElement.innerHTML.trim())
+          .toEqual('child of element-with-content-only');
     });
   });
 });

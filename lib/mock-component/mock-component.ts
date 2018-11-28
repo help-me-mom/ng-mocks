@@ -23,9 +23,10 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
 
   const { exportAs, inputs, outputs, queries, selector } = directiveResolver.resolve(component);
 
-  let template = '<div data-key="ng-content"><ng-content></ng-content></div>';
+  let template = `<ng-content></ng-content>`;
   if (queries) {
-    template += Object.keys(queries)
+    const queriesKeys = Object.keys(queries);
+    const templateQueries = queriesKeys
       .map((key: string) => {
         const query: Query = queries[key];
         if (query.isViewQuery) {
@@ -34,10 +35,18 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
         if (typeof query.selector !== 'string') {
           return ''; // in case of mocked component, Type based selector doesn't work properly anyway.
         }
-        return `<div data-key="${query.selector}">
-          <ng-container *ngTemplateOutlet="${key}"></ng-container>
-        </div>`;
+        return `
+          <div data-key="${query.selector}">
+            <ng-container *ngTemplateOutlet="${key}"></ng-container>
+          </div>
+        `;
       }).join('');
+    if (templateQueries) {
+      template = `
+        <div data-key="ng-content">${template}</div>
+        ${templateQueries}
+      `;
+    }
   }
 
   const options: Component = {
