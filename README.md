@@ -12,7 +12,9 @@ Sure, you could flip a flag on schema errors to make your component dependencies
 - Mocked component with the same selector
 - Inputs and Outputs with alias support
 - Each component instance has its own EventEmitter instances for outputs
-- Mocked component templates are ng-content tags to allow transclusion
+- Mocked component templates are `ng-content` tags to allow transclusion
+- When `@ContentChild` is present, then all of them will be wrapped as `[data-key="_id_"]`
+  and `ng-content` with `[data-key="ng-content"]`
 - Allows ng-model binding (You will have to add FormsModule to TestBed imports)
 - Mocks Reactive Forms (You will have to add ReactiveFormsModule to TestBed imports)
     - __simulateChange - calls `onChanged` on the mocked component bound to a FormControl
@@ -61,6 +63,39 @@ describe('TestedComponent', () => {
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
     mockedComponent.someOutput.emit(new Foo()); // if you casted mockedComponent as the original component type then this is type safe
+    fixture.detectChanges();
+    // assert on some side effect
+  });
+
+  // <mocked-dependency-component><p>inside content</p></mocked-dependency-component>
+  it('should render something inside of the dependency component', () => {
+    // because component does not have any @ContentChild we can access html directly.
+    const mockedNgContent = fixture.debugElement
+                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .innerHTML;
+    expect(mockedNgContent).toContain('<p>inside content</p>');
+    fixture.detectChanges();
+    // assert on some side effect
+  });
+
+  // <mocked-dependency-component>
+  //   <ng-template #something><p>inside something</p></ng-template>
+  //   <p>inside content</p>
+  // </mocked-dependency-component>
+  it('should render something inside of the dependency component', () => {
+    // because component does have @ContentChild we need to use wrappers.
+    const mockedNgContent = fixture.debugElement
+                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.css('[data-key="ng-content"]'))
+                                   .innerHTML;
+    expect(mockedNgContent).toContain('<p>inside content</p>');
+    
+    const mockedNgTemplate = fixture.debugElement
+                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.css('[data-key="something"]'))
+                                   .innerHTML;
+    expect(mockedNgTemplate).toContain('<p>inside something</p>');
+    
     fixture.detectChanges();
     // assert on some side effect
   });
