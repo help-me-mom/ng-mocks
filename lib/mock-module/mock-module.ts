@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, Type } from '@angular/core';
+import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
 import { ngModuleResolver } from '../common/reflect';
 import { MockDeclaration } from '../mock-declaration';
 
@@ -23,24 +23,39 @@ const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
     return result;
 };
 
-export function MockModule(module: Type<NgModule>): Type<NgModule> {
+const isModuleWithProviders = (object: any): object is ModuleWithProviders => typeof object.ngModule !== 'undefined';
+
+export function MockModule(module: Type<NgModule> | ModuleWithProviders): Type<NgModule> {
   return NgModule(MockIt(module))(class MockedModule {});
 }
 
 const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule];
 
-function MockIt(module: Type<NgModule>): IModuleOptions {
-  if (NEVER_MOCK.includes(module)) {
-    return module as any;
+function MockIt(module: Type<NgModule> | ModuleWithProviders): IModuleOptions {
+  let ngModule: Type<NgModule>;
+  let ngModuleProviders: Provider[] = [];
+
+  // Disassembling module.
+  if (isModuleWithProviders(module)) {
+    ngModule = module.ngModule;
+    if (module.providers) {
+      ngModuleProviders = flatten(module.providers);
+    }
+  } else {
+    ngModule = module;
+  }
+
+  if (NEVER_MOCK.includes(ngModule)) {
+    return ngModule as any;
   }
   const mockedModule: IModuleOptions = { declarations: [],
                                          exports: [],
                                          imports: [],
                                          providers: [] };
-  const { declarations = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
+  const { declarations = [], imports = [], providers = [] } = ngModuleResolver.resolve(ngModule);
 
   mockedModule.exports = mockedModule.declarations = flatten(declarations).map(MockDeclaration);
-  mockedModule.providers = flatten(providers).map(mockProvider);
+  mockedModule.providers = ngModuleProviders.concat(...flatten(providers)).map(mockProvider);
 
   flatten(imports).forEach((imPort: Type<NgModule>) => {
     const result = MockIt(imPort);

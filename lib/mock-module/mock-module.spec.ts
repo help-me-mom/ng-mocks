@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MockComponent } from '../mock-component';
 import { MockModule } from './mock-module';
-import { ExampleComponent, ParentModule } from './test-fixtures';
+import { ExampleComponent, ModuleWithProvidersModule, ParentModule } from './test-fixtures';
 
 @Component({
   selector: 'component-subject',
@@ -26,7 +26,8 @@ describe('MockModule', () => {
         ComponentSubject
       ],
       imports: [
-        MockModule(ParentModule)
+        MockModule(ParentModule),
+        MockModule(ModuleWithProvidersModule),
       ],
     })
     .compileComponents()
