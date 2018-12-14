@@ -1,10 +1,33 @@
 /* tslint:disable:max-classes-per-file */
 
 import { CommonModule } from '@angular/common';
-import { Component, Directive, Injectable, ModuleWithProviders, NgModule, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  Injectable,
+  ModuleWithProviders,
+  NgModule,
+  OnInit,
+  Pipe,
+  PipeTransform
+} from '@angular/core';
 
 @Directive({selector: '[example-directive]'})
-export class ExampleDirective {}
+export class ExampleDirective implements OnInit {
+
+  protected node: ElementRef;
+
+  constructor(
+    node: ElementRef,
+  ) {
+    this.node = node;
+  }
+
+  ngOnInit(): void {
+    this.node.nativeElement.innerText = 'ExampleDirective';
+  }
+}
 
 @Pipe({name: 'examplePipe'})
 export class ExamplePipe implements PipeTransform {
@@ -40,6 +63,16 @@ export class ChildModule {}
   imports: [ ChildModule ],
 })
 export class ParentModule {}
+
+@NgModule({
+  imports: [ ParentModule ],
+})
+export class SameImports1Module {}
+
+@NgModule({
+  imports: [ ParentModule ],
+})
+export class SameImports2Module {}
 
 /* Assets for ModuleWithProviders BEGIN */
 
