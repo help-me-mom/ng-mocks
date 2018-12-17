@@ -10,11 +10,6 @@ const cache = new Map<Type<NgModule>, Type<NgModule>>();
 
 export type ImportInstance = Type<NgModule> | ModuleWithProviders;
 
-// Interface of extra flags for MockModule function. Should be used internally.
-export interface IMockModuleConfig {
-  exposeDeclarations?: boolean;
-}
-
 interface IModuleOptions {
   declarations?: Array<Type<any>>;
   exports?: Array<Type<any>>;
@@ -62,15 +57,7 @@ const isModule = (object: any): object is Type<NgModule> => {
 const isModuleWithProviders = (object: any): object is ModuleWithProviders => typeof object.ngModule !== 'undefined'
     && isModule(object.ngModule);
 
-export function MockModule(module: ImportInstance, config: IMockModuleConfig = {}): ImportInstance {
-  // Usually we want to test what we have inside of module we passed here explicitly.
-  // For that we should have config.exposeDeclarations = true.
-  // That means all imports and declarations of the module will be exported.
-  // Other modules from list of imports of the module expose only own exports.
-  // It allow us to see failures in case if we use something what wasn't properly exported in nested modules.
-  if (typeof config.exposeDeclarations !== 'boolean') {
-    config.exposeDeclarations = true;
-  }
+export function MockModule(module: ImportInstance): ImportInstance {
   let ngModule: Type<NgModule>;
   let ngModuleProviders: Provider[] | undefined;
   let moduleMockPointer: Type<any>;
@@ -94,7 +81,7 @@ export function MockModule(module: ImportInstance, config: IMockModuleConfig = {
   if (cacheHit) {
     moduleMockPointer = cacheHit;
   } else {
-    @NgModule(MockIt(ngModule, config))
+    @NgModule(MockIt(ngModule))
     @MockOf(ngModule)
     class ModuleMock {
     }
@@ -115,23 +102,17 @@ export function MockModule(module: ImportInstance, config: IMockModuleConfig = {
 
 const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule, BrowserModule, BrowserAnimationsModule];
 
-function MockIt(module: Type<NgModule>, config: IMockModuleConfig): IModuleOptions {
+function MockIt(module: Type<NgModule>): IModuleOptions {
   const mockedModule: IModuleOptions = {};
   const {declarations = [], imports = [], exports = [], providers = []} = ngModuleResolver.resolve(module);
-
-  // all nested modules should export only own exports.
-  const nextConfig = {
-    ...config,
-    exposeDeclarations: false
-  };
 
   if (imports.length) {
     mockedModule.imports = flatten(imports).map((instance: Type<any>) => {
       if (isModule(instance)) {
-        return MockModule(instance, nextConfig);
+        return MockModule(instance);
       }
       if (isModuleWithProviders(instance)) {
-        return MockModule(instance, nextConfig) as ModuleWithProviders;
+        return MockModule(instance) as ModuleWithProviders;
       }
       return MockDeclaration(instance);
     });
@@ -149,17 +130,19 @@ function MockIt(module: Type<NgModule>, config: IMockModuleConfig): IModuleOptio
   if (exports.length) {
     mockedModule.exports = flatten(exports).map((instance: Type<any>) => {
       if (isModule(instance)) {
-        return MockModule(instance, nextConfig) as Type<NgModule>;
+        return MockModule(instance) as Type<NgModule>;
       }
       if (isModuleWithProviders(instance)) {
-        return MockModule(instance, nextConfig);
+        return MockModule(instance);
       }
       return MockDeclaration(instance);
     }) as Array<Type<any>>;
   }
 
-  // exposing declarations of the module.
-  if (config.exposeDeclarations && (mockedModule.declarations || mockedModule.imports)) {
+  // When we mock module only exported declarations are accessible inside of test.
+  // Because of that we have to export everything what a module imports or declares.
+  // Unfortunately in that case tests won't fail when some module has missed exports.
+  if (mockedModule.declarations || mockedModule.imports) {
     mockedModule.exports = mockedModule.exports || [];
 
     if (mockedModule.imports) {
