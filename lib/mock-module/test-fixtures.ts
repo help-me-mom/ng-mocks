@@ -12,6 +12,7 @@ import {
   Pipe,
   PipeTransform
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Directive({selector: '[example-directive]'})
 export class ExampleDirective implements OnInit {
@@ -73,6 +74,16 @@ export class SameImports1Module {}
   imports: [ ParentModule ],
 })
 export class SameImports2Module {}
+
+@NgModule({
+  imports: [ RouterModule.forRoot([
+    {
+      component: ExampleComponent,
+      path: '',
+    },
+  ]) ],
+})
+export class AppRoutingModule {}
 
 /* Assets for ModuleWithProviders BEGIN */
 
