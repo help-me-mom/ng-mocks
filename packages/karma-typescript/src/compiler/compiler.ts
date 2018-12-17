@@ -137,7 +137,7 @@ export class Compiler {
         this.outputDiagnostics(diagnostics, host);
     }
 
-    private outputDiagnostics(diagnostics: ts.Diagnostic[], host?: ts.FormatDiagnosticsHost): void {
+    private outputDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>, host?: ts.FormatDiagnosticsHost): void {
 
         if (!diagnostics || diagnostics.length === 0) {
             return;
