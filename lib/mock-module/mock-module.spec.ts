@@ -10,6 +10,9 @@ import { MockModule } from './mock-module';
 import {
   AppRoutingModule,
   ExampleComponent,
+  ExampleConsumerComponent,
+  LogicNestedModule,
+  LogicRootModule,
   ModuleWithProvidersModule,
   ParentModule,
   SameImports1Module,
@@ -116,7 +119,7 @@ describe('NeverMockModules', () => {
 });
 
 describe('RouterModule', () => {
-  let fixture: ComponentFixture<SameImportsComponent>;
+  let fixture: ComponentFixture<ExampleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -138,6 +141,62 @@ describe('RouterModule', () => {
     expect(fixture.componentInstance).toEqual(jasmine.any(ExampleComponent));
     expect(fixture.nativeElement.innerText).toEqual('My Example');
   });
+});
+
+// What we mock should always export own private imports and declarations to allow us to use it in TestBed.
+// In this test we check that nested module from cache still provides own private things.
+// See https://github.com/ike18t/ng-mocks/pull/35
+fdescribe('Usage of cached nested module', () => {
+  let fixture: ComponentFixture<ExampleConsumerComponent>;
+
+  describe('1st test for root', () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ExampleConsumerComponent,
+        ],
+        imports: [
+          MockModule(LogicRootModule),
+        ],
+      })
+        .compileComponents()
+        .then(() => {
+          fixture = TestBed.createComponent(ExampleConsumerComponent);
+          fixture.detectChanges();
+        });
+    }));
+
+    it('should be able to find component', () => {
+      expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
+    });
+
+  });
+
+  describe('2nd test for nested', () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ExampleConsumerComponent,
+        ],
+        imports: [
+          MockModule(LogicNestedModule),
+        ],
+      })
+        .compileComponents()
+        .then(() => {
+          fixture = TestBed.createComponent(ExampleConsumerComponent);
+          fixture.detectChanges();
+        });
+    }));
+
+    it('should be able to find component', () => {
+      expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
+    });
+
+  });
+
 });
 
 // TODO> Doesn't work because ParentModule doesn't export anything.
