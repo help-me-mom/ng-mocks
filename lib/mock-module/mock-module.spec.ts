@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from '../mock-component';
 import { MockModule } from './mock-module';
 import {
+  AppRoutingModule,
   ExampleComponent,
   ModuleWithProvidersModule,
   ParentModule,
@@ -111,6 +112,31 @@ describe('NeverMockModules', () => {
   it('should not fail when we pass them to MockModule', () => {
     expect(fixture.componentInstance).toEqual(jasmine.any(SameImportsComponent));
     expect(fixture.nativeElement.innerText).toEqual('same imports');
+  });
+});
+
+describe('RouterModule', () => {
+  let fixture: ComponentFixture<SameImportsComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        ExampleComponent,
+      ],
+      imports: [
+        MockModule(AppRoutingModule),
+      ],
+    })
+    .compileComponents()
+    .then(() => {
+      fixture = TestBed.createComponent(ExampleComponent);
+      fixture.detectChanges();
+    });
+  }));
+
+  it('should not fail when we pass RouterModule to MockModule', () => {
+    expect(fixture.componentInstance).toEqual(jasmine.any(ExampleComponent));
+    expect(fixture.nativeElement.innerText).toEqual('My Example');
   });
 });
 

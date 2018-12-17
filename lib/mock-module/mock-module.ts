@@ -22,10 +22,25 @@ interface IModuleOptions {
   providers?: Provider[];
 }
 
-const mockProvider = (provider: any) => ({
-  provide: typeof provider === 'object' && provider.provide ? provider.provide : provider,
-  useValue: {},
-});
+const mockProvider = (provider: any): Provider | undefined => {
+  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+  const multi = typeof provider === 'object' && provider.multi;
+
+  // RouterModule injects own Application Initializer, which doesn't allow mocks due to own logic.
+  // We have to avoid any injection of Application Initializer to mock everything properly.
+  if (
+    typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
+    && provide.toString() === 'InjectionToken Application Initializer'
+  ) {
+    return undefined;
+  }
+
+  return {
+    multi,
+    provide,
+    useValue: {},
+  };
+};
 
 const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
   if (Array.isArray(values)) {
@@ -91,7 +106,8 @@ export function MockModule(module: ImportInstance, config: IMockModuleConfig = {
   if (ngModuleProviders) {
     return {
       ngModule: moduleMockPointer,
-      providers: flatten(ngModuleProviders).map(mockProvider),
+      providers: flatten(ngModuleProviders).map(mockProvider)
+        .filter((provider) => !!provider) as Provider[],
     };
   }
   return moduleMockPointer;
@@ -126,7 +142,8 @@ function MockIt(module: Type<NgModule>, config: IMockModuleConfig): IModuleOptio
   }
 
   if (providers.length) {
-    mockedModule.providers = flatten(providers).map(mockProvider);
+    mockedModule.providers = flatten(providers).map(mockProvider)
+      .filter((provider) => !!provider) as Provider[];
   }
 
   if (exports.length) {
