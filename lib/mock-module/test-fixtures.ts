@@ -52,6 +52,12 @@ export class ExamplePrivateComponent { }
 })
 export class ExampleComponent { }
 
+@Component({
+  selector: 'example-consumer-component',
+  template: '<example-component></example-component>'
+})
+export class ExampleConsumerComponent { }
+
 @NgModule({
   declarations: [ ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective ],
   exports: [ ExampleComponent, ExamplePipe, ExampleDirective ],
@@ -74,6 +80,16 @@ export class SameImports1Module {}
   imports: [ ParentModule ],
 })
 export class SameImports2Module {}
+
+@NgModule({
+  imports: [ ChildModule ],
+})
+export class LogicNestedModule {}
+
+@NgModule({
+  imports: [ ChildModule, LogicNestedModule ],
+})
+export class LogicRootModule {}
 
 @NgModule({
   imports: [ RouterModule.forRoot([
