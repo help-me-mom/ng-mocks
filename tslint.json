@@ -1,5 +1,8 @@
 {
-  "extends": "tslint:all",
+  "extends": [
+    "tslint:all",
+    "tslint-jasmine-rules"
+  ],
   "rules": {
     "align": false,
     "completed-docs": false,
@@ -9,9 +12,11 @@
     "newline-before-return": false,
     "newline-per-chained-call": false,
     "no-any": false,
+    "no-disabled-tests": true,
     "no-empty": false,
     "no-implicit-dependencies": [true, "dev"],
     "no-floating-promises": false,
+    "no-focused-tests": true,
     "no-submodule-imports": false,
     "no-unsafe-any": false,
     "no-use-before-declare": false,
