@@ -274,6 +274,52 @@ describe('MockModule', () => {
 });
 ```
 
+## MockRender
+Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
+
+### Usage Example
+```typescript
+describe('MockRender', () => {
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        MockModule(AppModule),
+      ],
+      declarations: [
+        Real1Component,
+        Real2Component,
+      ]
+    });
+  });
+
+  it('renders ', () => {
+    const fixture = MockRender(
+      `
+        <real-1 (click)="myListener1($event)" [some]="myParam1" other="check">
+          something as ng-content
+        </real-1>
+        <real-2 (click)="myParam2 = $event" [some]="myParam2">
+          <ng-template #header>
+            something as ng-template
+          </ng-template>
+        </real-2>
+      `,
+      {
+        myParam1: 'something1',
+        myParam2: 'something2',
+        myListener1: createSpy('myListener1'),
+      }
+    );
+
+    // assert on some side effect
+    // fixture.componentInstance.myParam1;
+    // fixture.componentInstance.myParam2;
+    // fixture.componentInstance.myListener1;
+  });
+});
+```
+
 ## Find an issue or have a request?
 Report it as an issue or submit a PR.  I'm open to contributions.
 
