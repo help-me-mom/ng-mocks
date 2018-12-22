@@ -58,7 +58,7 @@ describe('TestedComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.directive(DependencyComponent))
                                    .componentInstance as DependencyComponent; // casting to retain type safety
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
@@ -71,7 +71,7 @@ describe('TestedComponent', () => {
   it('should render something inside of the dependency component', () => {
     // because component does not have any @ContentChild we can access html directly.
     const mockedNgContent = fixture.debugElement
-                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.directive(DependencyComponent))
                                    .innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
     fixture.detectChanges();
@@ -85,13 +85,13 @@ describe('TestedComponent', () => {
   it('should render something inside of the dependency component', () => {
     // because component does have @ContentChild we need to use wrappers.
     const mockedNgContent = fixture.debugElement
-                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.directive(DependencyComponent))
                                    .query(By.css('[data-key="ng-content"]'))
                                    .innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
     
     const mockedNgTemplate = fixture.debugElement
-                                   .query(By.directive(MockComponent(DependencyComponent)))
+                                   .query(By.directive(DependencyComponent))
                                    .query(By.css('[data-key="something"]'))
                                    .innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside something</p>');
@@ -138,16 +138,16 @@ describe('TestedComponent', () => {
   it('should send the correct value to the dependency component input', () => {
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
-    const debugElement = fixture.debugElement.query(By.directive(MockDirective(DependencyDirective)));
+    const debugElement = fixture.debugElement.query(By.directive(DependencyDirective));
     const mockedDirectiveInstance = debugElement.injector
-                                                .get(MockDirective(DependencyDirective)) as DependencyDirective; // casting to retain type safety
+                                                .get(DependencyDirective) as DependencyDirective; // casting to retain type safety
     expect(mockedDirectiveInstance.someInput).toEqual('foo');
   });
 
   it('should do something when the dependency directive emits on its output', () => {
-    const debugElement = fixture.debugElement.query(By.directive(MockDirective(DependencyDirective)));
+    const debugElement = fixture.debugElement.query(By.directive(DependencyDirective));
     const mockedDirectiveInstance = debugElement.injector
-                                                .get(MockDirective(DependencyDirective)) as DependencyDirective; // casting to retain type safety
+                                                .get(DependencyDirective) as DependencyDirective; // casting to retain type safety
     // again, let's pretend DependencyDirective has an output called 'someOutput'
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
     mockedDirectiveInstance.someOutput.emit(new Foo()); // if you casted mockedDirective as the original component type then this is type safe

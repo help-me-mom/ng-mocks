@@ -79,7 +79,7 @@ describe('MockComponent', () => {
   it('should have the input set on the mock component', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(SimpleComponent)))
+                                   .query(By.directive(SimpleComponent))
                                    .componentInstance;
     expect(mockedComponent.someInput).toEqual('hi');
     expect(mockedComponent.someInput2).toEqual('bye');
@@ -88,14 +88,14 @@ describe('MockComponent', () => {
   it('has no issues with multiple decorators on an input', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(SimpleComponent)));
+                                   .query(By.directive(SimpleComponent));
     expect(mockedComponent.componentInstance.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(SimpleComponent)))
+                                   .query(By.directive(SimpleComponent))
                                    .componentInstance;
     mockedComponent.someOutput1.emit('hi');
     expect(component.emitted).toEqual('hi');
@@ -104,7 +104,7 @@ describe('MockComponent', () => {
   it('should trigger output bound behavior for extended outputs', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(SimpleComponent)))
+                                   .query(By.directive(SimpleComponent))
                                    .componentInstance;
     mockedComponent.someOutput2.emit('hi');
     expect(component.emitted).toEqual('hi');
@@ -118,7 +118,7 @@ describe('MockComponent', () => {
 
   it('should give each instance of a mocked component its own event emitter', () => {
     const mockedComponents = fixture.debugElement
-                                    .queryAll(By.directive(MockComponent(SimpleComponent)));
+                                    .queryAll(By.directive(SimpleComponent));
     const mockedComponent1 = mockedComponents[0].componentInstance;
     const mockedComponent2 = mockedComponents[1].componentInstance;
     expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
@@ -126,7 +126,7 @@ describe('MockComponent', () => {
 
   it('should work with components w/o inputs or outputs', () => {
     const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(EmptyComponent)));
+                                   .query(By.directive(EmptyComponent));
     expect(mockedComponent).not.toBeNull();
   });
 

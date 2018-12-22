@@ -71,20 +71,20 @@ describe('MockDirective', () => {
   });
 
   it('should have use the original component\'s selector', () => {
-    const element = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
+    const element = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(element).not.toBeNull();
   });
 
   it('should have the input set on the mock component', () => {
-    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
-    const element = debugElement.injector.get(MockDirective(ExampleDirective)); // tslint:disable-line
+    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const element = debugElement.injector.get(ExampleDirective); // tslint:disable-line
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
   });
 
   it('triggers output bound behavior for extended outputs', () => {
-    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
-    const element = debugElement.injector.get(MockDirective(ExampleDirective)); // tslint:disable-line
+    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const element = debugElement.injector.get(ExampleDirective); // tslint:disable-line
 
     element.someOutput.emit(true);
     expect(component.emitted).toEqual(true);
@@ -100,7 +100,7 @@ describe('MockDirective', () => {
     // I found that FormControlDirective is one of those weird directives.
     // Since I don't know how they did it, I don't know how to test it except to write this
     // Test around a known-odd directive.
-    const debugElement = fixture.debugElement.query(By.directive(MockDirective(ExampleDirective)));
+    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(debugElement).not.toBeNull();
   });
 
