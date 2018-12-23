@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { MockDirective } from '../../lib/mock-directive';
 import { MockRender } from '../../lib/mock-render';
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
 import { CustomNgForWithoutOfDirective } from './custom-ng-for-without-of.directive';
 import { CustomNgIfDirective } from './custom-ng-if.directive';
 
-describe('structural-directive-as-ng-for', () => {
+describe('structural-directive-as-ng-for:real', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -82,37 +84,48 @@ describe('structural-directive-as-ng-for', () => {
   });
 });
 
-// fdescribe('structural-directive-as-ng-for fixtures are mocked as they should', () => {
-//
-//     beforeEach(() => {
-//         TestBed.configureTestingModule({
-//             declarations: [
-//                 MockDirective(CustomNgForWithOfDirective),
-//                 MockDirective(CustomNgForWithoutOfDirective),
-//                 MockDirective(CustomNgIfDirective),
-//                 StructuralDirectiveConsumerComponent,
-//             ],
-//         });
-//     });
-//
-//     it('provides way to fetch information of structural directive', () => {
-//         const fixture = MockRender(`
-//             <structural-directive-consumer-component></structural-directive-consumer-component>
-//         `);
-//         console.log(fixture.nativeElement.innerHTML);
-//
-//         const debugElement = fixture.debugElement.query(By.css('[data-type="customNgIfTrue"]'));
-//         expect(debugElement).toBeTruthy();
-//         console.log(debugElement.nativeElement.outerHTML);
-//
-//         // ideally
-//         // const element = debugElement.injector.get(MockDirective(ExampleStructuralDirective)); // tslint:disable-line
-//         // expect(element.exampleStructuralDirective).toBe(true);
-//
-//         // acceptable :shrug:
-//         // const data = debugElement.nativeElement.getAttribute('exampleStructuralDirective');
-//         // expect(data.exampleStructuralDirective).toBe(true);
-//
-//         expect(1).toEqual(0);
-//     });
-// });
+fdescribe('structural-directive-as-ng-for:mock', () => {
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        MockDirective(CustomNgForWithOfDirective),
+        MockDirective(CustomNgForWithoutOfDirective),
+        MockDirective(CustomNgIfDirective),
+      ],
+    });
+  });
+
+  it('mocks customNgIf properly', () => {
+    const fixture = MockRender(`
+        <div data-type="customNgIfTrue" *customNgIf="values">
+          should be shown
+        </div>
+        <div data-type="customNgIfFalse" *customNgIf="!values">
+          should be hidden
+        </div>
+      `, {
+      values: [
+        'string1',
+        'string2',
+        'string3',
+      ],
+    });
+
+    console.log(fixture.nativeElement.innerHTML);
+
+    const debugElement = fixture.debugElement.query(By.css('[data-type="customNgIfTrue"]'));
+    expect(debugElement).toBeTruthy();
+    console.log(debugElement.nativeElement.outerHTML);
+
+    // ideally
+    // const element = debugElement.injector.get(MockDirective(ExampleStructuralDirective)); // tslint:disable-line
+    // expect(element.exampleStructuralDirective).toBe(true);
+
+    // acceptable :shrug:
+    // const data = debugElement.nativeElement.getAttribute('exampleStructuralDirective');
+    // expect(data.exampleStructuralDirective).toBe(true);
+
+    expect(1).toEqual(0);
+  });
+});
