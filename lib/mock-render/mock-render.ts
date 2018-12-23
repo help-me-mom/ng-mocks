@@ -1,7 +1,7 @@
 import { Component, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-export function MockRender<TComponent>(template: string, params: TComponent): ComponentFixture<TComponent> {
+export function MockRender<TComponent>(template: string, params?: TComponent): ComponentFixture<TComponent> {
   const options: Component = {
     selector: 'mock-render',
     template
