@@ -2,7 +2,6 @@ import { Component, EventEmitter, forwardRef, Query, Type } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
-import { MockedComponent } from './mock-component';
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
@@ -84,7 +83,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
     __simulateChange = (param: any) => {}; // tslint:disable-line:variable-name
     __simulateTouch = () => {}; // tslint:disable-line:variable-name
 
-    registerOnChange = (fn: (value: any) => void) => {
+    registerOnChange(fn: (value: any) => void): void {
       this.__simulateChange = fn;
     }
 
