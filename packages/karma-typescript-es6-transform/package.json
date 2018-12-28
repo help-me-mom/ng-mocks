@@ -55,7 +55,7 @@
     "@types/sinon": "^5.0.5",
     "@types/tape": "^4.2.32",
     "faucet": "0.0.1",
-    "karma-typescript": "4.0.0",
+    "karma-typescript": "4.0.0-beta.1",
     "nyc": "^13.1.0",
     "sinon": "^7.1.1",
     "tape": "^4.6.3",
