@@ -1,4 +1,14 @@
-import { Component, EventEmitter, forwardRef, Query, Type } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Query,
+  TemplateRef,
+  Type,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
@@ -6,6 +16,12 @@ import { directiveResolver } from '../common/reflect';
 const cache = new Map<Type<Component>, Type<Component>>();
 
 export type MockedComponent<T> = T & {
+  /** Helper function to hide rendered @ContentChild() template. */
+  __hide(contentChildSelector: string): void;
+
+  /** Helper function to render any @ContentChild() template with any context. */
+  __render(contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}): void;
+
   __simulateChange(value: any): void;
   __simulateTouch(): void;
 };
@@ -23,6 +39,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
   const { exportAs, inputs, outputs, queries, selector } = directiveResolver.resolve(component);
 
   let template = `<ng-content></ng-content>`;
+  const viewChildRefs = new Map<string, string>();
   if (queries) {
     const queriesKeys = Object.keys(queries);
     const templateQueries = queriesKeys
@@ -34,9 +51,13 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
         if (typeof query.selector !== 'string') {
           return ''; // in case of mocked component, Type based selector doesn't work properly anyway.
         }
+        viewChildRefs.set(query.selector, key);
+        queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
+          read: ViewContainerRef,
+        });
         return `
-          <div data-key="${query.selector}">
-            <ng-container *ngTemplateOutlet="${key}"></ng-container>
+          <div *ngIf="mockRender_${query.selector}" data-key="${query.selector}">
+            <ng-template #__${query.selector}></ng-template>
           </div>
         `;
       }).join('');
@@ -68,7 +89,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
 
   @MockOf(component)
   class ComponentMock implements ControlValueAccessor {
-    constructor() {
+    constructor(changeDetector: ChangeDetectorRef) {
       Object.keys(component.prototype).forEach((method) => {
         if (!(this as any)[method]) {
           (this as any)[method] = () => {};
@@ -78,6 +99,32 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       (options.outputs || []).forEach((output) => {
         (this as any)[output.split(':')[0]] = new EventEmitter<any>();
       });
+
+      // Providing method to hide any @ContentChild based on its selector.
+      (this as any).__hide = (contentChildSelector: string) => {
+        const key = viewChildRefs.get(contentChildSelector);
+        if (key) {
+          (this as any)[`mockRender_${contentChildSelector}`] = false;
+          changeDetector.detectChanges();
+        }
+      };
+
+      // Providing a method to render any @ContentChild based on its selector.
+      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}) => {
+        const key = viewChildRefs.get(contentChildSelector);
+        let templateRef: TemplateRef<any>;
+        let viewContainer: ViewContainerRef;
+        if (key) {
+          (this as any)[`mockRender_${contentChildSelector}`] = true;
+          changeDetector.detectChanges();
+          viewContainer = (this as any)[`__mockView_${key}`];
+          templateRef = (this as any)[key];
+          if (viewContainer && templateRef) {
+            viewContainer.clear();
+            viewContainer.createEmbeddedView(templateRef, {...variables, $implicit} as any);
+          }
+        }
+      };
     }
 
     __simulateChange = (param: any) => {}; // tslint:disable-line:variable-name

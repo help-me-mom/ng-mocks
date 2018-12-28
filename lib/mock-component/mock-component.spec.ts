@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, DebugElement, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -172,6 +172,9 @@ describe('MockComponent', () => {
 
   describe('NgTemplateOutlet', () => {
     it('renders all @ContentChild properties and ngContent in wrappers too', () => {
+      let block1: DebugElement;
+      let block2: DebugElement;
+      let block3: DebugElement;
       fixture.detectChanges();
 
       // mocked component with @ViewChild was created without errors.
@@ -184,17 +187,27 @@ describe('MockComponent', () => {
       expect(ngContent.nativeElement.innerText.trim()).toEqual('ng-content body header ng-content body footer');
 
       // looking for 1st templateRef.
-      const block1 = templateOutlet.query(By.css('[data-key="block1"]'));
+      block1 = templateOutlet.query(By.css('[data-key="block1"]'));
+      expect(block1).toBeFalsy();
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block1');
+      block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeTruthy();
       expect(block1.nativeElement.innerText.trim()).toEqual('block 1 body');
 
       // looking for 2nd templateRef.
-      const block2 = templateOutlet.query(By.css('[data-key="block2"]'));
+      block2 = templateOutlet.query(By.css('[data-key="block2"]'));
+      expect(block2).toBeFalsy();
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block2');
+      block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
       expect(block2.nativeElement.innerText.trim()).toEqual('block 2 body');
 
       // looking for 3rd templateRef.
-      const block3 = templateOutlet.query(By.css('[data-key="block3"]'));
+      block3 = templateOutlet.query(By.css('[data-key="block3"]'));
+      expect(block3).toBeFalsy();
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block3');
+      fixture.detectChanges();
+      block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
       expect(block3.nativeElement.innerText.trim()).toEqual('');
     });
