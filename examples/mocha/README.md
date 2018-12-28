@@ -20,4 +20,4 @@ The example unit tests should now run in Karma and html test coverage should be 
 
 This software is licensed with the MIT license.
 
-© 2016-2018 Erik Barke, Monounity
+© 2016-2019 Erik Barke, Monounity

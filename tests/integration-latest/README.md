@@ -40,4 +40,4 @@ Happy contributing!
 
 This software is licensed with the MIT license.
 
-© 2016-2018 Erik Barke, Monounity
+© 2016-2019 Erik Barke, Monounity

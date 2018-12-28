@@ -106,4 +106,4 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/karma-typescript/sponsor/29/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/29/avatar.svg"></a>
 
 
-© 2016-2018 Erik Barke, Monounity
+© 2016-2019 Erik Barke, Monounity
