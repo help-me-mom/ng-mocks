@@ -23,9 +23,7 @@ describe('structural-directive-as-ng-for:real', () => {
     const fixture = MockRender(`
         <div data-type="customNgForWithOf"
           *customNgForWithOf="let v of values; let i = myIndex; let f = myFirst; let l = myLast;"
-        >
-          w/ {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}
-        </div>
+        >w/ {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}</div>
       `, {
       values: [
         'string1',
@@ -36,11 +34,11 @@ describe('structural-directive-as-ng-for:real', () => {
 
     // every value should be rendered correctly.
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithOf"> w/ string1010 </div>');
+      .toContain('<div data-type="customNgForWithOf">w/ string1010</div>');
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithOf"> w/ string2100 </div>');
+      .toContain('<div data-type="customNgForWithOf">w/ string2100</div>');
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithOf"> w/ string3201 </div>');
+      .toContain('<div data-type="customNgForWithOf">w/ string3201</div>');
   });
 
   it('renders customNgForWithoutOf properly', () => {
@@ -48,9 +46,7 @@ describe('structural-directive-as-ng-for:real', () => {
     const fixture = MockRender(`
         <div data-type="customNgForWithoutOf"
           *customNgForWithoutOf="values; let v; let i = myIndex; let f = myFirst; let l = myLast;"
-        >
-          w/o {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}
-        </div>
+        >w/o {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}</div>
       `, {
       values: [
         'string1',
@@ -61,22 +57,18 @@ describe('structural-directive-as-ng-for:real', () => {
 
     // every value should be rendered correctly.
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithoutOf"> w/o string1010 </div>');
+      .toContain('<div data-type="customNgForWithoutOf">w/o string1010</div>');
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithoutOf"> w/o string2100 </div>');
+      .toContain('<div data-type="customNgForWithoutOf">w/o string2100</div>');
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgForWithoutOf"> w/o string3201 </div>');
+      .toContain('<div data-type="customNgForWithoutOf">w/o string3201</div>');
   });
 
   it('renders customNgIf properly', () => {
     // should display just first part.
     const fixture = MockRender(`
-        <div data-type="customNgIfTrue" *customNgIf="values">
-          should be shown
-        </div>
-        <div data-type="customNgIfFalse" *customNgIf="!values">
-          should be hidden
-        </div>
+        <div data-type="customNgIfTrue" *customNgIf="values">should be shown</div>
+        <div data-type="customNgIfFalse" *customNgIf="!values">should be hidden</div>
       `, {
       values: [
         'string1',
@@ -87,9 +79,9 @@ describe('structural-directive-as-ng-for:real', () => {
 
     // only first div should be rendered.
     expect(fixture.nativeElement.innerHTML)
-      .toContain('<div data-type="customNgIfTrue"> should be shown </div>');
+      .toContain('<div data-type="customNgIfTrue">should be shown</div>');
     expect(fixture.nativeElement.innerHTML)
-      .not.toContain('<div data-type="customNgIfFalse"> should be hidden </div>');
+      .not.toContain('<div data-type="customNgIfFalse">should be hidden</div>');
   });
 });
 
