@@ -50,7 +50,7 @@ describe('MockHelper:getDirective', () => {
     // Using helper.
     const elementFromHelper = MockHelper.getDirective(
       fixture.debugElement.query(By.css('div')),
-      ExampleDirective
+      ExampleDirective,
     );
     expect(elementFromHelper).toBeTruthy();
     if (!elementFromHelper) {
