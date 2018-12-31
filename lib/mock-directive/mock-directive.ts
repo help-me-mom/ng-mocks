@@ -34,10 +34,10 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>
   return directives.map(MockDirective);
 }
 
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDirective> {
+export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockDirective<TDirective>> {
   const cacheHit = cache.get(directive);
   if (cacheHit) {
-    return cacheHit as Type<TDirective>;
+    return cacheHit as Type<MockDirective<TDirective>>;
   }
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
@@ -96,5 +96,5 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<TDi
 
   cache.set(directive, DirectiveMock);
 
-  return DirectiveMock as Type<TDirective>;
+  return DirectiveMock as Type<MockDirective<TDirective>>;
 }

@@ -1,6 +1,8 @@
-import { DebugNode } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { MockDirective } from '../../lib/mock-directive';
+import { MockHelper } from '../../lib/mock-helper';
 import { MockRender } from '../../lib/mock-render';
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
 import { CustomNgForWithoutOfDirective } from './custom-ng-for-without-of.directive';
@@ -113,21 +115,16 @@ describe('structural-directive-as-ng-for:mock', () => {
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('$implicit: fromDirective:');
 
-    // We're looking for related ng-template (DebugNode), not DebugElement.
-    // I think we can try to obfuscate it with own logic to reduce amount of code.
-    const debugNode = fixture.debugElement.queryAllNodes((element) => {
-      try {
-        element.injector.get(MockDirective(CustomNgIfDirective));
-        return true;
-      } catch (error) {
-        return false;
-      }
-    }).shift() as DebugNode;
-    expect(debugNode).toBeTruthy();
-
     // Extracting mock.
-    const directive = debugNode.injector.get(MockDirective(CustomNgIfDirective)) as MockDirective<CustomNgIfDirective>;
+    const debugElement = fixture.debugElement.query(By.css('div'));
+    const directive = MockHelper.getDirective(
+      debugElement,
+      MockDirective(CustomNgIfDirective),
+    );
     expect(directive).toBeTruthy();
+    if (!directive) {
+      return;
+    }
 
     // Assert that mock got right variables.
     expect(directive.setValue).toEqual([
@@ -168,22 +165,15 @@ describe('structural-directive-as-ng-for:mock', () => {
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('w/ 00');
 
-    // We're looking for related ng-template (DebugNode), not DebugElement.
-    // I think we can try to obfuscate it with own logic to reduce amount of code.
-    const debugNode = fixture.debugElement.queryAllNodes((element) => {
-      try {
-        element.injector.get(MockDirective(CustomNgForWithOfDirective));
-        return true;
-      } catch (error) {
-        return false;
-      }
-    }).shift() as DebugNode;
-    expect(debugNode).toBeTruthy();
+    const debugElement = fixture.debugElement.query(By.css('div'));
+    expect(debugElement).toBeTruthy();
 
     // Extracting mock.
-    const directive = debugNode.injector
-      .get(MockDirective(CustomNgForWithOfDirective)) as MockDirective<CustomNgForWithOfDirective>;
+    const directive = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithOfDirective));
     expect(directive).toBeTruthy();
+    if (!directive) {
+      return;
+    }
 
     // Assert that mock got right variables.
     expect(directive.setItems).toEqual([
@@ -228,22 +218,18 @@ describe('structural-directive-as-ng-for:mock', () => {
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('w/o 00');
 
-    // We're looking for related ng-template (DebugNode), not DebugElement.
-    // I think we can try to obfuscate it with own logic to reduce amount of code.
-    const debugNode = fixture.debugElement.queryAllNodes((element) => {
-      try {
-        element.injector.get(MockDirective(CustomNgForWithoutOfDirective));
-        return true;
-      } catch (error) {
-        return false;
-      }
-    }).shift() as DebugNode;
-    expect(debugNode).toBeTruthy();
+    const debugElement = fixture.debugElement.query(By.css('div'));
+    expect(debugElement).toBeTruthy();
 
     // Extracting mock.
-    const directive = debugNode.injector
-      .get(MockDirective(CustomNgForWithoutOfDirective)) as MockDirective<CustomNgForWithoutOfDirective>;
+    const directive = MockHelper.getDirective(
+      debugElement,
+      MockDirective(CustomNgForWithoutOfDirective),
+    );
     expect(directive).toBeTruthy();
+    if (!directive) {
+      return;
+    }
 
     // Assert that mock got right variables.
     expect(directive.setItems).toEqual([
@@ -269,5 +255,64 @@ describe('structural-directive-as-ng-for:mock', () => {
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('w/o MainValue2MyIndex201');
+  });
+
+  it('searches for related directive', () => {
+    let debugElement: DebugElement | undefined;
+    let mockedDirective: MockDirective<CustomNgForWithoutOfDirective> | undefined;
+
+    const fixture = MockRender(`
+        <div data-type="node-1"
+          *customNgForWithoutOf="values1; let v; let i = myIndex; let f = myFirst; let l = myLast;"
+        >
+          w/o {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}
+        </div>
+        <div data-type="node-2"
+          *customNgForWithoutOf="values2; let v; let i = myIndex; let f = myFirst; let l = myLast;"
+        >
+          w/o {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}
+        </div>
+      `, {
+      values1: [
+        'string1',
+        'string2',
+        'string3',
+      ],
+      values2: [
+        'string4',
+        'string5',
+        'string6',
+      ],
+    });
+
+    // Looking for first directive.
+    debugElement = fixture.debugElement.query(By.css('[data-type="node-1"]'));
+    mockedDirective = MockHelper.getDirective(
+      debugElement,
+      MockDirective(CustomNgForWithoutOfDirective),
+    );
+    expect(mockedDirective).toBeTruthy();
+    if (mockedDirective) {
+      expect(mockedDirective.setItems).toEqual([
+        'string1',
+        'string2',
+        'string3',
+      ]);
+    }
+
+    // Looking for second directive.
+    debugElement = fixture.debugElement.query(By.css('[data-type="node-2"]'));
+    mockedDirective = MockHelper.getDirective(
+      debugElement,
+      MockDirective(CustomNgForWithoutOfDirective),
+    );
+    expect(mockedDirective).toBeTruthy();
+    if (mockedDirective) {
+      expect(mockedDirective.setItems).toEqual([
+        'string4',
+        'string5',
+        'string6',
+      ]);
+    }
   });
 });
