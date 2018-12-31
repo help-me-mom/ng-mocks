@@ -13,7 +13,7 @@ import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
 
-export type MockDirective<T> = T & {
+export type MockedDirective<T> = T & {
   /** Pointer to current element in case of Attribute Directives. */
   __element?: ElementRef;
 
@@ -34,10 +34,10 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>
   return directives.map(MockDirective);
 }
 
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockDirective<TDirective>> {
+export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   const cacheHit = cache.get(directive);
   if (cacheHit) {
-    return cacheHit as Type<MockDirective<TDirective>>;
+    return cacheHit as Type<MockedDirective<TDirective>>;
   }
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
@@ -96,5 +96,5 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
   cache.set(directive, DirectiveMock);
 
-  return DirectiveMock as Type<MockDirective<TDirective>>;
+  return DirectiveMock as Type<MockedDirective<TDirective>>;
 }

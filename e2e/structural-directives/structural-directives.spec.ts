@@ -1,7 +1,7 @@
 import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockDirective } from '../../lib/mock-directive';
+import { MockDirective, MockedDirective } from '../../lib/mock-directive';
 import { MockHelper } from '../../lib/mock-helper';
 import { MockRender } from '../../lib/mock-render';
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
@@ -169,7 +169,10 @@ describe('structural-directive-as-ng-for:mock', () => {
     expect(debugElement).toBeTruthy();
 
     // Extracting mock.
-    const directive = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithOfDirective));
+    const directive = MockHelper.getDirective(
+      debugElement,
+      MockDirective(CustomNgForWithOfDirective),
+    );
     expect(directive).toBeTruthy();
     if (!directive) {
       return;
@@ -259,7 +262,7 @@ describe('structural-directive-as-ng-for:mock', () => {
 
   it('searches for related directive', () => {
     let debugElement: DebugElement | undefined;
-    let mockedDirective: MockDirective<CustomNgForWithoutOfDirective> | undefined;
+    let mockedDirective: MockedDirective<CustomNgForWithoutOfDirective> | undefined;
 
     const fixture = MockRender(`
         <div data-type="node-1"
