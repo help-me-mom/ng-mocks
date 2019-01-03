@@ -24,6 +24,6 @@ export class BundleItem {
     }
 
     public isTypescriptFile(): boolean {
-        return this.filename && !this.isTypingsFile() && /\.(ts|tsx)$/.test(this.filename);
+        return this.filename && !this.isTypingsFile() && /\.(ts|tsx|json)$/.test(this.filename);
     }
 }

@@ -8,6 +8,7 @@
         "module": "commonjs",
         "noImplicitAny": true,
         "outDir": "tmp",
+        "resolveJsonModule": true,
         "target": "ES5",
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
