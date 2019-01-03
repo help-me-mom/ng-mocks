@@ -18,4 +18,10 @@ describe("JsonImporter", () => {
 
         expect(tester.testRequireModuleRequiringJSON()).not.toBeUndefined();
     });
+
+    it("should support TS import of a json file", () => {
+        const { local, pkg } = tester.testTSImportJSON();
+        expect(local).toEqual([1, 2, 3, "a", "b", "c"]);
+        expect(pkg).not.toBeUndefined();
+    });
 });

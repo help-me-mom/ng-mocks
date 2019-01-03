@@ -15,4 +15,9 @@ export class JsonImportTester {
         // globals@9.14.0 requires a JSON file
         return require("globals");
     }
+
+    public testTSImportJSON(): any {
+
+        return require("./json-direct-import");
+    }
 }
