@@ -182,7 +182,7 @@ describe('MockComponent', () => {
       expect(templateOutlet).toBeTruthy();
 
       // looking for ng-content.
-      const ngContent = templateOutlet.query(By.css('[data-key="ng-content"]'));
+      const ngContent = templateOutlet;
       expect(ngContent).toBeTruthy();
       expect(ngContent.nativeElement.innerText.trim()).toEqual('ng-content body header ng-content body footer');
 

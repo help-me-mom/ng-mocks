@@ -1,5 +1,5 @@
 import { Component, Type } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 export function MockRender<TComponent>(template: string, params?: TComponent): ComponentFixture<TComponent> {
   const options: Component = {
@@ -14,8 +14,13 @@ export function MockRender<TComponent>(template: string, params?: TComponent): C
     }
   } as Type<TComponent>);
 
+  // Soft reset of TestBed.
+  (getTestBed() as any)._instantiated = false;
+  (getTestBed() as any)._moduleFactory = undefined;
+
+  // Injection of our template.
   TestBed.configureTestingModule({
-    declarations: [component]
+    declarations: [component],
   });
 
   const fixture = TestBed.createComponent(component);

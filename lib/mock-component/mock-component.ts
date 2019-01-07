@@ -63,7 +63,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<TCo
       }).join('');
     if (templateQueries) {
       template = `
-        <div data-key="ng-content">${template}</div>
+        ${template}
         ${templateQueries}
       `;
     }
