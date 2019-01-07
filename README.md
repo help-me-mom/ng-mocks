@@ -323,43 +323,49 @@ Providers simple way to render anything, change `@Inputs` and `@Outputs` of test
 
 ### Usage Example
 ```typescript
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { MockModule, MockRender } from 'ng-mocks';
+import { DependencyModule } from './dependency.module';
+import { TestedComponent } from './tested.component';
+
 describe('MockRender', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MockModule(AppModule),
-      ],
       declarations: [
-        Real1Component,
-        Real2Component,
-      ]
+        TestedComponent,
+      ],
+      imports: [
+        MockModule(DependencyModule),
+      ],
     });
   });
 
   it('renders ', () => {
+    const spy = jasmine.createSpy();
     const fixture = MockRender(
       `
-        <real-1 (click)="myListener1($event)" [some]="myParam1" other="check">
-          something as ng-content
-        </real-1>
-        <real-2 (click)="myParam2 = $event" [some]="myParam2">
+        <tested (trigger)="myListener1($event)" [value1]="myParam1" value2="check">
           <ng-template #header>
             something as ng-template
           </ng-template>
-        </real-2>
+          something as ng-content
+        </tested>
       `,
       {
+        myListener1: spy,
         myParam1: 'something1',
-        myParam2: 'something2',
-        myListener1: createSpy('myListener1'),
       }
     );
 
     // assert on some side effect
-    // fixture.componentInstance.myParam1;
-    // fixture.componentInstance.myParam2;
-    // fixture.componentInstance.myListener1;
+    const componentInstance = fixture.debugElement.query(By.directive(TestedComponent))
+      .componentInstance as TestedComponent;
+    componentInstance.trigger.emit('foo');
+    expect(componentInstance.value1).toEqual('something1');
+    expect(componentInstance.value2).toEqual('check');
+    expect(spy).toHaveBeenCalledWith('foo');
   });
 });
 ```
