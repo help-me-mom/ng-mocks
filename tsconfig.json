@@ -16,7 +16,11 @@
     "removeComments": true,
     "experimentalDecorators": true,
     "types" : ["node", "jasmine"],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "ng-mocks": ["index"]
+    }
   },
   "include": [
     "index.ts",

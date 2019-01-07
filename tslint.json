@@ -14,7 +14,7 @@
     "no-any": false,
     "no-disabled-tests": true,
     "no-empty": false,
-    "no-implicit-dependencies": [true, "dev"],
+    "no-implicit-dependencies": [true, "dev", ["ng-mocks"]],
     "no-floating-promises": false,
     "no-focused-tests": true,
     "no-submodule-imports": false,
