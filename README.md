@@ -199,33 +199,32 @@ Personally, I found the best thing to do for assertions is to override the trans
 
 ### Usage Example
 ```typescript
-import { async, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockComponent } from 'ng-mocks';
+import { MockPipe } from 'ng-mocks';
 import { DependencyPipe } from './dependency.pipe';
 import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
 
-  beforeEach(async() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         TestedComponent,
-        MockPipe(DependencyPipe, (...args) => JSON.stringify(args)), // alternatively you can use MockPipes to mock multiple but you lose the ability to override
+
+        // alternatively you can use MockPipes to mock multiple but you lose the ability to override
+        MockPipe(DependencyPipe, (...args) => JSON.stringify(args)),
       ]
-    })
-    .compileComponents();
-    .then(() => {
-      fixture = TestBed.createComponent(TestedComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
     });
-  }));
+
+    fixture = TestBed.createComponent(TestedComponent);
+    fixture.detectChanges();
+  });
 
   describe('with transform override', () => {
     it('should return the result of the provided transform function', () => {
-      expect(fixture.debugElement.query(By.css('#elementUsingPipe')).nativeElement.innerHTML).toEqual('foo');
+      expect(fixture.debugElement.query(By.css('span')).nativeElement.innerHTML).toEqual('["foo"]');
     });
   });
 });
