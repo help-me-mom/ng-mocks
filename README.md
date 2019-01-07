@@ -29,7 +29,7 @@ import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 
@@ -135,11 +135,11 @@ import { MockDirective, MockHelper } from 'ng-mocks';
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockDirective', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         TestedComponent,
@@ -205,7 +205,7 @@ import { MockPipe } from 'ng-mocks';
 import { DependencyPipe } from './dependency.pipe';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockPipe', () => {
   let fixture: ComponentFixture<TestedComponent>;
 
   beforeEach(() => {
@@ -245,7 +245,7 @@ import { MockComponent, MockedComponent } from 'ng-mocks';
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockReactiveForms', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 

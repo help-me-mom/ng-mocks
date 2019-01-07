@@ -5,7 +5,7 @@ import { MockComponent, MockedComponent } from 'ng-mocks';
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockReactiveForms', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 

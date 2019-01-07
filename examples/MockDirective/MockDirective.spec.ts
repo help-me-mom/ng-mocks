@@ -4,7 +4,7 @@ import { MockDirective, MockHelper } from 'ng-mocks';
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockDirective', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 
