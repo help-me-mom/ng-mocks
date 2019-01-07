@@ -1,6 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-interface ICustomNgForContext {
+export interface ICustomNgForContext {
   $implicit: string; // real value
   myFirst: boolean;
   myIndex: number;
