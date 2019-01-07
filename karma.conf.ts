@@ -15,8 +15,10 @@ module.exports = (config: any) => {
       'node_modules/zone.js/dist/async-test.js',
       'node_modules/zone.js/dist/fake-async-test.js',
       'karma-test-shim.ts',
-      { pattern: 'lib/**/*.ts' },
-      { pattern: 'e2e/**/*.ts' },
+      'index.ts',
+      {pattern: 'lib/**/*.ts'},
+      {pattern: 'e2e/**/*.ts'},
+      {pattern: 'examples/**/*.ts'}
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,
@@ -28,9 +30,12 @@ module.exports = (config: any) => {
     singleRun: true,
 
     karmaTypescriptConfig: {
-      compilerOptions: {
-        lib: ['ES2016', 'DOM']
-      }
+      include: [
+        'karma-test-shim.ts',
+        'e2e/**/*',
+        'examples/**/*',
+      ],
+      tsconfig: 'tsconfig.json'
     }
   });
 };
