@@ -4,7 +4,7 @@ import { MockPipe } from 'ng-mocks';
 import { DependencyPipe } from './dependency.pipe';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockPipe', () => {
   let fixture: ComponentFixture<TestedComponent>;
 
   beforeEach(() => {

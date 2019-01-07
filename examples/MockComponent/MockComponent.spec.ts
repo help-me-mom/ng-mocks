@@ -4,7 +4,7 @@ import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
 
-describe('TestedComponent', () => {
+describe('MockComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
   let component: TestedComponent;
 
