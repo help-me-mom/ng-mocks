@@ -129,47 +129,62 @@ describe('TestedComponent', () => {
 
 ### Usage Example
 ```typescript
-import { async, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockComponent } from 'ng-mocks';
+import { MockDirective, MockHelper } from 'ng-mocks';
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
 
 describe('TestedComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
+  let component: TestedComponent;
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [
         TestedComponent,
-        MockDirective(DependencyDirective)
+        MockDirective(DependencyDirective),
       ]
-    })
-    .compileComponents();
-    .then(() => {
-      fixture = TestBed.createComponent(TestedComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
     });
-  }));
+
+    fixture = TestBed.createComponent(TestedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should send the correct value to the dependency component input', () => {
+    component.value = 'foo';
+    fixture.detectChanges();
+
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
-    const debugElement = fixture.debugElement.query(By.directive(DependencyDirective));
-    const mockedDirectiveInstance = debugElement.injector
-                                                .get(DependencyDirective) as DependencyDirective; // casting to retain type safety
-    expect(mockedDirectiveInstance.someInput).toEqual('foo');
+    const mockedDirectiveInstance = MockHelper.getDirective(
+      fixture.debugElement.query(By.css('span')),
+      DependencyDirective,
+    );
+    expect(mockedDirectiveInstance).toBeTruthy();
+    if (mockedDirectiveInstance) {
+      expect(mockedDirectiveInstance.someInput).toEqual('foo');
+    }
+    // assert on some side effect
   });
 
   it('should do something when the dependency directive emits on its output', () => {
-    const debugElement = fixture.debugElement.query(By.directive(DependencyDirective));
-    const mockedDirectiveInstance = debugElement.injector
-                                                .get(DependencyDirective) as DependencyDirective; // casting to retain type safety
+    spyOn(component, 'trigger');
+    fixture.detectChanges();
+
     // again, let's pretend DependencyDirective has an output called 'someOutput'
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
-    mockedDirectiveInstance.someOutput.emit(new Foo()); // if you casted mockedDirective as the original component type then this is type safe
-    fixture.detectChanges();
+    const mockedDirectiveInstance = MockHelper.getDirective(
+      fixture.debugElement.query(By.css('span')),
+      DependencyDirective,
+    );
+    expect(mockedDirectiveInstance).toBeTruthy();
+    if (mockedDirectiveInstance) {
+      mockedDirectiveInstance.someOutput.emit({
+        payload: 'foo',
+      }); // if you casted mockedDirective as the original component type then this is type safe
+    }
     // assert on some side effect
   });
 });
