@@ -288,24 +288,33 @@ For providers I typically will use TestBed.get(SomeProvider) and extend it using
 
 ### Usage Example
 ```typescript
-describe('MockModule', () => {
-  let fixture: ComponentFixture<ComponentSubject>;
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockModule } from 'ng-mocks';
+import { DependencyModule } from './dependency.module';
+import { TestedComponent } from './tested.component';
 
-  beforeEach(async(() => {
+describe('MockModule', () => {
+  let fixture: ComponentFixture<TestedComponent>;
+  let component: TestedComponent;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ComponentSubject
+        TestedComponent,
       ],
       imports: [
-        MockModule(DependencyModule)
+        MockModule(DependencyModule),
       ],
-    })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ComponentSubject);
-      fixture.detectChanges();
     });
-  }));
+
+    fixture = TestBed.createComponent(TestedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('renders nothing without any error', () => {
+    expect(component).toBeTruthy();
+  });
 });
 ```
 
