@@ -55,7 +55,7 @@ The above example will compile all Typescript files and run the unit tests, prod
 
 ## Examples
 
-[Cookbook](https://github.com/monounity/karma-typescript/tree/master/cookbook.md)
+[Cookbook](https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/cookbook.md)
 
 ### Frameworks and Integrations
 
