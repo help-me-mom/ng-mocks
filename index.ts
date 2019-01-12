@@ -5,3 +5,4 @@ export * from './lib/mock-directive';
 export * from './lib/mock-render';
 export * from './lib/mock-module';
 export * from './lib/mock-pipe';
+export * from './lib/mock-provider';

@@ -320,6 +320,56 @@ describe('MockRender', () => {
 });
 ```
 
+## MockProvider
+
+Provides simple way to providers/services when including them in the testing module. 
+
+By default provider will be mocked with an empty method, but if you provide factory method for mocking, all methods will be mocked with that setting. This is useful for example when we want to mock service methods with something like `jasmine.createSpy` or `jest.fn()`.
+
+### Usage Example
+```typescript
+describe('MockProvider', () => {
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        MockProvider(RealService)
+      ]
+    });
+
+    const service = TestBed.get(RealService);
+  });
+});
+```
+
+With factory method:
+```typescript
+describe('MockProvider', () => {
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        MockProvider(RealService, (methodName) => jasmine.createSpy(methodName))
+      ]
+    });
+  });
+
+  it('call service', () => {
+    const service = TestBed.get(RealService);
+
+    // Assuming that component calls the service:
+    expect(service.callMethod).toHaveBeenCalled();
+  });
+});
+```
+
+### Limitations
+
+Current limitations of MockProvider are not being able to mock:
+- properties
+- arrow functions (defined as properties)
+
+
 ## Find an issue or have a request?
 Report it as an issue or submit a PR.  I'm open to contributions.
 
