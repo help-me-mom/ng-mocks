@@ -106,10 +106,10 @@ test("transformer should use custom options", (t) => {
                                   "::-ms-input-placeholder {}" +
                                   "\n::placeholder {}" +
                                   "\n/*# sourceMappingURL=data:application/json;base64," +
-                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hbWVz" +
-                                  "IjpbXSwibWFwcGluZ3MiOiJBQUFBLDhCQUFnQjtBQUFoQix5QkFBZ0I7" +
-                                  "QUFBaEIsMEJBQWdCO0FBQWhCLGdCQUFnQiIsImZpbGUiOiJmaWxlLmNz" +
-                                  "cyIsInNvdXJjZXNDb250ZW50IjpbIjo6cGxhY2Vob2xkZXIge30iXX0= */");
+                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hb" +
+                                  "WVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLDZCQUFlO0FBQWYsd0JBQW" +
+                                  "U7QUFBZix5QkFBZTtBQUFmLGVBQWUiLCJmaWxlIjoiZmlsZS5jc3M" +
+                                  "iLCJzb3VyY2VzQ29udGVudCI6WyI6OnBsYWNlaG9sZGVyIHt9Il19 */");
     });
 });
 
