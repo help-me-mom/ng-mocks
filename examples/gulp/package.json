@@ -1,6 +1,6 @@
 {
   "name": "foobar",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "description": "Example project for running a sequence of gulp tasks, issue https://github.com/monounity/karma-typescript/issues/29",
   "author": "https://github.com/kubut",
   "main": "index.js",
