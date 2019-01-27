@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockOf } from '../common';
 import { jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockDeclaration } from '../mock-declaration';
@@ -17,15 +15,34 @@ interface IModuleOptions {
   providers?: Provider[];
 }
 
+// Some modules inject own providers, which don't allow mocks due to conflicts with test env.
+// We have to avoid any injection of those providers to mock everything properly.
+const neverMockProvidedToken = [
+  // RouterModule
+  'InjectionToken Application Initializer',
+];
+const neverMockProvidedFunction = [
+  // BrowserModule
+  'ApplicationInitStatus',
+  'DomRendererFactory2',
+  // BrowserAnimationsModule
+  'RendererFactory2',
+];
+
 const mockProvider = (provider: any): Provider | undefined => {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
   const multi = typeof provider === 'object' && provider.multi;
 
-  // RouterModule injects own Application Initializer, which doesn't allow mocks due to own logic.
-  // We have to avoid any injection of Application Initializer to mock everything properly.
   if (
     typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
-    && provide.toString() === 'InjectionToken Application Initializer'
+    && neverMockProvidedToken.includes(provide.toString())
+  ) {
+    return undefined;
+  }
+
+  if (
+    typeof provide === 'function'
+    && neverMockProvidedFunction.includes(provide.name)
   ) {
     return undefined;
   }
@@ -100,7 +117,7 @@ export function MockModule(module: ImportInstance): ImportInstance {
   return moduleMockPointer;
 }
 
-const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule, BrowserModule, BrowserAnimationsModule];
+const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule];
 
 function MockIt(module: Type<NgModule>): IModuleOptions {
   const mockedModule: IModuleOptions = {};
