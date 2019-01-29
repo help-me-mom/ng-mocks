@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "fs-extra": "^7.0.1",
-    "lerna": "^3.4.3"
+    "lerna": "^3.10.7"
   },
   "collective": {
     "type": "opencollective",
