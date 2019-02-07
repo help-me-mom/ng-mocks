@@ -37,7 +37,7 @@ export class Resolver {
                          buffer: BundleItem[],
                          onModuleResolved: (bundleItem: BundleItem) => void) {
 
-        if (bundleItem.isTypescriptFile()) {
+        if (bundleItem.isTypescriptFile() && !bundleItem.isNpmModule()) {
             process.nextTick(() => {
                 onModuleResolved(bundleItem);
             });
