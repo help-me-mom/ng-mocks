@@ -86,7 +86,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
       // In case of structural directives we don't know how to render it properly when it's mocked.
       // Because variables can be mapped, reduced, changed etc.
-      // Due to that we render it without any variables.
+      // Due to that we can't render it at all, because templates like {{ var[key] }} will always trigger errors
+      // when var is undefined and basically break mocked component.
       if (viewContainer && template) {
         (this as any).__render();
       }
