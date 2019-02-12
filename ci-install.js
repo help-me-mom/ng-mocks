@@ -1,11 +1,11 @@
 const fse = require("fs-extra");
 
 const packages = [
-    "packages/karma-typescript",
-    "packages/karma-typescript-angular2-transform",
-    "packages/karma-typescript-cssmodules-transform",
-    "packages/karma-typescript-es6-transform",
-    "packages/karma-typescript-postcss-transform"
+    "karma-typescript",
+    "karma-typescript-angular2-transform",
+    "karma-typescript-cssmodules-transform",
+    "karma-typescript-es6-transform",
+    "karma-typescript-postcss-transform"
 ];
 
 const projects = [
@@ -19,7 +19,7 @@ for (const package of packages) {
     for (const project of projects) {
         console.log(`Copying ${package} to ${project}`);
         fse.emptyDirSync(`${project}/node_modules/${package}`);
-        fse.copySync(`${package}/dist/`, `${project}/node_modules/${package}/dist/`);
-        fse.copyFileSync(`${package}/package.json`, `${project}/node_modules/${package}/package.json`);
+        fse.copySync(`packages/${package}/dist/`, `${project}/node_modules/${package}/dist/`);
+        fse.copyFileSync(`packages/${package}/package.json`, `${project}/node_modules/${package}/package.json`);
     }
 }
