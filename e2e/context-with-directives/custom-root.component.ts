@@ -10,15 +10,14 @@ import { CustomTypeDirective } from './custom-type.directive';
       <div *ngIf="template1" class="template1">
           <ng-container *ngTemplateOutlet="template1; context {$implicit: context1}"></ng-container>
       </div>
-      <div *ngIf="template1" class="template2">
-          <ng-container *ngTemplateOutlet="template2; context {$implicit: context2}"></ng-container>
+      <div class="nested">
+          <ng-content></ng-content>
       </div>
   `,
 })
 export class CustomRootComponent implements AfterContentInit {
   public context = ['0'];
   public context1 = ['1'];
-  public context2 = ['2'];
   public template: TemplateRef<any>;
   public template1: TemplateRef<any>;
   public template2: TemplateRef<any>;

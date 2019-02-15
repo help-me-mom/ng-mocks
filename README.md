@@ -127,7 +127,7 @@ describe('MockComponent', () => {
 * Each directive instance has its own EventEmitter instances for outputs
 * exportAs support
 
-### Usage Example
+### Usage Example of Attribute Directives
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -184,6 +184,54 @@ describe('MockDirective', () => {
       mockedDirectiveInstance.someOutput.emit({
         payload: 'foo',
       }); // if you casted mockedDirective as the original component type then this is type safe
+    }
+    // assert on some side effect
+  });
+});
+```
+### Usage Example of Structural Directives
+It's important to render a structural directive first with right context,
+when assertions should be done on its nested elements.
+```typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockDirective, MockedDirective, MockHelper } from 'ng-mocks';
+import { DependencyDirective } from './dependency.directive';
+import { TestedComponent } from './tested.component';
+
+describe('MockDirective', () => {
+  let fixture: ComponentFixture<TestedComponent>;
+  let component: TestedComponent;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        TestedComponent,
+        MockDirective(DependencyDirective),
+      ]
+    });
+
+    fixture = TestBed.createComponent(TestedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should send the correct value to the dependency component input', () => {
+    component.value = 'foo';
+    fixture.detectChanges();
+
+    // IMPORTANT: by default structural directives aren't rendered.
+    // Because we can't automatically detect when and with which context they should be rendered.
+    // Usually developer knows context and can render it manually with proper setup.
+    const mockedDirectiveInstance = MockHelper.findDirective(
+      fixture.debugElement, DependencyDirective
+    ) as MockedDirective<DependencyDirective>;
+    fixture.detectChanges();
+
+    // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
+    // the input value will be passed into the mocked directive so you can assert on it
+    expect(mockedDirectiveInstance).toBeTruthy();
+    if (mockedDirectiveInstance) {
+      expect(mockedDirectiveInstance.someInput).toEqual('foo');
     }
     // assert on some side effect
   });
@@ -369,6 +417,25 @@ describe('MockRender', () => {
   });
 });
 ```
+
+## MockHelper
+MockHelper provides 3 methods to get attribute and structural directives from an element. 
+
+`MockHelper.getDirective(fixture.debugElement, Directive)` -
+returns attribute or structural directive which belongs to current element.
+
+`MockHelper.findDirective(fixture.debugElement, Directive)` -
+returns first found attribute or structural directive which belongs to current element or any child.
+
+`MockHelper.findDirectives(fixture.debugElement, Directive)`
+returns all found attribute or structural directives which belong to current element and all its child.
+
+## Other examples of tests
+More detailed examples can be found in
+[e2e](https://github.com/ike18t/ng-mocks/tree/master/e2e)
+and in
+[examples](https://github.com/ike18t/ng-mocks/tree/master/examples)
+directories in the repo.
 
 ## Find an issue or have a request?
 Report it as an issue or submit a PR.  I'm open to contributions.

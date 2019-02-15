@@ -64,7 +64,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-typescript": "^3.0.13",
+    "karma-typescript": "^4.0.0",
     "rxjs": "^6.0.0",
     "standard-version": "^4.3.0",
     "tslint": "^5.11.0",
