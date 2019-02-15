@@ -1,29 +1,41 @@
 /* tslint:disable:variable-name */
 
-import { DebugElement, Type } from '@angular/core';
+import { DebugNode, Type } from '@angular/core';
+
+interface INestedNodes extends DebugNode {
+  childNodes?: INestedNodes[];
+}
+
+function nestedCheck<T>(result: T[], node: INestedNodes, callback: (node: INestedNodes) => undefined | T) {
+  const element = callback(node);
+  if (element) {
+    result.push(element);
+  }
+  const childNodes = node.childNodes ? node.childNodes : [];
+  childNodes.forEach((childNode) => {
+    nestedCheck(result, childNode, callback);
+  });
+}
 
 export const MockHelper = {
-  getDirective: <T>(debugElement: DebugElement, directive: Type<T>): undefined | T => {
+  getDirective: <T>(debugNode: DebugNode, directive: Type<T>): undefined | T => {
     // Looking for related attribute directive.
     try {
-      return debugElement.injector.get(directive);
+      return debugNode.injector.get(directive);
     } catch (error) {
       // looks like the directive is structural.
     }
 
     // Looking for related structural directive.
     // It's located as prev node.
-    if (!debugElement.parent) {
+    if (!debugNode || !debugNode.parent) {
       return undefined;
     }
-    const prevNode = debugElement.nativeNode.previousSibling;
-    if (!prevNode) {
+    const prevNode = debugNode.nativeNode.previousSibling;
+    if (!prevNode || prevNode.nodeName !== '#comment') {
       return undefined;
     }
-    if (prevNode.nodeName !== '#comment') {
-      return undefined;
-    }
-    const matches = debugElement.parent.queryAllNodes((node) => node.nativeNode === prevNode);
+    const matches = debugNode.parent.queryAllNodes((node) => node.nativeNode === prevNode);
     if (matches.length === 0) {
       return undefined;
     }
@@ -33,5 +45,29 @@ export const MockHelper = {
     } catch (error) {
       return undefined;
     }
+  },
+
+  findDirective: <T>(debugNode: DebugNode, directive: Type<T>): undefined | T => {
+    const result: T[] = [];
+    nestedCheck<T>(result, debugNode, (node) => {
+      try {
+        return node.injector.get(directive);
+      } catch (error) {
+        return undefined;
+      }
+    });
+    return result.length ? result[0] : undefined;
+  },
+
+  findDirectives: <T>(debugNode: DebugNode, directive: Type<T>): T[] => {
+    const result: T[] = [];
+    nestedCheck<T>(result, debugNode, (node) => {
+      try {
+        return node.injector.get(directive);
+      } catch (error) {
+        return undefined;
+      }
+    });
+    return result;
   }
 };

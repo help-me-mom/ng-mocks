@@ -2,6 +2,7 @@ import { Component, Directive, EventEmitter, Input, Output, ViewChild } from '@a
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { MockedDirective, MockHelper } from 'ng-mocks';
 import { MockDirective } from './mock-directive';
 
 // tslint:disable:max-classes-per-file
@@ -105,6 +106,14 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
+    const mockedDirective = MockHelper
+    .findDirective(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<ExampleStructuralDirective>;
+
+    // structural directives should be rendered first.
+    mockedDirective.__render();
+    fixture.detectChanges();
+    expect(mockedDirective.exampleStructuralDirective).toBeTruthy();
+
     const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
   });

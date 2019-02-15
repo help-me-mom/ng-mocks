@@ -112,6 +112,14 @@ describe('structural-directive-as-ng-for:mock', () => {
         'string3',
       ],
     });
+
+    // we need to render mocked structural directives manually
+    MockHelper.findDirectives(fixture.debugElement, CustomNgIfDirective)
+    .forEach((item: MockedDirective<CustomNgIfDirective>) => item.__render(undefined, {
+      fromDirective: undefined,
+    }));
+    fixture.detectChanges();
+
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('$implicit: fromDirective:');
 
@@ -162,6 +170,12 @@ describe('structural-directive-as-ng-for:mock', () => {
         'string3',
       ],
     });
+
+    // we need to render mocked structural directives manually
+    MockHelper.findDirectives(fixture.debugElement, CustomNgForWithOfDirective)
+    .forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
+    fixture.detectChanges();
+
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('w/ 00');
 
@@ -218,6 +232,12 @@ describe('structural-directive-as-ng-for:mock', () => {
         'string3',
       ],
     });
+
+    // we need to render mocked structural directives manually
+    MockHelper.findDirectives(fixture.debugElement, CustomNgForWithoutOfDirective)
+    .forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
+    fixture.detectChanges();
+
     // By default mocked structural directives are rendered with undefined variables.
     expect(fixture.nativeElement.innerText).toEqual('w/o 00');
 
@@ -287,6 +307,13 @@ describe('structural-directive-as-ng-for:mock', () => {
         'string6',
       ],
     });
+
+    // we need to render mocked structural directives manually
+    MockHelper.findDirectives(fixture.debugElement, CustomNgForWithOfDirective)
+    .forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
+    MockHelper.findDirectives(fixture.debugElement, CustomNgForWithoutOfDirective)
+    .forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
+    fixture.detectChanges();
 
     // Looking for first directive.
     debugElement = fixture.debugElement.query(By.css('[data-type="node-1"]'));

@@ -62,9 +62,12 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       @Optional() viewContainer?: ViewContainerRef,
     ) {
       (this as any).__element = element;
-      (this as any).__isStructural = viewContainer && template;
+
+      // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
+      // In our case we don't if we should render it or not and due to this we do nothing.
       (this as any).__template = template;
       (this as any).__viewContainer = viewContainer;
+      (this as any).__isStructural = template && viewContainer;
 
       Object.keys(directive.prototype).forEach((method) => {
         if (!(this as any)[method]) {
@@ -83,14 +86,6 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
           viewContainer.createEmbeddedView(template, {...variables, $implicit});
         }
       };
-
-      // In case of structural directives we don't know how to render it properly when it's mocked.
-      // Because variables can be mapped, reduced, changed etc.
-      // Due to that we can't render it at all, because templates like {{ var[key] }} will always trigger errors
-      // when var is undefined and basically break mocked component.
-      if (viewContainer && template) {
-        (this as any).__render();
-      }
     }
   }
   // tslint:enable:no-unnecessary-class
