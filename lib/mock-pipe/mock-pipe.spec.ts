@@ -1,6 +1,7 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { MockPipe } from './mock-pipe';
 
 @Pipe({ name: 'mockedPipe' })

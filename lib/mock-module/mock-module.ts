@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
+
 import { MockOf } from '../common';
 import { jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockDeclaration } from '../mock-declaration';

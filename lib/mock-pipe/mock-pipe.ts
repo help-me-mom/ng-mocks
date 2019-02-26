@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform, Type } from '@angular/core';
+
 import { MockOf } from '../common';
 import { pipeResolver } from '../common/reflect';
 

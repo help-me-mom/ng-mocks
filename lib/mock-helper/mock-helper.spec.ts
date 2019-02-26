@@ -3,8 +3,10 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { MockDirective, MockedDirective } from '../mock-directive';
 import { MockRender } from '../mock-render';
+
 import { MockHelper } from './mock-helper';
 
 @Directive({

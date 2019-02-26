@@ -1,4 +1,5 @@
 import { Type } from '@angular/core';
+
 import { jitReflector, pipeResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';

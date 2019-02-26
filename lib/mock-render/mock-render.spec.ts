@@ -1,6 +1,7 @@
 import createSpy = jasmine.createSpy;
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { MockRender } from './mock-render';
 import { RenderRealComponent } from './mock-render.fixtures';
 

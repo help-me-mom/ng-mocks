@@ -1,4 +1,5 @@
 import { MockDirectiveResolver, MockNgModuleResolver, MockPipeResolver } from '@angular/compiler/testing';
+
 import { JitReflector } from './jit-reflector';
 
 export const jitReflector = new JitReflector();
