@@ -5,7 +5,9 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MockComponent } from '../mock-component';
+
 import { MockModule } from './mock-module';
 import {
   AppRoutingModule,

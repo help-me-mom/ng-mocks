@@ -1,10 +1,43 @@
 import { Component, Type } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
-export function MockRender<TComponent>(template: string, params?: TComponent): ComponentFixture<TComponent> {
+import { directiveResolver } from '../common/reflect';
+
+function MockRender<MComponent, TComponent extends {[key: string]: any}>(
+  template: string | Type<MComponent>,
+  params?: TComponent
+): ComponentFixture<TComponent> {
+  let mockedTemplate = '';
+  if (typeof template === 'string') {
+    mockedTemplate = template;
+  } else {
+    const {inputs, outputs, selector} = directiveResolver.resolve(template);
+    mockedTemplate += `<${selector}`;
+    if (inputs) {
+      inputs.forEach((definition: string) => {
+        const [property, alias] = definition.split(': ');
+        if (alias && params && typeof params[alias]) {
+          mockedTemplate += ` [${alias}]="${alias}"`;
+        } else if (property && params && typeof params[property]) {
+          mockedTemplate += ` [${property}]="${property}"`;
+        }
+      });
+    }
+    if (outputs) {
+      outputs.forEach((definition: string) => {
+        const [property, alias] = definition.split(': ');
+        if (alias && params && typeof params[alias]) {
+          mockedTemplate += ` (${alias})="${alias}($event)"`;
+        } else if (property && params && typeof params[property]) {
+          mockedTemplate += ` (${property})="${property}($event)"`;
+        }
+      });
+    }
+    mockedTemplate += `></${selector}>`;
+  }
   const options: Component = {
     selector: 'mock-render',
-    template
+    template: mockedTemplate,
   };
 
   // tslint:disable-next-line:no-angle-bracket-type-assertion
@@ -27,3 +60,5 @@ export function MockRender<TComponent>(template: string, params?: TComponent): C
   fixture.detectChanges();
   return fixture;
 }
+
+export { MockRender };

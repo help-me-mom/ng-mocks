@@ -8,6 +8,7 @@ import {
   Type,
   ViewContainerRef
 } from '@angular/core';
+
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
