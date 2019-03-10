@@ -72,6 +72,8 @@
     "karma-typescript-cssmodules-transform": "latest",
     "karma-typescript-es6-transform": "latest",
     "karma-typescript-postcss-transform": "latest",
+    "kt-commonjs-a": "file:src/exports/kt-commonjs-a",
+    "kt-commonjs-b": "file:src/exports/kt-commonjs-b",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
     "moment": "^2.17.1",
