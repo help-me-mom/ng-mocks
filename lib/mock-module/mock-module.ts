@@ -122,7 +122,7 @@ const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule];
 
 function MockIt(module: Type<NgModule>): IModuleOptions {
   const mockedModule: IModuleOptions = {};
-  const {declarations = [], imports = [], exports = [], providers = []} = ngModuleResolver.resolve(module);
+  const {declarations = [], imports = [], providers = []} = ngModuleResolver.resolve(module);
 
   if (imports.length) {
     mockedModule.imports = flatten(imports).map((instance: Type<any>) => {
@@ -145,23 +145,11 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
       .filter((provider) => !!provider) as Provider[];
   }
 
-  if (exports.length) {
-    mockedModule.exports = flatten(exports).map((instance: Type<any>) => {
-      if (isModule(instance)) {
-        return MockModule(instance) as Type<NgModule>;
-      }
-      if (isModuleWithProviders(instance)) {
-        return MockModule(instance);
-      }
-      return MockDeclaration(instance);
-    }) as Array<Type<any>>;
-  }
-
   // When we mock module only exported declarations are accessible inside of test.
   // Because of that we have to export everything what a module imports or declares.
   // Unfortunately in that case tests won't fail when some module has missed exports.
   if (mockedModule.declarations || mockedModule.imports) {
-    mockedModule.exports = mockedModule.exports || [];
+    mockedModule.exports = [];
 
     if (mockedModule.imports) {
       const onlyModules = mockedModule.imports.map((instance) => {
