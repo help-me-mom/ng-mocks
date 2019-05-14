@@ -11,6 +11,7 @@ export type ImportInstance = Type<NgModule> | ModuleWithProviders;
 
 interface IModuleOptions {
   declarations?: Array<Type<any>>;
+  entryComponents?: Array<Type<any>>;
   exports?: Array<Type<any>>;
   imports?: Array<Type<any> | ModuleWithProviders | any[]>;
   providers?: Provider[];
@@ -122,7 +123,7 @@ const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule];
 
 function MockIt(module: Type<NgModule>): IModuleOptions {
   const mockedModule: IModuleOptions = {};
-  const {declarations = [], imports = [], providers = []} = ngModuleResolver.resolve(module);
+  const { declarations = [], entryComponents = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
 
   if (imports.length) {
     mockedModule.imports = flatten(imports).map((instance: Type<any>) => {
@@ -138,6 +139,10 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
 
   if (declarations.length) {
     mockedModule.declarations = flatten(declarations).map(MockDeclaration);
+  }
+
+  if (entryComponents.length) {
+    mockedModule.entryComponents = flatten(entryComponents).map(MockDeclaration);
   }
 
   if (providers.length) {

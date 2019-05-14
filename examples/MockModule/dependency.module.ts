@@ -6,6 +6,9 @@ import { DependencyComponent } from './dependency.component';
   declarations: [
     DependencyComponent
   ],
+  entryComponents: [
+    DependencyComponent
+  ],
   imports: [
     CommonModule,
   ],
