@@ -73,11 +73,15 @@ export class Bundler {
     }
 
     private bundleQueuedModules() {
+        // Drain the bundle queue and keep a copy of the current items. This prevents problems
+        // when a new bundle is queued while transformations are running.
+        const queuedItems = this.bundleQueue.slice(0);
+        this.bundleQueue.length = 0;
 
         const benchmark = new Benchmark();
 
-        this.transformer.applyTsTransforms(this.bundleQueue, () => {
-            this.bundleQueue.forEach((queued) => {
+        this.transformer.applyTsTransforms(queuedItems, () => {
+            queuedItems.forEach((queued) => {
 
                 const source = this.sourceMap.removeSourceMapComment(queued);
                 const map = this.sourceMap.getSourceMap(queued);
@@ -91,13 +95,13 @@ export class Bundler {
                     queued.file.path, queued.file.originalPath, source, map);
             });
 
-            const dependencyCount = this.dependencyWalker.collectTypescriptDependencies(this.bundleQueue);
+            const dependencyCount = this.dependencyWalker.collectTypescriptDependencies(queuedItems);
 
             if (this.shouldBundle(dependencyCount)) {
-                this.bundleWithLoader(benchmark);
+                this.bundleWithLoader(benchmark, queuedItems);
             }
             else {
-                this.bundleWithoutLoader();
+                this.bundleWithoutLoader(queuedItems);
             }
         });
     }
@@ -119,9 +123,9 @@ export class Bundler {
         return this.projectImportCountOnFirstRun > 0;
     }
 
-    private bundleWithLoader(benchmark: Benchmark) {
+    private bundleWithLoader(benchmark: Benchmark, queuedItems: Queued[]) {
 
-        async.each(this.bundleQueue, (queued, onQueuedResolved) => {
+        async.each(queuedItems, (queued, onQueuedResolved) => {
 
             this.addEntrypointFilename(queued.item.filename);
 
@@ -131,14 +135,14 @@ export class Bundler {
                 });
             }, onQueuedResolved);
         }, () => {
-            this.onAllResolved(benchmark);
+            this.onAllResolved(benchmark, queuedItems);
         });
     }
 
-    private bundleWithoutLoader() {
+    private bundleWithoutLoader(queuedItems: Queued[]) {
         this.globals.add(this.bundleBuffer, this.entrypoints, () => {
             this.writeMainBundleFile(() => {
-                this.bundleQueue.forEach((queued) => {
+                queuedItems.forEach((queued) => {
                     const source = queued.item.source + "\n" +
                         (queued.item.sourceMap ? queued.item.sourceMap.toComment() + "\n" : "");
                     queued.callback(source);
@@ -147,23 +151,21 @@ export class Bundler {
         });
     }
 
-    private onAllResolved(benchmark: Benchmark) {
+    private onAllResolved(benchmark: Benchmark, queuedItems: Queued[]) {
 
         this.orderEntrypoints();
 
         this.globals.add(this.bundleBuffer, this.entrypoints, () => {
             this.writeMainBundleFile(() => {
                 this.log.info("Bundled imports for %s file(s) in %s ms.",
-                    this.bundleQueue.length, benchmark.elapsed());
+                    queuedItems.length, benchmark.elapsed());
 
-                this.bundleQueue.forEach((queued) => {
+                queuedItems.forEach((queued) => {
                     queued.callback(this.addLoaderFunction(queued.item, true));
                 });
 
                 this.log.debug("Karma callbacks for %s file(s) in %s ms.",
-                    this.bundleQueue.length, benchmark.elapsed());
-
-                this.bundleQueue.length = 0;
+                    queuedItems.length, benchmark.elapsed());
             });
         });
     }
