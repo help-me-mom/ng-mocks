@@ -11,7 +11,7 @@ import { CompileCallback } from "./compile-callback";
 
 interface CompiledFiles { [key: string]: string; }
 
-    interface Queued {
+interface Queued {
     file: File;
     callback: CompileCallback;
 }
