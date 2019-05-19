@@ -11,7 +11,7 @@ import { CompileCallback } from "./compile-callback";
 
 interface CompiledFiles { [key: string]: string; }
 
-interface Queued {
+    interface Queued {
     file: File;
     callback: CompileCallback;
 }
@@ -61,7 +61,13 @@ export class Compiler {
 
         this.outputDiagnostics(tsconfig.errors);
 
-        this.program = ts.createProgram(tsconfig.fileNames, tsconfig.options, this.compilerHost);
+        this.program = ts.createProgram({
+            rootNames: tsconfig.fileNames,
+            options: tsconfig.options,
+            projectReferences: tsconfig.projectReferences,
+            host: this.compilerHost
+        });
+
         this.cachedProgram = this.program;
 
         this.runDiagnostics(this.program, this.compilerHost);
