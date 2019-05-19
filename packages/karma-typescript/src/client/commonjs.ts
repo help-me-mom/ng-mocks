@@ -1,4 +1,4 @@
-((global) => {
+((global: any) => {
     "use strict";
     global.__karmaTypescriptModules__ =  {};
     const fn = 0;
