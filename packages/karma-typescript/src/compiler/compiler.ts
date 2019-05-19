@@ -62,10 +62,10 @@ export class Compiler {
         this.outputDiagnostics(tsconfig.errors);
 
         this.program = ts.createProgram({
-            rootNames: tsconfig.fileNames,
+            host: this.compilerHost,
             options: tsconfig.options,
             projectReferences: tsconfig.projectReferences,
-            host: this.compilerHost
+            rootNames: tsconfig.fileNames
         });
 
         this.cachedProgram = this.program;
