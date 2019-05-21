@@ -90,6 +90,7 @@ test("transformer should set the source property to the processed value", (t) =>
 
     transform(require("autoprefixer"))(context, () => {
         t.isEqual(context.source, "::-webkit-input-placeholder {}\n" +
+                                  "::-moz-placeholder {}\n" +
                                   ":-ms-input-placeholder {}\n" +
                                   "::-ms-input-placeholder {}\n::placeholder {}");
     });
@@ -107,9 +108,10 @@ test("transformer should use custom options", (t) => {
                                   "\n::placeholder {}" +
                                   "\n/*# sourceMappingURL=data:application/json;base64," +
                                   "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hb" +
-                                  "WVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLDZCQUFlO0FBQWYsd0JBQW" +
-                                  "U7QUFBZix5QkFBZTtBQUFmLGVBQWUiLCJmaWxlIjoiZmlsZS5jc3M" +
-                                  "iLCJzb3VyY2VzQ29udGVudCI6WyI6OnBsYWNlaG9sZGVyIHt9Il19 */");
+                                  "WVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLDZCQUFlO0FBQWYsb0JBQW" +
+                                  "U7QUFBZix3QkFBZTtBQUFmLHlCQUFlO0FBQWYsZUFBZSIsImZpbGU" +
+                                  "iOiJmaWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6cGxhY2Vo" +
+                                  "b2xkZXIge30iXX0 */");
     });
 });
 
