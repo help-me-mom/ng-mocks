@@ -112,7 +112,7 @@ test("transformer should use custom options", (t) => {
                                   "WVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLDZCQUFlO0FBQWYsb0JBQW" +
                                   "U7QUFBZix3QkFBZTtBQUFmLHlCQUFlO0FBQWYsZUFBZSIsImZpbGU" +
                                   "iOiJmaWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6cGxhY2Vo" +
-                                  "b2xkZXIge30iXX0=*/");
+                                  "b2xkZXIge30iXX0= */");
     });
 });
 
