@@ -61,7 +61,18 @@ export class Compiler {
 
         this.outputDiagnostics(tsconfig.errors);
 
-        this.program = ts.createProgram(tsconfig.fileNames, tsconfig.options, this.compilerHost);
+        if (+ts.version[0] >= 3) {
+            this.program = ts.createProgram({
+                host: this.compilerHost,
+                options: tsconfig.options,
+                projectReferences: tsconfig.projectReferences,
+                rootNames: tsconfig.fileNames
+            });
+        }
+        else {
+            this.program = ts.createProgram(tsconfig.fileNames, tsconfig.options, this.compilerHost);
+        }
+
         this.cachedProgram = this.program;
 
         this.runDiagnostics(this.program, this.compilerHost);
