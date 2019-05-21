@@ -103,6 +103,7 @@ test("transformer should use custom options", (t) => {
 
     transform(require("autoprefixer"), { map: { inline: true } })(context, () => {
         t.isEqual(context.source, "::-webkit-input-placeholder {}" +
+                                  "::-moz-placeholder {}\n" +
                                   "\n:-ms-input-placeholder {}\n" +
                                   "::-ms-input-placeholder {}" +
                                   "\n::placeholder {}" +
