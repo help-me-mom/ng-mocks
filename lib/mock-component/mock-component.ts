@@ -1,3 +1,4 @@
+import { core } from '@angular/compiler';
 import {
   ChangeDetectorRef,
   Component,
@@ -7,7 +8,7 @@ import {
   TemplateRef,
   Type,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -28,16 +29,16 @@ export type MockedComponent<T> = T & {
 };
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<any>> {
-  return components.map(MockComponent);
+  return components.map((component) => MockComponent(component, undefined));
 }
 
-export function MockComponent<TComponent>(component: Type<TComponent>): Type<TComponent> {
+export function MockComponent<TComponent>(component: Type<TComponent>, metaData?: core.Directive): Type<TComponent> {
   const cacheHit = cache.get(component);
   if (cacheHit) {
     return cacheHit as Type<TComponent>;
   }
 
-  const { exportAs, inputs, outputs, queries, selector } = directiveResolver.resolve(component);
+  const { exportAs, inputs, outputs, queries, selector } = metaData || directiveResolver.resolve(component);
 
   let template = `<ng-content></ng-content>`;
   const viewChildRefs = new Map<string, string>();
