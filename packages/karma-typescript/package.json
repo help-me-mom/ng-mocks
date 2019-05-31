@@ -71,8 +71,8 @@
   "dependencies": {
     "acorn": "^6.0.5",
     "acorn-walk": "^6.1.1",
-    "assert": "^1.4.1",
-    "async": "^2.6.1",
+    "assert": "^2.0.0",
+    "async": "^3.0.1",
     "browser-resolve": "^1.11.3",
     "browserify-zlib": "^0.2.0",
     "buffer": "^5.2.1",
@@ -93,7 +93,7 @@
     "log4js": "^4.0.1",
     "minimatch": "^3.0.4",
     "os-browserify": "^0.3.0",
-    "pad": "^2.2.2",
+    "pad": "^3.2.0",
     "path-browserify": "^1.0.0",
     "process": "^0.11.10",
     "punycode": "^2.1.1",
@@ -105,10 +105,10 @@
     "stream-http": "^3.0.0",
     "string_decoder": "^1.2.0",
     "timers-browserify": "^2.0.10",
-    "tmp": "^0.0.33",
+    "tmp": "^0.1.0",
     "tty-browserify": "^0.0.1",
     "url": "^0.11.0",
-    "util": "^0.11.1",
+    "util": "^0.12.0",
     "vm-browserify": "1.1.0"
   },
   "devDependencies": {
