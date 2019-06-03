@@ -5,7 +5,7 @@ import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } fro
   template: `dependency`,
 })
 export class DependencyComponent {
-  @ContentChild('something')
+  @ContentChild('something', { static: false })
   injectedSomething: TemplateRef<{}>;
 
   @Input()

@@ -56,6 +56,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
         viewChildRefs.set(query.selector, key);
         queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
           read: ViewContainerRef,
+          static: query.static
         });
         return `
           <div *ngIf="mockRender_${query.selector}" data-key="${query.selector}">

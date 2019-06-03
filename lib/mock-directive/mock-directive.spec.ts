@@ -40,7 +40,7 @@ export class ExampleStructuralDirective {
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ExampleDirective) childDirective: ExampleDirective;
+  @ViewChild(ExampleDirective, { static: false }) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
 

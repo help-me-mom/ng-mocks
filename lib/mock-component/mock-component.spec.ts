@@ -36,7 +36,7 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent) childComponent: ChildComponent;
+  @ViewChild(ChildComponent, { static: true }) childComponent: ChildComponent;
   emitted: string;
   formControl = new FormControl('');
 
