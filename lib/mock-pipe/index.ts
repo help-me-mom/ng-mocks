@@ -1,1 +1,1 @@
-export { MockPipe } from './mock-pipe';
+export * from './mock-pipe';
