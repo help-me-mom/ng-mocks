@@ -93,7 +93,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
   @MockOf(component)
   class ComponentMock implements ControlValueAccessor {
     constructor(changeDetector: ChangeDetectorRef) {
-      Object.keys(component.prototype).forEach((method) => {
+      Object.getOwnPropertyNames(component.prototype).forEach((method) => {
         if (!(this as any)[method]) {
           (this as any)[method] = () => {};
         }
