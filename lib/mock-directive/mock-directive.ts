@@ -70,7 +70,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       (this as any).__viewContainer = viewContainer;
       (this as any).__isStructural = template && viewContainer;
 
-      Object.keys(directive.prototype).forEach((method) => {
+      Object.getOwnPropertyNames(directive.prototype).forEach((method) => {
         if (!(this as any)[method]) {
           (this as any)[method] = () => {};
         }

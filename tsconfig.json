@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": ["es2016", "dom"],
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
