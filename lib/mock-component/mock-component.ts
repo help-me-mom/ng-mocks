@@ -92,6 +92,8 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
 
   @MockOf(component)
   class ComponentMock implements ControlValueAccessor {
+    value: any;
+
     constructor(changeDetector: ChangeDetectorRef) {
       Object.keys(component.prototype).forEach((method) => {
         if (!(this as any)[method]) {
@@ -141,7 +143,9 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
       this.__simulateTouch = fn;
     }
 
-    writeValue = (value: any) => {};
+    writeValue = (value: any) => {
+      this.value = value;
+    }
   }
 
   // tslint:disable-next-line:no-angle-bracket-type-assertion

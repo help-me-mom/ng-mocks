@@ -233,5 +233,15 @@ describe('MockComponent', () => {
       expect(templateOutlet.nativeElement.innerHTML.trim())
           .toEqual('child of element-with-content-only');
     });
+
+    it('should set value field on form value change', () => {
+      component.formControl.setValue('Pinocchio');
+
+      fixture.detectChanges();
+
+      const customFormControl: MockedComponent<CustomFormControlComponent>
+          = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
+      expect(customFormControl.value).toEqual('Pinocchio');
+  });
   });
 });
