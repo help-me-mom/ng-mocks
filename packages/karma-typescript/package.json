@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "files": [
     "dist/**",
