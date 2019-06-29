@@ -49,7 +49,7 @@ module.exports = function(config) {
                 sourceMap: true,
                 transforms: [
                     require("karma-typescript-cssmodules-transform")({}, {}, /style-import-tester\.css$/),
-                    require("karma-typescript-es6-transform")({presets: [["env"]]}),
+                    require("karma-typescript-es6-transform")({presets: [["@babel/preset-env"]]}),
                     require("karma-typescript-postcss-transform")(
                         [require("autoprefixer")], { map: { inline: true } }, /postcss.style\.css$/
                     ),

@@ -40,15 +40,15 @@
     "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "acorn": "^6.0.5",
     "acorn-walk": "^6.1.1",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
     "log4js": "^4.0.1",
     "magic-string": "^0.25.1"
   },
   "devDependencies": {
-    "@types/babel-core": "^6.25.5",
+    "@types/babel__core": "^7.1.2",
     "@types/karma": "^3.0.1",
     "@types/lodash": "^4.14.120",
     "@types/node": "^10.12.18",
