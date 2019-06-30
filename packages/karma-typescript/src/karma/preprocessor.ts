@@ -16,10 +16,10 @@ export class Preprocessor {
     constructor(bundler: Bundler, compiler: Compiler, private config: Configuration,
                 coverage: Coverage, sharedProcessedFiles: SharedProcessedFiles) {
 
-        this.create = (helper: any, logger: any) => {
+        this.create = (logger: any) => {
             this.log = logger.create("preprocessor.karma-typescript");
 
-            coverage.initialize(helper, logger);
+            coverage.initialize(logger);
 
             return (content: string, file: File, done: (e: any, c?: string) => void) => {
                 try {
@@ -49,6 +49,6 @@ export class Preprocessor {
             };
         };
 
-        (this.create as any).$inject = ["helper", "logger"];
+        (this.create as any).$inject = ["logger"];
     }
 }

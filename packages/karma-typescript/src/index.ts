@@ -12,11 +12,11 @@ import { Validator } from "./bundler/validator";
 import { Compiler } from "./compiler/compiler";
 
 import { Coverage } from "./istanbul/coverage";
-import { Threshold } from "./istanbul/threshold";
+// import { Threshold } from "./istanbul/threshold";
 
 import { Framework } from "./karma/framework";
 import { Preprocessor } from "./karma/preprocessor";
-import { Reporter } from "./karma/reporter";
+// import { Reporter } from "./karma/reporter";
 
 import { Configuration, LoggerList } from "./shared/configuration";
 import { Project } from "./shared/project";
@@ -42,7 +42,7 @@ const dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 const compiler = new Compiler(configuration, loggers.compiler, project);
 const coverage = new Coverage(configuration);
 const transformer = new Transformer(configuration, project);
-const threshold = new Threshold(configuration, loggers.threshold);
+// const threshold = new Threshold(configuration, loggers.threshold);
 const validator = new Validator(configuration);
 
 const sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
@@ -55,10 +55,10 @@ const bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bu
 
 const framework = new Framework(bundler, configuration, resolver);
 const preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
-const reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
+// const reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],
-    "preprocessor:karma-typescript": ["factory", preprocessor.create],
-    "reporter:karma-typescript": ["type", reporter.create]
+    "preprocessor:karma-typescript": ["factory", preprocessor.create]
+    // "reporter:karma-typescript": ["type", reporter.create]
 };

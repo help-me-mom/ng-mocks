@@ -1,3 +1,4 @@
+/*
 import * as lodash from "lodash";
 import * as path from "path";
 
@@ -112,3 +113,4 @@ export class Reporter {
         return null;
     }
 }
+*/
