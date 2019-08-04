@@ -1,4 +1,4 @@
-/*import * as istanbul from "istanbul";
+import * as istanbul from "istanbul";
 import { merge } from "lodash";
 import { Logger } from "log4js";
 import * as minimatch from "minimatch";
@@ -83,4 +83,3 @@ export class Threshold {
         return thresholds;
     }
 }
-*/
