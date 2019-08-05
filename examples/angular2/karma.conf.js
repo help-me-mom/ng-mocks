@@ -1,5 +1,3 @@
-var path = require("path");
-
 module.exports = function(config) {
     config.set({
 
@@ -26,12 +24,7 @@ module.exports = function(config) {
             }
         },
 
-        coverageIstanbulReporter: {
-            reports: ["html"],
-            dir: path.join(__dirname, "coverage"),
-        },
-
-        reporters: ["dots", "coverage-istanbul"],
+        reporters: ["dots", "karma-typescript"],
 
         browsers: ["ChromeHeadless"],
 

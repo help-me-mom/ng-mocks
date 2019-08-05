@@ -5,8 +5,7 @@
   "author": "monounity",
   "license": "MIT",
   "scripts": {
-    "setup-old-istanbul": "npm run setup:packages && npm run setup:examples && npm run setup:integration",
-    "setup": "npm run setup:packages && cd examples/angular2 && npm i && cd ../..",
+    "setup": "npm run setup:packages && npm run setup:examples && npm run setup:integration",
     "setup:packages": "npm install && lerna bootstrap --hoist --no-ci",
     "setup:examples": "cd examples/angular2 && npm i && cd ../.. && cd examples/typescript-1.6.2 && npm i && cd ../..",
     "setup:integration": "cd tests/integration-1.8.10 && npm i && cd ../.. && cd tests/integration-latest && npm i && cd ../..",
@@ -19,8 +18,7 @@
     "test:integration": "npm run test:integration-1.8.10 && npm run test:integration-latest",
     "test:integration-1.8.10": "npm --prefix tests/integration-1.8.10/ test && npm --prefix tests/integration-1.8.10/ run test:angular2 && npm --prefix tests/integration-1.8.10/ run test:react",
     "test:integration-latest": "npm --prefix tests/integration-latest test && npm --prefix tests/integration-latest run test:angular2 && npm --prefix tests/integration-latest run test:core && npm --prefix tests/integration-latest run test:emptyfile && npm --prefix tests/integration-latest run test:no-module && npm --prefix tests/integration-latest run test:react",
-    "ci-old-istanbul": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples && npm run test:integration",
-    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples:angular"
+    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples && npm run test:integration"
   },
   "dependencies": {
     "fs-extra": "^7.0.1",

@@ -1,20 +1,17 @@
 import { Logger } from "log4js";
-import * as path from "path";
 import { Bundler } from "../bundler/bundler";
 import { Compiler } from "../compiler/compiler";
 import { Coverage } from "../istanbul/coverage";
 import { Configuration } from "../shared/configuration";
 import { File } from "../shared/file";
 import { FileUtils } from "../shared/file-utils";
-import { SharedProcessedFiles } from "../shared/shared-processed-files";
 
 export class Preprocessor {
 
     public create: (helper: any, logger: any) => void;
     private log: Logger;
 
-    constructor(bundler: Bundler, compiler: Compiler, private config: Configuration,
-                coverage: Coverage, sharedProcessedFiles: SharedProcessedFiles) {
+    constructor(bundler: Bundler, compiler: Compiler, private config: Configuration, coverage: Coverage) {
 
         this.create = (logger: any) => {
             this.log = logger.create("preprocessor.karma-typescript");
@@ -35,7 +32,6 @@ export class Preprocessor {
                             return done(null, " ");
                         }
                         bundler.bundle(file, emitOutput, (bundled: string) => {
-                            sharedProcessedFiles[path.normalize(file.originalPath)] = bundled;
                             coverage.instrument(file, bundled, emitOutput, (result) => {
                                 done(null, result);
                             });
