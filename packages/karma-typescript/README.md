@@ -9,7 +9,7 @@
 > Karma :heart: Typescript
 
 * Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
-* Get remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul).
+* Get remapped test coverage with [Istanbul](https://istanbul.js.org).
 * Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
 
 ## Installation
@@ -108,18 +108,6 @@ karmaTypescriptConfig: {
 }
 ```
 
-The default `karma-coverage` instrumentation settings:
-
-```javascript
-karmaTypescriptConfig: {
-    coverageReporter: {
-        instrumenterOptions: {
-            istanbul: { noCompact: true }
-        }
-    }
-}
-```
-
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
 * **karmaTypescriptConfig.bundlerOptions.addNodeGlobals** - Boolean indicating whether the global variables
@@ -193,6 +181,54 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in `karmaTypescriptConfig.compilerOptions`,
   the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
 
+* **karmaTypescriptConfig.instrumenterOptions** - Pass options to the `istanbul` instrumenter, ie options supported by [istanbul-lib-instrument](https://github.com/istanbuljs/istanbuljs/blob/master/packages/istanbul-lib-instrument/src/instrumenter.js):
+
+    ```js
+    {
+        // Name of global coverage variable.
+        coverageVariable: '__coverage__',
+
+        // Preserve comments in output.
+        preserveComments: false,
+
+        // Generate compact code.
+        compact: true,
+
+        // Set to true to instrument ES6 modules.
+        esModules: false,
+
+        // Set to true to allow `return` statements outside of functions.
+        autoWrap: false,
+
+        // Set to true to produce a source map for the instrumented code.
+        produceSourceMap: false,
+
+        // Set to array of class method names to ignore for coverage.
+        ignoreClassMethods: [],
+
+        // A callback function that is called when a source map URL is found in the original code.
+        // This function is called with the source file name and the source map URL.
+        sourceMapUrlCallback: null,
+
+        // Turn debugging on.
+        debug: false,
+
+        // Set plugins.
+        plugins: [
+            'asyncGenerators',
+            'bigInt',
+            'classProperties',
+            'classPrivateProperties',
+            'dynamicImport',
+            'importMeta',
+            'objectRestSpread',
+            'optionalCatchBinding',
+            'flow',
+            'jsx'
+        ]
+    };
+    ```
+
 * **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
   set this property to `false` to see the original Typescript code when debugging.
   Please note that setting this property to `true` requires the Typescript compiler option `sourceMap` to also be set to `true`.
@@ -256,13 +292,6 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   }
   ```
   This option is available in Typescript ^2.0.0.
-
-* **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
-
-    * Available options:
-
-        * `exclude`, a regex for excluding files from remapping
-        * `warn`, a function for handling error messages
 
 * **karmaTypescriptConfig.reports** - The types of coverage reports that should be created when running the tests,
   defaults to an html report in the directory `./coverage`.
@@ -387,11 +416,6 @@ karmaTypescriptConfig: {
     include: {
         mode: "replace",
         values: ["**/*.ts"]
-    },
-    remapOptions: {
-        warn: function(message){
-            console.log(message);
-        }
     },
     reports: {
         "cobertura": {

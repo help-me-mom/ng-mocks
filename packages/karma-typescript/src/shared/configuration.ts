@@ -9,7 +9,6 @@ import {
     CoverageOptions,
     Extendable,
     KarmaTypescriptConfig,
-    RemapOptions,
     Reports
 } from "../api";
 
@@ -28,13 +27,11 @@ export class Configuration implements KarmaTypescriptConfig {
     public compilerDelay: number;
     public compilerOptions: any;
     public coverageOptions: CoverageOptions;
-    public coverageReporter: any;
+    public instrumenterOptions: any;
     public defaultTsconfig: any;
     public exclude: string[] | Extendable;
     public include: string[] | Extendable;
     public logAppenders: { [name: string]: log4js.Appender };
-    public remapOptions: RemapOptions;
-    public reporters: string[];
     public reports: Reports;
     public transformPath: (filepath: string) => string;
     public tsconfig: string;
@@ -58,7 +55,6 @@ export class Configuration implements KarmaTypescriptConfig {
         this.configureProject();
         this.configurePreprocessor();
         this.configureReporter();
-        this.configureKarmaCoverage();
         this.assertConfiguration();
 
         for (const callback of this.callbacks) {
@@ -161,6 +157,7 @@ export class Configuration implements KarmaTypescriptConfig {
             }
         };
 
+        this.instrumenterOptions = this.karmaTypescriptConfig.instrumenterOptions || {};
         this.hasCoverageThreshold = !!this.karmaTypescriptConfig.coverageOptions &&
             !!this.karmaTypescriptConfig.coverageOptions.threshold;
         this.coverageOptions = merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
@@ -202,28 +199,6 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private configureReporter() {
         this.reports = this.karmaTypescriptConfig.reports || { html: "coverage" };
-        this.remapOptions = this.karmaTypescriptConfig.remapOptions || {};
-    }
-
-    private configureKarmaCoverage() {
-
-        const defaultCoverageReporter = {
-            instrumenterOptions: {
-                istanbul: { noCompact: true }
-            }
-        };
-
-        this.coverageReporter = merge(defaultCoverageReporter, (this.karma as any).coverageReporter);
-
-        if (Array.isArray(this.karma.reporters)) {
-            this.reporters = this.karma.reporters.slice();
-            if (this.karma.reporters.indexOf("coverage") === -1){
-                this.reporters.push("coverage");
-            }
-        }
-        else {
-            this.reporters = ["coverage"];
-        }
     }
 
     private assertConfiguration() {
@@ -294,6 +269,11 @@ export class Configuration implements KarmaTypescriptConfig {
         if ((this.karmaTypescriptConfig as any).disableCodeCoverageInstrumentation !== undefined) {
             throw new Error("The option 'karmaTypescriptConfig.disableCodeCoverageInstrumentation' has been " +
                             "removed, please use 'karmaTypescriptConfig.coverageOptions.instrumentation' instead");
+        }
+
+        if ((this.karmaTypescriptConfig as any).remapOptions !== undefined) {
+            throw new Error("The option 'karmaTypescriptConfig.remapOptions' has been " +
+                            "removed, please use 'karmaTypescriptConfig.instrumenterOptions' instead");
         }
     }
 

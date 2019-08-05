@@ -23,11 +23,23 @@ export class Coverage {
 
         this.config.whenReady(() => {
             this.log.debug("Configuring coverage preprocessor");
-            this.instrumenter = istanbul.createInstrumenter({ compact: true });
+            this.instrumenter = istanbul.createInstrumenter(this.config.instrumenterOptions);
         });
     }
 
     public instrument(file: File, bundled: string, emitOutput: EmitOutput, callback: CoverageCallback): void {
+
+        if (this.config.hasPreprocessor("commonjs")) {
+            this.log.debug("karma-commonjs already configured");
+            callback(bundled);
+            return;
+        }
+
+        if (this.config.hasPreprocessor("coverage")) {
+            this.log.debug("karma-coverage already configured");
+            callback(bundled);
+            return;
+        }
 
         if (!this.config.coverageOptions.instrumentation ||
             this.isExcluded(this.config.coverageOptions.exclude, file.relativePath) ||
