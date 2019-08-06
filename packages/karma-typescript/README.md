@@ -181,7 +181,13 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   If `noEmitOnError` is set to a truthy value, in either `tsconfig.json` or in `karmaTypescriptConfig.compilerOptions`,
   the karma process will exit with `ts.ExitStatus.DiagnosticsPresent_OutputsSkipped` if any compilation errors occur.
 
-* **karmaTypescriptConfig.instrumenterOptions** - Pass options to the `istanbul` instrumenter, ie options supported by [istanbul-lib-instrument](https://github.com/istanbuljs/istanbuljs/blob/master/packages/istanbul-lib-instrument/src/instrumenter.js):
+* **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
+  set this property to `false` to see the original Typescript code when debugging.
+  Please note that setting this property to `true` requires the Typescript compiler option `sourceMap` to also be set to `true`.
+  For more debugging options, please see `karmaTypescriptConfig.coverageOptions.sourceMap`.<br/>
+  Defaults to `true`.
+
+* **karmaTypescriptConfig.coverageOptions.instrumenterOptions** - Pass options to the `istanbul` instrumenter, ie options supported by [istanbul-lib-instrument](https://github.com/istanbuljs/istanbuljs/blob/master/packages/istanbul-lib-instrument/src/instrumenter.js):
 
     ```js
     {
@@ -228,12 +234,6 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
         ]
     };
     ```
-
-* **karmaTypescriptConfig.coverageOptions.instrumentation** - A boolean indicating whether the code should be instrumented,
-  set this property to `false` to see the original Typescript code when debugging.
-  Please note that setting this property to `true` requires the Typescript compiler option `sourceMap` to also be set to `true`.
-  For more debugging options, please see `karmaTypescriptConfig.coverageOptions.sourceMap`.<br/>
-  Defaults to `true`.
 
 * **karmaTypescriptConfig.coverageOptions.exclude** - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
   When filtering file paths, beware that Windows uses `\` while UNIX-like systems use `/` as path separator.<br/>
@@ -385,6 +385,9 @@ karmaTypescriptConfig: {
     },
     coverageOptions: {
         instrumentation: true,
+        instrumenterOptions: {
+            preserveComments: true
+        },
         exclude: /\.(d|spec|test)\.ts/i,
         threshold: {
             global: {

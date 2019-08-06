@@ -23,7 +23,7 @@ export class Coverage {
 
         this.config.whenReady(() => {
             this.log.debug("Configuring coverage preprocessor");
-            this.instrumenter = istanbul.createInstrumenter(this.config.instrumenterOptions);
+            this.instrumenter = istanbul.createInstrumenter(this.config.coverageOptions.instrumenterOptions);
         });
     }
 

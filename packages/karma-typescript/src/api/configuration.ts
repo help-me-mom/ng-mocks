@@ -9,7 +9,6 @@ export interface KarmaTypescriptConfig {
     compilerDelay?: number;
     compilerOptions?: any;
     coverageOptions?: CoverageOptions;
-    instrumenterOptions?: any;
     exclude?: string[] | Extendable;
     include?: string[] | Extendable;
     reports?: Reports;
@@ -75,6 +74,7 @@ export interface ThresholdOptions {
 
 export interface CoverageOptions {
     instrumentation?: boolean;
+    instrumenterOptions?: any;
     exclude?: RegExp | RegExp[];
     threshold?: ThresholdOptions;
 }

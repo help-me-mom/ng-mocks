@@ -27,7 +27,6 @@ export class Configuration implements KarmaTypescriptConfig {
     public compilerDelay: number;
     public compilerOptions: any;
     public coverageOptions: CoverageOptions;
-    public instrumenterOptions: any;
     public defaultTsconfig: any;
     public exclude: string[] | Extendable;
     public include: string[] | Extendable;
@@ -138,6 +137,7 @@ export class Configuration implements KarmaTypescriptConfig {
         const defaultCoverageOptions: CoverageOptions = {
             exclude: /\.(d|spec|test)\.ts$/i,
             instrumentation: true,
+            instrumenterOptions: {},
             threshold: {
                 file: {
                     branches: 0,
@@ -157,7 +157,6 @@ export class Configuration implements KarmaTypescriptConfig {
             }
         };
 
-        this.instrumenterOptions = this.karmaTypescriptConfig.instrumenterOptions || {};
         this.hasCoverageThreshold = !!this.karmaTypescriptConfig.coverageOptions &&
             !!this.karmaTypescriptConfig.coverageOptions.threshold;
         this.coverageOptions = merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
@@ -273,7 +272,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
         if ((this.karmaTypescriptConfig as any).remapOptions !== undefined) {
             throw new Error("The option 'karmaTypescriptConfig.remapOptions' has been " +
-                            "removed, please use 'karmaTypescriptConfig.instrumenterOptions' instead");
+                            "removed, please use 'karmaTypescriptConfig.coverageOptions.instrumenterOptions' instead");
         }
     }
 
