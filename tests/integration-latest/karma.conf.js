@@ -12,8 +12,7 @@ module.exports = function(config) {
             { pattern: "src/misc/no-module-tester.spec.ts" },
             { pattern: "src/misc/!(emptyfile)/**/*.ts" },
             { pattern: "src/node/**/*.ts" },
-            { pattern: "src/typescript/**/*.ts" },
-            { pattern: "src/x-performance/**/*.ts" }
+            { pattern: "src/typescript/**/*.ts" }
         ],
 
         preprocessors: {
