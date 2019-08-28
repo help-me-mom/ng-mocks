@@ -31,7 +31,7 @@ karmaTypescriptConfig: {
 
 ## Babel core options
 
-By default, the options `presets: [["env"]]` and `filename: TransformContext.filename` are passed to the [Babel compiler](https://www.npmjs.com/package/babel-core).
+By default, the options `presets: [["@babel/preset-env"]]` and `filename: TransformContext.filename` are passed to the [Babel compiler](https://www.npmjs.com/package/babel-core).
 
 Custom options can be passed to the compiler in the first argument when calling the plugin:
 
@@ -41,7 +41,7 @@ karmaTypescriptConfig: {
         transforms: [
             require("karma-typescript-es6-transform")({
                 presets: [
-                    ["env", {
+                    ["@babel/preset-env", {
                         targets: {
                             chrome: "60"
                         }

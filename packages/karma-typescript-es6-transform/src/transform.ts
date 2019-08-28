@@ -1,5 +1,5 @@
+import * as babel from "@babel/core";
 import * as acorn from "acorn";
-import * as babel from "babel-core";
 import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 
@@ -43,7 +43,7 @@ const configure = (options?: babel.TransformOptions) => {
     options = options || {};
 
     if (!options.presets || options.presets.length === 0) {
-        options.presets = [["env"]];
+        options.presets = [["@babel/preset-env"]];
     }
 
     const transform: kt.Transform = (context: kt.TransformContext, callback: kt.TransformCallback) => {

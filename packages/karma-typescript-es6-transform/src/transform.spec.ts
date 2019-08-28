@@ -282,7 +282,8 @@ test("transformer should compile and set new source", (t) => {
 
     transform()(context, () => {
         t.equal(context.source, "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n" +
-                                "  value: true\n});\nvar x = 1;exports.default = x;");
+                                "  value: true\n});\nexports[\"default\"] = void 0;\nvar x = 1;\n" +
+                                "var _default = x;\nexports[\"default\"] = _default;");
     });
 });
 
@@ -314,14 +315,15 @@ test("transformer should use custom compiler options", (t) => {
     };
 
     transform({ presets: [
-        ["env", {
+        ["@babel/preset-env", {
             targets: {
                 chrome: "60"
             }
         }]
     ] })(context, () => {
         t.equal(context.source, "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", " +
-                                "{\n  value: true\n});\nlet x = 2;x **= 3;exports.default = x;");
+                                "{\n  value: true\n});\nexports.default = void 0;\nlet x = 2;\nx **= 3;\n" +
+                                "var _default = x;\nexports.default = _default;");
     });
 });
 
@@ -333,7 +335,7 @@ test("transformer should handle syntax errors", (t) => {
     context.source = ".x";
 
     transform()(context, (error: Error, dirty: boolean | kt.TransformResult) => {
-        t.isEqual(error.message, "file.js: Unexpected token (1:0)");
+        t.true(error.message.endsWith("file.js: Unexpected token (1:0)\n\n> 1 | .x\n    | ^"));
         t.false(dirty);
     });
 });
