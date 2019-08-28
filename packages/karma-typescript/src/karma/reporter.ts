@@ -1,93 +1,79 @@
+import * as istanbulCoverage from "istanbul-lib-coverage";
+import * as istanbulReport from "istanbul-lib-report";
+import * as istanbulSourceMaps from "istanbul-lib-source-maps";
+import * as istanbulReports from "istanbul-reports";
+
 import * as lodash from "lodash";
 import * as path from "path";
 
-import { Collector, Store } from "istanbul";
-import { ConfigOptions } from "karma";
 import { Logger } from "log4js";
 
 import { Threshold } from "../istanbul/threshold";
 import { Configuration } from "../shared/configuration";
-import { SharedProcessedFiles } from "../shared/shared-processed-files";
+
+const reporterName = "karma-typescript";
 
 export class Reporter {
 
-    public create: (karmaConfig: ConfigOptions, helper: any, logger: any, emitter: any) => void;
+    public create: (baseReporterDecorator: any, logger: any) => void;
 
     private log: Logger;
-    private remap = require("remap-istanbul/lib/remap");
-    private writeReport = require("remap-istanbul/lib/writeReport");
+    private coverageMap: WeakMap<any, any>;
 
-    constructor(config: Configuration, sharedProcessedFiles: SharedProcessedFiles, threshold: Threshold) {
+    constructor(config: Configuration, threshold: Threshold) {
 
-        const self = this;
+        const that = this;
 
         // tslint:disable-next-line:only-arrow-functions
-        this.create = function(logger: any) {
+        this.create = function(baseReporterDecorator: any, logger: any) {
 
-            let coverageMap: WeakMap<any, any>;
+            baseReporterDecorator(that);
 
-            self.log = logger.create("reporter.karma-typescript");
-            this.adapters = [];
+            that.log = logger.create(`reporter.${reporterName}`);
 
             this.onRunStart = () => {
-                coverageMap = new WeakMap<any, any>();
+                that.coverageMap = new WeakMap<any, any>();
             };
 
             this.onBrowserComplete = (browser: any, result: any) => {
-                if (!result || !result.coverage) {
-                    return;
+                if (result && result.coverage) {
+                    that.coverageMap.set(browser, result.coverage);
                 }
-                coverageMap.set(browser, result.coverage);
             };
 
             this.onRunComplete = (browsers: any[], results: any) => {
 
                 browsers.forEach((browser: any) => {
 
-                    const coverage = coverageMap.get(browser);
-                    const unmappedCollector = new Collector();
+                    const coverage = that.coverageMap.get(browser);
+                    const coverageMap = istanbulCoverage.createCoverageMap();
+                    coverageMap.merge(coverage);
 
-                    if (!coverage) {
-                        return;
-                    }
+                    const sourceMapStore = istanbulSourceMaps.createSourceMapStore();
+                    const remappedCoverageMap = sourceMapStore.transformCoverage(coverageMap).map;
 
-                    unmappedCollector.add(coverage);
+                    const tree = istanbulReport.summarizers.pkg(remappedCoverageMap);
 
-                    const sourceStore = (Store as any).create("memory");
-                    config.remapOptions.sources = sourceStore;
-                    config.remapOptions.readFile = (filepath: string) => {
-                        return sharedProcessedFiles[filepath];
-                    };
-                    const collector = self.remap((unmappedCollector as any).getFinalCoverage(), config.remapOptions);
-
-                    if (results && config.hasCoverageThreshold && !threshold.check(browser, collector)) {
+                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap)) {
                         results.exitCode = 1;
                     }
 
-                    Promise
-                        .all(Object.keys(config.reports)
-                        .map((reportType) => {
+                    Object.keys(config.reports).forEach((reportType: any) => {
 
-                            const destination = self.getReportDestination(browser, config.reports, reportType);
+                        const destination = that.getReportDestination(browser, config.reports, reportType);
 
-                            if (destination) {
-                                self.log.debug("Writing coverage to %s", destination);
-                            }
+                        if (destination) {
+                            that.log.debug("Writing coverage to %s", destination);
+                        }
+                        const context = istanbulReport.createContext( { dir: destination } );
 
-                            return self.writeReport(collector, reportType, {}, destination, sourceStore);
-                        }))
-                        .catch((error: any) => {
-                            self.log.error(error);
-                        })
-                        .then(() => {
-                            collector.dispose();
-                            coverageMap = null;
-                        });
+                        tree.visit(istanbulReports.create(reportType), context);
+                    });
                 });
             };
         };
 
-        (this.create as any).$inject = ["logger"];
+        Object.assign(this.create, { $inject: ["baseReporterDecorator", "logger", "config"] });
     }
 
     private getReportDestination(browser: any, reports: any, reportType: any) {

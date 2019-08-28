@@ -9,7 +9,7 @@
 > Karma :heart: Typescript
 
 * Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
-* Get remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul).
+* Get remapped test coverage with [Istanbul](https://istanbul.js.org).
 * Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
 
 ## Installation
@@ -108,18 +108,6 @@ karmaTypescriptConfig: {
 }
 ```
 
-The default `karma-coverage` instrumentation settings:
-
-```javascript
-karmaTypescriptConfig: {
-    coverageReporter: {
-        instrumenterOptions: {
-            istanbul: { noCompact: true }
-        }
-    }
-}
-```
-
 If the defaults aren't enough, the settings can be configured from `karma.conf.js`:
 
 * **karmaTypescriptConfig.bundlerOptions.addNodeGlobals** - Boolean indicating whether the global variables
@@ -199,6 +187,54 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   For more debugging options, please see `karmaTypescriptConfig.coverageOptions.sourceMap`.<br/>
   Defaults to `true`.
 
+* **karmaTypescriptConfig.coverageOptions.instrumenterOptions** - Pass options to the `istanbul` instrumenter, ie options supported by [istanbul-lib-instrument](https://github.com/istanbuljs/istanbuljs/blob/master/packages/istanbul-lib-instrument/src/instrumenter.js):
+
+    ```js
+    {
+        // Name of global coverage variable.
+        coverageVariable: '__coverage__',
+
+        // Preserve comments in output.
+        preserveComments: false,
+
+        // Generate compact code.
+        compact: true,
+
+        // Set to true to instrument ES6 modules.
+        esModules: false,
+
+        // Set to true to allow `return` statements outside of functions.
+        autoWrap: false,
+
+        // Set to true to produce a source map for the instrumented code.
+        produceSourceMap: false,
+
+        // Set to array of class method names to ignore for coverage.
+        ignoreClassMethods: [],
+
+        // A callback function that is called when a source map URL is found in the original code.
+        // This function is called with the source file name and the source map URL.
+        sourceMapUrlCallback: null,
+
+        // Turn debugging on.
+        debug: false,
+
+        // Set plugins.
+        plugins: [
+            'asyncGenerators',
+            'bigInt',
+            'classProperties',
+            'classPrivateProperties',
+            'dynamicImport',
+            'importMeta',
+            'objectRestSpread',
+            'optionalCatchBinding',
+            'flow',
+            'jsx'
+        ]
+    };
+    ```
+
 * **karmaTypescriptConfig.coverageOptions.exclude** - A `RegExp` object or an array of `RegExp` objects for filtering which files should be excluded from coverage instrumentation.<br/>
   When filtering file paths, beware that Windows uses `\` while UNIX-like systems use `/` as path separator.<br/>
   Defaults to `/\.(d|spec|test)\.ts$/i` which excludes &ast;.d.ts, &ast;.spec.ts and &ast;.test.ts (case insensitive).
@@ -256,13 +292,6 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   }
   ```
   This option is available in Typescript ^2.0.0.
-
-* **karmaTypescriptConfig.remapOptions** - Pass options to `remap-istanbul`.
-
-    * Available options:
-
-        * `exclude`, a regex for excluding files from remapping
-        * `warn`, a function for handling error messages
 
 * **karmaTypescriptConfig.reports** - The types of coverage reports that should be created when running the tests,
   defaults to an html report in the directory `./coverage`.
@@ -356,6 +385,9 @@ karmaTypescriptConfig: {
     },
     coverageOptions: {
         instrumentation: true,
+        instrumenterOptions: {
+            preserveComments: true
+        },
         exclude: /\.(d|spec|test)\.ts/i,
         threshold: {
             global: {
@@ -387,11 +419,6 @@ karmaTypescriptConfig: {
     include: {
         mode: "replace",
         values: ["**/*.ts"]
-    },
-    remapOptions: {
-        warn: function(message){
-            console.log(message);
-        }
     },
     reports: {
         "cobertura": {

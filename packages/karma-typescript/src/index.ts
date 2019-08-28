@@ -20,7 +20,6 @@ import { Reporter } from "./karma/reporter";
 
 import { Configuration, LoggerList } from "./shared/configuration";
 import { Project } from "./shared/project";
-import { SharedProcessedFiles } from "./shared/shared-processed-files";
 
 const loggers: LoggerList = {
     bundler: log4js.getLogger("bundler.karma-typescript"),
@@ -32,8 +31,6 @@ const loggers: LoggerList = {
     sourceReader: log4js.getLogger("source-reader.karma-typescript"),
     threshold: log4js.getLogger("threshold.karma-typescript")
 };
-
-const sharedProcessedFiles: SharedProcessedFiles = {};
 
 const configuration = new Configuration(loggers);
 const project = new Project(configuration, loggers.project);
@@ -54,8 +51,8 @@ const bundler = new Bundler(configuration, dependencyWalker, globals, loggers.bu
                           project, resolver, sourceMap, transformer, validator);
 
 const framework = new Framework(bundler, configuration, resolver);
-const preprocessor = new Preprocessor(bundler, compiler, configuration, coverage, sharedProcessedFiles);
-const reporter = new Reporter(configuration, sharedProcessedFiles, threshold);
+const preprocessor = new Preprocessor(bundler, compiler, configuration, coverage);
+const reporter = new Reporter(configuration, threshold);
 
 module.exports = {
     "framework:karma-typescript": ["factory", framework.create],

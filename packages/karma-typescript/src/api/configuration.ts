@@ -11,7 +11,6 @@ export interface KarmaTypescriptConfig {
     coverageOptions?: CoverageOptions;
     exclude?: string[] | Extendable;
     include?: string[] | Extendable;
-    remapOptions?: RemapOptions;
     reports?: Reports;
     transformPath?: (filepath: string) => string;
     tsconfig?: string;
@@ -75,15 +74,9 @@ export interface ThresholdOptions {
 
 export interface CoverageOptions {
     instrumentation?: boolean;
+    instrumenterOptions?: any;
     exclude?: RegExp | RegExp[];
     threshold?: ThresholdOptions;
-}
-
-export interface RemapOptions {
-    exclude?: RegExp;
-    readFile?: (filepath: string) => string;
-    sources?: any;
-    warn?: () => void;
 }
 
 export interface Reports {

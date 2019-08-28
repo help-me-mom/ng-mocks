@@ -8,7 +8,7 @@
 > Karma :heart: Typescript
 
 * Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
-* Get remapped test coverage with [karma-coverage](https://github.com/karma-runner/karma-coverage) and [Istanbul](https://github.com/gotwarlost/istanbul).
+* Get remapped test coverage with [Istanbul](https://istanbul.js.org).
 * Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
 
 ## Getting Started
