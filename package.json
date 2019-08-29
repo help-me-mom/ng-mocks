@@ -5,20 +5,18 @@
   "author": "monounity",
   "license": "MIT",
   "scripts": {
-    "setup": "npm run setup:packages && npm run setup:examples && npm run setup:integration",
+    "setup": "npm run setup:packages && npm run setup:examples",
     "setup:packages": "npm install && lerna bootstrap --hoist --no-ci",
-    "setup:examples": "cd examples/angular2 && npm i && cd ../.. && cd examples/typescript-1.6.2 && npm i && cd ../..",
-    "setup:integration": "cd tests/integration-1.8.10 && npm i && cd ../.. && cd tests/integration-latest && npm i && cd ../..",
+    "setup:examples": "cd examples/angular2 && npm i && cd ../.. && cd examples/typescript-1.6.2 && npm i && cd ../.. && cd examples/typescript-1.8.10 && npm i && cd ../.. && cd examples/typescript-latest && npm i && cd ../..",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "test:examples": "npm run test:examples:angular && npm run test:examples:typescript-1.6.2",
+    "test:examples": "npm run test:examples:angular && npm run test:examples:typescript-1.6.2 && npm run test:examples:typescript-1.8.10 && npm run test:examples:typescript-latest",
     "test:examples:angular": "npm --prefix examples/angular2/ test",
     "test:examples:typescript-1.6.2": "npm --prefix examples/typescript-1.6.2/ test",
-    "test:integration": "npm run test:integration-1.8.10 && npm run test:integration-latest",
-    "test:integration-1.8.10": "npm --prefix tests/integration-1.8.10/ test && npm --prefix tests/integration-1.8.10/ run test:angular2 && npm --prefix tests/integration-1.8.10/ run test:react",
-    "test:integration-latest": "npm --prefix tests/integration-latest test && npm --prefix tests/integration-latest run test:angular2 && npm --prefix tests/integration-latest run test:core && npm --prefix tests/integration-latest run test:emptyfile && npm --prefix tests/integration-latest run test:no-module && npm --prefix tests/integration-latest run test:react",
-    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples && npm run test:integration"
+    "test:examples:typescript-1.8.10": "npm --prefix examples/typescript-1.8.10/ test",
+    "test:examples:typescript-latest": "npm --prefix examples/typescript-latest/ test",
+    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples"
   },
   "dependencies": {
     "fs-extra": "^7.0.1",

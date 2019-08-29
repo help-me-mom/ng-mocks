@@ -21,12 +21,10 @@ rm -rf examples/mocha/coverage/ examples/mocha/node_modules/
 echo "Cleaning examples/typescript-1.6.2/"
 rm -rf examples/typescript-1.6.2/coverage/ examples/typescript-1.6.2/node_modules/
 
+echo "Cleaning examples/typescript-1.8.10/"
+rm -rf examples/typescript-1.8.10/coverage/ examples/typescript-1.8.10/node_modules/
+
 echo "Cleaning examples/typescript-latest/"
 rm -rf examples/typescript-latest/coverage/ examples/typescript-latest/node_modules/
 
-echo "Cleaning tests/integration-1.8.10/"
-rm -rf tests/integration-1.8.10/coverage/ tests/integration-1.8.10/node_modules/
-
-echo "Cleaning tests/integration-latest/"
-rm -rf tests/integration-latest/coverage/ tests/integration-latest/node_modules/
 echo "Done"

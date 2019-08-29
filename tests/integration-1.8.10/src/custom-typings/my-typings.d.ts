@@ -1,3 +1,0 @@
-interface MyInterface {
-    value: string;
-}

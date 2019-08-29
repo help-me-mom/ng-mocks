@@ -1,7 +1,7 @@
 # Angular2
 
 This project contains runnable sample code and configuration for unit testing
-Typescript on the fly in Karma with Angular2 and Istanbul coverage.
+Typescript on the fly in Karma with Angular and Istanbul coverage.
 
 ## Installation
 

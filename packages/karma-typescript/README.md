@@ -10,7 +10,7 @@
 
 * Run unit tests written in Typescript with full type checking, seamlessly without extra build steps or scripts.
 * Get remapped test coverage with [Istanbul](https://istanbul.js.org).
-* Use plain Typescript or a framework: Angular2, AngularJS, React, Sinon, any framework of choice.
+* Use plain Typescript or a framework: Angular, AngularJS, React, Sinon, any framework of choice.
 
 ## Installation
 
@@ -59,7 +59,7 @@ The above example will compile all Typescript files and run the unit tests, prod
 
 ### Frameworks and Integrations
 
-- [Angular2](https://github.com/monounity/karma-typescript/tree/master/examples/angular2)
+- [Angular](https://github.com/monounity/karma-typescript/tree/master/examples/angular2)
 - [AngularJS](https://github.com/monounity/karma-typescript/tree/master/examples/angularjs)
 - [Docker](https://github.com/monounity/karma-typescript/tree/master/examples/docker)
 - [Gulp](https://github.com/monounity/karma-typescript/tree/master/examples/gulp)
@@ -67,10 +67,9 @@ The above example will compile all Typescript files and run the unit tests, prod
 
 ### Other examples
 
-- Typescript [1.8.10 to ^2.0.0](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
-- Typescript [1.6.2 to 1.7.5](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
-- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/tests/integration-1.8.10/src)
-- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/tests/integration-latest/src)
+- Typescript [@latest](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-latest)
+- Typescript [1.8.10](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.8.10)
+- Typescript [1.6.2](https://github.com/monounity/karma-typescript/tree/master/examples/typescript-1.6.2)
 
 ### Sample applications by users
 - [Hybrid app, code in JavaScript and tests in Typescript](https://github.com/adrianmarinica/karma-typescript-angularjs-sample)

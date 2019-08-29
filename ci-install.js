@@ -11,8 +11,8 @@ const packages = [
 const projects = [
     "examples/angular2",
     "examples/typescript-1.6.2",
-    "tests/integration-1.8.10",
-    "tests/integration-latest"
+    "examples/typescript-1.8.10",
+    "examples/typescript-latest"
 ];
 
 for (const package of packages) {
