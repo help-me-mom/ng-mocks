@@ -160,6 +160,7 @@ export class Configuration implements KarmaTypescriptConfig {
         this.hasCoverageThreshold = !!this.karmaTypescriptConfig.coverageOptions &&
             !!this.karmaTypescriptConfig.coverageOptions.threshold;
         this.coverageOptions = merge(defaultCoverageOptions, this.karmaTypescriptConfig.coverageOptions);
+
         this.assertCoverageExclude(this.coverageOptions.exclude);
     }
 

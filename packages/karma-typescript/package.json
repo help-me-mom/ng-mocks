@@ -64,7 +64,19 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc --rootDir ./src",
-    "test": "tape dist/**/*.spec.js | faucet"
+    "test": "nyc --require ts-node/register tape src/**/*.spec.ts | faucet"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
     "acorn": "^7.0.0",
@@ -135,8 +147,10 @@
     "cli-clear": "^1.0.4",
     "faucet": "0.0.1",
     "mock-require": "^3.0.3",
+    "nyc": "^14.1.1",
     "puppeteer": "^1.19.0",
     "tape": "^4.9.2",
+    "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "latest"
