@@ -450,6 +450,70 @@ returns first found attribute or structural directive which belongs to current e
 `MockHelper.findDirectives(fixture.debugElement, Directive)`
 returns all found attribute or structural directives which belong to current element and all its child.
 
+## MockService
+
+* extends the original service with optional passing of it's dependencies
+* assumes that you will use `spyOn(..)` for stubbing real methods
+
+### Usage Example
+```typescript
+@Injectable()
+export class NumbersService {
+  constructor(private httpClient: HttpClient) {}
+
+  getNumbers() {
+    return this.httpClient.get<number[]>('/numbers');
+  }
+}
+
+describe('NumbersService', () => {
+  let service: NumberService;
+  let http: HttpClient;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        NumbersService,
+        MockService(HttpClient),
+      ]
+    });
+
+    service = TestBed.get(NumbersService);
+    http = TestBed.get(HttpClient)
+  });
+
+  describe('getNumbers', () => {
+    it('should fetch numbers', () => {
+      spyOn(http, 'get').and.returnValue(of([1]));
+   
+      service.getNumbers().subscribe((result) => {
+        expect(result).toEqual([1]);
+      });
+    });   
+  });
+});
+````
+
+## MockedServiceInstance
+
+* useful for getting mocked service instance
+
+### Usage Example
+```typescript
+describe('NumbersService', () => {
+  let service: NumberService;
+  let http: HttpClient;
+
+  beforeEach(() => {
+    http = MockedServiceInstance(HttpClient);
+    service = new NumberService(http);  
+  });
+
+  // ...
+
+});
+````
+
 ## Other examples of tests
 More detailed examples can be found in
 [e2e](https://github.com/ike18t/ng-mocks/tree/master/e2e)
