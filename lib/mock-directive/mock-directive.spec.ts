@@ -125,8 +125,8 @@ describe('MockDirective', () => {
   });
 
   it('should allow spying of viewchild directive methods', () => {
-    const spy = spyOn(component.childDirective, 'performAction');
     component.performActionOnChild('test');
-    expect(spy).toHaveBeenCalledWith('test');
+    // tslint:disable-next-line:no-unbound-method
+    expect(component.childDirective.performAction).toHaveBeenCalledWith('test');
   });
 });

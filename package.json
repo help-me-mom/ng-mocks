@@ -1,6 +1,6 @@
 {
-  "name": "ng-mocks",
-  "version": "8.1.0",
+  "name": "ng-jasmine-mocks",
+  "version": "8.1.1",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,13 +17,14 @@
     "build:all": "npm run lint && npm run test && npm run build",
     "release": "npm run lint && npm run test && npm run build && standard-version",
     "test": "karma start",
+    "standard-version": "standard-version",
     "test:watch": "karma start --auto-watch --single-run=false",
     "test:debug": "npm run test:watch -- --browsers=Chrome",
     "test:angular-versions": "sh build-with-supported-angluars.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ike18t/ng-mocks.git"
+    "url": "git@github.com:hakobpogh/ng-jasmine-mocks.git"
   },
   "keywords": [
     "Angular",
@@ -37,9 +38,9 @@
   "author": "Isaac Datlof <ike18t@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ike18t/ng-mocks/issues"
+    "url": "https://github.com/hakobpogh/ng-jasmine-mocks/issues"
   },
-  "homepage": "https://github.com/ike18t/ng-mocks#readme",
+  "homepage": "https://github.com/hakobpogh/ng-jasmine-mocks#readme",
   "peerDependencies": {
     "@angular/compiler": ">=5.x <=8.x",
     "@angular/core": ">=5.x <=8.x",
@@ -62,7 +63,7 @@
     "karma": "^3.1.3",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
-    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-jasmine-html-reporter": "^1.4.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-typescript": "^4.0.0",
     "rxjs": "^6.4.0",
@@ -71,5 +72,8 @@
     "tslint-jasmine-rules": "^1.5.1",
     "typescript": "3.4.3",
     "zone.js": "^0.9.1"
+  },
+  "dependencies": {
+    "jasmine": "^3.5.0"
   }
 }

@@ -148,9 +148,9 @@ describe('MockComponent', () => {
   });
 
   it('should allow spying of viewchild component methods', () => {
-    const spy = spyOn(component.childComponent, 'performAction');
     component.performActionOnChild('test');
-    expect(spy).toHaveBeenCalledWith('test');
+    // tslint:disable-next-line:no-unbound-method
+    expect(component.childComponent.performAction).toHaveBeenCalledWith('test');
   });
 
   describe('ReactiveForms - ControlValueAccessor', () => {

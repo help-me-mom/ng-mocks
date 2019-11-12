@@ -11,10 +11,12 @@ import {
 
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
+import createSpy = jasmine.createSpy;
+import SpyObj = jasmine.SpyObj;
 
 const cache = new Map<Type<Directive>, Type<Directive>>();
 
-export type MockedDirective<T> = T & {
+export type MockedDirective<T> = SpyObj<T> & {
   /** Pointer to current element in case of Attribute Directives. */
   __element?: ElementRef;
 
@@ -28,7 +30,7 @@ export type MockedDirective<T> = T & {
   __viewContainer?: ViewContainerRef;
 
   /** Helper function to render any Structural Directive with any context. */
-  __render($implicit?: any, variables?: {[key: string]: any}): void;
+  __render($implicit?: any, variables?: { [key: string]: any }): void;
 };
 
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>> {
@@ -56,11 +58,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     selector
   })
   class DirectiveMock {
-
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef,
+      @Optional() viewContainer?: ViewContainerRef
     ) {
       (this as any).__element = element;
 
@@ -72,7 +73,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
       Object.getOwnPropertyNames(directive.prototype).forEach((method) => {
         if (!(this as any)[method]) {
-          (this as any)[method] = () => {};
+          (this as any)[method] = createSpy(method, directive.prototype[method]);
         }
       });
 
@@ -81,14 +82,15 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       });
 
       // Providing method to render mocked values.
-      (this as any).__render = ($implicit?: any, variables?: {[key: string]: any}) => {
+      (this as any).__render = ($implicit?: any, variables?: { [key: string]: any }) => {
         if (viewContainer && template) {
           viewContainer.clear();
-          viewContainer.createEmbeddedView(template, {...variables, $implicit});
+          viewContainer.createEmbeddedView(template, { ...variables, $implicit });
         }
       };
     }
   }
+
   // tslint:enable:no-unnecessary-class
 
   cache.set(directive, DirectiveMock);

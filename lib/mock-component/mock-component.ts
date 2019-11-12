@@ -14,6 +14,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
+import createSpy = jasmine.createSpy;
+import SpyObj = jasmine.SpyObj;
 
 const cache = new Map<Type<Component>, Type<Component>>();
 
@@ -32,10 +34,13 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<any>
   return components.map((component) => MockComponent(component, undefined));
 }
 
-export function MockComponent<TComponent>(component: Type<TComponent>, metaData?: core.Directive): Type<TComponent> {
+export function MockComponent<TComponent>(
+  component: Type<TComponent>,
+  metaData?: core.Directive
+): Type<SpyObj<TComponent>> {
   const cacheHit = cache.get(component);
   if (cacheHit) {
-    return cacheHit as Type<TComponent>;
+    return cacheHit as Type<SpyObj<TComponent>>;
   }
 
   const { exportAs, inputs, outputs, queries, selector } = metaData || directiveResolver.resolve(component);
@@ -95,7 +100,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
     constructor(changeDetector: ChangeDetectorRef) {
       Object.getOwnPropertyNames(component.prototype).forEach((method) => {
         if (!(this as any)[method]) {
-          (this as any)[method] = () => {};
+          (this as any)[method] = createSpy(method, component.prototype[method]);
         }
       });
 
@@ -145,7 +150,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
   }
 
   // tslint:disable-next-line:no-angle-bracket-type-assertion
-  const mockedComponent = Component(options)(<any> ComponentMock as Type<TComponent>);
+  const mockedComponent = Component(options)(<any> ComponentMock as Type<SpyObj<TComponent>>);
 
   cache.set(component, mockedComponent);
 
