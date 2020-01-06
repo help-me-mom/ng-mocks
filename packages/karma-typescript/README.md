@@ -322,6 +322,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
         * `"clover": destination`
         * `"cobertura": destination`
         * `"html": destination`
+        * `"html-spa": destination`
         * `"json-summary": destination`
         * `"json": destination`
         * `"lcovonly": destination`

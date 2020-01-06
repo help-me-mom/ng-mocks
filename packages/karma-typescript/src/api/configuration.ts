@@ -83,6 +83,7 @@ export interface Reports {
     clover?: string | Destination;
     cobertura?: string | Destination;
     html?: string | Destination;
+    "html-spa"?: string | Destination;
     "json-summary"?: string | Destination;
     json?: string | Destination;
     lcovonly?: string | Destination;

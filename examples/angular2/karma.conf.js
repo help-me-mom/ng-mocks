@@ -21,6 +21,10 @@ module.exports = function(config) {
             },
             compilerOptions: {
                 lib: ["ES2015", "DOM"]
+            },
+            reports:
+            {
+                "html-spa": "coverage"
             }
         },
 
