@@ -39,27 +39,27 @@
     "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
-    "log4js": "^5.1.0"
+    "log4js": "^6.1.0"
   },
   "devDependencies": {
-    "@types/karma": "^3.0.1",
-    "@types/lodash": "^4.14.120",
-    "@types/node": "^12.7.2",
-    "@types/sinon": "^7.0.5",
+    "@types/karma": "^3.0.5",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.1.4",
+    "@types/sinon": "^7.5.1",
     "@types/tape": "^4.2.33",
     "faucet": "0.0.1",
     "generic-names": "^2.0.1",
     "karma-typescript": "5.0.0-beta.0",
-    "nyc": "^14.1.1",
-    "postcss": "^7.0.14",
+    "nyc": "^15.0.0",
+    "postcss": "^7.0.26",
     "postcss-modules-extract-imports": "^2.0.0",
     "postcss-modules-local-by-default": "^3.0.2",
-    "postcss-modules-scope": "^2.0.1",
+    "postcss-modules-scope": "^2.1.1",
     "postcss-modules-values": "^3.0.0",
-    "sinon": "^7.2.3",
-    "tape": "^4.9.2",
-    "ts-node": "^8.0.2",
-    "tslint": "^5.12.1",
+    "sinon": "^8.0.4",
+    "tape": "^4.12.1",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.20.1",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "latest"
   }
