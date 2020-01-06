@@ -86,7 +86,7 @@ export class Configuration implements KarmaTypescriptConfig {
     private configureLogging() {
         this.logAppenders = this.karma.loggers instanceof Array
             ? this.karma.loggers.reduce((logAppenders, logger, index) =>
-                Object.assign(logAppenders, { [logger.type + index]: logger }), {})
+                Object.assign(logAppenders, { [logger.type + index.toString()]: logger }), {})
             : this.karma.loggers;
 
         if (this.logAppenders != null) {
