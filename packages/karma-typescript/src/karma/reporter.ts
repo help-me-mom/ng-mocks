@@ -43,18 +43,16 @@ export class Reporter {
 
             this.onRunComplete = (browsers: any[], results: any) => {
 
-                browsers.forEach((browser: any) => {
+                browsers.forEach(async (browser: any) => {
 
                     const coverage = that.coverageMap.get(browser);
                     const coverageMap = istanbulCoverage.createCoverageMap();
                     coverageMap.merge(coverage);
 
                     const sourceMapStore = istanbulSourceMaps.createSourceMapStore();
-                    const remappedCoverageMap = sourceMapStore.transformCoverage(coverageMap).map;
+                    const remappedCoverageMap = await sourceMapStore.transformCoverage(coverageMap);
 
-                    const tree = istanbulReport.summarizers.pkg(remappedCoverageMap);
-
-                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap)) {
+                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap.map)) {
                         results.exitCode = 1;
                     }
 
@@ -65,9 +63,19 @@ export class Reporter {
                         if (destination) {
                             that.log.debug("Writing coverage to %s", destination);
                         }
-                        const context = istanbulReport.createContext( { dir: destination } );
 
-                        tree.visit(istanbulReports.create(reportType), context);
+                        const context = istanbulReport.createContext({
+                            // @ts-ignore
+                            coverageMap: remappedCoverageMap,
+                            dir: destination,
+                            // @ts-ignore
+                            sourceFinder: sourceMapStore.sourceFinder
+                        });
+
+                        istanbulReports
+                            .create(reportType)
+                            // @ts-ignore
+                            .execute(context);
                     });
                 });
             };
