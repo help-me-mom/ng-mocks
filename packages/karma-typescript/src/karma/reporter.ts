@@ -58,22 +58,23 @@ export class Reporter {
 
                     Object.keys(config.reports).forEach((reportType: any) => {
 
-                        const destination = that.getReportDestination(browser, config.reports, reportType);
+                        const reportConfig = config.reports[reportType] as any;
+                        const directory = that.getReportDestination(browser, reportConfig, reportType);
 
-                        if (destination) {
-                            that.log.debug("Writing coverage to %s", destination);
+                        if (directory) {
+                            that.log.debug("Writing coverage to %s", directory);
                         }
 
                         const context = istanbulReport.createContext({
                             // @ts-ignore
                             coverageMap: remappedCoverageMap,
-                            dir: destination,
+                            dir: directory,
                             // @ts-ignore
                             sourceFinder: sourceMapStore.sourceFinder
                         });
 
                         istanbulReports
-                            .create(reportType)
+                            .create(reportType, { file: reportConfig ? reportConfig.filename : undefined })
                             // @ts-ignore
                             .execute(context);
                     });
@@ -84,9 +85,7 @@ export class Reporter {
         Object.assign(this.create, { $inject: ["baseReporterDecorator", "logger", "config"] });
     }
 
-    private getReportDestination(browser: any, reports: any, reportType: any) {
-
-        const reportConfig = reports[reportType];
+    private getReportDestination(browser: any, reportConfig: any, reportType: any) {
 
         if (lodash.isPlainObject(reportConfig)) {
             let subdirectory = reportConfig.subdirectory || browser.name;
@@ -94,9 +93,7 @@ export class Reporter {
                 subdirectory = subdirectory(browser);
             }
 
-            return path.join(reportConfig.directory || "coverage",
-                             subdirectory,
-                             reportConfig.filename || reportType);
+            return path.join(reportConfig.directory || "coverage", subdirectory);
         }
 
         if (lodash.isString(reportConfig) && reportConfig.length > 0) {

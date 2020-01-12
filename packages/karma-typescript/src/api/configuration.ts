@@ -91,6 +91,7 @@ export interface Reports {
     "text-lcov"?: string | Destination;
     "text-summary"?: string | Destination;
     text?: string | Destination;
+    [key: string]: string | Destination;
 }
 
 export interface Destination {
