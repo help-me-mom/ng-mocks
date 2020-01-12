@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-postcss-transform",
-  "version": "5.0.0-beta.2",
+  "version": "5.0.0-beta.3",
   "description": "PostCSS runner plugin",
   "files": [
     "dist/**"
@@ -48,7 +48,7 @@
     "@types/tape": "^4.2.33",
     "autoprefixer": "^9.4.7",
     "faucet": "0.0.1",
-    "karma-typescript": "5.0.0-beta.2",
+    "karma-typescript": "5.0.0-beta.3",
     "nyc": "^15.0.0",
     "postcss": "^7.0.26",
     "sinon": "^8.0.4",
