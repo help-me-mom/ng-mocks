@@ -50,4 +50,20 @@ describe('MockRender', () => {
     expect(spy).toHaveBeenCalledWith(assertPayload);
   });
 
+  it('does not detect changes on fixture if detectChanges arg is false', () => {
+    const fixture = MockRender(
+      `
+        before
+        <render-real-component [content]="mockContent"></render-real-component>
+        after
+      `,
+      {
+        mockContent: 'injected content'
+      },
+      false
+    );
+    expect(fixture.debugElement.nativeElement.innerText).not.toContain('injected content');
+    fixture.detectChanges();
+    expect(fixture.debugElement.nativeElement.innerText).toContain('injected content');
+  });
 });
