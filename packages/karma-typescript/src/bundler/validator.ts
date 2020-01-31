@@ -1,11 +1,12 @@
 import * as acorn from "acorn";
+import { Logger } from "log4js";
 import * as os from "os";
 
 import { Configuration } from "../shared/configuration";
 
 export class Validator {
 
-    constructor(private config: Configuration) {}
+    constructor(private config: Configuration, private log: Logger) {}
 
     public validate(bundle: string, filename: string) {
 
@@ -23,11 +24,15 @@ export class Validator {
                                     "es6 modules with karma-typescript-es6-transform";
                 }
 
-                throw new Error("Invalid syntax in bundle: " + error.message + os.EOL +
+                const errorMessage = "Invalid syntax in bundle: " + error.message + os.EOL +
                     "in " + filename + os.EOL +
                     "at line " + error.loc.line + ", column " + error.loc.column + ":" + os.EOL + os.EOL +
                     "... " + bundle.slice(error.pos, error.pos + 50) + " ..." + os.EOL + os.EOL +
-                    possibleFix + (possibleFix ? os.EOL : ""));
+                    possibleFix + (possibleFix ? os.EOL : "");
+
+                this.log.error(errorMessage);
+
+                throw new Error(errorMessage);
             }
         }
     }

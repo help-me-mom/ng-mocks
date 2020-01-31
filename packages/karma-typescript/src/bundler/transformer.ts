@@ -1,6 +1,7 @@
 import * as acorn from "acorn";
 import * as async from "async";
 import { ErrorCallback } from "async";
+import { Logger } from "log4js";
 import * as os from "os";
 import * as ts from "typescript";
 
@@ -12,7 +13,7 @@ import { Queued } from "./queued";
 
 export class Transformer {
 
-    constructor(private config: Configuration, private project: Project) { }
+    constructor(private config: Configuration, private log: Logger, private project: Project) { }
 
     public applyTsTransforms(bundleQueue: Queued[], onTransformsApplied: () => void): void {
 
@@ -116,6 +117,7 @@ export class Transformer {
             const errorMessage = context.filename + ": " + error.message + os.EOL +
                 "Transform function: " + os.EOL + os.EOL +
                 transform + os.EOL;
+            this.log.error(errorMessage);
             throw new Error(errorMessage);
         }
     }

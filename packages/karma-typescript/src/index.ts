@@ -29,7 +29,9 @@ const loggers: LoggerList = {
     resolver: log4js.getLogger("resolver.karma-typescript"),
     sourceMap: log4js.getLogger("source-map.karma-typescript"),
     sourceReader: log4js.getLogger("source-reader.karma-typescript"),
-    threshold: log4js.getLogger("threshold.karma-typescript")
+    threshold: log4js.getLogger("threshold.karma-typescript"),
+    transformer: log4js.getLogger("transformer.karma-typescript"),
+    validator: log4js.getLogger("validator.karma-typescript")
 };
 
 const configuration = new Configuration(loggers);
@@ -38,9 +40,9 @@ const dependencyWalker = new DependencyWalker(loggers.dependencyWalker);
 
 const compiler = new Compiler(configuration, loggers.compiler, project);
 const coverage = new Coverage(configuration);
-const transformer = new Transformer(configuration, project);
+const transformer = new Transformer(configuration, loggers.transformer, project);
 const threshold = new Threshold(configuration, loggers.threshold);
-const validator = new Validator(configuration);
+const validator = new Validator(configuration, loggers.validator);
 
 const sourceReader = new SourceReader(configuration, loggers.sourceReader, transformer);
 const resolver = new Resolver(configuration, dependencyWalker, loggers.resolver, sourceReader);
