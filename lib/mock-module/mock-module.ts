@@ -22,11 +22,16 @@ interface IModuleOptions {
 const neverMockProvidedToken = [
   // RouterModule
   'InjectionToken Application Initializer',
+  // BrowserModule
+  'InjectionToken EventManagerPlugins',
+  'InjectionToken HammerGestureConfig',
 ];
 const neverMockProvidedFunction = [
   // BrowserModule
   'ApplicationInitStatus',
   'DomRendererFactory2',
+  'DomSharedStylesHost',
+  'EventManager',
   // BrowserAnimationsModule
   'RendererFactory2',
 ];
