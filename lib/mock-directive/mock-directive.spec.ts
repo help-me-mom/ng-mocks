@@ -28,6 +28,27 @@ export class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
 }
 
+@Directive({
+  selector: '[getters-and-setters]'
+})
+export class GettersAndSettersDirective {
+  get myGetter() {
+    return true;
+  }
+
+  set mySetter(value: string) {
+  }
+
+  @Input()
+  public normalInput?: boolean;
+
+  public normalProperty = false;
+
+  normalMethod(): boolean {
+    return this.myGetter;
+  }
+}
+
 @Component({
   selector: 'example-component-container',
   template: `
@@ -37,6 +58,7 @@ export class ExampleStructuralDirective {
       hi
     </div>
     <input [formControl]="fooControl"/>
+    <div getters-and-setters></div>
   `
 })
 export class ExampleComponentContainer {
@@ -60,7 +82,8 @@ describe('MockDirective', () => {
         ExampleComponentContainer,
         MockDirective(FormControlDirective),
         MockDirective(ExampleDirective),
-        MockDirective(ExampleStructuralDirective)
+        MockDirective(ExampleStructuralDirective),
+        MockDirective(GettersAndSettersDirective),
       ]
     })
     .compileComponents();
@@ -128,5 +151,15 @@ describe('MockDirective', () => {
     const spy = spyOn(component.childDirective, 'performAction');
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('should set getters and setters to undefined instead of function', () => {
+    const mockedDirective = MockHelper
+        .findDirective(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<GettersAndSettersDirective>;
+
+    expect(mockedDirective.normalMethod).toBeDefined();
+    expect(mockedDirective.myGetter).not.toBeDefined();
+    expect(mockedDirective.mySetter).not.toBeDefined();
+    expect(mockedDirective.normalProperty).not.toBeDefined();
   });
 });

@@ -94,7 +94,10 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
   class ComponentMock implements ControlValueAccessor {
     constructor(changeDetector: ChangeDetectorRef) {
       Object.getOwnPropertyNames(component.prototype).forEach((method) => {
-        if (!(this as any)[method]) {
+        // Skipping getters and setters
+        const descriptor = Object.getOwnPropertyDescriptor(component.prototype, method);
+        const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
+        if (!isGetterSetter && !(this as any)[method]) {
           (this as any)[method] = () => {};
         }
       });

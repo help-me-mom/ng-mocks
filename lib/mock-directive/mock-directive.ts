@@ -71,7 +71,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       (this as any).__isStructural = template && viewContainer;
 
       Object.getOwnPropertyNames(directive.prototype).forEach((method) => {
-        if (!(this as any)[method]) {
+        // Skipping getters and setters
+        const descriptor = Object.getOwnPropertyDescriptor(directive.prototype, method);
+        const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
+        if (!isGetterSetter && !(this as any)[method]) {
           (this as any)[method] = () => {};
         }
       });
