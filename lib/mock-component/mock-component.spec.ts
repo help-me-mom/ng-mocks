@@ -2,17 +2,20 @@ import { Component, DebugElement, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { MockedDirective, MockHelper } from 'ng-mocks';
 
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
 import { EmptyComponent } from './test-components/empty-component.component';
+import { GetterSetterComponent } from './test-components/getter-setter.component';
 import { SimpleComponent } from './test-components/simple-component.component';
 import { TemplateOutletComponent } from './test-components/template-outlet.component';
 
 @Component({
   selector: 'example-component-container',
   template: `
+    <getter-setter></getter-setter>
     <simple-component [someInput]="\'hi\'"
                       [someOtherInput]="\'bye\'"
                       [someInput3]=true
@@ -54,6 +57,7 @@ describe('MockComponent', () => {
       declarations: [
         ExampleComponentContainer,
         MockComponents(EmptyComponent,
+                       GetterSetterComponent,
                        SimpleComponent,
                        TemplateOutletComponent,
                        ChildComponent,
@@ -151,6 +155,16 @@ describe('MockComponent', () => {
     const spy = spyOn(component.childComponent, 'performAction');
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('should set getters and setters to undefined instead of function', () => {
+    const mockedComponent = MockHelper
+        .findDirective(fixture.debugElement, GetterSetterComponent) as MockedDirective<GetterSetterComponent>;
+
+    expect(mockedComponent.normalMethod).toBeDefined();
+    expect(mockedComponent.myGetter).not.toBeDefined();
+    expect(mockedComponent.mySetter).not.toBeDefined();
+    expect(mockedComponent.normalProperty).not.toBeDefined();
   });
 
   describe('ReactiveForms - ControlValueAccessor', () => {

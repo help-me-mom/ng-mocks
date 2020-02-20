@@ -18,6 +18,7 @@
     "no-floating-promises": false,
     "no-focused-tests": true,
     "no-submodule-imports": false,
+    "no-unbound-method": false,
     "no-unsafe-any": false,
     "no-use-before-declare": false,
     "only-arrow-functions": false,
