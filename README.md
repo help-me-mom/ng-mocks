@@ -225,7 +225,13 @@ describe('MockDirective', () => {
     const mockedDirectiveInstance = MockHelper.findDirective(
       fixture.debugElement, DependencyDirective
     ) as MockedDirective<DependencyDirective>;
-    fixture.detectChanges();
+
+    // now we assert that nothing has been rendered inside of the structural directive by default.
+    expect(fixture.debugElement.nativeElement.innerText).not.toContain('content');
+
+    // and now we render it manually.
+    mockedDirectiveInstance.__render();
+    expect(fixture.debugElement.nativeElement.innerText).toContain('content');
 
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
