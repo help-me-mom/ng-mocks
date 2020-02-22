@@ -20,10 +20,12 @@
     "baseUrl": ".",
     "paths": {
       "ng-mocks": ["index"]
-    }
+    },
+    "skipLibCheck": true
   },
   "include": [
     "index.ts",
-    "lib/**/*"
+    "lib/**/*",
+    "tests/**/*"
   ]
 }

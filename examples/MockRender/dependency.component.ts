@@ -1,11 +1,13 @@
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
+import { staticFalse } from '../../tests';
+
 @Component({
   selector: 'dependency-component-selector',
   template: `dependency`,
 })
 export class DependencyComponent {
-  @ContentChild('something', { static: false })
+  @ContentChild('something', {...staticFalse})
   injectedSomething: TemplateRef<{}>;
 
   @Input()
