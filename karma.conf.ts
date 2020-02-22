@@ -1,11 +1,24 @@
 // Karma configuration
 // Generated on Mon Dec 25 2017 20:41:30 GMT-0800 (PST)
 
+if (process.env.WITH_PUPPETEER) {
+  // tslint:disable-next-line:no-require-imports no-var-requires
+  process.env.CHROME_BIN = require('puppeteer').executablePath();
+}
+
 module.exports = (config: any) => {
   config.set({
     autoWatch: false,
-    browsers: ['ChromeHeadless'],
+    browsers: process.env.WITH_PUPPETEER ? ['Chrome'] : ['ChromeHeadless'],
     colors: true,
+    customLaunchers: {
+      Chrome: process.env.WITH_PUPPETEER
+          ? {
+            base: 'ChromeHeadless',
+            flags: ['--no-sandbox'],
+          }
+          : {},
+    },
     files: [
       'node_modules/zone.js/dist/zone.js',
       'node_modules/zone.js/dist/long-stack-trace-zone.js',
@@ -18,7 +31,8 @@ module.exports = (config: any) => {
       'index.ts',
       {pattern: 'lib/**/*.ts'},
       {pattern: 'e2e/**/*.ts'},
-      {pattern: 'examples/**/*.ts'}
+      {pattern: 'examples/**/*.ts'},
+      {pattern: 'tests/**/*.ts'}
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,

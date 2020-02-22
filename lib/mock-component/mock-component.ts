@@ -12,6 +12,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { staticFalse } from '../../tests';
+
 import { MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
@@ -55,8 +57,8 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
         }
         viewChildRefs.set(query.selector, key);
         queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
+          ...staticFalse,
           read: ViewContainerRef,
-          static: query.static
         });
         return `
           <div *ngIf="mockRender_${query.selector}" data-key="${query.selector}">
