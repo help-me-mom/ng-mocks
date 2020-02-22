@@ -32,29 +32,53 @@ export class ExampleComponent {
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ExampleComponent,
-        MockPipe(ExamplePipe, () => 'foo'),
-        MockPipe(AnotherExamplePipe)
-      ]
-    })
-    .compileComponents();
-  }));
+  describe('Base tests', () => {
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+          declarations: [
+            ExampleComponent,
+            MockPipe(ExamplePipe, () => 'foo'),
+            MockPipe(AnotherExamplePipe)
+          ]
+        })
+        .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ExampleComponent);
-    fixture.detectChanges();
+    beforeEach(() => {
+      fixture = TestBed.createComponent(ExampleComponent);
+      fixture.detectChanges();
+    });
+
+    it('should not display the word hi that is output by the unmocked pipe, because it is now mocked', () => {
+      expect(fixture.debugElement.query(By.css('#anotherExamplePipe')).nativeElement.innerHTML).toEqual('');
+    });
+
+    describe('with transform override', () => {
+      it('should return the result of the provided transform function', () => {
+        expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('foo');
+      });
+    });
   });
 
-  it('should not display the word hi that is output by the unmocked pipe, because it is now mocked', () => {
-    expect(fixture.debugElement.query(By.css('#anotherExamplePipe')).nativeElement.innerHTML).toEqual('');
-  });
+  describe('Cache check', () => {
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+          declarations: [
+            ExampleComponent,
+            MockPipe(ExamplePipe, () => 'bar'),
+            MockPipe(AnotherExamplePipe)
+          ]
+        })
+        .compileComponents();
+    }));
 
-  describe('with transform override', () => {
-    it('should return the result of the provided transform function', () => {
-      expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('foo');
+    beforeEach(() => {
+      fixture = TestBed.createComponent(ExampleComponent);
+      fixture.detectChanges();
+    });
+
+    it('should return the result of the new provided transform function', () => {
+      expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('bar');
     });
   });
 });
