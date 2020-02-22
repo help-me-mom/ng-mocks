@@ -5,7 +5,8 @@ import { directiveResolver } from '../common/reflect';
 
 function MockRender<MComponent, TComponent extends {[key: string]: any}>(
   template: string | Type<MComponent>,
-  params?: TComponent
+  params?: TComponent,
+  detectChanges = true
 ): ComponentFixture<TComponent> {
   let mockedTemplate = '';
   if (typeof template === 'string') {
@@ -57,7 +58,11 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
   });
 
   const fixture = TestBed.createComponent(component);
-  fixture.detectChanges();
+
+  if (detectChanges) {
+    fixture.detectChanges();
+  }
+
   return fixture;
 }
 
