@@ -32,10 +32,13 @@ export type MockedDirective<T> = T & {
 };
 
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>> {
-  return directives.map(MockDirective);
+  return directives.map(directive => MockDirective(directive)); // tslint:disable-line:no-unnecessary-callback-wrapper
 }
 
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
+export function MockDirective<TDirective>(
+  directive: Type<TDirective>,
+  renderStructuralContent = false
+): Type<MockedDirective<TDirective>> {
   const cacheHit = cache.get(directive);
   if (cacheHit) {
     return cacheHit as Type<MockedDirective<TDirective>>;
@@ -90,6 +93,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
           viewContainer.createEmbeddedView(template, {...variables, $implicit});
         }
       };
+
+      if (renderStructuralContent) {
+        (this as any).__render();
+      }
     }
   }
   // tslint:enable:no-unnecessary-class

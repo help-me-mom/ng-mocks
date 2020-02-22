@@ -29,6 +29,11 @@ export class ExampleStructuralDirective {
 }
 
 @Directive({
+  selector: '[anotherExampleStructuralDirective]'
+})
+export class AnotherExampleStructuralDirective { }
+
+@Directive({
   selector: '[getters-and-setters]'
 })
 export class GettersAndSettersDirective {
@@ -57,6 +62,9 @@ export class GettersAndSettersDirective {
     <div id="example-structural-directive" *exampleStructuralDirective="true">
       hi
     </div>
+    <div id="another-example-structural-directive" *anotherExampleStructuralDirective>
+      structual content rendered!
+    </div>
     <input [formControl]="fooControl"/>
     <div getters-and-setters></div>
   `
@@ -83,6 +91,7 @@ describe('MockDirective', () => {
         MockDirective(FormControlDirective),
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
+        MockDirective(AnotherExampleStructuralDirective, true),
         MockDirective(GettersAndSettersDirective),
       ]
     })
@@ -140,6 +149,12 @@ describe('MockDirective', () => {
 
     const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
+  });
+
+  it('displays structural directive content by default when arg is true', () => {
+    const debugElement = fixture.debugElement.query(By.css('#another-example-structural-directive'));
+
+    expect(debugElement.nativeElement.innerHTML).toContain('structual content rendered!');
   });
 
   it('should set ViewChild directives correctly', () => {

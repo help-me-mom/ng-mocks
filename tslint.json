@@ -5,6 +5,7 @@
   ],
   "rules": {
     "align": false,
+    "arrow-parens": false,
     "completed-docs": false,
     "comment-format": false,
     "file-name-casing": false,
