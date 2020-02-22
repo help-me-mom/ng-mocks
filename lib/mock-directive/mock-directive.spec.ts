@@ -4,6 +4,7 @@ import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockedDirective, MockHelper } from 'ng-mocks';
 
+import { staticFalse } from '../../tests';
 import { MockDirective } from './mock-directive';
 
 // tslint:disable:max-classes-per-file
@@ -70,7 +71,7 @@ export class GettersAndSettersDirective {
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, { static: false }) childDirective: ExampleDirective;
+  @ViewChild(ExampleDirective, {...staticFalse}) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
 

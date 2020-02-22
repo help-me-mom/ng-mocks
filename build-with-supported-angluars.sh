@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
-# VERSIONS="5 6 7 8"
-VERSIONS="8" # only 8 due to type definition updates in @angular 8
+VERSIONS="5 6 7 8 9"
 PACKAGES="animations common compiler core forms platform-browser platform-browser-dynamic router"
 
 for version in $VERSIONS
@@ -19,6 +18,7 @@ do
   echo $version | grep -Eq "^6" && NEW="$NEW rxjs@6.0.0 zone.js@0.8.26 typescript@2.7"
   echo $version | grep -Eq "^7" && NEW="$NEW rxjs@6.0.0 zone.js@0.8.26 typescript@3.1"
   echo $version | grep -Eq "^8" && NEW="$NEW rxjs@6.4.0 zone.js@0.9.1 typescript@3.4.3"
+  echo $version | grep -Eq "^9" && NEW="$NEW rxjs@6.5.3 zone.js@0.10.2 typescript@3.6.4"
 
   echo $NEW
 

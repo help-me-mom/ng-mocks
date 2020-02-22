@@ -4,6 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockedDirective, MockHelper } from 'ng-mocks';
 
+import { staticTrue } from '../../tests';
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
@@ -39,7 +40,7 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, { static: true }) childComponent: ChildComponent;
+  @ViewChild(ChildComponent, {...staticTrue}) childComponent: ChildComponent;
   emitted: string;
   formControl = new FormControl('');
 
