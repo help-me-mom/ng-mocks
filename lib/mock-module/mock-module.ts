@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
+import { MockDeclaration, MockOf, MockService } from 'ng-mocks';
 
-import { MockOf } from '../common';
 import { jitReflector, ngModuleResolver } from '../common/reflect';
-import { MockDeclaration } from '../mock-declaration';
 
 const cache = new Map<Type<NgModule>, Type<NgModule>>();
 
@@ -44,20 +43,20 @@ const mockProvider = (provider: any): Provider | undefined => {
     typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
     && neverMockProvidedToken.includes(provide.toString())
   ) {
-    return undefined;
+    return provider;
   }
 
   if (
     typeof provide === 'function'
     && neverMockProvidedFunction.includes(provide.name)
   ) {
-    return undefined;
+    return provider;
   }
 
   return {
     multi,
     provide,
-    useValue: {},
+    useValue: MockService(provide),
   };
 };
 
