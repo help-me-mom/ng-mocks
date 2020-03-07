@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-cssmodules-transform",
-  "version": "5.0.0-beta.3",
+  "version": "5.0.0",
   "description": "PostCSS runner plugin for CSS Modules",
   "files": [
     "dist/**"
@@ -49,7 +49,7 @@
     "@types/tape": "^4.2.33",
     "faucet": "0.0.1",
     "generic-names": "^2.0.1",
-    "karma-typescript": "5.0.0-beta.3",
+    "karma-typescript": "5.0.0",
     "nyc": "^15.0.0",
     "postcss": "^7.0.26",
     "postcss-modules-extract-imports": "^2.0.0",

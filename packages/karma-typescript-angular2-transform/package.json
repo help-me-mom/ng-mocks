@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-angular2-transform",
-  "version": "5.0.0-beta.3",
+  "version": "5.0.0",
   "description": "Plugin for transforming template and style urls in Angular components.",
   "files": [
     "dist/**"
@@ -51,7 +51,7 @@
     "@types/sinon": "^7.5.1",
     "@types/tape": "^4.2.33",
     "faucet": "0.0.1",
-    "karma-typescript": "5.0.0-beta.3",
+    "karma-typescript": "5.0.0",
     "nyc": "^15.0.0",
     "rxjs": "^6.5.4",
     "sinon": "^8.0.4",
