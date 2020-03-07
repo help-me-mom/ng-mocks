@@ -152,7 +152,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   The key is a string.
 
 * **karmaTypescriptConfig.bundlerOptions.resolve.extensions** - An array of file extensions to use, in order, when resolving modules.<br/>
-  Defaults to `[".js", ".json", ".ts", ".tsx"]`.
+  Defaults to `[".js", ".json", ".mjs", ".ts", ".tsx"]`.
 
 * **karmaTypescriptConfig.bundlerOptions.resolve.directories** - An array of directories where modules will be recursively looked up.<br/>
   Defaults to `["node_modules"]`.
