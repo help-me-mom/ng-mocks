@@ -24,8 +24,6 @@
     "skipLibCheck": true
   },
   "include": [
-    "index.ts",
-    "lib/**/*",
-    "tests/**/*"
+    "index.ts"
   ]
 }

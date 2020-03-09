@@ -48,6 +48,8 @@ module.exports = (config: any) => {
         'karma-test-shim.ts',
         'e2e/**/*',
         'examples/**/*',
+        'lib/**/*',
+        'tests/**/*',
       ],
       tsconfig: 'tsconfig.json'
     }

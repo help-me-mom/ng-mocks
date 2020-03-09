@@ -11,9 +11,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { staticFalse } from '../../tests';
-
-import { Mock, MockOf } from '../common';
+import {  Mock, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
@@ -56,9 +54,9 @@ export function MockComponent<TComponent>(
         }
         viewChildRefs.set(query.selector, key);
         queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
-          ...staticFalse,
           read: ViewContainerRef,
-        });
+          static: false,
+        } as any);
         return `
           <div *ngIf="mockRender_${query.selector}" data-key="${query.selector}">
             <ng-template #__${query.selector}></ng-template>
