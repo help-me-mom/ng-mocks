@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {  Mock, MockOf } from '../common';
+import {  MockControlValueAccessor, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
 
-export type MockedComponent<T> = T & Mock & {
+export type MockedComponent<T> = T & MockControlValueAccessor & {
   /** Helper function to hide rendered @ContentChild() template. */
   __hide(contentChildSelector: string): void;
 
@@ -24,7 +24,7 @@ export type MockedComponent<T> = T & Mock & {
   __render(contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}): void;
 };
 
-export function MockComponents(...components: Array<Type<any>>): Array<Type<any>> {
+export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
   return components.map((component) => MockComponent(component, undefined));
 }
 
@@ -90,7 +90,7 @@ export function MockComponent<TComponent>(
   };
 
   @MockOf(component, outputs)
-  class ComponentMock extends Mock {
+  class ComponentMock extends MockControlValueAccessor {
     constructor(changeDetector: ChangeDetectorRef) {
       super();
 

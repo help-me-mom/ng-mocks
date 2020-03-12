@@ -1,20 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
-import { MockDeclaration, MockOf, MockService } from 'ng-mocks';
+import { Mock, MockDeclaration, MockOf, MockService } from 'ng-mocks';
 
 import { jitReflector, ngModuleResolver } from '../common/reflect';
 
-const cache = new Map<Type<NgModule>, Type<NgModule>>();
+const cache = new Map<Type<any>, Type<any>>();
 
-export type ImportInstance = Type<NgModule> | ModuleWithProviders;
-
-interface IModuleOptions {
-  declarations?: Array<Type<any>>;
-  entryComponents?: Array<Type<any>>;
-  exports?: Array<Type<any>>;
-  imports?: Array<Type<any> | ModuleWithProviders | any[]>;
-  providers?: Provider[];
-}
+export type MockedModule<T> = T & Mock & {};
 
 // Some modules inject own providers, which don't allow mocks due to conflicts with test env.
 // We have to avoid any injection of those providers to mock everything properly.
@@ -70,7 +62,7 @@ const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
 };
 
 // Checks if an object was decorated by NgModule.
-const isModule = (object: any): object is Type<NgModule> => {
+const isModule = (object: any): object is Type<any> => {
   const annotations = jitReflector.annotations(object);
   const ngMetadataNames = annotations.map((annotation) => annotation.__proto__.ngMetadataName);
   return ngMetadataNames.indexOf('NgModule') !== -1;
@@ -80,8 +72,10 @@ const isModule = (object: any): object is Type<NgModule> => {
 const isModuleWithProviders = (object: any): object is ModuleWithProviders => typeof object.ngModule !== 'undefined'
     && isModule(object.ngModule);
 
-export function MockModule(module: ImportInstance): ImportInstance {
-  let ngModule: Type<NgModule>;
+export function MockModule<T>(module: Type<T>): Type<MockedModule<T>>;
+export function MockModule(module: ModuleWithProviders): ModuleWithProviders;
+export function MockModule(module: any): any {
+  let ngModule: Type<any>;
   let ngModuleProviders: Provider[] | undefined;
   let moduleMockPointer: Type<any>;
 
@@ -106,7 +100,7 @@ export function MockModule(module: ImportInstance): ImportInstance {
   } else {
     @NgModule(MockIt(ngModule))
     @MockOf(ngModule)
-    class ModuleMock {
+    class ModuleMock extends Mock {
     }
 
     moduleMockPointer = ModuleMock;
@@ -123,10 +117,10 @@ export function MockModule(module: ImportInstance): ImportInstance {
   return moduleMockPointer;
 }
 
-const NEVER_MOCK: Array<Type<NgModule>> = [CommonModule];
+const NEVER_MOCK: Array<Type<any>> = [CommonModule];
 
-function MockIt(module: Type<NgModule>): IModuleOptions {
-  const mockedModule: IModuleOptions = {};
+function MockIt(module: Type<any>): NgModule {
+  const mockedModule: NgModule = {};
   const { declarations = [], entryComponents = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
 
   if (imports.length) {
@@ -135,7 +129,7 @@ function MockIt(module: Type<NgModule>): IModuleOptions {
         return MockModule(instance);
       }
       if (isModuleWithProviders(instance)) {
-        return MockModule(instance) as ModuleWithProviders;
+        return MockModule(instance);
       }
       return MockDeclaration(instance);
     });

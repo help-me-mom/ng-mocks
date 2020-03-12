@@ -1,11 +1,11 @@
 import { Directive, ElementRef, forwardRef, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 
-import { Mock, MockOf } from '../common';
+import { MockControlValueAccessor, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<MockedDirective<Directive>>>();
 
-export type MockedDirective<T> = T & Mock & {
+export type MockedDirective<T> = T & MockControlValueAccessor & {
   /** Pointer to current element in case of Attribute Directives. */
   __element?: ElementRef;
 
@@ -22,7 +22,7 @@ export type MockedDirective<T> = T & Mock & {
   __render($implicit?: any, variables?: {[key: string]: any}): void;
 };
 
-export function MockDirectives(...directives: Array<Type<any>>): Array<Type<any>> {
+export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
 }
 
@@ -46,7 +46,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   };
 
   @MockOf(directive, outputs)
-  class DirectiveMock extends Mock {
+  class DirectiveMock extends MockControlValueAccessor {
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,

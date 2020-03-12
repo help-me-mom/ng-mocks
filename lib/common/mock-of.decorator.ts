@@ -1,5 +1,7 @@
 import { Type } from '@angular/core';
 
+import { mockServiceHelper } from '../mock-service';
+
 // This helps with debugging in the browser. Decorating mock classes with this
 // will change the display-name of the class to 'MockOf-<ClassName>` so our
 // debugging output (and Angular's error messages) will mention our mock classes
@@ -14,21 +16,11 @@ export const MockOf = (mockClass: Type<any>, outputs?: string[]) => (constructor
     nameConstructor: {value: constructor.name},
   });
 
-  const mockedMethods = [];
-  for (const method of Object.getOwnPropertyNames(mockClass.prototype || {})) {
-    // Skipping getters and setters
-    const descriptor = Object.getOwnPropertyDescriptor(mockClass.prototype, method);
-    const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
-    if (!isGetterSetter && !constructor.prototype[method]) {
-      mockedMethods.push(method);
-    }
-  }
+  constructor.prototype.__mockedMethods = mockServiceHelper.extractMethodsFromPrototype(mockClass.prototype);
 
   const mockedOutputs = [];
   for (const output of outputs || []) {
     mockedOutputs.push(output.split(':')[0]);
   }
-
-  constructor.prototype.__mockedMethods = mockedMethods;
   constructor.prototype.__mockedOutputs = mockedOutputs;
 };
