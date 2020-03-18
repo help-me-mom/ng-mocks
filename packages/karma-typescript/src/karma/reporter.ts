@@ -27,13 +27,16 @@ export class Reporter {
         // tslint:disable-next-line:only-arrow-functions
         this.create = function(baseReporterDecorator: any, logger: any) {
 
-            baseReporterDecorator(that);
+            baseReporterDecorator(this);
 
             that.log = logger.create(`reporter.${reporterName}`);
 
             this.onRunStart = () => {
                 that.coverageMap = new WeakMap<any, any>();
             };
+
+            this.onBrowserStart = () => { /**/ };
+            this.specFailure = () => { /**/ };
 
             this.onBrowserComplete = (browser: any, result: any) => {
                 if (result && result.coverage) {
