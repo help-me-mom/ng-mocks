@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript-es6-transform",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Plugin for transforming ES2015 javascript code to to ES5 syntax.",
   "files": [
     "dist/**"
@@ -56,7 +56,7 @@
     "acorn": "^7.1.0",
     "faucet": "0.0.1",
     "i": "^0.3.6",
-    "karma-typescript": "5.0.0",
+    "karma-typescript": "5.0.1",
     "npm": "^6.13.4",
     "nyc": "^15.0.0",
     "postcss": "^7.0.26",
