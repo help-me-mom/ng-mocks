@@ -1,20 +1,11 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Optional,
-  TemplateRef,
-  Type,
-  ViewContainerRef
-} from '@angular/core';
+import { Directive, ElementRef, forwardRef, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 
-import { MockOf } from '../common';
+import { Mock, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
-const cache = new Map<Type<Directive>, Type<Directive>>();
+const cache = new Map<Type<Directive>, Type<MockedDirective<Directive>>>();
 
-export type MockedDirective<T> = T & {
+export type MockedDirective<T> = T & Mock & {
   /** Pointer to current element in case of Attribute Directives. */
   __element?: ElementRef;
 
@@ -43,9 +34,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
 
-  // tslint:disable:no-unnecessary-class
-  @MockOf(directive)
-  @Directive({
+  const options: Directive = {
     exportAs,
     inputs,
     outputs,
@@ -53,35 +42,24 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       provide: directive,
       useExisting: forwardRef(() => DirectiveMock)
     }],
-    selector
-  })
-  class DirectiveMock {
+    selector,
+  };
 
+  @MockOf(directive, outputs)
+  class DirectiveMock extends Mock {
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
       @Optional() viewContainer?: ViewContainerRef,
     ) {
-      (this as any).__element = element;
+      super();
 
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.
+      (this as any).__element = element;
       (this as any).__template = template;
       (this as any).__viewContainer = viewContainer;
       (this as any).__isStructural = template && viewContainer;
-
-      Object.getOwnPropertyNames(directive.prototype).forEach((method) => {
-        // Skipping getters and setters
-        const descriptor = Object.getOwnPropertyDescriptor(directive.prototype, method);
-        const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
-        if (!isGetterSetter && !(this as any)[method]) {
-          (this as any)[method] = () => {};
-        }
-      });
-
-      (outputs || []).forEach((output) => {
-        (this as any)[output.split(':')[0]] = new EventEmitter<any>();
-      });
 
       // Providing method to render mocked values.
       (this as any).__render = ($implicit?: any, variables?: {[key: string]: any}) => {
@@ -92,9 +70,9 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       };
     }
   }
-  // tslint:enable:no-unnecessary-class
 
-  cache.set(directive, DirectiveMock);
+  const mockedDirective: Type<MockedDirective<TDirective>> = Directive(options)(DirectiveMock as any);
+  cache.set(directive, mockedDirective);
 
-  return DirectiveMock as Type<MockedDirective<TDirective>>;
+  return mockedDirective;
 }

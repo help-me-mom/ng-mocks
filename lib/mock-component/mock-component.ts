@@ -2,7 +2,6 @@ import { core } from '@angular/compiler';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   forwardRef,
   Query,
   TemplateRef,
@@ -10,34 +9,34 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { staticFalse } from '../../tests';
 
-import { MockOf } from '../common';
+import { Mock, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
-const cache = new Map<Type<Component>, Type<Component>>();
+const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
 
-export type MockedComponent<T> = T & {
+export type MockedComponent<T> = T & Mock & {
   /** Helper function to hide rendered @ContentChild() template. */
   __hide(contentChildSelector: string): void;
 
   /** Helper function to render any @ContentChild() template with any context. */
   __render(contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}): void;
-
-  __simulateChange(value: any): void;
-  __simulateTouch(): void;
 };
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<any>> {
   return components.map((component) => MockComponent(component, undefined));
 }
 
-export function MockComponent<TComponent>(component: Type<TComponent>, metaData?: core.Directive): Type<TComponent> {
+export function MockComponent<TComponent>(
+  component: Type<TComponent>,
+  metaData?: core.Directive,
+): Type<MockedComponent<TComponent>> {
   const cacheHit = cache.get(component);
   if (cacheHit) {
-    return cacheHit as Type<TComponent>;
+    return cacheHit as Type<MockedComponent<TComponent>>;
   }
 
   const { exportAs, inputs, outputs, queries, selector } = metaData || directiveResolver.resolve(component);
@@ -92,21 +91,10 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
     template,
   };
 
-  @MockOf(component)
-  class ComponentMock implements ControlValueAccessor {
+  @MockOf(component, outputs)
+  class ComponentMock extends Mock {
     constructor(changeDetector: ChangeDetectorRef) {
-      Object.getOwnPropertyNames(component.prototype).forEach((method) => {
-        // Skipping getters and setters
-        const descriptor = Object.getOwnPropertyDescriptor(component.prototype, method);
-        const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
-        if (!isGetterSetter && !(this as any)[method]) {
-          (this as any)[method] = () => {};
-        }
-      });
-
-      (options.outputs || []).forEach((output) => {
-        (this as any)[output.split(':')[0]] = new EventEmitter<any>();
-      });
+      super();
 
       // Providing method to hide any @ContentChild based on its selector.
       (this as any).__hide = (contentChildSelector: string) => {
@@ -134,24 +122,9 @@ export function MockComponent<TComponent>(component: Type<TComponent>, metaData?
         }
       };
     }
-
-    __simulateChange = (param: any) => {}; // tslint:disable-line:variable-name
-    __simulateTouch = () => {}; // tslint:disable-line:variable-name
-
-    registerOnChange(fn: (value: any) => void): void {
-      this.__simulateChange = fn;
-    }
-
-    registerOnTouched(fn: () => void): void {
-      this.__simulateTouch = fn;
-    }
-
-    writeValue = (value: any) => {};
   }
 
-  // tslint:disable-next-line:no-angle-bracket-type-assertion
-  const mockedComponent = Component(options)(<any> ComponentMock as Type<TComponent>);
-
+  const mockedComponent: Type<MockedComponent<TComponent>> = Component(options)(ComponentMock as any);
   cache.set(component, mockedComponent);
 
   return mockedComponent;
