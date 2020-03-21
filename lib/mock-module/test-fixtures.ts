@@ -136,4 +136,29 @@ class ModuleProvider {
 })
 export class ModuleWithProvidersModule {}
 
+// Checking services
+@Injectable()
+export class CustomService {
+  protected readonly value = 'dummy';
+
+  public getSomething(): string {
+    return this.value;
+  }
+}
+@Component({
+  selector: 'custom-service',
+  template: `same imports`
+})
+export class CustomWithServiceComponent {
+  public name: string;
+
+  constructor(service: CustomService) {
+    this.name = service.getSomething();
+  }
+}
+@NgModule({
+  providers: [CustomService],
+})
+export class WithServiceModule {}
+
 /* Assets for ModuleWithProviders END */

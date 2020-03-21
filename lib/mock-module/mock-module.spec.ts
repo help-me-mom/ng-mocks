@@ -5,12 +5,10 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent, MockModule, MockRender } from 'ng-mocks';
 
-import { MockComponent } from '../mock-component';
-
-import { MockModule } from './mock-module';
 import {
-  AppRoutingModule,
+  AppRoutingModule, CustomWithServiceComponent,
   ExampleComponent,
   ExampleConsumerComponent,
   LogicNestedModule,
@@ -18,7 +16,7 @@ import {
   ModuleWithProvidersModule,
   ParentModule,
   SameImports1Module,
-  SameImports2Module
+  SameImports2Module, WithServiceModule,
 } from './test-fixtures';
 
 @Component({
@@ -199,6 +197,24 @@ describe('Usage of cached nested module', () => {
 
   });
 
+});
+
+describe('WithServiceModule', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        CustomWithServiceComponent,
+      ],
+      imports: [
+        MockModule(WithServiceModule),
+      ],
+    });
+  }));
+
+  it('should not throw an error of service method', () => {
+    const fixture = MockRender('<custom-service></custom-service>');
+    expect(fixture).toBeDefined();
+  });
 });
 
 // TODO> Doesn't work because ParentModule doesn't export anything.
