@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
-import { Mock, MockDeclaration, MockOf, MockService } from 'ng-mocks';
+import { getTestBed } from '@angular/core/testing';
 
-import { jitReflector, ngModuleResolver } from '../common/reflect';
-
-const cache = new Map<Type<any>, Type<any>>();
+import { flatten, getMockedNgDefOf, isNgDef, isNgModuleDefWithProviders, Mock, MockOf } from '../common';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import { ngModuleResolver } from '../common/reflect';
+import { MockComponent } from '../mock-component';
+import { MockDirective } from '../mock-directive';
+import { MockPipe } from '../mock-pipe';
+import { MockService } from '../mock-service';
 
 export type MockedModule<T> = T & Mock & {};
 
@@ -27,9 +31,12 @@ const neverMockProvidedFunction = [
   'RendererFactory2',
 ];
 
-const mockProvider = (provider: any): Provider | undefined => {
+export function MockProvider(provider: any): Provider {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
   const multi = typeof provider === 'object' && provider.multi;
+  if (ngMocksUniverse.flags.has('cacheProvider') && ngMocksUniverse.cache.has(provide)) {
+    return ngMocksUniverse.cache.get(provide);
+  }
 
   if (
     typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
@@ -45,41 +52,30 @@ const mockProvider = (provider: any): Provider | undefined => {
     return provider;
   }
 
-  return {
+  const mockedProvider: Provider = {
     multi,
     provide,
     useValue: MockService(provide),
   };
-};
-
-const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
-  if (Array.isArray(values)) {
-    values.forEach((value: T | T[]) => flatten(value, result));
-  } else {
-    result.push(values);
+  if (ngMocksUniverse.flags.has('cacheProvider')) {
+    ngMocksUniverse.cache.set(provide, mockedProvider);
   }
-  return result;
-};
 
-// Checks if an object was decorated by NgModule.
-const isModule = (object: any): object is Type<any> => {
-  const annotations = jitReflector.annotations(object);
-  const ngMetadataNames = annotations.map((annotation) => annotation.__proto__.ngMetadataName);
-  return ngMetadataNames.indexOf('NgModule') !== -1;
-};
+  return mockedProvider;
+}
 
-// Checks if an object implements ModuleWithProviders.
-const isModuleWithProviders = (object: any): object is ModuleWithProviders => typeof object.ngModule !== 'undefined'
-    && isModule(object.ngModule);
-
-export function MockModule<T>(module: Type<T>): Type<MockedModule<T>>;
+export function MockModule<T>(module: Type<T>): Type<any>;
+// TODO add a proper generic of ModuleWithProviders when support of A5 has been stopped.
 export function MockModule(module: ModuleWithProviders): ModuleWithProviders;
-export function MockModule(module: any): any {
+export function MockModule(module: any): any { // tslint:disable-line:cyclomatic-complexity
   let ngModule: Type<any>;
   let ngModuleProviders: Provider[] | undefined;
-  let moduleMockPointer: Type<any>;
+  let mockModule: typeof ngModule | undefined;
+  let mockModuleProviders: typeof ngModuleProviders;
+  let mockModuleDef: NgModule | undefined;
+  let releaseSkipMockFlag = false;
 
-  if (isModuleWithProviders(module)) {
+  if (isNgModuleDefWithProviders(module)) {
     ngModule = module.ngModule;
     if (module.providers) {
       ngModuleProviders = module.providers;
@@ -92,85 +88,213 @@ export function MockModule(module: any): any {
     return module;
   }
 
+  // We are inside of an 'it'.
+  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
+    return getMockedNgDefOf(ngModule, 'm');
+  }
+
   // Every module should be mocked only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
-  const cacheHit = cache.get(ngModule);
-  if (cacheHit) {
-    moduleMockPointer = cacheHit;
-  } else {
-    @NgModule(MockIt(ngModule))
+  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cache.has(ngModule)) {
+    mockModule = ngMocksUniverse.cache.get(ngModule);
+  }
+
+  // Now we check if we need to keep the original module or to replace it with some other.
+  if (!mockModule && ngMocksUniverse.builder.has(ngModule)) {
+    const instance = ngMocksUniverse.builder.get(ngModule);
+    if (isNgDef(instance, 'm') && instance !== ngModule) {
+      mockModule = instance;
+    }
+    if (!ngMocksUniverse.flags.has('skipMock')) {
+      releaseSkipMockFlag = true;
+      ngMocksUniverse.flags.add('skipMock');
+    }
+  }
+
+  if (!mockModule) {
+    const [changed, ngModuleDef] = MockNgModuleDef(ngModuleResolver.resolve(ngModule), ngModule);
+    if (changed) {
+      mockModuleDef = ngModuleDef;
+    }
+  }
+
+  if (mockModuleDef) {
+    @NgModule(mockModuleDef)
     @MockOf(ngModule)
     class ModuleMock extends Mock {
     }
 
-    moduleMockPointer = ModuleMock;
-    cache.set(ngModule, moduleMockPointer);
+    mockModule = ModuleMock;
+    if (ngMocksUniverse.flags.has('cacheModule')) {
+      ngMocksUniverse.cache.set(ngModule, mockModule);
+    }
+  }
+  if (!mockModule) {
+    mockModule = ngModule;
   }
 
   if (ngModuleProviders) {
-    return {
-      ngModule: moduleMockPointer,
-      providers: flatten(ngModuleProviders).map(mockProvider)
-        .filter((provider) => !!provider) as Provider[],
-    };
+    const [changed, ngModuleDef] = MockNgModuleDef({providers: ngModuleProviders});
+    mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
   }
-  return moduleMockPointer;
+
+  if (releaseSkipMockFlag) {
+    ngMocksUniverse.flags.delete('skipMock');
+  }
+
+  return ngModuleProviders && ngModuleProviders.length
+    ? {ngModule: mockModule, providers: mockModuleProviders}
+    : mockModule;
 }
 
 const NEVER_MOCK: Array<Type<any>> = [CommonModule];
 
-function MockIt(module: Type<any>): NgModule {
-  const mockedModule: NgModule = {};
-  const { declarations = [], entryComponents = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
+// tslint:disable-next-line:cyclomatic-complexity
+function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
+  let changed = false;
+  const mockedModuleDef: NgModule = {};
+  const {
+    bootstrap = [],
+    declarations = [],
+    entryComponents = [],
+    exports = [],
+    imports = [],
+    providers = [],
+  } = ngModuleDef;
 
-  if (imports.length) {
-    mockedModule.imports = flatten(imports).map((instance: Type<any>) => {
-      if (isModule(instance)) {
-        return MockModule(instance);
-      }
-      if (isModuleWithProviders(instance)) {
-        return MockModule(instance);
-      }
-      return MockDeclaration(instance);
-    });
-  }
+  const resolutions = new Map();
+  const resolve = (def: any) => {
+    let mockedDef: typeof def;
+    if (resolutions.has(def)) {
+      return resolutions.get(def);
+    }
+    ngMocksUniverse.touches.add(isNgModuleDefWithProviders(def) ? def.ngModule : def);
 
-  if (declarations.length) {
-    mockedModule.declarations = flatten(declarations).map(MockDeclaration);
-  }
-
-  if (entryComponents.length) {
-    mockedModule.entryComponents = flatten(entryComponents).map(MockDeclaration);
-  }
-
-  if (providers.length) {
-    mockedModule.providers = flatten(providers).map(mockProvider)
-      .filter((provider) => !!provider) as Provider[];
-  }
-
-  // When we mock module only exported declarations are accessible inside of test.
-  // Because of that we have to export everything what a module imports or declares.
-  // Unfortunately in that case tests won't fail when some module has missed exports.
-  if (mockedModule.declarations || mockedModule.imports) {
-    mockedModule.exports = [];
-
-    if (mockedModule.imports) {
-      const onlyModules = mockedModule.imports.map((instance) => {
-        if (isModule(instance)) {
-          return instance;
-        }
-        if (isModuleWithProviders(instance)) {
-          return instance.ngModule;
-        }
-        return undefined;
-      }).filter((instance) => instance) as Array<Type<any>>;
-      mockedModule.exports = [...mockedModule.exports, ...onlyModules];
+    // First we mock modules.
+    if (!mockedDef && isNgDef(def, 'm')) {
+      mockedDef = MockModule(def);
+    }
+    if (!mockedDef && isNgModuleDefWithProviders(def)) {
+      mockedDef = MockModule(def);
+      resolutions.set(def.ngModule, mockedDef.ngModule);
     }
 
-    if (mockedModule.declarations) {
-      mockedModule.exports = [...mockedModule.exports, ...mockedModule.declarations];
+    // Then we check decisions whether we should keep or replace a def.
+    if (!mockedDef && ngMocksUniverse.builder.has(def)) {
+      mockedDef = ngMocksUniverse.builder.get(def);
     }
+
+    // And then we mock what we have if it wasn't blocked by the skipMock.
+    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+      mockedDef = def;
+    }
+    if (!mockedDef && isNgDef(def, 'c')) {
+      mockedDef = MockComponent(def);
+    }
+    if (!mockedDef && isNgDef(def, 'd')) {
+      mockedDef = MockDirective(def);
+    }
+    if (!mockedDef && isNgDef(def, 'p')) {
+      mockedDef = MockPipe(def);
+    }
+    if (!mockedDef) {
+      mockedDef = MockProvider(def);
+    }
+
+    resolutions.set(def, mockedDef);
+    changed = changed || mockedDef !== def;
+    return mockedDef;
+  };
+
+  // resolveProvider is a special case because of the def structure.
+  const resolveProvider = (def: any) => {
+    const provider = typeof def === 'object' && def.provide ? def.provide : def;
+    let mockedDef: typeof def;
+    if (resolutions.has(provider)) {
+      return resolutions.get(provider);
+    }
+    ngMocksUniverse.touches.add(provider);
+
+    // Then we check decisions whether we should keep or replace a def.
+    if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
+      mockedDef = ngMocksUniverse.builder.get(provider);
+      if (mockedDef === provider) {
+        mockedDef = def;
+      }
+    }
+
+    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+      mockedDef = def;
+    }
+    if (!mockedDef) {
+      mockedDef = MockProvider(def);
+    }
+
+    resolutions.set(provider, mockedDef);
+    changed = changed || mockedDef !== def;
+    return mockedDef;
+  };
+
+  if (imports && imports.length) {
+    mockedModuleDef.imports = flatten(imports).map(resolve);
   }
 
-  return mockedModule;
+  if (declarations && declarations.length) {
+    mockedModuleDef.declarations = flatten(declarations).map(resolve);
+  }
+
+  if (entryComponents && entryComponents.length) {
+    mockedModuleDef.entryComponents = flatten(entryComponents).map(resolve);
+  }
+
+  if (bootstrap && bootstrap.length) {
+    mockedModuleDef.bootstrap = flatten(bootstrap).map(resolve);
+  }
+
+  if (providers && providers.length) {
+    mockedModuleDef.providers = flatten(providers).map(resolveProvider);
+  }
+
+  // Default exports.
+  if (exports && exports.length) {
+    mockedModuleDef.exports = flatten(exports).map(resolve);
+  }
+
+  // if we are in the skipMock mode we need to export only the default exports.
+  // if we are in the correctModuleExports mode we need to export only default exports.
+  const correctExports = ngMocksUniverse.flags.has('skipMock')
+    || ngMocksUniverse.flags.has('correctModuleExports');
+
+  // When we mock a module, only exported declarations are accessible inside of a test.
+  // Because of that we have to export whatever a module imports or declares.
+  // Unfortunately, in this case tests won't fail when a module has missed exports.
+  // MockBuilder doesn't have have this issue.
+  for (const def of flatten([imports || [], declarations || []])) {
+    const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
+    const mockedDef = resolve(instance);
+
+    // If we export a declaration, then we have to export its module too.
+    const config = ngMocksUniverse.config.get(instance) || {};
+    if (config.export && ngModule) {
+      const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
+      if (!moduleConfig.export) {
+        moduleConfig.export = true;
+        ngMocksUniverse.config.set(ngModule, moduleConfig);
+      }
+    }
+
+    if (correctExports && !config.export) {
+      continue;
+    }
+    if (mockedModuleDef.exports && mockedModuleDef.exports.indexOf(mockedDef) !== -1) {
+      continue;
+    }
+
+    changed = true;
+    mockedModuleDef.exports = mockedModuleDef.exports || [];
+    mockedModuleDef.exports.push(mockedDef);
+  }
+
+  return [changed, mockedModuleDef];
 }

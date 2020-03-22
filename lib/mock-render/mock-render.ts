@@ -13,8 +13,8 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
     mockedTemplate = template;
   } else {
     const {inputs, outputs, selector} = directiveResolver.resolve(template);
-    mockedTemplate += `<${selector}`;
-    if (inputs) {
+    mockedTemplate += selector ? `<${selector}` : '';
+    if (selector && inputs) {
       inputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         if (alias && params && typeof params[alias]) {
@@ -24,7 +24,7 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
         }
       });
     }
-    if (outputs) {
+    if (selector && outputs) {
       outputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         if (alias && params && typeof params[alias]) {
@@ -34,7 +34,7 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
         }
       });
     }
-    mockedTemplate += `></${selector}>`;
+    mockedTemplate += selector ? `></${selector}>` : '';
   }
   const options: Component = {
     selector: 'mock-render',

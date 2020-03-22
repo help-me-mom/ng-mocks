@@ -1,23 +1,26 @@
 import { Type } from '@angular/core';
+import { MockComponent, MockedComponent } from '../mock-component';
+import { MockDirective, MockedDirective } from '../mock-directive';
+import { MockedPipe, MockPipe } from '../mock-pipe';
 
-import { jitReflector, pipeResolver } from '../common/reflect';
-import { MockComponent } from '../mock-component';
-import { MockDirective } from '../mock-directive';
-import { MockPipe } from '../mock-pipe';
+import { isNgDef } from '../common';
 
 export function MockDeclarations(...declarations: Array<Type<any>>): Array<Type<any>> {
   return declarations.map(MockDeclaration);
 }
 
-export function MockDeclaration(declaration: Type<any>): Type<any> {
-  if (pipeResolver.isPipe(declaration)) {
-    return MockPipe(declaration as any) as any;
+export function MockDeclaration<T>(
+  declaration: Type<T>,
+): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>> {
+  if (isNgDef(declaration, 'p')) {
+    // TODO remove any when support of A5 has been stopped.
+    return MockPipe(declaration) as any;
   }
-
-  const annotations = jitReflector.annotations(declaration);
-  if (annotations.find((annotation) => annotation.template !== undefined || annotation.templateUrl !== undefined)) {
-    return MockComponent(declaration) as any;
+  if (isNgDef(declaration, 'c')) {
+    return MockComponent(declaration);
   }
-
-  return MockDirective(declaration) as any;
+  if (isNgDef(declaration, 'd')) {
+    return MockDirective(declaration);
+  }
+  return declaration;
 }

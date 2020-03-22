@@ -1,3 +1,5 @@
+// tslint:disable:max-classes-per-file
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
@@ -7,4 +9,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class RenderRealComponent {
   @Output() click = new EventEmitter<{}>();
   @Input() content = '';
+}
+
+@Component({
+  template: 'WithoutSelectorComponent',
+})
+export class WithoutSelectorComponent {
 }

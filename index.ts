@@ -1,4 +1,5 @@
 export * from './lib/common';
+export * from './lib/mock-builder';
 export * from './lib/mock-component';
 export * from './lib/mock-declaration';
 export * from './lib/mock-directive';

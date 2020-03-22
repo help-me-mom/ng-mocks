@@ -2,10 +2,10 @@ import { Component, Directive, EventEmitter, Input, Output, ViewChild } from '@a
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockedDirective, MockHelper } from 'ng-mocks';
 
+import { MockDirective, MockedDirective } from '.';
 import { staticFalse } from '../../tests';
-import { MockDirective } from './mock-directive';
+import { MockHelper } from '../mock-helper';
 
 // tslint:disable:max-classes-per-file
 @Directive({

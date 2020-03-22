@@ -2,16 +2,18 @@ import { Component, DebugElement, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockedDirective, MockHelper } from 'ng-mocks';
 
-import { staticTrue } from '../../tests';
-import { MockComponent, MockComponents, MockedComponent } from './mock-component';
+import { MockComponent, MockComponents, MockedComponent } from '.';
 import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
 import { EmptyComponent } from './test-components/empty-component.component';
 import { GetterSetterComponent } from './test-components/getter-setter.component';
 import { SimpleComponent } from './test-components/simple-component.component';
 import { TemplateOutletComponent } from './test-components/template-outlet.component';
+
+import { staticTrue } from '../../tests';
+import { MockedDirective } from '../mock-directive';
+import { MockHelper } from '../mock-helper';
 
 @Component({
   selector: 'example-component-container',

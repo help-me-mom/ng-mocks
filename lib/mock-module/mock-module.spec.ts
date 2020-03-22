@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponent, MockModule, MockRender } from 'ng-mocks';
 
 import {
   AppRoutingModule, CustomWithServiceComponent,
@@ -18,6 +17,10 @@ import {
   SameImports1Module,
   SameImports2Module, WithServiceModule,
 } from './test-fixtures';
+
+import { MockModule } from '.';
+import { MockComponent } from '../mock-component';
+import { MockRender } from '../mock-render';
 
 @Component({
   selector: 'component-subject',

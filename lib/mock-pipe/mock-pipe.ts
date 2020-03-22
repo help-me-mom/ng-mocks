@@ -1,6 +1,8 @@
 import { Pipe, PipeTransform, Type } from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
 
-import { Mock, MockOf } from '../common';
+import { getMockedNgDefOf, Mock, MockOf } from '../common';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { pipeResolver } from '../common/reflect';
 
 export type MockedPipe<T> = T & Mock & {};
@@ -14,6 +16,15 @@ export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
   transform: TPipe['transform'] = defaultTransform,
 ): Type<MockedPipe<TPipe>> {
+  // We are inside of an 'it'.
+  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  if ((getTestBed() as any)._instantiated) {
+    return getMockedNgDefOf(pipe, 'p');
+  }
+  if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cache.has(pipe)) {
+    return ngMocksUniverse.cache.get(pipe);
+  }
+
   const { name } = pipeResolver.resolve(pipe);
 
   const options: Pipe = {
@@ -26,6 +37,9 @@ export function MockPipe<TPipe extends PipeTransform>(
   }
 
   const mockedPipe: Type<TPipe> = Pipe(options)(PipeMock as any);
+  if (ngMocksUniverse.flags.has('cachePipe')) {
+    ngMocksUniverse.cache.set(pipe, mockedPipe);
+  }
 
   return mockedPipe;
 }

@@ -1,9 +1,18 @@
-import { Directive, ElementRef, forwardRef, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  forwardRef,
+  OnInit,
+  Optional,
+  TemplateRef,
+  Type,
+  ViewContainerRef,
+} from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
 
-import { MockControlValueAccessor, MockOf } from '../common';
+import { getMockedNgDefOf, MockControlValueAccessor, MockOf } from '../common';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
-
-const cache = new Map<Type<Directive>, Type<MockedDirective<Directive>>>();
 
 export type MockedDirective<T> = T & MockControlValueAccessor & {
   /** Pointer to current element in case of Attribute Directives. */
@@ -26,14 +35,19 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
   return directives.map(MockDirective);
 }
 
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
-  const cacheHit = cache.get(directive);
-  if (cacheHit) {
-    return cacheHit as Type<MockedDirective<TDirective>>;
+export function MockDirective<TDirective>(
+  directive: Type<TDirective>,
+): Type<MockedDirective<TDirective>> {
+  // We are inside of an 'it'.
+  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  if ((getTestBed() as any)._instantiated) {
+    return getMockedNgDefOf(directive, 'd');
+  }
+  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cache.has(directive)) {
+    return ngMocksUniverse.cache.get(directive);
   }
 
   const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
-
   const options: Directive = {
     exportAs,
     inputs,
@@ -45,8 +59,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     selector,
   };
 
+  const config = ngMocksUniverse.config.get(directive);
+
   @MockOf(directive, outputs)
-  class DirectiveMock extends MockControlValueAccessor {
+  class DirectiveMock extends MockControlValueAccessor implements OnInit {
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
@@ -69,10 +85,22 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         }
       };
     }
+
+    ngOnInit(): void {
+      if (config && config.render) {
+        const { $implicit, variables } = config.render !== true ? config.render : {
+          $implicit: undefined,
+          variables: {},
+        };
+        (this as any).__render($implicit, variables);
+      }
+    }
   }
 
   const mockedDirective: Type<MockedDirective<TDirective>> = Directive(options)(DirectiveMock as any);
-  cache.set(directive, mockedDirective);
+  if (ngMocksUniverse.flags.has('cacheDirective')) {
+    ngMocksUniverse.cache.set(directive, mockedDirective);
+  }
 
   return mockedDirective;
 }

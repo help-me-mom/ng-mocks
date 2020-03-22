@@ -3,14 +3,15 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { MockRender } from './mock-render';
-import { RenderRealComponent } from './mock-render.fixtures';
+import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.fixtures';
 
 describe('MockRender', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RenderRealComponent
+        RenderRealComponent,
+        WithoutSelectorComponent,
       ]
     });
   });
@@ -65,5 +66,10 @@ describe('MockRender', () => {
     expect(fixture.debugElement.nativeElement.innerText).not.toContain('injected content');
     fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerText).toContain('injected content');
+  });
+
+  it('does not render a component without selector', () => {
+    const fixture = MockRender(WithoutSelectorComponent);
+    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('');
   });
 });
