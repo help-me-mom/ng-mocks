@@ -1,6 +1,7 @@
-import { MockService } from 'ng-mocks';
-
 // tslint:disable:max-classes-per-file
+
+import { MockService } from '.';
+
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';
 

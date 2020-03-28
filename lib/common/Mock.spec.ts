@@ -11,17 +11,60 @@ class ParentClass {
   }
 }
 
-@NgModule({})
+@NgModule({
+  providers: [
+    {
+      provide: 'MOCK',
+      useValue: 'HELLO',
+    },
+  ]
+})
+class ChildModuleClass extends ParentClass implements PipeTransform {
+  protected childValue = true;
+
+  public childMethod(): boolean {
+    return this.childValue;
+  }
+
+  transform(): string {
+    return typeof this.childValue;
+  }
+}
+
 @Component({
   template: '',
 })
+class ChildComponentClass extends ParentClass implements PipeTransform {
+  protected childValue = true;
+
+  public childMethod(): boolean {
+    return this.childValue;
+  }
+
+  transform(): string {
+    return typeof this.childValue;
+  }
+}
+
 @Directive({
   selector: 'mock',
 })
+class ChildDirectiveClass extends ParentClass implements PipeTransform {
+  protected childValue = true;
+
+  public childMethod(): boolean {
+    return this.childValue;
+  }
+
+  transform(): string {
+    return typeof this.childValue;
+  }
+}
+
 @Pipe({
   name: 'mock',
 })
-class ChildClass extends ParentClass implements PipeTransform {
+class ChildPipeClass extends ParentClass implements PipeTransform {
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -35,14 +78,14 @@ class ChildClass extends ParentClass implements PipeTransform {
 
 describe('Mock', () => {
   it('should affect as MockModule', () => {
-    const instance = new (MockModule(ChildClass))();
+    const instance = new (MockModule(ChildModuleClass))();
     expect(instance).toEqual(jasmine.any(Mock));
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
   });
 
   it('should affect as MockComponent', () => {
-    const instance = new (MockComponent(ChildClass))();
+    const instance = new (MockComponent(ChildComponentClass))();
     expect(instance).toEqual(jasmine.any(MockControlValueAccessor));
     expect(instance).toEqual(jasmine.any(Mock));
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
@@ -50,7 +93,7 @@ describe('Mock', () => {
   });
 
   it('should affect as MockDirective', () => {
-    const instance = new (MockDirective(ChildClass))();
+    const instance = new (MockDirective(ChildDirectiveClass))();
     expect(instance).toEqual(jasmine.any(MockControlValueAccessor));
     expect(instance).toEqual(jasmine.any(Mock));
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
@@ -58,7 +101,7 @@ describe('Mock', () => {
   });
 
   it('should affect as MockPipe', () => {
-    const instance = new (MockPipe(ChildClass))();
+    const instance = new (MockPipe(ChildPipeClass))();
     expect(instance).toEqual(jasmine.any(Mock));
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');

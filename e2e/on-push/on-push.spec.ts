@@ -66,12 +66,15 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   let fixture: ComponentFixture<ItemListComponent>;
   let component: ItemListComponent;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // console.log((TestBed as any)._instantiated);
     TestBed.configureTestingModule({
       declarations: [
         ItemListComponent,
       ],
     });
+    await TestBed.compileComponents();
+    // console.log((TestBed as any)._instantiated);
 
     fixture = MockRender(ItemListComponent, {
       items: [],

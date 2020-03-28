@@ -9,6 +9,24 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * **69:** Respect of all parents classes and their methods in mocks
+* `MockRender` won't render anything if a passed component doesn't have a selector.
+* `MockProvider` will return an original provider instead of `undefined` for whitelisted tokens.
+
+### Features
+
+- Added `MockBuilder` ([ISSUE](https://github.com/ike18t/ng-mocks/issues/44))
+- Added `NG_MOCKS` token to get a `Map` of mocks if the `MockBuilder` was used.
+* Added `isNgType` to verify whether a class belongs to a decorator.
+* Added `isNgDef` to verify whether a class decorated by `NgModule`, `Component`, `Directive` or `Pipe`.
+* Added `isNgModuleDefWithProviders` to verify whether an object is `NgModule` with `Providers`.
+* Added `isNgInjectionToken` to verify whether an object is `InjectionToken`.
+* Added `isMockedNgDefOf` to verify whether a class is
+  `MockedModule<T>`, `MockedComponent<T>`, `MockedDirective<T>` or `MockedPipe<T>`.
+* Added `isMockOf` to verify whether an object is an instance of
+  `MockedModule<T>`, `MockedComponent<T>`, `isMockedDirective<T>` or `MockedPipe<T>`.
+* Added `getMockedNgDefOf` returns the mocked version of
+  a module, component, directive or pipe.
+
 
 
 <a name="9.1.0"></a>
