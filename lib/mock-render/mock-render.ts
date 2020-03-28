@@ -3,7 +3,7 @@ import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { directiveResolver } from '../common/reflect';
 
-function MockRender<MComponent, TComponent extends {[key: string]: any}>(
+function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string | Type<MComponent>,
   params?: TComponent,
   detectChanges = true
@@ -12,7 +12,7 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
   if (typeof template === 'string') {
     mockedTemplate = template;
   } else {
-    const {inputs, outputs, selector} = directiveResolver.resolve(template);
+    const { inputs, outputs, selector } = directiveResolver.resolve(template);
     mockedTemplate += `<${selector}`;
     if (inputs) {
       inputs.forEach((definition: string) => {
@@ -41,12 +41,13 @@ function MockRender<MComponent, TComponent extends {[key: string]: any}>(
     template: mockedTemplate,
   };
 
-  // tslint:disable-next-line:no-angle-bracket-type-assertion
-  const component = Component(options)(<any> class MockRenderComponent {
-    constructor() {
-      Object.assign(this, params);
-    }
-  } as Type<TComponent>);
+  const component = Component(options)(
+    class MockRenderComponent {
+      constructor() {
+        Object.assign(this, params);
+      }
+    } as Type<TComponent>
+  );
 
   // Soft reset of TestBed.
   (getTestBed() as any)._instantiated = false;

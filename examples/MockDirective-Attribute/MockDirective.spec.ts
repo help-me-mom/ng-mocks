@@ -10,10 +10,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockDirective(DependencyDirective),
-      ]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -29,7 +26,7 @@ describe('MockDirective', () => {
     // the input value will be passed into the mocked directive so you can assert on it
     const mockedDirectiveInstance = MockHelper.getDirective(
       fixture.debugElement.query(By.css('span')),
-      DependencyDirective,
+      DependencyDirective
     );
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {
@@ -46,7 +43,7 @@ describe('MockDirective', () => {
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
     const mockedDirectiveInstance = MockHelper.getDirective(
       fixture.debugElement.query(By.css('span')),
-      DependencyDirective,
+      DependencyDirective
     );
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {

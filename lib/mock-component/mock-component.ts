@@ -11,26 +11,27 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {  MockControlValueAccessor, MockOf } from '../common';
+import { MockControlValueAccessor, MockOf } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
 
-export type MockedComponent<T> = T & MockControlValueAccessor & {
-  /** Helper function to hide rendered @ContentChild() template. */
-  __hide(contentChildSelector: string): void;
+export type MockedComponent<T> = T &
+  MockControlValueAccessor & {
+    /** Helper function to hide rendered @ContentChild() template. */
+    __hide(contentChildSelector: string): void;
 
-  /** Helper function to render any @ContentChild() template with any context. */
-  __render(contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}): void;
-};
+    /** Helper function to render any @ContentChild() template with any context. */
+    __render(contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }): void;
+  };
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
-  return components.map((component) => MockComponent(component, undefined));
+  return components.map(component => MockComponent(component, undefined));
 }
 
 export function MockComponent<TComponent>(
   component: Type<TComponent>,
-  metaData?: core.Directive,
+  metaData?: core.Directive
 ): Type<MockedComponent<TComponent>> {
   const cacheHit = cache.get(component);
   if (cacheHit) {
@@ -62,7 +63,8 @@ export function MockComponent<TComponent>(
             <ng-template #__${query.selector}></ng-template>
           </div>
         `;
-      }).join('');
+      })
+      .join('');
     if (templateQueries) {
       template = `
         ${template}
@@ -75,15 +77,17 @@ export function MockComponent<TComponent>(
     exportAs,
     inputs,
     outputs,
-    providers: [{
-      multi: true,
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ComponentMock)
-    },
-    {
-      provide: component,
-      useExisting: forwardRef(() => ComponentMock)
-    }],
+    providers: [
+      {
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ComponentMock),
+      },
+      {
+        provide: component,
+        useExisting: forwardRef(() => ComponentMock),
+      },
+    ],
     queries,
     selector,
     template,
@@ -104,7 +108,7 @@ export function MockComponent<TComponent>(
       };
 
       // Providing a method to render any @ContentChild based on its selector.
-      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}) => {
+      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }) => {
         const key = viewChildRefs.get(contentChildSelector);
         let templateRef: TemplateRef<any>;
         let viewContainer: ViewContainerRef;
@@ -115,7 +119,7 @@ export function MockComponent<TComponent>(
           templateRef = (this as any)[key];
           if (viewContainer && templateRef) {
             viewContainer.clear();
-            viewContainer.createEmbeddedView(templateRef, {...variables, $implicit} as any);
+            viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
           }
         }
       };

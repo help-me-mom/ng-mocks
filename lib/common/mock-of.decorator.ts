@@ -11,9 +11,9 @@ import { mockServiceHelper } from '../mock-service';
 /* tslint:disable-next-line variable-name */
 export const MockOf = (mockClass: Type<any>, outputs?: string[]) => (constructor: Type<any>) => {
   Object.defineProperties(constructor, {
-    mockOf: {value: mockClass},
-    name: {value: `MockOf${mockClass.name}`},
-    nameConstructor: {value: constructor.name},
+    mockOf: { value: mockClass },
+    name: { value: `MockOf${mockClass.name}` },
+    nameConstructor: { value: constructor.name },
   });
 
   constructor.prototype.__mockedMethods = mockServiceHelper.extractMethodsFromPrototype(mockClass.prototype);

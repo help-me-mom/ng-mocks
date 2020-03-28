@@ -2,15 +2,14 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'getter-setter',
-  template: ''
+  template: '',
 })
 export class GetterSetterComponent {
   get myGetter() {
     return true;
   }
 
-  set mySetter(value: string) {
-  }
+  set mySetter(value: string) {}
 
   @Input()
   public normalInput?: boolean;

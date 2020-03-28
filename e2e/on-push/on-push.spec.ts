@@ -68,9 +68,7 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ItemListComponent,
-      ],
+      declarations: [ItemListComponent],
     });
 
     fixture = MockRender(ItemListComponent, {

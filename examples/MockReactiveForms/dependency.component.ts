@@ -4,5 +4,4 @@ import { Component } from '@angular/core';
   selector: 'dependency-component-selector',
   template: `dependency`,
 })
-export class DependencyComponent {
-}
+export class DependencyComponent {}

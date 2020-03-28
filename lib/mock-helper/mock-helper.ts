@@ -12,7 +12,7 @@ function nestedCheck<T>(result: T[], node: INestedNodes, callback: (node: INeste
     result.push(element);
   }
   const childNodes = node.childNodes ? node.childNodes : [];
-  childNodes.forEach((childNode) => {
+  childNodes.forEach(childNode => {
     nestedCheck(result, childNode, callback);
   });
 }
@@ -35,7 +35,7 @@ export const MockHelper = {
     if (!prevNode || prevNode.nodeName !== '#comment') {
       return undefined;
     }
-    const matches = debugNode.parent.queryAllNodes((node) => node.nativeNode === prevNode);
+    const matches = debugNode.parent.queryAllNodes(node => node.nativeNode === prevNode);
     if (matches.length === 0) {
       return undefined;
     }
@@ -49,7 +49,7 @@ export const MockHelper = {
 
   findDirective: <T>(debugNode: DebugNode, directive: Type<T>): undefined | T => {
     const result: T[] = [];
-    nestedCheck<T>(result, debugNode, (node) => {
+    nestedCheck<T>(result, debugNode, node => {
       try {
         return node.injector.get(directive);
       } catch (error) {
@@ -61,7 +61,7 @@ export const MockHelper = {
 
   findDirectives: <T>(debugNode: DebugNode, directive: Type<T>): T[] => {
     const result: T[] = [];
-    nestedCheck<T>(result, debugNode, (node) => {
+    nestedCheck<T>(result, debugNode, node => {
       try {
         return node.injector.get(directive);
       } catch (error) {
@@ -69,5 +69,5 @@ export const MockHelper = {
       }
     });
     return result;
-  }
+  },
 };

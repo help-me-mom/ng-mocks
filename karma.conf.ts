@@ -13,11 +13,11 @@ module.exports = (config: any) => {
     colors: true,
     customLaunchers: {
       Chrome: process.env.WITH_PUPPETEER
-          ? {
+        ? {
             base: 'ChromeHeadless',
             flags: ['--no-sandbox'],
           }
-          : {},
+        : {},
     },
     files: [
       'node_modules/zone.js/dist/zone.js',
@@ -29,29 +29,23 @@ module.exports = (config: any) => {
       'node_modules/zone.js/dist/fake-async-test.js',
       'karma-test-shim.ts',
       'index.ts',
-      {pattern: 'lib/**/*.ts'},
-      {pattern: 'e2e/**/*.ts'},
-      {pattern: 'examples/**/*.ts'},
-      {pattern: 'tests/**/*.ts'}
+      { pattern: 'lib/**/*.ts' },
+      { pattern: 'e2e/**/*.ts' },
+      { pattern: 'examples/**/*.ts' },
+      { pattern: 'tests/**/*.ts' },
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,
     port: 9876,
     preprocessors: {
-      '**/*.ts': ['karma-typescript']
+      '**/*.ts': ['karma-typescript'],
     },
     reporters: ['dots', 'karma-typescript', 'kjhtml'],
     singleRun: true,
 
     karmaTypescriptConfig: {
-      include: [
-        'karma-test-shim.ts',
-        'e2e/**/*',
-        'examples/**/*',
-        'lib/**/*',
-        'tests/**/*',
-      ],
-      tsconfig: 'tsconfig.json'
-    }
+      include: ['karma-test-shim.ts', 'e2e/**/*', 'examples/**/*', 'lib/**/*', 'tests/**/*'],
+      tsconfig: 'tsconfig.json',
+    },
   });
 };

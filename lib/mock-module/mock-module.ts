@@ -32,16 +32,14 @@ const mockProvider = (provider: any): Provider | undefined => {
   const multi = typeof provider === 'object' && provider.multi;
 
   if (
-    typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
-    && neverMockProvidedToken.includes(provide.toString())
+    typeof provide === 'object' &&
+    provide.ngMetadataName === 'InjectionToken' &&
+    neverMockProvidedToken.includes(provide.toString())
   ) {
     return provider;
   }
 
-  if (
-    typeof provide === 'function'
-    && neverMockProvidedFunction.includes(provide.name)
-  ) {
+  if (typeof provide === 'function' && neverMockProvidedFunction.includes(provide.name)) {
     return provider;
   }
 
@@ -64,13 +62,13 @@ const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
 // Checks if an object was decorated by NgModule.
 const isModule = (object: any): object is Type<any> => {
   const annotations = jitReflector.annotations(object);
-  const ngMetadataNames = annotations.map((annotation) => annotation.__proto__.ngMetadataName);
+  const ngMetadataNames = annotations.map(annotation => annotation.__proto__.ngMetadataName);
   return ngMetadataNames.indexOf('NgModule') !== -1;
 };
 
 // Checks if an object implements ModuleWithProviders.
-const isModuleWithProviders = (object: any): object is ModuleWithProviders => typeof object.ngModule !== 'undefined'
-    && isModule(object.ngModule);
+const isModuleWithProviders = (object: any): object is ModuleWithProviders =>
+  typeof object.ngModule !== 'undefined' && isModule(object.ngModule);
 
 export function MockModule<T>(module: Type<T>): Type<MockedModule<T>>;
 export function MockModule(module: ModuleWithProviders): ModuleWithProviders;
@@ -100,8 +98,7 @@ export function MockModule(module: any): any {
   } else {
     @NgModule(MockIt(ngModule))
     @MockOf(ngModule)
-    class ModuleMock extends Mock {
-    }
+    class ModuleMock extends Mock {}
 
     moduleMockPointer = ModuleMock;
     cache.set(ngModule, moduleMockPointer);
@@ -110,8 +107,9 @@ export function MockModule(module: any): any {
   if (ngModuleProviders) {
     return {
       ngModule: moduleMockPointer,
-      providers: flatten(ngModuleProviders).map(mockProvider)
-        .filter((provider) => !!provider) as Provider[],
+      providers: flatten(ngModuleProviders)
+        .map(mockProvider)
+        .filter(provider => !!provider) as Provider[],
     };
   }
   return moduleMockPointer;
@@ -140,12 +138,13 @@ function MockIt(module: Type<any>): NgModule {
   }
 
   if (entryComponents.length) {
-    mockedModule.entryComponents = flatten(entryComponents).map(MockDeclaration);
+    mockedModule.entryComponents = flatten(entryComponents).map(MockDeclaration); // tslint:disable-line:deprecation
   }
 
   if (providers.length) {
-    mockedModule.providers = flatten(providers).map(mockProvider)
-      .filter((provider) => !!provider) as Provider[];
+    mockedModule.providers = flatten(providers)
+      .map(mockProvider)
+      .filter(provider => !!provider) as Provider[];
   }
 
   // When we mock module only exported declarations are accessible inside of test.
@@ -155,15 +154,17 @@ function MockIt(module: Type<any>): NgModule {
     mockedModule.exports = [];
 
     if (mockedModule.imports) {
-      const onlyModules = mockedModule.imports.map((instance) => {
-        if (isModule(instance)) {
-          return instance;
-        }
-        if (isModuleWithProviders(instance)) {
-          return instance.ngModule;
-        }
-        return undefined;
-      }).filter((instance) => instance) as Array<Type<any>>;
+      const onlyModules = mockedModule.imports
+        .map(instance => {
+          if (isModule(instance)) {
+            return instance;
+          }
+          if (isModuleWithProviders(instance)) {
+            return instance.ngModule;
+          }
+          return undefined;
+        })
+        .filter(instance => instance) as Array<Type<any>>;
       mockedModule.exports = [...mockedModule.exports, ...onlyModules];
     }
 

@@ -6,47 +6,36 @@ import { MockRender } from '../../lib/mock-render';
 import { CustomInjectionComponent } from './custom-injection.component';
 
 describe('injected-ng-templates:real', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CustomInjectionComponent
-      ]
+      declarations: [CustomInjectionComponent],
     });
   });
 
   it('renders injected template properly', () => {
     // should iterate against 3 string.
-    const fixture = MockRender(`<custom-injection [items]="values">
+    const fixture = MockRender(
+      `<custom-injection [items]="values">
         <ng-template let-value #block>
           <div>{{value}}</div>
         </ng-template>
-      </custom-injection>`, {
-      values: [
-        'string1',
-        'string2',
-        'string3'
-      ]
-    });
+      </custom-injection>`,
+      {
+        values: ['string1', 'string2', 'string3'],
+      }
+    );
 
     // every value should be rendered correctly.
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('<div>string1</div>');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('<div>string2</div>');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('<div>string3</div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<div>string1</div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<div>string2</div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<div>string3</div>');
   });
-
 });
 
 describe('structural-directive-as-ng-for:mock', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MockComponent(CustomInjectionComponent),
-      ]
+      declarations: [MockComponent(CustomInjectionComponent)],
     });
   });
 
@@ -54,19 +43,18 @@ describe('structural-directive-as-ng-for:mock', () => {
     let block: DebugElement;
 
     // should iterate against 3 string.
-    const fixture = MockRender(`<custom-injection [items]="values">
+    const fixture = MockRender(
+      `<custom-injection [items]="values">
         <ng-template let-value let-custom="test" #block>
           <div>{{outside}} {{value}} {{custom}}</div>
         </ng-template>
         <div>ng-content</div>
-      </custom-injection>`, {
-      outside: 'string0',
-      values: [
-        'string1',
-        'string2',
-        'string3'
-      ],
-    });
+      </custom-injection>`,
+      {
+        outside: 'string0',
+        values: ['string1', 'string2', 'string3'],
+      }
+    );
 
     // By default @ContentChild('block') shouldn't be rendered at all.
     block = fixture.debugElement.query(By.css('[data-key="block"]'));
@@ -93,5 +81,4 @@ describe('structural-directive-as-ng-for:mock', () => {
     expect(block).toBeTruthy();
     expect(block.nativeElement.innerHTML).toContain('<div>string0 string2 test2</div>');
   });
-
 });

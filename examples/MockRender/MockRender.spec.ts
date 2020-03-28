@@ -6,15 +6,10 @@ import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
 
 describe('MockRender', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-      ],
-      imports: [
-        MockModule(DependencyModule),
-      ],
+      declarations: [TestedComponent],
+      imports: [MockModule(DependencyModule)],
     });
   });
 

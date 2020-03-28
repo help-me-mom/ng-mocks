@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 @Directive({
-  selector: '[dependency]'
+  selector: '[dependency]',
 })
 export class DependencyDirective {
   @Input('dependency-input')

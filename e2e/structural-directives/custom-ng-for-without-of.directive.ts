@@ -8,28 +8,26 @@ export interface ICustomNgForContext {
 }
 
 @Directive({
-  selector: '[customNgForWithoutOf]'
+  selector: '[customNgForWithoutOf]',
 })
 export class CustomNgForWithoutOfDirective {
-
   @Input('customNgForWithoutOf') set setItems(items: string[]) {
     this.viewContainerRef.clear();
 
-    items.forEach((value, index) => this.viewContainerRef.createEmbeddedView(this.templateRef, {
-      $implicit: value,
-      myFirst: index === 0,
-      myIndex: index,
-      myLast: index + 1 === items.length,
-    }));
+    items.forEach((value, index) =>
+      this.viewContainerRef.createEmbeddedView(this.templateRef, {
+        $implicit: value,
+        myFirst: index === 0,
+        myIndex: index,
+        myLast: index + 1 === items.length,
+      })
+    );
   }
 
   protected templateRef: TemplateRef<ICustomNgForContext>;
   protected viewContainerRef: ViewContainerRef;
 
-  constructor(
-    templateRef: TemplateRef<ICustomNgForContext>,
-    viewContainerRef: ViewContainerRef,
-  ) {
+  constructor(templateRef: TemplateRef<ICustomNgForContext>, viewContainerRef: ViewContainerRef) {
     this.templateRef = templateRef;
     this.viewContainerRef = viewContainerRef;
   }

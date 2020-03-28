@@ -14,7 +14,7 @@ describe('MockPipe', () => {
 
         // alternatively you can use MockPipes to mock multiple but you lose the ability to override
         MockPipe(DependencyPipe, (...args: string[]) => JSON.stringify(args)),
-      ]
+      ],
     });
 
     fixture = TestBed.createComponent(TestedComponent);

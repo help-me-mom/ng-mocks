@@ -1,10 +1,8 @@
 {
-  "extends": [
-    "tslint:all",
-    "tslint-jasmine-rules"
-  ],
+  "extends": ["tslint:all", "tslint-jasmine-rules"],
   "rules": {
     "align": false,
+    "arrow-parens": false,
     "completed-docs": false,
     "comment-format": false,
     "file-name-casing": false,
@@ -22,12 +20,10 @@
     "no-unsafe-any": false,
     "no-use-before-declare": false,
     "only-arrow-functions": false,
-    "quotemark": [
-      true,
-      "single"
-    ],
+    "quotemark": [true, "single"],
+    "semicolon": [true, "always", "strict-bound-class-methods"],
     "strict-boolean-expressions": false,
-    "trailing-comma": false,
+    "trailing-comma": [true, { "esSpecCompliant": true }],
     "typedef": false,
     "variable-name": [true, "allow-leading-underscore"]
   }

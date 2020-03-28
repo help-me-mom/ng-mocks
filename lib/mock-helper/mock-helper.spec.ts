@@ -11,7 +11,7 @@ import { MockHelper } from './mock-helper';
 
 @Directive({
   exportAs: 'foo',
-  selector: '[exampleDirective]'
+  selector: '[exampleDirective]',
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
@@ -24,7 +24,7 @@ export class ExampleDirective {
 }
 
 @Directive({
-  selector: '[exampleStructuralDirective]'
+  selector: '[exampleStructuralDirective]',
 })
 export class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
@@ -33,10 +33,7 @@ export class ExampleStructuralDirective {
 describe('MockHelper:getDirective', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MockDirective(ExampleDirective),
-        MockDirective(ExampleStructuralDirective),
-      ]
+      declarations: [MockDirective(ExampleDirective), MockDirective(ExampleStructuralDirective)],
     });
   }));
 
@@ -50,10 +47,7 @@ describe('MockHelper:getDirective', () => {
     const element = debugElement.injector.get(ExampleDirective);
 
     // Using helper.
-    const elementFromHelper = MockHelper.getDirective(
-      fixture.debugElement.query(By.css('div')),
-      ExampleDirective,
-    );
+    const elementFromHelper = MockHelper.getDirective(fixture.debugElement.query(By.css('div')), ExampleDirective);
     expect(elementFromHelper).toBeTruthy();
     if (!elementFromHelper) {
       return;
@@ -69,16 +63,17 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // we need to render mocked structural directives manually
-    MockHelper.findDirectives(fixture.debugElement, ExampleStructuralDirective)
-    .forEach((item: MockedDirective<ExampleStructuralDirective>) => {
-      item.__render();
-    });
+    MockHelper.findDirectives(fixture.debugElement, ExampleStructuralDirective).forEach(
+      (item: MockedDirective<ExampleStructuralDirective>) => {
+        item.__render();
+      }
+    );
     fixture.detectChanges();
 
     // Using helper.
     const elementFromHelper = MockHelper.getDirective(
       fixture.debugElement.query(By.css('div')),
-      ExampleStructuralDirective,
+      ExampleStructuralDirective
     );
     expect(elementFromHelper).toBeTruthy();
     if (!elementFromHelper) {

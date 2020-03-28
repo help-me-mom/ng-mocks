@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent, MockModule, MockRender } from 'ng-mocks';
 
 import {
-  AppRoutingModule, CustomWithServiceComponent,
+  AppRoutingModule,
+  CustomWithServiceComponent,
   ExampleComponent,
   ExampleConsumerComponent,
   LogicNestedModule,
@@ -16,7 +17,8 @@ import {
   ModuleWithProvidersModule,
   ParentModule,
   SameImports1Module,
-  SameImports2Module, WithServiceModule,
+  SameImports2Module,
+  WithServiceModule,
 } from './test-fixtures';
 
 @Component({
@@ -25,7 +27,7 @@ import {
     <example-component></example-component>
     <span example-directive></span>
     {{ test | examplePipe }}
-  `
+  `,
 })
 class ComponentSubject {
   test = 'test';
@@ -33,7 +35,7 @@ class ComponentSubject {
 
 @Component({
   selector: 'same-imports',
-  template: `same imports`
+  template: `same imports`,
 })
 class SameImportsComponent {}
 
@@ -42,25 +44,19 @@ describe('MockModule', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ComponentSubject
-      ],
-      imports: [
-        MockModule(ParentModule),
-        MockModule(ModuleWithProvidersModule),
-      ],
+      declarations: [ComponentSubject],
+      imports: [MockModule(ParentModule), MockModule(ModuleWithProvidersModule)],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ComponentSubject);
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ComponentSubject);
+        fixture.detectChanges();
+      });
   }));
 
   it('should do stuff', () => {
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(MockComponent(ExampleComponent)))
-                                   .componentInstance as ExampleComponent;
+    const mockedComponent = fixture.debugElement.query(By.directive(MockComponent(ExampleComponent)))
+      .componentInstance as ExampleComponent;
     expect(mockedComponent).not.toBeNull();
   });
 });
@@ -70,19 +66,14 @@ describe('SameImportsModules', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        SameImportsComponent
-      ],
-      imports: [
-        MockModule(SameImports1Module),
-        MockModule(SameImports2Module),
-      ],
+      declarations: [SameImportsComponent],
+      imports: [MockModule(SameImports1Module), MockModule(SameImports2Module)],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(SameImportsComponent);
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(SameImportsComponent);
+        fixture.detectChanges();
+      });
   }));
 
   it('should be imported correctly', () => {
@@ -96,20 +87,14 @@ describe('NeverMockModules', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        SameImportsComponent
-      ],
-      imports: [
-        MockModule(CommonModule),
-        MockModule(BrowserModule),
-        MockModule(BrowserAnimationsModule),
-      ],
+      declarations: [SameImportsComponent],
+      imports: [MockModule(CommonModule), MockModule(BrowserModule), MockModule(BrowserAnimationsModule)],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(SameImportsComponent);
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(SameImportsComponent);
+        fixture.detectChanges();
+      });
   }));
 
   it('should not fail when we pass them to MockModule', () => {
@@ -123,18 +108,14 @@ describe('RouterModule', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ExampleComponent,
-      ],
-      imports: [
-        MockModule(AppRoutingModule),
-      ],
+      declarations: [ExampleComponent],
+      imports: [MockModule(AppRoutingModule)],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ExampleComponent);
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ExampleComponent);
+        fixture.detectChanges();
+      });
   }));
 
   it('should not fail when we pass RouterModule to MockModule', () => {
@@ -150,15 +131,10 @@ describe('Usage of cached nested module', () => {
   let fixture: ComponentFixture<ExampleConsumerComponent>;
 
   describe('1st test for root', () => {
-
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          ExampleConsumerComponent,
-        ],
-        imports: [
-          MockModule(LogicRootModule),
-        ],
+        declarations: [ExampleConsumerComponent],
+        imports: [MockModule(LogicRootModule)],
       })
         .compileComponents()
         .then(() => {
@@ -170,19 +146,13 @@ describe('Usage of cached nested module', () => {
     it('should be able to find component', () => {
       expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
     });
-
   });
 
   describe('2nd test for nested', () => {
-
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          ExampleConsumerComponent,
-        ],
-        imports: [
-          MockModule(LogicNestedModule),
-        ],
+        declarations: [ExampleConsumerComponent],
+        imports: [MockModule(LogicNestedModule)],
       })
         .compileComponents()
         .then(() => {
@@ -194,20 +164,14 @@ describe('Usage of cached nested module', () => {
     it('should be able to find component', () => {
       expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
     });
-
   });
-
 });
 
 describe('WithServiceModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CustomWithServiceComponent,
-      ],
-      imports: [
-        MockModule(WithServiceModule),
-      ],
+      declarations: [CustomWithServiceComponent],
+      imports: [MockModule(WithServiceModule)],
     });
   }));
 
