@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. See [standa
 # 9.1.0 (2020-03-21)
 
 
+### Bug Fixes
+
+* Mocking a provider doesn't touch getters and setters ([43e25ac](https://github.com/ike18t/ng-mocks/commit/43e25ac))
+* Components with an empty template are detected correctly ([b7104fe](https://github.com/ike18t/ng-mocks/commit/b7104fe))
+
 ### Features
 
 * Base class for directives and components ([f47853e](https://github.com/ike18t/ng-mocks/commit/f47853e))
@@ -16,6 +21,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 <a name="9.0.0"></a>
 # 9.0.0 (2020-02-11)
+
+
+### Features
+
+* angular 9 ([b1328e2](https://github.com/ike18t/ng-mocks/commit/b1328e2))
 
 
 
@@ -53,6 +63,11 @@ All notable changes to this project will be documented in this file. See [standa
 ## 7.7.2 (2019-04-26)
 
 
+### Features
+
+* Changelog records ([b7f6a849](https://github.com/ike18t/ng-mocks/commit/b7f6a849))
+
+
 
 <a name="7.7.1"></a>
 ## 7.7.1 (2019-04-23)
@@ -68,9 +83,19 @@ All notable changes to this project will be documented in this file. See [standa
 # 7.7.0 (2019-03-15)
 
 
+### Features
+
+* **46:** Support of a component instance in MockRender ([42d35e3](https://github.com/ike18t/ng-mocks/commit/42d35e3))
+
+
 
 <a name="7.6.0"></a>
 # 7.6.0 (2019-02-26)
+
+
+### Features
+
+* Skipping render of structural directives by default ([bcdb4c3](https://github.com/ike18t/ng-mocks/commit/bcdb4c3))
 
 
 
@@ -78,9 +103,35 @@ All notable changes to this project will be documented in this file. See [standa
 # 7.5.0 (2019-01-29)
 
 
+### Bug Fixes
+
+* **42:** Issue with Animations Library ([39f3914](https://github.com/ike18t/ng-mocks/commit/39f3914))
+
+### Features
+
+* Real test examples
+  ([5a17410](https://github.com/ike18t/ng-mocks/commit/5a17410),
+  [1aa5c4f](https://github.com/ike18t/ng-mocks/commit/1aa5c4f),
+  [f33f1a0](https://github.com/ike18t/ng-mocks/commit/f33f1a0),
+  [f48408e](https://github.com/ike18t/ng-mocks/commit/f48408e),
+  [14d6f33](https://github.com/ike18t/ng-mocks/commit/14d6f33),
+  [fa560f7](https://github.com/ike18t/ng-mocks/commit/fa560f7))
+* MockHelper to get directives from DebugElements ([11adaf6](https://github.com/ike18t/ng-mocks/commit/11adaf6))
+* Render of ContentChild in MockedComponent ([0fdcbcd](https://github.com/ike18t/ng-mocks/commit/0fdcbcd))
+* Support of mocking of Structural Directive
+  ([96e71cd](https://github.com/ike18t/ng-mocks/commit/96e71cd),
+  [6146e3d](https://github.com/ike18t/ng-mocks/commit/6146e3d),
+  [078df3b](https://github.com/ike18t/ng-mocks/commit/078df3b))
+
+
 
 <a name="7.4.0"></a>
 # 7.4.0 (2018-12-22)
+
+
+### Features
+
+* MockRender ([083c432](https://github.com/ike18t/ng-mocks/commit/083c432))
 
 
 
@@ -88,9 +139,29 @@ All notable changes to this project will be documented in this file. See [standa
 # 7.3.0 (2018-12-18)
 
 
+### Bug Fixes
+
+* Skipping mocks of system level providers
+  ([96d6b8](https://github.com/ike18t/ng-mocks/commit/96d6b8),
+  [654506](https://github.com/ike18t/ng-mocks/commit/654506))
+
+### Features
+
+* Multi MockModule support
+  ([accd727](https://github.com/ike18t/ng-mocks/commit/accd727),
+  [f468f4f](https://github.com/ike18t/ng-mocks/commit/f468f4f),
+  [2f62ca0](https://github.com/ike18t/ng-mocks/commit/2f62ca0),
+  [5b45d05](https://github.com/ike18t/ng-mocks/commit/5b45d05))
+
+
 
 <a name="7.2.0"></a>
 # 7.2.0 (2018-12-07)
+
+
+### Features
+
+* Support mock of ModuleWithProviders ([b51aea1](https://github.com/ike18t/ng-mocks/commit/b51aea1)) 
 
 
 
@@ -98,14 +169,30 @@ All notable changes to this project will be documented in this file. See [standa
 ## 7.1.3 (2018-12-02)
 
 
+### Bug Fixes
+
+* Adding ContentChild blocks only when necessary ([130a5edd](https://github.com/ike18t/ng-mocks/commit/130a5edd))
+
+
 
 <a name="7.1.2"></a>
 ## 7.1.2 (2018-11-26)
 
 
+### Bug Fixes
+
+* Flatten dependencies ([5b6cbcd2](https://github.com/ike18t/ng-mocks/commit/5b6cbcd2))
+* Skipping empty ContentChild blocks ([e77f76c9](https://github.com/ike18t/ng-mocks/commit/e77f76c9))
+
+
 
 <a name="7.1.1"></a>
 ## 7.1.1 (2018-11-06)
+
+
+### Bug Fixes
+
+* Skipping ViewChild blocks in mocks ([d5dca185](https://github.com/ike18t/ng-mocks/commit/d5dca185))
 
 
 
@@ -116,6 +203,10 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * trim innerText that was getting a new line from a div ([f883ad0](https://github.com/ike18t/ng-mocks/commit/f883ad0))
+
+### Features
+
+* Support of ContentChild blocks in mocked components ([9cee2471](https://github.com/ike18t/ng-mocks/commit/9cee2471))
 
 
 
@@ -132,6 +223,10 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="7.0.0"></a>
 # 7.0.0 (2018-10-26)
 
+
+### Features
+
+* angular 7 ([58d0c26a](https://github.com/ike18t/ng-mocks/commit/58d0c26a))
 
 
 <a name="6.3.0"></a>
@@ -167,6 +262,10 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="6.2.1"></a>
 ## 6.2.1 (2018-08-28)
 
+
+### Internal
+
+* Linter rules improvement ([39e9cfdf](https://github.com/ike18t/ng-mocks/commit/39e9cfdf))
 
 
 <a name="6.2.0"></a>
