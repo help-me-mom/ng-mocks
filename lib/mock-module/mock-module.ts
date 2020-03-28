@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
+import { ApplicationModule, ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import { flatten, getMockedNgDefOf, isNgDef, isNgModuleDefWithProviders, Mock, MockOf } from '../common';
@@ -15,9 +15,8 @@ export type MockedModule<T> = T & Mock & {};
 // Some modules inject own providers, which don't allow mocks due to conflicts with test env.
 // We have to avoid any injection of those providers to mock everything properly.
 const neverMockProvidedToken = [
-  // RouterModule
-  'InjectionToken Application Initializer',
   // BrowserModule
+  'InjectionToken Application Initializer',
   'InjectionToken EventManagerPlugins',
   'InjectionToken HammerGestureConfig',
 ];
@@ -148,7 +147,7 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
     : mockModule;
 }
 
-const NEVER_MOCK: Array<Type<any>> = [CommonModule];
+const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
 // tslint:disable-next-line:cyclomatic-complexity
 function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
