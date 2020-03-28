@@ -1,13 +1,14 @@
 /* tslint:disable:max-classes-per-file */
 
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ApplicationModule, Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  AppRoutingModule, CustomWithServiceComponent,
+  AppRoutingModule,
+  CustomWithServiceComponent,
   ExampleComponent,
   ExampleConsumerComponent,
   LogicNestedModule,
@@ -15,7 +16,8 @@ import {
   ModuleWithProvidersModule,
   ParentModule,
   SameImports1Module,
-  SameImports2Module, WithServiceModule,
+  SameImports2Module,
+  WithServiceModule,
 } from './test-fixtures';
 
 import { MockModule } from '.';
@@ -103,9 +105,10 @@ describe('NeverMockModules', () => {
         SameImportsComponent
       ],
       imports: [
-        MockModule(CommonModule),
-        MockModule(BrowserModule),
+        MockModule(ApplicationModule),
         MockModule(BrowserAnimationsModule),
+        MockModule(BrowserModule),
+        MockModule(CommonModule),
       ],
     })
     .compileComponents()
