@@ -149,7 +149,7 @@ describe('MockDirective', () => {
   });
 
   it('should allow spying of viewchild directive methods', () => {
-    const spy = spyOn(component.childDirective, 'performAction');
+    const spy = component.childDirective.performAction;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });

@@ -439,8 +439,55 @@ returns attribute or structural directive which belongs to current element.
 `MockHelper.findDirective(fixture.debugElement, Directive)` -
 returns first found attribute or structural directive which belongs to current element or any child.
 
-`MockHelper.findDirectives(fixture.debugElement, Directive)`
+`MockHelper.findDirectives(fixture.debugElement, Directive)` -
 returns all found attribute or structural directives which belong to current element and all its child.
+
+`MockHelper.mockService(instance, methodName)` -
+returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.
+
+`MockHelper.mockService(instance, propertyName, 'get' | 'set')` -
+returns a mocked function / spy of the property. If the property hasn't been mocked yet - mocks it.
+
+```typescript
+// The example below uses auto spy.
+it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
+  const mock: GetterSetterMethodHuetod = MockService(GetterSetterMethodHuetod);
+  expect(mock).toBeDefined();
+
+  // Creating a mock on the getter.
+  MockHelper.mockService<Spy>(mock, 'name', 'get').and.returnValue('mock');
+  expect(mock.name).toEqual('mock');
+
+  // Creating a mock on the setter.
+  MockHelper.mockService(mock, 'name', 'set');
+  mock.name = 'mock';
+  expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
+
+  // Creating a mock on the method.
+  MockHelper.mockService<Spy>(mock, 'nameMethod').and.returnValue('mock');
+  expect(mock.nameMethod('mock')).toEqual('mock');
+  expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
+
+  // Creating a mock on the method that doesn't exist.
+  MockHelper.mockService<Spy>(mock, 'fakeMethod').and.returnValue('mock');
+  expect((mock as any).fakeMethod('mock')).toEqual('mock');
+  expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+});
+```
+
+## Auto Spy
+
+Add the next code to `src/test.ts` if you want all mocked methods and functions to be a jasmine spy.
+
+```typescript
+import 'ng-mocks/dist/jasmine';
+```
+
+In case of jest.
+
+```typescript
+import 'ng-mocks/dist/jest';
+```
 
 ## Other examples of tests
 

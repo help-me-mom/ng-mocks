@@ -12,7 +12,7 @@ export class Mock {
       if ((this as any)[method]) {
         continue;
       }
-      (this as any)[method] = mockServiceHelper.mockFunction(this, method);
+      (this as any)[method] = mockServiceHelper.mockFunction();
     }
     for (const output of (this as any).__mockedOutputs) {
       if ((this as any)[output]) {

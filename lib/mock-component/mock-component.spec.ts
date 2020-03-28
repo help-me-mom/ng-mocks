@@ -145,7 +145,7 @@ describe('MockComponent', () => {
   });
 
   it('should allow spying of viewchild component methods', () => {
-    const spy = spyOn(component.childComponent, 'performAction');
+    const spy = component.childComponent.performAction;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });

@@ -2,6 +2,8 @@
 
 import { DebugNode, Type } from '@angular/core';
 
+import { MockedFunction, mockServiceHelper } from '../mock-service';
+
 interface INestedNodes extends DebugNode {
   childNodes?: INestedNodes[];
 }
@@ -70,4 +72,7 @@ export const MockHelper = {
     });
     return result;
   },
+
+  mockService: <T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T =>
+    mockServiceHelper.mock(instance, name, style),
 };
