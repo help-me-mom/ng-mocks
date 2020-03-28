@@ -1,0 +1,15 @@
+*.ico
+*.mp4
+*.sh
+.dockerignore
+.editorconfig
+.gitignore
+.gitkeep
+.idea/
+.npmrc
+.prettierignore
+.versionrc
+CODEOWNERS
+browserslist
+dist/
+node_modules/
