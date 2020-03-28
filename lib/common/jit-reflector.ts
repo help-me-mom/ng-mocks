@@ -12,7 +12,7 @@ export class JitReflector implements CompileReflector {
     return this._reflectionCapabilities.annotations(typeOrFunc);
   }
 
-  componentModuleUrl = (type: unknown) => `./${stringify(type)}`;
+  componentModuleUrl = (type: any) => `./${stringify(type)}`;
 
   // This does not exist in Angular 5.1.x but is required to exist in 5.2+
   guards = (): { [key: string]: any } => ({});
