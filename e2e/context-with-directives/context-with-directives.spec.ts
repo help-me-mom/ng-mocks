@@ -6,17 +6,13 @@ import { CustomRootComponent } from './custom-root.component';
 import { CustomTypeDirective } from './custom-type.directive';
 
 describe('context-with-directives:real', () => {
-
-  beforeEach((done) => {
+  beforeEach(done => {
     TestBed.configureTestingModule({
-      declarations: [
-        CustomTypeDirective,
-        CustomRootComponent,
-      ],
-      imports: [
-        CommonModule,
-      ]
-    }).compileComponents().then(done);
+      declarations: [CustomTypeDirective, CustomRootComponent],
+      imports: [CommonModule]
+    })
+      .compileComponents()
+      .then(done);
   });
 
   it('renders everything right', () => {
@@ -43,14 +39,14 @@ describe('context-with-directives:real', () => {
     `);
 
     // template should be rendered under .template
-    expect(fixture.debugElement.query(
-      By.css('.template')).nativeElement.innerText
-    ).toContain('template w/ directive w/o binding');
+    expect(fixture.debugElement.query(By.css('.template')).nativeElement.innerText).toContain(
+      'template w/ directive w/o binding'
+    );
 
     // template1 should be rendered under .template1
-    expect(fixture.debugElement.query(
-      By.css('.template1')).nativeElement.innerText
-    ).toContain('template w/ directive w/ binding 1');
+    expect(fixture.debugElement.query(By.css('.template1')).nativeElement.innerText).toContain(
+      'template w/ directive w/ binding 1'
+    );
 
     // template2 should not be rendered
     expect(fixture.nativeElement.innerText).not.toContain('template w/ directive w/ binding w/o render');
@@ -60,21 +56,19 @@ describe('context-with-directives:real', () => {
     expect(fixture.nativeElement.innerText).not.toContain('template w/o directive w/ binding');
 
     // ng-content contains header and footer
-    expect(fixture.debugElement.query(
-      By.css('.nested')
-    ).nativeElement.innerText.replace(/\s+/, ' ')).toContain('header footer');
+    expect(fixture.debugElement.query(By.css('.nested')).nativeElement.innerText.replace(/\s+/, ' ')).toContain(
+      'header footer'
+    );
   });
 });
 
 describe('context-with-directives:mock', () => {
-
-  beforeEach((done) => {
+  beforeEach(done => {
     TestBed.configureTestingModule({
-      declarations: [
-        MockDirective(CustomTypeDirective),
-        MockDirective(CustomRootComponent),
-      ],
-    }).compileComponents().then(done);
+      declarations: [MockDirective(CustomTypeDirective), MockDirective(CustomRootComponent)]
+    })
+      .compileComponents()
+      .then(done);
   });
 
   it('renders everything what is not template', () => {

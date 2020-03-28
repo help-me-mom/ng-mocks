@@ -6,15 +6,10 @@ import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
 
 describe('MockRender', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-      ],
-      imports: [
-        MockModule(DependencyModule),
-      ],
+      declarations: [TestedComponent],
+      imports: [MockModule(DependencyModule)]
     });
   });
 
@@ -31,7 +26,7 @@ describe('MockRender', () => {
       `,
       {
         myListener1: spy,
-        myParam1: 'something1',
+        myParam1: 'something1'
       }
     );
 
@@ -51,7 +46,7 @@ describe('MockRender', () => {
     // and returns fixture with a component with properties value1, value2 and empty callback trigger.
     const fixture = MockRender(TestedComponent, {
       trigger: spy,
-      value1: 'something2',
+      value1: 'something2'
     });
 
     // assert on some side effect

@@ -7,8 +7,7 @@ import { MockDeclaration } from './mock-declaration';
   selector: 'empty-template-container',
   template: ''
 })
-export class EmptyTemplateContainer {
-}
+export class EmptyTemplateContainer {}
 // tslint:enable:max-classes-per-file
 
 describe('MockDeclaration', () => {

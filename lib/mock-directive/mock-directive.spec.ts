@@ -37,8 +37,7 @@ export class GettersAndSettersDirective {
     return true;
   }
 
-  set mySetter(value: string) {
-  }
+  set mySetter(value: string) {}
 
   @Input()
   public normalInput?: boolean;
@@ -58,12 +57,12 @@ export class GettersAndSettersDirective {
     <div id="example-structural-directive" *exampleStructuralDirective="true">
       hi
     </div>
-    <input [formControl]="fooControl"/>
+    <input [formControl]="fooControl" />
     <div getters-and-setters></div>
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, {...staticFalse}) childDirective: ExampleDirective;
+  @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
 
@@ -84,10 +83,9 @@ describe('MockDirective', () => {
         MockDirective(FormControlDirective),
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
-        MockDirective(GettersAndSettersDirective),
+        MockDirective(GettersAndSettersDirective)
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -96,7 +94,7 @@ describe('MockDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should have use the original component\'s selector', () => {
+  it("should have use the original component's selector", () => {
     const element = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(element).not.toBeNull();
   });
@@ -131,8 +129,10 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
-    const mockedDirective = MockHelper
-    .findDirective(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<ExampleStructuralDirective>;
+    const mockedDirective = MockHelper.findDirective(
+      fixture.debugElement,
+      ExampleStructuralDirective
+    ) as MockedDirective<ExampleStructuralDirective>;
 
     // structural directives should be rendered first.
     mockedDirective.__render();
@@ -155,8 +155,10 @@ describe('MockDirective', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedDirective = MockHelper
-        .findDirective(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<GettersAndSettersDirective>;
+    const mockedDirective = MockHelper.findDirective(
+      fixture.debugElement,
+      GettersAndSettersDirective
+    ) as MockedDirective<GettersAndSettersDirective>;
 
     expect(mockedDirective.normalMethod).toBeDefined();
     expect(mockedDirective.myGetter).not.toBeDefined();

@@ -5,22 +5,23 @@ import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<MockedDirective<Directive>>>();
 
-export type MockedDirective<T> = T & MockControlValueAccessor & {
-  /** Pointer to current element in case of Attribute Directives. */
-  __element?: ElementRef;
+export type MockedDirective<T> = T &
+  MockControlValueAccessor & {
+    /** Pointer to current element in case of Attribute Directives. */
+    __element?: ElementRef;
 
-  /** Just a flag for easy understanding what it is. */
-  __isStructural: boolean;
+    /** Just a flag for easy understanding what it is. */
+    __isStructural: boolean;
 
-  /** Pointer to the template of Structural Directives. */
-  __template?: TemplateRef<any>;
+    /** Pointer to the template of Structural Directives. */
+    __template?: TemplateRef<any>;
 
-  /** Pointer to the view of Structural Directives. */
-  __viewContainer?: ViewContainerRef;
+    /** Pointer to the view of Structural Directives. */
+    __viewContainer?: ViewContainerRef;
 
-  /** Helper function to render any Structural Directive with any context. */
-  __render($implicit?: any, variables?: {[key: string]: any}): void;
-};
+    /** Helper function to render any Structural Directive with any context. */
+    __render($implicit?: any, variables?: { [key: string]: any }): void;
+  };
 
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
@@ -38,11 +39,13 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     exportAs,
     inputs,
     outputs,
-    providers: [{
-      provide: directive,
-      useExisting: forwardRef(() => DirectiveMock)
-    }],
-    selector,
+    providers: [
+      {
+        provide: directive,
+        useExisting: forwardRef(() => DirectiveMock)
+      }
+    ],
+    selector
   };
 
   @MockOf(directive, outputs)
@@ -50,7 +53,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef,
+      @Optional() viewContainer?: ViewContainerRef
     ) {
       super();
 
@@ -62,10 +65,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       (this as any).__isStructural = template && viewContainer;
 
       // Providing method to render mocked values.
-      (this as any).__render = ($implicit?: any, variables?: {[key: string]: any}) => {
+      (this as any).__render = ($implicit?: any, variables?: { [key: string]: any }) => {
         if (viewContainer && template) {
           viewContainer.clear();
-          viewContainer.createEmbeddedView(template, {...variables, $implicit});
+          viewContainer.createEmbeddedView(template, { ...variables, $implicit });
         }
       };
     }

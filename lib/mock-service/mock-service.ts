@@ -6,9 +6,9 @@ export type MockedFunction = () => undefined;
 export const mockServiceHelper = {
   mockFunction: (object?: {}, method?: string): MockedFunction => () => undefined,
 
-  createMockFromPrototype: (service: any): {[key: string]: MockedFunction} => {
+  createMockFromPrototype: (service: any): { [key: string]: MockedFunction } => {
     const methods = mockServiceHelper.extractMethodsFromPrototype(service);
-    const value: {[key: string]: MockedFunction} = {};
+    const value: { [key: string]: MockedFunction } = {};
     for (const method of methods) {
       value[method] = mockServiceHelper.mockFunction(value, method);
     }
@@ -36,7 +36,7 @@ export const mockServiceHelper = {
   }
 };
 
-export function MockService(service: boolean | number | string | null | undefined): undefined;
+export function MockService(service?: boolean | number | string | null): undefined;
 export function MockService<T extends {}>(service: T): any;
 export function MockService(service: any): any {
   // mocking all methods / properties of a class / object.
@@ -48,9 +48,10 @@ export function MockService(service: any): any {
   } else if (Array.isArray(service)) {
     value = [];
   } else if (typeof service === 'object' && service !== null && service.ngMetadataName !== 'InjectionToken') {
-    value = typeof service.constructor === 'function' && service.constructor.prototype
-      ? mockServiceHelper.createMockFromPrototype(service.constructor.prototype)
-      : {};
+    value =
+      typeof service.constructor === 'function' && service.constructor.prototype
+        ? mockServiceHelper.createMockFromPrototype(service.constructor.prototype)
+        : {};
     for (const property of Object.keys(service)) {
       const mock = MockService(service[property]);
       if (mock !== undefined) {

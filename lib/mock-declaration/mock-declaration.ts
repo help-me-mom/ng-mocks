@@ -15,7 +15,7 @@ export function MockDeclaration(declaration: Type<any>): Type<any> {
   }
 
   const annotations = jitReflector.annotations(declaration);
-  if (annotations.find((annotation) => annotation.template !== undefined || annotation.templateUrl !== undefined)) {
+  if (annotations.find(annotation => annotation.template !== undefined || annotation.templateUrl !== undefined)) {
     return MockComponent(declaration) as any;
   }
 

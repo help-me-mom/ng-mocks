@@ -7,8 +7,10 @@
 .gitkeep
 .idea/
 .npmrc
+.nvmrc
 .prettierignore
 .versionrc
+CHANGELOG.md
 CODEOWNERS
 browserslist
 dist/

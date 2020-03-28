@@ -17,13 +17,15 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
   selector: 'example-component-container',
   template: `
     <getter-setter></getter-setter>
-    <simple-component [someInput]="\'hi\'"
-                      [someOtherInput]="\'bye\'"
-                      [someInput3]=true
-                      (someOutput1)="emitted = $event"
-                      (someOutput2)="emitted = $event">
+    <simple-component
+      [someInput]="'hi'"
+      [someOtherInput]="'bye'"
+      [someInput3]="true"
+      (someOutput1)="emitted = $event"
+      (someOutput2)="emitted = $event"
+    >
     </simple-component>
-    <simple-component [someInput]="\'hi again\'" #f='seeimple'></simple-component>
+    <simple-component [someInput]="'hi again'" #f="seeimple"></simple-component>
     <empty-component></empty-component>
     <custom-form-control [formControl]="formControl"></custom-form-control>
     <empty-component id="ng-content-component">doh</empty-component>
@@ -40,7 +42,7 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
   `
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, {...staticTrue}) childComponent: ChildComponent;
+  @ViewChild(ChildComponent, { ...staticTrue }) childComponent: ChildComponent;
   emitted: string;
   formControl = new FormControl('');
 
@@ -57,26 +59,25 @@ describe('MockComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
-        MockComponents(EmptyComponent,
-                       GetterSetterComponent,
-                       SimpleComponent,
-                       TemplateOutletComponent,
-                       ChildComponent,
-                       CustomFormControlComponent),
+        MockComponents(
+          EmptyComponent,
+          GetterSetterComponent,
+          SimpleComponent,
+          TemplateOutletComponent,
+          ChildComponent,
+          CustomFormControlComponent
+        )
       ],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule
-      ]
+      imports: [FormsModule, ReactiveFormsModule]
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ExampleComponentContainer);
-      component = fixture.componentInstance;
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ExampleComponentContainer);
+        component = fixture.componentInstance;
+      });
   }));
 
-  it('should have use the original component\'s selector', () => {
+  it("should have use the original component's selector", () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement.query(By.css('simple-component'));
     expect(mockedComponent).not.toBeNull();
@@ -84,34 +85,27 @@ describe('MockComponent', () => {
 
   it('should have the input set on the mock component', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(SimpleComponent))
-                                   .componentInstance;
+    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
     expect(mockedComponent.someInput).toEqual('hi');
     expect(mockedComponent.someInput2).toEqual('bye');
   });
 
   it('has no issues with multiple decorators on an input', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(SimpleComponent));
+    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent));
     expect(mockedComponent.componentInstance.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(SimpleComponent))
-                                   .componentInstance;
+    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
     mockedComponent.someOutput1.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
   it('should trigger output bound behavior for extended outputs', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(SimpleComponent))
-                                   .componentInstance;
+    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
     mockedComponent.someOutput2.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
@@ -123,16 +117,14 @@ describe('MockComponent', () => {
   });
 
   it('should give each instance of a mocked component its own event emitter', () => {
-    const mockedComponents = fixture.debugElement
-                                    .queryAll(By.directive(SimpleComponent));
+    const mockedComponents = fixture.debugElement.queryAll(By.directive(SimpleComponent));
     const mockedComponent1 = mockedComponents[0].componentInstance;
     const mockedComponent2 = mockedComponents[1].componentInstance;
     expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
   });
 
   it('should work with components w/o inputs or outputs', () => {
-    const mockedComponent = fixture.debugElement
-                                   .query(By.directive(EmptyComponent));
+    const mockedComponent = fixture.debugElement.query(By.directive(EmptyComponent));
     expect(mockedComponent).not.toBeNull();
   });
 
@@ -159,8 +151,9 @@ describe('MockComponent', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedComponent = MockHelper
-        .findDirective(fixture.debugElement, GetterSetterComponent) as MockedDirective<GetterSetterComponent>;
+    const mockedComponent = MockHelper.findDirective(fixture.debugElement, GetterSetterComponent) as MockedDirective<
+      GetterSetterComponent
+    >;
 
     expect(mockedComponent.normalMethod).toBeDefined();
     expect(mockedComponent.myGetter).not.toBeDefined();
@@ -171,16 +164,18 @@ describe('MockComponent', () => {
   describe('ReactiveForms - ControlValueAccessor', () => {
     it('should allow you simulate the component being touched', () => {
       fixture.detectChanges();
-      const customFormControl: MockedComponent<CustomFormControlComponent> =
-        fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
+        By.css('custom-form-control')
+      ).componentInstance;
       customFormControl.__simulateTouch();
       expect(component.formControl.touched).toBe(true);
     });
 
     it('should allow you simulate a value being set', () => {
       fixture.detectChanges();
-      const customFormControl: MockedComponent<CustomFormControlComponent>
-        = fixture.debugElement.query(By.css('custom-form-control')).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
+        By.css('custom-form-control')
+      ).componentInstance;
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
     });
@@ -245,8 +240,7 @@ describe('MockComponent', () => {
       expect(templateOutlet).toBeTruthy();
 
       // content has right value
-      expect(templateOutlet.nativeElement.innerHTML.trim())
-          .toEqual('child of element-with-content-only');
+      expect(templateOutlet.nativeElement.innerHTML.trim()).toEqual('child of element-with-content-only');
     });
   });
 });

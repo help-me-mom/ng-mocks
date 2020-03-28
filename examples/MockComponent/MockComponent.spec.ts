@@ -10,10 +10,7 @@ describe('MockComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockComponent(DependencyComponent),
-      ]
+      declarations: [TestedComponent, MockComponent(DependencyComponent)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -22,8 +19,7 @@ describe('MockComponent', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedComponent = fixture.debugElement
-      .query(By.css('dependency-component-selector'))
+    const mockedComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
       .componentInstance as DependencyComponent; // casting to retain type safety
 
     // let's pretend Dependency Component (unmocked) has 'someInput' as an input
@@ -37,20 +33,19 @@ describe('MockComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     spyOn(component, 'trigger');
-    const mockedComponent = fixture.debugElement
-      .query(By.directive(DependencyComponent))
+    const mockedComponent = fixture.debugElement.query(By.directive(DependencyComponent))
       .componentInstance as DependencyComponent; // casting to retain type safety
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
     // if you casted mockedComponent as the original component type then this is type safe
     mockedComponent.someOutput.emit({
-      payload: 'foo',
+      payload: 'foo'
     });
 
     // assert on some side effect
     expect(component.trigger).toHaveBeenCalledWith({
-      payload: 'foo',
+      payload: 'foo'
     });
   });
 
@@ -62,9 +57,7 @@ describe('MockComponent', () => {
     `);
     // because component does not have any @ContentChild we can access html directly.
     // assert on some side effect
-    const mockedNgContent = localFixture.debugElement
-      .query(By.directive(DependencyComponent))
-      .nativeElement.innerHTML;
+    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
   });
 
@@ -77,9 +70,7 @@ describe('MockComponent', () => {
     `);
 
     // injected ng-content says as it was.
-    const mockedNgContent = localFixture.debugElement
-      .query(By.directive(DependencyComponent))
-      .nativeElement.innerHTML;
+    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
 
     // because component does have @ContentChild we need to render them first with proper context.
@@ -88,8 +79,7 @@ describe('MockComponent', () => {
     mockedComponent.__render('something');
     localFixture.detectChanges();
 
-    const mockedNgTemplate = mockedElement.query(By.css('[data-key="something"]'))
-      .nativeElement.innerHTML;
+    const mockedNgTemplate = mockedElement.query(By.css('[data-key="something"]')).nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });

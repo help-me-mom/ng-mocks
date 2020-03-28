@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - "node"
+  - 'node'
 sudo: required
 dist: trusty
 addons:
-    chrome: stable
+  chrome: stable
 before_script:
-    - "sudo chown root /opt/google/chrome/chrome-sandbox"
-    - "sudo chmod 4755 /opt/google/chrome/chrome-sandbox"
+  - 'sudo chown root /opt/google/chrome/chrome-sandbox'
+  - 'sudo chmod 4755 /opt/google/chrome/chrome-sandbox'
 before_install:
   - npm cache clean --force
 script: npm run test:angular-versions

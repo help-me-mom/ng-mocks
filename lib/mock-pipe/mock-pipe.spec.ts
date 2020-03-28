@@ -35,13 +35,8 @@ describe('MockPipe', () => {
   describe('Base tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-          declarations: [
-            ExampleComponent,
-            MockPipe(ExamplePipe, () => 'foo'),
-            MockPipe(AnotherExamplePipe)
-          ]
-        })
-        .compileComponents();
+        declarations: [ExampleComponent, MockPipe(ExamplePipe, () => 'foo'), MockPipe(AnotherExamplePipe)]
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -63,13 +58,8 @@ describe('MockPipe', () => {
   describe('Cache check', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-          declarations: [
-            ExampleComponent,
-            MockPipe(ExamplePipe, () => 'bar'),
-            MockPipe(AnotherExamplePipe)
-          ]
-        })
-        .compileComponents();
+        declarations: [ExampleComponent, MockPipe(ExamplePipe, () => 'bar'), MockPipe(AnotherExamplePipe)]
+      }).compileComponents();
     }));
 
     beforeEach(() => {

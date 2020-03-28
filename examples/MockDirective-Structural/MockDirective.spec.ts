@@ -9,10 +9,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockDirective(DependencyDirective),
-      ]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -28,7 +25,8 @@ describe('MockDirective', () => {
     // Because we can't automatically detect when and with which context they should be rendered.
     // Usually developer knows context and can render it manually with proper setup.
     const mockedDirectiveInstance = MockHelper.findDirective(
-      fixture.debugElement, DependencyDirective
+      fixture.debugElement,
+      DependencyDirective
     ) as MockedDirective<DependencyDirective>;
 
     // now we assert that nothing has been rendered inside of the structural directive by default.

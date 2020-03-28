@@ -13,7 +13,7 @@ describe('MockPipe', () => {
         TestedComponent,
 
         // alternatively you can use MockPipes to mock multiple but you lose the ability to override
-        MockPipe(DependencyPipe, (...args: string[]) => JSON.stringify(args)),
+        MockPipe(DependencyPipe, (...args: string[]) => JSON.stringify(args))
       ]
     });
 

@@ -11,13 +11,8 @@ describe('MockReactiveForms', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockComponent(DependencyComponent),
-      ],
-      imports: [
-        ReactiveFormsModule,
-      ],
+      declarations: [TestedComponent, MockComponent(DependencyComponent)],
+      imports: [ReactiveFormsModule]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -26,8 +21,7 @@ describe('MockReactiveForms', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedReactiveFormComponent = fixture.debugElement
-      .query(By.css('dependency-component-selector'))
+    const mockedReactiveFormComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
       .componentInstance as MockedComponent<DependencyComponent>; // casting to retain type safety
 
     mockedReactiveFormComponent.__simulateChange('foo');

@@ -9,8 +9,7 @@ export class GetterSetterComponent {
     return true;
   }
 
-  set mySetter(value: string) {
-  }
+  set mySetter(value: string) {}
 
   @Input()
   public normalInput?: boolean;

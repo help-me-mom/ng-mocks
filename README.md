@@ -2,10 +2,12 @@
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 
 # ngMocks
+
 Helper function for creating angular mocks for test.
 
 ## Why use this?
-Sure, you could flip a flag on schema errors to make your component dependencies not matter.  Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+
+Sure, you could flip a flag on schema errors to make your component dependencies not matter. Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
 ## MockComponent(s)
 
@@ -17,11 +19,12 @@ Sure, you could flip a flag on schema errors to make your component dependencies
   and `ng-content` with `[data-key="ng-content"]`
 - Allows ng-model binding (You will have to add FormsModule to TestBed imports)
 - Mocks Reactive Forms (You will have to add ReactiveFormsModule to TestBed imports)
-    - __simulateChange - calls `onChanged` on the mocked component bound to a FormControl
-    - __simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
+  - \_\_simulateChange - calls `onChanged` on the mocked component bound to a FormControl
+  - \_\_simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
 - exportAs support
 
 ### Usage Example
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -35,10 +38,7 @@ describe('MockComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockComponent(DependencyComponent),
-      ]
+      declarations: [TestedComponent, MockComponent(DependencyComponent)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -47,8 +47,7 @@ describe('MockComponent', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedComponent = fixture.debugElement
-      .query(By.css('dependency-component-selector'))
+    const mockedComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
       .componentInstance as DependencyComponent; // casting to retain type safety
 
     // let's pretend Dependency Component (unmocked) has 'someInput' as an input
@@ -62,20 +61,19 @@ describe('MockComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     spyOn(component, 'trigger');
-    const mockedComponent = fixture.debugElement
-      .query(By.directive(DependencyComponent))
+    const mockedComponent = fixture.debugElement.query(By.directive(DependencyComponent))
       .componentInstance as DependencyComponent; // casting to retain type safety
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
     // if you casted mockedComponent as the original component type then this is type safe
     mockedComponent.someOutput.emit({
-      payload: 'foo',
+      payload: 'foo'
     });
 
     // assert on some side effect
     expect(component.trigger).toHaveBeenCalledWith({
-      payload: 'foo',
+      payload: 'foo'
     });
   });
 
@@ -87,9 +85,7 @@ describe('MockComponent', () => {
     `);
     // because component does not have any @ContentChild we can access html directly.
     // assert on some side effect
-    const mockedNgContent = localFixture.debugElement
-      .query(By.directive(DependencyComponent))
-      .nativeElement.innerHTML;
+    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
   });
 
@@ -102,9 +98,7 @@ describe('MockComponent', () => {
     `);
 
     // injected ng-content says as it was.
-    const mockedNgContent = localFixture.debugElement
-      .query(By.directive(DependencyComponent))
-      .nativeElement.innerHTML;
+    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
 
     // because component does have @ContentChild we need to render them first with proper context.
@@ -113,8 +107,7 @@ describe('MockComponent', () => {
     mockedComponent.__render('something');
     localFixture.detectChanges();
 
-    const mockedNgTemplate = mockedElement.query(By.css('[data-key="something"]'))
-      .nativeElement.innerHTML;
+    const mockedNgTemplate = mockedElement.query(By.css('[data-key="something"]')).nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });
@@ -122,12 +115,13 @@ describe('MockComponent', () => {
 
 ## MockDirective(s)
 
-* Mocked directive with the same selector
-* Inputs and Outputs with alias support
-* Each directive instance has its own EventEmitter instances for outputs
-* exportAs support
+- Mocked directive with the same selector
+- Inputs and Outputs with alias support
+- Each directive instance has its own EventEmitter instances for outputs
+- exportAs support
 
 ### Usage Example of Attribute Directives
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -141,10 +135,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockDirective(DependencyDirective),
-      ]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -160,7 +151,7 @@ describe('MockDirective', () => {
     // the input value will be passed into the mocked directive so you can assert on it
     const mockedDirectiveInstance = MockHelper.getDirective(
       fixture.debugElement.query(By.css('span')),
-      DependencyDirective,
+      DependencyDirective
     );
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {
@@ -177,21 +168,24 @@ describe('MockDirective', () => {
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
     const mockedDirectiveInstance = MockHelper.getDirective(
       fixture.debugElement.query(By.css('span')),
-      DependencyDirective,
+      DependencyDirective
     );
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {
       mockedDirectiveInstance.someOutput.emit({
-        payload: 'foo',
+        payload: 'foo'
       }); // if you casted mockedDirective as the original component type then this is type safe
     }
     // assert on some side effect
   });
 });
 ```
+
 ### Usage Example of Structural Directives
+
 It's important to render a structural directive first with right context,
 when assertions should be done on its nested elements.
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockDirective, MockedDirective, MockHelper } from 'ng-mocks';
@@ -204,10 +198,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockDirective(DependencyDirective),
-      ]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -223,7 +214,8 @@ describe('MockDirective', () => {
     // Because we can't automatically detect when and with which context they should be rendered.
     // Usually developer knows context and can render it manually with proper setup.
     const mockedDirectiveInstance = MockHelper.findDirective(
-      fixture.debugElement, DependencyDirective
+      fixture.debugElement,
+      DependencyDirective
     ) as MockedDirective<DependencyDirective>;
 
     // now we assert that nothing has been rendered inside of the structural directive by default.
@@ -243,15 +235,17 @@ describe('MockDirective', () => {
   });
 });
 ```
+
 ## MockPipe(s)
 
-* Mocked pipe with the same name.
-* Ability to override the transform function with a type-safe function
-* Default transform is () => undefined to prevent problems with chaining
+- Mocked pipe with the same name.
+- Ability to override the transform function with a type-safe function
+- Default transform is () => undefined to prevent problems with chaining
 
 Personally, I found the best thing to do for assertions is to override the transform to write the args so that I can assert on the arguments.
 
 ### Usage Example
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -268,7 +262,7 @@ describe('MockPipe', () => {
         TestedComponent,
 
         // alternatively you can use MockPipes to mock multiple but you lose the ability to override
-        MockPipe(DependencyPipe, (...args) => JSON.stringify(args)),
+        MockPipe(DependencyPipe, (...args) => JSON.stringify(args))
       ]
     });
 
@@ -286,11 +280,12 @@ describe('MockPipe', () => {
 
 ## Mocked Reactive Forms Components
 
-- Set value on the formControl by calling __simulateChange
-- Set touched on the formControl by calling __simulateTouch
+- Set value on the formControl by calling \_\_simulateChange
+- Set touched on the formControl by calling \_\_simulateTouch
 - Use the `MockedComponent` type to stay typesafe: `MockedComponent<YourReactiveFormComponent>`
 
 ### Usage Example
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -305,13 +300,8 @@ describe('MockReactiveForms', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-        MockComponent(DependencyComponent),
-      ],
-      imports: [
-        ReactiveFormsModule,
-      ],
+      declarations: [TestedComponent, MockComponent(DependencyComponent)],
+      imports: [ReactiveFormsModule]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -320,8 +310,7 @@ describe('MockReactiveForms', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedReactiveFormComponent = fixture.debugElement
-      .query(By.css('dependency-component-selector'))
+    const mockedReactiveFormComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
       .componentInstance as MockedComponent<DependencyComponent>; // casting to retain type safety
 
     mockedReactiveFormComponent.__simulateChange('foo');
@@ -331,16 +320,19 @@ describe('MockReactiveForms', () => {
 ```
 
 ## MockDeclaration(s)
+
 It figures out if it is a component, directive, or pipe and mocks it for you
 
 ## MockModule
-  * Mocks all components, directives, and pipes using MockDeclaration
-  * Providers are all mocked as empty objects
-  * Module Dependencies are also mocked
+
+- Mocks all components, directives, and pipes using MockDeclaration
+- Providers are all mocked as empty objects
+- Module Dependencies are also mocked
 
 For providers I typically will use TestBed.get(SomeProvider) and extend it using a library like [ts-mocks](https://www.npmjs.com/package/ts-mocks).
 
 ### Usage Example
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockModule } from 'ng-mocks';
@@ -353,12 +345,8 @@ describe('MockModule', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-      ],
-      imports: [
-        MockModule(DependencyModule),
-      ],
+      declarations: [TestedComponent],
+      imports: [MockModule(DependencyModule)]
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -373,9 +361,11 @@ describe('MockModule', () => {
 ```
 
 ## MockRender
+
 Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
 
 ### Usage Example
+
 ```typescript
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -385,15 +375,10 @@ import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
 
 describe('MockRender', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-      ],
-      imports: [
-        MockModule(DependencyModule),
-      ],
+      declarations: [TestedComponent],
+      imports: [MockModule(DependencyModule)]
     });
   });
 
@@ -410,7 +395,7 @@ describe('MockRender', () => {
       `,
       {
         myListener1: spy,
-        myParam1: 'something1',
+        myParam1: 'something1'
       }
     );
 
@@ -430,7 +415,7 @@ describe('MockRender', () => {
     // and returns fixture with a component with properties value1, value2 and empty callback trigger.
     const fixture = MockRender(TestedComponent, {
       trigger: spy,
-      value1: 'something2',
+      value1: 'something2'
     });
 
     // assert on some side effect
@@ -445,7 +430,8 @@ describe('MockRender', () => {
 ```
 
 ## MockHelper
-MockHelper provides 3 methods to get attribute and structural directives from an element. 
+
+MockHelper provides 3 methods to get attribute and structural directives from an element.
 
 `MockHelper.getDirective(fixture.debugElement, Directive)` -
 returns attribute or structural directive which belongs to current element.
@@ -457,6 +443,7 @@ returns first found attribute or structural directive which belongs to current e
 returns all found attribute or structural directives which belong to current element and all its child.
 
 ## Other examples of tests
+
 More detailed examples can be found in
 [e2e](https://github.com/ike18t/ng-mocks/tree/master/e2e)
 and in
@@ -464,6 +451,7 @@ and in
 directories in the repo.
 
 ## Find an issue or have a request?
-Report it as an issue or submit a PR.  I'm open to contributions.
+
+Report it as an issue or submit a PR. I'm open to contributions.
 
 <https://github.com/ike18t/ng-mocks>

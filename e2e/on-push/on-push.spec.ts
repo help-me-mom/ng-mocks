@@ -6,7 +6,7 @@ import { MockRender } from '../../lib/mock-render';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'item-list',
-  template: '{{items.length}}',
+  template: '{{items.length}}'
 })
 export class ItemListComponent {
   @Input() items: string[];
@@ -15,7 +15,7 @@ export class ItemListComponent {
 /* tslint:disable:max-classes-per-file */
 @Component({
   selector: 'item-list-wrapper',
-  template: '<item-list [items]="items"></item-list>',
+  template: '<item-list [items]="items"></item-list>'
 })
 export class ItemListWrapperComponent {
   @Input() items: string[];
@@ -31,9 +31,9 @@ describe('ChangeDetectionStrategy.OnPush:real', () => {
     TestBed.configureTestingModule({
       declarations: [
         ItemListComponent,
-        ItemListWrapperComponent,
+        ItemListWrapperComponent
         // wrapperType,
-      ],
+      ]
     });
 
     wrapper = TestBed.createComponent(ItemListWrapperComponent);
@@ -68,13 +68,11 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ItemListComponent,
-      ],
+      declarations: [ItemListComponent]
     });
 
     fixture = MockRender(ItemListComponent, {
-      items: [],
+      items: []
     });
     component = fixture.componentInstance;
     fixture.detectChanges();

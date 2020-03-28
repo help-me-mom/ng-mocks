@@ -6,19 +6,16 @@ import { MockRender } from './mock-render';
 import { RenderRealComponent } from './mock-render.fixtures';
 
 describe('MockRender', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        RenderRealComponent
-      ]
+      declarations: [RenderRealComponent]
     });
   });
 
   it('renders any template and respects dynamic params', () => {
     const spy = createSpy('mockClick');
     const assertPayload = {
-      magic: Math.random(),
+      magic: Math.random()
     };
 
     // Rendering custom template.

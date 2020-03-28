@@ -4,10 +4,10 @@ import { staticFalse } from '../../tests';
 
 @Component({
   selector: 'dependency-component-selector',
-  template: `dependency`,
+  template: `dependency`
 })
 export class DependencyComponent {
-  @ContentChild('something', {...staticFalse})
+  @ContentChild('something', { ...staticFalse })
   injectedSomething: TemplateRef<{}>;
 
   @Input()
