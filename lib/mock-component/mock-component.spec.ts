@@ -39,7 +39,7 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
     </template-outlet-component>
     <empty-component id="element-without-content-and-template"></empty-component>
     <empty-component id="element-with-content-only">child of element-with-content-only</empty-component>
-  `
+  `,
 })
 export class ExampleComponentContainer {
   @ViewChild(ChildComponent, { ...staticTrue }) childComponent: ChildComponent;
@@ -66,9 +66,9 @@ describe('MockComponent', () => {
           TemplateOutletComponent,
           ChildComponent,
           CustomFormControlComponent
-        )
+        ),
       ],
-      imports: [FormsModule, ReactiveFormsModule]
+      imports: [FormsModule, ReactiveFormsModule],
     })
       .compileComponents()
       .then(() => {

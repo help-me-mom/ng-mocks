@@ -13,7 +13,7 @@ export const MockOf = (mockClass: Type<any>, outputs?: string[]) => (constructor
   Object.defineProperties(constructor, {
     mockOf: { value: mockClass },
     name: { value: `MockOf${mockClass.name}` },
-    nameConstructor: { value: constructor.name }
+    nameConstructor: { value: constructor.name },
   });
 
   constructor.prototype.__mockedMethods = mockServiceHelper.extractMethodsFromPrototype(mockClass.prototype);

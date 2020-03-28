@@ -8,7 +8,7 @@ import { CustomInjectionComponent } from './custom-injection.component';
 describe('injected-ng-templates:real', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CustomInjectionComponent]
+      declarations: [CustomInjectionComponent],
     });
   });
 
@@ -21,7 +21,7 @@ describe('injected-ng-templates:real', () => {
         </ng-template>
       </custom-injection>`,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -35,7 +35,7 @@ describe('injected-ng-templates:real', () => {
 describe('structural-directive-as-ng-for:mock', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MockComponent(CustomInjectionComponent)]
+      declarations: [MockComponent(CustomInjectionComponent)],
     });
   });
 
@@ -52,7 +52,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       </custom-injection>`,
       {
         outside: 'string0',
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -65,7 +65,7 @@ describe('structural-directive-as-ng-for:mock', () => {
 
     // Now we want to render @ContentChild('block') with some context.
     mockedComponent.__render('block', 'string1', {
-      test: 'test1'
+      test: 'test1',
     });
     fixture.detectChanges();
     block = fixture.debugElement.query(By.css('[data-key="block"]'));
@@ -74,7 +74,7 @@ describe('structural-directive-as-ng-for:mock', () => {
 
     // Now we want to render @ContentChild('block') with another context.
     mockedComponent.__render('block', 'string2', {
-      test: 'test2'
+      test: 'test2',
     });
     fixture.detectChanges();
     block = fixture.debugElement.query(By.css('[data-key="block"]'));

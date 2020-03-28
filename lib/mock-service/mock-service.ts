@@ -33,7 +33,7 @@ export const mockServiceHelper = {
       prototype = Object.getPrototypeOf(prototype);
     }
     return result;
-  }
+  },
 };
 
 export function MockService(service?: boolean | number | string | null): undefined;

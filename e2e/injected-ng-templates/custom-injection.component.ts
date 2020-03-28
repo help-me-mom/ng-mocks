@@ -9,7 +9,7 @@ import { staticFalse } from '../../tests';
       <ng-template ngFor [ngForOf]="items" [ngForTemplate]="injectedBlock"></ng-template>
     </div>
     <div #child></div>
-  `
+  `,
 })
 export class CustomInjectionComponent<T> {
   @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;

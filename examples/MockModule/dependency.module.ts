@@ -5,6 +5,6 @@ import { DependencyComponent } from './dependency.component';
 @NgModule({
   declarations: [DependencyComponent],
   entryComponents: [DependencyComponent],
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class DependencyModule {}

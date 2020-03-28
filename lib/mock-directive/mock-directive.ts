@@ -42,10 +42,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     providers: [
       {
         provide: directive,
-        useExisting: forwardRef(() => DirectiveMock)
-      }
+        useExisting: forwardRef(() => DirectiveMock),
+      },
     ],
-    selector
+    selector,
   };
 
   @MockOf(directive, outputs)

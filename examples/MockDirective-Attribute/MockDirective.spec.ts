@@ -10,7 +10,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockDirective(DependencyDirective)]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -48,7 +48,7 @@ describe('MockDirective', () => {
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {
       mockedDirectiveInstance.someOutput.emit({
-        payload: 'foo'
+        payload: 'foo',
       }); // if you casted mockedDirective as the original component type then this is type safe
     }
     // assert on some side effect

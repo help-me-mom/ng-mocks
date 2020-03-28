@@ -18,7 +18,7 @@ import {
   ParentModule,
   SameImports1Module,
   SameImports2Module,
-  WithServiceModule
+  WithServiceModule,
 } from './test-fixtures';
 
 @Component({
@@ -27,7 +27,7 @@ import {
     <example-component></example-component>
     <span example-directive></span>
     {{ test | examplePipe }}
-  `
+  `,
 })
 class ComponentSubject {
   test = 'test';
@@ -35,7 +35,7 @@ class ComponentSubject {
 
 @Component({
   selector: 'same-imports',
-  template: `same imports`
+  template: `same imports`,
 })
 class SameImportsComponent {}
 
@@ -45,7 +45,7 @@ describe('MockModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ComponentSubject],
-      imports: [MockModule(ParentModule), MockModule(ModuleWithProvidersModule)]
+      imports: [MockModule(ParentModule), MockModule(ModuleWithProvidersModule)],
     })
       .compileComponents()
       .then(() => {
@@ -67,7 +67,7 @@ describe('SameImportsModules', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
-      imports: [MockModule(SameImports1Module), MockModule(SameImports2Module)]
+      imports: [MockModule(SameImports1Module), MockModule(SameImports2Module)],
     })
       .compileComponents()
       .then(() => {
@@ -88,7 +88,7 @@ describe('NeverMockModules', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
-      imports: [MockModule(CommonModule), MockModule(BrowserModule), MockModule(BrowserAnimationsModule)]
+      imports: [MockModule(CommonModule), MockModule(BrowserModule), MockModule(BrowserAnimationsModule)],
     })
       .compileComponents()
       .then(() => {
@@ -109,7 +109,7 @@ describe('RouterModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ExampleComponent],
-      imports: [MockModule(AppRoutingModule)]
+      imports: [MockModule(AppRoutingModule)],
     })
       .compileComponents()
       .then(() => {
@@ -134,7 +134,7 @@ describe('Usage of cached nested module', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ExampleConsumerComponent],
-        imports: [MockModule(LogicRootModule)]
+        imports: [MockModule(LogicRootModule)],
       })
         .compileComponents()
         .then(() => {
@@ -152,7 +152,7 @@ describe('Usage of cached nested module', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ExampleConsumerComponent],
-        imports: [MockModule(LogicNestedModule)]
+        imports: [MockModule(LogicNestedModule)],
       })
         .compileComponents()
         .then(() => {
@@ -171,7 +171,7 @@ describe('WithServiceModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CustomWithServiceComponent],
-      imports: [MockModule(WithServiceModule)]
+      imports: [MockModule(WithServiceModule)],
     });
   }));
 

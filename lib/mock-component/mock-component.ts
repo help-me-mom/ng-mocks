@@ -7,7 +7,7 @@ import {
   TemplateRef,
   Type,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -56,7 +56,7 @@ export function MockComponent<TComponent>(
         viewChildRefs.set(query.selector, key);
         queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
           read: ViewContainerRef,
-          static: false
+          static: false,
         } as any);
         return `
           <div *ngIf="mockRender_${query.selector}" data-key="${query.selector}">
@@ -81,16 +81,16 @@ export function MockComponent<TComponent>(
       {
         multi: true,
         provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => ComponentMock)
+        useExisting: forwardRef(() => ComponentMock),
       },
       {
         provide: component,
-        useExisting: forwardRef(() => ComponentMock)
-      }
+        useExisting: forwardRef(() => ComponentMock),
+      },
     ],
     queries,
     selector,
-    template
+    template,
   };
 
   @MockOf(component, outputs)

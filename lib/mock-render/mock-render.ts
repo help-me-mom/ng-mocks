@@ -38,7 +38,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   }
   const options: Component = {
     selector: 'mock-render',
-    template: mockedTemplate
+    template: mockedTemplate,
   };
 
   const component = Component(options)(
@@ -55,7 +55,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
 
   // Injection of our template.
   TestBed.configureTestingModule({
-    declarations: [component]
+    declarations: [component],
   });
 
   const fixture = TestBed.createComponent(component);

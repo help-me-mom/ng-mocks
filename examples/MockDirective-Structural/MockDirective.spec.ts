@@ -9,7 +9,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockDirective(DependencyDirective)]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);

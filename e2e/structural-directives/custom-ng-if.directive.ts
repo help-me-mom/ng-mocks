@@ -1,7 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[customNgIf]'
+  selector: '[customNgIf]',
 })
 export class CustomNgIfDirective {
   @Input('customNgIf') set setValue(value: any) {

@@ -10,7 +10,7 @@ import { MockDirective } from './mock-directive';
 // tslint:disable:max-classes-per-file
 @Directive({
   exportAs: 'foo',
-  selector: '[exampleDirective]'
+  selector: '[exampleDirective]',
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
@@ -23,14 +23,14 @@ export class ExampleDirective {
 }
 
 @Directive({
-  selector: '[exampleStructuralDirective]'
+  selector: '[exampleStructuralDirective]',
 })
 export class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
 }
 
 @Directive({
-  selector: '[getters-and-setters]'
+  selector: '[getters-and-setters]',
 })
 export class GettersAndSettersDirective {
   get myGetter() {
@@ -59,7 +59,7 @@ export class GettersAndSettersDirective {
     </div>
     <input [formControl]="fooControl" />
     <div getters-and-setters></div>
-  `
+  `,
 })
 export class ExampleComponentContainer {
   @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
@@ -83,8 +83,8 @@ describe('MockDirective', () => {
         MockDirective(FormControlDirective),
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
-        MockDirective(GettersAndSettersDirective)
-      ]
+        MockDirective(GettersAndSettersDirective),
+      ],
     }).compileComponents();
   }));
 

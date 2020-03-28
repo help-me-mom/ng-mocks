@@ -17,7 +17,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   const { name } = pipeResolver.resolve(pipe);
 
   const options: Pipe = {
-    name
+    name,
   };
 
   @MockOf(pipe)

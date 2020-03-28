@@ -69,5 +69,5 @@ export const MockHelper = {
       }
     });
     return result;
-  }
+  },
 };

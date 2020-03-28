@@ -9,7 +9,7 @@ import { staticFalse } from '../../../tests';
     <h2><template [ngTemplateOutlet]="injectedBlock2"></template></h2>
     <h3><ng-content></ng-content></h3>
     <h4 #block4>own ref</h4>
-  `
+  `,
 })
 export class TemplateOutletComponent {
   // injected.

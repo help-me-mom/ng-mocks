@@ -13,7 +13,7 @@ import { CustomTypeDirective } from './custom-type.directive';
     <div class="nested">
       <ng-content></ng-content>
     </div>
-  `
+  `,
 })
 export class CustomRootComponent implements AfterContentInit {
   public context = ['0'];

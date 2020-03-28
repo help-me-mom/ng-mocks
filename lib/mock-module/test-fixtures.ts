@@ -10,7 +10,7 @@ import {
   NgModule,
   OnInit,
   Pipe,
-  PipeTransform
+  PipeTransform,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -39,19 +39,19 @@ export class ExampleService {
 
 @Component({
   selector: 'example-private-component',
-  template: '<span>Private thing</span>'
+  template: '<span>Private thing</span>',
 })
 export class ExamplePrivateComponent {}
 
 @Component({
   selector: 'example-component',
-  template: '<span>My Example</span>'
+  template: '<span>My Example</span>',
 })
 export class ExampleComponent {}
 
 @Component({
   selector: 'example-consumer-component',
-  template: '<example-component></example-component>'
+  template: '<example-component></example-component>',
 })
 export class ExampleConsumerComponent {}
 
@@ -59,32 +59,32 @@ export class ExampleConsumerComponent {}
   declarations: [ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective],
   exports: [ExampleComponent, ExamplePipe, ExampleDirective],
   imports: [CommonModule],
-  providers: [ExampleService]
+  providers: [ExampleService],
 })
 export class ChildModule {}
 
 @NgModule({
-  imports: [ChildModule]
+  imports: [ChildModule],
 })
 export class ParentModule {}
 
 @NgModule({
-  imports: [ParentModule]
+  imports: [ParentModule],
 })
 export class SameImports1Module {}
 
 @NgModule({
-  imports: [ParentModule]
+  imports: [ParentModule],
 })
 export class SameImports2Module {}
 
 @NgModule({
-  imports: [ChildModule]
+  imports: [ChildModule],
 })
 export class LogicNestedModule {}
 
 @NgModule({
-  imports: [ChildModule, LogicNestedModule]
+  imports: [ChildModule, LogicNestedModule],
 })
 export class LogicRootModule {}
 
@@ -93,10 +93,10 @@ export class LogicRootModule {}
     RouterModule.forRoot([
       {
         component: ExampleComponent,
-        path: ''
-      }
-    ])
-  ]
+        path: '',
+      },
+    ]),
+  ],
 })
 export class AppRoutingModule {}
 
@@ -104,7 +104,7 @@ export class AppRoutingModule {}
 
 // Simple module, one of components requires some special provider.
 @NgModule({
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 class RealModuleWithProvidersModule {}
 
@@ -117,9 +117,9 @@ class ModuleProvider {
       providers: [
         {
           provide: 'MODULE_FLAG',
-          useValue: flag
-        }
-      ]
+          useValue: flag,
+        },
+      ],
     };
   }
 }
@@ -127,7 +127,7 @@ class ModuleProvider {
 
 // Encapsulating module with provider in some random module.
 @NgModule({
-  imports: [ModuleProvider.withFlag(false)]
+  imports: [ModuleProvider.withFlag(false)],
 })
 export class ModuleWithProvidersModule {}
 
@@ -142,7 +142,7 @@ export class CustomService {
 }
 @Component({
   selector: 'custom-service',
-  template: `same imports`
+  template: `same imports`,
 })
 export class CustomWithServiceComponent {
   public name: string;
@@ -152,7 +152,7 @@ export class CustomWithServiceComponent {
   }
 }
 @NgModule({
-  providers: [CustomService]
+  providers: [CustomService],
 })
 export class WithServiceModule {}
 

@@ -15,9 +15,9 @@ module.exports = (config: any) => {
       Chrome: process.env.WITH_PUPPETEER
         ? {
             base: 'ChromeHeadless',
-            flags: ['--no-sandbox']
+            flags: ['--no-sandbox'],
           }
-        : {}
+        : {},
     },
     files: [
       'node_modules/zone.js/dist/zone.js',
@@ -32,20 +32,20 @@ module.exports = (config: any) => {
       { pattern: 'lib/**/*.ts' },
       { pattern: 'e2e/**/*.ts' },
       { pattern: 'examples/**/*.ts' },
-      { pattern: 'tests/**/*.ts' }
+      { pattern: 'tests/**/*.ts' },
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,
     port: 9876,
     preprocessors: {
-      '**/*.ts': ['karma-typescript']
+      '**/*.ts': ['karma-typescript'],
     },
     reporters: ['dots', 'karma-typescript', 'kjhtml'],
     singleRun: true,
 
     karmaTypescriptConfig: {
       include: ['karma-test-shim.ts', 'e2e/**/*', 'examples/**/*', 'lib/**/*', 'tests/**/*'],
-      tsconfig: 'tsconfig.json'
-    }
+      tsconfig: 'tsconfig.json',
+    },
   });
 };

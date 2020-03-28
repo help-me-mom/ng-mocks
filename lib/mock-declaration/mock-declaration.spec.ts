@@ -5,7 +5,7 @@ import { MockDeclaration } from './mock-declaration';
 // tslint:disable:max-classes-per-file
 @Component({
   selector: 'empty-template-container',
-  template: ''
+  template: '',
 })
 export class EmptyTemplateContainer {}
 // tslint:enable:max-classes-per-file

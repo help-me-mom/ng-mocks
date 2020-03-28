@@ -9,7 +9,7 @@ describe('context-with-directives:real', () => {
   beforeEach(done => {
     TestBed.configureTestingModule({
       declarations: [CustomTypeDirective, CustomRootComponent],
-      imports: [CommonModule]
+      imports: [CommonModule],
     })
       .compileComponents()
       .then(done);
@@ -65,7 +65,7 @@ describe('context-with-directives:real', () => {
 describe('context-with-directives:mock', () => {
   beforeEach(done => {
     TestBed.configureTestingModule({
-      declarations: [MockDirective(CustomTypeDirective), MockDirective(CustomRootComponent)]
+      declarations: [MockDirective(CustomTypeDirective), MockDirective(CustomRootComponent)],
     })
       .compileComponents()
       .then(done);

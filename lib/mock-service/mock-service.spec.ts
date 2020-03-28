@@ -120,27 +120,27 @@ describe('MockService', () => {
         child11: {
           func1: () => 0,
           nullValue: null, // tslint:disable-line:no-null-keyword
-          undefinedValue: undefined
+          undefinedValue: undefined,
         },
         number0: 0,
-        number1: 1
+        number1: 1,
       },
       child2: {
-        stringEmpty: ''
+        stringEmpty: '',
       },
       func2: () => 1,
-      func3: () => false
+      func3: () => false,
     });
 
     expect(mockedService).toEqual({
       child1: {
         child11: {
-          func1: jasmine.any(Function)
-        }
+          func1: jasmine.any(Function),
+        },
       },
       child2: {},
       func2: jasmine.any(Function),
-      func3: jasmine.any(Function)
+      func3: jasmine.any(Function),
     });
 
     expect(mockedService.child1.child11.func1()).toBeUndefined('func1()');

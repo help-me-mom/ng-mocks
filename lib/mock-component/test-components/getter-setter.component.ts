@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'getter-setter',
-  template: ''
+  template: '',
 })
 export class GetterSetterComponent {
   get myGetter() {

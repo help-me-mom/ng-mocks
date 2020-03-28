@@ -11,7 +11,7 @@ import { CustomNgIfDirective } from './custom-ng-if.directive';
 describe('structural-directive-as-ng-for:real', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CustomNgForWithOfDirective, CustomNgForWithoutOfDirective, CustomNgIfDirective]
+      declarations: [CustomNgForWithOfDirective, CustomNgForWithoutOfDirective, CustomNgIfDirective],
     });
   });
 
@@ -24,7 +24,7 @@ describe('structural-directive-as-ng-for:real', () => {
         >w/ {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}</div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -43,7 +43,7 @@ describe('structural-directive-as-ng-for:real', () => {
         >w/o {{v}}{{i}}{{f ? 1 : 0}}{{l ? 1 : 0}}</div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -61,7 +61,7 @@ describe('structural-directive-as-ng-for:real', () => {
         <div data-type="customNgIfFalse" *customNgIf="!values">should be hidden</div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -77,8 +77,8 @@ describe('structural-directive-as-ng-for:mock', () => {
       declarations: [
         MockDirective(CustomNgIfDirective),
         MockDirective(CustomNgForWithOfDirective),
-        MockDirective(CustomNgForWithoutOfDirective)
-      ]
+        MockDirective(CustomNgForWithoutOfDirective),
+      ],
     });
   });
 
@@ -91,7 +91,7 @@ describe('structural-directive-as-ng-for:mock', () => {
         </div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -99,7 +99,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     MockHelper.findDirectives(fixture.debugElement, CustomNgIfDirective).forEach(
       (item: MockedDirective<CustomNgIfDirective>) =>
         item.__render(undefined, {
-          fromDirective: undefined
+          fromDirective: undefined,
         })
     );
     fixture.detectChanges();
@@ -120,14 +120,14 @@ describe('structural-directive-as-ng-for:mock', () => {
 
     // Now we want to assert how our html is rendered based on structural directive variables' definition.
     directive.__render(true, {
-      fromDirective: false
+      fromDirective: false,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('$implicit:true fromDirective:false');
 
     // And we want dynamically change variables for render.
     directive.__render(false, {
-      fromDirective: true
+      fromDirective: true,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('$implicit:false fromDirective:true');
@@ -143,7 +143,7 @@ describe('structural-directive-as-ng-for:mock', () => {
         </div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -174,7 +174,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     directive.__render('MainValue', {
       myFirst: true,
       myIndex: 'MyIndex',
-      myLast: false
+      myLast: false,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('w/ MainValueMyIndex10');
@@ -183,7 +183,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     directive.__render('MainValue2', {
       myFirst: false,
       myIndex: 'MyIndex2',
-      myLast: true
+      myLast: true,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('w/ MainValue2MyIndex201');
@@ -199,7 +199,7 @@ describe('structural-directive-as-ng-for:mock', () => {
         </div>
       `,
       {
-        values: ['string1', 'string2', 'string3']
+        values: ['string1', 'string2', 'string3'],
       }
     );
 
@@ -230,7 +230,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     directive.__render('MainValue', {
       myFirst: true,
       myIndex: 'MyIndex',
-      myLast: false
+      myLast: false,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('w/o MainValueMyIndex10');
@@ -239,7 +239,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     directive.__render('MainValue2', {
       myFirst: false,
       myIndex: 'MyIndex2',
-      myLast: true
+      myLast: true,
     });
     fixture.detectChanges();
     expect(fixture.nativeElement.innerText).toEqual('w/o MainValue2MyIndex201');
@@ -264,7 +264,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       `,
       {
         values1: ['string1', 'string2', 'string3'],
-        values2: ['string4', 'string5', 'string6']
+        values2: ['string4', 'string5', 'string6'],
       }
     );
 

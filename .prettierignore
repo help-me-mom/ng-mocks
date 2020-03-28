@@ -13,5 +13,6 @@
 CHANGELOG.md
 CODEOWNERS
 browserslist
+coverage/
 dist/
 node_modules/

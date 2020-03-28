@@ -38,7 +38,7 @@ describe('MockComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockComponent(DependencyComponent)]
+      declarations: [TestedComponent, MockComponent(DependencyComponent)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -68,12 +68,12 @@ describe('MockComponent', () => {
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
     // if you casted mockedComponent as the original component type then this is type safe
     mockedComponent.someOutput.emit({
-      payload: 'foo'
+      payload: 'foo',
     });
 
     // assert on some side effect
     expect(component.trigger).toHaveBeenCalledWith({
-      payload: 'foo'
+      payload: 'foo',
     });
   });
 
@@ -135,7 +135,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockDirective(DependencyDirective)]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -173,7 +173,7 @@ describe('MockDirective', () => {
     expect(mockedDirectiveInstance).toBeTruthy();
     if (mockedDirectiveInstance) {
       mockedDirectiveInstance.someOutput.emit({
-        payload: 'foo'
+        payload: 'foo',
       }); // if you casted mockedDirective as the original component type then this is type safe
     }
     // assert on some side effect
@@ -198,7 +198,7 @@ describe('MockDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockDirective(DependencyDirective)]
+      declarations: [TestedComponent, MockDirective(DependencyDirective)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -262,8 +262,8 @@ describe('MockPipe', () => {
         TestedComponent,
 
         // alternatively you can use MockPipes to mock multiple but you lose the ability to override
-        MockPipe(DependencyPipe, (...args) => JSON.stringify(args))
-      ]
+        MockPipe(DependencyPipe, (...args) => JSON.stringify(args)),
+      ],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -301,7 +301,7 @@ describe('MockReactiveForms', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestedComponent, MockComponent(DependencyComponent)],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -346,7 +346,7 @@ describe('MockModule', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestedComponent],
-      imports: [MockModule(DependencyModule)]
+      imports: [MockModule(DependencyModule)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -378,7 +378,7 @@ describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestedComponent],
-      imports: [MockModule(DependencyModule)]
+      imports: [MockModule(DependencyModule)],
     });
   });
 
@@ -395,7 +395,7 @@ describe('MockRender', () => {
       `,
       {
         myListener1: spy,
-        myParam1: 'something1'
+        myParam1: 'something1',
       }
     );
 
@@ -415,7 +415,7 @@ describe('MockRender', () => {
     // and returns fixture with a component with properties value1, value2 and empty callback trigger.
     const fixture = MockRender(TestedComponent, {
       trigger: spy,
-      value1: 'something2'
+      value1: 'something2',
     });
 
     // assert on some side effect

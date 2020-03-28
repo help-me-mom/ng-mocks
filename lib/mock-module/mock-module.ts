@@ -15,7 +15,7 @@ const neverMockProvidedToken = [
   'InjectionToken Application Initializer',
   // BrowserModule
   'InjectionToken EventManagerPlugins',
-  'InjectionToken HammerGestureConfig'
+  'InjectionToken HammerGestureConfig',
 ];
 const neverMockProvidedFunction = [
   // BrowserModule
@@ -24,7 +24,7 @@ const neverMockProvidedFunction = [
   'DomSharedStylesHost',
   'EventManager',
   // BrowserAnimationsModule
-  'RendererFactory2'
+  'RendererFactory2',
 ];
 
 const mockProvider = (provider: any): Provider | undefined => {
@@ -46,7 +46,7 @@ const mockProvider = (provider: any): Provider | undefined => {
   return {
     multi,
     provide,
-    useValue: MockService(provide)
+    useValue: MockService(provide),
   };
 };
 
@@ -109,7 +109,7 @@ export function MockModule(module: any): any {
       ngModule: moduleMockPointer,
       providers: flatten(ngModuleProviders)
         .map(mockProvider)
-        .filter(provider => !!provider) as Provider[]
+        .filter(provider => !!provider) as Provider[],
     };
   }
   return moduleMockPointer;

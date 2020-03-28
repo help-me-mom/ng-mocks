@@ -11,7 +11,7 @@ import { MockHelper } from './mock-helper';
 
 @Directive({
   exportAs: 'foo',
-  selector: '[exampleDirective]'
+  selector: '[exampleDirective]',
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
@@ -24,7 +24,7 @@ export class ExampleDirective {
 }
 
 @Directive({
-  selector: '[exampleStructuralDirective]'
+  selector: '[exampleStructuralDirective]',
 })
 export class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
@@ -33,7 +33,7 @@ export class ExampleStructuralDirective {
 describe('MockHelper:getDirective', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MockDirective(ExampleDirective), MockDirective(ExampleStructuralDirective)]
+      declarations: [MockDirective(ExampleDirective), MockDirective(ExampleStructuralDirective)],
     });
   }));
 

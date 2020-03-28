@@ -8,7 +8,7 @@ export interface ICustomNgForContext {
 }
 
 @Directive({
-  selector: '[customNgForWithOf]'
+  selector: '[customNgForWithOf]',
 })
 export class CustomNgForWithOfDirective {
   @Input('customNgForWithOfOf') set setItems(items: string[]) {
@@ -19,7 +19,7 @@ export class CustomNgForWithOfDirective {
         $implicit: value,
         myFirst: index === 0,
         myIndex: index,
-        myLast: index + 1 === items.length
+        myLast: index + 1 === items.length,
       })
     );
   }

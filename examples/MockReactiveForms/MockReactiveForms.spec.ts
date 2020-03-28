@@ -12,7 +12,7 @@ describe('MockReactiveForms', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestedComponent, MockComponent(DependencyComponent)],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule],
     });
 
     fixture = TestBed.createComponent(TestedComponent);

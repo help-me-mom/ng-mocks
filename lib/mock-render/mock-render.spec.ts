@@ -8,14 +8,14 @@ import { RenderRealComponent } from './mock-render.fixtures';
 describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RenderRealComponent]
+      declarations: [RenderRealComponent],
     });
   });
 
   it('renders any template and respects dynamic params', () => {
     const spy = createSpy('mockClick');
     const assertPayload = {
-      magic: Math.random()
+      magic: Math.random(),
     };
 
     // Rendering custom template.
@@ -27,7 +27,7 @@ describe('MockRender', () => {
       `,
       {
         mockClick: spy,
-        mockContent: 'injected content'
+        mockContent: 'injected content',
       }
     );
     expect(fixture).toBeTruthy();
@@ -55,7 +55,7 @@ describe('MockRender', () => {
         after
       `,
       {
-        mockContent: 'injected content'
+        mockContent: 'injected content',
       },
       false
     );

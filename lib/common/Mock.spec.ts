@@ -13,13 +13,13 @@ class ParentClass {
 
 @NgModule({})
 @Component({
-  template: ''
+  template: '',
 })
 @Directive({
-  selector: 'mock'
+  selector: 'mock',
 })
 @Pipe({
-  name: 'mock'
+  name: 'mock',
 })
 class ChildClass extends ParentClass implements PipeTransform {
   protected childValue = true;

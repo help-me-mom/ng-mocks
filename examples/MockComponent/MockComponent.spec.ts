@@ -10,7 +10,7 @@ describe('MockComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestedComponent, MockComponent(DependencyComponent)]
+      declarations: [TestedComponent, MockComponent(DependencyComponent)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);
@@ -40,12 +40,12 @@ describe('MockComponent', () => {
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
     // if you casted mockedComponent as the original component type then this is type safe
     mockedComponent.someOutput.emit({
-      payload: 'foo'
+      payload: 'foo',
     });
 
     // assert on some side effect
     expect(component.trigger).toHaveBeenCalledWith({
-      payload: 'foo'
+      payload: 'foo',
     });
   });
 
