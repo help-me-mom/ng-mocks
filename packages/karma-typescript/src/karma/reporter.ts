@@ -55,7 +55,7 @@ export class Reporter {
                     const sourceMapStore = istanbulSourceMaps.createSourceMapStore();
                     const remappedCoverageMap = await sourceMapStore.transformCoverage(coverageMap);
 
-                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap.map)) {
+                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap)) {
                         results.exitCode = 1;
                     }
 
