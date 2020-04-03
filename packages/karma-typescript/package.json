@@ -1,6 +1,6 @@
 {
   "name": "karma-typescript",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Simplifying running unit tests with coverage for Typescript projects.",
   "files": [
     "dist/**",
@@ -133,7 +133,7 @@
     "@types/istanbul-lib-coverage": "^2.0.1",
     "@types/istanbul-lib-instrument": "^1.7.3",
     "@types/istanbul-lib-report": "^1.1.1",
-    "@types/istanbul-lib-source-maps": "^1.2.2",
+    "@types/istanbul-lib-source-maps": "^4.0.0",
     "@types/istanbul-reports": "^1.1.1",
     "@types/karma": "^3.0.5",
     "@types/lodash": "^4.14.149",
