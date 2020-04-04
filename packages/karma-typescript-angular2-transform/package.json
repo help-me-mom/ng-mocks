@@ -39,27 +39,27 @@
     "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
-    "acorn": "^7.1.0",
-    "log4js": "^6.1.0",
-    "magic-string": "^0.25.5"
+    "acorn": "^7.1.1",
+    "log4js": "^6.1.2",
+    "magic-string": "^0.25.7"
   },
   "devDependencies": {
-    "@angular/core": "^8.2.14",
-    "@types/karma": "^3.0.5",
+    "@angular/core": "^9.1.0",
+    "@types/karma": "^4.4.1",
     "@types/lodash": "^4.14.149",
-    "@types/node": "^13.1.4",
-    "@types/sinon": "^7.5.1",
-    "@types/tape": "^4.2.33",
+    "@types/node": "^13.11.0",
+    "@types/sinon": "^9.0.0",
+    "@types/tape": "^4.2.34",
     "faucet": "0.0.1",
     "karma-typescript": "5.0.1",
-    "nyc": "^15.0.0",
-    "rxjs": "^6.5.4",
-    "sinon": "^8.0.4",
-    "tape": "^4.12.1",
-    "ts-node": "^8.5.4",
-    "tslint": "^5.20.1",
+    "nyc": "^15.0.1",
+    "rxjs": "^6.5.5",
+    "sinon": "^9.0.1",
+    "tape": "^4.13.2",
+    "ts-node": "^8.8.1",
+    "tslint": "^6.1.1",
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "latest",
-    "zone.js": "^0.10.2"
+    "zone.js": "^0.10.3"
   }
 }
