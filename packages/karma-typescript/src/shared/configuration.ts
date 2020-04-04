@@ -39,7 +39,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
     private asserted: boolean;
     private karmaTypescriptConfig: KarmaTypescriptConfig;
-    private callbacks: Array<() => void> = [];
+    private callbacks: (() => void)[] = [];
 
     constructor(private loggers: LoggerList) {}
 
