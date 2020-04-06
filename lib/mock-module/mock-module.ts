@@ -119,9 +119,11 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
   }
 
   if (mockModuleDef) {
+    const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
+
     @NgModule(mockModuleDef)
     @MockOf(ngModule)
-    class ModuleMock extends Mock {
+    class ModuleMock extends parent {
     }
 
     mockModule = ModuleMock;
