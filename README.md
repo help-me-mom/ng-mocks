@@ -364,6 +364,12 @@ describe('MockModule', () => {
 
 Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
 
+It returns `fixture` with a `point` property if a component class was passed.
+The `fixture` belongs the middle component for the render,
+when `fixture.point` points to the debug element of the testing component.
+
+The best thing here is that `fixture.point.componentInstance` is typed to the component's class.
+
 ### Usage Example
 
 ```typescript
@@ -419,8 +425,7 @@ describe('MockRender', () => {
     });
 
     // assert on some side effect
-    const componentInstance = fixture.debugElement.query(By.directive(TestedComponent))
-      .componentInstance as TestedComponent;
+    const componentInstance = fixture.point.componentInstance; // it is not any, it is TestedComponent.
     componentInstance.trigger.emit('foo2');
     expect(componentInstance.value1).toEqual('something2');
     expect(componentInstance.value2).toBeUndefined();
