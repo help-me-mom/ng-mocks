@@ -12,6 +12,7 @@ import {
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { MockControlValueAccessor, MockOf } from '../common';
+import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
@@ -75,8 +76,6 @@ export function MockComponent<TComponent>(
 
   const options: Component = {
     exportAs,
-    inputs,
-    outputs,
     providers: [
       {
         multi: true,
@@ -88,7 +87,6 @@ export function MockComponent<TComponent>(
         useExisting: forwardRef(() => ComponentMock),
       },
     ],
-    queries,
     selector,
     template,
   };
@@ -120,11 +118,16 @@ export function MockComponent<TComponent>(
           if (viewContainer && templateRef) {
             viewContainer.clear();
             viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
+            changeDetector.detectChanges();
           }
         }
       };
     }
   }
+
+  decorateInputs(ComponentMock, inputs);
+  decorateOutputs(ComponentMock, outputs);
+  decorateQueries(ComponentMock, queries);
 
   const mockedComponent: Type<MockedComponent<TComponent>> = Component(options)(ComponentMock as any);
   cache.set(component, mockedComponent);
