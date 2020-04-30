@@ -1,10 +1,19 @@
 // tslint:disable:unified-signatures
 
-import { InjectionToken, ModuleWithProviders, NgModule, PipeTransform, Provider, Type } from '@angular/core';
+import {
+  ApplicationModule,
+  InjectionToken,
+  ModuleWithProviders,
+  NgModule,
+  PipeTransform,
+  Provider,
+  Type,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { flatten, isNgDef, isNgInjectionToken, NG_MOCKS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockModule, MockProvider } from '../mock-module';
@@ -41,7 +50,7 @@ const defaultMock = Symbol();
 
 export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
-  protected configDef: Map<Type<any>, any> = new Map();
+  protected configDef: Map<Type<any> | InjectionToken<any>, any> = new Map();
 
   protected keepDef: {
     component: Set<Type<any>>;
@@ -221,15 +230,23 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       if (ngMocksUniverse.touches.has(def)) {
         continue;
       }
-      providers.push(isNgInjectionToken(def) ? {
-        provide: def,
-        useValue: undefined,
-      } : def);
+      const config = this.configDef.get(def);
+      if (config && config.dependency) {
+        continue;
+      }
+      if (isNgInjectionToken(def)) {
+        continue;
+      }
+      providers.push(def);
     }
 
     // Adding missed providers to test bed.
     for (const def of this.mockDef.provider.values()) {
       if (ngMocksUniverse.touches.has(def)) {
+        continue;
+      }
+      const config = this.configDef.get(def);
+      if (config && config.dependency) {
         continue;
       }
       providers.push(ngMocksUniverse.builder.get(def));
@@ -404,6 +421,22 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
 export function MockBuilder(componentToTest?: Type<any>, itsModuleToMock?: Type<any>): MockBuilderPromise {
   const instance = new MockBuilderPromise();
+
+  // all providers of ApplicationModule shouldn't be mocked by default.
+  const providers = flatten(ngModuleResolver.resolve(ApplicationModule).providers);
+  for (const provider of providers) {
+    if (typeof provider === 'object' && provider.deps) {
+      for (const dep of provider.deps) {
+        instance.keep(dep, {dependency: true});
+      }
+    }
+    if (typeof provider === 'object' && provider.provide) {
+      instance.keep(provider.provide, {dependency: true});
+    } else {
+      instance.keep(provider, {dependency: true});
+    }
+  }
+
   if (componentToTest) {
     instance.keep(componentToTest, {
       export: true,
