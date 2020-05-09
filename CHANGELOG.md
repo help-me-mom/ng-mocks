@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0-alpha.3"></a>
+# [10.0.0-alpha.3](https://github.com/ike18t/ng-mocks/compare/v10.0.0-alpha.2...v10.0.0-alpha.3) (2020-05-09)
+
+
+### Bug Fixes
+
+* correct mocking of xxxChild(ren) decorators ([de7b8c3](https://github.com/ike18t/ng-mocks/commit/de7b8c3)), closes [#109](https://github.com/ike18t/ng-mocks/issues/109)
+* remove usage of uknown ([26dfdb8](https://github.com/ike18t/ng-mocks/commit/26dfdb8))
+
+
+### Features
+
+* MockHelper with find, findAll and OrFail ([ecc4ac7](https://github.com/ike18t/ng-mocks/commit/ecc4ac7))
+* providers for MockRender ([cb656b7](https://github.com/ike18t/ng-mocks/commit/cb656b7)), closes [#102](https://github.com/ike18t/ng-mocks/issues/102)
+* support to inject a library-related service mocker ([e6be694](https://github.com/ike18t/ng-mocks/commit/e6be694)), closes [#87](https://github.com/ike18t/ng-mocks/issues/87) [#103](https://github.com/ike18t/ng-mocks/issues/103)
+* typecasted MockRender ([3bfe7bf](https://github.com/ike18t/ng-mocks/commit/3bfe7bf))
+
+
+
+<a name="9.2.0"></a>
+# [9.2.0](https://github.com/ike18t/ng-mocks/compare/v10.0.0-alpha.0...v9.2.0) (2020-03-28)
+
+
+
 <a name="10.0.0-alpha.2"></a>
 # [10.0.0-alpha.2](https://github.com/ike18t/ng-mocks/compare/v10.0.0-alpha.1...v10.0.0-alpha.2) (2020-05-09)
 
