@@ -1,7 +1,9 @@
 /* tslint:disable:variable-name */
 
 import { DebugNode, Type } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
+import { DebugElementType } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
 
 interface INestedNodes extends DebugNode {
@@ -19,7 +21,28 @@ function nestedCheck<T>(result: T[], node: INestedNodes, callback: (node: INeste
   });
 }
 
-export const MockHelper = {
+export const MockHelper: {
+  find<T>(debugElement: DebugElementType<any>, component: Type<T>): null | DebugElementType<T>;
+  find(debugElement: DebugElementType<any>, cssSelector: string): null | DebugElementType<any>;
+  findAll<T>(debugElement: DebugElementType<any>, component: Type<T>): Array<DebugElementType<T>>;
+  findAll(debugElement: DebugElementType<any>, cssSelector: string): Array<DebugElementType<any>>;
+  findDirective<T>(debugNode: DebugNode, directive: Type<T>): undefined | T;
+  findDirectiveOrFail<T>(debugNode: DebugNode, directive: Type<T>): T;
+  findDirectives<T>(debugNode: DebugNode, directive: Type<T>): T[];
+  findOrFail<T>(debugElement: DebugElementType<any>, component: Type<T>): DebugElementType<T>;
+  findOrFail(debugElement: DebugElementType<any>, cssSelector: string): DebugElementType<any>;
+  getDirective<T>(debugNode: DebugNode, directive: Type<T>): undefined | T;
+  getDirectiveOrFail<T>(debugNode: DebugNode, directive: Type<T>): T;
+  mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
+} = {
+  getDirectiveOrFail: <T>(debugNode: DebugNode, directive: Type<T>): T => {
+    const result = MockHelper.getDirective(debugNode, directive);
+    if (!result) {
+      throw new Error(`Cannot find a directive via MockHelper.getDirectiveOrFail`);
+    }
+    return result;
+  },
+
   getDirective: <T>(debugNode: DebugNode, directive: Type<T>): undefined | T => {
     // Looking for related attribute directive.
     try {
@@ -49,6 +72,14 @@ export const MockHelper = {
     }
   },
 
+  findDirectiveOrFail: <T>(debugNode: DebugNode, directive: Type<T>): T => {
+    const result = MockHelper.findDirective(debugNode, directive);
+    if (!result) {
+      throw new Error(`Cannot find a directive via MockHelper.findDirectiveOrFail`);
+    }
+    return result;
+  },
+
   findDirective: <T>(debugNode: DebugNode, directive: Type<T>): undefined | T => {
     const result: T[] = [];
     nestedCheck<T>(result, debugNode, node => {
@@ -71,6 +102,24 @@ export const MockHelper = {
       }
     });
     return result;
+  },
+
+  findOrFail: (el: DebugElementType<any>, sel: any) => {
+    const result = MockHelper.find(el, sel);
+    if (!result) {
+      throw new Error(`Cannot find an element via MockHelper.findOrFail`);
+    }
+    return result;
+  },
+
+  find: (el: DebugElementType<any>, sel: any) => {
+    const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
+    return el.query(term);
+  },
+
+  findAll: (el: DebugElementType<any>, sel: any) => {
+    const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
+    return el.queryAll(term);
   },
 
   mockService: <T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T =>
