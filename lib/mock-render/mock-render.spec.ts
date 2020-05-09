@@ -1,6 +1,9 @@
 import createSpy = jasmine.createSpy;
+import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
+import { MockService } from '../mock-service';
 
 import { MockRender } from './mock-render';
 import { RenderRealComponent } from './mock-render.fixtures';
@@ -87,5 +90,23 @@ describe('MockRender', () => {
   it('returns pointer with a provided component', () => {
     const fixture = MockRender(RenderRealComponent);
     expect(fixture.point.componentInstance).toEqual(jasmine.any(RenderRealComponent));
+  });
+
+  it('returns pointer with a provided component', () => {
+    const document = MockService(Document);
+    spyOn(document, 'getElementById');
+    MockRender(
+      RenderRealComponent,
+      {},
+      {
+        providers: [
+          {
+            provide: DOCUMENT,
+            useValue: document,
+          },
+        ],
+      }
+    );
+    expect(document.getElementById).toHaveBeenCalledWith('test');
   });
 });

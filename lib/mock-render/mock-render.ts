@@ -1,6 +1,6 @@
 // tslint:disable:unified-signatures
 
-import { Component, DebugElement, Type } from '@angular/core';
+import { Component, DebugElement, Provider, Type } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { directiveResolver } from '../common/reflect';
@@ -30,10 +30,15 @@ export type DebugElementField =
 
 export type DebugElementType<T> = { componentInstance: T } & Pick<DebugElement, DebugElementField>;
 
+export interface IMockRenderOptions {
+  detectChanges?: boolean;
+  providers?: Provider[];
+}
+
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: Type<MComponent>,
   params: TComponent,
-  detectChanges?: boolean
+  detectChanges?: boolean | IMockRenderOptions
 ): ComponentFixture<TComponent> & { point: DebugElementType<MComponent> };
 
 // without params we shouldn't autocomplete any keys of any types.
@@ -44,7 +49,7 @@ function MockRender<MComponent>(
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string,
   params: TComponent,
-  detectChanges?: boolean
+  detectChanges?: boolean | IMockRenderOptions
 ): ComponentFixture<TComponent>;
 
 // without params we shouldn't autocomplete any keys of any types.
@@ -53,8 +58,10 @@ function MockRender<MComponent>(template: string): ComponentFixture<null>;
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string | Type<MComponent>,
   params?: TComponent,
-  detectChanges = true
+  flags: boolean | IMockRenderOptions = true
 ): ComponentFixture<TComponent> {
+  const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
+
   let mockedTemplate = '';
   if (typeof template === 'string') {
     mockedTemplate = template;
@@ -84,6 +91,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     mockedTemplate += `></${selector}>`;
   }
   const options: Component = {
+    providers: flagsObject.providers,
     selector: 'mock-render',
     template: mockedTemplate,
   };
@@ -107,7 +115,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
 
   const fixture: any = TestBed.createComponent(component);
 
-  if (detectChanges) {
+  if (flagsObject.detectChanges) {
     fixture.detectChanges();
   }
 

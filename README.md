@@ -365,10 +365,13 @@ describe('MockModule', () => {
 Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
 
 It returns `fixture` with a `point` property if a component class was passed.
-The `fixture` belongs the middle component for the render,
-when `fixture.point` points to the debug element of the testing component.
+The `fixture` belongs to the middle component for the render,
+when `fixture.point` points to the debugElement of the passed component.
 
 The best thing here is that `fixture.point.componentInstance` is typed to the component's class.
+
+If you want you can set providers for the render passing them via the 3rd parameter.
+It is useful if you want to mock system tokens / services such as APP_INITIALIZER, DOCUMENT etc.
 
 ### Usage Example
 
@@ -494,6 +497,9 @@ Add the next code to `src/test.ts` if you want all mocked methods and functions 
 
 ```typescript
 import 'ng-mocks/dist/jasmine';
+
+// uncomment in case if you existing tests with spies.
+// jasmine.getEnv().allowRespy(true);
 ```
 
 In case of jest.
