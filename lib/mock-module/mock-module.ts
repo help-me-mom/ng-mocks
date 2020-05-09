@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
-import { Mock, MockDeclaration, MockOf, MockService } from 'ng-mocks';
 
+import { Mock, MockOf } from '../common';
 import { jitReflector, ngModuleResolver } from '../common/reflect';
+import { MockDeclaration } from '../mock-declaration';
+import { MockService } from '../mock-service';
 
 const cache = new Map<Type<any>, Type<any>>();
 
