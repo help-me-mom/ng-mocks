@@ -50,8 +50,7 @@ describe('MockRender', () => {
     });
 
     // assert on some side effect
-    const componentInstance = fixture.debugElement.query(By.directive(TestedComponent))
-      .componentInstance as TestedComponent;
+    const componentInstance = fixture.point.componentInstance; // it is not any, it is TestedComponent.
     componentInstance.trigger.emit('foo2');
     expect(componentInstance.value1).toEqual('something2');
     expect(componentInstance.value2).toBeUndefined();

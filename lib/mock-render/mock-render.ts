@@ -1,7 +1,54 @@
-import { Component, Type } from '@angular/core';
+// tslint:disable:unified-signatures
+
+import { Component, DebugElement, Type } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { directiveResolver } from '../common/reflect';
+
+// A5 and its TS 2.4 don't support Omit, that's why we need the magic below.
+// TODO remove it once A5 isn't supported.
+export type DebugElementField =
+  | 'attributes'
+  | 'childNodes'
+  | 'children'
+  | 'classes'
+  | 'context'
+  | 'injector'
+  | 'listeners'
+  | 'name'
+  | 'nativeElement'
+  | 'nativeNode'
+  | 'parent'
+  | 'properties'
+  | 'providerTokens'
+  | 'query'
+  | 'queryAll'
+  | 'queryAllNodes'
+  | 'references'
+  | 'styles'
+  | 'triggerEventHandler';
+
+export type DebugElementType<T> = { componentInstance: T } & Pick<DebugElement, DebugElementField>;
+
+function MockRender<MComponent, TComponent extends { [key: string]: any }>(
+  template: Type<MComponent>,
+  params: TComponent,
+  detectChanges?: boolean
+): ComponentFixture<TComponent> & { point: DebugElementType<MComponent> };
+
+// without params we shouldn't autocomplete any keys of any types.
+function MockRender<MComponent>(
+  template: Type<MComponent>
+): ComponentFixture<null> & { point: DebugElementType<MComponent> };
+
+function MockRender<MComponent, TComponent extends { [key: string]: any }>(
+  template: string,
+  params: TComponent,
+  detectChanges?: boolean
+): ComponentFixture<TComponent>;
+
+// without params we shouldn't autocomplete any keys of any types.
+function MockRender<MComponent>(template: string): ComponentFixture<null>;
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string | Type<MComponent>,
@@ -58,12 +105,15 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     declarations: [component],
   });
 
-  const fixture = TestBed.createComponent(component);
+  const fixture: any = TestBed.createComponent(component);
 
   if (detectChanges) {
     fixture.detectChanges();
   }
 
+  if (typeof template !== 'string') {
+    fixture.point = fixture.debugElement.children[0];
+  }
   return fixture;
 }
 
