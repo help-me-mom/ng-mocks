@@ -442,10 +442,18 @@ MockHelper provides 3 methods to get attribute and structural directives from an
 returns attribute or structural directive which belongs to current element.
 
 `MockHelper.findDirective(fixture.debugElement, Directive)` -
-returns first found attribute or structural directive which belongs to current element or any child.
+returns the first found attribute or structural directive which belongs to current element or any child.
 
 `MockHelper.findDirectives(fixture.debugElement, Directive)` -
-returns all found attribute or structural directives which belong to current element and all its child.
+returns an array of all found attribute or structural directives which belong to current element and all its child.
+
+`MockHelper.find(fixture.debugElement, Component)` -
+returns a found DebugElement which belongs to the Component with the correctly typed componentInstance or null.
+
+`MockHelper.findAll(fixture.debugElement, Component)` -
+returns an array of found DebugElements which belong to the Component with the correctly typed componentInstance.
+
+`getDirective`, `findDirective` and `find` have `OrFail` version that throws an error if the desired element wasn't found.
 
 `MockHelper.mockService(instance, methodName)` -
 returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.
