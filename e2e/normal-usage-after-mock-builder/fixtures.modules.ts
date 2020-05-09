@@ -6,16 +6,9 @@ import { RealComponent, TargetComponent } from './fixtures.components';
 import { TargetService } from './fixtures.services';
 
 @NgModule({
-  declarations: [
-    TargetComponent,
-    RealComponent,
-  ],
-  exports: [
-    TargetComponent,
-  ],
-  providers: [
-    TargetService,
-  ],
+  declarations: [TargetComponent, RealComponent],
+  exports: [TargetComponent],
+  providers: [TargetService],
 })
 export class TargetModule {
   protected service: TargetService;

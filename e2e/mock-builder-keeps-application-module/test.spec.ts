@@ -7,9 +7,11 @@ import { TargetComponent } from './fixtures.components';
 import { TARGET_TOKEN, TargetModule } from './fixtures.modules';
 
 describe('MockBuilderKeepsApplicationModule:real', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [TargetModule],
-  }).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [TargetModule],
+    }).compileComponents()
+  );
 
   it('should render', () => {
     const fixture = MockRender(TargetComponent);

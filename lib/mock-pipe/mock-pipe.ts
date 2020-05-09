@@ -8,18 +8,22 @@ import { pipeResolver } from '../common/reflect';
 export type MockedPipe<T> = T & Mock & {};
 
 export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<PipeTransform>> {
-  return pipes.map((pipe) => MockPipe(pipe, undefined));
+  return pipes.map(pipe => MockPipe(pipe, undefined));
 }
 
 const defaultTransform = (...args: any[]): void => undefined;
 export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
-  transform: TPipe['transform'] = defaultTransform,
+  transform: TPipe['transform'] = defaultTransform
 ): Type<MockedPipe<TPipe>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
   if ((getTestBed() as any)._instantiated) {
-    return getMockedNgDefOf(pipe, 'p');
+    try {
+      return getMockedNgDefOf(pipe, 'p');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
   }
   if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cache.has(pipe)) {
     return ngMocksUniverse.cache.get(pipe);

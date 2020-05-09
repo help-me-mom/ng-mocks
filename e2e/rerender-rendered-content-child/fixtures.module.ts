@@ -10,5 +10,4 @@ import { ContentChildComponent } from './fixtures.components';
   exports: [ContentChildComponent],
   imports: [CommonModule],
 })
-export class ContentChildModule {
-}
+export class ContentChildModule {}

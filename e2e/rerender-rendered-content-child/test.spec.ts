@@ -5,23 +5,25 @@ import { ContentChildComponent } from './fixtures.components';
 
 describe('Rerender of a rendered @ContentChild', () => {
   beforeEach(async (done: DoneFn) => {
-    await MockBuilder()
-      .mock(ContentChildComponent, {
-        render: {
-          block: {
-            $implicit: '$implicit',
-          }
-        }
-      });
+    await MockBuilder().mock(ContentChildComponent, {
+      render: {
+        block: {
+          $implicit: '$implicit',
+        },
+      },
+    });
     done();
   });
 
   it('should rerender everything correctly', () => {
-    const fixture = MockRender(`<ccc>
+    const fixture = MockRender(
+      `<ccc>
         <ng-template #block let-value>{{ value }} {{ outside }}</ng-template>
-    </ccc>`, {
-      outside: '1',
-    });
+    </ccc>`,
+      {
+        outside: '1',
+      }
+    );
     expect(fixture).toBeDefined();
     expect(fixture.debugElement.nativeElement.innerText).toContain('$implicit 1');
 

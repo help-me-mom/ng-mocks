@@ -6,12 +6,8 @@ import { TargetComponent } from './fixtures.components';
 export const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
 
 @NgModule({
-  declarations: [
-    TargetComponent,
-  ],
-  exports: [
-    TargetComponent,
-  ],
+  declarations: [TargetComponent],
+  exports: [TargetComponent],
   providers: [
     {
       provide: TARGET_TOKEN,
@@ -20,7 +16,7 @@ export const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
     {
       provide: APP_ID,
       useValue: 'random',
-    }
+    },
   ],
 })
 export class TargetModule {}

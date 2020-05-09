@@ -1,11 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import {
-  isMockedNgDefOf,
-  MockBuilder,
-  NG_MOCKS,
-} from 'ng-mocks';
+import { isMockedNgDefOf, MockBuilder, NG_MOCKS } from 'ng-mocks';
 
 import {
   ComponentWeDontWantToMock,
@@ -28,7 +24,6 @@ import {
 describe('NG_MOCKS:deep', () => {
   beforeEach(async () => {
     const ngModule = MockBuilder(MyComponent, MyModule)
-
       .keep(ModuleWeDontWantToMock)
       .keep(ComponentWeDontWantToMock)
       .keep(DirectiveWeDontWantToMock)
@@ -45,7 +40,7 @@ describe('NG_MOCKS:deep', () => {
       .mock(ServiceWeWantToMock) // makes all methods an empty function
       .mock(INJECTION_TOKEN_WE_WANT_TO_MOCK) // makes its value undefined
 
-      .mock(ServiceWeWantToCustomize, {prop1: true, getName: () => 'My Customized String'})
+      .mock(ServiceWeWantToCustomize, { prop1: true, getName: () => 'My Customized String' })
       .mock(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE, 'My_Token')
 
       // Now the pipe won't be mocked.
@@ -55,9 +50,7 @@ describe('NG_MOCKS:deep', () => {
       .mock(MyComponent3)
 
       // and now we want to build our NgModule.
-      .build()
-    ;
-
+      .build();
     TestBed.configureTestingModule(ngModule);
 
     // Extra configuration
@@ -92,8 +85,9 @@ describe('NG_MOCKS:deep', () => {
 
     // mock
     const moduleWeWantToMockBesidesMyModule = mocks.get(ModuleWeWantToMockBesidesMyModule);
-    expect(isMockedNgDefOf(moduleWeWantToMockBesidesMyModule, ModuleWeWantToMockBesidesMyModule, 'm'))
-      .toBeTruthy('moduleWeWantToMockBesidesMyModule');
+    expect(isMockedNgDefOf(moduleWeWantToMockBesidesMyModule, ModuleWeWantToMockBesidesMyModule, 'm')).toBeTruthy(
+      'moduleWeWantToMockBesidesMyModule'
+    );
     const componentWeWantToMock = mocks.get(ComponentWeWantToMock);
     expect(isMockedNgDefOf(componentWeWantToMock, ComponentWeWantToMock, 'c')).toBeTruthy('componentWeWantToMock');
     const directiveWeWantToMock = mocks.get(DirectiveWeWantToMock);
@@ -114,8 +108,10 @@ describe('NG_MOCKS:deep', () => {
     expect(serviceWeWantToCustomize).toBeDefined('serviceWeWantToCustomize');
     expect(serviceWeWantToCustomize.useValue).toBeDefined('serviceWeWantToCustomize.useValue');
     expect(serviceWeWantToCustomize.useValue.getName).toBeDefined('serviceWeWantToCustomize.getName');
-    expect(serviceWeWantToCustomize.useValue.getName())
-      .toEqual('My Customized String', 'serviceWeWantToCustomize.getName()');
+    expect(serviceWeWantToCustomize.useValue.getName()).toEqual(
+      'My Customized String',
+      'serviceWeWantToCustomize.getName()'
+    );
     expect(serviceWeWantToCustomize.useValue.prop1).toEqual(true, 'serviceWeWantToCustomize.prop1');
     const injectionTokenWeWantToCustomize = mocks.get(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE);
     expect(injectionTokenWeWantToCustomize).toBeDefined('injectionTokenWeWantToCustomize');

@@ -5,7 +5,7 @@ import { InternalComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('ExportsOnly:real', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [TargetModule],
     }).compileComponents();
@@ -15,13 +15,12 @@ describe('ExportsOnly:real', () => {
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML)
-      .toContain('<internal-component>internal</internal-component>');
+    expect(fixture.debugElement.nativeElement.innerHTML).toContain('<internal-component>internal</internal-component>');
   });
 });
 
 describe('ExportsOnly:mock1', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await MockBuilder().mock(TargetModule);
     done();
   });
@@ -36,7 +35,7 @@ describe('ExportsOnly:mock1', () => {
 });
 
 describe('ExportsOnly:mock2', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await MockBuilder().mock(TargetModule).mock(InternalComponent);
     done();
   });
@@ -51,7 +50,7 @@ describe('ExportsOnly:mock2', () => {
 });
 
 describe('ExportsOnly:mock3', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await MockBuilder().keep(TargetModule);
     done();
   });
@@ -60,7 +59,6 @@ describe('ExportsOnly:mock3', () => {
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML)
-      .toContain('<internal-component>internal</internal-component>');
+    expect(fixture.debugElement.nativeElement.innerHTML).toContain('<internal-component>internal</internal-component>');
   });
 });

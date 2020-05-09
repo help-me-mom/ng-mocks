@@ -6,7 +6,7 @@ import { InternalComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('MockBuilderByDirective:real', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [TargetModule],
     }).compileComponents();
@@ -21,7 +21,7 @@ describe('MockBuilderByDirective:real', () => {
 });
 
 describe('MockBuilderByDirective:mock', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await MockBuilder().mock(TargetModule);
     done();
   });

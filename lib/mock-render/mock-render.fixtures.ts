@@ -1,18 +1,25 @@
 // tslint:disable:max-classes-per-file
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'render-real-component',
-  template: '<span (click)="click.emit($event)">{{ content }}</span>'
+  template: '<span (click)="click.emit($event)">{{ content }}</span>',
 })
 export class RenderRealComponent {
   @Output() click = new EventEmitter<{}>();
   @Input() content = '';
+
+  public readonly document: Document;
+
+  constructor(@Inject(DOCUMENT) document: Document) {
+    this.document = document;
+    this.document.getElementById('test');
+  }
 }
 
 @Component({
   template: 'WithoutSelectorComponent',
 })
-export class WithoutSelectorComponent {
-}
+export class WithoutSelectorComponent {}

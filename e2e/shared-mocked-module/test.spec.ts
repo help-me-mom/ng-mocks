@@ -6,7 +6,7 @@ import { MyComponent, TargetComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('SharedMockedModule:real', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [TargetModule],
     }).compileComponents();
@@ -17,19 +17,18 @@ describe('SharedMockedModule:real', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture).toBeDefined();
     const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content)
-      .toContain('<child-1-component>child:1 <my-component>real content</my-component></child-1-component>');
-    expect(content)
-      .toContain('<child-2-component>child:2 <my-component>real content</my-component></child-2-component>');
+    expect(content).toContain(
+      '<child-1-component>child:1 <my-component>real content</my-component></child-1-component>'
+    );
+    expect(content).toContain(
+      '<child-2-component>child:2 <my-component>real content</my-component></child-2-component>'
+    );
   });
 });
 
 describe('SharedMockedModule:mock', () => {
-  beforeEach(async (done) => {
-    await MockBuilder(TargetComponent)
-      .keep(TargetModule)
-      .mock(MyComponent)
-    ;
+  beforeEach(async done => {
+    await MockBuilder(TargetComponent).keep(TargetModule).mock(MyComponent);
     done();
   });
 
@@ -38,8 +37,9 @@ describe('SharedMockedModule:mock', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture).toBeDefined();
     const content = fixture.debugElement.nativeElement.innerHTML;
-    const component = fixture.debugElement.query(By.directive(MyComponent))
-      .componentInstance as MockedComponent<MyComponent>;
+    const component = fixture.debugElement.query(By.directive(MyComponent)).componentInstance as MockedComponent<
+      MyComponent
+    >;
     expect(component).toBeDefined();
     expect(content).toContain('<child-1-component>child:1 <my-component></my-component></child-1-component>');
     expect(content).toContain('<child-2-component>child:2 <my-component></my-component></child-2-component>');

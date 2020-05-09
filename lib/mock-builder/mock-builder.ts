@@ -30,18 +30,22 @@ export interface IMockBuilderConfigAll {
 
 export interface IMockBuilderConfigComponent {
   render?: {
-    [blockName: string]: boolean | {
-      $implicit?: any;
-      variables?: {[key: string]: any};
-    };
+    [blockName: string]:
+      | boolean
+      | {
+          $implicit?: any;
+          variables?: { [key: string]: any };
+        };
   };
 }
 
 export interface IMockBuilderConfigDirective {
-  render?: boolean | {
-    $implicit?: any;
-    variables?: {[key: string]: any};
-  };
+  render?:
+    | boolean
+    | {
+        $implicit?: any;
+        variables?: { [key: string]: any };
+      };
 }
 
 export type IMockBuilderConfig = IMockBuilderConfigAll | IMockBuilderConfigComponent | IMockBuilderConfigDirective;
@@ -103,7 +107,8 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     return this;
   }
 
-  public build(): NgModule { // tslint:disable-line:cyclomatic-complexity
+  public build(): NgModule {
+    // tslint:disable-line:cyclomatic-complexity
     const backup = {
       builder: ngMocksUniverse.builder,
       cache: ngMocksUniverse.cache,
@@ -147,7 +152,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     // mocking requested things.
     for (const def of this.mockDef.provider.values()) {
       if (this.mockDef.providerMock.has(def)) {
-        ngMocksUniverse.builder.set(def, {provide: def, useValue: this.mockDef.providerMock.get(def)});
+        ngMocksUniverse.builder.set(def, { provide: def, useValue: this.mockDef.providerMock.get(def) });
       } else {
         ngMocksUniverse.builder.set(def, MockProvider(def));
       }
@@ -261,10 +266,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     const ngMocks = new Map();
-    for (const [key, value] of [
-      ...ngMocksUniverse.builder.entries(),
-      ...ngMocksUniverse.cache.entries(),
-    ]) {
+    for (const [key, value] of [...ngMocksUniverse.builder.entries(), ...ngMocksUniverse.cache.entries()]) {
       ngMocks.set(key, value);
     }
 
@@ -403,8 +405,8 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   }
 
   public then<TResult1 = IMockBuilderResult, TResult2 = never>(
-    fulfill?: ((value: IMockBuilderResult) => (PromiseLike<TResult1> | TResult1)) | undefined | null,
-    reject?: ((reason: any) => (PromiseLike<TResult2> | TResult2)) | undefined | null,
+    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
+    reject?: (reason: any) => PromiseLike<TResult2>
   ): PromiseLike<TResult1 | TResult2> {
     const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
       const testBed = TestBed.configureTestingModule(this.build());
@@ -412,7 +414,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         callback(testBed);
       }
       testBed.compileComponents().then(() => {
-        resolve({testBed});
+        resolve({ testBed });
       });
     });
     return promise.then(fulfill, reject);
@@ -427,13 +429,13 @@ export function MockBuilder(componentToTest?: Type<any>, itsModuleToMock?: Type<
   for (const provider of providers) {
     if (typeof provider === 'object' && provider.deps) {
       for (const dep of provider.deps) {
-        instance.keep(dep, {dependency: true});
+        instance.keep(dep, { dependency: true });
       }
     }
     if (typeof provider === 'object' && provider.provide) {
-      instance.keep(provider.provide, {dependency: true});
+      instance.keep(provider.provide, { dependency: true });
     } else {
-      instance.keep(provider, {dependency: true});
+      instance.keep(provider, { dependency: true });
     }
   }
 

@@ -9,12 +9,8 @@ describe('MockModule', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestedComponent,
-      ],
-      imports: [
-        MockModule(DependencyModule),
-      ],
+      declarations: [TestedComponent],
+      imports: [MockModule(DependencyModule)],
     });
 
     fixture = TestBed.createComponent(TestedComponent);

@@ -6,12 +6,10 @@ import { Component } from '@angular/core';
   selector: 'internal-component',
   template: 'internal',
 })
-export class InternalComponent {
-}
+export class InternalComponent {}
 
 @Component({
   selector: 'external-component',
   template: 'external <internal-component></internal-component>',
 })
-export class ExternalComponent {
-}
+export class ExternalComponent {}

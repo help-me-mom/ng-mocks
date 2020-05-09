@@ -6,23 +6,13 @@ import { NgModule } from '@angular/core';
 import { InternalComponent } from './fixtures.components';
 
 @NgModule({
-  declarations: [
-    InternalComponent,
-  ],
-  exports: [
-    InternalComponent,
-  ],
-  imports: [
-    CommonModule,
-  ],
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
+  imports: [CommonModule],
 })
-export class InternalModule {
-}
+export class InternalModule {}
 
 @NgModule({
-  exports: [
-    InternalModule,
-  ],
+  exports: [InternalModule],
 })
-export class TargetModule {
-}
+export class TargetModule {}

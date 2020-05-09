@@ -5,7 +5,7 @@ import { InternalComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('InternalOnlyNested:real', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [TargetModule],
     }).compileComponents();
@@ -17,14 +17,14 @@ describe('InternalOnlyNested:real', () => {
       MockRender(InternalComponent);
       fail('should fail on the internal component');
     } catch (e) {
-      expect(e).toEqual(jasmine.objectContaining({ngSyntaxError: true}));
+      expect(e).toEqual(jasmine.objectContaining({ ngSyntaxError: true }));
     }
   });
 });
 
 describe('InternalOnlyNested:mock', () => {
-  beforeEach(async (done) => {
-    await MockBuilder().mock(TargetModule).mock(InternalComponent, {export: true});
+  beforeEach(async done => {
+    await MockBuilder().mock(TargetModule).mock(InternalComponent, { export: true });
     done();
   });
 

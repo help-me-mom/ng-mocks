@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   selector: 'target-component',
   template: 'target',
 })
-export class TargetComponent {
-}
+export class TargetComponent {}

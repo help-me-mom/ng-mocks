@@ -14,29 +14,35 @@ import { getTestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { getMockedNgDefOf, MockControlValueAccessor, MockOf } from '../common';
+import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
 
-export type MockedComponent<T> = T & MockControlValueAccessor & {
-  /** Helper function to hide rendered @ContentChild() template. */
-  __hide(contentChildSelector: string): void;
+export type MockedComponent<T> = T &
+  MockControlValueAccessor & {
+    /** Helper function to hide rendered @ContentChild() template. */
+    __hide(contentChildSelector: string): void;
 
-  /** Helper function to render any @ContentChild() template with any context. */
-  __render(contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}): void;
-};
+    /** Helper function to render any @ContentChild() template with any context. */
+    __render(contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }): void;
+  };
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
-  return components.map((component) => MockComponent(component, undefined));
+  return components.map(component => MockComponent(component, undefined));
 }
 
 export function MockComponent<TComponent>(
   component: Type<TComponent>,
-  metaData?: core.Directive,
+  metaData?: core.Directive
 ): Type<MockedComponent<TComponent>> {
   // we are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
   if ((getTestBed() as any)._instantiated) {
-    return getMockedNgDefOf(component, 'c');
+    try {
+      return getMockedNgDefOf(component, 'c');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
   }
   if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cache.has(component)) {
     return ngMocksUniverse.cache.get(component);
@@ -67,7 +73,8 @@ export function MockComponent<TComponent>(
             <ng-template #__${query.selector}></ng-template>
           </div>
         `;
-      }).join('');
+      })
+      .join('');
     if (templateQueries) {
       template = `
         ${template}
@@ -78,18 +85,17 @@ export function MockComponent<TComponent>(
 
   const options: Component = {
     exportAs,
-    inputs,
-    outputs,
-    providers: [{
-      multi: true,
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ComponentMock)
-    },
-    {
-      provide: component,
-      useExisting: forwardRef(() => ComponentMock)
-    }],
-    queries,
+    providers: [
+      {
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ComponentMock),
+      },
+      {
+        provide: component,
+        useExisting: forwardRef(() => ComponentMock),
+      },
+    ],
     selector,
     template,
   };
@@ -111,7 +117,7 @@ export function MockComponent<TComponent>(
       };
 
       // Providing a method to render any @ContentChild based on its selector.
-      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: {[key: string]: any}) => {
+      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }) => {
         const key = viewChildRefs.get(contentChildSelector);
         let templateRef: TemplateRef<any>;
         let viewContainer: ViewContainerRef;
@@ -122,7 +128,8 @@ export function MockComponent<TComponent>(
           templateRef = (this as any)[key];
           if (viewContainer && templateRef) {
             viewContainer.clear();
-            viewContainer.createEmbeddedView(templateRef, {...variables, $implicit} as any);
+            viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
+            changeDetector.detectChanges();
           }
         }
       };
@@ -131,16 +138,23 @@ export function MockComponent<TComponent>(
     ngAfterContentInit(): void {
       if (!(this as any).__rendered && config && config.render) {
         for (const block of Object.keys(config.render)) {
-          const { $implicit, variables } = config.render[block] !== true ? config.render[block] : {
-            $implicit: undefined,
-            variables: {},
-          };
+          const { $implicit, variables } =
+            config.render[block] !== true
+              ? config.render[block]
+              : {
+                  $implicit: undefined,
+                  variables: {},
+                };
           (this as any).__render(block, $implicit, variables);
         }
         (this as any).__rendered = true;
       }
     }
   }
+
+  decorateInputs(ComponentMock, inputs);
+  decorateOutputs(ComponentMock, outputs);
+  decorateQueries(ComponentMock, queries);
 
   const mockedComponent: Type<MockedComponent<TComponent>> = Component(options)(ComponentMock as any);
   if (ngMocksUniverse.flags.has('cacheComponent')) {

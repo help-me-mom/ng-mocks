@@ -7,7 +7,7 @@ import { staticFalse } from '../../tests';
   template: `dependency`,
 })
 export class DependencyComponent {
-  @ContentChild('something', {...staticFalse})
+  @ContentChild('something', { ...staticFalse })
   injectedSomething: TemplateRef<{}>;
 
   @Input()

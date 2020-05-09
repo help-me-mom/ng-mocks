@@ -38,16 +38,14 @@ export function MockProvider(provider: any): Provider {
   }
 
   if (
-    typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken'
-    && neverMockProvidedToken.includes(provide.toString())
+    typeof provide === 'object' &&
+    provide.ngMetadataName === 'InjectionToken' &&
+    neverMockProvidedToken.includes(provide.toString())
   ) {
     return provider;
   }
 
-  if (
-    typeof provide === 'function'
-    && neverMockProvidedFunction.includes(provide.name)
-  ) {
+  if (typeof provide === 'function' && neverMockProvidedFunction.includes(provide.name)) {
     return provider;
   }
 
@@ -66,7 +64,8 @@ export function MockProvider(provider: any): Provider {
 export function MockModule<T>(module: Type<T>): Type<any>;
 // TODO add a proper generic of ModuleWithProviders when support of A5 has been stopped.
 export function MockModule(module: ModuleWithProviders): ModuleWithProviders;
-export function MockModule(module: any): any { // tslint:disable-line:cyclomatic-complexity
+export function MockModule(module: any): any {
+  // tslint:disable-line:cyclomatic-complexity
   let ngModule: Type<any>;
   let ngModuleProviders: Provider[] | undefined;
   let mockModule: typeof ngModule | undefined;
@@ -90,7 +89,11 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
   // We are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
   if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
-    return getMockedNgDefOf(ngModule, 'm');
+    try {
+      return getMockedNgDefOf(ngModule, 'm');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
   }
 
   // Every module should be mocked only once to avoid errors like:
@@ -123,8 +126,7 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
 
     @NgModule(mockModuleDef)
     @MockOf(ngModule)
-    class ModuleMock extends parent {
-    }
+    class ModuleMock extends parent {}
 
     mockModule = ModuleMock;
     if (ngMocksUniverse.flags.has('cacheModule')) {
@@ -136,7 +138,7 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
   }
 
   if (ngModuleProviders) {
-    const [changed, ngModuleDef] = MockNgModuleDef({providers: ngModuleProviders});
+    const [changed, ngModuleDef] = MockNgModuleDef({ providers: ngModuleProviders });
     mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
   }
 
@@ -145,7 +147,7 @@ export function MockModule(module: any): any { // tslint:disable-line:cyclomatic
   }
 
   return ngModuleProviders && ngModuleProviders.length
-    ? {ngModule: mockModule, providers: mockModuleProviders}
+    ? { ngModule: mockModule, providers: mockModuleProviders }
     : mockModule;
 }
 
@@ -264,8 +266,7 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
 
   // if we are in the skipMock mode we need to export only the default exports.
   // if we are in the correctModuleExports mode we need to export only default exports.
-  const correctExports = ngMocksUniverse.flags.has('skipMock')
-    || ngMocksUniverse.flags.has('correctModuleExports');
+  const correctExports = ngMocksUniverse.flags.has('skipMock') || ngMocksUniverse.flags.has('correctModuleExports');
 
   // When we mock a module, only exported declarations are accessible inside of a test.
   // Because of that we have to export whatever a module imports or declares.

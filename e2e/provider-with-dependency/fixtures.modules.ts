@@ -6,12 +6,8 @@ import { InternalComponent } from './fixtures.components';
 import { ServiceChild, ServiceParent, ServiceReplacedParent } from './fixtures.services';
 
 @NgModule({
-  declarations: [
-    InternalComponent,
-  ],
-  exports: [
-    InternalComponent,
-  ],
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
   providers: [
     ServiceParent,
     ServiceReplacedParent,

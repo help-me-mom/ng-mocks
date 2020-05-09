@@ -64,12 +64,11 @@ describe('MockBuilder:simple', () => {
 describe('MockBuilder:deep', () => {
   beforeEach(async () => {
     const ngModule = MockBuilder(MyComponent, MyModule)
-
       .mock(ComponentContentChild, {
         render: {
           block: {
             $implicit: '-$implicit-',
-            variables: {a: {z: 'b'}},
+            variables: { a: { z: 'b' } },
           },
         },
       })
@@ -104,19 +103,19 @@ describe('MockBuilder:deep', () => {
       .mock(DirectiveWeWantToMock, {
         dependency: true,
         render: {
-          $implicit: {a: '$'},
-          variables: {a: {b: 'b'}
+          $implicit: { a: '$' },
+          variables: { a: { b: 'b' } },
         },
-      }})
+      })
       .mock(PipeWeWantToMock, {
         dependency: true,
       })
       .mock(ServiceWeWantToMock) // makes all methods an empty function
       .mock(INJECTION_TOKEN_WE_WANT_TO_MOCK) // makes its value undefined
 
-      .mock(PipeWeWantToCustomize, (value) => 'My Custom Result')
-      .mock(PipeWeWantToRestore, (value) => 'My Restored Pipe')
-      .mock(ServiceWeWantToCustomize, {prop1: true, getName: () => 'My Customized String'})
+      .mock(PipeWeWantToCustomize, value => 'My Custom Result')
+      .mock(PipeWeWantToRestore, value => 'My Restored Pipe')
+      .mock(ServiceWeWantToCustomize, { prop1: true, getName: () => 'My Customized String' })
       .mock(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE, 'My_Token')
 
       // All providers will be set into the TestModule.
@@ -144,16 +143,14 @@ describe('MockBuilder:deep', () => {
       .mock(MyComponent3)
 
       // and now we want to build our NgModule.
-      .build()
-    ;
+      .build();
+    TestBed.configureTestingModule(ngModule);
 
-      TestBed.configureTestingModule(ngModule);
+    // Extra configuration
+    TestBed.overrideTemplate(MyComponent1, 'If we need to tune testBed');
+    TestBed.overrideTemplate(MyComponent2, 'More callbacks');
 
-      // Extra configuration
-      TestBed.overrideTemplate(MyComponent1, 'If we need to tune testBed');
-      TestBed.overrideTemplate(MyComponent2, 'More callbacks');
-
-      return TestBed.compileComponents();
+    return TestBed.compileComponents();
   });
 
   it('should render', inject([HttpBackend], (httpBackend: HttpBackend) => {
@@ -203,17 +200,18 @@ describe('MockBuilder:deep', () => {
 });
 
 describe('MockBuilder:promise', () => {
-  beforeEach(() => MockBuilder()
-    .keep(MyComponent1)
-    .keep(MyComponent2)
+  beforeEach(() =>
+    MockBuilder()
+      .keep(MyComponent1)
+      .keep(MyComponent2)
 
-    // In case if you need extra customization of TestBed in promise way.
-    .beforeCompileComponents((testBed) => {
-      testBed.overrideTemplate(MyComponent1, 'If we need to tune testBed');
-    })
-    .beforeCompileComponents((testBed) => {
-      testBed.overrideTemplate(MyComponent2, 'More callbacks');
-    })
+      // In case if you need extra customization of TestBed in promise way.
+      .beforeCompileComponents(testBed => {
+        testBed.overrideTemplate(MyComponent1, 'If we need to tune testBed');
+      })
+      .beforeCompileComponents(testBed => {
+        testBed.overrideTemplate(MyComponent2, 'More callbacks');
+      })
   );
 
   it('should render content ignoring all dependencies', () => {

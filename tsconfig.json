@@ -15,7 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
     "experimentalDecorators": true,
-    "types" : ["node", "jasmine"],
+    "types": ["node", "jasmine"],
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
@@ -23,7 +23,5 @@
     },
     "skipLibCheck": true
   },
-  "include": [
-    "index.ts"
-  ]
+  "include": ["index.ts", "jasmine.ts", "jest.ts"]
 }

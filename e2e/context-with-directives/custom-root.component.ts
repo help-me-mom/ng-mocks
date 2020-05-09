@@ -4,15 +4,15 @@ import { CustomTypeDirective } from './custom-type.directive';
 @Component({
   selector: 'custom-root',
   template: `
-      <div *ngIf="template1" class="template">
-          <ng-container *ngTemplateOutlet="template; context {$implicit: context}"></ng-container>
-      </div>
-      <div *ngIf="template1" class="template1">
-          <ng-container *ngTemplateOutlet="template1; context {$implicit: context1}"></ng-container>
-      </div>
-      <div class="nested">
-          <ng-content></ng-content>
-      </div>
+    <div *ngIf="template1" class="template">
+      <ng-container *ngTemplateOutlet="template; context: { $implicit: context }"></ng-container>
+    </div>
+    <div *ngIf="template1" class="template1">
+      <ng-container *ngTemplateOutlet="template1; context: { $implicit: context1 }"></ng-container>
+    </div>
+    <div class="nested">
+      <ng-content></ng-content>
+    </div>
   `,
 })
 export class CustomRootComponent implements AfterContentInit {

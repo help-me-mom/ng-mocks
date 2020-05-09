@@ -8,5 +8,5 @@ import { staticFalse } from '../../tests';
   template: `<ng-template ngFor [ngForOf]="[]" [ngForTemplate]="injectedBlock"></ng-template>`,
 })
 export class ContentChildComponent {
-  @ContentChild('block', {...staticFalse}) injectedBlock: TemplateRef<any>;
+  @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;
 }

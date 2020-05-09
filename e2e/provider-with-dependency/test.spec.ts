@@ -37,7 +37,7 @@ describe('provider-with-dependency:provided', () => {
         {
           provide: ServiceReplacedParent,
           useClass: ServiceMock,
-        }
+        },
       ],
     });
     return TestBed.compileComponents();
@@ -51,10 +51,13 @@ describe('provider-with-dependency:provided', () => {
 
 describe('provider-with-dependency:mock', () => {
   beforeEach(() => {
-    const ngModule = MockBuilder().keep(TargetModule).provide({
-      provide: ServiceReplacedParent,
-      useClass: ServiceMock,
-    }).build();
+    const ngModule = MockBuilder()
+      .keep(TargetModule)
+      .provide({
+        provide: ServiceReplacedParent,
+        useClass: ServiceMock,
+      })
+      .build();
     TestBed.configureTestingModule(ngModule);
     return TestBed.compileComponents();
   });

@@ -19,12 +19,10 @@ export class TargetComponent {
   selector: 'internal',
   template: 'real',
 })
-export class RealComponent {
-}
+export class RealComponent {}
 
 @Component({
   selector: 'internal',
   template: 'fake',
 })
-export class FakeComponent {
-}
+export class FakeComponent {}
