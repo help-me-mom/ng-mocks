@@ -7,16 +7,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CustomFormControlComponent),
-    }
+    },
   ],
   selector: 'custom-form-control',
   template: `
-    <span>{{value}}</span>
+    <span>{{ value }}</span>
     <button (click)="this.onChange('changed')">Change value</button>
   `,
 })
 export class CustomFormControlComponent implements ControlValueAccessor {
-
   @Input() disabled = false;
   public value = '';
 

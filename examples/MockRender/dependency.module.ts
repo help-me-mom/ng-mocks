@@ -3,11 +3,7 @@ import { NgModule } from '@angular/core';
 import { DependencyComponent } from './dependency.component';
 
 @NgModule({
-  declarations: [
-    DependencyComponent
-  ],
-  imports: [
-    CommonModule,
-  ],
+  declarations: [DependencyComponent],
+  imports: [CommonModule],
 })
 export class DependencyModule {}

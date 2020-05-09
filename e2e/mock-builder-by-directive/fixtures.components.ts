@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   selector: 'internal-component',
   template: 'internal',
 })
-export class InternalComponent {
-}
+export class InternalComponent {}

@@ -17,7 +17,7 @@ class ParentClass {
       provide: 'MOCK',
       useValue: 'HELLO',
     },
-  ]
+  ],
 })
 class ChildModuleClass extends ParentClass implements PipeTransform {
   protected childValue = true;

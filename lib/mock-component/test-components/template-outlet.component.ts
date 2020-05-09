@@ -13,14 +13,14 @@ import { staticFalse } from '../../../tests';
 })
 export class TemplateOutletComponent {
   // injected.
-  @ContentChild('block1', {...staticFalse}) injectedBlock1: TemplateRef<any>;
+  @ContentChild('block1', { ...staticFalse }) injectedBlock1: TemplateRef<any>;
 
   // injected.
-  @ContentChild('block2', {...staticFalse}) injectedBlock2: TemplateRef<any>;
+  @ContentChild('block2', { ...staticFalse }) injectedBlock2: TemplateRef<any>;
 
   // undefined (not injected).
-  @ContentChild('block3', {...staticFalse}) injectedBlock3: TemplateRef<any>;
+  @ContentChild('block3', { ...staticFalse }) injectedBlock3: TemplateRef<any>;
 
   // ref to own template.
-  @ViewChild('block4', {...staticFalse}) ownBlock3: ElementRef;
+  @ViewChild('block4', { ...staticFalse }) ownBlock3: ElementRef;
 }

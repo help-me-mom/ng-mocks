@@ -1,16 +1,29 @@
-import { Component, Directive, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+// tslint:disable:max-classes-per-file
+
+import {
+  Component,
+  ContentChild,
+  ContentChildren,
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { MockDirective, MockedDirective } from '.';
 import { staticFalse } from '../../tests';
+import { MockDirective, MockedDirective } from '../mock-directive';
 import { MockHelper } from '../mock-helper';
 
-// tslint:disable:max-classes-per-file
 @Directive({
   exportAs: 'foo',
-  selector: '[exampleDirective]'
+  selector: '[exampleDirective]',
 })
 export class ExampleDirective {
   @Input() exampleDirective: string;
@@ -23,22 +36,21 @@ export class ExampleDirective {
 }
 
 @Directive({
-  selector: '[exampleStructuralDirective]'
+  selector: '[exampleStructuralDirective]',
 })
 export class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
 }
 
 @Directive({
-  selector: '[getters-and-setters]'
+  selector: '[getters-and-setters]',
 })
 export class GettersAndSettersDirective {
   get myGetter() {
     return true;
   }
 
-  set mySetter(value: string) {
-  }
+  set mySetter(value: string) {}
 
   @Input()
   public normalInput?: boolean;
@@ -58,12 +70,12 @@ export class GettersAndSettersDirective {
     <div id="example-structural-directive" *exampleStructuralDirective="true">
       hi
     </div>
-    <input [formControl]="fooControl"/>
+    <input [formControl]="fooControl" />
     <div getters-and-setters></div>
-  `
+  `,
 })
 export class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, {...staticFalse}) childDirective: ExampleDirective;
+  @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
 
@@ -71,7 +83,6 @@ export class ExampleComponentContainer {
     this.childDirective.performAction(s);
   }
 }
-// tslint:enable:max-classes-per-file
 
 describe('MockDirective', () => {
   let component: ExampleComponentContainer;
@@ -85,9 +96,8 @@ describe('MockDirective', () => {
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
         MockDirective(GettersAndSettersDirective),
-      ]
-    })
-    .compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -96,7 +106,7 @@ describe('MockDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should have use the original component\'s selector', () => {
+  it("should have use the original component's selector", () => {
     const element = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(element).not.toBeNull();
   });
@@ -131,8 +141,10 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
-    const mockedDirective = MockHelper
-    .findDirective(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<ExampleStructuralDirective>;
+    const mockedDirective = MockHelper.findDirective(
+      fixture.debugElement,
+      ExampleStructuralDirective
+    ) as MockedDirective<ExampleStructuralDirective>;
 
     // structural directives should be rendered first.
     mockedDirective.__render();
@@ -149,18 +161,113 @@ describe('MockDirective', () => {
   });
 
   it('should allow spying of viewchild directive methods', () => {
-    const spy = spyOn(component.childDirective, 'performAction');
+    const spy = component.childDirective.performAction;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedDirective = MockHelper
-        .findDirective(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<GettersAndSettersDirective>;
+    const mockedDirective = MockHelper.findDirective(
+      fixture.debugElement,
+      GettersAndSettersDirective
+    ) as MockedDirective<GettersAndSettersDirective>;
 
     expect(mockedDirective.normalMethod).toBeDefined();
     expect(mockedDirective.myGetter).not.toBeDefined();
     expect(mockedDirective.mySetter).not.toBeDefined();
     expect(mockedDirective.normalProperty).not.toBeDefined();
+  });
+
+  it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {
+    @Directive({
+      selector: 'never',
+    })
+    class MyClass {
+      @ContentChild('i1', { read: true } as any) o1: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) o2: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) o3: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) o4: QueryList<any>;
+
+      @ContentChild('i5', { read: false } as any) o5: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) o6: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) o7: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) o8: QueryList<any>;
+    }
+
+    const actual = MockDirective(MyClass) as any;
+    expect(actual.__prop__metadata__).toEqual({
+      o1: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: false,
+          read: true,
+          selector: 'i1',
+        }),
+      ],
+      o2: [
+        jasmine.objectContaining({
+          descendants: false,
+          first: false,
+          isViewQuery: false,
+          read: true,
+          selector: 'i2',
+        }),
+      ],
+      o3: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          read: true,
+          selector: 'i3',
+        }),
+      ],
+      o4: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: false,
+          isViewQuery: true,
+          read: true,
+          selector: 'i4',
+        }),
+      ],
+      o5: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: false,
+          read: false,
+          selector: 'i5',
+        }),
+      ],
+      o6: [
+        jasmine.objectContaining({
+          descendants: false,
+          first: false,
+          isViewQuery: false,
+          read: false,
+          selector: 'i6',
+        }),
+      ],
+      o7: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          read: false,
+          selector: 'i7',
+        }),
+      ],
+      o8: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: false,
+          isViewQuery: true,
+          read: false,
+          selector: 'i8',
+        }),
+      ],
+    });
   });
 });

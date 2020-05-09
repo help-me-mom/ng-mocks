@@ -1,13 +1,13 @@
 import { InjectionToken, ModuleWithProviders, PipeTransform, Type } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { jitReflector } from './reflect';
-
 import { MockedComponent } from '../mock-component';
 import { MockedDirective } from '../mock-directive';
 import { MockedModule } from '../mock-module';
 import { MockedPipe } from '../mock-pipe';
+
 import { ngMocksUniverse } from './ng-mocks-universe';
+import { jitReflector } from './reflect';
 
 export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
 
@@ -34,9 +34,8 @@ export const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
   return result;
 };
 
-export const isNgType = (object: Type<any>, type: string): boolean => jitReflector
-  .annotations(object)
-  .some((annotation) => annotation.ngMetadataName === type);
+export const isNgType = (object: Type<any>, type: string): boolean =>
+  jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
 
 /**
  * Checks whether a class was decorated by a ng type.
@@ -73,8 +72,11 @@ export function isNgDef(object: any, ngType: string): object is Type<any> {
 export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'm'): object is Type<MockedModule<T>>;
 export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'c'): object is Type<MockedComponent<T>>;
 export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'd'): object is Type<MockedDirective<T>>;
-export function isMockedNgDefOf<T extends PipeTransform>(object: any, type: Type<T>, ngType: 'p'):
-  object is Type<MockedPipe<T>>;
+export function isMockedNgDefOf<T extends PipeTransform>(
+  object: any,
+  type: Type<T>,
+  ngType: 'p'
+): object is Type<MockedPipe<T>>;
 export function isMockedNgDefOf<T>(object: any, type: Type<T>): object is Type<T>;
 export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType?: any): object is Type<T> {
   return typeof object === 'function' && object.mockOf === type && (ngType ? isNgDef(object, ngType) : true);
@@ -84,9 +86,8 @@ export const isNgInjectionToken = (object: any): object is InjectionToken<any> =
   typeof object === 'object' && object.ngMetadataName === 'InjectionToken';
 
 // Checks if an object implements ModuleWithProviders.
-export const isNgModuleDefWithProviders = (object: any):
-  object is ModuleWithProviders => object.ngModule !== undefined
-  && isNgDef(object.ngModule, 'm');
+export const isNgModuleDefWithProviders = (object: any): object is ModuleWithProviders =>
+  object.ngModule !== undefined && isNgDef(object.ngModule, 'm');
 
 /**
  * Checks whether an object is an instance of a mocked class that was decorated by a ng type.
@@ -98,12 +99,13 @@ export const isNgModuleDefWithProviders = (object: any):
 export function isMockOf<T>(object: any, type: Type<T>, ngType: 'm'): object is MockedModule<T>;
 export function isMockOf<T>(object: any, type: Type<T>, ngType: 'c'): object is MockedComponent<T>;
 export function isMockOf<T>(object: any, type: Type<T>, ngType: 'd'): object is MockedDirective<T>;
-export function isMockOf<T extends PipeTransform>(object: any, type: Type<T>, ngType: 'p'):
-  object is MockedPipe<T>;
+export function isMockOf<T extends PipeTransform>(object: any, type: Type<T>, ngType: 'p'): object is MockedPipe<T>;
 export function isMockOf<T>(object: any, type: Type<T>): object is T;
 export function isMockOf<T>(object: any, type: Type<T>, ngType?: any): object is T {
-  return typeof object === 'object'
-    && (ngType ? isMockedNgDefOf(object.constructor, type, ngType) : isMockedNgDefOf(object.constructor, type));
+  return (
+    typeof object === 'object' &&
+    (ngType ? isMockedNgDefOf(object.constructor, type, ngType) : isMockedNgDefOf(object.constructor, type))
+  );
 }
 
 /**

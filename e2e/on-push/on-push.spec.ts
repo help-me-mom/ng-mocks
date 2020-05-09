@@ -69,9 +69,7 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   beforeEach(async () => {
     // console.log((TestBed as any)._instantiated);
     TestBed.configureTestingModule({
-      declarations: [
-        ItemListComponent,
-      ],
+      declarations: [ItemListComponent],
     });
     await TestBed.compileComponents();
     // console.log((TestBed as any)._instantiated);

@@ -5,7 +5,7 @@ import { ExternalComponent, InternalComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('InternalVsExternal:real', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [TargetModule],
     }).compileComponents();
@@ -22,13 +22,13 @@ describe('InternalVsExternal:real', () => {
       MockRender(InternalComponent);
       fail('should fail on the internal component');
     } catch (e) {
-      expect(e).toEqual(jasmine.objectContaining({ngSyntaxError: true}));
+      expect(e).toEqual(jasmine.objectContaining({ ngSyntaxError: true }));
     }
   });
 });
 
 describe('InternalVsExternal:mock', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await MockBuilder().mock(TargetModule);
     done();
   });
@@ -44,13 +44,13 @@ describe('InternalVsExternal:mock', () => {
       MockRender(InternalComponent);
       fail('should fail on the internal component');
     } catch (e) {
-      expect(e).toEqual(jasmine.objectContaining({ngSyntaxError: true}));
+      expect(e).toEqual(jasmine.objectContaining({ ngSyntaxError: true }));
     }
   });
 });
 
 describe('InternalVsExternal:legacy', () => {
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await TestBed.configureTestingModule({
       imports: [MockModule(TargetModule)],
     }).compileComponents();

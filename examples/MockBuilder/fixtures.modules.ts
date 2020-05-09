@@ -9,13 +9,10 @@ import {
   ComponentWeWantToMock,
   MyComponent,
   MyComponent1,
-  MyComponent2, MyComponent3,
+  MyComponent2,
+  MyComponent3,
 } from './fixtures.components';
-import {
-  DirectiveWeDontWantToMock,
-  DirectiveWeWantToMock,
-  MyDirective,
-} from './fixtures.directives';
+import { DirectiveWeDontWantToMock, DirectiveWeWantToMock, MyDirective } from './fixtures.directives';
 import {
   MyPipe,
   PipeWeDontWantToMock,
@@ -78,44 +75,16 @@ import { CommonModule } from '@angular/common';
 export class ModuleWeWantToMockBesidesMyModule {}
 
 @NgModule({
-  declarations: [
-    MyComponent1,
-    MyComponent2,
-    MyComponent3,
-    ComponentContentChild,
-  ],
-  exports: [
-    MyComponent1,
-    MyComponent2,
-    MyComponent3,
-    ComponentContentChild,
-  ],
-  imports: [
-    CommonModule,
-  ],
+  declarations: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
+  exports: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
+  imports: [CommonModule],
 })
 export class ModuleWeDontWantToMock {}
 
 @NgModule({
-  declarations: [
-    MyComponent,
-    MyDirective,
-    MyPipe,
-  ],
-  exports: [
-    MyComponent,
-    MyDirective,
-    MyPipe,
-  ],
-  imports: [
-    HttpClientModule,
-    ModuleWeWantToMockBesidesMyModule,
-    ModuleWeDontWantToMock,
-  ],
-  providers: [
-    MyService1,
-    MyService2,
-    ServiceWeWantToCustomize,
-  ],
+  declarations: [MyComponent, MyDirective, MyPipe],
+  exports: [MyComponent, MyDirective, MyPipe],
+  imports: [HttpClientModule, ModuleWeWantToMockBesidesMyModule, ModuleWeDontWantToMock],
+  providers: [MyService1, MyService2, ServiceWeWantToCustomize],
 })
 export class MyModule {}

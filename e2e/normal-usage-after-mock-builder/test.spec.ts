@@ -5,9 +5,11 @@ import { FakeComponent, RealComponent, TargetComponent } from './fixtures.compon
 import { TargetModule } from './fixtures.modules';
 
 describe('normal-usage-after-mock-builder:real1', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [TargetModule],
-  }).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [TargetModule],
+    }).compileComponents()
+  );
 
   it('renders real component because we did not use MockBuilder.replace yet', () => {
     const fixture = MockRender(TargetComponent);
@@ -16,12 +18,11 @@ describe('normal-usage-after-mock-builder:real1', () => {
 });
 
 describe('normal-usage-after-mock-builder:mock', () => {
-  beforeEach(() => TestBed.configureTestingModule(
-    MockBuilder()
-      .keep(TargetModule)
-      .replace(RealComponent, FakeComponent, {dependency: true})
-      .build()
-  ).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule(
+      MockBuilder().keep(TargetModule).replace(RealComponent, FakeComponent, { dependency: true }).build()
+    ).compileComponents()
+  );
 
   it('renders fake component because we used MockBuilder.replace', () => {
     const fixture = MockRender(TargetComponent);
@@ -30,9 +31,11 @@ describe('normal-usage-after-mock-builder:mock', () => {
 });
 
 describe('normal-usage-after-mock-builder:real2', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [TargetModule],
-  }).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [TargetModule],
+    }).compileComponents()
+  );
 
   it('has to render real component after MockBuilder.replace', () => {
     const fixture = MockRender(TargetComponent);

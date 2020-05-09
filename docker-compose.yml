@@ -2,6 +2,6 @@ version: '3'
 
 services:
   ng-mocks:
-      build: ./
-      volumes:
+    build: ./
+    volumes:
       - ./:/app/:delegated

@@ -11,51 +11,56 @@ import {
 import { getTestBed } from '@angular/core/testing';
 
 import { getMockedNgDefOf, MockControlValueAccessor, MockOf } from '../common';
+import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
 
-export type MockedDirective<T> = T & MockControlValueAccessor & {
-  /** Pointer to current element in case of Attribute Directives. */
-  __element?: ElementRef;
+export type MockedDirective<T> = T &
+  MockControlValueAccessor & {
+    /** Pointer to current element in case of Attribute Directives. */
+    __element?: ElementRef;
 
-  /** Just a flag for easy understanding what it is. */
-  __isStructural: boolean;
+    /** Just a flag for easy understanding what it is. */
+    __isStructural: boolean;
 
-  /** Pointer to the template of Structural Directives. */
-  __template?: TemplateRef<any>;
+    /** Pointer to the template of Structural Directives. */
+    __template?: TemplateRef<any>;
 
-  /** Pointer to the view of Structural Directives. */
-  __viewContainer?: ViewContainerRef;
+    /** Pointer to the view of Structural Directives. */
+    __viewContainer?: ViewContainerRef;
 
-  /** Helper function to render any Structural Directive with any context. */
-  __render($implicit?: any, variables?: {[key: string]: any}): void;
-};
+    /** Helper function to render any Structural Directive with any context. */
+    __render($implicit?: any, variables?: { [key: string]: any }): void;
+  };
 
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
 }
 
-export function MockDirective<TDirective>(
-  directive: Type<TDirective>,
-): Type<MockedDirective<TDirective>> {
+export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
   if ((getTestBed() as any)._instantiated) {
-    return getMockedNgDefOf(directive, 'd');
+    try {
+      return getMockedNgDefOf(directive, 'd');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
   }
   if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cache.has(directive)) {
     return ngMocksUniverse.cache.get(directive);
   }
 
-  const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
+  const { selector, exportAs, inputs, outputs, queries } = directiveResolver.resolve(directive);
+
   const options: Directive = {
     exportAs,
-    inputs,
-    outputs,
-    providers: [{
-      provide: directive,
-      useExisting: forwardRef(() => DirectiveMock)
-    }],
+    providers: [
+      {
+        provide: directive,
+        useExisting: forwardRef(() => DirectiveMock),
+      },
+    ],
     selector,
   };
 
@@ -66,7 +71,7 @@ export function MockDirective<TDirective>(
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef,
+      @Optional() viewContainer?: ViewContainerRef
     ) {
       super();
 
@@ -78,24 +83,31 @@ export function MockDirective<TDirective>(
       (this as any).__isStructural = template && viewContainer;
 
       // Providing method to render mocked values.
-      (this as any).__render = ($implicit?: any, variables?: {[key: string]: any}) => {
+      (this as any).__render = ($implicit?: any, variables?: { [key: string]: any }) => {
         if (viewContainer && template) {
           viewContainer.clear();
-          viewContainer.createEmbeddedView(template, {...variables, $implicit});
+          viewContainer.createEmbeddedView(template, { ...variables, $implicit });
         }
       };
     }
 
     ngOnInit(): void {
       if (config && config.render) {
-        const { $implicit, variables } = config.render !== true ? config.render : {
-          $implicit: undefined,
-          variables: {},
-        };
+        const { $implicit, variables } =
+          config.render !== true
+            ? config.render
+            : {
+                $implicit: undefined,
+                variables: {},
+              };
         (this as any).__render($implicit, variables);
       }
     }
   }
+
+  decorateInputs(DirectiveMock, inputs);
+  decorateOutputs(DirectiveMock, outputs);
+  decorateQueries(DirectiveMock, queries);
 
   const mockedDirective: Type<MockedDirective<TDirective>> = Directive(options)(DirectiveMock as any);
   if (ngMocksUniverse.flags.has('cacheDirective')) {

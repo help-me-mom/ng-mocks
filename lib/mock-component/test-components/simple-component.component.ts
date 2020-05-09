@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
 
 @Component({
   selector: 'base-simple-component',
-  template: 'some template'
+  template: 'some template',
 })
 export class BaseSimpleComponent {
   @Output() someOutput2: EventEmitter<string>;
@@ -12,7 +12,7 @@ export class BaseSimpleComponent {
 @Component({
   exportAs: 'seeimple',
   selector: 'simple-component',
-  template: 'some template'
+  template: 'some template',
 })
 export class SimpleComponent extends BaseSimpleComponent {
   @Input() someInput: string;

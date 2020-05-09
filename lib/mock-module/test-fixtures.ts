@@ -10,18 +10,15 @@ import {
   NgModule,
   OnInit,
   Pipe,
-  PipeTransform
+  PipeTransform,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-@Directive({selector: '[example-directive]'})
+@Directive({ selector: '[example-directive]' })
 export class ExampleDirective implements OnInit {
-
   protected node: ElementRef;
 
-  constructor(
-    node: ElementRef,
-  ) {
+  constructor(node: ElementRef) {
     this.node = node;
   }
 
@@ -30,7 +27,7 @@ export class ExampleDirective implements OnInit {
   }
 }
 
-@Pipe({name: 'examplePipe'})
+@Pipe({ name: 'examplePipe' })
 export class ExamplePipe implements PipeTransform {
   transform = (text: string) => `Example: ${text}`;
 }
@@ -42,62 +39,64 @@ export class ExampleService {
 
 @Component({
   selector: 'example-private-component',
-  template: '<span>Private thing</span>'
+  template: '<span>Private thing</span>',
 })
-export class ExamplePrivateComponent { }
+export class ExamplePrivateComponent {}
 
 @Component({
   selector: 'example-component',
-  template: '<span>My Example</span>'
+  template: '<span>My Example</span>',
 })
-export class ExampleComponent { }
+export class ExampleComponent {}
 
 @Component({
   selector: 'example-consumer-component',
-  template: '<example-component></example-component>'
+  template: '<example-component></example-component>',
 })
-export class ExampleConsumerComponent { }
+export class ExampleConsumerComponent {}
 
 @NgModule({
-  declarations: [ ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective ],
-  exports: [ ExampleComponent, ExamplePipe, ExampleDirective ],
-  imports: [ CommonModule ],
-  providers: [ ExampleService ]
+  declarations: [ExamplePrivateComponent, ExampleComponent, ExamplePipe, ExampleDirective],
+  exports: [ExampleComponent, ExamplePipe, ExampleDirective],
+  imports: [CommonModule],
+  providers: [ExampleService],
 })
 export class ChildModule {}
 
 @NgModule({
-  imports: [ ChildModule ],
+  imports: [ChildModule],
 })
 export class ParentModule {}
 
 @NgModule({
-  imports: [ ParentModule ],
+  imports: [ParentModule],
 })
 export class SameImports1Module {}
 
 @NgModule({
-  imports: [ ParentModule ],
+  imports: [ParentModule],
 })
 export class SameImports2Module {}
 
 @NgModule({
-  imports: [ ChildModule ],
+  imports: [ChildModule],
 })
 export class LogicNestedModule {}
 
 @NgModule({
-  imports: [ ChildModule, LogicNestedModule ],
+  imports: [ChildModule, LogicNestedModule],
 })
 export class LogicRootModule {}
 
 @NgModule({
-  imports: [ RouterModule.forRoot([
-    {
-      component: ExampleComponent,
-      path: '',
-    },
-  ]) ],
+  imports: [
+    RouterModule.forRoot([
+      {
+        component: ExampleComponent,
+        path: '',
+      },
+    ]),
+  ],
 })
 export class AppRoutingModule {}
 
@@ -105,9 +104,7 @@ export class AppRoutingModule {}
 
 // Simple module, one of components requires some special provider.
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 })
 class RealModuleWithProvidersModule {}
 
@@ -130,9 +127,7 @@ class ModuleProvider {
 
 // Encapsulating module with provider in some random module.
 @NgModule({
-  imports: [
-    ModuleProvider.withFlag(false),
-  ],
+  imports: [ModuleProvider.withFlag(false)],
 })
 export class ModuleWithProvidersModule {}
 
@@ -147,7 +142,7 @@ export class CustomService {
 }
 @Component({
   selector: 'custom-service',
-  template: `same imports`
+  template: `same imports`,
 })
 export class CustomWithServiceComponent {
   public name: string;

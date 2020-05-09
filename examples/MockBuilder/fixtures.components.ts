@@ -23,13 +23,13 @@ import {
 @Component({
   selector: 'component-structural',
   template: `
-      <div *ngIf="items && items.length">
-          <ng-template ngFor [ngForOf]="items" [ngForTemplate]="injectedBlock"></ng-template>
-      </div>
+    <div *ngIf="items && items.length">
+      <ng-template ngFor [ngForOf]="items" [ngForTemplate]="injectedBlock"></ng-template>
+    </div>
   `,
 })
 export class ComponentContentChild<T> {
-  @ContentChild('block', {...staticFalse}) injectedBlock: TemplateRef<any>;
+  @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;
   @Input() items?: T[];
 }
 
@@ -65,7 +65,7 @@ export class MyComponent {
     @Optional() myService2: MyService2,
     @Optional() serviceWeDontWantToMock: ServiceWeDontWantToMock,
     @Optional() serviceWeWantToMock: ServiceWeWantToMock,
-    @Optional() serviceWeWantToCustomize: ServiceWeWantToCustomize,
+    @Optional() serviceWeWantToCustomize: ServiceWeWantToCustomize
   ) {
     this.t1v = t1;
     this.t2v = t2;
