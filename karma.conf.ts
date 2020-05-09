@@ -29,6 +29,7 @@ module.exports = (config: any) => {
       'node_modules/zone.js/dist/fake-async-test.js',
       'karma-test-shim.ts',
       'index.ts',
+      'jasmine.ts',
       { pattern: 'lib/**/*.ts' },
       { pattern: 'e2e/**/*.ts' },
       { pattern: 'examples/**/*.ts' },
