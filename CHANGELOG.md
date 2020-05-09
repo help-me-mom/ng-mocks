@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0-alpha.2"></a>
+# [10.0.0-alpha.2](https://github.com/ike18t/ng-mocks/compare/v10.0.0-alpha.1...v10.0.0-alpha.2) (2020-05-09)
+
+
+### Features
+
+* **mock-builder:** ApplicationModule providers ([554fa34](https://github.com/ike18t/ng-mocks/commit/554fa34))
+
+
+
 <a name="10.0.0-alpha.1"></a>
 # 10.0.0-alpha.1 (2020-03-28)
 
