@@ -1,10 +1,22 @@
-import { Component, DebugElement, ViewChild } from '@angular/core';
+// tslint:disable:max-classes-per-file
+
+import {
+  Component,
+  ContentChild,
+  ContentChildren,
+  DebugElement,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { MockedDirective, MockHelper } from 'ng-mocks';
 
 import { staticTrue } from '../../tests';
+
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { ChildComponent } from './test-components/child-component.component';
 import { CustomFormControlComponent } from './test-components/custom-form-control.component';
@@ -33,7 +45,9 @@ import { TemplateOutletComponent } from './test-components/template-outlet.compo
     <child-component></child-component>
     <template-outlet-component id="element-with-content-and-template">
       ng-content body header
-      <ng-template #block1><div>block 1 body</div></ng-template>
+      <ng-template #block1>
+        <div>block 1 body</div>
+      </ng-template>
       <ng-template #block2><span>block 2 body</span></ng-template>
       ng-content body footer
     </template-outlet-component>
@@ -241,6 +255,136 @@ describe('MockComponent', () => {
 
       // content has right value
       expect(templateOutlet.nativeElement.innerHTML.trim()).toEqual('child of element-with-content-only');
+    });
+  });
+
+  it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {
+    @Component({
+      template: '',
+    })
+    class MyClass {
+      @ContentChild('i1', { read: true } as any) o1: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) o2: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) o3: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) o4: QueryList<any>;
+
+      @ContentChild('i5', { read: false } as any) o5: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) o6: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) o7: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) o8: QueryList<any>;
+    }
+
+    const actual = MockComponent(MyClass) as any;
+    expect(actual.__prop__metadata__).toEqual({
+      o1: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: false,
+          read: true,
+          selector: 'i1',
+        }),
+      ],
+      o2: [
+        jasmine.objectContaining({
+          descendants: false,
+          first: false,
+          isViewQuery: false,
+          read: true,
+          selector: 'i2',
+        }),
+      ],
+      o3: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          read: true,
+          selector: 'i3',
+        }),
+      ],
+      o4: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: false,
+          isViewQuery: true,
+          read: true,
+          selector: 'i4',
+        }),
+      ],
+      o5: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: false,
+          read: false,
+          selector: 'i5',
+        }),
+      ],
+      o6: [
+        jasmine.objectContaining({
+          descendants: false,
+          first: false,
+          isViewQuery: false,
+          read: false,
+          selector: 'i6',
+        }),
+      ],
+      o7: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          read: false,
+          selector: 'i7',
+        }),
+      ],
+      o8: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: false,
+          isViewQuery: true,
+          read: false,
+          selector: 'i8',
+        }),
+      ],
+
+      __mockView_o1: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          selector: '__i1',
+          static: false,
+        }),
+      ],
+      __mockView_o2: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          selector: '__i2',
+          static: false,
+        }),
+      ],
+      __mockView_o5: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          selector: '__i5',
+          static: false,
+        }),
+      ],
+      __mockView_o6: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: true,
+          selector: '__i6',
+          static: false,
+        }),
+      ],
     });
   });
 });

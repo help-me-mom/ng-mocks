@@ -1,6 +1,7 @@
 import { Directive, ElementRef, forwardRef, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 
 import { MockControlValueAccessor, MockOf } from '../common';
+import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { directiveResolver } from '../common/reflect';
 
 const cache = new Map<Type<Directive>, Type<MockedDirective<Directive>>>();
@@ -33,12 +34,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return cacheHit as Type<MockedDirective<TDirective>>;
   }
 
-  const { selector, exportAs, inputs, outputs } = directiveResolver.resolve(directive);
+  const { selector, exportAs, inputs, outputs, queries } = directiveResolver.resolve(directive);
 
   const options: Directive = {
     exportAs,
-    inputs,
-    outputs,
     providers: [
       {
         provide: directive,
@@ -73,6 +72,10 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       };
     }
   }
+
+  decorateInputs(DirectiveMock, inputs);
+  decorateOutputs(DirectiveMock, outputs);
+  decorateQueries(DirectiveMock, queries);
 
   const mockedDirective: Type<MockedDirective<TDirective>> = Directive(options)(DirectiveMock as any);
   cache.set(directive, mockedDirective);
