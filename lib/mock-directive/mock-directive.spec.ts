@@ -16,11 +16,11 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MockedDirective, MockHelper } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
+import { MockHelper } from '../mock-helper';
 
-import { MockDirective } from './mock-directive';
+import { MockDirective, MockedDirective } from './mock-directive';
 
 @Directive({
   exportAs: 'foo',

@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { MockService } from '../mock-service';
 
-import { MockRender } from './mock-render';
+import { MockedComponentFixture, MockRender } from './mock-render';
 import { RenderRealComponent } from './mock-render.fixtures';
 
 describe('MockRender', () => {
@@ -81,10 +81,13 @@ describe('MockRender', () => {
     expect(spy).toHaveBeenCalledWith(payload);
   });
 
-  it('does not return a pointer with a provided template', () => {
-    const fixture = MockRender(`<render-real-component></render-real-component>`);
+  it('returns a pointer with a provided template', () => {
+    const fixture: MockedComponentFixture<RenderRealComponent> = MockRender(
+      `<render-real-component></render-real-component>`
+    );
     // because template can include more than 1 component, be wrapped by any html element etc.
-    expect((fixture as any).point).toBeUndefined();
+    expect(fixture.point).toBeDefined();
+    expect(fixture.point.componentInstance).toEqual(jasmine.any(RenderRealComponent));
   });
 
   it('returns pointer with a provided component', () => {

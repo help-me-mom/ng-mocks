@@ -1,5 +1,8 @@
 import { InjectionToken } from '@angular/core';
-import { MockHelper, MockService } from 'ng-mocks';
+
+import { MockHelper } from '../mock-helper';
+
+import { MockService } from './mock-service';
 
 // tslint:disable:max-classes-per-file
 class DeepParentClass {

@@ -364,11 +364,13 @@ describe('MockModule', () => {
 
 Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
 
-It returns `fixture` with a `point` property if a component class was passed.
+It returns `fixture` of type `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property if a component class was passed.
 The `fixture` belongs to the middle component for the render,
 when `fixture.point` points to the debugElement of the passed component.
 
-The best thing here is that `fixture.point.componentInstance` is typed to the component's class.
+Its type: `let fixture: <ComponentToRender> = MockRender(ComponentToRender)`.
+
+The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of any.
 
 If you want you can set providers for the render passing them via the 3rd parameter.
 It is useful if you want to mock system tokens / services such as APP_INITIALIZER, DOCUMENT etc.

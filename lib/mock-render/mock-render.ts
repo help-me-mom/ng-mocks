@@ -35,31 +35,34 @@ export interface IMockRenderOptions {
   providers?: Provider[];
 }
 
+// tslint:disable-next-line:interface-name
+export interface MockedComponentFixture<C = any, F = undefined> extends ComponentFixture<F> {
+  point: DebugElementType<C>;
+}
+
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: Type<MComponent>,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
-): ComponentFixture<TComponent> & { point: DebugElementType<MComponent> };
+): MockedComponentFixture<MComponent, TComponent>;
 
 // without params we shouldn't autocomplete any keys of any types.
-function MockRender<MComponent>(
-  template: Type<MComponent>
-): ComponentFixture<null> & { point: DebugElementType<MComponent> };
+function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent>;
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
-): ComponentFixture<TComponent>;
+): MockedComponentFixture<any, TComponent>;
 
 // without params we shouldn't autocomplete any keys of any types.
-function MockRender<MComponent>(template: string): ComponentFixture<null>;
+function MockRender<MComponent>(template: string): MockedComponentFixture;
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string | Type<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true
-): ComponentFixture<TComponent> {
+): MockedComponentFixture<MComponent, TComponent> {
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
 
   let mockedTemplate = '';
@@ -119,9 +122,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     fixture.detectChanges();
   }
 
-  if (typeof template !== 'string') {
-    fixture.point = fixture.debugElement.children[0];
-  }
+  fixture.point = fixture.debugElement.children[0];
   return fixture;
 }
 
