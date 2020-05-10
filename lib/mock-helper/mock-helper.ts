@@ -1,9 +1,9 @@
-/* tslint:disable:variable-name */
+/* tslint:disable:variable-name unified-signatures */
 
 import { DebugNode, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { DebugElementType } from '../mock-render';
+import { MockedDebugElement } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
 
 interface INestedNodes extends DebugNode {
@@ -22,15 +22,15 @@ function nestedCheck<T>(result: T[], node: INestedNodes, callback: (node: INeste
 }
 
 export const MockHelper: {
-  find<T>(debugElement: DebugElementType<any>, component: Type<T>): null | DebugElementType<T>;
-  find(debugElement: DebugElementType<any>, cssSelector: string): null | DebugElementType<any>;
-  findAll<T>(debugElement: DebugElementType<any>, component: Type<T>): Array<DebugElementType<T>>;
-  findAll(debugElement: DebugElementType<any>, cssSelector: string): Array<DebugElementType<any>>;
+  find<T>(debugElement: MockedDebugElement<any>, component: Type<T>): null | MockedDebugElement<T>;
+  find<T = any>(debugElement: MockedDebugElement<any>, cssSelector: string): null | MockedDebugElement<T>;
+  findAll<T>(debugElement: MockedDebugElement<any>, component: Type<T>): Array<MockedDebugElement<T>>;
+  findAll<T = any>(debugElement: MockedDebugElement<any>, cssSelector: string): Array<MockedDebugElement<T>>;
   findDirective<T>(debugNode: DebugNode, directive: Type<T>): undefined | T;
   findDirectiveOrFail<T>(debugNode: DebugNode, directive: Type<T>): T;
   findDirectives<T>(debugNode: DebugNode, directive: Type<T>): T[];
-  findOrFail<T>(debugElement: DebugElementType<any>, component: Type<T>): DebugElementType<T>;
-  findOrFail(debugElement: DebugElementType<any>, cssSelector: string): DebugElementType<any>;
+  findOrFail<T>(debugElement: MockedDebugElement<any>, component: Type<T>): MockedDebugElement<T>;
+  findOrFail<T = any>(debugElement: MockedDebugElement<any>, cssSelector: string): MockedDebugElement<T>;
   getDirective<T>(debugNode: DebugNode, directive: Type<T>): undefined | T;
   getDirectiveOrFail<T>(debugNode: DebugNode, directive: Type<T>): T;
   mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
@@ -104,7 +104,7 @@ export const MockHelper: {
     return result;
   },
 
-  findOrFail: (el: DebugElementType<any>, sel: any) => {
+  findOrFail: (el: MockedDebugElement<any>, sel: any) => {
     const result = MockHelper.find(el, sel);
     if (!result) {
       throw new Error(`Cannot find an element via MockHelper.findOrFail`);
@@ -112,12 +112,12 @@ export const MockHelper: {
     return result;
   },
 
-  find: (el: DebugElementType<any>, sel: any) => {
+  find: (el: MockedDebugElement<any>, sel: any) => {
     const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
     return el.query(term);
   },
 
-  findAll: (el: DebugElementType<any>, sel: any) => {
+  findAll: (el: MockedDebugElement<any>, sel: any) => {
     const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
     return el.queryAll(term);
   },

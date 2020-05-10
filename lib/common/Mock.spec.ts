@@ -1,7 +1,13 @@
 /* tslint:disable: max-classes-per-file */
 
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { Mock, MockComponent, MockControlValueAccessor, MockDirective, MockModule, MockPipe } from 'ng-mocks';
+
+import { MockComponent } from '../mock-component';
+import { MockDirective } from '../mock-directive';
+import { MockModule } from '../mock-module';
+import { MockPipe } from '../mock-pipe';
+
+import { Mock, MockControlValueAccessor } from './Mock';
 
 class ParentClass {
   protected parentValue = true;

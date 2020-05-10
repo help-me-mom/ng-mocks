@@ -7,7 +7,8 @@ Helper function for creating angular mocks for test.
 
 ## Why use this?
 
-Sure, you could flip a flag on schema errors to make your component dependencies not matter. Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+Sure, you could flip a flag on schema errors to make your component dependencies not matter.
+Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
 For an easy start check the [MockBuilder](#mockbuilder) first.
 
@@ -35,8 +36,7 @@ For an easy start check the [MockBuilder](#mockbuilder) first.
 - Inputs and Outputs with alias support
 - Each component instance has its own EventEmitter instances for outputs
 - Mocked component templates are `ng-content` tags to allow transclusion
-- When `@ContentChild` is present, then all of them will be wrapped as `[data-key="_id_"]`
-  and `ng-content` with `[data-key="ng-content"]`
+- Supports `@ContentChild` with \$implicit context.
 - Allows ng-model binding (You will have to add FormsModule to TestBed imports)
 - Mocks Reactive Forms (You will have to add ReactiveFormsModule to TestBed imports)
   - \_\_simulateChange - calls `onChanged` on the mocked component bound to a FormControl
@@ -574,15 +574,17 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 
 ## MockRender
 
-Providers simple way to render anything, change `@Inputs` and `@Outputs` of testing component, directives etc.
+Provides a simple way to render anything for ease of testing directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` of a component, etc.
 
-It returns `fixture` with a `point` property if a component class was passed.
-The `fixture` belongs to the middle component for the render,
+It returns a `fixture` of type `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property.
+`fixture.componentInstance` belongs to the middle component for the render, that is quite useless,
 when `fixture.point` points to the debugElement of the passed component.
 
-The best thing here is that `fixture.point.componentInstance` is typed to the component's class.
+Its type: `let fixture: MockedComponentFixture<ComponentToRender> = MockRender(ComponentToRender)`.
 
-If you want you can set providers for the render passing them via the 3rd parameter.
+The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of any.
+
+If you want you can specify providers for the render passing them via the 3rd parameter.
 It is useful if you want to mock system tokens / services such as APP_INITIALIZER, DOCUMENT etc.
 
 <details><summary>Click to see <strong>a usage example</strong></summary>
@@ -654,30 +656,66 @@ describe('MockRender', () => {
 
 ## MockHelper
 
-MockHelper provides 3 methods to get attribute and structural directives from an element.
+MockHelper provides functions to get attribute and structural directives from an element, find components and mock objects.
 
-`MockHelper.getDirective(fixture.debugElement, Directive)` -
-returns attribute or structural directive which belongs to current element.
+- getDirective
+- getDirectiveOrFail
+- findDirective
+- findDirectiveOrFail
+- findDirectives
 
-`MockHelper.findDirective(fixture.debugElement, Directive)` -
-returns the first found attribute or structural directive which belongs to current element or any child.
+* find
+* findOrFail
+* findAll
 
-`MockHelper.findDirectives(fixture.debugElement, Directive)` -
-returns an array of all found attribute or structural directives which belong to current element and all its child.
+- mockService
 
-`MockHelper.find(fixture.debugElement, Component)` -
-returns a found DebugElement which belongs to the Component with the correctly typed componentInstance or null.
+```typescript
+// returns attribute or structural directive
+// which belongs to current element.
+const directive: Directive | undefined = MockHelper.getDirective(fixture.debugElement, Directive);
 
-`MockHelper.findAll(fixture.debugElement, Component)` -
-returns an array of found DebugElements which belong to the Component with the correctly typed componentInstance.
+// returns the first found attribute or structural directive
+// which belongs to current element or any child.
+const directive: Directive | undefined = MockHelper.findDirective(fixture.debugElement, Directive);
 
-`getDirective`, `findDirective` and `find` have `OrFail` version that throws an error if the desired element wasn't found.
+// returns an array of all found attribute or structural directives
+// which belong to current element and all its child.
+const directives: Array<Directive> = MockHelper.findDirectives(fixture.debugElement, Directive);
 
-`MockHelper.mockService(instance, methodName)` -
-returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.
+// returns a found DebugElement which belongs to the Component
+// with the correctly typed componentInstance or null.
+const component: MockedDebugElement<Component> | undefined = MockHelper.find(fixture.debugElement, Component);
 
-`MockHelper.mockService(instance, propertyName, 'get' | 'set')` -
-returns a mocked function / spy of the property. If the property hasn't been mocked yet - mocks it.
+// returns an array of found DebugElements which belong to the Component
+// with the correctly typed componentInstance.
+const components: Array<MockedDebugElement<Component>> = MockHelper.findAll(fixture.debugElement, Component);
+
+// returns a found DebugElement which belongs to a css selector.
+const component: MockedDebugElement<Component> | undefined = MockHelper.find(fixture.debugElement, 'div.container');
+
+// returns an array of found DebugElements which belong to a css selector.
+const components: Array<MockedDebugElement<Component>> = MockHelper.findAll(fixture.debugElement, 'div.item');
+```
+
+```typescript
+// throws an error if the desired element wasn't found.
+const directive: Directive = MockHelper.getDirectiveOrFail(fixture.debugElement, Directive);
+const directive: Directive = MockHelper.findDirectiveOrFail(fixture.debugElement, Directive);
+const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.debugElement, Component);
+const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.debugElement, 'div.container');
+```
+
+In case if we want to mock methods / properties of a service / provider.
+
+```typescript
+// returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.
+const spy: Spy = MockHelper.mockService(instance, methodName);
+
+// returns a mocked function / spy of the property. If the property hasn't been mocked yet - mocks it.
+const spyGet: Spy = MockHelper.mockService(instance, propertyName, 'get');
+const spySet: Spy = MockHelper.mockService(instance, propertyName, 'set');
+```
 
 ```typescript
 // The example below uses auto spy.
@@ -713,7 +751,7 @@ Add the next code to `src/test.ts` if you want all mocked methods and functions 
 ```typescript
 import 'ng-mocks/dist/jasmine';
 
-// uncomment in case if you existing tests with spies.
+// uncomment in case if existing tests are with spies already.
 // jasmine.getEnv().allowRespy(true);
 ```
 
