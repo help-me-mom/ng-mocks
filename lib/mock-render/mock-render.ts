@@ -28,7 +28,7 @@ export type DebugElementField =
   | 'styles'
   | 'triggerEventHandler';
 
-export type DebugElementType<T> = { componentInstance: T } & Pick<DebugElement, DebugElementField>;
+export type MockedDebugElement<T> = { componentInstance: T } & Pick<DebugElement, DebugElementField>;
 
 export interface IMockRenderOptions {
   detectChanges?: boolean;
@@ -37,7 +37,7 @@ export interface IMockRenderOptions {
 
 // tslint:disable-next-line:interface-name
 export interface MockedComponentFixture<C = any, F = undefined> extends ComponentFixture<F> {
-  point: DebugElementType<C>;
+  point: MockedDebugElement<C>;
 }
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
