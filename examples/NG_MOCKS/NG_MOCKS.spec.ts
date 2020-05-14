@@ -99,9 +99,8 @@ describe('NG_MOCKS:deep', () => {
     expect(serviceWeWantToMock.useValue).toBeDefined('serviceWeWantToMock.useValue');
     expect(serviceWeWantToMock.useValue.getName).toBeDefined('serviceWeWantToMock.getName');
     expect(serviceWeWantToMock.useValue.getName()).toBeUndefined('serviceWeWantToMock.getName()');
-    const injectionTokenWeWantToMock = mocks.get(INJECTION_TOKEN_WE_WANT_TO_MOCK);
-    expect(injectionTokenWeWantToMock).toBeDefined('injectionTokenWeWantToMock');
-    expect(injectionTokenWeWantToMock.useValue).toBeUndefined('injectionTokenWeWantToMock.useValue');
+    expect(mocks.has(INJECTION_TOKEN_WE_WANT_TO_MOCK)).toBeDefined('injectionTokenWeWantToMock');
+    expect(mocks.get(INJECTION_TOKEN_WE_WANT_TO_MOCK)).toBeUndefined('injectionTokenWeWantToMock.useValue');
 
     // customize
     const serviceWeWantToCustomize = mocks.get(ServiceWeWantToCustomize);

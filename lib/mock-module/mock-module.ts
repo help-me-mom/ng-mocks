@@ -12,37 +12,19 @@ import { MockService } from '../mock-service';
 
 export type MockedModule<T> = T & Mock & {};
 
-// Some modules inject own providers, which don't allow mocks due to conflicts with test env.
-// We have to avoid any injection of those providers to mock everything properly.
-const neverMockProvidedToken = [
-  // BrowserModule
-  'InjectionToken Application Initializer',
-  'InjectionToken EventManagerPlugins',
-  'InjectionToken HammerGestureConfig',
-];
-const neverMockProvidedFunction = [
-  // BrowserModule
-  'ApplicationInitStatus',
-  'DomRendererFactory2',
-  'DomSharedStylesHost',
-  'EventManager',
-  // BrowserAnimationsModule
-  'RendererFactory2',
-];
+const neverMockProvidedFunction = ['DomRendererFactory2', 'RendererFactory2'];
 
-export function MockProvider(provider: any): Provider {
+export function MockProvider(provider: any): Provider | undefined {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
   const multi = typeof provider === 'object' && provider.multi;
   if (ngMocksUniverse.flags.has('cacheProvider') && ngMocksUniverse.cache.has(provide)) {
     return ngMocksUniverse.cache.get(provide);
   }
 
-  if (
-    typeof provide === 'object' &&
-    provide.ngMetadataName === 'InjectionToken' &&
-    neverMockProvidedToken.includes(provide.toString())
-  ) {
-    return provider;
+  // Tokens are special subject, we can skip adding them because in a mocked module they are useless.
+  // The main problem is providing undefined to HTTP_INTERCEPTORS and others breaks their code.
+  if (typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken') {
+    return undefined;
   }
 
   if (typeof provide === 'function' && neverMockProvidedFunction.includes(provide.name)) {
@@ -256,7 +238,9 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
   }
 
   if (providers && providers.length) {
-    mockedModuleDef.providers = flatten(providers).map(resolveProvider);
+    mockedModuleDef.providers = flatten(providers)
+      .map(resolveProvider)
+      .filter(provider => provider);
   }
 
   // Default exports.
