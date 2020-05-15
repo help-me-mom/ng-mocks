@@ -1,4 +1,4 @@
-export type MockedFunction = () => undefined;
+export type MockedFunction = () => any;
 
 const isFunc = (value: any): boolean => {
   if (typeof value !== 'function') {
@@ -35,17 +35,33 @@ const isInst = (value: any): boolean => {
   if (value.ngMetadataName === 'InjectionToken') {
     return false;
   }
-  return typeof value.__proto__ === 'object';
+  return typeof Object.getPrototypeOf(value) === 'object';
 };
 
 let customMockFunction: ((mockName: string) => MockedFunction) | undefined;
 
 const mockServiceHelperPrototype = {
-  mockFunction: (mockName: string): MockedFunction => {
-    if (customMockFunction) {
+  mockFunction: (mockName: string, original: boolean = false): MockedFunction => {
+    if (customMockFunction && !original) {
       return customMockFunction(mockName);
     }
-    return () => undefined;
+
+    // magic to make getters / setters working
+
+    let value: any;
+    let setValue: any;
+
+    const func = (val: any) => {
+      if (setValue) {
+        setValue(val);
+      }
+      return value;
+    };
+    func.__ngMocks = true;
+    func.__ngMocksSet = (newSetValue: any) => (setValue = newSetValue);
+    func.__ngMocksGet = (newValue: any) => (value = newValue);
+
+    return func as any;
   },
 
   registerMockFunction: (mockFunction: typeof customMockFunction) => {
@@ -63,17 +79,17 @@ const mockServiceHelperPrototype = {
       value[method] = mockServiceHelperPrototype.mockFunction(mockName);
     }
     if (typeof value === 'object') {
-      value.__proto__ = service;
+      Object.setPrototypeOf(value, service);
     }
 
     return value;
   },
 
-  extractMethodsFromPrototype: <T>(service: T): Array<keyof T> => {
-    const result: Array<keyof T> = [];
+  extractMethodsFromPrototype: <T>(service: T): string[] => {
+    const result: string[] = [];
     let prototype = service;
     while (prototype && Object.getPrototypeOf(prototype) !== null) {
-      for (const method of Object.getOwnPropertyNames(prototype) as Array<keyof T>) {
+      for (const method of Object.getOwnPropertyNames(prototype)) {
         if ((method as any) === 'constructor') {
           continue;
         }
@@ -90,19 +106,75 @@ const mockServiceHelperPrototype = {
     return result;
   },
 
-  mock: <T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T => {
+  extractPropertiesFromPrototype: <T>(service: T): string[] => {
+    const result: string[] = [];
+    let prototype = service;
+    while (prototype && Object.getPrototypeOf(prototype) !== null) {
+      for (const prop of Object.getOwnPropertyNames(prototype)) {
+        if ((prop as any) === 'constructor') {
+          continue;
+        }
+
+        const descriptor = Object.getOwnPropertyDescriptor(prototype, prop);
+        const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
+        if (!isGetterSetter || result.indexOf(prop) !== -1) {
+          continue;
+        }
+        result.push(prop);
+      }
+      prototype = Object.getPrototypeOf(prototype);
+    }
+    return result;
+  },
+
+  // tslint:disable-next-line:cyclomatic-complexity
+  mock: <T = MockedFunction>(instance: any, name: string, accessType?: 'get' | 'set'): T => {
     const def = Object.getOwnPropertyDescriptor(instance, name);
-    if (def && def[style || 'value']) {
-      return def[style || 'value'];
+    if (def && def[accessType || 'value']) {
+      return def[accessType || 'value'];
     }
 
-    const mockName = `${typeof instance.prototype === 'function' ? instance.prototype.name : 'unknown'}.${name}${
-      style ? `:${style}` : ''
-    }`;
-    const mock: any = mockServiceHelperPrototype.mockFunction(mockName);
-    Object.defineProperty(instance, name, {
-      [style || 'value']: mock,
-    });
+    const mockName = `${
+      typeof instance.prototype === 'function'
+        ? instance.prototype.name
+        : typeof instance.constructor === 'function'
+        ? instance.constructor.name
+        : 'unknown'
+    }.${name}${accessType ? `:${accessType}` : ''}`;
+    const mock: any = mockServiceHelperPrototype.mockFunction(mockName, !!accessType);
+
+    const mockDef: PropertyDescriptor = {
+      // keeping setter if we adding getter
+      ...(accessType === 'get' && def && def.set
+        ? {
+            set: def.set,
+          }
+        : {}),
+
+      // keeping getter if we adding setter
+      ...(accessType === 'set' && def && def.get
+        ? {
+            get: def.get,
+          }
+        : {}),
+
+      // to allow replacement for functions
+      ...(accessType
+        ? {}
+        : {
+            writable: true,
+          }),
+
+      [accessType || 'value']: mock,
+      configurable: true,
+      enumerable: true,
+    };
+
+    if (mockDef.get && mockDef.set && (mockDef.get as any).__ngMocks && (mockDef.set as any).__ngMocks) {
+      (mockDef.set as any).__ngMocksSet((val: any) => (mockDef.get as any).__ngMocksGet(val));
+    }
+
+    Object.defineProperty(instance, name, mockDef);
     return mock;
   },
 };
@@ -120,9 +192,10 @@ const localHelper: typeof mockServiceHelperPrototype = ((window as any) || (glob
  * @internal
  */
 export const mockServiceHelper: {
-  extractMethodsFromPrototype(service: any): Array<keyof any>;
-  mock<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
-  mockFunction(): MockedFunction;
+  extractMethodsFromPrototype(service: any): string[];
+  extractPropertiesFromPrototype(service: any): string[];
+  mock<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set' | 'both'): T;
+  mockFunction(mockName: string): MockedFunction;
   registerMockFunction(mockFunction: (mockName: string) => MockedFunction | undefined): void;
 } = ((window as any) || (global as any)).ngMocksMockServiceHelper;
 
@@ -148,7 +221,7 @@ export function MockService(service: any, mockNamePrefix?: string): any {
         value[property] = mock;
       }
     }
-    value.__proto__ = service.__proto__;
+    Object.setPrototypeOf(value, Object.getPrototypeOf(service));
   }
 
   return value;

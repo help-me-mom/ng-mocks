@@ -724,23 +724,33 @@ it('mocks getters, setters and methods in a way that jasmine can mock them w/o a
   expect(mock).toBeDefined();
 
   // Creating a mock on the getter.
-  MockHelper.mockService<Spy>(mock, 'name', 'get').and.returnValue('mock');
+  spyOnProperty(mock, 'name', 'get').and.returnValue('mock');
   expect(mock.name).toEqual('mock');
 
   // Creating a mock on the setter.
-  MockHelper.mockService(mock, 'name', 'set');
+  spyOnProperty(mock, 'name', 'set');
   mock.name = 'mock';
   expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
 
   // Creating a mock on the method.
-  MockHelper.mockService<Spy>(mock, 'nameMethod').and.returnValue('mock');
+  spyOn(mock, 'nameMethod').and.returnValue('mock');
   expect(mock.nameMethod('mock')).toEqual('mock');
   expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
 
   // Creating a mock on the method that doesn't exist.
-  MockHelper.mockService<Spy>(mock, 'fakeMethod').and.returnValue('mock');
+  MockHelper.mockService(mock, 'fakeMethod');
+  spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
   expect((mock as any).fakeMethod('mock')).toEqual('mock');
   expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+
+  // Creating a mock on the property that doesn't exist.
+  MockHelper.mockService(mock, 'fakeProp', 'get');
+  MockHelper.mockService(mock, 'fakeProp', 'set');
+  spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
+  const spy = spyOnProperty(mock as any, 'fakeProp', 'set');
+  expect((mock as any).fakeProp).toEqual('mockProp');
+  (mock as any).fakeProp = 'mockPropSet';
+  expect(spy).toHaveBeenCalledWith('mockPropSet');
 });
 ```
 

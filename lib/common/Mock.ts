@@ -8,11 +8,26 @@ import { mockServiceHelper } from '../mock-service';
 // tslint:disable-next-line:no-unnecessary-class
 export class Mock {
   constructor() {
-    for (const method of (this as any).__mockedMethods) {
+    (this as any).__ngMocks = true;
+
+    // first setting our mocked methods and properties
+    for (const method of mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(this))) {
+      (this as any)[method] = (this as any)[method];
+    }
+    for (const property of mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(this))) {
+      const value = Object.getOwnPropertyDescriptor(this, property);
+      if (!value) {
+        continue;
+      }
+      Object.defineProperty(this, property, value);
+    }
+
+    // then setting mocks for original class methods and properties
+    for (const method of mockServiceHelper.extractMethodsFromPrototype((this.constructor as any).mockOf.prototype)) {
       if ((this as any)[method]) {
         continue;
       }
-      (this as any)[method] = mockServiceHelper.mockFunction();
+      mockServiceHelper.mock(this, method);
     }
     for (const output of (this as any).__mockedOutputs) {
       if ((this as any)[output]) {
@@ -20,6 +35,13 @@ export class Mock {
       }
       (this as any)[output] = new EventEmitter<any>();
     }
+    for (const prop of mockServiceHelper.extractPropertiesFromPrototype((this.constructor as any).mockOf.prototype)) {
+      mockServiceHelper.mock(this, prop, 'get');
+      mockServiceHelper.mock(this, prop, 'set');
+    }
+
+    // and faking prototype
+    Object.setPrototypeOf(this, (this.constructor as any).mockOf.prototype);
   }
 }
 
