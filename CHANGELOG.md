@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.4.0"></a>
+# [9.4.0](https://github.com/ike18t/ng-mocks/compare/v9.3.0...v9.4.0) (2020-05-17)
+
+
+### Bug Fixes
+
+* better docs with current features ([c76209f](https://github.com/ike18t/ng-mocks/commit/c76209f))
+
+
+### Features
+
+* original instanceof and properties ([05dd90b](https://github.com/ike18t/ng-mocks/commit/05dd90b)), closes [#109](https://github.com/ike18t/ng-mocks/issues/109)
+
+
+
 <a name="9.3.0"></a>
 # [9.3.0](https://github.com/ike18t/ng-mocks/compare/v9.2.0...v9.3.0) (2020-05-10)
 
