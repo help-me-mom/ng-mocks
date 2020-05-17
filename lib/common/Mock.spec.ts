@@ -7,8 +7,6 @@ import { MockDirective } from '../mock-directive';
 import { MockModule } from '../mock-module';
 import { MockPipe } from '../mock-pipe';
 
-import { Mock, MockControlValueAccessor } from './Mock';
-
 class ParentClass {
   protected parentValue = true;
 
@@ -85,31 +83,106 @@ class ChildPipeClass extends ParentClass implements PipeTransform {
 describe('Mock', () => {
   it('should affect as MockModule', () => {
     const instance = new (MockModule(ChildModuleClass))();
-    expect(instance).toEqual(jasmine.any(Mock));
+    expect(instance).toEqual(jasmine.any(ChildModuleClass));
+    expect((instance as any).__ngMocksMock).toEqual(true);
+    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
   });
 
   it('should affect as MockComponent', () => {
     const instance = new (MockComponent(ChildComponentClass))();
-    expect(instance).toEqual(jasmine.any(MockControlValueAccessor));
-    expect(instance).toEqual(jasmine.any(Mock));
+    expect(instance).toEqual(jasmine.any(ChildComponentClass));
+    expect((instance as any).__ngMocksMock).toEqual(true);
+    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(true);
+
+    const spy = jasmine.createSpy('spy');
+    instance.registerOnChange(spy);
+    instance.__simulateChange('test');
+    expect(spy).toHaveBeenCalledWith('test');
+
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
   });
 
   it('should affect as MockDirective', () => {
     const instance = new (MockDirective(ChildDirectiveClass))();
-    expect(instance).toEqual(jasmine.any(MockControlValueAccessor));
-    expect(instance).toEqual(jasmine.any(Mock));
+    expect(instance).toEqual(jasmine.any(ChildDirectiveClass));
+    expect((instance as any).__ngMocksMock).toEqual(true);
+    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(true);
+
+    const spy = jasmine.createSpy('spy');
+    instance.registerOnChange(spy);
+    instance.__simulateChange('test');
+    expect(spy).toHaveBeenCalledWith('test');
+
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
   });
 
   it('should affect as MockPipe', () => {
     const instance = new (MockPipe(ChildPipeClass))();
-    expect(instance).toEqual(jasmine.any(Mock));
+    expect(instance).toEqual(jasmine.any(ChildPipeClass));
+    expect((instance as any).__ngMocksMock).toEqual(true);
+    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
     expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
     expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
+  });
+});
+
+describe('Mock prototype', () => {
+  @Component({
+    selector: 'custom',
+    template: '',
+  })
+  class CustomComponent {
+    public test = 'custom';
+
+    public get __ngMocksMock(): string {
+      return 'IMPOSSIBLE_OVERRIDE';
+    }
+
+    public get test1(): string {
+      return 'test1';
+    }
+
+    public set test2(value: string) {
+      this.test = value;
+    }
+
+    public testMethod(): string {
+      return this.test;
+    }
+  }
+
+  it('should get all things mocked and in the same time respect prototype', () => {
+    const mockDef = MockComponent(CustomComponent);
+    const mock = new mockDef();
+    expect(mock).toEqual(jasmine.any(CustomComponent));
+
+    // checking that it was processed through Mock
+    expect(mock.__ngMocksMock as any).toBe(true);
+    expect(mock.__ngMocksMockControlValueAccessor as any).toBe(true);
+
+    // checking that it was processed through MockControlValueAccessor
+    const spy = jasmine.createSpy('spy');
+    mock.registerOnChange(spy);
+    mock.__simulateChange('test');
+    expect(spy).toHaveBeenCalledWith('test');
+
+    // properties are mocked too
+    expect(mock.test1).toBeUndefined();
+    (mock as any).test1 = 'MyCustomValue';
+    expect(mock.test1).toEqual('MyCustomValue');
+
+    // properties are mocked too
+    expect(mock.test2).toBeUndefined();
+    (mock as any).test2 = 'MyCustomValue';
+    expect(mock.test2).toEqual('MyCustomValue');
+
+    // properties are mocked too
+    expect(mock.test).toBeUndefined();
+    (mock as any).test = 'MyCustomValue';
+    expect(mock.test).toEqual('MyCustomValue');
   });
 });

@@ -40,7 +40,7 @@ export function MockPipe<TPipe extends PipeTransform>(
     transform = transform || defaultTransform;
   }
 
-  const mockedPipe: Type<TPipe> = Pipe(options)(PipeMock as any);
+  const mockedPipe: Type<MockedPipe<TPipe>> = Pipe(options)(PipeMock as any);
   if (ngMocksUniverse.flags.has('cachePipe')) {
     ngMocksUniverse.cache.set(pipe, mockedPipe);
   }

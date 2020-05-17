@@ -26,6 +26,7 @@ For an easy start check the [MockBuilder](#mockbuilder) first.
 
 - [Reactive Forms Components](#mocked-reactive-forms-components)
 - [Structural Components](#usage-example-of-structural-directives)
+- [Auto Spy](#auto-spy)
 - [More examples](#other-examples-of-tests)
 
 ---
@@ -48,8 +49,10 @@ For an easy start check the [MockBuilder](#mockbuilder) first.
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
+import { MockComponent, MockedComponent, MockHelper, MockRender } from 'ng-mocks';
+
+import { DependencyComponent } from './dependency.component';
+import { TestedComponent } from './tested.component';
 
 describe('MockComponent', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -66,8 +69,11 @@ describe('MockComponent', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
-      .componentInstance as DependencyComponent; // casting to retain type safety
+    // the same as fixture.debugElement.query(By.css('dependency-component-selector')).componentInstance
+    const mockedComponent = MockHelper.findOrFail<DependencyComponent>(
+      fixture.debugElement,
+      'dependency-component-selector'
+    ).componentInstance;
 
     // let's pretend Dependency Component (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked component so you can assert on it
@@ -80,8 +86,7 @@ describe('MockComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     spyOn(component, 'trigger');
-    const mockedComponent = fixture.debugElement.query(By.directive(DependencyComponent))
-      .componentInstance as DependencyComponent; // casting to retain type safety
+    const mockedComponent = MockHelper.findOrFail(fixture.debugElement, DependencyComponent).componentInstance;
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
@@ -97,19 +102,20 @@ describe('MockComponent', () => {
   });
 
   it('should render something inside of the dependency component', () => {
-    const localFixture = MockRender(`
+    const localFixture = MockRender<DependencyComponent>(`
       <dependency-component-selector>
         <p>inside content</p>
       </dependency-component-selector>
     `);
+
     // because component does not have any @ContentChild we can access html directly.
     // assert on some side effect
-    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
+    const mockedNgContent = localFixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
   });
 
   it('should render something inside of the dependency component', () => {
-    const localFixture = MockRender(`
+    const localFixture = MockRender<MockedComponent<DependencyComponent>>(`
       <dependency-component-selector>
         <ng-template #something><p>inside template</p></ng-template>
         <p>inside content</p>
@@ -117,16 +123,16 @@ describe('MockComponent', () => {
     `);
 
     // injected ng-content stays as it was.
-    const mockedNgContent = localFixture.debugElement.query(By.directive(DependencyComponent)).nativeElement.innerHTML;
+    const mockedNgContent = localFixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
 
     // because component does have @ContentChild we need to render them first with proper context.
-    const mockedElement = localFixture.debugElement.query(By.directive(DependencyComponent));
-    const mockedComponent: MockedComponent<DependencyComponent> = mockedElement.componentInstance;
+    const mockedComponent = localFixture.point.componentInstance;
     mockedComponent.__render('something');
     localFixture.detectChanges();
 
-    const mockedNgTemplate = mockedElement.query(By.css('[data-key="something"]')).nativeElement.innerHTML;
+    const mockedNgTemplate = MockHelper.findOrFail(localFixture.debugElement, '[data-key="something"]').nativeElement
+      .innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });
@@ -149,8 +155,10 @@ describe('MockComponent', () => {
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { MockDirective, MockHelper } from 'ng-mocks';
+
+import { DependencyDirective } from './dependency.directive';
+import { TestedComponent } from './tested.component';
 
 describe('MockDirective', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -172,14 +180,12 @@ describe('MockDirective', () => {
 
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
-    const mockedDirectiveInstance = MockHelper.getDirective(
-      fixture.debugElement.query(By.css('span')),
+    const mockedDirectiveInstance = MockHelper.getDirectiveOrFail(
+      MockHelper.findOrFail(fixture.debugElement, 'span'),
       DependencyDirective
     );
-    expect(mockedDirectiveInstance).toBeTruthy();
-    if (mockedDirectiveInstance) {
-      expect(mockedDirectiveInstance.someInput).toEqual('foo');
-    }
+
+    expect(mockedDirectiveInstance.someInput).toEqual('foo');
     // assert on some side effect
   });
 
@@ -189,16 +195,13 @@ describe('MockDirective', () => {
 
     // again, let's pretend DependencyDirective has an output called 'someOutput'
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
-    const mockedDirectiveInstance = MockHelper.getDirective(
-      fixture.debugElement.query(By.css('span')),
+    const mockedDirectiveInstance = MockHelper.getDirectiveOrFail(
+      MockHelper.findOrFail(fixture.debugElement, 'span'),
       DependencyDirective
     );
-    expect(mockedDirectiveInstance).toBeTruthy();
-    if (mockedDirectiveInstance) {
-      mockedDirectiveInstance.someOutput.emit({
-        payload: 'foo',
-      }); // if you casted mockedDirective as the original component type then this is type safe
-    }
+    mockedDirectiveInstance.someOutput.emit({
+      payload: 'foo',
+    }); // if you casted mockedDirective as the original component type then this is type safe
     // assert on some side effect
   });
 });
@@ -216,6 +219,9 @@ when assertions should be done on its nested elements.
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockDirective, MockedDirective, MockHelper } from 'ng-mocks';
+
+import { DependencyDirective } from './dependency.directive';
+import { TestedComponent } from './tested.component';
 
 describe('MockDirective', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -238,7 +244,7 @@ describe('MockDirective', () => {
     // IMPORTANT: by default structural directives aren't rendered.
     // Because we can't automatically detect when and with which context they should be rendered.
     // Usually developer knows context and can render it manually with proper setup.
-    const mockedDirectiveInstance = MockHelper.findDirective(
+    const mockedDirectiveInstance = MockHelper.findDirectiveOrFail(
       fixture.debugElement,
       DependencyDirective
     ) as MockedDirective<DependencyDirective>;
@@ -252,10 +258,7 @@ describe('MockDirective', () => {
 
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
-    expect(mockedDirectiveInstance).toBeTruthy();
-    if (mockedDirectiveInstance) {
-      expect(mockedDirectiveInstance.someInput).toEqual('foo');
-    }
+    expect(mockedDirectiveInstance.someInput).toEqual('foo');
     // assert on some side effect
   });
 });
@@ -279,8 +282,10 @@ Personally, I found the best thing to do for assertions is to override the trans
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MockPipe } from 'ng-mocks';
+import { MockHelper, MockPipe } from 'ng-mocks';
+
+import { DependencyPipe } from './dependency.pipe';
+import { TestedComponent } from './tested.component';
 
 describe('MockPipe', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -291,7 +296,7 @@ describe('MockPipe', () => {
         TestedComponent,
 
         // alternatively you can use MockPipes to mock multiple but you lose the ability to override
-        MockPipe(DependencyPipe, (...args) => JSON.stringify(args)),
+        MockPipe(DependencyPipe, (...args: string[]) => JSON.stringify(args)),
       ],
     });
 
@@ -301,7 +306,8 @@ describe('MockPipe', () => {
 
   describe('with transform override', () => {
     it('should return the result of the provided transform function', () => {
-      expect(fixture.debugElement.query(By.css('span')).nativeElement.innerHTML).toEqual('["foo"]');
+      const pipeElement = MockHelper.findOrFail(fixture.debugElement, 'span');
+      expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
     });
   });
 });
@@ -324,8 +330,10 @@ describe('MockPipe', () => {
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { MockComponent, MockedComponent } from 'ng-mocks';
+import { MockComponent, MockedComponent, MockHelper } from 'ng-mocks';
+
+import { DependencyComponent } from './dependency.component';
+import { TestedComponent } from './tested.component';
 
 describe('MockReactiveForms', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -343,8 +351,10 @@ describe('MockReactiveForms', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedReactiveFormComponent = fixture.debugElement.query(By.css('dependency-component-selector'))
-      .componentInstance as MockedComponent<DependencyComponent>; // casting to retain type safety
+    const mockedReactiveFormComponent = MockHelper.findOrFail<MockedComponent<DependencyComponent>>(
+      fixture.debugElement,
+      'dependency-component-selector'
+    ).componentInstance;
 
     mockedReactiveFormComponent.__simulateChange('foo');
     expect(component.formControl.value).toBe('foo');
@@ -377,6 +387,9 @@ For providers I typically will use TestBed.get(SomeProvider) and extend it using
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockModule } from 'ng-mocks';
+
+import { DependencyModule } from './dependency.module';
+import { TestedComponent } from './tested.component';
 
 describe('MockModule', () => {
   let fixture: ComponentFixture<TestedComponent>;
@@ -592,8 +605,10 @@ It is useful if you want to mock system tokens / services such as APP_INITIALIZE
 
 ```typescript
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { MockModule, MockRender } from 'ng-mocks';
+
+import { DependencyModule } from './dependency.module';
+import { TestedComponent } from './tested.component';
 
 describe('MockRender', () => {
   beforeEach(() => {
@@ -621,8 +636,7 @@ describe('MockRender', () => {
     );
 
     // assert on some side effect
-    const componentInstance = fixture.debugElement.query(By.directive(TestedComponent))
-      .componentInstance as TestedComponent;
+    const componentInstance = fixture.point.componentInstance as TestedComponent;
     componentInstance.trigger.emit('foo1');
     expect(componentInstance.value1).toEqual('something1');
     expect(componentInstance.value2).toEqual('check');
@@ -718,29 +732,40 @@ const spySet: Spy = MockHelper.mockService(instance, propertyName, 'set');
 ```
 
 ```typescript
-// The example below uses auto spy.
-it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
-  const mock: GetterSetterMethodHuetod = MockService(GetterSetterMethodHuetod);
-  expect(mock).toBeDefined();
+describe('MockService', () => {
+  it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
+    const mock: GetterSetterMethodHuetod = MockService(GetterSetterMethodHuetod);
+    expect(mock).toBeDefined();
 
-  // Creating a mock on the getter.
-  MockHelper.mockService<Spy>(mock, 'name', 'get').and.returnValue('mock');
-  expect(mock.name).toEqual('mock');
+    // Creating a mock on the getter.
+    spyOnProperty(mock, 'name', 'get').and.returnValue('mock');
+    expect(mock.name).toEqual('mock');
 
-  // Creating a mock on the setter.
-  MockHelper.mockService(mock, 'name', 'set');
-  mock.name = 'mock';
-  expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
+    // Creating a mock on the setter.
+    spyOnProperty(mock, 'name', 'set');
+    mock.name = 'mock';
+    expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
 
-  // Creating a mock on the method.
-  MockHelper.mockService<Spy>(mock, 'nameMethod').and.returnValue('mock');
-  expect(mock.nameMethod('mock')).toEqual('mock');
-  expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
+    // Creating a mock on the method.
+    spyOn(mock, 'nameMethod').and.returnValue('mock');
+    expect(mock.nameMethod('mock')).toEqual('mock');
+    expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
 
-  // Creating a mock on the method that doesn't exist.
-  MockHelper.mockService<Spy>(mock, 'fakeMethod').and.returnValue('mock');
-  expect((mock as any).fakeMethod('mock')).toEqual('mock');
-  expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+    // Creating a mock on the method that doesn't exist.
+    MockHelper.mockService(mock, 'fakeMethod');
+    spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
+    expect((mock as any).fakeMethod('mock')).toEqual('mock');
+    expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+
+    // Creating a mock on the property that doesn't exist.
+    MockHelper.mockService(mock, 'fakeProp', 'get');
+    MockHelper.mockService(mock, 'fakeProp', 'set');
+    spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
+    spyOnProperty(mock as any, 'fakeProp', 'set');
+    expect((mock as any).fakeProp).toEqual('mockProp');
+    (mock as any).fakeProp = 'mockPropSet';
+    expect(MockHelper.mockService(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
+  });
 });
 ```
 

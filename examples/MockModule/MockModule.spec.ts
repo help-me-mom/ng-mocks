@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockModule } from 'ng-mocks';
+
 import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
 
