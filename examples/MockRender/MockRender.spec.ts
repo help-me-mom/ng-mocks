@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { MockModule, MockRender } from 'ng-mocks';
 
 import { DependencyModule } from './dependency.module';
@@ -31,8 +30,7 @@ describe('MockRender', () => {
     );
 
     // assert on some side effect
-    const componentInstance = fixture.debugElement.query(By.directive(TestedComponent))
-      .componentInstance as TestedComponent;
+    const componentInstance = fixture.point.componentInstance as TestedComponent;
     componentInstance.trigger.emit('foo1');
     expect(componentInstance.value1).toEqual('something1');
     expect(componentInstance.value2).toEqual('check');

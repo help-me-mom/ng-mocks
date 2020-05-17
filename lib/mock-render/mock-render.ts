@@ -1,34 +1,40 @@
 // tslint:disable:unified-signatures
 
-import { Component, DebugElement, Provider, Type } from '@angular/core';
+import { Component, DebugElement, DebugNode, Provider, Type } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
 import { directiveResolver } from '../common/reflect';
 
 // A5 and its TS 2.4 don't support Omit, that's why we need the magic below.
 // TODO remove it once A5 isn't supported.
-export type DebugElementField =
-  | 'attributes'
-  | 'childNodes'
-  | 'children'
-  | 'classes'
+
+export type DebugNodeField =
   | 'context'
   | 'injector'
   | 'listeners'
-  | 'name'
-  | 'nativeElement'
   | 'nativeNode'
   | 'parent'
-  | 'properties'
   | 'providerTokens'
+  | 'references';
+
+export type MockedDebugNode<T = any> = { componentInstance: T } & Pick<DebugNode, DebugNodeField> & {
+    childNodes?: MockedDebugNode[];
+  };
+
+export type DebugElementField =
+  | 'attributes'
+  | 'children'
+  | 'classes'
+  | 'name'
+  | 'nativeElement'
+  | 'properties'
   | 'query'
   | 'queryAll'
   | 'queryAllNodes'
-  | 'references'
   | 'styles'
   | 'triggerEventHandler';
 
-export type MockedDebugElement<T> = { componentInstance: T } & Pick<DebugElement, DebugElementField>;
+export type MockedDebugElement<T = any> = Pick<DebugElement, DebugElementField> & MockedDebugNode<T>;
 
 export interface IMockRenderOptions {
   detectChanges?: boolean;
@@ -49,14 +55,14 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
 // without params we shouldn't autocomplete any keys of any types.
 function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent>;
 
-function MockRender<MComponent, TComponent extends { [key: string]: any }>(
+function MockRender<MComponent = any, TComponent extends { [key: string]: any } = { [key: string]: any }>(
   template: string,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
-): MockedComponentFixture<any, TComponent>;
+): MockedComponentFixture<MComponent, TComponent>;
 
 // without params we shouldn't autocomplete any keys of any types.
-function MockRender<MComponent>(template: string): MockedComponentFixture;
+function MockRender<MComponent = any>(template: string): MockedComponentFixture<MComponent>;
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: string | Type<MComponent>,
