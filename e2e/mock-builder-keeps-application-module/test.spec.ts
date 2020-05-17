@@ -30,7 +30,7 @@ describe('MockBuilderKeepsApplicationModule:mock', () => {
     const fixture = MockRender(TargetComponent);
     const element = fixture.debugElement.query(By.directive(TargetComponent));
     expect(element).toBeDefined();
-    expect(TestBed.get(TARGET_TOKEN)).toBeUndefined();
+    expect(() => TestBed.get(TARGET_TOKEN)).toThrow();
     expect(TestBed.get(APP_INITIALIZER)).toBeDefined();
     expect(TestBed.get(APP_ID)).toBeDefined();
   });

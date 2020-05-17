@@ -1,13 +1,15 @@
 /* tslint:disable:max-classes-per-file */
 
 import { CommonModule } from '@angular/common';
-import { ApplicationModule, Component } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
-import { MockModule } from '../mock-module';
+import { MockModule, MockProvider } from '../mock-module';
 import { MockRender } from '../mock-render';
 
 import {
@@ -186,5 +188,36 @@ describe('WithServiceModule', () => {
   it('should not throw an error of service method', () => {
     const fixture = MockRender('<custom-service></custom-service>');
     expect(fixture).toBeDefined();
+  });
+});
+
+describe('MockProvider', () => {
+  const CUSTOM_TOKEN = new InjectionToken('TOKEN');
+
+  @NgModule({
+    providers: [
+      {
+        multi: true,
+        provide: HTTP_INTERCEPTORS,
+        useValue: 'MY_CUSTOM_VALUE',
+      },
+      {
+        provide: CUSTOM_TOKEN,
+        useValue: 'MY_CUSTOM_VALUE',
+      },
+    ],
+  })
+  class CustomTokenModule {}
+
+  it('should skip tokens in a mocked module', () => {
+    const mock = MockModule(CustomTokenModule);
+    const def = ngModuleResolver.resolve(mock);
+    expect(def.providers).toEqual([]);
+  });
+
+  it('should return undefined on any token', () => {
+    expect(MockProvider(CUSTOM_TOKEN)).toBeUndefined();
+    expect(MockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
+    expect(MockProvider(APP_INITIALIZER)).toBeUndefined();
   });
 });

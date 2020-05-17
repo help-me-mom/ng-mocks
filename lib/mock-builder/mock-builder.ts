@@ -1,19 +1,10 @@
 // tslint:disable:unified-signatures
 
-import {
-  ApplicationModule,
-  InjectionToken,
-  ModuleWithProviders,
-  NgModule,
-  PipeTransform,
-  Provider,
-  Type,
-} from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, PipeTransform, Provider, Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { flatten, isNgDef, isNgInjectionToken, NG_MOCKS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockModule, MockProvider } from '../mock-module';
@@ -423,21 +414,6 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
 export function MockBuilder(componentToTest?: Type<any>, itsModuleToMock?: Type<any>): MockBuilderPromise {
   const instance = new MockBuilderPromise();
-
-  // all providers of ApplicationModule shouldn't be mocked by default.
-  const providers = flatten(ngModuleResolver.resolve(ApplicationModule).providers);
-  for (const provider of providers) {
-    if (typeof provider === 'object' && provider.deps) {
-      for (const dep of provider.deps) {
-        instance.keep(dep, { dependency: true });
-      }
-    }
-    if (typeof provider === 'object' && provider.provide) {
-      instance.keep(provider.provide, { dependency: true });
-    } else {
-      instance.keep(provider, { dependency: true });
-    }
-  }
 
   if (componentToTest) {
     instance.keep(componentToTest, {
