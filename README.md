@@ -501,10 +501,8 @@ const spySet: Spy = MockHelper.mockService(instance, propertyName, 'set');
 ```
 
 ```typescript
-// The example below uses auto spy.
 describe('MockService', () => {
   it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
-    // please note that auto spy should be enabled for this test.
     const mock: GetterSetterMethodHuetod = MockService(GetterSetterMethodHuetod);
     expect(mock).toBeDefined();
 
