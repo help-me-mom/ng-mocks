@@ -29,6 +29,7 @@ export const MockHelper: {
   findOrFail<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
   getDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
   getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+  mockService<I extends object, O extends object>(instance: I, overrides: O): I & O;
   mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
 } = {
   getDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T => {
@@ -118,6 +119,16 @@ export const MockHelper: {
     return el.queryAll(term);
   },
 
-  mockService: <T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T =>
-    mockServiceHelper.mock(instance, name, style),
+  mockService: <T = MockedFunction>(instance: any, override: string | object, style?: 'get' | 'set'): T => {
+    if (typeof override === 'string') {
+      return mockServiceHelper.mock(instance, override, style);
+    }
+    for (const key of Object.getOwnPropertyNames(override)) {
+      const def = Object.getOwnPropertyDescriptor(override, key);
+      if (def) {
+        Object.defineProperty(instance, key, def);
+      }
+    }
+    return instance;
+  },
 };
