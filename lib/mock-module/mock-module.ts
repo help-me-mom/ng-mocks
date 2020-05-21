@@ -14,15 +14,21 @@ export type MockedModule<T> = T & Mock & {};
 
 const neverMockProvidedFunction = ['DomRendererFactory2', 'RendererFactory2'];
 
+/**
+ * Can be changed any time.
+ *
+ * @internal
+ */
 export function MockProvider(provider: any): Provider | undefined {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
-  const multi = typeof provider === 'object' && provider.multi;
   if (ngMocksUniverse.flags.has('cacheProvider') && ngMocksUniverse.cache.has(provide)) {
     return ngMocksUniverse.cache.get(provide);
   }
 
   // Tokens are special subject, we can skip adding them because in a mocked module they are useless.
   // The main problem is providing undefined to HTTP_INTERCEPTORS and others breaks their code.
+  // If a testing module / component requires omitted tokens then they should be provided manually
+  // during creation of TestBed module.
   if (typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken') {
     return undefined;
   }
@@ -32,7 +38,6 @@ export function MockProvider(provider: any): Provider | undefined {
   }
 
   const mockedProvider: Provider = {
-    multi,
     provide,
     useValue: MockService(provide),
   };
@@ -149,6 +154,43 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
   } = ngModuleDef;
 
   const resolutions = new Map();
+
+  // resolveProvider is a special case because of the def structure.
+  const resolveProvider = (def: any) => {
+    const provider = typeof def === 'object' && def.provide ? def.provide : def;
+    const multi = def !== provider && !!def.multi;
+    let mockedDef: typeof def;
+    if (resolutions.has(provider)) {
+      mockedDef = resolutions.get(provider);
+      return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+    }
+    ngMocksUniverse.touches.add(provider);
+
+    // Then we check decisions whether we should keep or replace a def.
+    if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
+      mockedDef = ngMocksUniverse.builder.get(provider);
+      if (mockedDef === provider) {
+        mockedDef = def;
+      } else if (mockedDef === undefined) {
+        mockedDef = {
+          provide: provider,
+          useValue: undefined,
+        };
+      }
+    }
+
+    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+      mockedDef = def;
+    }
+    if (!mockedDef) {
+      mockedDef = MockProvider(def);
+    }
+
+    resolutions.set(provider, mockedDef);
+    changed = changed || mockedDef !== def;
+    return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+  };
+
   const resolve = (def: any) => {
     let mockedDef: typeof def;
     if (resolutions.has(def)) {
@@ -184,39 +226,10 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
       mockedDef = MockPipe(def);
     }
     if (!mockedDef) {
-      mockedDef = MockProvider(def);
+      mockedDef = resolveProvider(def);
     }
 
     resolutions.set(def, mockedDef);
-    changed = changed || mockedDef !== def;
-    return mockedDef;
-  };
-
-  // resolveProvider is a special case because of the def structure.
-  const resolveProvider = (def: any) => {
-    const provider = typeof def === 'object' && def.provide ? def.provide : def;
-    let mockedDef: typeof def;
-    if (resolutions.has(provider)) {
-      return resolutions.get(provider);
-    }
-    ngMocksUniverse.touches.add(provider);
-
-    // Then we check decisions whether we should keep or replace a def.
-    if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
-      mockedDef = ngMocksUniverse.builder.get(provider);
-      if (mockedDef === provider) {
-        mockedDef = def;
-      }
-    }
-
-    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
-      mockedDef = def;
-    }
-    if (!mockedDef) {
-      mockedDef = MockProvider(def);
-    }
-
-    resolutions.set(provider, mockedDef);
     changed = changed || mockedDef !== def;
     return mockedDef;
   };
