@@ -157,7 +157,7 @@
     "typescript": "latest"
   },
   "peerDependencies": {
-    "karma": "1 || 2 || 3 || 4",
+    "karma": "1 || 2 || 3 || 4 || 5",
     "typescript": "1 || 2 || 3"
   }
 }

@@ -17,7 +17,7 @@
     "express": "^4.13.3",
     "@types/jasmine": "^2.5.35",
     "jasmine-core": "^2.4.1",
-    "karma": "^1.5.0",
+    "karma": "^5.0.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
