@@ -57,6 +57,8 @@ export class Mock {
 }
 
 export class MockControlValueAccessor extends Mock implements ControlValueAccessor {
+  __value: any; // tslint:disable-line:variable-name
+
   get __ngMocksMockControlValueAccessor(): boolean {
     return true;
   }
@@ -73,5 +75,7 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
     this.__simulateTouch = fn;
   }
 
-  writeValue = () => {};
+  writeValue(value: any) {
+    this.__value = value;
+  }
 }

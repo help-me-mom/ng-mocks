@@ -194,6 +194,15 @@ describe('MockComponent', () => {
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
     });
+
+    it('should allow to get control value', () => {
+      fixture.detectChanges();
+      component.formControl.setValue('foo')
+      const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
+        By.css('custom-form-control')
+      ).componentInstance;
+      expect(customFormControl.__value).toBe('foo');
+    });
   });
 
   describe('NgTemplateOutlet', () => {
