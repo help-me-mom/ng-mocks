@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file */
-
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule } from '@angular/core';

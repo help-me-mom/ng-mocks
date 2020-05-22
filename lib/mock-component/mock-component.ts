@@ -6,14 +6,13 @@ import {
   forwardRef,
   Query,
   TemplateRef,
-  Type,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { getMockedNgDefOf, MockControlValueAccessor, MockOf } from '../common';
+import { getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';

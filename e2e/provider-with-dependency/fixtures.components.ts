@@ -1,6 +1,5 @@
-// tslint:disable:max-classes-per-file
-
 import { Component } from '@angular/core';
+
 import { ServiceChild } from './fixtures.services';
 
 @Component({

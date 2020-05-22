@@ -1,4 +1,6 @@
-import { InjectionToken, Type } from '@angular/core';
+import { InjectionToken } from '@angular/core';
+
+import { Type } from './lib';
 
 /**
  * Can be changed any time.

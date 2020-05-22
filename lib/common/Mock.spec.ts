@@ -1,5 +1,3 @@
-/* tslint:disable: max-classes-per-file */
-
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
 
 import { MockComponent } from '../mock-component';

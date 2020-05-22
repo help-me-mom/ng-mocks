@@ -1,16 +1,8 @@
-import {
-  Directive,
-  ElementRef,
-  forwardRef,
-  OnInit,
-  Optional,
-  TemplateRef,
-  Type,
-  ViewContainerRef,
-} from '@angular/core';
+import { Directive, ElementRef, forwardRef, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { getMockedNgDefOf, MockControlValueAccessor, MockOf } from '../common';
+import { getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
@@ -56,6 +48,11 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   const options: Directive = {
     exportAs,
     providers: [
+      {
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => DirectiveMock),
+      },
       {
         provide: directive,
         useExisting: forwardRef(() => DirectiveMock),

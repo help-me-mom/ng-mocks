@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform, Type } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { getMockedNgDefOf, Mock, MockOf } from '../common';
+import { getMockedNgDefOf, Mock, MockOf, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { pipeResolver } from '../common/reflect';
 

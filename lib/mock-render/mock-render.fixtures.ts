@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { DOCUMENT } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 

@@ -1,7 +1,7 @@
-// tslint:disable:max-classes-per-file
-
 import { Component, ContentChild, Inject, Input, Optional, TemplateRef } from '@angular/core';
+
 import { staticFalse } from '../../tests';
+
 import {
   AnythingWeWant1,
   AnythingWeWant2,

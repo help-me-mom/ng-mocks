@@ -12,7 +12,6 @@ export class ItemListComponent {
   @Input() items: string[];
 }
 
-/* tslint:disable:max-classes-per-file */
 @Component({
   selector: 'item-list-wrapper',
   template: '<item-list [items]="items"></item-list>',
@@ -20,7 +19,6 @@ export class ItemListComponent {
 export class ItemListWrapperComponent {
   @Input() items: string[];
 }
-/* tslint:enable:max-classes-per-file */
 
 describe('ChangeDetectionStrategy.OnPush:real', () => {
   let wrapper: ComponentFixture<ItemListWrapperComponent>;

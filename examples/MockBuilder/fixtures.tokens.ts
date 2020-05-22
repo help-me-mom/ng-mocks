@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { InjectionToken } from '@angular/core';
 
 export const INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK = new InjectionToken('INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK');

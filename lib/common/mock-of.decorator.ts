@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Type } from './lib';
 
 // This helps with debugging in the browser. Decorating mock classes with this
 // will change the display-name of the class to 'MockOf-<ClassName>` so our
