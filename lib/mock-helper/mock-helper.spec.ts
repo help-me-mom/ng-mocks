@@ -34,15 +34,13 @@ export class ExampleStructuralDirective {
   selector: 'component-a',
   template: 'body-a',
 })
-export class AComponent {
-}
+export class AComponent {}
 
 @Component({
   selector: 'component-b',
   template: 'body-b',
 })
-export class BComponent {
-}
+export class BComponent {}
 
 describe('MockHelper:getDirective', () => {
   beforeEach(async(() => {
@@ -131,8 +129,9 @@ describe('MockHelper:getDirective', () => {
     const componentA = MockHelper.findOrFail(fixture.debugElement, AComponent);
     expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
 
-    expect(() => MockHelper.findOrFail(componentA, BComponent))
-      .toThrowError('Cannot find an element via MockHelper.findOrFail');
+    expect(() => MockHelper.findOrFail(componentA, BComponent)).toThrowError(
+      'Cannot find an element via MockHelper.findOrFail'
+    );
   });
 
   it('find selector: string', () => {
@@ -140,8 +139,9 @@ describe('MockHelper:getDirective', () => {
     const componentB = MockHelper.findOrFail(fixture.debugElement, 'component-b');
     expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
 
-    expect(() => MockHelper.findOrFail(componentB, AComponent))
-      .toThrowError('Cannot find an element via MockHelper.findOrFail');
+    expect(() => MockHelper.findOrFail(componentB, AComponent)).toThrowError(
+      'Cannot find an element via MockHelper.findOrFail'
+    );
   });
 
   it('find selector: T', () => {
@@ -165,7 +165,7 @@ describe('MockHelper:getDirective', () => {
   it('findAll selector: T', () => {
     const fixture = MockRender(`<component-a></component-a><component-a></component-a>`);
     const componentA = MockHelper.findAll(fixture.debugElement, AComponent);
-    expect(componentA.length).toBe(2); // tslint:disable-line:no-magic-numbers
+    expect(componentA.length).toBe(2);
     expect(componentA[0].componentInstance).toEqual(jasmine.any(AComponent));
     expect(componentA[1].componentInstance).toEqual(jasmine.any(AComponent));
 
@@ -176,7 +176,7 @@ describe('MockHelper:getDirective', () => {
   it('findAll selector: string', () => {
     const fixture = MockRender(`<component-b></component-b><component-b></component-b>`);
     const componentB = MockHelper.findAll(fixture.debugElement, 'component-b');
-    expect(componentB.length).toEqual(2); // tslint:disable-line:no-magic-numbers
+    expect(componentB.length).toEqual(2);
     expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));
     expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));
 

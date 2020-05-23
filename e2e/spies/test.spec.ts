@@ -48,7 +48,7 @@ describe('spies:manual-mock', () => {
     expect(targetService.echo).toHaveBeenCalledTimes(1);
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
     expect(component.echo()).toEqual('fake');
-    expect(targetService.echo).toHaveBeenCalledTimes(2); // tslint:disable-line:no-magic-numbers
+    expect(targetService.echo).toHaveBeenCalledTimes(2);
   }));
 });
 
@@ -68,6 +68,6 @@ describe('spies:auto-mock', () => {
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
     (targetService.echo as Spy).and.returnValue('faked');
     expect(component.echo()).toEqual('faked');
-    expect(targetService.echo).toHaveBeenCalledTimes(2); // tslint:disable-line:no-magic-numbers
+    expect(targetService.echo).toHaveBeenCalledTimes(2);
   }));
 });
