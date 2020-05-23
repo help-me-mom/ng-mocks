@@ -1,10 +1,11 @@
+// tslint:disable:max-classes-per-file
+
 import { InjectionToken } from '@angular/core';
 
 import { MockHelper } from '../mock-helper';
 
 import { MockService } from './mock-service';
 
-// tslint:disable:max-classes-per-file
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';
 
@@ -58,8 +59,6 @@ class GetterSetterMethodHuetod {
   }
 }
 
-// tslint:enable:max-classes-per-file
-
 describe('MockService', () => {
   it('should convert boolean, number, string, null and undefined to undefined', () => {
     expect(MockService(true)).toBeUndefined();
@@ -102,7 +101,9 @@ describe('MockService', () => {
     // all methods should be defined as functions which return undefined.
     expect(mockedService.deepParentMethod).toEqual(jasmine.any(Function), 'deepParentMethod');
     expect(mockedService.deepParentMethod()).toBeUndefined('deepParentMethod()');
-    expect(mockedService.deepParentMethod.and.identity()).toBe('DeepParentClass.deepParentMethod');
+    expect(MockHelper.mockService<any>(mockedService, 'deepParentMethod').and.identity()).toBe(
+      'DeepParentClass.deepParentMethod'
+    );
   });
 
   it('should mock own and parent methods of a class', () => {
@@ -118,16 +119,18 @@ describe('MockService', () => {
     // all methods should be defined as functions which return undefined.
     expect(mockedService.deepParentMethod).toEqual(jasmine.any(Function), 'deepParentMethod');
     expect(mockedService.deepParentMethod()).toBeUndefined('deepParentMethod()');
-    expect(mockedService.deepParentMethod.and.identity()).toBe('ChildClass.deepParentMethod');
+    expect(MockHelper.mockService<any>(mockedService, 'deepParentMethod').and.identity()).toBe(
+      'ChildClass.deepParentMethod'
+    );
     expect(mockedService.parentMethod).toEqual(jasmine.any(Function), 'parentMethod');
     expect(mockedService.parentMethod()).toBeUndefined('parentMethod()');
-    expect(mockedService.parentMethod.and.identity()).toBe('ChildClass.parentMethod');
+    expect(MockHelper.mockService<any>(mockedService, 'parentMethod').and.identity()).toBe('ChildClass.parentMethod');
     expect(mockedService.overrideMe).toEqual(jasmine.any(Function), 'overrideMe');
     expect(mockedService.overrideMe()).toBeUndefined('overrideMe()');
-    expect(mockedService.overrideMe.and.identity()).toBe('ChildClass.overrideMe');
+    expect(MockHelper.mockService<any>(mockedService, 'overrideMe').and.identity()).toBe('ChildClass.overrideMe');
     expect(mockedService.childMethod).toEqual(jasmine.any(Function), 'childMethod');
     expect(mockedService.childMethod()).toBeUndefined('childMethod()');
-    expect(mockedService.childMethod.and.identity()).toBe('ChildClass.childMethod');
+    expect(MockHelper.mockService<any>(mockedService, 'childMethod').and.identity()).toBe('ChildClass.childMethod');
   });
 
   it('should mock an instance of a class as an object', () => {
@@ -231,5 +234,40 @@ describe('MockService', () => {
   it('mocks injection tokens as undefined', () => {
     const token1 = MockService(new InjectionToken('hello'));
     expect(token1).toBeUndefined();
+  });
+
+  it('mocks a class to an instance with proper types', () => {
+    class Test {
+      public readonly nameRead = 'read';
+
+      private name = 'test';
+
+      public get nameGet(): string {
+        return this.name;
+      }
+
+      public set nameSet(name: string) {
+        this.name = name;
+      }
+
+      public echo(): string {
+        return this.name;
+      }
+    }
+
+    const test = MockHelper.mockService(MockService(Test), {
+      echo: jasmine.createSpy().and.returnValue('fake1'),
+      fake: jasmine.createSpy().and.returnValue('fake2'),
+      nameGet: 'fake3',
+      nameRead: 'fake4',
+      nameSet: 'fake5',
+    });
+
+    expect(test).toEqual(jasmine.any(Test));
+    expect(test.echo()).toBe('fake1');
+    expect((test as any).fake()).toBe('fake2');
+    expect(test.nameGet).toBe('fake3');
+    expect(test.nameRead).toBe('fake4');
+    expect(test.nameSet).toBe('fake5');
   });
 });
