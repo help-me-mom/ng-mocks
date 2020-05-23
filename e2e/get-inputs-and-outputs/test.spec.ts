@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MockHelper } from '../../lib/mock-helper';
+import { ngMocks } from '../../lib/mock-helper';
 import { MockRender } from '../../lib/mock-render';
 
 import { Target2Directive, Target3Directive, TargetComponent, TargetModule } from './fixtures';
@@ -34,8 +34,8 @@ describe('get-inputs-and-outputs', () => {
 
     const componentElement = fixture.point;
     const component = fixture.point.componentInstance;
-    const directive2 = MockHelper.getDirectiveOrFail(componentElement, Target2Directive);
-    const directive3 = MockHelper.getDirectiveOrFail(componentElement, Target3Directive);
+    const directive2 = ngMocks.get(componentElement, Target2Directive);
+    const directive3 = ngMocks.get(componentElement, Target3Directive);
 
     expect(component.input).toEqual('1');
     params.output1.calls.reset();
@@ -54,21 +54,24 @@ describe('get-inputs-and-outputs', () => {
     expect(params.output3).toHaveBeenCalled();
 
     // a really simple wait that allows us to skip pain of knowing directives.
-    expect(MockHelper.getInputOrFail(componentElement, 'input1')).toEqual('1');
-    expect(MockHelper.getInputOrFail(componentElement, 'input2')).toEqual('2');
-    expect(MockHelper.getInputOrFail(componentElement, 'inputUnused')).toEqual(undefined);
-    expect(() => MockHelper.getInputOrFail(componentElement, 'inputUndefined')).toThrowError(
-      'Cannot find inputUndefined input via MockHelper.getInputOrFail'
+    expect(ngMocks.input(componentElement, 'input1')).toEqual('1');
+    expect(ngMocks.input(componentElement, 'input2')).toEqual('2');
+    expect(ngMocks.input(componentElement, 'inputUnused')).toEqual(undefined);
+    expect(() => ngMocks.input(componentElement, 'inputUndefined')).toThrowError(
+      'Cannot find inputUndefined input via ngMocks.input'
     );
-    expect(MockHelper.getInputOrFail(componentElement, 'input3')).toEqual('3');
+    expect(ngMocks.input(componentElement, 'input3')).toEqual('3');
     params.output1.calls.reset();
-    MockHelper.getOutputOrFail(componentElement, 'output1').emit();
+    ngMocks.output(componentElement, 'output1').emit();
     expect(params.output1).toHaveBeenCalled();
     params.output2.calls.reset();
-    MockHelper.getOutputOrFail(componentElement, 'output2').emit();
+    ngMocks.output(componentElement, 'output2').emit();
     expect(params.output2).toHaveBeenCalled();
     params.output3.calls.reset();
-    MockHelper.getOutputOrFail(componentElement, 'output3').emit();
+    ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
+    expect(() => ngMocks.output(componentElement, 'outputUndefined')).toThrowError(
+      'Cannot find outputUndefined input via ngMocks.output'
+    );
   });
 });

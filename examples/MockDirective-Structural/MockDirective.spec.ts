@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDirective, MockedDirective, MockHelper } from 'ng-mocks';
+import { MockDirective, MockedDirective, ngMocks } from 'ng-mocks';
 
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
@@ -25,10 +25,9 @@ describe('MockDirective', () => {
     // IMPORTANT: by default structural directives aren't rendered.
     // Because we can't automatically detect when and with which context they should be rendered.
     // Usually developer knows context and can render it manually with proper setup.
-    const mockedDirectiveInstance = MockHelper.findDirectiveOrFail(
-      fixture.debugElement,
+    const mockedDirectiveInstance = ngMocks.findInstance(fixture.debugElement, DependencyDirective) as MockedDirective<
       DependencyDirective
-    ) as MockedDirective<DependencyDirective>;
+    >;
 
     // now we assert that nothing has been rendered inside of the structural directive by default.
     expect(fixture.debugElement.nativeElement.innerText).not.toContain('content');

@@ -2,7 +2,7 @@
 
 import { InjectionToken } from '@angular/core';
 
-import { MockHelper } from '../mock-helper';
+import { ngMocks } from '../mock-helper';
 
 import { MockService } from './mock-service';
 
@@ -101,7 +101,7 @@ describe('MockService', () => {
     // all methods should be defined as functions which return undefined.
     expect(mockedService.deepParentMethod).toEqual(jasmine.any(Function), 'deepParentMethod');
     expect(mockedService.deepParentMethod()).toBeUndefined('deepParentMethod()');
-    expect(MockHelper.mockService<any>(mockedService, 'deepParentMethod').and.identity()).toBe(
+    expect(ngMocks.stub<any>(mockedService, 'deepParentMethod').and.identity()).toBe(
       'DeepParentClass.deepParentMethod'
     );
   });
@@ -119,18 +119,16 @@ describe('MockService', () => {
     // all methods should be defined as functions which return undefined.
     expect(mockedService.deepParentMethod).toEqual(jasmine.any(Function), 'deepParentMethod');
     expect(mockedService.deepParentMethod()).toBeUndefined('deepParentMethod()');
-    expect(MockHelper.mockService<any>(mockedService, 'deepParentMethod').and.identity()).toBe(
-      'ChildClass.deepParentMethod'
-    );
+    expect(ngMocks.stub<any>(mockedService, 'deepParentMethod').and.identity()).toBe('ChildClass.deepParentMethod');
     expect(mockedService.parentMethod).toEqual(jasmine.any(Function), 'parentMethod');
     expect(mockedService.parentMethod()).toBeUndefined('parentMethod()');
-    expect(MockHelper.mockService<any>(mockedService, 'parentMethod').and.identity()).toBe('ChildClass.parentMethod');
+    expect(ngMocks.stub<any>(mockedService, 'parentMethod').and.identity()).toBe('ChildClass.parentMethod');
     expect(mockedService.overrideMe).toEqual(jasmine.any(Function), 'overrideMe');
     expect(mockedService.overrideMe()).toBeUndefined('overrideMe()');
-    expect(MockHelper.mockService<any>(mockedService, 'overrideMe').and.identity()).toBe('ChildClass.overrideMe');
+    expect(ngMocks.stub<any>(mockedService, 'overrideMe').and.identity()).toBe('ChildClass.overrideMe');
     expect(mockedService.childMethod).toEqual(jasmine.any(Function), 'childMethod');
     expect(mockedService.childMethod()).toBeUndefined('childMethod()');
-    expect(MockHelper.mockService<any>(mockedService, 'childMethod').and.identity()).toBe('ChildClass.childMethod');
+    expect(ngMocks.stub<any>(mockedService, 'childMethod').and.identity()).toBe('ChildClass.childMethod');
   });
 
   it('should mock an instance of a class as an object', () => {
@@ -208,27 +206,27 @@ describe('MockService', () => {
     // Creating a mock on the setter.
     spyOnProperty(mock, 'name', 'set');
     mock.name = 'mock';
-    expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the method.
     spyOn(mock, 'nameMethod').and.returnValue('mock');
     expect(mock.nameMethod('mock')).toEqual('mock');
-    expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the method that doesn't exist.
-    MockHelper.mockService(mock, 'fakeMethod');
+    ngMocks.stub(mock, 'fakeMethod');
     spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
     expect((mock as any).fakeMethod('mock')).toEqual('mock');
-    expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the property that doesn't exist.
-    MockHelper.mockService(mock, 'fakeProp', 'get');
-    MockHelper.mockService(mock, 'fakeProp', 'set');
+    ngMocks.stub(mock, 'fakeProp', 'get');
+    ngMocks.stub(mock, 'fakeProp', 'set');
     spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
     spyOnProperty(mock as any, 'fakeProp', 'set');
     expect((mock as any).fakeProp).toEqual('mockProp');
     (mock as any).fakeProp = 'mockPropSet';
-    expect(MockHelper.mockService(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
+    expect(ngMocks.stub(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
   });
 
   it('mocks injection tokens as undefined', () => {
@@ -255,7 +253,7 @@ describe('MockService', () => {
       }
     }
 
-    const test = MockHelper.mockService(MockService(Test), {
+    const test = ngMocks.stub(MockService(Test), {
       echo: jasmine.createSpy().and.returnValue('fake1'),
       fake: jasmine.createSpy().and.returnValue('fake2'),
       nameGet: 'fake3',

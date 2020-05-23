@@ -25,6 +25,7 @@
     "quotemark": [true, "single"],
     "semicolon": [true, "always", "strict-bound-class-methods"],
     "strict-boolean-expressions": false,
+    "strict-comparisons": false,
     "trailing-comma": [true, { "esSpecCompliant": true }],
     "typedef": false,
     "variable-name": [true, "allow-leading-underscore"]

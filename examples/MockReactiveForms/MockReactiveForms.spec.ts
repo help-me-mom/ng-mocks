@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MockComponent, MockedComponent, MockHelper } from 'ng-mocks';
+import { MockComponent, MockedComponent, ngMocks } from 'ng-mocks';
 
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
@@ -21,12 +21,16 @@ describe('MockReactiveForms', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedReactiveFormComponent = MockHelper.findOrFail<MockedComponent<DependencyComponent>>(
+    const mockedReactiveFormComponent = ngMocks.find<MockedComponent<DependencyComponent>>(
       fixture.debugElement,
       'dependency-component-selector'
     ).componentInstance;
 
     mockedReactiveFormComponent.__simulateChange('foo');
     expect(component.formControl.value).toBe('foo');
+
+    spyOn(mockedReactiveFormComponent, 'writeValue');
+    component.formControl.setValue('bar');
+    expect(mockedReactiveFormComponent.writeValue).toHaveBeenCalledWith('bar');
   });
 });

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MockModule, MockRender } from 'ng-mocks';
+import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
@@ -29,11 +29,12 @@ describe('MockRender', () => {
       }
     );
 
-    // assert on some side effect
-    const componentInstance = fixture.point.componentInstance as TestedComponent;
-    componentInstance.trigger.emit('foo1');
-    expect(componentInstance.value1).toEqual('something1');
-    expect(componentInstance.value2).toEqual('check');
+    // ngMocks.input helps to get current value of an input on a related debugElement.
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something1');
+    expect(ngMocks.input(fixture.point, 'value2')).toEqual('check');
+
+    // ngMocks.output does the same with outputs.
+    ngMocks.output(fixture.point, 'trigger').emit('foo1');
     expect(spy).toHaveBeenCalledWith('foo1');
   });
 
@@ -47,11 +48,17 @@ describe('MockRender', () => {
       value1: 'something2',
     });
 
-    // assert on some side effect
-    const componentInstance = fixture.point.componentInstance; // it is not any, it is TestedComponent.
-    componentInstance.trigger.emit('foo2');
-    expect(componentInstance.value1).toEqual('something2');
-    expect(componentInstance.value2).toBeUndefined();
+    // ngMocks.input helps to get current value of an input on a related debugElement.
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something2');
+    expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
+
+    // ngMocks.output does the same with outputs.
+    ngMocks.output(fixture.point, 'trigger').emit('foo2');
     expect(spy).toHaveBeenCalledWith('foo2');
+
+    // checking that an updated value has been passed into testing component.
+    fixture.componentInstance.value1 = 'updated';
+    fixture.detectChanges();
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('updated');
   });
 });
