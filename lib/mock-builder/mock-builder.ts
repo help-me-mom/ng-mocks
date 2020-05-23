@@ -245,7 +245,15 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       if (config && config.dependency) {
         continue;
       }
-      providers.push(ngMocksUniverse.builder.get(def));
+      const mock = ngMocksUniverse.builder.get(def);
+      providers.push(
+        mock
+          ? mock
+          : {
+              provide: def,
+              useValue: undefined,
+            }
+      );
     }
 
     // Adding requested providers to test bed.
@@ -360,9 +368,11 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   public provide(def: Provider): this {
     for (const provider of flatten(def)) {
       const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+      const multi = typeof provider === 'object' && provider.provide && provider.multi;
       this.keepDef.provider.delete(provide);
       this.mockDef.provider.delete(provide);
-      this.providerDef.set(provide, provider);
+      const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
+      this.providerDef.set(provide, multi ? [...(Array.isArray(existing) ? existing : []), provider] : provider);
     }
     return this;
   }
