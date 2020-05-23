@@ -4,7 +4,6 @@ import { MockHelper } from '../mock-helper';
 
 import { MockService } from './mock-service';
 
-// tslint:disable:max-classes-per-file
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';
 
@@ -57,8 +56,6 @@ class GetterSetterMethodHuetod {
     return this.name;
   }
 }
-
-// tslint:enable:max-classes-per-file
 
 describe('MockService', () => {
   it('should convert boolean, number, string, null and undefined to undefined', () => {

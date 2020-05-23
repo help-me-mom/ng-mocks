@@ -1,6 +1,5 @@
-// tslint:disable:max-classes-per-file
-
 import { APP_ID, InjectionToken, NgModule } from '@angular/core';
+
 import { TargetComponent } from './fixtures.components';
 
 export const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');

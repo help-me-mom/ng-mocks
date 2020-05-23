@@ -1,9 +1,9 @@
 // tslint:disable:unified-signatures
 
-import { InjectionToken, ModuleWithProviders, NgModule, PipeTransform, Provider, Type } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, PipeTransform, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { flatten, isNgDef, isNgInjectionToken, NG_MOCKS } from '../common';
+import { flatten, isNgDef, isNgInjectionToken, NG_MOCKS, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';

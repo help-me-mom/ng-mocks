@@ -1,8 +1,8 @@
 /* tslint:disable:variable-name unified-signatures */
 
-import { Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { AbstractType, Type } from '../common';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
 
@@ -19,16 +19,24 @@ function nestedCheck<T>(result: T[], node: MockedDebugNode, callback: (node: Moc
 
 export const MockHelper: {
   find<T>(debugElement: MockedDebugElement, component: Type<T>): null | MockedDebugElement<T>;
+  find<T>(debugElement: MockedDebugElement, component: AbstractType<T>): null | MockedDebugElement<T>;
   find<T = any>(debugElement: MockedDebugElement, cssSelector: string): null | MockedDebugElement<T>;
   findAll<T>(debugElement: MockedDebugElement, component: Type<T>): Array<MockedDebugElement<T>>;
+  findAll<T>(debugElement: MockedDebugElement, component: AbstractType<T>): Array<MockedDebugElement<T>>;
   findAll<T = any>(debugElement: MockedDebugElement, cssSelector: string): Array<MockedDebugElement<T>>;
   findDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
+  findDirective<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): undefined | T;
   findDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+  findDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T;
   findDirectives<T>(debugNode: MockedDebugNode, directive: Type<T>): T[];
+  findDirectives<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T[];
   findOrFail<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;
+  findOrFail<T>(debugElement: MockedDebugElement, component: AbstractType<T>): MockedDebugElement<T>;
   findOrFail<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
   getDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
+  getDirective<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): undefined | T;
   getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+  getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T;
   mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
 } = {
   getDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T => {

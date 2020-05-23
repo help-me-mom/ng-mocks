@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { Injectable } from '@angular/core';
 
 @Injectable()

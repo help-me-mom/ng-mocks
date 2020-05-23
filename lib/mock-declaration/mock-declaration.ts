@@ -1,6 +1,4 @@
-import { Type } from '@angular/core';
-
-import { isNgDef } from '../common';
+import { isNgDef, Type } from '../common';
 import { MockComponent, MockedComponent } from '../mock-component';
 import { MockDirective, MockedDirective } from '../mock-directive';
 import { MockedPipe, MockPipe } from '../mock-pipe';

@@ -1,8 +1,9 @@
 // tslint:disable:unified-signatures
 
-import { Component, DebugElement, DebugNode, Provider, Type } from '@angular/core';
+import { Component, DebugElement, DebugNode, Provider } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
+import { Type } from '../common';
 import { directiveResolver } from '../common/reflect';
 
 // A5 and its TS 2.4 don't support Omit, that's why we need the magic below.

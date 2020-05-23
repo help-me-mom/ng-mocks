@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file */
-
 import { CommonModule } from '@angular/common';
 import {
   Component,

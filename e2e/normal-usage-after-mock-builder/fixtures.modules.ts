@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { NgModule } from '@angular/core';
 
 import { RealComponent, TargetComponent } from './fixtures.components';

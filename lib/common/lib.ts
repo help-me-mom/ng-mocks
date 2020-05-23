@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, PipeTransform, Type } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import { MockedComponent } from '../mock-component';
@@ -8,6 +8,13 @@ import { MockedPipe } from '../mock-pipe';
 
 import { ngMocksUniverse } from './ng-mocks-universe';
 import { jitReflector } from './reflect';
+
+// tslint:disable-next-line:interface-name
+export interface AbstractType<T> extends Function {
+  prototype: T;
+}
+
+export type Type<T> = new (...args: any[]) => T;
 
 export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
 

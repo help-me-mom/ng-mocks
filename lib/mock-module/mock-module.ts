@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ApplicationModule, ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
+import { ApplicationModule, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { flatten, getMockedNgDefOf, isNgDef, isNgModuleDefWithProviders, Mock, MockOf } from '../common';
+import { flatten, getMockedNgDefOf, isNgDef, isNgModuleDefWithProviders, Mock, MockOf, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';

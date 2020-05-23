@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

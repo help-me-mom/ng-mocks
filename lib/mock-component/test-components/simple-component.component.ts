@@ -8,7 +8,6 @@ export class BaseSimpleComponent {
   @Output() someOutput2: EventEmitter<string>;
 }
 
-/* tslint:disable:max-classes-per-file */
 @Component({
   exportAs: 'seeimple',
   selector: 'simple-component',
@@ -20,4 +19,3 @@ export class SimpleComponent extends BaseSimpleComponent {
   @HostBinding('class.someClass') @Input() someInput3: boolean;
   @Output() someOutput1: EventEmitter<string>;
 }
-/* tslint:enable:max-classes-per-file */

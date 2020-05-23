@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { EventEmitter } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
