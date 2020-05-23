@@ -212,7 +212,9 @@ export const mockServiceHelper: {
 } = ((window as any) || (global as any)).ngMocksMockServiceHelper;
 
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
-export function MockService<T extends {}>(service: T, mockNamePrefix?: string): any;
+export function MockService<T>(service: new (...args: any[]) => T, mockNamePrefix?: string): T;
+// tslint:disable-next-line:no-misused-new unified-signatures
+export function MockService<T = any>(service: object, mockNamePrefix?: string): T;
 export function MockService(service: any, mockNamePrefix?: string): any {
   // mocking all methods / properties of a class / object.
   let value: any;
@@ -228,7 +230,7 @@ export function MockService(service: any, mockNamePrefix?: string): any {
         ? localHelper.createMockFromPrototype(service.constructor.prototype)
         : {};
     for (const property of Object.keys(service)) {
-      const mock = MockService(service[property], `${mockNamePrefix ? mockNamePrefix : 'instance'}.${property}`);
+      const mock: any = MockService(service[property], `${mockNamePrefix ? mockNamePrefix : 'instance'}.${property}`);
       if (mock !== undefined) {
         value[property] = mock;
       }
