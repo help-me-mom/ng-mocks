@@ -187,7 +187,7 @@ export class Configuration implements KarmaTypescriptConfig {
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
         this.assertExtendable("exclude");
         this.assertExtendable("include");
-        this.stopOnFailure = this.karmaTypescriptConfig.stopOnFailure || true;
+        this.stopOnFailure = this.karmaTypescriptConfig.stopOnFailure !== false;
     }
 
     private configurePreprocessor() {
