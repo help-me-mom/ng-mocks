@@ -150,7 +150,7 @@ export class Compiler {
 
     private outputDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>, host?: ts.FormatDiagnosticsHost): void {
 
-        if (!diagnostics || diagnostics.length === 0) {
+        if (!diagnostics || diagnostics.length === 0 || !this.config.stopOnFailure) {
             return;
         }
 

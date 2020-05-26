@@ -14,6 +14,7 @@ export interface KarmaTypescriptConfig {
     reports?: Reports;
     transformPath?: (filepath: string) => string;
     tsconfig?: string;
+    stopOnFailure?: boolean;
 }
 
 export interface BundlerOptions {
