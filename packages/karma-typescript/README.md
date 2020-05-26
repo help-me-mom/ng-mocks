@@ -355,6 +355,10 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
   The directory of the `tsconfig.json` file will be used as the base path for the Typescript compiler, and if `karmaTypescriptConfig.tsconfig` isn't set, the `basePath` property of the Karma config will be used as the
   compiler base path instead.
 
+* **karmaTypescriptConfig.stopOnFailure** - Stop on any compiler error.<br/>
+  By default karma will stop when any typescript compile errors are encountered.<br/>
+  Setting this to false will allow test tobe run when typescript compile errors are present.
+
 Example of a full `karmaTypescriptConfig` configuration:
 
 ```javascript
@@ -431,7 +435,8 @@ karmaTypescriptConfig: {
     transformPath: function(filepath) {
         return filepath.replace(/\.(ts|tsx)$/, ".js");
     },
-    tsconfig: "./tsconfig.json"
+    tsconfig: "./tsconfig.json",
+    stopOnFailure: false
 }
 ```
 
