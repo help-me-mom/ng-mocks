@@ -106,7 +106,7 @@ export class Compiler {
 
             queued.callback({
                 ambientModuleNames,
-                hasError: this.errors.indexOf(queued.file.originalPath) !== -1,
+                hasError: this.config.stopOnFailure ? this.errors.indexOf(queued.file.originalPath) !== -1 : false,
                 isAmbientModule: ambientModuleNames && ambientModuleNames.length > 0,
                 isDeclarationFile: this.fileExtensionIs(sourceFile.fileName, ".d.ts"),
                 outputText: this.compiledFiles[queued.file.path],
@@ -150,7 +150,7 @@ export class Compiler {
 
     private outputDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>, host?: ts.FormatDiagnosticsHost): void {
 
-        if (!diagnostics || diagnostics.length === 0 || !this.config.stopOnFailure) {
+        if (!diagnostics || diagnostics.length === 0) {
             return;
         }
 
