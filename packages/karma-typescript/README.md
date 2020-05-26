@@ -357,7 +357,7 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
 
 * **karmaTypescriptConfig.stopOnFailure** - Stop on any compiler error.<br/>
   By default karma will stop when any typescript compile errors are encountered.<br/>
-  Setting this to false will allow test tobe run when typescript compile errors are present.
+  Setting this to false will allow tests to be run when typescript compile errors are present.
 
 Example of a full `karmaTypescriptConfig` configuration:
 
