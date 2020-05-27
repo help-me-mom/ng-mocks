@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent, MockedComponent, MockHelper, MockRender } from 'ng-mocks';
+import { MockComponent, MockedComponent, MockRender, ngMocks } from 'ng-mocks';
 
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
@@ -20,10 +20,9 @@ describe('MockComponent', () => {
 
   it('should send the correct value to the dependency component input', () => {
     // the same as fixture.debugElement.query(By.css('dependency-component-selector')).componentInstance
-    const mockedComponent = MockHelper.findOrFail<DependencyComponent>(
-      fixture.debugElement,
-      'dependency-component-selector'
-    ).componentInstance;
+    // but properly typed.
+    const mockedComponent = ngMocks.find<DependencyComponent>(fixture.debugElement, 'dependency-component-selector')
+      .componentInstance;
 
     // let's pretend Dependency Component (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked component so you can assert on it
@@ -36,7 +35,7 @@ describe('MockComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     spyOn(component, 'trigger');
-    const mockedComponent = MockHelper.findOrFail(fixture.debugElement, DependencyComponent).componentInstance;
+    const mockedComponent = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
@@ -81,8 +80,7 @@ describe('MockComponent', () => {
     mockedComponent.__render('something');
     localFixture.detectChanges();
 
-    const mockedNgTemplate = MockHelper.findOrFail(localFixture.debugElement, '[data-key="something"]').nativeElement
-      .innerHTML;
+    const mockedNgTemplate = ngMocks.find(localFixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });

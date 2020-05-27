@@ -27,7 +27,7 @@ Or you could use this to mock them out and have the ability to assert on their i
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent, MockedComponent, MockHelper, MockRender } from 'ng-mocks';
+import { MockComponent, MockedComponent, MockRender, ngMocks } from 'ng-mocks';
 
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
@@ -48,10 +48,9 @@ describe('MockComponent', () => {
 
   it('should send the correct value to the dependency component input', () => {
     // the same as fixture.debugElement.query(By.css('dependency-component-selector')).componentInstance
-    const mockedComponent = MockHelper.findOrFail<DependencyComponent>(
-      fixture.debugElement,
-      'dependency-component-selector'
-    ).componentInstance;
+    // but properly typed.
+    const mockedComponent = ngMocks.find<DependencyComponent>(fixture.debugElement, 'dependency-component-selector')
+      .componentInstance;
 
     // let's pretend Dependency Component (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked component so you can assert on it
@@ -64,7 +63,7 @@ describe('MockComponent', () => {
 
   it('should do something when the dependency component emits on its output', () => {
     spyOn(component, 'trigger');
-    const mockedComponent = MockHelper.findOrFail(fixture.debugElement, DependencyComponent).componentInstance;
+    const mockedComponent = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
@@ -109,8 +108,7 @@ describe('MockComponent', () => {
     mockedComponent.__render('something');
     localFixture.detectChanges();
 
-    const mockedNgTemplate = MockHelper.findOrFail(localFixture.debugElement, '[data-key="something"]').nativeElement
-      .innerHTML;
+    const mockedNgTemplate = ngMocks.find(localFixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });
@@ -127,7 +125,7 @@ describe('MockComponent', () => {
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDirective, MockHelper } from 'ng-mocks';
+import { MockDirective, ngMocks } from 'ng-mocks';
 
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
@@ -152,10 +150,7 @@ describe('MockDirective', () => {
 
     // let's pretend Dependency Directive (unmocked) has 'someInput' as an input
     // the input value will be passed into the mocked directive so you can assert on it
-    const mockedDirectiveInstance = MockHelper.getDirectiveOrFail(
-      MockHelper.findOrFail(fixture.debugElement, 'span'),
-      DependencyDirective
-    );
+    const mockedDirectiveInstance = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
 
     expect(mockedDirectiveInstance.someInput).toEqual('foo');
     // assert on some side effect
@@ -167,10 +162,7 @@ describe('MockDirective', () => {
 
     // again, let's pretend DependencyDirective has an output called 'someOutput'
     // emit on the output that MockDirective setup when generating the mock of Dependency Directive
-    const mockedDirectiveInstance = MockHelper.getDirectiveOrFail(
-      MockHelper.findOrFail(fixture.debugElement, 'span'),
-      DependencyDirective
-    );
+    const mockedDirectiveInstance = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
     mockedDirectiveInstance.someOutput.emit({
       payload: 'foo',
     }); // if you casted mockedDirective as the original component type then this is type safe
@@ -186,7 +178,7 @@ when assertions should be done on its nested elements.
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDirective, MockedDirective, MockHelper } from 'ng-mocks';
+import { MockDirective, MockedDirective, ngMocks } from 'ng-mocks';
 
 import { DependencyDirective } from './dependency.directive';
 import { TestedComponent } from './tested.component';
@@ -212,10 +204,9 @@ describe('MockDirective', () => {
     // IMPORTANT: by default structural directives aren't rendered.
     // Because we can't automatically detect when and with which context they should be rendered.
     // Usually developer knows context and can render it manually with proper setup.
-    const mockedDirectiveInstance = MockHelper.findDirectiveOrFail(
-      fixture.debugElement,
+    const mockedDirectiveInstance = ngMocks.findInstance(fixture.debugElement, DependencyDirective) as MockedDirective<
       DependencyDirective
-    ) as MockedDirective<DependencyDirective>;
+    >;
 
     // now we assert that nothing has been rendered inside of the structural directive by default.
     expect(fixture.debugElement.nativeElement.innerText).not.toContain('content');
@@ -244,7 +235,7 @@ Personally, I found the best thing to do for assertions is to override the trans
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockHelper, MockPipe } from 'ng-mocks';
+import { MockPipe, ngMocks } from 'ng-mocks';
 
 import { DependencyPipe } from './dependency.pipe';
 import { TestedComponent } from './tested.component';
@@ -268,7 +259,7 @@ describe('MockPipe', () => {
 
   describe('with transform override', () => {
     it('should return the result of the provided transform function', () => {
-      const pipeElement = MockHelper.findOrFail(fixture.debugElement, 'span');
+      const pipeElement = ngMocks.find(fixture.debugElement, 'span');
       expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
     });
   });
@@ -286,7 +277,7 @@ describe('MockPipe', () => {
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MockComponent, MockedComponent, MockHelper } from 'ng-mocks';
+import { MockComponent, MockedComponent, ngMocks } from 'ng-mocks';
 
 import { DependencyComponent } from './dependency.component';
 import { TestedComponent } from './tested.component';
@@ -307,13 +298,17 @@ describe('MockReactiveForms', () => {
   });
 
   it('should send the correct value to the dependency component input', () => {
-    const mockedReactiveFormComponent = MockHelper.findOrFail<MockedComponent<DependencyComponent>>(
+    const mockedReactiveFormComponent = ngMocks.find<MockedComponent<DependencyComponent>>(
       fixture.debugElement,
       'dependency-component-selector'
     ).componentInstance;
 
     mockedReactiveFormComponent.__simulateChange('foo');
     expect(component.formControl.value).toBe('foo');
+
+    spyOn(mockedReactiveFormComponent, 'writeValue');
+    component.formControl.setValue('bar');
+    expect(mockedReactiveFormComponent.writeValue).toHaveBeenCalledWith('bar');
   });
 });
 ```
@@ -373,13 +368,15 @@ Its type: `let fixture: MockedComponentFixture<ComponentToRender> = MockRender(C
 The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of any.
 
 If you want you can specify providers for the render passing them via the 3rd parameter.
-It is useful if you want to mock system tokens / services such as APP_INITIALIZER, DOCUMENT etc.
+It is useful if you want to mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
+
+And don't forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
 
 ### Usage Example
 
 ```typescript
 import { TestBed } from '@angular/core/testing';
-import { MockModule, MockRender } from 'ng-mocks';
+import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 import { DependencyModule } from './dependency.module';
 import { TestedComponent } from './tested.component';
@@ -409,11 +406,12 @@ describe('MockRender', () => {
       }
     );
 
-    // assert on some side effect
-    const componentInstance = fixture.point.componentInstance as TestedComponent;
-    componentInstance.trigger.emit('foo1');
-    expect(componentInstance.value1).toEqual('something1');
-    expect(componentInstance.value2).toEqual('check');
+    // ngMocks.input helps to get current value of an input on a related debugElement.
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something1');
+    expect(ngMocks.input(fixture.point, 'value2')).toEqual('check');
+
+    // ngMocks.output does the same with outputs.
+    ngMocks.output(fixture.point, 'trigger').emit('foo1');
     expect(spy).toHaveBeenCalledWith('foo1');
   });
 
@@ -427,94 +425,87 @@ describe('MockRender', () => {
       value1: 'something2',
     });
 
-    // assert on some side effect
-    const componentInstance = fixture.point.componentInstance; // it is not any, it is TestedComponent.
-    componentInstance.trigger.emit('foo2');
-    expect(componentInstance.value1).toEqual('something2');
-    expect(componentInstance.value2).toBeUndefined();
+    // ngMocks.input helps to get current value of an input on a related debugElement.
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something2');
+    expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
+
+    // ngMocks.output does the same with outputs.
+    ngMocks.output(fixture.point, 'trigger').emit('foo2');
     expect(spy).toHaveBeenCalledWith('foo2');
+
+    // checking that an updated value has been passed into testing component.
+    fixture.componentInstance.value1 = 'updated';
+    fixture.detectChanges();
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('updated');
   });
 });
 ```
 
-## MockHelper
+## ngMocks
 
-MockHelper provides functions to get attribute and structural directives from an element, find components and mock objects.
+ngMocks provides functions to get attribute and structural directives from an element, find components and mock objects.
 
-- getDirective
-- getDirectiveOrFail
-- findDirective
-- findDirectiveOrFail
-- findDirectives
+- ngMocks.get(debugElement, directive, notFoundValue?)
+- ngMocks.findInstance(debugElement, directive, notFoundValue?)
+- ngMocks.findInstances(debugElement, directive)
 
-* find
-* findOrFail
-* findAll
+* ngMocks.find(debugElement, component, notFoundValue?)
+* ngMocks.findAll(debugElement, component)
 
-- getInput
-- getInputOrFail
-- getOutput
-- getOutputOrFail
+- ngMocks.input(debugElement, input, notFoundValue?)
+- ngMocks.output(debugElement, output, notFoundValue?)
 
-* mockService
+* ngMocks.stub(service, method)
+* ngMocks.stub(service, methods)
+* ngMocks.stub(service, property, 'get' | 'set')
 
 ```typescript
 // returns attribute or structural directive
 // which belongs to current element.
-const directive: Directive | undefined = MockHelper.getDirective(fixture.debugElement, Directive);
+const directive: Directive = ngMocks.get(fixture.debugElement, Directive);
 
 // returns the first found attribute or structural directive
 // which belongs to current element or any child.
-const directive: Directive | undefined = MockHelper.findDirective(fixture.debugElement, Directive);
+const directive: Directive = ngMocks.findInstance(fixture.debugElement, Directive);
 
 // returns an array of all found attribute or structural directives
 // which belong to current element and all its child.
-const directives: Array<Directive> = MockHelper.findDirectives(fixture.debugElement, Directive);
+const directives: Array<Directive> = ngMocks.findInstances(fixture.debugElement, Directive);
 
 // returns a found DebugElement which belongs to the Component
-// with the correctly typed componentInstance or null.
-const component: MockedDebugElement<Component> | undefined = MockHelper.find(fixture.debugElement, Component);
+// with the correctly typed componentInstance.
+const component: MockedDebugElement<Component> = ngMocks.find(fixture.debugElement, Component);
 
 // returns an array of found DebugElements which belong to the Component
 // with the correctly typed componentInstance.
-const components: Array<MockedDebugElement<Component>> = MockHelper.findAll(fixture.debugElement, Component);
+const components: Array<MockedDebugElement<Component>> = ngMocks.findAll(fixture.debugElement, Component);
 
 // returns a found DebugElement which belongs to a css selector.
-const component: MockedDebugElement<Component> | undefined = MockHelper.find(fixture.debugElement, 'div.container');
+const component: MockedDebugElement<Component> = ngMocks.find(fixture.debugElement, 'div.container');
 
 // returns an array of found DebugElements which belong to a css selector.
-const components: Array<MockedDebugElement<Component>> = MockHelper.findAll(fixture.debugElement, 'div.item');
-```
-
-```typescript
-// throws an error if the desired element wasn't found.
-const directive: Directive = MockHelper.getDirectiveOrFail(fixture.debugElement, Directive);
-const directive: Directive = MockHelper.findDirectiveOrFail(fixture.debugElement, Directive);
-const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.debugElement, Component);
-const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.debugElement, 'div.container');
+const components: Array<MockedDebugElement<Component>> = ngMocks.findAll(fixture.debugElement, 'div.item');
 ```
 
 To avoid pain of knowing a name of a component or a directive what an input or an output belongs to, you can use next functions:
 
 ```typescript
-const inputValue: number | undefined = MockHelper.getInput(debugElement, 'param1');
-const inputValue: number = MockHelper.getInputOrFail(debugElement, 'param1');
-const outputValue: EventEmitter<any> | undefined = MockHelper.getOutput(debugElement, 'update');
-const outputValue: EventEmitter<any> = MockHelper.getOutputOrFail(debugElement, 'update');
+const inputValue: number = ngMocks.input(debugElement, 'param1');
+const outputValue: EventEmitter<any> = ngMocks.output(debugElement, 'update');
 ```
 
 In case if we want to mock methods / properties of a service / provider.
 
 ```typescript
 // returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.
-const spy: Spy = MockHelper.mockService(instance, methodName);
+const spy: Function = ngMocks.stub(instance, methodName);
 
 // returns a mocked function / spy of the property. If the property hasn't been mocked yet - mocks it.
-const spyGet: Spy = MockHelper.mockService(instance, propertyName, 'get');
-const spySet: Spy = MockHelper.mockService(instance, propertyName, 'set');
+const spyGet: Function = ngMocks.stub(instance, propertyName, 'get');
+const spySet: Function = ngMocks.stub(instance, propertyName, 'set');
 
 // or add / override properties and methods.
-MockHelper.mockService(instance, {
+ngMocks.stub(instance, {
   newPropert: true,
   existingMethod: jasmine.createSpy(),
 });
@@ -533,27 +524,27 @@ describe('MockService', () => {
     // Creating a mock on the setter.
     spyOnProperty(mock, 'name', 'set');
     mock.name = 'mock';
-    expect(MockHelper.mockService(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'name', 'set')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the method.
     spyOn(mock, 'nameMethod').and.returnValue('mock');
     expect(mock.nameMethod('mock')).toEqual('mock');
-    expect(MockHelper.mockService(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the method that doesn't exist.
-    MockHelper.mockService(mock, 'fakeMethod');
+    ngMocks.stub(mock, 'fakeMethod');
     spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
     expect((mock as any).fakeMethod('mock')).toEqual('mock');
-    expect(MockHelper.mockService(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
+    expect(ngMocks.stub(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the property that doesn't exist.
-    MockHelper.mockService(mock, 'fakeProp', 'get');
-    MockHelper.mockService(mock, 'fakeProp', 'set');
+    ngMocks.stub(mock, 'fakeProp', 'get');
+    ngMocks.stub(mock, 'fakeProp', 'set');
     spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
     spyOnProperty(mock as any, 'fakeProp', 'set');
     expect((mock as any).fakeProp).toEqual('mockProp');
     (mock as any).fakeProp = 'mockPropSet';
-    expect(MockHelper.mockService(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
+    expect(ngMocks.stub(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
   });
 });
 ```

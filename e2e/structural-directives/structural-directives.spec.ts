@@ -2,7 +2,7 @@ import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MockDirective, MockedDirective } from '../../lib/mock-directive';
-import { MockHelper } from '../../lib/mock-helper';
+import { ngMocks } from '../../lib/mock-helper';
 import { MockRender } from '../../lib/mock-render';
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
 import { CustomNgForWithoutOfDirective } from './custom-ng-for-without-of.directive';
@@ -96,12 +96,13 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // we need to render mocked structural directives manually
-    MockHelper.findDirectives(fixture.debugElement, CustomNgIfDirective).forEach(
-      (item: MockedDirective<CustomNgIfDirective>) =>
+    ngMocks
+      .findInstances(fixture.debugElement, CustomNgIfDirective)
+      .forEach((item: MockedDirective<CustomNgIfDirective>) =>
         item.__render(undefined, {
           fromDirective: undefined,
         })
-    );
+      );
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
@@ -109,7 +110,7 @@ describe('structural-directive-as-ng-for:mock', () => {
 
     // Extracting mock.
     const debugElement = fixture.debugElement.query(By.css('div'));
-    const directive = MockHelper.getDirective(debugElement, MockDirective(CustomNgIfDirective));
+    const directive = ngMocks.get(debugElement, MockDirective(CustomNgIfDirective));
     expect(directive).toBeTruthy();
     if (!directive) {
       return;
@@ -148,10 +149,9 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // we need to render mocked structural directives manually
-    MockHelper.findDirectives(
-      fixture.debugElement,
-      CustomNgForWithOfDirective
-    ).forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
+    ngMocks
+      .findInstances(fixture.debugElement, CustomNgForWithOfDirective)
+      .forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
@@ -161,7 +161,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     expect(debugElement).toBeTruthy();
 
     // Extracting mock.
-    const directive = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithOfDirective));
+    const directive = ngMocks.get(debugElement, MockDirective(CustomNgForWithOfDirective));
     expect(directive).toBeTruthy();
     if (!directive) {
       return;
@@ -204,10 +204,9 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // we need to render mocked structural directives manually
-    MockHelper.findDirectives(
-      fixture.debugElement,
-      CustomNgForWithoutOfDirective
-    ).forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
+    ngMocks
+      .findInstances(fixture.debugElement, CustomNgForWithoutOfDirective)
+      .forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
@@ -217,7 +216,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     expect(debugElement).toBeTruthy();
 
     // Extracting mock.
-    const directive = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithoutOfDirective));
+    const directive = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
     expect(directive).toBeTruthy();
     if (!directive) {
       return;
@@ -269,30 +268,22 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // we need to render mocked structural directives manually
-    MockHelper.findDirectives(
-      fixture.debugElement,
-      CustomNgForWithOfDirective
-    ).forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
-    MockHelper.findDirectives(
-      fixture.debugElement,
-      CustomNgForWithoutOfDirective
-    ).forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
+    ngMocks
+      .findInstances(fixture.debugElement, CustomNgForWithOfDirective)
+      .forEach((item: MockedDirective<CustomNgForWithOfDirective>) => item.__render());
+    ngMocks
+      .findInstances(fixture.debugElement, CustomNgForWithoutOfDirective)
+      .forEach((item: MockedDirective<CustomNgForWithoutOfDirective>) => item.__render());
     fixture.detectChanges();
 
     // Looking for first directive.
     debugElement = fixture.debugElement.query(By.css('[data-type="node-1"]'));
-    mockedDirective = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithoutOfDirective));
-    expect(mockedDirective).toBeTruthy();
-    if (mockedDirective) {
-      expect(mockedDirective.setItems).toEqual(['string1', 'string2', 'string3']);
-    }
+    mockedDirective = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
+    expect(mockedDirective.setItems).toEqual(['string1', 'string2', 'string3']);
 
     // Looking for second directive.
     debugElement = fixture.debugElement.query(By.css('[data-type="node-2"]'));
-    mockedDirective = MockHelper.getDirective(debugElement, MockDirective(CustomNgForWithoutOfDirective));
-    expect(mockedDirective).toBeTruthy();
-    if (mockedDirective) {
-      expect(mockedDirective.setItems).toEqual(['string4', 'string5', 'string6']);
-    }
+    mockedDirective = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
+    expect(mockedDirective.setItems).toEqual(['string4', 'string5', 'string6']);
   });
 });

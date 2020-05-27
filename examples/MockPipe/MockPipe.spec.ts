@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockHelper, MockPipe } from 'ng-mocks';
+import { MockPipe, ngMocks } from 'ng-mocks';
 
 import { DependencyPipe } from './dependency.pipe';
 import { TestedComponent } from './tested.component';
@@ -23,7 +23,7 @@ describe('MockPipe', () => {
 
   describe('with transform override', () => {
     it('should return the result of the provided transform function', () => {
-      const pipeElement = MockHelper.findOrFail(fixture.debugElement, 'span');
+      const pipeElement = ngMocks.find(fixture.debugElement, 'span');
       expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
     });
   });

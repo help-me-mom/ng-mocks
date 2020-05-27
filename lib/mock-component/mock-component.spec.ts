@@ -16,7 +16,7 @@ import { By } from '@angular/platform-browser';
 
 import { staticTrue } from '../../tests';
 import { MockedDirective } from '../mock-directive';
-import { MockHelper } from '../mock-helper';
+import { ngMocks } from '../mock-helper';
 
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { ChildComponent } from './test-components/child-component.component';
@@ -166,7 +166,7 @@ describe('MockComponent', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedComponent = MockHelper.findDirective(fixture.debugElement, GetterSetterComponent) as MockedDirective<
+    const mockedComponent = ngMocks.findInstance(fixture.debugElement, GetterSetterComponent) as MockedDirective<
       GetterSetterComponent
     >;
 

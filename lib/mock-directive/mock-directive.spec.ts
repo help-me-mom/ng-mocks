@@ -18,7 +18,7 @@ import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { staticFalse } from '../../tests';
-import { MockHelper } from '../mock-helper';
+import { ngMocks } from '../mock-helper';
 
 import { MockDirective, MockedDirective } from './mock-directive';
 
@@ -142,10 +142,9 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
-    const mockedDirective = MockHelper.findDirective(
-      fixture.debugElement,
+    const mockedDirective = ngMocks.findInstance(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<
       ExampleStructuralDirective
-    ) as MockedDirective<ExampleStructuralDirective>;
+    >;
 
     // structural directives should be rendered first.
     mockedDirective.__render();
@@ -168,10 +167,9 @@ describe('MockDirective', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedDirective = MockHelper.findDirective(
-      fixture.debugElement,
+    const mockedDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
       GettersAndSettersDirective
-    ) as MockedDirective<GettersAndSettersDirective>;
+    >;
 
     expect(mockedDirective.normalMethod).toBeDefined();
     expect(mockedDirective.myGetter).not.toBeDefined();
