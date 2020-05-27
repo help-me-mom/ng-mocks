@@ -451,7 +451,12 @@ MockHelper provides functions to get attribute and structural directives from an
 * findOrFail
 * findAll
 
-- mockService
+- getInput
+- getInputOrFail
+- getOutput
+- getOutputOrFail
+
+* mockService
 
 ```typescript
 // returns attribute or structural directive
@@ -489,6 +494,15 @@ const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.d
 const component: MockedDebugElement<Component> = MockHelper.findOrFail(fixture.debugElement, 'div.container');
 ```
 
+To avoid pain of knowing a name of a component or a directive what an input or an output belongs to, you can use next functions:
+
+```typescript
+const inputValue: number | undefined = MockHelper.getInput(debugElement, 'param1');
+const inputValue: number = MockHelper.getInputOrFail(debugElement, 'param1');
+const outputValue: EventEmitter<any> | undefined = MockHelper.getOutput(debugElement, 'update');
+const outputValue: EventEmitter<any> = MockHelper.getOutputOrFail(debugElement, 'update');
+```
+
 In case if we want to mock methods / properties of a service / provider.
 
 ```typescript
@@ -498,6 +512,12 @@ const spy: Spy = MockHelper.mockService(instance, methodName);
 // returns a mocked function / spy of the property. If the property hasn't been mocked yet - mocks it.
 const spyGet: Spy = MockHelper.mockService(instance, propertyName, 'get');
 const spySet: Spy = MockHelper.mockService(instance, propertyName, 'set');
+
+// or add / override properties and methods.
+MockHelper.mockService(instance, {
+  newPropert: true,
+  existingMethod: jasmine.createSpy(),
+});
 ```
 
 ```typescript

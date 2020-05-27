@@ -1,8 +1,9 @@
 /* tslint:disable:variable-name unified-signatures */
 
-import { Type } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { directiveResolver } from '../common/reflect';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
 
@@ -29,13 +30,106 @@ export const MockHelper: {
   findOrFail<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
   getDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
   getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+  getInput<T = any>(debugNode: MockedDebugNode, input: string): undefined | T;
+  getInputOrFail<T = any>(debugNode: MockedDebugNode, input: string): T;
+  getOutput<T = any>(debugNode: MockedDebugNode, output: string): undefined | EventEmitter<T>;
+  getOutputOrFail<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
   mockService<I extends object, O extends object>(instance: I, overrides: O): I & O;
   mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
 } = {
+  getInput: (debugNode: MockedDebugNode, input: string): any => {
+    for (const token of debugNode.providerTokens) {
+      const { inputs } = directiveResolver.resolve(token);
+      if (!inputs) {
+        continue;
+      }
+      for (const inputDef of inputs) {
+        const [prop = '', alias = ''] = inputDef.split(':', 2).map(v => v.trim());
+        if (!prop) {
+          continue;
+        }
+        if (!alias && prop !== input) {
+          continue;
+        }
+        if (alias !== input) {
+          continue;
+        }
+        const directive: any = MockHelper.getDirective(debugNode, token);
+        if (!directive) {
+          continue;
+        }
+        return directive[prop];
+      }
+    }
+  },
+
+  getInputOrFail: (debugNode: MockedDebugNode, input: string): any => {
+    // for inputs with a value of undefined it's hard to detect if it exists or doesn't.
+    // therefore we have copy-paste until best times when someone combines them correctly together.
+    for (const token of debugNode.providerTokens) {
+      const { inputs } = directiveResolver.resolve(token);
+      if (!inputs) {
+        continue;
+      }
+      for (const inputDef of inputs) {
+        const [prop = '', alias = ''] = inputDef.split(':', 2).map(v => v.trim());
+        if (!prop) {
+          continue;
+        }
+        if (!alias && prop !== input) {
+          continue;
+        }
+        if (alias !== input) {
+          continue;
+        }
+        const directive: any = MockHelper.getDirective(debugNode, token);
+        if (!directive) {
+          continue;
+        }
+        return directive[prop];
+      }
+    }
+    throw new Error(`Cannot find ${input} input via MockHelper.getInputOrFail`);
+  },
+
+  getOutput: (debugNode: MockedDebugNode, output: string): any => {
+    for (const token of debugNode.providerTokens) {
+      const { outputs } = directiveResolver.resolve(token);
+      if (!outputs) {
+        continue;
+      }
+      for (const outputDef of outputs) {
+        const [prop = '', alias = ''] = outputDef.split(':', 2).map(v => v.trim());
+        if (!prop) {
+          continue;
+        }
+        if (!alias && prop !== output) {
+          continue;
+        }
+        if (alias !== output) {
+          continue;
+        }
+        const directive: any = MockHelper.getDirective(debugNode, token);
+        if (!directive) {
+          continue;
+        }
+        return directive[prop];
+      }
+    }
+  },
+
+  getOutputOrFail: (debugNode: MockedDebugNode, output: string): any => {
+    const result = MockHelper.getOutput(debugNode, output);
+    if (!result) {
+      throw new Error(`Cannot find ${output} output via MockHelper.getOutputOrFail`);
+    }
+    return result;
+  },
+
   getDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T => {
     const result = MockHelper.getDirective(debugNode, directive);
     if (!result) {
-      throw new Error(`Cannot find a directive via MockHelper.getDirectiveOrFail`);
+      throw new Error(`Cannot find ${directive.name} directive via MockHelper.getDirectiveOrFail`);
     }
     return result;
   },
@@ -72,7 +166,7 @@ export const MockHelper: {
   findDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T => {
     const result = MockHelper.findDirective(debugNode, directive);
     if (!result) {
-      throw new Error(`Cannot find a directive via MockHelper.findDirectiveOrFail`);
+      throw new Error(`Cannot find ${directive.name} directive via MockHelper.findDirectiveOrFail`);
     }
     return result;
   },
