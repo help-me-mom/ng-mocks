@@ -1,3 +1,4 @@
+import { core } from '@angular/compiler';
 import { Directive, ElementRef, forwardRef, Optional, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 
 import { MockControlValueAccessor, MockOf } from '../common';
@@ -34,7 +35,15 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return cacheHit as Type<MockedDirective<TDirective>>;
   }
 
-  const { selector, exportAs, inputs, outputs, queries } = directiveResolver.resolve(directive);
+  let meta: core.Directive | undefined;
+  if (!meta) {
+    try {
+      meta = directiveResolver.resolve(directive);
+    } catch (e) {
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+  }
+  const { selector, exportAs, inputs, outputs, queries } = meta;
 
   const options: Directive = {
     exportAs,

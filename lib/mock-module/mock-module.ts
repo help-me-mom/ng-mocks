@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { core } from '@angular/compiler';
 import { ModuleWithProviders, NgModule, Provider, Type } from '@angular/core';
 
 import { Mock, MockOf } from '../common';
@@ -121,7 +122,17 @@ const NEVER_MOCK: Array<Type<any>> = [CommonModule];
 
 function MockIt(module: Type<any>): NgModule {
   const mockedModule: NgModule = {};
-  const { declarations = [], entryComponents = [], imports = [], providers = [] } = ngModuleResolver.resolve(module);
+
+  let meta: core.NgModule | undefined;
+  if (!meta) {
+    try {
+      meta = ngModuleResolver.resolve(module);
+    } catch (e) {
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+  }
+
+  const { declarations = [], entryComponents = [], imports = [], providers = [] } = meta;
 
   if (imports.length) {
     mockedModule.imports = flatten(imports).map((instance: Type<any>) => {

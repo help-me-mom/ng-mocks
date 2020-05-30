@@ -1,5 +1,6 @@
 // tslint:disable:unified-signatures
 
+import { core } from '@angular/compiler';
 import { Component, DebugElement, DebugNode, Provider, Type } from '@angular/core';
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
@@ -75,7 +76,16 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   if (typeof template === 'string') {
     mockedTemplate = template;
   } else {
-    const { inputs, outputs, selector } = directiveResolver.resolve(template);
+    let meta: core.Directive | undefined;
+    if (!meta) {
+      try {
+        meta = directiveResolver.resolve(template);
+      } catch (e) {
+        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+      }
+    }
+
+    const { inputs, outputs, selector } = meta;
     mockedTemplate += `<${selector}`;
     if (inputs) {
       inputs.forEach((definition: string) => {
