@@ -39,7 +39,15 @@ export function MockComponent<TComponent>(
     return cacheHit as Type<MockedComponent<TComponent>>;
   }
 
-  const { exportAs, inputs, outputs, queries, selector } = metaData || directiveResolver.resolve(component);
+  let meta: core.Directive | undefined = metaData;
+  if (!meta) {
+    try {
+      meta = directiveResolver.resolve(component);
+    } catch (e) {
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+  }
+  const { exportAs, inputs, outputs, queries, selector } = meta;
 
   let template = `<ng-content></ng-content>`;
   const viewChildRefs = new Map<string, string>();

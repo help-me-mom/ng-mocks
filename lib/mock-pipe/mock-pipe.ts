@@ -1,3 +1,4 @@
+import { core } from '@angular/compiler';
 import { Pipe, PipeTransform, Type } from '@angular/core';
 
 import { Mock, MockOf } from '../common';
@@ -14,7 +15,16 @@ export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
   transform: TPipe['transform'] = defaultTransform
 ): Type<MockedPipe<TPipe>> {
-  const { name } = pipeResolver.resolve(pipe);
+  let meta: core.Pipe | undefined;
+  if (!meta) {
+    try {
+      meta = pipeResolver.resolve(pipe);
+    } catch (e) {
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+  }
+
+  const { name } = meta;
 
   const options: Pipe = {
     name,

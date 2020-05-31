@@ -1,5 +1,6 @@
 /* tslint:disable:variable-name unified-signatures */
 
+import { core } from '@angular/compiler';
 import { EventEmitter, Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -196,7 +197,16 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
-      const { inputs } = directiveResolver.resolve(token);
+      let meta: core.Directive | undefined;
+      if (!meta) {
+        try {
+          meta = directiveResolver.resolve(token);
+        } catch (e) {
+          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+        }
+      }
+
+      const { inputs } = meta;
       if (!inputs) {
         continue;
       }
@@ -230,7 +240,16 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
-      const { outputs } = directiveResolver.resolve(token);
+      let meta: core.Directive | undefined;
+      if (!meta) {
+        try {
+          meta = directiveResolver.resolve(token);
+        } catch (e) {
+          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+        }
+      }
+
+      const { outputs } = meta;
       if (!outputs) {
         continue;
       }
