@@ -10,6 +10,8 @@ Helper function for creating angular mocks for test.
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
 Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
+> You can use it with either Jest or Jasmine.
+
 ## MockComponent(s)
 
 - Mocked component with the same selector
