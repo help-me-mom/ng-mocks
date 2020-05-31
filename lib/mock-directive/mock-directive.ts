@@ -1,3 +1,4 @@
+import { core } from '@angular/compiler';
 import { Directive, ElementRef, forwardRef, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -43,7 +44,15 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return ngMocksUniverse.cache.get(directive);
   }
 
-  const { selector, exportAs, inputs, outputs, queries } = directiveResolver.resolve(directive);
+  let meta: core.Directive | undefined;
+  if (!meta) {
+    try {
+      meta = directiveResolver.resolve(directive);
+    } catch (e) {
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+  }
+  const { selector, exportAs, inputs, outputs, queries } = meta;
 
   const options: Directive = {
     exportAs,

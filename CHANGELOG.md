@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.5.0"></a>
+# [9.5.0](https://github.com/ike18t/ng-mocks/compare/v9.4.0...v9.5.0) (2020-05-31)
+
+
+### Bug Fixes
+
+* ngMocks instead of MockHelper ([1db914c](https://github.com/ike18t/ng-mocks/commit/1db914c)), closes [#131](https://github.com/ike18t/ng-mocks/issues/131)
+* throw a human readable error during resolve ([284e848](https://github.com/ike18t/ng-mocks/commit/284e848)), closes [#133](https://github.com/ike18t/ng-mocks/issues/133)
+
+
+### Features
+
+* ease of getting inputs and outputs ([af9a846](https://github.com/ike18t/ng-mocks/commit/af9a846)), closes [#129](https://github.com/ike18t/ng-mocks/issues/129)
+* mock-service is typed and supports overrides ([805e37b](https://github.com/ike18t/ng-mocks/commit/805e37b)), closes [#122](https://github.com/ike18t/ng-mocks/issues/122)
+
+
+
 <a name="9.4.0"></a>
 # [9.4.0](https://github.com/ike18t/ng-mocks/compare/v9.3.0...v9.4.0) (2020-05-17)
 

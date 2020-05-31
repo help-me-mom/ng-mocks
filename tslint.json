@@ -18,6 +18,7 @@
     "no-focused-tests": true,
     "no-implicit-dependencies": [true, "dev", ["ng-mocks"]],
     "no-inferred-empty-object-type": false,
+    "no-magic-numbers": false,
     "no-submodule-imports": false,
     "no-unbound-method": false,
     "no-unsafe-any": false,

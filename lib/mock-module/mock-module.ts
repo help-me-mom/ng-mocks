@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { core } from '@angular/compiler';
 import { ApplicationModule, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
@@ -102,7 +103,16 @@ export function MockModule(module: any): any {
   }
 
   if (!mockModule) {
-    const [changed, ngModuleDef] = MockNgModuleDef(ngModuleResolver.resolve(ngModule), ngModule);
+    let meta: core.NgModule | undefined;
+    if (!meta) {
+      try {
+        meta = ngModuleResolver.resolve(ngModule);
+      } catch (e) {
+        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+      }
+    }
+
+    const [changed, ngModuleDef] = MockNgModuleDef(meta, ngModule);
     if (changed) {
       mockModuleDef = ngModuleDef;
     }
