@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "npm run clean && tsc",
-    "build:all": "npm run lint && npm run test && npm run build",
+    "build:all": "npm run lint && npm run build && npm run test",
     "i:a": "npm run i:a5 && npm run i:a6 && npm run i:a7 && npm run i:a8 && npm run i:a9f && npm run i:a9t",
     "i:a5": "cd e2e/angular5 && npm install && npm run postinstall",
     "i:a6": "cd e2e/angular6 && npm install && npm run postinstall",

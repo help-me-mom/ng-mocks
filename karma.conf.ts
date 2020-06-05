@@ -4,12 +4,12 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 module.exports = (config: any) => {
   config.set({
     autoWatch: false,
-    browsers: ['ChromeHeadlessNoSandbox'],
+    browsers: ['ChromeCi'],
     colors: true,
     customLaunchers: {
-      ChromeHeadlessNoSandbox: {
+      ChromeCi: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox'],
+        flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
       },
     },
     files: [
