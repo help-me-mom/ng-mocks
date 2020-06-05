@@ -27,4 +27,5 @@ do
   npm run build:all
 done
 echo Testing complete
+npm run e2e
 npm install

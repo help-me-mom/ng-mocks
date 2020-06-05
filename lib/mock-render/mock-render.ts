@@ -126,6 +126,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   // Soft reset of TestBed.
   (getTestBed() as any)._instantiated = false;
   (getTestBed() as any)._moduleFactory = undefined;
+  (getTestBed() as any)._testModuleRef = null;
 
   // Injection of our template.
   TestBed.configureTestingModule({
