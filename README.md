@@ -571,7 +571,7 @@ import 'ng-mocks/dist/jest';
 ## Other examples of tests
 
 More detailed examples can be found in
-[e2e](https://github.com/ike18t/ng-mocks/tree/master/e2e)
+[tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 and in
 [examples](https://github.com/ike18t/ng-mocks/tree/master/examples)
 directories in the repo.
