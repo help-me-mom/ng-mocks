@@ -15,7 +15,7 @@ describe('context-with-directives:real', () => {
       .then(done);
   });
 
-  it('renders everything right', async () => {
+  it('renders everything right', () => {
     const fixture = MockRender(`
       <custom-root>
         <div>header</div>

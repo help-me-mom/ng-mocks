@@ -1,6 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MockModule, MockRender } from 'ng-mocks';
+import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 import { TargetComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
@@ -16,7 +15,7 @@ describe('spies:real', () => {
 
   it('should render', () => {
     const fixture = MockRender(TargetComponent);
-    const component = fixture.debugElement.query(By.directive(TargetComponent)).componentInstance as TargetComponent;
+    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
     expect(component).toBeDefined();
     expect(component.echo()).toEqual('TargetComponent');
   });
@@ -41,7 +40,7 @@ describe('spies:manual-mock', () => {
 
   it('should get manually mocked service', inject([TargetService], (targetService: TargetService) => {
     const fixture = MockRender(TargetComponent);
-    const component = fixture.debugElement.query(By.directive(TargetComponent)).componentInstance as TargetComponent;
+    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
     expect(component).toBeDefined();
     expect(targetService.echo).toHaveBeenCalledTimes(1);
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
@@ -60,11 +59,11 @@ describe('spies:auto-mock', () => {
 
   it('should get already mocked service', inject([TargetService], (targetService: TargetService) => {
     const fixture = MockRender(TargetComponent);
-    const component = fixture.debugElement.query(By.directive(TargetComponent)).componentInstance as TargetComponent;
+    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
     expect(component).toBeDefined();
     expect(targetService.echo).toHaveBeenCalledTimes(1);
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
-    (targetService.echo as jasmine.Spy).and.returnValue('faked');
+    ngMocks.stub<jasmine.Spy>(targetService, 'echo').and.returnValue('faked');
     expect(component.echo()).toEqual('faked');
     expect(targetService.echo).toHaveBeenCalledTimes(2);
   }));

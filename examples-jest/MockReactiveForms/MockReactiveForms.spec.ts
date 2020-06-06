@@ -31,6 +31,6 @@ describe('MockReactiveForms', () => {
 
     spyOn(mockedReactiveFormComponent, 'writeValue');
     component.formControl.setValue('bar');
-    expect(mockedReactiveFormComponent.writeValue as any).toHaveBeenCalledWith('bar');
+    expect(mockedReactiveFormComponent.writeValue).toHaveBeenCalledWith('bar');
   });
 });

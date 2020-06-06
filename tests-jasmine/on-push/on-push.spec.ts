@@ -42,21 +42,21 @@ describe('ChangeDetectionStrategy.OnPush:real', () => {
   });
 
   it('should show 0 if no items', () => {
-    expect(component.nativeElement.innerText).toEqual('0');
+    expect(component.nativeElement.innerHTML).toEqual('0');
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
     wrapper.componentInstance.items.push('demo');
     wrapper.detectChanges();
 
-    expect(component.nativeElement.innerText).toEqual('0');
+    expect(component.nativeElement.innerHTML).toEqual('0');
   });
 
   it('should show 1 if items array changed reference', () => {
     wrapper.componentInstance.items = ['demo'];
     wrapper.detectChanges();
 
-    expect(component.nativeElement.innerText).toEqual('1');
+    expect(component.nativeElement.innerHTML).toEqual('1');
   });
 });
 
@@ -64,13 +64,10 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   let fixture: ComponentFixture<ItemListComponent>;
   let component: ItemListComponent;
 
-  beforeEach(async () => {
-    // console.log((TestBed as any)._instantiated);
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ItemListComponent],
     });
-    await TestBed.compileComponents();
-    // console.log((TestBed as any)._instantiated);
 
     fixture = MockRender(ItemListComponent, {
       items: [],
@@ -80,20 +77,20 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   });
 
   it('should show 0 if no items', () => {
-    expect(fixture.nativeElement.innerText).toEqual('0');
+    expect(fixture.nativeElement.innerHTML).toContain('>0<');
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
     component.items.push('demo');
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.innerText).toEqual('0');
+    expect(fixture.nativeElement.innerHTML).toContain('>0<');
   });
 
   it('should show 1 if items array changed reference', () => {
     component.items = ['demo'];
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.innerText).toEqual('1');
+    expect(fixture.nativeElement.innerHTML).toContain('>1<');
   });
 });
