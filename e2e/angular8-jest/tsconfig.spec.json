@@ -5,6 +5,6 @@
         "emitDecoratorMetadata": true,
         "esModuleInterop": true
     },
-    "files": ["src/test.ts", "src/polyfills.ts"],
+    "files": ["src/setupJest.ts", "src/polyfills.ts"],
     "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -9,6 +9,7 @@ VOLUME /app/node_modules
 VOLUME /app/e2e/angular5/node_modules
 VOLUME /app/e2e/angular6/node_modules
 VOLUME /app/e2e/angular7/node_modules
+VOLUME /app/e2e/angular7-jest/node_modules
 VOLUME /app/e2e/angular8/node_modules
 VOLUME /app/e2e/angular8-jest/node_modules
 VOLUME /app/e2e/angular9-ivy-false/node_modules

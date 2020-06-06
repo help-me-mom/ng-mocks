@@ -7,19 +7,16 @@ Helper function for creating angular mocks for test.
 
 Tested on:
 
-- Angular 5
-- Angular 6
-- Angular 7
-- Angular 8
-- Angular 9 w/o Ivy
-- Angular 9 w/ Ivy
+- Angular 5 (Jasmine)
+- Angular 6 (Jasmine)
+- Angular 7 (Jasmine, Jest)
+- Angular 8 (Jasmine, Jest)
+- Angular 9 (Jasmine, Jest, Ivy)
 
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
 Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
-
-**You can use it with either Jest or Jasmine.**
 
 - [jasmine examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jasmine)
 - [jest examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jest)
