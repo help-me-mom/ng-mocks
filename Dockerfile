@@ -7,6 +7,7 @@ CMD ["sh", "build-with-supported-angluars.sh"]
 VOLUME /npm
 VOLUME /app/node_modules
 VOLUME /app/e2e/angular5/node_modules
+VOLUME /app/e2e/angular5-jest/node_modules
 VOLUME /app/e2e/angular6/node_modules
 VOLUME /app/e2e/angular6-jest/node_modules
 VOLUME /app/e2e/angular7/node_modules
