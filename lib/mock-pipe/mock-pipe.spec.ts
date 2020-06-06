@@ -32,7 +32,7 @@ export class ExampleComponent {
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;
 
-  describe('Base tests', () => {
+  describe('Base tests-jasmine', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ExampleComponent, MockPipe(ExamplePipe, () => 'foo'), MockPipe(AnotherExamplePipe)],

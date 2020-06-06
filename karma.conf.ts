@@ -24,8 +24,8 @@ module.exports = (config: any) => {
       'index.ts',
       'jasmine.ts',
       { pattern: 'lib/**/*.ts' },
-      { pattern: 'examples/**/*.ts' },
-      { pattern: 'tests/**/*.ts' },
+      { pattern: 'examples-jasmine/**/*.ts' },
+      { pattern: 'tests-jasmine/**/*.ts' },
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,
@@ -37,7 +37,7 @@ module.exports = (config: any) => {
     singleRun: true,
 
     karmaTypescriptConfig: {
-      include: ['karma-test-shim.ts', 'examples/**/*', 'lib/**/*', 'tests/**/*'],
+      include: ['karma-test-shim.ts', 'examples-jasmine/**/*', 'lib/**/*', 'tests-jasmine/**/*'],
       tsconfig: 'tsconfig.json',
     },
   });

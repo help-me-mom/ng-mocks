@@ -5,12 +5,27 @@
 
 Helper function for creating angular mocks for test.
 
+Tested on:
+
+- Angular 5
+- Angular 6
+- Angular 7
+- Angular 8
+- Angular 9 w/o Ivy
+- Angular 9 w/ Ivy
+
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
 Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
-> You can use it with either Jest or Jasmine.
+**You can use it with either Jest or Jasmine.**
+
+- [jasmine examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jasmine)
+- [jest examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jest)
+
+* [jasmine e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jasmine)
+* [jest e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jest)
 
 ## MockComponent(s)
 
@@ -558,7 +573,7 @@ Add the next code to `src/test.ts` if you want all mocked methods and functions 
 ```typescript
 import 'ng-mocks/dist/jasmine';
 
-// uncomment in case if existing tests are with spies already.
+// uncomment in case if existing tests-jasmine are with spies already.
 // jasmine.getEnv().allowRespy(true);
 ```
 
@@ -567,14 +582,6 @@ In case of jest.
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
-
-## Other examples of tests
-
-More detailed examples can be found in
-[tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
-and in
-[examples](https://github.com/ike18t/ng-mocks/tree/master/examples)
-directories in the repo.
 
 ## Find an issue or have a request?
 

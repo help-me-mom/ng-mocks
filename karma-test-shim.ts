@@ -1,6 +1,6 @@
 Error.stackTraceLimit = Infinity;
 
-// Reflect.metadata polyfill is only needed in the JIT mode which we use only for unit tests
+// Reflect.metadata polyfill is only needed in the JIT mode which we use only for unit tests-jasmine
 import 'core-js/es6/reflect'; // tslint:disable-line
 import 'core-js/es7/reflect'; // tslint:disable-line
 
