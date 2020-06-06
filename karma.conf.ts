@@ -33,7 +33,7 @@ module.exports = (config: any) => {
     preprocessors: {
       '**/*.ts': ['karma-typescript'],
     },
-    reporters: ['dots', 'karma-typescript', 'kjhtml'],
+    reporters: ['kjhtml'],
     singleRun: true,
 
     karmaTypescriptConfig: {

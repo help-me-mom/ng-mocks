@@ -1,4 +1,3 @@
-/* tslint:disable: max-classes-per-file */
 import { MockOf } from './mock-of.decorator';
 
 describe('DebuggableMock', () => {

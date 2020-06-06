@@ -6,6 +6,7 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import 'ng-mocks/dist/jasmine';
 
 declare const require: any;
+jasmine.getEnv().allowRespy(true);
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());

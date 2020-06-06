@@ -1,7 +1,6 @@
 import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
+import { MockComponent, MockRender, ngMocks } from 'ng-mocks';
 
 import { CustomInjectionComponent } from './custom-injection.component';
 
@@ -40,7 +39,8 @@ describe('structural-directive-as-ng-for:mock', () => {
   });
 
   it('renders mocked component with injected template properly', () => {
-    let block: DebugElement;
+    // do not remove, it checks casts from MockDebugElement to DebugElement.
+    let block: undefined | DebugElement;
 
     // should iterate against 3 string.
     const fixture = MockRender(
@@ -57,19 +57,18 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // By default @ContentChild('block') shouldn't be rendered at all.
-    block = fixture.debugElement.query(By.css('[data-key="block"]'));
-    expect(block).toBeFalsy();
+    block = ngMocks.find(fixture.debugElement, '[data-key="block"]', undefined);
+    expect(block).toBeUndefined();
 
-    const mockedComponent = fixture.debugElement.query(By.directive(MockComponent(CustomInjectionComponent)))
-      .componentInstance as MockedComponent<CustomInjectionComponent<string>>;
+    const mockedComponent = ngMocks.find(fixture.debugElement, MockComponent(CustomInjectionComponent))
+      .componentInstance;
 
     // Now we want to render @ContentChild('block') with some context.
     mockedComponent.__render('block', 'string1', {
       test: 'test1',
     });
     fixture.detectChanges();
-    block = fixture.debugElement.query(By.css('[data-key="block"]'));
-    expect(block).toBeTruthy();
+    block = ngMocks.find(fixture.debugElement, '[data-key="block"]');
     expect(block.nativeElement.innerHTML).toContain('<div>string0 string1 test1</div>');
 
     // Now we want to render @ContentChild('block') with another context.
@@ -77,8 +76,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       test: 'test2',
     });
     fixture.detectChanges();
-    block = fixture.debugElement.query(By.css('[data-key="block"]'));
-    expect(block).toBeTruthy();
+    block = ngMocks.find(fixture.debugElement, '[data-key="block"]');
     expect(block.nativeElement.innerHTML).toContain('<div>string0 string2 test2</div>');
   });
 });

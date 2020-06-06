@@ -1,6 +1,4 @@
-import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { MockDirective, MockedDirective, MockRender, ngMocks } from 'ng-mocks';
 
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
@@ -105,10 +103,10 @@ describe('structural-directive-as-ng-for:mock', () => {
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
-    expect(fixture.nativeElement.innerText).toEqual('$implicit: fromDirective:');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' $implicit: fromDirective: ');
 
     // Extracting mock.
-    const debugElement = fixture.debugElement.query(By.css('div'));
+    const debugElement = ngMocks.find(fixture.debugElement, 'div');
     const directive = ngMocks.get(debugElement, MockDirective(CustomNgIfDirective));
     expect(directive).toBeTruthy();
     if (!directive) {
@@ -123,14 +121,14 @@ describe('structural-directive-as-ng-for:mock', () => {
       fromDirective: false,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('$implicit:true fromDirective:false');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' $implicit:true fromDirective:false ');
 
     // And we want dynamically change variables for render.
     directive.__render(false, {
       fromDirective: true,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('$implicit:false fromDirective:true');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' $implicit:false fromDirective:true ');
   });
 
   it('mocks CustomNgForWithOfDirective properly', () => {
@@ -154,10 +152,9 @@ describe('structural-directive-as-ng-for:mock', () => {
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
-    expect(fixture.nativeElement.innerText).toEqual('w/ 00');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/ 00 ');
 
-    const debugElement = fixture.debugElement.query(By.css('div'));
-    expect(debugElement).toBeTruthy();
+    const debugElement = ngMocks.find(fixture.debugElement, 'div');
 
     // Extracting mock.
     const directive = ngMocks.get(debugElement, MockDirective(CustomNgForWithOfDirective));
@@ -176,7 +173,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       myLast: false,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('w/ MainValueMyIndex10');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/ MainValueMyIndex10 ');
 
     // And we want dynamically change variables for render.
     directive.__render('MainValue2', {
@@ -185,7 +182,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       myLast: true,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('w/ MainValue2MyIndex201');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/ MainValue2MyIndex201 ');
   });
 
   it('mocks customNgForWithoutOf properly', () => {
@@ -209,10 +206,9 @@ describe('structural-directive-as-ng-for:mock', () => {
     fixture.detectChanges();
 
     // By default mocked structural directives are rendered with undefined variables.
-    expect(fixture.nativeElement.innerText).toEqual('w/o 00');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/o 00 ');
 
-    const debugElement = fixture.debugElement.query(By.css('div'));
-    expect(debugElement).toBeTruthy();
+    const debugElement = ngMocks.find(fixture.debugElement, 'div');
 
     // Extracting mock.
     const directive = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
@@ -231,7 +227,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       myLast: false,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('w/o MainValueMyIndex10');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/o MainValueMyIndex10 ');
 
     // And we want dynamically change variables for render.
     directive.__render('MainValue2', {
@@ -240,11 +236,10 @@ describe('structural-directive-as-ng-for:mock', () => {
       myLast: true,
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual('w/o MainValue2MyIndex201');
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(' w/o MainValue2MyIndex201 ');
   });
 
   it('searches for related directive', () => {
-    let debugElement: DebugElement | undefined;
     let mockedDirective: MockedDirective<CustomNgForWithoutOfDirective> | undefined;
 
     const fixture = MockRender(
@@ -276,13 +271,17 @@ describe('structural-directive-as-ng-for:mock', () => {
     fixture.detectChanges();
 
     // Looking for first directive.
-    debugElement = fixture.debugElement.query(By.css('[data-type="node-1"]'));
-    mockedDirective = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
+    mockedDirective = ngMocks.get(
+      ngMocks.find(fixture.debugElement, '[data-type="node-1"]'),
+      MockDirective(CustomNgForWithoutOfDirective)
+    );
     expect(mockedDirective.setItems).toEqual(['string1', 'string2', 'string3']);
 
     // Looking for second directive.
-    debugElement = fixture.debugElement.query(By.css('[data-type="node-2"]'));
-    mockedDirective = ngMocks.get(debugElement, MockDirective(CustomNgForWithoutOfDirective));
+    mockedDirective = ngMocks.get(
+      ngMocks.find(fixture.debugElement, '[data-type="node-2"]'),
+      MockDirective(CustomNgForWithoutOfDirective)
+    );
     expect(mockedDirective.setItems).toEqual(['string4', 'string5', 'string6']);
   });
 });

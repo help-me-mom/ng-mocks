@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, DebugElement, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MockRender } from 'ng-mocks';
+import { MockedDebugElement, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,7 +11,6 @@ export class ItemListComponent {
   @Input() items: string[];
 }
 
-/* tslint:disable:max-classes-per-file */
 @Component({
   selector: 'item-list-wrapper',
   template: '<item-list [items]="items"></item-list>',
@@ -20,11 +18,10 @@ export class ItemListComponent {
 export class ItemListWrapperComponent {
   @Input() items: string[];
 }
-/* tslint:enable:max-classes-per-file */
 
 describe('ChangeDetectionStrategy.OnPush:real', () => {
   let wrapper: ComponentFixture<ItemListWrapperComponent>;
-  let component: DebugElement;
+  let componentDebugElement: MockedDebugElement;
 
   beforeEach(() => {
     // const wrapperType = WrapComponent(ItemListComponent);
@@ -40,25 +37,25 @@ describe('ChangeDetectionStrategy.OnPush:real', () => {
     wrapper.componentInstance.items = [];
     wrapper.detectChanges();
 
-    component = wrapper.debugElement.query(By.directive(ItemListComponent));
+    componentDebugElement = ngMocks.find(wrapper.debugElement, ItemListComponent);
   });
 
   it('should show 0 if no items', () => {
-    expect(component.nativeElement.innerText).toEqual('0');
+    expect(componentDebugElement.nativeElement.innerHTML).toEqual('0');
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
     wrapper.componentInstance.items.push('demo');
     wrapper.detectChanges();
 
-    expect(component.nativeElement.innerText).toEqual('0');
+    expect(componentDebugElement.nativeElement.innerHTML).toEqual('0');
   });
 
   it('should show 1 if items array changed reference', () => {
     wrapper.componentInstance.items = ['demo'];
     wrapper.detectChanges();
 
-    expect(component.nativeElement.innerText).toEqual('1');
+    expect(componentDebugElement.nativeElement.innerHTML).toEqual('1');
   });
 });
 
@@ -79,20 +76,20 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   });
 
   it('should show 0 if no items', () => {
-    expect(fixture.nativeElement.innerText).toEqual('0');
+    expect(fixture.nativeElement.innerHTML).toContain('>0<');
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
     component.items.push('demo');
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.innerText).toEqual('0');
+    expect(fixture.nativeElement.innerHTML).toContain('>0<');
   });
 
   it('should show 1 if items array changed reference', () => {
     component.items = ['demo'];
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.innerText).toEqual('1');
+    expect(fixture.nativeElement.innerHTML).toContain('>1<');
   });
 });

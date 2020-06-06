@@ -1,18 +1,8 @@
-/* tslint:disable:max-classes-per-file */
-
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Directive,
-  ElementRef,
-  Injectable,
-  ModuleWithProviders,
-  NgModule,
-  OnInit,
-  Pipe,
-  PipeTransform,
-} from '@angular/core';
+import { Component, Directive, ElementRef, Injectable, NgModule, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
+import { NgModuleWithProviders } from '../common';
 
 @Directive({ selector: '[example-directive]' })
 export class ExampleDirective implements OnInit {
@@ -111,7 +101,7 @@ class RealModuleWithProvidersModule {}
 // Factory to setup module with provider.
 /* tslint:disable:no-unnecessary-class */
 class ModuleProvider {
-  static withFlag(flag: boolean): ModuleWithProviders {
+  static withFlag(flag: boolean): NgModuleWithProviders {
     return {
       ngModule: RealModuleWithProvidersModule,
       providers: [

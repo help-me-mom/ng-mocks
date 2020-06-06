@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';

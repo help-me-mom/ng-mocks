@@ -28,7 +28,7 @@ module.exports = function (config) {
                 flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
             },
         },
-        reporters: ['progress', 'kjhtml'],
+        reporters: ['kjhtml'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

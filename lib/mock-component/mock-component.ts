@@ -1,21 +1,21 @@
 import { core } from '@angular/compiler';
 import {
+  AfterContentInit,
   ChangeDetectorRef,
   Component,
   forwardRef,
   Query,
   TemplateRef,
-  Type,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { MockControlValueAccessor, MockOf } from '../common';
+import { AbstractType, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
-
-const cache = new Map<Type<Component>, Type<MockedComponent<Component>>>();
 
 export type MockedComponent<T> = T &
   MockControlValueAccessor & {
@@ -33,10 +33,26 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
 export function MockComponent<TComponent>(
   component: Type<TComponent>,
   metaData?: core.Directive
+): Type<MockedComponent<TComponent>>;
+export function MockComponent<TComponent>(
+  component: AbstractType<TComponent>,
+  metaData?: core.Directive
+): Type<MockedComponent<TComponent>>;
+export function MockComponent<TComponent>(
+  component: Type<TComponent>,
+  metaData?: core.Directive
 ): Type<MockedComponent<TComponent>> {
-  const cacheHit = cache.get(component);
-  if (cacheHit) {
-    return cacheHit as Type<MockedComponent<TComponent>>;
+  // we are inside of an 'it'.
+  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  if ((getTestBed() as any)._instantiated) {
+    try {
+      return getMockedNgDefOf(component, 'c');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
+  }
+  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cache.has(component)) {
+    return ngMocksUniverse.cache.get(component);
   }
 
   let meta: core.Directive | undefined = metaData;
@@ -99,8 +115,10 @@ export function MockComponent<TComponent>(
     template,
   };
 
+  const config = ngMocksUniverse.config.get(component);
+
   @MockOf(component, outputs)
-  class ComponentMock extends MockControlValueAccessor {
+  class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
     constructor(changeDetector: ChangeDetectorRef) {
       super();
 
@@ -131,6 +149,22 @@ export function MockComponent<TComponent>(
         }
       };
     }
+
+    ngAfterContentInit(): void {
+      if (!(this as any).__rendered && config && config.render) {
+        for (const block of Object.keys(config.render)) {
+          const { $implicit, variables } =
+            config.render[block] !== true
+              ? config.render[block]
+              : {
+                  $implicit: undefined,
+                  variables: {},
+                };
+          (this as any).__render(block, $implicit, variables);
+        }
+        (this as any).__rendered = true;
+      }
+    }
   }
 
   decorateInputs(ComponentMock, inputs);
@@ -138,7 +172,9 @@ export function MockComponent<TComponent>(
   decorateQueries(ComponentMock, queries);
 
   const mockedComponent: Type<MockedComponent<TComponent>> = Component(options)(ComponentMock as any);
-  cache.set(component, mockedComponent);
+  if (ngMocksUniverse.flags.has('cacheComponent')) {
+    ngMocksUniverse.cache.set(component, mockedComponent);
+  }
 
   return mockedComponent;
 }

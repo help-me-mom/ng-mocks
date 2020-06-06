@@ -16,3 +16,8 @@ export class RenderRealComponent {
     this.document.getElementById('test');
   }
 }
+
+@Component({
+  template: 'WithoutSelectorComponent',
+})
+export class WithoutSelectorComponent {}
