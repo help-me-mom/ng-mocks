@@ -570,7 +570,7 @@ Add the next code to `src/test.ts` if you want all mocked methods and functions 
 ```typescript
 import 'ng-mocks/dist/jasmine';
 
-// uncomment in case if existing tests-jasmine are with spies already.
+// uncomment in case if existing tests are with spies already.
 // jasmine.getEnv().allowRespy(true);
 ```
 

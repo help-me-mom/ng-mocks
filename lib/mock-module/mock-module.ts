@@ -162,7 +162,7 @@ function MockIt(module: Type<any>): NgModule {
 
   // When we mock module only exported declarations are accessible inside of test.
   // Because of that we have to export everything what a module imports or declares.
-  // Unfortunately in that case tests-jasmine won't fail when some module has missed exports.
+  // Unfortunately in that case tests won't fail when some module has missed exports.
   if (mockedModule.declarations || mockedModule.imports) {
     mockedModule.exports = [];
 
