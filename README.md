@@ -577,7 +577,7 @@ import 'ng-mocks/dist/jasmine';
 // jasmine.getEnv().allowRespy(true);
 ```
 
-In case of jest.
+In case of jest add it to `src/setupJest.ts`.
 
 ```typescript
 import 'ng-mocks/dist/jest';
