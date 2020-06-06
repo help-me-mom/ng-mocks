@@ -8,7 +8,7 @@ Helper function for creating angular mocks for test.
 Tested on:
 
 - Angular 5 (Jasmine)
-- Angular 6 (Jasmine)
+- Angular 6 (Jasmine, Jest)
 - Angular 7 (Jasmine, Jest)
 - Angular 8 (Jasmine, Jest)
 - Angular 9 (Jasmine, Jest, Ivy)
