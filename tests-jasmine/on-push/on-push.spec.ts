@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DebugElement, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockRender } from '../../lib/mock-render';
+import { MockRender } from 'ng-mocks';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

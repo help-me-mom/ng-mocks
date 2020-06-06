@@ -156,7 +156,7 @@ describe('MockBuilder:deep', () => {
   it('should render', inject([HttpBackend], (httpBackend: HttpBackend) => {
     const fixture = MockRender(MyComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
+    const content = fixture.debugElement.nativeElement.innerHTML.replace(/<!--.*?-->/gm, '');
     expect(content).toContain('<div>My Content</div>');
 
     expect(content).toContain('<div>MyComponent1: <component-1>If we need to tune testBed</component-1></div>');
@@ -168,8 +168,8 @@ describe('MockBuilder:deep', () => {
 
     expect(content).toContain('<div>MyDirective: <mydirective></mydirective></div>');
     expect(content).toContain('<div>DirectiveWeDontWantToMock: <wedontwanttomock></wedontwanttomock></div>');
-    expect(content).toContain('<div>DirectiveWeWantToMock 1: <!----><span>render b</span></div>');
-    expect(content).toContain('<div>DirectiveWeWantToMock 2: <!---->render $</div>');
+    expect(content).toContain('<div>DirectiveWeWantToMock 1: <span>render b</span></div>');
+    expect(content).toContain('<div>DirectiveWeWantToMock 2: render $</div>');
 
     expect(content).toContain('<div>MyPipe: MyPipe:text</div>');
     expect(content).toContain('<div>PipeWeDontWantToMock: PipeWeDontWantToMock:text</div>');

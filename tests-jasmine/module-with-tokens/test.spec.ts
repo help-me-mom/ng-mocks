@@ -1,5 +1,4 @@
-import { MockBuilder } from '../../lib/mock-builder';
-import { MockRender } from '../../lib/mock-render';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { MY_TOKEN_MULTI, MY_TOKEN_SINGLE, TargetComponent, TargetModule } from './fixtures';
 

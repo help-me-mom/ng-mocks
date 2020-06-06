@@ -71,5 +71,5 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
     this.__simulateTouch = fn;
   }
 
-  writeValue = () => {};
+  writeValue = (value: any) => {};
 }

@@ -2,9 +2,10 @@
 
 import { core } from '@angular/compiler';
 import { EventEmitter } from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AbstractType, Type } from '../common';
+import { AbstractType, getSourceOfMock, Type } from '../common';
 import { directiveResolver } from '../common/reflect';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
@@ -103,6 +104,8 @@ export const ngMocks: {
   findInstance<T, D>(debugNode: MockedDebugNode, instanceClass: Type<T>, notFoundValue: D): D | T;
   findInstances<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T[];
 
+  flushTestBed(): void;
+
   get<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
@@ -120,7 +123,7 @@ export const ngMocks: {
     const sel: any = args[1];
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
-    const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
+    const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
     const result = el.query(term);
     if (result) {
       return result;
@@ -134,7 +137,7 @@ export const ngMocks: {
   },
 
   findAll: (el: MockedDebugElement, sel: any) => {
-    const term = typeof sel === 'string' ? By.css(sel) : By.directive(sel);
+    const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
     return el.queryAll(term);
   },
 
@@ -143,7 +146,7 @@ export const ngMocks: {
     const sel: Type<T> = args[1];
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
-    const result = ngMocks.findInstances(el, sel);
+    const result = ngMocks.findInstances(el, getSourceOfMock(sel));
     if (result.length) {
       return result[0];
     }
@@ -157,7 +160,7 @@ export const ngMocks: {
     const result: T[] = [];
     nestedCheck<T>(result, el, node => {
       try {
-        return node.injector.get(sel);
+        return node.injector.get(getSourceOfMock(sel));
       } catch (error) {
         return undefined;
       }
@@ -173,7 +176,7 @@ export const ngMocks: {
 
     // Looking for related attribute directive.
     try {
-      return el.injector.get(sel);
+      return el.injector.get(getSourceOfMock(sel));
     } catch (error) {
       // looks like the directive is structural.
     }
@@ -190,7 +193,7 @@ export const ngMocks: {
     }
     const matchedNode = matches[0];
     try {
-      return matchedNode.injector.get(sel);
+      return matchedNode.injector.get(getSourceOfMock(sel));
     } catch (error) {
       notFound = true;
     }
@@ -297,5 +300,11 @@ export const ngMocks: {
       }
     }
     return instance;
+  },
+
+  flushTestBed(): void {
+    (getTestBed() as any)._instantiated = false;
+    (getTestBed() as any)._moduleFactory = undefined;
+    (getTestBed() as any)._testModuleRef = null;
   },
 };

@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
-import { ngMocks } from '../../lib/mock-helper';
-import { MockRender } from '../../lib/mock-render';
+import { MockRender, ngMocks } from 'ng-mocks';
 
 import { Target2Directive, Target3Directive, TargetComponent, TargetModule } from './fixtures';
 

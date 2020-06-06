@@ -2,10 +2,11 @@
 
 import { core } from '@angular/compiler';
 import { Component, DebugElement, DebugNode, Provider } from '@angular/core';
-import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Type } from '../common';
 import { directiveResolver } from '../common/reflect';
+import { ngMocks } from '../mock-helper';
 
 // A5 and its TS 2.4 don't support Omit, that's why we need the magic below.
 // TODO remove it once A5 isn't supported.
@@ -125,8 +126,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   );
 
   // Soft reset of TestBed.
-  (getTestBed() as any)._instantiated = false;
-  (getTestBed() as any)._moduleFactory = undefined;
+  ngMocks.flushTestBed();
 
   // Injection of our template.
   TestBed.configureTestingModule({

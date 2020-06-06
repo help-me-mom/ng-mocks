@@ -1,9 +1,9 @@
 // tslint:disable:unified-signatures
 
-import { InjectionToken, ModuleWithProviders, NgModule, PipeTransform, Provider } from '@angular/core';
+import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { flatten, isNgDef, isNgInjectionToken, NG_MOCKS, Type } from '../common';
+import { flatten, isNgDef, isNgInjectionToken, NgModuleWithProviders, NG_MOCKS, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
@@ -177,7 +177,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     // Setting up TestBed.
-    const imports: Array<Type<any> | ModuleWithProviders> = [];
+    const imports: Array<Type<any> | NgModuleWithProviders> = [];
 
     // Adding suitable leftovers.
     for (const def of [

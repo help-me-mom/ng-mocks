@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, PipeTransform } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, PipeTransform, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import { MockedComponent } from '../mock-component';
@@ -15,6 +15,13 @@ export interface AbstractType<T> extends Function {
 }
 
 export type Type<T> = new (...args: any[]) => T;
+
+// remove after removal of A5 support
+// tslint:disable-next-line:interface-name
+export interface NgModuleWithProviders<T = any> extends ModuleWithProviders {
+  ngModule: Type<T>;
+  providers?: Provider[];
+}
 
 export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
 
@@ -93,7 +100,7 @@ export const isNgInjectionToken = (object: any): object is InjectionToken<any> =
   typeof object === 'object' && object.ngMetadataName === 'InjectionToken';
 
 // Checks if an object implements ModuleWithProviders.
-export const isNgModuleDefWithProviders = (object: any): object is ModuleWithProviders =>
+export const isNgModuleDefWithProviders = (object: any): object is NgModuleWithProviders =>
   object.ngModule !== undefined && isNgDef(object.ngModule, 'm');
 
 /**
@@ -156,4 +163,13 @@ export function getMockedNgDefOf(type: any, ngType?: any): any {
 
   // Looks like the def hasn't been mocked.
   throw new Error(`There is no mock for ${source.name}`);
+}
+
+export function getSourceOfMock<T>(type: Type<MockedModule<T>>): Type<T>;
+export function getSourceOfMock<T>(type: Type<MockedComponent<T>>): Type<T>;
+export function getSourceOfMock<T>(type: Type<MockedDirective<T>>): Type<T>;
+export function getSourceOfMock<T>(type: Type<MockedPipe<T>>): Type<T>;
+export function getSourceOfMock<T>(type: Type<T>): Type<T>;
+export function getSourceOfMock<T>(type: any): Type<T> {
+  return typeof type === 'function' && type.mockOf ? type.mockOf : type;
 }

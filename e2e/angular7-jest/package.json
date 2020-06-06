@@ -1,0 +1,52 @@
+{
+    "name": "angular7-jest",
+    "version": "0.0.0",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "build": "ng build",
+        "test": "jest --runInBand",
+        "test:debug": "jest --watch",
+        "lint": "ng lint"
+    },
+    "private": true,
+    "peerDependencies": {
+        "ng-mocks": "*"
+    },
+    "dependencies": {
+        "@angular/animations": "~7.2.0",
+        "@angular/common": "~7.2.0",
+        "@angular/compiler": "~7.2.0",
+        "@angular/core": "~7.2.0",
+        "@angular/forms": "~7.2.0",
+        "@angular/platform-browser": "~7.2.0",
+        "@angular/platform-browser-dynamic": "~7.2.0",
+        "@angular/router": "~7.2.0",
+        "classlist.js": "^1.1.20150312",
+        "core-js": "^2.5.4",
+        "rxjs": "~6.3.3",
+        "tslib": "^1.9.0",
+        "zone.js": "~0.8.26"
+    },
+    "devDependencies": {
+        "@angular-devkit/build-angular": "^0.13.10",
+        "@angular/cli": "^7.3.10",
+        "@angular/compiler-cli": "~7.2.0",
+        "@angular/language-service": "~7.2.0",
+        "@types/jest": "^24.9.1",
+        "@types/node": "~8.9.4",
+        "codelyzer": "~4.5.0",
+        "jest": "^24.9.0",
+        "jest-preset-angular": "^7.1.1",
+        "ts-jest": "^24.3.0",
+        "ts-node": "~7.0.0",
+        "tslint": "~5.11.0",
+        "typescript": "~3.2.2"
+    },
+    "jest": {
+        "preset": "jest-preset-angular",
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/setupJest.ts"
+        ]
+    }
+}

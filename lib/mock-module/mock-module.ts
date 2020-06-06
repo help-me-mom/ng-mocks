@@ -1,9 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { core } from '@angular/compiler';
-import { ApplicationModule, ModuleWithProviders, NgModule, Provider } from '@angular/core';
+import { ApplicationModule, NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { flatten, getMockedNgDefOf, isNgDef, isNgModuleDefWithProviders, Mock, MockOf, Type } from '../common';
+import {
+  flatten,
+  getMockedNgDefOf,
+  isNgDef,
+  isNgModuleDefWithProviders,
+  Mock,
+  MockOf,
+  NgModuleWithProviders,
+  Type,
+} from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
@@ -49,9 +58,8 @@ export function MockProvider(provider: any): Provider | undefined {
   return mockedProvider;
 }
 
-export function MockModule<T>(module: Type<T>): Type<any>;
-// TODO add a proper generic of ModuleWithProviders when support of A5 has been stopped.
-export function MockModule(module: ModuleWithProviders): ModuleWithProviders;
+export function MockModule<T>(module: Type<T>): Type<T>;
+export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 export function MockModule(module: any): any {
   // tslint:disable-line:cyclomatic-complexity
   let ngModule: Type<any>;

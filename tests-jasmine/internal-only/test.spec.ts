@@ -13,12 +13,10 @@ describe('InternalOnly:real', () => {
   });
 
   it('should render', () => {
-    try {
+    expect(() => {
       MockRender(InternalComponent);
-      fail('should fail on the internal component');
-    } catch (e) {
-      expect(e).toEqual(jasmine.objectContaining({ ngSyntaxError: true }));
-    }
+      TestBed.get(InternalComponent); // Thanks Ivy True, it doesn't throw an error and we have to use injector.
+    }).toThrowError();
   });
 });
 

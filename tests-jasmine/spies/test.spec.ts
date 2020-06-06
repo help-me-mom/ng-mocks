@@ -5,8 +5,6 @@ import { MockModule, MockRender } from 'ng-mocks';
 import { TargetComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 import { TargetService } from './fixtures.providers';
-import createSpyObj = jasmine.createSpyObj;
-import Spy = jasmine.Spy;
 
 describe('spies:real', () => {
   beforeEach(() =>
@@ -26,7 +24,7 @@ describe('spies:real', () => {
 
 describe('spies:manual-mock', () => {
   beforeEach(() => {
-    const spy = createSpyObj<TargetService>('TargetService', ['echo']);
+    const spy = jasmine.createSpyObj<TargetService>('TargetService', ['echo']);
     spy.echo.and.returnValue('fake');
 
     return TestBed.configureTestingModule({
@@ -66,7 +64,7 @@ describe('spies:auto-mock', () => {
     expect(component).toBeDefined();
     expect(targetService.echo).toHaveBeenCalledTimes(1);
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
-    (targetService.echo as Spy).and.returnValue('faked');
+    (targetService.echo as jasmine.Spy).and.returnValue('faked');
     expect(component.echo()).toEqual('faked');
     expect(targetService.echo).toHaveBeenCalledTimes(2);
   }));

@@ -47,6 +47,7 @@ describe('nested-before-all', () => {
   beforeAll(() => {
     level = 0;
     mock = MockComponent(InternalComponent);
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       declarations: [mock],
     });

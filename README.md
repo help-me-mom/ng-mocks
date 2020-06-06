@@ -5,6 +5,14 @@
 
 Helper function for creating angular mocks for test.
 
+Tested on:
+
+- Angular 5 (Jasmine, Jest)
+- Angular 6 (Jasmine, Jest)
+- Angular 7 (Jasmine, Jest)
+- Angular 8 (Jasmine, Jest)
+- Angular 9 (Jasmine, Jest, Ivy)
+
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
@@ -12,7 +20,11 @@ Or you could use this to mock them out and have the ability to assert on their i
 
 For an easy start check the [MockBuilder](#mockbuilder) first.
 
-> You can use it with either Jest or Jasmine.
+- [jasmine examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jasmine)
+- [jest examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jest)
+
+* [jasmine e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jasmine)
+* [jest e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jest)
 
 ### Sections:
 
@@ -692,6 +704,8 @@ ngMocks provides functions to get attribute and structural directives from an el
 * ngMocks.stub(service, methods)
 * ngMocks.stub(service, property, 'get' | 'set')
 
+- ngMocks.flushTestBed()
+
 ```typescript
 // returns attribute or structural directive
 // which belongs to current element.
@@ -793,21 +807,11 @@ import 'ng-mocks/dist/jasmine';
 // jasmine.getEnv().allowRespy(true);
 ```
 
-In case of jest.
+In case of jest add it to `src/setupJest.ts`.
 
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
-
----
-
-## Other examples of tests
-
-More detailed examples can be found in
-[e2e](https://github.com/ike18t/ng-mocks/tree/master/e2e)
-and in
-[examples](https://github.com/ike18t/ng-mocks/tree/master/examples)
-directories in the repo.
 
 ---
 

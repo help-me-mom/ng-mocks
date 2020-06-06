@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MockDirective, MockRender } from 'ng-mocks';
+
 import { CustomRootComponent } from './custom-root.component';
 import { CustomTypeDirective } from './custom-type.directive';
 

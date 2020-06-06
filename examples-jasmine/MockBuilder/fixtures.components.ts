@@ -35,7 +35,52 @@ export class ComponentContentChild<T> {
 
 @Component({
   selector: 'my-component',
-  template: require('./fixtures.components.my-component.html'), // tslint:disable-line:no-require-imports
+  template: `
+    <div>My Content</div>
+
+    <div>MyComponent1: <component-1></component-1></div>
+    <div>MyComponent2: <component-2></component-2></div>
+    <div>MyComponent3: <component-3></component-3></div>
+    <div>ComponentWeDontWantToMock: <dont-want></dont-want></div>
+    <div>ComponentWeWantToMock: <do-want></do-want></div>
+
+    <div>MyDirective: <MyDirective></MyDirective></div>
+    <div>DirectiveWeDontWantToMock: <WeDontWantToMock></WeDontWantToMock></div>
+    <div>
+      DirectiveWeWantToMock 1: <span *WeWantToMock="let z = a">render {{ z.b }}</span>
+    </div>
+    <div>
+      DirectiveWeWantToMock 2: <ng-template WeWantToMock let-z>render {{ z.a }}</ng-template>
+    </div>
+
+    <div>MyPipe: {{ 'text' | MyPipe }}</div>
+    <div>PipeWeDontWantToMock: {{ 'text' | PipeWeDontWantToMock }}</div>
+    <div>PipeWeWantToMock: {{ 'text' | PipeWeWantToMock }}</div>
+    <div>PipeWeWantToCustomize: {{ 'text' | PipeWeWantToCustomize }}</div>
+    <div>PipeWeWantToRestore: {{ 'text' | PipeWeWantToRestore }}</div>
+
+    <div>INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK: {{ t1v }}</div>
+    <div>INJECTION_TOKEN_WE_WANT_TO_MOCK: {{ t2v }}</div>
+    <div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: {{ t3v }}</div>
+
+    <div>anythingWeWant1: {{ anythingWeWant1?.getName() }}</div>
+    <div>anythingWeWant2: {{ anythingWeWant2?.getName() }}</div>
+    <div>myCustomProvider1: {{ myCustomProvider1?.getName() }}</div>
+    <div>myCustomProvider2: {{ myCustomProvider2?.getName() }}</div>
+    <div>myCustomProvider3: {{ myCustomProvider3?.getName() }}</div>
+
+    <div>myService1: {{ myService1?.getName() }}</div>
+    <div>myService2: {{ myService2?.getName() }}</div>
+    <div>serviceWeDontWantToMock: {{ serviceWeDontWantToMock?.getName() }}</div>
+    <div>serviceWeWantToCustomize: {{ serviceWeWantToCustomize?.getName() }}</div>
+    <div>serviceWeWantToMock: {{ serviceWeWantToMock?.getName() }}</div>
+
+    <component-structural>
+      <ng-template let-value let-b="a" #block>
+        <div>ComponentStructural: {{ value }} {{ b.z }}</div>
+      </ng-template>
+    </component-structural>
+  `,
 })
 export class MyComponent {
   public readonly anythingWeWant1: AnythingWeWant1;

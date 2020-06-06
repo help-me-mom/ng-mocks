@@ -1,9 +1,5 @@
 import { FormsModule, NgModel } from '@angular/forms';
-
-import { MockBuilder } from '../../lib/mock-builder';
-import { MockComponent } from '../../lib/mock-component';
-import { MockHelper } from '../../lib/mock-helper';
-import { MockRender } from '../../lib/mock-render';
+import { MockBuilder, MockComponent, MockHelper, MockRender } from 'ng-mocks';
 
 import { ControlComponent, TargetComponent, TargetModule } from './fixtures';
 

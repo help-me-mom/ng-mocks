@@ -3,5 +3,4 @@ version: '3'
 services:
   ng-mocks:
     build: ./
-    volumes:
-      - ./:/app/:delegated
+    command: npm run build && npm run i:a5 && npm run s:a5 && npm run s:test:a5 && npm run test:a5

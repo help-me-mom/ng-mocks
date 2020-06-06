@@ -26,5 +26,6 @@ do
   npm install --no-save $NEW
   npm run build:all
 done
-echo Testing complete
 npm install
+npm run e2e
+echo Testing complete

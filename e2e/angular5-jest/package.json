@@ -1,0 +1,52 @@
+{
+  "name": "angular5-jest",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build --prod",
+    "test": "jest --runInBand",
+    "test:debug": "jest --watch",
+    "lint": "ng lint"
+  },
+  "private": true,
+  "peerDependencies": {
+    "ng-mocks": "*"
+  },
+  "dependencies": {
+    "@angular/animations": "^5.2.0",
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "@angular/forms": "^5.2.0",
+    "@angular/http": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "@angular/platform-browser-dynamic": "^5.2.0",
+    "@angular/router": "^5.2.0",
+    "core-js": "^2.4.1",
+    "rxjs": "^5.5.6",
+    "zone.js": "^0.8.19"
+  },
+  "devDependencies": {
+    "@angular/cli": "1.6.6",
+    "@angular/compiler-cli": "^5.2.0",
+    "@angular/language-service": "^5.2.0",
+    "@types/jest": "^22.2.3",
+    "@types/node": "~6.0.60",
+    "codelyzer": "^4.0.1",
+    "jest": "^22.4.4",
+    "jest-preset-angular": "^5.2.3",
+    "ts-jest": "^22.4.6",
+    "ts-node": "~4.1.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.5.3"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts",
+    "transform": {
+      "^.+\\.(ts|js|html)$": "ts-jest"
+    },
+    "testURL": "http://localhost"
+  }
+}

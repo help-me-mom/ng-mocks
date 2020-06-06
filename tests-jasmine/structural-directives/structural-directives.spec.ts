@@ -1,9 +1,8 @@
 import { DebugElement } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MockDirective, MockedDirective } from '../../lib/mock-directive';
-import { ngMocks } from '../../lib/mock-helper';
-import { MockRender } from '../../lib/mock-render';
+import { MockDirective, MockedDirective, MockRender, ngMocks } from 'ng-mocks';
+
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
 import { CustomNgForWithoutOfDirective } from './custom-ng-for-without-of.directive';
 import { CustomNgIfDirective } from './custom-ng-if.directive';

@@ -1,23 +1,16 @@
-// Karma configuration
-// Generated on Mon Dec 25 2017 20:41:30 GMT-0800 (PST)
-
-if (process.env.WITH_PUPPETEER) {
-  // tslint:disable-next-line:no-require-imports no-var-requires
-  process.env.CHROME_BIN = require('puppeteer').executablePath();
-}
+// tslint:disable-next-line:no-require-imports no-var-requires
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = (config: any) => {
   config.set({
     autoWatch: false,
-    browsers: process.env.WITH_PUPPETEER ? ['Chrome'] : ['ChromeHeadless'],
+    browsers: ['ChromeCi'],
     colors: true,
     customLaunchers: {
-      Chrome: process.env.WITH_PUPPETEER
-        ? {
-            base: 'ChromeHeadless',
-            flags: ['--no-sandbox'],
-          }
-        : {},
+      ChromeCi: {
+        base: 'ChromeHeadless',
+        flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
+      },
     },
     files: [
       'node_modules/zone.js/dist/zone.js',
