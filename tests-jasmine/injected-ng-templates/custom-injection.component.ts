@@ -1,6 +1,6 @@
 import { Component, ContentChild, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 
-import { staticFalse } from '../../tests';
+import { staticFalse } from '..';
 
 @Component({
   selector: 'custom-injection',

@@ -1,6 +1,6 @@
 import { Component, ContentChild, TemplateRef } from '@angular/core';
 
-import { staticFalse } from '../../tests';
+import { staticFalse } from '..';
 
 @Component({
   selector: 'ccc',

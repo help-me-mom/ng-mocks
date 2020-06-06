@@ -1,6 +1,6 @@
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
-import { staticFalse } from '../../tests';
+import { staticFalse } from '../../tests-jasmine';
 
 @Component({
   selector: 'dependency-component-selector',

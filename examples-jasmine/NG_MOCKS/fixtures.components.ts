@@ -1,6 +1,6 @@
 import { Component, ContentChild, Inject, Input, Optional, TemplateRef } from '@angular/core';
 
-import { staticFalse } from '../../tests';
+import { staticFalse } from '../../tests-jasmine';
 
 import {
   AnythingWeWant1,
@@ -22,11 +22,7 @@ import {
 
 @Component({
   selector: 'component-structural',
-  template: `
-    <div *ngIf="items && items.length">
-      <ng-template ngFor [ngForOf]="items" [ngForTemplate]="injectedBlock"></ng-template>
-    </div>
-  `,
+  template: '',
 })
 export class ComponentContentChild<T> {
   @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;
@@ -35,7 +31,7 @@ export class ComponentContentChild<T> {
 
 @Component({
   selector: 'my-component',
-  template: require('./fixtures.components.my-component.html'), // tslint:disable-line:no-require-imports
+  template: '',
 })
 export class MyComponent {
   public readonly anythingWeWant1: AnythingWeWant1;

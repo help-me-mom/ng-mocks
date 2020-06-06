@@ -3,11 +3,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, InjectionToken, NgModule } from '@angular/core';
 
-export const MY_TOKEN_SINGLE = new (InjectionToken as any) /* A5 */('MY_TOKEN_SINGLE', {
+export const MY_TOKEN_SINGLE = new (InjectionToken as any)(/* A5 */ 'MY_TOKEN_SINGLE', {
   factory: () => 'MY_TOKEN_SINGLE',
 });
 
-export const MY_TOKEN_MULTI = new (InjectionToken as any) /* A5 */('MY_TOKEN_MULTI', {
+export const MY_TOKEN_MULTI = new (InjectionToken as any)(/* A5 */ 'MY_TOKEN_MULTI', {
   factory: () => 'MY_TOKEN_MULTI',
 });
 
