@@ -27,4 +27,5 @@ do
   npm run build:all
 done
 npm install --silent --quiet --no-progress
+npm run e2e
 echo Testing complete

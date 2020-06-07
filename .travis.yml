@@ -9,9 +9,15 @@ install:
   - npm install
 script:
   - npm run test:angular-versions
-  - npm run e2e
 cache:
   npm: false
   directories:
-    - /home/travis/.npm
-    - /home/travis/.node-gyp
+    - $HOME/.npm
+    - $HOME/.node-gyp
+    - node_modules
+    - e2e/angular5/node_modules
+    - e2e/angular6/node_modules
+    - e2e/angular7/node_modules
+    - e2e/angular8/node_modules
+    - e2e/angular9-ivy-false/node_modules
+    - e2e/angular9-ivy-true/node_modules

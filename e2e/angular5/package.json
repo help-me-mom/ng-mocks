@@ -5,13 +5,18 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
-    "test": "ng test",
-    "test:debug": "ng test -- --watch --browsers Chrome",
-    "lint": "ng lint"
+    "test": "npm run test:jasmine -- --progress=false && npm run test:jest",
+    "test:jasmine": "ng test",
+    "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
+    "test:jest": "jest --runInBand",
+    "test:jest:debug": "jest --watch",
+    "lint": "ng lint",
+    "puppeteer": "npm install puppeteer@~3.3.0 --no-save"
   },
   "private": true,
   "peerDependencies": {
-    "ng-mocks": "*"
+    "ng-mocks": "*",
+    "puppeteer": "~3.3.0"
   },
   "dependencies": {
     "@angular/animations": "^5.2.0",
@@ -32,18 +37,32 @@
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "2.8.3",
+    "@types/jest": "^22.2.3",
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
+    "jest": "^22.4.4",
+    "jest-preset-angular": "^5.2.3",
     "karma": "~2.0.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "puppeteer": "~3.3.0",
+    "ts-jest": "^22.4.6",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts",
+    "transform": {
+      "^.+\\.(ts|js|html)$": "ts-jest"
+    },
+    "testURL": "http://localhost",
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/test.ts"
+    ]
   }
 }
