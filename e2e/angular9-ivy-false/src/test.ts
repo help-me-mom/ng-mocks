@@ -15,6 +15,7 @@ declare const require: {
         <T>(id: string): T;
     };
 };
+jasmine.getEnv().allowRespy(true);
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());

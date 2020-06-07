@@ -1,6 +1,6 @@
 import { Component, ContentChild, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 
-import { staticFalse } from '../../../tests-jasmine';
+import { staticFalse } from '../../../tests';
 
 @Component({
   selector: 'template-outlet-component',

@@ -9,8 +9,6 @@ export class ExamplePipe implements PipeTransform {
   transform = (args: string): string => 'hi';
 }
 
-// tslint:disable:max-classes-per-file
-
 @Pipe({ name: 'anotherMockedPipe' })
 export class AnotherExamplePipe implements PipeTransform {
   transform = (args: string): string => 'hi';
@@ -26,8 +24,6 @@ export class AnotherExamplePipe implements PipeTransform {
 export class ExampleComponent {
   someStuff = 'bah';
 }
-
-// tslint:enable:max-classes-per-file
 
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;

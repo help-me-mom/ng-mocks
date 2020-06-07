@@ -1,20 +1,23 @@
+os: linux
 language: node_js
 node_js:
-  - 'node'
-sudo: required
+  - 10
 dist: trusty
 addons:
   chrome: stable
-before_script:
-  - 'sudo chown root /opt/google/chrome/chrome-sandbox'
-  - 'sudo chmod 4755 /opt/google/chrome/chrome-sandbox'
-before_install:
-  - npm cache clean --force
-script: npm run test:angular-versions
-matrix:
-  notifications:
-    email:
-      recipients:
-        - ike18t@gmail.com
-      on_success: change
-      on_failure: change
+install:
+  - npm install
+script:
+  - npm run test:angular-versions
+cache:
+  npm: false
+  directories:
+    - $HOME/.npm
+    - $HOME/.node-gyp
+    - node_modules
+    - e2e/angular5/node_modules
+    - e2e/angular6/node_modules
+    - e2e/angular7/node_modules
+    - e2e/angular8/node_modules
+    - e2e/angular9-ivy-false/node_modules
+    - e2e/angular9-ivy-true/node_modules

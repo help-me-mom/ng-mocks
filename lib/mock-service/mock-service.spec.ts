@@ -201,6 +201,8 @@ describe('MockService', () => {
 
     // Creating a mock on the getter.
     spyOnProperty(mock, 'name', 'get').and.returnValue('mock');
+    // for jest
+    // spyOnProperty(mock, 'name', 'get').mockReturnValue('mock');
     expect(mock.name).toEqual('mock');
 
     // Creating a mock on the setter.
@@ -210,12 +212,16 @@ describe('MockService', () => {
 
     // Creating a mock on the method.
     spyOn(mock, 'nameMethod').and.returnValue('mock');
+    // for jest
+    // spyOn(mock, 'nameMethod').mockReturnValue('mock');
     expect(mock.nameMethod('mock')).toEqual('mock');
     expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
 
     // Creating a mock on the method that doesn't exist.
     ngMocks.stub(mock, 'fakeMethod');
     spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
+    // for jest
+    // spyOn(mock as any, 'fakeMethod').mockReturnValue('mock');
     expect((mock as any).fakeMethod('mock')).toEqual('mock');
     expect(ngMocks.stub(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
 
@@ -223,6 +229,8 @@ describe('MockService', () => {
     ngMocks.stub(mock, 'fakeProp', 'get');
     ngMocks.stub(mock, 'fakeProp', 'set');
     spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
+    // for jest
+    // spyOnProperty(mock as any, 'fakeProp', 'get').mockReturnValue('mockProp');
     spyOnProperty(mock as any, 'fakeProp', 'set');
     expect((mock as any).fakeProp).toEqual('mockProp');
     (mock as any).fakeProp = 'mockPropSet';

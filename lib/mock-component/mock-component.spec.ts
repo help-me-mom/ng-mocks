@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import {
   Component,
   ContentChild,
@@ -14,7 +12,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { staticTrue } from '../../tests-jasmine';
+import { staticTrue } from '../../tests';
 import { MockedDirective } from '../mock-directive';
 import { ngMocks } from '../mock-helper';
 

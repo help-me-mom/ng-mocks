@@ -24,8 +24,8 @@ module.exports = (config: any) => {
       'index.ts',
       'jasmine.ts',
       { pattern: 'lib/**/*.ts' },
-      { pattern: 'examples-jasmine/**/*.ts' },
-      { pattern: 'tests-jasmine/**/*.ts' },
+      { pattern: 'examples/**/*.ts' },
+      { pattern: 'tests/**/*.ts' },
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     logLevel: config.LOG_INFO,
@@ -33,11 +33,11 @@ module.exports = (config: any) => {
     preprocessors: {
       '**/*.ts': ['karma-typescript'],
     },
-    reporters: ['dots', 'karma-typescript', 'kjhtml'],
+    reporters: ['kjhtml'],
     singleRun: true,
 
     karmaTypescriptConfig: {
-      include: ['karma-test-shim.ts', 'examples-jasmine/**/*', 'lib/**/*', 'tests-jasmine/**/*'],
+      include: ['karma-test-shim.ts', 'lib/**/*', 'examples/**/*', 'tests/**/*'],
       tsconfig: 'tsconfig.json',
     },
   });

@@ -1,15 +1,15 @@
-/* tslint:disable:max-classes-per-file */
-
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
+import { MockModule, MockProvider } from '../mock-module';
 import { MockRender } from '../mock-render';
 
-import { MockModule } from './mock-module';
 import {
   AppRoutingModule,
   CustomWithServiceComponent,
@@ -91,7 +91,12 @@ describe('NeverMockModules', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
-      imports: [MockModule(CommonModule), MockModule(BrowserModule), MockModule(BrowserAnimationsModule)],
+      imports: [
+        MockModule(ApplicationModule),
+        MockModule(BrowserAnimationsModule),
+        MockModule(BrowserModule),
+        MockModule(CommonModule),
+      ],
     })
       .compileComponents()
       .then(() => {
@@ -184,33 +189,33 @@ describe('WithServiceModule', () => {
   });
 });
 
-// TODO> Doesn't work because ParentModule doesn't export anything.
-// TODO> Basically it's feature of ng-mocks to export declarations of mocked modules.
-// describe('RealModule', () => {
-//   let fixture: ComponentFixture<ComponentSubject>;
-//
-//   beforeEach(async(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [
-//         ComponentSubject
-//       ],
-//       imports: [
-//         ParentModule,
-//       ],
-//     })
-//     .compileComponents()
-//     .then(() => {
-//       fixture = TestBed.createComponent(ComponentSubject);
-//       fixture.detectChanges();
-//     });
-//   }));
-//
-//   it('should do stuff', () => {
-//     expect(fixture.nativeElement.innerHTML)
-//       .toContain('<example-component><span>My Example</span></example-component>');
-//     expect(fixture.nativeElement.innerHTML)
-//       .toContain('<span example-directive="">ExampleDirective</span>');
-//     expect(fixture.nativeElement.innerHTML)
-//       .toContain('Example: test');
-//   });
-// });
+describe('MockProvider', () => {
+  const CUSTOM_TOKEN = new InjectionToken('TOKEN');
+
+  @NgModule({
+    providers: [
+      {
+        multi: true,
+        provide: HTTP_INTERCEPTORS,
+        useValue: 'MY_CUSTOM_VALUE',
+      },
+      {
+        provide: CUSTOM_TOKEN,
+        useValue: 'MY_CUSTOM_VALUE',
+      },
+    ],
+  })
+  class CustomTokenModule {}
+
+  it('should skip tokens in a mocked module', () => {
+    const mock = MockModule(CustomTokenModule);
+    const def = ngModuleResolver.resolve(mock);
+    expect(def.providers).toEqual([]);
+  });
+
+  it('should return undefined on any token', () => {
+    expect(MockProvider(CUSTOM_TOKEN)).toBeUndefined();
+    expect(MockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
+    expect(MockProvider(APP_INITIALIZER)).toBeUndefined();
+  });
+});

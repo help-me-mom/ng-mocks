@@ -2,13 +2,8 @@
 /dist
 /node_modules
 /e2e/angular5/node_modules
-/e2e/angular5-jest/node_modules
 /e2e/angular6/node_modules
-/e2e/angular6-jest/node_modules
 /e2e/angular7/node_modules
-/e2e/angular7-jest/node_modules
 /e2e/angular8/node_modules
-/e2e/angular8-jest/node_modules
 /e2e/angular9-ivy-false/node_modules
 /e2e/angular9-ivy-true/node_modules
-/e2e/angular9-jest/node_modules

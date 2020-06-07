@@ -22,10 +22,10 @@ do
 
   echo $NEW
 
-  npm uninstall --no-save $OLD
-  npm install --no-save $NEW
+  npm uninstall --no-save $OLD --silent --quiet --no-progress
+  npm install --no-save $NEW --silent --quiet --no-progress
   npm run build:all
 done
-npm install
+npm install --silent --quiet --no-progress
 npm run e2e
 echo Testing complete

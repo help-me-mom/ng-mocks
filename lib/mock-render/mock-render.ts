@@ -1,41 +1,20 @@
-// tslint:disable:unified-signatures
-
 import { core } from '@angular/compiler';
-import { Component, DebugElement, DebugNode, Provider, Type } from '@angular/core';
-import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { Component, DebugElement, DebugNode, Provider } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Type } from '../common';
 import { directiveResolver } from '../common/reflect';
+import { ngMocks } from '../mock-helper';
 
-// A5 and its TS 2.4 don't support Omit, that's why we need the magic below.
-// TODO remove it once A5 isn't supported.
+// tslint:disable-next-line:interface-name
+export interface MockedDebugNode<T = any> extends DebugNode {
+  componentInstance: T;
+}
 
-export type DebugNodeField =
-  | 'context'
-  | 'injector'
-  | 'listeners'
-  | 'nativeNode'
-  | 'parent'
-  | 'providerTokens'
-  | 'references';
-
-export type MockedDebugNode<T = any> = { componentInstance: T } & Pick<DebugNode, DebugNodeField> & {
-    childNodes?: MockedDebugNode[];
-  };
-
-export type DebugElementField =
-  | 'attributes'
-  | 'children'
-  | 'classes'
-  | 'name'
-  | 'nativeElement'
-  | 'properties'
-  | 'query'
-  | 'queryAll'
-  | 'queryAllNodes'
-  | 'styles'
-  | 'triggerEventHandler';
-
-export type MockedDebugElement<T = any> = Pick<DebugElement, DebugElementField> & MockedDebugNode<T>;
+// tslint:disable-next-line:interface-name
+export interface MockedDebugElement<T = any> extends DebugElement, MockedDebugNode<T> {
+  componentInstance: T;
+}
 
 export interface IMockRenderOptions {
   detectChanges?: boolean;
@@ -86,8 +65,8 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     }
 
     const { inputs, outputs, selector } = meta;
-    mockedTemplate += `<${selector}`;
-    if (inputs) {
+    mockedTemplate += selector ? `<${selector}` : '';
+    if (selector && inputs) {
       inputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         if (alias && params && typeof params[alias]) {
@@ -97,7 +76,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
         }
       });
     }
-    if (outputs) {
+    if (selector && outputs) {
       outputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         if (alias && params && typeof params[alias]) {
@@ -107,7 +86,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
         }
       });
     }
-    mockedTemplate += `></${selector}>`;
+    mockedTemplate += selector ? `></${selector}>` : '';
   }
   const options: Component = {
     providers: flagsObject.providers,
@@ -124,9 +103,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   );
 
   // Soft reset of TestBed.
-  (getTestBed() as any)._instantiated = false;
-  (getTestBed() as any)._moduleFactory = undefined;
-  (getTestBed() as any)._testModuleRef = null;
+  ngMocks.flushTestBed();
 
   // Injection of our template.
   TestBed.configureTestingModule({

@@ -1,4 +1,6 @@
-import { ContentChild, ContentChildren, Input, Output, Query, Type, ViewChild, ViewChildren } from '@angular/core';
+import { ContentChild, ContentChildren, Input, Output, Query, ViewChild, ViewChildren } from '@angular/core';
+
+import { Type } from './lib';
 
 // Looks like an A9 bug, that queries from @Component aren't processed.
 // Also we have to pass prototype, not the class.

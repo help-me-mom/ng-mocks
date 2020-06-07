@@ -5,13 +5,14 @@ import { By } from '@angular/platform-browser';
 
 import { MockService } from '../mock-service';
 
-import { MockedComponentFixture, MockRender } from './mock-render';
-import { RenderRealComponent } from './mock-render.fixtures';
+import { MockedComponentFixture, MockedDebugElement, MockedDebugNode, MockRender } from './mock-render';
+import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.fixtures';
+import { DebugElement, DebugNode } from '@angular/core';
 
 describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RenderRealComponent],
+      declarations: [RenderRealComponent, WithoutSelectorComponent],
     });
   });
 
@@ -111,5 +112,32 @@ describe('MockRender', () => {
       }
     );
     expect(document.getElementById).toHaveBeenCalledWith('test');
+  });
+
+  it('does not render a component without selector', () => {
+    const fixture = MockRender(WithoutSelectorComponent);
+    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('');
+  });
+
+  it('assigns DebugNodes and DebugElements to Mocks and back', () => {
+    const debugNode = ({} as any) as DebugNode;
+    const debugElement = ({} as any) as DebugElement;
+    const mockedDebugNode = ({} as any) as MockedDebugNode<string>;
+    const mockedDebugElement = ({} as any) as MockedDebugElement<string>;
+
+    const debugNodeToMockedDebugNode: MockedDebugNode = debugNode;
+    const debugElementToMockedDebugElement: MockedDebugElement = debugElement;
+    const mockedDebugNodeToDebugNode: DebugNode = mockedDebugNode;
+    const mockedDebugElementToDebugElement: DebugElement = mockedDebugElement;
+
+    const valueNode: string = mockedDebugNode.componentInstance;
+    const valueElement: string = mockedDebugElement.componentInstance;
+
+    expect(debugNodeToMockedDebugNode).toBeDefined();
+    expect(debugElementToMockedDebugElement).toBeDefined();
+    expect(mockedDebugNodeToDebugNode).toBeDefined();
+    expect(mockedDebugElementToDebugElement).toBeDefined();
+    expect(valueNode).toBeUndefined();
+    expect(valueElement).toBeUndefined();
   });
 });
