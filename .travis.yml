@@ -1,27 +1,17 @@
 os: linux
 language: node_js
 node_js:
-  - 'node'
+  - 10
 dist: trusty
 addons:
   chrome: stable
-before_script:
-  - 'sudo chown root /opt/google/chrome/chrome-sandbox'
-  - 'sudo chmod 4755 /opt/google/chrome/chrome-sandbox'
-script: npm run test:angular-versions
+install:
+  - npm install
+script:
+  - npm run test:angular-versions
+  - npm run e2e
 cache:
+  npm: false
   directories:
-    - $HOME/.node-gyp/
-    - $HOME/.npm/
-    - node_modules/
-    - e2e/angular5/node_modules/
-    - e2e/angular5-jest/node_modules/
-    - e2e/angular6/node_modules/
-    - e2e/angular6-jest/node_modules/
-    - e2e/angular7/node_modules/
-    - e2e/angular7-jest/node_modules/
-    - e2e/angular8/node_modules/
-    - e2e/angular8-jest/node_modules/
-    - e2e/angular9-ivy-false/node_modules/
-    - e2e/angular9-ivy-true/node_modules/
-    - e2e/angular9-jest/node_modules/
+    - /home/travis/.npm
+    - /home/travis/.node-gyp

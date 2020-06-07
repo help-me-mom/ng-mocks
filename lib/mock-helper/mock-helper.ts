@@ -5,7 +5,7 @@ import { EventEmitter } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AbstractType, getSourceOfMock, Type } from '../common';
+import { AbstractType, getSourceOfMock, isNgInjectionToken, Type } from '../common';
 import { directiveResolver } from '../common/reflect';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
@@ -213,6 +213,10 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
+      if (isNgInjectionToken(token)) {
+        continue;
+      }
+
       let meta: core.Directive | undefined;
       if (!meta) {
         try {
@@ -256,6 +260,10 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
+      if (isNgInjectionToken(token)) {
+        continue;
+      }
+
       let meta: core.Directive | undefined;
       if (!meta) {
         try {

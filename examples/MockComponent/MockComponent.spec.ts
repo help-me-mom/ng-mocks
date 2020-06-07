@@ -71,7 +71,7 @@ describe('MockComponent', () => {
       </dependency-component-selector>
     `);
 
-    // injected ng-content says as it was.
+    // injected ng-content stays as it was.
     const mockedNgContent = localFixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
 
