@@ -15,7 +15,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { staticFalse } from '../../tests-jasmine';
+import { staticFalse } from '../../tests';
 import { ngMocks } from '../mock-helper';
 
 import { MockDirective, MockedDirective } from './mock-directive';

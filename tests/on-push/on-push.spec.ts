@@ -1,0 +1,77 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'item-list',
+  template: '{{items.length}}',
+})
+export class ItemListComponent {
+  @Input() items: string[];
+}
+
+describe('ChangeDetectionStrategy.OnPush:real', () => {
+  beforeEach(() => MockBuilder(ItemListComponent));
+
+  it('should show 0 if no items', () => {
+    const fixture = MockRender(ItemListComponent, {
+      items: [],
+    });
+    expect(fixture.point.nativeElement.innerHTML).toEqual('0');
+  });
+
+  it('should show 0 if items pushed to array but not changed reference', () => {
+    const params: { items: string[] } = {
+      items: [],
+    };
+    const fixture = MockRender(ItemListComponent, params);
+    fixture.componentInstance.items.push('demo');
+    fixture.detectChanges();
+
+    expect(fixture.point.nativeElement.innerHTML).toEqual('0');
+  });
+
+  it('should show 1 if items array changed reference', () => {
+    const params: { items: string[] } = {
+      items: [],
+    };
+    const fixture = MockRender(ItemListComponent, params);
+    fixture.componentInstance.items = ['demo'];
+    fixture.detectChanges();
+
+    expect(fixture.point.nativeElement.innerHTML).toEqual('1');
+  });
+});
+
+describe('ChangeDetectionStrategy.OnPush:mock', () => {
+  beforeEach(() => MockBuilder(ItemListComponent));
+
+  it('should show 0 if no items', () => {
+    const fixture = MockRender(ItemListComponent, {
+      items: [],
+    });
+    expect(fixture.point.nativeElement.innerHTML).toEqual('0');
+  });
+
+  it('should show 0 if items pushed to array but not changed reference', () => {
+    const params: { items: string[] } = {
+      items: [],
+    };
+    const fixture = MockRender(ItemListComponent, params);
+    fixture.componentInstance.items.push('demo');
+    fixture.detectChanges();
+
+    expect(fixture.point.nativeElement.innerHTML).toEqual('0');
+  });
+
+  it('should show 1 if items array changed reference', () => {
+    const params: { items: string[] } = {
+      items: [],
+    };
+    const fixture = MockRender(ItemListComponent, params);
+    fixture.componentInstance.items = ['demo'];
+    fixture.detectChanges();
+
+    expect(fixture.point.nativeElement.innerHTML).toEqual('1');
+  });
+});

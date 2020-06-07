@@ -20,28 +20,25 @@ Or you could use this to mock them out and have the ability to assert on their i
 
 For an easy start check the [MockBuilder](#mockbuilder) first.
 
-- [jasmine examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jasmine)
-- [jest examples](https://github.com/ike18t/ng-mocks/tree/master/examples-jest)
+- [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 
-* [jasmine e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jasmine)
-* [jest e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests-jest)
+* [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
 ### Sections:
 
-- [MockModule](#mockmodule)
 - [MockComponent](#mockcomponents)
 - [MockDirective](#mockdirectives)
 - [MockPipe](#mockpipes)
 - [MockDeclaration](#mockdeclarations)
+- [MockModule](#mockmodule)
 
 * [MockBuilder](#mockbuilder) - facilitate creation of a mocked environment
 * [MockRender](#mockrender) - facilitate render of components
-* [MockHelper](#mockhelper) - facilitate extraction of directives of an element
+* [ngMocks](#ngmocks) - facilitate extraction of directives of an element
 
 - [Reactive Forms Components](#mocked-reactive-forms-components)
 - [Structural Components](#usage-example-of-structural-directives)
 - [Auto Spy](#auto-spy)
-- [More examples](#other-examples-of-tests)
 
 ---
 
@@ -706,6 +703,9 @@ ngMocks provides functions to get attribute and structural directives from an el
 
 - ngMocks.flushTestBed()
 
+<details><summary>Click to see <strong>a usage example</strong></summary>
+<p>
+
 ```typescript
 // returns attribute or structural directive
 // which belongs to current element.
@@ -795,6 +795,9 @@ describe('MockService', () => {
   });
 });
 ```
+
+</p>
+</details>
 
 ## Auto Spy
 
