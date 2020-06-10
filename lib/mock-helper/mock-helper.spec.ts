@@ -117,7 +117,9 @@ describe('MockHelper:getDirective', () => {
     const componentA = ngMocks.find(fixture.debugElement, AComponent);
     expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
 
-    expect(() => ngMocks.find(componentA, BComponent)).toThrowError('Cannot find an element via ngMocks.find');
+    expect(() => ngMocks.find(componentA, BComponent)).toThrowError(
+      'Cannot find an element via ngMocks.find(BComponent)'
+    );
   });
 
   it('find selector: string', () => {
@@ -125,7 +127,9 @@ describe('MockHelper:getDirective', () => {
     const componentB = ngMocks.find(fixture.debugElement, 'component-b');
     expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
 
-    expect(() => ngMocks.find(componentB, AComponent)).toThrowError('Cannot find an element via ngMocks.find');
+    expect(() => ngMocks.find(componentB, AComponent)).toThrowError(
+      'Cannot find an element via ngMocks.find(AComponent)'
+    );
   });
 
   it('find selector: T', () => {
