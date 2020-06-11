@@ -124,7 +124,7 @@ export const ngMocks: {
 } = {
   find: (...args: any[]) => {
     const el: MockedDebugElement = args[0];
-    const sel: any = args[1];
+    const sel: string | Type<any> = args[1];
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
@@ -136,7 +136,7 @@ export const ngMocks: {
       return notFoundValue;
     }
     if (!result) {
-      throw new Error(`Cannot find an element via ngMocks.find`);
+      throw new Error(`Cannot find an element via ngMocks.find(${typeof sel === 'string' ? sel : sel.name})`);
     }
   },
 

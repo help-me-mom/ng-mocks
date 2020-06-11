@@ -1,13 +1,14 @@
-import createSpy = jasmine.createSpy;
 import { DOCUMENT } from '@angular/common';
+import { DebugElement, DebugNode, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { first } from 'rxjs/operators';
 
+import { ngMocks } from '../mock-helper';
 import { MockService } from '../mock-service';
 
 import { MockedComponentFixture, MockedDebugElement, MockedDebugNode, MockRender } from './mock-render';
 import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.fixtures';
-import { DebugElement, DebugNode } from '@angular/core';
 
 describe('MockRender', () => {
   beforeEach(() => {
@@ -17,7 +18,7 @@ describe('MockRender', () => {
   });
 
   it('renders any template and respects dynamic params', () => {
-    const spy = createSpy('mockClick');
+    const spy = jasmine.createSpy('mockClick');
     const assertPayload = {
       magic: Math.random(),
     };
@@ -69,7 +70,7 @@ describe('MockRender', () => {
   });
 
   it('binds inputs and outputs with a provided component', () => {
-    const spy = createSpy('click');
+    const spy = jasmine.createSpy('click');
     const fixture = MockRender(RenderRealComponent, {
       click: spy,
       content: 'content',
@@ -117,6 +118,32 @@ describe('MockRender', () => {
   it('does not render a component without selector', () => {
     const fixture = MockRender(WithoutSelectorComponent);
     expect(fixture.debugElement.nativeElement.innerHTML).toEqual('');
+  });
+
+  it('assigns outputs to a literals', () => {
+    const fixture = MockRender(RenderRealComponent, {
+      click: undefined,
+    });
+
+    const expected = {
+      value: Math.random(),
+    };
+    ngMocks.find(fixture.debugElement, 'span').triggerEventHandler('click', expected);
+    expect(fixture.componentInstance.click as any).toEqual(expected);
+  });
+
+  it('assigns outputs to an EventEmitter', () => {
+    const fixture = MockRender(RenderRealComponent, {
+      click: new EventEmitter(),
+    });
+
+    const expected = {
+      value: Math.random(),
+    };
+    let actual: any;
+    fixture.componentInstance.click.pipe(first()).subscribe(value => (actual = value));
+    ngMocks.find(fixture.debugElement, 'span').triggerEventHandler('click', expected);
+    expect(actual).toEqual(expected);
   });
 
   it('assigns DebugNodes and DebugElements to Mocks and back', () => {
