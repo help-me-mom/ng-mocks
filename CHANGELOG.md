@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.6.0"></a>
+# [9.6.0](https://github.com/ike18t/ng-mocks/compare/v9.5.0...v9.6.0) (2020-06-14)
+
+
+### Features
+
+* e2e tests for all angular versions ([7bc10a7](https://github.com/ike18t/ng-mocks/commit/7bc10a7))
+* mock-builder + lots of helpers ([6965ec0](https://github.com/ike18t/ng-mocks/commit/6965ec0)), closes [#44](https://github.com/ike18t/ng-mocks/issues/44)
+* mock-render tries to mirror passed component ([cbb37ba](https://github.com/ike18t/ng-mocks/commit/cbb37ba)), closes [#137](https://github.com/ike18t/ng-mocks/issues/137)
+
+
+
 <a name="9.5.0"></a>
 # [9.5.0](https://github.com/ike18t/ng-mocks/compare/v9.4.0...v9.5.0) (2020-05-31)
 
