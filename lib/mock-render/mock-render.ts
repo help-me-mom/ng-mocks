@@ -24,7 +24,7 @@ export interface IMockRenderOptions {
 }
 
 // tslint:disable-next-line:interface-name
-export interface MockedComponentFixture<C = any, F = undefined> extends ComponentFixture<F> {
+export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> extends ComponentFixture<F> {
   point: MockedDebugElement<C>;
 }
 
@@ -56,7 +56,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
 // without params we shouldn't autocomplete any keys of any types.
 function MockRender<MComponent extends Record<keyof any, any>>(
   template: Type<MComponent>
-): MockedComponentFixture<MComponent, DefaultRenderComponent<MComponent>>;
+): MockedComponentFixture<MComponent>;
 
 function MockRender<MComponent = any, TComponent extends { [key: string]: any } = { [key: string]: any }>(
   template: string,

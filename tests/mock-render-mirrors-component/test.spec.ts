@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { ChangeDetectorRef, Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
+import { DefaultRenderComponent, MockBuilder, MockedComponentFixture, MockRender, ngMocks } from 'ng-mocks';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -23,7 +24,16 @@ export class TargetComponent {
   public var1 = '';
   public var2 = '';
 
+  // required for DefaultRenderComponent generation assertion.
+  protected readonly cdf: ChangeDetectorRef;
+  protected var3 = '';
+
+  constructor(cdf: ChangeDetectorRef) {
+    this.cdf = cdf;
+  }
+
   public test(var2: string): void {
+    this.var3 = this.var2;
     this.var2 = var2;
   }
 }
@@ -79,5 +89,43 @@ describe('mock-render-mirrors-component', () => {
     fixture.componentInstance.output2.pipe(first()).subscribe(() => (updatedOutput2 = true));
     output2.triggerEventHandler('click', null);
     expect(updatedOutput2).toBe(true);
+  });
+
+  it('correctly inherits types', () => {
+    // keeps the 2nd args as DefaultRenderComponent<TargetComponent>
+    const fixture1: MockedComponentFixture<TargetComponent> = MockRender(TargetComponent);
+    fixture1.componentInstance.input1 = '1';
+    fixture1.detectChanges();
+    expect(fixture1).toBeDefined();
+    expect(fixture1.componentInstance.input1).toBe('1');
+    expect(fixture1.point.componentInstance.input1).toBe('1');
+
+    // we have to provide DefaultRenderComponent in this case.
+    // the generated component isn't the same as the testing component.
+    const fixture2: ComponentFixture<DefaultRenderComponent<TargetComponent>> = MockRender(TargetComponent);
+    fixture2.componentInstance.input1 = '1';
+    fixture2.detectChanges();
+    expect(fixture2).toBeDefined();
+    expect(fixture2.componentInstance.input1).toBe('1');
+
+    // full declaration of the mocked fixture type.
+    const fixture3: MockedComponentFixture<TargetComponent, Record<'input1' | 'input3', string>> = MockRender(
+      TargetComponent,
+      {
+        input1: '1',
+        input3: '3',
+      }
+    );
+    expect(fixture3).toBeDefined();
+    expect(fixture3.componentInstance.input3).toBe('3');
+    expect(fixture3.point.componentInstance.input1).toBe('1');
+
+    // full declaration of the default fixture type.
+    const fixture4: ComponentFixture<Record<'input1' | 'input3', string>> = MockRender(TargetComponent, {
+      input1: '1',
+      input3: '3',
+    });
+    expect(fixture4).toBeDefined();
+    expect(fixture4.componentInstance.input3).toBe('3');
   });
 });

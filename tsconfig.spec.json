@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "files": ["index.ts", "jasmine.ts", "jest.ts"],
+  "exclude": ["e2e"],
+  "include": ["**/*.spec.ts"]
+}

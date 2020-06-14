@@ -38,7 +38,7 @@ module.exports = (config: any) => {
 
     karmaTypescriptConfig: {
       include: ['karma-test-shim.ts', 'lib/**/*', 'examples/**/*', 'tests/**/*'],
-      tsconfig: 'tsconfig.json',
+      tsconfig: 'tsconfig.spec.json',
     },
   });
 };

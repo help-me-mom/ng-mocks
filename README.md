@@ -700,9 +700,18 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 
 Provides a simple way to render anything for ease of testing directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` of a component, etc.
 
+> Please note, that `MockRender(MyComponent)` is not assignable to `ComponentFixture<MyComponent>`.
+>
+> You should use either:
+> `MockedComponentFixture<MyComponent>` or
+> `ComponentFixture<DefaultRenderComponent<MyComponent>>`.
+>
+> It happens because `MockRender` generates an additional component to render the desired thing
+> and its interface differs.
+
 It returns a `fixture` of type `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property.
-`fixture.componentInstance` belongs to the middle component for the render, that is quite useless,
-when `fixture.point` points to the debugElement of the passed component.
+`fixture.componentInstance` belongs to the middle component for the render,
+when `fixture.point` points to the debugElement of the desired component.
 
 Its type: `let fixture: MockedComponentFixture<ComponentToRender> = MockRender(ComponentToRender)`.
 
