@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.6.1"></a>
+## [9.6.1](https://github.com/ike18t/ng-mocks/compare/v9.6.0...v9.6.1) (2020-06-14)
+
+
+### Bug Fixes
+
+* better default type of MockedComponentFixture ([cca6994](https://github.com/ike18t/ng-mocks/commit/cca6994))
+
+
+
 <a name="9.6.0"></a>
 # [9.6.0](https://github.com/ike18t/ng-mocks/compare/v9.5.0...v9.6.0) (2020-06-14)
 
