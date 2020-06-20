@@ -7,6 +7,7 @@ import {
   flatten,
   getMockedNgDefOf,
   isNgDef,
+  isNgInjectionToken,
   isNgModuleDefWithProviders,
   Mock,
   MockOf,
@@ -160,7 +161,7 @@ const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
 // tslint:disable-next-line:cyclomatic-complexity
 function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
-  let changed = false;
+  let changed = !ngMocksUniverse.flags.has('skipMock');
   const mockedModuleDef: NgModule = {};
   const {
     bootstrap = [],
@@ -204,7 +205,9 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
       mockedDef = MockProvider(def);
     }
 
-    resolutions.set(provider, mockedDef);
+    if (!isNgInjectionToken(provider) || def !== mockedDef) {
+      resolutions.set(provider, mockedDef);
+    }
     changed = changed || mockedDef !== def;
     return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
   };
