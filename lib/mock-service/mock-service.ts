@@ -78,7 +78,7 @@ const mockServiceHelperPrototype = {
       const mockName = `${service.constructor ? service.constructor.name : 'unknown'}.${method as any}`;
       value[method] = mockServiceHelperPrototype.mockFunction(mockName);
     }
-    if (typeof value === 'object') {
+    if (typeof value === 'object' && typeof service === 'object') {
       Object.setPrototypeOf(value, service);
     }
 

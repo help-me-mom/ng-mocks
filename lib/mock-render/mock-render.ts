@@ -136,7 +136,9 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   const component = Component(options)(
     class MockRenderComponent {
       constructor() {
-        Object.assign(this as any, params);
+        for (const key of Object.keys(params || {})) {
+          (this as any)[key] = (params as any)[key];
+        }
         if (noParams && isComponent && inputs) {
           for (const definition of inputs) {
             const [property] = definition.split(': ');

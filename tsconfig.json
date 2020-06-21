@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "lib": ["es2016", "dom"],
+    "lib": ["dom", "es7"],
     "module": "commonjs",
     "target": "es2015",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "noUnusedLocals": true,
     "sourceMap": true,
     "declaration": true,

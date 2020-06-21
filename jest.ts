@@ -1,4 +1,4 @@
-import { mockServiceHelper } from './lib/mock-service';
+import { mockServiceHelper } from 'ng-mocks';
 
 declare const jest: any;
 

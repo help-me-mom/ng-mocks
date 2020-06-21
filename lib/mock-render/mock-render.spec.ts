@@ -38,12 +38,12 @@ describe('MockRender', () => {
     expect(fixture).toBeTruthy();
 
     // Asserting inputs.
-    expect(fixture.nativeElement.innerText).toEqual(`before injected content after`);
+    expect(fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(`before injected content after`);
 
     // Asserting dynamic changes on inputs.
     fixture.componentInstance.mockContent = 'dynamic content';
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toEqual(`before dynamic content after`);
+    expect(fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(`before dynamic content after`);
 
     // Asserting outputs.
     const spanElement = fixture.debugElement.query(By.css('render-real-component span'));
@@ -98,8 +98,8 @@ describe('MockRender', () => {
   });
 
   it('returns pointer with a provided component', () => {
-    const document = MockService(Document);
-    spyOn(document, 'getElementById');
+    const mock = MockService(document);
+    spyOn(mock, 'getElementById');
     MockRender(
       RenderRealComponent,
       {},
@@ -107,12 +107,12 @@ describe('MockRender', () => {
         providers: [
           {
             provide: DOCUMENT,
-            useValue: document,
+            useValue: mock,
           },
         ],
       }
     );
-    expect(document.getElementById).toHaveBeenCalledWith('test');
+    expect(mock.getElementById).toHaveBeenCalledWith('test');
   });
 
   it('does not render a component without selector', () => {
