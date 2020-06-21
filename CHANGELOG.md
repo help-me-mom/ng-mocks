@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.6.2"></a>
+## [9.6.2](https://github.com/ike18t/ng-mocks/compare/v9.6.1...v9.6.2) (2020-06-21)
+
+
+### Bug Fixes
+
+* detection of empty modules in mock process ([7427e29](https://github.com/ike18t/ng-mocks/commit/7427e29)), closes [#142](https://github.com/ike18t/ng-mocks/issues/142)
+
+
+
 <a name="9.6.1"></a>
 ## [9.6.1](https://github.com/ike18t/ng-mocks/compare/v9.6.0...v9.6.1) (2020-06-14)
 
