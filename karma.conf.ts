@@ -4,22 +4,19 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 module.exports = (config: any) => {
   config.set({
     autoWatch: false,
-    browsers: ['ChromeCi'],
+    browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
     colors: true,
     customLaunchers: {
       ChromeCi: {
         base: 'ChromeHeadless',
         flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
       },
+      IECi: {
+        base: 'IE',
+        flags: ['-extoff'],
+      },
     },
     files: [
-      'node_modules/zone.js/dist/zone.js',
-      'node_modules/zone.js/dist/long-stack-trace-zone.js',
-      'node_modules/zone.js/dist/proxy.js',
-      'node_modules/zone.js/dist/sync-test.js',
-      'node_modules/zone.js/dist/jasmine-patch.js',
-      'node_modules/zone.js/dist/async-test.js',
-      'node_modules/zone.js/dist/fake-async-test.js',
       'karma-test-shim.ts',
       'index.ts',
       'jasmine.ts',
@@ -31,13 +28,13 @@ module.exports = (config: any) => {
     logLevel: config.LOG_INFO,
     port: 9876,
     preprocessors: {
+      '**/*.js': ['sourcemap'],
       '**/*.ts': ['karma-typescript'],
     },
-    reporters: ['kjhtml'],
+    reporters: ['kjhtml', 'karma-typescript'],
     singleRun: true,
 
     karmaTypescriptConfig: {
-      include: ['karma-test-shim.ts', 'lib/**/*', 'examples/**/*', 'tests/**/*'],
       tsconfig: 'tsconfig.spec.json',
     },
   });

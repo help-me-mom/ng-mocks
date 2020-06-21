@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "files": ["index.ts", "jasmine.ts", "jest.ts"],
-  "exclude": ["e2e"],
-  "include": ["**/*.spec.ts"]
+  "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts"],
+  "exclude": ["e2e", "node_modules"],
+  "include": ["lib/**/*", "examples/**/*", "tests/**/*"]
 }

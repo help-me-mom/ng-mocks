@@ -208,7 +208,9 @@ describe('MockComponent', () => {
       // looking for ng-content.
       const ngContent = templateOutlet;
       expect(ngContent).toBeTruthy();
-      expect(ngContent.nativeElement.innerText.trim()).toEqual('ng-content body header ng-content body footer');
+      expect(ngContent.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(
+        'ng-content body header ng-content body footer'
+      );
 
       // looking for 1st templateRef.
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));

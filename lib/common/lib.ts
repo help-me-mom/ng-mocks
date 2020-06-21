@@ -54,6 +54,24 @@ export const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
   return result;
 };
 
+export const mapKeys = <T>(set: Map<T, any>): T[] => {
+  const result: T[] = [];
+  set.forEach((_, value: T) => result.push(value));
+  return result;
+};
+
+export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }): T[] => {
+  const result: T[] = [];
+  set.forEach((value: T) => result.push(value));
+  return result;
+};
+
+export const mapEntries = <K, T>(set: Map<K, T>): Array<[K, T]> => {
+  const result: Array<[K, T]> = [];
+  set.forEach((value: T, key: K) => result.push([key, value]));
+  return result;
+};
+
 export const isNgType = (object: Type<any>, type: string): boolean =>
   jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
 

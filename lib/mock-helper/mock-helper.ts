@@ -88,7 +88,7 @@ export const MockHelper: {
     typeof override === 'object' ? ngMocks.stub(instance, override) : ngMocks.stub(instance, override, style),
 };
 
-const defaultNotFoundValue = Symbol();
+const defaultNotFoundValue = {}; // simulating Symbol
 
 export const ngMocks: {
   find<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;

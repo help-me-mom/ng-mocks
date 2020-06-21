@@ -5,6 +5,8 @@ node_js:
 dist: trusty
 addons:
   chrome: stable
+git:
+  autocrlf: false
 install:
   - npm install
 script:

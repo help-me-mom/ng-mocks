@@ -44,7 +44,7 @@ export function MockProvider(provider: any): Provider | undefined {
     return undefined;
   }
 
-  if (typeof provide === 'function' && neverMockProvidedFunction.includes(provide.name)) {
+  if (typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1) {
     return provider;
   }
 
@@ -79,7 +79,7 @@ export function MockModule(module: any): any {
     ngModule = module;
   }
 
-  if (NEVER_MOCK.includes(ngModule)) {
+  if (NEVER_MOCK.indexOf(ngModule) !== -1) {
     return module;
   }
 
