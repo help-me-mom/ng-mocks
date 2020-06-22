@@ -10,9 +10,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AbstractType, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
+import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
@@ -63,7 +63,7 @@ export function MockComponent<TComponent>(
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
   }
-  const { exportAs, inputs, outputs, queries, selector } = meta;
+  const { exportAs, inputs, outputs, queries, selector, providers } = meta;
 
   let template = `<ng-content></ng-content>`;
   const viewChildRefs = new Map<string, string>();
@@ -102,11 +102,6 @@ export function MockComponent<TComponent>(
     exportAs,
     providers: [
       {
-        multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => ComponentMock),
-      },
-      {
         provide: component,
         useExisting: forwardRef(() => ComponentMock),
       },
@@ -114,6 +109,25 @@ export function MockComponent<TComponent>(
     selector,
     template,
   };
+
+  for (const providerDef of flatten(providers)) {
+    const provider =
+      providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
+    if (options.providers && provider === NG_VALUE_ACCESSOR) {
+      options.providers.push({
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ComponentMock),
+      });
+    }
+    if (options.providers && provider === NG_VALIDATORS) {
+      options.providers.push({
+        multi: true,
+        provide: NG_VALIDATORS,
+        useExisting: forwardRef(() => ComponentMock),
+      });
+    }
+  }
 
   const config = ngMocksUniverse.config.get(component);
 

@@ -1,9 +1,9 @@
 import { core } from '@angular/compiler';
 import { Directive, ElementRef, forwardRef, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AbstractType, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
+import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
@@ -54,16 +54,11 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
   }
-  const { selector, exportAs, inputs, outputs, queries } = meta;
+  const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 
   const options: Directive = {
     exportAs,
     providers: [
-      {
-        multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => DirectiveMock),
-      },
       {
         provide: directive,
         useExisting: forwardRef(() => DirectiveMock),
@@ -71,6 +66,25 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     ],
     selector,
   };
+
+  for (const providerDef of flatten(providers)) {
+    const provider =
+      providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
+    if (options.providers && provider === NG_VALUE_ACCESSOR) {
+      options.providers.push({
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => DirectiveMock),
+      });
+    }
+    if (options.providers && provider === NG_VALIDATORS) {
+      options.providers.push({
+        multi: true,
+        provide: NG_VALIDATORS,
+        useExisting: forwardRef(() => DirectiveMock),
+      });
+    }
+  }
 
   const config = ngMocksUniverse.config.get(directive);
 
