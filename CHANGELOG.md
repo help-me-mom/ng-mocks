@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.6.3"></a>
+## [9.6.3](https://github.com/ike18t/ng-mocks/compare/v9.6.2...v9.6.3) (2020-06-23)
+
+
+### Bug Fixes
+
+* adding NG_VALUE_ACCESSOR only when necessary ([7f54464](https://github.com/ike18t/ng-mocks/commit/7f54464)), closes [#145](https://github.com/ike18t/ng-mocks/issues/145)
+
+
+
 <a name="9.6.2"></a>
 ## [9.6.2](https://github.com/ike18t/ng-mocks/compare/v9.6.1...v9.6.2) (2020-06-21)
 
