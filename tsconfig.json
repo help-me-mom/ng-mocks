@@ -20,7 +20,8 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "ng-mocks": ["index"]
+      "ng-mocks": ["index"],
+      "ng-mocks/dist/*": ["./*"]
     },
     "skipLibCheck": true
   },
