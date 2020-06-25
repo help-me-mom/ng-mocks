@@ -12,6 +12,8 @@ VOLUME /app/e2e/angular7/node_modules
 VOLUME /app/e2e/angular8/node_modules
 VOLUME /app/e2e/angular9-ivy-false/node_modules
 VOLUME /app/e2e/angular9-ivy-true/node_modules
+VOLUME /app/e2e/angular10-ivy-false/node_modules
+VOLUME /app/e2e/angular10-ivy-true/node_modules
 
 RUN npm config set cache /npm --global
 

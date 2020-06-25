@@ -23,3 +23,5 @@ cache:
     - e2e/angular8/node_modules
     - e2e/angular9-ivy-false/node_modules
     - e2e/angular9-ivy-true/node_modules
+    - e2e/angular10-ivy-false/node_modules
+    - e2e/angular10-ivy-true/node_modules

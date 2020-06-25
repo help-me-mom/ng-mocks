@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, PipeTransform, Provider } from '@angular/core';
+import { InjectionToken, PipeTransform, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import { MockedComponent } from '../mock-component';
@@ -24,7 +24,7 @@ export interface Type<T> extends Function {
 
 // remove after removal of A5 support
 // tslint:disable-next-line:interface-name
-export interface NgModuleWithProviders<T = any> extends ModuleWithProviders {
+export interface NgModuleWithProviders<T = any> {
   ngModule: Type<T>;
   providers?: Provider[];
 }

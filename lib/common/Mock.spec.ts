@@ -155,12 +155,12 @@ describe('Mock prototype', () => {
 
   it('should get all things mocked and in the same time respect prototype', () => {
     const mockDef = MockComponent(CustomComponent);
-    const mock = new mockDef();
+    const mock = new mockDef() as any;
     expect(mock).toEqual(jasmine.any(CustomComponent));
 
     // checking that it was processed through Mock
-    expect(mock.__ngMocksMock as any).toBe(true);
-    expect(mock.__ngMocksMockControlValueAccessor as any).toBe(true);
+    expect(mock.__ngMocksMock).toBe(true);
+    expect(mock.__ngMocksMockControlValueAccessor).toBe(true);
 
     // checking that it was processed through MockControlValueAccessor
     const spy = jasmine.createSpy('spy');

@@ -1,9 +1,9 @@
 import { APP_ID, APP_INITIALIZER, VERSION } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { TargetComponent } from './fixtures.components';
 import { TARGET_TOKEN, TargetModule } from './fixtures.modules';
+import { testBedInjector } from '../utils/test-bed-injector';
 
 describe('MockBuilderKeepsApplicationModule:real', () => {
   beforeEach(() => MockBuilder(TargetModule));
@@ -12,9 +12,9 @@ describe('MockBuilderKeepsApplicationModule:real', () => {
     const fixture = MockRender(TargetComponent);
     const element = ngMocks.find(fixture.debugElement, TargetComponent);
     expect(element).toBeDefined();
-    expect(TestBed.get(TARGET_TOKEN)).toBeDefined();
-    expect(TestBed.get(APP_INITIALIZER)).toBeDefined();
-    expect(TestBed.get(APP_ID)).toBeDefined();
+    expect(testBedInjector(TARGET_TOKEN)).toBeDefined();
+    expect(testBedInjector(APP_INITIALIZER)).toBeDefined();
+    expect(testBedInjector(APP_ID)).toBeDefined();
   });
 });
 
@@ -25,12 +25,12 @@ describe('MockBuilderKeepsApplicationModule:mock', () => {
     const fixture = MockRender(TargetComponent);
     const element = ngMocks.find(fixture.debugElement, TargetComponent);
     expect(element).toBeDefined();
-    expect(() => TestBed.get(TARGET_TOKEN)).toThrow();
-    if (VERSION.major !== '9') {
+    expect(() => testBedInjector(TARGET_TOKEN)).toThrow();
+    if (!['9', '10'].includes(VERSION.major)) {
       // somehow ivy doesn't provide APP_INITIALIZER out of the box and this assertion fails.
       // our mock logic skips all multi tokens therefore this one isn't present anymore.
-      expect(TestBed.get(APP_INITIALIZER)).toBeDefined();
+      expect(testBedInjector(APP_INITIALIZER)).toBeDefined();
     }
-    expect(TestBed.get(APP_ID)).toBeDefined();
+    expect(testBedInjector(APP_ID)).toBeDefined();
   });
 });

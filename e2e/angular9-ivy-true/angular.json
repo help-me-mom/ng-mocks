@@ -102,5 +102,8 @@
             "sourceRoot": "src"
         }
     },
-    "defaultProject": "ngrx-entity-relations"
+    "defaultProject": "ngrx-entity-relations",
+    "cli": {
+        "analytics": false
+    }
 }
