@@ -152,8 +152,10 @@ export function MockModule(module: any): any {
     ngMocksUniverse.flags.delete('skipMock');
   }
 
-  return ngModuleProviders && ngModuleProviders.length
-    ? { ngModule: mockModule, providers: mockModuleProviders }
+  return mockModule === ngModule && mockModuleProviders === ngModuleProviders
+    ? module
+    : isNgModuleDefWithProviders(module)
+    ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
     : mockModule;
 }
 
