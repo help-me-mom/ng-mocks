@@ -600,11 +600,13 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 // The replacement has to be decorated with the same decorator as the source.
 // It's impossible to replace a provider or a service, we should use .provide or .mock for that.
 const ngModule = MockBuilder(MyComponent, MyModule)
-  .replace(HttpClientModule, HttpClientTestingModule)
+  .replace(SomeModule, SomeOtherModule)
   .replace(SomeComponent, SomeOtherComponent)
   .replace(SomeDirective, SomeOtherDirective)
   .replace(SomePipe, SomeOtherPipe)
   .build();
+// In case of HttpClientTestingModule, it should be kept instead of replacement.
+const ngModule = MockBuilder(MyComponent, MyModule).keep(HttpClientModule).keep(HttpClientTestingModule).build();
 // For pipes we can set its handler as the 2nd parameter of .mock too.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomePipe, value => 'My Custom Content')
