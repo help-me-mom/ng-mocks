@@ -131,6 +131,7 @@ export function MockComponent<TComponent>(
 
   const config = ngMocksUniverse.config.get(component);
 
+  @Component(options)
   @MockOf(component, outputs)
   class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
     constructor(changeDetector: ChangeDetectorRef) {
@@ -185,10 +186,9 @@ export function MockComponent<TComponent>(
   decorateOutputs(ComponentMock, outputs);
   decorateQueries(ComponentMock, queries);
 
-  const mockedComponent: Type<MockedComponent<TComponent>> = Component(options)(ComponentMock as any);
   if (ngMocksUniverse.flags.has('cacheComponent')) {
-    ngMocksUniverse.cache.set(component, mockedComponent);
+    ngMocksUniverse.cache.set(component, ComponentMock);
   }
 
-  return mockedComponent;
+  return ComponentMock as any;
 }

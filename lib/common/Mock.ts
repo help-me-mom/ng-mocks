@@ -5,6 +5,9 @@ import { mockServiceHelper } from '../mock-service';
 
 // tslint:disable-next-line:no-unnecessary-class
 export class Mock {
+  // tslint:disable-next-line:variable-name
+  public readonly __ngMocksMock: true = true;
+
   constructor() {
     // setting outputs
     for (const output of (this as any).__mockedOutputs) {
@@ -48,18 +51,13 @@ export class Mock {
     // and faking prototype
     Object.setPrototypeOf(this, (this.constructor as any).mockOf.prototype);
   }
-
-  get __ngMocksMock(): boolean {
-    return true;
-  }
 }
 
 export class MockControlValueAccessor extends Mock implements ControlValueAccessor, Validator {
-  get __ngMocksMockControlValueAccessor(): boolean {
-    return true;
-  }
+  // tslint:disable-next-line:variable-name
+  public readonly __ngMocksMockControlValueAccessor: true = true;
 
-  __simulateChange = (param: any) => {}; // tslint:disable-line:variable-name
+  __simulateChange = (value: any) => {}; // tslint:disable-line:variable-name
 
   __simulateTouch = () => {}; // tslint:disable-line:variable-name
 
@@ -81,5 +79,5 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
 
   validate = (control: AbstractControl): ValidationErrors | null => null;
 
-  writeValue = (obj: any) => {};
+  writeValue = (value: any) => {};
 }

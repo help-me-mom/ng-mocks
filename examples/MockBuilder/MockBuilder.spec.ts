@@ -43,9 +43,9 @@ import {
 describe('MockBuilder:simple', () => {
   beforeEach(() => MockBuilder(MyComponent, MyModule));
   // the same as
-  // TestBed.configureTestingModule({{
+  // beforeEach(() => TestBed.configureTestingModule({{
   //   imports: [MockModule(MyModule)], // but MyComponent wasn't mocked for the testing purposes.
-  // }).compileComponents();
+  // }).compileComponents());
   // and we can simply pass it to the TestBed.
 
   it('should render content ignoring all dependencies', () => {

@@ -88,6 +88,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
   const config = ngMocksUniverse.config.get(directive);
 
+  @Directive(options)
   @MockOf(directive, outputs)
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
     constructor(
@@ -131,10 +132,9 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   decorateOutputs(DirectiveMock, outputs);
   decorateQueries(DirectiveMock, queries);
 
-  const mockedDirective: Type<MockedDirective<TDirective>> = Directive(options)(DirectiveMock as any);
   if (ngMocksUniverse.flags.has('cacheDirective')) {
-    ngMocksUniverse.cache.set(directive, mockedDirective);
+    ngMocksUniverse.cache.set(directive, DirectiveMock);
   }
 
-  return mockedDirective;
+  return DirectiveMock as any;
 }
