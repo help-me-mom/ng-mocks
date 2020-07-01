@@ -4,6 +4,7 @@ import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ngMocksUniverse } from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
@@ -217,5 +218,38 @@ describe('MockProvider', () => {
     expect(MockProvider(CUSTOM_TOKEN)).toBeUndefined();
     expect(MockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
     expect(MockProvider(APP_INITIALIZER)).toBeUndefined();
+  });
+});
+
+describe('MockModuleWithProviders', () => {
+  const TARGET_TOKEN = new InjectionToken('TOKEN');
+
+  @NgModule()
+  class TargetModule {}
+
+  it('returns the same object on zero change', () => {
+    const def = {
+      ngModule: TargetModule,
+      providers: [
+        {
+          provide: TARGET_TOKEN,
+          useValue: 1,
+        },
+      ],
+    };
+
+    ngMocksUniverse.flags.add('skipMock');
+    const actual = MockModule(def);
+    ngMocksUniverse.flags.delete('skipMock');
+    expect(actual).toBe(def);
+  });
+
+  it('returns mocked ngModule with undefined providers', () => {
+    const def = {
+      ngModule: TargetModule,
+    };
+
+    const actual = MockModule(def);
+    expect(actual.ngModule).toBeDefined();
   });
 });
