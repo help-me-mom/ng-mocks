@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.6.4"></a>
+## [9.6.4](https://github.com/ike18t/ng-mocks/compare/v9.6.3...v9.6.4) (2020-07-02)
+
+
+### Bug Fixes
+
+* respect of WithProviders without providers ([11ec9de](https://github.com/ike18t/ng-mocks/commit/11ec9de)), closes [#151](https://github.com/ike18t/ng-mocks/issues/151)
+
+
+
 <a name="9.6.3"></a>
 ## [9.6.3](https://github.com/ike18t/ng-mocks/compare/v9.6.2...v9.6.3) (2020-06-23)
 
