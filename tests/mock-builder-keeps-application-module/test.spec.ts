@@ -26,7 +26,7 @@ describe('MockBuilderKeepsApplicationModule:mock', () => {
     const element = ngMocks.find(fixture.debugElement, TargetComponent);
     expect(element).toBeDefined();
     expect(() => TestBed.get(TARGET_TOKEN)).toThrow();
-    if (VERSION.major !== '9') {
+    if (parseInt(VERSION.major, 10) < 9) {
       // somehow ivy doesn't provide APP_INITIALIZER out of the box and this assertion fails.
       // our mock logic skips all multi tokens therefore this one isn't present anymore.
       expect(TestBed.get(APP_INITIALIZER)).toBeDefined();

@@ -1,4 +1,5 @@
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
 
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
@@ -36,31 +37,55 @@ class ChildModuleClass extends ParentClass implements PipeTransform {
 @Component({
   template: '',
 })
-class ChildComponentClass extends ParentClass implements PipeTransform {
+class ChildComponentClass extends ParentClass implements PipeTransform, ControlValueAccessor {
   protected childValue = true;
 
   public childMethod(): boolean {
     return this.childValue;
   }
 
-  transform(): string {
+  // tslint:disable-next-line:prefer-function-over-method
+  public registerOnChange(fn: any): void {}
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public registerOnTouched(fn: any): void {}
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public setDisabledState(isDisabled: boolean): void {}
+
+  public transform(): string {
     return typeof this.childValue;
   }
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public writeValue(obj: any): void {}
 }
 
 @Directive({
   selector: 'mock',
 })
-class ChildDirectiveClass extends ParentClass implements PipeTransform {
+class ChildDirectiveClass extends ParentClass implements PipeTransform, ControlValueAccessor {
   protected childValue = true;
 
   public childMethod(): boolean {
     return this.childValue;
   }
 
-  transform(): string {
+  // tslint:disable-next-line:prefer-function-over-method
+  public registerOnChange(fn: any): void {}
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public registerOnTouched(fn: any): void {}
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public setDisabledState(isDisabled: boolean): void {}
+
+  public transform(): string {
     return typeof this.childValue;
   }
+
+  // tslint:disable-next-line:prefer-function-over-method
+  public writeValue(obj: any): void {}
 }
 
 @Pipe({
@@ -133,12 +158,8 @@ describe('Mock prototype', () => {
     selector: 'custom',
     template: '',
   })
-  class CustomComponent {
+  class CustomComponent implements ControlValueAccessor {
     public test = 'custom';
-
-    public get __ngMocksMock(): string {
-      return 'IMPOSSIBLE_OVERRIDE';
-    }
 
     public get test1(): string {
       return 'test1';
@@ -148,9 +169,21 @@ describe('Mock prototype', () => {
       this.test = value;
     }
 
+    // tslint:disable-next-line:prefer-function-over-method
+    public registerOnChange(fn: any): void {}
+
+    // tslint:disable-next-line:prefer-function-over-method
+    public registerOnTouched(fn: any): void {}
+
+    // tslint:disable-next-line:prefer-function-over-method
+    public setDisabledState(isDisabled: boolean): void {}
+
     public testMethod(): string {
       return this.test;
     }
+
+    // tslint:disable-next-line:prefer-function-over-method
+    public writeValue(obj: any): void {}
   }
 
   it('should get all things mocked and in the same time respect prototype', () => {

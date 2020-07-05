@@ -9,17 +9,16 @@ git:
   autocrlf: false
 install:
   - npm install
-script:
-  - npm run test:angular-versions
+jobs:
+  include:
+    - name: 'Unit Tests'
+      script:
+        - npm run test:angular-versions
+    - name: 'E2E'
+      script:
+        - npm run e2e
 cache:
-  npm: false
+  npm: true
   directories:
-    - $HOME/.npm
     - $HOME/.node-gyp
     - node_modules
-    - e2e/angular5/node_modules
-    - e2e/angular6/node_modules
-    - e2e/angular7/node_modules
-    - e2e/angular8/node_modules
-    - e2e/angular9-ivy-false/node_modules
-    - e2e/angular9-ivy-true/node_modules
