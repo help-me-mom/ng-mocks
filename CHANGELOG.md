@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0"></a>
+# [10.0.0](https://github.com/ike18t/ng-mocks/compare/v9.6.4...v10.0.0) (2020-07-05)
+
+
+### Features
+
+* angular 10 support ([83debd2](https://github.com/ike18t/ng-mocks/commit/83debd2)), closes [#148](https://github.com/ike18t/ng-mocks/issues/148) [#149](https://github.com/ike18t/ng-mocks/issues/149)
+
+
+### BREAKING CHANGES
+
+* A10
+
+
+
 <a name="9.6.4"></a>
 ## [9.6.4](https://github.com/ike18t/ng-mocks/compare/v9.6.3...v9.6.4) (2020-07-02)
 
