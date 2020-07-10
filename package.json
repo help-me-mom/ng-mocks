@@ -3,9 +3,6 @@
   "version": "10.0.0",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
-  "module": "dist/es5/index.js",
-  "es5": "dist/es5/index.js",
-  "es2015": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "CHANGELOG",
@@ -14,7 +11,7 @@
     "README"
   ],
   "scripts": {
-    "build": "npm run clean && tsc && tsc -t es5 --outDir dist/es5",
+    "build": "npm run clean && tsc",
     "build:all": "npm run lint && npm run build && npm run test",
     "i:a": "npm run i:a5 & npm run i:a6 & npm run i:a7 & npm run i:a8 & npm run i:a9 & npm run i:a10 & wait",
     "i:a5": "npm run i:a5es5 && npm run i:a5es2015",
@@ -138,7 +135,7 @@
     "test:a9es5noivy": "cd e2e/a9es5noivy && npm run test",
     "test:a9es2015ivy": "cd e2e/a9es2015ivy && npm run test",
     "test:a9es2015noivy": "cd e2e/a9es2015noivy && npm run test",
-    "test:a10": "npm run test:a10es2015",
+    "test:a10": "npm run test:a10es5 && npm run test:a10es2015",
     "test:a10es5": "npm run test:a10es5ivy && npm run test:a10es5noivy",
     "test:a10es2015": "npm run test:a10es2015ivy && npm run test:a10es2015noivy",
     "test:a10es5ivy": "cd e2e/a10es5ivy && npm run test",
