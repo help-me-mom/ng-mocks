@@ -2,9 +2,10 @@
 
 import { InjectionToken } from '@angular/core';
 
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper';
 
-import { MockService } from './mock-service';
+import { MockService, mockServiceHelper } from './mock-service';
 
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';
@@ -275,5 +276,26 @@ describe('MockService', () => {
     expect(test.nameGet).toBe('fake3');
     expect(test.nameRead).toBe('fake4');
     expect(test.nameSet).toBe('fake5');
+  });
+
+  it('respects original class in replaceWithMocks', () => {
+    class A {}
+
+    class B {}
+
+    class Test {
+      private member = A;
+
+      public getMember() {
+        return this.member;
+      }
+    }
+
+    ngMocksUniverse.cache.set(A, B);
+
+    const instance = new Test();
+    const updated = mockServiceHelper.replaceWithMocks(instance);
+    expect(updated).toEqual(jasmine.any(Test));
+    expect(updated.getMember()).toBe(B);
   });
 });
