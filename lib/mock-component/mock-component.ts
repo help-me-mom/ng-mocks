@@ -4,13 +4,15 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  Optional,
   Query,
+  Self,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgControl, NG_VALIDATORS } from '@angular/forms';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
@@ -110,20 +112,13 @@ export function MockComponent<TComponent>(
     template,
   };
 
-  for (const providerDef of flatten(providers)) {
-    const provider =
+  for (const providerDef of flatten(providers || [])) {
+    const provide =
       providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
-    if (options.providers && provider === NG_VALUE_ACCESSOR) {
+    if (options.providers && provide === NG_VALIDATORS) {
       options.providers.push({
         multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => ComponentMock),
-      });
-    }
-    if (options.providers && provider === NG_VALIDATORS) {
-      options.providers.push({
-        multi: true,
-        provide: NG_VALIDATORS,
+        provide,
         useExisting: forwardRef(() => ComponentMock),
       });
     }
@@ -134,8 +129,12 @@ export function MockComponent<TComponent>(
   @Component(options)
   @MockOf(component, outputs)
   class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
-    constructor(changeDetector: ChangeDetectorRef) {
+    constructor(changeDetector: ChangeDetectorRef, @Self() @Optional() ngControl?: NgControl) {
       super();
+
+      if (ngControl && !ngControl.valueAccessor) {
+        ngControl.valueAccessor = this;
+      }
 
       // Providing method to hide any @ContentChild based on its selector.
       (this as any).__hide = (contentChildSelector: string) => {
