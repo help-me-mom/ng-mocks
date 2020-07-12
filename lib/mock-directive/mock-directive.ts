@@ -1,7 +1,16 @@
 import { core } from '@angular/compiler';
-import { Directive, ElementRef, forwardRef, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  forwardRef,
+  OnInit,
+  Optional,
+  Self,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgControl, NG_VALIDATORS } from '@angular/forms';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
@@ -67,20 +76,13 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     selector,
   };
 
-  for (const providerDef of flatten(providers)) {
-    const provider =
+  for (const providerDef of flatten(providers || [])) {
+    const provide =
       providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
-    if (options.providers && provider === NG_VALUE_ACCESSOR) {
+    if (options.providers && provide === NG_VALIDATORS) {
       options.providers.push({
         multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => DirectiveMock),
-      });
-    }
-    if (options.providers && provider === NG_VALIDATORS) {
-      options.providers.push({
-        multi: true,
-        provide: NG_VALIDATORS,
+        provide,
         useExisting: forwardRef(() => DirectiveMock),
       });
     }
@@ -94,9 +96,14 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     constructor(
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef
+      @Optional() viewContainer?: ViewContainerRef,
+      @Self() @Optional() ngControl?: NgControl
     ) {
       super();
+
+      if (ngControl && !ngControl.valueAccessor) {
+        ngControl.valueAccessor = this;
+      }
 
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.

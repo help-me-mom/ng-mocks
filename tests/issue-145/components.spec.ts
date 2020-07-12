@@ -48,20 +48,19 @@ describe('issue-145', () => {
     ]);
   });
 
-  it('ComponentValueAccessor', () => {
+  // this test was changed due to issue 157: https://github.com/ike18t/ng-mocks/issues/157
+  it('should skip NG_VALUE_ACCESSOR in mocked component ComponentValueAccessor', () => {
     const mock = MockComponent(ComponentValueAccessor);
     const { providers } = directiveResolver.resolve(mock);
-    expect(providers).toEqual([
-      {
-        provide: ComponentValueAccessor,
-        useExisting: jasmine.anything(),
-      },
-      {
-        multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: jasmine.anything(),
-      },
-    ]);
+    expect(providers as any).not.toEqual(
+      jasmine.arrayContaining([
+        {
+          multi: true,
+          provide: NG_VALUE_ACCESSOR,
+          useExisting: jasmine.anything(),
+        },
+      ])
+    );
   });
 
   it('ComponentValidator', () => {

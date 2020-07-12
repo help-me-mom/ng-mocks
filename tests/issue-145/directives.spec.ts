@@ -45,20 +45,19 @@ describe('issue-145', () => {
     ]);
   });
 
+  // this test was changed due to issue 157: https://github.com/ike18t/ng-mocks/issues/157
   it('DirectiveValueAccessor', () => {
     const mock = MockDirective(DirectiveValueAccessor);
     const { providers } = directiveResolver.resolve(mock);
-    expect(providers).toEqual([
-      {
-        provide: DirectiveValueAccessor,
-        useExisting: jasmine.anything(),
-      },
-      {
-        multi: true,
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: jasmine.anything(),
-      },
-    ]);
+    expect(providers as any).not.toEqual(
+      jasmine.arrayContaining([
+        {
+          multi: true,
+          provide: NG_VALUE_ACCESSOR,
+          useExisting: jasmine.anything(),
+        },
+      ])
+    );
   });
 
   it('DirectiveValidator', () => {
