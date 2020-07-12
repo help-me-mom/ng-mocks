@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.1"></a>
+## [10.0.1](https://github.com/ike18t/ng-mocks/compare/v10.0.0...v10.0.1) (2020-07-12)
+
+
+### Bug Fixes
+
+* building es5 only that supports es2015 ([d11ed5a](https://github.com/ike18t/ng-mocks/commit/d11ed5a)), closes [#158](https://github.com/ike18t/ng-mocks/issues/158)
+* respect mocks in tokens with useValue ([ccccfc6](https://github.com/ike18t/ng-mocks/commit/ccccfc6)), closes [#151](https://github.com/ike18t/ng-mocks/issues/151)
+* smart injection of NG_VALUE_ACCESSOR ([ad37bf0](https://github.com/ike18t/ng-mocks/commit/ad37bf0)), closes [#157](https://github.com/ike18t/ng-mocks/issues/157)
+
+
+
 <a name="10.0.0"></a>
 # [10.0.0](https://github.com/ike18t/ng-mocks/compare/v9.6.4...v10.0.0) (2020-07-05)
 
