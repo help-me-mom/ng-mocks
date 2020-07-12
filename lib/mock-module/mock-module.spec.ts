@@ -4,8 +4,8 @@ import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ngMocksUniverse } from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockModule, MockProvider } from '../mock-module';

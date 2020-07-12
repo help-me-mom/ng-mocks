@@ -19,7 +19,7 @@ import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockPipe } from '../mock-pipe';
-import { MockService } from '../mock-service';
+import { MockService, mockServiceHelper } from '../mock-service';
 
 export type MockedModule<T> = T & Mock & {};
 
@@ -62,7 +62,6 @@ export function MockProvider(provider: any): Provider | undefined {
 export function MockModule<T>(module: Type<T>): Type<T>;
 export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 export function MockModule(module: any): any {
-  // tslint:disable-line:cyclomatic-complexity
   let ngModule: Type<any>;
   let ngModuleProviders: Provider[] | undefined;
   let mockModule: typeof ngModule | undefined;
@@ -161,7 +160,6 @@ export function MockModule(module: any): any {
 
 const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
-// tslint:disable-next-line:cyclomatic-complexity
 function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
   let changed = !ngMocksUniverse.flags.has('skipMock');
   const mockedModuleDef: NgModule = {};
@@ -205,6 +203,17 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
     }
     if (!mockedDef) {
       mockedDef = MockProvider(def);
+    }
+    // if provider is a value, we need to go through the value and to replace all mocked instances.
+    if (provider !== def && mockedDef && mockedDef.useValue) {
+      const useValue = mockServiceHelper.replaceWithMocks(mockedDef.useValue);
+      mockedDef =
+        useValue === mockedDef.useValue
+          ? mockedDef
+          : {
+              ...mockedDef,
+              useValue,
+            };
     }
 
     if (!isNgInjectionToken(provider) || def !== mockedDef) {

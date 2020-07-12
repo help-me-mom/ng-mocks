@@ -107,7 +107,6 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   }
 
   public build(): NgModule {
-    // tslint:disable-line:cyclomatic-complexity
     const backup = {
       builder: ngMocksUniverse.builder,
       cache: ngMocksUniverse.cache,

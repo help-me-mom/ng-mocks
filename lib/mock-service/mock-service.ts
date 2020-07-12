@@ -1,3 +1,5 @@
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
+
 export type MockedFunction = () => any;
 
 const isFunc = (value: any): boolean => {
@@ -138,7 +140,6 @@ const mockServiceHelperPrototype = {
     }
   },
 
-  // tslint:disable-next-line:cyclomatic-complexity
   mock: <T = MockedFunction>(instance: any, name: string, accessType?: 'get' | 'set'): T => {
     const def = Object.getOwnPropertyDescriptor(instance, name);
     if (def && def[accessType || 'value']) {
@@ -188,6 +189,35 @@ const mockServiceHelperPrototype = {
     Object.defineProperty(instance, name, mockDef);
     return mock;
   },
+
+  replaceWithMocks(value: any): any {
+    if (ngMocksUniverse.cache.has(value)) {
+      return ngMocksUniverse.cache.get(value);
+    }
+    if (typeof value !== 'object') {
+      return value;
+    }
+    let mocked: any;
+    let updated = false;
+    if (Array.isArray(value)) {
+      mocked = [];
+      for (let key = 0; key < value.length; key += 1) {
+        mocked[key] = mockServiceHelper.replaceWithMocks(value[key]);
+        updated = updated || mocked[key] !== value[key];
+      }
+    } else if (value) {
+      mocked = {};
+      for (const key of Object.keys(value)) {
+        mocked[key] = mockServiceHelper.replaceWithMocks(value[key]);
+        updated = updated || mocked[key] !== value[key];
+      }
+    }
+    if (updated) {
+      Object.setPrototypeOf(mocked, Object.getPrototypeOf(value));
+      return mocked;
+    }
+    return value;
+  },
 };
 
 // We need a single pointer to the object among all environments.
@@ -209,6 +239,7 @@ export const mockServiceHelper: {
   mock<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
   mockFunction(mockName: string): MockedFunction;
   registerMockFunction(mockFunction: (mockName: string) => MockedFunction | undefined): void;
+  replaceWithMocks(value: any): any;
 } = ((window as any) || (global as any)).ngMocksMockServiceHelper;
 
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
