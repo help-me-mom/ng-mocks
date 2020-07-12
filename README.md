@@ -12,7 +12,7 @@ Tested on:
 - Angular 7 (Jasmine, Jest, es5, es2015)
 - Angular 8 (Jasmine, Jest, es5, es2015)
 - Angular 9 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 10 (Jasmine, Jest, Ivy, es2015), es5 isn't supported, use `target: es2015` in `tsconfig.spec.json`
+- Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 
 ## Why use this?
 

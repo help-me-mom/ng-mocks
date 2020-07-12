@@ -15,7 +15,7 @@ import {
   Type,
 } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { ngModuleResolver } from '../common/reflect';
+import { jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockPipe } from '../mock-pipe';
@@ -129,11 +129,31 @@ export function MockModule(module: any): any {
   if (mockModuleDef) {
     const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
 
-    @NgModule(mockModuleDef)
-    @MockOf(ngModule)
-    class ModuleMock extends parent {}
+    // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
+    (window as any).ngMocksParent = parent;
+    try {
+      // tslint:disable-next-line:no-eval
+      eval(`
+        class mockModule extends window.ngMocksParent {
+        }
+        window.ngMocksResult = mockModule
+      `);
+      mockModule = (window as any).ngMocksResult;
+    } catch (e) {
+      class ClassEs5 extends parent {}
+      mockModule = ClassEs5;
+    }
+    (window as any).ngMocksParent = undefined;
 
-    mockModule = ModuleMock;
+    // the next step is to respect constructor parameters as the parent class.
+    if (mockModule) {
+      (mockModule as any).parameters = jitReflector.parameters(parent);
+    }
+
+    // the last thing is to apply decorators.
+    NgModule(mockModuleDef)(mockModule as any);
+    MockOf(ngModule)(mockModule as any);
+
     if (ngMocksUniverse.flags.has('cacheModule')) {
       ngMocksUniverse.cache.set(ngModule, mockModule);
     }
