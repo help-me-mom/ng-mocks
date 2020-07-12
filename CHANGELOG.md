@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.2"></a>
+## [10.0.2](https://github.com/ike18t/ng-mocks/compare/v10.0.1...v10.0.2) (2020-07-12)
+
+
+### Bug Fixes
+
+* skipping mocking of EventManager and DomSharedStylesHost ([84b2720](https://github.com/ike18t/ng-mocks/commit/84b2720)), closes [#162](https://github.com/ike18t/ng-mocks/issues/162)
+
+
+
 <a name="10.0.1"></a>
 ## [10.0.1](https://github.com/ike18t/ng-mocks/compare/v10.0.0...v10.0.1) (2020-07-12)
 
