@@ -23,7 +23,7 @@ import { MockService, mockServiceHelper } from '../mock-service';
 
 export type MockedModule<T> = T & Mock & {};
 
-const neverMockProvidedFunction = ['DomRendererFactory2', 'RendererFactory2'];
+const neverMockProvidedFunction = ['DomRendererFactory2', 'DomSharedStylesHost', 'EventManager', 'RendererFactory2'];
 
 /**
  * Can be changed any time.

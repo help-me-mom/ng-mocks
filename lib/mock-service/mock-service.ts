@@ -44,8 +44,16 @@ let customMockFunction: ((mockName: string) => MockedFunction) | undefined;
 
 const mockServiceHelperPrototype = {
   mockFunction: (mockName: string, original: boolean = false): MockedFunction => {
+    let func: any;
     if (customMockFunction && !original) {
-      return customMockFunction(mockName);
+      func = customMockFunction(mockName);
+    } else {
+      func = (val: any) => {
+        if (setValue) {
+          setValue(val);
+        }
+        return value;
+      };
     }
 
     // magic to make getters / setters working
@@ -53,12 +61,6 @@ const mockServiceHelperPrototype = {
     let value: any;
     let setValue: any;
 
-    const func: any = (val: any) => {
-      if (setValue) {
-        setValue(val);
-      }
-      return value;
-    };
     func.__ngMocks = true;
     func.__ngMocksSet = (newSetValue: any) => (setValue = newSetValue);
     func.__ngMocksGet = (newValue: any) => (value = newValue);
