@@ -119,8 +119,8 @@ export const ngMocks: {
   output<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
   output<T = any, D = undefined>(debugNode: MockedDebugNode, output: string, notFoundValue: D): D | EventEmitter<T>;
 
-  stub<I extends object, O extends object>(instance: I, overrides: O): I & O;
   stub<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
+  stub<I extends object, O extends object>(instance: I, overrides: O): I & O;
 } = {
   find: (...args: any[]) => {
     const el: MockedDebugElement = args[0];
@@ -315,8 +315,9 @@ export const ngMocks: {
   },
 
   flushTestBed(): void {
-    (getTestBed() as any)._instantiated = false;
-    (getTestBed() as any)._moduleFactory = undefined;
-    (getTestBed() as any)._testModuleRef = null;
+    const testBed: any = getTestBed();
+    testBed._instantiated = false;
+    testBed._moduleFactory = undefined;
+    testBed._testModuleRef = null;
   },
 };
