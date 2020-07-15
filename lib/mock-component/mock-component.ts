@@ -4,15 +4,16 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  Injector,
   Optional,
   Query,
-  Self,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NgControl, NG_VALIDATORS } from '@angular/forms';
+import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { mockServiceHelper } from 'ng-mocks/dist/lib/mock-service';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
@@ -112,6 +113,7 @@ export function MockComponent<TComponent>(
     template,
   };
 
+  let setNgValueAccessor: undefined | boolean;
   for (const providerDef of flatten(providers || [])) {
     const provide =
       providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
@@ -122,6 +124,18 @@ export function MockComponent<TComponent>(
         useExisting: forwardRef(() => ComponentMock),
       });
     }
+    if (setNgValueAccessor === undefined && options.providers && provide === NG_VALUE_ACCESSOR) {
+      setNgValueAccessor = false;
+      options.providers.push({
+        multi: true,
+        provide,
+        useExisting: forwardRef(() => ComponentMock),
+      });
+    }
+  }
+  if (setNgValueAccessor === undefined) {
+    setNgValueAccessor =
+      mockServiceHelper.extractMethodsFromPrototype(component.prototype).indexOf('writeValue') !== -1;
   }
 
   const config = ngMocksUniverse.config.get(component);
@@ -129,11 +143,19 @@ export function MockComponent<TComponent>(
   @Component(options)
   @MockOf(component, outputs)
   class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
-    constructor(changeDetector: ChangeDetectorRef, @Self() @Optional() ngControl?: NgControl) {
+    constructor(changeDetector: ChangeDetectorRef, @Optional() injector?: Injector) {
       super();
 
-      if (ngControl && !ngControl.valueAccessor) {
-        ngControl.valueAccessor = this;
+      if (injector && setNgValueAccessor) {
+        try {
+          // tslint:disable-next-line:no-bitwise
+          const ngControl = (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
+          if (ngControl && !ngControl.valueAccessor) {
+            ngControl.valueAccessor = this;
+          }
+        } catch (e) {
+          // nothing to do.
+        }
       }
 
       // Providing method to hide any @ContentChild based on its selector.

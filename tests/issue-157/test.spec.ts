@@ -4,8 +4,8 @@ import {
   ControlValueAccessor,
   FormControl,
   FormGroup,
-  NgControl,
   NG_VALUE_ACCESSOR,
+  NgControl,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -131,7 +131,7 @@ describe('issue-157:real', () => {
     ).not.toThrow();
   });
 
-  it('does not throw on mix of NG_VALUE_ACCESSOR declarations', () => {
+  it('throws on mix of NG_VALUE_ACCESSOR declarations', () => {
     expect(() =>
       MockRender(
         `
@@ -245,8 +245,7 @@ describe('issue-157:mock', () => {
     ).not.toThrow();
   });
 
-  // not original behavior
-  it('does not throw on mix of NG_VALUE_ACCESSOR declarations when both component and directive are mocked', () => {
+  it('throws on mix of NG_VALUE_ACCESSOR declarations', () => {
     expect(() =>
       MockRender(
         `
@@ -260,7 +259,7 @@ describe('issue-157:mock', () => {
           }),
         }
       )
-    ).not.toThrow();
+    ).toThrow();
   });
 
   it('does not throw when component does not provide NG_VALUE_ACCESSOR', () => {
@@ -280,8 +279,7 @@ describe('issue-157:mock', () => {
     ).not.toThrow();
   });
 
-  // not original behavior
-  it('does not throw when NG_VALUE_ACCESSOR is not provided, but the related component is mocked', () => {
+  it('throws when NG_VALUE_ACCESSOR is not provided', () => {
     expect(() =>
       MockRender(
         `
@@ -295,7 +293,7 @@ describe('issue-157:mock', () => {
           }),
         }
       )
-    ).not.toThrow();
+    ).toThrow();
   });
 
   it('does not throw when NG_VALUE_ACCESSOR is provided on a normal tag', () => {

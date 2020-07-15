@@ -3,14 +3,15 @@ import {
   Directive,
   ElementRef,
   forwardRef,
+  Injector,
   OnInit,
   Optional,
-  Self,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NgControl, NG_VALIDATORS } from '@angular/forms';
+import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { mockServiceHelper } from 'ng-mocks/dist/lib/mock-service';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
@@ -76,6 +77,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     selector,
   };
 
+  let setNgValueAccessor: undefined | boolean;
   for (const providerDef of flatten(providers || [])) {
     const provide =
       providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
@@ -86,6 +88,18 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: forwardRef(() => DirectiveMock),
       });
     }
+    if (setNgValueAccessor === undefined && options.providers && provide === NG_VALUE_ACCESSOR) {
+      setNgValueAccessor = false;
+      options.providers.push({
+        multi: true,
+        provide,
+        useExisting: forwardRef(() => DirectiveMock),
+      });
+    }
+  }
+  if (setNgValueAccessor === undefined) {
+    setNgValueAccessor =
+      mockServiceHelper.extractMethodsFromPrototype(directive.prototype).indexOf('writeValue') !== -1;
   }
 
   const config = ngMocksUniverse.config.get(directive);
@@ -97,12 +111,20 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
       @Optional() viewContainer?: ViewContainerRef,
-      @Self() @Optional() ngControl?: NgControl
+      @Optional() injector?: Injector
     ) {
       super();
 
-      if (ngControl && !ngControl.valueAccessor) {
-        ngControl.valueAccessor = this;
+      if (injector && setNgValueAccessor) {
+        try {
+          // tslint:disable-next-line:no-bitwise
+          const ngControl = (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
+          if (ngControl && !ngControl.valueAccessor) {
+            ngControl.valueAccessor = this;
+          }
+        } catch (e) {
+          // nothing to do.
+        }
       }
 
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
