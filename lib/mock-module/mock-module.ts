@@ -7,7 +7,6 @@ import {
   flatten,
   getMockedNgDefOf,
   isNgDef,
-  isNgInjectionToken,
   isNgModuleDefWithProviders,
   Mock,
   MockOf,
@@ -48,10 +47,7 @@ export function MockProvider(provider: any): Provider | undefined {
     return provider;
   }
 
-  const mockedProvider: Provider = {
-    provide,
-    useValue: MockService(provide),
-  };
+  const mockedProvider = mockServiceHelper.useFactory(provide, MockService(provide));
   if (ngMocksUniverse.flags.has('cacheProvider')) {
     ngMocksUniverse.cache.set(provide, mockedProvider);
   }
@@ -195,53 +191,10 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
   const resolutions = new Map();
 
   // resolveProvider is a special case because of the def structure.
-  const resolveProvider = (def: any) => {
-    const provider = typeof def === 'object' && def.provide ? def.provide : def;
-    const multi = def !== provider && !!def.multi;
-    let mockedDef: typeof def;
-    if (resolutions.has(provider)) {
-      mockedDef = resolutions.get(provider);
-      return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
-    }
-    ngMocksUniverse.touches.add(provider);
-
-    // Then we check decisions whether we should keep or replace a def.
-    if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
-      mockedDef = ngMocksUniverse.builder.get(provider);
-      if (mockedDef === provider) {
-        mockedDef = def;
-      } else if (mockedDef === undefined) {
-        mockedDef = {
-          provide: provider,
-          useValue: undefined,
-        };
-      }
-    }
-
-    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
-      mockedDef = def;
-    }
-    if (!mockedDef) {
-      mockedDef = MockProvider(def);
-    }
-    // if provider is a value, we need to go through the value and to replace all mocked instances.
-    if (provider !== def && mockedDef && mockedDef.useValue) {
-      const useValue = mockServiceHelper.replaceWithMocks(mockedDef.useValue);
-      mockedDef =
-        useValue === mockedDef.useValue
-          ? mockedDef
-          : {
-              ...mockedDef,
-              useValue,
-            };
-    }
-
-    if (!isNgInjectionToken(provider) || def !== mockedDef) {
-      resolutions.set(provider, mockedDef);
-    }
-    changed = changed || mockedDef !== def;
-    return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
-  };
+  const resolveProvider = (def: Provider) =>
+    mockServiceHelper.resolveProvider(def, resolutions, flag => {
+      changed = changed || flag;
+    });
 
   const resolve = (def: any) => {
     let mockedDef: typeof def;

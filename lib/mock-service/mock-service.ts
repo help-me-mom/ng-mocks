@@ -1,4 +1,8 @@
+import { Injector, Provider } from '@angular/core';
+
+import { isNgInjectionToken } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import { MockProvider } from '../mock-module';
 
 export type MockedFunction = () => any;
 
@@ -220,6 +224,71 @@ const mockServiceHelperPrototype = {
     }
     return value;
   },
+
+  // tries to resolve a provider based on current universe state.
+  resolveProvider: (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) => void) => {
+    const provider = typeof def === 'object' && def.provide ? def.provide : def;
+    const multi = def !== provider && !!def.multi;
+    let mockedDef: typeof def;
+    if (resolutions.has(provider)) {
+      mockedDef = resolutions.get(provider);
+      return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+    }
+    ngMocksUniverse.touches.add(provider);
+
+    // Then we check decisions whether we should keep or replace a def.
+    if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
+      mockedDef = ngMocksUniverse.builder.get(provider);
+      if (mockedDef === provider) {
+        mockedDef = def;
+      } else if (mockedDef === undefined) {
+        mockedDef = {
+          provide: provider,
+          useValue: undefined,
+        };
+      }
+    }
+
+    if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+      mockedDef = def;
+    }
+    if (!mockedDef) {
+      mockedDef = MockProvider(def);
+    }
+    // if provider is a value, we need to go through the value and to replace all mocked instances.
+    if (provider !== def && mockedDef && mockedDef.useValue) {
+      const useValue = mockServiceHelper.replaceWithMocks(mockedDef.useValue);
+      mockedDef =
+        useValue === mockedDef.useValue
+          ? mockedDef
+          : {
+              ...mockedDef,
+              useValue,
+            };
+    }
+
+    if (!isNgInjectionToken(provider) || def !== mockedDef) {
+      resolutions.set(provider, mockedDef);
+    }
+    if (changed && mockedDef !== def) {
+      changed(true);
+    }
+    return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+  },
+
+  useFactory<D, I>(def: D, mock: I): Provider {
+    return {
+      deps: [Injector],
+      provide: def,
+      useFactory: (injector?: Injector) => {
+        const config = ngMocksUniverse.config.get(def);
+        if (injector && mock && config && config.init) {
+          config.init(mock, injector);
+        }
+        return mock;
+      },
+    };
+  },
 };
 
 // We need a single pointer to the object among all environments.
@@ -242,6 +311,8 @@ export const mockServiceHelper: {
   mockFunction(mockName: string): MockedFunction;
   registerMockFunction(mockFunction: (mockName: string) => MockedFunction | undefined): void;
   replaceWithMocks(value: any): any;
+  resolveProvider(def: Provider, resolutions: Map<any, any>, changed?: (flag: boolean) => void): Provider;
+  useFactory<D, I>(def: D, instance: I): Provider;
 } = ((window as any) || (global as any)).ngMocksMockServiceHelper;
 
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;

@@ -1,16 +1,47 @@
-import { EventEmitter } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
+import { EventEmitter, Injector, Optional } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, NgControl, ValidationErrors, Validator } from '@angular/forms';
 
 import { mockServiceHelper } from '../mock-service';
+
+import { ngMocksUniverse } from './ng-mocks-universe';
+
+// tslint:disable-next-line:interface-over-type-literal
+export type ngMocksMockConfig = {
+  outputs?: string[];
+  setNgValueAccessor?: boolean;
+};
 
 // tslint:disable-next-line:no-unnecessary-class
 export class Mock {
   // tslint:disable-next-line:variable-name
   public readonly __ngMocksMock: true = true;
 
-  constructor() {
+  // tslint:disable-next-line:variable-name
+  protected readonly __ngMocksConfig?: ngMocksMockConfig;
+
+  constructor(@Optional() injector?: Injector) {
+    const mockOf = (this.constructor as any).mockOf;
+
+    if (injector && this.__ngMocksConfig && this.__ngMocksConfig.setNgValueAccessor) {
+      try {
+        // tslint:disable-next-line:no-bitwise
+        const ngControl = (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
+        if (ngControl && !ngControl.valueAccessor) {
+          ngControl.valueAccessor = this;
+        }
+      } catch (e) {
+        // nothing to do.
+      }
+    }
+
     // setting outputs
-    for (const output of (this as any).__mockedOutputs) {
+
+    const mockedOutputs = [];
+    for (const output of this.__ngMocksConfig && this.__ngMocksConfig.outputs ? this.__ngMocksConfig.outputs : []) {
+      mockedOutputs.push(output.split(':')[0]);
+    }
+
+    for (const output of mockedOutputs) {
       if ((this as any)[output] || Object.getOwnPropertyDescriptor(this, output)) {
         continue;
       }
@@ -34,13 +65,13 @@ export class Mock {
     }
 
     // setting mocks for original class methods and props
-    for (const method of mockServiceHelper.extractMethodsFromPrototype((this.constructor as any).mockOf.prototype)) {
+    for (const method of mockServiceHelper.extractMethodsFromPrototype(mockOf.prototype)) {
       if ((this as any)[method] || Object.getOwnPropertyDescriptor(this, method)) {
         continue;
       }
       mockServiceHelper.mock(this, method);
     }
-    for (const prop of mockServiceHelper.extractPropertiesFromPrototype((this.constructor as any).mockOf.prototype)) {
+    for (const prop of mockServiceHelper.extractPropertiesFromPrototype(mockOf.prototype)) {
       if ((this as any)[prop] || Object.getOwnPropertyDescriptor(this, prop)) {
         continue;
       }
@@ -49,7 +80,12 @@ export class Mock {
     }
 
     // and faking prototype
-    Object.setPrototypeOf(this, (this.constructor as any).mockOf.prototype);
+    Object.setPrototypeOf(this, mockOf.prototype);
+
+    const config = ngMocksUniverse.config.get(mockOf);
+    if (config && config.init && config.init) {
+      config.init(this, injector);
+    }
   }
 }
 

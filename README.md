@@ -134,19 +134,20 @@ Our tests:
 
 ### Sections:
 
-- [MockComponent](#mockcomponents)
-- [MockDirective](#mockdirectives)
-- [MockPipe](#mockpipes)
-- [MockDeclaration](#mockdeclarations)
-- [MockModule](#mockmodule)
+- [MockBuilder](#mockbuilder) - facilitates creation of a mocked environment
+- [MockRender](#mockrender) - facilitates rendering of components
+- [MockInstance](#mockinstance) - customizes mocked instances on an early stage
+- [ngMocks](#ngmocks) - facilitates interaction with a fixture, DOM etc.
 
-* [MockBuilder](#mockbuilder) - facilitate creation of a mocked environment
-* [MockRender](#mockrender) - facilitate render of components
-* [ngMocks](#ngmocks) - facilitate extraction of directives of an element
+* [MockComponent](#mockcomponents)
+* [MockDirective](#mockdirectives)
+* [MockPipe](#mockpipes)
+* [MockDeclaration](#mockdeclarations)
+* [MockModule](#mockmodule)
 
-- [Reactive Forms Components](#mocked-reactive-forms-components)
-- [Structural Components](#usage-example-of-structural-directives)
-- [Auto Spy](#auto-spy)
+* [Reactive Forms Components](#mocked-reactive-forms-components)
+* [Structural Components](#usage-example-of-structural-directives)
+* [Auto Spy](#auto-spy)
 
 ---
 
@@ -791,6 +792,95 @@ describe('MockRender', () => {
     fixture.componentInstance.value1 = 'updated';
     fixture.detectChanges();
     expect(ngMocks.input(fixture.point, 'value1')).toEqual('updated');
+  });
+});
+```
+
+</p>
+</details>
+
+---
+
+## MockInstance
+
+`MockInstance` is useful when you want to configure spies of a component before it has been rendered.
+
+MockInstance supports: Modules, Components, Directives, Pipes and Services.
+
+```typescript
+MockInstance(MyComponent, {
+  init: (instance: MyComponent, injector: Injector): void => {
+    // Now you can customize a mocked instance of MyComponent.
+    // If you use auto-spy then all methods have been spied already here.
+  },
+});
+```
+
+After a test you can reset changes to avoid their influence in other tests via a call of `MockReset()`.
+
+<details><summary>Click to see <strong>a usage example</strong></summary>
+<p>
+
+```typescript
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
+import { staticFalse } from 'ng-mocks/dist/tests';
+import { EMPTY, Observable, Subject } from 'rxjs';
+
+// A child component that contains update$ the parent component wants to listen to.
+@Component({
+  selector: 'target',
+  template: '{{ update$ | async }}',
+})
+export class TargetComponent {
+  public update$: Observable<void>;
+
+  constructor() {
+    const subject = new Subject<void>();
+    this.update$ = subject;
+    subject.complete();
+  }
+}
+
+// A parent component that uses @ViewChild to listen to update$ of its child component.
+@Component({
+  selector: 'real',
+  template: '<target></target>',
+})
+export class RealComponent implements AfterViewInit {
+  @ViewChild(TargetComponent, { ...staticFalse }) public child: TargetComponent;
+
+  ngAfterViewInit() {
+    this.child.update$.subscribe();
+  }
+}
+
+describe('MockInstance', () => {
+  // A normal setup of the TestBed, TargetComponent will be mocked.
+  beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
+
+  beforeEach(() => {
+    // Because TargetComponent is mocked its update$ is undefined and
+    // ngAfterViewInit of the parent component will fail on .subscribe().
+    // Let's fix it via defining custom initialization of the mock.
+    MockInstance(TargetComponent, {
+      init: (instance, injector) => {
+        instance.update$ = EMPTY; // comment this line to check the failure.
+        // if you want you can use injector.get(Service) for a more complicated initialization.
+      },
+    });
+  });
+
+  // Don't forget to reset MockInstance back.
+  afterEach(MockReset);
+
+  it('should render', () => {
+    // Without the custom initialization rendering would fail here with
+    // "Cannot read property 'subscribe' of undefined"
+    const fixture = MockRender(RealComponent);
+
+    // Let's check that the mocked component has been decorated by the custom initialization.
+    expect(fixture.point.componentInstance.child.update$).toBe(EMPTY);
   });
 });
 ```

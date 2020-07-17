@@ -17,6 +17,7 @@ import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockModule, MockProvider } from '../mock-module';
 import { MockPipe } from '../mock-pipe';
+import { mockServiceHelper } from '../mock-service';
 
 export interface IMockBuilderResult {
   testBed: typeof TestBed;
@@ -150,7 +151,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     // mocking requested things.
     for (const def of mapValues(this.mockDef.provider)) {
       if (this.mockDef.providerMock.has(def)) {
-        ngMocksUniverse.builder.set(def, { provide: def, useValue: this.mockDef.providerMock.get(def) });
+        ngMocksUniverse.builder.set(def, mockServiceHelper.useFactory(def, this.mockDef.providerMock.get(def)));
       } else {
         ngMocksUniverse.builder.set(def, MockProvider(def));
       }
@@ -324,8 +325,12 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     return this;
   }
 
-  public mock(pipe: Type<PipeTransform>, config?: IMockBuilderConfig): this;
-  public mock(pipe: Type<PipeTransform>, mock?: PipeTransform['transform'], config?: IMockBuilderConfig): this;
+  public mock<T extends PipeTransform>(pipe: Type<T>, config?: IMockBuilderConfig): this;
+  public mock<T extends PipeTransform>(
+    pipe: Type<T>,
+    mock?: PipeTransform['transform'],
+    config?: IMockBuilderConfig
+  ): this;
   public mock<T>(token: InjectionToken<T>, mock?: any): this;
   public mock<T>(def: Type<T>, mock: IMockBuilderConfig): this;
   public mock<T>(provider: Type<T>, mock?: any): this;

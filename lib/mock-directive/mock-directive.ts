@@ -6,11 +6,12 @@ import {
   Injector,
   OnInit,
   Optional,
+  Provider,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NgControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { mockServiceHelper } from 'ng-mocks/dist/lib/mock-service';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
@@ -77,6 +78,9 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     selector,
   };
 
+  const resolutions = new Map();
+  const resolveProvider = (def: Provider) => mockServiceHelper.resolveProvider(def, resolutions);
+
   let setNgValueAccessor: undefined | boolean;
   for (const providerDef of flatten(providers || [])) {
     const provide =
@@ -87,6 +91,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         provide,
         useExisting: forwardRef(() => DirectiveMock),
       });
+      continue;
     }
     if (setNgValueAccessor === undefined && options.providers && provide === NG_VALUE_ACCESSOR) {
       setNgValueAccessor = false;
@@ -95,6 +100,12 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         provide,
         useExisting: forwardRef(() => DirectiveMock),
       });
+      continue;
+    }
+
+    const mock = resolveProvider(providerDef);
+    if (options.providers && mock) {
+      options.providers.push(mock);
     }
   }
   if (setNgValueAccessor === undefined) {
@@ -105,27 +116,15 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   const config = ngMocksUniverse.config.get(directive);
 
   @Directive(options)
-  @MockOf(directive, outputs)
+  @MockOf(directive, { outputs, setNgValueAccessor })
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
     constructor(
+      injector: Injector,
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef,
-      @Optional() injector?: Injector
+      @Optional() viewContainer?: ViewContainerRef
     ) {
-      super();
-
-      if (injector && setNgValueAccessor) {
-        try {
-          // tslint:disable-next-line:no-bitwise
-          const ngControl = (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
-          if (ngControl && !ngControl.valueAccessor) {
-            ngControl.valueAccessor = this;
-          }
-        } catch (e) {
-          // nothing to do.
-        }
-      }
+      super(injector);
 
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.

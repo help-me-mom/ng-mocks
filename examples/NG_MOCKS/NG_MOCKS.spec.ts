@@ -94,22 +94,26 @@ describe('NG_MOCKS:deep', () => {
     expect(isMockedNgDefOf(pipeWeWantToMock, PipeWeWantToMock, 'p')).toBeTruthy();
     const serviceWeWantToMock = mocks.get(ServiceWeWantToMock);
     expect(serviceWeWantToMock).toBeDefined();
-    expect(serviceWeWantToMock.useValue).toBeDefined();
-    expect(serviceWeWantToMock.useValue.getName).toBeDefined();
-    expect(serviceWeWantToMock.useValue.getName()).toBeUndefined();
+    expect(serviceWeWantToMock.useFactory).toBeDefined();
+    const serviceWeWantToMockInstance = serviceWeWantToMock.useFactory();
+    expect(serviceWeWantToMockInstance.getName).toBeDefined();
+    expect(serviceWeWantToMockInstance.getName()).toBeUndefined();
     expect(mocks.has(INJECTION_TOKEN_WE_WANT_TO_MOCK)).toBeDefined();
     expect(mocks.get(INJECTION_TOKEN_WE_WANT_TO_MOCK)).toBeUndefined();
 
     // customize
     const serviceWeWantToCustomize = mocks.get(ServiceWeWantToCustomize);
     expect(serviceWeWantToCustomize).toBeDefined();
-    expect(serviceWeWantToCustomize.useValue).toBeDefined();
-    expect(serviceWeWantToCustomize.useValue.getName).toBeDefined();
-    expect(serviceWeWantToCustomize.useValue.getName()).toEqual('My Customized String');
-    expect(serviceWeWantToCustomize.useValue.prop1).toEqual(true);
+    expect(serviceWeWantToCustomize.useFactory).toBeDefined();
+    const serviceWeWantToCustomizeInstance = serviceWeWantToCustomize.useFactory();
+    expect(serviceWeWantToCustomizeInstance.getName).toBeDefined();
+    expect(serviceWeWantToCustomizeInstance.getName()).toEqual('My Customized String');
+    expect(serviceWeWantToCustomizeInstance.prop1).toEqual(true);
     const injectionTokenWeWantToCustomize = mocks.get(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE);
     expect(injectionTokenWeWantToCustomize).toBeDefined();
-    expect(injectionTokenWeWantToCustomize.useValue).toEqual('My_Token');
+    expect(injectionTokenWeWantToCustomize.useFactory).toBeDefined();
+    const injectionTokenWeWantToCustomizeInstance = injectionTokenWeWantToCustomize.useFactory();
+    expect(injectionTokenWeWantToCustomizeInstance).toEqual('My_Token');
 
     // restore
     const pipeWeWantToRestore = mocks.get(PipeWeWantToRestore);
