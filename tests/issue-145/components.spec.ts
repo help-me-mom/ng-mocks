@@ -35,9 +35,8 @@ export class ComponentValueAccessor {}
 })
 export class ComponentValidator {}
 
-// providers should be added to components only in case if they were specified in the original component.
 describe('issue-145', () => {
-  it('ComponentDefault', () => {
+  it('does not add NG_VALUE_ACCESSOR to components', () => {
     const mock = MockComponent(ComponentDefault);
     const { providers } = directiveResolver.resolve(mock);
     expect(providers).toEqual([
@@ -48,22 +47,23 @@ describe('issue-145', () => {
     ]);
   });
 
-  // this test was changed due to issue 157: https://github.com/ike18t/ng-mocks/issues/157
-  it('should skip NG_VALUE_ACCESSOR in mocked component ComponentValueAccessor', () => {
+  it('adds NG_VALUE_ACCESSOR to components that provide it', () => {
     const mock = MockComponent(ComponentValueAccessor);
     const { providers } = directiveResolver.resolve(mock);
-    expect(providers as any).not.toEqual(
-      jasmine.arrayContaining([
-        {
-          multi: true,
-          provide: NG_VALUE_ACCESSOR,
-          useExisting: jasmine.anything(),
-        },
-      ])
-    );
+    expect(providers).toEqual([
+      {
+        provide: ComponentValueAccessor,
+        useExisting: jasmine.anything(),
+      },
+      {
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: jasmine.anything(),
+      },
+    ]);
   });
 
-  it('ComponentValidator', () => {
+  it('respects NG_VALIDATORS too', () => {
     const mock = MockComponent(ComponentValidator);
     const { providers } = directiveResolver.resolve(mock);
     expect(providers).toEqual([

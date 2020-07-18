@@ -139,13 +139,13 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
         for (const key of Object.keys(params || {})) {
           (this as any)[key] = (params as any)[key];
         }
-        if (noParams && isComponent && inputs) {
+        if (noParams && isComponent && inputs && inputs.length) {
           for (const definition of inputs) {
             const [property] = definition.split(': ');
             (this as any)[property] = undefined;
           }
         }
-        if (noParams && isComponent && outputs) {
+        if (noParams && isComponent && outputs && outputs.length) {
           for (const definition of outputs) {
             const [property] = definition.split(': ');
             (this as any)[property] = new EventEmitter();

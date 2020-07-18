@@ -34,7 +34,7 @@ export class DirectiveValidator {}
 
 // providers should be added to directives only in case if they were specified in the original directive.
 describe('issue-145', () => {
-  it('DirectiveDefault', () => {
+  it('does not add NG_VALUE_ACCESSOR to directives', () => {
     const mock = MockDirective(DirectiveDefault);
     const { providers } = directiveResolver.resolve(mock);
     expect(providers).toEqual([
@@ -45,22 +45,23 @@ describe('issue-145', () => {
     ]);
   });
 
-  // this test was changed due to issue 157: https://github.com/ike18t/ng-mocks/issues/157
-  it('DirectiveValueAccessor', () => {
+  it('adds NG_VALUE_ACCESSOR to directives that provide it', () => {
     const mock = MockDirective(DirectiveValueAccessor);
     const { providers } = directiveResolver.resolve(mock);
-    expect(providers as any).not.toEqual(
-      jasmine.arrayContaining([
-        {
-          multi: true,
-          provide: NG_VALUE_ACCESSOR,
-          useExisting: jasmine.anything(),
-        },
-      ])
-    );
+    expect(providers).toEqual([
+      {
+        provide: DirectiveValueAccessor,
+        useExisting: jasmine.anything(),
+      },
+      {
+        multi: true,
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: jasmine.anything(),
+      },
+    ]);
   });
 
-  it('DirectiveValidator', () => {
+  it('respects NG_VALIDATORS too', () => {
     const mock = MockDirective(DirectiveValidator);
     const { providers } = directiveResolver.resolve(mock);
     expect(providers).toEqual([
