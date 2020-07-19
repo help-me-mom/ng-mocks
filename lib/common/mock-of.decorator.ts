@@ -1,4 +1,5 @@
 import { Type } from './lib';
+import { ngMocksMockConfig } from './Mock';
 
 // This helps with debugging in the browser. Decorating mock classes with this
 // will change the display-name of the class to 'MockOf-<ClassName>` so our
@@ -7,16 +8,12 @@ import { Type } from './lib';
 // Additionally, if we set breakpoints, we can inspect the actual class being mocked
 // by looking into the 'mockOf' property on the class.
 /* tslint:disable-next-line variable-name */
-export const MockOf = (mockClass: Type<any>, outputs?: string[]) => (constructor: Type<any>) => {
+export const MockOf = (mockClass: Type<any>, config?: ngMocksMockConfig) => (constructor: Type<any>) => {
   Object.defineProperties(constructor, {
     mockOf: { value: mockClass },
     name: { value: `MockOf${mockClass.name}` },
     nameConstructor: { value: constructor.name },
   });
 
-  const mockedOutputs = [];
-  for (const output of outputs || []) {
-    mockedOutputs.push(output.split(':')[0]);
-  }
-  constructor.prototype.__mockedOutputs = mockedOutputs;
+  constructor.prototype.__ngMocksConfig = config;
 };
