@@ -1,6 +1,18 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [10.1.0](https://github.com/ike18t/ng-mocks/compare/v10.0.2...v10.1.0) (2020-07-19)
+
+
+### Features
+
+* extending mocked things via MockInstance ([1ab2c9d](https://github.com/ike18t/ng-mocks/commit/1ab2c9d34b5a54074f9e30f4c39acd32a5f5d2c2)), closes [#170](https://github.com/ike18t/ng-mocks/issues/170)
+
+
+### Bug Fixes
+
+* injection of NG_VALIDATORS and NgControl ([82dd56a](https://github.com/ike18t/ng-mocks/commit/82dd56a78122e0dc6413d3e3d05bb345fbc0c118)), closes [#167](https://github.com/ike18t/ng-mocks/issues/167)
 
 <a name="10.0.2"></a>
 ## [10.0.2](https://github.com/ike18t/ng-mocks/compare/v10.0.1...v10.0.2) (2020-07-12)
