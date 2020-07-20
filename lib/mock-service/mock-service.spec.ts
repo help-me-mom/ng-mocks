@@ -291,7 +291,7 @@ describe('MockService', () => {
       }
     }
 
-    ngMocksUniverse.cache.set(A, B);
+    ngMocksUniverse.cacheMocks.set(A, B);
 
     const instance = new Test();
     const updated = mockServiceHelper.replaceWithMocks(instance);

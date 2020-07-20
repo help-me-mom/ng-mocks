@@ -35,8 +35,8 @@ export function MockPipe<TPipe extends PipeTransform>(
       // looks like an in-test mock.
     }
   }
-  if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cache.has(pipe)) {
-    return ngMocksUniverse.cache.get(pipe);
+  if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheMocks.has(pipe)) {
+    return ngMocksUniverse.cacheMocks.get(pipe);
   }
 
   let meta: core.Pipe | undefined;
@@ -61,7 +61,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   }
 
   if (ngMocksUniverse.flags.has('cachePipe')) {
-    ngMocksUniverse.cache.set(pipe, PipeMock);
+    ngMocksUniverse.cacheMocks.set(pipe, PipeMock);
   }
 
   return PipeMock as any;

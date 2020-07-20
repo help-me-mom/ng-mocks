@@ -54,8 +54,8 @@ export function MockComponent<TComponent>(
       // looks like an in-test mock.
     }
   }
-  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cache.has(component)) {
-    return ngMocksUniverse.cache.get(component);
+  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cacheMocks.has(component)) {
+    return ngMocksUniverse.cacheMocks.get(component);
   }
 
   let meta: core.Directive | undefined = metaData;
@@ -206,7 +206,7 @@ export function MockComponent<TComponent>(
   decorateQueries(ComponentMock, queries);
 
   if (ngMocksUniverse.flags.has('cacheComponent')) {
-    ngMocksUniverse.cache.set(component, ComponentMock);
+    ngMocksUniverse.cacheMocks.set(component, ComponentMock);
   }
 
   return ComponentMock as any;

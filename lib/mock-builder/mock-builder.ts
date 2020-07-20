@@ -110,14 +110,16 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   public build(): NgModule {
     const backup = {
       builder: ngMocksUniverse.builder,
-      cache: ngMocksUniverse.cache,
+      cacheMocks: ngMocksUniverse.cacheMocks,
+      cacheProviders: ngMocksUniverse.cacheProviders,
       config: ngMocksUniverse.config,
       flags: ngMocksUniverse.flags,
       touches: ngMocksUniverse.touches,
     };
 
     ngMocksUniverse.builder = new Map();
-    ngMocksUniverse.cache = new Map();
+    ngMocksUniverse.cacheMocks = new Map();
+    ngMocksUniverse.cacheProviders = new Map();
     ngMocksUniverse.config = this.configDef;
     ngMocksUniverse.flags = new Set([
       'cacheComponent',
@@ -273,7 +275,14 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     const ngMocks = new Map();
-    for (const [key, value] of [...mapEntries(ngMocksUniverse.builder), ...mapEntries(ngMocksUniverse.cache)]) {
+    for (const [key, value] of [
+      ...mapEntries(ngMocksUniverse.builder),
+      ...mapEntries(ngMocksUniverse.cacheMocks),
+      ...mapEntries(ngMocksUniverse.cacheProviders),
+    ]) {
+      if (ngMocks.has(key)) {
+        continue;
+      }
       ngMocks.set(key, value);
     }
 
