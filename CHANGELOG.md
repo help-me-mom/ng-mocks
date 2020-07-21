@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.1.1](https://github.com/ike18t/ng-mocks/compare/v10.1.0...v10.1.1) (2020-07-21)
+
+
+### Bug Fixes
+
+* unexpected value '[object Object]' exported by the module ([148d659](https://github.com/ike18t/ng-mocks/commit/148d659515fae1d7653aa37c2a0880357ccf7b53)), closes [#173](https://github.com/ike18t/ng-mocks/issues/173)
+
 ## [10.1.0](https://github.com/ike18t/ng-mocks/compare/v10.0.2...v10.1.0) (2020-07-19)
 
 
