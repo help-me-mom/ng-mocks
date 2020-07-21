@@ -5,7 +5,7 @@
 
 Helper function for creating angular mocks for test.
 
-Tested on:
+The current version can be used and has been tested on:
 
 - Angular 5 (Jasmine, Jest, es5, es2015)
 - Angular 6 (Jasmine, Jest, es5, es2015)

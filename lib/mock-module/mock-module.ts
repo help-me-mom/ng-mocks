@@ -31,8 +31,8 @@ const neverMockProvidedFunction = ['DomRendererFactory2', 'DomSharedStylesHost',
  */
 export function MockProvider(provider: any): Provider | undefined {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
-  if (ngMocksUniverse.flags.has('cacheProvider') && ngMocksUniverse.cache.has(provide)) {
-    return ngMocksUniverse.cache.get(provide);
+  if (ngMocksUniverse.flags.has('cacheProvider') && ngMocksUniverse.cacheProviders.has(provide)) {
+    return ngMocksUniverse.cacheProviders.get(provide);
   }
 
   // Tokens are special subject, we can skip adding them because in a mocked module they are useless.
@@ -47,9 +47,12 @@ export function MockProvider(provider: any): Provider | undefined {
     return provider;
   }
 
-  const mockedProvider = mockServiceHelper.useFactory(provide, MockService(provide));
+  const mockedProvider = mockServiceHelper.useFactory(
+    ngMocksUniverse.cacheMocks.get(provide) || provide,
+    MockService(provide)
+  );
   if (ngMocksUniverse.flags.has('cacheProvider')) {
-    ngMocksUniverse.cache.set(provide, mockedProvider);
+    ngMocksUniverse.cacheProviders.set(provide, mockedProvider);
   }
 
   return mockedProvider;
@@ -90,8 +93,8 @@ export function MockModule(module: any): any {
 
   // Every module should be mocked only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
-  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cache.has(ngModule)) {
-    mockModule = ngMocksUniverse.cache.get(ngModule);
+  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheMocks.has(ngModule)) {
+    mockModule = ngMocksUniverse.cacheMocks.get(ngModule);
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
@@ -143,7 +146,9 @@ export function MockModule(module: any): any {
 
     // the next step is to respect constructor parameters as the parent class.
     if (mockModule) {
-      (mockModule as any).parameters = jitReflector.parameters(parent);
+      (mockModule as any).parameters = jitReflector
+        .parameters(parent)
+        .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
     }
 
     // the last thing is to apply decorators.
@@ -151,7 +156,7 @@ export function MockModule(module: any): any {
     MockOf(ngModule)(mockModule as any);
 
     if (ngMocksUniverse.flags.has('cacheModule')) {
-      ngMocksUniverse.cache.set(ngModule, mockModule);
+      ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
     }
   }
   if (!mockModule) {

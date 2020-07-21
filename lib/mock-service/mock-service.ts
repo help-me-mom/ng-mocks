@@ -197,8 +197,8 @@ const mockServiceHelperPrototype = {
   },
 
   replaceWithMocks(value: any): any {
-    if (ngMocksUniverse.cache.has(value)) {
-      return ngMocksUniverse.cache.get(value);
+    if (ngMocksUniverse.cacheMocks.has(value)) {
+      return ngMocksUniverse.cacheMocks.get(value);
     }
     if (typeof value !== 'object') {
       return value;

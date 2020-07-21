@@ -9,7 +9,8 @@ import { Type } from './lib';
  */
 export const ngMocksUniverse = {
   builder: new Map(),
-  cache: new Map(),
+  cacheMocks: new Map(),
+  cacheProviders: new Map(),
   config: new Map(),
   flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']),
   touches: new Set<Type<any> | InjectionToken<any>>(),

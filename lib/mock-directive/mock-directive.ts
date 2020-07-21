@@ -53,8 +53,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       // looks like an in-test mock.
     }
   }
-  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cache.has(directive)) {
-    return ngMocksUniverse.cache.get(directive);
+  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cacheMocks.has(directive)) {
+    return ngMocksUniverse.cacheMocks.get(directive);
   }
 
   let meta: core.Directive | undefined;
@@ -161,7 +161,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   decorateQueries(DirectiveMock, queries);
 
   if (ngMocksUniverse.flags.has('cacheDirective')) {
-    ngMocksUniverse.cache.set(directive, DirectiveMock);
+    ngMocksUniverse.cacheMocks.set(directive, DirectiveMock);
   }
 
   return DirectiveMock as any;

@@ -174,8 +174,8 @@ export function getMockedNgDefOf(type: any, ngType?: any): any {
   // If we are not in the MockBuilder env we can rely on the current cache.
   if (!mock && source !== type) {
     mock = type;
-  } else if (!mock && ngMocksUniverse.cache.has(source)) {
-    mock = ngMocksUniverse.cache.get(source);
+  } else if (!mock && ngMocksUniverse.cacheMocks.has(source)) {
+    mock = ngMocksUniverse.cacheMocks.get(source);
   }
 
   if (!ngType) {
