@@ -244,10 +244,6 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
     return mockedDef;
   };
 
-  if (imports && imports.length) {
-    mockedModuleDef.imports = flatten(imports).map(resolve);
-  }
-
   if (declarations && declarations.length) {
     mockedModuleDef.declarations = flatten(declarations).map(resolve);
   }
@@ -264,6 +260,11 @@ function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean,
     mockedModuleDef.providers = flatten(providers)
       .map(resolveProvider)
       .filter(provider => provider);
+  }
+
+  // mock of imports should be the latest step before exports to ensure that everything has been mocked already
+  if (imports && imports.length) {
+    mockedModuleDef.imports = flatten(imports).map(resolve);
   }
 
   // Default exports.
