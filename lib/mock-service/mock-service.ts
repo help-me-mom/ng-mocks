@@ -77,15 +77,26 @@ const mockServiceHelperPrototype = {
   },
 
   createMockFromPrototype: (service: any): { [key in keyof any]: MockedFunction } => {
-    const methods = mockServiceHelperPrototype.extractMethodsFromPrototype(service);
+    const mockName = `${service && service.constructor ? service.constructor.name : 'unknown'}`;
     const value: any = {};
+
+    const methods = mockServiceHelperPrototype.extractMethodsFromPrototype(service);
     for (const method of methods) {
       if (value[method]) {
         continue;
       }
-      const mockName = `${service.constructor ? service.constructor.name : 'unknown'}.${method as any}`;
-      value[method] = mockServiceHelperPrototype.mockFunction(mockName);
+      mockServiceHelperPrototype.mock(value, method, mockName);
     }
+
+    const properties = mockServiceHelperPrototype.extractPropertiesFromPrototype(service);
+    for (const property of properties) {
+      if (value[property]) {
+        continue;
+      }
+      mockServiceHelperPrototype.mock(value, property, 'get', mockName);
+      mockServiceHelperPrototype.mock(value, property, 'set', mockName);
+    }
+
     if (typeof value === 'object' && typeof service === 'object') {
       Object.setPrototypeOf(value, service);
     }
@@ -146,20 +157,32 @@ const mockServiceHelperPrototype = {
     }
   },
 
-  mock: <T = MockedFunction>(instance: any, name: string, accessType?: 'get' | 'set'): T => {
+  mock: <T = MockedFunction>(instance: any, name: string, ...args: string[]): T => {
+    let accessType: 'get' | 'set' | undefined;
+    let mockName: string | undefined;
+
+    if (args.length && args[0] !== 'get' && args[0] !== 'set') {
+      mockName = args[0];
+    } else if (args.length && (args[0] === 'get' || args[0] === 'set')) {
+      accessType = args[0] as any;
+      mockName = args[1];
+    }
+
     const def = Object.getOwnPropertyDescriptor(instance, name);
     if (def && def[accessType || 'value']) {
       return def[accessType || 'value'];
     }
 
-    const mockName = `${
-      typeof instance.prototype === 'function'
+    const detectedMockName = `${
+      mockName
+        ? mockName
+        : typeof instance.prototype === 'function'
         ? instance.prototype.name
         : typeof instance.constructor === 'function'
         ? instance.constructor.name
         : 'unknown'
     }.${name}${accessType ? `:${accessType}` : ''}`;
-    const mock: any = mockServiceHelperPrototype.mockFunction(mockName, !!accessType);
+    const mock: any = mockServiceHelperPrototype.mockFunction(detectedMockName, !!accessType);
 
     const mockDef: PropertyDescriptor = {
       // keeping setter if we adding getter
@@ -307,7 +330,8 @@ export const mockServiceHelper: {
   extractMethodsFromPrototype(service: any): string[];
   extractPropertiesFromPrototype(service: any): string[];
   extractPropertyDescriptor(service: any, prop: string): PropertyDescriptor | undefined;
-  mock<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
+  mock<T = MockedFunction>(instance: any, name: string, style: 'get' | 'set', mockName?: string): T;
+  mock<T = MockedFunction>(instance: any, name: string, mockName?: string): T;
   mockFunction(mockName: string): MockedFunction;
   registerMockFunction(mockFunction: (mockName: string) => MockedFunction | undefined): void;
   replaceWithMocks(value: any): any;
