@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.1.2](https://github.com/ike18t/ng-mocks/compare/v10.1.1...v10.1.2) (2020-08-09)
+
+
+### Bug Fixes
+
+* mocking getter and setters of services ([5a0ac7c](https://github.com/ike18t/ng-mocks/commit/5a0ac7c44d4c73d33ab4dad9ad583e31ad28ec5d)), closes [#177](https://github.com/ike18t/ng-mocks/issues/177)
+* mocking imports after declarations ([ab3aa6f](https://github.com/ike18t/ng-mocks/commit/ab3aa6f91406d44cde530c0e6ec46e7af80d9b4c)), closes [#178](https://github.com/ike18t/ng-mocks/issues/178)
+
 ### [10.1.1](https://github.com/ike18t/ng-mocks/compare/v10.1.0...v10.1.1) (2020-07-21)
 
 
