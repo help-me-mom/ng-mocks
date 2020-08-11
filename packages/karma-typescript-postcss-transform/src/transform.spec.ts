@@ -89,10 +89,10 @@ test("transformer should set the source property to the processed value", (t) =>
     const context = createContext("::placeholder {}");
 
     transform(require("autoprefixer"))(context, () => {
-        t.isEqual(context.source, "::-webkit-input-placeholder {}\n" +
-                                  "::-moz-placeholder {}\n" +
+        t.isEqual(context.source, "::-moz-placeholder {}\n" +
                                   ":-ms-input-placeholder {}\n" +
-                                  "::-ms-input-placeholder {}\n::placeholder {}");
+                                  "::-ms-input-placeholder {}\n" + 
+                                  "::placeholder {}");
     });
 });
 
@@ -102,17 +102,15 @@ test("transformer should use custom options", (t) => {
     const context = createContext("::placeholder {}");
 
     transform(require("autoprefixer"), { map: { inline: true } })(context, () => {
-        t.isEqual(context.source, "::-webkit-input-placeholder {}\n" +
-                                  "::-moz-placeholder {}\n" +
+        t.isEqual(context.source, "::-moz-placeholder {}\n" +
                                   ":-ms-input-placeholder {}\n" +
                                   "::-ms-input-placeholder {}" +
                                   "\n::placeholder {}" +
-                                  "\n/*# sourceMappingURL=data:application/json;base64," +
-                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hb" +
-                                  "WVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLDZCQUFlO0FBQWYsb0JBQW" +
-                                  "U7QUFBZix3QkFBZTtBQUFmLHlCQUFlO0FBQWYsZUFBZSIsImZpbGU" +
-                                  "iOiJmaWxlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIjo6cGxhY2Vo" +
-                                  "b2xkZXIge30iXX0= */");
+                                  "\n/*# sourceMappingURL=data:application/json;base64," + 
+                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hbWV" +
+                                  "zIjpbXSwibWFwcGluZ3MiOiJBQUFBLG9CQUFlO0FBQWYsd0JBQWU7QU" +
+                                  "FBZix5QkFBZTtBQUFmLGVBQWUiLCJmaWxlIjoiZmlsZS5jc3MiLCJzb" + 
+                                  "3VyY2VzQ29udGVudCI6WyI6OnBsYWNlaG9sZGVyIHt9Il19 */");
     });
 });
 

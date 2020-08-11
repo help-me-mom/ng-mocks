@@ -34,6 +34,7 @@ export class Configuration implements KarmaTypescriptConfig {
     public reports: Reports;
     public transformPath: (filepath: string) => string;
     public tsconfig: string;
+    public stopOnFailure: boolean;
 
     public hasCoverageThreshold: boolean;
 
@@ -186,6 +187,7 @@ export class Configuration implements KarmaTypescriptConfig {
         this.tsconfig = this.karmaTypescriptConfig.tsconfig;
         this.assertExtendable("exclude");
         this.assertExtendable("include");
+        this.stopOnFailure = this.karmaTypescriptConfig.stopOnFailure !== false;
     }
 
     private configurePreprocessor() {
