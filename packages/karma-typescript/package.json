@@ -81,8 +81,8 @@
     "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
-    "acorn": "^7.4.0",
-    "acorn-walk": "^7.2.0",
+    "acorn": "^8.0.1",
+    "acorn-walk": "^8.0.0",
     "assert": "^2.0.0",
     "async": "^3.0.1",
     "browser-resolve": "^2.0.0",
