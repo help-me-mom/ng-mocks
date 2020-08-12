@@ -17,7 +17,7 @@
     "@types/angular": "^1.6.21",
     "@types/angular-mocks": "^1.5.10",
     "@types/jasmine": "^3.4.0",
-    "angular": "^1.6.4",
+    "angular": "^1.8.0",
     "angular-mocks": "^1.6.4",
     "jasmine-core": "^3.3.0",
     "karma": "^5.0.0",
