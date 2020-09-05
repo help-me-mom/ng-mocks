@@ -201,7 +201,7 @@ export function MockComponent<TComponent>(
     }
   }
 
-  decorateInputs(ComponentMock, inputs);
+  decorateInputs(ComponentMock, inputs, queries ? Object.keys(queries) : undefined);
   decorateOutputs(ComponentMock, outputs);
   decorateQueries(ComponentMock, queries);
 
