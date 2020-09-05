@@ -24,29 +24,10 @@ For an easy start check the [MockBuilder](#mockbuilder) first.
 ```typescript
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-// our dependency component that we want to mock but respect inputs and outputs
-@Component({
-  selector: 'app-header',
-  template: `
-    <a (click)="logo.emit()"><img src="assets/logo.png" *ngIf="showLogo" /></a>
-    {{ title }}
-    <template [ngTemplateOutlet]="menu"></template>
-  `,
-})
-export class AppHeaderComponent {
-  @Input() public showLogo: boolean;
-  @Input() public title: string;
-
-  @Output() public logo: EventEmitter<void>;
-
-  @ContentChild('menu') public menu: TemplateRef<ElementRef>;
-}
-
-// our main component that we want to test
+// Our main component that we want to test.
 @Component({
   selector: 'app-root',
   template: `
@@ -67,59 +48,105 @@ export class AppComponent {
   @Output() public logoClick = new EventEmitter<void>();
 }
 
-// the module where our component is declared
+// A dependency component that we want to mock with a respect
+// of its inputs and outputs.
+@Component({
+  selector: 'app-header',
+  template: `
+    <a (click)="logo.emit()"><img src="assets/logo.png" *ngIf="showLogo" /></a>
+    {{ title }}
+    <template [ngTemplateOutlet]="menu"></template>
+  `,
+})
+export class AppHeaderComponent {
+  @Input() public showLogo: boolean;
+  @Input() public title: string;
+
+  @Output() public logo: EventEmitter<void>;
+
+  @ContentChild('menu', { read: false } as any) public menu: TemplateRef<ElementRef>;
+}
+
+// The module where our components are declared.
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, RouterModule.forRoot([])],
+  imports: [CommonModule, RouterModule.forRoot([])],
   declarations: [AppComponent, AppHeaderComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
 
 describe('main', () => {
-  // instead of helper components and NO_ERRORS_SCHEMA we have a clear declaration
-  // AppComponent will stay as it is
-  // everything in AppModule will be mocked in a typesafe way
+  // Usually we would have something like that.
+  // beforeEach(() => {
+  //   TestBed.configureTestingModule({
+  //     imports: [CommonModule],
+  //     declarations: [AppComponent, AppHeaderComponent],
+  //   });
+  //
+  //   fixture = TestBed.createComponent(AppComponent);
+  //   fixture.detectChanges();
+  // });
+  // Instead of AppHeaderComponent we want to have a mock and
+  // usually doing it via a helper component
+  // or setting NO_ERRORS_SCHEMA.
+
+  // With ng-mocks it can be defined in the next way.
   beforeEach(() =>
-    MockBuilder(AppComponent, AppModule).mock(AppHeaderComponent, {
-      // adding a special config how to mock AppHeaderComponent
-      render: {
-        menu: true, // #menu template will be rendered together with mocked AppHeaderComponent.
-      },
-    })
+    // AppComponent will stay as it is
+    // everything in AppModule will be mocked.
+    MockBuilder(AppComponent, AppModule)
+      // Adding a special config how to mock AppHeaderComponent.
+      .mock(AppHeaderComponent, {
+        render: {
+          // #menu template will be rendered together
+          // with mocked AppHeaderComponent.
+          menu: true,
+        },
+      })
   );
 
   it('example', () => {
-    // renders the component as <app-root [title]="'Fake Application'" (logoClick)="logoClickSpy($event)"></app-root>
-    // real component is accessible via fixture.point
     const logoClickSpy = jasmine.createSpy();
-    // const logoClickSpy = jest.fn(); // in case of jest
+    // const logoClickSpy = jest.fn(); // in case of jest.
+
+    // Instead of TestBed.createComponent(AppComponent)
+    // MockRender should be used.
     const fixture = MockRender(AppComponent, {
       title: 'Fake Application',
       logoClick: logoClickSpy,
     });
+    // It creates a helper component
+    // with the template:
+    // <app-root
+    //   [title]="'Fake Application'"
+    //   (logoClick)="logoClickSpy($event)"
+    // ></app-root>
+    // and renders it via TestBed.createComponent(HelperComponent).
+    // AppComponent is accessible via fixture.point.
 
-    // the same as fixture.debugElement.query(By.directive(AppHeaderComponent));
-    // but typesafe and fails if nothing was found
+    // The same as fixture.debugElement.query(By.directive(AppHeaderComponent));
+    // but typesafe and fails if nothing was found.
     const header = ngMocks.find(fixture.debugElement, AppHeaderComponent);
 
-    // asserting how AppComponent uses AppHeaderComponent
+    // Asserting how AppComponent uses AppHeaderComponent.
     expect(header.componentInstance.showLogo).toBe(true);
     expect(header.componentInstance.title).toBe('Fake Application');
 
-    // checking that AppComponents updates AppHeaderComponent
+    // Checking that AppComponents updates AppHeaderComponent.
     fixture.componentInstance.title = 'Updated Application';
     fixture.detectChanges();
     expect(header.componentInstance.title).toBe('Updated Application');
 
-    // checking that AppComponent listens on outputs of AppHeaderComponent
+    // Checking that AppComponent listens on outputs of AppHeaderComponent.
     expect(logoClickSpy).not.toHaveBeenCalled();
     header.componentInstance.logo.emit();
     expect(logoClickSpy).toHaveBeenCalled();
 
-    // asserting that AppComponent passes the right menu into AppHeaderComponent
+    // Asserting that AppComponent passes the right menu into AppHeaderComponent.
     const links = ngMocks.findAll(header, 'a');
     expect(links.length).toBe(2);
-    // an easy way to get a value of an input
+
+    // An easy way to get a value of an input.
     // the same as links[0].injector.get(RouterLinkWithHref).routerLink
     expect(ngMocks.input(links[0], 'routerLink')).toEqual(['/home']);
     expect(ngMocks.input(links[1], 'routerLink')).toEqual(['/about']);
