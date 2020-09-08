@@ -91,7 +91,6 @@ test("transformer should set the source property to the processed value", (t) =>
     transform(require("autoprefixer"))(context, () => {
         t.isEqual(context.source, "::-moz-placeholder {}\n" +
                                   ":-ms-input-placeholder {}\n" +
-                                  "::-ms-input-placeholder {}\n" + 
                                   "::placeholder {}");
     });
 });
@@ -104,13 +103,8 @@ test("transformer should use custom options", (t) => {
     transform(require("autoprefixer"), { map: { inline: true } })(context, () => {
         t.isEqual(context.source, "::-moz-placeholder {}\n" +
                                   ":-ms-input-placeholder {}\n" +
-                                  "::-ms-input-placeholder {}" +
-                                  "\n::placeholder {}" +
-                                  "\n/*# sourceMappingURL=data:application/json;base64," + 
-                                  "eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hbWV" +
-                                  "zIjpbXSwibWFwcGluZ3MiOiJBQUFBLG9CQUFlO0FBQWYsd0JBQWU7QU" +
-                                  "FBZix5QkFBZTtBQUFmLGVBQWUiLCJmaWxlIjoiZmlsZS5jc3MiLCJzb" + 
-                                  "3VyY2VzQ29udGVudCI6WyI6OnBsYWNlaG9sZGVyIHt9Il19 */");
+                                  "::placeholder {}\n" +
+                                  "/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGUuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLG9CQUFlO0FBQWYsd0JBQWU7QUFBZixlQUFlIiwiZmlsZSI6ImZpbGUuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOjpwbGFjZWhvbGRlciB7fSJdfQ== */");
     });
 });
 

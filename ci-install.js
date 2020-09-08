@@ -12,7 +12,8 @@ const projects = [
     "examples/angular2",
     "examples/typescript-1.6.2",
     "examples/typescript-1.8.10",
-    "examples/typescript-latest"
+    "examples/typescript-latest",
+    "tests/integration-latest"
 ];
 
 for (const package of packages) {
@@ -23,3 +24,7 @@ for (const package of packages) {
         fse.copyFileSync(`packages/${package}/package.json`, `${project}/node_modules/${package}/package.json`);
     }
 }
+
+fse.copySync("tests/integration-latest/karma-typescript-test-module/", "tests/integration-latest/node_modules/karma-typescript-test-module/");
+fse.copySync("tests/integration-latest/karma-typescript-test-module-commonjs-a/", "tests/integration-latest/node_modules/karma-typescript-test-module-commonjs-a/");
+fse.copySync("tests/integration-latest/karma-typescript-test-module-commonjs-b/", "tests/integration-latest/node_modules/karma-typescript-test-module-commonjs-b/");

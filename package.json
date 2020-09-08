@@ -5,9 +5,10 @@
   "author": "monounity",
   "license": "MIT",
   "scripts": {
-    "setup": "npm run setup:packages && npm run setup:examples",
+    "setup": "npm run setup:packages && npm run setup:examples && npm run setup:integration-tests",
     "setup:packages": "npm install && lerna bootstrap --hoist --no-ci",
     "setup:examples": "cd examples/angular2 && npm i && cd ../.. && cd examples/typescript-1.6.2 && npm i && cd ../.. && cd examples/typescript-1.8.10 && npm i && cd ../.. && cd examples/typescript-latest && npm i && cd ../..",
+    "setup:integration-tests": "cd tests/integration-latest && npm i && cd ../..",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test",
@@ -16,7 +17,8 @@
     "test:examples:typescript-1.6.2": "npm --prefix examples/typescript-1.6.2/ test",
     "test:examples:typescript-1.8.10": "npm --prefix examples/typescript-1.8.10/ test",
     "test:examples:typescript-latest": "npm --prefix examples/typescript-latest/ test",
-    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples"
+    "test:integration": "npm --prefix tests/integration-latest/ test",
+    "ci": "npm run lint && npm run build && node ci-install.js && npm run test && npm run test:examples && npm run test:integration"
   },
   "dependencies": {
     "fs-extra": "^9.0.1",

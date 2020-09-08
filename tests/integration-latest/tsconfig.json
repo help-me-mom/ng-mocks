@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "module": "commonjs",
+        "paths": {
+            "compilerpaths/*": [ "src/typescript/compiler-paths/*" ],
+            "karma-typescript-test-module-add": [ "node_modules/karma-typescript-test-module/add/index.js" ],
+            "@karma-typescript-test-module/*": [ "node_modules/karma-typescript-test-module/*" ]
+        },
+        "resolveJsonModule": true,
+        "target": "ES5",
+        "types": [
+            "jasmine",
+            "node"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

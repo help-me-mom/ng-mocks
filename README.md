@@ -29,10 +29,13 @@ npm install --save-dev karma-typescript
 | [`karma-typescript-es6-transform`](/packages/karma-typescript-es6-transform) | [![Npm Version](https://img.shields.io/npm/v/karma-typescript-es6-transform.svg)](https://www.npmjs.com/package/karma-typescript-es6-transform) | [![Dependencies Status](https://david-dm.org/monounity/karma-typescript/status.svg?path=packages/karma-typescript-es6-transform)](https://david-dm.org/monounity/karma-typescript?path=packages/karma-typescript-es6-transform) |
 | [`karma-typescript-postcss-transform`](/packages/karma-typescript-postcss-transform) | [![Npm Version](https://img.shields.io/npm/v/karma-typescript-postcss-transform.svg)](https://www.npmjs.com/package/karma-typescript-postcss-transform) | [![Dependencies Status](https://david-dm.org/monounity/karma-typescript.svg?path=packages/karma-typescript-postcss-transform)](https://david-dm.org/monounity/karma-typescript?path=packages/karma-typescript-postcss-transform) |
 
-
 ## Contributors
 
 <a href="https://github.com/monounity/karma-typescript/graphs/contributors"><img src="https://opencollective.com/karma-typescript/contributors.svg?width=890&button=false" /></a>
+
+## Contribute
+
+[Contributing guidelines](https://github.com/monounity/karma-typescript/wiki/Contributing)
 
 ## Backers
 

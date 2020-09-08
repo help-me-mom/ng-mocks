@@ -1,0 +1,27 @@
+{
+  "name": "tests-integration-latest",
+  "version": "5.1.0",
+  "description": "Integration tests for the latest version of Typescript",
+  "author": "monounity",
+  "contributors": [
+    {
+      "name": "erikbarke"
+    }
+  ],
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "karma start"
+  },
+  "dependencies": {
+    "@types/jasmine": "^2.5.37",
+    "date-fns": "^2.16.1",
+    "jasmine-core": "^2.6.0",
+    "karma": "^5.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "latest",
+    "typescript": "latest"
+  }
+}

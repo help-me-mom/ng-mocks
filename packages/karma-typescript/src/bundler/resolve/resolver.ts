@@ -152,28 +152,9 @@ export class Resolver {
         return this.filenameCache.indexOf(bundleItem.filename) !== -1;
     }
 
-    private resolveCompilerPathModulename(bundleItem: BundleItem): string {
-
-        let moduleName = bundleItem.moduleName;
-
-        if (bundleItem.isNpmModule() && bundleItem.isTypingsFile() &&
-            bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
-
-            const filename = PathTool.fixWindowsPath(bundleItem.filename);
-            const matches = filename.match(/\/node_modules\/(.*)\//);
-
-            if (matches && matches[1]) {
-                moduleName = matches[1];
-                this.log.debug("Resolved module name [%s] to [%s]", bundleItem.moduleName, moduleName);
-            }
-        }
-
-        return moduleName;
-    }
-
     private resolveFilename(requiringModule: string, bundleItem: BundleItem, onFilenameResolved: () => void) {
 
-        const moduleName = this.resolveCompilerPathModulename(bundleItem);
+        let moduleName = bundleItem.moduleName;
 
         if (this.bowerPackages[moduleName]) {
             bundleItem.filename = this.bowerPackages[moduleName];
@@ -197,10 +178,33 @@ export class Resolver {
         };
 
         browserResolve(moduleName, bopts, (error, filename) => {
+
             if (!error) {
                 bundleItem.filename = fs.realpathSync(filename);
                 return onFilenameResolved();
             }
+
+            // This is probably a compiler path module
+            if(bundleItem.filename && !bundleItem.isTypingsFile() && (
+                bundleItem.filename.endsWith(".js") ||
+                bundleItem.filename.endsWith(".jsx") ||
+                bundleItem.filename.endsWith(".ts") ||
+                bundleItem.filename.endsWith(".tsx"))
+            ) {
+                return onFilenameResolved();
+            }
+
+            // This is probably a compiler path module (.d.ts)
+            if (bundleItem.isNpmModule() && bundleItem.isTypingsFile() &&
+                bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
+                const filepath = PathTool.fixWindowsPath(bundleItem.filename);
+                const matches = filepath.match(/\/node_modules\/(.*)\//);
+                if (matches && matches[1]) {
+                    moduleName = matches[1];
+                    this.log.debug("Resolved module name [%s] to [%s]", bundleItem.moduleName, moduleName);
+                }
+            }
+
             bopts = {
                 basedir: bundleItem.filename ? path.dirname(bundleItem.filename) : this.config.karma.basePath,
                 extensions: this.config.bundlerOptions.resolve.extensions,
@@ -208,12 +212,8 @@ export class Resolver {
                 modules: this.shims
             };
 
-            browserResolve(moduleName, bopts, (error2, filename2) => {
+            browserResolve(moduleName, bopts, (error2: any, filename2: fs.PathLike) => {
                 if (error2) {
-                    if (bundleItem.filename && !bundleItem.isTypingsFile()) {
-                        // This is probably a compiler path module (.js)
-                        return onFilenameResolved();
-                    }
                     throw new Error("Unable to resolve module [" +
                         moduleName + "] from [" + requiringModule + "]" + os.EOL +
                         JSON.stringify(bopts, undefined, 2) + os.EOL +
@@ -231,7 +231,7 @@ export class Resolver {
 
         if (bundleItem.isScript() && this.dependencyWalker.hasRequire(bundleItem.source)) {
             this.dependencyWalker.collectJavascriptDependencies(bundleItem, (moduleNames) => {
-                async.each(moduleNames, (moduleName, onModuleResolved) => {
+                async.each(moduleNames, (moduleName: string, onModuleResolved: () => void) => {
                     const dependency = new BundleItem(moduleName);
                     this.resolveModule(bundleItem.filename, dependency, buffer, (resolved) => {
                         if (resolved) {

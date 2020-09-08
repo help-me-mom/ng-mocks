@@ -27,4 +27,7 @@ rm -rf examples/typescript-1.8.10/coverage/ examples/typescript-1.8.10/node_modu
 echo "Cleaning examples/typescript-latest/"
 rm -rf examples/typescript-latest/coverage/ examples/typescript-latest/node_modules/
 
+echo "Cleaning tests/integration-latest/"
+rm -rf tests/integration-latest/coverage/ tests/integration-latest/node_modules/
+
 echo "Done"
