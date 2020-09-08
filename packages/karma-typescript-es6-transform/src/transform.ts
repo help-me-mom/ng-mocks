@@ -24,8 +24,8 @@ const isEs6 = (ast: acorn.Node): boolean => {
                     case "VariableDeclaration":
                         if (node.kind === "const" || node.kind === "let") {
                             es6NodeFound = true;
-                            break;
                         }
+                        break;
                     default:
                 }
             }
@@ -38,7 +38,7 @@ const isEs6 = (ast: acorn.Node): boolean => {
     return es6NodeFound;
 };
 
-const configure = (options?: babel.TransformOptions) => {
+const configure = (options?: babel.TransformOptions) : kt.Transform => {
 
     options = options || {};
 

@@ -41,7 +41,7 @@ export class Transformer {
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
-                    transform(context, (error: Error, result: TransformResult | boolean, transpile: boolean = true) => {
+                    transform(context, (error: Error, result: TransformResult | boolean, transpile = true) => {
                         if (typeof result !== "object" || result === null) {
                             result = {
                                 dirty: !!result,

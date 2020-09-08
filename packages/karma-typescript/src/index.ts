@@ -6,7 +6,7 @@ import { Globals } from "./bundler/globals";
 import { Resolver } from "./bundler/resolve/resolver";
 import { SourceReader } from "./bundler/resolve/source-reader";
 import { SourceMap } from "./bundler/source-map";
-import { Transformer } from "./bundler/transformer";
+import { Transformer } from "./bundler/transformer";
 import { Validator } from "./bundler/validator";
 
 import { Compiler } from "./compiler/compiler";

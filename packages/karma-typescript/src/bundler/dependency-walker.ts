@@ -28,7 +28,7 @@ export class DependencyWalker {
 
     public collectTypescriptDependencies(queue: Queued[]): number {
 
-        let dependencyCount: number = 0;
+        let dependencyCount = 0;
         const ambientModuleNames = this.collectAmbientModules(queue);
 
         queue.forEach((queued) => {

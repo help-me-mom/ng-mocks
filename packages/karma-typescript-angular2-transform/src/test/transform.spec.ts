@@ -101,7 +101,7 @@ test("transformer should check ts property", (t) => {
             t.fail();
         }
         else {
-            const dirty: boolean = !!result;
+            const dirty = !!result;
             t.false(dirty);
         }
     });
@@ -117,7 +117,7 @@ test("transformer should set dirty flag to true", (t) => {
         if (error) {
             t.fail();
         }
-        const dirty: boolean = !!result;
+        const dirty = !!result;
         t.assert(dirty);
     });
 });
@@ -176,7 +176,7 @@ test("transformer should skip files without the properties 'templateUrl' and/or 
         if (error) {
             t.fail();
         }
-        const dirty: boolean = !!result;
+        const dirty = !!result;
         t.false(dirty);
     });
 });

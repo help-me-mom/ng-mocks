@@ -28,5 +28,10 @@
     "type": "opencollective",
     "url": "https://opencollective.com/karma-typescript",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "eslint": "^7.8.1"
   }
 }

@@ -14,7 +14,7 @@ export class SourceReader {
                 private log: Logger,
                 private transformer: Transformer) { }
 
-    public read(bundleItem: BundleItem, onSourceRead: () => void) {
+    public read(bundleItem: BundleItem, onSourceRead: () => void) : void {
 
         this.readFile(bundleItem, (source: string) => {
 

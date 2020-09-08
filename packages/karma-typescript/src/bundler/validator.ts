@@ -8,7 +8,7 @@ export class Validator {
 
     constructor(private config: Configuration, private log: Logger) {}
 
-    public validate(bundle: string, filename: string) {
+    public validate(bundle: string, filename: string) : void {
 
         if (this.config.bundlerOptions.validateSyntax) {
 

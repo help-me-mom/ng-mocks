@@ -44,7 +44,7 @@ export class Configuration implements KarmaTypescriptConfig {
 
     constructor(private loggers: LoggerList) {}
 
-    public initialize(config: ConfigOptions) {
+    public initialize(config: ConfigOptions) : void {
 
         this.karma = config || {};
         this.karmaTypescriptConfig = (config as any).karmaTypescriptConfig || {};
@@ -62,7 +62,7 @@ export class Configuration implements KarmaTypescriptConfig {
         }
     }
 
-    public whenReady(callback: () => void) {
+    public whenReady(callback: () => void) : void {
         this.callbacks.push(callback);
     }
 

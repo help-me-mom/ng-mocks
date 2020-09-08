@@ -16,6 +16,7 @@ export class Coverage {
 
     constructor(private config: Configuration) { }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     public initialize(logger: any): void {
 
         this.log = logger.create("coverage.karma-typescript");

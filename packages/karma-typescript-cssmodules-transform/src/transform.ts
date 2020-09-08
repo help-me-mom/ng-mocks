@@ -17,12 +17,14 @@ const parser = postcss.plugin("karma-typescript-cssmodules-transform-parser", ()
     };
 });
 
-const configure = (postcssOptions?: postcss.ProcessOptions, options?: any, filter?: RegExp) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const configure = (postcssOptions?: postcss.ProcessOptions, options?: any, filter?: RegExp) : kt.Transform => {
 
     postcssOptions = postcssOptions || {};
     options = options || {};
     filter = (filter instanceof RegExp) ? filter : /\.css$/;
 
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const genericNames = require("generic-names");
     const scopedNameGenerator = options.generateScopedName || "[name]_[local]_[hash:base64:5]";
 
@@ -40,8 +42,10 @@ const configure = (postcssOptions?: postcss.ProcessOptions, options?: any, filte
             }
 
             const plugins = [
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
                 require("postcss-modules-local-by-default")({ mode: options.mode }),
                 require("postcss-modules-extract-imports"),
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
                 require("postcss-modules-scope")({ generateScopedName: genericNames(scopedNameGenerator, {
                     context: context.filename
                 })}),

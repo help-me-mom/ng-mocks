@@ -9,7 +9,8 @@ export class Threshold {
 
     constructor(private config: Configuration, private log: Logger) { }
 
-    public check(browser: any, coverageMap: istanbulCoverage.CoverageMap) {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    public check(browser: any, coverageMap: istanbulCoverage.CoverageMap) : boolean {
 
         let passedThreshold = true;
 

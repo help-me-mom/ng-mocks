@@ -11,11 +11,11 @@ import { Queued } from "./queued";
 export class SourceMap {
 
     private combiner: Combiner;
-    private line: number = 0;
+    private line = 0;
 
     constructor(private config: Configuration, private log: Logger) {}
 
-    public initialize(bundle: string) {
+    public initialize(bundle: string) : void {
         this.combiner = combineSourceMap.create();
         this.line = this.getNumberOfNewlines(bundle);
     }
@@ -40,7 +40,7 @@ export class SourceMap {
         return undefined;
     }
 
-    public addFile(bundleItem: BundleItem) {
+    public addFile(bundleItem: BundleItem) : void {
 
         if (this.config.bundlerOptions.sourceMap) {
 
@@ -56,17 +56,17 @@ export class SourceMap {
         bundleItem.source = combineSourceMap.removeComments(bundleItem.source);
     }
 
-    public offsetLineNumber(wrappedSource: string) {
+    public offsetLineNumber(wrappedSource: string) : void {
         if (this.config.bundlerOptions.sourceMap) {
             this.line += this.getNumberOfNewlines(wrappedSource);
         }
     }
 
-    public getComment() {
+    public getComment() : string {
         return this.config.bundlerOptions.sourceMap ? this.combiner.comment() : "";
     }
 
-    public loadFileFromComment(bundleItem: BundleItem) {
+    public loadFileFromComment(bundleItem: BundleItem) : void {
 
         const commentMatch = convertSourceMap.mapFileCommentRegex.exec(bundleItem.source);
 

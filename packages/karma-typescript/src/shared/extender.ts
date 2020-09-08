@@ -9,6 +9,7 @@ import {
 
 export class Extender {
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     public static extend(key: string, tsconfig: any, karmaTypescriptConfig: KarmaTypescriptConfig): void {
 
         const extendable = karmaTypescriptConfig[key] as Extendable;

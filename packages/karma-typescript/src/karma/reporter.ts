@@ -22,6 +22,7 @@ export class Reporter {
 
     constructor(config: Configuration, threshold: Threshold) {
 
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const that = this;
 
         // tslint:disable-next-line:only-arrow-functions
@@ -69,15 +70,14 @@ export class Reporter {
                         }
 
                         const context = istanbulReport.createContext({
-                            // @ts-ignore
                             coverageMap: remappedCoverageMap,
                             dir: directory,
-                            // @ts-ignore
                             sourceFinder: sourceMapStore.sourceFinder
                         });
 
                         istanbulReports
                             .create(reportType, { file: reportConfig ? reportConfig.filename : undefined })
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             .execute(context);
                     });

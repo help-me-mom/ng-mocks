@@ -25,7 +25,7 @@ export class Resolver {
                 private log: Logger,
                 private sourceReader: SourceReader) { }
 
-    public initialize() {
+    public initialize() : void {
         this.shims = this.config.bundlerOptions.addNodeGlobals ?
             require("./shims") : undefined;
         this.log.debug(this.shims);
@@ -35,7 +35,7 @@ export class Resolver {
     public resolveModule(requiringModule: string,
                          bundleItem: BundleItem,
                          buffer: BundleItem[],
-                         onModuleResolved: (bundleItem: BundleItem) => void) {
+                         onModuleResolved: (bundleItem: BundleItem) => void) : void {
 
         if (bundleItem.isTypescriptFile() && !bundleItem.isNpmModule()) {
             process.nextTick(() => {
@@ -108,6 +108,7 @@ export class Resolver {
 
     private cacheBowerPackages(): void {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const bower = require("bower");
             bower.commands
                 .list({ map: true }, { offline: true })

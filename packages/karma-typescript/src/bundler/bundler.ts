@@ -50,7 +50,7 @@ export class Bundler {
                 private transformer: Transformer,
                 private validator: Validator) { }
 
-    public attach(files: FilePattern[]) {
+    public attach(files: FilePattern[]) : void {
 
         files.unshift({
             included: true,
@@ -67,7 +67,7 @@ export class Bundler {
         });
     }
 
-    public bundle(file: File, emitOutput: EmitOutput, callback: BundleCallback) {
+    public bundle(file: File, emitOutput: EmitOutput, callback: BundleCallback) : void {
         this.bundleQueue.push({ callback, emitOutput, file });
         this.bundleQueuedModulesDeferred();
     }

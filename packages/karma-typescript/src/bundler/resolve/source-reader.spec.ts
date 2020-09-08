@@ -6,8 +6,9 @@ import * as test from "tape";
 let readFileCallback = [undefined, new Buffer("")];
 
 mock("fs", {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     readFile: (filename: string, callback: (error: Error, buffer: Buffer) => void) => {
-        filename = filename;
         return callback(undefined, readFileCallback[1]);
     }
 });
@@ -18,7 +19,7 @@ import { KarmaTypescriptConfig } from "../../api/configuration";
 import { Configuration } from "../../shared/configuration";
 import { Project } from "../../shared/project";
 import { BundleItem } from "../bundle-item";
-import { Transformer } from "../transformer";
+import { Transformer } from "../transformer";
 import { SourceReader } from "./source-reader";
 
 const configuration = new Configuration({});
@@ -150,7 +151,7 @@ test("source-reader should prepend 'module.exports =' to valid javascript with n
     const bundleItem = new BundleItem("valid-js", "valid-js.css");
 
     sourceReader.read(bundleItem, () => {
-        t.equal(bundleItem.source, os.EOL + "module.exports = \"{ color: \'_color_xkpkl_5\'; }\";");
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"{ color: '_color_xkpkl_5'; }\";");
     });
 });
 
@@ -162,6 +163,6 @@ test("source-reader should prepend 'module.exports =' to valid javascript with n
     const bundleItem = new BundleItem("valid-js", "valid-js.txt");
 
     sourceReader.read(bundleItem, () => {
-        t.equal(bundleItem.source, os.EOL + "module.exports = \"(function() {return {foo: \'baz\',bork: true}})();\";");
+        t.equal(bundleItem.source, os.EOL + "module.exports = \"(function() {return {foo: 'baz', bork: true}})();\";");
     });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as kt from "karma-typescript";
 import * as log4js from "log4js";
 import * as os from "os";

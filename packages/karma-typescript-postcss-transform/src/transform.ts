@@ -5,7 +5,7 @@ import * as postcss from "postcss";
 
 let log: log4js.Logger;
 
-const configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOptions, filter?: RegExp) => {
+const configure = (plugins?: postcss.AcceptedPlugin[], options?: postcss.ProcessOptions, filter?: RegExp) : kt.Transform => {
 
     options = options || {};
     filter = (filter instanceof RegExp) ? filter : /\.css$/;

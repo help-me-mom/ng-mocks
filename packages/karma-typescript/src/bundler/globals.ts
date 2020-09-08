@@ -10,7 +10,7 @@ export class Globals {
 
     constructor(private config: Configuration, private resolver: Resolver) { }
 
-    public add(buffer: BundleItem[], entrypoints: string[], onGlobalsAdded: () => void) {
+    public add(buffer: BundleItem[], entrypoints: string[], onGlobalsAdded: () => void) : void {
 
         const items: BundleItem[] = [];
 
