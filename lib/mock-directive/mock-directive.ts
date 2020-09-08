@@ -156,7 +156,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     }
   }
 
-  decorateInputs(DirectiveMock, inputs);
+  decorateInputs(DirectiveMock, inputs, queries ? Object.keys(queries) : undefined);
   decorateOutputs(DirectiveMock, outputs);
   decorateQueries(DirectiveMock, queries);
 

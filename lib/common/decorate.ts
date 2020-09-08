@@ -13,10 +13,13 @@ import { Type } from './lib';
  *
  * @internal
  */
-export function decorateInputs(cls: Type<any>, inputs?: string[]) {
+export function decorateInputs(cls: Type<any>, inputs?: string[], exclude?: string[]) {
   if (inputs) {
     for (const input of inputs) {
       const [key, alias] = input.split(': ');
+      if (exclude && exclude.indexOf(key) !== -1) {
+        continue;
+      }
       Input(alias)(cls.prototype, key);
     }
   }
