@@ -4,6 +4,7 @@
         "baseUrl": ".",
         "esModuleInterop": true,
         "module": "commonjs",
+        "outDir": "dist",
         "paths": {
             "compilerpaths/*": [ "src/typescript/compiler-paths/*" ],
             "karma-typescript-test-module-add": [ "node_modules/karma-typescript-test-module/add/index.js" ],
