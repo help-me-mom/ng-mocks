@@ -11,6 +11,10 @@ import { Logger } from "log4js";
 import { Threshold } from "../istanbul/threshold";
 import { Configuration } from "../shared/configuration";
 
+type BrowserCollection = {
+    forEach: any[]['forEach'];
+}
+
 const reporterName = "karma-typescript";
 
 export class Reporter {
@@ -45,20 +49,19 @@ export class Reporter {
                 }
             };
 
-            this.onRunComplete = (browsers: any[], results: any) => {
+            this.onRunComplete = async (collection: BrowserCollection, results: any) => {
+                const browsers: any[] = [];
+                collection.forEach((browser) => browsers.push(browser));
 
-                browsers.forEach(async (browser: any) => {
+                let isBelowCoverageThreshold = false;
 
+                for(const browser of browsers) {
                     const coverage = that.coverageMap.get(browser);
                     const coverageMap = istanbulCoverage.createCoverageMap();
                     coverageMap.merge(coverage);
 
                     const sourceMapStore = istanbulSourceMaps.createSourceMapStore();
                     const remappedCoverageMap = await sourceMapStore.transformCoverage(coverageMap);
-
-                    if (results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap)) {
-                        results.exitCode = 1;
-                    }
 
                     Object.keys(config.reports).forEach((reportType: any) => {
 
@@ -81,7 +84,15 @@ export class Reporter {
                             // @ts-ignore
                             .execute(context);
                     });
-                });
+
+                    const isCoverageCheckFailed = results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap);
+
+                    isBelowCoverageThreshold = isBelowCoverageThreshold || isCoverageCheckFailed;
+                }
+
+                if (isBelowCoverageThreshold) {
+                    process.exit(1);
+                }
             };
         };
 
