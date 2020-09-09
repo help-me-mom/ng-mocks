@@ -66,7 +66,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "build": "tsc --rootDir ./src",
-    "test": "nyc --require ts-node/register tape src/**/*.spec.ts | faucet"
+    "test": "nyc --require ts-node/register tape \"src/**/*.spec.ts\" | faucet"
   },
   "nyc": {
     "extension": [

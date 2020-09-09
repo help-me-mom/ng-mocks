@@ -23,7 +23,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "lint": "eslint . --ext .ts",
-    "test": "nyc --require ts-node/register tape src/*.spec.ts | faucet"
+    "test": "nyc --require ts-node/register tape \"src/*.spec.ts\" | faucet"
   },
   "nyc": {
     "extension": [

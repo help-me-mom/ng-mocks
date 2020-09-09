@@ -159,7 +159,7 @@ test("source-reader should prepend 'module.exports =' to valid javascript with n
 
     t.plan(1);
 
-    readFileCallback = [undefined, new Buffer("(function() {return {foo: 'baz',bork: true}})();")];
+    readFileCallback = [undefined, new Buffer("(function() {return {foo: 'baz', bork: true}})();")];
     const bundleItem = new BundleItem("valid-js", "valid-js.txt");
 
     sourceReader.read(bundleItem, () => {
