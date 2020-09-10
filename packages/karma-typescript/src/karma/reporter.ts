@@ -53,9 +53,7 @@ export class Reporter {
                 const browsers: any[] = [];
                 collection.forEach((browser) => browsers.push(browser));
 
-                let isBelowCoverageThreshold = false;
-
-                for(const browser of browsers) {
+                const coverageChecks = browsers.map(async (browser) => {
                     const coverage = that.coverageMap.get(browser);
                     const coverageMap = istanbulCoverage.createCoverageMap();
                     coverageMap.merge(coverage);
@@ -83,14 +81,18 @@ export class Reporter {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             .execute(context);
-                    });
 
-                    const isCoverageCheckFailed = results && config.hasCoverageThreshold && !threshold.check(browser, remappedCoverageMap);
+                        });
+                    
+                    return results 
+                        && config.hasCoverageThreshold 
+                        && !threshold.check(browser, remappedCoverageMap);
+                });
 
-                    isBelowCoverageThreshold = isBelowCoverageThreshold || isCoverageCheckFailed;
-                }
+                const isCoverageCheckFailed = (await Promise.all(coverageChecks))
+                    .some(isCheckFailed => isCheckFailed);
 
-                if (isBelowCoverageThreshold) {
+                if (isCoverageCheckFailed) {
                     process.exit(1);
                 }
             };
