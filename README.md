@@ -91,32 +91,46 @@ describe('main', () => {
   // or setting NO_ERRORS_SCHEMA.
 
   // With ng-mocks it can be defined in the next way.
-  beforeEach(() =>
-    // AppComponent will stay as it is
+  beforeEach(() => {
+    // AppComponent will stay as it is,
     // everything in AppModule will be mocked.
-    MockBuilder(AppComponent, AppModule)
-      // Adding a special config how to mock AppHeaderComponent.
-      .mock(AppHeaderComponent, {
-        render: {
-          // #menu template will be rendered together
-          // with mocked AppHeaderComponent.
-          menu: true,
-        },
-      })
-  );
+    return (
+      MockBuilder(AppComponent, AppModule)
+        // Adding a special config how to mock AppHeaderComponent.
+        .mock(AppHeaderComponent, {
+          render: {
+            // #menu template will be rendered together
+            // with mocked AppHeaderComponent.
+            menu: true,
+          },
+        })
+    );
+    // the same as
+    // TestBed.configureTestingModule({
+    //   imports: [
+    //     MockModule(CommonModule),
+    //     MockModule(RouterModule.forRoot([])),
+    //   ],
+    //   declarations: [
+    //     AppComponent, // not mocked
+    //     MockComponent(AppHeaderComponent),
+    //   ],
+    // });
+    // return testBed.compileComponents();
+  });
 
   it('example', () => {
-    const logoClickSpy = jasmine.createSpy();
-    // const logoClickSpy = jest.fn(); // in case of jest.
+    const logoClickSpy = typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
     // Instead of TestBed.createComponent(AppComponent)
-    // MockRender should be used.
+    // in beforeEach MockRender should be directly used
+    // in tests.
     const fixture = MockRender(AppComponent, {
       title: 'Fake Application',
       logoClick: logoClickSpy,
     });
     // It creates a helper component
-    // with the template:
+    // with the next template:
     // <app-root
     //   [title]="'Fake Application'"
     //   (logoClick)="logoClickSpy($event)"
