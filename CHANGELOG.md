@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.1.3](https://github.com/ike18t/ng-mocks/compare/v10.1.2...v10.1.3) (2020-09-13)
+
+
+### Bug Fixes
+
+* cannot combine @Input decorators with query decorators ([7cda85d](https://github.com/ike18t/ng-mocks/commit/7cda85d385b140248d44adb25ae95b1914ca1c5f)), closes [#181](https://github.com/ike18t/ng-mocks/issues/181)
+* respecting initialization of providers between tests ([2c7b47d](https://github.com/ike18t/ng-mocks/commit/2c7b47d7b9d6bdfe49596be225ddc28234265c65)), closes [#186](https://github.com/ike18t/ng-mocks/issues/186)
+
 ### [10.1.2](https://github.com/ike18t/ng-mocks/compare/v10.1.1...v10.1.2) (2020-08-09)
 
 
