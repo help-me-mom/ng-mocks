@@ -6,6 +6,7 @@ import { getTestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { AbstractType, getSourceOfMock, isNgInjectionToken, Type } from '../common';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
 import { MockedFunction, mockServiceHelper } from '../mock-service';
@@ -118,6 +119,8 @@ export const ngMocks: {
 
   output<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
   output<T = any, D = undefined>(debugNode: MockedDebugNode, output: string, notFoundValue: D): D | EventEmitter<T>;
+
+  reset(): void;
 
   stub<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
   stub<I extends object, O extends object>(instance: I, overrides: O): I & O;
@@ -319,5 +322,14 @@ export const ngMocks: {
     testBed._instantiated = false;
     testBed._moduleFactory = undefined;
     testBed._testModuleRef = null;
+  },
+
+  reset(): void {
+    ngMocksUniverse.builder = new Map();
+    ngMocksUniverse.cacheMocks = new Map();
+    ngMocksUniverse.cacheProviders = new Map();
+    ngMocksUniverse.config = new Map();
+    ngMocksUniverse.flags = new Set(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']);
+    ngMocksUniverse.touches = new Set();
   },
 };

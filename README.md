@@ -186,9 +186,9 @@ Our tests:
 * [MockDeclaration](#mockdeclarations)
 * [MockModule](#mockmodule)
 
-* [Reactive Forms Components](#mocked-reactive-forms-components)
-* [Structural Components](#usage-example-of-structural-directives)
-* [Auto Spy](#auto-spy)
+- [Reactive Forms Components](#mocked-reactive-forms-components)
+- [Structural Components](#usage-example-of-structural-directives)
+- [Auto Spy](#auto-spy)
 
 ---
 
@@ -949,7 +949,8 @@ ngMocks provides functions to get attribute and structural directives from an el
 * ngMocks.stub(service, methods)
 * ngMocks.stub(service, property, 'get' | 'set')
 
-- ngMocks.flushTestBed()
+- ngMocks.flushTestBed() - flushes initialization of TestBed
+- ngMocks.reset() - resets caches of ngMocks
 
 <details><summary>Click to see <strong>a usage example</strong></summary>
 <p>

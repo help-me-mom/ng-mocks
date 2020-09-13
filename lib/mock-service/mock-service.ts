@@ -299,16 +299,17 @@ const mockServiceHelperPrototype = {
     return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
   },
 
-  useFactory<D, I>(def: D, mock: I): Provider {
+  useFactory<D, I>(def: D, mock: () => I): Provider {
     return {
       deps: [Injector],
       provide: def,
       useFactory: (injector?: Injector) => {
+        const instance = mock();
         const config = ngMocksUniverse.config.get(def);
-        if (injector && mock && config && config.init) {
-          config.init(mock, injector);
+        if (injector && instance && config && config.init) {
+          config.init(instance, injector);
         }
-        return mock;
+        return instance;
       },
     };
   },
@@ -336,7 +337,7 @@ export const mockServiceHelper: {
   registerMockFunction(mockFunction: (mockName: string) => MockedFunction | undefined): void;
   replaceWithMocks(value: any): any;
   resolveProvider(def: Provider, resolutions: Map<any, any>, changed?: (flag: boolean) => void): Provider;
-  useFactory<D, I>(def: D, instance: I): Provider;
+  useFactory<D, I>(def: D, instance: () => I): Provider;
 } = ((window as any) || (global as any)).ngMocksMockServiceHelper;
 
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
