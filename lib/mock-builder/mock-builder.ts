@@ -153,7 +153,11 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     // mocking requested things.
     for (const def of mapValues(this.mockDef.provider)) {
       if (this.mockDef.providerMock.has(def)) {
-        ngMocksUniverse.builder.set(def, mockServiceHelper.useFactory(def, this.mockDef.providerMock.get(def)));
+        const instance = this.mockDef.providerMock.get(def);
+        ngMocksUniverse.builder.set(
+          def,
+          mockServiceHelper.useFactory(def, () => instance)
+        );
       } else {
         ngMocksUniverse.builder.set(def, MockProvider(def));
       }

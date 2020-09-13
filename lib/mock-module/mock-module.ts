@@ -47,8 +47,7 @@ export function MockProvider(provider: any): Provider | undefined {
     return provider;
   }
 
-  const mockedProvider = mockServiceHelper.useFactory(
-    ngMocksUniverse.cacheMocks.get(provide) || provide,
+  const mockedProvider = mockServiceHelper.useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () =>
     MockService(provide)
   );
   if (ngMocksUniverse.flags.has('cacheProvider')) {
