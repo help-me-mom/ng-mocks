@@ -45,6 +45,22 @@ module.exports = function(config) {
                     }
                 ]
             },
+            coverageOptions: {
+                threshold: {
+                    global: {
+                        statements: 80,
+                        branches: 60,
+                        functions: 90,
+                        lines: 90
+                    }
+                },
+                watermarks: {
+                    lines: [75, 90],
+                    functions: [75, 90],
+                    branches: [75, 90],
+                    statements: [75, 90]
+                }
+            },
             tsconfig: "./tsconfig.json",
         },
 
