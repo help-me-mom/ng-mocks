@@ -270,6 +270,19 @@ If the defaults aren't enough, the settings can be configured from `karma.conf.j
     }
     ```
 
+* **karmaTypescriptConfig.coverageOptions.watermarks** - An object with custom istanbul watermarks. Each value is an array consisting of
+  a lower and upper bound. If code coverage is above the upper bound, this is considered "healthy", and many reports will print output in green.
+  If code coverage is below the lower bound, this is considered "unhealthy", and many reports will print output in red. Yellow output is reserved
+  for coverage in between the lower and upper bound.
+    ```javascript
+    watermarks: {
+      lines: [75, 90],
+      functions: [75, 90],
+      branches: [75, 90],
+      statements: [75, 90]
+    }
+    ```
+
 * **karmaTypescriptConfig.exclude** - File string patterns to be excluded by the compiler. This property may be an `array` or an `object` for more fine-grained control.
   * Array: The string values will be merged with existing options.
   * Object: The string values will be merged with or replace existing options:
@@ -577,7 +590,7 @@ Typescript files and JavaScript files from `node_modules`, making each plugin im
 context before performing any logic, for example by checking the file name, module name or the existence of an ast object etc.
 
 Each transforming function will be executed before resolving dependencies, which means paths in `import` or `require` statements
-or anywhere in the code can be rewritten before bundling, to fit the Karma execution environment. 
+or anywhere in the code can be rewritten before bundling, to fit the Karma execution environment.
 
 Example of a simple inline transforming function replacing the contents of a `.css` file, mimicking the behavior of Css Modules:
 

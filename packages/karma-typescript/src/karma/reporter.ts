@@ -70,11 +70,13 @@ export class Reporter {
                             that.log.debug("Writing coverage to %s", directory);
                         }
 
-                        const context = istanbulReport.createContext({
+                        const istanbulReportOptions = {
                             coverageMap: remappedCoverageMap,
                             dir: directory,
-                            sourceFinder: sourceMapStore.sourceFinder
-                        });
+                            sourceFinder: sourceMapStore.sourceFinder,
+                            watermarks: config.coverageOptions.watermarks
+                        };
+                        const context = istanbulReport.createContext(istanbulReportOptions);
 
                         istanbulReports
                             .create(reportType, { file: reportConfig ? reportConfig.filename : undefined })
@@ -83,9 +85,9 @@ export class Reporter {
                             .execute(context);
 
                         });
-                    
-                    return results 
-                        && config.hasCoverageThreshold 
+
+                    return results
+                        && config.hasCoverageThreshold
                         && !threshold.check(browser, remappedCoverageMap);
                 });
 

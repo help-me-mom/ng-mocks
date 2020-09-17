@@ -78,6 +78,7 @@ export interface CoverageOptions {
     instrumenterOptions?: any;
     exclude?: RegExp | RegExp[];
     threshold?: ThresholdOptions;
+    watermarks?: any;
 }
 
 export interface Reports {
