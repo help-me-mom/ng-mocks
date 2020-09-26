@@ -106,7 +106,11 @@ export function MockComponent<TComponent>(
     providers: [
       {
         provide: component,
-        useExisting: forwardRef(() => ComponentMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       },
     ],
     selector,
@@ -124,7 +128,11 @@ export function MockComponent<TComponent>(
       options.providers.push({
         multi: true,
         provide,
-        useExisting: forwardRef(() => ComponentMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       });
       continue;
     }
@@ -133,7 +141,11 @@ export function MockComponent<TComponent>(
       options.providers.push({
         multi: true,
         provide,
-        useExisting: forwardRef(() => ComponentMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       });
       continue;
     }

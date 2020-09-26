@@ -252,6 +252,12 @@ const mockServiceHelperPrototype = {
   resolveProvider: (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) => void) => {
     const provider = typeof def === 'object' && def.provide ? def.provide : def;
     const multi = def !== provider && !!def.multi;
+
+    //  we shouldn't touch our system providers at all.
+    if (typeof def === 'object' && def.useExisting && def.useExisting.__ngMocksSkip) {
+      return def;
+    }
+
     let mockedDef: typeof def;
     if (resolutions.has(provider)) {
       mockedDef = resolutions.get(provider);

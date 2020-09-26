@@ -72,7 +72,11 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     providers: [
       {
         provide: directive,
-        useExisting: forwardRef(() => DirectiveMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       },
     ],
     selector,
@@ -89,7 +93,11 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       options.providers.push({
         multi: true,
         provide,
-        useExisting: forwardRef(() => DirectiveMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       });
       continue;
     }
@@ -98,7 +106,11 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       options.providers.push({
         multi: true,
         provide,
-        useExisting: forwardRef(() => DirectiveMock),
+        useExisting: (() => {
+          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
+          value.__ngMocksSkip = true;
+          return value;
+        })(),
       });
       continue;
     }

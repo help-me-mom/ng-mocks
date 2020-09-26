@@ -1,5 +1,6 @@
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { MetadataOverride, TestBed } from '@angular/core/testing';
+import { directiveResolver, ngModuleResolver } from 'ng-mocks/dist/lib/common/reflect';
 
 import {
   flatten,
@@ -15,7 +16,7 @@ import {
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
-import { MockModule, MockProvider } from '../mock-module';
+import { MockModule, MockNgDef, MockProvider } from '../mock-module';
 import { MockPipe } from '../mock-pipe';
 import { mockServiceHelper } from '../mock-service';
 
@@ -188,6 +189,45 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     ]) {
       ngMocksUniverse.builder.set(def, MockModule(def));
       ngMocksUniverse.touches.delete(def);
+    }
+
+    // Redefining providers for kept declarations.
+    for (const value of mapValues(ngMocksUniverse.builder)) {
+      let meta: NgModule | undefined;
+      if (isNgDef(value, 'm')) {
+        meta = ngModuleResolver.resolve(value);
+      } else if (isNgDef(value, 'c')) {
+        meta = directiveResolver.resolve(value);
+      } else if (isNgDef(value, 'd')) {
+        meta = directiveResolver.resolve(value);
+      } else {
+        continue;
+      }
+
+      const skipMock = ngMocksUniverse.flags.has('skipMock');
+      if (!skipMock) {
+        ngMocksUniverse.flags.add('skipMock');
+      }
+      const [changed, def] = MockNgDef({ providers: meta.providers });
+      if (!skipMock) {
+        ngMocksUniverse.flags.delete('skipMock');
+      }
+      if (!changed) {
+        continue;
+      }
+      const override: MetadataOverride<{ providers: Provider[] | undefined }> = {
+        set: {
+          providers: def.providers,
+        },
+      };
+
+      if (isNgDef(value, 'm')) {
+        TestBed.overrideModule(value, override);
+      } else if (isNgDef(value, 'c')) {
+        TestBed.overrideComponent(value, override);
+      } else if (isNgDef(value, 'd')) {
+        TestBed.overrideDirective(value, override);
+      }
     }
 
     // Setting up TestBed.
@@ -422,7 +462,9 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       this.mockDef.pipe.delete(source);
       this.replaceDef.pipe.set(source, destination);
     } else {
-      throw new Error('cannot replace the source by destination destination, wrong types');
+      throw new Error(
+        'Cannot replace the declaration, both have to be a Module, a Component, a Directive or a Pipe, for Providers use `.mock` or `.provide`'
+      );
     }
     if (config) {
       this.configDef.set(source, config);
