@@ -217,25 +217,6 @@ describe('MockService', () => {
     // spyOn(mock, 'nameMethod').mockReturnValue('mock');
     expect(mock.nameMethod('mock')).toEqual('mock');
     expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
-
-    // Creating a mock on the method that doesn't exist.
-    ngMocks.stub(mock, 'fakeMethod');
-    spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
-    // for jest
-    // spyOn(mock as any, 'fakeMethod').mockReturnValue('mock');
-    expect((mock as any).fakeMethod('mock')).toEqual('mock');
-    expect(ngMocks.stub(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
-
-    // Creating a mock on the property that doesn't exist.
-    ngMocks.stub(mock, 'fakeProp', 'get');
-    ngMocks.stub(mock, 'fakeProp', 'set');
-    spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
-    // for jest
-    // spyOnProperty(mock as any, 'fakeProp', 'get').mockReturnValue('mockProp');
-    spyOnProperty(mock as any, 'fakeProp', 'set');
-    expect((mock as any).fakeProp).toEqual('mockProp');
-    (mock as any).fakeProp = 'mockPropSet';
-    expect(ngMocks.stub(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
   });
 
   it('mocks injection tokens as undefined', () => {
@@ -264,15 +245,14 @@ describe('MockService', () => {
 
     const test = ngMocks.stub(MockService(Test), {
       echo: jasmine.createSpy().and.returnValue('fake1'),
-      fake: jasmine.createSpy().and.returnValue('fake2'),
       nameGet: 'fake3',
-      nameRead: 'fake4',
       nameSet: 'fake5',
     });
+    ngMocks.stub(test, 'nameRead', 'get');
+    spyOnProperty(test, 'nameRead', 'get').and.returnValue('fake4');
 
     expect(test).toEqual(jasmine.any(Test));
     expect(test.echo()).toBe('fake1');
-    expect((test as any).fake()).toBe('fake2');
     expect(test.nameGet).toBe('fake3');
     expect(test.nameRead).toBe('fake4');
     expect(test.nameSet).toBe('fake5');
