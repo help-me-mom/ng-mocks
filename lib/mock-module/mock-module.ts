@@ -4,6 +4,7 @@ import { ApplicationModule, NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import {
+  extendClass,
   flatten,
   getMockedNgDefOf,
   isNgDef,
@@ -14,7 +15,7 @@ import {
   Type,
 } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { jitReflector, ngModuleResolver } from '../common/reflect';
+import { ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockPipe } from '../mock-pipe';
@@ -118,7 +119,7 @@ export function MockModule(module: any): any {
       }
     }
 
-    const [changed, ngModuleDef] = MockNgModuleDef(meta, ngModule);
+    const [changed, ngModuleDef] = MockNgDef(meta, ngModule);
     if (changed) {
       mockModuleDef = ngModuleDef;
     }
@@ -126,29 +127,7 @@ export function MockModule(module: any): any {
 
   if (mockModuleDef) {
     const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
-
-    // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
-    (window as any).ngMocksParent = parent;
-    try {
-      // tslint:disable-next-line:no-eval
-      eval(`
-        class mockModule extends window.ngMocksParent {
-        }
-        window.ngMocksResult = mockModule
-      `);
-      mockModule = (window as any).ngMocksResult;
-    } catch (e) {
-      class ClassEs5 extends parent {}
-      mockModule = ClassEs5;
-    }
-    (window as any).ngMocksParent = undefined;
-
-    // the next step is to respect constructor parameters as the parent class.
-    if (mockModule) {
-      (mockModule as any).parameters = jitReflector
-        .parameters(parent)
-        .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
-    }
+    mockModule = extendClass(parent);
 
     // the last thing is to apply decorators.
     NgModule(mockModuleDef)(mockModule as any);
@@ -163,7 +142,7 @@ export function MockModule(module: any): any {
   }
 
   if (ngModuleProviders) {
-    const [changed, ngModuleDef] = MockNgModuleDef({ providers: ngModuleProviders });
+    const [changed, ngModuleDef] = MockNgDef({ providers: ngModuleProviders });
     mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
   }
 
@@ -180,7 +159,12 @@ export function MockModule(module: any): any {
 
 const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
-function MockNgModuleDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
+/**
+ * Can be changed at any time.
+ *
+ * @internal
+ */
+export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] {
   let changed = !ngMocksUniverse.flags.has('skipMock');
   const mockedModuleDef: NgModule = {};
   const {

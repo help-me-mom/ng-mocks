@@ -72,6 +72,36 @@ export const mapEntries = <K, T>(set: Map<K, T>): Array<[K, T]> => {
   return result;
 };
 
+export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
+  let child: any;
+  const parent: any = base;
+
+  // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
+  (window as any).ngMocksParent = parent;
+  try {
+    // tslint:disable-next-line:no-eval
+    eval(`
+        class child extends window.ngMocksParent {
+        }
+        window.ngMocksResult = child
+      `);
+    child = (window as any).ngMocksResult;
+  } catch (e) {
+    class ClassEs5 extends parent {}
+    child = ClassEs5;
+  }
+  (window as any).ngMocksParent = undefined;
+
+  // the next step is to respect constructor parameters as the parent class.
+  if (child) {
+    child.parameters = jitReflector
+      .parameters(parent)
+      .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
+  }
+
+  return child;
+};
+
 export const isNgType = (object: Type<any>, type: string): boolean =>
   jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
 
