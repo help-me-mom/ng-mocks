@@ -1,8 +1,10 @@
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
-import { MetadataOverride, TestBed } from '@angular/core/testing';
+import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { directiveResolver, ngModuleResolver } from 'ng-mocks/dist/lib/common/reflect';
+import { ngMocks } from 'ng-mocks/dist/lib/mock-helper';
 
 import {
+  AbstractType,
   flatten,
   isNgDef,
   isNgInjectionToken,
@@ -11,6 +13,8 @@ import {
   mapValues,
   NgModuleWithProviders,
   NG_MOCKS,
+  NG_MOCKS_OVERRIDES,
+  NG_MOCKS_TOUCHES,
   Type,
 } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
@@ -56,6 +60,8 @@ const defaultMock = {}; // simulating Symbol
 export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
   protected configDef: Map<Type<any> | InjectionToken<any>, any> = new Map();
+
+  protected excludeDef: Set<Type<any> | InjectionToken<any>> = new Set();
 
   protected keepDef: {
     component: Set<Type<any>>;
@@ -151,6 +157,10 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       ngMocksUniverse.builder.set(source, destination);
     }
 
+    for (const def of [...mapValues(this.excludeDef)]) {
+      ngMocksUniverse.builder.set(def, null);
+    }
+
     // mocking requested things.
     for (const def of mapValues(this.mockDef.provider)) {
       if (this.mockDef.providerMock.has(def)) {
@@ -191,45 +201,6 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       ngMocksUniverse.touches.delete(def);
     }
 
-    // Redefining providers for kept declarations.
-    for (const value of mapValues(ngMocksUniverse.builder)) {
-      let meta: NgModule | undefined;
-      if (isNgDef(value, 'm')) {
-        meta = ngModuleResolver.resolve(value);
-      } else if (isNgDef(value, 'c')) {
-        meta = directiveResolver.resolve(value);
-      } else if (isNgDef(value, 'd')) {
-        meta = directiveResolver.resolve(value);
-      } else {
-        continue;
-      }
-
-      const skipMock = ngMocksUniverse.flags.has('skipMock');
-      if (!skipMock) {
-        ngMocksUniverse.flags.add('skipMock');
-      }
-      const [changed, def] = MockNgDef({ providers: meta.providers });
-      if (!skipMock) {
-        ngMocksUniverse.flags.delete('skipMock');
-      }
-      if (!changed) {
-        continue;
-      }
-      const override: MetadataOverride<{ providers: Provider[] | undefined }> = {
-        set: {
-          providers: def.providers,
-        },
-      };
-
-      if (isNgDef(value, 'm')) {
-        TestBed.overrideModule(value, override);
-      } else if (isNgDef(value, 'c')) {
-        TestBed.overrideComponent(value, override);
-      } else if (isNgDef(value, 'd')) {
-        TestBed.overrideDirective(value, override);
-      }
-    }
-
     // Setting up TestBed.
     const imports: Array<Type<any> | NgModuleWithProviders> = [];
 
@@ -247,6 +218,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         continue;
       }
       imports.push(ngMocksUniverse.builder.get(def));
+      ngMocksUniverse.touches.add(def);
     }
 
     const declarations: Array<Type<any>> = [];
@@ -271,6 +243,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         continue;
       }
       declarations.push(ngMocksUniverse.builder.get(def));
+      ngMocksUniverse.touches.add(def);
     }
 
     const providers: Provider[] = [];
@@ -288,6 +261,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         continue;
       }
       providers.push(def);
+      ngMocksUniverse.touches.add(def);
     }
 
     // Adding missed providers to test bed.
@@ -308,6 +282,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
               useValue: undefined,
             }
       );
+      ngMocksUniverse.touches.add(def);
     }
 
     // Adding requested providers to test bed.
@@ -318,22 +293,87 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       providers.push(provider);
     }
 
-    const ngMocks = new Map();
+    const mocks = new Map();
     for (const [key, value] of [
       ...mapEntries(ngMocksUniverse.builder),
       ...mapEntries(ngMocksUniverse.cacheMocks),
       ...mapEntries(ngMocksUniverse.cacheProviders),
     ]) {
-      if (ngMocks.has(key)) {
+      if (mocks.has(key)) {
         continue;
       }
-      ngMocks.set(key, value);
+      mocks.set(key, value);
     }
 
     providers.push({
       provide: NG_MOCKS,
-      useValue: ngMocks,
+      useValue: mocks,
     });
+
+    // Redefining providers for kept declarations.
+    const touches = new Set();
+    providers.push({
+      provide: NG_MOCKS_TOUCHES,
+      useValue: touches,
+    });
+    const overrides: Map<Type<any>, MetadataOverride<any>> = new Map();
+    providers.push({
+      provide: NG_MOCKS_OVERRIDES,
+      useValue: overrides,
+    });
+    for (const proto of mapValues(ngMocksUniverse.touches)) {
+      const source: any = proto;
+      let value = ngMocksUniverse.builder.get(source);
+
+      // kept declarations should be based on their source.
+      if (value === undefined) {
+        value = source;
+      }
+
+      touches.add(source);
+      touches.add(value);
+
+      // no customizations in replacements
+      if (this.replaceDef.module.has(source) && value === this.replaceDef.module.get(source)) {
+        continue;
+      }
+      if (this.replaceDef.component.has(source) && value === this.replaceDef.component.get(source)) {
+        continue;
+      }
+      if (this.replaceDef.directive.has(source) && value === this.replaceDef.directive.get(source)) {
+        continue;
+      }
+      if (this.replaceDef.pipe.has(source) && value === this.replaceDef.pipe.get(source)) {
+        continue;
+      }
+
+      let meta: NgModule | undefined;
+      if (isNgDef(value, 'm')) {
+        meta = ngModuleResolver.resolve(value);
+      } else if (isNgDef(value, 'c')) {
+        meta = directiveResolver.resolve(value);
+      } else if (isNgDef(value, 'd')) {
+        meta = directiveResolver.resolve(value);
+      } else {
+        continue;
+      }
+
+      const skipMock = ngMocksUniverse.flags.has('skipMock');
+      if (!skipMock) {
+        ngMocksUniverse.flags.add('skipMock');
+      }
+      const [changed, def] = MockNgDef(meta);
+      if (!skipMock) {
+        ngMocksUniverse.flags.delete('skipMock');
+      }
+      if (!changed) {
+        continue;
+      }
+      const override: MetadataOverride<NgModule> = {
+        set: def,
+      };
+      overrides.set(value, override);
+    }
 
     for (const key of Object.keys(backup)) {
       (ngMocksUniverse as any)[key] = (backup as any)[key];
@@ -346,28 +386,60 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     };
   }
 
+  public exclude(def: any): this {
+    this.keepDef.component.delete(def);
+    this.keepDef.directive.delete(def);
+    this.keepDef.module.delete(def);
+    this.keepDef.pipe.delete(def);
+    this.keepDef.provider.delete(def);
+
+    this.mockDef.component.delete(def);
+    this.mockDef.directive.delete(def);
+    this.mockDef.module.delete(def);
+    this.mockDef.pipe.delete(def);
+    this.mockDef.pipeTransform.delete(def);
+    this.mockDef.provider.delete(def);
+    this.mockDef.providerMock.delete(def);
+
+    this.providerDef.delete(def);
+
+    this.replaceDef.component.delete(def);
+    this.replaceDef.directive.delete(def);
+    this.replaceDef.module.delete(def);
+    this.replaceDef.pipe.delete(def);
+
+    this.excludeDef.add(def);
+
+    return this;
+  }
+
   public keep(def: any, config?: IMockBuilderConfig): this {
     if (isNgDef(def, 'm')) {
       this.mockDef.module.delete(def);
       this.replaceDef.module.delete(def);
+      this.excludeDef.delete(def);
       this.keepDef.module.add(def);
     } else if (isNgDef(def, 'c')) {
       this.mockDef.component.delete(def);
       this.replaceDef.component.delete(def);
+      this.excludeDef.delete(def);
       this.keepDef.component.add(def);
     } else if (isNgDef(def, 'd')) {
       this.mockDef.directive.delete(def);
       this.replaceDef.directive.delete(def);
+      this.excludeDef.delete(def);
       this.keepDef.directive.add(def);
     } else if (isNgDef(def, 'p')) {
       this.mockDef.pipe.delete(def);
       this.mockDef.pipeTransform.delete(def);
       this.replaceDef.pipe.delete(def);
+      this.excludeDef.delete(def);
       this.keepDef.pipe.add(def);
     } else {
       this.mockDef.provider.delete(def);
       this.mockDef.providerMock.delete(def);
       this.providerDef.delete(def);
+      this.excludeDef.delete(def);
       this.keepDef.provider.add(def);
     }
     if (config) {
@@ -399,18 +471,22 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     if (isNgDef(def, 'm')) {
       this.keepDef.module.delete(def);
       this.replaceDef.module.delete(def);
+      this.excludeDef.delete(def);
       this.mockDef.module.add(def);
     } else if (isNgDef(def, 'c')) {
       this.keepDef.component.delete(def);
       this.replaceDef.component.delete(def);
+      this.excludeDef.delete(def);
       this.mockDef.component.add(def);
     } else if (isNgDef(def, 'd')) {
       this.keepDef.directive.delete(def);
       this.replaceDef.directive.delete(def);
+      this.excludeDef.delete(def);
       this.mockDef.directive.add(def);
     } else if (isNgDef(def, 'p')) {
       this.keepDef.pipe.delete(def);
       this.replaceDef.pipe.delete(def);
+      this.excludeDef.delete(def);
       this.mockDef.pipe.add(def);
       if (typeof mock === 'function') {
         this.mockDef.pipeTransform.set(def, mock);
@@ -418,6 +494,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     } else {
       this.keepDef.provider.delete(def);
       this.providerDef.delete(def);
+      this.excludeDef.delete(def);
       this.mockDef.provider.add(def);
       if (mock !== defaultMock) {
         this.mockDef.providerMock.set(def, mock);
@@ -448,18 +525,22 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     if (isNgDef(source, 'm') && isNgDef(destination, 'm')) {
       this.keepDef.module.delete(source);
       this.mockDef.module.delete(source);
+      this.excludeDef.delete(source);
       this.replaceDef.module.set(source, destination);
     } else if (isNgDef(source, 'c') && isNgDef(destination, 'c')) {
       this.keepDef.component.delete(source);
       this.mockDef.component.delete(source);
+      this.excludeDef.delete(source);
       this.replaceDef.component.set(source, destination);
     } else if (isNgDef(source, 'd') && isNgDef(destination, 'd')) {
       this.keepDef.directive.delete(source);
       this.mockDef.directive.delete(source);
+      this.excludeDef.delete(source);
       this.replaceDef.directive.set(source, destination);
     } else if (isNgDef(source, 'p') && isNgDef(destination, 'p')) {
       this.keepDef.pipe.delete(source);
       this.mockDef.pipe.delete(source);
+      this.excludeDef.delete(source);
       this.replaceDef.pipe.set(source, destination);
     } else {
       throw new Error(
@@ -491,11 +572,78 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   }
 }
 
-export function MockBuilder(componentToTest?: Type<any>, itsModuleToMock?: Type<any>): MockBuilderPromise {
+export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<any>): MockBuilderPromise {
+  if (!(TestBed as any).ngMocks) {
+    const configureTestingModule = TestBed.configureTestingModule;
+    TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {
+      let mocks: Map<any, any> | undefined;
+      let touches: Set<any> | undefined;
+      let overrides: Map<Type<any> | AbstractType<any>, MetadataOverride<any>> | undefined;
+
+      for (const provide of flatten(moduleDef.providers || [])) {
+        if (typeof provide !== 'object') {
+          continue;
+        }
+        if (provide.provide === NG_MOCKS) {
+          mocks = provide.useValue;
+        }
+        if (provide.provide === NG_MOCKS_TOUCHES) {
+          touches = provide.useValue;
+        }
+        if (provide.provide === NG_MOCKS_OVERRIDES) {
+          overrides = provide.useValue;
+        }
+      }
+
+      if (mocks) {
+        ngMocks.flushTestBed();
+      }
+      const testBed = configureTestingModule.call(TestBed, moduleDef);
+      if (!mocks) {
+        return testBed;
+      }
+      if (!overrides) {
+        overrides = new Map();
+      }
+
+      // Thanks Ivy and its TestBed.override - it doesn't clean up leftovers.
+      for (const def of touches ? mapValues(touches) : []) {
+        if (overrides.has(def)) {
+          continue;
+        }
+        if (isNgDef(def, 'm')) {
+          overrides.set(def, {});
+        } else if (isNgDef(def, 'c')) {
+          overrides.set(def, {});
+        } else if (isNgDef(def, 'd')) {
+          overrides.set(def, {});
+        } else if (isNgDef(def, 'p')) {
+          overrides.set(def, {});
+        }
+      }
+
+      // Now we can apply overrides.
+      for (const [def, override] of overrides ? mapEntries(overrides) : []) {
+        if (isNgDef(def, 'm')) {
+          testBed.overrideModule(def, override);
+        } else if (isNgDef(def, 'c')) {
+          testBed.overrideComponent(def, override);
+        } else if (isNgDef(def, 'd')) {
+          testBed.overrideDirective(def, override);
+        } else if (isNgDef(def, 'p')) {
+          testBed.overridePipe(def, override);
+        }
+      }
+
+      return testBed;
+    };
+    (TestBed as any).ngMocks = true;
+  }
+
   const instance = new MockBuilderPromise();
 
-  if (componentToTest) {
-    instance.keep(componentToTest, {
+  if (keepDeclaration) {
+    instance.keep(keepDeclaration, {
       export: true,
     });
   }

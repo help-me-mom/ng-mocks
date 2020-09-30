@@ -2,30 +2,6 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { MY_TOKEN_MULTI, MY_TOKEN_SINGLE, TargetComponent, TargetModule } from './fixtures';
 
-// Because all tokens are provided in the module the test should render them correctly.
-describe('module-with-tokens:real', () => {
-  beforeEach(() => MockBuilder().keep(TargetModule));
-
-  it('renders all tokens', () => {
-    const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
-    );
-  });
-});
-
-// Because all tokens are kept in the module the test should render them correctly.
-describe('module-with-tokens:keep', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(MY_TOKEN_SINGLE).keep(MY_TOKEN_MULTI));
-
-  it('renders all tokens', () => {
-    const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
-    );
-  });
-});
-
 // Preferred way.
 // Because tokens are provided in the testbed module with custom values the test should render them.
 describe('module-with-tokens:mock-0', () => {
@@ -93,5 +69,31 @@ describe('module-with-tokens:mock-3', () => {
 
   it('fails to render all tokens', () => {
     expect(() => MockRender(TargetComponent)).toThrowError(/InjectionToken/);
+  });
+});
+
+//There is a sequential failure, real and keep should be after mocked versions.
+
+// Because all tokens are provided in the module the test should render them correctly.
+describe('module-with-tokens:real', () => {
+  beforeEach(() => MockBuilder(TargetModule));
+
+  it('renders all tokens', () => {
+    const fixture = MockRender(TargetComponent);
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
+    );
+  });
+});
+
+// Because all tokens are kept in the module the test should render them correctly.
+describe('module-with-tokens:keep', () => {
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(MY_TOKEN_SINGLE).keep(MY_TOKEN_MULTI));
+
+  it('renders all tokens', () => {
+    const fixture = MockRender(TargetComponent);
+    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
+    );
   });
 });

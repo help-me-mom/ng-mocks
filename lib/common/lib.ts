@@ -1,5 +1,5 @@
 import { InjectionToken, PipeTransform, Provider } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
+import { getTestBed, MetadataOverride } from '@angular/core/testing';
 
 import { MockedComponent } from '../mock-component';
 import { MockedDirective } from '../mock-directive';
@@ -30,16 +30,20 @@ export interface NgModuleWithProviders<T = any> {
 }
 
 export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
+export const NG_MOCKS_TOUCHES = new InjectionToken<Set<any>>('NG_MOCKS_TOUCHES');
+export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<Type<any> | AbstractType<any>, MetadataOverride<any>>>(
+  'NG_MOCKS_OVERRIDES'
+);
 
 /**
  * Can be changed any time.
  *
  * @internal
  */
-export const getNgMocksFromTestBed = (): Map<any, any> | undefined => {
+export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
-    return testBed.inject ? testBed.inject(NG_MOCKS) : testBed.get(NG_MOCKS);
+    return testBed.inject ? testBed.inject(token) : testBed.get(token);
   } catch (e) {
     return undefined;
   }
@@ -190,7 +194,7 @@ export function getMockedNgDefOf<T>(type: Type<T>, ngType: 'p'): Type<MockedPipe
 export function getMockedNgDefOf(type: Type<any>): Type<any>;
 export function getMockedNgDefOf(type: any, ngType?: any): any {
   const source = type.mockOf ? type.mockOf : type;
-  const mocks = getNgMocksFromTestBed();
+  const mocks = getTestBedInjection(NG_MOCKS);
 
   let mock: any;
 

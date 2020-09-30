@@ -11,8 +11,7 @@
     "test:jest": "jest --runInBand",
     "test:jest:debug": "jest --watch",
     "lint": "ng lint",
-    "puppeteer": "npm install puppeteer@~3.3.0 --no-save",
-    "postinstall": "ngcc"
+    "puppeteer": "npm install puppeteer@~3.3.0 --no-save"
   },
   "private": true,
   "peerDependencies": {
