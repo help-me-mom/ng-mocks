@@ -253,7 +253,7 @@ const mockServiceHelperPrototype = {
     const provider = typeof def === 'object' && def.provide ? def.provide : def;
     const multi = def !== provider && !!def.multi;
 
-    //  we shouldn't touch our system providers at all.
+    //  we shouldn't touch our system providers.
     if (typeof def === 'object' && def.useExisting && def.useExisting.__ngMocksSkip) {
       return def;
     }
@@ -263,6 +263,15 @@ const mockServiceHelperPrototype = {
       mockedDef = resolutions.get(provider);
       return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
     }
+
+    //  we shouldn't touch excluded providers.
+    if (ngMocksUniverse.builder.has(provider) && ngMocksUniverse.builder.get(provider) === null) {
+      if (changed) {
+        changed(true);
+      }
+      return;
+    }
+
     ngMocksUniverse.touches.add(provider);
 
     // Then we check decisions whether we should keep or replace a def.
@@ -299,7 +308,22 @@ const mockServiceHelperPrototype = {
     if (!isNgInjectionToken(provider) || def !== mockedDef) {
       resolutions.set(provider, mockedDef);
     }
-    if (changed && mockedDef !== def) {
+    let differs = false;
+    if (def === provider && mockedDef !== def) {
+      differs = true;
+    } else if (
+      def !== provider &&
+      (!mockedDef ||
+        def.provide !== mockedDef.provide ||
+        def.useValue !== mockedDef.useValue ||
+        def.useClass !== mockedDef.useClass ||
+        def.useExisting !== mockedDef.useExisting ||
+        def.useFactory !== mockedDef.useFactory ||
+        def.deps !== mockedDef.deps)
+    ) {
+      differs = true;
+    }
+    if (changed && differs) {
       changed(true);
     }
     return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;

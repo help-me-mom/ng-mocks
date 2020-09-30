@@ -1,17 +1,32 @@
-import { TestBed } from '@angular/core/testing';
+// tslint:disable:no-console
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { InternalComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('InternalOnlyNested:real', () => {
+  // Thanks Ivy, it doesn't throw an error and we have to use injector.
+  let backupWarn: typeof console.warn;
+  let backupError: typeof console.error;
+
+  beforeAll(() => {
+    backupWarn = console.warn;
+    backupError = console.error;
+    console.error = console.warn = (...args: any[]) => {
+      throw new Error(args.join(' '));
+    };
+  });
+
+  afterAll(() => {
+    console.error = backupError;
+    console.warn = backupWarn;
+  });
+
   beforeEach(() => MockBuilder(TargetModule));
 
   it('should render', () => {
-    expect(() => {
-      MockRender(InternalComponent);
-      TestBed.get(InternalComponent); // Thanks Ivy True, it doesn't throw an error and we have to use injector.
-    }).toThrowError();
+    expect(() => MockRender(InternalComponent)).toThrowError(/'internal-component' is not a known element/);
   });
 });
 

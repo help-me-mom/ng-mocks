@@ -189,6 +189,13 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     if (resolutions.has(def)) {
       return resolutions.get(def);
     }
+    // skipping excluded things
+    if (ngMocksUniverse.builder.has(def) && ngMocksUniverse.builder.get(def) === null) {
+      changed = changed || true;
+      resolutions.set(def, undefined);
+      return;
+    }
+
     ngMocksUniverse.touches.add(isNgModuleDefWithProviders(def) ? def.ngModule : def);
 
     // First we mock modules.
@@ -228,31 +235,41 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
   };
 
   if (declarations && declarations.length) {
-    mockedModuleDef.declarations = flatten(declarations).map(resolve);
+    mockedModuleDef.declarations = flatten(declarations)
+      .map(resolve)
+      .filter(declaration => declaration);
   }
 
   if (entryComponents && entryComponents.length) {
-    mockedModuleDef.entryComponents = flatten(entryComponents).map(resolve);
+    mockedModuleDef.entryComponents = flatten(entryComponents)
+      .map(resolve)
+      .filter(declaration => declaration);
   }
 
   if (bootstrap && bootstrap.length) {
-    mockedModuleDef.bootstrap = flatten(bootstrap).map(resolve);
+    mockedModuleDef.bootstrap = flatten(bootstrap)
+      .map(resolve)
+      .filter(declaration => declaration);
   }
 
   if (providers && providers.length) {
     mockedModuleDef.providers = flatten(providers)
       .map(resolveProvider)
-      .filter(provider => provider);
+      .filter(declaration => declaration);
   }
 
   // mock of imports should be the latest step before exports to ensure that everything has been mocked already
   if (imports && imports.length) {
-    mockedModuleDef.imports = flatten(imports).map(resolve);
+    mockedModuleDef.imports = flatten(imports)
+      .map(resolve)
+      .filter(declaration => declaration);
   }
 
   // Default exports.
   if (exports && exports.length) {
-    mockedModuleDef.exports = flatten(exports).map(resolve);
+    mockedModuleDef.exports = flatten(exports)
+      .map(resolve)
+      .filter(declaration => declaration);
   }
 
   // if we are in the skipMock mode we need to export only the default exports.
@@ -266,6 +283,9 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
   for (const def of flatten([imports || [], declarations || []])) {
     const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
     const mockedDef = resolve(instance);
+    if (!mockedDef) {
+      continue;
+    }
 
     // If we export a declaration, then we have to export its module too.
     const config = ngMocksUniverse.config.get(instance) || {};
