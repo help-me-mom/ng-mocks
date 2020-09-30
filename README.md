@@ -1002,7 +1002,7 @@ const spySet: Function = ngMocks.stub(instance, propertyName, 'set');
 
 // or add / override properties and methods.
 ngMocks.stub(instance, {
-  newPropert: true,
+  existingProperty: true,
   existingMethod: jasmine.createSpy(),
 });
 ```
@@ -1030,25 +1030,6 @@ describe('MockService', () => {
     // spyOn(mock, 'nameMethod').mockReturnValue('mock');
     expect(mock.nameMethod('mock')).toEqual('mock');
     expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
-
-    // Creating a mock on the method that doesn't exist.
-    ngMocks.stub(mock, 'fakeMethod');
-    spyOn(mock as any, 'fakeMethod').and.returnValue('mock');
-    // for jest
-    // spyOn(mock as any, 'fakeMethod').mockReturnValue('mock');
-    expect((mock as any).fakeMethod('mock')).toEqual('mock');
-    expect(ngMocks.stub(mock, 'fakeMethod')).toHaveBeenCalledWith('mock');
-
-    // Creating a mock on the property that doesn't exist.
-    ngMocks.stub(mock, 'fakeProp', 'get');
-    ngMocks.stub(mock, 'fakeProp', 'set');
-    spyOnProperty(mock as any, 'fakeProp', 'get').and.returnValue('mockProp');
-    // for jest
-    // spyOnProperty(mock as any, 'fakeProp', 'get').mockReturnValue('mockProp');
-    spyOnProperty(mock as any, 'fakeProp', 'set');
-    expect((mock as any).fakeProp).toEqual('mockProp');
-    (mock as any).fakeProp = 'mockPropSet';
-    expect(ngMocks.stub(mock as any, 'fakeProp', 'set')).toHaveBeenCalledWith('mockPropSet');
   });
 });
 ```

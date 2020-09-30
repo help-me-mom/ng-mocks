@@ -85,8 +85,13 @@ export const MockHelper: {
 
   findAll: (el: MockedDebugElement, sel: any) => ngMocks.findAll(el, sel),
 
-  mockService: <T = MockedFunction>(instance: any, override: string | object, style?: 'get' | 'set'): T =>
-    typeof override === 'object' ? ngMocks.stub(instance, override) : ngMocks.stub(instance, override, style),
+  mockService: <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
+    if (typeof override !== 'object') {
+      return ngMocks.stub(instance, override, style);
+    }
+
+    return ngMocks.stub(instance, override);
+  },
 };
 
 const defaultNotFoundValue = {}; // simulating Symbol
@@ -122,8 +127,8 @@ export const ngMocks: {
 
   reset(): void;
 
-  stub<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
-  stub<I extends object, O extends object>(instance: I, overrides: O): I & O;
+  stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
+  stub<I extends object, O extends Partial<I>>(instance: I, overrides: O): I & O;
 } = {
   find: (...args: any[]) => {
     const el: MockedDebugElement = args[0];
@@ -304,7 +309,7 @@ export const ngMocks: {
     throw new Error(`Cannot find ${sel} input via ngMocks.output`);
   },
 
-  stub: <T = MockedFunction>(instance: any, override: string | object, style?: 'get' | 'set'): T => {
+  stub: <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
     if (typeof override === 'string') {
       return mockServiceHelper.mock(instance, override, style);
     }
