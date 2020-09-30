@@ -33,6 +33,16 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
   return components.map(component => MockComponent(component, undefined));
 }
 
+/**
+ * @deprecated since version 10.0.0 and will be removed in 11.0.0
+ * feel free to open a github issue to discuss an alternative solution.
+ * https://github.com/ike18t/ng-mocks/issues
+ */
+export function MockComponent<TComponent>(
+  component: Type<TComponent>,
+  metaData: core.Directive
+): Type<MockedComponent<TComponent>>;
+
 export function MockComponent<TComponent>(
   component: Type<TComponent>,
   metaData?: core.Directive
