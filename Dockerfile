@@ -22,6 +22,10 @@ VOLUME /app/e2e/a10es5ivy/node_modules
 VOLUME /app/e2e/a10es5noivy/node_modules
 VOLUME /app/e2e/a10es2015ivy/node_modules
 VOLUME /app/e2e/a10es2015noivy/node_modules
+VOLUME /app/e2e/a11es5ivy/node_modules
+VOLUME /app/e2e/a11es5noivy/node_modules
+VOLUME /app/e2e/a11es2015ivy/node_modules
+VOLUME /app/e2e/a11es2015noivy/node_modules
 
 RUN npm config set cache /npm --global
 
