@@ -8,15 +8,15 @@
         "test": "npm run test:jasmine -- --progress=false && npm run test:jest",
         "test:jasmine": "ng test",
         "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
-        "test:jest": "jest --runInBand",
+        "test:jest": "jest",
         "test:jest:debug": "jest --watch",
         "lint": "ng lint",
-        "puppeteer": "npm install puppeteer@~3.3.0 --no-save"
+        "puppeteer": "npm install puppeteer@~5.3.1 --no-save"
     },
     "private": true,
     "peerDependencies": {
         "ng-mocks": "*",
-        "puppeteer": "~3.3.0"
+        "puppeteer": "~5.3.1"
     },
     "dependencies": {
         "@angular/animations": "^6.1.0",

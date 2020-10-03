@@ -13,6 +13,7 @@ The current version can be used and has been tested on:
 - Angular 8 (Jasmine, Jest, es5, es2015)
 - Angular 9 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
+- Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
 ## Why use this?
 
