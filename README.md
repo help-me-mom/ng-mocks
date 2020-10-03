@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/ike18t/ng-mocks.png?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 
-# ngMocks
+# ngMocks - ease of mocking annoying dependencies in Angular unit tests
 
-Helper function for creating mocks for test in Angular.
+Helper functions for creating mocks of components, directives, pipes, providers and modules for tests in Angular.
 
 The current version can be used and has been tested on:
 
@@ -15,7 +15,7 @@ The current version can be used and has been tested on:
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
-## Why use this?
+### Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
 Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
@@ -42,6 +42,8 @@ Or you could use this to mock them out and have the ability to assert on their i
 ---
 
 ## Install
+
+It's quite easy, for any angular project you can use the latest version of the library.
 
 NPM
 
