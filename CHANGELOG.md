@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.2.0](https://github.com/ike18t/ng-mocks/compare/v10.1.3...v10.2.0) (2020-10-03)
+
+
+### Features
+
+* angular 11 support ([af50a72](https://github.com/ike18t/ng-mocks/commit/af50a720c7a821fec1e1aa5df773e04e33bef390))
+* exclude feature in MockBuilder ([d839f27](https://github.com/ike18t/ng-mocks/commit/d839f2747cff9433fbbddeb34bb83943e096231d)), closes [#175](https://github.com/ike18t/ng-mocks/issues/175)
+* mocked providers for kept declarations ([062d147](https://github.com/ike18t/ng-mocks/commit/062d147c0ccadce2621003c7e0c6f6143acc80b8)), closes [#172](https://github.com/ike18t/ng-mocks/issues/172)
+
+
+### Bug Fixes
+
+* cache break of MockComponent ([4b0ea25](https://github.com/ike18t/ng-mocks/commit/4b0ea25f7dbeac68433ce79460f12fdab57367c9)), closes [#96](https://github.com/ike18t/ng-mocks/issues/96)
+* generic type constraint for ngMocks.stub tedious to write ([cccd96d](https://github.com/ike18t/ng-mocks/commit/cccd96d47e6ce3dc8277970d4ad0608d9b64f1a6)), closes [#166](https://github.com/ike18t/ng-mocks/issues/166)
+
 ### [10.1.3](https://github.com/ike18t/ng-mocks/compare/v10.1.2...v10.1.3) (2020-09-13)
 
 
