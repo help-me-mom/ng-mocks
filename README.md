@@ -3,7 +3,7 @@
 
 # ngMocks
 
-Helper function for creating angular mocks for test.
+Helper function for creating mocks for test in Angular.
 
 The current version can be used and has been tested on:
 
@@ -24,13 +24,13 @@ Or you could use this to mock them out and have the ability to assert on their i
 
 - [How to install](#install)
 
-* [How to mock a component](#how-to-mock-a-component)
-* [How to mock a directive](#how-to-mock-a-directive)
-* [How to mock a pipe](#how-to-mock-a-pipe)
-* [How to mock a provider](#how-to-mock-a-provider)
-* [How to mock a module](#how-to-mock-a-module)
+* [How to mock a component](#how-to-mock-a-component-in-angular-test)
+* [How to mock a directive](#how-to-mock-a-directive-in-angular-test)
+* [How to mock a pipe](#how-to-mock-a-pipe-in-angular-test)
+* [How to mock a provider](#how-to-mock-a-provider-in-angular-test)
+* [How to mock a module](#how-to-mock-a-module-in-angular-test)
 
-- [Extensive example](#extensive-example)
+- [Extensive example](#extensive-example-of-mocks-in-angular-tests)
 - [Reactive forms components](#mocked-reactive-forms-components)
 
 * [`MockBuilder` in details](#mockbuilder)
@@ -53,7 +53,7 @@ Yarn
 
 ---
 
-## How to mock a component
+## How to mock a component in Angular test
 
 - Mocked component with the same selector
 - Inputs and Outputs with alias support
@@ -66,7 +66,7 @@ Yarn
   - \_\_simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
 - `exportAs` support
 
-Let's pretend that our component `TargetComponent` depends on `DependencyComponent` and we want to mock it in the test.
+Let's pretend that in our Angular application `TargetComponent` depends on `DependencyComponent` and we want to mock it in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -107,7 +107,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example of mocking components in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -193,7 +193,7 @@ describe('MockComponent', () => {
 
 ---
 
-## How to mock a directive
+## How to mock a directive in Angular test
 
 - Mocked directive with the same selector
 - Inputs and Outputs with alias support
@@ -205,7 +205,7 @@ describe('MockComponent', () => {
   - \_\_simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
 - `exportAs` support
 
-Let's pretend that our component `TargetComponent` depends on `DependencyDirective` and we want to mock it in the test.
+Let's assume that an Angular application has `TargetComponent` that depends on `DependencyDirective` and we need to mock it in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -246,7 +246,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>a usage example</strong> of Attribute Directives</summary>
+<details><summary>Click to see <strong>an example of mocking attribute directives in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -289,7 +289,7 @@ describe('MockDirective', () => {
 </p>
 </details>
 
-<details><summary>Click to see <strong>a usage example</strong> of Structural Directives</summary>
+<details><summary>Click to see <strong>an example of mocking structural directives in Angular</strong></summary>
 <p>
 
 It's important to render a structural directive first with the right context,
@@ -333,15 +333,15 @@ describe('MockDirective', () => {
 
 ---
 
-## How to mock a pipe
+## How to mock a pipe in Angular test
 
-- Mocked pipe with the same name.
+- Mocked pipe with the same name
 - Ability to override the transform function with a type-safe function
 - Default transform is () => undefined to prevent problems with chaining
 
 Personally, I found the best thing to do for assertions is to override the transform to write the args so that I can assert on the arguments.
 
-Let's pretend that our component `TargetComponent` depends on `DependencyPipe` and we want to mock it in the test.
+Let's imagine that in an Angular application `TargetComponent` depends on `DependencyPipe` and we would like to mock it in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -382,7 +382,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example of mocking pipes in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -405,12 +405,12 @@ describe('MockPipe', () => {
 
 ---
 
-## How to mock a provider
+## How to mock a provider in Angular test
 
 - Mocks all methods with dummy functions like `() => undefined` unless auto spy is used
 - Mocks all getters and setters with dummy functions like `() => undefined`
 
-Let's pretend that our component `TargetComponent` depends on `DependencyService` and we want to mock it in the test.
+Let's pretend that in an Angular application `TargetComponent` depends on `DependencyService` and it should be mocked in a test to avoid overhead.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -454,13 +454,13 @@ describe('Test', () => {
 
 ---
 
-## How to mock a module
+## How to mock a module in Angular test
 
 - Mocks all components, directives, pipes and providers using MockDeclaration
 - Providers are all mocked as dummy objects with dummy methods
 - Module dependencies are also mocked
 
-Let's pretend that our component `TargetComponent` depends on `DependencyModule` and we want to mock its exports in the test.
+Let's imagine an Angular application where `TargetComponent` depends on `DependencyModule` and we would like to mock its exports a the test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -510,7 +510,7 @@ Everything in `TargetModule` will be mocked, but not `TargetComponent`, it will 
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 ```
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example of mocking modules in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -531,7 +531,7 @@ describe('MockModule', () => {
 
 ---
 
-## Extensive example
+## Extensive example of mocks in Angular tests
 
 ```typescript
 import { CommonModule } from '@angular/common';
@@ -695,7 +695,7 @@ Our tests:
 - Set touched on the formControl by calling \_\_simulateTouch
 - Use the `MockedComponent` type to stay typesafe: `MockedComponent<YourReactiveFormComponent>`
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example of mocking form components in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -731,7 +731,7 @@ describe('MockReactiveForms', () => {
 The simplest way to mock everything, but not the component for testing is usage of [`MockBuilder`](#mockbuilder).
 Check [`examples/MockBuilder/`](https://github.com/ike18t/ng-mocks/tree/master/examples/MockBuilder/) for real examples.
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example</strong></summary>
 <p>
 
 ```typescript
@@ -760,7 +760,7 @@ describe('MockBuilder:simple', () => {
 </p>
 </details>
 
-<details><summary>Click to see <strong>a detailed information</strong></summary>
+<details><summary>Click to see <strong>a detailed information about flexible mocking in Angular</strong></summary>
 <p>
 
 ```typescript
@@ -905,7 +905,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 
 ## MockRender
 
-Provides a simple way to render anything for ease of testing directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` of a component, etc.
+Provides a simple tool on how to render a custom template in an Angular test to cover functionality of components, directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` etc.
 
 > Please note, that `MockRender(MyComponent)` is not assignable to `ComponentFixture<MyComponent>`.
 >
@@ -929,7 +929,7 @@ It is useful if you want to mock system tokens / services such as `APP_INITIALIZ
 
 And don't forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example how to render flexible templates in an Angular test</strong></summary>
 <p>
 
 ```typescript
@@ -1021,7 +1021,7 @@ MockInstance(MyComponent, {
 
 After a test you can reset changes to avoid their influence in other tests via a call of `MockReset()`.
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example of mocking services before initialization in Angular tests</strong></summary>
 <p>
 
 ```typescript
@@ -1114,7 +1114,7 @@ describe('MockInstance', () => {
 - `ngMocks.flushTestBed()` - flushes initialization of TestBed
 - `ngMocks.reset()` - resets caches of [`ngMocks`](#ngmocks)
 
-<details><summary>Click to see <strong>a usage example</strong></summary>
+<details><summary>Click to see <strong>an example</strong></summary>
 <p>
 
 ```typescript
@@ -1203,7 +1203,8 @@ describe('MockService', () => {
 
 ## Auto Spy
 
-Add the next code to `src/test.ts` if you want all mocked methods and functions to be a jasmine spy.
+If you want all mocks in your Angular tests to be automatically spied then
+add the next code to `src/test.ts`.
 
 ```typescript
 import 'ng-mocks/dist/jasmine';
@@ -1220,7 +1221,7 @@ import 'ng-mocks/dist/jest';
 
 ---
 
-## Find an issue or have a request?
+## Find an issue or have a question or a request?
 
 Report it as an issue or submit a PR. I'm open to contributions.
 
