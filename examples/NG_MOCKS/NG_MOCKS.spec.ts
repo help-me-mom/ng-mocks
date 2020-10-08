@@ -40,7 +40,7 @@ describe('NG_MOCKS:deep', () => {
       .mock(ServiceWeWantToMock) // makes all methods an empty function
       .mock(INJECTION_TOKEN_WE_WANT_TO_MOCK) // makes its value undefined
 
-      .mock(ServiceWeWantToCustomize, { prop1: true, getName: () => 'My Customized String' })
+      .mock(ServiceWeWantToCustomize, { getName: () => 'My Customized String' })
       .mock(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE, 'My_Token')
 
       // Now the pipe won't be mocked.
@@ -108,7 +108,6 @@ describe('NG_MOCKS:deep', () => {
     const serviceWeWantToCustomizeInstance = serviceWeWantToCustomize.useFactory();
     expect(serviceWeWantToCustomizeInstance.getName).toBeDefined();
     expect(serviceWeWantToCustomizeInstance.getName()).toEqual('My Customized String');
-    expect(serviceWeWantToCustomizeInstance.prop1).toEqual(true);
     const injectionTokenWeWantToCustomize = mocks.get(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE);
     expect(injectionTokenWeWantToCustomize).toBeDefined();
     expect(injectionTokenWeWantToCustomize.useFactory).toBeDefined();

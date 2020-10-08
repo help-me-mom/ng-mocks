@@ -458,7 +458,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   ): this;
   public mock<T>(token: InjectionToken<T>, mock?: any): this;
   public mock<T>(def: Type<T>, mock: IMockBuilderConfig): this;
-  public mock<T>(provider: Type<T>, mock?: any): this;
+  public mock<T>(provider: Type<T>, mock?: Partial<T>): this;
   public mock<T>(def: Type<T>): this;
   public mock(def: any, a1: any = defaultMock, a2?: any): this {
     let mock: any = a1;
