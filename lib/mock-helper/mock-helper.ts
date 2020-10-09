@@ -128,7 +128,7 @@ export const ngMocks: {
   reset(): void;
 
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
-  stub<I extends object, O extends Partial<I>>(instance: I, overrides: O): I & O;
+  stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
   find: (...args: any[]) => {
     const el: MockedDebugElement = args[0];

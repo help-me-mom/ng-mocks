@@ -27,7 +27,6 @@ describe('issue-166', () => {
   it('accepts spies', () => {
     const spy = typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
     const stub = ngMocks.stub(MockService(MyService), {
-      fakeMethod: () => 123,
       onErrorSet$: new Subject<string>(),
       onWarningSet$: new Subject<string>(),
       stringMethod: spy,
