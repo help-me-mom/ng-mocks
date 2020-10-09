@@ -60,6 +60,7 @@ const defaultMock = {}; // simulating Symbol
 export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
   protected configDef: Map<Type<any> | InjectionToken<any>, any> = new Map();
+  protected defProviders: Map<Type<any> | InjectionToken<any>, Provider[]> = new Map();
   protected defValue: Map<Type<any> | InjectionToken<any>, any> = new Map();
   protected excludeDef: Set<Type<any> | InjectionToken<any>> = new Set();
   protected keepDef: Set<Type<any> | InjectionToken<any>> = new Set();
@@ -126,7 +127,13 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     for (const def of mapValues(this.mockDef)) {
-      if (isNgDef(def, 'c')) {
+      if (isNgDef(def, 'm') && this.defProviders.has(def)) {
+        const loProviders = this.defProviders.get(def);
+        const [changed, loDef] = loProviders ? MockNgDef({ providers: loProviders }) : [false, {}];
+        if (changed && loDef.providers) {
+          this.defProviders.set(def, loDef.providers);
+        }
+      } else if (isNgDef(def, 'c')) {
         ngMocksUniverse.builder.set(def, MockComponent(def));
       } else if (isNgDef(def, 'd')) {
         ngMocksUniverse.builder.set(def, MockDirective(def));
@@ -157,7 +164,9 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
     // Adding suitable leftovers.
     for (const def of [...mapValues(this.mockDef), ...mapValues(this.keepDef), ...mapValues(this.replaceDef)]) {
-      if (!isNgDef(def) || ngMocksUniverse.touches.has(def)) {
+      if (isNgDef(def, 'm') && this.defProviders.has(def)) {
+        // nothing to do
+      } else if (!isNgDef(def) || ngMocksUniverse.touches.has(def)) {
         continue;
       }
       const config = this.configDef.get(def);
@@ -165,7 +174,16 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         continue;
       }
       if (isNgDef(def, 'm')) {
-        imports.push(ngMocksUniverse.builder.get(def));
+        const loModule = ngMocksUniverse.builder.get(def);
+        const loProviders = this.defProviders.has(def) ? this.defProviders.get(def) : undefined;
+        imports.push(
+          loProviders
+            ? {
+                ngModule: loModule,
+                providers: loProviders,
+              }
+            : loModule
+        );
       } else {
         declarations.push(ngMocksUniverse.builder.get(def));
       }
@@ -317,10 +335,18 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   }
 
   public keep(input: any, config?: IMockBuilderConfig): this {
-    const def = isNgModuleDefWithProviders(input) ? input.ngModule : input;
+    const { def, providers } = isNgModuleDefWithProviders(input)
+      ? { def: input.ngModule, providers: input.providers }
+      : { def: input, providers: undefined };
 
+    const existing = this.keepDef.has(def) ? this.defProviders.get(def) : [];
     this.wipe(def);
     this.keepDef.add(def);
+
+    // a magic to support modules with providers.
+    if (providers) {
+      this.defProviders.set(def, [...existing, ...providers]);
+    }
 
     if (config) {
       this.configDef.set(def, config);
@@ -338,18 +364,30 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     config?: IMockBuilderConfig
   ): this;
   public mock<T>(token: InjectionToken<T>, mock?: any): this;
+  public mock<T>(def: NgModuleWithProviders<T>): this;
   public mock<T>(def: AnyType<T>, mock: IMockBuilderConfig): this;
   public mock<T>(provider: AnyType<T>, mock?: Partial<T>): this;
   public mock<T>(def: AnyType<T>): this;
-  public mock(def: any, a1: any = defaultMock, a2?: any): this {
+  public mock(input: any, a1: any = defaultMock, a2?: any): this {
+    const { def, providers } = isNgModuleDefWithProviders(input)
+      ? { def: input.ngModule, providers: input.providers }
+      : { def: input, providers: undefined };
+
     let mock: any = a1;
     let config: any = a1 === defaultMock ? undefined : a1;
     if (isNgDef(def, 'p') && typeof a1 === 'function') {
       mock = a1;
       config = a2;
     }
+
+    const existing = this.mockDef.has(def) ? this.defProviders.get(def) : [];
     this.wipe(def);
     this.mockDef.add(def);
+
+    // a magic to support modules with providers.
+    if (providers) {
+      this.defProviders.set(def, [...existing, ...providers]);
+    }
 
     if (isNgDef(def, 'p') && typeof mock === 'function') {
       this.defValue.set(def, mock);
@@ -414,6 +452,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
   }
 
   private wipe(def: Type<any>): void {
+    this.defProviders.delete(def);
     this.defValue.delete(def);
     this.excludeDef.delete(def);
     this.keepDef.delete(def);

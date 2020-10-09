@@ -108,13 +108,8 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   return child;
 };
 
-export const isNgType = (object: Type<any>, type: string): boolean => {
-  try {
-    return jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
-  } catch (error) {
-    return false;
-  }
-};
+export const isNgType = (object: Type<any>, type: string): boolean =>
+  jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
 
 /**
  * Checks whether a class was decorated by a ng type.
