@@ -22,6 +22,8 @@ export interface Type<T> extends Function {
   new (...args: any[]): T;
 }
 
+export type AnyType<T> = Type<T> | AbstractType<T>;
+
 // remove after removal of A5 support
 // tslint:disable-next-line:interface-name
 export interface NgModuleWithProviders<T = any> {
@@ -106,8 +108,13 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   return child;
 };
 
-export const isNgType = (object: Type<any>, type: string): boolean =>
-  jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
+export const isNgType = (object: Type<any>, type: string): boolean => {
+  try {
+    return jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
+  } catch (error) {
+    return false;
+  }
+};
 
 /**
  * Checks whether a class was decorated by a ng type.
@@ -118,20 +125,13 @@ export const isNgType = (object: Type<any>, type: string): boolean =>
  */
 export function isNgDef(object: any, ngType: 'm' | 'c' | 'd'): object is Type<any>;
 export function isNgDef(object: any, ngType: 'p'): object is Type<PipeTransform>;
-export function isNgDef(object: any, ngType: string): object is Type<any> {
-  if (ngType === 'm') {
-    return isNgType(object, 'NgModule');
-  }
-  if (ngType === 'c') {
-    return isNgType(object, 'Component');
-  }
-  if (ngType === 'd') {
-    return isNgType(object, 'Directive');
-  }
-  if (ngType === 'p') {
-    return isNgType(object, 'Pipe');
-  }
-  return false;
+export function isNgDef(object: any): object is Type<any>;
+export function isNgDef(object: any, ngType?: string): object is Type<any> {
+  const isModule = (!ngType || ngType === 'm') && isNgType(object, 'NgModule');
+  const isComponent = (!ngType || ngType === 'c') && isNgType(object, 'Component');
+  const isDirective = (!ngType || ngType === 'd') && isNgType(object, 'Directive');
+  const isPipe = (!ngType || ngType === 'p') && isNgType(object, 'Pipe');
+  return isModule || isComponent || isDirective || isPipe;
 }
 
 /**
