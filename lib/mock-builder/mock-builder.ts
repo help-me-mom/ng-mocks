@@ -333,6 +333,11 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       touches.add(source);
       touches.add(value);
 
+      // no reason to touch mocks
+      if (ngMocksUniverse.cacheMocks.has(value)) {
+        continue;
+      }
+
       // no customizations in replacements
       if (this.replaceDef.module.has(source) && value === this.replaceDef.module.get(source)) {
         continue;
