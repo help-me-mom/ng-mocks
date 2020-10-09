@@ -373,6 +373,9 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         set: def,
       };
       overrides.set(value, override);
+      if (!ngMocksUniverse.resetOverrides.has(value)) {
+        ngMocksUniverse.resetOverrides.add(value);
+      }
     }
 
     for (const key of Object.keys(backup)) {
@@ -611,6 +614,13 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
         if (overrides.has(def)) {
           continue;
         }
+
+        // checking if an override has been made in past
+        if (!ngMocksUniverse.resetOverrides.has(def)) {
+          continue;
+        }
+        ngMocksUniverse.resetOverrides.delete(def);
+
         if (isNgDef(def, 'm')) {
           overrides.set(def, {});
         } else if (isNgDef(def, 'c')) {
