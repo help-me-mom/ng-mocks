@@ -109,7 +109,7 @@ describe('MockBuilder:deep', () => {
 
       .mock(PipeWeWantToCustomize, value => 'My Custom Result')
       .mock(PipeWeWantToRestore, value => 'My Restored Pipe')
-      .mock(ServiceWeWantToCustomize, { prop1: true, getName: () => 'My Customized String' })
+      .mock(ServiceWeWantToCustomize, { getName: () => 'My Customized String' })
       .mock(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE, 'My_Token')
 
       // All providers will be set into the TestModule.

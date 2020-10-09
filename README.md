@@ -1008,15 +1008,19 @@ describe('MockRender', () => {
 
 ## MockInstance
 
-[`MockInstance`](#mockinstance) is useful when you want to configure spies of a component before it has been rendered.
+[`MockInstance`](#mockinstance) is useful when you want to configure spies of a declaration before it has been rendered.
 
-[`MockInstance`](#mockinstance) supports: Modules, Components, Directives, Pipes and Services.
+[`MockInstance`](#mockinstance) supports: Modules, Components, Directives, Pipes and Providers.
+
+> NOTE: it works only for pure mocks without overrides.
+> If you provide an own mock like `.mock(MyService, myMock)` then MockInstance doesn't have an effect.
 
 ```typescript
-MockInstance(MyComponent, {
-  init: (instance: MyComponent, injector: Injector): void => {
-    // Now you can customize a mocked instance of MyComponent.
+MockInstance(MyService, {
+  init: (instance: MyService, injector: Injector): void => {
+    // Now you can customize a mocked instance of MyService.
     // If you use auto-spy then all methods have been spied already here.
+    instance.data$ = EMPTY;
   },
 });
 ```
