@@ -1,6 +1,7 @@
 *.ico
 *.mp4
 *.sh
+.browserslistrc
 .dockerignore
 .editorconfig
 .gitignore
