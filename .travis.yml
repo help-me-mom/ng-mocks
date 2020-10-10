@@ -17,6 +17,9 @@ jobs:
     - name: 'E2E'
       script:
         - npm run e2e
+after_script:
+  - mkdir -p $HOME/.npm/_cacache/index-v5/34/8e
+  - echo '' > $HOME/.npm/_cacache/index-v5/34/8e/30c54cce758990bcd1b33114c4aa8a9e5a25c152ac39d9feab22b7e13e00
 cache:
   npm: true
   directories:
