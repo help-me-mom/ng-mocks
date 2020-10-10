@@ -23,7 +23,7 @@ import {
   SameImports1Module,
   SameImports2Module,
   WithServiceModule,
-} from './test-fixtures';
+} from './mock-module.spec.fixtures';
 
 @Component({
   selector: 'component-subject',

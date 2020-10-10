@@ -1,8 +1,5 @@
-coverage
-definitions
-node_modules
-**/tags*
-dist
 .DS_Store
-.git
 .idea
+dist
+node_modules
+test-reports

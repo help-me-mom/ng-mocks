@@ -51,8 +51,6 @@
     "jest-preset-angular": "^8.2.0",
     "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
-    "karma-coverage-istanbul-reporter": "~2.0.1",
-    "karma-ie-launcher": "^1.0.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
     "ts-jest": "^25.5.1",

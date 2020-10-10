@@ -8,11 +8,12 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
     "module": "es2015",
     "lib": ["es2017", "dom"],
-    "types": []
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["jasmine", "jest", "node"]
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.d.ts"]
+  "files": ["src/test.ts", "src/polyfills.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

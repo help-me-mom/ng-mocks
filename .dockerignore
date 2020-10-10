@@ -1,6 +1,4 @@
-/coverage
 /dist
-/node_modules
 /e2e/a5es5/node_modules
 /e2e/a5es2015/node_modules
 /e2e/a6/node_modules
@@ -9,3 +7,5 @@
 /e2e/a9/node_modules
 /e2e/a10/node_modules
 /e2e/a11/node_modules
+/node_modules
+/test-reports

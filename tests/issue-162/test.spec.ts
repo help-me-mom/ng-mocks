@@ -4,10 +4,6 @@ import { BrowserModule, EventManager } from '@angular/platform-browser';
 import { MockBuilder, ngMocks } from 'ng-mocks';
 import { MockRender } from 'ng-mocks/dist/lib/mock-render/mock-render';
 
-// fix to support both jasmine and jest in the test
-declare const jest: any;
-declare const jasmine: any;
-
 @Component({
   selector: 'app-root',
   template: `<a (click)="title = 'test'">click</a>`,

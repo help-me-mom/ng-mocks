@@ -17,12 +17,12 @@ import { MockedDirective } from '../mock-directive';
 import { ngMocks } from '../mock-helper';
 
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
-import { ChildComponent } from './test-components/child-component.component';
-import { CustomFormControlComponent } from './test-components/custom-form-control.component';
-import { EmptyComponent } from './test-components/empty-component.component';
-import { GetterSetterComponent } from './test-components/getter-setter.component';
-import { SimpleComponent } from './test-components/simple-component.component';
-import { TemplateOutletComponent } from './test-components/template-outlet.component';
+import { ChildComponent } from './mock-component.spec.child-component.fixtures';
+import { CustomFormControlComponent } from './mock-component.spec.custom-form-control.component.fixtures';
+import { EmptyComponent } from './mock-component.spec.empty-component.component.fixtures';
+import { GetterSetterComponent } from './mock-component.spec.getter-setter.component.fixtures';
+import { SimpleComponent } from './mock-component.spec.simple-component.component.fixtures';
+import { TemplateOutletComponent } from './mock-component.spec.template-outlet.component.fixtures';
 
 @Component({
   selector: 'example-component-container',

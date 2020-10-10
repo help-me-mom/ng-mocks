@@ -1,13 +1,9 @@
 // tslint:disable:object-literal-sort-keys member-ordering arrow-return-shorthand
 
-// fix to support both jasmine and jest in the test
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-
-declare const jest: any;
-declare const jasmine: any;
 
 // Our main component that we want to test.
 @Component({
