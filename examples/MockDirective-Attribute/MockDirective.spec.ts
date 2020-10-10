@@ -41,5 +41,6 @@ describe('MockDirective', () => {
       payload: 'foo',
     }); // if you casted mockedDirective as the original component type then this is type safe
     // assert on some side effect
+    expect(fixture).toBeDefined();
   });
 });

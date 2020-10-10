@@ -2,10 +2,6 @@ import { Component, Injectable, NgModule } from '@angular/core';
 import { inject } from '@angular/core/testing';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
 
-// fix to support both jasmine and jest in the test
-declare const jest: any;
-declare const jasmine: any;
-
 @Injectable()
 class TargetService {
   protected value = 'TargetService';

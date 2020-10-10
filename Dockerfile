@@ -2,7 +2,7 @@ FROM satantime/puppeteer-node:10-buster-slim
 
 WORKDIR /app
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["sh", "build-with-supported-angluars.sh"]
+CMD ["npm", "run", "e2e"]
 
 VOLUME /npm
 VOLUME /app/node_modules

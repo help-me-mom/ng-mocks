@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    "sourceMap": true
+  },
   "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts"],
   "exclude": ["e2e", "node_modules"],
   "include": ["lib/**/*", "examples/**/*", "tests/**/*"]

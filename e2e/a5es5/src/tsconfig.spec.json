@@ -5,7 +5,8 @@
     "baseUrl": "./",
     "module": "commonjs",
     "emitDecoratorMetadata": true,
-    "types": ["jasmine", "node"]
+    "skipLibCheck": true,
+    "types": ["jasmine", "jest", "node"]
   },
   "files": ["test.ts", "polyfills.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]

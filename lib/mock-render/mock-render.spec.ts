@@ -8,7 +8,7 @@ import { ngMocks } from '../mock-helper';
 import { MockService } from '../mock-service';
 
 import { MockedComponentFixture, MockedDebugElement, MockedDebugNode, MockRender } from './mock-render';
-import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.fixtures';
+import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.spec.fixtures';
 
 describe('MockRender', () => {
   beforeEach(() => {

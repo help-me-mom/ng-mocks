@@ -16,7 +16,7 @@
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
     "experimentalDecorators": true,
-    "types": ["node", "jasmine"],
+    "types": ["node", "jasmine", "jest"],
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
