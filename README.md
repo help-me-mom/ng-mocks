@@ -16,6 +16,9 @@ The current version can be used and has been tested on:
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
+There is a preconfigured sandbox on [codesandbox.io](https://codesandbox.io/s/ng-mocks-4iwdy?file=/src/test.spec.ts)
+where you might check all the features.
+
 ### Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
