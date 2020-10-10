@@ -779,6 +779,8 @@ const ngModule = MockBuilder().keep(MyComponent, { export: true }).mock(MyModule
 // We should use .keep.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .keep(SomeModule)
+  .keep(SomeModule.forSome())
+  .keep(SomeModule.forAnother())
   .keep(SomeComponent)
   .keep(SomeDirective)
   .keep(SomePipe)
@@ -788,6 +790,8 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 // If we want to mock something, even a part of a kept module we should use .mock.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomeModule)
+  .mock(SomeModule.forSome())
+  .mock(SomeModule.forAnother())
   .mock(SomeComponent)
   .mock(SomeDirective)
   .mock(SomePipe)

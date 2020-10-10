@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { Type } from './lib';
+import { AbstractType, Type } from './lib';
 
 /**
  * Can be changed any time.
@@ -14,5 +14,5 @@ export const ngMocksUniverse = {
   config: new Map(),
   flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']),
   resetOverrides: new Set(),
-  touches: new Set<Type<any> | InjectionToken<any>>(),
+  touches: new Set<Type<any> | AbstractType<any> | InjectionToken<any>>(),
 };
