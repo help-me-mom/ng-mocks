@@ -70,7 +70,7 @@ describe('issue-197:with-providers:manually-injection', () => {
   });
 });
 
-describe('issue-197:with-providers', () => {
+describe('issue-197:with-providers:keep', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(DependencyModule.withProviders()));
 
   it('creates component with provided dependencies', () => {
@@ -80,7 +80,7 @@ describe('issue-197:with-providers', () => {
   });
 });
 
-describe('issue-197:with-providers', () => {
+describe('issue-197:with-providers:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(DependencyModule.withProviders()));
 
   it('creates component with provided dependencies', () => {

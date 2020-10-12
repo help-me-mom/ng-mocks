@@ -127,13 +127,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     for (const def of mapValues(this.mockDef)) {
-      if (isNgDef(def, 'm') && this.defProviders.has(def)) {
-        const loProviders = this.defProviders.get(def);
-        const [changed, loDef] = loProviders ? MockNgDef({ providers: loProviders }) : [false, {}];
-        if (changed && loDef.providers) {
-          this.defProviders.set(def, loDef.providers);
-        }
-      } else if (isNgDef(def, 'c')) {
+      if (isNgDef(def, 'c')) {
         ngMocksUniverse.builder.set(def, MockComponent(def));
       } else if (isNgDef(def, 'd')) {
         ngMocksUniverse.builder.set(def, MockDirective(def));
@@ -149,10 +143,19 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     }
 
     // Now we need to run through requested modules.
+    const defProviders = new Map();
     for (const def of [...mapValues(this.mockDef), ...mapValues(this.keepDef), ...mapValues(this.replaceDef)]) {
       if (!isNgDef(def, 'm')) {
         continue;
       }
+
+      if (this.defProviders.has(def) && this.mockDef.has(def)) {
+        const [, loDef] = MockNgDef({ providers: this.defProviders.get(def) });
+        defProviders.set(def, loDef.providers);
+      } else if (this.defProviders.has(def)) {
+        defProviders.set(def, this.defProviders.get(def));
+      }
+
       ngMocksUniverse.builder.set(def, MockModule(def));
       ngMocksUniverse.touches.delete(def);
     }
@@ -164,7 +167,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
     // Adding suitable leftovers.
     for (const def of [...mapValues(this.mockDef), ...mapValues(this.keepDef), ...mapValues(this.replaceDef)]) {
-      if (isNgDef(def, 'm') && this.defProviders.has(def)) {
+      if (isNgDef(def, 'm') && defProviders.has(def)) {
         // nothing to do
       } else if (!isNgDef(def) || ngMocksUniverse.touches.has(def)) {
         continue;
@@ -175,7 +178,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       }
       if (isNgDef(def, 'm')) {
         const loModule = ngMocksUniverse.builder.get(def);
-        const loProviders = this.defProviders.has(def) ? this.defProviders.get(def) : undefined;
+        const loProviders = defProviders.has(def) ? defProviders.get(def) : undefined;
         imports.push(
           loProviders
             ? {
@@ -311,9 +314,6 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         set: def,
       };
       overrides.set(value, override);
-      if (!ngMocksUniverse.resetOverrides.has(value)) {
-        ngMocksUniverse.resetOverrides.add(value);
-      }
     }
 
     for (const key of Object.keys(backup)) {
@@ -444,7 +444,8 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       for (const callback of mapValues(this.beforeCC)) {
         callback(testBed);
       }
-      testBed.compileComponents().then(() => {
+      const testBedPromise = testBed.compileComponents();
+      testBedPromise.then(() => {
         resolve({ testBed });
       });
     });
@@ -467,7 +468,6 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
     const configureTestingModule = TestBed.configureTestingModule;
     TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {
       let mocks: Map<any, any> | undefined;
-      let touches: Set<any> | undefined;
       let overrides: Map<AnyType<any>, MetadataOverride<any>> | undefined;
 
       for (const provide of flatten(moduleDef.providers || [])) {
@@ -476,9 +476,6 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
         }
         if (provide.provide === NG_MOCKS) {
           mocks = provide.useValue;
-        }
-        if (provide.provide === NG_MOCKS_TOUCHES) {
-          touches = provide.useValue;
         }
         if (provide.provide === NG_MOCKS_OVERRIDES) {
           overrides = provide.useValue;
@@ -496,31 +493,12 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
         overrides = new Map();
       }
 
-      // Thanks Ivy and its TestBed.override - it doesn't clean up leftovers.
-      for (const def of touches ? mapValues(touches) : []) {
-        if (overrides.has(def)) {
-          continue;
-        }
-
-        // checking if an override has been made in past
-        if (!ngMocksUniverse.resetOverrides.has(def)) {
-          continue;
-        }
-        ngMocksUniverse.resetOverrides.delete(def);
-
-        if (isNgDef(def, 'm')) {
-          overrides.set(def, {});
-        } else if (isNgDef(def, 'c')) {
-          overrides.set(def, {});
-        } else if (isNgDef(def, 'd')) {
-          overrides.set(def, {});
-        } else if (isNgDef(def, 'p')) {
-          overrides.set(def, {});
-        }
-      }
-
       // Now we can apply overrides.
+      if (!(TestBed as any).ngMocksOverrides) {
+        (TestBed as any).ngMocksOverrides = new Set();
+      }
       for (const [def, override] of overrides ? mapEntries(overrides) : []) {
+        (TestBed as any).ngMocksOverrides.add(def);
         if (isNgDef(def, 'm')) {
           testBed.overrideModule(def, override);
         } else if (isNgDef(def, 'c')) {
@@ -534,6 +512,29 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
 
       return testBed;
     };
+
+    const resetTestingModule = TestBed.resetTestingModule;
+    (TestBed as any).resetTestingModule = () => {
+      // Thanks Ivy and its TestBed.override - it doesn't clean up leftovers.
+      if ((TestBed as any).ngMocksOverrides) {
+        ngMocks.flushTestBed();
+        for (const def of (TestBed as any).ngMocksOverrides) {
+          if (isNgDef(def, 'm')) {
+            TestBed.overrideModule(def, {});
+          } else if (isNgDef(def, 'c')) {
+            TestBed.overrideComponent(def, {});
+          } else if (isNgDef(def, 'd')) {
+            TestBed.overrideDirective(def, {});
+          } else if (isNgDef(def, 'p')) {
+            TestBed.overridePipe(def, {});
+          }
+        }
+        (TestBed as any).ngMocksOverrides = undefined;
+      }
+
+      return resetTestingModule.call(TestBed);
+    };
+
     (TestBed as any).ngMocks = true;
   }
 

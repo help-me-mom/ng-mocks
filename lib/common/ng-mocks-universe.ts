@@ -13,6 +13,5 @@ export const ngMocksUniverse = {
   cacheProviders: new Map(),
   config: new Map(),
   flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']),
-  resetOverrides: new Set(),
   touches: new Set<Type<any> | AbstractType<any> | InjectionToken<any>>(),
 };
