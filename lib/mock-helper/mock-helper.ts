@@ -334,6 +334,7 @@ export const ngMocks: {
     ngMocksUniverse.cacheMocks = new Map();
     ngMocksUniverse.cacheProviders = new Map();
     ngMocksUniverse.config = new Map();
+    ngMocksUniverse.global = new Map();
     ngMocksUniverse.flags = new Set(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']);
     ngMocksUniverse.touches = new Set();
   },

@@ -13,12 +13,12 @@ import {
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { mockServiceHelper } from 'ng-mocks/dist/lib/mock-service';
 
 import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
+import { mockServiceHelper } from '../mock-service/mock-service';
 
 export type MockedComponent<T> = T &
   MockControlValueAccessor & {
