@@ -67,7 +67,11 @@ describe('multi-tokens:real', () => {
 
   it('returns all provided tokens', () => {
     const service = getTestBedInjection(TargetService);
-    expect(service?.tokens).toEqual(['1', '2', '3', '4', '5', '6']);
+    if (service) {
+      expect(service.tokens).toEqual(['1', '2', '3', '4', '5', '6']);
+    } else {
+      fail('Cannot find TargetService');
+    }
   });
 });
 
@@ -90,7 +94,11 @@ describe('multi-tokens:builder', () => {
 
   it('returns all provided tokens', () => {
     const service = getTestBedInjection(TargetService);
-    expect(service?.tokens).toEqual(['1', '2', '3', '4', '5', '6']);
+    if (service) {
+      expect(service.tokens).toEqual(['1', '2', '3', '4', '5', '6']);
+    } else {
+      fail('Cannot find TargetService');
+    }
   });
 });
 
@@ -113,6 +121,10 @@ describe('multi-tokens:builder:mock', () => {
 
   it('returns all provided tokens', () => {
     const service = getTestBedInjection(TargetService);
-    expect(service?.tokens).toEqual(['1', '2', '5', '6']);
+    if (service) {
+      expect(service.tokens).toEqual(['1', '2', '5', '6']);
+    } else {
+      fail('Cannot find TargetService');
+    }
   });
 });

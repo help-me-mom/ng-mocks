@@ -14,6 +14,9 @@ module.exports = (config: KarmaTypescriptConfig) => {
     browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
     client: {
       clearContext: false,
+      jasmine: {
+        random: false,
+      },
     },
     colors: true,
     coverageReporter: {

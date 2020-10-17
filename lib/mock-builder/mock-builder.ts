@@ -1,4 +1,5 @@
 import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { ngMocksUniverse } from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { AnyType, flatten, isNgDef, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES, Type } from '../common';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -10,6 +11,7 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
     TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {
+      ngMocksUniverse.global.set('bullet:customized', true);
       let mocks: Map<any, any> | undefined;
       let overrides: Map<AnyType<any>, MetadataOverride<any>> | undefined;
 
@@ -58,6 +60,15 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
 
     const resetTestingModule = TestBed.resetTestingModule;
     (TestBed as any).resetTestingModule = () => {
+      if (ngMocksUniverse.global.has('bullet')) {
+        if (ngMocksUniverse.global.has('bullet:customized')) {
+          ngMocksUniverse.global.set('bullet:reset', true);
+        }
+        return TestBed;
+      }
+      ngMocksUniverse.global.delete('bullet:customized');
+      ngMocksUniverse.global.delete('bullet:reset');
+
       // Thanks Ivy and its TestBed.override - it doesn't clean up leftovers.
       if ((TestBed as any).ngMocksOverrides) {
         ngMocks.flushTestBed();

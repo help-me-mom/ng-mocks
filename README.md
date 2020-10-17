@@ -41,7 +41,9 @@ Or you could use this to mock them out and have the ability to assert on their i
 * [`MockRender` in details](#mockrender)
 * [`MockInstance` in details](#mockinstance)
 * [`ngMocks` in details](#ngmocks)
-* [Auto Spy](#auto-spy)
+
+- [Making tests faster](#making-angular-tests-faster)
+- [Auto Spy](#auto-spy)
 
 ---
 
@@ -1125,6 +1127,7 @@ describe('MockInstance', () => {
 * `ngMocks.stub(service, methods)`
 * `ngMocks.stub(service, property, 'get' | 'set')`
 
+- `ngMocks.faster()` - [optimizes setup](#making-angular-tests-faster) between tests in a suite
 - `ngMocks.flushTestBed()` - flushes initialization of TestBed
 - `ngMocks.reset()` - resets caches of [`ngMocks`](#ngmocks)
 
@@ -1207,6 +1210,105 @@ describe('MockService', () => {
     expect(mock.nameMethod('mock')).toEqual('mock');
     expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith('mock');
   });
+});
+```
+
+</p>
+</details>
+
+---
+
+## Making Angular tests faster
+
+There is a `ngMocks.faster` feature that optimizes setup of similar test modules between tests
+and reduces required time on their execution.
+
+Imagine a situation when `beforeEach` creates the same setup used by dozens of `it`.
+This is the case where `ngMocks.faster` might be useful, simply call it before `beforeEach` and
+the tests will run faster.
+
+```typescript
+describe('performance:correct', () => {
+  ngMocks.faster(); // <-- add it before
+
+  // Doesn't change between tests.
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
+
+  it('...', () => {
+    // ...
+  });
+
+  it('...', () => {
+    // ...
+  });
+
+  // ...
+});
+```
+
+If a test creates spies in `beforeEach` then this should be tuned,
+because `ngMocks.faster` will detect this difference and display a notice.
+
+A possible solution is usage of [MockInstance](#mockinstance) or to move creation of spies
+outside of `beforeEach`.
+
+<details><summary>Click to see <strong>an example of MockInstance</strong></summary>
+<p>
+
+```typescript
+describe('beforeEach:mock-instance', () => {
+  ngMocks.faster(); // <-- add it before
+
+  // A normal setup of the TestBed, TargetService will be mocked.
+  beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
+
+  // Configuring behavior of the mocked TargetService.
+  beforeAll(() => {
+    MockInstance(TargetService, {
+      init: instance => {
+        instance.method = jasmine.createSpy().and.returnValue(5);
+        // in case of jest
+        // instance.method = jest.fn().mockReturnValue(5);
+        instance.prop = 123;
+      },
+    });
+  });
+
+  // Don't forget to reset the spy between runs.
+  afterAll(MockReset);
+});
+```
+
+</p>
+</details>
+
+<details><summary>Click to see <strong>an example of optimizing spies in beforeEach</strong></summary>
+<p>
+
+```typescript
+describe('beforeEach:manual-spy', () => {
+  ngMocks.faster(); // <-- add it before
+
+  // Creating a spy outside of `beforeEach`
+  // allows its pointer being the same between tests
+  // and this let ngMocks.faster do its job.
+  const mock = {
+    method: jasmine.createSpy().and.returnValue(5),
+    // in case of jest
+    // method: jest.fn().mockReturnValue(5),
+    prop: 123,
+  };
+
+  // Don't forget to reset the spy between runs.
+  beforeEach(() => {
+    mock.method.calls.reset();
+    // in case of jest
+    // mock.method = jest.fn().mockReturnValue(5);
+    mock.prop = 123;
+  });
+
+  // A normal setup of the TestBed, TargetService will be mocked.
+  beforeEach(() => MockBuilder(TargetComponent).mock(TargetService, mock));
 });
 ```
 

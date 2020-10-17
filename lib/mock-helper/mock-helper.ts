@@ -2,7 +2,7 @@
 
 import { core } from '@angular/compiler';
 import { EventEmitter } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { AbstractType, getSourceOfMock, isNgInjectionToken, Type } from '../common';
@@ -97,6 +97,8 @@ export const MockHelper: {
 const defaultNotFoundValue = {}; // simulating Symbol
 
 export const ngMocks: {
+  faster(): void;
+
   find<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;
   find<T, D>(debugElement: MockedDebugElement, component: Type<T>, notFoundValue: D): D | MockedDebugElement<T>;
 
@@ -130,6 +132,29 @@ export const ngMocks: {
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
+  faster: () => {
+    beforeAll(() => {
+      if (ngMocksUniverse.global.has('bullet:customized')) {
+        TestBed.resetTestingModule();
+      }
+      ngMocksUniverse.global.set('bullet', true);
+    });
+
+    afterEach(() => {
+      ngMocks.flushTestBed();
+      for (const fixture of (getTestBed() as any)._activeFixtures || []) {
+        fixture.destroy();
+      }
+    });
+
+    afterAll(() => {
+      ngMocksUniverse.global.delete('bullet');
+      if (ngMocksUniverse.global.has('bullet:reset')) {
+        TestBed.resetTestingModule();
+      }
+    });
+  },
+
   find: (...args: any[]) => {
     const el: MockedDebugElement = args[0];
     const sel: string | Type<any> = args[1];

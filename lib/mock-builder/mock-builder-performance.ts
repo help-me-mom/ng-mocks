@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { TestModuleMetadata } from '@angular/core/testing';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapEntries, mapKeys, mapValues } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
-import { MockBuilderPromise } from './mock-builder-promise';
+import { IMockBuilderResult, MockBuilderPromise } from './mock-builder-promise';
 
 export class MockBuilderPerformance extends MockBuilderPromise {
   public build(): NgModule {
@@ -23,6 +23,11 @@ export class MockBuilderPerformance extends MockBuilderPromise {
         imports: [...ngModule.imports],
         providers: [...ngModule.providers],
       };
+    }
+
+    // removal of cached promise in case of mismatch
+    if (ngMocksUniverse.global.has('builder:module')) {
+      ngMocksUniverse.global.delete(ngMocksUniverse.global.get('builder:module'));
     }
 
     const initialConfig = {
@@ -74,6 +79,34 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       imports: [...ngModule.imports],
       providers: [...ngModule.providers],
     };
+  }
+
+  public then<TResult1 = IMockBuilderResult, TResult2 = never>(
+    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
+    reject?: (reason: any) => PromiseLike<TResult2>
+  ): PromiseLike<TResult1 | TResult2> {
+    if (
+      ngMocksUniverse.global.has('bullet') &&
+      ngMocksUniverse.global.has('builder:module') &&
+      ngMocksUniverse.global.has('builder:config') &&
+      this.equalsTo(ngMocksUniverse.global.get('builder:config'))
+    ) {
+      return ngMocksUniverse.global.get(ngMocksUniverse.global.get('builder:module')).then(fulfill, reject);
+    }
+
+    // we need to reset testing module in case if we are in bullet mode but current module doesn't match.
+    if (ngMocksUniverse.global.has('bullet') && ngMocksUniverse.global.has('bullet:reset')) {
+      // tslint:disable-next-line:no-console
+      console.warn('ngMocks.faster has zero effect due to changes in testing module between runs');
+      ngMocksUniverse.global.delete('bullet');
+      TestBed.resetTestingModule();
+      ngMocksUniverse.global.set('bullet', true);
+    }
+
+    const promise = super.then(fulfill, reject);
+    ngMocksUniverse.global.set(ngMocksUniverse.global.get('builder:module'), promise);
+
+    return promise;
   }
 
   // tslint:disable-next-line:prefer-function-over-method
