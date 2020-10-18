@@ -4,9 +4,9 @@
 
 # ngMocks - ease of mocking annoying dependencies in Angular unit tests
 
-Helper functions for creating mocks of components, directives, pipes, providers and modules for tests in Angular.
+`ngMocks` is a library providing helper functions for creating mocks of components, directives, pipes, modules and services for unit testing in Angular.
 
-The current version can be used and has been tested on:
+The current version of the library has been tested and can be used with:
 
 - Angular 5 (Jasmine, Jest, es5, es2015)
 - Angular 6 (Jasmine, Jest, es5, es2015)
@@ -22,20 +22,20 @@ where you might check all the features.
 ### Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
-Or you could use this to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+Or you could use `ngMocks` to mock them out and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
-### Sections:
+### Content:
 
 - [How to install](#install)
 
-* [How to mock a component](#how-to-mock-a-component-in-angular-test)
-* [How to mock a directive](#how-to-mock-a-directive-in-angular-test)
-* [How to mock a pipe](#how-to-mock-a-pipe-in-angular-test)
-* [How to mock a provider](#how-to-mock-a-provider-in-angular-test)
-* [How to mock a module](#how-to-mock-a-module-in-angular-test)
+* [How to mock a component](#how-to-mock-a-component)
+* [How to mock a directive](#how-to-mock-a-directive)
+* [How to mock a pipe](#how-to-mock-a-pipe)
+* [How to mock a service](#how-to-mock-a-service)
+* [How to mock a module](#how-to-mock-a-module)
+* [How to mock classic and reactive form components](#how-to-mock-classic-and-reactive-form-components)
 
 - [Extensive example](#extensive-example-of-mocks-in-angular-tests)
-- [Reactive forms components](#mocked-reactive-forms-components)
 
 * [`MockBuilder` in details](#mockbuilder)
 * [`MockRender` in details](#mockrender)
@@ -49,7 +49,7 @@ Or you could use this to mock them out and have the ability to assert on their i
 
 ## Install
 
-It's quite easy, for any angular project you can use the latest version of the library.
+It's quite easy, for any Angular project you can use the latest version of the library.
 
 NPM
 
@@ -61,20 +61,23 @@ Yarn
 
 ---
 
-## How to mock a component in Angular test
+## How to mock a component
 
-- Mocked component with the same selector
-- Inputs and Outputs with alias support
-- Each component instance has its own `EventEmitter` instances for outputs
-- Mocked component templates are `ng-content` tags to allow transclusion
-- Supports `@ContentChild` with `$implicit` context.
-- Allows ng-model binding (You will have to add `FormsModule` to TestBed imports)
-- Mocks Reactive Forms (You will have to add `ReactiveFormsModule` to TestBed imports)
-  - \_\_simulateChange - calls `onChanged` on the mocked component bound to a FormControl
-  - \_\_simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
-- `exportAs` support
+Below you can find an example how to mock a component in Angular tests.
 
-Let's pretend that in our Angular application `TargetComponent` depends on `DependencyComponent` and we want to mock it in a test.
+A mocked component respects its original component and provides:
+
+- the same selector
+- the same `Inputs` and `Outputs` with alias support
+- each instance has its own `EventEmitter` instances for outputs
+- templates are `ng-content` tags to allow transclusion
+- supports `@ContentChild` with `$implicit` context
+- supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
+  - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
+  - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
+- supports `exportAs`
+
+Let's pretend that in our Angular application `TargetComponent` depends on a component of `DependencyComponent` and we want to mock it in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -115,7 +118,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>an example of mocking components in Angular</strong></summary>
+<details><summary>Click to see <strong>an example of mocking components in Angular tests</strong></summary>
 <p>
 
 ```typescript
@@ -201,19 +204,23 @@ describe('MockComponent', () => {
 
 ---
 
-## How to mock a directive in Angular test
+## How to mock a directive
 
-- Mocked directive with the same selector
-- Inputs and Outputs with alias support
-- Each directive instance has its own `EventEmitter` instances for outputs
-- Supports `@ContentChild` with `$implicit` context.
-- Allows ng-model binding (You will have to add `FormsModule` to TestBed imports)
-- Mocks Reactive Forms (You will have to add `ReactiveFormsModule` to TestBed imports)
-  - \_\_simulateChange - calls `onChanged` on the mocked component bound to a FormControl
-  - \_\_simulateTouch - calls `onTouched` on the mocked component bound to a FormControl
-- `exportAs` support
+There is an example of mocking a directive in tests of an Angular application below.
+`ngMocks` supports both attribute and structural directives.
 
-Let's assume that an Angular application has `TargetComponent` that depends on `DependencyDirective` and we need to mock it in a test.
+A mocked directive respects its original directive and provides:
+
+- the same selector
+- the same `Inputs` and `Outputs` with alias support
+- each instance has its own `EventEmitter` instances for outputs
+- supports `@ContentChild` with `$implicit` context
+- supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
+  - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
+  - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
+- supports `exportAs`
+
+Let's assume that an Angular application has `TargetComponent` that depends on a directive of `DependencyDirective` and we need to mock it for facilitating unit tests.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -254,7 +261,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>an example of mocking attribute directives in Angular</strong></summary>
+<details><summary>Click to see <strong>an example of mocking attribute directives in Angular tests</strong></summary>
 <p>
 
 ```typescript
@@ -297,7 +304,7 @@ describe('MockDirective', () => {
 </p>
 </details>
 
-<details><summary>Click to see <strong>an example of mocking structural directives in Angular</strong></summary>
+<details><summary>Click to see <strong>an example of mocking structural directives in Angular tests</strong></summary>
 <p>
 
 It's important to render a structural directive first with the right context,
@@ -341,15 +348,17 @@ describe('MockDirective', () => {
 
 ---
 
-## How to mock a pipe in Angular test
+## How to mock a pipe
 
-- Mocked pipe with the same name
-- Ability to override the transform function with a type-safe function
-- Default transform is () => undefined to prevent problems with chaining
+An example of mocking a pipe can be found below.
 
-Personally, I found the best thing to do for assertions is to override the transform to write the args so that I can assert on the arguments.
+A mocked pipe respects its original pipe and provides:
 
-Let's imagine that in an Angular application `TargetComponent` depends on `DependencyPipe` and we would like to mock it in a test.
+- the same name
+- ability to override the transform function with a type-safe function
+- default transform is `() => undefined` to prevent problems with chaining
+
+Let's imagine that in an Angular application `TargetComponent` depends on a pipe of `DependencyPipe` and we would like to mock it in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -390,7 +399,7 @@ describe('Test', () => {
 });
 ```
 
-<details><summary>Click to see <strong>an example of mocking pipes in Angular</strong></summary>
+<details><summary>Click to see <strong>an example of mocking pipes in Angular tests</strong></summary>
 <p>
 
 ```typescript
@@ -413,12 +422,43 @@ describe('MockPipe', () => {
 
 ---
 
-## How to mock a provider in Angular test
+## How to mock a service
 
-- Mocks all methods with dummy functions like `() => undefined` unless auto spy is used
-- Mocks all getters and setters with dummy functions like `() => undefined`
+There is an example below of mocking a service. The technique supports all types of providers including tokens.
 
-Let's pretend that in an Angular application `TargetComponent` depends on `DependencyService` and it should be mocked in a test to avoid overhead.
+A mocked provider is based on its original service / token, and provides:
+
+- all methods are dummies like `() => undefined`
+- all properties are linked getters and setters (might not work in some cases, use `ngMocks.stub` then)
+- a mocked token returns `undefined` by default
+
+There is a helper function called `MockService`, it tends to avoid hassle of providing customized mocks for huge services.
+Simply pass a class into it and its result wil be a mocked instance that respects the class,
+but all methods and properties are customizable dummies.
+
+```typescript
+const instance = MockService(MyClass);
+// instance.method() returns undefined
+instance.method = () => 'My Custom Behavior';
+```
+
+It also supports objects. All properties that are not objects or functions will be omitted,
+the functions will be dummy functions.
+
+```typescript
+const instance = MockService({
+  nested: {
+    prop: true,
+    func: () => 'hello',
+  },
+});
+// instance.nested.prop is undefined
+// instance.nested.func() returns undefined
+instance.nested.func = () => 'My Custom Behavior';
+```
+
+Now let's pretend that in an Angular application `TargetComponent` depends on service of `DependencyService`,
+and it should be mocked to avoid overhead.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -462,13 +502,18 @@ describe('Test', () => {
 
 ---
 
-## How to mock a module in Angular test
+## How to mock a module
 
-- Mocks all components, directives, pipes and providers using MockDeclaration
-- Providers are all mocked as dummy objects with dummy methods
-- Module dependencies are also mocked
+Mocking a module in Angular tests with `ngMocks` is quite easy.
+The library does it recursively and mocks also all imports, exports and their declarations.
 
-Let's imagine an Angular application where `TargetComponent` depends on `DependencyModule` and we would like to mock its exports a the test.
+A mocked module provides:
+
+- mocks all components, directives, pipes
+- mocks all services as their dummy instances
+- mocks all imports and exports
+
+Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule` and we would like to mock in a test.
 
 Instead of defining `TestBed` via `configureTestingModule`:
 
@@ -518,7 +563,7 @@ Everything in `TargetModule` will be mocked, but not `TargetComponent`, it will 
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 ```
 
-<details><summary>Click to see <strong>an example of mocking modules in Angular</strong></summary>
+<details><summary>Click to see <strong>an example of mocking modules in Angular tests</strong></summary>
 <p>
 
 ```typescript
@@ -539,12 +584,53 @@ describe('MockModule', () => {
 
 ---
 
+## How to mock classic and reactive form components
+
+`ngMocks` respects `ControlValueAccessor` interface if a directive, or a component implements it.
+Apart from that, `ngMocks` provides helper functions to cause changes and touches.
+
+A mocked instance of `ControlValueAccessor` provides:
+
+- `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
+- `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
+
+<details><summary>Click to see <strong>an example of mocking form components and directives in Angular tests</strong></summary>
+<p>
+
+```typescript
+describe('MockReactiveForms', () => {
+  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent).keep(ReactiveFormsModule));
+
+  it('should send the correct value to the dependency component input', () => {
+    const fixture = MockRender(TestedComponent);
+    const component = fixture.point.componentInstance;
+
+    const mockedReactiveFormComponent = ngMocks.find<MockedComponent<DependencyComponent>>(
+      fixture.debugElement,
+      'dependency-component-selector'
+    ).componentInstance;
+
+    mockedReactiveFormComponent.__simulateChange('foo');
+    expect(component.formControl.value).toBe('foo');
+
+    spyOn(mockedReactiveFormComponent, 'writeValue');
+    component.formControl.setValue('bar');
+    expect(mockedReactiveFormComponent.writeValue).toHaveBeenCalledWith('bar');
+  });
+});
+```
+
+</p>
+</details>
+
+---
+
 ## Extensive example of mocks in Angular tests
 
 ```typescript
-import { CommonModule } from '@angular/common';
-import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@Angular/common';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@Angular/core';
+import { RouterModule } from '@Angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // Our main component that we want to test.
@@ -692,58 +778,27 @@ describe('main', () => {
 
 Our tests:
 
+- [sandbox on codesandbox.io](https://codesandbox.io/s/ng-mocks-4iwdy?file=/src/e2e.ts)
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
 ---
 
-## Mocked Reactive Forms Components
-
-- Set value on the formControl by calling \_\_simulateChange
-- Set touched on the formControl by calling \_\_simulateTouch
-- Use the `MockedComponent` type to stay typesafe: `MockedComponent<YourReactiveFormComponent>`
-
-<details><summary>Click to see <strong>an example of mocking form components in Angular</strong></summary>
-<p>
-
-```typescript
-describe('MockReactiveForms', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent).keep(ReactiveFormsModule));
-
-  it('should send the correct value to the dependency component input', () => {
-    const fixture = MockRender(TestedComponent);
-    const component = fixture.point.componentInstance;
-
-    const mockedReactiveFormComponent = ngMocks.find<MockedComponent<DependencyComponent>>(
-      fixture.debugElement,
-      'dependency-component-selector'
-    ).componentInstance;
-
-    mockedReactiveFormComponent.__simulateChange('foo');
-    expect(component.formControl.value).toBe('foo');
-
-    spyOn(mockedReactiveFormComponent, 'writeValue');
-    component.formControl.setValue('bar');
-    expect(mockedReactiveFormComponent.writeValue).toHaveBeenCalledWith('bar');
-  });
-});
-```
-
-</p>
-</details>
-
----
-
 ## MockBuilder
 
-The simplest way to mock everything, but not the component for testing is usage of [`MockBuilder`](#mockbuilder).
-Check [`examples/MockBuilder/`](https://github.com/ike18t/ng-mocks/tree/master/examples/MockBuilder/) for real examples.
+`MockBuilder` is the simplest way to mock everything.
+It provides a rich toolkit of functions to manipulate mocks in the way your test requires with minimum overhead.
 
-<details><summary>Click to see <strong>an example</strong></summary>
+Usually, we have something simple to test and, unfortunately, time to time its nightmarish dependencies.
+The good thing here is that usually the dependencies are declared or imported in the same module where our thing has
+been defined. Therefore, with help of `MockBuilder` we can quite easily define a testing module where everything
+in the module will be mocked except the thing: `MockBuilder(TheThing, ItsModule)`.
+
+<details><summary>Click to see <strong>a code sample demonstrating ease of mocking in Angular tests</strong></summary>
 <p>
 
 ```typescript
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@Angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { MyComponent } from './fixtures.components';
@@ -768,18 +823,29 @@ describe('MockBuilder:simple', () => {
 </p>
 </details>
 
-<details><summary>Click to see <strong>a detailed information about flexible mocking in Angular</strong></summary>
+<details><summary>Click to see <strong>a detailed information about features of MockBuilder</strong></summary>
 <p>
 
 ```typescript
 import { MockBuilder } from 'ng-mocks';
 
-// Mocks everything in MyModule (imports, declarations, providers)
+// Mocks everything in MyModule (imports, declarations, providers and exports)
 // but keeps MyComponent as it is.
 const ngModule = MockBuilder(MyComponent, MyModule).build();
 
 // The same as code above.
 const ngModule = MockBuilder().keep(MyComponent, { export: true }).mock(MyModule).build();
+
+// If you don't plan a further customization of ngModule
+// then you don't need to call .build().
+// Simply return result of mock builder in beforeEach
+beforeEach(() => MockBuilder().keep(MyComponent, { export: true }).mock(MyModule));
+// It is the same as:
+beforeEach(() => {
+  const ngModule = MockBuilder().keep(MyComponent, { export: true }).mock(MyModule);
+  TestBed.configureTestingModule(ngModule);
+  return TestBed.compileComponents();
+});
 
 // If we want to keep a module, component, directive, pipe or provider as it is (not mocking).
 // We should use .keep.
@@ -793,6 +859,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .keep(SomeDependency)
   .keep(SomeInjectionToken)
   .build();
+
 // If we want to mock something, even a part of a kept module we should use .mock.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomeModule)
@@ -804,7 +871,8 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomeDependency)
   .mock(SomeInjectionToken)
   .build();
-// If we want to replace something with something we should use .replace.
+
+// If we want to replace something with something, we should use .replace.
 // The replacement has to be decorated with the same decorator as the source.
 // It's impossible to replace a provider or a service, we should use .provide or .mock for that.
 const ngModule = MockBuilder(MyComponent, MyModule)
@@ -813,6 +881,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .replace(SomeDirective, SomeOtherDirective)
   .replace(SomePipe, SomeOtherPipe)
   .build();
+
 // If we want to exclude something, even a part of a kept module we should use .exclude.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .exclude(SomeModule)
@@ -836,6 +905,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .provide({ provide: SomeComponent3, useValue: anything1 })
   .provide({ provide: SOME_TOKEN, useFactory: () => anything2 })
   .build();
+
 // If we need to mock, or to use useValue we can use .mock for that.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(MyService)
@@ -844,6 +914,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomeComponent3, anything1)
   .mock(SOME_TOKEN, anything2)
   .build();
+
 // Anytime we can change our decision.
 // The last action on the same object wins.
 const ngModule = MockBuilder(MyComponent, MyModule)
@@ -852,6 +923,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .keep(SomeModule)
   .mock(SomeModule)
   .build();
+
 // If we want to test a component, directive or pipe which wasn't exported
 // we should mark it as an 'export'.
 // Doesn't matter how deep it is. It will be exported to the level of TestingModule.
@@ -860,6 +932,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
     export: true,
   })
   .build();
+
 // By default all definitions (kept and mocked) are added to the TestingModule
 // if they are not dependency of another definition.
 // Modules are added as imports to the TestingModule.
@@ -878,6 +951,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
     dependency: true,
   })
   .build();
+
 // Imagine we want to render a structural directive by default.
 // Now we can do that via adding a 'render' flag in its config.
 const ngModule = MockBuilder(MyComponent, MyModule)
@@ -885,6 +959,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
     render: true,
   })
   .build();
+
 // Imagine the directive has own context and variables.
 // Then instead of flag we can set its context.
 const ngModule = MockBuilder(MyComponent, MyModule)
@@ -895,6 +970,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
     },
   })
   .build();
+
 // If we use ContentChild in a component and we want to render it by default too
 // we should use its id for that in the same way as for a mocked directive.
 const ngModule = MockBuilder(MyComponent, MyModule)
@@ -917,7 +993,8 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 
 ## MockRender
 
-Provides a simple tool on how to render a custom template in an Angular test to cover functionality of components, directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` etc.
+`MockRender` provides a simple tool on how to render a custom template in an Angular test
+in case if we want to cover functionality of components, directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` etc.
 
 > Please note, that `MockRender(MyComponent)` is not assignable to `ComponentFixture<MyComponent>`.
 >
@@ -928,24 +1005,24 @@ Provides a simple tool on how to render a custom template in an Angular test to 
 > It happens because `MockRender` generates an additional component to render the desired thing
 > and its interface differs.
 
-It returns a `fixture` of type `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property.
+`MockRender` returns a `fixture` of a type of `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property.
 `fixture.componentInstance` belongs to the middle component for the render,
-when `fixture.point` points to the debugElement of the desired component.
+whereas `fixture.point` points to the `debugElement` of the desired component.
 
 Its type: `let fixture: MockedComponentFixture<ComponentToRender> = MockRender(ComponentToRender)`.
 
-The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of any.
+The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of `any`.
 
-If you want you can specify providers for the render passing them via the 3rd parameter.
-It is useful if you want to mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
+If you want, you can specify providers for the render passing them via the 3rd parameter.
+It is useful when you want to mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
 
 And don't forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
 
-<details><summary>Click to see <strong>an example how to render flexible templates in an Angular test</strong></summary>
+<details><summary>Click to see <strong>an example how to render a custom template in an Angular tests</strong></summary>
 <p>
 
 ```typescript
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@Angular/core/testing';
 import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 import { DependencyModule } from './dependency.module';
@@ -1018,12 +1095,12 @@ describe('MockRender', () => {
 
 ## MockInstance
 
-[`MockInstance`](#mockinstance) is useful when you want to configure spies of a declaration before it has been rendered.
+`MockInstance` is useful when you want to configure spies of a declaration before its render.
 
-[`MockInstance`](#mockinstance) supports: Modules, Components, Directives, Pipes and Providers.
+`MockInstance` supports: Modules, Components, Directives, Pipes and Services.
 
 > NOTE: it works only for pure mocks without overrides.
-> If you provide an own mock like `.mock(MyService, myMock)` then MockInstance doesn't have an effect.
+> If you provide an own mock via `useValue` or like `.mock(MyService, myMock)` then `MockInstance` doesn't have an effect.
 
 ```typescript
 MockInstance(MyService, {
@@ -1041,7 +1118,7 @@ After a test you can reset changes to avoid their influence in other tests via a
 <p>
 
 ```typescript
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@Angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
 import { staticFalse } from 'ng-mocks/dist/tests';
 import { EMPTY, Observable, Subject } from 'rxjs';
@@ -1111,7 +1188,7 @@ describe('MockInstance', () => {
 
 ## ngMocks
 
-[`ngMocks`](#ngmocks) provides functions to get attribute and structural directives from an element, find components and mock objects.
+`ngMocks` provides functions to get attribute and structural directives from an element, find components and mock objects.
 
 - `ngMocks.get(debugElement, directive, notFoundValue?)`
 - `ngMocks.findInstance(debugElement, directive, notFoundValue?)`
@@ -1131,7 +1208,7 @@ describe('MockInstance', () => {
 - `ngMocks.flushTestBed()` - flushes initialization of TestBed
 - `ngMocks.reset()` - resets caches of [`ngMocks`](#ngmocks)
 
-<details><summary>Click to see <strong>an example</strong></summary>
+<details><summary>Click to see <strong>an example of all functionality of ngMocks</strong></summary>
 <p>
 
 ```typescript
@@ -1169,7 +1246,7 @@ const inputValue: number = ngMocks.input(debugElement, 'param1');
 const outputValue: EventEmitter<any> = ngMocks.output(debugElement, 'update');
 ```
 
-In case if we want to mock methods / properties of a service / provider.
+In case if we want to mock methods / properties of a service.
 
 ```typescript
 // returns a mocked function / spy of the method. If the method hasn't been mocked yet - mocks it.

@@ -37,7 +37,7 @@ export function MockProvider(provider: any): Provider | undefined {
   }
 
   // Tokens are special subject, we can skip adding them because in a mocked module they are useless.
-  // The main problem is providing undefined to HTTP_INTERCEPTORS and others breaks their code.
+  // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
   // If a testing module / component requires omitted tokens then they should be provided manually
   // during creation of TestBed module.
   if (typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken') {
