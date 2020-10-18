@@ -1,19 +1,19 @@
-import { Component, Injectable } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
+// tslint:disable:no-console
+
+import { Component, Injectable, NgModule } from '@angular/core';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
-  public prop = 0;
-  private readonly value = 1;
-
-  method(): number {
-    return this.value;
+  public count = 0;
+  constructor() {
+    this.count += 1;
   }
 }
 
 @Component({
   selector: 'target',
-  template: 'target',
+  template: '{{ service.count }}',
 })
 class TargetComponent {
   public readonly service: TargetService;
@@ -23,86 +23,63 @@ class TargetComponent {
   }
 }
 
-describe('examples:performance', () => {
-  describe('beforeEach:mock-instance', () => {
-    ngMocks.faster(); // <-- add it before
+@NgModule({
+  declarations: [TargetComponent],
+  providers: [TargetService],
+})
+class TargetModule {}
 
-    // A normal setup of the TestBed, TargetService will be mocked.
-    beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
+describe('performance:correct', () => {
+  let backupWarn: typeof console.warn;
 
-    // Configuring behavior of the mocked TargetService.
-    beforeAll(() => {
-      MockInstance(TargetService, {
-        init: instance => {
-          instance.method =
-            typeof jest === 'undefined' ? jasmine.createSpy().and.returnValue(5) : jest.fn().mockReturnValue(5);
-          instance.prop = 123;
-        },
-      });
-    });
-
-    // Don't forget to reset the spy between runs.
-    afterAll(MockReset);
-
-    it('test:1', () => {
-      const fixture = MockRender(TargetComponent);
-
-      expect(fixture.point.componentInstance.service.prop).toBe(123);
-      const actual = fixture.point.componentInstance.service.method();
-      expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
-    });
-
-    it('test:2', () => {
-      const fixture = MockRender(TargetComponent);
-
-      expect(fixture.point.componentInstance.service.prop).toBe(123);
-      const actual = fixture.point.componentInstance.service.method();
-      expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
-    });
+  beforeAll(() => {
+    backupWarn = console.warn;
+    console.warn = jasmine.createSpy('console').and.callFake(console.log);
   });
 
-  describe('beforeEach:manual-spy', () => {
-    ngMocks.faster(); // <-- add it before
+  afterAll(() => {
+    console.warn = backupWarn;
+  });
 
-    // Creating a spy outside of `beforeEach`
-    // allows its pointer being the same between tests
-    // and this let ngMocks.faster do its job.
-    const mock = {
-      method: typeof jest === 'undefined' ? jasmine.createSpy().and.returnValue(5) : jest.fn().mockReturnValue(5),
-      prop: 123,
-    };
+  ngMocks.faster();
 
-    // Don't forget to reset the spy between runs.
-    beforeEach(() => {
-      if (typeof jest === 'undefined') {
-        (mock.method as jasmine.Spy).calls.reset();
-      } else {
-        mock.method = jest.fn().mockReturnValue(5);
-      }
-      mock.prop = 123;
-    });
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
 
-    // A normal setup of the TestBed, TargetService will be mocked.
-    beforeEach(() => MockBuilder(TargetComponent).mock(TargetService, mock));
+  it('creates a module on first call', () => {
+    expect(console.warn).not.toHaveBeenCalled();
+  });
 
-    it('test:1', () => {
-      const fixture = MockRender(TargetComponent);
+  it('reuses a module on second call', () => {
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+});
 
-      expect(fixture.point.componentInstance.service.prop).toBe(123);
-      const actual = fixture.point.componentInstance.service.method();
-      expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
-    });
+// This suite should be executed sequentially.
+describe('performance:wrong', () => {
+  let backupWarn: typeof console.warn;
 
-    it('test:2', () => {
-      const fixture = MockRender(TargetComponent);
+  beforeAll(() => {
+    backupWarn = console.warn;
+    console.warn = jasmine.createSpy('console');
+  });
 
-      expect(fixture.point.componentInstance.service.prop).toBe(123);
-      const actual = fixture.point.componentInstance.service.method();
-      expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
-    });
+  afterAll(() => {
+    console.warn = backupWarn;
+  });
+
+  ngMocks.faster();
+
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).mock(TargetService, {
+      count: 5,
+    })
+  );
+
+  it('creates a module on first call', () => {
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it('reuses a module on second call', () => {
+    expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/ngMocks.faster/));
   });
 });
