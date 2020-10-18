@@ -44,7 +44,7 @@ describe('v10:MockComponent', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // if you casted mockedComponent as the original component type then this is type safe
+    // if you cast mockedComponent as the original component type then this is type safe
     expect(mockedComponent.someInput).toEqual('foo');
   });
 
@@ -57,7 +57,7 @@ describe('v10:MockComponent', () => {
 
     // again, let's pretend DependencyComponent has an output called 'someOutput'
     // emit on the output that MockComponent setup when generating the mock of Dependency Component
-    // if you casted mockedComponent as the original component type then this is type safe
+    // if you cast mockedComponent as the original component type then this is type safe
     mockedComponent.someOutput.emit({
       payload: 'foo',
     });
