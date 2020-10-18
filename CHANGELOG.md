@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.3.0](https://github.com/ike18t/ng-mocks/compare/v10.2.1...v10.3.0) (2020-10-18)
+
+
+### Features
+
+* ngMocks.faster execution of test suites ([a077d15](https://github.com/ike18t/ng-mocks/commit/a077d158b5d47549ef84de6af3b388659e103892))
+
 ### [10.2.1](https://github.com/ike18t/ng-mocks/compare/v10.2.0...v10.2.1) (2020-10-10)
 
 
