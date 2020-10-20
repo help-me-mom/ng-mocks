@@ -17,7 +17,7 @@ The current version of the library has been tested and can be used with:
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
-There is a preconfigured sandbox on [codesandbox.io](https://codesandbox.io/s/ng-mocks-4iwdy?file=/src/test.spec.ts)
+There is a preconfigured sandbox on [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/test.spec.ts)
 where you might check all the features.
 
 ### Why use this?
@@ -869,7 +869,7 @@ describe('main', () => {
 
 Our tests:
 
-- [sandbox on codesandbox.io](https://codesandbox.io/s/ng-mocks-4iwdy?file=/src/e2e.ts)
+- [sandbox on codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/e2e.ts)
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
