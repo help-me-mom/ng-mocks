@@ -281,6 +281,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
   // Unfortunately, in this case tests won't fail when a module has missed exports.
   // MockBuilder doesn't have have this issue.
   for (const def of flatten([imports || [], declarations || []])) {
+    const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
     const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
     const mockedDef = resolve(instance);
     if (!mockedDef) {
@@ -290,14 +291,15 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     // If we export a declaration, then we have to export its module too.
     const config = ngMocksUniverse.config.get(instance) || {};
     if (config.export && ngModule) {
-      const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
       if (!moduleConfig.export) {
-        moduleConfig.export = true;
-        ngMocksUniverse.config.set(ngModule, moduleConfig);
+        ngMocksUniverse.config.set(ngModule, {
+          ...moduleConfig,
+          export: true,
+        });
       }
     }
 
-    if (correctExports && !config.export) {
+    if (correctExports && !config.export && !moduleConfig.exportAll) {
       continue;
     }
     if (mockedModuleDef.exports && mockedModuleDef.exports.indexOf(mockedDef) !== -1) {

@@ -31,6 +31,10 @@ export interface IMockBuilderConfigAll {
   export?: boolean; // will be forced for export in its module.
 }
 
+export interface IMockBuilderConfigModule {
+  exportAll?: boolean; // exports all declarations and imports.
+}
+
 export interface IMockBuilderConfigComponent {
   render?: {
     [blockName: string]:
@@ -51,7 +55,11 @@ export interface IMockBuilderConfigDirective {
       };
 }
 
-export type IMockBuilderConfig = IMockBuilderConfigAll | IMockBuilderConfigComponent | IMockBuilderConfigDirective;
+export type IMockBuilderConfig =
+  | IMockBuilderConfigAll
+  | IMockBuilderConfigModule
+  | IMockBuilderConfigComponent
+  | IMockBuilderConfigDirective;
 
 const defaultMock = {}; // simulating Symbol
 

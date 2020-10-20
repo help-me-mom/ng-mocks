@@ -447,6 +447,12 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
   });
+  it('fails on different exportAll configDef', () => {
+    const ngModule1 = MockBuilder().keep(Target1Module, { exportAll: true }).build();
+    const ngModule2 = MockBuilder().keep(Target1Module, { exportAll: false }).build();
+
+    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+  });
   it('accepts the same render configDef', () => {
     const render = {};
     const ngModule1 = MockBuilder().keep(Target1Module, { render }).build();

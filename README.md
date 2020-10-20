@@ -43,6 +43,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [`MockInstance` in details](#mockinstance)
 * [`ngMocks` in details](#ngmocks)
 
+- [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
@@ -362,7 +363,7 @@ describe('MockDirective', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // IMPORTANT: by default structural directives aren't rendered.
+    // IMPORTANT: by default structural directives are not rendered.
     // Because we cannot automatically detect when and which context
     // they should be rendered with.
     // Usually a developer knows the context and can render it
@@ -900,7 +901,7 @@ describe('MockBuilder:simple', () => {
   // beforeEach(() => TestBed.configureTestingModule({{
   //   imports: [MockModule(MyModule)],
   // }).compileComponents());
-  // but MyComponent wasn't mocked for the testing purposes
+  // but MyComponent was not mocked for the testing purposes
   // and we can simply pass it to the TestBed.
 
   it('should render content ignoring all dependencies', () => {
@@ -929,20 +930,18 @@ const ngModule = MockBuilder(MyComponent, MyModule).build();
 // The same as code above.
 const ngModule = MockBuilder()
   .keep(MyComponent, { export: true })
-  .mock(MyModule)
+  .mock(MyModule, { exportAll: true })
   .build();
 
-// If you don't plan a further customization of ngModule
-// then you don't need to call .build().
+// If you do not plan a further customization of ngModule
+// then you do not need to call .build().
 // Simply return result of MockBuilder in beforeEach
-beforeEach(() =>
-  MockBuilder().keep(MyComponent, { export: true }).mock(MyModule)
-);
+beforeEach(() => MockBuilder(MyComponent, MyModule));
 // It is the same as:
 beforeEach(() => {
   const ngModule = MockBuilder()
     .keep(MyComponent, { export: true })
-    .mock(MyModule)
+    .mock(MyModule, { exportAll: true })
     .build();
   TestBed.configureTestingModule(ngModule);
   return TestBed.compileComponents();
@@ -1035,12 +1034,26 @@ const ngModule = MockBuilder(MyComponent, MyModule)
   .mock(SomeModule)
   .build();
 
-// If we want to test a component, directive or pipe which wasn't
+// If we want to test a component, directive or pipe which was not
 // exported we should mark it as an 'export'.
-// Doesn't matter how deep it is. It will be exported to the level of
+// Does not matter how deep it is. It will be exported to the level of
 // TestingModule.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .keep(SomeModuleComponentDirectivePipeProvider1, {
+    export: true,
+  })
+  .build();
+
+// If we want to use declarations of a module which were not
+// exported, we should mark the module with the 'exportAll' flag.
+// Then all its imports and declarations will be exported.
+// If the module is nested, then add `export` beside `exportAll`.
+const ngModule = MockBuilder(MyComponent)
+  .keep(MyModule, {
+    exportAll: true,
+  })
+  .mock(MyNestedModule, {
+    exportAll: true,
     export: true,
   })
   .build();
@@ -1051,7 +1064,7 @@ const ngModule = MockBuilder(MyComponent, MyModule)
 // Components, Directive, Pipes are added as declarations to the
 // TestingModule.
 // Providers and Services are added as providers to the TestingModule.
-// If we don't want something to be added to the TestingModule at all
+// If we do not want something to be added to the TestingModule at all
 // we should mark it as a 'dependency'.
 const ngModule = MockBuilder(MyComponent, MyModule)
   .keep(SomeModuleComponentDirectivePipeProvider1, {
@@ -1131,7 +1144,7 @@ The best thing here is that `fixture.point.componentInstance` is typed to the co
 If you want, you can specify providers for the render passing them via the 3rd parameter.
 It is useful when you want to mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
 
-And don't forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
+And do not forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
 
 <details><summary>Click to see <strong>an example how to render a custom template in an Angular tests</strong></summary>
 <p>
@@ -1230,7 +1243,7 @@ describe('MockRender', () => {
 > NOTE: it works only for pure mocks without overrides.
 > If you provide an own mock via `useValue`
 > or like `.mock(MyService, myMock)`
-> then `MockInstance` doesn't have an effect.
+> then `MockInstance` does not have an effect.
 
 ```typescript
 MockInstance(MyService, {
@@ -1309,7 +1322,7 @@ describe('MockInstance', () => {
     });
   });
 
-  // Don't forget to reset MockInstance back.
+  // Do not forget to reset MockInstance back.
   afterEach(MockReset);
 
   it('should render', () => {
@@ -1416,11 +1429,11 @@ In case if we want to mock methods / properties of a service.
 
 ```typescript
 // Returns a mocked function / spy of the method. If the method
-// hasn't been mocked yet - mocks it.
+// has not been mocked yet - mocks it.
 const spy: Function = ngMocks.stub(instance, methodName);
 
 // Returns a mocked function / spy of the property. If the property
-// hasn't been mocked yet - mocks it.
+// has not been mocked yet - mocks it.
 const spyGet: Function = ngMocks.stub(instance, propertyName, 'get');
 const spySet: Function = ngMocks.stub(instance, propertyName, 'set');
 
@@ -1469,6 +1482,40 @@ describe('MockService', () => {
 
 ---
 
+## Usage with 3rd-party libraries
+
+`ngMocks` provides flexibility via [`MockBuilder`](#mockbuilder)
+that allows developers to use another Angular testing libraries for creation of `TestBed`,
+and in the same time mock all dependencies via `ngMocks`.
+
+For example if we use `@ngneat/spectator` and its functions
+like `createHostFactory`, `createComponentFactory`, `createDirectiveFactory` and so on,
+then to mock everything properly we need:
+
+- exclude the component we want to test
+- mock its module
+- export all declarations the module has
+
+This means we need `.exclude`, `.mock` and `exportAll` flag.
+
+```typescript
+const dependencies = MockBuilder()
+  .exclude(MyComponent)
+  .mock(MyModule, {
+    exportAll: true,
+  })
+  .build();
+
+const createComponent = createComponentFactory({
+  component: MyComponent,
+  ...dependencies,
+});
+```
+
+Profit.
+
+---
+
 ## Making Angular tests faster
 
 There is a `ngMocks.faster` feature that optimizes setup of similar test modules between tests
@@ -1482,7 +1529,7 @@ the tests will run faster.
 describe('performance:correct', () => {
   ngMocks.faster(); // <-- add it before
 
-  // Doesn't change between tests.
+  // The TestBed does not change between tests.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(TargetService)
   );
@@ -1527,7 +1574,7 @@ describe('beforeEach:mock-instance', () => {
     });
   });
 
-  // Don't forget to reset the spy between runs.
+  // Do not forget to reset the spy between runs.
   afterAll(MockReset);
 });
 ```
@@ -1551,7 +1598,7 @@ describe('beforeEach:manual-spy', () => {
     prop: 123,
   };
 
-  // Don't forget to reset the spy between runs.
+  // Do not forget to reset the spy between runs.
   beforeEach(() => {
     mock.method.calls.reset();
     // in case of jest

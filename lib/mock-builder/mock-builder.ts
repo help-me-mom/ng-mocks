@@ -100,7 +100,9 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
     });
   }
   if (itsModuleToMock) {
-    instance.mock(itsModuleToMock);
+    instance.mock(itsModuleToMock, {
+      exportAll: true,
+    });
   }
   return instance;
 }
