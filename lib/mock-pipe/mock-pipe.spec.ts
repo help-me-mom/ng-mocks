@@ -1,6 +1,7 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { isMockedNgDefOf, MockPipes } from 'ng-mocks';
 
 import { MockPipe } from './mock-pipe';
 
@@ -27,6 +28,13 @@ export class ExampleComponent {
 
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;
+
+  it('mocks several pipes', () => {
+    const mocks = MockPipes(ExamplePipe, AnotherExamplePipe);
+    expect(mocks.length).toEqual(2);
+    expect(isMockedNgDefOf(mocks[0], ExamplePipe, 'p')).toBeTruthy();
+    expect(isMockedNgDefOf(mocks[1], AnotherExamplePipe, 'p')).toBeTruthy();
+  });
 
   describe('Base tests-jasmine', () => {
     beforeEach(async(() => {

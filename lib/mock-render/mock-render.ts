@@ -88,6 +88,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
       try {
         meta = directiveResolver.resolve(template);
       } catch (e) {
+        /* istanbul ignore next */
         throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
       }
     }

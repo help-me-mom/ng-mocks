@@ -14,11 +14,12 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { isMockedNgDefOf } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
 import { ngMocks } from '../mock-helper';
 
-import { MockDirective, MockedDirective } from './mock-directive';
+import { MockDirective, MockDirectives, MockedDirective } from './mock-directive';
 
 @Directive({
   exportAs: 'foo',
@@ -105,7 +106,7 @@ describe('MockDirective', () => {
     fixture.detectChanges();
   });
 
-  it("should have use the original component's selector", () => {
+  it('should have use a selector of the original component', () => {
     const element = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(element).not.toBeNull();
   });
@@ -173,6 +174,13 @@ describe('MockDirective', () => {
     expect(mockedDirective.myGetter).not.toBeDefined();
     expect(mockedDirective.mySetter).not.toBeDefined();
     expect(mockedDirective.normalProperty).not.toBeDefined();
+  });
+
+  it('mocks several directives', () => {
+    const mocks = MockDirectives(GettersAndSettersDirective, ExampleStructuralDirective);
+    expect(mocks.length).toEqual(2);
+    expect(isMockedNgDefOf(mocks[0], GettersAndSettersDirective, 'd')).toBeTruthy();
+    expect(isMockedNgDefOf(mocks[1], ExampleStructuralDirective, 'd')).toBeTruthy();
   });
 
   it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {

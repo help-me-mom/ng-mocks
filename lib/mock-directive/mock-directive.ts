@@ -62,6 +62,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     try {
       meta = directiveResolver.resolve(directive);
     } catch (e) {
+      /* istanbul ignore next */
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
   }

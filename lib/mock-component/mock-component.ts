@@ -73,6 +73,7 @@ export function MockComponent<TComponent>(
     try {
       meta = directiveResolver.resolve(component);
     } catch (e) {
+      /* istanbul ignore next */
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
   }

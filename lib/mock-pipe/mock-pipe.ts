@@ -44,6 +44,7 @@ export function MockPipe<TPipe extends PipeTransform>(
     try {
       meta = pipeResolver.resolve(pipe);
     } catch (e) {
+      /* istanbul ignore next */
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
   }

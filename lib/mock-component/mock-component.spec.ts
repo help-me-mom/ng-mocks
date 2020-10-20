@@ -90,7 +90,7 @@ describe('MockComponent', () => {
       });
   }));
 
-  it("should have use the original component's selector", () => {
+  it('should have use a selector of the original component', () => {
     fixture.detectChanges();
     const mockedComponent = fixture.debugElement.query(By.css('simple-component'));
     expect(mockedComponent).not.toBeNull();
@@ -236,6 +236,9 @@ describe('MockComponent', () => {
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
       expect(block3.nativeElement.innerText.trim()).toEqual('');
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__hide('block3');
+      fixture.detectChanges();
+      expect(templateOutlet.query(By.css('[data-key="block3"]'))).toBeFalsy();
     });
 
     it('renders nothing if no @ContentChild in component and ng-content is empty', () => {

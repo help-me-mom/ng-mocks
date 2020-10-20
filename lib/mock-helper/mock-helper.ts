@@ -26,6 +26,7 @@ function nestedCheck<T>(
   });
 }
 
+/* istanbul ignore next */
 /**
  * @deprecated use ngMocks instead
  */

@@ -115,6 +115,7 @@ export function MockModule(module: any): any {
       try {
         meta = ngModuleResolver.resolve(ngModule);
       } catch (e) {
+        /* istanbul ignore next */
         throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
       }
     }
