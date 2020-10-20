@@ -3,6 +3,7 @@
   "compilerOptions": {
     "inlineSourceMap": false,
     "inlineSources": false,
+    "removeComments": false,
     "sourceMap": true
   },
   "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts"],

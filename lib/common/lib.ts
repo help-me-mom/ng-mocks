@@ -84,6 +84,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
 
   // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
   (window as any).ngMocksParent = parent;
+  /* istanbul ignore next */
   try {
     // tslint:disable-next-line:no-eval
     eval(`
@@ -171,7 +172,9 @@ export function isMockOf<T>(object: any, type: Type<T>): object is T;
 export function isMockOf<T>(object: any, type: Type<T>, ngType?: any): object is T {
   return (
     typeof object === 'object' &&
-    (ngType ? isMockedNgDefOf(object.constructor, type, ngType) : isMockedNgDefOf(object.constructor, type))
+    object.__ngMocksMock &&
+    object.constructor === type &&
+    (ngType ? isNgDef(object.constructor, ngType) : isNgDef(object.constructor))
   );
 }
 
@@ -207,10 +210,10 @@ export function getMockedNgDefOf(type: any, ngType?: any): any {
     mock = ngMocksUniverse.cacheMocks.get(source);
   }
 
-  if (!ngType) {
+  if (mock && !ngType) {
     return mock;
   }
-  if (ngType && isMockedNgDefOf(mock, type, ngType)) {
+  if (mock && ngType && isMockedNgDefOf(mock, source, ngType)) {
     return mock;
   }
 

@@ -58,6 +58,7 @@ export class Mock {
     }
     for (const prop of mockServiceHelper.extractPropertiesFromPrototype(prototype)) {
       const descriptor = mockServiceHelper.extractPropertyDescriptor(prototype, prop);
+      /* istanbul ignore next */
       if (!descriptor) {
         continue;
       }
