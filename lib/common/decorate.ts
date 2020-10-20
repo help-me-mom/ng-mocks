@@ -49,9 +49,6 @@ export function decorateQueries(cls: Type<any>, queries?: { [key: string]: Query
     for (const key of Object.keys(queries)) {
       // tslint:disable:no-unnecessary-type-assertion
       const query: any = queries[key];
-      if (!query) {
-        continue;
-      }
       if (query.ngMetadataName === 'ContentChild') {
         ContentChild(query.selector, query)(cls.prototype, key);
       }
