@@ -57,6 +57,12 @@ module.exports = (config: KarmaTypescriptConfig) => {
       useBrowserName: false,
     },
     karmaTypescriptConfig: {
+      coverageOptions:
+        process.env.WITH_COVERAGE === undefined
+          ? {
+              instrumentation: false,
+            }
+          : {},
       tsconfig: 'tsconfig.spec.json',
     },
     logLevel: config.LOG_INFO,
