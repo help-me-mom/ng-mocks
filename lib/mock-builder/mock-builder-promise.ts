@@ -238,9 +238,6 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
     // Adding requested providers to test bed.
     for (const provider of mapValues(this.providerDef)) {
-      if (!provider) {
-        continue;
-      }
       providers.push(provider);
     }
 
@@ -306,10 +303,12 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       }
 
       const skipMock = ngMocksUniverse.flags.has('skipMock');
+      /* istanbul ignore else */
       if (!skipMock) {
         ngMocksUniverse.flags.add('skipMock');
       }
       const [changed, def] = MockNgDef(meta);
+      /* istanbul ignore else */
       if (!skipMock) {
         ngMocksUniverse.flags.delete('skipMock');
       }
@@ -340,6 +339,10 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     return this;
   }
 
+  public keep<T>(def: NgModuleWithProviders<T>, config?: IMockBuilderConfig): this;
+  public keep<T>(token: InjectionToken<T>, config?: IMockBuilderConfig): this;
+  public keep<T>(def: AnyType<T>, config?: IMockBuilderConfig): this;
+  public keep(def: any, config?: IMockBuilderConfig): this;
   public keep(input: any, config?: IMockBuilderConfig): this {
     const { def, providers } = isNgModuleDefWithProviders(input)
       ? { def: input.ngModule, providers: input.providers }
@@ -369,9 +372,12 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     mock?: PipeTransform['transform'],
     config?: IMockBuilderConfig
   ): this;
+  public mock<T>(token: InjectionToken<T>, mock: any, config: IMockBuilderConfig): this;
+  public mock<T>(provider: AnyType<T>, mock: Partial<T>, config: IMockBuilderConfig): this;
+  public mock<T>(provider: AnyType<T>, mock: AnyType<T>, config: IMockBuilderConfig): this;
   public mock<T>(token: InjectionToken<T>, mock?: any): this;
   public mock<T>(def: NgModuleWithProviders<T>): this;
-  public mock<T>(def: AnyType<T>, mock: IMockBuilderConfig): this;
+  public mock<T>(def: AnyType<T>, config: IMockBuilderConfig): this;
   public mock<T>(provider: AnyType<T>, mock?: Partial<T>): this;
   public mock<T>(def: AnyType<T>): this;
   public mock(input: any, a1: any = defaultMock, a2?: any): this {
@@ -379,10 +385,13 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       ? { def: input.ngModule, providers: input.providers }
       : { def: input, providers: undefined };
 
-    let mock: any = a1;
-    let config: any = a1 === defaultMock ? undefined : a1;
+    let mock: any = def === a1 ? defaultMock : a1;
+    let config: any = a2 ? a2 : a1 !== defaultMock ? a1 : undefined;
     if (isNgDef(def, 'p') && typeof a1 === 'function') {
       mock = a1;
+      config = a2;
+    }
+    if (!isNgDef(def)) {
       config = a2;
     }
 
@@ -402,7 +411,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       this.defValue.set(def, mock);
     }
 
-    if (isNgDef(def) && config) {
+    if (config) {
       this.configDef.set(def, config);
     } else {
       this.configDef.delete(def);
@@ -417,13 +426,13 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       const multi = typeof provider === 'object' && provider.provide && provider.multi;
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
       this.wipe(provide);
-      this.providerDef.set(provide, multi ? [...(Array.isArray(existing) ? existing : []), provider] : provider);
+      this.providerDef.set(provide, multi ? [...existing, provider] : provider);
     }
     return this;
   }
 
   public replace(source: Type<any>, destination: Type<any>, config?: IMockBuilderConfig): this {
-    if (!isNgDef(source)) {
+    if (!isNgDef(destination) || !isNgDef(source)) {
       throw new Error(
         'Cannot replace the declaration, both have to be a Module, a Component, a Directive or a Pipe, for Providers use `.mock` or `.provide`'
       );

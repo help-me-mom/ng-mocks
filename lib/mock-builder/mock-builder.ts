@@ -13,7 +13,7 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
     TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {
       ngMocksUniverse.global.set('bullet:customized', true);
       let mocks: Map<any, any> | undefined;
-      let overrides: Map<AnyType<any>, MetadataOverride<any>> | undefined;
+      let overrides: Map<AnyType<any>, MetadataOverride<any>> = new Map();
 
       for (const provide of flatten(moduleDef.providers || [])) {
         if (typeof provide !== 'object') {
@@ -34,24 +34,21 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
       if (!mocks) {
         return testBed;
       }
-      if (!overrides) {
-        overrides = new Map();
-      }
 
+      /* istanbul ignore else */
       // Now we can apply overrides.
       if (!(TestBed as any).ngMocksOverrides) {
         (TestBed as any).ngMocksOverrides = new Set();
       }
-      for (const [def, override] of overrides ? mapEntries(overrides) : []) {
+      for (const [def, override] of mapEntries(overrides)) {
         (TestBed as any).ngMocksOverrides.add(def);
+        /* istanbul ignore else */
         if (isNgDef(def, 'm')) {
           testBed.overrideModule(def, override);
         } else if (isNgDef(def, 'c')) {
           testBed.overrideComponent(def, override);
         } else if (isNgDef(def, 'd')) {
           testBed.overrideDirective(def, override);
-        } else if (isNgDef(def, 'p')) {
-          testBed.overridePipe(def, override);
         }
       }
 
@@ -73,14 +70,13 @@ export function MockBuilder(keepDeclaration?: Type<any>, itsModuleToMock?: Type<
       if ((TestBed as any).ngMocksOverrides) {
         ngMocks.flushTestBed();
         for (const def of (TestBed as any).ngMocksOverrides) {
+          /* istanbul ignore else */
           if (isNgDef(def, 'm')) {
             TestBed.overrideModule(def, {});
           } else if (isNgDef(def, 'c')) {
             TestBed.overrideComponent(def, {});
           } else if (isNgDef(def, 'd')) {
             TestBed.overrideDirective(def, {});
-          } else if (isNgDef(def, 'p')) {
-            TestBed.overridePipe(def, {});
           }
         }
         (TestBed as any).ngMocksOverrides = undefined;
