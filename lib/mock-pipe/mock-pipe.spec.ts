@@ -1,7 +1,7 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { isMockedNgDefOf, MockPipes, ngMocks } from 'ng-mocks';
+import { isMockedNgDefOf, MockPipes } from 'ng-mocks';
 
 import { MockPipe } from './mock-pipe';
 
@@ -28,8 +28,6 @@ export class ExampleComponent {
 
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;
-
-  afterEach(ngMocks.reset);
 
   it('mocks several pipes', () => {
     const mocks = MockPipes(ExamplePipe, AnotherExamplePipe);

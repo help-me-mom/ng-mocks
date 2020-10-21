@@ -51,6 +51,7 @@ export function MockProvider(provider: any): Provider | undefined {
   const mockedProvider = mockServiceHelper.useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () =>
     MockService(provide)
   );
+  /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheProvider')) {
     ngMocksUniverse.cacheProviders.set(provide, mockedProvider);
   }
@@ -132,6 +133,7 @@ export function MockModule(module: any): any {
     NgModule(mockModuleDef)(mockModule as any);
     MockOf(ngModule)(mockModule as any);
 
+    /* istanbul ignore else */
     if (ngMocksUniverse.flags.has('cacheModule')) {
       ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
     }
@@ -224,9 +226,6 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     if (!mockedDef && isNgDef(def, 'p')) {
       mockedDef = MockPipe(def);
     }
-    if (!mockedDef) {
-      mockedDef = resolveProvider(def);
-    }
 
     resolutions.set(def, mockedDef);
     changed = changed || mockedDef !== def;
@@ -279,7 +278,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
   // Because of that we have to export whatever a module imports or declares.
   // Unfortunately, in this case tests won't fail when a module has missed exports.
   // MockBuilder doesn't have have this issue.
-  for (const def of flatten([imports || [], declarations || []])) {
+  for (const def of flatten([imports, declarations])) {
     const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
     const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
     const mockedDef = resolve(instance);
