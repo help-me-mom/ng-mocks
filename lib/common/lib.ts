@@ -96,6 +96,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
     child = (window as any).ngMocksResult;
   } catch (e) {
     class ClassEs5 extends parent {}
+
     child = ClassEs5;
   }
   (window as any).ngMocksParent = undefined;
@@ -136,17 +137,27 @@ export function isNgDef(object: any, ngType?: string): object is Type<any> {
  * d - directive.
  * p - pipe.
  */
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'm'): object is Type<MockedModule<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'c'): object is Type<MockedComponent<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'd'): object is Type<MockedDirective<T>>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType: 'm'): declaration is Type<MockedModule<T>>;
+export function isMockedNgDefOf<T>(
+  declaration: any,
+  type: Type<T>,
+  ngType: 'c'
+): declaration is Type<MockedComponent<T>>;
+export function isMockedNgDefOf<T>(
+  declaration: any,
+  type: Type<T>,
+  ngType: 'd'
+): declaration is Type<MockedDirective<T>>;
 export function isMockedNgDefOf<T extends PipeTransform>(
-  object: any,
+  declaration: any,
   type: Type<T>,
   ngType: 'p'
-): object is Type<MockedPipe<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>): object is Type<T>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType?: any): object is Type<T> {
-  return typeof object === 'function' && object.mockOf === type && (ngType ? isNgDef(object, ngType) : true);
+): declaration is Type<MockedPipe<T>>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>): declaration is Type<T>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType?: any): declaration is Type<T> {
+  return (
+    typeof declaration === 'function' && declaration.mockOf === type && (ngType ? isNgDef(declaration, ngType) : true)
+  );
 }
 
 export const isNgInjectionToken = (object: any): object is InjectionToken<any> =>

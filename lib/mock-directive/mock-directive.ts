@@ -57,15 +57,12 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return ngMocksUniverse.cacheMocks.get(directive);
   }
 
-  let meta: core.Directive | undefined;
-  /* istanbul ignore else */
-  if (!meta) {
-    try {
-      meta = directiveResolver.resolve(directive);
-    } catch (e) {
-      /* istanbul ignore next */
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
+  let meta: core.Directive;
+  try {
+    meta = directiveResolver.resolve(directive);
+  } catch (e) {
+    /* istanbul ignore next */
+    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
   const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 

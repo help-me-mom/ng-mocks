@@ -110,14 +110,12 @@ export function MockModule(module: any): any {
   }
 
   if (!mockModule) {
-    let meta: core.NgModule | undefined;
-    if (!meta) {
-      try {
-        meta = ngModuleResolver.resolve(ngModule);
-      } catch (e) {
-        /* istanbul ignore next */
-        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-      }
+    let meta: core.NgModule;
+    try {
+      meta = ngModuleResolver.resolve(ngModule);
+    } catch (e) {
+      /* istanbul ignore next */
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
 
     const [changed, ngModuleDef] = MockNgDef(meta, ngModule);
