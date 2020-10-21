@@ -99,6 +99,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     if (selector && inputs) {
       inputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
+        /* istanbul ignore else */
         if (alias && params && typeof params[alias]) {
           mockedTemplate += ` [${alias}]="${alias}"`;
         } else if (property && params && typeof params[property]) {
@@ -113,6 +114,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     if (selector && outputs) {
       outputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
+        /* istanbul ignore else */
         if (alias && params && typeof params[alias]) {
           mockedTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
         } else if (property && params && typeof params[property]) {
@@ -173,6 +175,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     const properties = mockServiceHelper.extractPropertiesFromPrototype(template.prototype);
     const exists = Object.getOwnPropertyNames(fixture.componentInstance);
     for (const property of properties) {
+      /* istanbul ignore if */
       if (exists.indexOf(property) !== -1) {
         continue;
       }
@@ -186,6 +189,7 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
     }
     const methods = mockServiceHelper.extractMethodsFromPrototype(template.prototype);
     for (const method of methods) {
+      /* istanbul ignore if */
       if (exists.indexOf(method) !== -1) {
         continue;
       }

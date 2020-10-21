@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { DebugElement, DebugNode, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { ngMocks } from '../mock-helper';
@@ -15,6 +16,26 @@ describe('MockRender', () => {
     TestBed.configureTestingModule({
       declarations: [RenderRealComponent, WithoutSelectorComponent],
     });
+  });
+
+  it('respects observables', () => {
+    const click = new Subject();
+    const fixture = MockRender(RenderRealComponent, { click });
+    let actual: any;
+    click.subscribe(value => (actual = value));
+    ngMocks.output(fixture.point, 'click').emit(true);
+    click.complete();
+    expect(actual).toEqual(true);
+  });
+
+  it('respects getters, setters and methods', () => {
+    const fixture = MockRender(RenderRealComponent);
+    fixture.componentInstance.nameProp = 'test';
+    expect(fixture.point.componentInstance.nameProp).toEqual('test');
+    expect(fixture.point.componentInstance.name()).toEqual('test');
+    fixture.point.componentInstance.nameProp = '';
+    expect(fixture.componentInstance.nameProp).toEqual('');
+    expect(fixture.componentInstance.name()).toEqual('');
   });
 
   it('renders any template and respects dynamic params', () => {
