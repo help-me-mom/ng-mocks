@@ -5,7 +5,7 @@ import { EventEmitter } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AbstractType, getSourceOfMock, isNgInjectionToken, Type } from '../common';
+import { AbstractType, getSourceOfMock, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
@@ -143,7 +143,7 @@ export const ngMocks: {
 
     afterEach(() => {
       ngMocks.flushTestBed();
-      for (const fixture of (getTestBed() as any)._activeFixtures || []) {
+      for (const fixture of (getTestBed() as any)._activeFixtures || /* istanbul ignore next */ []) {
         fixture.destroy();
       }
     });
@@ -169,9 +169,7 @@ export const ngMocks: {
     if (notFoundValue !== defaultNotFoundValue) {
       return notFoundValue;
     }
-    if (!result) {
-      throw new Error(`Cannot find an element via ngMocks.find(${typeof sel === 'string' ? sel : sel.name})`);
-    }
+    throw new Error(`Cannot find an element via ngMocks.find(${typeof sel === 'string' ? sel : sel.name})`);
   },
 
   findAll: (el: MockedDebugElement, sel: any) => {
@@ -221,7 +219,7 @@ export const ngMocks: {
 
     // Looking for related structural directive.
     // It's located as prev node.
-    const prevNode = notFound ? undefined : el.nativeNode.previousSibling;
+    const prevNode = el.nativeNode.previousSibling;
     if (!prevNode || prevNode.nodeName !== '#comment') {
       notFound = true;
     }
@@ -247,38 +245,28 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
-      if (isNgInjectionToken(token)) {
-        continue;
-      }
-
-      let meta: core.Directive | undefined;
-      if (!meta) {
-        try {
-          meta = directiveResolver.resolve(token);
-        } catch (e) {
-          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-        }
+      let meta: core.Directive;
+      try {
+        meta = directiveResolver.resolve(token);
+      } catch (e) {
+        /* istanbul ignore next */
+        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
       }
 
       const { inputs } = meta;
+      /* istanbul ignore if */
       if (!inputs) {
         continue;
       }
       for (const inputDef of inputs) {
-        const [prop = '', alias = ''] = inputDef.split(':', 2).map(v => v.trim());
-        if (!prop) {
-          continue;
-        }
+        const [prop, alias = ''] = inputDef.split(':', 2).map(v => v.trim());
         if (!alias && prop !== sel) {
           continue;
         }
         if (alias && alias !== sel) {
           continue;
         }
-        const directive: any = ngMocks.get(el, token, undefined);
-        if (!directive) {
-          continue;
-        }
+        const directive: any = ngMocks.get(el, token);
         return directive[prop];
       }
     }
@@ -294,45 +282,35 @@ export const ngMocks: {
     const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
     for (const token of el.providerTokens) {
-      if (isNgInjectionToken(token)) {
-        continue;
-      }
-
-      let meta: core.Directive | undefined;
-      if (!meta) {
-        try {
-          meta = directiveResolver.resolve(token);
-        } catch (e) {
-          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-        }
+      let meta: core.Directive;
+      try {
+        meta = directiveResolver.resolve(token);
+      } catch (e) {
+        /* istanbul ignore next */
+        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
       }
 
       const { outputs } = meta;
+      /* istanbul ignore if */
       if (!outputs) {
         continue;
       }
       for (const outputDef of outputs) {
-        const [prop = '', alias = ''] = outputDef.split(':', 2).map(v => v.trim());
-        if (!prop) {
-          continue;
-        }
+        const [prop, alias = ''] = outputDef.split(':', 2).map(v => v.trim());
         if (!alias && prop !== sel) {
           continue;
         }
         if (alias && alias !== sel) {
           continue;
         }
-        const directive: any = ngMocks.get(el, token, undefined);
-        if (!directive) {
-          continue;
-        }
+        const directive: any = ngMocks.get(el, token);
         return directive[prop];
       }
     }
     if (notFoundValue !== defaultNotFoundValue) {
       return notFoundValue;
     }
-    throw new Error(`Cannot find ${sel} input via ngMocks.output`);
+    throw new Error(`Cannot find ${sel} output via ngMocks.output`);
   },
 
   stub: <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
@@ -341,6 +319,7 @@ export const ngMocks: {
     }
     for (const key of Object.getOwnPropertyNames(override)) {
       const def = Object.getOwnPropertyDescriptor(override, key);
+      /* istanbul ignore else */
       if (def) {
         Object.defineProperty(instance, key, def);
       }
