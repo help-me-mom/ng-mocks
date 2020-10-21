@@ -1,7 +1,10 @@
 // tslint:disable:no-console
 
 import { Component, Directive, Injectable, InjectionToken, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { getTestBedInjection, MockBuilder } from 'ng-mocks';
+
+import { getTestBedInjection } from '../common/lib';
+
+import { MockBuilder } from './mock-builder';
 
 @Injectable()
 class TargetService {}

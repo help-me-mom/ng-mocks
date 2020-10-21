@@ -11,11 +11,12 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { isMockOf, MockRender } from 'ng-mocks';
 
 import { staticTrue } from '../../tests';
+import { isMockOf } from '../common/lib';
 import { MockedDirective } from '../mock-directive';
 import { ngMocks } from '../mock-helper';
+import { MockRender } from '../mock-render';
 
 import { MockComponent, MockComponents, MockedComponent } from './mock-component';
 import { ChildComponent } from './mock-component.spec.child-component.fixtures';

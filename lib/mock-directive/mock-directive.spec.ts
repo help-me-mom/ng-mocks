@@ -15,10 +15,12 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { isMockedNgDefOf, MockBuilder, MockRender } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
+import { isMockedNgDefOf } from '../common/lib';
+import { MockBuilder } from '../mock-builder';
 import { ngMocks } from '../mock-helper';
+import { MockRender } from '../mock-render';
 
 import { MockDirective, MockDirectives, MockedDirective } from './mock-directive';
 

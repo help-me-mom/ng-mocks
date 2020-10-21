@@ -1,5 +1,8 @@
 import { Component, Directive, Injectable, InjectionToken, NgModule } from '@angular/core';
-import { MockBuilder, ngMocks } from 'ng-mocks';
+
+import { ngMocks } from '../mock-helper';
+
+import { MockBuilder } from './mock-builder';
 
 const TARGET1_TOKEN = new InjectionToken('TARGET1');
 const TARGET2_TOKEN = new InjectionToken('TARGET2');

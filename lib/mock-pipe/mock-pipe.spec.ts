@@ -1,9 +1,10 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { isMockedNgDefOf, MockPipes } from 'ng-mocks';
 
-import { MockPipe } from './mock-pipe';
+import { isMockedNgDefOf } from '../common/lib';
+
+import { MockPipe, MockPipes } from './mock-pipe';
 
 @Pipe({ name: 'mockedPipe' })
 export class ExamplePipe implements PipeTransform {

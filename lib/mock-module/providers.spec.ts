@@ -1,5 +1,8 @@
 import { Injectable, NgModule } from '@angular/core';
-import { isMockedNgDefOf, MockModule } from 'ng-mocks';
+
+import { isMockedNgDefOf } from '../common/lib';
+
+import { MockModule } from './mock-module';
 
 @Injectable()
 class TargetService {}

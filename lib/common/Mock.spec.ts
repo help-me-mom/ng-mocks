@@ -1,13 +1,14 @@
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
-import { MockOf, Type } from 'ng-mocks';
 
 import { MockComponent } from '../mock-component';
 import { MockDirective } from '../mock-directive';
 import { MockModule } from '../mock-module';
 import { MockPipe } from '../mock-pipe';
 
+import { Type } from './lib';
 import { Mock } from './Mock';
+import { MockOf } from './mock-of.decorator';
 
 class ParentClass {
   protected parentValue = true;
