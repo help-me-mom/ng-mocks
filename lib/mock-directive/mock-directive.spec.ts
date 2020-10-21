@@ -4,6 +4,7 @@ import {
   ContentChildren,
   Directive,
   EventEmitter,
+  Injectable,
   Input,
   Output,
   QueryList,
@@ -14,18 +15,21 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { isMockedNgDefOf } from 'ng-mocks';
+import { isMockedNgDefOf, MockBuilder, MockRender } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
 import { ngMocks } from '../mock-helper';
 
 import { MockDirective, MockDirectives, MockedDirective } from './mock-directive';
 
+@Injectable()
+class TargetService {}
+
 @Directive({
   exportAs: 'foo',
   selector: '[exampleDirective]',
 })
-export class ExampleDirective {
+class ExampleDirective {
   @Input() exampleDirective: string;
   @Output() someOutput = new EventEmitter<boolean>();
   @Input('bah') something: string;
@@ -36,26 +40,27 @@ export class ExampleDirective {
 }
 
 @Directive({
+  providers: [TargetService],
   selector: '[exampleStructuralDirective]',
 })
-export class ExampleStructuralDirective {
+class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
 }
 
 @Directive({
   selector: '[getters-and-setters]',
 })
-export class GettersAndSettersDirective {
+class GettersAndSettersDirective {
+  @Input()
+  public normalInput?: boolean;
+
+  public normalProperty = false;
+
   get myGetter() {
     return true;
   }
 
   set mySetter(value: string) {}
-
-  @Input()
-  public normalInput?: boolean;
-
-  public normalProperty = false;
 
   normalMethod(): boolean {
     return this.myGetter;
@@ -74,7 +79,7 @@ export class GettersAndSettersDirective {
     <div getters-and-setters></div>
   `,
 })
-export class ExampleComponentContainer {
+class ExampleComponentContainer {
   @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
@@ -154,6 +159,22 @@ describe('MockDirective', () => {
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
   });
 
+  it('renders with true', async () => {
+    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
+      render: true,
+    });
+    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+  });
+
+  it('renders with $implicit', async () => {
+    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
+      render: {
+        $implicit: true,
+      },
+    });
+    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+  });
+
   it('should set ViewChild directives correctly', () => {
     fixture.detectChanges();
     expect(component.childDirective).toBeTruthy();
@@ -169,7 +190,7 @@ describe('MockDirective', () => {
     const mockedDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
       GettersAndSettersDirective
     >;
-
+    expect(() => mockedDirective.__render()).not.toThrow();
     expect(mockedDirective.normalMethod).toBeDefined();
     expect(mockedDirective.myGetter).not.toBeDefined();
     expect(mockedDirective.mySetter).not.toBeDefined();
