@@ -11,6 +11,7 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { isMockOf, MockRender } from 'ng-mocks';
 
 import { staticTrue } from '../../tests';
 import { MockedDirective } from '../mock-directive';
@@ -239,6 +240,17 @@ describe('MockComponent', () => {
       (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__hide('block3');
       fixture.detectChanges();
       expect(templateOutlet.query(By.css('[data-key="block3"]'))).toBeFalsy();
+    });
+
+    it('ignores missed blocks', () => {
+      const loFixture = MockRender(TemplateOutletComponent);
+      const loComponent: any = loFixture.point.componentInstance;
+      if (isMockOf(loComponent, TemplateOutletComponent, 'c')) {
+        expect(() => loComponent.__hide('empty')).not.toThrow();
+        expect(() => loComponent.__render('empty')).not.toThrow();
+      } else {
+        fail('the component is not mocked');
+      }
     });
 
     it('renders nothing if no @ContentChild in component and ng-content is empty', () => {
