@@ -45,6 +45,7 @@ export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<Type<any> | AbstractTyp
 export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
+    /* istanbul ignore next */
     return testBed.inject ? testBed.inject(token) : testBed.get(token);
   } catch (e) {
     return undefined;
@@ -100,11 +101,9 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   (window as any).ngMocksParent = undefined;
 
   // the next step is to respect constructor parameters as the parent class.
-  if (child) {
-    child.parameters = jitReflector
-      .parameters(parent)
-      .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
-  }
+  child.parameters = jitReflector
+    .parameters(parent)
+    .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
 
   return child;
 };

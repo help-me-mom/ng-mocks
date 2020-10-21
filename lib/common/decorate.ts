@@ -1,3 +1,5 @@
+// tslint:disable:no-unnecessary-type-assertion
+
 import { ContentChild, ContentChildren, Input, Output, Query, ViewChild, ViewChildren } from '@angular/core';
 
 import { Type } from './lib';
@@ -14,6 +16,7 @@ import { Type } from './lib';
  * @internal
  */
 export function decorateInputs(cls: Type<any>, inputs?: string[], exclude?: string[]) {
+  /* istanbul ignore else */
   if (inputs) {
     for (const input of inputs) {
       const [key, alias] = input.split(': ');
@@ -31,6 +34,7 @@ export function decorateInputs(cls: Type<any>, inputs?: string[], exclude?: stri
  * @internal
  */
 export function decorateOutputs(cls: Type<any>, outputs?: string[]) {
+  /* istanbul ignore else */
   if (outputs) {
     for (const output of outputs) {
       const [key, alias] = output.split(': ');
@@ -45,9 +49,9 @@ export function decorateOutputs(cls: Type<any>, outputs?: string[]) {
  * @internal
  */
 export function decorateQueries(cls: Type<any>, queries?: { [key: string]: Query }) {
+  /* istanbul ignore else */
   if (queries) {
     for (const key of Object.keys(queries)) {
-      // tslint:disable:no-unnecessary-type-assertion
       const query: any = queries[key];
       if (query.ngMetadataName === 'ContentChild') {
         ContentChild(query.selector, query)(cls.prototype, key);
