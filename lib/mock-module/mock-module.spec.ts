@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationModule, Component, InjectionToken, NgModule } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationModule,
+  Component,
+  FactoryProvider,
+  InjectionToken,
+  Injector,
+  NgModule,
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -208,16 +216,59 @@ describe('MockProvider', () => {
   })
   class CustomTokenModule {}
 
-  it('should skip tokens in a mocked module', () => {
+  it('should skip multi tokens in a mocked module', () => {
     const mock = MockModule(CustomTokenModule);
     const def = ngModuleResolver.resolve(mock);
-    expect(def.providers).toEqual([]);
+    expect(def.providers).toEqual([
+      {
+        provide: CUSTOM_TOKEN,
+        useValue: '',
+      },
+    ]);
   });
 
   it('should return undefined on any token', () => {
     expect(MockProvider(CUSTOM_TOKEN)).toBeUndefined();
     expect(MockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
     expect(MockProvider(APP_INITIALIZER)).toBeUndefined();
+  });
+
+  it('should return default value on primitives', () => {
+    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: undefined })).toEqual({
+      provide: CUSTOM_TOKEN,
+      useValue: undefined,
+    });
+    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: 123 })).toEqual({
+      provide: CUSTOM_TOKEN,
+      useValue: 0,
+    });
+    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: true })).toEqual({
+      provide: CUSTOM_TOKEN,
+      useValue: false,
+    });
+    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' })).toEqual({
+      provide: CUSTOM_TOKEN,
+      useValue: '',
+    });
+    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: null })).toEqual({
+      provide: CUSTOM_TOKEN,
+      useValue: null,
+    });
+    const mock: FactoryProvider = MockProvider({
+      provide: CUSTOM_TOKEN,
+      useValue: {
+        func: () => undefined,
+        test: 123,
+      },
+    }) as any;
+    expect(mock).toEqual({
+      deps: [Injector],
+      provide: CUSTOM_TOKEN,
+      useFactory: jasmine.anything(),
+    });
+    expect(mock.useFactory(null)).toEqual({
+      func: jasmine.anything(),
+    });
   });
 });
 

@@ -8,6 +8,7 @@ import {
   flatten,
   getMockedNgDefOf,
   isNgDef,
+  isNgInjectionToken,
   isNgModuleDefWithProviders,
   Mock,
   MockOf,
@@ -40,7 +41,30 @@ export function MockProvider(provider: any): Provider | undefined {
   // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
   // If a testing module / component requires omitted tokens then they should be provided manually
   // during creation of TestBed module.
-  if (typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken') {
+  if (isNgInjectionToken(provide) && provider.multi) {
+    return undefined;
+  }
+  // if a token has a primitive type, we can return its initial state.
+  if (isNgInjectionToken(provide) && Object.keys(provider).indexOf('useValue') !== -1) {
+    return provider.useValue && typeof provider.useValue === 'object'
+      ? mockServiceHelper.useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () =>
+          MockService(provider.useValue)
+        )
+      : {
+          provide,
+          useValue:
+            typeof provider.useValue === 'boolean'
+              ? false
+              : typeof provider.useValue === 'number'
+              ? 0
+              : typeof provider.useValue === 'string'
+              ? ''
+              : provider.useValue === null
+              ? null
+              : undefined,
+        };
+  }
+  if (isNgInjectionToken(provide)) {
     return undefined;
   }
 

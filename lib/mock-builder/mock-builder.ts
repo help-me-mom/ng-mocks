@@ -1,7 +1,7 @@
 import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
-import { ngMocksUniverse } from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
-import { AnyType, flatten, isNgDef, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES, Type } from '../common';
+import { AnyType, flatten, isNgDef, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES, Type } from '../common/lib';
+import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 
 import { MockBuilderPerformance } from './mock-builder-performance';

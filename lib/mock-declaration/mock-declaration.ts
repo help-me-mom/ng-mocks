@@ -1,4 +1,4 @@
-import { AbstractType, isNgDef, Type } from '../common';
+import { AnyType, isNgDef, Type } from '../common';
 import { MockComponent, MockedComponent } from '../mock-component';
 import { MockDirective, MockedDirective } from '../mock-directive';
 import { MockedPipe, MockPipe } from '../mock-pipe';
@@ -7,9 +7,11 @@ export function MockDeclarations(...declarations: Array<Type<any>>): Array<Type<
   return declarations.map(MockDeclaration);
 }
 
-export function MockDeclaration<T>(declaration: Type<T>): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>>;
 export function MockDeclaration<T>(
-  declaration: AbstractType<T>
+  declaration: AnyType<T>
+): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>>;
+export function MockDeclaration<T>(
+  declaration: AnyType<T>
 ): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>>;
 export function MockDeclaration<T>(
   declaration: Type<T>
