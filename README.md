@@ -1529,7 +1529,7 @@ the tests will run faster.
 describe('performance:correct', () => {
   ngMocks.faster(); // <-- add it before
 
-  // The TestBed does not change between tests.
+  // The TestBed is not going to be changed between tests.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(TargetService)
   );
@@ -1640,6 +1640,6 @@ import 'ng-mocks/dist/jest';
 
 ## Find an issue or have a question or a request?
 
-Report it as an issue or submit a PR. I'm open to contributions.
-
-<https://github.com/ike18t/ng-mocks>
+[Ask a question on gitter](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge),
+[report it as an issue on github](https://github.com/ike18t/ng-mocks/issues),
+or [submit a PR](https://github.com/ike18t/ng-mocks/pulls). I'm open to contributions.
