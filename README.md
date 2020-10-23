@@ -947,8 +947,11 @@ A mocked instance of `ControlValueAccessor` provides:
 - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
 - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
 
-<details><summary>Click to see <strong>an example of mocking form components and directives in Angular tests</strong></summary>
+<details><summary>Click to see <strong>an example of mocking Angular form with FormControl in tests</strong></summary>
 <p>
+
+The source file is here:
+[examples/MockReactiveForms/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts)
 
 ```typescript
 describe('MockReactiveForms', () => {
@@ -958,23 +961,73 @@ describe('MockReactiveForms', () => {
       .keep(ReactiveFormsModule)
   );
 
-  it('should send the correct value to the dependency component input', () => {
+  it('sends the correct value to the mocked form component', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
-    const mockedReactiveFormComponent = ngMocks.find<
-      MockedComponent<DependencyComponent>
-    >(fixture.debugElement, 'dependency-component-selector')
-      .componentInstance;
+    // Let's find the mocked form component.
+    const mockedControl = ngMocks.find(
+      fixture.debugElement,
+      DependencyComponent
+    ).componentInstance;
 
-    mockedReactiveFormComponent.__simulateChange('foo');
+    // Let's simulate its change, like a user does it.
+    if (isMockOf(mockedControl, DependencyComponent, 'c')) {
+      mockedControl.__simulateChange('foo');
+    }
     expect(component.formControl.value).toBe('foo');
 
-    spyOn(mockedReactiveFormComponent, 'writeValue');
+    // Let's check that change on existing formControl
+    // causes calls of `writeValue` on the mocked component.
+    spyOn(mockedControl, 'writeValue');
     component.formControl.setValue('bar');
-    expect(
-      mockedReactiveFormComponent.writeValue
-    ).toHaveBeenCalledWith('bar');
+    expect(mockedControl.writeValue).toHaveBeenCalledWith('bar');
+  });
+});
+```
+
+</p>
+</details>
+
+<details><summary>Click to see <strong>an example of mocking Angular forms with ngModel in tests</strong></summary>
+<p>
+
+The source file is here:
+[examples/MockForms/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts)
+
+```typescript
+describe('MockForms', () => {
+  beforeEach(() =>
+    MockBuilder(TestedComponent)
+      .mock(DependencyComponent)
+      .keep(FormsModule)
+  );
+
+  it('sends the correct value to the mocked form component', async () => {
+    const fixture = MockRender(TestedComponent);
+    const component = fixture.point.componentInstance;
+
+    // Let's find the mocked form component.
+    const mockedControl = ngMocks.find(
+      fixture.debugElement,
+      DependencyComponent
+    ).componentInstance;
+
+    // Let's simulate its change, like a user does it.
+    if (isMockOf(mockedControl, DependencyComponent, 'c')) {
+      mockedControl.__simulateChange('foo');
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
+    expect(component.value).toBe('foo');
+
+    // Let's check that change on existing value
+    // causes calls of `writeValue` on the mocked component.
+    spyOn(mockedControl, 'writeValue');
+    component.value = 'bar';
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(mockedControl.writeValue).toHaveBeenCalledWith('bar');
   });
 });
 ```

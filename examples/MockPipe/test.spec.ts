@@ -2,7 +2,7 @@ import { Component, Pipe, PipeTransform } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({ name: 'dependency' })
-export class DependencyPipe implements PipeTransform {
+class DependencyPipe implements PipeTransform {
   transform = (name: string): string => `hi ${name}`;
 }
 
@@ -10,7 +10,7 @@ export class DependencyPipe implements PipeTransform {
   selector: 'tested',
   template: ` <span>{{ 'foo' | dependency }}</span> `,
 })
-export class TestedComponent {}
+class TestedComponent {}
 
 describe('MockPipe', () => {
   beforeEach(() => MockBuilder(TestedComponent).mock(DependencyPipe, (...args: string[]) => JSON.stringify(args)));

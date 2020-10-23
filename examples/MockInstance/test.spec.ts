@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
   selector: 'target',
   template: '{{ update$ | async }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public update$: Observable<void>;
 
   constructor() {
@@ -22,7 +22,7 @@ export class TargetComponent {
   selector: 'real',
   template: '<target></target>',
 })
-export class RealComponent implements AfterViewInit {
+class RealComponent implements AfterViewInit {
   @ViewChild(TargetComponent, {
     static: false,
   } as any)

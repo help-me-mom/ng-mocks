@@ -4,7 +4,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 @Directive({
   selector: '[dependency]',
 })
-export class DependencyDirective {
+class DependencyDirective {
   @Input('dependency')
   someInput = '';
 
@@ -16,7 +16,7 @@ export class DependencyDirective {
   selector: 'tested',
   template: ` <span *dependency="value" (dependency-output)="trigger($event)">content</span> `,
 })
-export class TestedComponent {
+class TestedComponent {
   value = '';
   trigger = () => {};
 }

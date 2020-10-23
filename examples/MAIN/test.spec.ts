@@ -20,7 +20,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     <router-outlet></router-outlet>
   `,
 })
-export class AppComponent {
+class AppComponent {
   @Input() public title = 'My Application';
 
   @Output() public logoClick = new EventEmitter<void>();
@@ -36,7 +36,7 @@ export class AppComponent {
     <template [ngTemplateOutlet]="menu"></template>
   `,
 })
-export class AppHeaderComponent {
+class AppHeaderComponent {
   @Input() public showLogo: boolean;
   @Input() public title: string;
 
@@ -51,7 +51,7 @@ export class AppHeaderComponent {
   declarations: [AppComponent, AppHeaderComponent],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+class AppModule {}
 
 describe('main', () => {
   // Usually we would have something like that.
