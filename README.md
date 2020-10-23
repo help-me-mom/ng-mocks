@@ -1039,8 +1039,11 @@ describe('MockForms', () => {
 
 ## Extensive example of mocks in Angular tests
 
+The source file is here:
+[examples/MAIN/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MAIN/test.spec.ts)
+
 ```typescript
-import { CommonModule } from '@Angular/common';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ContentChild,
@@ -1050,8 +1053,8 @@ import {
   NgModule,
   Output,
   TemplateRef,
-} from '@Angular/core';
-import { RouterModule } from '@Angular/router';
+} from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // Our main component that we want to test.
@@ -1080,7 +1083,7 @@ export class AppComponent {
 }
 
 // A dependency component that we want to mock with a respect
-// of its inputs and outputs.
+// of its inputs, outputs and ContentChild.
 @Component({
   selector: 'app-header',
   template: `
@@ -1103,28 +1106,29 @@ export class AppHeaderComponent {
 
 // The module where our components are declared.
 @NgModule({
-  imports: [CommonModule, RouterModule.forRoot([])],
   declarations: [AppComponent, AppHeaderComponent],
-  bootstrap: [AppComponent],
+  imports: [CommonModule, RouterModule.forRoot([])],
 })
 export class AppModule {}
 
-describe('main', () => {
+describe('MAIN', () => {
   // Usually we would have something like that.
   // beforeEach(() => {
   //   TestBed.configureTestingModule({
-  //     imports: [CommonModule],
+  //     imports: [
+  //       CommonModule,
+  //       RouterModule.forRoot([]),
+  //     ],
   //     declarations: [AppComponent, AppHeaderComponent],
   //   });
   //
   //   fixture = TestBed.createComponent(AppComponent);
   //   fixture.detectChanges();
   // });
-  // Instead of AppHeaderComponent we want to have a mocked copy
-  // and usually doing it via a helper component or setting
-  // NO_ERRORS_SCHEMA.
+  // But, usually, instead of AppHeaderComponent we want to have
+  // a mocked copy.
 
-  // With ng-mocks it can be defined in the next way.
+  // With ngMocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
     // everything in AppModule will be mocked.
@@ -1133,7 +1137,7 @@ describe('main', () => {
         // Adding a special config how to mock AppHeaderComponent.
         .mock(AppHeaderComponent, {
           render: {
-            // #menu template will be rendered together
+            // #menu template will be rendered simultaneously
             // with mocked AppHeaderComponent.
             menu: true,
           },
@@ -1146,20 +1150,27 @@ describe('main', () => {
     //     MockModule(RouterModule.forRoot([])),
     //   ],
     //   declarations: [
-    //     AppComponent, // not mocked
+    //     AppComponent, // <- not mocked
     //     MockComponent(AppHeaderComponent),
     //   ],
     // });
     // return testBed.compileComponents();
+    //
+    // of if we used ngMocks.guts
+    // TestBed.configureTestingModule(ngMocks.guts(
+    //   AppComponent, // <- not mocked
+    //   AppModule,
+    // ));
+    // return testBed.compileComponents();
   });
 
-  it('example', () => {
+  it('asserts behavior of AppComponent', () => {
     const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
 
     // Instead of TestBed.createComponent(AppComponent) in beforeEach
-    // MockRender should be directly used in tests.
+    // MockRender might be used directly in tests.
     const fixture = MockRender(AppComponent, {
       title: 'Fake Application',
       logoClick: logoClickSpy,
@@ -1176,7 +1187,7 @@ describe('main', () => {
     // The same as fixture.debugElement.query(
     //   By.directive(AppHeaderComponent)
     // );
-    // but typesafe and fails if nothing was found.
+    // but typesafe and fails if nothing has been found.
     const header = ngMocks.find(
       fixture.debugElement,
       AppHeaderComponent
