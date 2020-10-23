@@ -124,7 +124,8 @@ describe('ngMocks.guts:NO_ERRORS_SCHEMA', () => {
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toEqual('<div><target2></target2></div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toContain('hello');
@@ -156,7 +157,8 @@ describe('ngMocks.guts:legacy', () => {
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toEqual('<div><target2></target2></div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toContain('hello');
@@ -175,7 +177,8 @@ describe('ngMocks.guts:normal', () => {
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toEqual('<div><target2></target2></div>');
+    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toContain('hello');

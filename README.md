@@ -65,23 +65,37 @@ Yarn
 
 ## How to mock a component
 
-Below you can find an example how to mock a component in Angular tests.
+There is a `MockComponent` function. It covers almost all needs of mocked behavior.
 
-A mocked component respects its original component and provides:
+- `MockComponent(MyComopnent)` - returns mockery of `MyComopnent` component.
+- `MockComponents(MyComponent1, SomeComponent2, ...)` - returns an array of mocked components.
 
-- the same selector
+<small>**Hint**: If you see that `MockComponent` does not cover functionality you need,
+then I would recommend you to use [`MockBuilder`](#mockbuilder).
+It extends features of `MockComponent`.</small>
+
+<small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start).</small>
+
+Mockery of an angular component respects its original component and provides:
+
+- the same `selector`
 - the same `Inputs` and `Outputs` with alias support
-- each instance has its own `EventEmitter` instances for outputs
-- templates are `ng-content` tags to allow transclusion
+- templates are pure `ng-content` tags to allow transclusion
 - supports `@ContentChild` with `$implicit` context
+  - `__render('id', {$implicit: context, variables: locals})` - renders a template
+  - `__hide('id')` - hides a rendered template
 - supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
   - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
 - supports `exportAs`
+- typed to `MockedComponent<T>`
 
-Let's pretend that in our Angular application `TargetComponent` depends on a component of `DependencyComponent` and we want to mock it in a test.
+Below you can find an example how to mock a component in Angular tests.
 
-Instead of defining `TestBed` via `configureTestingModule`:
+Let's pretend that in our Angular application `TargetComponent` depends on a child component of `DependencyComponent`
+and we want to mock it in a test.
+
+Usually `beforeEach` looks like:
 
 ```typescript
 describe('Test', () => {
@@ -90,24 +104,33 @@ describe('Test', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TargetComponent, DependencyComponent],
+      declarations: [
+        TargetComponent,
+        DependencyComponent, // <- annoying dependency
+      ],
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TargetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeDefined();
   });
 });
 ```
 
-We should use [`MockBuilder`](#mockbuilder) and pass `DependencyComponent` into `.mock` method
-and call [`MockRender`](#mockrender) instead of `TestBed.createComponent`:
+To mock the child component simply pass `DependencyComponent` into `MockComponent`:
+
+```typescript
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    declarations: [
+      TargetComponent,
+      MockComponent(DependencyComponent), // <- profit
+    ],
+  });
+});
+```
+
+Or be like a pro and use [`MockBuilder`](#mockbuilder), its `.mock` method
+and [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
@@ -125,29 +148,33 @@ describe('Test', () => {
 <details><summary>Click to see <strong>an example of mocking components in Angular tests</strong></summary>
 <p>
 
+The source file is here:
+[examples/MockComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts)
+
 ```typescript
 describe('MockComponent', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent).mock(DependencyComponent)
   );
 
-  it('should send the correct value to the dependency component input', () => {
+  it('sends the correct value to the child input', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
     // fixture.debugElement.query(
-    //   By.css('dependency-component-selector')
+    //   By.css('app-child')
     // ).componentInstance
     // but properly typed.
-    const mockedComponent: DependencyComponent = ngMocks.find(
+    const mockedComponent = ngMocks.find<DependencyComponent>(
       fixture.debugElement,
-      'dependency-component-selector'
+      'app-child'
     ).componentInstance;
 
-    // Let's pretend Dependency Component (unmocked) has 'someInput'
-    // as an input, the input's value will be passed into the mocked
-    // component so you can assert on it.
+    // Let's pretend that DependencyComponent has 'someInput' as
+    // an input. TestedComponent sets its value via
+    // `[someInput]="value"`. The input's value will be passed into
+    // the mocked component so you can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
@@ -156,21 +183,25 @@ describe('MockComponent', () => {
     expect(mockedComponent.someInput).toEqual('foo');
   });
 
-  it('should do something when the dependency component emits on its output', () => {
+  it('does something on an emit of the child component', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
-    spyOn(component, 'trigger');
+    // The same as
+    // fixture.debugElement.query(
+    //   By.directive(DependencyComponent)
+    // ).componentInstance
+    // but properly typed.
     const mockedComponent = ngMocks.find(
       fixture.debugElement,
       DependencyComponent
     ).componentInstance;
 
     // Again, let's pretend DependencyComponent has an output
-    // called 'someOutput'. An emit on the output that MockComponent
-    // setup when generating the mock of Dependency Component.
-    // If you cast mockedComponent as the original component type
-    // then this is type safe.
+    // called 'someOutput'. TestedComponent listens on the output via
+    // `(someOutput)="trigger($event)"`.
+    // Let's install a spy and trigger the output.
+    spyOn(component, 'trigger');
     mockedComponent.someOutput.emit({
       payload: 'foo',
     });
@@ -181,41 +212,46 @@ describe('MockComponent', () => {
     });
   });
 
-  it('should render something inside of the dependency component', () => {
+  it('renders something inside of the child component', () => {
     const localFixture = MockRender<DependencyComponent>(`
-      <dependency-component-selector>
+      <app-child>
         <p>inside content</p>
-      </dependency-component-selector>
+      </app-child>
     `);
 
-    // Because component does not have any @ContentChild we can access
-    // html directly asserting on some side effect.
+    // We can access html directly asserting on some side effect.
     const mockedNgContent =
       localFixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
   });
 
-  it('should render something inside of the dependency component', () => {
-    const localFixture = MockRender<
-      MockedComponent<DependencyComponent>
-    >(`
-      <dependency-component-selector>
-        <ng-template #something><p>inside template</p></ng-template>
+  it('renders ContentChild of the child component', () => {
+    const localFixture = MockRender<DependencyComponent>(`
+      <app-child>
+        <ng-template #something>
+          <p>inside template</p>
+        </ng-template>
         <p>inside content</p>
-      </dependency-component-selector>
+      </app-child>
     `);
 
-    // Injected ng-content stays as it was.
+    // Injected ng-content rendered everything except templates.
     const mockedNgContent =
       localFixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
+    expect(mockedNgContent).not.toContain('<p>inside template</p>');
 
-    // Because a component does have @ContentChild we need to render
-    // them with a proper context first.
+    // Let's render the template. First, we need to assert that
+    // componentInstance is a MockedComponent<T> to access
+    // its `__render` method. `isMockOf` function helps here.
     const mockedComponent = localFixture.point.componentInstance;
-    mockedComponent.__render('something');
-    localFixture.detectChanges();
+    if (isMockOf(mockedComponent, DependencyComponent, 'c')) {
+      mockedComponent.__render('something');
+      localFixture.detectChanges();
+    }
 
+    // The rendered template is wrapped by <div data-key="something">.
+    // We can use this selector to assert exactly its content.
     const mockedNgTemplate = ngMocks.find(
       localFixture.debugElement,
       '[data-key="something"]'
@@ -776,8 +812,9 @@ describe('main', () => {
   //   fixture = TestBed.createComponent(AppComponent);
   //   fixture.detectChanges();
   // });
-  // Instead of AppHeaderComponent we want to have a mock and usually
-  // doing it via a helper component or setting NO_ERRORS_SCHEMA.
+  // Instead of AppHeaderComponent we want to have a mockery
+  // and usually doing it via a helper component or setting
+  // NO_ERRORS_SCHEMA.
 
   // With ng-mocks it can be defined in the next way.
   beforeEach(() => {
@@ -1452,20 +1489,20 @@ describe('MockService', () => {
     );
     expect(mock).toBeDefined();
 
-    // Creating a mock on the getter.
+    // Creating mockery on the getter.
     spyOnProperty(mock, 'name', 'get').and.returnValue('mock');
     // for jest
     // spyOnProperty(mock, 'name', 'get').mockReturnValue('mock');
     expect(mock.name).toEqual('mock');
 
-    // Creating a mock on the setter.
+    // Creating mockery on the setter.
     spyOnProperty(mock, 'name', 'set');
     mock.name = 'mock';
     expect(ngMocks.stub(mock, 'name', 'set')).toHaveBeenCalledWith(
       'mock'
     );
 
-    // Creating a mock on the method.
+    // Creating mockery on the method.
     spyOn(mock, 'nameMethod').and.returnValue('mock');
     // for jest
     // spyOn(mock, 'nameMethod').mockReturnValue('mock');
