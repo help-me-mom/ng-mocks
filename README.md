@@ -1492,52 +1492,63 @@ beforeEach(() =>
 
 ## MockRender
 
-`MockRender` provides a simple tool on how to render a custom template in an Angular test
-in case if we want to cover functionality of components, directives, pipes, `@Inputs`, `@Outputs`, `@ContentChild` etc.
+`MockRender` is a simple tool helps **to render a custom template in an Angular test**
+in case if we need a custom template to cover functionality of components, directives, pipes and services.
+
+<strong><span style="color: red">NOTE</span></strong>:
 
 > Please note, that `MockRender(MyComponent)` is not assignable
 > to `ComponentFixture<MyComponent>`.
 >
-> You should use either:
+> You should use either
 > `MockedComponentFixture<MyComponent>` or
 > `ComponentFixture<DefaultRenderComponent<MyComponent>>`.
 >
 > It happens because `MockRender` generates an additional component
 > to render the desired thing and its interface differs.
 
-`MockRender` returns a `fixture` of a type of `MockedComponentFixture` (it extends `ComponentFixture`) with a `point` property.
-`fixture.componentInstance` belongs to the middle component for the render,
-whereas `fixture.point` points to the `debugElement` of the desired component.
+It returns `MockedComponentFixture<T>` type. The difference is an additional `point` property.
+The best thing about it is that `fixture.point.componentInstance` is typed to the component's class instead of `any`.
 
-Its type: `let fixture: MockedComponentFixture<ComponentToRender> = MockRender(ComponentToRender)`.
-
-The best thing here is that `fixture.point.componentInstance` is typed to the component's class instead of `any`.
+```typescript
+const fixture = MockRender(ComponentToRender);
+fixture.componentInstance; // is a middle component, mostly useless
+fixture.point.componentInstance; // the thing we need
+```
 
 If you want, you can specify providers for the render passing them via the 3rd parameter.
 It is useful when you want to mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
 
-And do not forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to trigger updates.
+```typescript
+const fixture = MockRender(
+  ComponentToRender,
+  {},
+  {
+    providers: [
+      SomeService,
+      {
+        provide: DOCUMENT,
+        useValue: MockService(Document),
+      },
+    ],
+  }
+);
+```
 
-<details><summary>Click to see <strong>an example how to render a custom template in an Angular tests</strong></summary>
-<p>
+And do not forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to reflect changes in
+the render.
+
+There is **an example how to render a custom template in an Angular tests** below.
 
 ```typescript
-import { TestBed } from '@angular/core/testing';
-import { MockModule, MockRender, ngMocks } from 'ng-mocks';
-
-import { DependencyModule } from './dependency.module';
-import { TestedComponent } from './tested.component';
-
 describe('MockRender', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TestedComponent],
-      imports: [MockModule(DependencyModule)],
-    });
-  });
+  beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
 
   it('renders template', () => {
     const spy = jasmine.createSpy();
+    // in case of jest
+    // const spy = jest.fn();
+
     const fixture = MockRender(
       `
         <tested
@@ -1557,8 +1568,8 @@ describe('MockRender', () => {
       }
     );
 
-    // ngMocks.input helps to get current value of an input on
-    // a related debugElement.
+    // ngMocks.input helps to get the current value of an input on
+    // a related debugElement without knowing its owner.
     expect(ngMocks.input(fixture.point, 'value1')).toEqual(
       'something1'
     );
@@ -1569,40 +1580,34 @@ describe('MockRender', () => {
     expect(spy).toHaveBeenCalledWith('foo1');
   });
 
-  it('renders component', () => {
+  it('renders inputs and outputs automatically', () => {
     const spy = jasmine.createSpy();
-    // Generates template like:
+    // Generates a template like:
     // <tested [value1]="value1" [value2]="value2"
-    // (trigger)="trigger"></tested>
-    // and returns fixture with a component with properties value1,
-    // value2 and empty callback trigger.
+    // (trigger)="trigger"></tested>.
     const fixture = MockRender(TestedComponent, {
       trigger: spy,
       value1: 'something2',
     });
 
-    // ngMocks.input helps to get current value of an input on
-    // a related debugElement.
+    // Checking the inputs.
     expect(ngMocks.input(fixture.point, 'value1')).toEqual(
       'something2'
     );
     expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
 
-    // ngMocks.output does the same with outputs.
+    // Checking the outputs.
     ngMocks.output(fixture.point, 'trigger').emit('foo2');
     expect(spy).toHaveBeenCalledWith('foo2');
 
-    // checking that an updated value has been passed into the testing
-    // component.
+    // checking that an updated value has been passed into
+    // the testing component.
     fixture.componentInstance.value1 = 'updated';
     fixture.detectChanges();
     expect(ngMocks.input(fixture.point, 'value1')).toEqual('updated');
   });
 });
 ```
-
-</p>
-</details>
 
 ---
 
