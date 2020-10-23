@@ -164,12 +164,12 @@ Profit. Now we can forget about noise of child dependencies.
 Nevertheless, if we count lines of mocked declarations we see that
 there are a lot of them, and looks like here might be dozens more for big
 components. Also, what happens if someone deletes `AppSearchModule`
-from `AppBaseModule`? Doesn't look like the test will fail due to
+from `AppBaseModule`? Doesn't look like a test will fail due to
 the missed dependency.
 
 Right, we need a tool that would extract declarations of the module
 `AppBaseComponent` belongs to, and mock them like the code above.
-Then, if someone deletes `AppSearchModule` the test fails too.
+Then, if someone deletes `AppSearchModule` a test fails too.
 
 [`ngMocks.guts`](#ngmocks) is the tool for that.
 Its first argument accepts things we want to test (avoid mocking) and
@@ -454,7 +454,7 @@ There is an example **how to mock a child directive in Angular** tests below.
 Let's assume that an Angular application has `TargetComponent` that depends on a directive of `DependencyDirective` and
 we need to mock it for facilitating unit tests.
 
-Usually the test looks like:
+Usually a test looks like:
 
 ```typescript
 describe('Test', () => {
@@ -652,7 +652,7 @@ An example of **mocking a pipe in Angular** tests can be found below.
 Let's imagine that in an Angular application `TargetComponent` depends on a pipe of `DependencyPipe` and
 we would like to mock it in a test.
 
-Usually the test looks like:
+Usually a test looks like:
 
 ```typescript
 describe('Test', () => {
@@ -731,17 +731,29 @@ describe('MockPipe', () => {
 
 ## How to mock a service
 
-There is an example below of mocking a service. The technique supports all types of providers including tokens.
-
-A mocked provider is based on its original service / token, and provides:
-
-- all methods are dummies like `() => undefined`
-- all properties are linked getters and setters (might not work in some cases, use `ngMocks.stub` then)
-- a mocked token returns `undefined` by default
-
-There is a helper function called `MockService`, it tends to avoid hassle of providing customized mocks for huge services.
+`ngMocks` provides a `MockService` function that tries its best
+to facilitate creation of mocked copies for services and tokens.
+It tends to avoid hustle of providing customized mocks for huge services.
 Simply pass a class into it and its result wil be a mocked instance that respects the class,
 but all methods and properties are customizable dummies.
+
+`MockService(MyService)` - returns a mocked instance of `MyService` service.
+`MockService(MyOb)` - returns a mocked clone of `MyOb` object.
+
+<small>**Hint**: If you see that `MockService` does not cover functionality you need,
+then I would recommend you to use [`MockBuilder`](#mockbuilder).
+It extends features of `MockService`.</small>
+
+<small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
+
+**A mocked copy of an angular provider** is based on its original service / token, and provides:
+
+- all methods are dummies like `() => undefined`
+- all properties have been linked via getters and setters <small>(might not work in some cases, use `ngMocks.stub` then)</small>
+- respects auto spy environment
+
+A class with dozens of methods, where we want to change behavior of
+a single method, can be mocked like that:
 
 ```typescript
 const instance = MockService(MyClass);
@@ -750,7 +762,7 @@ instance.method = () => 'My Custom Behavior';
 ```
 
 It also supports objects. All properties that are not objects or functions will be omitted,
-the functions will be dummy functions.
+the functions will become dummy functions.
 
 ```typescript
 const instance = MockService({
@@ -765,9 +777,9 @@ instance.nested.func = () => 'My Custom Behavior';
 ```
 
 Now let's pretend that in an Angular application `TargetComponent` depends on service of `DependencyService`,
-and it should be mocked to avoid overhead.
+and it should be mocked in favor of avoiding overhead.
 
-Instead of defining `TestBed` via `configureTestingModule`:
+Usually a test looks like:
 
 ```typescript
 describe('Test', () => {
@@ -777,24 +789,35 @@ describe('Test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
-      providers: [DependencyService],
+      providers: [
+        DependencyService, // <- annoying dependency
+      ],
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TargetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeDefined();
   });
 });
 ```
 
-We should use [`MockBuilder`](#mockbuilder) and pass `DependencyService` into `.mock` method
-and call [`MockRender`](#mockrender) instead of `TestBed.createComponent`:
+To **mock a service** simply pass `DependencyService` into `MockService`:
+
+```typescript
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    declarations: [TargetComponent],
+    providers: [
+      {
+        provide: DependencyService,
+        useValue: MockService(DependencyService), // <- profit
+      },
+    ],
+  });
+});
+```
+
+Or to be like a pro use [`MockBuilder`](#mockbuilder), `.mock` method
+and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
