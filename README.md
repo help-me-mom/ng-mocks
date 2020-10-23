@@ -164,16 +164,16 @@ Profit. Now we can forget about noise of child dependencies.
 Nevertheless, if we count lines of mocked declarations we see that
 there are a lot of them, and looks like here might be dozens more for big
 components. Also, what happens if someone deletes `AppSearchModule`
-from `AppBaseModule`? Doesn't look like a test will fail due to
+from `AppBaseModule`? Doesn't look like the test will fail due to
 the missed dependency.
 
 Right, we need a tool that would extract declarations of the module
 `AppBaseComponent` belongs to, and mock them like the code above.
-Then, if someone deletes `AppSearchModule` a test fails too.
+Then, if someone deletes `AppSearchModule` the test fails too.
 
 [`ngMocks.guts`](#ngmocks) is the tool for that.
 Its first argument accepts things we want to test (avoid mocking) and
-the second argument accepts things we want to mock, if it is a module
+the second argument accepts things we want to mock, if it is a module,
 its declarations (guts) will be extracted and mocked except the things
 from the first argument.
 
@@ -187,9 +187,11 @@ const testModuleMeta = ngMocks.guts(AppBaseComponent, AppBaseModule);
 TestBed.configureTestingModule(testModuleMeta);
 ```
 
+Profit, but what about lazy loaded modules?
+
 If we have a lazy module, then it alone might be not sufficient, and
 we need to add its parent module, for example `AppModule`.
-In such a case, simply pass an array the modules as the second
+In such a case, simply pass an array of modules as the second
 argument.
 
 ```typescript
@@ -201,7 +203,9 @@ TestBed.configureTestingModule(
 );
 ```
 
-Profit. The functions above help with an easy start, but they do not cover all
+Profit. That should be enough for the start.
+
+The functions above help with an easy start, but they do not cover all
 possible cases and do not provide tools for customizing behavior.
 Consider reading [`MockBuilder`](#mockbuilder) and [`MockRender`](#mockrender)
 if you want **to mock child dependencies like a pro** in your Angular tests.
@@ -223,13 +227,15 @@ beforeEach(() =>
 
 Profit. Subscribe, like, share!
 
+Below more detailed documentation begins, please bear with us.
+
 ---
 
 ## How to mock a component
 
 There is a `MockComponent` function. It covers almost all needs for mocking behavior.
 
-- `MockComponent(MyComopnent)` - returns a mocked copy of `MyComopnent` component.
+- `MockComponent(MyComponent)` - returns a mocked copy of `MyComponent` component.
 - `MockComponents(MyComponent1, SomeComponent2, ...)` - returns an array of mocked components.
 
 <small>**Hint**: If you see that `MockComponent` does not cover functionality you need,
@@ -239,13 +245,13 @@ It extends features of `MockComponent`.</small>
 <small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
 
 **A mocked copy of an angular component** respects its original component as
-type of `MockedComponent<T>` and provides:
+a type of `MockedComponent<T>` and provides:
 
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
 - templates are pure `ng-content` tags to allow transclusion
 - supports `@ContentChild` with `$implicit` context
-  - `__render('id', {$implicit: context, variables: locals})` - renders a template
+  - `__render('id', $implicit, variables)` - renders a template
   - `__hide('id')` - hides a rendered template
 - supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
   - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
@@ -436,12 +442,12 @@ It extends features of `MockDirective`.</small>
 <small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
 
 **A mocked copy of an angular directive** respects its original directive as
-type of `MockedDirective<T>` and provides:
+a type of `MockedDirective<T>` and provides:
 
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
 - supports structural directives
-  - `__render($implicit: context, variables: locals)` - renders content
+  - `__render($implicit, variables)` - renders content
 - supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
   - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
@@ -624,7 +630,7 @@ describe('MockDirective', () => {
 
 ## How to mock a pipe
 
-`MockPipe` is a function that mocks pipes for needs of Angular testing.
+`MockPipe` is a function that mocks pipes for needs in Angular testing.
 
 - `MockPipe(MyPipe)` - returns a mocked copy of `MyPipe` pipe that always returns `undefined`.
 - `MockPipe(MyPipe, value => 'stub behavior')` - returns a mocked copy of `MyPipe` pipe.
@@ -637,7 +643,7 @@ It extends features of `MockPipe`.</small>
 <small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
 
 **A mocked copy of an angular pipe** respects its original pipe as
-type of `MockedPipe<T>` and provides:
+a type of `MockedPipe<T>` and provides:
 
 - the same `name`
 - ability to override the transform function with a type-safe function
@@ -726,7 +732,7 @@ describe('MockPipe', () => {
 ## How to mock a service
 
 `ngMocks` provides a `MockService` function that tries its best
-to facilitate creation of mocked copies for services and tokens.
+to facilitate creation of mocked copies of services.
 It tends to avoid hustle of providing customized mocks for huge services.
 Simply pass a class into it and its result wil be a mocked instance that respects the class,
 but all methods and properties are customizable dummies.
@@ -744,7 +750,7 @@ It extends features of `MockService`.</small>
 
 - all methods are dummies like `() => undefined`
 - all properties have been linked via getters and setters <small>(might not work in some cases, use [`ngMocks.stub`](#ngmocks) then)</small>
-- respects auto spy environment
+- respects [auto spy](#auto-spy) environment
 
 A class with dozens of methods, where we want to change behavior of
 a single method, can be mocked like that:
@@ -816,12 +822,40 @@ and call [`MockRender`](#mockrender):
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyService)
+    MockBuilder(TargetComponent).mock(
+      DependencyService,
+      MockService(DependencyService)
+    )
   );
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
     expect(component).toBeDefined();
+
+    const service = fixture.point.componentInstance.service;
+    expect(service).toBeDefined();
+
+    // Creating a spy on the getter.
+    spyOnProperty(service, 'name', 'get').and.returnValue('mock');
+    // for jest
+    // spyOnProperty(service, 'name', 'get').mockReturnValue('mock');
+    expect(service.name).toEqual('mock');
+
+    // Creating a spy on the setter.
+    spyOnProperty(service, 'name', 'set');
+    service.name = 'mock';
+    expect(ngMocks.stub(service, 'name', 'set')).toHaveBeenCalledWith(
+      'mock'
+    );
+
+    // Creating a spy on the method.
+    spyOn(service, 'nameMethod').and.returnValue('mock');
+    // for jest
+    // spyOn(service, 'nameMethod').mockReturnValue('mock');
+    expect(service.nameMethod('mock')).toEqual('mock');
+    expect(ngMocks.stub(service, 'nameMethod')).toHaveBeenCalledWith(
+      'mock'
+    );
   });
 });
 ```
@@ -844,7 +878,7 @@ It extends features of `MockModule`.</small>
 <small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
 
 **A mocked module** respects its original module as
-type of `MockedModule<T>` and provides:
+a type of `MockedModule<T>` and provides:
 
 - mocks all components, directives, pipes
 - mocks all services as their dummy instances
@@ -1237,7 +1271,7 @@ Our tests:
 It provides a rich toolkit of functions to manipulate the mocked copies in the way your test requires,
 but with minimum overhead.
 
-Usually, we have something simple to test and, unfortunately, time to time its nightmarish dependencies.
+Usually, we have something simple to test and, unfortunately, time to time, we meet nightmarish dependencies.
 The good thing here is that commonly the dependencies have been declared or imported in the same module, where our
 tested thing has been defined. Therefore, with help of `MockBuilder` we can quite easily define a testing module,
 where everything in the module will be mocked except the tested thing: `MockBuilder(TheThing, ItsModule)`.
@@ -1276,6 +1310,8 @@ describe('MockBuilder:simple', () => {
 </p>
 </details>
 <br>
+
+The comments below describe functionality of `MockBuilder`.
 
 ```typescript
 import { MockBuilder } from 'ng-mocks';
@@ -1492,8 +1528,8 @@ beforeEach(() =>
 
 ## MockRender
 
-`MockRender` is a simple tool helps **to render a custom template in an Angular test**
-in case if we need a custom template to cover functionality of components, directives, pipes and services.
+`MockRender` is a simple tool that helps **to render a custom template in an Angular test**
+if we need that to cover functionality of components, directives, pipes and services.
 
 > <strong><span style="color: red">Please note</span></strong> that `MockRender(MyComponent)` is not assignable
 > to `ComponentFixture<MyComponent>`.
@@ -1732,65 +1768,60 @@ describe('MockInstance', () => {
 // and tokens.
 // If there is a module in the second argment, then its guts will be
 // mocked excluding things from the first argument.
-const ngModuleMeta = ngMocks.guts(Component, ItsModule);
-
-// If we pass several declarations in case if we want to test their
-// integration or to avoid their mocked copies.
-// The same is applicable for the second argument. We can mock as many
-// declarations as we want.
-const ngModuleMeta = ngMocks.guts(
+const ngModuleMeta1 = ngMocks.guts(Component, ItsModule);
+const ngModuleMeta2 = ngMocks.guts(
   [Component1, Component2, Service3],
   [ModuleToMock, DirectiveToMock, WhateverToMock]
 );
 
 // Returns an attribute or structural directive which belongs to
 // the current element.
-const directive: Directive = ngMocks.get(
+const directive1: Directive = ngMocks.get(
   fixture.debugElement,
   Directive
 );
 
 // Returns the first found attribute or structural directive which
-// belongs to the current element or any child.
-const directive: Directive = ngMocks.findInstance(
+// belongs to the current element or its any child.
+const directive2: Directive = ngMocks.findInstance(
   fixture.debugElement,
   Directive
 );
 
 // Returns an array of all found attribute or structural directives
-// which belong to the current element and all its child.
-const directives: Array<Directive> = ngMocks.findInstances(
+// which belong to the current element and all its children.
+const directives1: Array<Directive> = ngMocks.findInstances(
   fixture.debugElement,
   Directive
 );
 
 // Returns a found DebugElement which belongs to the Component
 // with the correctly typed componentInstance.
-const component: MockedDebugElement<Component> = ngMocks.find(
+const component1: MockedDebugElement<Component> = ngMocks.find(
   fixture.debugElement,
   Component
 );
 
 // Returns an array of found DebugElements which belong to
 // the Component with the correctly typed componentInstance.
-const components: Array<MockedDebugElement<
+const components1: Array<MockedDebugElement<
   Component
 >> = ngMocks.findAll(fixture.debugElement, Component);
 
-// Returns a found DebugElement which belongs to a css selector.
-const component: MockedDebugElement<Component> = ngMocks.find(
+// Returns a found DebugElement which matches the css selector.
+const component2: MockedDebugElement<Component> = ngMocks.find(
   fixture.debugElement,
   'div.container'
 );
 
-// Returns an array of found DebugElements which belong to
-// a css selector.
+// Returns an array of found DebugElements which match
+// the css selector.
 const components: Array<MockedDebugElement<
   Component
 >> = ngMocks.findAll(fixture.debugElement, 'div.item');
 ```
 
-To avoid pain of knowing a name of a component or a directive what an input or an output belongs to, you can use next functions:
+To avoid pain of knowing a name of the component or the directive an input or an output belongs to, you can use next functions:
 
 ```typescript
 const inputValue: number = ngMocks.input(debugElement, 'param1');
@@ -1816,39 +1847,6 @@ const spySet: Function = ngMocks.stub(instance, propertyName, 'set');
 ngMocks.stub(instance, {
   existingProperty: true,
   existingMethod: jasmine.createSpy(),
-});
-```
-
-```typescript
-describe('MockService', () => {
-  it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
-    const mock: GetterSetterMethodHuetod = MockService(
-      GetterSetterMethodHuetod
-    );
-    expect(mock).toBeDefined();
-
-    // Creating a spy on the getter.
-    spyOnProperty(mock, 'name', 'get').and.returnValue('mock');
-    // for jest
-    // spyOnProperty(mock, 'name', 'get').mockReturnValue('mock');
-    expect(mock.name).toEqual('mock');
-
-    // Creating a spy on the setter.
-    spyOnProperty(mock, 'name', 'set');
-    mock.name = 'mock';
-    expect(ngMocks.stub(mock, 'name', 'set')).toHaveBeenCalledWith(
-      'mock'
-    );
-
-    // Creating a spy on the method.
-    spyOn(mock, 'nameMethod').and.returnValue('mock');
-    // for jest
-    // spyOn(mock, 'nameMethod').mockReturnValue('mock');
-    expect(mock.nameMethod('mock')).toEqual('mock');
-    expect(ngMocks.stub(mock, 'nameMethod')).toHaveBeenCalledWith(
-      'mock'
-    );
-  });
 });
 ```
 
@@ -1967,7 +1965,7 @@ and reduces required time on their execution.
 
 Imagine a situation when `beforeEach` creates the same setup used by dozens of `it`.
 This is the case where `ngMocks.faster` might be useful, simply call it before `beforeEach` and
-**the tests will run faster**.
+**the Angular tests will run faster**.
 
 ```typescript
 describe('performance:correct', () => {
