@@ -8,7 +8,7 @@ import { MockedDebugElement } from '../mock-render';
 const defaultNotFoundValue = {}; // simulating Symbol
 
 export default (...args: any[]) => {
-  const el: MockedDebugElement = args[0];
+  const el: MockedDebugElement = args[0].debugElement ? args[0].debugElement : args[0];
   const sel: string | Type<any> = args[1];
   const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 

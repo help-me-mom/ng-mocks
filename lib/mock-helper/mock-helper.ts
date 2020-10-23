@@ -1,7 +1,7 @@
 // tslint:disable:variable-name unified-signatures no-default-import
 
 import { EventEmitter, InjectionToken, Provider } from '@angular/core';
-import { TestModuleMetadata } from '@angular/core/testing';
+import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AbstractType, AnyType, NgModuleWithProviders, Type } from '../common';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
@@ -92,18 +92,28 @@ export const MockHelper: {
 export const ngMocks: {
   faster(): void;
 
-  find<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;
-  find<T, D>(debugElement: MockedDebugElement, component: Type<T>, notFoundValue: D): D | MockedDebugElement<T>;
+  find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
+  find<T, D>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    component: Type<T>,
+    notFoundValue: D
+  ): D | MockedDebugElement<T>;
 
-  find<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
+  find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
   find<T = any, D = undefined>(
-    debugElement: MockedDebugElement,
+    debugElement: MockedDebugElement | ComponentFixture<any>,
     cssSelector: string,
     notFoundValue: D
   ): D | MockedDebugElement<T>;
 
-  findAll<T>(debugElement: MockedDebugElement, component: Type<T>): Array<MockedDebugElement<T>>;
-  findAll<T = any>(debugElement: MockedDebugElement, cssSelector: string): Array<MockedDebugElement<T>>;
+  findAll<T>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    component: Type<T>
+  ): Array<MockedDebugElement<T>>;
+  findAll<T = any>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    cssSelector: string
+  ): Array<MockedDebugElement<T>>;
 
   findInstance<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T;
   findInstance<T, D>(debugNode: MockedDebugNode, instanceClass: Type<T>, notFoundValue: D): D | T;

@@ -157,7 +157,7 @@ describe('MockHelper:getDirective', () => {
 
   it('findAll selector: T', () => {
     const fixture = MockRender(`<component-a></component-a><component-a></component-a>`);
-    const componentA = ngMocks.findAll(fixture.debugElement, AComponent);
+    const componentA = ngMocks.findAll(fixture, AComponent);
     expect(componentA.length).toBe(2);
     expect(componentA[0].componentInstance).toEqual(jasmine.any(AComponent));
     expect(componentA[1].componentInstance).toEqual(jasmine.any(AComponent));
@@ -168,7 +168,7 @@ describe('MockHelper:getDirective', () => {
 
   it('findAll selector: string', () => {
     const fixture = MockRender(`<component-b></component-b><component-b></component-b>`);
-    const componentB = ngMocks.findAll(fixture.debugElement, 'component-b');
+    const componentB = ngMocks.findAll(fixture, 'component-b');
     expect(componentB.length).toEqual(2);
     expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));
     expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));

@@ -39,7 +39,7 @@ describe('MockComponent', () => {
     //   By.css('app-child')
     // ).componentInstance
     // but properly typed.
-    const mockedComponent = ngMocks.find<DependencyComponent>(fixture.debugElement, 'app-child').componentInstance;
+    const mockedComponent = ngMocks.find<DependencyComponent>(fixture, 'app-child').componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. TestedComponent sets its value via
@@ -62,7 +62,7 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockedComponent = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
+    const mockedComponent = ngMocks.find(fixture, DependencyComponent).componentInstance;
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. TestedComponent listens on the output via
@@ -117,7 +117,7 @@ describe('MockComponent', () => {
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockedNgTemplate = ngMocks.find(localFixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
+    const mockedNgTemplate = ngMocks.find(localFixture, '[data-key="something"]').nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });
