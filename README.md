@@ -1495,9 +1495,7 @@ beforeEach(() =>
 `MockRender` is a simple tool helps **to render a custom template in an Angular test**
 in case if we need a custom template to cover functionality of components, directives, pipes and services.
 
-<strong><span style="color: red">NOTE</span></strong>:
-
-> Please note, that `MockRender(MyComponent)` is not assignable
+> <strong><span style="color: red">Please note</span></strong> that `MockRender(MyComponent)` is not assignable
 > to `ComponentFixture<MyComponent>`.
 >
 > You should use either
@@ -1539,6 +1537,9 @@ And do not forget to call `fixture.detectChanges()` and / or `await fixture.when
 the render.
 
 There is **an example how to render a custom template in an Angular tests** below.
+
+The source file is here:
+[examples/MockRender/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts)
 
 ```typescript
 describe('MockRender', () => {
@@ -1614,23 +1615,29 @@ describe('MockRender', () => {
 ## MockInstance
 
 `MockInstance` is useful when you want to configure spies of a declaration before its render.
+It supports: Modules, Components, Directives, Pipes and Services.
 
-`MockInstance` supports: Modules, Components, Directives, Pipes and Services.
+> <strong><span style="color: red">Please note</span></strong> that it works only for pure mocked copies without overrides.
+> If you provide an own mocked copy via `useValue` or like `.mock(MyService, myMock)` then `MockInstance` does not have an effect.
 
-> NOTE: it works only for pure mocks without overrides.
-> If you provide an own mock via `useValue`
-> or like `.mock(MyService, myMock)`
-> then `MockInstance` does not have an effect.
+You definitely need it when a test fails like:
+
+- Cannot read property 'subscribe' of undefined
+- Cannot read property 'pipe' of undefined
 
 ```typescript
-MockInstance(MyService, {
-  init: (instance: MyService, injector: Injector): void => {
-    // Now you can customize a mocked instance of MyService.
-    // If you use auto-spy then all methods have been spied already
-    // here.
-    instance.data$ = EMPTY;
-  },
-});
+beforeAll(() =>
+  MockInstance(MyService, {
+    init: (instance: MyService, injector: Injector): void => {
+      // Now you can customize a mocked instance of MyService.
+      // If you use auto-spy then all methods have been spied already
+      // here.
+      instance.data$ = EMPTY;
+    },
+  })
+);
+
+afterAll(MockReset);
 ```
 
 After a test you can reset changes to avoid their influence in other tests via a call of `MockReset()`.
@@ -1638,69 +1645,33 @@ After a test you can reset changes to avoid their influence in other tests via a
 <details><summary>Click to see <strong>an example of mocking services before initialization in Angular tests</strong></summary>
 <p>
 
+The source file is here:
+[examples/MockInstance/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts)
+
 ```typescript
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import {
-  MockBuilder,
-  MockInstance,
-  MockRender,
-  MockReset,
-} from 'ng-mocks';
-import { staticFalse } from 'ng-mocks/dist/tests';
-import { EMPTY, Observable, Subject } from 'rxjs';
-
-// A child component that contains update$ the parent component wants
-// to listen to.
-@Component({
-  selector: 'target',
-  template: '{{ update$ | async }}',
-})
-export class TargetComponent {
-  public update$: Observable<void>;
-
-  constructor() {
-    const subject = new Subject<void>();
-    this.update$ = subject;
-    subject.complete();
-  }
-}
-
-// A parent component that uses @ViewChild to listen to update$ of
-// its child component.
-@Component({
-  selector: 'real',
-  template: '<target></target>',
-})
-export class RealComponent implements AfterViewInit {
-  @ViewChild(TargetComponent, { ...staticFalse })
-  public child: TargetComponent;
-
-  ngAfterViewInit() {
-    this.child.update$.subscribe();
-  }
-}
-
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be mocked.
   beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
 
-  beforeEach(() => {
+  beforeAll(() => {
     // Because TargetComponent is mocked its update$ is undefined and
     // ngAfterViewInit of the parent component will fail on
     // .subscribe().
-    // Let's fix it via defining custom initialization of the mock.
+    // Let's fix it via defining customization for the mocked copy.
     MockInstance(TargetComponent, {
       init: (instance, injector) => {
-        // comment this line to check the failure.
-        instance.update$ = EMPTY;
-        // if you want you can use injector.get(Service) for a more
-        // complicated initialization.
+        const subject = new Subject<void>();
+        subject.complete();
+        // comment the next line to check the failure.
+        instance.update$ = subject;
+        // if you want you can use injector.get(Service) for more
+        // complicated customization.
       },
     });
   });
 
   // Do not forget to reset MockInstance back.
-  afterEach(MockReset);
+  afterAll(MockReset);
 
   it('should render', () => {
     // Without the custom initialization rendering would fail here
@@ -1709,7 +1680,9 @@ describe('MockInstance', () => {
 
     // Let's check that the mocked component has been decorated by
     // the custom initialization.
-    expect(fixture.point.componentInstance.child.update$).toBe(EMPTY);
+    expect(
+      fixture.point.componentInstance.child.update$
+    ).toBeDefined();
   });
 });
 ```
