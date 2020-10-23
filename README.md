@@ -340,8 +340,7 @@ describe('MockComponent', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // If you cast mockedComponent as the original component type
-    // then this is type safe.
+    // Thanks to ngMocks, this is type safe.
     expect(mockedComponent.someInput).toEqual('foo');
   });
 
@@ -366,7 +365,7 @@ describe('MockComponent', () => {
       payload: 'foo',
     });
 
-    // Assert on some side effect.
+    // Assert on the effect.
     expect(component.trigger).toHaveBeenCalledWith({
       payload: 'foo',
     });
@@ -386,7 +385,7 @@ describe('MockComponent', () => {
   });
 
   it('renders ContentChild of the child component', () => {
-    const localFixture = MockRender<DependencyComponent>(`
+    const fixture = MockRender<DependencyComponent>(`
       <app-child>
         <ng-template #something>
           <p>inside template</p>
@@ -396,24 +395,23 @@ describe('MockComponent', () => {
     `);
 
     // Injected ng-content rendered everything except templates.
-    const mockedNgContent =
-      localFixture.point.nativeElement.innerHTML;
+    const mockedNgContent = fixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
     expect(mockedNgContent).not.toContain('<p>inside template</p>');
 
     // Let's render the template. First, we need to assert that
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
-    const mockedComponent = localFixture.point.componentInstance;
+    const mockedComponent = fixture.point.componentInstance;
     if (isMockOf(mockedComponent, DependencyComponent, 'c')) {
       mockedComponent.__render('something');
-      localFixture.detectChanges();
+      fixture.detectChanges();
     }
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
     const mockedNgTemplate = ngMocks.find(
-      localFixture.debugElement,
+      fixture.debugElement,
       '[data-key="something"]'
     ).nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
@@ -428,23 +426,35 @@ describe('MockComponent', () => {
 
 ## How to mock a directive
 
-There is an example of mocking a directive in tests of an Angular application below.
-`ngMocks` supports both attribute and structural directives.
+There is a `MockDirective` function covering almost all needs for mocking behavior.
 
-A mocked directive respects its original directive and provides:
+- `MockDirective(MyDirective)` - returns a mocked copy of `MyDirective` directive.
+- `MockDirectives(MyDirective1, MyDirective2, ...)` - returns an array of mocked directives.
 
-- the same selector
+<small>**Hint**: If you see that `MockDirective` does not cover functionality you need,
+then I would recommend you to use [`MockBuilder`](#mockbuilder).
+It extends features of `MockDirective`.</small>
+
+<small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
+
+**A mocked copy of an angular directive** respects its original directive as
+type of `MockedDirective<T>` and provides:
+
+- the same `selector`
 - the same `Inputs` and `Outputs` with alias support
-- each instance has its own `EventEmitter` instances for outputs
-- supports `@ContentChild` with `$implicit` context
+- supports structural directives
+  - `__render($implicit: context, variables: locals)` - renders content
 - supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
   - `__simulateChange()` - calls `onChanged` on the mocked component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mocked component bound to a `FormControl`
 - supports `exportAs`
 
-Let's assume that an Angular application has `TargetComponent` that depends on a directive of `DependencyDirective` and we need to mock it for facilitating unit tests.
+There is an example **how to mock a child directive in Angular** tests below.
 
-Instead of defining `TestBed` via `configureTestingModule`:
+Let's assume that an Angular application has `TargetComponent` that depends on a directive of `DependencyDirective` and
+we need to mock it for facilitating unit tests.
+
+Usually the test looks like:
 
 ```typescript
 describe('Test', () => {
@@ -453,24 +463,33 @@ describe('Test', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TargetComponent, DependencyDirective],
+      declarations: [
+        TargetComponent,
+        DependencyDirective, // <- annoying dependency
+      ],
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TargetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeDefined();
   });
 });
 ```
 
-We should use [`MockBuilder`](#mockbuilder) and pass `DependencyDirective` into `.mock` method
-and call [`MockRender`](#mockrender) instead of `TestBed.createComponent`:
+To mock the child directive simply pass `DependencyDirective` into `MockDirective`:
+
+```typescript
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    declarations: [
+      TargetComponent,
+      MockDirective(DependencyDirective), // <- profit
+    ],
+  });
+});
+```
+
+Or be like a pro and use [`MockBuilder`](#mockbuilder), its `.mock` method
+and [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
@@ -488,51 +507,65 @@ describe('Test', () => {
 <details><summary>Click to see <strong>an example of mocking attribute directives in Angular tests</strong></summary>
 <p>
 
+The source file is here:
+[examples/MockDirective-Attribute/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts)
+
 ```typescript
 describe('MockDirective', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent).mock(DependencyDirective)
   );
 
-  it('should send the correct value to the dependency component input', () => {
+  it('sends the correct value to the input', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
+    // The same as
+    // fixture.debugElement.query(
+    //   By.css('span')
+    // ).injector.get(DependencyDirective)
+    // but easier and more precise.
+    const mockedDirective = ngMocks.get(
+      ngMocks.find(fixture.debugElement, 'span'),
+      DependencyDirective
+    );
+
+    // Let's pretend DependencyDirective has 'someInput'
+    // as an input. TestedComponent sets its value via
+    // `[someInput]="value"`. The input's value will be passed into
+    // the mocked directive so you can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
-    // Let's pretend DependencyDirective (unmocked) has 'someInput'
-    // as an input. The input's value will be passed into the mocked
-    // directive so you can assert on it.
-    const mockedDirectiveInstance = ngMocks.get(
-      ngMocks.find(fixture.debugElement, 'span'),
-      DependencyDirective
-    );
-
-    expect(mockedDirectiveInstance.someInput).toEqual('foo');
-    // Assert on some side effect.
+    // Thanks to ngMocks, this is type safe.
+    expect(mockedDirective.someInput).toEqual('foo');
   });
 
-  it('should do something when the dependency directive emits on its output', () => {
+  it('does something on an emit of the child directive', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
-    spyOn(component, 'trigger');
-    fixture.detectChanges();
-
-    // Again, let's pretend DependencyDirective has an output called
-    // 'someOutput'. An emit on the output that MockDirective setup
-    // when generating the mock of DependencyDirective.
-    const mockedDirectiveInstance = ngMocks.get(
+    // The same as
+    // fixture.debugElement.query(
+    //   By.css('span')
+    // ).injector.get(DependencyDirective)
+    // but easier and more precise.
+    const mockedDirective = ngMocks.get(
       ngMocks.find(fixture.debugElement, 'span'),
       DependencyDirective
     );
-    // If you cast mockedDirective as the original component type
-    // then this is type safe.
-    mockedDirectiveInstance.someOutput.emit({
+
+    // Again, let's pretend DependencyDirective has an output called
+    // 'someOutput'. TestedComponent listens on the output via
+    // `(someOutput)="trigger($event)"`.
+    // Let's install a spy and trigger the output.
+    spyOn(component, 'trigger');
+    fixture.detectChanges();
+
+    // Assert on the effect.
+    mockedDirective.someOutput.emit({
       payload: 'foo',
     });
-    // Assert on some side effect.
   });
 });
 ```
@@ -544,48 +577,46 @@ describe('MockDirective', () => {
 <p>
 
 It's important to render a structural directive first with the right context,
-when assertions should be done on its nested elements.
+if you want to assert on its nested elements.
+
+The source file is here:
+[examples/MockDirective-Structural/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts)
 
 ```typescript
 describe('MockDirective', () => {
+  // IMPORTANT: by default structural directives are not rendered.
+  // Because they might require context which should be provided.
+  // Usually a developer knows the context and can render it
+  // manually with proper setup.
   beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyDirective)
+    MockBuilder(TestedComponent).mock(DependencyDirective, {
+      // render: true, // <-- a flag to render the directive by default
+    })
   );
 
-  it('should send the correct value to the dependency component input', () => {
+  it('renders content of the child structural directive', () => {
     const fixture = MockRender(TestedComponent);
-    const component = fixture.point.componentInstance;
 
-    component.value = 'foo';
-    fixture.detectChanges();
-
-    // IMPORTANT: by default structural directives are not rendered.
-    // Because we cannot automatically detect when and which context
-    // they should be rendered with.
-    // Usually a developer knows the context and can render it
-    // manually with proper setup.
-    const mockedDirectiveInstance = ngMocks.findInstance(
-      fixture.debugElement,
-      DependencyDirective
-    ) as MockedDirective<DependencyDirective>;
-
-    // Now we assert that nothing has been rendered inside of
+    // Let's assert that nothing has been rendered inside of
     // the structural directive by default.
     expect(
       fixture.debugElement.nativeElement.innerHTML
     ).not.toContain('>content<');
 
-    // And we render it manually now.
-    mockedDirectiveInstance.__render();
+    // And let's render it manually now.
+    const mockedDirective = ngMocks.findInstance(
+      fixture.debugElement,
+      DependencyDirective
+    );
+    if (isMockOf(mockedDirective, DependencyDirective, 'd')) {
+      mockedDirective.__render();
+      fixture.detectChanges();
+    }
+
+    // The content of the structural directive should be rendered.
     expect(fixture.debugElement.nativeElement.innerHTML).toContain(
       '>content<'
     );
-
-    // Let's pretend DependencyDirective (unmocked) has 'someInput'
-    // as an input. The input's value will be passed into the mocked
-    // directive so you can assert on it.
-    expect(mockedDirectiveInstance.someInput).toEqual('foo');
-    // Assert on some side effect.
   });
 });
 ```

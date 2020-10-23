@@ -7,7 +7,7 @@ import { staticFalse } from '../../tests';
   selector: 'app-child',
   template: `child`,
 })
-export class DependencyComponent {
+class DependencyComponent {
   @ContentChild('something', { ...staticFalse })
   injectedSomething: TemplateRef<{}>;
 
@@ -22,7 +22,7 @@ export class DependencyComponent {
   selector: 'tested',
   template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
 })
-export class TestedComponent {
+class TestedComponent {
   value = '';
   trigger = (obj: any) => {};
 }
@@ -48,8 +48,7 @@ describe('MockComponent', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // If you cast mockedComponent as the original component type
-    // then this is type safe.
+    // Thanks to ngMocks, this is type safe.
     expect(mockedComponent.someInput).toEqual('foo');
   });
 
@@ -73,7 +72,7 @@ describe('MockComponent', () => {
       payload: 'foo',
     });
 
-    // Assert on some side effect.
+    // Assert on the effect.
     expect(component.trigger).toHaveBeenCalledWith({
       payload: 'foo',
     });
@@ -92,7 +91,7 @@ describe('MockComponent', () => {
   });
 
   it('renders ContentChild of the child component', () => {
-    const localFixture = MockRender<DependencyComponent>(`
+    const fixture = MockRender<DependencyComponent>(`
       <app-child>
         <ng-template #something>
           <p>inside template</p>
@@ -102,22 +101,22 @@ describe('MockComponent', () => {
     `);
 
     // Injected ng-content rendered everything except templates.
-    const mockedNgContent = localFixture.point.nativeElement.innerHTML;
+    const mockedNgContent = fixture.point.nativeElement.innerHTML;
     expect(mockedNgContent).toContain('<p>inside content</p>');
     expect(mockedNgContent).not.toContain('<p>inside template</p>');
 
     // Let's render the template. First, we need to assert that
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
-    const mockedComponent = localFixture.point.componentInstance;
+    const mockedComponent = fixture.point.componentInstance;
     if (isMockOf(mockedComponent, DependencyComponent, 'c')) {
       mockedComponent.__render('something');
-      localFixture.detectChanges();
+      fixture.detectChanges();
     }
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockedNgTemplate = ngMocks.find(localFixture, '[data-key="something"]').nativeElement.innerHTML;
+    const mockedNgTemplate = ngMocks.find(fixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
     expect(mockedNgTemplate).toContain('<p>inside template</p>');
   });
 });
