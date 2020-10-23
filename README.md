@@ -179,7 +179,7 @@ from the first argument.
 
 ```typescript
 const testModuleMeta = ngMocks.guts(AppBaseComponent, AppBaseModule);
-// feel free to add your stuff
+// feel free to add extra stuff
 // testModuleMeta.providers.push({
 //   provide: SearchServce,
 //   useValue: SpiedSearchServce,
@@ -475,7 +475,7 @@ describe('Test', () => {
 });
 ```
 
-To mock the child directive simply pass `DependencyDirective` into `MockDirective`:
+To **mock the child directive** simply pass `DependencyDirective` into `MockDirective`:
 
 ```typescript
 beforeEach(() => {
@@ -628,17 +628,31 @@ describe('MockDirective', () => {
 
 ## How to mock a pipe
 
-An example of mocking a pipe can be found below.
+`MockPipe` is a function that mocks pipes for needs of Angular testing.
 
-A mocked pipe respects its original pipe and provides:
+- `MockPipe(MyPipe)` - returns a mocked copy of `MyPipe` pipe that always returns `undefined`.
+- `MockPipe(MyPipe, value => 'stub behavior')` - returns a mocked copy of `MyPipe` pipe.
+- `MockPipes(MyPipe1, MyPipe2, ...)` - returns an array of mocked directives.
 
-- the same name
+<small>**Hint**: If you see that `MockPipe` does not cover functionality you need,
+then I would recommend you to use [`MockBuilder`](#mockbuilder).
+It extends features of `MockPipe`.</small>
+
+<small>**Hint**: Don't miss [Motivation and easy start](#motivation-and-easy-start) if you haven't read it yet.</small>
+
+**A mocked copy of an angular pipe** respects its original pipe as
+type of `MockedPipe<T>` and provides:
+
+- the same `name`
 - ability to override the transform function with a type-safe function
 - default transform is `() => undefined` to prevent problems with chaining
 
-Let's imagine that in an Angular application `TargetComponent` depends on a pipe of `DependencyPipe` and we would like to mock it in a test.
+An example of **mocking a pipe in Angular** tests can be found below.
 
-Instead of defining `TestBed` via `configureTestingModule`:
+Let's imagine that in an Angular application `TargetComponent` depends on a pipe of `DependencyPipe` and
+we would like to mock it in a test.
+
+Usually the test looks like:
 
 ```typescript
 describe('Test', () => {
@@ -647,24 +661,33 @@ describe('Test', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TargetComponent, DependencyPipe],
+      declarations: [
+        TargetComponent,
+        DependencyPipe, // <- annoying dependency
+      ],
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TargetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeDefined();
   });
 });
 ```
 
-We should use [`MockBuilder`](#mockbuilder) and pass `DependencyPipe` into `.mock` method
-and call [`MockRender`](#mockrender) instead of `TestBed.createComponent`:
+To **mock the child pipe** simply pass `DependencyPipe` into `MockPipe`:
+
+```typescript
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    declarations: [
+      TargetComponent,
+      MockPipe(DependencyPipe), // <- profit
+    ],
+  });
+});
+```
+
+Or if you want to be like a pro, use [`MockBuilder`](#mockbuilder), its `.mock` method
+and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
@@ -680,6 +703,9 @@ describe('Test', () => {
 <details><summary>Click to see <strong>an example of mocking pipes in Angular tests</strong></summary>
 <p>
 
+The source file is here:
+[examples/MockPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts)
+
 ```typescript
 describe('MockPipe', () => {
   beforeEach(() =>
@@ -689,13 +715,11 @@ describe('MockPipe', () => {
     )
   );
 
-  describe('with transform override', () => {
-    it('should return the result of the provided transform function', () => {
-      const fixture = MockRender(TestedComponent);
+  it('transforms values to jsoin', () => {
+    const fixture = MockRender(TestedComponent);
 
-      const pipeElement = ngMocks.find(fixture.debugElement, 'span');
-      expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
-    });
+    const pipeElement = ngMocks.find(fixture.debugElement, 'span');
+    expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
   });
 });
 ```
