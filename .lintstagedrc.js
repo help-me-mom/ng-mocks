@@ -27,7 +27,8 @@ module.exports = {
     const filesForLint = filenames
       .map(file => path.relative(cwd, file))
       .filter(file => !file.match(/^e2e\//i))
-      .filter(file => !file.match(/^test\//i))
+      .filter(file => !file.match(/^examples\//i))
+      .filter(file => !file.match(/^tests\//i))
       .map(file => `'${file}'`);
 
     if (filesForLint.length) {

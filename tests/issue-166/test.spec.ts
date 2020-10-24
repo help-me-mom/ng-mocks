@@ -3,10 +3,6 @@
 import { MockService, ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
-// fix to support both jasmine and jest in the test
-declare let jest: { fn(): () => any };
-declare let jasmine: { createSpy(): () => any };
-
 class MyService {
   public readonly onErrorSet$: Observable<string>;
   public readonly onSuccessSet$: Observable<string>;
