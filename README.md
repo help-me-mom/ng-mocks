@@ -61,6 +61,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test a structural directive](#how-to-test-a-structural-directive)
 * [How to test a structural directive with context](#how-to-test-a-structural-directive-with-context)
 * [How to test a provider of a directive](#how-to-test-a-provider-of-a-directive)
+* [How to test a pipe](#how-to-test-a-pipe)
 
 ---
 
@@ -2131,6 +2132,8 @@ The source file is here:
 
 ```typescript
 describe('TestAttributeDirective', () => {
+  ngMocks.faster(); // the same TestBed for several its.
+
   // Because we want to test the directive, we pass it as the first
   // argument of MockBuilder. We can omit the second argument,
   // because there are no dependencies.
@@ -2286,6 +2289,8 @@ The source file is here:
 
 ```typescript
 describe('TestProviderInDirective', () => {
+  ngMocks.faster(); // the same TestBed for several its.
+
   // Because we want to test the service, we pass it as the first
   // argument of MockBuilder.
   // Because we do not care about TargetDirective, we pass it as
@@ -2316,6 +2321,41 @@ describe('TestProviderInDirective', () => {
 
     // Here we go, now we can assert everything about the service.
     expect(service.value).toEqual(true);
+  });
+});
+```
+
+---
+
+## How to test a pipe
+
+The source file is here:
+[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts)
+
+```typescript
+describe('TestPipe', () => {
+  ngMocks.faster(); // the same TestBed for several its.
+
+  // Because we want to test the pipe, we pass it as the first
+  // argument of MockBuilder. We can omit the second argument,
+  // because there are no dependencies.
+  beforeEach(() => MockBuilder(TargetPipe));
+
+  it('sorts strings', () => {
+    const fixture = MockRender(`{{ values | target}}`, {
+      values: ['1', '3', '2'],
+    });
+
+    expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
+  });
+
+  it('reverses strings on param', () => {
+    const fixture = MockRender(`{{ values | target:flag}}`, {
+      flag: false,
+      values: ['1', '3', '2'],
+    });
+
+    expect(fixture.nativeElement.innerHTML).toEqual('3, 2, 1');
   });
 });
 ```

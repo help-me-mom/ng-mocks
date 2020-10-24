@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Injectable, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -42,6 +42,8 @@ class TargetDirective implements OnInit {
 }
 
 describe('TestProviderInDirective', () => {
+  ngMocks.faster(); // the same TestBed for several its.
+
   // Because we want to test the service, we pass it as the first
   // argument of MockBuilder.
   // Because we do not care about TargetDirective, we pass it as

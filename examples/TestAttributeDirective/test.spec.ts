@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // The purpose of the directive is to add a background color
 // on mouseenter and to remove it on mouseleave.
@@ -26,6 +26,8 @@ class TargetDirective {
 }
 
 describe('TestAttributeDirective', () => {
+  ngMocks.faster(); // the same TestBed for several its.
+
   // Because we want to test the directive, we pass it as the first
   // argument of MockBuilder. We can omit the second argument,
   // because there are no dependencies.

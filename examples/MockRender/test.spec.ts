@@ -6,7 +6,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'app-child',
   template: `dependency`,
 })
-export class DependencyComponent {
+class DependencyComponent {
   @ContentChild('something', { static: false } as any)
   injectedSomething: TemplateRef<{}>;
 
@@ -21,13 +21,13 @@ export class DependencyComponent {
   declarations: [DependencyComponent],
   imports: [CommonModule],
 })
-export class DependencyModule {}
+class DependencyModule {}
 
 @Component({
   selector: 'tested',
   template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
 })
-export class TestedComponent {
+class TestedComponent {
   @Output()
   trigger = new EventEmitter();
 
