@@ -1,6 +1,6 @@
 {
   "name": "ng-mocks",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "Functions for creating angular mocks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -51,7 +51,7 @@
     "s:test:a10": "P=e2e/a10/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
     "s:test:a11": "P=e2e/a11/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
     "e2e": "npm run build && npm run i:a && npm run clear:a && npm run s:a && npm run s:test:a && npm run test:a",
-    "clean": "rm -rf dist test-reports",
+    "clean": "rm -rf dist test-reports tmp",
     "commit": "npx git-cz",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
