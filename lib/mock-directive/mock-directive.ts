@@ -57,13 +57,12 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return ngMocksUniverse.cacheMocks.get(directive);
   }
 
-  let meta: core.Directive | undefined;
-  if (!meta) {
-    try {
-      meta = directiveResolver.resolve(directive);
-    } catch (e) {
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
+  let meta: core.Directive;
+  try {
+    meta = directiveResolver.resolve(directive);
+  } catch (e) {
+    /* istanbul ignore next */
+    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
   const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 
@@ -116,6 +115,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     }
 
     const mock = resolveProvider(providerDef);
+    /* istanbul ignore else */
     if (options.providers && mock) {
       options.providers.push(mock);
     }
@@ -130,6 +130,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   @Directive(options)
   @MockOf(directive, { outputs, setNgValueAccessor })
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
+    /* istanbul ignore next */
     constructor(
       injector: Injector,
       @Optional() element?: ElementRef,
@@ -137,7 +138,27 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       @Optional() viewContainer?: ViewContainerRef
     ) {
       super(injector);
+      this.__ngMocksInstall(element, template, viewContainer);
+    }
 
+    ngOnInit(): void {
+      if (config && config.render) {
+        const { $implicit, variables } =
+          config.render !== true
+            ? config.render
+            : {
+                $implicit: undefined,
+                variables: {},
+              };
+        (this as any).__render($implicit, variables);
+      }
+    }
+
+    private __ngMocksInstall(
+      element?: ElementRef,
+      template?: TemplateRef<any>,
+      viewContainer?: ViewContainerRef
+    ): void {
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.
       (this as any).__element = element;
@@ -153,25 +174,16 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         }
       };
     }
-
-    ngOnInit(): void {
-      if (config && config.render) {
-        const { $implicit, variables } =
-          config.render !== true
-            ? config.render
-            : {
-                $implicit: undefined,
-                variables: {},
-              };
-        (this as any).__render($implicit, variables);
-      }
-    }
   }
 
-  decorateInputs(DirectiveMock, inputs, queries ? Object.keys(queries) : undefined);
+  /* istanbul ignore else */
+  if (queries) {
+    decorateInputs(DirectiveMock, inputs, Object.keys(queries));
+  }
   decorateOutputs(DirectiveMock, outputs);
   decorateQueries(DirectiveMock, queries);
 
+  /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheDirective')) {
     ngMocksUniverse.cacheMocks.set(directive, DirectiveMock);
   }

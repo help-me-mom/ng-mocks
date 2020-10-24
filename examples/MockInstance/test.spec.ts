@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
   selector: 'target',
   template: '{{ update$ | async }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public update$: Observable<void>;
 
   constructor() {
@@ -22,7 +22,7 @@ export class TargetComponent {
   selector: 'real',
   template: '<target></target>',
 })
-export class RealComponent implements AfterViewInit {
+class RealComponent implements AfterViewInit {
   @ViewChild(TargetComponent, {
     static: false,
   } as any)
@@ -37,29 +37,33 @@ describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be mocked.
   beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
 
-  beforeEach(() => {
+  beforeAll(() => {
     // Because TargetComponent is mocked its update$ is undefined and
-    // ngAfterViewInit of the parent component will fail on .subscribe().
-    // Let's fix it via defining custom initialization of the mock.
+    // ngAfterViewInit of the parent component will fail on
+    // .subscribe().
+    // Let's fix it via defining customization for the mocked copy.
     MockInstance(TargetComponent, {
       init: (instance, injector) => {
         const subject = new Subject<void>();
         subject.complete();
-        instance.update$ = subject; // comment this line to check the failure.
-        // if you want you can use injector.get(Service) for a more complicated initialization.
+        // comment the next line to check the failure.
+        instance.update$ = subject;
+        // if you want you can use injector.get(Service) for more
+        // complicated customization.
       },
     });
   });
 
-  // Don't forget to reset MockInstance back.
-  afterEach(MockReset);
+  // Do not forget to reset MockInstance back.
+  afterAll(MockReset);
 
   it('should render', () => {
-    // Without the custom initialization rendering would fail here with
-    // "Cannot read property 'subscribe' of undefined"
+    // Without the custom initialization rendering would fail here
+    // with "Cannot read property 'subscribe' of undefined".
     const fixture = MockRender(RealComponent);
 
-    // Let's check that the mocked component has been decorated by the custom initialization.
+    // Let's check that the mocked component has been decorated by
+    // the custom initialization.
     expect(fixture.point.componentInstance.child.update$).toBeDefined();
   });
 });

@@ -11,9 +11,23 @@ export class RenderRealComponent {
 
   public readonly document: Document;
 
+  public realName = '';
+
   constructor(@Inject(DOCUMENT) document: Document) {
     this.document = document;
     this.document.getElementById('test');
+  }
+
+  public get nameProp(): string {
+    return this.realName;
+  }
+
+  public set nameProp(value: string) {
+    this.realName = value;
+  }
+
+  public name(): string {
+    return this.realName;
   }
 }
 

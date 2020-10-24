@@ -89,7 +89,7 @@ describe('get-inputs-and-outputs', () => {
     ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
     expect(() => ngMocks.output(componentElement, 'outputUndefined')).toThrowError(
-      'Cannot find outputUndefined input via ngMocks.output'
+      'Cannot find outputUndefined output via ngMocks.output'
     );
   });
 });

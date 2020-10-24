@@ -1,5 +1,8 @@
 import { Component, Directive, Injectable, InjectionToken, NgModule } from '@angular/core';
-import { MockBuilder, ngMocks } from 'ng-mocks';
+
+import { ngMocks } from '../mock-helper';
+
+import { MockBuilder } from './mock-builder';
 
 const TARGET1_TOKEN = new InjectionToken('TARGET1');
 const TARGET2_TOKEN = new InjectionToken('TARGET2');
@@ -444,6 +447,12 @@ describe('MockBuilderPerformance', () => {
   it('fails on different export configDef', () => {
     const ngModule1 = MockBuilder().keep(Target1Module, { export: true }).build();
     const ngModule2 = MockBuilder().keep(Target1Module, { export: false }).build();
+
+    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+  });
+  it('fails on different exportAll configDef', () => {
+    const ngModule1 = MockBuilder().keep(Target1Module, { exportAll: true }).build();
+    const ngModule2 = MockBuilder().keep(Target1Module, { exportAll: false }).build();
 
     expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
   });

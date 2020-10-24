@@ -6,6 +6,10 @@ import { MockDirective } from '../mock-directive';
 import { MockModule } from '../mock-module';
 import { MockPipe } from '../mock-pipe';
 
+import { Type } from './lib';
+import { Mock } from './Mock';
+import { MockOf } from './mock-of.decorator';
+
 class ParentClass {
   protected parentValue = true;
 
@@ -215,5 +219,64 @@ describe('Mock prototype', () => {
     expect(mock.test).toBeUndefined();
     (mock as any).test = 'MyCustomValue';
     expect(mock.test).toEqual('MyCustomValue');
+  });
+});
+
+describe('definitions', () => {
+  it('skips output properties from config', () => {
+    class TargetComponent {}
+
+    @MockOf(TargetComponent, {
+      outputs: ['__ngMocksMock'],
+    })
+    class TestComponent extends Mock {}
+
+    const instance: any = new TestComponent();
+    expect(instance.__ngMocksMock).toEqual(true);
+  });
+
+  it('adds missed properties to the instance', () => {
+    const customProperty = (constructor: Type<any>) => {
+      Object.defineProperty(constructor.prototype, 'test', {
+        get: () => false,
+      });
+    };
+
+    class TargetComponent {}
+
+    @customProperty
+    class TestMock extends Mock {}
+
+    @MockOf(TargetComponent)
+    class TestComponent extends TestMock {}
+
+    const instance: any = new TestComponent();
+    expect(Object.getOwnPropertyDescriptor(instance, 'test')).toBeDefined();
+  });
+
+  it('skips existing properties from mockOf', () => {
+    const customPropertyFalse = (constructor: Type<any>) => {
+      Object.defineProperty(constructor.prototype, 'test', {
+        get: () => false,
+      });
+    };
+
+    const customPropertyTrue = (constructor: Type<any>) => {
+      Object.defineProperty(constructor.prototype, 'test', {
+        get: () => true,
+      });
+    };
+
+    @customPropertyTrue
+    class TargetComponent {}
+
+    @customPropertyFalse
+    class TestMock extends Mock {}
+
+    @MockOf(TargetComponent)
+    class TestComponent extends TestMock {}
+
+    const instance: any = new TestComponent();
+    expect(instance.test).toEqual(false);
   });
 });

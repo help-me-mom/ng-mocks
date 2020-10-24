@@ -6,11 +6,15 @@ import { MockProvider } from '../mock-module';
 
 export type MockedFunction = () => any;
 
+/* istanbul ignore next */
+const getGlobal = (): any => window || global;
+
 const isFunc = (value: any): boolean => {
   if (typeof value !== 'function') {
     return false;
   }
   const proto = value.toString();
+  /* istanbul ignore next */
   if (proto.match(/^\(/) !== null) {
     return true;
   }
@@ -25,6 +29,7 @@ const isClass = (value: any): boolean => {
     return false;
   }
   const proto = value.toString();
+  /* istanbul ignore next */
   if (proto.match(/^class\b/) !== null) {
     return true;
   }
@@ -82,17 +87,11 @@ const mockServiceHelperPrototype = {
 
     const methods = mockServiceHelperPrototype.extractMethodsFromPrototype(service);
     for (const method of methods) {
-      if (value[method]) {
-        continue;
-      }
       mockServiceHelperPrototype.mock(value, method, mockName);
     }
 
     const properties = mockServiceHelperPrototype.extractPropertiesFromPrototype(service);
     for (const property of properties) {
-      if (value[property]) {
-        continue;
-      }
       mockServiceHelperPrototype.mock(value, property, 'get', mockName);
       mockServiceHelperPrototype.mock(value, property, 'set', mockName);
     }
@@ -173,6 +172,7 @@ const mockServiceHelperPrototype = {
       return def[accessType || 'value'];
     }
 
+    /* istanbul ignore next */
     const detectedMockName = `${
       mockName
         ? mockName
@@ -266,6 +266,7 @@ const mockServiceHelperPrototype = {
 
     //  we shouldn't touch excluded providers.
     if (ngMocksUniverse.builder.has(provider) && ngMocksUniverse.builder.get(provider) === null) {
+      /* istanbul ignore else */
       if (changed) {
         changed(true);
       }
@@ -346,10 +347,9 @@ const mockServiceHelperPrototype = {
 };
 
 // We need a single pointer to the object among all environments.
-((window as any) || (global as any)).ngMocksMockServiceHelper =
-  ((window as any) || (global as any)).ngMocksMockServiceHelper || mockServiceHelperPrototype;
+getGlobal().ngMocksMockServiceHelper = getGlobal().ngMocksMockServiceHelper || mockServiceHelperPrototype;
 
-const localHelper: typeof mockServiceHelperPrototype = ((window as any) || (global as any)).ngMocksMockServiceHelper;
+const localHelper: typeof mockServiceHelperPrototype = getGlobal().ngMocksMockServiceHelper;
 
 /**
  * DO NOT USE this object outside of the library.
@@ -368,7 +368,7 @@ export const mockServiceHelper: {
   replaceWithMocks(value: any): any;
   resolveProvider(def: Provider, resolutions: Map<any, any>, changed?: (flag: boolean) => void): Provider;
   useFactory<D, I>(def: D, instance: () => I): Provider;
-} = ((window as any) || (global as any)).ngMocksMockServiceHelper;
+} = getGlobal().ngMocksMockServiceHelper;
 
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
 export function MockService<T>(service: new (...args: any[]) => T, mockNamePrefix?: string): T;
@@ -384,10 +384,7 @@ export function MockService(service: any, mockNamePrefix?: string): any {
   } else if (Array.isArray(service)) {
     value = [];
   } else if (isInst(service)) {
-    value =
-      typeof service.constructor === 'function'
-        ? localHelper.createMockFromPrototype(service.constructor.prototype)
-        : {};
+    value = localHelper.createMockFromPrototype(service.constructor.prototype);
     for (const property of Object.keys(service)) {
       const mock: any = MockService(service[property], `${mockNamePrefix ? mockNamePrefix : 'instance'}.${property}`);
       if (mock !== undefined) {

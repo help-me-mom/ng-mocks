@@ -4,6 +4,7 @@ import {
   ContentChildren,
   Directive,
   EventEmitter,
+  Injectable,
   Input,
   Output,
   QueryList,
@@ -16,15 +17,21 @@ import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { staticFalse } from '../../tests';
+import { isMockedNgDefOf } from '../common/lib';
+import { MockBuilder } from '../mock-builder';
 import { ngMocks } from '../mock-helper';
+import { MockRender } from '../mock-render';
 
-import { MockDirective, MockedDirective } from './mock-directive';
+import { MockDirective, MockDirectives, MockedDirective } from './mock-directive';
+
+@Injectable()
+class TargetService {}
 
 @Directive({
   exportAs: 'foo',
   selector: '[exampleDirective]',
 })
-export class ExampleDirective {
+class ExampleDirective {
   @Input() exampleDirective: string;
   @Output() someOutput = new EventEmitter<boolean>();
   @Input('bah') something: string;
@@ -35,26 +42,27 @@ export class ExampleDirective {
 }
 
 @Directive({
+  providers: [TargetService],
   selector: '[exampleStructuralDirective]',
 })
-export class ExampleStructuralDirective {
+class ExampleStructuralDirective {
   @Input() exampleStructuralDirective = true;
 }
 
 @Directive({
   selector: '[getters-and-setters]',
 })
-export class GettersAndSettersDirective {
+class GettersAndSettersDirective {
+  @Input()
+  public normalInput?: boolean;
+
+  public normalProperty = false;
+
   get myGetter() {
     return true;
   }
 
   set mySetter(value: string) {}
-
-  @Input()
-  public normalInput?: boolean;
-
-  public normalProperty = false;
 
   normalMethod(): boolean {
     return this.myGetter;
@@ -73,7 +81,7 @@ export class GettersAndSettersDirective {
     <div getters-and-setters></div>
   `,
 })
-export class ExampleComponentContainer {
+class ExampleComponentContainer {
   @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
   emitted = false;
   foo = new FormControl('');
@@ -105,7 +113,7 @@ describe('MockDirective', () => {
     fixture.detectChanges();
   });
 
-  it("should have use the original component's selector", () => {
+  it('should have use a selector of the original component', () => {
     const element = fixture.debugElement.query(By.directive(ExampleDirective));
     expect(element).not.toBeNull();
   });
@@ -153,6 +161,22 @@ describe('MockDirective', () => {
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
   });
 
+  it('renders with true', async () => {
+    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
+      render: true,
+    });
+    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+  });
+
+  it('renders with $implicit', async () => {
+    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
+      render: {
+        $implicit: true,
+      },
+    });
+    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+  });
+
   it('should set ViewChild directives correctly', () => {
     fixture.detectChanges();
     expect(component.childDirective).toBeTruthy();
@@ -168,11 +192,18 @@ describe('MockDirective', () => {
     const mockedDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
       GettersAndSettersDirective
     >;
-
+    expect(() => mockedDirective.__render()).not.toThrow();
     expect(mockedDirective.normalMethod).toBeDefined();
     expect(mockedDirective.myGetter).not.toBeDefined();
     expect(mockedDirective.mySetter).not.toBeDefined();
     expect(mockedDirective.normalProperty).not.toBeDefined();
+  });
+
+  it('mocks several directives', () => {
+    const mocks = MockDirectives(GettersAndSettersDirective, ExampleStructuralDirective);
+    expect(mocks.length).toEqual(2);
+    expect(isMockedNgDefOf(mocks[0], GettersAndSettersDirective, 'd')).toBeTruthy();
+    expect(isMockedNgDefOf(mocks[1], ExampleStructuralDirective, 'd')).toBeTruthy();
   });
 
   it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {

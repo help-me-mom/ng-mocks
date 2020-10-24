@@ -2,7 +2,7 @@ import { CompileReflector, ExternalReference } from '@angular/compiler';
 import { ɵReflectionCapabilities as ReflectionCapabilities, ɵstringify as stringify } from '@angular/core';
 
 export class JitReflector implements CompileReflector {
-  private readonly _reflectionCapabilities: ReflectionCapabilities;
+  protected _reflectionCapabilities: ReflectionCapabilities;
 
   constructor() {
     this._reflectionCapabilities = new ReflectionCapabilities();

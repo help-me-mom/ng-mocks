@@ -278,4 +278,17 @@ describe('MockService', () => {
     expect(updated).toEqual(jasmine.any(Test));
     expect(updated.getMember()).toBe(B);
   });
+
+  it('keeps setter when we add getter', () => {
+    const value = {};
+    mockServiceHelper.mock(value, 'prop', 'set');
+    mockServiceHelper.mock(value, 'prop', 'get');
+    const def = Object.getOwnPropertyDescriptor(value, 'prop') || {};
+    expect(def.get).toBeDefined();
+    expect(def.set).toBeDefined();
+  });
+
+  it('returns undefined on undefined in replaceWithMocks', () => {
+    expect(mockServiceHelper.replaceWithMocks(null)).toEqual(null);
+  });
 });

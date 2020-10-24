@@ -289,6 +289,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       if (configPrototype.export !== configThis.export) {
         return false;
       }
+      if (configPrototype.exportAll !== configThis.exportAll) {
+        return false;
+      }
       if (!this.equalRender(configPrototype.render, configThis.render)) {
         return false;
       }

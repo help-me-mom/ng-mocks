@@ -1,5 +1,3 @@
-// tslint:disable:object-literal-sort-keys member-ordering arrow-return-shorthand
-
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -27,7 +25,7 @@ export class AppComponent {
 }
 
 // A dependency component that we want to mock with a respect
-// of its inputs and outputs.
+// of its inputs, outputs and ContentChild.
 @Component({
   selector: 'app-header',
   template: `
@@ -42,33 +40,35 @@ export class AppHeaderComponent {
 
   @Output() public logo: EventEmitter<void>;
 
-  @ContentChild('menu', { read: false } as any) public menu: TemplateRef<ElementRef>;
+  @ContentChild('menu', { read: false } as any)
+  public menu: TemplateRef<ElementRef>;
 }
 
 // The module where our components are declared.
 @NgModule({
-  imports: [CommonModule, RouterModule.forRoot([])],
   declarations: [AppComponent, AppHeaderComponent],
-  bootstrap: [AppComponent],
+  imports: [CommonModule, RouterModule.forRoot([])],
 })
 export class AppModule {}
 
-describe('main', () => {
+describe('MAIN', () => {
   // Usually we would have something like that.
   // beforeEach(() => {
   //   TestBed.configureTestingModule({
-  //     imports: [CommonModule],
+  //     imports: [
+  //       CommonModule,
+  //       RouterModule.forRoot([]),
+  //     ],
   //     declarations: [AppComponent, AppHeaderComponent],
   //   });
   //
   //   fixture = TestBed.createComponent(AppComponent);
   //   fixture.detectChanges();
   // });
-  // Instead of AppHeaderComponent we want to have a mock and
-  // usually doing it via a helper component
-  // or setting NO_ERRORS_SCHEMA.
+  // But, usually, instead of AppHeaderComponent we want to have
+  // a mocked copy.
 
-  // With ng-mocks it can be defined in the next way.
+  // With ngMocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
     // everything in AppModule will be mocked.
@@ -77,7 +77,7 @@ describe('main', () => {
         // Adding a special config how to mock AppHeaderComponent.
         .mock(AppHeaderComponent, {
           render: {
-            // #menu template will be rendered together
+            // #menu template will be rendered simultaneously
             // with mocked AppHeaderComponent.
             menu: true,
           },
@@ -90,19 +90,27 @@ describe('main', () => {
     //     MockModule(RouterModule.forRoot([])),
     //   ],
     //   declarations: [
-    //     AppComponent, // not mocked
+    //     AppComponent, // <- not mocked
     //     MockComponent(AppHeaderComponent),
     //   ],
     // });
     // return testBed.compileComponents();
+    //
+    // of if we used ngMocks.guts
+    // TestBed.configureTestingModule(ngMocks.guts(
+    //   AppComponent, // <- not mocked
+    //   AppModule,
+    // ));
+    // return testBed.compileComponents();
   });
 
-  it('example', () => {
-    const logoClickSpy = typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+  it('asserts behavior of AppComponent', () => {
+    const logoClickSpy = jasmine.createSpy();
+    // in case of jest
+    // const logoClickSpy = jest.fn();
 
-    // Instead of TestBed.createComponent(AppComponent)
-    // in beforeEach MockRender should be directly used
-    // in tests.
+    // Instead of TestBed.createComponent(AppComponent) in beforeEach
+    // MockRender might be used directly in tests.
     const fixture = MockRender(AppComponent, {
       title: 'Fake Application',
       logoClick: logoClickSpy,
@@ -116,8 +124,10 @@ describe('main', () => {
     // and renders it via TestBed.createComponent(HelperComponent).
     // AppComponent is accessible via fixture.point.
 
-    // The same as fixture.debugElement.query(By.directive(AppHeaderComponent));
-    // but typesafe and fails if nothing was found.
+    // The same as fixture.debugElement.query(
+    //   By.directive(AppHeaderComponent)
+    // );
+    // but typesafe and fails if nothing has been found.
     const header = ngMocks.find(fixture.debugElement, AppHeaderComponent);
 
     // Asserting how AppComponent uses AppHeaderComponent.
@@ -129,17 +139,19 @@ describe('main', () => {
     fixture.detectChanges();
     expect(header.componentInstance.title).toBe('Updated Application');
 
-    // Checking that AppComponent listens on outputs of AppHeaderComponent.
+    // Checking that AppComponent listens on outputs of
+    // AppHeaderComponent.
     expect(logoClickSpy).not.toHaveBeenCalled();
     header.componentInstance.logo.emit();
     expect(logoClickSpy).toHaveBeenCalled();
 
-    // Asserting that AppComponent passes the right menu into AppHeaderComponent.
+    // Asserting that AppComponent passes the right menu into
+    // AppHeaderComponent.
     const links = ngMocks.findAll(header, 'a');
     expect(links.length).toBe(2);
 
-    // An easy way to get a value of an input.
-    // the same as links[0].injector.get(RouterLinkWithHref).routerLink
+    // An easy way to get a value of an input. The same as
+    // links[0].injector.get(RouterLinkWithHref).routerLink
     expect(ngMocks.input(links[0], 'routerLink')).toEqual(['/home']);
     expect(ngMocks.input(links[1], 'routerLink')).toEqual(['/about']);
   });

@@ -8,6 +8,7 @@ import {
   flatten,
   getMockedNgDefOf,
   isNgDef,
+  isNgInjectionToken,
   isNgModuleDefWithProviders,
   Mock,
   MockOf,
@@ -40,7 +41,30 @@ export function MockProvider(provider: any): Provider | undefined {
   // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
   // If a testing module / component requires omitted tokens then they should be provided manually
   // during creation of TestBed module.
-  if (typeof provide === 'object' && provide.ngMetadataName === 'InjectionToken') {
+  if (isNgInjectionToken(provide) && provider.multi) {
+    return undefined;
+  }
+  // if a token has a primitive type, we can return its initial state.
+  if (isNgInjectionToken(provide) && Object.keys(provider).indexOf('useValue') !== -1) {
+    return provider.useValue && typeof provider.useValue === 'object'
+      ? mockServiceHelper.useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () =>
+          MockService(provider.useValue)
+        )
+      : {
+          provide,
+          useValue:
+            typeof provider.useValue === 'boolean'
+              ? false
+              : typeof provider.useValue === 'number'
+              ? 0
+              : typeof provider.useValue === 'string'
+              ? ''
+              : provider.useValue === null
+              ? null
+              : undefined,
+        };
+  }
+  if (isNgInjectionToken(provide)) {
     return undefined;
   }
 
@@ -51,6 +75,7 @@ export function MockProvider(provider: any): Provider | undefined {
   const mockedProvider = mockServiceHelper.useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () =>
     MockService(provide)
   );
+  /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheProvider')) {
     ngMocksUniverse.cacheProviders.set(provide, mockedProvider);
   }
@@ -110,13 +135,12 @@ export function MockModule(module: any): any {
   }
 
   if (!mockModule) {
-    let meta: core.NgModule | undefined;
-    if (!meta) {
-      try {
-        meta = ngModuleResolver.resolve(ngModule);
-      } catch (e) {
-        throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-      }
+    let meta: core.NgModule;
+    try {
+      meta = ngModuleResolver.resolve(ngModule);
+    } catch (e) {
+      /* istanbul ignore next */
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
 
     const [changed, ngModuleDef] = MockNgDef(meta, ngModule);
@@ -133,6 +157,7 @@ export function MockModule(module: any): any {
     NgModule(mockModuleDef)(mockModule as any);
     MockOf(ngModule)(mockModule as any);
 
+    /* istanbul ignore else */
     if (ngMocksUniverse.flags.has('cacheModule')) {
       ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
     }
@@ -225,9 +250,6 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     if (!mockedDef && isNgDef(def, 'p')) {
       mockedDef = MockPipe(def);
     }
-    if (!mockedDef) {
-      mockedDef = resolveProvider(def);
-    }
 
     resolutions.set(def, mockedDef);
     changed = changed || mockedDef !== def;
@@ -280,7 +302,8 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
   // Because of that we have to export whatever a module imports or declares.
   // Unfortunately, in this case tests won't fail when a module has missed exports.
   // MockBuilder doesn't have have this issue.
-  for (const def of flatten([imports || [], declarations || []])) {
+  for (const def of flatten([imports, declarations])) {
+    const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
     const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
     const mockedDef = resolve(instance);
     if (!mockedDef) {
@@ -290,14 +313,15 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     // If we export a declaration, then we have to export its module too.
     const config = ngMocksUniverse.config.get(instance) || {};
     if (config.export && ngModule) {
-      const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
       if (!moduleConfig.export) {
-        moduleConfig.export = true;
-        ngMocksUniverse.config.set(ngModule, moduleConfig);
+        ngMocksUniverse.config.set(ngModule, {
+          ...moduleConfig,
+          export: true,
+        });
       }
     }
 
-    if (correctExports && !config.export) {
+    if (correctExports && !config.export && !moduleConfig.exportAll) {
       continue;
     }
     if (mockedModuleDef.exports && mockedModuleDef.exports.indexOf(mockedDef) !== -1) {

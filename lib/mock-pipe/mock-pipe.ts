@@ -35,17 +35,17 @@ export function MockPipe<TPipe extends PipeTransform>(
       // looks like an in-test mock.
     }
   }
+  /* istanbul ignore next */
   if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheMocks.has(pipe)) {
     return ngMocksUniverse.cacheMocks.get(pipe);
   }
 
-  let meta: core.Pipe | undefined;
-  if (!meta) {
-    try {
-      meta = pipeResolver.resolve(pipe);
-    } catch (e) {
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
+  let meta: core.Pipe;
+  try {
+    meta = pipeResolver.resolve(pipe);
+  } catch (e) {
+    /* istanbul ignore next */
+    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
 
   const { name } = meta;
@@ -57,7 +57,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   @Pipe(options)
   @MockOf(pipe)
   class PipeMock extends Mock implements PipeTransform {
-    transform = transform || defaultTransform;
+    transform = transform;
   }
 
   if (ngMocksUniverse.flags.has('cachePipe')) {

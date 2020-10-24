@@ -1,31 +1,26 @@
-/* tslint:disable:variable-name unified-signatures */
+// tslint:disable:variable-name unified-signatures no-default-import
 
-import { core } from '@angular/compiler';
-import { EventEmitter } from '@angular/core';
-import { getTestBed, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { EventEmitter, InjectionToken, Provider } from '@angular/core';
+import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
-import { AbstractType, getSourceOfMock, isNgInjectionToken, Type } from '../common';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver } from '../common/reflect';
+import { AbstractType, AnyType, NgModuleWithProviders, Type } from '../common';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render';
-import { MockedFunction, mockServiceHelper } from '../mock-service';
+import { MockedFunction } from '../mock-service';
 
-function nestedCheck<T>(
-  result: T[],
-  node: MockedDebugNode & { childNodes?: MockedDebugNode[] },
-  callback: (node: MockedDebugNode) => undefined | T
-) {
-  const element = callback(node);
-  if (element) {
-    result.push(element);
-  }
-  const childNodes = node.childNodes ? node.childNodes : [];
-  childNodes.forEach(childNode => {
-    nestedCheck(result, childNode, callback);
-  });
-}
+import ngMocksFaster from './mock-helper.faster';
+import ngMocksFind from './mock-helper.find';
+import ngMocksFindAll from './mock-helper.findAll';
+import ngMocksFindInstance from './mock-helper.findInstance';
+import ngMocksFindInstances from './mock-helper.findInstances';
+import ngMocksFlushTestBed from './mock-helper.flushTestBed';
+import ngMocksGet from './mock-helper.get';
+import ngMocksGuts from './mock-helper.guts';
+import ngMocksInput from './mock-helper.input';
+import ngMocksOutput from './mock-helper.output';
+import ngMocksReset from './mock-helper.reset';
+import ngMocksStub from './mock-helper.stub';
 
+/* istanbul ignore next */
 /**
  * @deprecated use ngMocks instead
  */
@@ -94,23 +89,31 @@ export const MockHelper: {
   },
 };
 
-const defaultNotFoundValue = {}; // simulating Symbol
-
 export const ngMocks: {
   faster(): void;
 
-  find<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;
-  find<T, D>(debugElement: MockedDebugElement, component: Type<T>, notFoundValue: D): D | MockedDebugElement<T>;
+  find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
+  find<T, D>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    component: Type<T>,
+    notFoundValue: D
+  ): D | MockedDebugElement<T>;
 
-  find<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
+  find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
   find<T = any, D = undefined>(
-    debugElement: MockedDebugElement,
+    debugElement: MockedDebugElement | ComponentFixture<any>,
     cssSelector: string,
     notFoundValue: D
   ): D | MockedDebugElement<T>;
 
-  findAll<T>(debugElement: MockedDebugElement, component: Type<T>): Array<MockedDebugElement<T>>;
-  findAll<T = any>(debugElement: MockedDebugElement, cssSelector: string): Array<MockedDebugElement<T>>;
+  findAll<T>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    component: Type<T>
+  ): Array<MockedDebugElement<T>>;
+  findAll<T = any>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    cssSelector: string
+  ): Array<MockedDebugElement<T>>;
 
   findInstance<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T;
   findInstance<T, D>(debugNode: MockedDebugNode, instanceClass: Type<T>, notFoundValue: D): D | T;
@@ -120,6 +123,16 @@ export const ngMocks: {
 
   get<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
+
+  guts(
+    keep: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>>,
+    mock?:
+      | AnyType<any>
+      | InjectionToken<any>
+      | NgModuleWithProviders
+      | Provider
+      | Array<AnyType<any> | InjectionToken<any> | NgModuleWithProviders | Provider>
+  ): TestModuleMetadata;
 
   input<T = any>(debugNode: MockedDebugNode, input: string): T;
   input<T = any, D = undefined>(debugNode: MockedDebugNode, input: string, notFoundValue: D): D | T;
@@ -132,235 +145,16 @@ export const ngMocks: {
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
-  faster: () => {
-    beforeAll(() => {
-      if (ngMocksUniverse.global.has('bullet:customized')) {
-        TestBed.resetTestingModule();
-      }
-      ngMocksUniverse.global.set('bullet', true);
-    });
-
-    afterEach(() => {
-      ngMocks.flushTestBed();
-      for (const fixture of (getTestBed() as any)._activeFixtures || []) {
-        fixture.destroy();
-      }
-    });
-
-    afterAll(() => {
-      ngMocksUniverse.global.delete('bullet');
-      if (ngMocksUniverse.global.has('bullet:reset')) {
-        TestBed.resetTestingModule();
-      }
-    });
-  },
-
-  find: (...args: any[]) => {
-    const el: MockedDebugElement = args[0];
-    const sel: string | Type<any> = args[1];
-    const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-
-    const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
-    const result = el.query(term);
-    if (result) {
-      return result;
-    }
-    if (notFoundValue !== defaultNotFoundValue) {
-      return notFoundValue;
-    }
-    if (!result) {
-      throw new Error(`Cannot find an element via ngMocks.find(${typeof sel === 'string' ? sel : sel.name})`);
-    }
-  },
-
-  findAll: (el: MockedDebugElement, sel: any) => {
-    const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
-    return el.queryAll(term);
-  },
-
-  findInstance: <T>(...args: any[]) => {
-    const el: MockedDebugElement = args[0];
-    const sel: Type<T> = args[1];
-    const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-
-    const result = ngMocks.findInstances(el, getSourceOfMock(sel));
-    if (result.length) {
-      return result[0];
-    }
-    if (notFoundValue !== defaultNotFoundValue) {
-      return notFoundValue;
-    }
-    throw new Error(`Cannot find ${sel.name} directive via ngMocks.findInstance`);
-  },
-
-  findInstances: <T>(el: MockedDebugNode, sel: Type<T>): T[] => {
-    const result: T[] = [];
-    nestedCheck<T>(result, el, node => {
-      try {
-        return node.injector.get(getSourceOfMock(sel));
-      } catch (error) {
-        return undefined;
-      }
-    });
-    return result;
-  },
-
-  get: <T>(...args: any[]) => {
-    const el: MockedDebugElement = args[0];
-    const sel: Type<T> = args[1];
-    const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-    let notFound = false;
-
-    // Looking for related attribute directive.
-    try {
-      return el.injector.get(getSourceOfMock(sel));
-    } catch (error) {
-      // looks like the directive is structural.
-    }
-
-    // Looking for related structural directive.
-    // It's located as prev node.
-    const prevNode = notFound ? undefined : el.nativeNode.previousSibling;
-    if (!prevNode || prevNode.nodeName !== '#comment') {
-      notFound = true;
-    }
-    const matches = notFound || !el || !el.parent ? [] : el.parent.queryAllNodes(node => node.nativeNode === prevNode);
-    if (matches.length === 0) {
-      notFound = true;
-    }
-    const matchedNode = matches[0];
-    try {
-      return matchedNode.injector.get(getSourceOfMock(sel));
-    } catch (error) {
-      notFound = true;
-    }
-    if (notFound && notFoundValue !== defaultNotFoundValue) {
-      return notFoundValue;
-    }
-    throw new Error(`Cannot find ${sel.name} directive via ngMocks.get`);
-  },
-
-  input: (...args: any[]) => {
-    const el: MockedDebugElement = args[0];
-    const sel: string = args[1];
-    const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-
-    for (const token of el.providerTokens) {
-      if (isNgInjectionToken(token)) {
-        continue;
-      }
-
-      let meta: core.Directive | undefined;
-      if (!meta) {
-        try {
-          meta = directiveResolver.resolve(token);
-        } catch (e) {
-          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-        }
-      }
-
-      const { inputs } = meta;
-      if (!inputs) {
-        continue;
-      }
-      for (const inputDef of inputs) {
-        const [prop = '', alias = ''] = inputDef.split(':', 2).map(v => v.trim());
-        if (!prop) {
-          continue;
-        }
-        if (!alias && prop !== sel) {
-          continue;
-        }
-        if (alias && alias !== sel) {
-          continue;
-        }
-        const directive: any = ngMocks.get(el, token, undefined);
-        if (!directive) {
-          continue;
-        }
-        return directive[prop];
-      }
-    }
-    if (notFoundValue !== defaultNotFoundValue) {
-      return notFoundValue;
-    }
-    throw new Error(`Cannot find ${sel} input via ngMocks.input`);
-  },
-
-  output: (...args: any[]) => {
-    const el: MockedDebugElement = args[0];
-    const sel: string = args[1];
-    const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-
-    for (const token of el.providerTokens) {
-      if (isNgInjectionToken(token)) {
-        continue;
-      }
-
-      let meta: core.Directive | undefined;
-      if (!meta) {
-        try {
-          meta = directiveResolver.resolve(token);
-        } catch (e) {
-          throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-        }
-      }
-
-      const { outputs } = meta;
-      if (!outputs) {
-        continue;
-      }
-      for (const outputDef of outputs) {
-        const [prop = '', alias = ''] = outputDef.split(':', 2).map(v => v.trim());
-        if (!prop) {
-          continue;
-        }
-        if (!alias && prop !== sel) {
-          continue;
-        }
-        if (alias && alias !== sel) {
-          continue;
-        }
-        const directive: any = ngMocks.get(el, token, undefined);
-        if (!directive) {
-          continue;
-        }
-        return directive[prop];
-      }
-    }
-    if (notFoundValue !== defaultNotFoundValue) {
-      return notFoundValue;
-    }
-    throw new Error(`Cannot find ${sel} input via ngMocks.output`);
-  },
-
-  stub: <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
-    if (typeof override === 'string') {
-      return mockServiceHelper.mock(instance, override, style);
-    }
-    for (const key of Object.getOwnPropertyNames(override)) {
-      const def = Object.getOwnPropertyDescriptor(override, key);
-      if (def) {
-        Object.defineProperty(instance, key, def);
-      }
-    }
-    return instance;
-  },
-
-  flushTestBed(): void {
-    const testBed: any = getTestBed();
-    testBed._instantiated = false;
-    testBed._moduleFactory = undefined;
-    testBed._testModuleRef = null;
-  },
-
-  reset(): void {
-    ngMocksUniverse.builder = new Map();
-    ngMocksUniverse.cacheMocks = new Map();
-    ngMocksUniverse.cacheProviders = new Map();
-    ngMocksUniverse.config = new Map();
-    ngMocksUniverse.global = new Map();
-    ngMocksUniverse.flags = new Set(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']);
-    ngMocksUniverse.touches = new Set();
-  },
+  faster: ngMocksFaster,
+  find: ngMocksFind,
+  findAll: ngMocksFindAll,
+  findInstance: ngMocksFindInstance,
+  findInstances: ngMocksFindInstances,
+  flushTestBed: ngMocksFlushTestBed,
+  get: ngMocksGet,
+  guts: ngMocksGuts,
+  input: ngMocksInput,
+  output: ngMocksOutput,
+  reset: ngMocksReset,
+  stub: ngMocksStub,
 };

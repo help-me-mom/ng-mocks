@@ -2,7 +2,9 @@ import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { MockPipe } from './mock-pipe';
+import { isMockedNgDefOf } from '../common/lib';
+
+import { MockPipe, MockPipes } from './mock-pipe';
 
 @Pipe({ name: 'mockedPipe' })
 export class ExamplePipe implements PipeTransform {
@@ -27,6 +29,19 @@ export class ExampleComponent {
 
 describe('MockPipe', () => {
   let fixture: ComponentFixture<ExampleComponent>;
+
+  it('mocks several pipes', () => {
+    const mocks = MockPipes(ExamplePipe, AnotherExamplePipe);
+    expect(mocks.length).toEqual(2);
+    expect(isMockedNgDefOf(mocks[0], ExamplePipe, 'p')).toBeTruthy();
+    expect(isMockedNgDefOf(mocks[1], AnotherExamplePipe, 'p')).toBeTruthy();
+  });
+
+  it('used default transform', () => {
+    const mock = MockPipe(ExamplePipe);
+    const instance = new mock();
+    expect(instance.transform('default')).toBeUndefined();
+  });
 
   describe('Base tests-jasmine', () => {
     beforeEach(async(() => {
@@ -65,6 +80,11 @@ describe('MockPipe', () => {
 
     it('should return the result of the new provided transform function', () => {
       expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('bar');
+    });
+
+    it('returns cached version', () => {
+      const mock = MockPipe(ExamplePipe);
+      expect(isMockedNgDefOf(mock, ExamplePipe)).toBeTruthy();
     });
   });
 });

@@ -45,6 +45,7 @@ export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<Type<any> | AbstractTyp
 export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
+    /* istanbul ignore next */
     return testBed.inject ? testBed.inject(token) : testBed.get(token);
   } catch (e) {
     return undefined;
@@ -84,6 +85,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
 
   // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
   (window as any).ngMocksParent = parent;
+  /* istanbul ignore next */
   try {
     // tslint:disable-next-line:no-eval
     eval(`
@@ -94,22 +96,21 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
     child = (window as any).ngMocksResult;
   } catch (e) {
     class ClassEs5 extends parent {}
+
     child = ClassEs5;
   }
   (window as any).ngMocksParent = undefined;
 
   // the next step is to respect constructor parameters as the parent class.
-  if (child) {
-    child.parameters = jitReflector
-      .parameters(parent)
-      .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
-  }
+  child.parameters = jitReflector
+    .parameters(parent)
+    .map(parameter => ngMocksUniverse.cacheMocks.get(parameter) || parameter);
 
   return child;
 };
 
-export const isNgType = (object: Type<any>, type: string): boolean =>
-  jitReflector.annotations(object).some(annotation => annotation.ngMetadataName === type);
+export const isNgType = (declaration: Type<any>, type: string): boolean =>
+  jitReflector.annotations(declaration).some(annotation => annotation.ngMetadataName === type);
 
 /**
  * Checks whether a class was decorated by a ng type.
@@ -118,14 +119,14 @@ export const isNgType = (object: Type<any>, type: string): boolean =>
  * d - directive.
  * p - pipe.
  */
-export function isNgDef(object: any, ngType: 'm' | 'c' | 'd'): object is Type<any>;
-export function isNgDef(object: any, ngType: 'p'): object is Type<PipeTransform>;
-export function isNgDef(object: any): object is Type<any>;
-export function isNgDef(object: any, ngType?: string): object is Type<any> {
-  const isModule = (!ngType || ngType === 'm') && isNgType(object, 'NgModule');
-  const isComponent = (!ngType || ngType === 'c') && isNgType(object, 'Component');
-  const isDirective = (!ngType || ngType === 'd') && isNgType(object, 'Directive');
-  const isPipe = (!ngType || ngType === 'p') && isNgType(object, 'Pipe');
+export function isNgDef(declaration: any, ngType: 'm' | 'c' | 'd'): declaration is Type<any>;
+export function isNgDef(declaration: any, ngType: 'p'): declaration is Type<PipeTransform>;
+export function isNgDef(declaration: any): declaration is Type<any>;
+export function isNgDef(declaration: any, ngType?: string): declaration is Type<any> {
+  const isModule = (!ngType || ngType === 'm') && isNgType(declaration, 'NgModule');
+  const isComponent = (!ngType || ngType === 'c') && isNgType(declaration, 'Component');
+  const isDirective = (!ngType || ngType === 'd') && isNgType(declaration, 'Directive');
+  const isPipe = (!ngType || ngType === 'p') && isNgType(declaration, 'Pipe');
   return isModule || isComponent || isDirective || isPipe;
 }
 
@@ -136,25 +137,35 @@ export function isNgDef(object: any, ngType?: string): object is Type<any> {
  * d - directive.
  * p - pipe.
  */
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'm'): object is Type<MockedModule<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'c'): object is Type<MockedComponent<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType: 'd'): object is Type<MockedDirective<T>>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType: 'm'): declaration is Type<MockedModule<T>>;
+export function isMockedNgDefOf<T>(
+  declaration: any,
+  type: Type<T>,
+  ngType: 'c'
+): declaration is Type<MockedComponent<T>>;
+export function isMockedNgDefOf<T>(
+  declaration: any,
+  type: Type<T>,
+  ngType: 'd'
+): declaration is Type<MockedDirective<T>>;
 export function isMockedNgDefOf<T extends PipeTransform>(
-  object: any,
+  declaration: any,
   type: Type<T>,
   ngType: 'p'
-): object is Type<MockedPipe<T>>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>): object is Type<T>;
-export function isMockedNgDefOf<T>(object: any, type: Type<T>, ngType?: any): object is Type<T> {
-  return typeof object === 'function' && object.mockOf === type && (ngType ? isNgDef(object, ngType) : true);
+): declaration is Type<MockedPipe<T>>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>): declaration is Type<T>;
+export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType?: any): declaration is Type<T> {
+  return (
+    typeof declaration === 'function' && declaration.mockOf === type && (ngType ? isNgDef(declaration, ngType) : true)
+  );
 }
 
-export const isNgInjectionToken = (object: any): object is InjectionToken<any> =>
-  typeof object === 'object' && object.ngMetadataName === 'InjectionToken';
+export const isNgInjectionToken = (token: any): token is InjectionToken<any> =>
+  typeof token === 'object' && token.ngMetadataName === 'InjectionToken';
 
 // Checks if an object implements ModuleWithProviders.
-export const isNgModuleDefWithProviders = (object: any): object is NgModuleWithProviders =>
-  object.ngModule !== undefined && isNgDef(object.ngModule, 'm');
+export const isNgModuleDefWithProviders = (declaration: any): declaration is NgModuleWithProviders =>
+  declaration.ngModule !== undefined && isNgDef(declaration.ngModule, 'm');
 
 /**
  * Checks whether an object is an instance of a mocked class that was decorated by a ng type.
@@ -163,15 +174,21 @@ export const isNgModuleDefWithProviders = (object: any): object is NgModuleWithP
  * d - directive.
  * p - pipe.
  */
-export function isMockOf<T>(object: any, type: Type<T>, ngType: 'm'): object is MockedModule<T>;
-export function isMockOf<T>(object: any, type: Type<T>, ngType: 'c'): object is MockedComponent<T>;
-export function isMockOf<T>(object: any, type: Type<T>, ngType: 'd'): object is MockedDirective<T>;
-export function isMockOf<T extends PipeTransform>(object: any, type: Type<T>, ngType: 'p'): object is MockedPipe<T>;
-export function isMockOf<T>(object: any, type: Type<T>): object is T;
-export function isMockOf<T>(object: any, type: Type<T>, ngType?: any): object is T {
+export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'm'): instance is MockedModule<T>;
+export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'c'): instance is MockedComponent<T>;
+export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'd'): instance is MockedDirective<T>;
+export function isMockOf<T extends PipeTransform>(
+  instance: any,
+  declaration: Type<T>,
+  ngType: 'p'
+): instance is MockedPipe<T>;
+export function isMockOf<T>(instance: any, declaration: Type<T>): instance is T;
+export function isMockOf<T>(instance: any, declaration: Type<T>, ngType?: any): instance is T {
   return (
-    typeof object === 'object' &&
-    (ngType ? isMockedNgDefOf(object.constructor, type, ngType) : isMockedNgDefOf(object.constructor, type))
+    typeof instance === 'object' &&
+    instance.__ngMocksMock &&
+    instance.constructor === declaration &&
+    (ngType ? isNgDef(instance.constructor, ngType) : isNgDef(instance.constructor))
   );
 }
 
@@ -182,13 +199,13 @@ export function isMockOf<T>(object: any, type: Type<T>, ngType?: any): object is
  * d - directive.
  * p - pipe.
  */
-export function getMockedNgDefOf<T>(type: Type<T>, ngType: 'm'): Type<MockedModule<T>>;
-export function getMockedNgDefOf<T>(type: Type<T>, ngType: 'c'): Type<MockedComponent<T>>;
-export function getMockedNgDefOf<T>(type: Type<T>, ngType: 'd'): Type<MockedDirective<T>>;
-export function getMockedNgDefOf<T>(type: Type<T>, ngType: 'p'): Type<MockedPipe<T>>;
-export function getMockedNgDefOf(type: Type<any>): Type<any>;
-export function getMockedNgDefOf(type: any, ngType?: any): any {
-  const source = type.mockOf ? type.mockOf : type;
+export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'm'): Type<MockedModule<T>>;
+export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'c'): Type<MockedComponent<T>>;
+export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'd'): Type<MockedDirective<T>>;
+export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'p'): Type<MockedPipe<T>>;
+export function getMockedNgDefOf(declaration: Type<any>): Type<any>;
+export function getMockedNgDefOf(declaration: any, type?: any): any {
+  const source = declaration.mockOf ? declaration.mockOf : declaration;
   const mocks = getTestBedInjection(NG_MOCKS);
 
   let mock: any;
@@ -201,16 +218,16 @@ export function getMockedNgDefOf(type: any, ngType?: any): any {
   }
 
   // If we are not in the MockBuilder env we can rely on the current cache.
-  if (!mock && source !== type) {
-    mock = type;
+  if (!mock && source !== declaration) {
+    mock = declaration;
   } else if (!mock && ngMocksUniverse.cacheMocks.has(source)) {
     mock = ngMocksUniverse.cacheMocks.get(source);
   }
 
-  if (!ngType) {
+  if (mock && !type) {
     return mock;
   }
-  if (ngType && isMockedNgDefOf(mock, type, ngType)) {
+  if (mock && type && isMockedNgDefOf(mock, source, type)) {
     return mock;
   }
 
@@ -218,11 +235,11 @@ export function getMockedNgDefOf(type: any, ngType?: any): any {
   throw new Error(`There is no mock for ${source.name}`);
 }
 
-export function getSourceOfMock<T>(type: Type<MockedModule<T>>): Type<T>;
-export function getSourceOfMock<T>(type: Type<MockedComponent<T>>): Type<T>;
-export function getSourceOfMock<T>(type: Type<MockedDirective<T>>): Type<T>;
-export function getSourceOfMock<T>(type: Type<MockedPipe<T>>): Type<T>;
-export function getSourceOfMock<T>(type: Type<T>): Type<T>;
-export function getSourceOfMock<T>(type: any): Type<T> {
-  return typeof type === 'function' && type.mockOf ? type.mockOf : type;
+export function getSourceOfMock<T>(declaration: Type<MockedModule<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: Type<MockedComponent<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: Type<MockedDirective<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: Type<MockedPipe<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: Type<T>): Type<T>;
+export function getSourceOfMock<T>(declaration: any): Type<T> {
+  return typeof declaration === 'function' && declaration.mockOf ? declaration.mockOf : declaration;
 }
