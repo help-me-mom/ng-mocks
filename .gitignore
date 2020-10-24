@@ -1,5 +1,7 @@
 .DS_Store
+.env
 .idea
-dist
-node_modules
-test-reports
+/dist
+/node_modules
+/test-reports
+/tmp
