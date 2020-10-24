@@ -63,6 +63,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test a provider of a directive](#how-to-test-a-provider-of-a-directive)
 * [How to test a pipe](#how-to-test-a-pipe)
 * [How to test a provider](#how-to-test-a-provider)
+* [How to test a provider with dependencies](#how-to-test-a-provider-with-dependencies)
 
 ---
 
@@ -2383,6 +2384,48 @@ describe('TestProvider', () => {
     const service = TestBed.get(TargetService);
 
     expect(service.echo()).toEqual(service.value);
+  });
+});
+```
+
+---
+
+## How to test a provider with dependencies
+
+The source file is here:
+[examples/TestProviderWithDependencies/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts)
+
+```typescript
+describe('TestProviderWithDependencies', () => {
+  // Because we want to test the service, we pass it as the first
+  // parameter of MockBuilder. To correctly satisfy its dependencies
+  // we need to pass its module as the second parameter.
+  beforeEach(() => MockBuilder(TargetService, TargetModule));
+
+  beforeAll(() => {
+    // Let's customize a bit behavior of the mocked copy of Service1.
+    MockInstance(Service1, {
+      init: instance => {
+        instance.trigger = () => 'mock1';
+      },
+    });
+    // Let's customize a bit behavior of the mocked copy of Service2.
+    MockInstance(Service2, {
+      init: instance => {
+        instance.trigger = () => 'mock2';
+      },
+    });
+  });
+
+  afterAll(MockReset);
+
+  it('creates TargetService', () => {
+    // Creates an instance only if all dependencies are present.
+    const service = TestBed.get(TargetService);
+
+    // Let's assert behavior.
+    expect(service.value1).toEqual('mock1');
+    expect(service.value2).toEqual('mock2');
   });
 });
 ```
