@@ -62,6 +62,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test a structural directive with context](#how-to-test-a-structural-directive-with-context)
 * [How to test a provider of a directive](#how-to-test-a-provider-of-a-directive)
 * [How to test a pipe](#how-to-test-a-pipe)
+* [How to test a provider](#how-to-test-a-provider)
 
 ---
 
@@ -2356,6 +2357,32 @@ describe('TestPipe', () => {
     });
 
     expect(fixture.nativeElement.innerHTML).toEqual('3, 2, 1');
+  });
+});
+```
+
+---
+
+## How to test a provider
+
+Usually, you don't need `TestBed` if you want to test a simple
+provider. It might be a pure unit test.
+
+Nevertheless, `MockBuilder` can help here too. Dependencies will be
+mocked if a provider has them, do not forget to provide its module in
+this case.
+
+The source file is here:
+[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts)
+
+```typescript
+describe('TestProvider', () => {
+  beforeEach(() => MockBuilder(TargetService));
+
+  it('returns value on echo', () => {
+    const service = TestBed.get(TargetService);
+
+    expect(service.echo()).toEqual(service.value);
   });
 });
 ```
