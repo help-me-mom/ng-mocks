@@ -14,7 +14,7 @@ class DependencyDirective {
 
 @Component({
   selector: 'tested',
-  template: ` <span *dependency="value" (dependency-output)="trigger($event)">content</span> `,
+  template: ` <span *dependency="value" (dependency-output)="trigger($event)">content</span>`,
 })
 class TestedComponent {
   value = '';

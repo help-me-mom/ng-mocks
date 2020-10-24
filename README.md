@@ -58,6 +58,8 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test a component](#how-to-test-a-component)
 * [How to test a provider of a component](#how-to-test-a-provider-of-a-component)
 * [How to test an attribute directive](#how-to-test-an-attribute-directive)
+* [How to test a structural directive](#how-to-test-a-structural-directive)
+* [How to test a structural directive with context](#how-to-test-a-structural-directive-with-context)
 
 ---
 
@@ -2184,8 +2186,8 @@ class TargetDirective {
 
 describe('TestAttributeDirective', () => {
   // Because we want to test the directive, we pass it as the first
-  // argument of MockBuilder.
-  // We can omit the second argment, because there are no dependencies.
+  // argument of MockBuilder. We can omit the second argument,
+  // because there are no dependencies.
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('uses default background color', () => {
@@ -2240,6 +2242,167 @@ describe('TestAttributeDirective', () => {
     expect(fixture.nativeElement.innerHTML).toContain(
       'style="background-color: blue;"'
     );
+  });
+});
+```
+
+---
+
+## How to test a structural directive
+
+The source file is here:
+[examples/TestStructuralDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts)
+
+```typescript
+import {
+  Directive,
+  Input,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+// This directive is the same as `ngIf`, it renders its content only
+// when its input has a positive value.
+@Directive({
+  selector: '[target]',
+})
+class TargetDirective {
+  protected templateRef: TemplateRef<any>;
+  protected viewContainerRef: ViewContainerRef;
+
+  constructor(
+    templateRef: TemplateRef<any>,
+    viewContainerRef: ViewContainerRef
+  ) {
+    this.templateRef = templateRef;
+    this.viewContainerRef = viewContainerRef;
+  }
+
+  @Input() set target(value: any) {
+    if (value) {
+      this.viewContainerRef.createEmbeddedView(this.templateRef);
+    } else {
+      this.viewContainerRef.clear();
+    }
+  }
+}
+
+describe('TestStructuralDirective', () => {
+  // Because we want to test the directive, we pass it as the first
+  // argument of MockBuilder. We can omit the second argument,
+  // because there are no dependencies.
+  beforeEach(() => MockBuilder(TargetDirective));
+
+  it('hides and renders its content', () => {
+    const fixture = MockRender(
+      `
+        <div *target="value">
+          content
+        </div>
+    `,
+      {
+        value: false,
+      }
+    );
+
+    // Because the value is false the "content" should not be
+    // rendered.
+    expect(fixture.nativeElement.innerHTML).not.toContain('content');
+
+    // Let's change the value to true and assert that the "content"
+    // has been rendered.
+    fixture.componentInstance.value = true;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).toContain('content');
+
+    // Let's change the value to false and assert that the
+    // "content" has been hidden.
+    fixture.componentInstance.value = false;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).not.toContain('content');
+  });
+});
+```
+
+---
+
+## How to test a structural directive with context
+
+The source file is here:
+[examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
+
+```typescript
+import {
+  Directive,
+  Input,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+export interface ITargetContext {
+  $implicit: string;
+  myIndex: number;
+}
+
+// This directive is almost the same as `ngFor`,
+// it renders every item as a new row.
+@Directive({
+  selector: '[target]',
+})
+class TargetDirective {
+  protected templateRef: TemplateRef<ITargetContext>;
+  protected viewContainerRef: ViewContainerRef;
+
+  constructor(
+    templateRef: TemplateRef<ITargetContext>,
+    viewContainerRef: ViewContainerRef
+  ) {
+    this.templateRef = templateRef;
+    this.viewContainerRef = viewContainerRef;
+  }
+
+  @Input() set target(items: string[]) {
+    this.viewContainerRef.clear();
+
+    items.forEach((value, index) =>
+      this.viewContainerRef.createEmbeddedView(this.templateRef, {
+        $implicit: value,
+        myIndex: index,
+      })
+    );
+  }
+}
+
+describe('TestStructuralDirectiveWithContext', () => {
+  // Because we want to test the directive, we pass it as the first
+  // argument of MockBuilder. We can omit the second argument,
+  // because there are no dependencies.
+  beforeEach(() => MockBuilder(TargetDirective));
+
+  it('renders passed values', () => {
+    const fixture = MockRender(
+      `
+        <div *target="values; let value; let index = myIndex">
+        {{index}}: {{ value }}
+        </div>`,
+      {
+        values: ['hello', 'world'],
+      }
+    );
+
+    // Let's assert that the 'values' have been rendered as expected
+    expect(fixture.nativeElement.innerHTML).toContain('0: hello');
+    expect(fixture.nativeElement.innerHTML).toContain('1: world');
+
+    // Let's change the 'values' and assert that the new render
+    // has done everything as expected.
+    fixture.componentInstance.values = ['ngMocks'];
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).toContain('0: ngMocks');
+    expect(fixture.nativeElement.innerHTML).not.toContain('0: hello');
+    expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
   });
 });
 ```

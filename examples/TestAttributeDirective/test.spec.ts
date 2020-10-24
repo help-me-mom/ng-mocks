@@ -27,8 +27,8 @@ class TargetDirective {
 
 describe('TestAttributeDirective', () => {
   // Because we want to test the directive, we pass it as the first
-  // argument of MockBuilder.
-  // We can omit the second argment, because there are no dependencies.
+  // argument of MockBuilder. We can omit the second argument,
+  // because there are no dependencies.
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('uses default background color', () => {
