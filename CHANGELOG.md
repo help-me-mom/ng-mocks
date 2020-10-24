@@ -7,9 +7,6 @@
 * ngMocks.guts for easy start ([d19f958](https://github.com/ike18t/ng-mocks/commit/d19f95809a9e5802f201ddce31372deecf95393d))
 * supporting fixture in ngMocks.find ([26da8a4](https://github.com/ike18t/ng-mocks/commit/26da8a47033897f8fae31e387bfdac29aec05dd1))
 
-# Changelog
-
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ## [10.3.0](https://github.com/ike18t/ng-mocks/compare/v10.2.1...v10.3.0) (2020-10-18)
 
