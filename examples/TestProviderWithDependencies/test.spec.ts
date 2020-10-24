@@ -34,7 +34,7 @@ class TargetService {
   }
 }
 
-// A module that provides all services
+// A module that provides all services.
 @NgModule({
   providers: [Service1, Service2, TargetService],
 })

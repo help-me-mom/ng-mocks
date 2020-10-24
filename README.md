@@ -64,6 +64,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test a pipe](#how-to-test-a-pipe)
 * [How to test a provider](#how-to-test-a-provider)
 * [How to test a provider with dependencies](#how-to-test-a-provider-with-dependencies)
+* [How to test a provider with useClass or mock it](#how-to-test-a-provider-with-useclass-or-mock-it)
 
 ---
 
@@ -2426,6 +2427,40 @@ describe('TestProviderWithDependencies', () => {
     // Let's assert behavior.
     expect(service.value1).toEqual('mock1');
     expect(service.value2).toEqual('mock2');
+  });
+});
+```
+
+---
+
+## How to test a provider with useClass or mock it
+
+The source file is here:
+[examples/TestProviderWithUseClass/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts)
+
+```typescript
+describe('TestProviderWithUseClass', () => {
+  // Because we want to test the service, we pass it as the first
+  // parameter of MockBuilder. To correctly satisfy its dependencies
+  // we need to pass its module as the second parameter.
+  beforeEach(() => MockBuilder(Target1Service, TargetModule));
+
+  it('respects all dependencies', () => {
+    const service = TestBed.get(Target1Service);
+
+    // Let's assert that service has a flag from Target2Service.
+    expect(service.flag).toBeTruthy();
+    expect(service).toEqual(jasmine.any(Target2Service));
+
+    // And let's assert that Service1 has been mocked and its name
+    // is undefined.
+    expect(service.service.name).toBeUndefined();
+    expect(service.service).toEqual(jasmine.any(Service1));
+
+    // Because we mocked the module, Service1 has been mocked
+    // based on its `provide` class, deps and other values are
+    // ignored by mocking logic.
+    expect(service.service).not.toEqual(jasmine.any(Service2));
   });
 });
 ```
