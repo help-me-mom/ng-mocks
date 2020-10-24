@@ -51,12 +51,13 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
   - [getSourceOfMock](#getsourceofmock)
   - [isNgInjectionToken](#isnginjectiontoken)
 
-- [How to test a component](#how-to-test-a-component)
-- [How to test a provider of a component](#how-to-test-a-provider-of-a-component)
+- [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
+- [Making tests faster](#making-angular-tests-faster)
+- [Auto Spy](#auto-spy)
 
-* [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
-* [Making tests faster](#making-angular-tests-faster)
-* [Auto Spy](#auto-spy)
+* [How to test a component](#how-to-test-a-component)
+* [How to test a provider of a component](#how-to-test-a-provider-of-a-component)
+* [How to test an attribute directive](#how-to-test-an-attribute-directive)
 
 ---
 
@@ -1927,54 +1928,6 @@ This function verifies tokens.
 
 ---
 
-## How to test a component
-
-Please check [an extensive example](#extensive-example-of-mocks-in-angular-tests),
-it covers all aspects of **testing components in angular applications**.
-
----
-
-## How to test a provider of a component
-
-The source file is here:
-[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
-
-```typescript
-import { Component, Injectable } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
-
-@Injectable()
-class TargetService {
-  public readonly value = 'target';
-}
-
-@Component({
-  providers: [TargetService],
-  selector: 'target',
-  template: `{{ service.value }}`,
-})
-class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
-}
-
-describe('TestProviderInComponent', () => {
-  beforeEach(() => MockBuilder(TargetService, TargetComponent));
-
-  it('has access to the service via a component', () => {
-    const fixture = MockRender(TargetComponent);
-
-    // Despite the mocked component we have access to
-    // the original service and can assert its behavior.
-    const service = fixture.point.injector.get(TargetService);
-    expect(service.value).toEqual('target');
-  });
-});
-```
-
 ## Usage with 3rd-party libraries
 
 `ngMocks` provides flexibility via [`MockBuilder`](#mockbuilder)
@@ -2127,6 +2080,168 @@ In case of jest add it to `src/setupJest.ts`.
 
 ```typescript
 import 'ng-mocks/dist/jest';
+```
+
+---
+
+## How to test a component
+
+Please check [an extensive example](#extensive-example-of-mocks-in-angular-tests),
+it covers all aspects of **testing components in angular applications**.
+
+---
+
+## How to test a provider of a component
+
+The source file is here:
+[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
+
+```typescript
+import { Component, Injectable } from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+// A simple service, might have contained more logic,
+// but it is redundant for the test demonstration.
+@Injectable()
+class TargetService {
+  public readonly value = 'target';
+}
+
+@Component({
+  providers: [TargetService],
+  selector: 'target',
+  template: `{{ service.value }}`,
+})
+class TargetComponent {
+  public readonly service: TargetService;
+
+  constructor(service: TargetService) {
+    this.service = service;
+  }
+}
+
+describe('TestProviderInComponent', () => {
+  // Because we want to test the service, we pass it as the first
+  // argument of MockBuilder.
+  // Because we do not care about TargetComponent, we pass it as
+  // the second argument for being mocked.
+  beforeEach(() => MockBuilder(TargetService, TargetComponent));
+
+  it('has access to the service via a component', () => {
+    // Let's render the mocked component. It provides as a point
+    // to access the service.
+    const fixture = MockRender(TargetComponent);
+
+    // The root element is fixture.point and it is the TargetComponent
+    // with its injector for extracting internal services.
+    const service = fixture.point.injector.get(TargetService);
+
+    // Here we go, now we can assert everything about the service.
+    expect(service.value).toEqual('target');
+  });
+});
+```
+
+---
+
+## How to test an attribute directive
+
+The source file is here:
+[examples/TestAttributeDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestAttributeDirective/test.spec.ts)
+
+```typescript
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+} from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+// The purpose of the directive is to add a background color
+// on mouseenter and to remove it on mouseleave.
+// By default the color is yellow.
+@Directive({
+  selector: '[target]',
+})
+class TargetDirective {
+  @Input() public color = 'yellow';
+
+  protected ref: ElementRef;
+
+  constructor(ref: ElementRef) {
+    this.ref = ref;
+  }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.ref.nativeElement.style.backgroundColor = this.color;
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.ref.nativeElement.style.backgroundColor = null;
+  }
+}
+
+describe('TestAttributeDirective', () => {
+  // Because we want to test the directive, we pass it as the first
+  // argument of MockBuilder.
+  // We can omit the second argment, because there are no dependencies.
+  beforeEach(() => MockBuilder(TargetDirective));
+
+  it('uses default background color', () => {
+    const fixture = MockRender(`<div target></div>`);
+
+    // By default, without the mouse enter, there is no background
+    // color on the div.
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      'style="background-color: yellow;"'
+    );
+
+    // Let's simulate the mouse enter event.
+    // fixture.point is out root element from the rendered template,
+    // therefore it points to the div we want to trigger the event
+    // on.
+    fixture.point.triggerEventHandler('mouseenter', null);
+
+    // Let's assert the color.
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: yellow;"'
+    );
+
+    // Now let's simulate the mouse mouse leave event.
+    fixture.point.triggerEventHandler('mouseleave', null);
+
+    // And assert that the background color is gone now.
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      'style="background-color: yellow;"'
+    );
+  });
+
+  it('sets provided background color', () => {
+    // When we want to test inputs / outputs we need to use the second
+    // argument of MockRender, simply pass there variables for the
+    // template, they'll become properties of
+    // fixture.componentInstance.
+    const fixture = MockRender(`<div [color]="color" target></div>`, {
+      color: 'red',
+    });
+
+    // Let's assert that the background color is red.
+    fixture.point.triggerEventHandler('mouseenter', null);
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: red;"'
+    );
+
+    // Let's switch the color, we don't need `.point`, because we
+    // access a middle component of MockRender.
+    fixture.componentInstance.color = 'blue';
+    fixture.detectChanges(); // shaking the template
+    fixture.point.triggerEventHandler('mouseenter', null);
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: blue;"'
+    );
+  });
+});
 ```
 
 ---

@@ -1,6 +1,8 @@
 import { Component, Injectable } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
+// A simple service, might have contained more logic,
+// but it is redundant for the test demonstration.
 @Injectable()
 class TargetService {
   public readonly value = 'target';
@@ -20,13 +22,22 @@ class TargetComponent {
 }
 
 describe('TestProviderInComponent', () => {
+  // Because we want to test the service, we pass it as the first
+  // argument of MockBuilder.
+  // Because we do not care about TargetComponent, we pass it as
+  // the second argument for being mocked.
   beforeEach(() => MockBuilder(TargetService, TargetComponent));
 
   it('has access to the service via a component', () => {
+    // Let's render the mocked component. It provides as a point
+    // to access the service.
     const fixture = MockRender(TargetComponent);
 
-    // despite the mocked component we have access to the original service.
+    // The root element is fixture.point and it is the TargetComponent
+    // with its injector for extracting internal services.
     const service = fixture.point.injector.get(TargetService);
+
+    // Here we go, now we can assert everything about the service.
     expect(service.value).toEqual('target');
   });
 });
