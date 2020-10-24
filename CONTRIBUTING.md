@@ -31,6 +31,6 @@ GIT_COMMITTER_NAME=Best Coder
 GIT_COMMITTER_EMAIL=best@coder.com
 ```
 
-After that you need to execute `npm run release`.
+After that you need to execute `npm run release -- --no-ci`.
 
 Profit.
