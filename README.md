@@ -60,6 +60,7 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
 * [How to test an attribute directive](#how-to-test-an-attribute-directive)
 * [How to test a structural directive](#how-to-test-a-structural-directive)
 * [How to test a structural directive with context](#how-to-test-a-structural-directive-with-context)
+* [How to test a provider of a directive](#how-to-test-a-provider-of-a-directive)
 
 ---
 
@@ -2099,29 +2100,6 @@ The source file is here:
 [examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
 
 ```typescript
-import { Component, Injectable } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
-
-// A simple service, might have contained more logic,
-// but it is redundant for the test demonstration.
-@Injectable()
-class TargetService {
-  public readonly value = 'target';
-}
-
-@Component({
-  providers: [TargetService],
-  selector: 'target',
-  template: `{{ service.value }}`,
-})
-class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
-}
-
 describe('TestProviderInComponent', () => {
   // Because we want to test the service, we pass it as the first
   // argument of MockBuilder.
@@ -2152,38 +2130,6 @@ The source file is here:
 [examples/TestAttributeDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestAttributeDirective/test.spec.ts)
 
 ```typescript
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-} from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
-
-// The purpose of the directive is to add a background color
-// on mouseenter and to remove it on mouseleave.
-// By default the color is yellow.
-@Directive({
-  selector: '[target]',
-})
-class TargetDirective {
-  @Input() public color = 'yellow';
-
-  protected ref: ElementRef;
-
-  constructor(ref: ElementRef) {
-    this.ref = ref;
-  }
-
-  @HostListener('mouseenter') onMouseEnter() {
-    this.ref.nativeElement.style.backgroundColor = this.color;
-  }
-
-  @HostListener('mouseleave') onMouseLeave() {
-    this.ref.nativeElement.style.backgroundColor = null;
-  }
-}
-
 describe('TestAttributeDirective', () => {
   // Because we want to test the directive, we pass it as the first
   // argument of MockBuilder. We can omit the second argument,
@@ -2254,40 +2200,6 @@ The source file is here:
 [examples/TestStructuralDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts)
 
 ```typescript
-import {
-  Directive,
-  Input,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
-
-// This directive is the same as `ngIf`, it renders its content only
-// when its input has a positive value.
-@Directive({
-  selector: '[target]',
-})
-class TargetDirective {
-  protected templateRef: TemplateRef<any>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(
-    templateRef: TemplateRef<any>,
-    viewContainerRef: ViewContainerRef
-  ) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
-
-  @Input() set target(value: any) {
-    if (value) {
-      this.viewContainerRef.createEmbeddedView(this.templateRef);
-    } else {
-      this.viewContainerRef.clear();
-    }
-  }
-}
-
 describe('TestStructuralDirective', () => {
   // Because we want to test the directive, we pass it as the first
   // argument of MockBuilder. We can omit the second argument,
@@ -2333,48 +2245,6 @@ The source file is here:
 [examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
 
 ```typescript
-import {
-  Directive,
-  Input,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
-
-export interface ITargetContext {
-  $implicit: string;
-  myIndex: number;
-}
-
-// This directive is almost the same as `ngFor`,
-// it renders every item as a new row.
-@Directive({
-  selector: '[target]',
-})
-class TargetDirective {
-  protected templateRef: TemplateRef<ITargetContext>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(
-    templateRef: TemplateRef<ITargetContext>,
-    viewContainerRef: ViewContainerRef
-  ) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
-
-  @Input() set target(items: string[]) {
-    this.viewContainerRef.clear();
-
-    items.forEach((value, index) =>
-      this.viewContainerRef.createEmbeddedView(this.templateRef, {
-        $implicit: value,
-        myIndex: index,
-      })
-    );
-  }
-}
-
 describe('TestStructuralDirectiveWithContext', () => {
   // Because we want to test the directive, we pass it as the first
   // argument of MockBuilder. We can omit the second argument,
@@ -2403,6 +2273,49 @@ describe('TestStructuralDirectiveWithContext', () => {
     expect(fixture.nativeElement.innerHTML).toContain('0: ngMocks');
     expect(fixture.nativeElement.innerHTML).not.toContain('0: hello');
     expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
+  });
+});
+```
+
+---
+
+## How to test a provider of a directive
+
+The source file is here:
+[examples/TestProviderInDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts)
+
+```typescript
+describe('TestProviderInDirective', () => {
+  // Because we want to test the service, we pass it as the first
+  // argument of MockBuilder.
+  // Because we do not care about TargetDirective, we pass it as
+  // the second argument for being mocked.
+  beforeEach(() => MockBuilder(TargetService, TargetDirective));
+
+  it('has access to the service via a directive', () => {
+    // Let's render a div with the directive. It provides a point
+    // to access the service.
+    const fixture = MockRender(`<div target></div>`);
+
+    // The root element is fixture.point and it has access to the
+    // context of the directive. Its injector can extract the service.
+    const service = fixture.point.injector.get(TargetService);
+
+    // Here we go, now we can assert everything about the service.
+    expect(service.value).toEqual(true);
+  });
+
+  it('has access to the service via a structural directive', () => {
+    // Let's render a div with the directive. It provides a point to
+    // access the service.
+    const fixture = MockRender(`<div *target></div>`);
+
+    // The root element is fixture.point and it has access to the
+    // context of the directive. Its injector can extract the service.
+    const service = fixture.point.injector.get(TargetService);
+
+    // Here we go, now we can assert everything about the service.
+    expect(service.value).toEqual(true);
   });
 });
 ```

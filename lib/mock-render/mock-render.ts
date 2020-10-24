@@ -171,6 +171,9 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   }
 
   fixture.point = fixture.debugElement.children[0];
+  if (!fixture.point) {
+    fixture.point = fixture.debugElement.childNodes[0];
+  }
   if (noParams && typeof template === 'function') {
     const properties = mockServiceHelper.extractPropertiesFromPrototype(template.prototype);
     const exists = Object.getOwnPropertyNames(fixture.componentInstance);

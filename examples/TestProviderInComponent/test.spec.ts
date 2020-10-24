@@ -29,7 +29,7 @@ describe('TestProviderInComponent', () => {
   beforeEach(() => MockBuilder(TargetService, TargetComponent));
 
   it('has access to the service via a component', () => {
-    // Let's render the mocked component. It provides as a point
+    // Let's render the mocked component. It provides a point
     // to access the service.
     const fixture = MockRender(TargetComponent);
 
