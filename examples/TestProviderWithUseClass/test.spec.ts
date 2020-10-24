@@ -1,11 +1,11 @@
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 
 // A service we want to replace via useClass.
 @Injectable()
 class Service1 {
-  public readonly name: string;
+  public name: string;
 
   constructor(name: string) {
     this.name = name;
@@ -61,6 +61,17 @@ describe('TestProviderWithUseClass', () => {
   // we need to pass its module as the second parameter.
   beforeEach(() => MockBuilder(Target1Service, TargetModule));
 
+  beforeAll(() => {
+    // Let's customize a bit behavior of the mocked copy of Service1.
+    MockInstance(Service1, {
+      init: instance => {
+        instance.name = 'mock1';
+      },
+    });
+  });
+
+  afterAll(MockReset);
+
   it('respects all dependencies', () => {
     const service = TestBed.get(Target1Service);
 
@@ -70,7 +81,7 @@ describe('TestProviderWithUseClass', () => {
 
     // And let's assert that Service1 has been mocked and its name
     // is undefined.
-    expect(service.service.name).toBeUndefined();
+    expect(service.service.name).toEqual('mock1');
     expect(service.service).toEqual(jasmine.any(Service1));
 
     // Because we mocked the module, Service1 has been mocked

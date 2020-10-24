@@ -2445,6 +2445,17 @@ describe('TestProviderWithUseClass', () => {
   // we need to pass its module as the second parameter.
   beforeEach(() => MockBuilder(Target1Service, TargetModule));
 
+  beforeAll(() => {
+    // Let's customize a bit behavior of the mocked copy of Service1.
+    MockInstance(Service1, {
+      init: instance => {
+        instance.name = 'mock1';
+      },
+    });
+  });
+
+  afterAll(MockReset);
+
   it('respects all dependencies', () => {
     const service = TestBed.get(Target1Service);
 
@@ -2454,13 +2465,63 @@ describe('TestProviderWithUseClass', () => {
 
     // And let's assert that Service1 has been mocked and its name
     // is undefined.
-    expect(service.service.name).toBeUndefined();
+    expect(service.service.name).toEqual('mock1');
     expect(service.service).toEqual(jasmine.any(Service1));
 
     // Because we mocked the module, Service1 has been mocked
     // based on its `provide` class, deps and other values are
     // ignored by mocking logic.
     expect(service.service).not.toEqual(jasmine.any(Service2));
+  });
+});
+```
+
+---
+
+## How to test a provider with useValue
+
+The source file is here:
+[examples/TestProviderWithUseValue/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts)
+
+```typescript
+import { Injectable, NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
+
+// A simple service, it might have contained more logic,
+// but it is redundant for the test demonstration.
+@Injectable()
+class TargetService {
+  public readonly name = 'target';
+}
+
+// A module that provides all services.
+@NgModule({
+  providers: [
+    {
+      provide: TargetService,
+      // an empty object instead
+      useValue: {
+        service: null,
+      },
+    },
+  ],
+})
+class TargetModule {}
+
+describe('TestProviderWithUseValue', () => {
+  // Because we want to test the service, we pass it as the first
+  // parameter of MockBuilder. To correctly satisfy its initialization
+  // we need to pass its module as the second parameter.
+  beforeEach(() => MockBuilder(TargetService, TargetModule));
+
+  it('creates TargetService', () => {
+    const service = TestBed.get(TargetService);
+
+    // Let's assert received data.
+    expect(service).toEqual({
+      service: null,
+    });
   });
 });
 ```
