@@ -51,9 +51,12 @@ Or you could use `ngMocks` to mock them out and have the ability to assert on th
   - [getSourceOfMock](#getsourceofmock)
   - [isNgInjectionToken](#isnginjectiontoken)
 
-- [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
-- [Making tests faster](#making-angular-tests-faster)
-- [Auto Spy](#auto-spy)
+- [How to test a component](#how-to-test-a-component)
+- [How to test a provider of a component](#how-to-test-a-provider-of-a-component)
+
+* [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
+* [Making tests faster](#making-angular-tests-faster)
+* [Auto Spy](#auto-spy)
 
 ---
 
@@ -1923,6 +1926,54 @@ This function verifies tokens.
 - `isNgInjectionToken(TOKEN)` - checks whether `TOKEN` is a token
 
 ---
+
+## How to test a component
+
+Please check [an extensive example](#extensive-example-of-mocks-in-angular-tests),
+it covers all aspects of **testing components in angular applications**.
+
+---
+
+## How to test a provider of a component
+
+The source file is here:
+[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
+
+```typescript
+import { Component, Injectable } from '@angular/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+
+@Injectable()
+class TargetService {
+  public readonly value = 'target';
+}
+
+@Component({
+  providers: [TargetService],
+  selector: 'target',
+  template: `{{ service.value }}`,
+})
+class TargetComponent {
+  public readonly service: TargetService;
+
+  constructor(service: TargetService) {
+    this.service = service;
+  }
+}
+
+describe('TestProviderInComponent', () => {
+  beforeEach(() => MockBuilder(TargetService, TargetComponent));
+
+  it('has access to the service via a component', () => {
+    const fixture = MockRender(TargetComponent);
+
+    // Despite the mocked component we have access to
+    // the original service and can assert its behavior.
+    const service = fixture.point.injector.get(TargetService);
+    expect(service.value).toEqual('target');
+  });
+});
+```
 
 ## Usage with 3rd-party libraries
 
