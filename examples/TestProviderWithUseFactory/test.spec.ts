@@ -31,7 +31,7 @@ class TargetService {
 })
 class TargetModule {}
 
-fdescribe('TestProviderWithUseFactory', () => {
+describe('TestProviderWithUseFactory', () => {
   // Because we want to test the service, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its initialization
   // we need to pass its module as the second parameter.

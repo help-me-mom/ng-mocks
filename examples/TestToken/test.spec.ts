@@ -43,11 +43,12 @@ class TargetModule {}
 describe('TestToken', () => {
   ngMocks.faster();
 
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its initialization
-  // we need to pass its module as the second parameter.
+  // Because we want to test the tokens, we pass them in .keep in
+  // the chain on MockBuilder. To correctly satisfy their
+  // initialization we need to pass its module as the second
+  // parameter.
   beforeEach(() =>
-    MockBuilder(TargetModule).keep(TOKEN_CLASS).keep(TOKEN_EXISTING).keep(TOKEN_FACTORY).keep(TOKEN_VALUE)
+    MockBuilder().mock(TargetModule).keep(TOKEN_CLASS).keep(TOKEN_EXISTING).keep(TOKEN_FACTORY).keep(TOKEN_VALUE)
   );
 
   it('creates TOKEN_CLASS', () => {
