@@ -1427,12 +1427,19 @@ beforeEach(() =>
     .replace(SomeDirective, SomeOtherDirective)
     .replace(SomePipe, SomeOtherPipe)
 );
-// In case of HttpClientTestingModule,
-// it should be kept instead of replacement.
+// In case of HttpClientTestingModule you can use .replace too.
+beforeEach(() =>
+  MockBuilder(MyComponent, MyModule).replace(
+    HttpClientModule,
+    HttpClientTestingModule
+  )
+);
+// In case of RouterTestingModule you need to use .keep for both of
+// the modules and to pass an empty array into .withRoutes.
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
-    .keep(HttpClientModule)
-    .keep(HttpClientTestingModule)
+    .keep(RouterModule)
+    .keep(RouterTestingModule.withRoutes([]))
 );
 
 // If we want to add or replace providers or services
@@ -3255,6 +3262,81 @@ describe('TestRoutingResolver', () => {
       },
     });
   }));
+});
+```
+
+---
+
+## How to test a http request
+
+The source file is here:
+[examples/TestHttpRequest/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpRequest/test.spec.ts)
+
+```typescript
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { Injectable, NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder } from 'ng-mocks';
+import { Observable } from 'rxjs';
+
+// A service that does http requests.
+@Injectable()
+class TargetService {
+  protected http: HttpClient;
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
+  fetch(): Observable<boolean[]> {
+    return this.http.get<boolean[]>('/data');
+  }
+}
+
+// A module providing the service and http client.
+@NgModule({
+  imports: [HttpClientModule],
+  providers: [TargetService],
+})
+class TargetModule {}
+
+describe('TestHttpRequest', () => {
+  // Because we want to test the service, we pass it as the first
+  // parameter of MockBuilder. To correctly satisfy its
+  // initialization, we need to pass its module as the second
+  // parameter. And, the last but not the least, we need to replace
+  // HttpClientModule with HttpClientTestingModule.
+  beforeEach(() =>
+    MockBuilder(TargetService, TargetModule).replace(
+      HttpClientModule,
+      HttpClientTestingModule
+    )
+  );
+
+  it('sends a request', () => {
+    // Let's extract the service and http controller for testing.
+    const service: TargetService = TestBed.get(TargetService);
+    const http: HttpTestingController = TestBed.get(
+      HttpTestingController
+    );
+
+    // A simple subscription to check what the service returns.
+    let actual: any;
+    service.fetch().subscribe(value => (actual = value));
+
+    // Simulating a request.
+    const req = http.expectOne('/data');
+    expect(req.request.method).toEqual('GET');
+    req.flush([false, true, false]);
+    http.verify();
+
+    // Asserting the result.
+    expect(actual).toEqual([false, true, false]);
+  });
 });
 ```
 
