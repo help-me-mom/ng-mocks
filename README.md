@@ -2194,41 +2194,38 @@ The source file of this test is here:
 
 ### How to test a structural directive with context
 
-The source file is here:
-[examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
+If you did not read [testing of structural directives](#how-to-test-a-structural-directive), please do it first.
+
+The difference for structural directives with context in terms of testing is what we want to render in a custom template.
+It should include variables:
 
 ```typescript
-describe('TestStructuralDirectiveWithContext', () => {
-  // Because we want to test the directive, we pass it as the first
-  // parameter of MockBuilder. We can omit the second parameter,
-  // because there are no dependencies.
-  beforeEach(() => MockBuilder(TargetDirective));
-
-  it('renders passed values', () => {
-    const fixture = MockRender(
-      `
-        <div *target="values; let value; let index = myIndex">
-        {{index}}: {{ value }}
-        </div>`,
-      {
-        values: ['hello', 'world'],
-      }
-    );
-
-    // Let's assert that the 'values' have been rendered as expected
-    expect(fixture.nativeElement.innerHTML).toContain('0: hello');
-    expect(fixture.nativeElement.innerHTML).toContain('1: world');
-
-    // Let's change the 'values' and assert that the new render
-    // has done everything as expected.
-    fixture.componentInstance.values = ['ngMocks'];
-    fixture.detectChanges();
-    expect(fixture.nativeElement.innerHTML).toContain('0: ngMocks');
-    expect(fixture.nativeElement.innerHTML).not.toContain('0: hello');
-    expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
-  });
-});
+const fixture = MockRender(
+  `
+    <div *target="values; let value; let index = myIndex">
+    {{index}}: {{ value }}
+    </div>`,
+  {
+    values: ['hello', 'world'],
+  }
+);
 ```
+
+This directive simulates behavior of `*ngFor`. We can do different assertions checking rendered html, and to verify how the
+directive behaves when we are changing `values`:
+
+```typescript
+expect(fixture.nativeElement.innerHTML).toContain('0: hello');
+expect(fixture.nativeElement.innerHTML).toContain('1: world');
+```
+
+```typescript
+fixture.componentInstance.values = ['ngMocks'];
+fixture.detectChanges();
+```
+
+The source file is here:
+[examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
 
 ---
 
