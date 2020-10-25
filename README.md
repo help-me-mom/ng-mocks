@@ -2252,43 +2252,36 @@ fixture.componentInstance.values = ['ngMocks'];
 fixture.detectChanges();
 ```
 
-The source file is here:
+The source file of this test is here:
 [examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
 
 ---
 
 ### How to test a pipe
 
-The source file is here:
-[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts)
+An approach with testing pipes is similar to directives. The pipe we pass as the first parameter of [`MockBuilder`](#mockbuilder),
+and its module with dependencies as the second one if they exist:
 
 ```typescript
-describe('TestPipe', () => {
-  ngMocks.faster(); // the same TestBed for several its.
+beforeEach(() => MockBuilder(TargetPipe));
+```
 
-  // Because we want to test the pipe, we pass it as the first
-  // parameter of MockBuilder. We can omit the second parameter,
-  // because there are no dependencies.
-  beforeEach(() => MockBuilder(TargetPipe));
+To verify how the pipe behaives we need to render a custom template:
 
-  it('sorts strings', () => {
-    const fixture = MockRender(`{{ values | target}}`, {
-      values: ['1', '3', '2'],
-    });
-
-    expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
-  });
-
-  it('reverses strings on param', () => {
-    const fixture = MockRender(`{{ values | target:flag}}`, {
-      flag: false,
-      values: ['1', '3', '2'],
-    });
-
-    expect(fixture.nativeElement.innerHTML).toEqual('3, 2, 1');
-  });
+```typescript
+const fixture = MockRender(`{{ values | target}}`, {
+  values: ['1', '3', '2'],
 });
 ```
+
+Now we can assert what has been rendered:
+
+```typescript
+expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
+```
+
+The source file of this test is here:
+[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts)
 
 ---
 
