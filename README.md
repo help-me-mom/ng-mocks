@@ -2076,6 +2076,11 @@ import 'ng-mocks/dist/jest';
 
 ## How to test
 
+The goal of this section is to demonstrate **comprehensive examples of angular unit tests**
+covering almost all possible cases.
+
+Should you not find an example you are interested in? Just contact us.
+
 ### How to test a component
 
 Please check [the extensive example](#extensive-example-of-mocking-in-angular-tests),
@@ -2085,31 +2090,28 @@ it covers all aspects of **testing components in angular applications**.
 
 ### How to test a provider of a component
 
-The source file is here:
-[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
+If we have a component with providers for testing, we need to mock everything
+except the provider:
 
 ```typescript
-describe('TestProviderInComponent', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder.
-  // Because we do not care about TargetComponent, we pass it as
-  // the second parameter for being mocked.
-  beforeEach(() => MockBuilder(TargetService, TargetComponent));
-
-  it('has access to the service via a component', () => {
-    // Let's render the mocked component. It provides as a point
-    // to access the service.
-    const fixture = MockRender(TargetComponent);
-
-    // The root element is fixture.point and it is the TargetComponent
-    // with its injector for extracting internal services.
-    const service = fixture.point.injector.get(TargetService);
-
-    // Here we go, now we can assert everything about the service.
-    expect(service.value).toEqual('target');
-  });
-});
+beforeEach(() => MockBuilder(TargetService, TargetComponent));
 ```
+
+This code will setup `TestBed` with a mocked copy of `TargetComponent`, but leave `TargetService` as it is
+that we would be able to assert it.
+
+In the test we need to render the mocked component, find its element in the fixture and extract the service from the element.
+If we use `MockRender` we can access the element of the component via `fixture.point`.
+
+```typescript
+const fixture = MockRender(TargetComponent);
+const service = fixture.point.injector.get(TargetService);
+```
+
+Profit. Now we can assert behavior of the service.
+
+The source file of this test is here:
+[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts)
 
 ---
 
