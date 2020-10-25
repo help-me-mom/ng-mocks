@@ -67,10 +67,6 @@ I'm open to contributions.
   - [a structural directive with context](#how-to-test-a-structural-directive-with-context)
   - [a pipe](#how-to-test-a-pipe)
   - [a provider](#how-to-test-a-provider)
-  - [a provider with dependencies](#how-to-test-a-provider-with-dependencies)
-  - [a provider with useClass or mock it](#how-to-test-a-provider-with-useclass-or-mock-it)
-  - [a provider with useExisting](#how-to-test-a-provider-with-useexisting)
-  - [a provider with useFactory](#how-to-test-a-provider-with-usefactory)
   - [a token](#how-to-test-a-token)
   - [a multi token](#how-to-test-a-multi-token)
   - [a route](#how-to-test-a-route)
@@ -2288,302 +2284,65 @@ The source file of this test is here:
 ### How to test a provider
 
 Usually, you don't need `TestBed` if you want to test a simple
-provider. It might be a pure unit test.
+provider, the best way would be to write isolated pure unit tests.
 
-Nevertheless, `MockBuilder` can help here too. Dependencies will be
-mocked if a provider has them, do not forget to provide its module in
-this case.
-
-The source file is here:
-[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts)
+Nevertheless, [`MockBuilder`](#mockbuilder) might help here too. If a provider has complex dependencies, or you want to verify
+that its module creates the provider in a particular way, then simply pass the provider as the first parameter and its module as the second one.
 
 ```typescript
-describe('TestProvider', () => {
-  beforeEach(() => MockBuilder(TargetService));
-
-  it('returns value on echo', () => {
-    const service = TestBed.get(TargetService);
-
-    expect(service.echo()).toEqual(service.value);
-  });
-});
+beforeEach(() => MockBuilder(TargetService, TargetModule));
 ```
 
----
-
-### How to test a provider with dependencies
-
-The source file is here:
-[examples/TestProviderWithDependencies/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts)
+In a test you need to you the global injector to get an instance of the service to assert its behavior:
 
 ```typescript
-describe('TestProviderWithDependencies', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its dependencies
-  // we need to pass its module as the second parameter.
-  beforeEach(() => MockBuilder(TargetService, TargetModule));
-
-  beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
-    MockInstance(Service1, {
-      init: instance => {
-        instance.trigger = () => 'mock1';
-      },
-    });
-    // Let's customize a bit behavior of the mocked copy of Service2.
-    MockInstance(Service2, {
-      init: instance => {
-        instance.trigger = () => 'mock2';
-      },
-    });
-  });
-
-  afterAll(MockReset);
-
-  it('creates TargetService', () => {
-    // Creates an instance only if all dependencies are present.
-    const service = TestBed.get(TargetService);
-
-    // Let's assert behavior.
-    expect(service.value1).toEqual('mock1');
-    expect(service.value2).toEqual('mock2');
-  });
-});
+const service = TestBed.get(TargetService);
+expect(service.echo()).toEqual(service.value);
 ```
 
----
-
-### How to test a provider with useClass or mock it
-
-The source file is here:
-[examples/TestProviderWithUseClass/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts)
+What might be useful here is knowledge of how to customize the dependencies.
+There are 3 options: `.mock`, `.provide` and `MockInstance`. All of them are a good choice:
 
 ```typescript
-describe('TestProviderWithUseClass', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its dependencies
-  // we need to pass its module as the second parameter.
-  beforeEach(() => MockBuilder(Target1Service, TargetModule));
-
-  beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
-    MockInstance(Service1, {
-      init: instance => {
-        instance.name = 'mock1';
-      },
-    });
-  });
-
-  afterAll(MockReset);
-
-  it('respects all dependencies', () => {
-    const service = TestBed.get(Target1Service);
-
-    // Let's assert that service has a flag from Target2Service.
-    expect(service.flag).toBeTruthy();
-    expect(service).toEqual(jasmine.any(Target2Service));
-
-    // And let's assert that Service1 has been mocked and its name
-    // is undefined.
-    expect(service.service.name).toEqual('mock1');
-    expect(service.service).toEqual(jasmine.any(Service1));
-
-    // Because we mocked the module, Service1 has been mocked
-    // based on its `provide` class, deps and other values are
-    // ignored by mocking logic.
-    expect(service.service).not.toEqual(jasmine.any(Service2));
-  });
-});
-```
-
----
-
-### How to test a provider with useValue
-
-The source file is here:
-[examples/TestProviderWithUseValue/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts)
-
-```typescript
-import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
-
-// A simple service, it might have contained more logic,
-// but it is redundant for the test demonstration.
-@Injectable()
-class TargetService {
-  public readonly name = 'target';
-}
-
-// A module that provides all services.
-@NgModule({
-  providers: [
-    {
-      provide: TargetService,
-      // an empty object instead
+beforeEach(() =>
+  MockBuilder(TargetService, TargetModule)
+    .mock(Service2, {
+      trigger: () => 'mock2',
+    })
+    .provide({
+      provide: Service3,
       useValue: {
-        service: null,
+        trigger: () => 'mock3',
       },
-    },
-  ],
-})
-class TargetModule {}
-
-describe('TestProviderWithUseValue', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its initialization
-  // we need to pass its module as the second parameter.
-  beforeEach(() => MockBuilder(TargetService, TargetModule));
-
-  it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
-
-    // Let's assert received data.
-    expect(service).toEqual({
-      service: null,
-    });
-  });
-});
+    })
+);
 ```
-
----
-
-### How to test a provider with useExisting
-
-The source file is here:
-[examples/TestProviderWithUseExisting/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseExisting/test.spec.ts)
 
 ```typescript
-import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
-
-// A service we want to use.
-@Injectable()
-class Service1 {
-  public name = 'target';
-}
-
-// A service we want to replace.
-@Injectable()
-class Service2 {
-  public name = 'target';
-}
-
-// A service we want to test and to replace via useExisting.
-@Injectable()
-class TargetService {}
-
-// A module that provides all services.
-@NgModule({
-  providers: [
-    Service1,
-    {
-      provide: Service2,
-      useExisting: Service1,
+beforeAll(() => {
+  MockInstance(Service1, {
+    init: instance => {
+      instance.trigger = () => 'mock1';
     },
-    {
-      provide: TargetService,
-      useExisting: Service2,
-    },
-  ],
-})
-class TargetModule {}
-
-describe('TestProviderWithUseExisting', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its initialization
-  // we need to pass its module as the second parameter.
-  beforeEach(() => MockBuilder(TargetService, TargetModule));
-
-  beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
-    MockInstance(Service2, {
-      init: instance => {
-        instance.name = 'mock2';
-      },
-    });
-  });
-
-  afterAll(MockReset);
-
-  it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
-
-    // Because Service2 has been mocked, we are getting here a mocked
-    // copy of Service2 instead of Service1.
-    expect(service).toEqual(jasmine.any(Service2));
-    // Because we have kept TargetService we are getting here a
-    // mocked copy of Service2 as it says in useExisting.
-    expect(service.name).toEqual('mock2');
   });
 });
 ```
 
----
+Despite the way providers are created: `useClass`, `useValue` etc.
+Their tests are quite similar.
 
-### How to test a provider with useFactory
-
-The source file is here:
+The source file of a test without dependencies is here:
+[examples/TestProvider/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProvider/test.spec.ts)<br>
+The source file of a test with dependencies is here:
+[examples/TestProviderWithDependencies/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts)<br>
+The source file of a test with `useClass` is here:
+[examples/TestProviderWithUseClass/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts)<br>
+The source file of a test with `useValue` is here:
+[examples/TestProviderWithUseValue/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts)<br>
+The source file of a test with `useExisting` is here:
+[examples/TestProviderWithUseExisting/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseExisting/test.spec.ts)<br>
+The source file of a test with `useFactory` is here:
 [examples/TestProviderWithUseFactory/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseFactory/test.spec.ts)
-
-```typescript
-import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance } from 'ng-mocks';
-
-// Dependency 1.
-@Injectable()
-class Service1 {
-  public name = 'target';
-}
-
-// A service we want to use.
-@Injectable()
-class TargetService {
-  public readonly service: Service1;
-
-  constructor(service: Service1) {
-    this.service = service;
-  }
-}
-
-// A module that provides all services.
-@NgModule({
-  providers: [
-    Service1,
-    {
-      deps: [Service1],
-      provide: TargetService,
-      useFactory: (service: Service1) => new TargetService(service),
-    },
-  ],
-})
-class TargetModule {}
-
-describe('TestProviderWithUseFactory', () => {
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its initialization
-  // we need to pass its module as the second parameter.
-  beforeEach(() => MockBuilder(TargetService, TargetModule));
-
-  beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
-    MockInstance(Service1, {
-      init: instance => {
-        instance.name = 'mock1';
-      },
-    });
-  });
-
-  it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
-
-    // Because Service1 has been mocked, we should get mock1 here.
-    expect(service.service.name).toEqual('mock1');
-  });
-});
-```
 
 ---
 
