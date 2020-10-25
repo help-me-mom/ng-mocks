@@ -300,6 +300,13 @@ const mockServiceHelperPrototype = {
     let mockedDef: typeof def;
     if (resolutions.has(provider)) {
       mockedDef = resolutions.get(provider);
+      // A case when a provider is actually a component, directive, pipe.
+      if (typeof mockedDef === 'function') {
+        mockedDef = {
+          provide: provider,
+          useClass: mockedDef,
+        };
+      }
       return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
     }
 
