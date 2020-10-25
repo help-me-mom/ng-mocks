@@ -1,4 +1,3 @@
-// A simple component pretending a login form.
 import { Location } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -8,11 +7,14 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
+// A simple service simulating login check.
+// It will be mocked.
 @Injectable()
 class LoginService {
   public isLoggedIn = false;
 }
 
+// A guard we want to test.
 @Injectable()
 class LoginGuard implements CanActivate {
   protected router: Router;
@@ -32,6 +34,8 @@ class LoginGuard implements CanActivate {
   }
 }
 
+// A simple component pretending a login form.
+// It will be mocked.
 @Component({
   selector: 'login',
   template: 'login',
@@ -39,6 +43,7 @@ class LoginGuard implements CanActivate {
 class LoginComponent {}
 
 // A simple component pretending a protected dashboard.
+// It will be mocked.
 @Component({
   selector: 'dashboard',
   template: 'dashboard',
@@ -77,6 +82,7 @@ describe('TestRoutingGuard', () => {
   // routes to have tools for testing.
   beforeEach(() => MockBuilder(LoginGuard, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])));
 
+  // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
     const router: Router = TestBed.get(Router);
