@@ -29,7 +29,7 @@ describe('TestAttributeDirective', () => {
   ngMocks.faster(); // the same TestBed for several its.
 
   // Because we want to test the directive, we pass it as the first
-  // argument of MockBuilder. We can omit the second argument,
+  // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
   beforeEach(() => MockBuilder(TargetDirective));
 
@@ -58,7 +58,7 @@ describe('TestAttributeDirective', () => {
 
   it('sets provided background color', () => {
     // When we want to test inputs / outputs we need to use the second
-    // argument of MockRender, simply pass there variables for the
+    // parameter of MockRender, simply pass there variables for the
     // template, they'll become properties of
     // fixture.componentInstance.
     const fixture = MockRender(`<div [color]="color" target></div>`, {

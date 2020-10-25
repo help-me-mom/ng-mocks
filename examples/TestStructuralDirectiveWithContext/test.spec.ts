@@ -34,7 +34,7 @@ class TargetDirective {
 
 describe('TestStructuralDirectiveWithContext', () => {
   // Because we want to test the directive, we pass it as the first
-  // argument of MockBuilder. We can omit the second argument,
+  // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
   beforeEach(() => MockBuilder(TargetDirective));
 

@@ -21,7 +21,7 @@ describe('TestPipe', () => {
   ngMocks.faster(); // the same TestBed for several its.
 
   // Because we want to test the pipe, we pass it as the first
-  // argument of MockBuilder. We can omit the second argument,
+  // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
   beforeEach(() => MockBuilder(TargetPipe));
 

@@ -45,9 +45,9 @@ describe('TestProviderInDirective', () => {
   ngMocks.faster(); // the same TestBed for several its.
 
   // Because we want to test the service, we pass it as the first
-  // argument of MockBuilder.
+  // parameter of MockBuilder.
   // Because we do not care about TargetDirective, we pass it as
-  // the second argument for being mocked.
+  // the second parameter for being mocked.
   beforeEach(() => MockBuilder(TargetService, TargetDirective));
 
   it('has access to the service via a directive', () => {

@@ -23,9 +23,9 @@ class TargetComponent {
 
 describe('TestProviderInComponent', () => {
   // Because we want to test the service, we pass it as the first
-  // argument of MockBuilder.
+  // parameter of MockBuilder.
   // Because we do not care about TargetComponent, we pass it as
-  // the second argument for being mocked.
+  // the second parameter for being mocked.
   beforeEach(() => MockBuilder(TargetService, TargetComponent));
 
   it('has access to the service via a component', () => {
