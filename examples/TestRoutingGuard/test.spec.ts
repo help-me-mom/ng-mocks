@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Injectable, NgModule } from '@angular/core';
+import { Component, Injectable, NgModule, VERSION } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CanActivate, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -84,6 +84,11 @@ describe('TestRoutingGuard', () => {
 
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
+    if (parseInt(VERSION.major, 10) <= 6) {
+      pending('Need Angular > 6');
+      return;
+    }
+
     const fixture = MockRender(RouterOutlet);
     const router: Router = TestBed.get(Router);
     const location: Location = TestBed.get(Location);

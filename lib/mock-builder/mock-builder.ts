@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
-import { AnyType, flatten, isNgDef, isNgInjectionToken, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/lib';
+import { AnyType, flatten, isNgDef, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/lib';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 
@@ -10,7 +10,7 @@ import { MockBuilderPromise } from './mock-builder-promise';
 
 export function MockBuilder(
   keepDeclaration?: AnyType<any> | InjectionToken<any>,
-  itsModuleToMock?: AnyType<any> | InjectionToken<any>
+  itsModuleToMock?: AnyType<any>
 ): MockBuilderPromise {
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
@@ -99,9 +99,7 @@ export function MockBuilder(
       export: true,
     });
   }
-  if (itsModuleToMock && isNgInjectionToken(itsModuleToMock)) {
-    instance.mock(itsModuleToMock);
-  } else if (itsModuleToMock) {
+  if (itsModuleToMock) {
     instance.mock(itsModuleToMock, {
       exportAll: true,
     });

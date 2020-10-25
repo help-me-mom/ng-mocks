@@ -751,8 +751,8 @@ describe('MockPipe', () => {
 
 `ngMocks` provides a `MockService` function that tries its best
 to facilitate creation of mocked copies of services.
-It tends to avoid hustle of providing customized mocks for huge services.
-Simply pass a class into it and its result wil be a mocked instance that respects the class,
+It tends to avoid hustle of providing customized mocked copies for huge services.
+Simply pass a class into it and its result will be a mocked instance that respects the class,
 but all methods and properties are customizable dummies.
 
 - `MockService(MyService)` - returns a mocked instance of `MyService` class.
@@ -898,11 +898,15 @@ It extends features of `MockModule`.</small>
 **A mocked module** respects its original module as
 a type of `MockedModule<T>` and provides:
 
-- mocks all components, directives, pipes
-- mocks all services as their dummy instances
+- mocks all components, directives, pipes and providers
 - mocks all imports and exports
-- mocks tokens with `useValue` definition as primitives such as `0`, `false`, `''`, `null` and `undefined`
-- ignores all other token to avoid their influence
+- mocks all services as their dummy instances
+- mocks abstract methods of services with a `useClass` definition
+- mocks tokens with a `useClass` definition based on its value
+- forwards tokens with a `useExisting` definition to its value
+- mocks tokens with a `useFactory` definition as an empty object
+- mocks tokens with a `useValue` definition as a primitive such as `0`, `false`, `''`, `null` and `undefined`
+- mocks tokens with a `useValue` definition as an object via [`MockService`](#how-to-mock-a-service)
 
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to mock in a test.
