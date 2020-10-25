@@ -37,17 +37,17 @@ describe('TestHttpRequest', () => {
   it('sends a request', () => {
     // Let's extract the service and http controller for testing.
     const service: TargetService = TestBed.get(TargetService);
-    const http: HttpTestingController = TestBed.get(HttpTestingController);
+    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
 
     // A simple subscription to check what the service returns.
     let actual: any;
     service.fetch().subscribe(value => (actual = value));
 
     // Simulating a request.
-    const req = http.expectOne('/data');
+    const req = httpMock.expectOne('/data');
     expect(req.request.method).toEqual('GET');
     req.flush([false, true, false]);
-    http.verify();
+    httpMock.verify();
 
     // Asserting the result.
     expect(actual).toEqual([false, true, false]);
