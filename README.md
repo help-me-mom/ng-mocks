@@ -62,9 +62,9 @@ I'm open to contributions.
   - [a component](#how-to-test-a-component)
   - [a provider of a component](#how-to-test-a-provider-of-a-component)
   - [an attribute directive](#how-to-test-an-attribute-directive)
+  - [a provider of a directive](#how-to-test-a-provider-of-a-directive)
   - [a structural directive](#how-to-test-a-structural-directive)
   - [a structural directive with context](#how-to-test-a-structural-directive-with-context)
-  - [a provider of a directive](#how-to-test-a-provider-of-a-directive)
   - [a pipe](#how-to-test-a-pipe)
   - [a provider](#how-to-test-a-provider)
   - [a provider with dependencies](#how-to-test-a-provider-with-dependencies)
@@ -2150,6 +2150,34 @@ The source file of this test is here:
 
 ---
 
+### How to test a provider of a directive
+
+This test is quite similar to [testing a provider of a component](#how-to-test-a-provider-of-a-component).
+With difference that we need a bit different template.
+
+Let's prepare `TestBed`: the service for testing is the first parameter, the directive is the second one:
+
+```typescript
+beforeEach(() => MockBuilder(TargetService, TargetDirective));
+```
+
+A custom template for the test could look like:
+
+```typescript
+const fixture = MockRender(`<div target></div>`);
+```
+
+Once we have the fixture we can extract the service from it and assert its behavior:
+
+```typescript
+const service = fixture.point.injector.get(TargetService);
+```
+
+The source file of this test is here:
+[examples/TestProviderInDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts)
+
+---
+
 ### How to test a structural directive
 
 Structural directives influence render of their child view, you definitely have used `*ngIf`, that's the thing.
@@ -2226,51 +2254,6 @@ fixture.detectChanges();
 
 The source file is here:
 [examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts)
-
----
-
-### How to test a provider of a directive
-
-The source file is here:
-[examples/TestProviderInDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts)
-
-```typescript
-describe('TestProviderInDirective', () => {
-  ngMocks.faster(); // the same TestBed for several its.
-
-  // Because we want to test the service, we pass it as the first
-  // parameter of MockBuilder.
-  // Because we do not care about TargetDirective, we pass it as
-  // the second parameter for being mocked.
-  beforeEach(() => MockBuilder(TargetService, TargetDirective));
-
-  it('has access to the service via a directive', () => {
-    // Let's render a div with the directive. It provides a point
-    // to access the service.
-    const fixture = MockRender(`<div target></div>`);
-
-    // The root element is fixture.point and it has access to the
-    // context of the directive. Its injector can extract the service.
-    const service = fixture.point.injector.get(TargetService);
-
-    // Here we go, now we can assert everything about the service.
-    expect(service.value).toEqual(true);
-  });
-
-  it('has access to the service via a structural directive', () => {
-    // Let's render a div with the directive. It provides a point to
-    // access the service.
-    const fixture = MockRender(`<div *target></div>`);
-
-    // The root element is fixture.point and it has access to the
-    // context of the directive. Its injector can extract the service.
-    const service = fixture.point.injector.get(TargetService);
-
-    // Here we go, now we can assert everything about the service.
-    expect(service.value).toEqual(true);
-  });
-});
-```
 
 ---
 
