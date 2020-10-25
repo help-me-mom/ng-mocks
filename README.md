@@ -2152,46 +2152,43 @@ The source file of this test is here:
 
 ### How to test a structural directive
 
-The source file is here:
-[examples/TestStructuralDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts)
+Structural directives influence render of their child view, you definitely have used `*ngIf`, that's the thing.
+Steps for testing are quite close to the steps for testing attribute directives: we need to render a custom template and
+then to assert behavior of the directive.
+
+Let's configure `TestBed`. The first parameter for [`MockBuilder`](#mockbuilder) is the directive itself,
+and if it has dependencies we should pass its module as the second parameter:
 
 ```typescript
-describe('TestStructuralDirective', () => {
-  // Because we want to test the directive, we pass it as the first
-  // parameter of MockBuilder. We can omit the second parameter,
-  // because there are no dependencies.
-  beforeEach(() => MockBuilder(TargetDirective));
-
-  it('hides and renders its content', () => {
-    const fixture = MockRender(
-      `
-        <div *target="value">
-          content
-        </div>
-    `,
-      {
-        value: false,
-      }
-    );
-
-    // Because the value is false the "content" should not be
-    // rendered.
-    expect(fixture.nativeElement.innerHTML).not.toContain('content');
-
-    // Let's change the value to true and assert that the "content"
-    // has been rendered.
-    fixture.componentInstance.value = true;
-    fixture.detectChanges();
-    expect(fixture.nativeElement.innerHTML).toContain('content');
-
-    // Let's change the value to false and assert that the
-    // "content" has been hidden.
-    fixture.componentInstance.value = false;
-    fixture.detectChanges();
-    expect(fixture.nativeElement.innerHTML).not.toContain('content');
-  });
-});
+beforeEach(() => MockBuilder(TargetDirective));
 ```
+
+The next step is to render a custom template. Let's assume that the selector of the directive is `[target]`.
+Now let's render it in a test:
+
+```typescript
+const fixture = MockRender(
+  `
+    <div *target="value">
+      content
+    </div>
+  `,
+  {
+    value: false,
+  }
+);
+```
+
+With help of [`MockRender`](#mockrender) we can access the element of the directive via `fixture.point` to cause events on,
+and we can change the `value` via `fixture.componentInstance.value`:
+
+```typescript
+fixture.componentInstance.value = true;
+const instance = ngMocks.get(fixture.point, TargetDirective);
+```
+
+The source file of this test is here:
+[examples/TestStructuralDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts)
 
 ---
 
