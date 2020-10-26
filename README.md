@@ -38,7 +38,7 @@ I'm open to contributions.
 - [How to install](#install)
 - [Motivation and easy start](#motivation-and-easy-start)
 
-* How to mock
+* [How to mock](#how-to-mock-dependencies-in-an-angular-application)
   - [a component](#how-to-mock-a-component)
   - [a directive](#how-to-mock-a-directive)
   - [a pipe](#how-to-mock-a-pipe)
@@ -58,13 +58,13 @@ I'm open to contributions.
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
-* How to test
+* [How to test](#how-to-test-an-angular-application)
   - [a component](#how-to-test-a-component)
   - [a provider of a component](#how-to-test-a-provider-of-a-component)
   - [an attribute directive](#how-to-test-an-attribute-directive)
   - [a provider of a directive](#how-to-test-a-provider-of-a-directive)
   - [a structural directive](#how-to-test-a-structural-directive)
-  - [a structural directive with context](#how-to-test-a-structural-directive-with-context)
+  - [a structural directive with a context](#how-to-test-a-structural-directive-with-a-context)
   - [a pipe](#how-to-test-a-pipe)
   - [a provider](#how-to-test-a-provider)
   - [a token](#how-to-test-a-token)
@@ -251,7 +251,7 @@ Below more detailed documentation begins, please bear with us.
 
 ---
 
-## How to mock
+## How to mock dependencies in an Angular application
 
 This section provides vast **information how to mock dependencies in angular** with real examples and detailed explanations
 of all aspects might be useful in writing fully isolated unit tests.
@@ -269,7 +269,7 @@ a type of `MockedComponent<T>` and provides:
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
 - templates are pure `ng-content` tags to allow transclusion
-- supports `@ContentChild` with `$implicit` context
+- supports `@ContentChild` with an `$implicit` context
   - `__render('id', $implicit, variables)` - renders a template
   - `__hide('id')` - hides a rendered template
 - supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
@@ -600,7 +600,7 @@ The source file is here:
 ```typescript
 describe('MockDirective', () => {
   // IMPORTANT: by default structural directives are not rendered.
-  // Because they might require context which should be provided.
+  // Because they might require a context which should be provided.
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() =>
@@ -2084,7 +2084,7 @@ import 'ng-mocks/dist/jest';
 
 ---
 
-## How to test
+## How to test an Angular application
 
 The goal of this section is to demonstrate **comprehensive examples of angular unit tests**
 covering almost all possible cases.
@@ -2107,8 +2107,8 @@ except the provider:
 beforeEach(() => MockBuilder(TargetService, TargetComponent));
 ```
 
-This code will setup `TestBed` with a mocked copy of `TargetComponent`, but leave `TargetService` as it is
-that we would be able to assert it.
+This code will setup `TestBed` with a mocked copy of `TargetComponent`, but leave `TargetService` as it is,
+so we would be able to assert it.
 
 In the test we need to render the mocked component, find its element in the fixture and extract the service from the element.
 If we use `MockRender` we can access the element of the component via `fixture.point`.
@@ -2206,23 +2206,33 @@ Now let's render it in a test:
 
 ```typescript
 const fixture = MockRender(
-  `
-    <div *target="value">
-      content
-    </div>
-  `,
+  `<div *target="value">
+    content
+  </div>`,
   {
     value: false,
   }
 );
 ```
 
+Let's assert that the content has not been rendered.
+
+```typescript
+expect(fixture.nativeElement.innerHTML).not.toContain('content');
+```
+
 With help of [`MockRender`](#mockrender) we can access the element of the directive via `fixture.point` to cause events on,
-and we can change the `value` via `fixture.componentInstance.value`:
+and we can change the `value` via `fixture.componentInstance.value`.
 
 ```typescript
 fixture.componentInstance.value = true;
-const instance = ngMocks.get(fixture.point, TargetDirective);
+```
+
+Because `value` is `true` now, the content should be rendered.
+
+```typescript
+fixture.detectChanges();
+expect(fixture.nativeElement.innerHTML).toContain('content');
 ```
 
 The source file of this test is here:
@@ -2230,19 +2240,17 @@ The source file of this test is here:
 
 ---
 
-### How to test a structural directive with context
+### How to test a structural directive with a context
 
 If you did not read ["How to test a structural directive"](#how-to-test-a-structural-directive), please do it first.
 
-The difference for structural directives with context in terms of testing is what we want to render in a custom template.
-It should include variables:
+The difference for structural directives with a context in terms of testing is that our custom template has variables.
 
 ```typescript
 const fixture = MockRender(
-  `
-    <div *target="values; let value; let index = myIndex">
+  `<div *target="values; let value; let index = myIndex">
     {{index}}: {{ value }}
-    </div>`,
+  </div>`,
   {
     values: ['hello', 'world'],
   }
@@ -2260,6 +2268,9 @@ expect(fixture.nativeElement.innerHTML).toContain('1: world');
 ```typescript
 fixture.componentInstance.values = ['ngMocks'];
 fixture.detectChanges();
+expect(fixture.nativeElement.innerHTML).toContain('0: ngMocks');
+expect(fixture.nativeElement.innerHTML).not.toContain('0: hello');
+expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
 ```
 
 The source file of this test is here:
@@ -2269,7 +2280,7 @@ The source file of this test is here:
 
 ### How to test a pipe
 
-An approach with testing pipes is similar to directives. The pipe we pass as the first parameter of [`MockBuilder`](#mockbuilder),
+An approach with testing pipes is similar to directives. We pass the pipe as the first parameter of [`MockBuilder`](#mockbuilder),
 and its module with dependencies as the second one if they exist:
 
 ```typescript
@@ -2364,9 +2375,9 @@ The source file of a test with `useFactory` is here:
 
 For proper testing of tokens in Angular application, we need extra declarations compare to their usage in the application.
 
-Because a token might have a factory function it is not always necessary to list the token in providers for successful execution of its application.
+Because a token might have a factory function, it is not always necessary to list the token in providers for successful execution of its application.
 Unfortunately, for testing it is not like that, and in this case `ngMocks` cannot detect the token.
-Please make sure, that the token and its dependencies are listed in providers of a module, then `ngMocks` can mock them properly.
+Please make sure, that the token and its dependencies are listed in providers of a related module, then `ngMocks` can mock them properly.
 
 Configuration of `TestBed` should be done via `MockBuilder` where its first parameter is the token we want to test, and
 the second parameter is its module.

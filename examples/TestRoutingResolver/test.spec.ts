@@ -4,7 +4,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Resolve, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-import { combineLatest, from, Observable } from 'rxjs';
+import { combineLatest, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 // A simple service simulating a data request.
@@ -31,6 +31,16 @@ class DataResolver implements Resolve<{ flag: boolean }> {
   }
 }
 
+// A resolver we want to ignore.
+@Injectable()
+class MockedResolver implements Resolve<{ mock: boolean }> {
+  protected mock = true;
+
+  resolve() {
+    return of({ mock: this.mock });
+  }
+}
+
 // A dummy component.
 // It will be mocked.
 @Component({
@@ -50,11 +60,12 @@ class TargetComponent {}
         path: 'target',
         resolve: {
           data: DataResolver,
+          mock: MockedResolver,
         },
       },
     ]),
   ],
-  providers: [DataService, DataResolver],
+  providers: [DataService, DataResolver, MockedResolver],
 })
 class TargetModule {}
 
@@ -97,10 +108,12 @@ describe('TestRoutingResolver', () => {
     const route: ActivatedRoute = el.injector.get(ActivatedRoute);
 
     // Now we can assert that it has expected data.
-    expect(route.snapshot.data).toEqual({
-      data: {
-        flag: false,
-      },
-    });
+    expect(route.snapshot.data).toEqual(
+      jasmine.objectContaining({
+        data: {
+          flag: false,
+        },
+      })
+    );
   }));
 });
