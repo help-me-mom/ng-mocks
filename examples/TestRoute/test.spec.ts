@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
@@ -57,7 +57,45 @@ class TargetRoutingModule {}
 })
 class TargetModule {}
 
-describe('TestRoute', () => {
+describe('TestRoute:Route', () => {
+  beforeEach(() => MockBuilder(RouterModule, TargetModule).keep(RouterTestingModule.withRoutes([])));
+
+  it('renders /1 with Target1Component', fakeAsync(() => {
+    const fixture = MockRender(RouterOutlet);
+    const router: Router = TestBed.get(Router);
+    const location: Location = TestBed.get(Location);
+
+    // First we need to initialize navigation.
+    location.go('/1');
+    if (fixture.ngZone) {
+      fixture.ngZone.run(() => router.initialNavigation());
+      tick(); // is needed for rendering of the current route.
+    }
+
+    // We should see Target1Component component on /1 page.
+    expect(location.path()).toEqual('/1');
+    expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
+  }));
+
+  it('renders /2 with Target2Component', fakeAsync(() => {
+    const fixture = MockRender(RouterOutlet);
+    const router: Router = TestBed.get(Router);
+    const location: Location = TestBed.get(Location);
+
+    // First we need to initialize navigation.
+    location.go('/2');
+    if (fixture.ngZone) {
+      fixture.ngZone.run(() => router.initialNavigation());
+      tick(); // is needed for rendering of the current route.
+    }
+
+    // We should see Target2Component component on /2 page.
+    expect(location.path()).toEqual('/2');
+    expect(() => ngMocks.find(fixture, Target2Component)).not.toThrow();
+  }));
+});
+
+describe('TestRoute:Component', () => {
   // Because we want to test navigation, it means that we want to
   // test a component with 'router-outlet' and its integration with
   // RouterModule. Therefore, we pass the component as the first
