@@ -1374,6 +1374,13 @@ beforeEach(() =>
     .exclude(SomeDependency)
     .exclude(SomeInjectionToken)
 );
+// If we want to test guards we need to .keep guards we need, but
+// what should we do with other guards we do not want to care about
+// at all? The answer is to exclude `NG_GUARDS`, it will removal all
+// the guards from routes except the explicitly configured ones.
+beforeEach(
+  () => MockBuilder(MyGuard, MyModule).exclude(NG_GUARDS) // <- Token to remove all guards
+);
 
 // If we want to replace something with something,
 // we should use .replace.

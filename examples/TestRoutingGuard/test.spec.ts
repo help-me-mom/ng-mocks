@@ -3,7 +3,7 @@ import { Component, Injectable, NgModule, VERSION } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CanActivate, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, NG_GUARDS, ngMocks } from 'ng-mocks';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
@@ -34,6 +34,16 @@ class LoginGuard implements CanActivate {
   }
 }
 
+// A side guard, when it has been mocked it blocks all routes, because `canActivate` returns undefined.
+@Injectable()
+class MockedGuard implements CanActivate {
+  protected readonly allow = true;
+
+  canActivate(): boolean {
+    return this.allow;
+  }
+}
+
 // A simple component pretending a login form.
 // It will be mocked.
 @Component({
@@ -57,17 +67,26 @@ class DashboardComponent {}
   imports: [
     RouterModule.forRoot([
       {
+        canActivate: [MockedGuard, 'canActivateToken'],
         component: LoginComponent,
         path: 'login',
       },
       {
-        canActivate: [LoginGuard],
+        canActivate: [LoginGuard, MockedGuard, 'canActivateToken'],
         component: DashboardComponent,
         path: '**',
       },
     ]),
   ],
-  providers: [LoginService, LoginGuard],
+  providers: [
+    LoginService,
+    LoginGuard,
+    MockedGuard,
+    {
+      provide: 'canActivateToken',
+      useValue: () => true,
+    },
+  ],
 })
 class TargetModule {}
 
@@ -76,11 +95,14 @@ describe('TestRoutingGuard', () => {
   // test its integration with RouterModule. Therefore, we pass
   // the guard as the first parameter of MockBuilder. Then, to
   // correctly satisfy its initialization, we need to pass its module
-  // as the second parameter. And, the last but not the least, we
-  // need to avoid mocking of RouterModule to have its routes, and to
-  // add RouterTestingModule.withRoutes([]), yes yes, with empty
-  // routes to have tools for testing.
-  beforeEach(() => MockBuilder(LoginGuard, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])));
+  // as the second parameter. The next step is to avoid mocking of
+  // RouterModule to have its routes, and to add
+  // RouterTestingModule.withRoutes([]), yes yes, with empty routes
+  // to have tools for testing. And the last thing is to exclude
+  // `NG_GUARDS` to remove all other guards.
+  beforeEach(() =>
+    MockBuilder(LoginGuard, TargetModule).exclude(NG_GUARDS).keep(RouterModule).keep(RouterTestingModule.withRoutes([]))
+  );
 
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
