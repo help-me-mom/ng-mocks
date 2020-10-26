@@ -223,7 +223,7 @@ const mockServiceHelperPrototype = {
     if (ngMocksUniverse.cacheMocks.has(value)) {
       return ngMocksUniverse.cacheMocks.get(value);
     }
-    if (typeof value !== 'object' || !value) {
+    if (typeof value !== 'object') {
       return value;
     }
 

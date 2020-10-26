@@ -59,7 +59,7 @@ class MockedInterceptor implements HttpInterceptor {
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
-      useExisting: MockedInterceptor,
+      useClass: MockedInterceptor,
     },
   ],
 })
