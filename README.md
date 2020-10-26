@@ -2447,8 +2447,8 @@ After we have rendered `RouterOutlet` we should initialize the router, also we c
 As mentioned above, we should use zones and `fakeAsync` for that.
 
 ```typescript
-const router: Router = TestBed.get(Router);
-const location: Location = TestBed.get(Location);
+const router = TestBed.get(Router);
+const location = TestBed.get(Location);
 
 location.go('/1');
 if (fixture.ngZone) {
@@ -2577,15 +2577,17 @@ const fixture = MockRender(RouterOutlet);
 Additionally, we also need to properly customize mocked services if the resolver is using them to fetch data.
 
 ```typescript
-const dataService: DataService = TestBed.get(DataService);
+const dataService = TestBed.get(DataService);
+
 dataService.data = () => from([false]);
 ```
 
 The next step is to go to the route where the resolver is, and to trigger initialization of the router.
 
 ```typescript
-const location: Location = TestBed.get(Location);
-const router: Router = TestBed.get(Router);
+const location = TestBed.get(Location);
+const router = TestBed.get(Router);
+
 location.go('/target');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
@@ -2638,11 +2640,13 @@ subscribe to the service and to write an expectation of the request.
 ```typescript
 const service = TestBed.get(TargetService);
 let actual: any;
+
 service.fetch().subscribe(value => (actual = value));
 ```
 
 ```typescript
 const httpMock = TestBed.get(HttpTestingController);
+
 const req = httpMock.expectOne('/data');
 expect(req.request.method).toEqual('GET');
 req.flush([false, true, false]);
@@ -2662,89 +2666,52 @@ The source file of this test is here:
 
 ### How to test a http interceptor
 
-The source file is here:
-[examples/TestHttpInterceptor/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpInterceptor/test.spec.ts)
+To test an interceptor we need the interceptor itself and its module.
+Please consider refactoring if the interceptor is defined by `useValue` or `useFactory`, whereas `useClass` and `useExisting` are supported.
+The problem of `useValue` and `useFactory` is that it is quite hard to distinguish them to avoid influence of other interceptors
+in `TestBed`.
+
+We need to keep `HTTP_INTERCEPTORS` token, because the interceptor is defined by it.
+But this cause that all other interceptors will be kept too, therefore, we need to get rid of them via excluding `NG_INTERCEPTORS` token.
+The issue here is that if there are more interceptors, then their mocked copies will fail
+with "You provided 'undefined' where a stream was expected." error.
+And the last important step is to replace `HttpClientModule` with `HttpClientTestingModule`,
+so we can use `HttpTestingController` for faking requests.
 
 ```typescript
-import {
-  HTTP_INTERCEPTORS,
-  HttpClient,
-  HttpClientModule,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
-import { Observable } from 'rxjs';
-
-// An interceptor we want to test.
-@Injectable()
-class TargetInterceptor implements HttpInterceptor {
-  protected value = 'HttpInterceptor';
-
-  public intercept(
-    request: HttpRequest<void>,
-    next: HttpHandler
-  ): Observable<HttpEvent<void>> {
-    return next.handle(
-      request.clone({
-        setHeaders: {
-          'My-Custom': this.value,
-        },
-      })
-    );
-  }
-}
-
-// A module with its definition.
-@NgModule({
-  imports: [HttpClientModule],
-  providers: [
-    TargetInterceptor,
-    {
-      multi: true,
-      provide: HTTP_INTERCEPTORS,
-      useClass: TargetInterceptor,
-    },
-  ],
-})
-class TargetModule {}
-
-describe('TestHttpInterceptor', () => {
-  // Because we want to test the interceptor, we pass it as the first
-  // parameter of MockBuilder. To correctly satisfy its dependencies
-  // we need to pass its module as the second parameter. Also we
-  // should mocking HTTP_INTERCEPTORS and replace HttpClientModule
-  // with HttpClientTestingModule.
-  beforeEach(() =>
-    MockBuilder(TargetInterceptor, TargetModule)
-      .keep(HTTP_INTERCEPTORS)
-      .replace(HttpClientModule, HttpClientTestingModule)
-  );
-
-  it('triggers interceptor', () => {
-    const client: HttpClient = TestBed.get(HttpClient);
-    const httpMock: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-
-    // Let's do a simply request.
-    client.get('/target').subscribe();
-
-    // Now we can assert that a header has been added to the request.
-    const req = httpMock.expectOne('/target');
-    expect(req.request.headers.get('My-Custom')).toEqual(
-      'HttpInterceptor'
-    );
-    req.flush('');
-    httpMock.verify();
-  });
-});
+beforeEach(() =>
+  MockBuilder(TargetInterceptor, TargetModule)
+    .exclude(NG_INTERCEPTORS)
+    .keep(HTTP_INTERCEPTORS)
+    .replace(HttpClientModule, HttpClientTestingModule)
+);
 ```
+
+Let's pretend that `TargetInterceptor` adds `My-Custom: HttpInterceptor` header to every request.
+To test it we need to send a request via `HttpClient`.
+
+```typescript
+const client = TestBed.get(HttpClient);
+
+client.get('/target').subscribe();
+```
+
+The next step is to write an expectation of the request.
+
+```typescript
+const req = httpMock.expectOne('/target');
+
+req.flush('');
+httpMock.verify();
+```
+
+Now we can assert the headers of the request.
+
+```typescript
+expect(req.request.headers.get('My-Custom')).toEqual(
+  'HttpInterceptor'
+);
+```
+
+The source file of this test is here:
+[examples/TestHttpInterceptor/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpInterceptor/test.spec.ts)

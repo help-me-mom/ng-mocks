@@ -87,8 +87,9 @@ describe('TestHttpInterceptor', () => {
 
     // Now we can assert that a header has been added to the request.
     const req = httpMock.expectOne('/target');
-    expect(req.request.headers.get('My-Custom')).toEqual('HttpInterceptor');
     req.flush('');
     httpMock.verify();
+
+    expect(req.request.headers.get('My-Custom')).toEqual('HttpInterceptor');
   });
 });
