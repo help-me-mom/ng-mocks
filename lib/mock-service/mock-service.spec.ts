@@ -1,8 +1,10 @@
 // tslint:disable:max-classes-per-file
 
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, NG_INTERCEPTORS } from 'ng-mocks';
 
 import { NG_GUARDS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
@@ -374,5 +376,34 @@ describe('replaceWithMocks', () => {
     expect(actual).toEqual({
       canActivate: [],
     });
+  });
+});
+
+describe('resolveProvider', () => {
+  it('ignores useFactory and useValue interceptors with excluded NG_INTERCEPTORS', async () => {
+    @NgModule({
+      imports: [HttpClientModule],
+      providers: [
+        {
+          multi: true,
+          provide: HTTP_INTERCEPTORS,
+          useValue: false,
+        },
+        {
+          multi: true,
+          provide: HTTP_INTERCEPTORS,
+          useFactory: () => true,
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder()
+      .mock(TargetModule)
+      .replace(HttpClientModule, HttpClientTestingModule)
+      .keep(HTTP_INTERCEPTORS)
+      .exclude(NG_INTERCEPTORS);
+    const actual = TestBed.get(HTTP_INTERCEPTORS);
+    expect(actual).not.toEqual(jasmine.arrayContaining([false, true]));
   });
 });

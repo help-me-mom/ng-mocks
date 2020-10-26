@@ -317,15 +317,15 @@ const mockServiceHelperPrototype = {
       provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
       provider !== def
     ) {
-      const interceptor = def.useExisting || def.useClass;
-      if (!ngMocksUniverse.builder.has(interceptor) || ngMocksUniverse.builder.get(interceptor) === null) {
+      if (def.useFactory || def.useValue) {
         /* istanbul ignore else */
         if (changed) {
           changed(true);
         }
         return;
       }
-      if (def.useFactory || def.useValue) {
+      const interceptor = def.useExisting || def.useClass;
+      if (!ngMocksUniverse.builder.has(interceptor) || ngMocksUniverse.builder.get(interceptor) === null) {
         /* istanbul ignore else */
         if (changed) {
           changed(true);
