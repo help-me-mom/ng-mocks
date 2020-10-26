@@ -10,7 +10,7 @@ import {
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, NG_INTERCEPTORS } from 'ng-mocks';
 import { Observable } from 'rxjs';
 
 // An interceptor we want to test.
@@ -29,15 +29,37 @@ class TargetInterceptor implements HttpInterceptor {
   }
 }
 
+// An interceptor we want to ignore.
+@Injectable()
+class MockedInterceptor implements HttpInterceptor {
+  protected value = 'Ignore';
+
+  public intercept(request: HttpRequest<void>, next: HttpHandler): Observable<HttpEvent<void>> {
+    return next.handle(
+      request.clone({
+        setHeaders: {
+          'My-Mocked': this.value,
+        },
+      })
+    );
+  }
+}
+
 // A module with its definition.
 @NgModule({
   imports: [HttpClientModule],
   providers: [
     TargetInterceptor,
+    MockedInterceptor,
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
-      useClass: TargetInterceptor,
+      useExisting: TargetInterceptor,
+    },
+    {
+      multi: true,
+      provide: HTTP_INTERCEPTORS,
+      useExisting: MockedInterceptor,
     },
   ],
 })
@@ -51,6 +73,7 @@ describe('TestHttpInterceptor', () => {
   // with HttpClientTestingModule.
   beforeEach(() =>
     MockBuilder(TargetInterceptor, TargetModule)
+      .exclude(NG_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
       .replace(HttpClientModule, HttpClientTestingModule)
   );

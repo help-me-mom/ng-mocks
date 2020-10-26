@@ -1,6 +1,6 @@
 import { Injector, Provider } from '@angular/core';
 
-import { isNgInjectionToken, NG_GUARDS } from '../common';
+import { isNgInjectionToken, NG_GUARDS, NG_INTERCEPTORS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockProvider } from '../mock-module';
 
@@ -308,6 +308,30 @@ const mockServiceHelperPrototype = {
         changed(true);
       }
       return;
+    }
+
+    if (
+      ngMocksUniverse.builder.has(NG_INTERCEPTORS) &&
+      ngMocksUniverse.builder.get(NG_INTERCEPTORS) === null &&
+      isNgInjectionToken(provider) &&
+      provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
+      provider !== def
+    ) {
+      const interceptor = def.useExisting || def.useClass;
+      if (!ngMocksUniverse.builder.has(interceptor) || ngMocksUniverse.builder.get(interceptor) === null) {
+        /* istanbul ignore else */
+        if (changed) {
+          changed(true);
+        }
+        return;
+      }
+      if (def.useFactory || def.useValue) {
+        /* istanbul ignore else */
+        if (changed) {
+          changed(true);
+        }
+        return;
+      }
     }
 
     ngMocksUniverse.touches.add(provider);

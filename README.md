@@ -73,6 +73,7 @@ I'm open to contributions.
   - [a routing guard](#how-to-test-a-routing-guard)
   - [a routing resolver](#how-to-test-a-routing-resolver)
   - [a http request](#how-to-test-a-http-request)
+  - [a http interceptor](#how-to-test-a-http-interceptor)
 
 ---
 
@@ -1380,6 +1381,13 @@ beforeEach(() =>
 // at all? The answer is to exclude `NG_GUARDS` token, it will removal
 // all the guards from routes except the explicitly configured ones.
 beforeEach(() => MockBuilder(MyGuard, MyModule).exclude(NG_GUARDS));
+// The same thing if we want to test interceptors. If we exclude
+// `NG_INTERCEPTORS` token, then all interceptors with `useValue` or
+// `useFactory` will be excluded together with other interceptors
+// except the explicitly configured ones.
+beforeEach(() =>
+  MockBuilder(MyInterceptor, MyModule).exclude(NG_INTERCEPTORS)
+);
 
 // If we want to replace something with something,
 // we should use .replace.
