@@ -98,8 +98,8 @@ Yarn
 Angular testing is fun and easy until you've met complex dependencies,
 and setting up the `TestBed` becomes really annoying and time consuming.
 
-`ngMocks` helps to bring fun and ease back allowing developers **to mock
-and/or stub child components** and dependencies via a few lines of code with help of
+`ngMocks` helps to bring fun and ease back allowing developers **to stub
+and/or mock child components** and dependencies via a few lines of code with help of
 [`MockComponent`](#how-to-mock-a-component),
 [`MockDirective`](#how-to-mock-a-directive),
 [`MockPipe`](#how-to-mock-a-pipe),
@@ -303,7 +303,7 @@ describe('Test', () => {
 });
 ```
 
-To mock the child component simply pass `DependencyComponent` into `MockComponent`:
+To **mock the child component** simply pass `DependencyComponent` into `MockComponent`:
 
 ```typescript
 beforeEach(() => {
