@@ -1318,6 +1318,14 @@ const ngModule2 = MockBuilder()
   .mock(MyModule, { exportAll: true })
   .build();
 
+// Also you can supress the first parameter with `null` if you want
+// only to mock a class and export its declarations.
+const ngModule3 = MockBuilder(null, MyModule).build();
+// It does the next calls:
+const ngModule4 = MockBuilder()
+  .mock(MyModule, { exportAll: true })
+  .build();
+
 // If you do not plan further customization of ngModule
 // then you do not need to call .build().
 // Simply return result of MockBuilder in beforeEach

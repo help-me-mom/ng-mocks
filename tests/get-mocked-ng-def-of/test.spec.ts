@@ -1,5 +1,5 @@
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { getMockedNgDefOf, MockBuilder, MockComponent, MockDirective, MockModule, MockPipe } from 'ng-mocks';
+import { getMockedNgDefOf, MockBuilder, MockComponent, MockDirective, MockModule, MockPipe, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'target',
@@ -81,7 +81,9 @@ describe('getMockedNgDefOf:mocks', () => {
 });
 
 describe('getMockedNgDefOf:builder', () => {
-  beforeEach(() => MockBuilder().mock(TargetModule));
+  ngMocks.faster();
+
+  beforeEach(() => MockBuilder(null, TargetModule));
 
   it('returns mock for a module', () => {
     expect(getMockedNgDefOf(TargetModule, 'm')).toBeDefined();

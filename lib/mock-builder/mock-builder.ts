@@ -9,8 +9,8 @@ import { MockBuilderPerformance } from './mock-builder-performance';
 import { MockBuilderPromise } from './mock-builder-promise';
 
 export function MockBuilder(
-  keepDeclaration?: AnyType<any> | InjectionToken<any>,
-  itsModuleToMock?: AnyType<any>
+  keepDeclaration?: AnyType<any> | InjectionToken<any> | null | undefined,
+  itsModuleToMock?: AnyType<any> | null | undefined
 ): MockBuilderPromise {
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
