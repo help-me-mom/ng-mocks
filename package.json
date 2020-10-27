@@ -85,8 +85,12 @@
     "Pipe",
     "Provider",
     "Service",
-    "Token",
     "TestBed",
+    "Shallow",
+    "Render",
+    "Stub",
+    "Dumb",
+    "Dummy",
     "Testing"
   ],
   "author": "Isaac Datlof <ike18t@gmail.com>",
