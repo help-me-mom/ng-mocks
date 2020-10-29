@@ -1,3 +1,5 @@
+// tslint:disable:no-misused-new unified-signatures
+
 import { Injector, Provider } from '@angular/core';
 
 import { isNgInjectionToken, NG_GUARDS, NG_INTERCEPTORS } from '../common';
@@ -334,8 +336,6 @@ const mockServiceHelperPrototype = {
       }
     }
 
-    ngMocksUniverse.touches.add(provider);
-
     // Then we check decisions whether we should keep or replace a def.
     if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
       mockedDef = ngMocksUniverse.builder.get(provider);
@@ -388,6 +388,12 @@ const mockServiceHelperPrototype = {
     if (changed && differs) {
       changed(true);
     }
+
+    // Touching only when we really provide a value.
+    if (mockedDef) {
+      ngMocksUniverse.touches.add(provider);
+    }
+
     return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
   },
 
@@ -431,9 +437,19 @@ export const mockServiceHelper: {
   useFactory<D, I>(def: D, instance: () => I): Provider;
 } = getGlobal().ngMocksMockServiceHelper;
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService<T>(service: new (...args: any[]) => T, mockNamePrefix?: string): T;
-// tslint:disable-next-line:no-misused-new unified-signatures
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService<T = any>(service: object, mockNamePrefix?: string): T;
 export function MockService(service: any, mockNamePrefix?: string): any {
   // mocking all methods / properties of a class / object.

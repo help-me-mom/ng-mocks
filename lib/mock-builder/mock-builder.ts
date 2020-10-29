@@ -8,6 +8,9 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockBuilderPerformance } from './mock-builder-performance';
 import { MockBuilderPromise } from './mock-builder-promise';
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockbuilder
+ */
 export function MockBuilder(
   keepDeclaration?: AnyType<any> | InjectionToken<any> | null | undefined,
   itsModuleToMock?: AnyType<any> | null | undefined

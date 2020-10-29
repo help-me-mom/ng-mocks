@@ -869,6 +869,12 @@ a type of `MockedModule<T>` and provides:
 - base primitives instead of tokens with a `useValue` definition
 - mocked copies of tokens with a `useValue` definition
 
+If you get an error like: "**Component is part of the declaration of 2 modules**",
+then consider usage of [`ngMocks.guts`](#ngmocks) or [`MockBuilder`](#mockbuilder).
+The issue here is, that you are trying to mock a module that has a declaration which is specified in `TestBed`,
+therefore, it should be handled in a better way which excludes it ([`ngMocks.guts`](#ngmocks)),
+or handles internals vs externals properly ([`MockBuilder`](#mockbuilder)).
+
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to mock in a test.
 
@@ -1281,6 +1287,14 @@ The good thing here is that commonly the dependencies have been declared or impo
 tested thing is. Therefore, with help of `MockBuilder` we can quite easily define a testing module,
 where everything in the module will be mocked except the tested thing: `MockBuilder(TheThing, ItsModule)`.
 
+MockBuilder tends to provide **a simple instrument to mock Angular dependencies**, does it in isolated scopes,
+and has a rich toolkit that supports:
+
+- respect of internal vs external declarations (precise exports)
+- detection and creation of mocked copies for root providers
+- replacement of modules and declarations in any depth
+- exclusion of modules, declarations and providers in any depth
+
 <details><summary>Click to see <strong>a code sample demonstrating ease of mocking in Angular tests</strong></summary>
 <p>
 
@@ -1517,7 +1531,16 @@ beforeEach(() =>
     .keep(SomeModuleComponentDirectivePipeProvider1, {
       dependency: true,
     })
-    .mock(SomeModuleComponentDirectivePipeProvider1, {
+    .mock(SomeModuleComponentDirectivePipe, {
+      dependency: true,
+    })
+    // Pass the same def as a mocked instance, if you want only to
+    // specify the config.
+    .mock(SomeProvider, SomeProvider, {
+      dependency: true,
+    })
+    // Or provide a mocked instance together with the config.
+    .mock(SomeProvider, mockedInstance, {
       dependency: true,
     })
     .replace(SomeModuleComponentDirectivePipeProvider1, anything1, {

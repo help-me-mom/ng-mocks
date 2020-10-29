@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { core } from '@angular/compiler';
-import { ApplicationModule, NgModule, Provider } from '@angular/core';
+import { ApplicationModule, APP_INITIALIZER, NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
 import {
   extendClass,
@@ -24,14 +25,14 @@ import { MockService, mockServiceHelper } from '../mock-service';
 
 export type MockedModule<T> = T & Mock & {};
 
-const neverMockProvidedFunction = ['DomRendererFactory2', 'DomSharedStylesHost', 'EventManager', 'RendererFactory2'];
-const neverMockToken = [
-  // RouterModule
-  'InjectionToken Application Initializer',
-  // BrowserModule
-  'InjectionToken EventManagerPlugins',
-  'InjectionToken HammerGestureConfig',
+const neverMockProvidedFunction = [
+  'DomRendererFactory2',
+  'DomSharedStylesHost',
+  'EventManager',
+  'Injector',
+  'RendererFactory2',
 ];
+const neverMockToken = [APP_INITIALIZER, EVENT_MANAGER_PLUGINS, HAMMER_GESTURE_CONFIG];
 
 /**
  * Can be changed any time.
@@ -44,7 +45,7 @@ export function MockProvider(provider: any): Provider | undefined {
   if (typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1) {
     return provider;
   }
-  if (isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1) {
+  if (isNgInjectionToken(provide) && neverMockToken.indexOf(provide) !== -1) {
     return undefined;
   }
 
@@ -101,6 +102,9 @@ export function MockProvider(provider: any): Provider | undefined {
   // If a testing module / component requires omitted tokens then they should be provided manually
   // during creation of TestBed module.
   if (provider.multi) {
+    if (ngMocksUniverse.config.has('multi')) {
+      (ngMocksUniverse.config.get('multi') as Set<any>).add(provide);
+    }
     return undefined;
   }
 
@@ -144,7 +148,14 @@ export function MockProvider(provider: any): Provider | undefined {
   return mockedProvider;
 }
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
+ */
 export function MockModule<T>(module: Type<T>): Type<T>;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
+ */
 export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 export function MockModule(module: any): any {
   let ngModule: Type<any>;

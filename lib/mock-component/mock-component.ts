@@ -14,7 +14,7 @@ import {
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
+import { AnyType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
@@ -43,12 +43,11 @@ export function MockComponent<TComponent>(
   metaData: core.Directive
 ): Type<MockedComponent<TComponent>>;
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-component
+ */
 export function MockComponent<TComponent>(
-  component: Type<TComponent>,
-  metaData?: core.Directive
-): Type<MockedComponent<TComponent>>;
-export function MockComponent<TComponent>(
-  component: AbstractType<TComponent>,
+  component: AnyType<TComponent>,
   metaData?: core.Directive
 ): Type<MockedComponent<TComponent>>;
 export function MockComponent<TComponent>(

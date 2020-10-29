@@ -102,7 +102,8 @@
   "peerDependencies": {
     "@angular/compiler": ">=5.x <=11.x",
     "@angular/core": ">=5.x <=11.x",
-    "@angular/forms": ">=5.x <=11.x"
+    "@angular/forms": ">=5.x <=11.x",
+    "@angular/platform-browser": ">=5.x <=11.x"
   },
   "devDependencies": {
     "@angular/animations": "^10.2.0",

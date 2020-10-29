@@ -64,11 +64,17 @@ describe('module-with-tokens:mock-2', () => {
 // the tokens will be omitted from the final mock and injection will fail.
 // Unfortunately it's quite tough to guess which tokens we can keep, mocks or omit and now
 // a user is responsible to specify tokens for his mock.
+// UPD 2020-10-28: it has been fixed. Now all missed tokens are added to the TestModuleMeta.
 describe('module-with-tokens:mock-3', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('fails to render all tokens', () => {
-    expect(() => MockRender(TargetComponent)).toThrowError(/InjectionToken/);
+  it('does not fail to render all tokens', () => {
+    expect(() => MockRender(TargetComponent)).not.toThrowError(/InjectionToken/);
+  });
+
+  it('renders mocked tokens with respect of multi flag', () => {
+    const fixture = MockRender(TargetComponent);
+    expect(fixture.nativeElement.innerHTML).toContain('[]');
   });
 });
 

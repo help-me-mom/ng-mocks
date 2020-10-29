@@ -1,5 +1,7 @@
+import { DOCUMENT } from '@angular/common';
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
 import { MetadataOverride, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import {
   AnyType,
@@ -16,7 +18,7 @@ import {
   Type,
 } from '../common/lib';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver, ngModuleResolver } from '../common/reflect';
+import { directiveResolver, jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockModule, MockNgDef, MockProvider } from '../mock-module/mock-module';
@@ -102,6 +104,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       'correctModuleExports',
     ]);
     ngMocksUniverse.touches = new Set();
+    ngMocksUniverse.config.set('multi', new Set());
 
     for (const def of mapValues(this.keepDef)) {
       ngMocksUniverse.builder.set(def, def);
@@ -209,6 +212,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
         continue;
       }
       if (isNgInjectionToken(def)) {
+        ngMocksUniverse.touches.add(def);
         continue;
       }
       providers.push(def);
@@ -239,6 +243,78 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     // Adding requested providers to test bed.
     for (const provider of mapValues(this.providerDef)) {
       providers.push(provider);
+    }
+
+    // Adding missed providers
+    const parameters = new Set<any>();
+    if (ngMocksUniverse.touches.size) {
+      const touchedDefs = mapValues(ngMocksUniverse.touches);
+      for (const def of touchedDefs) {
+        // Analyzing parameters.
+        for (const decorators of jitReflector.parameters(def)) {
+          if (!decorators) {
+            continue;
+          }
+          let provide: any;
+          for (const decorator of decorators) {
+            if (decorator && typeof decorator === 'object' && decorator.token) {
+              provide = decorator.token;
+            }
+          }
+          if (!provide && decorators[0]) {
+            provide = decorators[0];
+          }
+          if (!provide) {
+            continue;
+          }
+          if (provide === DOCUMENT) {
+            continue;
+          }
+          if (provide === EVENT_MANAGER_PLUGINS) {
+            continue;
+          }
+          if (ngMocksUniverse.touches.has(provide)) {
+            continue;
+          }
+
+          // Empty providedIn or things for a platform have to be skipped.
+          let skip = !provide.ɵprov?.providedIn || provide.ɵprov.providedIn === 'platform';
+          /* istanbul ignore next: A6 */
+          skip = skip && (!provide.ngInjectableDef?.providedIn || provide.ngInjectableDef.providedIn === 'platform');
+          if (typeof provide === 'function' && skip) {
+            continue;
+          }
+          if (typeof provide === 'function' && touchedDefs.indexOf(provide) === -1) {
+            touchedDefs.push(provide);
+          }
+          parameters.add(provide);
+        }
+      }
+    }
+
+    // Adding missed providers.
+    if (parameters.size) {
+      const parametersMap = new Map();
+      const providersSkip = new Set();
+      // Excluding manually provided values.
+      for (const provider of flatten(providers)) {
+        const provide =
+          typeof provider === 'object' && (provider as any).provide ? (provider as any).provide : provider;
+        providersSkip.add(provide);
+      }
+      for (const parameter of mapValues(parameters)) {
+        if (providersSkip.has(parameter)) {
+          continue;
+        }
+
+        const mock = mockServiceHelper.resolveProvider(parameter, parametersMap);
+        if (mock) {
+          providers.push(mock);
+        } else if (isNgInjectionToken(parameter)) {
+          const multi = ngMocksUniverse.config.has('multi') && ngMocksUniverse.config.get('multi').has(parameter);
+          providers.push(mockServiceHelper.useFactory(parameter, () => (multi ? [] : undefined)));
+        }
+      }
     }
 
     const mocks = new Map();
@@ -373,6 +449,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     config?: IMockBuilderConfig
   ): this;
   public mock<T>(token: InjectionToken<T>, mock: any, config: IMockBuilderConfig): this;
+  public mock<T>(provider: AnyType<T>, mock: AnyType<T>, config: IMockBuilderConfig): this;
   public mock<T>(provider: AnyType<T>, mock: Partial<T>, config: IMockBuilderConfig): this;
   public mock<T>(provider: AnyType<T>, mock: AnyType<T>, config: IMockBuilderConfig): this;
   public mock<T>(token: InjectionToken<T>, mock?: any): this;
