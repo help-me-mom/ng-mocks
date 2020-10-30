@@ -1,3 +1,20 @@
+# [10.5.0](https://github.com/ike18t/ng-mocks/compare/v10.4.0...v10.5.0) (2020-10-30)
+
+
+### Bug Fixes
+
+* mocking token more intelligently ([0f7cc0c](https://github.com/ike18t/ng-mocks/commit/0f7cc0c0a6513d208c5e63602c643ef1764ff7d4))
+* supporting null as keepDeclaration of MockBuilder ([5f44445](https://github.com/ike18t/ng-mocks/commit/5f44445ebccf99fab62c21d6199af9c590408659))
+* supporting pipes in providers ([6e252e8](https://github.com/ike18t/ng-mocks/commit/6e252e81c818c7cf88f8945304edc8d2f67cbd68)), closes [#218](https://github.com/ike18t/ng-mocks/issues/218)
+
+
+### Features
+
+* detecting global providers and mocking them ([a36a9df](https://github.com/ike18t/ng-mocks/commit/a36a9df46788ae9236f5e2f61aa39b86b58eceb2))
+* exclude feature for ngMocks.guts ([1886fd1](https://github.com/ike18t/ng-mocks/commit/1886fd1894e3180bd43b7f868931c0e7fe83b852))
+* token to exclude all guards ([7068784](https://github.com/ike18t/ng-mocks/commit/7068784541c6a0ec1ca90b38cb4169ec373dd5e7))
+* token to exclude all interceptors ([660f4c4](https://github.com/ike18t/ng-mocks/commit/660f4c413eb90796eb79c126e7614677e87b5b4c))
+
 # [10.4.0](https://github.com/ike18t/ng-mocks/compare/v10.3.0...v10.4.0) (2020-10-24)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "ng-mocks",
-  "version": "10.4.0",
+  "version": "10.5.0",
   "description": "A library mocking angular components, directives, services and more",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
