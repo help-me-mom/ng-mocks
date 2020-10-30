@@ -26,6 +26,7 @@ module.exports = {
 
     const filesForLint = filenames
       .map(file => path.relative(cwd, file))
+      .filter(file => !file.match(/\.spec\.ts$/i))
       .filter(file => !file.match(/^e2e\//i))
       .filter(file => !file.match(/^examples\//i))
       .filter(file => !file.match(/^tests\//i))

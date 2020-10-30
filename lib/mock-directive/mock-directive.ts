@@ -13,7 +13,7 @@ import {
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AbstractType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
+import { AnyType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
 import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { directiveResolver } from '../common/reflect';
@@ -41,8 +41,10 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
   return directives.map(MockDirective);
 }
 
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>>;
-export function MockDirective<TDirective>(directive: AbstractType<TDirective>): Type<MockedDirective<TDirective>>;
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-directive
+ */
+export function MockDirective<TDirective>(directive: AnyType<TDirective>): Type<MockedDirective<TDirective>>;
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.

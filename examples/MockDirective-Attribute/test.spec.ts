@@ -62,11 +62,9 @@ describe('MockDirective', () => {
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
     spyOn(component, 'trigger');
-    fixture.detectChanges();
+    mockedDirective.someOutput.emit();
 
     // Assert on the effect.
-    mockedDirective.someOutput.emit({
-      payload: 'foo',
-    });
+    expect(component.trigger).toHaveBeenCalled();
   });
 });

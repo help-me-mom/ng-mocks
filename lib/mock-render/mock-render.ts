@@ -47,24 +47,38 @@ function solveOutput(output: any): string {
   return '=$event';
 }
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   template: Type<MComponent>,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
 ): MockedComponentFixture<MComponent, TComponent>;
 
-// without params we shouldn't autocomplete any keys of any types.
+/**
+ * Without params we shouldn't autocomplete any keys of any types.
+ *
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
 function MockRender<MComponent extends Record<keyof any, any>>(
   template: Type<MComponent>
 ): MockedComponentFixture<MComponent>;
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
 function MockRender<MComponent = any, TComponent extends { [key: string]: any } = { [key: string]: any }>(
   template: string,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
 ): MockedComponentFixture<MComponent, TComponent>;
 
-// without params we shouldn't autocomplete any keys of any types.
+/**
+ * Without params we shouldn't autocomplete any keys of any types.
+ *
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
 function MockRender<MComponent = any>(template: string): MockedComponentFixture<MComponent>;
 
 function MockRender<MComponent, TComponent extends { [key: string]: any }>(
@@ -171,6 +185,9 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   }
 
   fixture.point = fixture.debugElement.children[0];
+  if (!fixture.point) {
+    fixture.point = fixture.debugElement.childNodes[0];
+  }
   if (noParams && typeof template === 'function') {
     const properties = mockServiceHelper.extractPropertiesFromPrototype(template.prototype);
     const exists = Object.getOwnPropertyNames(fixture.componentInstance);

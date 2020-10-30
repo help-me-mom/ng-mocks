@@ -33,7 +33,7 @@ GIT_COMMITTER_EMAIL=best@coder.com
 
 After that you need to execute 2 commands:
 
-- `npm run release -- --no-ci` - to generate a release and public it on github.com
-- `npm publish ./tmp/ng-mocks-N.N.N.tgz` - to publish it on npmjs.com
+- `npm run release -- --no-ci` - to generate a release and publish it on [github.com](https://github.com/ike18t/ng-mocks/releases)
+- `npm publish ./tmp/ng-mocks-N.N.N.tgz` - to publish it on [npmjs.com](https://www.npmjs.com/package/ng-mocks)
 
 Profit.

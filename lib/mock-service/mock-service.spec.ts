@@ -1,7 +1,12 @@
 // tslint:disable:max-classes-per-file
 
-import { InjectionToken } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { InjectionToken, NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, NG_INTERCEPTORS } from 'ng-mocks';
 
+import { NG_GUARDS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper';
 
@@ -290,5 +295,115 @@ describe('MockService', () => {
 
   it('returns undefined on undefined in replaceWithMocks', () => {
     expect(mockServiceHelper.replaceWithMocks(null)).toEqual(null);
+  });
+});
+
+describe('replaceWithMocks', () => {
+  it('removes excluded things from an array', async () => {
+    @NgModule({
+      providers: [
+        {
+          provide: 'test',
+          useValue: [DeepParentClass, ParentClass, GetterSetterMethodHuetod],
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder().mock(TargetModule).keep('test').exclude(ParentClass);
+    const actual = TestBed.get('test');
+    expect(actual).toEqual([DeepParentClass, GetterSetterMethodHuetod]);
+  });
+
+  it('removes excluded things from an object', async () => {
+    @NgModule({
+      providers: [
+        {
+          provide: 'test',
+          useValue: {
+            DeepParentClass,
+            GetterSetterMethodHuetod,
+            ParentClass,
+          },
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder().mock(TargetModule).keep('test').exclude(ParentClass);
+    const actual = TestBed.get('test');
+    expect(actual).toEqual({
+      DeepParentClass,
+      GetterSetterMethodHuetod,
+    });
+  });
+
+  it('keeps all guards without excluding NG_GUARDS', async () => {
+    @NgModule({
+      providers: [
+        {
+          provide: 'test',
+          useValue: {
+            canActivate: [DeepParentClass, GetterSetterMethodHuetod, ParentClass],
+          },
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder().mock(TargetModule).keep('test');
+    const actual = TestBed.get('test');
+    expect(actual).toEqual({
+      canActivate: [DeepParentClass, GetterSetterMethodHuetod, ParentClass],
+    });
+  });
+
+  it('ignores all guards with excluded NG_GUARDS', async () => {
+    @NgModule({
+      providers: [
+        {
+          provide: 'test',
+          useValue: {
+            canActivate: [DeepParentClass, GetterSetterMethodHuetod, ParentClass],
+          },
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder().mock(TargetModule).keep('test').exclude(NG_GUARDS);
+    const actual = TestBed.get('test');
+    expect(actual).toEqual({
+      canActivate: [],
+    });
+  });
+});
+
+describe('resolveProvider', () => {
+  it('ignores useFactory and useValue interceptors with excluded NG_INTERCEPTORS', async () => {
+    @NgModule({
+      imports: [HttpClientModule],
+      providers: [
+        {
+          multi: true,
+          provide: HTTP_INTERCEPTORS,
+          useValue: false,
+        },
+        {
+          multi: true,
+          provide: HTTP_INTERCEPTORS,
+          useFactory: () => true,
+        },
+      ],
+    })
+    class TargetModule {}
+
+    await MockBuilder()
+      .mock(TargetModule)
+      .replace(HttpClientModule, HttpClientTestingModule)
+      .keep(HTTP_INTERCEPTORS)
+      .exclude(NG_INTERCEPTORS);
+    const actual = TestBed.get(HTTP_INTERCEPTORS);
+    expect(actual).not.toEqual(jasmine.arrayContaining([false, true]));
   });
 });

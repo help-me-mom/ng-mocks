@@ -3,6 +3,9 @@ import { Injector } from '@angular/core';
 import { AbstractType, Type } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockinstance
+ */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
   config?: {

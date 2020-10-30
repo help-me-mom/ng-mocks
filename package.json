@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "10.4.0",
-  "description": "Functions for creating angular mocks",
+  "description": "A library mocking angular components, directives, services and more",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -42,8 +42,8 @@
     "clear:a11": "rm -Rf e2e/a11/node_modules/ng-mocks && rm -Rf e2e/a11/test",
     "s:test:a": "npm run s:test:a5 & npm run s:test:a6 & npm run s:test:a7 & npm run s:test:a8 & npm run s:test:a9 & npm run s:test:a10 & npm run s:test:a11 & wait",
     "s:test:a5": "npm run s:test:a5es5 && npm run s:test:a5es2015",
-    "s:test:a5es5": "P=e2e/a5es5/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
-    "s:test:a5es2015": "P=e2e/a5es2015/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
+    "s:test:a5es5": "P=e2e/a5es5/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P && rm $P/examples/TestRoutingGuard/test.spec.ts && rm $P/examples/TestRoutingResolver/test.spec.ts",
+    "s:test:a5es2015": "P=e2e/a5es2015/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P && rm $P/examples/TestRoutingGuard/test.spec.ts && rm $P/examples/TestRoutingResolver/test.spec.ts",
     "s:test:a6": "P=e2e/a6/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
     "s:test:a7": "P=e2e/a7/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
     "s:test:a8": "P=e2e/a8/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
@@ -78,11 +78,19 @@
   },
   "keywords": [
     "Angular",
+    "Mock",
+    "Module",
     "Component",
     "Directive",
-    "Mock",
     "Pipe",
+    "Provider",
+    "Service",
     "TestBed",
+    "Shallow",
+    "Render",
+    "Stub",
+    "Dumb",
+    "Dummy",
     "Testing"
   ],
   "author": "Isaac Datlof <ike18t@gmail.com>",
@@ -94,7 +102,8 @@
   "peerDependencies": {
     "@angular/compiler": ">=5.x <=11.x",
     "@angular/core": ">=5.x <=11.x",
-    "@angular/forms": ">=5.x <=11.x"
+    "@angular/forms": ">=5.x <=11.x",
+    "@angular/platform-browser": ">=5.x <=11.x"
   },
   "devDependencies": {
     "@angular/animations": "^10.2.0",

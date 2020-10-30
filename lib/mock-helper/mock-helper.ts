@@ -89,7 +89,13 @@ export const MockHelper: {
   },
 };
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#ngmocks
+ */
 export const ngMocks: {
+  /**
+   * @see https://github.com/ike18t/ng-mocks#making-angular-tests-faster
+   */
   faster(): void;
 
   find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;

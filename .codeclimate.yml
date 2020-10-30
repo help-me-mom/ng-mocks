@@ -1,0 +1,7 @@
+version: '2'
+exclude_patterns:
+  - 'e2e/'
+  - 'examples/'
+  - 'tests/'
+  - '**/*.spec.ts'
+  - '**/*.fixtures.ts'

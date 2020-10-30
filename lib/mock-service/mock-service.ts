@@ -1,6 +1,8 @@
+// tslint:disable:no-misused-new unified-signatures
+
 import { Injector, Provider } from '@angular/core';
 
-import { isNgInjectionToken } from '../common';
+import { isNgInjectionToken, NG_GUARDS, NG_INTERCEPTORS } from '../common';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockProvider } from '../mock-module';
 
@@ -226,21 +228,58 @@ const mockServiceHelperPrototype = {
     if (typeof value !== 'object') {
       return value;
     }
+
     let mocked: any;
     let updated = false;
+
     if (Array.isArray(value)) {
       mocked = [];
-      for (let key = 0; key < value.length; key += 1) {
-        mocked[key] = mockServiceHelper.replaceWithMocks(value[key]);
-        updated = updated || mocked[key] !== value[key];
+      for (const valueItem of value) {
+        if (ngMocksUniverse.builder.has(valueItem) && ngMocksUniverse.builder.get(valueItem) === null) {
+          updated = updated || true;
+          continue;
+        }
+        mocked.push(mockServiceHelper.replaceWithMocks(valueItem));
+        updated = updated || mocked[mocked.length - 1] !== valueItem;
       }
     } else if (value) {
       mocked = {};
       for (const key of Object.keys(value)) {
+        if (ngMocksUniverse.builder.has(value[key]) && ngMocksUniverse.builder.get(value[key]) === null) {
+          updated = updated || true;
+          continue;
+        }
         mocked[key] = mockServiceHelper.replaceWithMocks(value[key]);
         updated = updated || mocked[key] !== value[key];
       }
+
+      // Removal of guards.
+      for (const section of ['canActivate', 'canActivateChild', 'canDeactivate', 'canLoad']) {
+        if (!Array.isArray(mocked[section])) {
+          continue;
+        }
+
+        const guards: any[] = [];
+        for (const guard of mocked[section]) {
+          if (ngMocksUniverse.builder.has(guard) && ngMocksUniverse.builder.get(guard) !== null) {
+            guards.push(guard);
+            continue;
+          }
+          if (ngMocksUniverse.builder.has(NG_GUARDS) && ngMocksUniverse.builder.get(NG_GUARDS) === null) {
+            continue;
+          }
+          guards.push(guard);
+        }
+        if (mocked[section].length !== guards.length) {
+          updated = updated || true;
+          mocked = {
+            ...mocked,
+            [section]: guards,
+          };
+        }
+      }
     }
+
     if (updated) {
       Object.setPrototypeOf(mocked, Object.getPrototypeOf(value));
       return mocked;
@@ -273,7 +312,29 @@ const mockServiceHelperPrototype = {
       return;
     }
 
-    ngMocksUniverse.touches.add(provider);
+    if (
+      ngMocksUniverse.builder.has(NG_INTERCEPTORS) &&
+      ngMocksUniverse.builder.get(NG_INTERCEPTORS) === null &&
+      isNgInjectionToken(provider) &&
+      provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
+      provider !== def
+    ) {
+      if (def.useFactory || def.useValue) {
+        /* istanbul ignore else */
+        if (changed) {
+          changed(true);
+        }
+        return;
+      }
+      const interceptor = def.useExisting || def.useClass;
+      if (!ngMocksUniverse.builder.has(interceptor) || ngMocksUniverse.builder.get(interceptor) === null) {
+        /* istanbul ignore else */
+        if (changed) {
+          changed(true);
+        }
+        return;
+      }
+    }
 
     // Then we check decisions whether we should keep or replace a def.
     if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
@@ -327,6 +388,12 @@ const mockServiceHelperPrototype = {
     if (changed && differs) {
       changed(true);
     }
+
+    // Touching only when we really provide a value.
+    if (mockedDef) {
+      ngMocksUniverse.touches.add(provider);
+    }
+
     return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
   },
 
@@ -370,9 +437,19 @@ export const mockServiceHelper: {
   useFactory<D, I>(def: D, instance: () => I): Provider;
 } = getGlobal().ngMocksMockServiceHelper;
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService(service?: boolean | number | string | null, mockNamePrefix?: string): undefined;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService<T>(service: new (...args: any[]) => T, mockNamePrefix?: string): T;
-// tslint:disable-next-line:no-misused-new unified-signatures
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
+ */
 export function MockService<T = any>(service: object, mockNamePrefix?: string): T;
 export function MockService(service: any, mockNamePrefix?: string): any {
   // mocking all methods / properties of a class / object.
