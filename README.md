@@ -306,13 +306,11 @@ describe('Test', () => {
 To **mock the child component** simply pass `DependencyComponent` into `MockComponent`:
 
 ```typescript
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    declarations: [
-      TargetComponent,
-      MockComponent(DependencyComponent), // <- profit
-    ],
-  });
+TestBed.configureTestingModule({
+  declarations: [
+    TargetComponent,
+    MockComponent(DependencyComponent), // <- profit
+  ],
 });
 ```
 
@@ -498,13 +496,11 @@ describe('Test', () => {
 To **mock the child directive** simply pass `DependencyDirective` into `MockDirective`:
 
 ```typescript
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    declarations: [
-      TargetComponent,
-      MockDirective(DependencyDirective), // <- profit
-    ],
-  });
+TestBed.configureTestingModule({
+  declarations: [
+    TargetComponent,
+    MockDirective(DependencyDirective), // <- profit
+  ],
 });
 ```
 
@@ -692,13 +688,11 @@ describe('Test', () => {
 To **mock the child pipe** simply pass `DependencyPipe` into `MockPipe`:
 
 ```typescript
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    declarations: [
-      TargetComponent,
-      MockPipe(DependencyPipe), // <- profit
-    ],
-  });
+TestBed.configureTestingModule({
+  declarations: [
+    TargetComponent,
+    MockPipe(DependencyPipe), // <- profit
+  ],
 });
 ```
 
@@ -816,16 +810,14 @@ describe('Test', () => {
 To **mock a service** simply pass `DependencyService` into `MockService`:
 
 ```typescript
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    declarations: [TargetComponent],
-    providers: [
-      {
-        provide: DependencyService,
-        useValue: MockService(DependencyService), // <- profit
-      },
-    ],
-  });
+TestBed.configureTestingModule({
+  declarations: [TargetComponent],
+  providers: [
+    {
+      provide: DependencyService,
+      useValue: MockService(DependencyService), // <- profit
+    },
+  ],
 });
 ```
 
@@ -900,13 +892,11 @@ describe('Test', () => {
 To mock the module simply pass `DependencyModule` into `MockModule`:
 
 ```typescript
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    imports: [
-      MockModule(DependencyModule), // <- profit
-    ],
-    declarations: [TargetComponent],
-  });
+TestBed.configureTestingModule({
+  imports: [
+    MockModule(DependencyModule), // <- profit
+  ],
+  declarations: [TargetComponent],
 });
 ```
 
