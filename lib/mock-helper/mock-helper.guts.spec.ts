@@ -14,7 +14,7 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { isMockedNgDefOf, isNgDef, ngMocks } from 'ng-mocks';
+import { getMockedNgDefOf, isMockedNgDefOf, isNgDef, ngMocks } from 'ng-mocks';
 
 const TARGET1 = new InjectionToken('TARGET1');
 const TARGET2 = new InjectionToken('TARGET2');
@@ -99,6 +99,19 @@ class Target2Module {}
   ],
 })
 class Target1Module {}
+
+@NgModule({
+  declarations: [Target1Pipe, Target1Component, Target1Directive],
+  imports: [CommonModule, Target2Module],
+  providers: [
+    Target1Service,
+    {
+      provide: TARGET1,
+      useValue: 'target1',
+    },
+  ],
+})
+class Target1CopyModule {}
 
 @NgModule({
   exports: [Target2Module],
@@ -315,16 +328,25 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips existing module', () => {
-    const ngModule = ngMocks.guts(Target1Module, [Target1Module, Target1Module]);
+  it('skips existing kept module', () => {
+    const ngModule = ngMocks.guts(Target1Module, Target1Module);
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(Target1Module);
     }
   });
 
+  it('skips existing mocked module', () => {
+    const ngModule = ngMocks.guts(null, [Target1Module, Target1CopyModule]);
+    expect(ngModule.imports?.length).toEqual(2);
+    if (ngModule.imports) {
+      expect(ngModule.imports[0]).toBe(CommonModule);
+      expect(ngModule.imports[1]).toBe(getMockedNgDefOf(Target2Module));
+    }
+  });
+
   it('skips 2nd kept module', () => {
-    const ngModule = ngMocks.guts(Target2Module, [Target1Module, Target1Module]);
+    const ngModule = ngMocks.guts(Target2Module, [Target1Module, Target1CopyModule]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
@@ -333,7 +355,7 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips 2nd mocked module', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target1Module]);
+    const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target1CopyModule]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
@@ -499,6 +521,7 @@ describe('mock-helper.guts', () => {
       });
     }
   });
+
   it('skips 2nd mocked multi token', () => {
     const ngModule = ngMocks.guts(TARGET2, [
       {
@@ -513,5 +536,136 @@ describe('mock-helper.guts', () => {
       },
     ]);
     expect(ngModule.providers?.length).toEqual(0);
+  });
+
+  it('excludes 2nd nested kept module', () => {
+    const ngModule = ngMocks.guts(Target2Module, [Target1Module, Target3Module]);
+    expect(ngModule).toEqual(
+      jasmine.objectContaining({
+        imports: [CommonModule, Target2Module],
+      })
+    );
+  });
+
+  it('excludes 2nd mocked kept module', () => {
+    const ngModule = ngMocks.guts(null, [Target1Module, Target3Module]);
+    expect(ngModule).toEqual(
+      jasmine.objectContaining({
+        imports: [CommonModule, getMockedNgDefOf(Target2Module)],
+      })
+    );
+  });
+
+  it('ignores null values', () => {
+    const ngModule = ngMocks.guts(null, null, null);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('ignores duplicates values', () => {
+    const ngModule = ngMocks.guts(
+      [Target1Service, Target1Service],
+      [Target1Module, Target1Module],
+      [Target1Pipe, Target1Pipe]
+    );
+    expect(ngModule).toEqual({
+      declarations: [getMockedNgDefOf(Target1Component), getMockedNgDefOf(Target1Directive)],
+      imports: [CommonModule, getMockedNgDefOf(Target2Module)],
+      providers: [
+        Target1Service,
+        {
+          provide: TARGET1,
+          useValue: '',
+        },
+      ],
+    });
+  });
+
+  it('excludes mocked providers', () => {
+    const ngModule = ngMocks.guts(null, Target1Service, Target1Service);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes mocked module with providers', () => {
+    const ngModule = ngMocks.guts(null, { ngModule: Target1Module, providers: [] }, Target1Module);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes nested mocked module', () => {
+    const ngModule = ngMocks.guts(null, Target3Module, Target2Module);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [CommonModule],
+      providers: [],
+    });
+  });
+
+  it('excludes nested kept module', () => {
+    const ngModule = ngMocks.guts(Target2Module, Target3Module, Target2Module);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [CommonModule],
+      providers: [],
+    });
+  });
+
+  it('excludes mocked module', () => {
+    const ngModule = ngMocks.guts(null, Target2Module, Target2Module);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes mocked component', () => {
+    const ngModule = ngMocks.guts(null, Target1Component, Target1Component);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes mocked directive', () => {
+    const ngModule = ngMocks.guts(null, Target1Directive, Target1Directive);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes mocked pipe', () => {
+    const ngModule = ngMocks.guts(null, Target1Pipe, Target1Pipe);
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes kept declarations', () => {
+    const ngModule = ngMocks.guts(
+      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1],
+      null,
+      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1]
+    );
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
   });
 });
