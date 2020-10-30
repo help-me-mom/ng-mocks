@@ -131,13 +131,22 @@ export const ngMocks: {
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
   guts(
-    keep: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>>,
+    keep:
+      | AnyType<any>
+      | InjectionToken<any>
+      | Provider
+      | Array<AnyType<any> | InjectionToken<any> | Provider>
+      | null
+      | undefined,
     mock?:
       | AnyType<any>
       | InjectionToken<any>
       | NgModuleWithProviders
       | Provider
       | Array<AnyType<any> | InjectionToken<any> | NgModuleWithProviders | Provider>
+      | null
+      | undefined,
+    exclude?: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>> | null | undefined
   ): TestModuleMetadata;
 
   input<T = any>(debugNode: MockedDebugNode, input: string): T;

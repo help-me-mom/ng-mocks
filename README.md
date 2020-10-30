@@ -197,7 +197,9 @@ Then, if someone deletes `AppSearchModule` the test fails too.
 Its first parameter accepts things we want to test (avoid mocking) and
 the second parameter accepts things we want to mock, if it is a module,
 its declarations (guts) will be extracted and mocked except the things
-from the first parameter.
+from the first parameter, and the third parameter accepts things we want
+to exclude at all from the final meta. Any parameter can be `null` if
+we need to skip it, or an array if we want to pass several things there.
 
 ```typescript
 const testModuleMeta = ngMocks.guts(AppBaseComponent, AppBaseModule);
@@ -1791,7 +1793,7 @@ describe('MockInstance', () => {
 `ngMocks` provides functions to get attribute and structural directives from an element, find components and mock objects.
 
 - `ngMocks.guts(TestingDeclaration, ItsModule)`
-- `ngMocks.guts([Thing1, Thing2], [ToMock1, ToMock2, ToMock3])`
+- `ngMocks.guts([Thing1, Thing2], [ToMock1, ToMock2], [Skip1, Skip2])`
 
 * `ngMocks.get(debugElement, directive, notFoundValue?)`
 * `ngMocks.findInstance(debugElement, directive, notFoundValue?)`
@@ -1824,12 +1826,22 @@ describe('MockInstance', () => {
 // The second parameter can be a class or an array of classes
 // we want to mock: Modules, Components, Directives, Pipes, Services
 // and tokens.
-// If there is a module in the second argment, then its guts will be
+// The third parameter can be a class or an array of classes
+// we want to exclude: Modules, Components, Directives, Pipes, Services
+// and tokens.
+// If there is a module in the second parameter, then its guts will be
 // mocked excluding things from the first parameter.
+// Any parameter might be `null` if we need to skip it.
 const ngModuleMeta1 = ngMocks.guts(Component, ItsModule);
 const ngModuleMeta2 = ngMocks.guts(
   [Component1, Component2, Service3],
-  [ModuleToMock, DirectiveToMock, WhateverToMock]
+  [ModuleToMock, DirectiveToMock, WhateverToMock],
+  [ServiceToExclude, DirectiveToExclude]
+);
+const ngModuleMeta3 = ngMocks.guts(
+  null,
+  ModuleToMock,
+  ComponentToExclude
 );
 
 // Returns an attribute or structural directive which belongs to
@@ -1984,7 +1996,7 @@ This function verifies tokens.
 
 ### Usage with 3rd-party libraries
 
-`ngMocks` provides flexibility via [`MockBuilder`](#mockbuilder)
+`ngMocks` provides flexibility via [`ngMocks.guts`](#ngmocks) and [`MockBuilder`](#mockbuilder)
 that allows developers to use another **Angular testing libraries** for creation of `TestBed`,
 and in the same time to **mock all dependencies** via `ngMocks`.
 
@@ -1996,7 +2008,18 @@ then to mock everything properly we need:
 - mock its module
 - export all declarations the module has
 
-This means we need `.exclude`, `.mock` and `exportAll` flag.
+if we use [`ngMocks.guts`](#ngmocks) we need to skip the first parameter, pass the module
+as the second parameter to export its declaration, and to pass the component as the third one to exclude it.
+
+```typescript
+const dependencies = ngMocks.guts(null, MyModule, MyComponent);
+const createComponent = createComponentFactory({
+  component: MyComponent,
+  ...dependencies,
+});
+```
+
+If we use [`MockBuilder`](#mockbuilder) we need `.exclude`, `.mock` and `exportAll` flag.
 
 ```typescript
 const dependencies = MockBuilder()

@@ -82,7 +82,7 @@ describe('issue-218:real', () => {
   });
 });
 
-describe('issue-218:mock-all', () => {
+describe('issue-218:builder:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('renders emptiness', () => {
@@ -94,7 +94,19 @@ describe('issue-218:mock-all', () => {
   });
 });
 
-describe('issue-218:guts', () => {
+describe('issue-218:builder:keep', () => {
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetPipe));
+
+  it('renders how we mocked it', () => {
+    const fixture = MockRender(TargetComponent, {
+      value: 'test',
+    });
+
+    expect(fixture.nativeElement.innerHTML).toContain('>undefined:test - undefined:test<');
+  });
+});
+
+describe('issue-218:guts:mock', () => {
   beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)).compileComponents());
 
   it('renders emptiness', () => {
@@ -106,8 +118,10 @@ describe('issue-218:guts', () => {
   });
 });
 
-describe('issue-218:keep-pipe', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetPipe));
+describe('issue-218:guts:keep', () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule(ngMocks.guts([TargetComponent, TargetPipe], TargetModule)).compileComponents()
+  );
 
   it('renders how we mocked it', () => {
     const fixture = MockRender(TargetComponent, {
