@@ -158,6 +158,11 @@ TestBed.configureTestingModule({
     AppSearchModule,
     // ...
   ],
+  providers: [
+    LoginService,
+    DataService,
+    // ...
+  ],
 });
 ```
 
@@ -179,6 +184,11 @@ TestBed.configureTestingModule({
   imports: [
     MockModule(CommonModule),
     MockModule(AppSearchModule),
+    // ...
+  ],
+  providers: [
+    MockProvider(LoginService),
+    MockProvider(DataService),
     // ...
   ],
 });

@@ -47,6 +47,32 @@ export const mapEntries = <K, T>(set: Map<K, T>): Array<[K, T]> => {
   return result;
 };
 
+// Accepts an array of dependencies from providers, skips injections flags,
+// and adds the providers to the set.
+export const extractDependency = (deps: any[], set?: Set<any>): void => {
+  if (!set) {
+    return;
+  }
+  for (const dep of deps) {
+    if (!Array.isArray(dep)) {
+      set.add(dep);
+      continue;
+    }
+    for (const flag of dep) {
+      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'Optional') {
+        continue;
+      }
+      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'SkipSelf') {
+        continue;
+      }
+      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'Self') {
+        continue;
+      }
+      set.add(flag);
+    }
+  }
+};
+
 export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   let child: any;
   const parent: any = base;

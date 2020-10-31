@@ -1,3 +1,4 @@
+import { extractDependency } from '../common/core.helpers';
 import { NG_INTERCEPTORS } from '../common/core.tokens';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
@@ -35,6 +36,10 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
       changed(true);
     }
     return;
+  }
+
+  if (provider !== def && def.deps) {
+    extractDependency(def.deps, ngMocksUniverse.config.get('deps'));
   }
 
   if (

@@ -1,4 +1,4 @@
-import { Component, Injectable as InjectableSource, NgModule, Optional } from '@angular/core';
+import { Component, Injectable as InjectableSource, NgModule, Optional, Self, SkipSelf, VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -30,12 +30,14 @@ class Dep3Service {
 
 @Injectable()
 class TargetService {
+  public readonly flag: undefined;
   public readonly optional?: { name: string };
   public readonly service: { name: string };
 
-  constructor(service: Dep1Service, optional: Dep1Service) {
+  constructor(service: Dep1Service, optional: Dep1Service, flag?: undefined) {
     this.service = service;
     this.optional = optional;
+    this.flag = flag;
   }
 }
 
@@ -60,7 +62,11 @@ class TargetComponent {
   exports: [TargetComponent],
   providers: [
     {
-      deps: [Dep2Service, [new Optional(), Dep3Service]],
+      provide: 'test',
+      useValue: undefined,
+    },
+    {
+      deps: [Dep2Service, [new Optional(), new SkipSelf(), new Self(), Dep3Service], 'test'],
       provide: TargetService,
       useClass: TargetService,
     },
@@ -68,7 +74,13 @@ class TargetComponent {
 })
 class TargetModule {}
 
-xdescribe('provider-with-custom-dependencies', () => {
+describe('provider-with-custom-dependencies', () => {
+  beforeEach(() => {
+    if (parseInt(VERSION.major, 10) <= 5) {
+      pending('Need Angular > 5');
+    }
+  });
+
   describe('real', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
@@ -88,13 +100,31 @@ xdescribe('provider-with-custom-dependencies', () => {
     });
   });
 
-  describe('mock-builder', () => {
+  describe('mock-builder:mock', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
 
     it('creates component with mocked custom dependencies', () => {
       const fixture = MockRender(TargetComponent);
       // Injects root dependency correctly, it is not missed, it is mocked.
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
+      // Skips unprovided local dependency despite its mocked copy.
+      expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
+      // The dependency should not be provided in TestBed.
+      expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);
+    });
+  });
+
+  describe('mock-builder:keep', () => {
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).keep(TargetService).keep(Dep2Service, {
+        dependency: true,
+      })
+    );
+
+    it('creates component with kept Dep2Service', () => {
+      const fixture = MockRender(TargetComponent);
+      // Injects root dependency correctly, it is not missed, it is mocked.
+      expect(fixture.nativeElement.innerHTML).toContain('"service:dep-2"');
       // Skips unprovided local dependency despite its mocked copy.
       expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
       // The dependency should not be provided in TestBed.

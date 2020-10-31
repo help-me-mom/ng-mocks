@@ -28,4 +28,4 @@ const mockFunction: {
   return func;
 };
 
-export default mockFunction;
+export default (() => mockFunction)();

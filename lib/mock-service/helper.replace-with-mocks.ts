@@ -67,4 +67,4 @@ const replaceWithMocks = (value: any): any => {
   return value;
 };
 
-export default replaceWithMocks;
+export default (() => replaceWithMocks)();
