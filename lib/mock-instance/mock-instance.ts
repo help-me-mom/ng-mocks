@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 
-import { AbstractType, Type } from '../common';
+import { AbstractType, Type } from '../common/core.types';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
 /**

@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
-import { flatten, mapEntries, mapKeys, mapValues } from '../common';
+import { flatten, mapEntries, mapKeys, mapValues } from '../common/core.helpers';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
-import { IMockBuilderResult, MockBuilderPromise } from './mock-builder-promise';
+import { MockBuilderPromise } from './mock-builder-promise';
+import { IMockBuilderResult } from './types';
 
 export class MockBuilderPerformance extends MockBuilderPromise {
   public build(): NgModule {

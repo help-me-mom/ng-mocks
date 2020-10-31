@@ -1,3 +1,3 @@
-import { mockServiceHelper } from 'ng-mocks';
+import { registerMockFunction } from 'ng-mocks';
 
-mockServiceHelper.registerMockFunction(name => jest.fn().mockName(name));
+registerMockFunction(name => jest.fn().mockName(name));

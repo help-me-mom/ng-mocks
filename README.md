@@ -1,7 +1,7 @@
+[![chat on gitter](https://badges.gitter.im/ng-mocks/community.svg)](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
-[![Build Status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
-[![Coverage Status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
-[![Gitter](https://badges.gitter.im/ng-mocks/community.svg)](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
+[![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 
 # ngMocks - ease of mocking annoying dependencies in Angular unit tests
 
@@ -45,6 +45,7 @@ I'm open to contributions.
   - [a directive](#how-to-mock-a-directive)
   - [a pipe](#how-to-mock-a-pipe)
   - [a service](#how-to-mock-a-service)
+  - [a provider](#how-to-mock-a-provider)
   - [a module](#how-to-mock-a-module)
   - [a form control](#how-to-mock-classic-and-reactive-form-components)
 
@@ -103,9 +104,11 @@ and/or mock child components** and dependencies via a few lines of code with hel
 [`MockComponent`](#how-to-mock-a-component),
 [`MockDirective`](#how-to-mock-a-directive),
 [`MockPipe`](#how-to-mock-a-pipe),
-[`MockService`](#how-to-mock-a-service),
-[`MockModule`](#how-to-mock-a-module) and
-[`MockBuilder`](#mockbuilder).
+[`MockProvider`](#how-to-mock-a-provider),
+[`MockModule`](#how-to-mock-a-module),
+or with pro tools such as
+[`MockBuilder`](#mockbuilder) with
+[`MockRender`](#mockrender).
 
 Let's imagine that in our Angular application we have a base component
 and its template looks like that:
@@ -249,7 +252,7 @@ beforeEach(() =>
 );
 ```
 
-Profit. Subscribe, like, share!
+Profit. Subscribe, like, share! [Back to top](#content).
 
 Below more detailed documentation begins, please bear with us.
 
@@ -259,6 +262,10 @@ Below more detailed documentation begins, please bear with us.
 
 This section provides vast **information how to mock dependencies in angular** with real examples and detailed explanations
 of all aspects might be useful in writing fully isolated unit tests.
+
+[Back to top](#content).
+
+---
 
 ### How to mock a component
 
@@ -336,7 +343,7 @@ describe('Test', () => {
 <p>
 
 The source file is here:
-[examples/MockComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts).<br>
+[MockComponent](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockComponent/test.spec.ts)
 to play with.
@@ -450,6 +457,8 @@ describe('MockComponent', () => {
 </p>
 </details>
 
+<br>[Back to top](#content).
+
 ---
 
 ### How to mock a directive
@@ -526,7 +535,7 @@ describe('Test', () => {
 <p>
 
 The source file is here:
-[examples/MockDirective-Attribute/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts).<br>
+[MockDirective-Attribute](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockDirective-Attribute/test.spec.ts)
 to play with.
@@ -599,7 +608,7 @@ It's important to render a structural directive with the right context first,
 if you want to assert on its nested elements.
 
 The source file is here:
-[examples/MockDirective-Structural/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts).<br>
+[MockDirective-Structural](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockDirective-Structural/test.spec.ts)
 to play with.
@@ -645,6 +654,8 @@ describe('MockDirective', () => {
 
 </p>
 </details>
+
+<br>[Back to top](#content).
 
 ---
 
@@ -716,7 +727,7 @@ describe('Test', () => {
 <p>
 
 The source file is here:
-[examples/MockPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts).<br>
+[MockPipe](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockPipe/test.spec.ts)
 to play with.
@@ -741,6 +752,8 @@ describe('MockPipe', () => {
 
 </p>
 </details>
+
+<br>[Back to top](#content).
 
 ---
 
@@ -785,6 +798,20 @@ const instance = MockService({
 instance.nested.func = () => 'My Custom Behavior';
 ```
 
+[Back to top](#content).
+
+---
+
+### How to mock a provider
+
+`MockProvider` might be useful If you want to stub a service or a token in providers.
+
+- `MockProvider(MyService)` - creates a `useFactory` provider with `MockService(MyService)` under the hood.
+- `MockProvider(MY_TOKEN_1)` - creates a `useValue` provider that returns `undefined`.
+- `MockProvider(MyService, {mocked: true})` - creates a `useValue` provider that returns the passed value.
+- `MockProvider(MY_TOKEN_1, 'fake')` - creates a `useValue` provider that returns the passed value.
+- `MockProviders(MyService1, MY_TOKEN_1, ...)` - returns an array of mocked services and tokens.
+
 Now let's pretend that in an Angular application `TargetComponent` depends on a service of `DependencyService`,
 and it should be mocked in favor of avoiding overhead.
 
@@ -809,16 +836,13 @@ describe('Test', () => {
 });
 ```
 
-To **mock a service** simply pass `DependencyService` into `MockService`:
+To **mock a service** simply pass it into `MockProvider`:
 
 ```typescript
 TestBed.configureTestingModule({
   declarations: [TargetComponent],
   providers: [
-    {
-      provide: DependencyService,
-      useValue: MockService(DependencyService), // <- profit
-    },
+    MockProvider(DependencyService), // <- profit
   ],
 });
 ```
@@ -838,6 +862,41 @@ describe('Test', () => {
   });
 });
 ```
+
+<details><summary>Click to see <strong>an example of mocking providers in Angular tests</strong></summary>
+<p>
+
+The source file is here:
+[MockProvider](https://github.com/ike18t/ng-mocks/blob/master/examples/MockProvider/test.spec.ts).<br>
+Prefix it with `fdescribe` or `fit` on
+[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockProvider/test.spec.ts)
+to play with.
+
+```typescript
+describe('MockProvider', () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      declarations: [TargetComponent],
+      providers: [
+        MockProvider(DependencyService),
+        MockProvider(DEPENDENCY_TOKEN, 'mocked token'),
+      ],
+    }).compileComponents()
+  );
+
+  it('mocks providers', () => {
+    const fixture = TestBed.createComponent(TargetComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML).not.toContain('target');
+    expect(fixture.nativeElement.innerHTML).toContain('mocked token');
+  });
+});
+```
+
+</p>
+</details>
+
+<br>[Back to top](#content).
 
 ---
 
@@ -930,7 +989,7 @@ beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 <p>
 
 The source file is here:
-[examples/MockModule/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts).<br>
+[MockModule](https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockModule/test.spec.ts)
 to play with.
@@ -953,6 +1012,8 @@ describe('MockModule', () => {
 </p>
 </details>
 
+<br>[Back to top](#content).
+
 ---
 
 ### How to mock classic and reactive form components
@@ -969,7 +1030,7 @@ A mocked instance of `ControlValueAccessor` provides:
 <p>
 
 The source file is here:
-[examples/MockReactiveForms/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts).<br>
+[MockReactiveForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockReactiveForms/test.spec.ts)
 to play with.
@@ -1014,7 +1075,7 @@ describe('MockReactiveForms', () => {
 <p>
 
 The source file is here:
-[examples/MockForms/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts).<br>
+[MockForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockForms/test.spec.ts)
 to play with.
@@ -1059,12 +1120,14 @@ describe('MockForms', () => {
 </p>
 </details>
 
+<br>[Back to top](#content).
+
 ---
 
 ## Extensive example of mocking in Angular tests
 
 The source file is here:
-[examples/MAIN/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MAIN/test.spec.ts).<br>
+[MAIN](https://github.com/ike18t/ng-mocks/blob/master/examples/MAIN/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MAIN/test.spec.ts)
 to play with.
@@ -1256,6 +1319,8 @@ Our tests:
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
+[Back to top](#content).
+
 ---
 
 ## Functions for easy mocking and rendering
@@ -1267,6 +1332,10 @@ with minimum coding.
 - [`MockRender`](#mockrender) - renders customized templates
 - [`MockInstance`](#mockinstance) - edits anything on an early stage
 - [`ngMocks`](#ngmocks) - facilitates work with fixtures
+
+[Back to top](#content).
+
+---
 
 ### MockBuilder
 
@@ -1291,7 +1360,7 @@ and has a rich toolkit that supports:
 <p>
 
 The source file is here:
-[examples/MockBuilder/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.spec.ts).<br>
+[MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockBuilder/test.spec.ts)
 to play with.
@@ -1574,6 +1643,8 @@ beforeEach(() =>
 );
 ```
 
+[Back to top](#content).
+
 ---
 
 ### MockRender
@@ -1581,17 +1652,23 @@ beforeEach(() =>
 `MockRender` is a simple tool that helps with **shallow rendering in Angular tests**
 when we want to assert `Inputs`, `Outputs`, `ChildContent` and custom templates.
 
-**Please note**
+**Please note**, that `MockRender(MyComponent)` is not assignable to
+`ComponentFixture<MyComponent>`. You should use either
 
-> that `MockRender(MyComponent)` is not assignable
-> to `ComponentFixture<MyComponent>`.
+```typescript
+MockedComponentFixture<MyComponent>
+```
+
+or
+
+```typescript
+ComponentFixture<
+  DefaultRenderComponent<MyComponent>
 >
-> You should use either
-> `MockedComponentFixture<MyComponent>` or
-> `ComponentFixture<DefaultRenderComponent<MyComponent>>`.
->
-> It happens because `MockRender` generates an additional component
-> to render the desired thing and its interface differs.
+```
+
+It happens because `MockRender` generates an additional component to
+render the desired thing and its interface differs.
 
 It returns `MockedComponentFixture<T>` type. The difference is an additional `point` property.
 The best thing about it is that `fixture.point.componentInstance` is typed to the component's class instead of `any`.
@@ -1627,7 +1704,7 @@ the render.
 There is **an example how to render a custom template in an Angular tests** below.
 
 The source file is here:
-[examples/MockRender/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts).<br>
+[MockRender](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockRender/test.spec.ts)
 to play with.
@@ -1701,6 +1778,8 @@ describe('MockRender', () => {
 });
 ```
 
+[Back to top](#content).
+
 ---
 
 ### MockInstance
@@ -1739,7 +1818,7 @@ After a test you can reset changes to avoid their influence in other tests via a
 <p>
 
 The source file is here:
-[examples/MockInstance/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts).<br>
+[MockInstance](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockInstance/test.spec.ts)
 to play with.
@@ -1785,6 +1864,8 @@ describe('MockInstance', () => {
 
 </p>
 </details>
+
+<br>[Back to top](#content).
 
 ---
 
@@ -1923,6 +2004,8 @@ ngMocks.stub(instance, {
 </p>
 </details>
 
+<br>[Back to top](#content).
+
 ---
 
 ### Helper functions
@@ -1992,6 +2075,8 @@ This function verifies tokens.
 
 - `isNgInjectionToken(TOKEN)` - checks whether `TOKEN` is a token
 
+[Back to top](#content).
+
 ---
 
 ### Usage with 3rd-party libraries
@@ -2036,6 +2121,8 @@ const createComponent = createComponentFactory({
 ```
 
 Profit. Subscribe, like, share!
+
+[Back to top](#content).
 
 ---
 
@@ -2139,6 +2226,8 @@ describe('beforeEach:manual-spy', () => {
 </p>
 </details>
 
+<br>[Back to top](#content).
+
 ---
 
 ### Auto Spy
@@ -2159,6 +2248,8 @@ In case of jest add it to `src/setupJest.ts`.
 import 'ng-mocks/dist/jest';
 ```
 
+[Back to top](#content).
+
 ---
 
 ## How to test an Angular application
@@ -2168,10 +2259,16 @@ covering almost all possible cases.
 
 Should you not find an example you are interested in? Just contact us.
 
+[Back to top](#content).
+
+---
+
 ### How to test a component
 
 Please check [the extensive example](#extensive-example-of-mocking-in-angular-tests),
 it covers all aspects of **testing components in angular applications**.
+
+[Back to top](#content).
 
 ---
 
@@ -2198,10 +2295,12 @@ const service = fixture.point.injector.get(TargetService);
 Profit. Now we can assert behavior of the service.
 
 A source file of this test is here:
-[examples/TestProviderInComponent/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts).<br>
+[TestProviderInComponent](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderInComponent/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2236,10 +2335,12 @@ const instance = ngMocks.get(fixture.point, TargetDirective);
 ```
 
 A source file of this test is here:
-[examples/TestAttributeDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestAttributeDirective/test.spec.ts).<br>
+[TestAttributeDirective](https://github.com/ike18t/ng-mocks/blob/master/examples/TestAttributeDirective/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestAttributeDirective/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2267,10 +2368,12 @@ const service = fixture.point.injector.get(TargetService);
 ```
 
 A source file of this test is here:
-[examples/TestProviderInDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts).<br>
+[TestProviderInDirective](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderInDirective/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2322,10 +2425,12 @@ expect(fixture.nativeElement.innerHTML).toContain('content');
 ```
 
 A source file of this test is here:
-[examples/TestStructuralDirective/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts).<br>
+[TestStructuralDirective](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestStructuralDirective/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2363,10 +2468,12 @@ expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
 ```
 
 A source file of this test is here:
-[examples/TestStructuralDirectiveWithContext/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts).<br>
+[TestStructuralDirectiveWithContext](https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestStructuralDirectiveWithContext/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2394,10 +2501,12 @@ expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
 ```
 
 A source file of this test is here:
-[examples/TestPipe/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts).<br>
+[TestPipe](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestPipe/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2452,40 +2561,42 @@ Despite the way providers are created: `useClass`, `useValue` etc.
 Their tests are quite similar.
 
 A source file of a test without dependencies is here:
-[examples/TestProvider/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProvider/test.spec.ts).<br>
+[TestProvider](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProvider/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProvider/test.spec.ts)
 to play with.
 
 A source file of a test with dependencies is here:
-[examples/TestProviderWithDependencies/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts).<br>
+[TestProviderWithDependencies](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderWithDependencies/test.spec.ts)
 to play with.
 
 A source file of a test with `useClass` is here:
-[examples/TestProviderWithUseClass/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts).<br>
+[TestProviderWithUseClass](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderWithUseClass/test.spec.ts)
 to play with.
 
 A source file of a test with `useValue` is here:
-[examples/TestProviderWithUseValue/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts).<br>
+[TestProviderWithUseValue](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/examples/TestProviderWithUseValue/test.spec.ts)
 to play with.
 
 A source file of a test with `useExisting` is here:
-[examples/TestProviderWithUseExisting/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseExisting/test.spec.ts).<br>
+[TestProviderWithUseExisting](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseExisting/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderWithUseExisting/test.spec.ts)
 to play with.
 
 A source file of a test with `useFactory` is here:
-[examples/TestProviderWithUseFactory/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseFactory/test.spec.ts).<br>
+[TestProviderWithUseFactory](https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseFactory/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/examples/TestProviderWithUseFactory/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2521,10 +2632,12 @@ expect(token).toEqual(jasmine.any(ServiceExisting));
 ```
 
 A source file of this test is here:
-[examples/TestToken/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestToken/test.spec.ts).<br>
+[TestToken](https://github.com/ike18t/ng-mocks/blob/master/examples/TestToken/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestToken/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2542,10 +2655,12 @@ expect(values.length).toEqual(4);
 ```
 
 A source file of this test is here:
-[examples/TestMultiToken/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts).<br>
+[TestMultiToken](https://github.com/ike18t/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestMultiToken/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2643,10 +2758,12 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 ```
 
 A source file of these tests is here:
-[examples/TestRoute/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoute/test.spec.ts).<br>
+[TestRoute](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoute/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoute/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2686,10 +2803,12 @@ expect(() => ngMocks.find(fixture, LoginComponent)).not.toThrow();
 ```
 
 A source file of this test is here:
-[examples/TestRoutingGuard/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoutingGuard/test.spec.ts).<br>
+[TestRoutingGuard](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoutingGuard/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoutingGuard/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2756,10 +2875,12 @@ expect(route.snapshot.data).toEqual({
 ```
 
 A source file of this test is here:
-[examples/TestRoutingResolver/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoutingResolver/test.spec.ts).<br>
+[TestRoutingResolver](https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoutingResolver/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoutingResolver/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2804,10 +2925,12 @@ expect(actual).toEqual([false, true, false]);
 ```
 
 A source file of this test is here:
-[examples/TestHttpRequest/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpRequest/test.spec.ts).<br>
+[TestHttpRequest](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpRequest/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestHttpRequest/test.spec.ts)
 to play with.
+
+[Back to top](#content).
 
 ---
 
@@ -2861,7 +2984,9 @@ expect(req.request.headers.get('My-Custom')).toEqual(
 ```
 
 A source file of this test is here:
-[examples/TestHttpInterceptor/test.spec.ts](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpInterceptor/test.spec.ts).<br>
+[TestHttpInterceptor](https://github.com/ike18t/ng-mocks/blob/master/examples/TestHttpInterceptor/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestHttpInterceptor/test.spec.ts)
 to play with.
+
+[Back to top](#content).

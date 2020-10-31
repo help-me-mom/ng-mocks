@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Directive, ElementRef, Injectable, NgModule, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { NgModuleWithProviders } from '../common';
+import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 
 @Directive({ selector: '[example-directive]' })
 export class ExampleDirective implements OnInit {

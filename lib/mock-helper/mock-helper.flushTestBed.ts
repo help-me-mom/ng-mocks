@@ -1,5 +1,3 @@
-// tslint:disable:no-default-export
-
 import { getTestBed } from '@angular/core/testing';
 
 export default (): void => {

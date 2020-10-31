@@ -1,11 +1,12 @@
-// tslint:disable:variable-name unified-signatures no-default-import
+// tslint:disable:variable-name
 
 import { EventEmitter, InjectionToken, Provider } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
-import { AbstractType, AnyType, NgModuleWithProviders, Type } from '../common';
-import { MockedDebugElement, MockedDebugNode } from '../mock-render';
-import { MockedFunction } from '../mock-service';
+import { AbstractType, AnyType, Type } from '../common/core.types';
+import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
+import { MockedFunction } from '../mock-service/types';
 
 import ngMocksFaster from './mock-helper.faster';
 import ngMocksFind from './mock-helper.find';

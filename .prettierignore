@@ -4,6 +4,7 @@
 .browserslistrc
 .dockerignore
 .editorconfig
+.env
 .gitignore
 .gitkeep
 .idea/

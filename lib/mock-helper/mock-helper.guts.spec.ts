@@ -14,7 +14,12 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { getMockedNgDefOf, isMockedNgDefOf, isNgDef, ngMocks } from 'ng-mocks';
+
+import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
+import { isNgDef } from '../common/func.is-ng-def';
+
+import { ngMocks } from './mock-helper';
 
 const TARGET1 = new InjectionToken('TARGET1');
 const TARGET2 = new InjectionToken('TARGET2');

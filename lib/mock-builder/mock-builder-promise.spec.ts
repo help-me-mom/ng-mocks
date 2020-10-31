@@ -2,7 +2,7 @@
 
 import { Component, Directive, Injectable, InjectionToken, NgModule, Pipe, PipeTransform } from '@angular/core';
 
-import { getTestBedInjection } from '../common/lib';
+import { getTestBedInjection } from '../common/core.helpers';
 
 import { MockBuilder } from './mock-builder';
 

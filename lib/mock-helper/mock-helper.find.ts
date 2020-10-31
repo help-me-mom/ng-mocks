@@ -1,9 +1,8 @@
-// tslint:disable:no-default-export
-
 import { By } from '@angular/platform-browser';
 
-import { getSourceOfMock, Type } from '../common';
-import { MockedDebugElement } from '../mock-render';
+import { Type } from '../common/core.types';
+import { getSourceOfMock } from '../common/func.get-source-of-mock';
+import { MockedDebugElement } from '../mock-render/types';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 

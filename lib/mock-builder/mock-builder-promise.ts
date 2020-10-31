@@ -3,65 +3,22 @@ import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core
 import { MetadataOverride, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import {
-  AnyType,
-  flatten,
-  isNgDef,
-  isNgInjectionToken,
-  isNgModuleDefWithProviders,
-  mapEntries,
-  mapValues,
-  NgModuleWithProviders,
-  NG_MOCKS,
-  NG_MOCKS_OVERRIDES,
-  NG_MOCKS_TOUCHES,
-  Type,
-} from '../common/lib';
+import { flatten, mapEntries, mapValues } from '../common/core.helpers';
+import { directiveResolver, jitReflector, ngModuleResolver } from '../common/core.reflect';
+import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_TOUCHES } from '../common/core.tokens';
+import { AnyType, Type } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
+import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
+import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver, jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
-import { MockModule, MockNgDef, MockProvider } from '../mock-module/mock-module';
+import { MockModule, MockNgDef } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
-import { mockServiceHelper } from '../mock-service/mock-service';
+import mockServiceHelper from '../mock-service/helper';
+import MockProvider from '../mock-service/mock-provider';
 
-export interface IMockBuilderResult {
-  testBed: typeof TestBed;
-}
-export interface IMockBuilderConfigAll {
-  dependency?: boolean; // won't be added to TestBedModule.
-  export?: boolean; // will be forced for export in its module.
-}
-
-export interface IMockBuilderConfigModule {
-  exportAll?: boolean; // exports all declarations and imports.
-}
-
-export interface IMockBuilderConfigComponent {
-  render?: {
-    [blockName: string]:
-      | boolean
-      | {
-          $implicit?: any;
-          variables?: { [key: string]: any };
-        };
-  };
-}
-
-export interface IMockBuilderConfigDirective {
-  render?:
-    | boolean
-    | {
-        $implicit?: any;
-        variables?: { [key: string]: any };
-      };
-}
-
-export type IMockBuilderConfig =
-  | IMockBuilderConfigAll
-  | IMockBuilderConfigModule
-  | IMockBuilderConfigComponent
-  | IMockBuilderConfigDirective;
+import { IMockBuilderConfig, IMockBuilderResult } from './types';
 
 const defaultMock = {}; // simulating Symbol
 

@@ -4,13 +4,14 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, NG_INTERCEPTORS } from 'ng-mocks';
 
-import { NG_GUARDS } from '../common';
+import { NG_GUARDS, NG_INTERCEPTORS } from '../common/core.tokens';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { ngMocks } from '../mock-helper';
+import { MockBuilder } from '../mock-builder/mock-builder';
+import { ngMocks } from '../mock-helper/mock-helper';
 
-import { MockService, mockServiceHelper } from './mock-service';
+import { MockService } from './mock-service';
+import mockServiceHelper from './helper';
 
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';

@@ -5,11 +5,12 @@ import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { ngMocks } from '../mock-helper';
-import { MockService } from '../mock-service';
+import { ngMocks } from '../mock-helper/mock-helper';
+import { MockService } from '../mock-service/mock-service';
 
-import { MockedComponentFixture, MockedDebugElement, MockedDebugNode, MockRender } from './mock-render';
+import { MockRender } from './mock-render';
 import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.spec.fixtures';
+import { MockedComponentFixture, MockedDebugElement, MockedDebugNode } from './types';
 
 describe('MockRender', () => {
   beforeEach(() => {

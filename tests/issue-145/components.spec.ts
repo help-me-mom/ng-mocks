@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
-import { directiveResolver } from 'ng-mocks/dist/lib/common/reflect';
+import { directiveResolver } from 'ng-mocks/dist/lib/common/core.reflect';
 
 @Component({
   selector: 'component',

@@ -1,9 +1,9 @@
 // tslint:disable: no-bitwise variable-name interface-over-type-literal
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, NgControl, ValidationErrors, Validator } from '@angular/forms';
+import { NgControl } from '@angular/forms';
 
-import { mockServiceHelper } from '../mock-service';
+import mockServiceHelper from '../mock-service/helper';
 
 import { ngMocksUniverse } from './ng-mocks-universe';
 
@@ -87,35 +87,4 @@ export class Mock {
       config.init(this, injector);
     }
   }
-}
-
-export class MockControlValueAccessor extends Mock implements ControlValueAccessor, Validator {
-  public readonly __ngMocksMockControlValueAccessor: true = true;
-
-  /* istanbul ignore next */
-  __simulateChange = (value: any) => {};
-
-  /* istanbul ignore next */
-  __simulateTouch = () => {};
-
-  /* istanbul ignore next */
-  __simulateValidatorChange = () => {};
-
-  registerOnChange(fn: (value: any) => void): void {
-    this.__simulateChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.__simulateTouch = fn;
-  }
-
-  registerOnValidatorChange(fn: () => void): void {
-    this.__simulateValidatorChange = fn;
-  }
-
-  setDisabledState = (isDisabled: boolean): void => {};
-
-  validate = (control: AbstractControl): ValidationErrors | null => null;
-
-  writeValue = (value: any) => {};
 }

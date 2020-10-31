@@ -1,4 +1,4 @@
-import { MockOf } from './mock-of.decorator';
+import { MockOf } from './mock-of';
 
 describe('DebuggableMock', () => {
   it('prefixes the class name with MockOf', () => {

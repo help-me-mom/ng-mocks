@@ -1,7 +1,11 @@
-import { AnyType, isNgDef, Type } from '../common';
-import { MockComponent, MockedComponent } from '../mock-component';
-import { MockDirective, MockedDirective } from '../mock-directive';
-import { MockedPipe, MockPipe } from '../mock-pipe';
+import { AnyType, Type } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
+import { MockComponent } from '../mock-component/mock-component';
+import { MockedComponent } from '../mock-component/types';
+import { MockDirective } from '../mock-directive/mock-directive';
+import { MockedDirective } from '../mock-directive/types';
+import { MockPipe } from '../mock-pipe/mock-pipe';
+import { MockedPipe } from '../mock-pipe/types';
 
 export function MockDeclarations(...declarations: Array<Type<any>>): Array<Type<any>> {
   return declarations.map(MockDeclaration);

@@ -13,12 +13,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ngModuleResolver } from '../common/core.reflect';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { ngModuleResolver } from '../common/reflect';
-import { MockComponent } from '../mock-component';
-import { MockModule, MockProvider } from '../mock-module';
-import { MockRender } from '../mock-render';
+import { MockComponent } from '../mock-component/mock-component';
+import { MockRender } from '../mock-render/mock-render';
+import MockProvider from '../mock-service/mock-provider';
 
+import { MockModule } from './mock-module';
 import {
   AppRoutingModule,
   CustomWithServiceComponent,

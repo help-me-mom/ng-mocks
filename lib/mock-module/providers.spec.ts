@@ -1,6 +1,6 @@
 import { Injectable, NgModule } from '@angular/core';
 
-import { isMockedNgDefOf } from '../common/lib';
+import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
 
 import { MockModule } from './mock-module';
 
