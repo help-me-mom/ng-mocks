@@ -11,8 +11,10 @@ install:
   - npm install
 jobs:
   include:
-    - name: 'Unit Tests'
+    - name: 'Essential checks'
       script:
+        - npm run prettier:check
+        - npm run lint
         - WITH_COVERAGE=1 npm run test
         - ./node_modules/coveralls/bin/coveralls.js < test-reports/coverage/lcov/lcov.info
     - name: 'E2E'

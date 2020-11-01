@@ -56,6 +56,7 @@
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "prettier:repo": "prettier --write \"**/*.*\"",
+    "prettier:check": "prettier -c \"**/*.*\"",
     "prettier:stage": "pretty-quick --staged",
     "release": "export $(cat .env) && semantic-release",
     "test": "karma start",
