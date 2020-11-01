@@ -1370,6 +1370,18 @@ and has a rich toolkit that supports:
 - replacement of modules and declarations in any depth
 - exclusion of modules, declarations and providers in any depth
 
+* [Factory function](#mockbuilder-factory)
+* [`.keep()`](#mockbuilderkeep)
+* [`.mock()`](#mockbuildermock)
+* [`.exclude()`](#mockbuilderexclude)
+* [`.replace()`](#mockbuilderreplace)
+* [`.provide()`](#mockbuilderprovide)
+* [`export` flag](#mockbuilder-export-flag)
+* [`exportAll` flag](#mockbuilder-exportall-flag)
+* [`dependency` flag](#mockbuilder-dependency-flag)
+* [`render` flag](#mockbuilder-render-flag)
+* [Good to know](#mockbuilder-good-to-know)
+
 <details><summary>Click to see <strong>a code sample demonstrating ease of mocking in Angular tests</strong></summary>
 <p>
 
@@ -1708,7 +1720,7 @@ beforeEach(() =>
 );
 ```
 
-#### MockBuilder extra
+#### MockBuilder good to know
 
 Anytime we can change our decision. The last action on the same object wins. SomeModule will be mocked.
 
@@ -1951,6 +1963,19 @@ describe('MockInstance', () => {
 ### ngMocks
 
 `ngMocks` provides functions to get attribute and structural directives from an element, find components and mock objects.
+
+- [`.guts()`](#ngmocksguts)
+- [`.get()`](#ngmocksget)
+- [`.findInstance()`](#ngmocksfindinstance)
+- [`.findInstances()`](#ngmocksfindinstances)
+- [`.find()`](#ngmocksfind)
+- [`.findAll()`](#ngmocksfindall)
+- [`.input()`](#ngmocksinput)
+- [`.output()`](#ngmocksoutput)
+- [`.stub()`](#ngmocksstub)
+- [`.faster()`](#ngmocksfaster)
+- [`.flushTestBed()`](#ngmocksflushtestbed)
+- [`.reset()`](#ngmocksreset)
 
 #### ngMocks.guts
 
