@@ -1,3 +1,11 @@
+## [10.5.1](https://github.com/ike18t/ng-mocks/compare/v10.5.0...v10.5.1) (2020-11-01)
+
+
+### Bug Fixes
+
+* mocking custom deps of providers ([87da53b](https://github.com/ike18t/ng-mocks/commit/87da53b646bdb0cdb30ddf4c87d3348e87b176ee))
+* providing MockProvider and its docs ([ecfb15d](https://github.com/ike18t/ng-mocks/commit/ecfb15de2bd6f0fd308a10a4cd907775df994bdd))
+
 # [10.5.0](https://github.com/ike18t/ng-mocks/compare/v10.4.0...v10.5.0) (2020-10-30)
 
 
