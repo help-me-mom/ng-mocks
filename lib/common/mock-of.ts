@@ -1,5 +1,5 @@
-import { Type } from './lib';
-import { ngMocksMockConfig } from './Mock';
+import { Type } from './core.types';
+import { ngMocksMockConfig } from './mock';
 
 // This helps with debugging in the browser. Decorating mock classes with this
 // will change the display-name of the class to 'MockOf-<ClassName>` so our

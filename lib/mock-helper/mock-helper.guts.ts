@@ -1,14 +1,16 @@
-// tslint:disable:no-default-export
-
 import { core } from '@angular/compiler';
 import { TestModuleMetadata } from '@angular/core/testing';
 
-import { flatten, isNgDef, isNgInjectionToken, isNgModuleDefWithProviders } from '../common/lib';
-import { ngModuleResolver } from '../common/reflect';
+import { flatten } from '../common/core.helpers';
+import { ngModuleResolver } from '../common/core.reflect';
+import { isNgDef } from '../common/func.is-ng-def';
+import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
+import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
-import { MockModule, MockProvider } from '../mock-module/mock-module';
+import { MockModule } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
+import MockProvider from '../mock-service/mock-provider';
 
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
   const declarations: any[] = [];

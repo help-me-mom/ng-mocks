@@ -13,29 +13,19 @@ import {
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AnyType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
-import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
+import { flatten } from '../common/core.helpers';
+import { directiveResolver } from '../common/core.reflect';
+import { AnyType, Type } from '../common/core.types';
+import decorateInputs from '../common/decorate.inputs';
+import decorateOutputs from '../common/decorate.outputs';
+import decorateQueries from '../common/decorate.queries';
+import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import { MockOf } from '../common/mock-of';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver } from '../common/reflect';
-import { mockServiceHelper } from '../mock-service/mock-service';
+import mockServiceHelper from '../mock-service/helper';
 
-export type MockedDirective<T> = T &
-  MockControlValueAccessor & {
-    /** Pointer to current element in case of Attribute Directives. */
-    __element?: ElementRef;
-
-    /** Just a flag for easy understanding what it is. */
-    __isStructural: boolean;
-
-    /** Pointer to the template of Structural Directives. */
-    __template?: TemplateRef<any>;
-
-    /** Pointer to the view of Structural Directives. */
-    __viewContainer?: ViewContainerRef;
-
-    /** Helper function to render any Structural Directive with any context. */
-    __render($implicit?: any, variables?: { [key: string]: any }): void;
-  };
+import { MockedDirective } from './types';
 
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);

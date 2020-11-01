@@ -2,12 +2,18 @@ import { core } from '@angular/compiler';
 import { Pipe, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { AnyType, getMockedNgDefOf, Mock, MockOf, Type } from '../common';
+import { pipeResolver } from '../common/core.reflect';
+import { AnyType, Type } from '../common/core.types';
+import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import { Mock } from '../common/mock';
+import { MockOf } from '../common/mock-of';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { pipeResolver } from '../common/reflect';
 
-export type MockedPipe<T> = T & Mock & {};
+import { MockedPipe } from './types';
 
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-pipe
+ */
 export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<PipeTransform>> {
   return pipes.map(pipe => MockPipe(pipe, undefined));
 }

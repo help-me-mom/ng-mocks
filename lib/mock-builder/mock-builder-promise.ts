@@ -1,67 +1,24 @@
-import { DOCUMENT } from '@angular/common';
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
 import { MetadataOverride, TestBed } from '@angular/core/testing';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import {
-  AnyType,
-  flatten,
-  isNgDef,
-  isNgInjectionToken,
-  isNgModuleDefWithProviders,
-  mapEntries,
-  mapValues,
-  NgModuleWithProviders,
-  NG_MOCKS,
-  NG_MOCKS_OVERRIDES,
-  NG_MOCKS_TOUCHES,
-  Type,
-} from '../common/lib';
+import { extractDependency, flatten, mapEntries, mapValues } from '../common/core.helpers';
+import { directiveResolver, jitReflector, ngModuleResolver } from '../common/core.reflect';
+import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_TOUCHES } from '../common/core.tokens';
+import { AnyType, Type } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
+import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
+import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver, jitReflector, ngModuleResolver } from '../common/reflect';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
-import { MockModule, MockNgDef, MockProvider } from '../mock-module/mock-module';
+import { MockModule, MockNgDef } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
-import { mockServiceHelper } from '../mock-service/mock-service';
+import mockServiceHelper from '../mock-service/helper';
+import MockProvider from '../mock-service/mock-provider';
 
-export interface IMockBuilderResult {
-  testBed: typeof TestBed;
-}
-export interface IMockBuilderConfigAll {
-  dependency?: boolean; // won't be added to TestBedModule.
-  export?: boolean; // will be forced for export in its module.
-}
-
-export interface IMockBuilderConfigModule {
-  exportAll?: boolean; // exports all declarations and imports.
-}
-
-export interface IMockBuilderConfigComponent {
-  render?: {
-    [blockName: string]:
-      | boolean
-      | {
-          $implicit?: any;
-          variables?: { [key: string]: any };
-        };
-  };
-}
-
-export interface IMockBuilderConfigDirective {
-  render?:
-    | boolean
-    | {
-        $implicit?: any;
-        variables?: { [key: string]: any };
-      };
-}
-
-export type IMockBuilderConfig =
-  | IMockBuilderConfigAll
-  | IMockBuilderConfigModule
-  | IMockBuilderConfigComponent
-  | IMockBuilderConfigDirective;
+import extractDep from './mock-builder-promise.extract-dep';
+import skipDep from './mock-builder-promise.skip-dep';
+import { IMockBuilderConfig, IMockBuilderResult } from './types';
 
 const defaultMock = {}; // simulating Symbol
 
@@ -104,7 +61,8 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       'correctModuleExports',
     ]);
     ngMocksUniverse.touches = new Set();
-    ngMocksUniverse.config.set('multi', new Set());
+    ngMocksUniverse.config.set('multi', new Set()); // collecting multi flags of providers.
+    ngMocksUniverse.config.set('deps', new Set()); // collecting all deps of providers.
 
     for (const def of mapValues(this.keepDef)) {
       ngMocksUniverse.builder.set(def, def);
@@ -245,43 +203,29 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       providers.push(provider);
     }
 
-    // Adding missed providers
-    const parameters = new Set<any>();
-    if (ngMocksUniverse.touches.size) {
-      const touchedDefs = mapValues(ngMocksUniverse.touches);
-      for (const def of touchedDefs) {
-        // Analyzing parameters.
-        for (const decorators of jitReflector.parameters(def)) {
-          if (!decorators) {
-            continue;
-          }
-          let provide: any;
-          for (const decorator of decorators) {
-            if (decorator && typeof decorator === 'object' && decorator.token) {
-              provide = decorator.token;
-            }
-          }
-          if (!provide && decorators[0]) {
-            provide = decorators[0];
-          }
-          if (!provide) {
-            continue;
-          }
-          if (provide === DOCUMENT) {
-            continue;
-          }
-          if (provide === EVENT_MANAGER_PLUGINS) {
-            continue;
-          }
-          if (ngMocksUniverse.touches.has(provide)) {
-            continue;
-          }
+    // Analyzing providers.
+    for (const provider of flatten(providers)) {
+      const provide = typeof provider === 'object' && (provider as any).provide ? (provider as any).provide : provider;
+      ngMocksUniverse.touches.add(provide);
 
-          // Empty providedIn or things for a platform have to be skipped.
-          let skip = !provide.ɵprov?.providedIn || provide.ɵprov.providedIn === 'platform';
-          /* istanbul ignore next: A6 */
-          skip = skip && (!provide.ngInjectableDef?.providedIn || provide.ngInjectableDef.providedIn === 'platform');
-          if (typeof provide === 'function' && skip) {
+      if (provide !== provider && (provider as any).deps) {
+        extractDependency((provider as any).deps, ngMocksUniverse.config.get('deps'));
+      }
+    }
+
+    // Adding missed providers.
+    const parameters = new Set<any>();
+    if (ngMocksUniverse.touches.size || ngMocksUniverse.config.get('deps').size) {
+      const touchedDefs: any[] = mapValues(ngMocksUniverse.touches);
+      touchedDefs.push(...mapValues(ngMocksUniverse.config.get('deps')));
+      for (const def of touchedDefs) {
+        if (!skipDep(def)) {
+          parameters.add(def);
+        }
+
+        for (const decorators of jitReflector.parameters(def)) {
+          const provide: any = extractDep(decorators);
+          if (skipDep(provide)) {
             continue;
           }
           if (typeof provide === 'function' && touchedDefs.indexOf(provide) === -1) {
@@ -295,18 +239,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     // Adding missed providers.
     if (parameters.size) {
       const parametersMap = new Map();
-      const providersSkip = new Set();
-      // Excluding manually provided values.
-      for (const provider of flatten(providers)) {
-        const provide =
-          typeof provider === 'object' && (provider as any).provide ? (provider as any).provide : provider;
-        providersSkip.add(provide);
-      }
       for (const parameter of mapValues(parameters)) {
-        if (providersSkip.has(parameter)) {
-          continue;
-        }
-
         const mock = mockServiceHelper.resolveProvider(parameter, parametersMap);
         if (mock) {
           providers.push(mock);

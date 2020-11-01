@@ -1,5 +1,3 @@
-// tslint:disable:no-default-export no-default-import
-
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { ngMocksUniverse } from '../common/ng-mocks-universe';

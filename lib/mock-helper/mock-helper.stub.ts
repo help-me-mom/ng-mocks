@@ -1,6 +1,5 @@
-// tslint:disable:no-default-export
-
-import { MockedFunction, mockServiceHelper } from '../mock-service/mock-service';
+import mockServiceHelper from '../mock-service/helper';
+import { MockedFunction } from '../mock-service/types';
 
 export default <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
   if (typeof override === 'string') {

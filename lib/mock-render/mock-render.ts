@@ -1,38 +1,14 @@
 import { core } from '@angular/compiler';
-import { Component, DebugElement, DebugNode, EventEmitter, Provider } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, EventEmitter } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 
-import { Type } from '../common';
-import { directiveResolver } from '../common/reflect';
-import { ngMocks } from '../mock-helper';
-import { mockServiceHelper } from '../mock-service';
+import { directiveResolver } from '../common/core.reflect';
+import { Type } from '../common/core.types';
+import { ngMocks } from '../mock-helper/mock-helper';
+import mockServiceHelper from '../mock-service/helper';
 
-// tslint:disable-next-line:interface-name
-export interface MockedDebugNode<T = any> extends DebugNode {
-  componentInstance: T;
-}
-
-// tslint:disable-next-line:interface-name
-export interface MockedDebugElement<T = any> extends DebugElement, MockedDebugNode<T> {
-  componentInstance: T;
-}
-
-export interface IMockRenderOptions {
-  detectChanges?: boolean;
-  providers?: Provider[];
-}
-
-// tslint:disable-next-line:interface-name
-export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> extends ComponentFixture<F> {
-  point: MockedDebugElement<C>;
-}
-
-// tslint:disable: interface-over-type-literal interface-name
-export type DefaultRenderComponent<MComponent extends Record<keyof any, any>> = {
-  [K in keyof MComponent]: MComponent[K];
-};
-// tslint:enable: interface-over-type-literal interface-name
+import { IMockRenderOptions, MockedComponentFixture } from './types';
 
 function solveOutput(output: any): string {
   if (typeof output === 'function') {

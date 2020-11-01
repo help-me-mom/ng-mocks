@@ -1,12 +1,15 @@
 import { InjectionToken } from '@angular/core';
 import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
-import { AnyType, flatten, isNgDef, mapEntries, NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/lib';
+import { flatten, mapEntries } from '../common/core.helpers';
+import { NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/core.tokens';
+import { AnyType } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 
 import { MockBuilderPerformance } from './mock-builder-performance';
-import { MockBuilderPromise } from './mock-builder-promise';
+import { IMockBuilder } from './types';
 
 /**
  * @see https://github.com/ike18t/ng-mocks#mockbuilder
@@ -14,7 +17,7 @@ import { MockBuilderPromise } from './mock-builder-promise';
 export function MockBuilder(
   keepDeclaration?: AnyType<any> | InjectionToken<any> | null | undefined,
   itsModuleToMock?: AnyType<any> | null | undefined
-): MockBuilderPromise {
+): IMockBuilder {
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
     TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {

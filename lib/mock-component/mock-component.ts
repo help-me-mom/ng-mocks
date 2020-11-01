@@ -14,20 +14,19 @@ import {
 import { getTestBed } from '@angular/core/testing';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { AnyType, flatten, getMockedNgDefOf, MockControlValueAccessor, MockOf, Type } from '../common';
-import { decorateInputs, decorateOutputs, decorateQueries } from '../common/decorate';
+import { flatten } from '../common/core.helpers';
+import { directiveResolver } from '../common/core.reflect';
+import { AnyType, Type } from '../common/core.types';
+import decorateInputs from '../common/decorate.inputs';
+import decorateOutputs from '../common/decorate.outputs';
+import decorateQueries from '../common/decorate.queries';
+import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import { MockOf } from '../common/mock-of';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
-import { directiveResolver } from '../common/reflect';
-import { mockServiceHelper } from '../mock-service/mock-service';
+import mockServiceHelper from '../mock-service/helper';
 
-export type MockedComponent<T> = T &
-  MockControlValueAccessor & {
-    /** Helper function to hide rendered @ContentChild() template. */
-    __hide(contentChildSelector: string): void;
-
-    /** Helper function to render any @ContentChild() template with any context. */
-    __render(contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }): void;
-  };
+import { MockedComponent } from './types';
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
   return components.map(component => MockComponent(component, undefined));

@@ -13,18 +13,19 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { staticTrue } from '../../tests';
-import { isMockOf } from '../common/lib';
-import { MockedDirective } from '../mock-directive';
-import { ngMocks } from '../mock-helper';
-import { MockRender } from '../mock-render';
+import { isMockOf } from '../common/func.is-mock-of';
+import { MockedDirective } from '../mock-directive/types';
+import { ngMocks } from '../mock-helper/mock-helper';
+import { MockRender } from '../mock-render/mock-render';
 
-import { MockComponent, MockComponents, MockedComponent } from './mock-component';
+import { MockComponent, MockComponents } from './mock-component';
 import { ChildComponent } from './mock-component.spec.child-component.fixtures';
 import { CustomFormControlComponent } from './mock-component.spec.custom-form-control.component.fixtures';
 import { EmptyComponent } from './mock-component.spec.empty-component.component.fixtures';
 import { GetterSetterComponent } from './mock-component.spec.getter-setter.component.fixtures';
 import { SimpleComponent } from './mock-component.spec.simple-component.component.fixtures';
 import { TemplateOutletComponent } from './mock-component.spec.template-outlet.component.fixtures';
+import { MockedComponent } from './types';
 
 @Component({
   selector: 'example-component-container',

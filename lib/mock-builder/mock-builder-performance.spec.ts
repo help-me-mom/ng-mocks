@@ -1,6 +1,6 @@
 import { Component, Directive, Injectable, InjectionToken, NgModule } from '@angular/core';
 
-import { ngMocks } from '../mock-helper';
+import { ngMocks } from '../mock-helper/mock-helper';
 
 import { MockBuilder } from './mock-builder';
 

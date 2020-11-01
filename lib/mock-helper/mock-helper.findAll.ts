@@ -1,8 +1,6 @@
-// tslint:disable:no-default-export
-
 import { By } from '@angular/platform-browser';
 
-import { getSourceOfMock } from '../common';
+import { getSourceOfMock } from '../common/func.get-source-of-mock';
 
 export default (el: any, sel: any) => {
   const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));

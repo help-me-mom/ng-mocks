@@ -2,8 +2,9 @@ import { Component, Directive, EventEmitter, Input, Output } from '@angular/core
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { MockDirective, MockedDirective } from '../mock-directive';
-import { MockRender } from '../mock-render';
+import { MockDirective } from '../mock-directive/mock-directive';
+import { MockedDirective } from '../mock-directive/types';
+import { MockRender } from '../mock-render/mock-render';
 
 import { ngMocks } from './mock-helper';
 

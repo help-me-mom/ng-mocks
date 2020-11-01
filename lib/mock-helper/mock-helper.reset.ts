@@ -1,5 +1,3 @@
-// tslint:disable:no-default-export
-
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
 export default (): void => {

@@ -1,9 +1,7 @@
-// tslint:disable:no-default-export no-default-import
-
 import { core } from '@angular/compiler';
 
-import { directiveResolver } from '../common/reflect';
-import { MockedDebugElement } from '../mock-render';
+import { directiveResolver } from '../common/core.reflect';
+import { MockedDebugElement } from '../mock-render/types';
 
 import get from './mock-helper.get';
 

@@ -2,7 +2,7 @@ import { Component, Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { isMockedNgDefOf } from '../common/lib';
+import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
 
 import { MockPipe, MockPipes } from './mock-pipe';
 

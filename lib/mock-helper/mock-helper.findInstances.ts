@@ -1,7 +1,6 @@
-// tslint:disable:no-default-export
-
-import { getSourceOfMock, Type } from '../common';
-import { MockedDebugNode } from '../mock-render';
+import { Type } from '../common/core.types';
+import { getSourceOfMock } from '../common/func.get-source-of-mock';
+import { MockedDebugNode } from '../mock-render/types';
 
 function nestedCheck<T>(
   result: T[],

@@ -17,12 +17,13 @@ import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { staticFalse } from '../../tests';
-import { isMockedNgDefOf } from '../common/lib';
-import { MockBuilder } from '../mock-builder';
-import { ngMocks } from '../mock-helper';
-import { MockRender } from '../mock-render';
+import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
+import { MockBuilder } from '../mock-builder/mock-builder';
+import { ngMocks } from '../mock-helper/mock-helper';
+import { MockRender } from '../mock-render/mock-render';
 
-import { MockDirective, MockDirectives, MockedDirective } from './mock-directive';
+import { MockDirective, MockDirectives } from './mock-directive';
+import { MockedDirective } from './types';
 
 @Injectable()
 class TargetService {}
@@ -74,9 +75,7 @@ class GettersAndSettersDirective {
   template: `
     <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo" (someOutput)="emitted = $event"></div>
     <div exampleDirective></div>
-    <div id="example-structural-directive" *exampleStructuralDirective="true">
-      hi
-    </div>
+    <div id="example-structural-directive" *exampleStructuralDirective="true">hi</div>
     <input [formControl]="fooControl" />
     <div getters-and-setters></div>
   `,
