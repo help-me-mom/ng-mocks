@@ -1406,36 +1406,46 @@ describe('MockBuilder:simple', () => {
 
 </p>
 </details>
-<br>
 
-The comments below describe functionality of `MockBuilder`.
+#### MockBuilder factory
 
 ```typescript
-import { MockBuilder } from 'ng-mocks';
-import { MyComponent } from './fixtures.components';
+const ngModule = MockBuilder(MyComponent, MyModule).build();
+```
 
-// Mocks everything in MyModule (imports, declarations, providers
-// and exports), but keeps MyComponent as it is for testing.
-const ngModule1 = MockBuilder(MyComponent, MyModule).build();
-// It does the next calls:
-const ngModule2 = MockBuilder()
+The code above mocks everything in `MyModule` (imports, declarations, providers and exports), but keeps `MyComponent` as it is for testing purposes.
+Actually, it does the next:
+
+```typescript
+const ngModule = MockBuilder()
   .keep(MyComponent, { export: true })
   .mock(MyModule, { exportAll: true })
   .build();
+```
 
-// Also you can supress the first parameter with `null` if you want
-// only to mock a class and export its declarations.
-const ngModule3 = MockBuilder(null, MyModule).build();
-// It does the next calls:
-const ngModule4 = MockBuilder()
+Also, you can suppress the first parameter with `null` if you want to mock only a class and export its declarations.
+
+```typescript
+const ngModule = MockBuilder(null, MyModule).build();
+```
+
+It does the next:
+
+```typescript
+const ngModule = MockBuilder()
   .mock(MyModule, { exportAll: true })
   .build();
+```
 
-// If you do not plan further customization of ngModule
-// then you do not need to call .build().
-// Simply return result of MockBuilder in beforeEach
+If you do not plan further customization of `ngModule` then you do not need to call `.build()`. Simply return result of `MockBuilder` in `beforeEach`.
+
+```typescript
 beforeEach(() => MockBuilder(MyComponent, MyModule));
-// It does the next calls:
+```
+
+It does the next:
+
+```typescript
 beforeEach(() => {
   const ngModule = MockBuilder()
     .keep(MyComponent, { export: true })
@@ -1444,9 +1454,13 @@ beforeEach(() => {
   TestBed.configureTestingModule(ngModule);
   return TestBed.compileComponents();
 });
+```
 
-// If we want to keep a module, component, directive, pipe or provider
-// as it is (not mocking). We should use .keep.
+#### MockBuilder.keep
+
+If we want to keep a module, component, directive, pipe or provider as it is (not mocking). We should use `.keep`.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .keep(SomeModule)
@@ -1458,9 +1472,13 @@ beforeEach(() =>
     .keep(SomeService)
     .keep(SomeInjectionToken)
 );
+```
 
-// If we want to mock something, even a part of a kept module
-// we should use .mock.
+#### MockBuilder.mock
+
+If we want to mock something, even a part of a kept module we should use `.mock`.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .mock(SomeModule)
@@ -1472,25 +1490,35 @@ beforeEach(() =>
     .mock(SomeService)
     .mock(SomeInjectionToken)
 );
+```
 
-// For pipes we can set their handlers as the 2nd parameter of .mock.
+For pipes, we can set their handlers as the 2nd parameter of .mock.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(
     SomePipe,
     value => 'My Custom Content'
   )
 );
+```
 
-// For services and tokens we can optionally provide their mocked
-// values. They are added as `useValue` in providers.
+For services and tokens, we can optionally provide their mocked values.
+They are added as `useValue` in providers.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .mock(SomeService3, anything1)
     .mock(SOME_TOKEN, anything2)
 );
+```
 
-// If we want to exclude something, even a part of a kept module
-// we should use .exclude.
+#### MockBuilder.exclude
+
+If we want to exclude something, even a part of a kept module we should use `.exclude`.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .exclude(SomeModule)
@@ -1500,25 +1528,32 @@ beforeEach(() =>
     .exclude(SomeDependency)
     .exclude(SomeInjectionToken)
 );
-// If we want to test guards we need to .keep guards we need, but
-// what should we do with other guards we do not want to care about
-// at all? The answer is to exclude `NG_GUARDS` token, it will removal
-// all the guards from routes except the explicitly configured ones.
+```
+
+If we want to test guards we need to `.keep` them, but what should we do with other guards we do not want to care about at all?
+The answer is to exclude `NG_GUARDS` token, it will removal all the guards from their routes except the explicitly configured ones.
+
+```typescript
 beforeEach(() => MockBuilder(MyGuard, MyModule).exclude(NG_GUARDS));
-// The same thing if we want to test interceptors. If we exclude
-// `NG_INTERCEPTORS` token, then all interceptors with `useValue` or
-// `useFactory` will be excluded together with other interceptors
-// except the explicitly configured ones.
+```
+
+The same thing if we want to test interceptors.
+If we exclude `NG_INTERCEPTORS` token, then all interceptors with `useValue` or `useFactory` will be excluded
+together with other interceptors except the explicitly configured ones.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyInterceptor, MyModule).exclude(NG_INTERCEPTORS)
 );
+```
 
-// If we want to replace something with something,
-// we should use .replace.
-// The replacement has to be decorated with the same decorator
-// as the source.
-// It is not impossible to replace a provider or a service,
-// we should use .provide or .mock for that.
+#### MockBuilder.replace
+
+If we want to replace something with something, we should use `.replace`.
+The replacement has to be decorated with the same decorator as the source.
+It is not impossible to replace a provider / service, we should use [`.provide`](#mockbuilderprovide) or [`.mock`](#mockbuildermock) for that.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .replace(SomeModule, SomeOtherModule)
@@ -1526,24 +1561,34 @@ beforeEach(() =>
     .replace(SomeDirective, SomeOtherDirective)
     .replace(SomePipe, SomeOtherPipe)
 );
-// In case of HttpClientTestingModule you can use .replace too.
+```
+
+In case of `HttpClientTestingModule` you can use `.replace` too.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).replace(
     HttpClientModule,
     HttpClientTestingModule
   )
 );
-// In case of RouterTestingModule you need to use .keep for both of
-// the modules and to pass an empty array into .withRoutes.
+```
+
+In case of `RouterTestingModule` you need to use [`.keep`](#mockbuilderkeep) for both of the modules and to pass an empty array into `.withRoutes`.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .keep(RouterModule)
     .keep(RouterTestingModule.withRoutes([]))
 );
+```
 
-// If we want to add or replace providers or services
-// we should use .provide.
-// It has the same interface as a regular provider.
+#### MockBuilder.provide
+
+If we want to add or replace providers / services we should use `.provide`. It has the same interface as a regular provider.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .provide(MyService)
@@ -1551,22 +1596,15 @@ beforeEach(() =>
     .provide({ provide: SomeComponent3, useValue: anything1 })
     .provide({ provide: SOME_TOKEN, useFactory: () => anything2 })
 );
+```
 
-// Anytime we can change our decision.
-// The last action on the same object wins.
-// SomeModule will be mocked.
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
-    .keep(SomeModule)
-    .mock(SomeModule)
-    .keep(SomeModule)
-    .mock(SomeModule)
-);
+#### MockBuilder `export` flag
 
-// If we want to test a component, directive or pipe which,
-// unfortunately, has not been exported, then we need to mark it
-// with the 'export' flag. Does not matter how deep it is. It will be
-// exported to the level of TestingModule.
+If we want to test a component, directive or pipe which, unfortunately, has not been exported,
+then we need to mark it with the `export` flag.
+Does not matter how deep it is. It will be exported to the level of `TestingModule`.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .keep(SomeDeclaration1, {
@@ -1576,12 +1614,15 @@ beforeEach(() =>
       export: true,
     })
 );
+```
 
-// If we want to use all the declarations of a module which have not
-// been exported, we need to mark the module with the 'exportAll' flag.
-// Then all its imports and declarations will be exported.
-// If the module is nested, then add the `export` flag
-// beside `exportAll` too.
+#### MockBuilder `exportAll` flag
+
+If we want to use all the declarations of a module which have not been exported,
+we need to mark the module with the `exportAll` flag. Then all its imports and declarations will be exported.
+If the module is nested, then add the [`export`](#mockbuilder-export-flag) flag beside `exportAll` too.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent)
     .keep(MyModule, {
@@ -1592,15 +1633,17 @@ beforeEach(() =>
       export: true,
     })
 );
+```
 
-// By default all definitions (kept and mocked) are added to the
-// TestingModule if they are not a dependency of another definition.
-// Modules are added as imports to the TestingModule.
-// Components, Directive, Pipes are added as declarations to the
-// TestingModule.
-// Tokens and Services are added as providers to the TestingModule.
-// If we do not want something to be added to the TestingModule at
-// all, then we need to mark it with the 'dependency' flag.
+#### MockBuilder `dependency` flag
+
+By default, all definitions (kept and mocked) are added to the `TestingModule` if they are not a dependency of another definition.
+Modules are added as imports to the `TestingModule`.
+Components, Directive, Pipes are added as declarations to the `TestingModule`.
+Tokens and Services are added as providers to the `TestingModule`.
+If we do not want something to be added to the `TestingModule` at all, then we need to mark it with the `dependency` flag.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .keep(SomeModuleComponentDirectivePipeProvider1, {
@@ -1622,16 +1665,23 @@ beforeEach(() =>
       dependency: true,
     })
 );
+```
 
-// If we want to render a structural directive by default.
-// Now we can do that via adding the 'render' flag in its config.
+#### MockBuilder `render` flag
+
+If we want to render a structural directive by default. Now we can do that via adding the `render` flag in its config.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(MyDirective, {
     render: true,
   })
 );
-// If the directive has own context and variables.
-// Then instead of setting 'render' to true we can set the context.
+```
+
+If the directive has own context and variables. Then instead of setting `render` to true we can set the context.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(MyDirective, {
     render: {
@@ -1640,10 +1690,11 @@ beforeEach(() =>
     },
   })
 );
+```
 
-// If we use ContentChild in a component and we want to render it by
-// default, we should use its id for that in the same way as for
-// a mocked directive.
+If we use `ContentChild` in a component, and we want to render it by default, we should use its id for that in the same way as for a mocked directive.
+
+```typescript
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(MyComponent, {
     render: {
@@ -1654,6 +1705,20 @@ beforeEach(() =>
       },
     },
   })
+);
+```
+
+#### MockBuilder extra
+
+Anytime we can change our decision. The last action on the same object wins. SomeModule will be mocked.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(MyComponent, MyModule)
+    .keep(SomeModule)
+    .mock(SomeModule)
+    .keep(SomeModule)
+    .mock(SomeModule)
 );
 ```
 
