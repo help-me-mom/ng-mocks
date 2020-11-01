@@ -99,38 +99,83 @@ export const ngMocks: {
    */
   faster(): void;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T, D>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     component: Type<T>,
     notFoundValue: D
   ): D | MockedDebugElement<T>;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T = any, D = undefined>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     cssSelector: string,
     notFoundValue: D
   ): D | MockedDebugElement<T>;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   */
   findAll<T>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     component: Type<T>
   ): Array<MockedDebugElement<T>>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   */
   findAll<T = any>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     cssSelector: string
   ): Array<MockedDebugElement<T>>;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   */
   findInstance<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   */
   findInstance<T, D>(debugNode: MockedDebugNode, instanceClass: Type<T>, notFoundValue: D): D | T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   */
   findInstances<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T[];
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksflushtestbed
+   */
   flushTestBed(): void;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksget
+   */
   get<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksget
+   */
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksguts
+   */
   guts(
     keep:
       | AnyType<any>
@@ -150,15 +195,39 @@ export const ngMocks: {
     exclude?: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>> | null | undefined
   ): TestModuleMetadata;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksinput
+   */
   input<T = any>(debugNode: MockedDebugNode, input: string): T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksinput
+   */
   input<T = any, D = undefined>(debugNode: MockedDebugNode, input: string, notFoundValue: D): D | T;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksoutput
+   */
   output<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksoutput
+   */
   output<T = any, D = undefined>(debugNode: MockedDebugNode, output: string, notFoundValue: D): D | EventEmitter<T>;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksreset
+   */
   reset(): void;
 
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstub
+   */
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstub
+   */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
   faster: ngMocksFaster,

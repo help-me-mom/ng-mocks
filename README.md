@@ -262,7 +262,7 @@ beforeEach(() =>
 );
 ```
 
-Profit. Subscribe, like, share! [Back to top](#content).
+Profit. Subscribe, like, share! [to the top](#content).
 
 Below more detailed documentation begins, please bear with us.
 
@@ -273,7 +273,13 @@ Below more detailed documentation begins, please bear with us.
 This section provides vast **information how to mock dependencies in angular** with real examples and detailed explanations
 of all aspects might be useful in writing fully isolated unit tests.
 
-[Back to top](#content).
+- [mock a component](#how-to-mock-a-component)
+- [mock a directive](#how-to-mock-a-directive)
+- [mock a pipe](#how-to-mock-a-pipe)
+- [mock a service](#how-to-mock-a-service)
+- [mock a provider](#how-to-mock-a-provider)
+- [mock a module](#how-to-mock-a-module)
+- [mock a form control](#how-to-mock-classic-and-reactive-form-components)
 
 ---
 
@@ -322,7 +328,7 @@ describe('Test', () => {
 });
 ```
 
-To **mock the child component** simply pass `DependencyComponent` into `MockComponent`:
+To **mock a child component** simply pass its class into `MockComponent`:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -467,7 +473,7 @@ describe('MockComponent', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -514,7 +520,7 @@ describe('Test', () => {
 });
 ```
 
-To **mock the child directive** simply pass `DependencyDirective` into `MockDirective`:
+To **mock a child directive** simply pass its class into `MockDirective`:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -665,7 +671,7 @@ describe('MockDirective', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -708,7 +714,7 @@ describe('Test', () => {
 });
 ```
 
-To **mock the child pipe** simply pass `DependencyPipe` into `MockPipe`:
+To **mock a child pipe** simply pass its class into `MockPipe`:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -763,7 +769,7 @@ describe('MockPipe', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -808,7 +814,7 @@ const instance = MockService({
 instance.nested.func = () => 'My Custom Behavior';
 ```
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -846,7 +852,7 @@ describe('Test', () => {
 });
 ```
 
-To **mock a service** simply pass it into `MockProvider`:
+To **mock a service** simply pass its class into `MockProvider`:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -906,7 +912,7 @@ describe('MockProvider', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -960,7 +966,7 @@ describe('Test', () => {
 });
 ```
 
-To mock the module simply pass `DependencyModule` into `MockModule`:
+To **mock a module** simply pass its class into `MockModule`:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -1022,7 +1028,7 @@ describe('MockModule', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1130,7 +1136,7 @@ describe('MockForms', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1329,7 +1335,7 @@ Our tests:
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1342,8 +1348,6 @@ with minimum coding.
 - [`MockRender`](#mockrender) - renders customized templates
 - [`MockInstance`](#mockinstance) - edits anything on an early stage
 - [`ngMocks`](#ngmocks) - facilitates work with fixtures
-
-[Back to top](#content).
 
 ---
 
@@ -1653,7 +1657,7 @@ beforeEach(() =>
 );
 ```
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1788,7 +1792,7 @@ describe('MockRender', () => {
 });
 ```
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1875,7 +1879,7 @@ describe('MockInstance', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -1883,138 +1887,176 @@ describe('MockInstance', () => {
 
 `ngMocks` provides functions to get attribute and structural directives from an element, find components and mock objects.
 
+#### ngMocks.guts
+
+Generates and returns metadata for `TestBed` module.
+
 - `ngMocks.guts(TestingDeclaration, ItsModule)`
 - `ngMocks.guts([Thing1, Thing2], [ToMock1, ToMock2], [Skip1, Skip2])`
 
-* `ngMocks.get(debugElement, directive, notFoundValue?)`
-* `ngMocks.findInstance(debugElement, directive, notFoundValue?)`
-* `ngMocks.findInstances(debugElement, directive)`
+The first parameter can be a declaration or an array of them we want to test.
+The second parameter can be a declaration or an array of them we want to mock.
+The third parameter can be a declaration or an array of them we want to exclude.
+They support: Modules, Components, Directives, Pipes, Services and tokens.
+
+If there is a module in the second parameter, then its guts will be mocked excluding things from the first parameter.
+Any parameter might be `null` if we need to skip it.
+
+```typescript
+const ngModuleMeta = ngMocks.guts(Component, ItsModule);
+```
+
+```typescript
+const ngModuleMeta = ngMocks.guts(
+  [Component1, Component2, Service3],
+  [ModuleToMock, DirectiveToMock, WhateverToMock],
+  [ServiceToExclude, DirectiveToExclude]
+);
+```
+
+```typescript
+const ngModuleMeta = ngMocks.guts(
+  null,
+  ModuleToMock,
+  ComponentToExclude
+);
+```
+
+#### ngMocks.get
+
+Returns an attribute or structural directive which belongs to the current element.
+
+- `ngMocks.get(debugElement, directive, notFoundValue?)`
+
+```typescript
+const directive = ngMocks.get(fixture.debugElement, Directive);
+```
+
+#### ngMocks.findInstance
+
+Returns the first found attribute or structural directive which belongs to the current element or its any child.
+
+- `ngMocks.findInstance(debugElement, directive, notFoundValue?)`
+
+```typescript
+const directive = ngMocks.findInstance(
+  fixture.debugElement,
+  Directive
+);
+```
+
+#### ngMocks.findInstances
+
+Returns an array of all found attribute or structural directives which belong to the current element and all its children.
+
+- `ngMocks.findInstances(debugElement, directive)`
+
+```typescript
+const directives = ngMocks.findInstances(
+  fixture.debugElement,
+  Directive
+);
+```
+
+#### ngMocks.find
+
+Returns a found DebugElement which belongs to a component with the correctly typed componentInstance,
+or matches a css selector.
 
 - `ngMocks.find(fixture, component, notFoundValue?)`
 - `ngMocks.find(debugElement, component, notFoundValue?)`
+- `ngMocks.find(debugElement, selector, notFoundValue?)`
+
+```typescript
+const element = ngMocks.find(fixture.debugElement, Component);
+```
+
+```typescript
+const element = ngMocks.find(fixture.debugElement, 'div.container');
+```
+
+#### ngMocks.findAll
+
+Returns an array of found DebugElements which belong to a component with the correctly typed componentInstance,
+or match a css selector.
+
 - `ngMocks.findAll(fixture, component)`
 - `ngMocks.findAll(debugElement, component)`
+- `ngMocks.findAll(debugElement, selector)`
 
-* `ngMocks.input(debugElement, input, notFoundValue?)`
-* `ngMocks.output(debugElement, output, notFoundValue?)`
+```typescript
+const elements = ngMocks.findAll(fixture.debugElement, Component);
+```
+
+```typescript
+const elements = ngMocks.findAll(fixture.debugElement, 'div.item');
+```
+
+#### ngMocks.input
+
+Returns value of an `input` of an element.
+It avoids the issue of knowing the name of a component / directive the input belongs to.
+
+- `ngMocks.input(debugElement, input, notFoundValue?)`
+
+```typescript
+const inputValue = ngMocks.input(debugElement, 'param1');
+```
+
+#### ngMocks.output
+
+Returns an emitter of an `output` of an element.
+It avoids the issue of knowing the name of a component / directive the output belongs to.
+
+- `ngMocks.output(debugElement, output, notFoundValue?)`
+
+```typescript
+const outputEmitter = ngMocks.output(debugElement, 'update');
+```
+
+#### ngMocks.stub
+
+In case if we want to mock methods / properties of a service.
 
 - `ngMocks.stub(service, method)`
 - `ngMocks.stub(service, methods)`
 - `ngMocks.stub(service, property, 'get' | 'set')`
 
-* `ngMocks.faster()` - [optimizes setup](#making-angular-tests-faster) between tests in a suite
-* `ngMocks.flushTestBed()` - flushes initialization of TestBed
-* `ngMocks.reset()` - resets caches of [`ngMocks`](#ngmocks)
-
-<details><summary>Click to see <strong>an example of all functionality of ngMocks</strong></summary>
-<p>
+Returns a mocked function / spy of the method. If the method has not been mocked yet - mocks it.
 
 ```typescript
-// Returns metadata for TestBed module.
-// The first parameter can be a class or an array of classes
-// we want to test: Modules, Components, Directives, Pipes, Services
-// and tokens.
-// The second parameter can be a class or an array of classes
-// we want to mock: Modules, Components, Directives, Pipes, Services
-// and tokens.
-// The third parameter can be a class or an array of classes
-// we want to exclude: Modules, Components, Directives, Pipes, Services
-// and tokens.
-// If there is a module in the second parameter, then its guts will be
-// mocked excluding things from the first parameter.
-// Any parameter might be `null` if we need to skip it.
-const ngModuleMeta1 = ngMocks.guts(Component, ItsModule);
-const ngModuleMeta2 = ngMocks.guts(
-  [Component1, Component2, Service3],
-  [ModuleToMock, DirectiveToMock, WhateverToMock],
-  [ServiceToExclude, DirectiveToExclude]
-);
-const ngModuleMeta3 = ngMocks.guts(
-  null,
-  ModuleToMock,
-  ComponentToExclude
-);
-
-// Returns an attribute or structural directive which belongs to
-// the current element.
-const directive1: Directive = ngMocks.get(
-  fixture.debugElement,
-  Directive
-);
-
-// Returns the first found attribute or structural directive which
-// belongs to the current element or its any child.
-const directive2: Directive = ngMocks.findInstance(
-  fixture.debugElement,
-  Directive
-);
-
-// Returns an array of all found attribute or structural directives
-// which belong to the current element and all its children.
-const directives1: Array<Directive> = ngMocks.findInstances(
-  fixture.debugElement,
-  Directive
-);
-
-// Returns a found DebugElement which belongs to the Component
-// with the correctly typed componentInstance.
-const component1: MockedDebugElement<Component> = ngMocks.find(
-  fixture.debugElement,
-  Component
-);
-
-// Returns an array of found DebugElements which belong to
-// the Component with the correctly typed componentInstance.
-const components1: Array<MockedDebugElement<
-  Component
->> = ngMocks.findAll(fixture.debugElement, Component);
-
-// Returns a found DebugElement which matches the css selector.
-const component2: MockedDebugElement<Component> = ngMocks.find(
-  fixture.debugElement,
-  'div.container'
-);
-
-// Returns an array of found DebugElements which match
-// the css selector.
-const components: Array<MockedDebugElement<
-  Component
->> = ngMocks.findAll(fixture.debugElement, 'div.item');
-```
-
-To avoid pain of knowing a name of the component or the directive an input or an output belongs to, you can use next functions:
-
-```typescript
-const inputValue: number = ngMocks.input(debugElement, 'param1');
-const outputValue: EventEmitter<any> = ngMocks.output(
-  debugElement,
-  'update'
-);
-```
-
-In case if we want to mock methods / properties of a service.
-
-```typescript
-// Returns a mocked function / spy of the method. If the method
-// has not been mocked yet - mocks it.
 const spy: Function = ngMocks.stub(instance, methodName);
+```
 
-// Returns a mocked function / spy of the property. If the property
-// has not been mocked yet - mocks it.
+Returns a mocked function / spy of the property. If the property has not been mocked yet - mocks it.
+
+```typescript
 const spyGet: Function = ngMocks.stub(instance, propertyName, 'get');
 const spySet: Function = ngMocks.stub(instance, propertyName, 'set');
+```
 
-// Or override properties and methods.
+Or override properties and methods.
+
+```typescript
 ngMocks.stub(instance, {
   existingProperty: true,
   existingMethod: jasmine.createSpy(),
 });
 ```
 
-</p>
-</details>
+#### ngMocks.faster
 
-<br>[Back to top](#content).
+`ngMocks.faster()` [optimizes setup](#making-angular-tests-faster) between tests in a suite.
+
+#### ngMocks.flushTestBed
+
+`ngMocks.flushTestBed()` flushes initialization of TestBed.
+
+#### ngMocks.reset
+
+`ngMocks.reset()` resets cache of [`ngMocks`](#ngmocks).
+
+[to the top](#content)
 
 ---
 
@@ -2085,7 +2127,7 @@ This function verifies tokens.
 
 - `isNgInjectionToken(TOKEN)` - checks whether `TOKEN` is a token
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2132,7 +2174,7 @@ const createComponent = createComponentFactory({
 
 Profit. Subscribe, like, share!
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2236,7 +2278,7 @@ describe('beforeEach:manual-spy', () => {
 </p>
 </details>
 
-<br>[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2258,7 +2300,7 @@ In case of jest add it to `src/setupJest.ts`.
 import 'ng-mocks/dist/jest';
 ```
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2267,9 +2309,24 @@ import 'ng-mocks/dist/jest';
 The goal of this section is to demonstrate **comprehensive examples of angular unit tests**
 covering almost all possible cases.
 
-Should you not find an example you are interested in? Just contact us.
+Should you not find an example you are interested in?
+Just [contact us](#find-an-issue-or-have-a-question-or-a-request).
 
-[Back to top](#content).
+- [testing a component](#how-to-test-a-component)
+- [testing a provider of a component](#how-to-test-a-provider-of-a-component)
+- [testing an attribute directive](#how-to-test-an-attribute-directive)
+- [testing a provider of a directive](#how-to-test-a-provider-of-a-directive)
+- [testing a structural directive](#how-to-test-a-structural-directive)
+- [testing a structural directive with a context](#how-to-test-a-structural-directive-with-a-context)
+- [testing a pipe](#how-to-test-a-pipe)
+- [testing a provider](#how-to-test-a-provider)
+- [testing a token](#how-to-test-a-token)
+- [testing a multi token](#how-to-test-a-multi-token)
+- [testing a route](#how-to-test-a-route)
+- [testing a routing guard](#how-to-test-a-routing-guard)
+- [testing a routing resolver](#how-to-test-a-routing-resolver)
+- [testing a http request](#how-to-test-a-http-request)
+- [testing a http interceptor](#how-to-test-a-http-interceptor)
 
 ---
 
@@ -2278,7 +2335,7 @@ Should you not find an example you are interested in? Just contact us.
 Please check [the extensive example](#extensive-example-of-mocking-in-angular-tests),
 it covers all aspects of **testing components in angular applications**.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2310,7 +2367,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderInComponent/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2350,7 +2407,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestAttributeDirective/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2383,7 +2440,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestProviderInDirective/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2440,7 +2497,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestStructuralDirective/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2483,7 +2540,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestStructuralDirectiveWithContext/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2516,7 +2573,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestPipe/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2606,7 +2663,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/examples/TestProviderWithUseFactory/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2647,7 +2704,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestToken/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2670,7 +2727,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestMultiToken/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2773,7 +2830,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoute/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2818,7 +2875,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoutingGuard/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2890,7 +2947,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestRoutingResolver/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2940,7 +2997,7 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestHttpRequest/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
 
 ---
 
@@ -2999,4 +3056,4 @@ Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestHttpInterceptor/test.spec.ts)
 to play with.
 
-[Back to top](#content).
+[to the top](#content)
