@@ -287,8 +287,8 @@ of all aspects might be useful in writing fully isolated unit tests.
 
 There is a `MockComponent` function. It covers almost all needs for mocking behavior.
 
-- `MockComponent(MyComponent)` - returns a mocked copy of `MyComponent` component.
-- `MockComponents(MyComponent1, SomeComponent2, ...)` - returns an array of mocked components.
+- `MockComponent( MyComponent )` - returns a mocked copy of `MyComponent` component.
+- `MockComponents( MyComponent1, SomeComponent2, ... )` - returns an array of mocked components.
 
 **A mocked copy of an angular component** respects its original component as
 a type of `MockedComponent<T>` and provides:
@@ -481,8 +481,8 @@ describe('MockComponent', () => {
 
 There is a `MockDirective` function covering almost all needs for mocking behavior.
 
-- `MockDirective(MyDirective)` - returns a mocked copy of `MyDirective` directive.
-- `MockDirectives(MyDirective1, MyDirective2, ...)` - returns an array of mocked directives.
+- `MockDirective( MyDirective )` - returns a mocked copy of `MyDirective` directive.
+- `MockDirectives( MyDirective1, MyDirective2, ... )` - returns an array of mocked directives.
 
 **A mocked copy of an angular directive** respects its original directive as
 a type of `MockedDirective<T>` and provides:
@@ -679,9 +679,9 @@ describe('MockDirective', () => {
 
 `MockPipe` is a function that mocks pipes for needs in Angular testing.
 
-- `MockPipe(MyPipe)` - returns a mocked copy of `MyPipe` pipe that always returns `undefined`.
-- `MockPipe(MyPipe, value => 'stub behavior')` - returns a mocked copy of `MyPipe` pipe.
-- `MockPipes(MyPipe1, MyPipe2, ...)` - returns an array of mocked pipes.
+- `MockPipe( MyPipe )` - returns a mocked copy of `MyPipe` pipe that always returns `undefined`.
+- `MockPipe( MyPipe, value => 'stub behavior' )` - returns a mocked copy of `MyPipe` pipe.
+- `MockPipes( MyPipe1, MyPipe2, ... )` - returns an array of mocked pipes.
 
 **A mocked copy of an angular pipe** respects its original pipe as
 a type of `MockedPipe<T>` and provides:
@@ -781,8 +781,8 @@ It tends to avoid a hassle of providing customized mocked copies for huge servic
 Simply pass a class into it and its result will be a mocked instance that respects the class,
 but all methods and properties are customizable dummies.
 
-- `MockService(MyService)` - returns a mocked instance of `MyService` class.
-- `MockService(MyOb)` - returns a mocked clone of `MyOb` object.
+- `MockService( MyService )` - returns a mocked instance of `MyService` class.
+- `MockService( MyOb )` - returns a mocked clone of `MyOb` object.
 
 **A mocked copy of an angular service** is based on its original class, and provides:
 
@@ -822,11 +822,11 @@ instance.nested.func = () => 'My Custom Behavior';
 
 `MockProvider` might be useful If you want to stub a service or a token in providers.
 
-- `MockProvider(MyService)` - creates a `useFactory` provider with `MockService(MyService)` under the hood.
-- `MockProvider(MY_TOKEN_1)` - creates a `useValue` provider that returns `undefined`.
-- `MockProvider(MyService, {mocked: true})` - creates a `useValue` provider that returns the passed value.
-- `MockProvider(MY_TOKEN_1, 'fake')` - creates a `useValue` provider that returns the passed value.
-- `MockProviders(MyService1, MY_TOKEN_1, ...)` - returns an array of mocked services and tokens.
+- `MockProvider( MyService )` - creates a `useFactory` provider with `MockService(MyService)` under the hood.
+- `MockProvider( MY_TOKEN_1 )` - creates a `useValue` provider that returns `undefined`.
+- `MockProvider( MyService, {mocked: true} )` - creates a `useValue` provider that returns the passed value.
+- `MockProvider( MY_TOKEN_1, 'fake' )` - creates a `useValue` provider that returns the passed value.
+- `MockProviders( MyService1, MY_TOKEN_1, ... )` - returns an array of mocked services and tokens.
 
 Now let's pretend that in an Angular application `TargetComponent` depends on a service of `DependencyService`,
 and it should be mocked in favor of avoiding overhead.
@@ -922,8 +922,8 @@ There is a `MockModule` function covering almost all needs for mocking behavior.
 **Mocking a module in Angular tests** with `ngMocks` is quite easy.
 The library does it recursively for modules, and mocks all imports, exports and their declarations.
 
-- `MockModule(MyModule)` - returns a mocked copy of `MyModule` module.
-- `MockModule(MyModule.forRoots())` - additionally to a mocked copy of `MyModule` module returns mocked providers.
+- `MockModule( MyModule )` - returns a mocked copy of `MyModule` module.
+- `MockModule( MyModule.forRoots() )` - additionally to a mocked copy of `MyModule` module returns mocked providers.
 
 **A mocked module** respects its original module as
 a type of `MockedModule<T>` and provides:
@@ -1360,7 +1360,7 @@ but with minimum overhead.
 Usually, we have something simple to test, but, time to time, the simplicity is killed by nightmarish dependencies.
 The good thing here is that commonly the dependencies have been declared or imported in the same module, where our
 tested thing is. Therefore, with help of `MockBuilder` we can quite easily define a testing module,
-where everything in the module will be mocked except the tested thing: `MockBuilder(TheThing, ItsModule)`.
+where everything in the module will be mocked except the tested thing: `MockBuilder( TheThing, ItsModule )`.
 
 MockBuilder tends to provide **a simple instrument to mock Angular dependencies**, does it in isolated scopes,
 and has a rich toolkit that supports:
@@ -1981,8 +1981,8 @@ describe('MockInstance', () => {
 
 Generates and returns metadata for `TestBed` module.
 
-- `ngMocks.guts(TestingDeclaration, ItsModule)`
-- `ngMocks.guts([Thing1, Thing2], [ToMock1, ToMock2], [Skip1, Skip2])`
+- `ngMocks.guts( TestingDeclaration, ItsModule )`
+- `ngMocks.guts( [Thing1, Thing2], [ToMock1, ToMock2], [Skip1, Skip2] )`
 
 The first parameter can be a declaration or an array of them we want to test.
 The second parameter can be a declaration or an array of them we want to mock.
@@ -2016,7 +2016,7 @@ const ngModuleMeta = ngMocks.guts(
 
 Returns an attribute or structural directive which belongs to the current element.
 
-- `ngMocks.get(debugElement, directive, notFoundValue?)`
+- `ngMocks.get( debugElement, directive, notFoundValue? )`
 
 ```typescript
 const directive = ngMocks.get(fixture.debugElement, Directive);
@@ -2026,7 +2026,7 @@ const directive = ngMocks.get(fixture.debugElement, Directive);
 
 Returns the first found attribute or structural directive which belongs to the current element or its any child.
 
-- `ngMocks.findInstance(debugElement, directive, notFoundValue?)`
+- `ngMocks.findInstance( debugElement, directive, notFoundValue? )`
 
 ```typescript
 const directive = ngMocks.findInstance(
@@ -2039,7 +2039,7 @@ const directive = ngMocks.findInstance(
 
 Returns an array of all found attribute or structural directives which belong to the current element and all its children.
 
-- `ngMocks.findInstances(debugElement, directive)`
+- `ngMocks.findInstances( debugElement, directive )`
 
 ```typescript
 const directives = ngMocks.findInstances(
@@ -2053,9 +2053,9 @@ const directives = ngMocks.findInstances(
 Returns a found DebugElement which belongs to a component with the correctly typed componentInstance,
 or matches a css selector.
 
-- `ngMocks.find(fixture, component, notFoundValue?)`
-- `ngMocks.find(debugElement, component, notFoundValue?)`
-- `ngMocks.find(debugElement, selector, notFoundValue?)`
+- `ngMocks.find( fixture, component, notFoundValue? )`
+- `ngMocks.find( debugElement, component, notFoundValue? )`
+- `ngMocks.find( debugElement, selector, notFoundValue? )`
 
 ```typescript
 const element = ngMocks.find(fixture.debugElement, Component);
@@ -2070,9 +2070,9 @@ const element = ngMocks.find(fixture.debugElement, 'div.container');
 Returns an array of found DebugElements which belong to a component with the correctly typed componentInstance,
 or match a css selector.
 
-- `ngMocks.findAll(fixture, component)`
-- `ngMocks.findAll(debugElement, component)`
-- `ngMocks.findAll(debugElement, selector)`
+- `ngMocks.findAll( fixture, component )`
+- `ngMocks.findAll( debugElement, component )`
+- `ngMocks.findAll( debugElement, selector )`
 
 ```typescript
 const elements = ngMocks.findAll(fixture.debugElement, Component);
@@ -2087,7 +2087,7 @@ const elements = ngMocks.findAll(fixture.debugElement, 'div.item');
 Returns value of an `input` of an element.
 It avoids the issue of knowing the name of a component / directive the input belongs to.
 
-- `ngMocks.input(debugElement, input, notFoundValue?)`
+- `ngMocks.input( debugElement, input, notFoundValue? )`
 
 ```typescript
 const inputValue = ngMocks.input(debugElement, 'param1');
@@ -2098,7 +2098,7 @@ const inputValue = ngMocks.input(debugElement, 'param1');
 Returns an emitter of an `output` of an element.
 It avoids the issue of knowing the name of a component / directive the output belongs to.
 
-- `ngMocks.output(debugElement, output, notFoundValue?)`
+- `ngMocks.output( debugElement, output, notFoundValue? )`
 
 ```typescript
 const outputEmitter = ngMocks.output(debugElement, 'update');
@@ -2108,9 +2108,9 @@ const outputEmitter = ngMocks.output(debugElement, 'update');
 
 In case if we want to mock methods / properties of a service.
 
-- `ngMocks.stub(service, method)`
-- `ngMocks.stub(service, methods)`
-- `ngMocks.stub(service, property, 'get' | 'set')`
+- `ngMocks.stub( service, method )`
+- `ngMocks.stub( service, methods )`
+- `ngMocks.stub( service, property, 'get' | 'set' )`
 
 Returns a mocked function / spy of the method. If the method has not been mocked yet - mocks it.
 
@@ -2152,6 +2152,17 @@ ngMocks.stub(instance, {
 
 ### Helper functions
 
+`ngMocks` provides several functions which help with **detection of mocked instances**.
+For example, they are useful in situations when we want to render `ChildContent` of a mocked component, or to touch a
+mocked form control.
+
+- [isMockOf](#ismockof)
+- [isMockedNgDefOf](#ismockedngdefof)
+- [getMockedNgDefOf](#getmockedngdefof)
+- [isNgDef](#isngdef)
+- [getSourceOfMock](#getsourceofmock)
+- [isNgInjectionToken](#isnginjectiontoken)
+
 #### isMockOf
 
 This function helps when we want to use mocked tools for rendering or change simulation,
@@ -2169,53 +2180,53 @@ if (isMockOf(instance, SomeClass, 'c')) {
 }
 ```
 
-- `isMockOf(inst, SomeClass, 'm')` - checks whether `inst` is an instance of `MockedModule<SomeClass>`
-- `isMockOf(inst, SomeClass, 'c')` - checks whether `inst` is an instance of `MockedComponent<SomeClass>`
-- `isMockOf(inst, SomeClass, 'd')` - checks whether `inst` is an instance of `MockedDirective<SomeClass>`
-- `isMockOf(inst, SomeClass, 'p')` - checks whether `inst` is an instance of `MockedPipe<SomeClass>`
-- `isMockOf(inst, SomeClass)` - checks whether `inst` is an inst of mocked `SomeClass`
+- `isMockOf( inst, SomeClass, 'm' )` - checks whether `inst` is an instance of `MockedModule<SomeClass>`
+- `isMockOf( inst, SomeClass, 'c' )` - checks whether `inst` is an instance of `MockedComponent<SomeClass>`
+- `isMockOf( inst, SomeClass, 'd' )` - checks whether `inst` is an instance of `MockedDirective<SomeClass>`
+- `isMockOf( inst, SomeClass, 'p' )` - checks whether `inst` is an instance of `MockedPipe<SomeClass>`
+- `isMockOf( inst, SomeClass )` - checks whether `inst` is an inst of mocked `SomeClass`
 
 #### isMockedNgDefOf
 
 This function helps when we need to verify that a class is actually a mocked copy of a class.
 
-- `isMockedNgDefOf(MockedClass, SomeClass, 'm')` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a module
-- `isMockedNgDefOf(MockedClass, SomeClass, 'c')` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a component
-- `isMockedNgDefOf(MockedClass, SomeClass, 'd')` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a directive
-- `isMockedNgDefOf(MockedClass, SomeClass, 'p')` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a pipe
-- `isMockedNgDefOf(MockedClass, SomeClass)` - checks whether `MockedClass` is a mocked copy of `SomeClass`
+- `isMockedNgDefOf( MockedClass, SomeClass, 'm' )` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a module
+- `isMockedNgDefOf( MockedClass, SomeClass, 'c' )` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a component
+- `isMockedNgDefOf( MockedClass, SomeClass, 'd' )` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a directive
+- `isMockedNgDefOf( MockedClass, SomeClass, 'p' )` - checks whether `MockedClass` is a mocked copy of `SomeClass` and a pipe
+- `isMockedNgDefOf( MockedClass, SomeClass )` - checks whether `MockedClass` is a mocked copy of `SomeClass`
 
 #### getMockedNgDefOf
 
 This function helps when in a test we want to get a mocked copy of a class created in TestBed.
 
-- `getMockedNgDefOf(SomeClass, 'm')` - returns an existing `MockedModule<SomeClass>` of `SomeClass`
-- `getMockedNgDefOf(SomeClass, 'c')` - returns an existing `MockedComponent<SomeClass>` of `SomeClass`
-- `getMockedNgDefOf(SomeClass, 'd')` - returns an existing `MockedDirective<SomeClass>` of `SomeClass`
-- `getMockedNgDefOf(SomeClass, 'p')` - returns an existing `MockedPipe<SomeClass>` of `SomeClass`
-- `getMockedNgDefOf(SomeClass)` - returns an existing mocked class of `SomeClass`
+- `getMockedNgDefOf( SomeClass, 'm' )` - returns an existing `MockedModule<SomeClass>` of `SomeClass`
+- `getMockedNgDefOf( SomeClass, 'c' )` - returns an existing `MockedComponent<SomeClass>` of `SomeClass`
+- `getMockedNgDefOf( SomeClass, 'd' )` - returns an existing `MockedDirective<SomeClass>` of `SomeClass`
+- `getMockedNgDefOf( SomeClass, 'p' )` - returns an existing `MockedPipe<SomeClass>` of `SomeClass`
+- `getMockedNgDefOf( SomeClass )` - returns an existing mocked class of `SomeClass`
 
 #### isNgDef
 
 This function verifies how a class has been decorated.
 
-- `isNgDef(SomeClass, 'm')` - checks whether `SomeClass` is a module
-- `isNgDef(SomeClass, 'c')` - checks whether `SomeClass` is a component
-- `isNgDef(SomeClass, 'd')` - checks whether `SomeClass` is a directive
-- `isNgDef(SomeClass, 'p')` - checks whether `SomeClass` is a pipe
-- `isNgDef(SomeClass)` - checks whether `SomeClass` is a module / component / directive / pipe.
+- `isNgDef( SomeClass, 'm' )` - checks whether `SomeClass` is a module
+- `isNgDef( SomeClass, 'c' )` - checks whether `SomeClass` is a component
+- `isNgDef( SomeClass, 'd' )` - checks whether `SomeClass` is a directive
+- `isNgDef( SomeClass, 'p' )` - checks whether `SomeClass` is a pipe
+- `isNgDef( SomeClass )` - checks whether `SomeClass` is a module / component / directive / pipe.
 
 #### getSourceOfMock
 
 This function returns an origin of the mocked copy.
 
-- `getSourceOfMock(MockedClass)` - returns the source class of `MockedClass`
+- `getSourceOfMock( MockedClass )` - returns the source class of `MockedClass`
 
 #### isNgInjectionToken
 
 This function verifies tokens.
 
-- `isNgInjectionToken(TOKEN)` - checks whether `TOKEN` is a token
+- `isNgInjectionToken( TOKEN )` - checks whether `TOKEN` is a token
 
 [to the top](#content)
 
