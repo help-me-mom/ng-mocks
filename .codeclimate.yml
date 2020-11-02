@@ -1,7 +1,21 @@
 version: '2'
 exclude_patterns:
+  - 'dist/'
   - 'e2e/'
   - 'examples/'
+  - 'node_modules/'
+  - 'test-reports/'
   - 'tests/'
+  - 'tmp/'
   - '**/*.spec.ts'
   - '**/*.fixtures.ts'
+analysis_paths:
+  - 'lib/'
+plugins:
+  structure:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        typescript:

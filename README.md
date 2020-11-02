@@ -69,6 +69,7 @@ I'm open to contributions.
   - [a structural directive](#how-to-test-a-structural-directive)
   - [a structural directive with a context](#how-to-test-a-structural-directive-with-a-context)
   - [a pipe](#how-to-test-a-pipe)
+  - [ngOnChanges lifecycle hook](#how-to-test-ngonchanges-lifecycle-hook)
   - [a provider](#how-to-test-a-provider)
   - [a token](#how-to-test-a-token)
   - [a multi token](#how-to-test-a-multi-token)
@@ -1743,6 +1744,9 @@ beforeEach(() =>
 `MockRender` is a simple tool that helps with **shallow rendering in Angular tests**
 when we want to assert `Inputs`, `Outputs`, `ChildContent` and custom templates.
 
+The best thing about it is that `MockRender` properly triggers all lifecycle hooks,
+and allows **to test `ngOnChanges` hook from `OnChanges` interface**.
+
 **Please note**, that `MockRender(MyComponent)` is not assignable to
 `ComponentFixture<MyComponent>`. You should use either
 
@@ -2420,6 +2424,7 @@ Just [contact us](#find-an-issue-or-have-a-question-or-a-request).
 - [testing a structural directive](#how-to-test-a-structural-directive)
 - [testing a structural directive with a context](#how-to-test-a-structural-directive-with-a-context)
 - [testing a pipe](#how-to-test-a-pipe)
+- [testing ngOnChanges lifecycle hook](#how-to-test-ngonchanges-lifecycle-hook)
 - [testing a provider](#how-to-test-a-provider)
 - [testing a token](#how-to-test-a-token)
 - [testing a multi token](#how-to-test-a-multi-token)
@@ -2672,6 +2677,38 @@ A source file of this test is here:
 [TestPipe](https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestPipe/test.spec.ts)
+to play with.
+
+[to the top](#content)
+
+---
+
+### How to test `ngOnChanges` lifecycle hook
+
+`TestBed.createComponent` does not support `ngOnChanges` out of the box.
+That is where [`MockRender`](#mockrender) might be helpful.
+
+Simply use it instead of `TestBed.createComponent`.
+
+```typescript
+const fixture = MockRender(TargetComponent, {
+  input: '',
+});
+// The hook has been already called here.
+```
+
+Changes of parameters will trigger the hook.
+
+```typescript
+fixture.componentInstance.input = 'change';
+fixture.detectChanges(); // <- triggers the hook again.
+// Here we can do desired assertions.
+```
+
+A source file of this test is here:
+[TestLifecycleHooks](https://github.com/ike18t/ng-mocks/blob/master/examples/TestLifecycleHooks/test.spec.ts).<br>
+Prefix it with `fdescribe` or `fit` on
+[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/TestLifecycleHooks/test.spec.ts)
 to play with.
 
 [to the top](#content)
