@@ -14,7 +14,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
 
 // Because of A5 we need to cast Injectable to any type.
 // But because of A10+ we need to do it via a middle function.
@@ -184,7 +184,7 @@ describe('root-providers', () => {
   });
 
   describe('keep via component module, but mocks root providers', () => {
-    beforeEach(() => MockBuilder(TargetModule));
+    beforeEach(() => MockBuilder(TargetModule).mock(NG_MOCKS_ROOT_PROVIDERS));
 
     it('mocks providers', () => {
       const fixture = MockRender(TargetComponent);
@@ -197,7 +197,7 @@ describe('root-providers', () => {
   });
 
   describe('keep via component module, and keeps root providers', () => {
-    beforeEach(() => MockBuilder(TargetModule).keep(TargetService).keep(TOKEN));
+    beforeEach(() => MockBuilder(TargetModule).mock(NG_MOCKS_ROOT_PROVIDERS).keep(TargetService).keep(TOKEN));
 
     it('mocks providers', () => {
       const fixture = MockRender(TargetComponent);

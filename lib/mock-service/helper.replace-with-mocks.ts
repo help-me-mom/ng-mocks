@@ -1,4 +1,4 @@
-import { NG_GUARDS } from '../common/core.tokens';
+import { NG_MOCKS_GUARDS } from '../common/core.tokens';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
 const replaceWithMocks = (value: any): any => {
@@ -45,7 +45,7 @@ const replaceWithMocks = (value: any): any => {
           guards.push(guard);
           continue;
         }
-        if (ngMocksUniverse.builder.has(NG_GUARDS) && ngMocksUniverse.builder.get(NG_GUARDS) === null) {
+        if (ngMocksUniverse.builder.has(NG_MOCKS_GUARDS) && ngMocksUniverse.builder.get(NG_MOCKS_GUARDS) === null) {
           continue;
         }
         guards.push(guard);
