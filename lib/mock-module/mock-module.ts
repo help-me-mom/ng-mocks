@@ -1,8 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { core } from '@angular/compiler';
-import { ApplicationModule, NgModule, Provider } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import ngConfig from '../common/core.config';
 import { extendClass, flatten } from '../common/core.helpers';
 import { ngModuleResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
@@ -43,10 +43,6 @@ export function MockModule(module: any): any {
     ngModule = module;
   }
 
-  if (NEVER_MOCK.indexOf(ngModule) !== -1) {
-    return module;
-  }
-
   // We are inside of an 'it'.
   // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
   if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
@@ -61,6 +57,11 @@ export function MockModule(module: any): any {
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
   if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheMocks.has(ngModule)) {
     mockModule = ngMocksUniverse.cacheMocks.get(ngModule);
+  }
+
+  if (ngConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
+    releaseSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
@@ -122,8 +123,6 @@ export function MockModule(module: any): any {
     ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
     : mockModule;
 }
-
-const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
 /**
  * Can be changed at any time.
