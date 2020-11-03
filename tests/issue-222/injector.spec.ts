@@ -25,7 +25,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-describe('issue-222', () => {
+describe('issue-222:Injector', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('does not mock Injector, fails on ivy only', () => {

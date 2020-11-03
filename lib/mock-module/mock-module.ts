@@ -32,7 +32,7 @@ export function MockModule(module: any): any {
   let mockModule: typeof ngModule | undefined;
   let mockModuleProviders: typeof ngModuleProviders;
   let mockModuleDef: NgModule | undefined;
-  let releaseSkipMockFlag = false;
+  let toggleSkipMockFlag = false;
 
   if (isNgModuleDefWithProviders(module)) {
     ngModule = module.ngModule;
@@ -59,8 +59,24 @@ export function MockModule(module: any): any {
     mockModule = ngMocksUniverse.cacheMocks.get(ngModule);
   }
 
+  const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
+    .get('resolution')
+    ?.get(ngModule);
+  if (resolution === 'mock' && ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.delete('skipMock');
+  }
+  if (resolution === 'keep' && !ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+  if (resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+
   if (ngConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
-    releaseSkipMockFlag = true;
+    toggleSkipMockFlag = true;
     ngMocksUniverse.flags.add('skipMock');
   }
 
@@ -69,10 +85,6 @@ export function MockModule(module: any): any {
     const instance = ngMocksUniverse.builder.get(ngModule);
     if (isNgDef(instance, 'm') && instance !== ngModule) {
       mockModule = instance;
-    }
-    if (!ngMocksUniverse.flags.has('skipMock')) {
-      releaseSkipMockFlag = true;
-      ngMocksUniverse.flags.add('skipMock');
     }
   }
 
@@ -98,15 +110,18 @@ export function MockModule(module: any): any {
     // the last thing is to apply decorators.
     NgModule(mockModuleDef)(mockModule as any);
     MockOf(ngModule)(mockModule as any);
-
-    /* istanbul ignore else */
-    if (ngMocksUniverse.flags.has('cacheModule')) {
-      ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
-    }
   }
   if (!mockModule) {
     mockModule = ngModule;
   }
+
+  // We should always cache the result, in global scope it always will be a mock.
+  // In MockBuilder scope it will be reset later anyway.
+  /* istanbul ignore else */
+  if (ngMocksUniverse.flags.has('cacheModule')) {
+    ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
+  }
+
   if (ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
   }
@@ -116,8 +131,10 @@ export function MockModule(module: any): any {
     mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
   }
 
-  if (releaseSkipMockFlag) {
+  if (toggleSkipMockFlag && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.delete('skipMock');
+  } else if (toggleSkipMockFlag && !ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.flags.add('skipMock');
   }
 
   return mockModule === ngModule && mockModuleProviders === ngModuleProviders

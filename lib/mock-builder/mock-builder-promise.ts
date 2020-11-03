@@ -2,7 +2,7 @@ import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core
 import { MetadataOverride, TestBed } from '@angular/core/testing';
 
 import { extractDependency, flatten, mapEntries, mapValues } from '../common/core.helpers';
-import { directiveResolver, jitReflector, ngModuleResolver } from '../common/core.reflect';
+import { directiveResolver, jitReflector } from '../common/core.reflect';
 import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from '../common/core.tokens';
 import { AnyType, Type } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
@@ -64,21 +64,26 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     ngMocksUniverse.config.set('multi', new Set()); // collecting multi flags of providers.
     ngMocksUniverse.config.set('deps', new Set()); // collecting all deps of providers.
     ngMocksUniverse.config.set('depsSkip', new Set()); // collecting all declarations of kept modules.
+    ngMocksUniverse.config.set('resolution', new Map()); // flags to understand how to mock nested declarations.
 
     for (const def of mapValues(this.keepDef)) {
       ngMocksUniverse.builder.set(def, def);
+      ngMocksUniverse.config.get('resolution').set(def, 'keep');
     }
 
-    for (const source of mapValues(this.replaceDef)) {
-      ngMocksUniverse.builder.set(source, this.defValue.get(source));
+    for (const def of mapValues(this.replaceDef)) {
+      ngMocksUniverse.builder.set(def, this.defValue.get(def));
+      ngMocksUniverse.config.get('resolution').set(def, 'replace');
     }
 
     for (const def of [...mapValues(this.excludeDef)]) {
       ngMocksUniverse.builder.set(def, null);
+      ngMocksUniverse.config.get('resolution').set(def, 'exclude');
     }
 
     // mocking requested things.
     for (const def of mapValues(this.mockDef)) {
+      ngMocksUniverse.config.get('resolution').set(def, 'mock');
       if (isNgDef(def)) {
         continue;
       }
@@ -112,7 +117,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
 
     // Now we need to run through requested modules.
     const defProviders = new Map();
-    for (const def of [...mapValues(this.mockDef), ...mapValues(this.keepDef), ...mapValues(this.replaceDef)]) {
+    for (const def of [...mapValues(this.keepDef), ...mapValues(this.mockDef), ...mapValues(this.replaceDef)]) {
       if (!isNgDef(def, 'm')) {
         continue;
       }
@@ -317,9 +322,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       }
 
       let meta: NgModule | undefined;
-      if (isNgDef(value, 'm')) {
-        meta = ngModuleResolver.resolve(value);
-      } else if (isNgDef(value, 'c')) {
+      if (isNgDef(value, 'c')) {
         meta = directiveResolver.resolve(value);
       } else if (isNgDef(value, 'd')) {
         meta = directiveResolver.resolve(value);
@@ -332,7 +335,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       if (!skipMock) {
         ngMocksUniverse.flags.add('skipMock');
       }
-      const [changed, def] = MockNgDef(meta);
+      const [changed, def] = MockNgDef({ providers: meta.providers });
       /* istanbul ignore else */
       if (!skipMock) {
         ngMocksUniverse.flags.delete('skipMock');
