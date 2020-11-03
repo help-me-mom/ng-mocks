@@ -242,6 +242,9 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
             if (skipDep(provide)) {
               continue;
             }
+            if (ngMocksUniverse.config.get('depsSkip').has(provide)) {
+              continue;
+            }
             if (typeof provide === 'function' && touched.indexOf(provide) === -1) {
               touched.push(provide);
               bucket.push(provide);
