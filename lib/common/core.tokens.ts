@@ -10,6 +10,7 @@ export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<Type<any> | AbstractTyp
 );
 export const NG_MOCKS_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
 export const NG_MOCKS_INTERCEPTORS = new InjectionToken<void>('NG_MOCKS_INTERCEPTORS');
+export const NG_MOCKS_ROOT_PROVIDERS = new InjectionToken<void>('NG_MOCKS_ROOT_PROVIDERS');
 
 /**
  * Use NG_MOCKS_GUARDS instead.

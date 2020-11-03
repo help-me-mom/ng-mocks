@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { isNgInjectionToken } from 'ng-mocks';
 
+import ngConfig from '../common/core.config';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
 // Checks if we should avoid mocking of the provider.
@@ -11,10 +12,15 @@ export default (provide: any): boolean => {
   if (ngMocksUniverse.touches.has(provide)) {
     return true;
   }
+
   if (provide === DOCUMENT) {
     return true;
   }
-  if (provide === EVENT_MANAGER_PLUGINS) {
+
+  if (typeof provide === 'function' && ngConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1) {
+    return true;
+  }
+  if (isNgInjectionToken(provide) && ngConfig.neverMockToken.indexOf(provide.toString()) !== -1) {
     return true;
   }
 

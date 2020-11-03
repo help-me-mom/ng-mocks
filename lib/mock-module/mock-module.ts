@@ -107,6 +107,9 @@ export function MockModule(module: any): any {
   if (!mockModule) {
     mockModule = ngModule;
   }
+  if (ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
+  }
 
   if (ngModuleProviders) {
     const [changed, ngModuleDef] = MockNgDef({ providers: ngModuleProviders });
@@ -189,6 +192,10 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     }
     if (!mockedDef && isNgDef(def, 'p')) {
       mockedDef = MockPipe(def);
+    }
+
+    if (ngMocksUniverse.flags.has('skipMock')) {
+      ngMocksUniverse.config.get('depsSkip')?.add(mockedDef);
     }
 
     resolutions.set(def, mockedDef);

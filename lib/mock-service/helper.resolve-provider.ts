@@ -80,6 +80,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.config.get('depsSkip')?.add(provider);
     mockedDef = def;
   }
   if (!mockedDef) {

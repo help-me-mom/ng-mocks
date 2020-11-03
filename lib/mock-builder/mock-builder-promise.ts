@@ -3,7 +3,7 @@ import { MetadataOverride, TestBed } from '@angular/core/testing';
 
 import { extractDependency, flatten, mapEntries, mapValues } from '../common/core.helpers';
 import { directiveResolver, jitReflector, ngModuleResolver } from '../common/core.reflect';
-import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_TOUCHES } from '../common/core.tokens';
+import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from '../common/core.tokens';
 import { AnyType, Type } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
@@ -63,6 +63,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
     ngMocksUniverse.touches = new Set();
     ngMocksUniverse.config.set('multi', new Set()); // collecting multi flags of providers.
     ngMocksUniverse.config.set('deps', new Set()); // collecting all deps of providers.
+    ngMocksUniverse.config.set('depsSkip', new Set()); // collecting all declarations of kept modules.
 
     for (const def of mapValues(this.keepDef)) {
       ngMocksUniverse.builder.set(def, def);
@@ -213,25 +214,40 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult> {
       }
     }
 
-    // Adding missed providers.
+    // Mocking root providers.
     const parameters = new Set<any>();
-    if (ngMocksUniverse.touches.size || ngMocksUniverse.config.get('deps').size) {
-      const touchedDefs: any[] = mapValues(ngMocksUniverse.touches);
-      touchedDefs.push(...mapValues(ngMocksUniverse.config.get('deps')));
-      for (const def of touchedDefs) {
-        if (!skipDep(def)) {
-          parameters.add(def);
-        }
+    if (!this.keepDef.has(NG_MOCKS_ROOT_PROVIDERS)) {
+      // We need buckets here to process first all depsSkip, then deps and only after that all other defs.
+      const buckets: any[] = [];
+      buckets.push(mapValues(ngMocksUniverse.config.get('depsSkip')));
+      buckets.push(mapValues(ngMocksUniverse.config.get('deps')));
+      buckets.push(mapValues(ngMocksUniverse.touches));
+      // Also we need to track what has been touched to check params recursively, but avoiding duplicates.
+      const touched: any[] = [].concat(...buckets);
+      for (const bucket of buckets) {
+        for (const def of bucket) {
+          if (!skipDep(def)) {
+            if (this.mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('depsSkip').has(def)) {
+              parameters.add(def);
+            }
+          }
 
-        for (const decorators of jitReflector.parameters(def)) {
-          const provide: any = extractDep(decorators);
-          if (skipDep(provide)) {
-            continue;
+          for (const decorators of jitReflector.parameters(def)) {
+            const provide: any = extractDep(decorators);
+            if (skipDep(provide)) {
+              continue;
+            }
+            if (typeof provide === 'function' && touched.indexOf(provide) === -1) {
+              touched.push(provide);
+              bucket.push(provide);
+            }
+
+            if (this.mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('depsSkip').has(def)) {
+              parameters.add(provide);
+            } else {
+              ngMocksUniverse.config.get('depsSkip').add(provide);
+            }
           }
-          if (typeof provide === 'function' && touchedDefs.indexOf(provide) === -1) {
-            touchedDefs.push(provide);
-          }
-          parameters.add(provide);
         }
       }
     }

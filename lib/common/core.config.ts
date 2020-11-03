@@ -5,15 +5,13 @@ export default {
   neverMockModule: [ApplicationModule, CommonModule],
   neverMockProvidedFunction: [
     'DomRendererFactory2',
-    'DomSharedStylesHost',
     'EventManager',
-    'Injector',
+    'Injector', // ivy only
     'RendererFactory2',
   ],
   neverMockToken: [
-    'InjectionToken Set Injector scope.',
-    'InjectionToken Application Initializer',
-    'InjectionToken EventManagerPlugins',
-    'InjectionToken HammerGestureConfig',
+    'InjectionToken Set Injector scope.', // INJECTOR_SCOPE // ivy only
+    'InjectionToken EventManagerPlugins', // EVENT_MANAGER_PLUGINS
+    'InjectionToken HammerGestureConfig', // HAMMER_GESTURE_CONFIG
   ],
 };
