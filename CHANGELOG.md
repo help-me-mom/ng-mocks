@@ -1,3 +1,13 @@
+## [10.5.2](https://github.com/ike18t/ng-mocks/compare/v10.5.1...v10.5.2) (2020-11-04)
+
+
+### Bug Fixes
+
+* keeping root providers for kept modules ([dc078af](https://github.com/ike18t/ng-mocks/commit/dc078af4b85e9e57b17091c21b11d670960f95df)), closes [#222](https://github.com/ike18t/ng-mocks/issues/222)
+* providing a root service as it is for kept declarations ([e5486e6](https://github.com/ike18t/ng-mocks/commit/e5486e6b29e39ee403aa3f514b7671f3fa442b58)), closes [#222](https://github.com/ike18t/ng-mocks/issues/222)
+* respecting mock keep switch in nested modules ([2f185fb](https://github.com/ike18t/ng-mocks/commit/2f185fb9ca7be3d96abb14e37f700d76826a13de))
+* support of ngOnChanges from OnChanges interface ([820dc94](https://github.com/ike18t/ng-mocks/commit/820dc946c0c4963c1ea715584471d25ff44e6c60))
+
 ## [10.5.1](https://github.com/ike18t/ng-mocks/compare/v10.5.0...v10.5.1) (2020-11-01)
 
 
