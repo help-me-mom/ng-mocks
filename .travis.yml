@@ -30,9 +30,9 @@ jobs:
           $HOME/cc-test-reporter upload-coverage
           -r 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69
           -i test-reports/codeclimate.json
-#    - name: 'E2E'
-#      script:
-#        - npm run e2e
+    - name: 'E2E'
+      script:
+        - npm run e2e
 before_cache:
   - echo '' > $HOME/.npm/anonymous-cli-metrics.json
   - mkdir -p $HOME/.npm/_cacache/index-v5/34/8e
