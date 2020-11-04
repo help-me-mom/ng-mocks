@@ -164,5 +164,10 @@
       "pre-commit": "lint-staged && npm run lint",
       "post-commit": "git update-index --again"
     }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
