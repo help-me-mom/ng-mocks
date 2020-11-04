@@ -8,11 +8,15 @@ exclude_patterns:
   - 'test-reports/'
   - 'tests/'
   - 'tmp/'
+  - '.codeclimate.yml'
   - '.dockerignore'
   - '.gitignore'
   - '.lintstagedrc.js'
   - '.nvmrc'
   - '.prettierignore'
+  - '.prettierrc.yml'
+  - '.releaserc.yml'
+  - '.travis.yml'
   - 'CODEOWNERS'
   - 'Dockerfile'
   - 'LICENSE'
@@ -23,8 +27,6 @@ exclude_patterns:
   - '**/*.yml'
   - '**/*.spec.ts'
   - '**/*.fixtures.ts'
-analysis_paths:
-  - 'lib/'
 plugins:
   structure:
     enabled: true
