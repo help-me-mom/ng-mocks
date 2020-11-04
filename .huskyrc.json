@@ -1,6 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "pretty-quick --staged && tslint --project tsconfig.json --fix && tslint --project tsconfig.json",
-    "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-  }
-}
