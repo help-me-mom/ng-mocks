@@ -8,5 +8,20 @@ export const NG_MOCKS_TOUCHES = new InjectionToken<Set<any>>('NG_MOCKS_TOUCHES')
 export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<Type<any> | AbstractType<any>, MetadataOverride<any>>>(
   'NG_MOCKS_OVERRIDES'
 );
-export const NG_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
-export const NG_INTERCEPTORS = new InjectionToken<void>('NG_MOCKS_INTERCEPTORS');
+export const NG_MOCKS_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
+export const NG_MOCKS_INTERCEPTORS = new InjectionToken<void>('NG_MOCKS_INTERCEPTORS');
+export const NG_MOCKS_ROOT_PROVIDERS = new InjectionToken<void>('NG_MOCKS_ROOT_PROVIDERS');
+
+/**
+ * Use NG_MOCKS_GUARDS instead.
+ * Will be removed in v11.
+ * @deprecated
+ */
+export const NG_GUARDS = NG_MOCKS_GUARDS;
+
+/**
+ * Use NG_MOCKS_INTERCEPTORS instead.
+ * Will be removed in v11.
+ * @deprecated
+ */
+export const NG_INTERCEPTORS = NG_MOCKS_INTERCEPTORS;

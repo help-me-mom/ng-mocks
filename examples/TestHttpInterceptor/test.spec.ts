@@ -10,7 +10,7 @@ import {
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, NG_INTERCEPTORS } from 'ng-mocks';
+import { MockBuilder, NG_MOCKS_INTERCEPTORS } from 'ng-mocks';
 import { Observable } from 'rxjs';
 
 // An interceptor we want to test.
@@ -73,7 +73,7 @@ describe('TestHttpInterceptor', () => {
   // with HttpClientTestingModule.
   beforeEach(() =>
     MockBuilder(TargetInterceptor, TargetModule)
-      .exclude(NG_INTERCEPTORS)
+      .exclude(NG_MOCKS_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
       .replace(HttpClientModule, HttpClientTestingModule)
   );

@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { NG_GUARDS, NG_INTERCEPTORS } from '../common/core.tokens';
+import { NG_MOCKS_GUARDS, NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -339,7 +339,7 @@ describe('replaceWithMocks', () => {
     });
   });
 
-  it('keeps all guards without excluding NG_GUARDS', async () => {
+  it('keeps all guards without excluding NG_MOCKS_GUARDS', async () => {
     @NgModule({
       providers: [
         {
@@ -359,7 +359,7 @@ describe('replaceWithMocks', () => {
     });
   });
 
-  it('ignores all guards with excluded NG_GUARDS', async () => {
+  it('ignores all guards with excluded NG_MOCKS_GUARDS', async () => {
     @NgModule({
       providers: [
         {
@@ -372,7 +372,7 @@ describe('replaceWithMocks', () => {
     })
     class TargetModule {}
 
-    await MockBuilder().mock(TargetModule).keep('test').exclude(NG_GUARDS);
+    await MockBuilder().mock(TargetModule).keep('test').exclude(NG_MOCKS_GUARDS);
     const actual = TestBed.get('test');
     expect(actual).toEqual({
       canActivate: [],
@@ -381,7 +381,7 @@ describe('replaceWithMocks', () => {
 });
 
 describe('resolveProvider', () => {
-  it('ignores useFactory and useValue interceptors with excluded NG_INTERCEPTORS', async () => {
+  it('ignores useFactory and useValue interceptors with excluded NG_MOCKS_INTERCEPTORS', async () => {
     @NgModule({
       imports: [HttpClientModule],
       providers: [
@@ -403,7 +403,7 @@ describe('resolveProvider', () => {
       .mock(TargetModule)
       .replace(HttpClientModule, HttpClientTestingModule)
       .keep(HTTP_INTERCEPTORS)
-      .exclude(NG_INTERCEPTORS);
+      .exclude(NG_MOCKS_INTERCEPTORS);
     const actual = TestBed.get(HTTP_INTERCEPTORS);
     expect(actual).not.toEqual(jasmine.arrayContaining([false, true]));
   });

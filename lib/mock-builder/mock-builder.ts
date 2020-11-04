@@ -53,9 +53,7 @@ export function MockBuilder(
       for (const [def, override] of mapEntries(overrides)) {
         (TestBed as any).ngMocksOverrides.add(def);
         /* istanbul ignore else */
-        if (isNgDef(def, 'm')) {
-          testBed.overrideModule(def, override);
-        } else if (isNgDef(def, 'c')) {
+        if (isNgDef(def, 'c')) {
           testBed.overrideComponent(def, override);
         } else if (isNgDef(def, 'd')) {
           testBed.overrideDirective(def, override);
@@ -81,9 +79,7 @@ export function MockBuilder(
         ngMocks.flushTestBed();
         for (const def of (TestBed as any).ngMocksOverrides) {
           /* istanbul ignore else */
-          if (isNgDef(def, 'm')) {
-            TestBed.overrideModule(def, {});
-          } else if (isNgDef(def, 'c')) {
+          if (isNgDef(def, 'c')) {
             TestBed.overrideComponent(def, {});
           } else if (isNgDef(def, 'd')) {
             TestBed.overrideDirective(def, {});

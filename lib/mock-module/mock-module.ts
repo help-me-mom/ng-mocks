@@ -1,8 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { core } from '@angular/compiler';
-import { ApplicationModule, NgModule, Provider } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import ngConfig from '../common/core.config';
 import { extendClass, flatten } from '../common/core.helpers';
 import { ngModuleResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
@@ -32,7 +32,7 @@ export function MockModule(module: any): any {
   let mockModule: typeof ngModule | undefined;
   let mockModuleProviders: typeof ngModuleProviders;
   let mockModuleDef: NgModule | undefined;
-  let releaseSkipMockFlag = false;
+  let toggleSkipMockFlag = false;
 
   if (isNgModuleDefWithProviders(module)) {
     ngModule = module.ngModule;
@@ -41,10 +41,6 @@ export function MockModule(module: any): any {
     }
   } else {
     ngModule = module;
-  }
-
-  if (NEVER_MOCK.indexOf(ngModule) !== -1) {
-    return module;
   }
 
   // We are inside of an 'it'.
@@ -63,15 +59,32 @@ export function MockModule(module: any): any {
     mockModule = ngMocksUniverse.cacheMocks.get(ngModule);
   }
 
+  const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
+    .get('resolution')
+    ?.get(ngModule);
+  if (resolution === 'mock' && ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.delete('skipMock');
+  }
+  if (resolution === 'keep' && !ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+  if (resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+
+  if (ngConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+
   // Now we check if we need to keep the original module or to replace it with some other.
   if (!mockModule && ngMocksUniverse.builder.has(ngModule)) {
     const instance = ngMocksUniverse.builder.get(ngModule);
     if (isNgDef(instance, 'm') && instance !== ngModule) {
       mockModule = instance;
-    }
-    if (!ngMocksUniverse.flags.has('skipMock')) {
-      releaseSkipMockFlag = true;
-      ngMocksUniverse.flags.add('skipMock');
     }
   }
 
@@ -97,14 +110,20 @@ export function MockModule(module: any): any {
     // the last thing is to apply decorators.
     NgModule(mockModuleDef)(mockModule as any);
     MockOf(ngModule)(mockModule as any);
-
-    /* istanbul ignore else */
-    if (ngMocksUniverse.flags.has('cacheModule')) {
-      ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
-    }
   }
   if (!mockModule) {
     mockModule = ngModule;
+  }
+
+  // We should always cache the result, in global scope it always will be a mock.
+  // In MockBuilder scope it will be reset later anyway.
+  /* istanbul ignore else */
+  if (ngMocksUniverse.flags.has('cacheModule')) {
+    ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
+  }
+
+  if (ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
   }
 
   if (ngModuleProviders) {
@@ -112,8 +131,10 @@ export function MockModule(module: any): any {
     mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
   }
 
-  if (releaseSkipMockFlag) {
+  if (toggleSkipMockFlag && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.delete('skipMock');
+  } else if (toggleSkipMockFlag && !ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.flags.add('skipMock');
   }
 
   return mockModule === ngModule && mockModuleProviders === ngModuleProviders
@@ -122,8 +143,6 @@ export function MockModule(module: any): any {
     ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
     : mockModule;
 }
-
-const NEVER_MOCK: Array<Type<any>> = [CommonModule, ApplicationModule];
 
 /**
  * Can be changed at any time.
@@ -190,6 +209,10 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     }
     if (!mockedDef && isNgDef(def, 'p')) {
       mockedDef = MockPipe(def);
+    }
+
+    if (ngMocksUniverse.flags.has('skipMock')) {
+      ngMocksUniverse.config.get('depsSkip')?.add(mockedDef);
     }
 
     resolutions.set(def, mockedDef);

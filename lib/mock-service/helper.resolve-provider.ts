@@ -1,5 +1,5 @@
 import { extractDependency } from '../common/core.helpers';
-import { NG_INTERCEPTORS } from '../common/core.tokens';
+import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
@@ -43,8 +43,8 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   if (
-    ngMocksUniverse.builder.has(NG_INTERCEPTORS) &&
-    ngMocksUniverse.builder.get(NG_INTERCEPTORS) === null &&
+    ngMocksUniverse.builder.has(NG_MOCKS_INTERCEPTORS) &&
+    ngMocksUniverse.builder.get(NG_MOCKS_INTERCEPTORS) === null &&
     isNgInjectionToken(provider) &&
     provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
     provider !== def
@@ -80,6 +80,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.config.get('depsSkip')?.add(provider);
     mockedDef = def;
   }
   if (!mockedDef) {

@@ -3,7 +3,7 @@ import { Component, Injectable, NgModule, VERSION } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CanActivate, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockBuilder, MockRender, NG_GUARDS, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, NG_MOCKS_GUARDS, ngMocks } from 'ng-mocks';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
@@ -99,9 +99,12 @@ describe('TestRoutingGuard', () => {
   // RouterModule to have its routes, and to add
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing. And the last thing is to exclude
-  // `NG_GUARDS` to remove all other guards.
+  // `NG_MOCKS_GUARDS` to remove all other guards.
   beforeEach(() =>
-    MockBuilder(LoginGuard, TargetModule).exclude(NG_GUARDS).keep(RouterModule).keep(RouterTestingModule.withRoutes([]))
+    MockBuilder(LoginGuard, TargetModule)
+      .exclude(NG_MOCKS_GUARDS)
+      .keep(RouterModule)
+      .keep(RouterTestingModule.withRoutes([]))
   );
 
   // It is important to run routing tests in fakeAsync.

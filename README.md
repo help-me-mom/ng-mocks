@@ -1381,6 +1381,9 @@ and has a rich toolkit that supports:
 * [`exportAll` flag](#mockbuilder-exportall-flag)
 * [`dependency` flag](#mockbuilder-dependency-flag)
 * [`render` flag](#mockbuilder-render-flag)
+* [`NG_MOCKS_GUARDS` token](#ng_mocks_guards-token)
+* [`NG_MOCKS_INTERCEPTORS` token](#ng_mocks_interceptors-token)
+* [`NG_MOCKS_ROOT_PROVIDERS` token](#ng_mocks_root_providers-token)
 * [Good to know](#mockbuilder-good-to-know)
 
 <details><summary>Click to see <strong>a code sample demonstrating ease of mocking in Angular tests</strong></summary>
@@ -1540,23 +1543,6 @@ beforeEach(() =>
     .exclude(SomePipe)
     .exclude(SomeDependency)
     .exclude(SomeInjectionToken)
-);
-```
-
-If we want to test guards we need to `.keep` them, but what should we do with other guards we do not want to care about at all?
-The answer is to exclude `NG_GUARDS` token, it will removal all the guards from their routes except the explicitly configured ones.
-
-```typescript
-beforeEach(() => MockBuilder(MyGuard, MyModule).exclude(NG_GUARDS));
-```
-
-The same thing if we want to test interceptors.
-If we exclude `NG_INTERCEPTORS` token, then all interceptors with `useValue` or `useFactory` will be excluded
-together with other interceptors except the explicitly configured ones.
-
-```typescript
-beforeEach(() =>
-  MockBuilder(MyInterceptor, MyModule).exclude(NG_INTERCEPTORS)
 );
 ```
 
@@ -1720,6 +1706,61 @@ beforeEach(() =>
   })
 );
 ```
+
+#### `NG_MOCKS_GUARDS` token
+
+If we want to test guards we need to `.keep` them, but what should we do with other guards we do not want to care about at all?
+The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guards from routes** except the explicitly configured ones.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(MyGuard, MyModule).exclude(NG_MOCKS_GUARDS)
+);
+```
+
+#### `NG_MOCKS_INTERCEPTORS` token
+
+Usually, when we want to test an interceptor, we want to avoid influences of other interceptors.
+To **remove all interceptors in an angular test** we need to exclude `NG_MOCKS_INTERCEPTORS` token,
+then all interceptors will be excluded except the explicitly configured ones.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(MyInterceptor, MyModule).exclude(NG_MOCKS_INTERCEPTORS)
+);
+```
+
+#### `NG_MOCKS_ROOT_PROVIDERS` token
+
+There are root services and tokens apart from provided ones in Angular applications.
+It might happen that in a test we want these providers to be mocked, or kept.
+
+If we want to mock all root providers in an angular test we need to mock `NG_MOCKS_ROOT_PROVIDERS` token.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(
+    MyComponentWithRootServices,
+    MyModuleWithRootTokens
+  ).mock(NG_MOCKS_ROOT_PROVIDERS)
+);
+```
+
+In contrast to that, we might want to keep all root providers for mocked declarations.
+For that, we need to keep `NG_MOCKS_ROOT_PROVIDERS` token.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(
+    MyComponentWithRootServices,
+    MyModuleWithRootTokens
+  ).keep(NG_MOCKS_ROOT_PROVIDERS)
+);
+```
+
+If we do not pass `NG_MOCKS_ROOT_PROVIDERS` anywhere,
+then only root providers for kept modules will stay as they are.
+All other root providers will be mocked, even for kept declarations of mocked modules.
 
 #### MockBuilder good to know
 
@@ -2978,13 +3019,13 @@ If you did not read ["How to test a route"](#how-to-test-a-route), please do it 
 
 To test a guard means that we need to mock everything except the guard and `RouterModule`.
 But, what if we have several guards? If we mocked them they would block routes due to falsy returns of their mocked methods.
-**To skip guards in angular tests `ngMocks` provides `NG_GUARDS` token**, we should pass it into `.exclude`, then all other guards will be
+**To skip guards in angular tests `ngMocks` provides `NG_MOCKS_GUARDS` token**, we should pass it into `.exclude`, then all other guards will be
 excluded from `TestBed` and we can be sure, that we are **testing only the guard we want**.
 
 ```typescript
 beforeEach(() =>
   MockBuilder(LoginGuard, TargetModule)
-    .exclude(NG_GUARDS)
+    .exclude(NG_MOCKS_GUARDS)
     .keep(RouterModule)
     .keep(RouterTestingModule.withRoutes([]))
 );
@@ -3027,7 +3068,7 @@ Optionally, we can disable guards to avoid influence of their mocked methods ret
 ```typescript
 beforeEach(() =>
   MockBuilder(DataResolver, TargetModule)
-    .exclude(NG_GUARDS)
+    .exclude(NG_MOCKS_GUARDS)
     .keep(RouterModule)
     .keep(RouterTestingModule.withRoutes([]))
 );
@@ -3147,7 +3188,7 @@ The problem of `useValue` and `useFactory` is that it is quite hard to distingui
 in `TestBed`.
 
 We need to keep `HTTP_INTERCEPTORS` token, because the interceptor is defined by it.
-But this cause that all other interceptors will be kept too, therefore, we need to get rid of them via excluding `NG_INTERCEPTORS` token.
+But this cause that all other interceptors will be kept too, therefore, we need to get rid of them via excluding `NG_MOCKS_INTERCEPTORS` token.
 The issue here is that if there are more interceptors, then their mocked copies will fail
 with "You provided 'undefined' where a stream was expected." error.
 And the last important step is to replace `HttpClientModule` with `HttpClientTestingModule`,
@@ -3156,7 +3197,7 @@ so we can use `HttpTestingController` for faking requests.
 ```typescript
 beforeEach(() =>
   MockBuilder(TargetInterceptor, TargetModule)
-    .exclude(NG_INTERCEPTORS)
+    .exclude(NG_MOCKS_INTERCEPTORS)
     .keep(HTTP_INTERCEPTORS)
     .replace(HttpClientModule, HttpClientTestingModule)
 );

@@ -1,20 +1,13 @@
-import { APP_INITIALIZER, Provider } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { Provider } from '@angular/core';
 
+import ngConfig from '../common/core.config';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { ngMocksUniverse } from '../common/ng-mocks-universe';
 
 import useFactory from './helper.use-factory';
 import { MockService } from './mock-service';
 
-const neverMockProvidedFunction = [
-  'DomRendererFactory2',
-  'DomSharedStylesHost',
-  'EventManager',
-  'Injector',
-  'RendererFactory2',
-];
-const neverMockToken = [APP_INITIALIZER, EVENT_MANAGER_PLUGINS, HAMMER_GESTURE_CONFIG];
+const { neverMockProvidedFunction, neverMockToken } = ngConfig;
 
 export default function (provider: any): Provider | undefined {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
@@ -22,7 +15,7 @@ export default function (provider: any): Provider | undefined {
   if (typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1) {
     return provider;
   }
-  if (isNgInjectionToken(provide) && neverMockToken.indexOf(provide) !== -1) {
+  if (isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1) {
     return undefined;
   }
 
