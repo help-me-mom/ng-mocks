@@ -61,7 +61,11 @@ I'm open to contributions.
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
-* [How to test](#how-to-test-an-angular-application)
+* [How to fix](#how-to-fix-an-error-in-angular-tests)
+  - [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+  - [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+
+- [How to test](#how-to-test-an-angular-application)
   - [a component](#how-to-test-a-component)
   - [a provider of a component](#how-to-test-a-provider-of-a-component)
   - [an attribute directive](#how-to-test-an-attribute-directive)
@@ -843,7 +847,9 @@ describe('Test', () => {
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
       providers: [
-        DependencyService, // <- annoying dependency
+        // Annoying dependencies.
+        DependencyService,
+        ObservableService,
       ],
     });
 
@@ -859,18 +865,28 @@ To **mock a service** simply pass its class into `MockProvider`:
 TestBed.configureTestingModule({
   declarations: [TargetComponent],
   providers: [
-    MockProvider(DependencyService), // <- profit
+    // Profit.
+    MockProvider(DependencyService),
+    MockProvider(ObservableService, {
+      prop$: EMPTY,
+      getStream$: () => EMPTY,
+    }),
   ],
 });
 ```
 
-Or to be like a pro use [`MockBuilder`](#mockbuilder), `.mock` method
+Or, to be like a pro, use [`MockBuilder`](#mockbuilder), `.mock` method
 and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyService)
+    MockBuilder(TargetComponent)
+      .mock(DependencyService)
+      .mock(ObservableService, {
+        prop$: EMPTY,
+        getStream$: () => EMPTY,
+      })
   );
 
   it('should create', () => {
@@ -879,6 +895,9 @@ describe('Test', () => {
   });
 });
 ```
+
+**Please note**: The most common error developers meet, when they mock services, is "**TypeError: Cannot read property 'subscribe' of undefined**".
+If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
 
 <details><summary>Click to see <strong>an example of mocking providers in Angular tests</strong></summary>
 <p>
@@ -939,11 +958,9 @@ a type of `MockedModule<T>` and provides:
 - base primitives instead of tokens with a `useValue` definition
 - mocked copies of tokens with a `useValue` definition
 
-If you get an error like: "**Component is part of the declaration of 2 modules**",
-then consider usage of [`ngMocks.guts`](#ngmocks) or [`MockBuilder`](#mockbuilder).
-The issue here is, that you are trying to mock a module that has a declaration which is specified in `TestBed`,
-therefore, it should be handled in a better way which excludes it ([`ngMocks.guts`](#ngmocks)),
-or handles internals vs externals properly ([`MockBuilder`](#mockbuilder)).
+If you get an error like: "**Type is part of the declarations of 2 modules**",
+then consider usage of [`MockBuilder`](#mockbuilder).
+More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules).
 
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to mock in a test.
@@ -2445,6 +2462,70 @@ In case of jest add it to `src/setupJest.ts`.
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
+
+[to the top](#content)
+
+---
+
+## How to fix an error in Angular tests
+
+We may encounter different unpleasant issues, when we mock declarations in testing environment.
+
+There is a list of most common issues and their solutions below,
+feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you are facing or struggling with anything else.
+
+- [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+
+---
+
+### How to fix `TypeError: Cannot read property 'subscribe' of undefined`
+
+[to the top](#content)
+
+---
+
+### How to fix `Error: Type is part of the declarations of 2 modules`
+
+If you encounter the issue, highly likely it means that a mocked declaration,
+usually a mocked module, contains something, that is declared in the `TestBed` module directly.
+
+Let's imagine a situation that we have a module which exports declarations, for example directives, we need in our test.
+In the same time, we have another module that has another declarations, our component depends on,
+but we would like to mock them, and it imports the same module we want to import in `TestBed`.
+
+```typescript
+TestBed.configureTestingModule({
+  imports: [
+    SharedModule,
+    MockModule(ModuleWithServicesAndSharedModule),
+  ],
+  declarations: [ComponentToTest],
+});
+```
+
+The problem is clear: when we mock the module, [`MockModule`](#how-to-mock-a-module) recursively mocks its dependencies, and, therefore, it creates a mocked copy of `SharedModule`.
+Now imported and mocked declarations are part of 2 modules.
+
+To solve it we need to let [`MockModule`](#how-to-mock-a-module) know, that `SharedModule` should not be mocked.
+
+There are good and bad news. Bad news is that [`MockModule`](#how-to-mock-a-module) does not support that, but good news is that `ngMocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
+The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuilder) instead of [`MockModule`](#how-to-mock-a-module).
+A possible solution might looks like:
+
+```typescript
+beforeEach(() =>
+  MockBuilder(ComponentToTest)
+    .keep(SharedModule)
+    .mock(ModuleWithServicesAndSharedModule)
+);
+```
+
+The configuration says that we want to test `ComponentToTest`, which depends on `SharedModule` and `ModuleWithServicesAndSharedModule`, but `SharedModule` should stay as it is.
+
+Now, during the mocking process, [`MockBuilder`](#mockbuilder) will keep `SharedModule` as it is, although it is a dependency of the mocked module, and that avoids declarations of the same things in 2 modules.
+
+More detailed information how to use it you can find in the section called [`MockBuilder`](#mockbuilder).
 
 [to the top](#content)
 
