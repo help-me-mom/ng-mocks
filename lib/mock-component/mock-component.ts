@@ -206,7 +206,7 @@ export function MockComponent<TComponent>(
       };
 
       // Providing a method to render any @ContentChild based on its selector.
-      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }) => {
+      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
         const key = viewChildRefs.get(contentChildSelector);
         let templateRef: TemplateRef<any>;
         let viewContainer: ViewContainerRef;

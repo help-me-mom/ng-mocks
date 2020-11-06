@@ -159,7 +159,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       (this as any).__isStructural = template && viewContainer;
 
       // Providing method to render mocked values.
-      (this as any).__render = ($implicit?: any, variables?: { [key: string]: any }) => {
+      (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
         if (viewContainer && template) {
           viewContainer.clear();
           viewContainer.createEmbeddedView(template, { ...variables, $implicit });

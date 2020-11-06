@@ -6,5 +6,5 @@ export type MockedComponent<T> = T &
     __hide(contentChildSelector: string): void;
 
     /** Helper function to render any @ContentChild() template with any context. */
-    __render(contentChildSelector: string, $implicit?: any, variables?: { [key: string]: any }): void;
+    __render(contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>): void;
   };

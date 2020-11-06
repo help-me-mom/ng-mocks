@@ -15,7 +15,7 @@ export class JitReflector implements CompileReflector {
   componentModuleUrl = (type: any) => `./${stringify(type)}`;
 
   // This does not exist in Angular 5.1.x but is required to exist in 5.2+
-  guards = (): { [key: string]: any } => ({});
+  guards = (): Record<keyof any, any> => ({});
 
   hasLifecycleHook(type: any, lcProperty: string): boolean {
     return this._reflectionCapabilities.hasLifecycleHook(type, lcProperty);

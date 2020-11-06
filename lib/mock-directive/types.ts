@@ -17,5 +17,5 @@ export type MockedDirective<T> = T &
     __viewContainer?: ViewContainerRef;
 
     /** Helper function to render any Structural Directive with any context. */
-    __render($implicit?: any, variables?: { [key: string]: any }): void;
+    __render($implicit?: any, variables?: Record<keyof any, any>): void;
   };
