@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
+import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
 // A child component that contains update$ the parent component wants to listen to.
@@ -7,8 +7,8 @@ import { Observable, Subject } from 'rxjs';
   selector: 'target',
   template: '{{ update$ | async }}',
 })
-class TargetComponent {
-  public update$: Observable<void>;
+class ChildComponent {
+  public readonly update$: Observable<void>;
 
   constructor() {
     const subject = new Subject<void>();
@@ -23,10 +23,10 @@ class TargetComponent {
   template: '<target></target>',
 })
 class RealComponent implements AfterViewInit {
-  @ViewChild(TargetComponent, {
+  @ViewChild(ChildComponent, {
     static: false,
   } as any)
-  public child: TargetComponent;
+  protected child: ChildComponent;
 
   ngAfterViewInit() {
     this.child.update$.subscribe();
@@ -35,22 +35,22 @@ class RealComponent implements AfterViewInit {
 
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be mocked.
-  beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
+  beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
   beforeAll(() => {
     // Because TargetComponent is mocked its update$ is undefined and
     // ngAfterViewInit of the parent component will fail on
     // .subscribe().
     // Let's fix it via defining customization for the mocked copy.
-    MockInstance(TargetComponent, {
-      init: (instance, injector) => {
-        const subject = new Subject<void>();
-        subject.complete();
+    MockInstance(ChildComponent, (instance, injector) => {
+      const subject = new Subject<void>();
+      subject.complete();
+      ngMocks.stub(instance, {
         // comment the next line to check the failure.
-        instance.update$ = subject;
-        // if you want you can use injector.get(Service) for more
-        // complicated customization.
-      },
+        update$: subject,
+      });
+      // if you want you can use injector.get(Service) for more
+      // complicated customization.
     });
   });
 
@@ -60,10 +60,6 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    const fixture = MockRender(RealComponent);
-
-    // Let's check that the mocked component has been decorated by
-    // the custom initialization.
-    expect(fixture.point.componentInstance.child.update$).toBeDefined();
+    expect(() => MockRender(RealComponent)).not.toThrowError(/Cannot read property 'subscribe' of undefined/);
   });
 });

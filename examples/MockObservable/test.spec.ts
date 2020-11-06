@@ -40,20 +40,20 @@ describe('MockObservable', () => {
   const value$: Subject<number[]> = new Subject();
   beforeAll(() => {
     // MockInstance helps to override mocked instances.
-    MockInstance(TargetService, {
-      init: instance =>
-        ngMocks.stub(instance, {
-          value$, // even it is a read-only property we can override it in a type-safe way.
-        }),
-    });
+    MockInstance(TargetService, instance =>
+      ngMocks.stub(instance, {
+        value$, // even it is a read-only property we can override it in a type-safe way.
+      })
+    );
   });
 
   // Cleanup after tests.
   afterAll(() => {
     value$.complete();
+    MockInstance(TargetService);
   });
 
-  it('has access to the service via a component', () => {
+  it('listens on emits of an injected subject', () => {
     // Let's render the component.
     const fixture = MockRender(TargetComponent);
 
