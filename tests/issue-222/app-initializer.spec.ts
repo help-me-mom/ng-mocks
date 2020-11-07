@@ -20,7 +20,7 @@ class TargetModule {}
 describe('issue-222:APP_INITIALIZER:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('correctly handles APP_INITIALIZER in a mocked module', () => {
+  it('correctly handles APP_INITIALIZER in a mock module', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('<router-outlet></router-outlet>');
   });

@@ -33,7 +33,7 @@ class DataResolver implements Resolve<{ flag: boolean }> {
 
 // A resolver we want to ignore.
 @Injectable()
-class MockedResolver implements Resolve<{ mock: boolean }> {
+class MockResolver implements Resolve<{ mock: boolean }> {
   protected mock = true;
 
   resolve() {
@@ -42,7 +42,7 @@ class MockedResolver implements Resolve<{ mock: boolean }> {
 }
 
 // A dummy component.
-// It will be mocked.
+// It will be replaced with a mock copy.
 @Component({
   selector: 'target',
   template: 'target',
@@ -60,12 +60,12 @@ class TargetComponent {}
         path: 'target',
         resolve: {
           data: DataResolver,
-          mock: MockedResolver,
+          mock: MockResolver,
         },
       },
     ]),
   ],
-  providers: [DataService, DataResolver, MockedResolver],
+  providers: [DataService, DataResolver, MockResolver],
 })
 class TargetModule {}
 
@@ -75,7 +75,7 @@ describe('TestRoutingResolver', () => {
   // the resolver as the first parameter of MockBuilder. Then, to
   // correctly satisfy its initialization, we need to pass its module
   // as the second parameter. And, the last but not the least, we
-  // need to avoid mocking of RouterModule to have its routes, and to
+  // need to keep RouterModule to have its routes, and to
   // add RouterTestingModule.withRoutes([]), yes yes, with empty
   // routes to have tools for testing.
   beforeEach(() => MockBuilder(DataResolver, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])));
@@ -87,8 +87,8 @@ describe('TestRoutingResolver', () => {
     const location: Location = TestBed.get(Location);
     const dataService: DataService = TestBed.get(DataService);
 
-    // DataService has been mocked, let's set a custom value we will
-    // assert later on.
+    // DataService has been replaced with a mock copy,
+    // let's set a custom value we will assert later on.
     dataService.data = () => from([false]);
 
     // Let's switch to the route with the resolver.

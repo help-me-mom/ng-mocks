@@ -68,9 +68,9 @@ describe('MockModule', () => {
   }));
 
   it('should do stuff', () => {
-    const mockedComponent = fixture.debugElement.query(By.directive(MockComponent(ExampleComponent)))
+    const mockComponent = fixture.debugElement.query(By.directive(MockComponent(ExampleComponent)))
       .componentInstance as ExampleComponent;
-    expect(mockedComponent).not.toBeNull();
+    expect(mockComponent).not.toBeNull();
   });
 });
 
@@ -217,7 +217,7 @@ describe('MockProvider', () => {
   })
   class CustomTokenModule {}
 
-  it('should skip multi tokens in a mocked module', () => {
+  it('should skip multi tokens in a mock module', () => {
     const mock = MockModule(CustomTokenModule);
     const def = ngModuleResolver.resolve(mock);
     expect(def.providers).toEqual([
@@ -296,7 +296,7 @@ describe('MockModuleWithProviders', () => {
     expect(actual).toBe(def);
   });
 
-  it('returns mocked ngModule with undefined providers', () => {
+  it('returns a mock ngModule with undefined providers', () => {
     const def = {
       ngModule: TargetModule,
     };

@@ -46,13 +46,13 @@ const TOKEN_CLASS_KEEP = new InjectionToken('KEEP');
 class TargetModule {}
 
 // useClass ignores existing services with the same class name, but
-// ngMocks still detects whether the class should be mocked or not.
+// ngMocks still detects whether the class should be replaced with a mock copy or not.
 describe('tokens-class', () => {
   ngMocks.faster();
 
   beforeEach(() => MockBuilder().mock(TargetModule).keep(Class2Service));
 
-  it('resolves Class1Service as a mocked instance', () => {
+  it('resolves Class1Service as a mock instance', () => {
     const actual = TestBed.get(Class1Service);
     expect(actual).toEqual(jasmine.any(Class1Service));
     expect(actual.name).toBeUndefined();
@@ -64,7 +64,7 @@ describe('tokens-class', () => {
     expect(actual.name).toEqual('class2');
   });
 
-  it('resolves TOKEN_EXISTING_MOCK as a mocked instance', () => {
+  it('resolves TOKEN_EXISTING_MOCK as a mock instance', () => {
     const actual = TestBed.get(TOKEN_CLASS_MOCK);
     expect(actual).toEqual(jasmine.any(Class1Service));
     expect(actual.name).toBeUndefined();

@@ -21,7 +21,7 @@ class TestedComponent {
   trigger = () => {};
 }
 
-describe('MockDirective', () => {
+describe('MockDirective:Attribute', () => {
   beforeEach(() => MockBuilder(TestedComponent).mock(DependencyDirective));
 
   it('sends the correct value to the input', () => {
@@ -33,17 +33,17 @@ describe('MockDirective', () => {
     //   By.css('span')
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
-    const mockedDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
+    const mockDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
 
     // Let's pretend DependencyDirective has 'someInput'
     // as an input. TestedComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
-    // the mocked directive so you can assert on it.
+    // the mock directive so you can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
     // Thanks to ngMocks, this is type safe.
-    expect(mockedDirective.someInput).toEqual('foo');
+    expect(mockDirective.someInput).toEqual('foo');
   });
 
   it('does something on an emit of the child directive', () => {
@@ -55,14 +55,14 @@ describe('MockDirective', () => {
     //   By.css('span')
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
-    const mockedDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
+    const mockDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
 
     // Again, let's pretend DependencyDirective has an output called
     // 'someOutput'. TestedComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
     spyOn(component, 'trigger');
-    mockedDirective.someOutput.emit();
+    mockDirective.someOutput.emit();
 
     // Assert on the effect.
     expect(component.trigger).toHaveBeenCalled();

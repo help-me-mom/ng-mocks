@@ -27,14 +27,14 @@ describe('MockProvider', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
-      providers: [MockProvider(DependencyService), MockProvider(DEPENDENCY_TOKEN, 'mocked token')],
+      providers: [MockProvider(DependencyService), MockProvider(DEPENDENCY_TOKEN, 'mock token')],
     }).compileComponents()
   );
 
-  it('mocks providers', () => {
+  it('uses mock providers', () => {
     const fixture = TestBed.createComponent(TargetComponent);
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).not.toContain('target');
-    expect(fixture.nativeElement.innerHTML).toContain('mocked token');
+    expect(fixture.nativeElement.innerHTML).toContain('mock token');
   });
 });

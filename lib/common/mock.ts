@@ -33,19 +33,19 @@ export class Mock {
 
     // setting outputs
 
-    const mockedOutputs = [];
+    const mockOutputs = [];
     for (const output of this.__ngMocksConfig && this.__ngMocksConfig.outputs ? this.__ngMocksConfig.outputs : []) {
-      mockedOutputs.push(output.split(':')[0]);
+      mockOutputs.push(output.split(':')[0]);
     }
 
-    for (const output of mockedOutputs) {
+    for (const output of mockOutputs) {
       if ((this as any)[output] || Object.getOwnPropertyDescriptor(this, output)) {
         continue;
       }
       (this as any)[output] = new EventEmitter<any>();
     }
 
-    // setting our mocked methods and props
+    // setting our mock methods and props
     const prototype = Object.getPrototypeOf(this);
     for (const method of mockServiceHelper.extractMethodsFromPrototype(prototype)) {
       const descriptor = mockServiceHelper.extractPropertyDescriptor(prototype, method);

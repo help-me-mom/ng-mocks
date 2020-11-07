@@ -66,12 +66,12 @@ describe('MockBuilderPromise', () => {
     expect(getTestBedInjection(TargetService)).toBeTruthy();
   });
 
-  it('skips dependencies in mocked providers', async () => {
+  it('skips dependencies in mock providers', async () => {
     await MockBuilder().mock(TargetService, TargetService, { dependency: true });
     expect(getTestBedInjection(TargetService)).toBeFalsy();
   });
 
-  it('adds non dependencies in mocked providers', async () => {
+  it('adds non dependencies in mock providers', async () => {
     await MockBuilder().mock(TargetService);
     expect(getTestBedInjection(TargetService)).toBeTruthy();
   });
@@ -101,7 +101,7 @@ describe('MockBuilderPromise', () => {
     expect(getTestBedInjection(TARGET_TOKEN)).toEqual([1, 2]);
   });
 
-  it('respects several mocked overloads', async () => {
+  it('respects several mock overloads', async () => {
     await MockBuilder()
       .mock({
         ngModule: TargetModule,

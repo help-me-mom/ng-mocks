@@ -32,13 +32,13 @@ const TOKEN_EXISTING_KEEP = new InjectionToken('KEEP');
 class TargetModule {}
 
 // We should do nothing about a useExisting provider, because
-// the question comes whether its pointer has been mocked or not.
+// the question comes whether its pointer has been replaced with a mock copy or not.
 describe('tokens-existing', () => {
   ngMocks.faster();
 
   beforeEach(() => MockBuilder().mock(TargetModule).keep(Exist2Service));
 
-  it('resolves TOKEN_EXISTING_MOCK as a mocked service', () => {
+  it('resolves TOKEN_EXISTING_MOCK as a mock service', () => {
     const actual = TestBed.get(TOKEN_EXISTING_MOCK);
     expect(actual).toEqual(jasmine.any(Exist1Service));
     expect(actual.name).toBeUndefined();

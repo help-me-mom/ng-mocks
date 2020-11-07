@@ -137,7 +137,7 @@ describe('root-providers', () => {
 
     beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(ModuleComponent));
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
@@ -160,7 +160,7 @@ describe('root-providers', () => {
       })
     );
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
@@ -173,7 +173,7 @@ describe('root-providers', () => {
   describe('keep', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:service"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
@@ -186,7 +186,7 @@ describe('root-providers', () => {
   describe('keep via component module, but mocks root providers', () => {
     beforeEach(() => MockBuilder(TargetModule).mock(NG_MOCKS_ROOT_PROVIDERS));
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
@@ -199,7 +199,7 @@ describe('root-providers', () => {
   describe('keep via component module, and keeps root providers', () => {
     beforeEach(() => MockBuilder(TargetModule).mock(NG_MOCKS_ROOT_PROVIDERS).keep(TargetService).keep(TOKEN));
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:service"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
@@ -216,7 +216,7 @@ describe('root-providers', () => {
       })
     );
 
-    it('mocks providers', () => {
+    it('uses mock providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"service:service"');
       expect(fixture.nativeElement.innerHTML).toContain('"fake:"');

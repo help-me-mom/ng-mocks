@@ -10,14 +10,14 @@ import {
   MyCustomProvider3,
   MyService1,
   MyService2,
-  ServiceWeDontWantToMock,
+  ServiceWeDontWantToMimic,
   ServiceWeWantToCustomize,
-  ServiceWeWantToMock,
+  ServiceWeWantToMimic,
 } from './fixtures.services';
 import {
-  INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
-  INJECTION_TOKEN_WE_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
 
 @Component({
@@ -41,16 +41,16 @@ export class MyComponent {
   public readonly myCustomProvider3: MyCustomProvider3;
   public readonly myService1: MyService1;
   public readonly myService2: MyService2;
-  public readonly serviceWeDontWantToMock: ServiceWeDontWantToMock;
+  public readonly serviceWeDontWantToMimic: ServiceWeDontWantToMimic;
   public readonly serviceWeWantToCustomize: ServiceWeWantToCustomize;
-  public readonly serviceWeWantToMock: ServiceWeWantToMock;
+  public readonly serviceWeWantToMimic: ServiceWeWantToMimic;
   public readonly t1v: string;
   public readonly t2v: string;
   public readonly t3v: string;
 
   constructor(
-    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK) t1: string,
-    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MOCK) t2: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC) t1: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MIMIC) t2: string,
     @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE) t3: string,
     @Optional() anythingWeWant1: AnythingWeWant1,
     @Optional() anythingWeWant2: AnythingWeWant2,
@@ -59,8 +59,8 @@ export class MyComponent {
     @Optional() myCustomProvider3: MyCustomProvider3,
     @Optional() myService1: MyService1,
     @Optional() myService2: MyService2,
-    @Optional() serviceWeDontWantToMock: ServiceWeDontWantToMock,
-    @Optional() serviceWeWantToMock: ServiceWeWantToMock,
+    @Optional() serviceWeDontWantToMimic: ServiceWeDontWantToMimic,
+    @Optional() serviceWeWantToMimic: ServiceWeWantToMimic,
     @Optional() serviceWeWantToCustomize: ServiceWeWantToCustomize
   ) {
     this.t1v = t1;
@@ -73,9 +73,9 @@ export class MyComponent {
     this.myCustomProvider3 = myCustomProvider3;
     this.myService1 = myService1;
     this.myService2 = myService2;
-    this.serviceWeDontWantToMock = serviceWeDontWantToMock;
+    this.serviceWeDontWantToMimic = serviceWeDontWantToMimic;
     this.serviceWeWantToCustomize = serviceWeWantToCustomize;
-    this.serviceWeWantToMock = serviceWeWantToMock;
+    this.serviceWeWantToMimic = serviceWeWantToMimic;
   }
 }
 
@@ -99,12 +99,12 @@ export class MyComponent3 {}
 
 @Component({
   selector: 'dont-want',
-  template: 'ComponentWeDontWantToMock',
+  template: 'ComponentWeDontWantToMimic',
 })
-export class ComponentWeDontWantToMock {}
+export class ComponentWeDontWantToMimic {}
 
 @Component({
   selector: 'do-want',
-  template: 'ComponentWeWantToMock',
+  template: 'ComponentWeWantToMimic',
 })
-export class ComponentWeWantToMock {}
+export class ComponentWeWantToMimic {}

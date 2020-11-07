@@ -63,7 +63,8 @@ describe('TestToken', () => {
     const token = TestBed.get(TOKEN_EXISTING);
 
     // Verifying that the token is an instance of ServiceExisting.
-    // But because it has been mocked we should see an empty name.
+    // But because it has been replaced with a mock copy,
+    // we should see an empty name.
     expect(token).toEqual(jasmine.any(ServiceExisting));
     expect(token.name).toBeUndefined();
   });

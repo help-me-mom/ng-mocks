@@ -103,11 +103,11 @@ describe('provider-with-custom-dependencies', () => {
   describe('mock-builder:mock', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
 
-    it('creates component with mocked custom dependencies', () => {
+    it('creates component with mock custom dependencies', () => {
       const fixture = MockRender(TargetComponent);
-      // Injects root dependency correctly, it is not missed, it is mocked.
+      // Injects root dependency correctly, it is not missed, it is replaced with a mock copy.
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
-      // Skips unprovided local dependency despite its mocked copy.
+      // Skips unprovided local dependency despite its mock copy.
       expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
       // The dependency should not be provided in TestBed.
       expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);
@@ -123,9 +123,9 @@ describe('provider-with-custom-dependencies', () => {
 
     it('creates component with kept Dep2Service', () => {
       const fixture = MockRender(TargetComponent);
-      // Injects root dependency correctly, it is not missed, it is mocked.
+      // Injects root dependency correctly, it is not missed, it is replaced with a mock copy.
       expect(fixture.nativeElement.innerHTML).toContain('"service:dep-2"');
-      // Skips unprovided local dependency despite its mocked copy.
+      // Skips unprovided local dependency despite its mock copy.
       expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
       // The dependency should not be provided in TestBed.
       expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);

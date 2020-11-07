@@ -95,58 +95,58 @@ describe('MockComponent', () => {
 
   it('should have use a selector of the original component', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.css('simple-component'));
-    expect(mockedComponent).not.toBeNull();
+    const mockComponent = fixture.debugElement.query(By.css('simple-component'));
+    expect(mockComponent).not.toBeNull();
   });
 
   it('should have the input set on the mock component', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
-    expect(mockedComponent.someInput).toEqual('hi');
-    expect(mockedComponent.someInput2).toEqual('bye');
+    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    expect(mockComponent.someInput).toEqual('hi');
+    expect(mockComponent.someInput2).toEqual('bye');
   });
 
   it('has no issues with multiple decorators on an input', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent));
-    expect(mockedComponent.componentInstance.someInput3).toEqual(true);
+    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent));
+    expect(mockComponent.componentInstance.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
-    mockedComponent.someOutput1.emit('hi');
+    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    mockComponent.someOutput1.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
   it('should trigger output bound behavior for extended outputs', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
-    mockedComponent.someOutput2.emit('hi');
+    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    mockComponent.someOutput2.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
   it('the mock should have an ng-content body', () => {
     fixture.detectChanges();
-    const mockedComponent = fixture.debugElement.query(By.css('#ng-content-component'));
-    expect(mockedComponent.nativeElement.innerText).toContain('doh');
+    const mockComponent = fixture.debugElement.query(By.css('#ng-content-component'));
+    expect(mockComponent.nativeElement.innerText).toContain('doh');
   });
 
-  it('should give each instance of a mocked component its own event emitter', () => {
-    const mockedComponents = fixture.debugElement.queryAll(By.directive(SimpleComponent));
-    const mockedComponent1 = mockedComponents[0].componentInstance;
-    const mockedComponent2 = mockedComponents[1].componentInstance;
-    expect(mockedComponent1.someOutput1).not.toEqual(mockedComponent2.someOutput1);
+  it('should give each instance of a mock component its own event emitter', () => {
+    const mockComponents = fixture.debugElement.queryAll(By.directive(SimpleComponent));
+    const mockComponent1 = mockComponents[0].componentInstance;
+    const mockComponent2 = mockComponents[1].componentInstance;
+    expect(mockComponent1.someOutput1).not.toEqual(mockComponent2.someOutput1);
   });
 
   it('should work with components w/o inputs or outputs', () => {
-    const mockedComponent = fixture.debugElement.query(By.directive(EmptyComponent));
-    expect(mockedComponent).not.toBeNull();
+    const mockComponent = fixture.debugElement.query(By.directive(EmptyComponent));
+    expect(mockComponent).not.toBeNull();
   });
 
   it('should allow ngModel bindings', () => {
-    const mockedComponent = fixture.debugElement.query(By.css('#ngmodel-component'));
-    expect(mockedComponent).not.toBeNull();
+    const mockComponent = fixture.debugElement.query(By.css('#ngmodel-component'));
+    expect(mockComponent).not.toBeNull();
   });
 
   it('should memoize the return value by argument', () => {
@@ -167,14 +167,14 @@ describe('MockComponent', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedComponent = ngMocks.findInstance(fixture.debugElement, GetterSetterComponent) as MockedDirective<
+    const mockComponent = ngMocks.findInstance(fixture.debugElement, GetterSetterComponent) as MockedDirective<
       GetterSetterComponent
     >;
 
-    expect(mockedComponent.normalMethod).toBeDefined();
-    expect(mockedComponent.myGetter).not.toBeDefined();
-    expect(mockedComponent.mySetter).not.toBeDefined();
-    expect(mockedComponent.normalProperty).not.toBeDefined();
+    expect(mockComponent.normalMethod).toBeDefined();
+    expect(mockComponent.myGetter).not.toBeDefined();
+    expect(mockComponent.mySetter).not.toBeDefined();
+    expect(mockComponent.normalProperty).not.toBeDefined();
   });
 
   describe('ReactiveForms - ControlValueAccessor', () => {
@@ -204,7 +204,7 @@ describe('MockComponent', () => {
       let block3: DebugElement;
       fixture.detectChanges();
 
-      // mocked component with @ViewChild was created without errors.
+      // a mock component with @ViewChild was created without errors.
       const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-and-template'));
       expect(templateOutlet).toBeTruthy();
 
@@ -251,14 +251,14 @@ describe('MockComponent', () => {
         expect(() => loComponent.__hide('empty')).not.toThrow();
         expect(() => loComponent.__render('empty')).not.toThrow();
       } else {
-        fail('the component is not mocked');
+        fail('the component is not replaced with its mock copy');
       }
     });
 
     it('renders nothing if no @ContentChild in component and ng-content is empty', () => {
       fixture.detectChanges();
 
-      // mocked component was created without errors.
+      // a mock component was created without errors.
       const templateOutlet = fixture.debugElement.query(By.css('#element-without-content-and-template'));
       expect(templateOutlet).toBeTruthy();
       expect(templateOutlet.nativeElement.innerHTML).toBeFalsy();
@@ -267,7 +267,7 @@ describe('MockComponent', () => {
     it('renders ng-content without wrapper if no @ContentChild in component', () => {
       fixture.detectChanges();
 
-      // mocked component was created without errors.
+      // a mock component was created without errors.
       const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-only'));
       expect(templateOutlet).toBeTruthy();
 

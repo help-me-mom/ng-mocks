@@ -39,17 +39,17 @@ describe('MockComponent', () => {
     //   By.css('app-child')
     // ).componentInstance
     // but properly typed.
-    const mockedComponent = ngMocks.find<DependencyComponent>(fixture, 'app-child').componentInstance;
+    const mockComponent = ngMocks.find<DependencyComponent>(fixture, 'app-child').componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. TestedComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
-    // the mocked component so you can assert on it.
+    // the mock component so you can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
     // Thanks to ngMocks, this is type safe.
-    expect(mockedComponent.someInput).toEqual('foo');
+    expect(mockComponent.someInput).toEqual('foo');
   });
 
   it('does something on an emit of the child component', () => {
@@ -61,14 +61,14 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockedComponent = ngMocks.find(fixture, DependencyComponent).componentInstance;
+    const mockComponent = ngMocks.find(fixture, DependencyComponent).componentInstance;
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. TestedComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
     spyOn(component, 'trigger');
-    mockedComponent.someOutput.emit({
+    mockComponent.someOutput.emit({
       payload: 'foo',
     });
 
@@ -86,8 +86,8 @@ describe('MockComponent', () => {
     `);
 
     // We can access html directly asserting on some side effect.
-    const mockedNgContent = localFixture.point.nativeElement.innerHTML;
-    expect(mockedNgContent).toContain('<p>inside content</p>');
+    const mockNgContent = localFixture.point.nativeElement.innerHTML;
+    expect(mockNgContent).toContain('<p>inside content</p>');
   });
 
   it('renders ContentChild of the child component', () => {
@@ -101,22 +101,22 @@ describe('MockComponent', () => {
     `);
 
     // Injected ng-content rendered everything except templates.
-    const mockedNgContent = fixture.point.nativeElement.innerHTML;
-    expect(mockedNgContent).toContain('<p>inside content</p>');
-    expect(mockedNgContent).not.toContain('<p>inside template</p>');
+    const mockNgContent = fixture.point.nativeElement.innerHTML;
+    expect(mockNgContent).toContain('<p>inside content</p>');
+    expect(mockNgContent).not.toContain('<p>inside template</p>');
 
     // Let's render the template. First, we need to assert that
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
-    const mockedComponent = fixture.point.componentInstance;
-    if (isMockOf(mockedComponent, DependencyComponent, 'c')) {
-      mockedComponent.__render('something');
+    const mockComponent = fixture.point.componentInstance;
+    if (isMockOf(mockComponent, DependencyComponent, 'c')) {
+      mockComponent.__render('something');
       fixture.detectChanges();
     }
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockedNgTemplate = ngMocks.find(fixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
-    expect(mockedNgTemplate).toContain('<p>inside template</p>');
+    const mockNgTemplate = ngMocks.find(fixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
+    expect(mockNgTemplate).toContain('<p>inside template</p>');
   });
 });

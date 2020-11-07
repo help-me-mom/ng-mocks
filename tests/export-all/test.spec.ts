@@ -47,7 +47,7 @@ describe('export-all', () => {
     console.warn = backupWarn;
   });
 
-  // The goal is to get access to declarations of mocked TargetModule
+  // The goal is to get access to declarations of the mock TargetModule
   // when TargetComponent is used externally.
   describe('valid', () => {
     beforeEach(() => {

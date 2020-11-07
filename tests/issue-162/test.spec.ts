@@ -31,7 +31,7 @@ export class AppModule {}
 describe('issue-162', () => {
   beforeEach(() => MockBuilder(AppComponent, AppModule));
 
-  it(`verifies that EventManager was not mocked`, () => {
+  it(`verifies that EventManager was not replaced with a mock copy`, () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: EventManager = TestBed.get(EventManager);
@@ -40,7 +40,7 @@ describe('issue-162', () => {
     TestBed.resetTestingModule();
   });
 
-  it(`verifies that RendererFactory2 was not mocked`, () => {
+  it(`verifies that RendererFactory2 was not replaced with a mock copy`, () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: RendererFactory2 = TestBed.get(RendererFactory2);

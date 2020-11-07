@@ -108,7 +108,7 @@ describe('mock-render-mirrors-component', () => {
     expect(fixture2).toBeDefined();
     expect(fixture2.componentInstance.input1).toBe('1');
 
-    // full declaration of the mocked fixture type.
+    // full declaration of the mock fixture type.
     const fixture3: MockedComponentFixture<TargetComponent, Record<'input1' | 'input3', string>> = MockRender(
       TargetComponent,
       {

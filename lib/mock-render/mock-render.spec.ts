@@ -171,16 +171,16 @@ describe('MockRender', () => {
   it('assigns DebugNodes and DebugElements to Mocks and back', () => {
     const debugNode = ({} as any) as DebugNode;
     const debugElement = ({} as any) as DebugElement;
-    const mockedDebugNode = ({} as any) as MockedDebugNode<string>;
-    const mockedDebugElement = ({} as any) as MockedDebugElement<string>;
+    const mockDebugNode = ({} as any) as MockedDebugNode<string>;
+    const mockDebugElement = ({} as any) as MockedDebugElement<string>;
 
     const debugNodeToMockedDebugNode: MockedDebugNode = debugNode;
     const debugElementToMockedDebugElement: MockedDebugElement = debugElement;
-    const mockedDebugNodeToDebugNode: DebugNode = mockedDebugNode;
-    const mockedDebugElementToDebugElement: DebugElement = mockedDebugElement;
+    const mockedDebugNodeToDebugNode: DebugNode = mockDebugNode;
+    const mockedDebugElementToDebugElement: DebugElement = mockDebugElement;
 
-    const valueNode: string = mockedDebugNode.componentInstance;
-    const valueElement: string = mockedDebugElement.componentInstance;
+    const valueNode: string = mockDebugNode.componentInstance;
+    const valueElement: string = mockDebugElement.componentInstance;
 
     expect(debugNodeToMockedDebugNode).toBeDefined();
     expect(debugElementToMockedDebugElement).toBeDefined();

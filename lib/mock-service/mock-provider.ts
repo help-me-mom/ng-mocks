@@ -29,9 +29,9 @@ export default function (provider: any): Provider | undefined {
     return ngMocksUniverse.cacheProviders.get(provide);
   }
 
-  let mockedProvider: Provider | undefined;
-  if (typeof provide === 'function' && !mockedProvider) {
-    mockedProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => {
+  let mockProvider: Provider | undefined;
+  if (typeof provide === 'function' && !mockProvider) {
+    mockProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => {
       const instance = MockService(provide);
       // Magic below adds missed properties to the instance to
       // fulfill missed abstract methods.
@@ -53,21 +53,21 @@ export default function (provider: any): Provider | undefined {
     });
   }
 
-  if (provide === provider && mockedProvider && ngMocksUniverse.flags.has('cacheProvider')) {
-    ngMocksUniverse.cacheProviders.set(provide, mockedProvider);
+  if (provide === provider && mockProvider && ngMocksUniverse.flags.has('cacheProvider')) {
+    ngMocksUniverse.cacheProviders.set(provide, mockProvider);
   }
-  if (mockedProvider) {
-    return mockedProvider;
+  if (mockProvider) {
+    return mockProvider;
   }
 
   // Not sure if this case is possible, all classes should be already
-  // mocked by the code above, below we should have only tokens and
-  // string literals with a proper definition.
+  // replaced with their mock coplies by the code above, below we
+  // should have only tokens and string literals with a proper definition.
   if (provide === provider) {
     return undefined;
   }
 
-  // Tokens are special subject, we can skip adding them because in a mocked module they are useless.
+  // Tokens are special subject, we can skip adding them because in a mock module they are useless.
   // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
   // If a testing module / component requires omitted tokens then they should be provided manually
   // during creation of TestBed module.
@@ -79,8 +79,8 @@ export default function (provider: any): Provider | undefined {
   }
 
   // if a token has a primitive type, we can return its initial state.
-  if (!mockedProvider && Object.keys(provider).indexOf('useValue') !== -1) {
-    mockedProvider =
+  if (!mockProvider && Object.keys(provider).indexOf('useValue') !== -1) {
+    mockProvider =
       provider.useValue && typeof provider.useValue === 'object'
         ? useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => MockService(provider.useValue))
         : {
@@ -97,19 +97,19 @@ export default function (provider: any): Provider | undefined {
                 : undefined,
           };
   }
-  if (!mockedProvider && Object.keys(provider).indexOf('useExisting') !== -1) {
-    mockedProvider = provider;
+  if (!mockProvider && Object.keys(provider).indexOf('useExisting') !== -1) {
+    mockProvider = provider;
   }
-  if (!mockedProvider && Object.keys(provider).indexOf('useClass') !== -1) {
-    mockedProvider =
+  if (!mockProvider && Object.keys(provider).indexOf('useClass') !== -1) {
+    mockProvider =
       ngMocksUniverse.builder.has(provider.useClass) &&
       ngMocksUniverse.builder.get(provider.useClass) === provider.useClass
         ? provider
         : useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => MockService(provider.useClass));
   }
-  if (!mockedProvider && Object.keys(provider).indexOf('useFactory') !== -1) {
-    mockedProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => ({}));
+  if (!mockProvider && Object.keys(provider).indexOf('useFactory') !== -1) {
+    mockProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => ({}));
   }
 
-  return mockedProvider;
+  return mockProvider;
 }

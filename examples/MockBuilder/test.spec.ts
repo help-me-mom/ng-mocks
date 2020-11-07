@@ -5,20 +5,20 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 import {
   ComponentContentChild,
-  ComponentWeDontWantToMock,
-  ComponentWeWantToMock,
+  ComponentWeDontWantToMimic,
+  ComponentWeWantToMimic,
   MyComponent,
   MyComponent1,
   MyComponent2,
   MyComponent3,
 } from './fixtures.components';
-import { DirectiveWeDontWantToMock, DirectiveWeWantToMock, MyDirective } from './fixtures.directives';
-import { ModuleWeDontWantToMock, ModuleWeWantToMockBesidesMyModule, MyModule } from './fixtures.modules';
+import { DirectiveWeDontWantToMimic, DirectiveWeWantToMimic, MyDirective } from './fixtures.directives';
+import { ModuleWeDontWantToMimic, ModuleWeWantToMimicBesidesMyModule, MyModule } from './fixtures.modules';
 import {
   MyPipe,
-  PipeWeDontWantToMock,
+  PipeWeDontWantToMimicPipe,
   PipeWeWantToCustomize,
-  PipeWeWantToMock,
+  PipeWeWantToMimicPipe,
   PipeWeWantToRestore,
 } from './fixtures.pipes';
 import {
@@ -29,15 +29,15 @@ import {
   MyCustomProvider3,
   MyService1,
   MyService2,
-  ServiceWeDontWantToMock,
+  ServiceWeDontWantToMimic,
   ServiceWeWantToCustomize,
-  ServiceWeWantToMock,
+  ServiceWeWantToMimic,
   TheSameAsAnyProvider,
 } from './fixtures.services';
 import {
-  INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
-  INJECTION_TOKEN_WE_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
 
 describe('MockBuilder:simple', () => {
@@ -46,7 +46,8 @@ describe('MockBuilder:simple', () => {
   // beforeEach(() => TestBed.configureTestingModule({{
   //   imports: [MockModule(MyModule)],
   // }).compileComponents());
-  // but MyComponent has not been mocked for the testing purposes.
+  // but MyComponent has not been replaced with a mock copy for
+  // the testing purposes.
 
   it('should render content ignoring all dependencies', () => {
     const fixture = MockRender(MyComponent);
@@ -67,20 +68,20 @@ describe('MockBuilder:deep', () => {
         },
       })
 
-      .keep(ModuleWeDontWantToMock, {
+      .keep(ModuleWeDontWantToMimic, {
         dependency: true,
       })
-      .keep(ComponentWeDontWantToMock, {
+      .keep(ComponentWeDontWantToMimic, {
         dependency: true,
       })
-      .keep(DirectiveWeDontWantToMock, {
+      .keep(DirectiveWeDontWantToMimic, {
         dependency: true,
       })
-      .keep(PipeWeDontWantToMock, {
+      .keep(PipeWeDontWantToMimicPipe, {
         dependency: true,
       })
-      .keep(ServiceWeDontWantToMock)
-      .keep(INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK)
+      .keep(ServiceWeDontWantToMimic)
+      .keep(INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC)
 
       // The same can be done with Components, Directives and Pipes.
       // For Providers use .provider() or .mock().
@@ -88,24 +89,24 @@ describe('MockBuilder:deep', () => {
         dependency: true,
       })
 
-      .mock(ModuleWeWantToMockBesidesMyModule, {
+      .mock(ModuleWeWantToMimicBesidesMyModule, {
         dependency: true,
       })
-      .mock(ComponentWeWantToMock, {
+      .mock(ComponentWeWantToMimic, {
         dependency: true,
       })
-      .mock(DirectiveWeWantToMock, {
+      .mock(DirectiveWeWantToMimic, {
         dependency: true,
         render: {
           $implicit: { a: '$' },
           variables: { a: { b: 'b' } },
         },
       })
-      .mock(PipeWeWantToMock, {
+      .mock(PipeWeWantToMimicPipe, {
         dependency: true,
       })
-      .mock(ServiceWeWantToMock) // makes all methods an empty function
-      .mock(INJECTION_TOKEN_WE_WANT_TO_MOCK) // makes its value undefined
+      .mock(ServiceWeWantToMimic) // makes all methods an empty function
+      .mock(INJECTION_TOKEN_WE_WANT_TO_MIMIC) // makes its value undefined
 
       .mock(PipeWeWantToCustomize, value => 'My Custom Result')
       .mock(PipeWeWantToRestore, value => 'My Restored Pipe')
@@ -124,7 +125,7 @@ describe('MockBuilder:deep', () => {
       .provide(MyCustomProvider1)
       .provide([MyCustomProvider2, MyCustomProvider3])
 
-      // Now the pipe won't be mocked.
+      // Now the pipe won't be replaced with its mock copy.
       .keep(PipeWeWantToRestore)
 
       // Extra configuration.
@@ -133,7 +134,8 @@ describe('MockBuilder:deep', () => {
       .mock(MyService1)
       .keep(MyService2)
 
-      // Even it belongs to the module that is marked as kept, the component will be mocked and replaced.
+      // Even it belongs to the module that is marked as kept,
+      // the component will be replaced with its mock copy.
       .mock(MyComponent3)
 
       // and now we want to build our NgModule.
@@ -156,23 +158,27 @@ describe('MockBuilder:deep', () => {
     expect(content).toContain('<div>MyComponent1: <component-1>If we need to tune testBed</component-1></div>');
     expect(content).toContain('<div>MyComponent2: <component-2>More callbacks</component-2></div>');
     expect(content).toContain('<div>MyComponent3: <component-3></component-3></div>');
-    expect(content).toContain('<div>ComponentWeDontWantToMock: <dont-want>ComponentWeDontWantToMock</dont-want></div>');
-    expect(content).toContain('<div>ComponentWeWantToMock: <do-want></do-want></div>');
+    expect(content).toContain(
+      '<div>ComponentWeDontWantToMimic: <dont-want>ComponentWeDontWantToMimic</dont-want></div>'
+    );
+    expect(content).toContain('<div>ComponentWeWantToMimic: <do-want></do-want></div>');
     expect(content).toContain('<div>ComponentStructural: -$implicit- b</div>');
 
     expect(content).toContain('<div>MyDirective: <mydirective></mydirective></div>');
-    expect(content).toContain('<div>DirectiveWeDontWantToMock: <wedontwanttomock></wedontwanttomock></div>');
-    expect(content).toContain('DirectiveWeWantToMock 1: <span>render b</span>');
-    expect(content).toContain('DirectiveWeWantToMock 2: render $');
+    expect(content).toContain('<div>DirectiveWeDontWantToMimic: <wedontwanttomimic></wedontwanttomimic></div>');
+    expect(content).toContain('DirectiveWeWantToMimic 1: <span>render b</span>');
+    expect(content).toContain('DirectiveWeWantToMimic 2: render $');
 
     expect(content).toContain('<div>MyPipe: MyPipe:text</div>');
-    expect(content).toContain('<div>PipeWeDontWantToMock: PipeWeDontWantToMock:text</div>');
-    expect(content).toContain('<div>PipeWeWantToMock: </div>');
+    expect(content).toContain('<div>PipeWeDontWantToMimic: PipeWeDontWantToMimic:text</div>');
+    expect(content).toContain('<div>PipeWeWantToMimic: </div>');
     expect(content).toContain('<div>PipeWeWantToCustomize: My Custom Result</div>');
     expect(content).toContain('<div>PipeWeWantToRestore: PipeWeWantToRestore:text</div>');
 
-    expect(content).toContain('<div>INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK: INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK</div>');
-    expect(content).toContain('<div>INJECTION_TOKEN_WE_WANT_TO_MOCK: </div>');
+    expect(content).toContain(
+      '<div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC</div>'
+    );
+    expect(content).toContain('<div>INJECTION_TOKEN_WE_WANT_TO_MIMIC: </div>');
     expect(content).toContain('<div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: My_Token</div>');
 
     expect(content).toContain('<div>anythingWeWant1: TheSameAsAnyProvider</div>');
@@ -183,9 +189,9 @@ describe('MockBuilder:deep', () => {
 
     expect(content).toContain('<div>myService1: </div>');
     expect(content).toContain('<div>myService2: MyService2</div>');
-    expect(content).toContain('<div>serviceWeDontWantToMock: ServiceWeDontWantToMock</div>');
+    expect(content).toContain('<div>serviceWeDontWantToMimic: ServiceWeDontWantToMimic</div>');
     expect(content).toContain('<div>serviceWeWantToCustomize: My Customized String</div>');
-    expect(content).toContain('<div>serviceWeWantToMock: </div>');
+    expect(content).toContain('<div>serviceWeWantToMimic: </div>');
 
     // Checking that replacement works.
     expect(httpBackend.constructor).toBeDefined();

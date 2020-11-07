@@ -73,7 +73,7 @@ describe('root-provider-with-root-dep', () => {
     it('mocks service', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"name:"');
-      // A nested token as a dependency should be mocked.
+      // A nested token as a dependency should be replaced with a mock copy.
       expect(TestBed.get(TOKEN)).toBeUndefined();
     });
   });

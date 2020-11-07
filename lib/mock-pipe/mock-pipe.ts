@@ -32,7 +32,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   transform: TPipe['transform'] = defaultTransform
 ): Type<MockedPipe<TPipe>> {
   // We are inside of an 'it'.
-  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(pipe, 'p');

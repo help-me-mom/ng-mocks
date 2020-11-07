@@ -1,7 +1,7 @@
 import { JitReflector } from './jit-reflector';
 
 describe('JitReflector', () => {
-  class MockedJitReflector extends JitReflector {
+  class MockJitReflector extends JitReflector {
     public readonly mock: any = {
       annotations: jasmine.createSpy('annotations'),
       hasLifecycleHook: jasmine.createSpy('hasLifecycleHook'),
@@ -14,10 +14,10 @@ describe('JitReflector', () => {
     }
   }
 
-  let instance: MockedJitReflector;
+  let instance: MockJitReflector;
 
   beforeEach(() => {
-    instance = new MockedJitReflector();
+    instance = new MockJitReflector();
   });
 
   it('annotations', () => {

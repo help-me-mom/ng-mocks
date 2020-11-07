@@ -147,14 +147,14 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
-    const mockedDirective = ngMocks.findInstance(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<
+    const mockDirective = ngMocks.findInstance(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<
       ExampleStructuralDirective
     >;
 
     // structural directives should be rendered first.
-    mockedDirective.__render();
+    mockDirective.__render();
     fixture.detectChanges();
-    expect(mockedDirective.exampleStructuralDirective).toBeTruthy();
+    expect(mockDirective.exampleStructuralDirective).toBeTruthy();
 
     const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
@@ -188,14 +188,14 @@ describe('MockDirective', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockedDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
+    const mockDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
       GettersAndSettersDirective
     >;
-    expect(() => mockedDirective.__render()).not.toThrow();
-    expect(mockedDirective.normalMethod).toBeDefined();
-    expect(mockedDirective.myGetter).not.toBeDefined();
-    expect(mockedDirective.mySetter).not.toBeDefined();
-    expect(mockedDirective.normalProperty).not.toBeDefined();
+    expect(() => mockDirective.__render()).not.toThrow();
+    expect(mockDirective.normalMethod).toBeDefined();
+    expect(mockDirective.myGetter).not.toBeDefined();
+    expect(mockDirective.mySetter).not.toBeDefined();
+    expect(mockDirective.normalProperty).not.toBeDefined();
   });
 
   it('mocks several directives', () => {

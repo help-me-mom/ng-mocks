@@ -31,18 +31,18 @@ class TargetModule {}
 
 describe('MockObservable', () => {
   // Because we want to test the component, we pass it as the first
-  // parameter of MockBuilder. To mock its dependencies we pass its
-  // module as the second parameter.
+  // parameter of MockBuilder. To create its mock dependencies
+  // we pass its module as the second parameter.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  // Now we need to customize the mocked copy of the service.
+  // Now we need to customize the mock copy of the service.
   // value$ is our access point to the stream.
   const value$: Subject<number[]> = new Subject();
   beforeAll(() => {
-    // MockInstance helps to override mocked instances.
+    // MockInstance helps to override mock instances.
     MockInstance(TargetService, instance =>
       ngMocks.stub(instance, {
-        value$, // even it is a read-only property we can override it in a type-safe way.
+        value$, // even it is a read-only property we can override.
       })
     );
   });

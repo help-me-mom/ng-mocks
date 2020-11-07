@@ -29,7 +29,7 @@ class TargetModule {}
 describe('abstract-methods-provider', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
-  it('provides a mocked copy with an implemented abstract method', () => {
+  it('provides a mock copy with an implemented abstract method', () => {
     const actual: LoggerInterface = TestBed.get(LoggerInterface);
 
     expect(actual.log).toBeDefined();

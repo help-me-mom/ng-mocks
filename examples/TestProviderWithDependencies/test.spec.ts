@@ -47,13 +47,13 @@ describe('TestProviderWithDependencies', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
+    // Let's customize a bit behavior of the mock copy of Service1.
     MockInstance(Service1, {
       init: instance => {
         instance.trigger = () => 'mock1';
       },
     });
-    // Let's customize a bit behavior of the mocked copy of Service2.
+    // Let's customize a bit behavior of the mock copy of Service2.
     MockInstance(Service2, {
       init: instance => {
         instance.trigger = () => 'mock2';

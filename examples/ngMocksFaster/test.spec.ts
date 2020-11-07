@@ -24,18 +24,21 @@ class TargetComponent {
 }
 
 describe('examples:performance', () => {
-  describe('beforeEach:mock-instance', () => {
+  describe('beforeEach:MockInstance', () => {
     ngMocks.faster(); // <-- add it before
 
-    // A normal setup of the TestBed, TargetService will be mocked.
+    // A normal setup of the TestBed, TargetService will be replaced
+    // with its mock copy.
     beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
 
-    // Configuring behavior of the mocked TargetService.
+    // Configuring behavior of the mock TargetService.
     beforeAll(() => {
       MockInstance(TargetService, {
         init: instance => {
           instance.method =
             typeof jest === 'undefined' ? jasmine.createSpy().and.returnValue(5) : jest.fn().mockReturnValue(5);
+          // in case of jest
+          // instance.method = jest.fn().mockReturnValue(5);
           instance.prop = 123;
         },
       });
@@ -84,7 +87,8 @@ describe('examples:performance', () => {
       mock.prop = 123;
     });
 
-    // A normal setup of the TestBed, TargetService will be mocked.
+    // A normal setup of the TestBed, TargetService will be replaced
+    // with its mock copy.
     beforeEach(() => MockBuilder(TargetComponent).mock(TargetService, mock));
 
     it('test:1', () => {

@@ -22,7 +22,7 @@ describe('issue-222:CommonModule', () => {
     })
   );
 
-  it('correctly handles kept and mocked CommonModule', () => {
+  it('correctly handles kept and the mock CommonModule', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual('<target></target>');
   });

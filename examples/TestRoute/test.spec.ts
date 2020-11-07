@@ -101,8 +101,8 @@ describe('TestRoute:Component', () => {
   // RouterModule. Therefore, we pass the component as the first
   // parameter of MockBuilder. Then, to correctly satisfy its
   // initialization, we need to pass its module as the second
-  // parameter. And, the last but not the least, we need avoid
-  // mocking of RouterModule to have its routes, and to add
+  // parameter. And, the last but not the least, we need keep
+  // RouterModule to have its routes, and to add
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing.
   beforeEach(() =>

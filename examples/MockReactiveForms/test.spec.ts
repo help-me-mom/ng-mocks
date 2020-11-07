@@ -34,23 +34,23 @@ class TestedComponent {
 describe('MockReactiveForms', () => {
   beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent).keep(ReactiveFormsModule));
 
-  it('sends the correct value to the mocked form component', () => {
+  it('sends the correct value to the mock form component', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
-    // Let's find the mocked form component.
-    const mockedControl = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
+    // Let's find the mock form component.
+    const mockControl = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
 
     // Let's simulate its change, like a user does it.
-    if (isMockOf(mockedControl, DependencyComponent, 'c')) {
-      mockedControl.__simulateChange('foo');
+    if (isMockOf(mockControl, DependencyComponent, 'c')) {
+      mockControl.__simulateChange('foo');
     }
     expect(component.formControl.value).toBe('foo');
 
     // Let's check that change on existing formControl
-    // causes calls of `writeValue` on the mocked component.
-    spyOn(mockedControl, 'writeValue');
+    // causes calls of `writeValue` on the mock component.
+    spyOn(mockControl, 'writeValue');
     component.formControl.setValue('bar');
-    expect(mockedControl.writeValue).toHaveBeenCalledWith('bar');
+    expect(mockControl.writeValue).toHaveBeenCalledWith('bar');
   });
 });

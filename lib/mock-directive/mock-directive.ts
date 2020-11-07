@@ -37,7 +37,7 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
 export function MockDirective<TDirective>(directive: AnyType<TDirective>): Type<MockedDirective<TDirective>>;
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
-  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(directive, 'd');
@@ -158,7 +158,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       (this as any).__viewContainer = viewContainer;
       (this as any).__isStructural = template && viewContainer;
 
-      // Providing method to render mocked values.
+      // Providing method to render mock values.
       (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
         if (viewContainer && template) {
           viewContainer.clear();

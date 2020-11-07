@@ -12,10 +12,10 @@ export class MyPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'PipeWeDontWantToMock',
+  name: 'PipeWeDontWantToMimic',
 })
-export class PipeWeDontWantToMock implements PipeTransform {
-  protected prefix = 'PipeWeDontWantToMock:';
+export class PipeWeDontWantToMimicPipe implements PipeTransform {
+  protected prefix = 'PipeWeDontWantToMimic:';
 
   public transform(value: any, ...args: any[]): any {
     return this.prefix + value;
@@ -23,10 +23,10 @@ export class PipeWeDontWantToMock implements PipeTransform {
 }
 
 @Pipe({
-  name: 'PipeWeWantToMock',
+  name: 'PipeWeWantToMimic',
 })
-export class PipeWeWantToMock implements PipeTransform {
-  protected prefix = 'PipeWeWantToMock:';
+export class PipeWeWantToMimicPipe implements PipeTransform {
+  protected prefix = 'PipeWeWantToMimic:';
 
   public transform(value: any, ...args: any[]): any {
     return this.prefix + value;

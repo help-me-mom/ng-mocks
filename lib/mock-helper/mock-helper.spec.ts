@@ -74,7 +74,7 @@ describe('MockHelper:getDirective', () => {
       <div id="example-structural-directive" *exampleStructuralDirective="false">hi</div>
     `);
 
-    // we need to render mocked structural directives manually
+    // we need to render mock structural directives manually
     ngMocks
       .findInstances(fixture.debugElement, ExampleStructuralDirective)
       .forEach((item: MockedDirective<ExampleStructuralDirective>) => {
@@ -98,7 +98,7 @@ describe('MockHelper:getDirective', () => {
       <div id="example-structural-directive" *exampleStructuralDirective="false">hi</div>
     `);
 
-    // we need to render mocked structural directives manually
+    // we need to render mock structural directives manually
     ngMocks
       .findInstances(fixture.debugElement, ExampleStructuralDirective)
       .forEach((item: MockedDirective<ExampleStructuralDirective>) => {

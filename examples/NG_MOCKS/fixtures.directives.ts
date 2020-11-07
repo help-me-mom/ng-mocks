@@ -6,11 +6,11 @@ import { Directive } from '@angular/core';
 export class MyDirective {}
 
 @Directive({
-  selector: 'WeDontWantToMock',
+  selector: 'WeDontWantToMimic',
 })
-export class DirectiveWeDontWantToMock {}
+export class DirectiveWeDontWantToMimic {}
 
 @Directive({
-  selector: '[WeWantToMock]',
+  selector: '[WeWantToMimic]',
 })
-export class DirectiveWeWantToMock {}
+export class DirectiveWeWantToMimic {}

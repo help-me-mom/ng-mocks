@@ -26,8 +26,8 @@ class ParentDirective {}
 class TargetModule {}
 
 // Declarations and providers should be cached in different buckets.
-// Because when we mock a declaration we get a mocked class, but
-// when we mock a provider we get a mocked instance.
+// Because when we mock a declaration we get a mock class, but
+// when we mock a provider we get a mock instance.
 describe('issue-173', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 

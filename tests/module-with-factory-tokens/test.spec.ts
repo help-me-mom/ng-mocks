@@ -61,7 +61,7 @@ describe('module-with-factory-tokens:mock-0', () => {
   });
 });
 
-// Because all tokens are mocked in the module the test should render empty values.
+// Because all tokens are replaced with mock copies in the module the test should render empty values.
 // The tokens will be added to provides with undefined values.
 // Result of the render is an empty string because there's no way to pass multi.
 describe('module-with-factory-tokens:mock-1', () => {
@@ -73,19 +73,19 @@ describe('module-with-factory-tokens:mock-1', () => {
   });
 });
 
-// Because all tokens are mocked with custom values the test should render them.
+// Because all tokens are replaced with mock copies with custom values the test should render them.
 // There's no way to specify multi in a factory, so we don't get an array.
 describe('module-with-factory-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
-      .mock(MY_TOKEN_SINGLE, 'MOCKED_MY_TOKEN_SINGLE')
-      .mock(MY_TOKEN_MULTI, 'MOCKED_MY_TOKEN_MULTI')
+      .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE')
+      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI')
   );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>"MOCKED_MY_TOKEN_SINGLE" "MOCKED_MY_TOKEN_MULTI"</internal-component>'
+      '<internal-component>"MOCK_MY_TOKEN_SINGLE" "MOCK_MY_TOKEN_MULTI"</internal-component>'
     );
   });
 });

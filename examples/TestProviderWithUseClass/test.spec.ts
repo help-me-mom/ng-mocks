@@ -62,7 +62,7 @@ describe('TestProviderWithUseClass', () => {
   beforeEach(() => MockBuilder(Target1Service, TargetModule));
 
   beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
+    // Let's customize a bit behavior of the mock copy of Service1.
     MockInstance(Service1, {
       init: instance => {
         instance.name = 'mock1';
@@ -79,14 +79,14 @@ describe('TestProviderWithUseClass', () => {
     expect(service.flag).toBeTruthy();
     expect(service).toEqual(jasmine.any(Target2Service));
 
-    // And let's assert that Service1 has been mocked and its name
-    // is undefined.
+    // And let's assert that Service1 has been replaced with its mock copy
+    // and its name is undefined.
     expect(service.service.name).toEqual('mock1');
     expect(service.service).toEqual(jasmine.any(Service1));
 
-    // Because we mocked the module, Service1 has been mocked
-    // based on its `provide` class, deps and other values are
-    // ignored by mocking logic.
+    // Because we use a mock module, Service1 has been replaced with
+    // a mock copy based on its `provide` class, deps and other
+    // values are ignored by building mocks logic.
     expect(service.service).not.toEqual(jasmine.any(Service2));
   });
 });

@@ -95,7 +95,7 @@ describe('issue-172:mock', () => {
     })
   );
 
-  it('renders mocked echo', () => {
+  it('renders the mock echo', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('<app-target>MockServiceTarget2Service</app-target>');
   });

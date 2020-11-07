@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-// This directive is shared via a module that is actually is kept in one and is mocked in another one.
+// This directive is shared via a module.
+// The module is kept in one module,
+// and is replaced with a mock copy in another one.
 @Component({
   selector: 'shared',
   template: 'shared',
@@ -64,7 +66,7 @@ describe('issue-222:mock-keep-priorities', () => {
   describe('reverse', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(KeepModule).keep(SharedModule));
 
-    it('keeps the nested module of a mocked module', () => {
+    it('keeps the nested module of a mock module', () => {
       const fixture = MockRender(SharedComponent);
       expect(fixture.nativeElement.innerHTML).toEqual('<shared>shared</shared>');
     });

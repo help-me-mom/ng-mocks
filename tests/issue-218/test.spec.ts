@@ -97,7 +97,7 @@ describe('issue-218:builder:mock', () => {
 describe('issue-218:builder:keep', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetPipe));
 
-  it('renders how we mocked it', () => {
+  it('renders how we replaced it with a mock copy', () => {
     const fixture = MockRender(TargetComponent, {
       value: 'test',
     });
@@ -123,7 +123,7 @@ describe('issue-218:guts:keep', () => {
     TestBed.configureTestingModule(ngMocks.guts([TargetComponent, TargetPipe], TargetModule)).compileComponents()
   );
 
-  it('renders how we mocked it', () => {
+  it('renders how we replaced it with a mock copy', () => {
     const fixture = MockRender(TargetComponent, {
       value: 'test',
     });

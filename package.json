@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "10.5.2",
-  "description": "A library mocking angular components, directives, pipes, services, providers and modules in unit tests, which also includes shallow rendering and precise stubs to dump child dependencies.",
+  "description": "A library creating angular mock components, directives, pipes, services, providers and modules in unit tests, which also includes shallow rendering and precise stubs to dump child dependencies.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -80,8 +80,6 @@
   "keywords": [
     "angular unit tests",
     "angular testing",
-    "angular test example",
-    "mocking TestBed how to",
     "mock component",
     "mock directive",
     "mock pipe",
@@ -89,10 +87,12 @@
     "mock service",
     "shallow render",
     "shallow rendering",
+    "an angular test example",
+    "mocking TestBed how to",
     "stub child dependency",
     "stubbing",
     "dumb",
-    "dummy"
+    "create mock dummy child copies"
   ],
   "author": {
     "name": "Isaac Datlof",

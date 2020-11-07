@@ -341,7 +341,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips existing mocked module', () => {
+  it('skips an existing mock module', () => {
     const ngModule = ngMocks.guts(null, [Target1Module, Target1CopyModule]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
@@ -359,7 +359,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked module', () => {
+  it('skips the 2nd mock module', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target1CopyModule]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
@@ -368,7 +368,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd nested mocked module', () => {
+  it('skips the 2nd nested mock module', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target3Module]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
@@ -394,7 +394,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked module with providers', () => {
+  it('skips the 2nd mock module with providers', () => {
     const ngModule = ngMocks.guts(TARGET1, [
       {
         ngModule: Target1Module,
@@ -419,7 +419,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked component', () => {
+  it('skips the 2nd mock component', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Component, Target1Component]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
@@ -435,7 +435,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked directive', () => {
+  it('skips the 2nd mock directive', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Directive, Target1Directive]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
@@ -451,7 +451,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked pipe', () => {
+  it('skips the 2nd mock pipe', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Pipe, Target1Pipe]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
@@ -467,7 +467,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked service', () => {
+  it('skips the 2nd mock service', () => {
     const ngModule = ngMocks.guts(TARGET1, [Target1Service, Target1Service]);
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
@@ -503,7 +503,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked token', () => {
+  it('skips the 2nd mock token', () => {
     const ngModule = ngMocks.guts(TARGET2, [
       {
         provide: TARGET1,
@@ -527,7 +527,7 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('skips 2nd mocked multi token', () => {
+  it('skips the 2nd mock multi token', () => {
     const ngModule = ngMocks.guts(TARGET2, [
       {
         multi: true,
@@ -552,7 +552,7 @@ describe('mock-helper.guts', () => {
     );
   });
 
-  it('excludes 2nd mocked kept module', () => {
+  it('excludes the 2nd mock kept module', () => {
     const ngModule = ngMocks.guts(null, [Target1Module, Target3Module]);
     expect(ngModule).toEqual(
       jasmine.objectContaining({
@@ -589,7 +589,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked providers', () => {
+  it('excludes mock providers', () => {
     const ngModule = ngMocks.guts(null, Target1Service, Target1Service);
     expect(ngModule).toEqual({
       declarations: [],
@@ -598,7 +598,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked module with providers', () => {
+  it('excludes mock module with providers', () => {
     const ngModule = ngMocks.guts(null, { ngModule: Target1Module, providers: [] }, Target1Module);
     expect(ngModule).toEqual({
       declarations: [],
@@ -607,7 +607,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes nested mocked module', () => {
+  it('excludes nested mock module', () => {
     const ngModule = ngMocks.guts(null, Target3Module, Target2Module);
     expect(ngModule).toEqual({
       declarations: [],
@@ -625,7 +625,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked module', () => {
+  it('excludes mock module', () => {
     const ngModule = ngMocks.guts(null, Target2Module, Target2Module);
     expect(ngModule).toEqual({
       declarations: [],
@@ -634,7 +634,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked component', () => {
+  it('excludes mock component', () => {
     const ngModule = ngMocks.guts(null, Target1Component, Target1Component);
     expect(ngModule).toEqual({
       declarations: [],
@@ -643,7 +643,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked directive', () => {
+  it('excludes mock directive', () => {
     const ngModule = ngMocks.guts(null, Target1Directive, Target1Directive);
     expect(ngModule).toEqual({
       declarations: [],
@@ -652,7 +652,7 @@ describe('mock-helper.guts', () => {
     });
   });
 
-  it('excludes mocked pipe', () => {
+  it('excludes mock pipe', () => {
     const ngModule = ngMocks.guts(null, Target1Pipe, Target1Pipe);
     expect(ngModule).toEqual({
       declarations: [],

@@ -69,9 +69,9 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   let inputs: string[] | undefined = [];
   let outputs: string[] | undefined = [];
   let selector: string | undefined = '';
-  let mockedTemplate = '';
+  let mockTemplate = '';
   if (typeof template === 'string') {
-    mockedTemplate = template;
+    mockTemplate = template;
   } else {
     let meta: core.Directive;
     try {
@@ -85,19 +85,19 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
     outputs = meta.outputs;
     selector = meta.selector;
 
-    mockedTemplate += selector ? `<${selector}` : '';
+    mockTemplate += selector ? `<${selector}` : '';
     if (selector && inputs) {
       inputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
         if (alias && params && typeof params[alias]) {
-          mockedTemplate += ` [${alias}]="${alias}"`;
+          mockTemplate += ` [${alias}]="${alias}"`;
         } else if (property && params && typeof params[property]) {
-          mockedTemplate += ` [${property}]="${property}"`;
+          mockTemplate += ` [${property}]="${property}"`;
         } else if (alias && noParams) {
-          mockedTemplate += ` [${alias}]="${property}"`;
+          mockTemplate += ` [${alias}]="${property}"`;
         } else if (noParams) {
-          mockedTemplate += ` [${property}]="${property}"`;
+          mockTemplate += ` [${property}]="${property}"`;
         }
       });
     }
@@ -106,22 +106,22 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
         if (alias && params && typeof params[alias]) {
-          mockedTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
+          mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
         } else if (property && params && typeof params[property]) {
-          mockedTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
+          mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
         } else if (alias && noParams) {
-          mockedTemplate += ` (${alias})="${property}.emit($event)"`;
+          mockTemplate += ` (${alias})="${property}.emit($event)"`;
         } else if (noParams) {
-          mockedTemplate += ` (${property})="${property}.emit($event)"`;
+          mockTemplate += ` (${property})="${property}.emit($event)"`;
         }
       });
     }
-    mockedTemplate += selector ? `></${selector}>` : '';
+    mockTemplate += selector ? `></${selector}>` : '';
   }
   const options: Component = {
     providers: flagsObject.providers,
     selector: 'mock-render',
-    template: mockedTemplate,
+    template: mockTemplate,
   };
 
   const component = Component(options)(

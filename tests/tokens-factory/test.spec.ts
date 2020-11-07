@@ -25,7 +25,7 @@ describe('tokens-factory', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
   // Yes, it is tricky, but we do not have much to do here.
-  // If a factory returns something else - it should be mocked manually
+  // If a factory returns something else - it should be replaced with a mock copy manually
   // with a proper value.
   it('mocks TOKEN_FACTORY as an empty object', () => {
     const actual1 = TestBed.get(TOKEN_FACTORY1);

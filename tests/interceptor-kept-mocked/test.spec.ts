@@ -64,7 +64,7 @@ class TargetModule {}
 
 // The idea is to check that a multi token does not break logic to
 // much due to missed observables.
-describe('interceptor-kept-mocked', () => {
+describe('interceptor-kept-mock', () => {
   beforeEach(() =>
     MockBuilder(Target1Interceptor, TargetModule)
       .keep(HTTP_INTERCEPTORS)

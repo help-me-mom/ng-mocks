@@ -6,12 +6,12 @@ import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
 
 import { MockPipe, MockPipes } from './mock-pipe';
 
-@Pipe({ name: 'mockedPipe' })
+@Pipe({ name: 'mockPipe' })
 export class ExamplePipe implements PipeTransform {
   transform = (args: string): string => 'hi';
 }
 
-@Pipe({ name: 'anotherMockedPipe' })
+@Pipe({ name: 'anotherMockPipe' })
 export class AnotherExamplePipe implements PipeTransform {
   transform = (args: string): string => 'hi';
 }
@@ -19,8 +19,8 @@ export class AnotherExamplePipe implements PipeTransform {
 @Component({
   selector: 'example-component',
   template: `
-    <span id="examplePipe">{{ someStuff | mockedPipe: 'foo' }}</span>
-    <span id="anotherExamplePipe">{{ someStuff | anotherMockedPipe: 'fighters' }}</span>
+    <span id="examplePipe">{{ someStuff | mockPipe: 'foo' }}</span>
+    <span id="anotherExamplePipe">{{ someStuff | anotherMockPipe: 'fighters' }}</span>
   `,
 })
 export class ExampleComponent {
@@ -55,7 +55,7 @@ describe('MockPipe', () => {
       fixture.detectChanges();
     });
 
-    it('should not display the word hi that is output by the unmocked pipe, because it is now mocked', () => {
+    it('should not display the word hi that is printed by the pipe, because it is replaced with its mock copy', () => {
       expect(fixture.debugElement.query(By.css('#anotherExamplePipe')).nativeElement.innerHTML).toEqual('');
     });
 

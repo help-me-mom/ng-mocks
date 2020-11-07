@@ -17,7 +17,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-// A dummy service we are going to mock and to use for assertions.
+// A dummy service we are going to replace with its mock copy and to use for assertions.
 @Injectable()
 class TargetService {
   protected called = false;

@@ -26,7 +26,7 @@ describe('issue-151', () => {
     });
 
     it('should create the app', () => {
-      // asserting that app-hello is mocked (no content) and detected by router.
+      // asserting that app-hello is replaced with a mock copy (no content) and detected by router.
       expect(fixture.nativeElement.innerHTML).toContain('<app-hello></app-hello>');
     });
   });

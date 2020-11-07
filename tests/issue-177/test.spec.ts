@@ -26,20 +26,20 @@ class Example {
 
 describe('issue-177', () => {
   it('should mock get/set properties and methods', () => {
-    const mockedExample = MockService(Example);
+    const mockExample = MockService(Example);
 
     // Properties
-    expect(mockedExample.hardCodedGet).toBeUndefined();
-    expect(mockedExample.dynamicGet).toBeUndefined();
-    mockedExample['_dynamicGet'] = 'value set in test to _dynamicGet';
-    expect(mockedExample.dynamicGet).toBeUndefined();
-    (mockedExample as any).dynamicGet = 'test';
-    expect(mockedExample.dynamicGet).toBe('test');
+    expect(mockExample.hardCodedGet).toBeUndefined();
+    expect(mockExample.dynamicGet).toBeUndefined();
+    mockExample['_dynamicGet'] = 'value set in test to _dynamicGet';
+    expect(mockExample.dynamicGet).toBeUndefined();
+    (mockExample as any).dynamicGet = 'test';
+    expect(mockExample.dynamicGet).toBe('test');
 
     // Methods
-    expect(mockedExample.hardCodedMethod()).toBeUndefined();
-    expect(mockedExample.dynamicMethod()).toBeUndefined();
-    mockedExample['_dynamicMethod'] = 'value set in test to _dynamicMethod';
-    expect(mockedExample.dynamicMethod()).toBeUndefined();
+    expect(mockExample.hardCodedMethod()).toBeUndefined();
+    expect(mockExample.dynamicMethod()).toBeUndefined();
+    mockExample['_dynamicMethod'] = 'value set in test to _dynamicMethod';
+    expect(mockExample.dynamicMethod()).toBeUndefined();
   });
 });

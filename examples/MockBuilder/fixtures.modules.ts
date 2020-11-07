@@ -3,66 +3,66 @@ import { NgModule } from '@angular/core';
 
 import {
   ComponentContentChild,
-  ComponentWeDontWantToMock,
-  ComponentWeWantToMock,
+  ComponentWeDontWantToMimic,
+  ComponentWeWantToMimic,
   MyComponent,
   MyComponent1,
   MyComponent2,
   MyComponent3,
 } from './fixtures.components';
-import { DirectiveWeDontWantToMock, DirectiveWeWantToMock, MyDirective } from './fixtures.directives';
+import { DirectiveWeDontWantToMimic, DirectiveWeWantToMimic, MyDirective } from './fixtures.directives';
 import {
   MyPipe,
-  PipeWeDontWantToMock,
+  PipeWeDontWantToMimicPipe,
   PipeWeWantToCustomize,
-  PipeWeWantToMock,
+  PipeWeWantToMimicPipe,
   PipeWeWantToRestore,
 } from './fixtures.pipes';
 import {
   MyService1,
   MyService2,
-  ServiceWeDontWantToMock,
+  ServiceWeDontWantToMimic,
   ServiceWeWantToCustomize,
-  ServiceWeWantToMock,
+  ServiceWeWantToMimic,
 } from './fixtures.services';
 import {
-  INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
-  INJECTION_TOKEN_WE_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
-    ComponentWeDontWantToMock,
-    ComponentWeWantToMock,
-    DirectiveWeDontWantToMock,
-    DirectiveWeWantToMock,
-    PipeWeDontWantToMock,
-    PipeWeWantToMock,
+    ComponentWeDontWantToMimic,
+    ComponentWeWantToMimic,
+    DirectiveWeDontWantToMimic,
+    DirectiveWeWantToMimic,
+    PipeWeDontWantToMimicPipe,
+    PipeWeWantToMimicPipe,
     PipeWeWantToCustomize,
     PipeWeWantToRestore,
   ],
   exports: [
-    ComponentWeDontWantToMock,
-    ComponentWeWantToMock,
-    DirectiveWeDontWantToMock,
-    DirectiveWeWantToMock,
-    PipeWeDontWantToMock,
-    PipeWeWantToMock,
+    ComponentWeDontWantToMimic,
+    ComponentWeWantToMimic,
+    DirectiveWeDontWantToMimic,
+    DirectiveWeWantToMimic,
+    PipeWeDontWantToMimicPipe,
+    PipeWeWantToMimicPipe,
     PipeWeWantToCustomize,
     PipeWeWantToRestore,
   ],
   providers: [
-    ServiceWeDontWantToMock,
-    ServiceWeWantToMock,
+    ServiceWeDontWantToMimic,
+    ServiceWeWantToMimic,
     {
-      provide: INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK,
-      useValue: 'INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK',
+      provide: INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,
+      useValue: 'INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC',
     },
     {
-      provide: INJECTION_TOKEN_WE_WANT_TO_MOCK,
-      useValue: 'INJECTION_TOKEN_WE_WANT_TO_MOCK',
+      provide: INJECTION_TOKEN_WE_WANT_TO_MIMIC,
+      useValue: 'INJECTION_TOKEN_WE_WANT_TO_MIMIC',
     },
     {
       provide: INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
@@ -70,19 +70,19 @@ import { CommonModule } from '@angular/common';
     },
   ],
 })
-export class ModuleWeWantToMockBesidesMyModule {}
+export class ModuleWeWantToMimicBesidesMyModule {}
 
 @NgModule({
   declarations: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
   exports: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
   imports: [CommonModule],
 })
-export class ModuleWeDontWantToMock {}
+export class ModuleWeDontWantToMimic {}
 
 @NgModule({
   declarations: [MyComponent, MyDirective, MyPipe],
   exports: [MyComponent, MyDirective, MyPipe],
-  imports: [HttpClientModule, ModuleWeWantToMockBesidesMyModule, ModuleWeDontWantToMock],
+  imports: [HttpClientModule, ModuleWeWantToMimicBesidesMyModule, ModuleWeDontWantToMimic],
   providers: [MyService1, MyService2, ServiceWeWantToCustomize],
 })
 export class MyModule {}

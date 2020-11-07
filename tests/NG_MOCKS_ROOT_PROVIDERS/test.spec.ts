@@ -88,7 +88,7 @@ describe('NG_MOCKS_ROOT_PROVIDERS', () => {
     });
   });
 
-  describe('default for a mocked module', () => {
+  describe('default for a mock module', () => {
     beforeEach(() => MockBuilder(Target1Component, CombinedModule));
 
     it('mocks its global service', () => {
@@ -100,7 +100,7 @@ describe('NG_MOCKS_ROOT_PROVIDERS', () => {
   describe('keep the token', () => {
     beforeEach(() => MockBuilder(Target1Component, CombinedModule).keep(NG_MOCKS_ROOT_PROVIDERS));
 
-    it('keeps global service for a mocked module', () => {
+    it('keeps global service for a mock module', () => {
       const fixture = MockRender(Target1Component);
       expect(fixture.nativeElement.innerHTML).toEqual('<target-1>target-1</target-1>');
     });

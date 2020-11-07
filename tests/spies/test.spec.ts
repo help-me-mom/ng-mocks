@@ -58,7 +58,7 @@ describe('spies:manual-mock', () => {
     return MockBuilder(TargetComponent, TargetModule).mock(TargetService, spy);
   });
 
-  it('should get manually mocked service', inject([TargetService], (targetService: TargetService) => {
+  it('should get manually mock service', inject([TargetService], (targetService: TargetService) => {
     expect((targetService as any).manual).toBe(true);
     const fixture = MockRender(TargetComponent);
     const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
@@ -73,7 +73,7 @@ describe('spies:manual-mock', () => {
 describe('spies:auto-mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('should get already mocked service', () => {
+  it('should get an existing mock service', () => {
     const fixture = MockRender(TargetComponent);
     const targetService = fixture.point.injector.get(TargetService);
     const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;

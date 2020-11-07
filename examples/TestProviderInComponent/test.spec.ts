@@ -25,11 +25,11 @@ describe('TestProviderInComponent', () => {
   // Because we want to test the service, we pass it as the first
   // parameter of MockBuilder.
   // Because we do not care about TargetComponent, we pass it as
-  // the second parameter for being mocked.
+  // the second parameter for being replaced with a mock copy.
   beforeEach(() => MockBuilder(TargetService, TargetComponent));
 
   it('has access to the service via a component', () => {
-    // Let's render the mocked component. It provides a point
+    // Let's render the mock component. It provides a point
     // to access the service.
     const fixture = MockRender(TargetComponent);
 

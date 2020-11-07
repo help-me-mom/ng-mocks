@@ -9,7 +9,7 @@ describe('DebuggableMock', () => {
     expect(Mock.name).toBe('MockOfFoo');
   });
 
-  it('adds a mockOf property that is the class being mocked', () => {
+  it('adds a mockOf property that is the class being replaced with a mock copy', () => {
     class Bar {}
     @MockOf(Bar)
     class Mock {}

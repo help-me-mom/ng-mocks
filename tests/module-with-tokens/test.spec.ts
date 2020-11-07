@@ -31,7 +31,7 @@ describe('module-with-tokens:mock-0', () => {
   });
 });
 
-// Because all tokens are mocked in the module the test should render empty values.
+// Because all tokens are replaced with mock copies in the module the test should render empty values.
 // interesting is that for multi it's null, not undefined.
 describe('module-with-tokens:mock-1', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(MY_TOKEN_SINGLE).mock(MY_TOKEN_MULTI));
@@ -44,18 +44,18 @@ describe('module-with-tokens:mock-1', () => {
   });
 });
 
-// Because all tokens are mocked in the module with custom values the test should render them.
+// Because all tokens are replaced with mock copies in the module with custom values the test should render them.
 describe('module-with-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
-      .mock(MY_TOKEN_SINGLE, 'MOCKED_MY_TOKEN_SINGLE')
-      .mock(MY_TOKEN_MULTI, 'MOCKED_MY_TOKEN_MULTI')
+      .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE')
+      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI')
   );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MOCKED_MY_TOKEN_SINGLE" [ "MOCKED_MY_TOKEN_MULTI", "MOCKED_MY_TOKEN_MULTI" ]</internal-component>'
+      '<internal-component>"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]</internal-component>'
     );
   });
 });
@@ -72,13 +72,13 @@ describe('module-with-tokens:mock-3', () => {
     expect(() => MockRender(TargetComponent)).not.toThrowError(/InjectionToken/);
   });
 
-  it('renders mocked tokens with respect of multi flag', () => {
+  it('renders mock tokens with respect of multi flag', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('[]');
   });
 });
 
-//There is a sequential failure, real and keep should be after mocked versions.
+//There is a sequential failure, real and keep should be after mock versions.
 
 // Because all tokens are provided in the module the test should render them correctly.
 describe('module-with-tokens:real', () => {

@@ -24,8 +24,8 @@ class AppComponent {
   @Output() public logoClick = new EventEmitter<void>();
 }
 
-// A dependency component that we want to mock with a respect
-// of its inputs, outputs and ContentChild.
+// A dependency component out of which we want to create a mock
+// component with a respect of its inputs, outputs and ContentChild.
 @Component({
   selector: 'app-header',
   template: `
@@ -66,19 +66,20 @@ describe('MAIN', () => {
   //   fixture.detectChanges();
   // });
   // But, usually, instead of AppHeaderComponent we want to have
-  // a mocked copy.
+  // a mock copy.
 
   // With ngMocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
-    // everything in AppModule will be mocked.
+    // everything in AppModule will be replaced with their mock copies.
     return (
       MockBuilder(AppComponent, AppModule)
-        // Adding a special config how to mock AppHeaderComponent.
+        // Adding a special config how to how to create
+        // a mock AppHeaderComponent.
         .mock(AppHeaderComponent, {
           render: {
             // #menu template will be rendered simultaneously
-            // with mocked AppHeaderComponent.
+            // with the mock AppHeaderComponent.
             menu: true,
           },
         })
@@ -90,7 +91,7 @@ describe('MAIN', () => {
     //     MockModule(RouterModule.forRoot([])),
     //   ],
     //   declarations: [
-    //     AppComponent, // <- not mocked
+    //     AppComponent, // <- keeping it as it is.
     //     MockComponent(AppHeaderComponent),
     //   ],
     // });
@@ -98,7 +99,7 @@ describe('MAIN', () => {
     //
     // of if we used ngMocks.guts
     // TestBed.configureTestingModule(ngMocks.guts(
-    //   AppComponent, // <- not mocked
+    //   AppComponent, // <- keeping it as it is.
     //   AppModule,
     // ));
     // return testBed.compileComponents();

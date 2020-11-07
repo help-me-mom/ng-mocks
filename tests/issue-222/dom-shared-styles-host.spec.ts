@@ -48,10 +48,10 @@ class TargetModule {}
 describe('issue-222:DomSharedStylesHost:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('correctly handles DomSharedStylesHost in a mocked module', () => {
+  it('correctly handles DomSharedStylesHost in a mock module', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('The box is now Open!');
-    // Animations are mocked, therefore no styles.
+    // Animations are replaced with a mock copy, therefore no styles.
     expect(fixture.nativeElement.innerHTML).not.toContain('yellow');
   });
 });
@@ -70,10 +70,10 @@ describe('issue-222:DomSharedStylesHost:keep', () => {
 describe('issue-222:DomSharedStylesHost:guts', () => {
   beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)).compileComponents());
 
-  it('correctly handles DomSharedStylesHost in a mocked module', () => {
+  it('correctly handles DomSharedStylesHost in a mock module', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('The box is now Open!');
-    // Animations are mocked, therefore no styles.
+    // Animations are replaced with a mock copy, therefore no styles.
     expect(fixture.nativeElement.innerHTML).not.toContain('yellow');
   });
 });

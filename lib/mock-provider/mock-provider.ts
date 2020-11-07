@@ -36,7 +36,7 @@ export function MockProvider(provide: any, useValue: any = defaultValue): Provid
     };
   }
 
-  let mockedProvider:
+  let mockProvider:
     | ValueProvider
     | ClassProvider
     | ConstructorProvider
@@ -44,14 +44,14 @@ export function MockProvider(provide: any, useValue: any = defaultValue): Provid
     | FactoryProvider
     | undefined;
 
-  if (!mockedProvider && typeof provide === 'function') {
-    mockedProvider = useFactory(provide, () => MockService(provide));
+  if (!mockProvider && typeof provide === 'function') {
+    mockProvider = useFactory(provide, () => MockService(provide));
   } else {
-    mockedProvider = {
+    mockProvider = {
       provide,
       useValue: undefined,
     };
   }
 
-  return mockedProvider;
+  return mockProvider;
 }

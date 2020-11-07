@@ -50,7 +50,7 @@ describe('control-value-accessor-form-control:real', () => {
   });
 });
 
-// a way that ensures that a mocked component behaves the same way as real one.
+// a way that ensures that a mock component behaves the same way as real one.
 describe('control-value-accessor-form-control:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(ReactiveFormsModule));
 

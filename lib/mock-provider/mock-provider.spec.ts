@@ -32,7 +32,7 @@ describe('mock-provider', () => {
     expect(instance.name).toBeUndefined();
   });
 
-  it('returns an array of mocked providers', () => {
+  it('returns an array of mock providers', () => {
     const actual = MockProviders(TARGET_TOKEN, TargetService);
     expect(actual.length).toEqual(2);
     expect(actual[0]).toEqual({

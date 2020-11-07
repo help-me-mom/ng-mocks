@@ -21,9 +21,9 @@ class TestedComponent {
   trigger = () => {};
 }
 
-describe('MockDirective', () => {
+describe('MockDirective:Structural', () => {
   // IMPORTANT: by default structural directives are not rendered.
-  // Because they might require context which should be provided.
+  // Because they might require a context which should be provided.
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() =>
@@ -40,9 +40,9 @@ describe('MockDirective', () => {
     expect(fixture.debugElement.nativeElement.innerHTML).not.toContain('>content<');
 
     // And let's render it manually now.
-    const mockedDirective = ngMocks.findInstance(fixture.debugElement, DependencyDirective);
-    if (isMockOf(mockedDirective, DependencyDirective, 'd')) {
-      mockedDirective.__render();
+    const mockDirective = ngMocks.findInstance(fixture.debugElement, DependencyDirective);
+    if (isMockOf(mockDirective, DependencyDirective, 'd')) {
+      mockDirective.__render();
       fixture.detectChanges();
     }
 

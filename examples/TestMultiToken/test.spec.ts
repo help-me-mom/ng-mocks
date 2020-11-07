@@ -58,7 +58,7 @@ describe('TestMultiToken', () => {
     expect(tokens[0].name).toEqual('class');
 
     // Verifying that the token is an instance of ServiceExisting.
-    // But because it has been mocked we should see an empty name.
+    // But because it has been replaced with its mock copy we should see an empty name.
     expect(tokens[1]).toEqual(jasmine.any(ServiceExisting));
     expect(tokens[1].name).toBeUndefined();
 

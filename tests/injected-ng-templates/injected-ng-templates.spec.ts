@@ -29,7 +29,7 @@ describe('injected-ng-templates:real', () => {
 describe('structural-directive-as-ng-for:mock', () => {
   beforeEach(() => MockBuilder().mock(CustomInjectionComponent));
 
-  it('renders mocked component with injected template properly', () => {
+  it('renders a mock component with injected template properly', () => {
     // do not remove, it checks casts from MockDebugElement to DebugElement.
     let block: undefined | DebugElement;
 
@@ -51,11 +51,10 @@ describe('structural-directive-as-ng-for:mock', () => {
     block = ngMocks.find(fixture.debugElement, '[data-key="block"]', undefined);
     expect(block).toBeUndefined();
 
-    const mockedComponent = ngMocks.find(fixture.debugElement, MockComponent(CustomInjectionComponent))
-      .componentInstance;
+    const mockComponent = ngMocks.find(fixture.debugElement, MockComponent(CustomInjectionComponent)).componentInstance;
 
     // Now we want to render @ContentChild('block') with some context.
-    mockedComponent.__render('block', 'string1', {
+    mockComponent.__render('block', 'string1', {
       test: 'test1',
     });
     fixture.detectChanges();
@@ -63,7 +62,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     expect(block.nativeElement.innerHTML).toContain('<div>string0 string1 test1</div>');
 
     // Now we want to render @ContentChild('block') with another context.
-    mockedComponent.__render('block', 'string2', {
+    mockComponent.__render('block', 'string2', {
       test: 'test2',
     });
     fixture.detectChanges();

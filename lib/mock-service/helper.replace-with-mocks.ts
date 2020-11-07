@@ -9,38 +9,38 @@ const replaceWithMocks = (value: any): any => {
     return value;
   }
 
-  let mocked: any;
+  let mock: any;
   let updated = false;
 
   if (Array.isArray(value)) {
-    mocked = [];
+    mock = [];
     for (const valueItem of value) {
       if (ngMocksUniverse.builder.has(valueItem) && ngMocksUniverse.builder.get(valueItem) === null) {
         updated = updated || true;
         continue;
       }
-      mocked.push(replaceWithMocks(valueItem));
-      updated = updated || mocked[mocked.length - 1] !== valueItem;
+      mock.push(replaceWithMocks(valueItem));
+      updated = updated || mock[mock.length - 1] !== valueItem;
     }
   } else if (value) {
-    mocked = {};
+    mock = {};
     for (const key of Object.keys(value)) {
       if (ngMocksUniverse.builder.has(value[key]) && ngMocksUniverse.builder.get(value[key]) === null) {
         updated = updated || true;
         continue;
       }
-      mocked[key] = replaceWithMocks(value[key]);
-      updated = updated || mocked[key] !== value[key];
+      mock[key] = replaceWithMocks(value[key]);
+      updated = updated || mock[key] !== value[key];
     }
 
     // Removal of guards.
     for (const section of ['canActivate', 'canActivateChild', 'canDeactivate', 'canLoad']) {
-      if (!Array.isArray(mocked[section])) {
+      if (!Array.isArray(mock[section])) {
         continue;
       }
 
       const guards: any[] = [];
-      for (const guard of mocked[section]) {
+      for (const guard of mock[section]) {
         if (ngMocksUniverse.builder.has(guard) && ngMocksUniverse.builder.get(guard) !== null) {
           guards.push(guard);
           continue;
@@ -50,10 +50,10 @@ const replaceWithMocks = (value: any): any => {
         }
         guards.push(guard);
       }
-      if (mocked[section].length !== guards.length) {
+      if (mock[section].length !== guards.length) {
         updated = updated || true;
-        mocked = {
-          ...mocked,
+        mock = {
+          ...mock,
           [section]: guards,
         };
       }
@@ -61,8 +61,8 @@ const replaceWithMocks = (value: any): any => {
   }
 
   if (updated) {
-    Object.setPrototypeOf(mocked, Object.getPrototypeOf(value));
-    return mocked;
+    Object.setPrototypeOf(mock, Object.getPrototypeOf(value));
+    return mock;
   }
   return value;
 };

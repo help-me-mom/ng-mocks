@@ -31,14 +31,14 @@ class TargetInterceptor implements HttpInterceptor {
 
 // An interceptor we want to ignore.
 @Injectable()
-class MockedInterceptor implements HttpInterceptor {
+class MockInterceptor implements HttpInterceptor {
   protected value = 'Ignore';
 
   public intercept(request: HttpRequest<void>, next: HttpHandler): Observable<HttpEvent<void>> {
     return next.handle(
       request.clone({
         setHeaders: {
-          'My-Mocked': this.value,
+          'My-Mock': this.value,
         },
       })
     );
@@ -50,7 +50,7 @@ class MockedInterceptor implements HttpInterceptor {
   imports: [HttpClientModule],
   providers: [
     TargetInterceptor,
-    MockedInterceptor,
+    MockInterceptor,
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
@@ -59,7 +59,7 @@ class MockedInterceptor implements HttpInterceptor {
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
-      useClass: MockedInterceptor,
+      useClass: MockInterceptor,
     },
   ],
 })
@@ -69,8 +69,8 @@ describe('TestHttpInterceptor', () => {
   // Because we want to test the interceptor, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its dependencies
   // we need to pass its module as the second parameter. Also we
-  // should mocking HTTP_INTERCEPTORS and replace HttpClientModule
-  // with HttpClientTestingModule.
+  // should to pass HTTP_INTERCEPTORS into `.mock` and replace
+  // HttpClientModule with HttpClientTestingModule.
   beforeEach(() =>
     MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)

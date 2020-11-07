@@ -54,7 +54,7 @@ export function MockComponent<TComponent>(
   metaData?: core.Directive
 ): Type<MockedComponent<TComponent>> {
   // we are inside of an 'it'.
-  // It's fine to to return a mock or to throw an exception if it wasn't mocked in TestBed.
+  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(component, 'c');
@@ -90,7 +90,7 @@ export function MockComponent<TComponent>(
           return ''; // ignoring all internal @ViewChild.
         }
         if (typeof query.selector !== 'string') {
-          return ''; // in case of mocked component, Type based selector doesn't work properly anyway.
+          return ''; // in case of a mock component, Type based selector doesn't work properly anyway.
         }
         viewChildRefs.set(query.selector, key);
         queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {

@@ -19,8 +19,8 @@ export class MyService2 {
 }
 
 @Injectable()
-export class ServiceWeDontWantToMock {
-  protected value = 'ServiceWeDontWantToMock';
+export class ServiceWeDontWantToMimic {
+  protected value = 'ServiceWeDontWantToMimic';
 
   public getName() {
     return this.value;
@@ -28,8 +28,8 @@ export class ServiceWeDontWantToMock {
 }
 
 @Injectable()
-export class ServiceWeWantToMock {
-  protected value = 'ServiceWeWantToMock';
+export class ServiceWeWantToMimic {
+  protected value = 'ServiceWeWantToMimic';
 
   public getName() {
     return this.value;

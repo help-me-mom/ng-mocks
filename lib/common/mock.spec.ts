@@ -113,8 +113,8 @@ describe('Mock', () => {
     expect(instance).toEqual(jasmine.any(ChildModuleClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
     expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
-    expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
-    expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
+    expect(instance.parentMethod()).toBeUndefined('mock to an empty function');
+    expect(instance.childMethod()).toBeUndefined('mock to an empty function');
   });
 
   it('should affect as MockComponent', () => {
@@ -128,8 +128,8 @@ describe('Mock', () => {
     instance.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
-    expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
-    expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
+    expect(instance.parentMethod()).toBeUndefined();
+    expect(instance.childMethod()).toBeUndefined();
   });
 
   it('should affect as MockDirective', () => {
@@ -143,8 +143,8 @@ describe('Mock', () => {
     instance.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
-    expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
-    expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
+    expect(instance.parentMethod()).toBeUndefined();
+    expect(instance.childMethod()).toBeUndefined();
   });
 
   it('should affect as MockPipe', () => {
@@ -152,8 +152,8 @@ describe('Mock', () => {
     expect(instance).toEqual(jasmine.any(ChildPipeClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
     expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
-    expect(instance.parentMethod()).toBeUndefined('mocked to an empty function');
-    expect(instance.childMethod()).toBeUndefined('mocked to an empty function');
+    expect(instance.parentMethod()).toBeUndefined();
+    expect(instance.childMethod()).toBeUndefined();
   });
 });
 
@@ -190,7 +190,7 @@ describe('Mock prototype', () => {
     public writeValue(obj: any): void {}
   }
 
-  it('should get all things mocked and in the same time respect prototype', () => {
+  it('should get all mock things and in the same time respect prototype', () => {
     const mockDef = MockComponent(CustomComponent);
     const mock = new mockDef();
     expect(mock).toEqual(jasmine.any(CustomComponent));
@@ -205,17 +205,17 @@ describe('Mock prototype', () => {
     mock.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
-    // properties are mocked too
+    // properties are replaced with their mock coplies too
     expect(mock.test1).toBeUndefined();
     (mock as any).test1 = 'MyCustomValue';
     expect(mock.test1).toEqual('MyCustomValue');
 
-    // properties are mocked too
+    // properties are replaced with their mock coplies too
     expect(mock.test2).toBeUndefined();
     (mock as any).test2 = 'MyCustomValue';
     expect(mock.test2).toEqual('MyCustomValue');
 
-    // properties are mocked too
+    // properties are replaced with their mock coplies too
     expect(mock.test).toBeUndefined();
     (mock as any).test = 'MyCustomValue';
     expect(mock.test).toEqual('MyCustomValue');

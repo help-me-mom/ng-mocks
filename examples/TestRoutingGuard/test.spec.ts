@@ -8,7 +8,7 @@ import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 // A simple service simulating login check.
-// It will be mocked.
+// It will be replaced with its mock copy.
 @Injectable()
 class LoginService {
   public isLoggedIn = false;
@@ -34,9 +34,10 @@ class LoginGuard implements CanActivate {
   }
 }
 
-// A side guard, when it has been mocked it blocks all routes, because `canActivate` returns undefined.
+// A side guard, when it has been replaced with its mock copy
+// it blocks all routes, because `canActivate` returns undefined.
 @Injectable()
-class MockedGuard implements CanActivate {
+class MockGuard implements CanActivate {
   protected readonly allow = true;
 
   canActivate(): boolean {
@@ -45,7 +46,7 @@ class MockedGuard implements CanActivate {
 }
 
 // A simple component pretending a login form.
-// It will be mocked.
+// It will be replaced with a mock copy.
 @Component({
   selector: 'login',
   template: 'login',
@@ -53,7 +54,7 @@ class MockedGuard implements CanActivate {
 class LoginComponent {}
 
 // A simple component pretending a protected dashboard.
-// It will be mocked.
+// It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
   template: 'dashboard',
@@ -67,12 +68,12 @@ class DashboardComponent {}
   imports: [
     RouterModule.forRoot([
       {
-        canActivate: [MockedGuard, 'canActivateToken'],
+        canActivate: [MockGuard, 'canActivateToken'],
         component: LoginComponent,
         path: 'login',
       },
       {
-        canActivate: [LoginGuard, MockedGuard, 'canActivateToken'],
+        canActivate: [LoginGuard, MockGuard, 'canActivateToken'],
         component: DashboardComponent,
         path: '**',
       },
@@ -81,7 +82,7 @@ class DashboardComponent {}
   providers: [
     LoginService,
     LoginGuard,
-    MockedGuard,
+    MockGuard,
     {
       provide: 'canActivateToken',
       useValue: () => true,

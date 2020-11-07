@@ -76,7 +76,7 @@ describe('replace-service-wherever:mock', () => {
   it('uses service everywhere', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('replacement');
-    // The module is mocked, its ctor does nothing.
+    // The module is replaced with a mock copy, its ctor does nothing.
     expect(fixture.nativeElement.innerHTML).not.toContain('called');
   });
 });

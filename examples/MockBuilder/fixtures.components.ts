@@ -10,14 +10,14 @@ import {
   MyCustomProvider3,
   MyService1,
   MyService2,
-  ServiceWeDontWantToMock,
+  ServiceWeDontWantToMimic,
   ServiceWeWantToCustomize,
-  ServiceWeWantToMock,
+  ServiceWeWantToMimic,
 } from './fixtures.services';
 import {
-  INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
-  INJECTION_TOKEN_WE_WANT_TO_MOCK,
+  INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
 
 @Component({
@@ -41,26 +41,26 @@ export class ComponentContentChild<T> {
     <div>MyComponent1: <component-1></component-1></div>
     <div>MyComponent2: <component-2></component-2></div>
     <div>MyComponent3: <component-3></component-3></div>
-    <div>ComponentWeDontWantToMock: <dont-want></dont-want></div>
-    <div>ComponentWeWantToMock: <do-want></do-want></div>
+    <div>ComponentWeDontWantToMimic: <dont-want></dont-want></div>
+    <div>ComponentWeWantToMimic: <do-want></do-want></div>
 
     <div>MyDirective: <MyDirective></MyDirective></div>
-    <div>DirectiveWeDontWantToMock: <WeDontWantToMock></WeDontWantToMock></div>
+    <div>DirectiveWeDontWantToMimic: <WeDontWantToMimic></WeDontWantToMimic></div>
     <div>
-      DirectiveWeWantToMock 1: <span *WeWantToMock="let z = a">render {{ z.b }}</span>
+      DirectiveWeWantToMimic 1: <span *WeWantToMimic="let z = a">render {{ z.b }}</span>
     </div>
     <div>
-      DirectiveWeWantToMock 2: <ng-template WeWantToMock let-z>render {{ z.a }}</ng-template>
+      DirectiveWeWantToMimic 2: <ng-template WeWantToMimic let-z>render {{ z.a }}</ng-template>
     </div>
 
     <div>MyPipe: {{ 'text' | MyPipe }}</div>
-    <div>PipeWeDontWantToMock: {{ 'text' | PipeWeDontWantToMock }}</div>
-    <div>PipeWeWantToMock: {{ 'text' | PipeWeWantToMock }}</div>
+    <div>PipeWeDontWantToMimic: {{ 'text' | PipeWeDontWantToMimic }}</div>
+    <div>PipeWeWantToMimic: {{ 'text' | PipeWeWantToMimic }}</div>
     <div>PipeWeWantToCustomize: {{ 'text' | PipeWeWantToCustomize }}</div>
     <div>PipeWeWantToRestore: {{ 'text' | PipeWeWantToRestore }}</div>
 
-    <div>INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK: {{ t1v }}</div>
-    <div>INJECTION_TOKEN_WE_WANT_TO_MOCK: {{ t2v }}</div>
+    <div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: {{ t1v }}</div>
+    <div>INJECTION_TOKEN_WE_WANT_TO_MIMIC: {{ t2v }}</div>
     <div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: {{ t3v }}</div>
 
     <div>anythingWeWant1: {{ anythingWeWant1?.getName() }}</div>
@@ -71,9 +71,9 @@ export class ComponentContentChild<T> {
 
     <div>myService1: {{ myService1?.getName() }}</div>
     <div>myService2: {{ myService2?.getName() }}</div>
-    <div>serviceWeDontWantToMock: {{ serviceWeDontWantToMock?.getName() }}</div>
+    <div>serviceWeDontWantToMimic: {{ serviceWeDontWantToMimic?.getName() }}</div>
     <div>serviceWeWantToCustomize: {{ serviceWeWantToCustomize?.getName() }}</div>
-    <div>serviceWeWantToMock: {{ serviceWeWantToMock?.getName() }}</div>
+    <div>serviceWeWantToMimic: {{ serviceWeWantToMimic?.getName() }}</div>
 
     <component-structural>
       <ng-template let-value let-b="a" #block>
@@ -90,16 +90,16 @@ export class MyComponent {
   public readonly myCustomProvider3: MyCustomProvider3;
   public readonly myService1: MyService1;
   public readonly myService2: MyService2;
-  public readonly serviceWeDontWantToMock: ServiceWeDontWantToMock;
+  public readonly serviceWeDontWantToMimic: ServiceWeDontWantToMimic;
   public readonly serviceWeWantToCustomize: ServiceWeWantToCustomize;
-  public readonly serviceWeWantToMock: ServiceWeWantToMock;
+  public readonly serviceWeWantToMimic: ServiceWeWantToMimic;
   public readonly t1v: string;
   public readonly t2v: string;
   public readonly t3v: string;
 
   constructor(
-    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MOCK) t1: string,
-    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MOCK) t2: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC) t1: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MIMIC) t2: string,
     @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE) t3: string,
     @Optional() anythingWeWant1: AnythingWeWant1,
     @Optional() anythingWeWant2: AnythingWeWant2,
@@ -108,8 +108,8 @@ export class MyComponent {
     @Optional() myCustomProvider3: MyCustomProvider3,
     @Optional() myService1: MyService1,
     @Optional() myService2: MyService2,
-    @Optional() serviceWeDontWantToMock: ServiceWeDontWantToMock,
-    @Optional() serviceWeWantToMock: ServiceWeWantToMock,
+    @Optional() serviceWeDontWantToMimic: ServiceWeDontWantToMimic,
+    @Optional() serviceWeWantToMimic: ServiceWeWantToMimic,
     @Optional() serviceWeWantToCustomize: ServiceWeWantToCustomize
   ) {
     this.t1v = t1;
@@ -122,9 +122,9 @@ export class MyComponent {
     this.myCustomProvider3 = myCustomProvider3;
     this.myService1 = myService1;
     this.myService2 = myService2;
-    this.serviceWeDontWantToMock = serviceWeDontWantToMock;
+    this.serviceWeDontWantToMimic = serviceWeDontWantToMimic;
     this.serviceWeWantToCustomize = serviceWeWantToCustomize;
-    this.serviceWeWantToMock = serviceWeWantToMock;
+    this.serviceWeWantToMimic = serviceWeWantToMimic;
   }
 }
 
@@ -148,12 +148,12 @@ export class MyComponent3 {}
 
 @Component({
   selector: 'dont-want',
-  template: 'ComponentWeDontWantToMock',
+  template: 'ComponentWeDontWantToMimic',
 })
-export class ComponentWeDontWantToMock {}
+export class ComponentWeDontWantToMimic {}
 
 @Component({
   selector: 'do-want',
-  template: 'ComponentWeWantToMock',
+  template: 'ComponentWeWantToMimic',
 })
-export class ComponentWeWantToMock {}
+export class ComponentWeWantToMimic {}

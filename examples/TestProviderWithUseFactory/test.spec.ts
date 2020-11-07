@@ -38,7 +38,7 @@ describe('TestProviderWithUseFactory', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
+    // Let's customize a bit behavior of the mock copy of Service1.
     MockInstance(Service1, {
       init: instance => {
         instance.name = 'mock1';
@@ -49,7 +49,7 @@ describe('TestProviderWithUseFactory', () => {
   it('creates TargetService', () => {
     const service = TestBed.get(TargetService);
 
-    // Because Service1 has been mocked, we should get mock1 here.
+    // Because Service1 has been replaced with a mock copy, we should get mock1 here.
     expect(service.service.name).toEqual('mock1');
   });
 });

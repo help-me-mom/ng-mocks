@@ -41,7 +41,7 @@ describe('TestProviderWithUseExisting', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   beforeAll(() => {
-    // Let's customize a bit behavior of the mocked copy of Service1.
+    // Let's customize a bit behavior of the mock copy of Service1.
     MockInstance(Service2, {
       init: instance => {
         instance.name = 'mock2';
@@ -54,11 +54,11 @@ describe('TestProviderWithUseExisting', () => {
   it('creates TargetService', () => {
     const service = TestBed.get(TargetService);
 
-    // Because Service2 has been mocked, we are getting here a mocked
-    // copy of Service2 instead of Service1.
+    // Because Service2 has been replaced with a mock copy,
+    // we are getting here a mock copy of Service2 instead of Service1.
     expect(service).toEqual(jasmine.any(Service2));
     // Because we have kept TargetService we are getting here a
-    // mocked copy of Service2 as it says in useExisting.
+    // mock copy of Service2 as it says in useExisting.
     expect(service.name).toEqual('mock2');
   });
 });

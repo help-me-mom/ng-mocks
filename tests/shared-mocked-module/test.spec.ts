@@ -3,7 +3,7 @@ import { MockBuilder, MockComponent, MockRender, ngMocks } from 'ng-mocks';
 import { MyComponent, TargetComponent } from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
-describe('SharedMockedModule:real', () => {
+describe('SharedMockModule:real', () => {
   beforeEach(() => MockBuilder(TargetModule));
 
   it('should render', () => {
@@ -19,13 +19,13 @@ describe('SharedMockedModule:real', () => {
   });
 });
 
-describe('SharedMockedModule:mock', () => {
+describe('SharedMockModule:mock', () => {
   beforeEach(async done => {
     await MockBuilder(TargetComponent).keep(TargetModule).mock(MyComponent);
     done();
   });
 
-  // The expectation is to verify that only MyComponent was mocked, even it was deeply nested.
+  // The expectation is to verify that only MyComponent was replaced with a mock copy, even it was deeply nested.
   it('should render', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture).toBeDefined();

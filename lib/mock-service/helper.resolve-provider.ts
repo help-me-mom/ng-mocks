@@ -16,17 +16,17 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
     return def;
   }
 
-  let mockedDef: typeof def;
+  let mockDef: typeof def;
   if (resolutions.has(provider)) {
-    mockedDef = resolutions.get(provider);
+    mockDef = resolutions.get(provider);
     // A case when a provider is actually a component, directive, pipe.
-    if (typeof mockedDef === 'function') {
-      mockedDef = {
+    if (typeof mockDef === 'function') {
+      mockDef = {
         provide: provider,
-        useClass: mockedDef,
+        useClass: mockDef,
       };
     }
-    return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+    return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
   }
 
   //  we shouldn't touch excluded providers.
@@ -67,52 +67,52 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   // Then we check decisions whether we should keep or replace a def.
-  if (!mockedDef && ngMocksUniverse.builder.has(provider)) {
-    mockedDef = ngMocksUniverse.builder.get(provider);
-    if (mockedDef === provider) {
-      mockedDef = def;
-    } else if (mockedDef === undefined) {
-      mockedDef = {
+  if (!mockDef && ngMocksUniverse.builder.has(provider)) {
+    mockDef = ngMocksUniverse.builder.get(provider);
+    if (mockDef === provider) {
+      mockDef = def;
+    } else if (mockDef === undefined) {
+      mockDef = {
         provide: provider,
         useValue: undefined,
       };
     }
   }
 
-  if (!mockedDef && ngMocksUniverse.flags.has('skipMock')) {
+  if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.config.get('depsSkip')?.add(provider);
-    mockedDef = def;
+    mockDef = def;
   }
-  if (!mockedDef) {
-    mockedDef = MockProvider(def);
+  if (!mockDef) {
+    mockDef = MockProvider(def);
   }
-  // if provider is a value, we need to go through the value and to replace all mocked instances.
-  if (provider !== def && mockedDef && mockedDef.useValue) {
-    const useValue = mockServiceHelper.replaceWithMocks(mockedDef.useValue);
-    mockedDef =
-      useValue === mockedDef.useValue
-        ? mockedDef
+  // if provider is a value, we need to go through the value and to replace all mock instances.
+  if (provider !== def && mockDef && mockDef.useValue) {
+    const useValue = mockServiceHelper.replaceWithMocks(mockDef.useValue);
+    mockDef =
+      useValue === mockDef.useValue
+        ? mockDef
         : {
-            ...mockedDef,
+            ...mockDef,
             useValue,
           };
   }
 
-  if (!isNgInjectionToken(provider) || def !== mockedDef) {
-    resolutions.set(provider, mockedDef);
+  if (!isNgInjectionToken(provider) || def !== mockDef) {
+    resolutions.set(provider, mockDef);
   }
   let differs = false;
-  if (def === provider && mockedDef !== def) {
+  if (def === provider && mockDef !== def) {
     differs = true;
   } else if (
     def !== provider &&
-    (!mockedDef ||
-      def.provide !== mockedDef.provide ||
-      def.useValue !== mockedDef.useValue ||
-      def.useClass !== mockedDef.useClass ||
-      def.useExisting !== mockedDef.useExisting ||
-      def.useFactory !== mockedDef.useFactory ||
-      def.deps !== mockedDef.deps)
+    (!mockDef ||
+      def.provide !== mockDef.provide ||
+      def.useValue !== mockDef.useValue ||
+      def.useClass !== mockDef.useClass ||
+      def.useExisting !== mockDef.useExisting ||
+      def.useFactory !== mockDef.useFactory ||
+      def.deps !== mockDef.deps)
   ) {
     differs = true;
   }
@@ -121,9 +121,9 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   // Touching only when we really provide a value.
-  if (mockedDef) {
+  if (mockDef) {
     ngMocksUniverse.touches.add(provider);
   }
 
-  return multi && typeof mockedDef === 'object' ? { ...mockedDef, multi } : mockedDef;
+  return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };
