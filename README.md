@@ -47,6 +47,7 @@ I'm open to contributions.
   - [a service](#how-to-mock-a-service)
   - [a provider](#how-to-mock-a-provider)
   - [a module](#how-to-mock-a-module)
+  - [an observable](#how-to-mock-an-observable)
   - [a form control](#how-to-mock-classic-and-reactive-form-components)
 
 - [Extensive example](#extensive-example-of-mocking-in-angular-tests)
@@ -61,7 +62,11 @@ I'm open to contributions.
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
-* [How to test](#how-to-test-an-angular-application)
+* [How to fix](#how-to-fix-an-error-in-angular-tests)
+  - [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+  - [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+
+- [How to test](#how-to-test-an-angular-application)
   - [a component](#how-to-test-a-component)
   - [a provider of a component](#how-to-test-a-provider-of-a-component)
   - [an attribute directive](#how-to-test-an-attribute-directive)
@@ -280,6 +285,7 @@ of all aspects might be useful in writing fully isolated unit tests.
 - [mock a service](#how-to-mock-a-service)
 - [mock a provider](#how-to-mock-a-provider)
 - [mock a module](#how-to-mock-a-module)
+- [mock an observable](#how-to-mock-an-observable)
 - [mock a form control](#how-to-mock-classic-and-reactive-form-components)
 
 ---
@@ -843,7 +849,9 @@ describe('Test', () => {
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
       providers: [
-        DependencyService, // <- annoying dependency
+        // Annoying dependencies.
+        DependencyService,
+        ObservableService,
       ],
     });
 
@@ -859,18 +867,28 @@ To **mock a service** simply pass its class into `MockProvider`:
 TestBed.configureTestingModule({
   declarations: [TargetComponent],
   providers: [
-    MockProvider(DependencyService), // <- profit
+    // Profit.
+    MockProvider(DependencyService),
+    MockProvider(ObservableService, {
+      prop$: EMPTY,
+      getStream$: () => EMPTY,
+    }),
   ],
 });
 ```
 
-Or to be like a pro use [`MockBuilder`](#mockbuilder), `.mock` method
+Or, to be like a pro, use [`MockBuilder`](#mockbuilder), `.mock` method
 and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyService)
+    MockBuilder(TargetComponent)
+      .mock(DependencyService)
+      .mock(ObservableService, {
+        prop$: EMPTY,
+        getStream$: () => EMPTY,
+      })
   );
 
   it('should create', () => {
@@ -879,6 +897,9 @@ describe('Test', () => {
   });
 });
 ```
+
+**Please note**: The most common error developers meet, when they mock services, is "**TypeError: Cannot read property 'subscribe' of undefined**".
+If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
 
 <details><summary>Click to see <strong>an example of mocking providers in Angular tests</strong></summary>
 <p>
@@ -939,11 +960,9 @@ a type of `MockedModule<T>` and provides:
 - base primitives instead of tokens with a `useValue` definition
 - mocked copies of tokens with a `useValue` definition
 
-If you get an error like: "**Component is part of the declaration of 2 modules**",
-then consider usage of [`ngMocks.guts`](#ngmocks) or [`MockBuilder`](#mockbuilder).
-The issue here is, that you are trying to mock a module that has a declaration which is specified in `TestBed`,
-therefore, it should be handled in a better way which excludes it ([`ngMocks.guts`](#ngmocks)),
-or handles internals vs externals properly ([`MockBuilder`](#mockbuilder)).
+If you get an error like: "**Type is part of the declarations of 2 modules**",
+then consider usage of [`MockBuilder`](#mockbuilder).
+More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules).
 
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to mock in a test.
@@ -1022,6 +1041,184 @@ describe('MockModule', () => {
     const component = fixture.point.componentInstance;
 
     expect(component).toBeTruthy();
+  });
+});
+```
+
+</p>
+</details>
+
+[to the top](#content)
+
+---
+
+### How to mock an `Observable`
+
+For example, if we have `TodoService.list$()`,
+that returns a type of `Observable<Array<Todo>>`,
+and a component,
+that fetches the list in `OnInit` via `subscribe` method:
+
+```typescript
+class TodoComponent implements OnInit {
+  public list: Observable<Array<Todo>>;
+
+  constructor(protected service: TodoService) {}
+
+  ngOnInit(): void {
+    // Never do like that.
+    // It is just for the demonstration purposes.
+    this.service.list$().subscribe(list => (this.list = list));
+  }
+}
+```
+
+If we wanted to test the component, we would like to mock its dependencies. In our case it is `TodoService`.
+
+```typescript
+TestBed.configureTestingModule({
+  declarations: [TodoComponent],
+  providers: [MockProvider(TodoService)],
+});
+```
+
+If we created a fixture, we would face an error about reading properties of `undefined`. This happens because a mocked copy of `TodoService.list$`
+returns a spy, if [auto spy](#auto-spy) has been configured, or `undefined`. Therefore, neither has the `subscribe` property.
+
+Obviously, to solve this, we need to get the method to return an observable stream.
+For that, we could create a mocked copy via [`MockService`](#how-to-mock-a-service) and to pass it as the second parameter into [`MockProvider`](#how-to-mock-a-provider).
+
+```typescript
+const todoServiceMock = MockService(TodoService);
+ngMocks.stub(todoServiceMock, {
+  list$: () => EMPTY,
+});
+
+TestBed.configureTestingModule({
+  declarations: [TodoComponent],
+  providers: [MockProvider(TodoService, todoServiceMock)],
+});
+```
+
+Profit, now initialization of the component with the mocked service does not throw the error anymore.
+
+Nevertheless, usually, we want not only to stub the result with an `EMPTY` observable stream,
+but also to provide a fake subject, that would simulate its calls.
+
+A possible solution is to create a context variable of `Subject` type for that.
+
+```typescript
+let todoServiceList$: Subject<any>; // <- a context variable.
+
+beforeEach(() => {
+  todoServiceList$ = new Subject(); // <- create the subject.
+  const todoServiceMock = MockService(TodoService);
+  ngMocks.stub(todoServiceMock, {
+    list$: () => todoServiceList$,
+  });
+
+  TestBed.configureTestingModule({
+    declarations: [TodoComponent],
+    providers: [MockProvider(TodoService, todoServiceMock)],
+  });
+});
+
+it('test', () => {
+  const fixture = TestBed.createComponent(TodoComponent);
+  // Let's simulate emits.
+  todoServiceList$.next([]);
+  // Here we can do some assertions.
+});
+```
+
+A solution for [`MockBuilder`](#mockbuilder) is quite similar.
+
+```typescript
+let todoServiceList$: Subject<any>; // <- a context variable.
+
+beforeEach(() => {
+  todoServiceList$ = new Subject(); // <- create the subject.
+  const todoServiceMock = MockService(TodoService);
+  ngMocks.stub(todoServiceMock, {
+    list$: () => todoServiceList$,
+  });
+
+  return MockBuilder(TodoComponent).mock(
+    TodoService,
+    todoServiceMock
+  );
+});
+
+it('test', () => {
+  const fixture = MockRender(TodoComponent);
+  todoServiceList$.next([]);
+  // some assertions.
+});
+```
+
+This all might be implemented with [`MockInstance`](#mockinstance) too,
+but it goes beyond the topic.
+
+<details><summary>Click to see <strong>an example of mocking an Observable in Angular tests</strong></summary>
+<p>
+
+The source file is here:
+[MockObservable](https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts).<br>
+Prefix it with `fdescribe` or `fit` on
+[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockObservable/test.spec.ts)
+to play with.
+
+```typescript
+describe('MockObservable', () => {
+  // Because we want to test the component, we pass it as the first
+  // parameter of MockBuilder. To mock its dependencies we pass its
+  // module as the second parameter.
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+
+  // Now we need to customize the mocked copy of the service.
+  // value$ is our access point to the stream.
+  const value$: Subject<number[]> = new Subject();
+  beforeAll(() => {
+    // MockInstance helps to override mocked instances.
+    MockInstance(TargetService, instance =>
+      ngMocks.stub(instance, {
+        value$, // even it is a read-only property we can override.
+      })
+    );
+  });
+
+  // Cleanup after tests.
+  afterAll(() => {
+    value$.complete();
+    MockInstance(TargetService);
+  });
+
+  it('listens on emits of an injected subject', () => {
+    // Let's render the component.
+    const fixture = MockRender(TargetComponent);
+
+    // We haven't emitted anything yet, let's check the template.
+    expect(fixture.nativeElement.innerHTML).not.toContain('1');
+    expect(fixture.nativeElement.innerHTML).not.toContain('2');
+    expect(fixture.nativeElement.innerHTML).not.toContain('3');
+
+    // Let's simulate an emit.
+    value$.next([1, 2, 3]);
+    fixture.detectChanges();
+
+    // The template should contain the emitted numbers.
+    expect(fixture.nativeElement.innerHTML).toContain('1');
+    expect(fixture.nativeElement.innerHTML).toContain('2');
+    expect(fixture.nativeElement.innerHTML).toContain('3');
+
+    // Let's simulate an emit.
+    value$.next([]);
+    fixture.detectChanges();
+
+    // The numbers should disappear.
+    expect(fixture.nativeElement.innerHTML).not.toContain('1');
+    expect(fixture.nativeElement.innerHTML).not.toContain('2');
+    expect(fixture.nativeElement.innerHTML).not.toContain('3');
   });
 });
 ```
@@ -1923,6 +2120,11 @@ describe('MockRender', () => {
 `MockInstance` is useful when you want to configure spies of a declaration or a service before its render.
 It supports: Modules, Components, Directives, Pipes and Services.
 
+- `MockInstance( MyService, ( instance, injector ) => void)` - sets a callback to initialize an instance.
+- `MockInstance( MyService, config: {init: Function} )` - sets a config, currently only `init` is supported, it is the callback.
+- `MockInstance( MyService )` - removes initialization from the service.
+- `MockReset()` - removes initialization from all services.
+
 **Please note**
 
 > that it works only for pure mocked copies without overrides.
@@ -1930,25 +2132,78 @@ It supports: Modules, Components, Directives, Pipes and Services.
 
 You definitely need it when a test fails like:
 
-- Cannot read property 'subscribe' of undefined
-- Cannot read property 'pipe' of undefined
+- [TypeError: Cannot read property 'subscribe' of undefined](##how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [TypeError: Cannot read property 'pipe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- or any other issue like reading properties or calling methods of undefined
+
+Let's pretend a situation when our component uses `ViewChild` to access a child component instance.
+Its property has `protected` visibility, therefore, we cannot access it easily.
+
+```typescript
+class RealComponent implements AfterViewInit {
+  @ViewChild(ChildComponent) protected child: ChildComponent;
+
+  ngAfterViewInit() {
+    this.child.update$.subscribe();
+  }
+}
+```
+
+When we test `RealComponent` we would like to mock `ChildComponent`, and it would mean, if we mocked `ChildComponent` then its `update$` would be mocked to and would return `undefined`,
+therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
+
+If it was a service, we would use `providers` to set a properly mocked instance of the service.
+
+```typescript
+TestBed.configureTestingModule({
+  declarations: [RealComponent],
+  providers: [
+    {
+      provide: ChildService,
+      useValue: {
+        update$: EMPTY,
+      },
+    },
+  ],
+});
+```
+
+In our case, we have a component instance created by Angular, and does not look like `TestBed` provides
+a solution here. That's where `ngMocks` helps again with `MockInstance` helper function.
+It accepts a class as the first parameter, and a tiny callback describing how to mock its instances as the second one.
 
 ```typescript
 beforeAll(() =>
-  MockInstance(MyService, {
-    init: (instance: MyService, injector: Injector): void => {
-      // Now you can customize a mocked instance of MyService.
-      // If you use auto-spy then all methods have been spied already
+  MockInstance(
+    ChildComponent,
+    (instance: ChildComponent, injector: Injector): void => {
+      // Now you can customize a mocked instance of ChildComponent.
+      // If you had used auto-spy then all its methods have been spied already
       // here.
-      instance.data$ = EMPTY;
-    },
-  })
+      ngMocks.stub(instance, {
+        update$: EMPTY,
+      });
+      // if you want you can use injector.get(SomeService) for more
+      // complicated customization.
+    }
+  )
 );
-
-afterAll(MockReset);
 ```
 
-After a test you can reset changes to avoid their influence in other tests via a call of `MockReset()`.
+Profit. Now, when Angular creates an instance of `ChildComponent` the callback is called too and `update$` property
+of the instance is an `Observable` instead of `undefined`.
+
+_Good to know_: you might notice `ngMocks.stub` usage instead of `instance.update$ = EMPTY`. This has been made with intention to
+show **how to mock `readonly` properties in Angular**.
+
+After a test you can reset changes to avoid their influence in other tests via a call of
+`MockInstance` without the second parameter or simply
+`MockReset()` to reset all customizations.
+
+```typescript
+afterAll(() => MockInstance(ChildComponent)); // <- resets ChildComponent.
+// afterAll(MockReset); // <- or this one to reset all MockInstances.
+```
 
 <details><summary>Click to see <strong>an example of mocking services before initialization in Angular tests</strong></summary>
 <p>
@@ -1962,22 +2217,22 @@ to play with.
 ```typescript
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be mocked.
-  beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
+  beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
   beforeAll(() => {
     // Because TargetComponent is mocked its update$ is undefined and
     // ngAfterViewInit of the parent component will fail on
     // .subscribe().
     // Let's fix it via defining customization for the mocked copy.
-    MockInstance(TargetComponent, {
-      init: (instance, injector) => {
-        const subject = new Subject<void>();
-        subject.complete();
+    MockInstance(ChildComponent, (instance, injector) => {
+      const subject = new Subject<void>();
+      subject.complete();
+      ngMocks.stub(instance, {
         // comment the next line to check the failure.
-        instance.update$ = subject;
-        // if you want you can use injector.get(Service) for more
-        // complicated customization.
-      },
+        update$: subject,
+      });
+      // if you want you can use injector.get(Service) for more
+      // complicated customization.
     });
   });
 
@@ -1987,13 +2242,9 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    const fixture = MockRender(RealComponent);
-
-    // Let's check that the mocked component has been decorated by
-    // the custom initialization.
-    expect(
-      fixture.point.componentInstance.child.update$
-    ).toBeDefined();
+    expect(() => MockRender(RealComponent)).not.toThrowError(
+      /Cannot read property 'subscribe' of undefined/
+    );
   });
 });
 ```
@@ -2445,6 +2696,77 @@ In case of jest add it to `src/setupJest.ts`.
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
+
+[to the top](#content)
+
+---
+
+## How to fix an error in Angular tests
+
+We may encounter different unpleasant issues, when we mock declarations in testing environment.
+
+There is a list of most common issues and their solutions below,
+feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you are facing or struggling with them or anything else.
+
+- [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+
+---
+
+### How to fix `TypeError: Cannot read property 'subscribe' of undefined`
+
+This issue means that something has been mocked and returns a dummy result (`undefined`) instead of observable streams.
+
+There is an answer for this error in the section called [How to mock an observable](#how-to-mock-an-observable),
+if the error is triggered by a mocked service, and its property is of type of `undefined`.
+
+Or you might check [`MockInstance`](#mockinstance) in case if the error has been caused by a mocked component or a mocked directive.
+
+[to the top](#content)
+
+---
+
+### How to fix `Error: Type is part of the declarations of 2 modules`
+
+If you encounter the issue, highly likely it means that a mocked declaration,
+usually a mocked module, contains something, that is declared in the `TestBed` module directly.
+
+Let's imagine a situation that we have a module which exports declarations, for example directives, we need in our test.
+In the same time, we have another module that has another declarations, our component depends on,
+but we would like to mock them, and it imports the same module we want to import in `TestBed`.
+
+```typescript
+TestBed.configureTestingModule({
+  imports: [
+    SharedModule,
+    MockModule(ModuleWithServicesAndSharedModule),
+  ],
+  declarations: [ComponentToTest],
+});
+```
+
+The problem is clear: when we mock the module, [`MockModule`](#how-to-mock-a-module) recursively mocks its dependencies, and, therefore, it creates a mocked copy of `SharedModule`.
+Now imported and mocked declarations are part of 2 modules.
+
+To solve this, we need to let [`MockModule`](#how-to-mock-a-module) know, that `SharedModule` should not be mocked.
+
+There are good and bad news. Bad news is that [`MockModule`](#how-to-mock-a-module) does not support that, but good news is that `ngMocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
+The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuilder) instead of [`MockModule`](#how-to-mock-a-module).
+A possible solution might looks like:
+
+```typescript
+beforeEach(() =>
+  MockBuilder(ComponentToTest)
+    .keep(SharedModule)
+    .mock(ModuleWithServicesAndSharedModule)
+);
+```
+
+The configuration says that we want to test `ComponentToTest`, which depends on `SharedModule` and `ModuleWithServicesAndSharedModule`, but `SharedModule` should stay as it is.
+
+Now, during the mocking process, [`MockBuilder`](#mockbuilder) will keep `SharedModule` as it is, although it is a dependency of the mocked module, and that avoids declarations of the same things in 2 modules.
+
+More detailed information how to use it you can find in the section called [`MockBuilder`](#mockbuilder).
 
 [to the top](#content)
 
