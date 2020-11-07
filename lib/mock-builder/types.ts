@@ -116,17 +116,7 @@ export interface IMockBuilder {
   /**
    * @see https://github.com/ike18t/ng-mocks#mockbuildermock
    */
-  mock<T>(provider: AnyType<T>, mock: AnyType<T>, config: IMockBuilderConfig): this;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
-   */
-  mock<T>(provider: AnyType<T>, mock: Partial<T>, config: IMockBuilderConfig): this;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
-   */
-  mock<T>(provider: AnyType<T>, mock: AnyType<T>, config: IMockBuilderConfig): this;
+  mock<T>(provider: AnyType<T>, mock: AnyType<T> | Partial<T>, config: IMockBuilderConfig): this;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#mockbuildermock
