@@ -26,7 +26,7 @@ function solveOutput(output: any): string {
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
-function MockRender<MComponent, TComponent extends { [key: string]: any }>(
+function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   template: Type<MComponent>,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
@@ -44,7 +44,7 @@ function MockRender<MComponent extends Record<keyof any, any>>(
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
-function MockRender<MComponent = any, TComponent extends { [key: string]: any } = { [key: string]: any }>(
+function MockRender<MComponent = any, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions
@@ -57,7 +57,7 @@ function MockRender<MComponent = any, TComponent extends { [key: string]: any } 
  */
 function MockRender<MComponent = any>(template: string): MockedComponentFixture<MComponent>;
 
-function MockRender<MComponent, TComponent extends { [key: string]: any }>(
+function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   template: string | Type<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true
@@ -164,35 +164,47 @@ function MockRender<MComponent, TComponent extends { [key: string]: any }>(
   if (!fixture.point) {
     fixture.point = fixture.debugElement.childNodes[0];
   }
-  if (noParams && typeof template === 'function') {
-    const properties = mockServiceHelper.extractPropertiesFromPrototype(template.prototype);
-    const exists = Object.getOwnPropertyNames(fixture.componentInstance);
-    for (const property of properties) {
-      /* istanbul ignore if */
-      if (exists.indexOf(property) !== -1) {
+  let pointComponentInstance: any;
+  try {
+    // ivy throws Error: Expecting instance of DOM Element
+    pointComponentInstance = fixture.point?.componentInstance;
+  } catch (e) {
+    // nothing to do
+  }
+  if (noParams && pointComponentInstance) {
+    const keys = [
+      ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
+      ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
+      ...Object.keys(pointComponentInstance),
+    ];
+    const exists = [
+      ...Object.getOwnPropertyNames(fixture.componentInstance),
+      ...Object.keys(fixture.componentInstance),
+    ];
+    for (const key of keys) {
+      if (exists.indexOf(key) !== -1) {
         continue;
       }
-      Object.defineProperty(fixture.componentInstance, property, {
-        get: () => fixture.point.componentInstance[property],
-        set: (v: any) => (fixture.point.componentInstance[property] = v),
+      const def = mockServiceHelper.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
+      const keyType = def ? undefined : typeof pointComponentInstance[key];
+      if (def?.value || keyType === 'function') {
+        Object.defineProperty(fixture.componentInstance, key, {
+          value: (...args: any[]) => pointComponentInstance[key](...args),
 
-        configurable: true,
-        enumerable: true,
-      });
-    }
-    const methods = mockServiceHelper.extractMethodsFromPrototype(template.prototype);
-    for (const method of methods) {
-      /* istanbul ignore if */
-      if (exists.indexOf(method) !== -1) {
-        continue;
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      } else {
+        Object.defineProperty(fixture.componentInstance, key, {
+          get: () => pointComponentInstance[key],
+          set: (v: any) => (pointComponentInstance[key] = v),
+
+          configurable: true,
+          enumerable: true,
+        });
       }
-      Object.defineProperty(fixture.componentInstance, method, {
-        value: (...args: any[]) => fixture.point.componentInstance[method](...args),
-
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
+      exists.push(key);
     }
   }
 

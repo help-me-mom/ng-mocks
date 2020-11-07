@@ -37,7 +37,7 @@ export interface IMockBuilderConfigComponent {
       | boolean
       | {
           $implicit?: any;
-          variables?: { [key: string]: any };
+          variables?: Record<keyof any, any>;
         };
   };
 }
@@ -50,7 +50,7 @@ export interface IMockBuilderConfigDirective {
     | boolean
     | {
         $implicit?: any;
-        variables?: { [key: string]: any };
+        variables?: Record<keyof any, any>;
       };
 }
 
