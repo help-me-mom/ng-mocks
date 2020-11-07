@@ -1,3 +1,13 @@
+## [10.5.3](https://github.com/ike18t/ng-mocks/compare/v10.5.2...v10.5.3) (2020-11-07)
+
+
+### Bug Fixes
+
+* an example how to handle "TypeError: Cannot read property 'subscribe' of undefined" ([6501a87](https://github.com/ike18t/ng-mocks/commit/6501a87b7ea433c9250ae7805dd2a7f8d2a4d063)), closes [#226](https://github.com/ike18t/ng-mocks/issues/226)
+* info how to solve "type is part of the declarations of 2 modules" ([f5ee1bc](https://github.com/ike18t/ng-mocks/commit/f5ee1bcfde02443ff4fadb0ca1f357f02cdeb610))
+* mock-render proxy ([eaeabba](https://github.com/ike18t/ng-mocks/commit/eaeabba28897ea29b2f58109c193a27bf5278518))
+* relaxed signature of MockInstance ([dccaa2d](https://github.com/ike18t/ng-mocks/commit/dccaa2d93f671474aedc76de381ff8546310a55f))
+
 ## [10.5.2](https://github.com/ike18t/ng-mocks/compare/v10.5.1...v10.5.2) (2020-11-04)
 
 
