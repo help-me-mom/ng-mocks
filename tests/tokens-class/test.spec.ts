@@ -46,7 +46,7 @@ const TOKEN_CLASS_KEEP = new InjectionToken('KEEP');
 class TargetModule {}
 
 // useClass ignores existing services with the same class name, but
-// ngMocks still detects whether the class should be replaced with a mock copy or not.
+// ng-mocks still detects whether the class should be replaced with a mock copy or not.
 describe('tokens-class', () => {
   ngMocks.faster();
 

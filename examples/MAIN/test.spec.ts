@@ -68,7 +68,7 @@ describe('MAIN', () => {
   // But, usually, instead of AppHeaderComponent we want to have
   // a mock copy.
 
-  // With ngMocks it can be defined in the next way.
+  // With ng-mocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
     // everything in AppModule will be replaced with their mock copies.

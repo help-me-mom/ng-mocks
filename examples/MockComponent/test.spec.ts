@@ -48,7 +48,7 @@ describe('MockComponent', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // Thanks to ngMocks, this is type safe.
+    // Thanks to ng-mocks, this is type safe.
     expect(mockComponent.someInput).toEqual('foo');
   });
 

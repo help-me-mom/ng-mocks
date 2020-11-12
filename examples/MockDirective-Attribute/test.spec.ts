@@ -42,7 +42,7 @@ describe('MockDirective:Attribute', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // Thanks to ngMocks, this is type safe.
+    // Thanks to ng-mocks, this is type safe.
     expect(mockDirective.someInput).toEqual('foo');
   });
 
