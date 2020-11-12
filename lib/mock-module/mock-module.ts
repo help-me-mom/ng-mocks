@@ -184,7 +184,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     ngMocksUniverse.touches.add(isNgModuleDefWithProviders(def) ? def.ngModule : def);
 
     // First we mock modules.
-    if (!mockDef && isNgDef(def, 'm')) {
+    if (isNgDef(def, 'm')) {
       mockDef = MockModule(def);
     }
     if (!mockDef && isNgModuleDefWithProviders(def)) {

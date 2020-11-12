@@ -2,6 +2,7 @@
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 [![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
 [![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks.svg?branch=master)](https://lgtm.com/projects/g/ike18t/ng-mocks)
 
 # ngMocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 

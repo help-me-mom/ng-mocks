@@ -30,7 +30,7 @@ export default function (provider: any): Provider | undefined {
   }
 
   let mockProvider: Provider | undefined;
-  if (typeof provide === 'function' && !mockProvider) {
+  if (typeof provide === 'function') {
     mockProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => {
       const instance = MockService(provide);
       // Magic below adds missed properties to the instance to
@@ -79,7 +79,7 @@ export default function (provider: any): Provider | undefined {
   }
 
   // if a token has a primitive type, we can return its initial state.
-  if (!mockProvider && Object.keys(provider).indexOf('useValue') !== -1) {
+  if (Object.keys(provider).indexOf('useValue') !== -1) {
     mockProvider =
       provider.useValue && typeof provider.useValue === 'object'
         ? useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => MockService(provider.useValue))
