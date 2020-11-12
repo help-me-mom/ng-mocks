@@ -102,7 +102,17 @@ export const ngMocks: {
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfind
    */
+  find<T>(component: Type<T>): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
+  find<T, D>(component: Type<T>, notFoundValue: D): D | MockedDebugElement<T>;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfind
@@ -116,7 +126,17 @@ export const ngMocks: {
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfind
    */
+  find<T = any>(cssSelector: string): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
   find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   */
+  find<T = any, D = undefined>(cssSelector: string, notFoundValue: D): D | MockedDebugElement<T>;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfind
@@ -130,10 +150,20 @@ export const ngMocks: {
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
    */
+  findAll<T>(component: Type<T>): Array<MockedDebugElement<T>>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   */
   findAll<T>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     component: Type<T>
   ): Array<MockedDebugElement<T>>;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   */
+  findAll<T = any>(cssSelector: string): Array<MockedDebugElement<T>>;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
@@ -146,17 +176,36 @@ export const ngMocks: {
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
    */
-  findInstance<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T;
+  findInstance<T>(instanceClass: Type<T>): T;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
    */
-  findInstance<T, D>(debugNode: MockedDebugNode, instanceClass: Type<T>, notFoundValue: D): D | T;
+  findInstance<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
    */
-  findInstances<T>(debugNode: MockedDebugNode, instanceClass: Type<T>): T[];
+  findInstance<T, D>(instanceClass: Type<T>, notFoundValue: D): D | T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   */
+  findInstance<T, D>(
+    debugNode: MockedDebugNode | ComponentFixture<any>,
+    instanceClass: Type<T>,
+    notFoundValue: D
+  ): D | T;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstances
+   */
+  findInstances<T>(instanceClass: Type<T>): T[];
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstances
+   */
+  findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T[];
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksflushtestbed

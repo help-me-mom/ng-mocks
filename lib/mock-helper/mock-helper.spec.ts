@@ -180,7 +180,9 @@ describe('MockHelper:getDirective', () => {
 
   it('findInstance throws an error', () => {
     const fixture = MockRender(`<component-a></component-a>`);
-    expect(() => ngMocks.findInstance(fixture.debugElement, BComponent)).toThrowError(/Cannot find BComponent/);
+    expect(() => ngMocks.findInstance(fixture.debugElement, BComponent)).toThrowError(
+      /Cannot find an instance via ngMocks.findInstance\(BComponent\)/
+    );
   });
 
   it('findInstance returns default value', () => {
