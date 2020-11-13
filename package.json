@@ -136,6 +136,7 @@
     "@types/jasmine": "2.8.9",
     "@types/jest": "^22.2.3",
     "@types/node": "^10.17.27",
+    "codecov": "^3.8.1",
     "core-js": "^2.6.11",
     "coveralls": "^3.1.0",
     "husky": "^4.3.0",
