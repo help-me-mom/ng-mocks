@@ -16,7 +16,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { flatten } from '../common/core.helpers';
 import { directiveResolver } from '../common/core.reflect';
-import { AnyType, Type } from '../common/core.types';
+import { Type } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
@@ -29,30 +29,13 @@ import mockServiceHelper from '../mock-service/helper';
 import { MockedComponent } from './types';
 
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
-  return components.map(component => MockComponent(component, undefined));
+  return components.map(MockComponent);
 }
-
-/**
- * @deprecated since version 10.0.0 and will be removed in 11.0.0
- * feel free to open a github issue to discuss an alternative solution.
- * https://github.com/ike18t/ng-mocks/issues
- */
-export function MockComponent<TComponent>(
-  component: Type<TComponent>,
-  metaData: core.Directive
-): Type<MockedComponent<TComponent>>;
 
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-component
  */
-export function MockComponent<TComponent>(
-  component: AnyType<TComponent>,
-  metaData?: core.Directive
-): Type<MockedComponent<TComponent>>;
-export function MockComponent<TComponent>(
-  component: Type<TComponent>,
-  metaData?: core.Directive
-): Type<MockedComponent<TComponent>> {
+export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
   // we are inside of an 'it'.
   // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
@@ -66,15 +49,12 @@ export function MockComponent<TComponent>(
     return ngMocksUniverse.cacheDeclarations.get(component);
   }
 
-  let meta: core.Directive | undefined = metaData;
-  /* istanbul ignore else */
-  if (!meta) {
-    try {
-      meta = directiveResolver.resolve(component);
-    } catch (e) {
-      /* istanbul ignore next */
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
+  let meta: core.Directive | undefined;
+  try {
+    meta = directiveResolver.resolve(component);
+  } catch (e) {
+    /* istanbul ignore next */
+    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
   const { exportAs, inputs, outputs, queries, selector, providers } = meta;
 
