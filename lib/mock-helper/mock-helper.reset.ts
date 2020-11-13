@@ -6,6 +6,12 @@ export default (): void => {
   ngMocksUniverse.cacheProviders = new Map();
   ngMocksUniverse.config = new Map();
   ngMocksUniverse.global = new Map();
-  ngMocksUniverse.flags = new Set(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']);
+  ngMocksUniverse.flags = new Set([
+    'cacheModule',
+    'cacheComponent',
+    'cacheDirective',
+    'cacheProvider',
+    'correctModuleExports',
+  ]);
   ngMocksUniverse.touches = new Set();
 };

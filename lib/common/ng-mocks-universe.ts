@@ -11,7 +11,7 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   cacheDeclarations: new Map(),
   cacheProviders: new Map(),
   config: new Map(),
-  flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider']),
+  flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports']),
   global: new Map(),
   touches: new Set<AnyType<any> | InjectionToken<any>>(),
 };

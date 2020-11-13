@@ -54,6 +54,7 @@ export class ExampleConsumerComponent {}
 export class ChildModule {}
 
 @NgModule({
+  exports: [ChildModule],
   imports: [ChildModule],
 })
 export class ParentModule {}
@@ -69,11 +70,13 @@ export class SameImports1Module {}
 export class SameImports2Module {}
 
 @NgModule({
+  exports: [ChildModule],
   imports: [ChildModule],
 })
 export class LogicNestedModule {}
 
 @NgModule({
+  exports: [ChildModule, LogicNestedModule],
   imports: [ChildModule, LogicNestedModule],
 })
 export class LogicRootModule {}

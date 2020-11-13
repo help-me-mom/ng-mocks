@@ -11,6 +11,7 @@ class TargetComponent {}
 
 @NgModule({
   declarations: [TargetComponent],
+  exports: [TargetComponent],
   imports: [CommonModule],
 })
 class TargetModule {}
