@@ -12,24 +12,29 @@ install:
 jobs:
   include:
     - name: 'Essential checks'
-      before_script:
-        - >-
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-          > $HOME/cc-test-reporter
-        - chmod +x $HOME/cc-test-reporter
       script:
         - npm run prettier:check
         - npm run lint
         - WITH_COVERAGE=1 npm run test
       after_success:
-        - ./node_modules/coveralls/bin/coveralls.js < test-reports/coverage/lcov/lcov.info
-        - $HOME/cc-test-reporter before-build
+        # https://coveralls.io/github/ike18t/ng-mocks
+        - ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
+
+        # https://codecov.io/gh/ike18t/ng-mocks
+        - ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info
+
+        # https://codeclimate.com/github/ike18t/ng-mocks
         - >-
-          $HOME/cc-test-reporter format-coverage
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+          > $HOME/codeclimate
+        - chmod +x $HOME/codeclimate
+        - $HOME/codeclimate before-build
+        - >-
+          $HOME/codeclimate format-coverage
           -t lcov test-reports/coverage/lcov/lcov.info
           -o test-reports/codeclimate.json
         - >-
-          $HOME/cc-test-reporter upload-coverage
+          $HOME/codeclimate upload-coverage
           -r 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69
           -i test-reports/codeclimate.json
     - name: 'E2E'
