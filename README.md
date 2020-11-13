@@ -3,9 +3,11 @@
 [![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
 [![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 
-# ngMocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
+# ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
-`ngMocks` is a library providing **helper functions for creating mock dependencies in Angular** that supports components, directives, pipes, modules and services.
+`ng-mocks` is a library providing **helper functions for creating mock components, directives, pipes, modules and services in Angular**.
+Whether you need a mock child component, or any other annoying dependency, `ng-mocks` has a tool to turn this declaration into its mock copy,
+keeping its interface as it is, but suppressing its implementation.
 
 The current version of the library has been tested and can be used with:
 
@@ -25,7 +27,7 @@ There is a brief summary of the latest changes in [CHANGELOG](https://github.com
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
-Or you could use `ngMocks` to create mock declarations out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+Or you could use `ng-mocks` to create mock declarations out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
 ### Find an issue or have a question or a request?
 
@@ -105,7 +107,7 @@ Yarn
 Angular testing is fun and easy until you've met complex dependencies,
 and setting up the `TestBed` becomes really annoying and time consuming.
 
-`ngMocks` helps to bring fun and ease back allowing developers
+`ng-mocks` helps to bring fun and ease back allowing developers
 **to create mock child components** and stub dependencies via a few lines of code with help of
 [`MockComponent`](#how-to-create-a-mock-component),
 [`MockDirective`](#how-to-create-a-mock-directive),
@@ -175,7 +177,7 @@ TestBed.configureTestingModule({
 And... nobody knows which dependencies the dependencies have.
 Although, we definitely know that we do not want to worry about them.
 
-That's where `ngMocks` comes for help. Simply pass all the dependencies
+That's where `ng-mocks` comes for help. Simply pass all the dependencies
 into **helper functions to get their mock copies** and to avoid a dependency hassle.
 
 ```typescript
@@ -346,7 +348,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-Or be like a pro and use [`MockBuilder`](#mockbuilder), its `.mock` method
+Or be like a pro and use [`MockBuilder`](#mockbuilder), its [`.mock`](#mockbuildermock) method
 and [`MockRender`](#mockrender):
 
 ```typescript
@@ -398,7 +400,7 @@ describe('MockComponent', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // Thanks to ngMocks, this is type safe.
+    // Thanks to ng-mocks, this is type safe.
     expect(mockComponent.someInput).toEqual('foo');
   });
 
@@ -537,7 +539,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-Or be like a pro and use [`MockBuilder`](#mockbuilder), its `.mock` method
+Or be like a pro and use [`MockBuilder`](#mockbuilder), its [`.mock`](#mockbuildermock) method
 and [`MockRender`](#mockrender):
 
 ```typescript
@@ -589,7 +591,7 @@ describe('MockDirective:Attribute', () => {
     component.value = 'foo';
     fixture.detectChanges();
 
-    // Thanks to ngMocks, this is type safe.
+    // Thanks to ng-mocks, this is type safe.
     expect(mockDirective.someInput).toEqual('foo');
   });
 
@@ -731,7 +733,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-Or if you want to be like a pro, use [`MockBuilder`](#mockbuilder), its `.mock` method
+Or if you want to be like a pro, use [`MockBuilder`](#mockbuilder), its [`.mock`](#mockbuildermock) method
 and call [`MockRender`](#mockrender):
 
 ```typescript
@@ -781,7 +783,7 @@ describe('MockPipe', () => {
 
 ### How to create a mock service
 
-`ngMocks` provides a `MockService` function that tries its best
+`ng-mocks` provides a `MockService` function that tries its best
 to facilitate creation of mock copies of services.
 It tends to avoid a hassle of providing customized mock copies for huge services.
 Simply pass a class into it and its result will be a mock instance that respects the class,
@@ -830,7 +832,7 @@ instance.nested.func = () => 'My Custom Behavior';
 
 - `MockProvider( MyService )` - creates a `useFactory` provider with `MockService(MyService)` under the hood.
 - `MockProvider( MY_TOKEN_1 )` - creates a `useValue` provider that returns `undefined`.
-- `MockProvider( MyService, {mocked: true} )` - creates a `useValue` provider that returns the passed value.
+- `MockProvider( MyService, {mock: true} )` - creates a `useValue` provider that returns the passed value.
 - `MockProvider( MY_TOKEN_1, 'fake' )` - creates a `useValue` provider that returns the passed value.
 - `MockProviders( MyService1, MY_TOKEN_1, ... )` - returns an array of mock services and tokens.
 
@@ -876,7 +878,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-Or, to be like a pro, use [`MockBuilder`](#mockbuilder), `.mock` method
+Or, to be like a pro, use [`MockBuilder`](#mockbuilder), [`.mock`](#mockbuildermock) method
 and call [`MockRender`](#mockrender):
 
 ```typescript
@@ -940,7 +942,7 @@ describe('MockProvider', () => {
 ### How to create a mock module
 
 There is a `MockModule` function covering almost all needs for mock behavior.
-**To create a mock module in Angular tests** with `ngMocks` is quite easy.
+**To create a mock module in Angular tests** with `ng-mocks` is quite easy.
 The library does it recursively for modules, and creates mocks for all imports, exports and their declarations.
 
 - `MockModule( MyModule )` - returns a mock copy of `MyModule` module.
@@ -996,7 +998,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-Or be like a pro and use [`MockBuilder`](#mockbuilder), its `.mock` method
+Or be like a pro and use [`MockBuilder`](#mockbuilder), its [`.mock`](#mockbuildermock) method
 and [`MockRender`](#mockrender):
 
 ```typescript
@@ -1231,8 +1233,8 @@ describe('MockObservable', () => {
 
 ### How to create a mock form control
 
-`ngMocks` respects `ControlValueAccessor` interface if a directive, or a component implements it.
-Apart from that, `ngMocks` provides helper functions to cause changes and touches.
+`ng-mocks` respects `ControlValueAccessor` interface if a directive, or a component implements it.
+Apart from that, `ng-mocks` provides helper functions to cause changes and touches.
 
 A mock instance of `ControlValueAccessor` provides:
 
@@ -1431,7 +1433,7 @@ describe('MAIN', () => {
   // But, usually, instead of AppHeaderComponent we want to have
   // a mock copy.
 
-  // With ngMocks it can be defined in the next way.
+  // With ng-mocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
     // everything in AppModule will be replaced with their mock copies.
@@ -1558,7 +1560,7 @@ but with minimum overhead.
 Usually, we have something simple to test, but, time to time, the simplicity is killed by nightmarish dependencies.
 The good thing here is that commonly the dependencies have been declared or imported in the same module, where our
 tested thing is. Therefore, with help of `MockBuilder` we can quite easily define a testing module,
-where everything in the module will be mocked except the tested thing: `MockBuilder( TheThing, ItsModule )`.
+where everything in the module will be replaced with their mock copies, except the tested thing: `MockBuilder( TheThing, ItsModule )`.
 
 MockBuilder tends to provide **a simple instrument to create mock Angular dependencies**, does it in isolated scopes,
 and has a rich toolkit that supports:
@@ -1849,7 +1851,7 @@ beforeEach(() =>
       dependency: true,
     })
     // Or provide a mock instance together with the config.
-    .mock(SomeProvider, mockedInstance, {
+    .mock(SomeProvider, mockInstance, {
       dependency: true,
     })
     .replace(SomeModuleComponentDirectivePipeProvider1, anything1, {
@@ -1901,7 +1903,7 @@ beforeEach(() =>
 
 #### `NG_MOCKS_GUARDS` token
 
-If we want to test guards we need to `.keep` them, but what should we do with other guards we do not want to care about at all?
+If we want to test guards we need to [`.keep`](#mockbuilderkeep) them, but what should we do with other guards we do not want to care about at all?
 The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guards from routes** except the explicitly configured ones.
 
 ```typescript
@@ -1927,7 +1929,8 @@ beforeEach(() =>
 There are root services and tokens apart from provided ones in Angular applications.
 It might happen that in a test we want these providers to be replaced with their mock copies, or kept.
 
-If we want to replace all root providers with their mock copies in an angular test, we need to pass `NG_MOCKS_ROOT_PROVIDERS` token into `.mock`.
+If we want to replace all root providers with their mock copies in an angular test,
+we need to pass `NG_MOCKS_ROOT_PROVIDERS` token into [`.mock`](#mockbuildermock).
 
 ```typescript
 beforeEach(() =>
@@ -2164,7 +2167,7 @@ TestBed.configureTestingModule({
 ```
 
 In our case, we have a component instance created by Angular, and does not look like `TestBed` provides
-a solution here. That's where `ngMocks` helps again with `MockInstance` helper function.
+a solution here. That's where `ng-mocks` helps again with `MockInstance` helper function.
 It accepts a class as the first parameter, and a tiny callback describing how to customize its instances as the second one.
 
 ```typescript
@@ -2172,7 +2175,7 @@ beforeAll(() =>
   MockInstance(
     ChildComponent,
     (instance: ChildComponent, injector: Injector): void => {
-      // Now you can customize a mocked instance of ChildComponent.
+      // Now you can customize a mock instance of ChildComponent.
       // If you had used auto-spy then all its methods have been spied already
       // here.
       ngMocks.stub(instance, {
@@ -2444,7 +2447,7 @@ ngMocks.stub(instance, {
 
 ### Helper functions
 
-`ngMocks` provides several functions which help with **detection of mock instances**.
+`ng-mocks` provides several functions which help with **detection of mock instances**.
 For example, they are useful in situations when we want to render `ChildContent` of a mock component, or to touch a
 mock form control.
 
@@ -2457,7 +2460,7 @@ mock form control.
 
 #### isMockOf
 
-This function helps when we want to use `ngMocks` tools for rendering or change simulation,
+This function helps when we want to use `ng-mocks` tools for rendering or change simulation,
 but typescript doesn't recognize `instance` as a mock instance.
 
 You need it when you get an error like:
@@ -2482,11 +2485,11 @@ if (isMockOf(instance, SomeClass, 'c')) {
 
 This function helps when we need to verify that a class is actually a mock copy of a class.
 
-- `isMockedNgDefOf( MockedClass, SomeClass, 'm' )` - checks whether `MockedClass` is a mock copy of `SomeClass` and a module
-- `isMockedNgDefOf( MockedClass, SomeClass, 'c' )` - checks whether `MockedClass` is a mock copy of `SomeClass` and a component
-- `isMockedNgDefOf( MockedClass, SomeClass, 'd' )` - checks whether `MockedClass` is a mock copy of `SomeClass` and a directive
-- `isMockedNgDefOf( MockedClass, SomeClass, 'p' )` - checks whether `MockedClass` is a mock copy of `SomeClass` and a pipe
-- `isMockedNgDefOf( MockedClass, SomeClass )` - checks whether `MockedClass` is a mock copy of `SomeClass`
+- `isMockedNgDefOf( MockClass, SomeClass, 'm' )` - checks whether `MockClass` is a mock copy of `SomeClass` and a module
+- `isMockedNgDefOf( MockClass, SomeClass, 'c' )` - checks whether `MockClass` is a mock copy of `SomeClass` and a component
+- `isMockedNgDefOf( MockClass, SomeClass, 'd' )` - checks whether `MockClass` is a mock copy of `SomeClass` and a directive
+- `isMockedNgDefOf( MockClass, SomeClass, 'p' )` - checks whether `MockClass` is a mock copy of `SomeClass` and a pipe
+- `isMockedNgDefOf( MockClass, SomeClass )` - checks whether `MockClass` is a mock copy of `SomeClass`
 
 #### getMockedNgDefOf
 
@@ -2512,7 +2515,7 @@ This function verifies how a class has been decorated.
 
 This function returns an origin of the mock copy.
 
-- `getSourceOfMock( MockedClass )` - returns the source class of `MockedClass`
+- `getSourceOfMock( MockClass )` - returns the source class of `MockClass`
 
 #### isNgInjectionToken
 
@@ -2526,9 +2529,9 @@ This function verifies tokens.
 
 ### Usage with 3rd-party libraries
 
-`ngMocks` provides flexibility via [`ngMocks.guts`](#ngmocks) and [`MockBuilder`](#mockbuilder)
+`ng-mocks` provides flexibility via [`ngMocks.guts`](#ngmocks) and [`MockBuilder`](#mockbuilder)
 that allows developers to use another **Angular testing libraries** for creation of `TestBed`,
-and in the same time to **use mock copies out of all dependencies** via `ngMocks`.
+and in the same time to **use mock copies out of all dependencies** via `ng-mocks`.
 
 For example if we use `@ngneat/spectator` and its functions
 like `createHostFactory`, `createComponentFactory`, `createDirectiveFactory` and so on,
@@ -2549,7 +2552,7 @@ const createComponent = createComponentFactory({
 });
 ```
 
-If we use [`MockBuilder`](#mockbuilder) we need `.exclude`, `.mock` and `exportAll` flag.
+If we use [`MockBuilder`](#mockbuilder) we need [`.exclude`](#mockbuilderexclude), [`.mock`](#mockbuildermock) and [`exportAll`](#mockbuilder-exportall-flag) flag.
 
 ```typescript
 const dependencies = MockBuilder()
@@ -2715,7 +2718,7 @@ feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you
 
 This issue means that something has been replaced with a mock copy and returns a dummy result (`undefined`) instead of observable streams.
 
-There is an answer for this error in the section called [How to mock an observable](#how-to-create-a-mock-observable),
+There is an answer for this error in the section called [How to create a mock observable](#how-to-create-a-mock-observable),
 if the error has been triggered by a mock service, and its property is of type of `undefined`.
 
 Or you might check [`MockInstance`](#mockinstance) in case if the error has been caused by a mock component or a mock directive.
@@ -2731,7 +2734,7 @@ usually a mock module, contains something, that is declared in the `TestBed` mod
 
 Let's imagine a situation that we have a module which exports declarations, for example directives, we need in our test.
 In the same time, we have another module that has another declarations, our component depends on,
-we would like to crate a mock copy out of it, but, in the same time, it imports the same module we want to keep as it is
+we would like to create a mock copy out of it, but, in the same time, it imports the same module we want to keep as it is
 via an import in `TestBed`.
 
 ```typescript
@@ -2745,11 +2748,13 @@ TestBed.configureTestingModule({
 ```
 
 The problem is clear: when we create the mock module, [`MockModule`](#how-to-create-a-mock-module) recursively creates its mock dependencies, and, therefore, it creates a mock copy of `SharedModule`.
-Now imported and mocked declarations are part of 2 modules.
+Now imported and mock declarations are part of 2 modules.
 
-To solve this, we need to let [`MockModule`](#how-to-create-a-mock-module) know, that `SharedModule` should not be processed.
+To solve this, we need to let [`MockModule`](#how-to-create-a-mock-module) know, that `SharedModule` should stay as it is.
 
-There are good and bad news. Bad news is that [`MockModule`](#how-to-create-a-mock-module) does not support that, but good news is that `ngMocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
+There are good and bad news.
+The bad news is that [`MockModule`](#how-to-create-a-mock-module) does not support that,
+but the good news is that `ng-mocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
 The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuilder) instead of [`MockModule`](#how-to-create-a-mock-module).
 A possible solution might looks like:
 
