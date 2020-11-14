@@ -36,7 +36,7 @@ getGlobal().ngMocksMockServiceHelper = getGlobal().ngMocksMockServiceHelper || {
  *
  * @internal
  */
-export default getGlobal().ngMocksMockServiceHelper;
+export default (() => getGlobal().ngMocksMockServiceHelper)();
 
 export const registerMockFunction: (func: CustomMockFunction | undefined) => void = getGlobal().ngMocksMockServiceHelper
   .registerMockFunction;

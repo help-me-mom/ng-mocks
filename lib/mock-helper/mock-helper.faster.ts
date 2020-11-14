@@ -1,6 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import flushTestBed from './mock-helper.flushTestBed';
 

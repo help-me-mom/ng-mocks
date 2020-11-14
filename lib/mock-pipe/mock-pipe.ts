@@ -7,7 +7,7 @@ import { AnyType, Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { Mock } from '../common/mock';
 import { MockOf } from '../common/mock-of';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockedPipe } from './types';
 
@@ -41,8 +41,8 @@ export function MockPipe<TPipe extends PipeTransform>(
     }
   }
   /* istanbul ignore next */
-  if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheMocks.has(pipe)) {
-    return ngMocksUniverse.cacheMocks.get(pipe);
+  if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheDeclarations.has(pipe)) {
+    return ngMocksUniverse.cacheDeclarations.get(pipe);
   }
 
   let meta: core.Pipe;
@@ -66,7 +66,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   }
 
   if (ngMocksUniverse.flags.has('cachePipe')) {
-    ngMocksUniverse.cacheMocks.set(pipe, PipeMock);
+    ngMocksUniverse.cacheDeclarations.set(pipe, PipeMock);
   }
 
   return PipeMock as any;

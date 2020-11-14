@@ -5,7 +5,7 @@ import { flatten, mapEntries } from '../common/core.helpers';
 import { NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/core.tokens';
 import { AnyType } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 
 import { MockBuilderPerformance } from './mock-builder-performance';

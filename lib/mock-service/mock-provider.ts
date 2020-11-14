@@ -2,7 +2,7 @@ import { Provider } from '@angular/core';
 
 import ngConfig from '../common/core.config';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import useFactory from './helper.use-factory';
 import { MockService } from './mock-service';
@@ -31,7 +31,7 @@ export default function (provider: any): Provider | undefined {
 
   let mockProvider: Provider | undefined;
   if (typeof provide === 'function') {
-    mockProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => {
+    mockProvider = useFactory(provide, () => {
       const instance = MockService(provide);
       // Magic below adds missed properties to the instance to
       // fulfill missed abstract methods.
@@ -82,7 +82,7 @@ export default function (provider: any): Provider | undefined {
   if (Object.keys(provider).indexOf('useValue') !== -1) {
     mockProvider =
       provider.useValue && typeof provider.useValue === 'object'
-        ? useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => MockService(provider.useValue))
+        ? useFactory(provide, () => MockService(provider.useValue))
         : {
             provide,
             useValue:
@@ -102,13 +102,13 @@ export default function (provider: any): Provider | undefined {
   }
   if (!mockProvider && Object.keys(provider).indexOf('useClass') !== -1) {
     mockProvider =
-      ngMocksUniverse.builder.has(provider.useClass) &&
-      ngMocksUniverse.builder.get(provider.useClass) === provider.useClass
+      ngMocksUniverse.builtProviders.has(provider.useClass) &&
+      ngMocksUniverse.builtProviders.get(provider.useClass) === provider.useClass
         ? provider
-        : useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => MockService(provider.useClass));
+        : useFactory(provide, () => MockService(provider.useClass));
   }
   if (!mockProvider && Object.keys(provider).indexOf('useFactory') !== -1) {
-    mockProvider = useFactory(ngMocksUniverse.cacheMocks.get(provide) || provide, () => ({}));
+    mockProvider = useFactory(provide, () => ({}));
   }
 
   return mockProvider;

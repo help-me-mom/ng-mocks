@@ -23,7 +23,7 @@ import decorateQueries from '../common/decorate.queries';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
 import { MockOf } from '../common/mock-of';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockServiceHelper from '../mock-service/helper';
 
 import { MockedComponent } from './types';
@@ -62,8 +62,8 @@ export function MockComponent<TComponent>(
       // looks like an in-test mock.
     }
   }
-  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cacheMocks.has(component)) {
-    return ngMocksUniverse.cacheMocks.get(component);
+  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cacheDeclarations.has(component)) {
+    return ngMocksUniverse.cacheDeclarations.get(component);
   }
 
   let meta: core.Directive | undefined = metaData;
@@ -234,7 +234,7 @@ export function MockComponent<TComponent>(
 
   /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheComponent')) {
-    ngMocksUniverse.cacheMocks.set(component, ComponentMock);
+    ngMocksUniverse.cacheDeclarations.set(component, ComponentMock);
   }
 
   return ComponentMock as any;

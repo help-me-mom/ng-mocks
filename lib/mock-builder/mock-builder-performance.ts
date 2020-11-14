@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapEntries, mapKeys, mapValues } from '../common/core.helpers';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderPromise } from './mock-builder-promise';
 import { IMockBuilderResult } from './types';

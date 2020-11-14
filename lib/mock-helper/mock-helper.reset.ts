@@ -1,8 +1,8 @@
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 export default (): void => {
-  ngMocksUniverse.builder = new Map();
-  ngMocksUniverse.cacheMocks = new Map();
+  ngMocksUniverse.builtDeclarations = new Map();
+  ngMocksUniverse.cacheDeclarations = new Map();
   ngMocksUniverse.cacheProviders = new Map();
   ngMocksUniverse.config = new Map();
   ngMocksUniverse.global = new Map();

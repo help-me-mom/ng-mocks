@@ -766,7 +766,7 @@ describe('MockPipe', () => {
     )
   );
 
-  it('transforms values to jsoin', () => {
+  it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
 
     const pipeElement = ngMocks.find(fixture.debugElement, 'span');
@@ -2527,7 +2527,8 @@ This function verifies how a class has been decorated.
 - `isNgDef( SomeClass, 'c' )` - checks whether `SomeClass` is a component
 - `isNgDef( SomeClass, 'd' )` - checks whether `SomeClass` is a directive
 - `isNgDef( SomeClass, 'p' )` - checks whether `SomeClass` is a pipe
-- `isNgDef( SomeClass )` - checks whether `SomeClass` is a module / component / directive / pipe.
+- `isNgDef( SomeClass, 'i' )` - checks whether `SomeClass` is a service
+- `isNgDef( SomeClass )` - checks whether `SomeClass` is a module / component / directive / pipe / service.
 
 #### getSourceOfMock
 

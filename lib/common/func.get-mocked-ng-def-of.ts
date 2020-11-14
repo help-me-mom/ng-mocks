@@ -7,7 +7,7 @@ import { getTestBedInjection } from './core.helpers';
 import { NG_MOCKS } from './core.tokens';
 import { Type } from './core.types';
 import { isMockedNgDefOf } from './func.is-mocked-ng-def-of';
-import { ngMocksUniverse } from './ng-mocks-universe';
+import ngMocksUniverse from './ng-mocks-universe';
 
 /**
  * Returns a def of a mock module based on a mock module or a source module.
@@ -60,8 +60,8 @@ export function getMockedNgDefOf(declaration: any, type?: any): any {
   // If we are not in the MockBuilder env we can rely on the current cache.
   if (!mock && source !== declaration) {
     mock = declaration;
-  } else if (!mock && ngMocksUniverse.cacheMocks.has(source)) {
-    mock = ngMocksUniverse.cacheMocks.get(source);
+  } else if (!mock && ngMocksUniverse.cacheDeclarations.has(source)) {
+    mock = ngMocksUniverse.cacheDeclarations.get(source);
   }
 
   if (mock && !type) {
