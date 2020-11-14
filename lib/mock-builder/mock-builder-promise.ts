@@ -1,5 +1,6 @@
 import { InjectionToken, NgModule, Provider } from '@angular/core';
 import { MetadataOverride, TestBed } from '@angular/core/testing';
+import { MockService, ngMocks } from 'ng-mocks';
 
 import { extractDependency, flatten, mapEntries, mapValues } from '../common/core.helpers';
 import { directiveResolver, jitReflector } from '../common/core.reflect';
@@ -102,7 +103,9 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
         const instance = this.defValue.get(def);
         ngMocksUniverse.builtDeclarations.set(
           def,
-          instance && typeof instance === 'object' && typeof instance.transform === 'function'
+          typeof instance === 'function'
+            ? MockPipe(def, instance)
+            : instance && typeof instance === 'object' && typeof instance.transform === 'function'
             ? MockPipe(def, instance.transform)
             : MockPipe(def)
         );
@@ -110,9 +113,12 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
 
       if (isNgDef(def, 'i') && this.defValue.has(def)) {
         const instance = this.defValue.get(def);
+        const isFunc = isNgDef(def, 'p') && typeof instance === 'function';
         ngMocksUniverse.builtProviders.set(
           def,
-          mockServiceHelper.useFactory(def, () => instance)
+          mockServiceHelper.useFactory(def, () =>
+            isFunc ? ngMocks.stub(MockService(def), { transform: instance }) : instance
+          )
         );
       } else if (isNgDef(def, 'i')) {
         ngMocksUniverse.builtProviders.set(def, MockProvider(def));
@@ -427,9 +433,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
     let mock: any = def === a1 ? defaultMock : a1;
     let config: any = a2 ? a2 : a1 !== defaultMock ? a1 : undefined;
     if (isNgDef(def, 'p') && typeof a1 === 'function') {
-      mock = {
-        transform: a1,
-      };
+      mock = a1;
       config = a2;
     } else if (isNgDef(def, 'i') || !isNgDef(def)) {
       config = a2;

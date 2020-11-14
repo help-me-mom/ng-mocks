@@ -19,6 +19,11 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   let mockDef: typeof def;
   if (resolutions.has(provider)) {
     mockDef = resolutions.get(provider);
+    const existingMock = ngMocksUniverse.builtProviders.get(provider);
+    if (existingMock) {
+      mockDef = existingMock;
+    }
+
     // A case when a provider is actually a component, directive, pipe.
     if (typeof mockDef === 'function') {
       mockDef = {
@@ -26,6 +31,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
         useClass: mockDef,
       };
     }
+
     return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
   }
 
