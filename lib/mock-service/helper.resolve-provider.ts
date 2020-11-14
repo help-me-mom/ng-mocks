@@ -67,7 +67,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   // Then we check decisions whether we should keep or replace a def.
-  if (!mockDef && ngMocksUniverse.builder.has(provider)) {
+  if (ngMocksUniverse.builder.has(provider)) {
     mockDef = ngMocksUniverse.builder.get(provider);
     if (mockDef === provider) {
       mockDef = def;

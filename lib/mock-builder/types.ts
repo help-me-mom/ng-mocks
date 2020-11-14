@@ -94,11 +94,6 @@ export interface IMockBuilder {
   keep(def: any, config?: IMockBuilderConfig): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilderkeep
-   */
-  keep(input: any, config?: IMockBuilderConfig): this;
-
-  /**
    * @see https://github.com/ike18t/ng-mocks#mockbuildermock
    */
   mock<T extends PipeTransform>(pipe: AnyType<T>, config?: IMockBuilderConfig): this;

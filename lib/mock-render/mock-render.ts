@@ -90,9 +90,9 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
       inputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
-        if (alias && params && typeof params[alias]) {
+        if (alias && params) {
           mockTemplate += ` [${alias}]="${alias}"`;
-        } else if (property && params && typeof params[property]) {
+        } else if (property && params) {
           mockTemplate += ` [${property}]="${property}"`;
         } else if (alias && noParams) {
           mockTemplate += ` [${alias}]="${property}"`;
@@ -105,9 +105,9 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
       outputs.forEach((definition: string) => {
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
-        if (alias && params && typeof params[alias]) {
+        if (alias && params) {
           mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
-        } else if (property && params && typeof params[property]) {
+        } else if (property && params) {
           mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
         } else if (alias && noParams) {
           mockTemplate += ` (${alias})="${property}.emit($event)"`;

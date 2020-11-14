@@ -2,6 +2,7 @@
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 [![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
 [![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks.svg?branch=master)](https://lgtm.com/projects/g/ike18t/ng-mocks)
 
 # ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
@@ -1494,10 +1495,7 @@ describe('MAIN', () => {
     //   By.directive(AppHeaderComponent)
     // );
     // but typesafe and fails if nothing has been found.
-    const header = ngMocks.find(
-      fixture.debugElement,
-      AppHeaderComponent
-    );
+    const header = ngMocks.find(AppHeaderComponent);
 
     // Asserting how AppComponent uses AppHeaderComponent.
     expect(header.componentInstance.showLogo).toBe(true);
@@ -2320,26 +2318,34 @@ const directive = ngMocks.get(fixture.debugElement, Directive);
 #### ngMocks.findInstance
 
 Returns the first found attribute or structural directive which belongs to the current element or its any child.
+If the element isn't specified then the current fixture is used.
 
-- `ngMocks.findInstance( debugElement, directive, notFoundValue? )`
+- `ngMocks.findInstance( fixture?, directive, notFoundValue? )`
+- `ngMocks.findInstance( debugElement?, directive, notFoundValue? )`
 
 ```typescript
-const directive = ngMocks.findInstance(
+const directive1 = ngMocks.findInstance(Directive1);
+const directive2 = ngMocks.findInstance(fixture, Directive2);
+const directive3 = ngMocks.findInstance(
   fixture.debugElement,
-  Directive
+  Directive3
 );
 ```
 
 #### ngMocks.findInstances
 
 Returns an array of all found attribute or structural directives which belong to the current element and all its children.
+If the element isn't specified then the current fixture is used.
 
-- `ngMocks.findInstances( debugElement, directive )`
+- `ngMocks.findInstances( fixture?, directive )`
+- `ngMocks.findInstances( debugElement?, directive )`
 
 ```typescript
-const directives = ngMocks.findInstances(
+const directives1 = ngMocks.findInstances(Directive1);
+const directives2 = ngMocks.findInstances(fixture, Directive2);
+const directives3 = ngMocks.findInstances(
   fixture.debugElement,
-  Directive
+  Directive3
 );
 ```
 
@@ -2347,34 +2353,46 @@ const directives = ngMocks.findInstances(
 
 Returns a found DebugElement which belongs to a component with the correctly typed componentInstance,
 or matches a css selector.
+If a root element or a fixture aren't specified then the current fixture is used.
 
-- `ngMocks.find( fixture, component, notFoundValue? )`
-- `ngMocks.find( debugElement, component, notFoundValue? )`
-- `ngMocks.find( debugElement, selector, notFoundValue? )`
+- `ngMocks.find( fixture?, component, notFoundValue? )`
+- `ngMocks.find( fixture?, cssSelector, notFoundValue? )`
+- `ngMocks.find( debugElement?, component, notFoundValue? )`
+- `ngMocks.find( debugElement?, cssSelector, notFoundValue? )`
 
 ```typescript
-const element = ngMocks.find(fixture.debugElement, Component);
+const element1 = ngMocks.find(Component1);
+const element2 = ngMocks.find(fixture, Component2);
+const element3 = ngMocks.find(fixture.debugElement, Component3);
 ```
 
 ```typescript
-const element = ngMocks.find(fixture.debugElement, 'div.container');
+const element1 = ngMocks.find('div.con1');
+const element2 = ngMocks.find(fixture, 'div.con2');
+const element3 = ngMocks.find(fixture.debugElement, 'div.con3');
 ```
 
 #### ngMocks.findAll
 
 Returns an array of found DebugElements which belong to a component with the correctly typed componentInstance,
 or match a css selector.
+If a root element or a fixture aren't specified then the current fixture is used.
 
-- `ngMocks.findAll( fixture, component )`
-- `ngMocks.findAll( debugElement, component )`
-- `ngMocks.findAll( debugElement, selector )`
+- `ngMocks.findAll( fixture?, component )`
+- `ngMocks.findAll( fixture?, cssSelector )`
+- `ngMocks.findAll( debugElement?, component )`
+- `ngMocks.findAll( debugElement?, cssSelector )`
 
 ```typescript
-const elements = ngMocks.findAll(fixture.debugElement, Component);
+const elements1 = ngMocks.findAll(Component1);
+const elements2 = ngMocks.findAll(fixture, Component2);
+const elements3 = ngMocks.findAll(fixture.debugElement, Component3);
 ```
 
 ```typescript
-const elements = ngMocks.findAll(fixture.debugElement, 'div.item');
+const elements1 = ngMocks.findAll('div.item1');
+const elements2 = ngMocks.findAll(fixture, 'div.item2');
+const elements3 = ngMocks.findAll(fixture.debugElement, 'div.item3');
 ```
 
 #### ngMocks.input

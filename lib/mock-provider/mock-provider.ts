@@ -1,12 +1,4 @@
-import {
-  ClassProvider,
-  ConstructorProvider,
-  ExistingProvider,
-  FactoryProvider,
-  InjectionToken,
-  Provider,
-  ValueProvider,
-} from '@angular/core';
+import { InjectionToken, Provider } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import useFactory from '../mock-service/helper.use-factory';
@@ -35,23 +27,12 @@ export function MockProvider(provide: any, useValue: any = defaultValue): Provid
       useValue,
     };
   }
-
-  let mockProvider:
-    | ValueProvider
-    | ClassProvider
-    | ConstructorProvider
-    | ExistingProvider
-    | FactoryProvider
-    | undefined;
-
-  if (!mockProvider && typeof provide === 'function') {
-    mockProvider = useFactory(provide, () => MockService(provide));
-  } else {
-    mockProvider = {
-      provide,
-      useValue: undefined,
-    };
+  if (typeof provide === 'function') {
+    return useFactory(provide, () => MockService(provide));
   }
 
-  return mockProvider;
+  return {
+    provide,
+    useValue: undefined,
+  };
 }

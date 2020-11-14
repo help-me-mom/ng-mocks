@@ -129,7 +129,7 @@ describe('MAIN', () => {
     //   By.directive(AppHeaderComponent)
     // );
     // but typesafe and fails if nothing has been found.
-    const header = ngMocks.find(fixture.debugElement, AppHeaderComponent);
+    const header = ngMocks.find(AppHeaderComponent);
 
     // Asserting how AppComponent uses AppHeaderComponent.
     expect(header.componentInstance.showLogo).toBe(true);

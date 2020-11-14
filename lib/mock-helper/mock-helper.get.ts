@@ -8,7 +8,6 @@ export default <T>(...args: any[]) => {
   const el: MockedDebugElement = args[0];
   const sel: Type<T> = args[1];
   const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
-  let notFound = false;
 
   // Looking for related attribute directive.
   try {
@@ -20,20 +19,17 @@ export default <T>(...args: any[]) => {
   // Looking for related structural directive.
   // It's located as prev node.
   const prevNode = el.nativeNode.previousSibling;
-  if (!prevNode || prevNode.nodeName !== '#comment') {
-    notFound = true;
-  }
-  const matches = notFound || !el || !el.parent ? [] : el.parent.queryAllNodes(node => node.nativeNode === prevNode);
-  if (matches.length === 0) {
-    notFound = true;
-  }
+  const matches =
+    !prevNode || prevNode.nodeName !== '#comment' || !el || !el.parent
+      ? []
+      : el.parent.queryAllNodes(node => node.nativeNode === prevNode);
   const matchedNode = matches[0];
   try {
     return matchedNode.injector.get(getSourceOfMock(sel));
   } catch (error) {
-    notFound = true;
+    // nothing to do
   }
-  if (notFound && notFoundValue !== defaultNotFoundValue) {
+  if (notFoundValue !== defaultNotFoundValue) {
     return notFoundValue;
   }
   throw new Error(`Cannot find ${sel.name} directive via ngMocks.get`);
