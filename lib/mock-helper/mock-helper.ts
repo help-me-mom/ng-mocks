@@ -3,7 +3,7 @@
 import { EventEmitter, InjectionToken, Provider } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
-import { AbstractType, AnyType, Type } from '../common/core.types';
+import { AnyType, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { MockedFunction } from '../mock-service/types';
@@ -20,75 +20,6 @@ import ngMocksInput from './mock-helper.input';
 import ngMocksOutput from './mock-helper.output';
 import ngMocksReset from './mock-helper.reset';
 import ngMocksStub from './mock-helper.stub';
-
-/* istanbul ignore next */
-/**
- * @deprecated use ngMocks instead
- */
-export const MockHelper: {
-  find<T>(debugElement: MockedDebugElement, component: Type<T>): null | MockedDebugElement<T>;
-  find<T>(debugElement: MockedDebugElement, component: AbstractType<T>): null | MockedDebugElement<T>;
-  find<T = any>(debugElement: MockedDebugElement, cssSelector: string): null | MockedDebugElement<T>;
-  findAll<T>(debugElement: MockedDebugElement, component: Type<T>): Array<MockedDebugElement<T>>;
-  findAll<T>(debugElement: MockedDebugElement, component: AbstractType<T>): Array<MockedDebugElement<T>>;
-  findAll<T = any>(debugElement: MockedDebugElement, cssSelector: string): Array<MockedDebugElement<T>>;
-  findDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
-  findDirective<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): undefined | T;
-  findDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
-  findDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T;
-  findDirectives<T>(debugNode: MockedDebugNode, directive: Type<T>): T[];
-  findDirectives<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T[];
-  findOrFail<T>(debugElement: MockedDebugElement, component: Type<T>): MockedDebugElement<T>;
-  findOrFail<T>(debugElement: MockedDebugElement, component: AbstractType<T>): MockedDebugElement<T>;
-  findOrFail<T = any>(debugElement: MockedDebugElement, cssSelector: string): MockedDebugElement<T>;
-  getDirective<T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T;
-  getDirective<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): undefined | T;
-  getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
-  getDirectiveOrFail<T>(debugNode: MockedDebugNode, directive: AbstractType<T>): T;
-  getInput<T = any>(debugNode: MockedDebugNode, input: string): undefined | T;
-  getInputOrFail<T = any>(debugNode: MockedDebugNode, input: string): T;
-  getOutput<T = any>(debugNode: MockedDebugNode, output: string): undefined | EventEmitter<T>;
-  getOutputOrFail<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
-  mockService<I extends object, O extends object>(instance: I, overrides: O): I & O;
-  mockService<T = MockedFunction>(instance: any, name: string, style?: 'get' | 'set'): T;
-} = {
-  getInput: (debugNode: MockedDebugNode, input: string): any => ngMocks.input(debugNode, input, undefined),
-
-  getInputOrFail: (debugNode: MockedDebugNode, input: string): any => ngMocks.input(debugNode, input),
-
-  getOutput: (debugNode: MockedDebugNode, output: string): any => ngMocks.output(debugNode, output, undefined),
-
-  getOutputOrFail: (debugNode: MockedDebugNode, output: string): any => ngMocks.output(debugNode, output),
-
-  getDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T => ngMocks.get(debugNode, directive),
-
-  getDirective: <T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T =>
-    ngMocks.get(debugNode, directive, undefined),
-
-  findDirectiveOrFail: <T>(debugNode: MockedDebugNode, directive: Type<T>): T =>
-    ngMocks.findInstance(debugNode, directive),
-
-  findDirective: <T>(debugNode: MockedDebugNode, directive: Type<T>): undefined | T =>
-    ngMocks.findInstance(debugNode, directive, undefined),
-
-  findDirectives: <T>(debugNode: MockedDebugNode, directive: Type<T>): T[] =>
-    ngMocks.findInstances(debugNode, directive),
-
-  findOrFail: (el: MockedDebugElement, sel: any) => ngMocks.find(el, sel),
-
-  // tslint:disable-next-line:no-null-keyword
-  find: (el: MockedDebugElement, sel: any) => ngMocks.find(el, sel, null),
-
-  findAll: (el: MockedDebugElement, sel: any) => ngMocks.findAll(el, sel),
-
-  mockService: <T = MockedFunction>(instance: any, override: any, style?: 'get' | 'set'): T => {
-    if (typeof override !== 'object') {
-      return ngMocks.stub(instance, override, style);
-    }
-
-    return ngMocks.stub(instance, override);
-  },
-};
 
 /**
  * @see https://github.com/ike18t/ng-mocks#ngmocks

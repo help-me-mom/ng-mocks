@@ -20,7 +20,7 @@ The current version of the library has been tested and can be used with:
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
-There is a preconfigured sandbox [codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/test.spec.ts)
+There is a preconfigured sandbox [codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
 where you might check all the features. To focus on a particular one simply prefix it with `fdescribe` or `fit`.
 
 There is a brief summary of the latest changes in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
@@ -371,7 +371,7 @@ describe('Test', () => {
 The source file is here:
 [MockComponent](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockComponent/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockComponent/test.spec.ts)
 to play with.
 
 ```typescript
@@ -562,7 +562,7 @@ describe('Test', () => {
 The source file is here:
 [MockDirective-Attribute](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockDirective-Attribute/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Attribute/test.spec.ts)
 to play with.
 
 ```typescript
@@ -635,7 +635,7 @@ if you want to assert on its nested elements.
 The source file is here:
 [MockDirective-Structural](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockDirective-Structural/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Structural/test.spec.ts)
 to play with.
 
 ```typescript
@@ -754,7 +754,7 @@ describe('Test', () => {
 The source file is here:
 [MockPipe](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockPipe/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockPipe/test.spec.ts)
 to play with.
 
 ```typescript
@@ -909,7 +909,7 @@ If you are encountering it too, please read a section called [How to fix `TypeEr
 The source file is here:
 [MockProvider](https://github.com/ike18t/ng-mocks/blob/master/examples/MockProvider/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockProvider/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockProvider/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1029,7 +1029,7 @@ beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 The source file is here:
 [MockModule](https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockModule/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockModule/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1167,7 +1167,7 @@ but it goes beyond the topic.
 The source file is here:
 [MockObservable](https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockObservable/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockObservable/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1248,7 +1248,7 @@ A mock instance of `ControlValueAccessor` provides:
 The source file is here:
 [MockReactiveForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockReactiveForms/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockReactiveForms/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1293,7 +1293,7 @@ describe('MockReactiveForms', () => {
 The source file is here:
 [MockForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockForms/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockForms/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1345,7 +1345,7 @@ describe('MockForms', () => {
 The source file is here:
 [MAIN](https://github.com/ike18t/ng-mocks/blob/master/examples/MAIN/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MAIN/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MAIN/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1529,7 +1529,7 @@ describe('MAIN', () => {
 
 Our tests:
 
-- [sandbox on codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/e2e.ts)
+- [sandbox on codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/e2e.ts)
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
@@ -1589,7 +1589,7 @@ and has a rich toolkit that supports:
 The source file is here:
 [MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockBuilder/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.spec.ts)
 to play with.
 
 ```typescript
@@ -2035,7 +2035,7 @@ There is **an example how to render a custom template in an Angular test** below
 The source file is here:
 [MockRender](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockRender/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockRender/test.spec.ts)
 to play with.
 
 ```typescript
@@ -2207,7 +2207,7 @@ afterAll(() => MockInstance(ChildComponent)); // <- resets ChildComponent.
 The source file is here:
 [MockInstance](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/satanTime/ng-mocks-cs?file=/src/examples/MockInstance/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockInstance/test.spec.ts)
 to play with.
 
 ```typescript

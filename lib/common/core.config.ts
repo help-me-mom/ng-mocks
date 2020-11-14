@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ApplicationModule } from '@angular/core';
 
 export default {
+  flags: ['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports'],
   neverMockModule: [ApplicationModule, CommonModule],
   neverMockProvidedFunction: [
     'DomRendererFactory2',
