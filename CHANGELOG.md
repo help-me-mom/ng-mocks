@@ -1,3 +1,12 @@
+## [10.5.4](https://github.com/ike18t/ng-mocks/compare/v10.5.3...v10.5.4) (2020-11-14)
+
+
+### Bug Fixes
+
+* better handling of double decorations ([60bbebc](https://github.com/ike18t/ng-mocks/commit/60bbebc506325faa236b29249d686cbae17e5569))
+* flex behavior for a mock pipe ([9769061](https://github.com/ike18t/ng-mocks/commit/97690614511753dc8cb5bcf6dcbc4d57ca9f3eb3))
+* searching for things in default fixture ([17b5208](https://github.com/ike18t/ng-mocks/commit/17b5208afcc50ac2705f15bc6fd9c016eda627ce))
+
 ## [10.5.3](https://github.com/ike18t/ng-mocks/compare/v10.5.2...v10.5.3) (2020-11-07)
 
 
