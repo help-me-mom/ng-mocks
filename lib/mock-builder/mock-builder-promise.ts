@@ -1,6 +1,5 @@
 import { InjectionToken, NgModule, Provider } from '@angular/core';
 import { MetadataOverride, TestBed } from '@angular/core/testing';
-import { MockService, ngMocks } from 'ng-mocks';
 
 import { extractDependency, flatten, mapEntries, mapValues } from '../common/core.helpers';
 import { directiveResolver, jitReflector } from '../common/core.reflect';
@@ -12,10 +11,12 @@ import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/fun
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
+import { ngMocks } from '../mock-helper/mock-helper';
 import { MockModule, MockNgDef } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
 import mockServiceHelper from '../mock-service/helper';
 import MockProvider from '../mock-service/mock-provider';
+import { MockService } from '../mock-service/mock-service';
 
 import extractDep from './mock-builder-promise.extract-dep';
 import skipDep from './mock-builder-promise.skip-dep';

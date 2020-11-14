@@ -1,8 +1,7 @@
 import { Component, NgModule, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, EventManager } from '@angular/platform-browser';
-import { MockBuilder, ngMocks } from 'ng-mocks';
-import { MockRender } from 'ng-mocks/dist/lib/mock-render/mock-render';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'app-root',

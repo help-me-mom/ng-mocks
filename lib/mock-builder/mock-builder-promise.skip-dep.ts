@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import { isNgInjectionToken } from 'ng-mocks';
 
 import ngConfig from '../common/core.config';
+import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 // Checks if we should avoid mocking of the provider.

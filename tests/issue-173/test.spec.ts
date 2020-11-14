@@ -1,6 +1,5 @@
 import { Directive, NgModule } from '@angular/core';
-import { MockBuilder } from 'ng-mocks';
-import { MockRender } from 'ng-mocks/dist/lib/mock-render/mock-render';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
   selector: 'child',

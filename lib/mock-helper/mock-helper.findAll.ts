@@ -1,7 +1,8 @@
 import { By } from '@angular/platform-browser';
-import { MockedDebugElement, Type } from 'ng-mocks';
 
+import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
+import { MockedDebugElement } from '../mock-render/types';
 
 import getLastFixture from './func.get-last-fixture';
 
