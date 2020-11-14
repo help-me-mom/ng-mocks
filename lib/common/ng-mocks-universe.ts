@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
+import config from './core.config';
 import { AnyType } from './core.types';
 
 /* istanbul ignore next */
@@ -11,7 +12,7 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   cacheDeclarations: new Map(),
   cacheProviders: new Map(),
   config: new Map(),
-  flags: new Set<string>(['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports']),
+  flags: new Set<string>(config.flags),
   global: new Map(),
   touches: new Set<AnyType<any> | InjectionToken<any>>(),
 };
