@@ -21,7 +21,7 @@ jobs:
         - ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
 
         # https://codecov.io/gh/ike18t/ng-mocks
-        - ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info
+        - ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info --disable=gcov
 
         # https://codeclimate.com/github/ike18t/ng-mocks
         - >-
