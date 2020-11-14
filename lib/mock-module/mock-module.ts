@@ -11,7 +11,7 @@ import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { Mock } from '../common/mock';
 import { MockOf } from '../common/mock-of';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockPipe } from '../mock-pipe/mock-pipe';
@@ -55,8 +55,8 @@ export function MockModule(module: any): any {
 
   // Every module should be replaced with its mock copy only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
-  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheMocks.has(ngModule)) {
-    mockModule = ngMocksUniverse.cacheMocks.get(ngModule);
+  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {
+    mockModule = ngMocksUniverse.cacheDeclarations.get(ngModule);
   }
 
   const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
@@ -81,8 +81,8 @@ export function MockModule(module: any): any {
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
-  if (!mockModule && ngMocksUniverse.builder.has(ngModule)) {
-    const instance = ngMocksUniverse.builder.get(ngModule);
+  if (!mockModule && ngMocksUniverse.builtDeclarations.has(ngModule)) {
+    const instance = ngMocksUniverse.builtDeclarations.get(ngModule);
     if (isNgDef(instance, 'm') && instance !== ngModule) {
       mockModule = instance;
     }
@@ -119,7 +119,7 @@ export function MockModule(module: any): any {
   // In MockBuilder scope it will be reset later anyway.
   /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheModule')) {
-    ngMocksUniverse.cacheMocks.set(ngModule, mockModule);
+    ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
   }
 
   if (ngMocksUniverse.flags.has('skipMock')) {
@@ -175,7 +175,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
       return resolutions.get(def);
     }
     // skipping excluded things
-    if (ngMocksUniverse.builder.has(def) && ngMocksUniverse.builder.get(def) === null) {
+    if (ngMocksUniverse.builtDeclarations.has(def) && ngMocksUniverse.builtDeclarations.get(def) === null) {
       changed = changed || true;
       resolutions.set(def, undefined);
       return;
@@ -193,8 +193,8 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     }
 
     // Then we check decisions whether we should keep or replace a def.
-    if (!mockDef && ngMocksUniverse.builder.has(def)) {
-      mockDef = ngMocksUniverse.builder.get(def);
+    if (!mockDef && ngMocksUniverse.builtDeclarations.has(def)) {
+      mockDef = ngMocksUniverse.builtDeclarations.get(def);
     }
 
     // And then we mock what we have if it wasn't blocked by the skipMock.

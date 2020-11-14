@@ -22,7 +22,7 @@ import decorateQueries from '../common/decorate.queries';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
 import { MockOf } from '../common/mock-of';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockServiceHelper from '../mock-service/helper';
 
 import { MockedDirective } from './types';
@@ -45,8 +45,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       // looks like an in-test mock.
     }
   }
-  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cacheMocks.has(directive)) {
-    return ngMocksUniverse.cacheMocks.get(directive);
+  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cacheDeclarations.has(directive)) {
+    return ngMocksUniverse.cacheDeclarations.get(directive);
   }
 
   let meta: core.Directive;
@@ -177,7 +177,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
 
   /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheDirective')) {
-    ngMocksUniverse.cacheMocks.set(directive, DirectiveMock);
+    ngMocksUniverse.cacheDeclarations.set(directive, DirectiveMock);
   }
 
   return DirectiveMock as any;

@@ -1,6 +1,6 @@
 import { FactoryProvider, Injector } from '@angular/core';
 
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 export default <D, I>(def: D, mock: () => I): FactoryProvider => ({
   deps: [Injector],

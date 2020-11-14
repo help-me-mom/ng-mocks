@@ -5,7 +5,7 @@ import { NgControl } from '@angular/forms';
 
 import mockServiceHelper from '../mock-service/helper';
 
-import { ngMocksUniverse } from './ng-mocks-universe';
+import ngMocksUniverse from './ng-mocks-universe';
 
 export type ngMocksMockConfig = {
   outputs?: string[];

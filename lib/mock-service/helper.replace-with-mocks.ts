@@ -1,9 +1,9 @@
 import { NG_MOCKS_GUARDS } from '../common/core.tokens';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 const replaceWithMocks = (value: any): any => {
-  if (ngMocksUniverse.cacheMocks.has(value)) {
-    return ngMocksUniverse.cacheMocks.get(value);
+  if (ngMocksUniverse.cacheDeclarations.has(value)) {
+    return ngMocksUniverse.cacheDeclarations.get(value);
   }
   if (typeof value !== 'object') {
     return value;
@@ -15,7 +15,10 @@ const replaceWithMocks = (value: any): any => {
   if (Array.isArray(value)) {
     mock = [];
     for (const valueItem of value) {
-      if (ngMocksUniverse.builder.has(valueItem) && ngMocksUniverse.builder.get(valueItem) === null) {
+      if (
+        ngMocksUniverse.builtDeclarations.has(valueItem) &&
+        ngMocksUniverse.builtDeclarations.get(valueItem) === null
+      ) {
         updated = updated || true;
         continue;
       }
@@ -25,7 +28,10 @@ const replaceWithMocks = (value: any): any => {
   } else if (value) {
     mock = {};
     for (const key of Object.keys(value)) {
-      if (ngMocksUniverse.builder.has(value[key]) && ngMocksUniverse.builder.get(value[key]) === null) {
+      if (
+        ngMocksUniverse.builtDeclarations.has(value[key]) &&
+        ngMocksUniverse.builtDeclarations.get(value[key]) === null
+      ) {
         updated = updated || true;
         continue;
       }
@@ -41,11 +47,14 @@ const replaceWithMocks = (value: any): any => {
 
       const guards: any[] = [];
       for (const guard of mock[section]) {
-        if (ngMocksUniverse.builder.has(guard) && ngMocksUniverse.builder.get(guard) !== null) {
+        if (ngMocksUniverse.builtDeclarations.has(guard) && ngMocksUniverse.builtDeclarations.get(guard) !== null) {
           guards.push(guard);
           continue;
         }
-        if (ngMocksUniverse.builder.has(NG_MOCKS_GUARDS) && ngMocksUniverse.builder.get(NG_MOCKS_GUARDS) === null) {
+        if (
+          ngMocksUniverse.builtDeclarations.has(NG_MOCKS_GUARDS) &&
+          ngMocksUniverse.builtDeclarations.get(NG_MOCKS_GUARDS) === null
+        ) {
           continue;
         }
         guards.push(guard);

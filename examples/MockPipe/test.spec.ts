@@ -15,7 +15,7 @@ class TestedComponent {}
 describe('MockPipe', () => {
   beforeEach(() => MockBuilder(TestedComponent).mock(DependencyPipe, (...args: string[]) => JSON.stringify(args)));
 
-  it('transforms values to jsoin', () => {
+  it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
 
     const pipeElement = ngMocks.find(fixture.debugElement, 'span');

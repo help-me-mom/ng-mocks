@@ -1,7 +1,7 @@
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import mockServiceHelper from './helper';
 import MockProvider from './mock-provider';
@@ -30,7 +30,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   //  we shouldn't touch excluded providers.
-  if (ngMocksUniverse.builder.has(provider) && ngMocksUniverse.builder.get(provider) === null) {
+  if (ngMocksUniverse.builtProviders.has(provider) && ngMocksUniverse.builtProviders.get(provider) === null) {
     /* istanbul ignore else */
     if (changed) {
       changed(true);
@@ -43,8 +43,8 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   if (
-    ngMocksUniverse.builder.has(NG_MOCKS_INTERCEPTORS) &&
-    ngMocksUniverse.builder.get(NG_MOCKS_INTERCEPTORS) === null &&
+    ngMocksUniverse.builtProviders.has(NG_MOCKS_INTERCEPTORS) &&
+    ngMocksUniverse.builtProviders.get(NG_MOCKS_INTERCEPTORS) === null &&
     isNgInjectionToken(provider) &&
     provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
     provider !== def
@@ -57,7 +57,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
       return;
     }
     const interceptor = def.useExisting || def.useClass;
-    if (!ngMocksUniverse.builder.has(interceptor) || ngMocksUniverse.builder.get(interceptor) === null) {
+    if (!ngMocksUniverse.builtProviders.has(interceptor) || ngMocksUniverse.builtProviders.get(interceptor) === null) {
       /* istanbul ignore else */
       if (changed) {
         changed(true);
@@ -67,8 +67,8 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
 
   // Then we check decisions whether we should keep or replace a def.
-  if (ngMocksUniverse.builder.has(provider)) {
-    mockDef = ngMocksUniverse.builder.get(provider);
+  if (ngMocksUniverse.builtProviders.has(provider)) {
+    mockDef = ngMocksUniverse.builtProviders.get(provider);
     if (mockDef === provider) {
       mockDef = def;
     } else if (mockDef === undefined) {

@@ -32,6 +32,13 @@ export function isNgDef(declaration: any, ngType: 'd'): declaration is Type<any>
 export function isNgDef(declaration: any, ngType: 'p'): declaration is Type<PipeTransform>;
 
 /**
+ * Checks whether a class was decorated by @Injectable.
+ *
+ * @see https://github.com/ike18t/ng-mocks#isngdef
+ */
+export function isNgDef(declaration: any, ngType: 'i'): declaration is Type<any>;
+
+/**
  * Checks whether a class was decorated by a ng type.
  *
  * @see https://github.com/ike18t/ng-mocks#isngdef
@@ -43,5 +50,6 @@ export function isNgDef(declaration: any, ngType?: string): declaration is Type<
   const isComponent = (!ngType || ngType === 'c') && isNgType(declaration, 'Component');
   const isDirective = (!ngType || ngType === 'd') && isNgType(declaration, 'Directive');
   const isPipe = (!ngType || ngType === 'p') && isNgType(declaration, 'Pipe');
-  return isModule || isComponent || isDirective || isPipe;
+  const isInjectable = (!ngType || ngType === 'i') && isNgType(declaration, 'Injectable');
+  return isModule || isComponent || isDirective || isPipe || isInjectable;
 }

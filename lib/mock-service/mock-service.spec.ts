@@ -6,12 +6,12 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { NG_MOCKS_GUARDS, NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
-import { ngMocksUniverse } from '../common/ng-mocks-universe';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
 
-import { MockService } from './mock-service';
 import mockServiceHelper from './helper';
+import { MockService } from './mock-service';
 
 class DeepParentClass {
   public deepParentMethodName = 'deepParentMethod';
@@ -275,7 +275,7 @@ describe('MockService', () => {
       }
     }
 
-    ngMocksUniverse.cacheMocks.set(A, B);
+    ngMocksUniverse.cacheDeclarations.set(A, B);
 
     const instance = new Test();
     const updated = mockServiceHelper.replaceWithMocks(instance);
