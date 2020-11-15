@@ -1,3 +1,26 @@
+# [11.0.0](https://github.com/ike18t/ng-mocks/compare/v10.5.4...v11.0.0) (2020-11-15)
+
+
+### Bug Fixes
+
+* removing deprecations ([2625352](https://github.com/ike18t/ng-mocks/commit/262535265cf09e151e7a578f1325fd7cd8067352))
+* respecting internals vs externals ([d4abf41](https://github.com/ike18t/ng-mocks/commit/d4abf41d996763fdb90ec77992055ed5164d9081)), closes [#44](https://github.com/ike18t/ng-mocks/issues/44)
+
+
+### Features
+
+* angular 11 support ([eef7b94](https://github.com/ike18t/ng-mocks/commit/eef7b94381a5cd1da4468ea9364ead480a62aa10))
+
+
+### BREAKING CHANGES
+
+* respects internals vs externals, to access them use guts or MockBuilder
+* removed NG_GUARDS, use NG_MOCKS_GUARDS
+* removed NG_INTERCEPTORS, use NG_MOCKS_INTERCEPTORS
+* removed custom meta in MockComponent
+* removed MockHelper, use ngMocks
+* A11
+
 ## [10.5.4](https://github.com/ike18t/ng-mocks/compare/v10.5.3...v10.5.4) (2020-11-14)
 
 

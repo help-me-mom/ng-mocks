@@ -1,6 +1,6 @@
 {
   "name": "ng-mocks",
-  "version": "10.5.4",
+  "version": "11.0.0",
   "description": "A library creating angular mock components, directives, pipes, services, providers and modules in unit tests, which also includes shallow rendering and precise stubs to dump child dependencies.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
