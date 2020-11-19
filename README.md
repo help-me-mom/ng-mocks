@@ -790,7 +790,7 @@ It tends to avoid a hassle of providing customized mock copies for huge services
 Simply pass a class into it and its result will be a mock instance that respects the class,
 but all methods and properties are customizable dummies.
 
-- `MockService( MyService )` - returns a mock instance of `MyService` class.
+- `MockService( MyService, overrides? )` - returns a mock instance of `MyService` class.
 - `MockService( MyOb )` - returns a mock clone of `MyOb` object.
 
 **A mock instance out of an angular service** is based on its original class, and provides:
@@ -806,6 +806,13 @@ a single method, can be handled like that:
 const instance = MockService(MyClass);
 // instance.method() returns undefined
 instance.method = () => 'My Custom Behavior';
+```
+
+```typescript
+const instance = MockService(MyClass, {
+  method: () => 'My Custom Behavior',
+});
+// instance.method() returns 'My Custom Behavior'
 ```
 
 It also supports objects. All properties that are not objects or functions will be omitted,
@@ -831,10 +838,10 @@ instance.nested.func = () => 'My Custom Behavior';
 
 `MockProvider` might be useful If you want to create a stub service or a stub token in providers.
 
-- `MockProvider( MyService )` - creates a `useFactory` provider with `MockService(MyService)` under the hood.
-- `MockProvider( MY_TOKEN_1 )` - creates a `useValue` provider that returns `undefined`.
-- `MockProvider( MyService, {mock: true} )` - creates a `useValue` provider that returns the passed value.
-- `MockProvider( MY_TOKEN_1, 'fake' )` - creates a `useValue` provider that returns the passed value.
+- `MockProvider( MyService, overrides? )` - creates a factory provider with `MockService(MyService)` under the hood.
+- `MockProvider( MY_TOKEN_1, useValue? )` - creates a factory provider that returns `undefined`.
+- `MockProvider( MyService, {mock: true} )` - creates a factory provider that extends the mock with the passed value.
+- `MockProvider( MY_TOKEN_1, 'fake' )` - creates a factory provider that returns the passed value.
 - `MockProviders( MyService1, MY_TOKEN_1, ... )` - returns an array of mock services and tokens.
 
 Now let's pretend that in an Angular application `TargetComponent` depends on a service of `DependencyService`,
