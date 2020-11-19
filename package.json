@@ -110,7 +110,7 @@
   "bugs": {
     "url": "https://github.com/ike18t/ng-mocks/issues"
   },
-  "homepage": "https://github.com/ike18t/ng-mocks#readme",
+  "homepage": "https://www.npmjs.com/package/ng-mocks",
   "peerDependencies": {
     "@angular/compiler": ">=5.x <=11.x",
     "@angular/core": ">=5.x <=11.x",

@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
 [![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
 [![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks.svg?branch=master)](https://lgtm.com/projects/g/ike18t/ng-mocks)
+[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks.svg?branch=master)](https://lgtm.com/projects/g/ike18t/ng-mocks)
 
 # ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
@@ -20,7 +20,10 @@ The current version of the library has been tested and can be used with:
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
-There is a preconfigured sandbox [codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
+There are preconfigured sandboxes on
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
+and
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts)
 where you might check all the features. To focus on a particular one simply prefix it with `fdescribe` or `fit`.
 
 There is a brief summary of the latest changes in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
@@ -38,10 +41,10 @@ I'm open to contributions.
 - [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues)
 - or submit a PR
 
-### Content:
+## Table of contents
 
-- [How to install](#install)
 - [Motivation and easy start](#motivation-and-easy-start)
+- [How to install](#install)
 
 * [How to create](#how-to-create-mock-dependencies-in-an-angular-application)
   - [a mock component](#how-to-create-a-mock-component)
@@ -65,9 +68,11 @@ I'm open to contributions.
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
-* [How to fix](#how-to-fix-an-error-in-angular-tests)
-  - [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
-  - [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+* [How to fix](https://ng-mocks.github.io/)
+  - [`TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
+  - [`Error: Type is part of the declarations of 2 modules`](https://ng-mocks.github.io/how-to-fix-error-type-is-part-of-the-declarations-of-2-modules.html)
+  - [`Error: Directive has no selector, please add it!`](https://ng-mocks.github.io/how-to-fix-error-directive-has-no-selector-please-add-it.html)
+  - [`Template parse errors: <component> is not a known element`](https://ng-mocks.github.io/how-to-fix-template-parse-errors-component-is-not-a-known-element.html)
 
 - [How to test Angular application](https://ng-mocks.github.io/)
   - [testing a component](https://ng-mocks.github.io/how-to-test-a-component.html)
@@ -86,20 +91,6 @@ I'm open to contributions.
   - [testing a routing resolver](https://ng-mocks.github.io/how-to-test-a-routing-resolver.html)
   - [testing a http request](https://ng-mocks.github.io/how-to-test-a-http-request.html)
   - [testing a http interceptor](https://ng-mocks.github.io/how-to-test-a-http-interceptor.html)
-
----
-
-## Install
-
-For any Angular project you can use the latest version of the library.
-
-NPM
-
-> npm install ng-mocks --save-dev
-
-Yarn
-
-> yarn add ng-mocks --dev
 
 ---
 
@@ -146,8 +137,9 @@ This means that our base component depends on:
 `TranslatePipe`
 etc.
 
-We could easily test it with `schemas: [NO_ERRORS_SCHEMA]` and it would
-work, but in this case we have zero guarantee, that our tests will fail
+We could easily test it with `schemas: [NO_ERRORS_SCHEMA]`
+to avoid `Template parse errors: <component> is not a known element`,
+and it would work, but in this case we have zero guarantee, that our tests will fail
 if an interface of a dependency has been changed and requires
 code updates. Therefore, we have to avoid `NO_ERRORS_SCHEMA`.
 
@@ -215,7 +207,7 @@ Right, we need a tool that would extract declarations of the module
 `AppBaseComponent` belongs to, and create mock copies out of them like the code above.
 Then, if someone deletes `AppSearchModule` the test fails too.
 
-[`ngMocks.guts`](#ngmocks) is the tool for that.
+[`ngMocks.guts`](#ngmocksguts) is the tool for that.
 Its first parameter accepts things we want to test (avoid creation of mocks) and
 the second parameter accepts things out of which we want to create mocks, if it is a module,
 its declarations (guts) will be extracted for creation of their mock copies, except the things
@@ -274,6 +266,20 @@ beforeEach(() =>
 Profit. Subscribe, like, share! [to the top](#content).
 
 Below more detailed documentation begins, please bear with us.
+
+---
+
+## Install
+
+For any Angular project you can use the latest version of the library.
+
+NPM
+
+> npm install ng-mocks --save-dev
+
+Yarn
+
+> yarn add ng-mocks --dev
 
 ---
 
@@ -901,7 +907,7 @@ describe('Test', () => {
 ```
 
 **Please note**: The most common error developers meet, when they create mock services, is "**TypeError: Cannot read property 'subscribe' of undefined**".
-If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
+If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html).
 
 <details><summary>Click to see <strong>a usage example of mock providers in Angular tests</strong></summary>
 <p>
@@ -964,7 +970,7 @@ a type of `MockedModule<T>` and provides:
 
 If you get an error like: "**Type is part of the declarations of 2 modules**",
 then consider usage of [`MockBuilder`](#mockbuilder).
-More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules).
+More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](https://ng-mocks.github.io/how-to-fix-error-type-is-part-of-the-declarations-of-2-modules.html).
 
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to use its mock copy in a test.
@@ -2128,8 +2134,8 @@ It supports: Modules, Components, Directives, Pipes and Services.
 
 You definitely need it when a test fails like:
 
-- [TypeError: Cannot read property 'subscribe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
-- [TypeError: Cannot read property 'pipe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [TypeError: Cannot read property 'subscribe' of undefined](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
+- [TypeError: Cannot read property 'pipe' of undefined](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
 - or any other issue like reading properties or calling methods of undefined
 
 Let's pretend a situation when our component uses `ViewChild` to access a child component instance.
@@ -2146,7 +2152,7 @@ class RealComponent implements AfterViewInit {
 ```
 
 When we test `RealComponent` we would like to have a mock `ChildComponent`, and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would be return `undefined`,
-therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
+therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html).
 
 If it was a service, we would use `providers` to set a proper mock instance of the service.
 
@@ -2548,7 +2554,7 @@ This function verifies tokens.
 
 ### Usage with 3rd-party libraries
 
-`ng-mocks` provides flexibility via [`ngMocks.guts`](#ngmocks) and [`MockBuilder`](#mockbuilder)
+`ng-mocks` provides flexibility via [`ngMocks.guts`](#ngmocksguts) and [`MockBuilder`](#mockbuilder)
 that allows developers to use another **Angular testing libraries** for creation of `TestBed`,
 and in the same time to **use mock copies out of all dependencies** via `ng-mocks`.
 
@@ -2560,7 +2566,7 @@ then to get mock declarations properly we need:
 - get its mock module
 - export all declarations the module has
 
-if we use [`ngMocks.guts`](#ngmocks) we need to skip the first parameter, pass the module
+if we use [`ngMocks.guts`](#ngmocksguts) we need to skip the first parameter, pass the module
 as the second parameter to export its declaration, and to pass the component as the third one to exclude it.
 
 ```typescript
@@ -2716,79 +2722,5 @@ In case of jest add it to `src/setupJest.ts`.
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
-
-[to the top](#content)
-
----
-
-## How to fix an error in Angular tests
-
-We may encounter different unpleasant issues, when we create mock declarations in testing environment.
-
-There is a list of most common issues and their solutions below,
-feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you are facing or struggling with them or anything else.
-
-- [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
-- [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
-
----
-
-### How to fix `TypeError: Cannot read property 'subscribe' of undefined`
-
-This issue means that something has been replaced with a mock copy and returns a dummy result (`undefined`) instead of observable streams.
-
-There is an answer for this error in the section called [How to create a mock observable](#how-to-create-a-mock-observable),
-if the error has been triggered by a mock service, and its property is of type of `undefined`.
-
-Or you might check [`MockInstance`](#mockinstance) in case if the error has been caused by a mock component or a mock directive.
-
-[to the top](#content)
-
----
-
-### How to fix `Error: Type is part of the declarations of 2 modules`
-
-If you encounter the issue, highly likely it means that a mock declaration,
-usually a mock module, contains something, that is declared in the `TestBed` module directly.
-
-Let's imagine a situation that we have a module which exports declarations, for example directives, we need in our test.
-In the same time, we have another module that has another declarations, our component depends on,
-we would like to create a mock copy out of it, but, in the same time, it imports the same module we want to keep as it is
-via an import in `TestBed`.
-
-```typescript
-TestBed.configureTestingModule({
-  imports: [
-    SharedModule,
-    MockModule(ModuleWithServicesAndSharedModule),
-  ],
-  declarations: [ComponentToTest],
-});
-```
-
-The problem is clear: when we create the mock module, [`MockModule`](#how-to-create-a-mock-module) recursively creates its mock dependencies, and, therefore, it creates a mock copy of `SharedModule`.
-Now imported and mock declarations are part of 2 modules.
-
-To solve this, we need to let [`MockModule`](#how-to-create-a-mock-module) know, that `SharedModule` should stay as it is.
-
-There are good and bad news.
-The bad news is that [`MockModule`](#how-to-create-a-mock-module) does not support that,
-but the good news is that `ng-mocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
-The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuilder) instead of [`MockModule`](#how-to-create-a-mock-module).
-A possible solution might looks like:
-
-```typescript
-beforeEach(() =>
-  MockBuilder(ComponentToTest)
-    .keep(SharedModule)
-    .mock(ModuleWithServicesAndSharedModule)
-);
-```
-
-The configuration says that we want to test `ComponentToTest`, which depends on `SharedModule` and `ModuleWithServicesAndSharedModule`, but `SharedModule` should stay as it is.
-
-Now, during the building process, [`MockBuilder`](#mockbuilder) will keep `SharedModule` as it is, although it is a dependency of the mock module, and that avoids declarations of the same things in 2 modules.
-
-More detailed information how to use it you can find in the section called [`MockBuilder`](#mockbuilder).
 
 [to the top](#content)
