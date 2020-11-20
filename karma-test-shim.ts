@@ -1,4 +1,4 @@
-// tslint:disable:no-import-side-effect ordered-imports
+// tslint:disable no-import-side-effect ordered-imports
 Error.stackTraceLimit = Infinity;
 
 import 'core-js';

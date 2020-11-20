@@ -1,5 +1,4 @@
-// tslint:enable:no-any no-unsafe-any
-// tslint:disable:strict-type-predicates
+// tslint:disable strict-type-predicates
 
 import { MockService, ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';

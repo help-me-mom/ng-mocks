@@ -1,4 +1,4 @@
-// tslint:disable:no-bitwise variable-name interface-over-type-literal
+// tslint:disable variable-name
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';

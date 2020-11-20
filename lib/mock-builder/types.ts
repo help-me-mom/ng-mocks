@@ -1,5 +1,3 @@
-// tslint:disable:interface-name
-
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 

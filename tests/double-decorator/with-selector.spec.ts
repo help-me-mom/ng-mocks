@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';

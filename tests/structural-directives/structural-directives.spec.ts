@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import { isMockOf, MockBuilder, MockDirective, MockedDirective, MockRender, ngMocks } from 'ng-mocks';
 
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';

@@ -1,4 +1,4 @@
-// tslint:disable:strict-type-predicates
+// tslint:disable strict-type-predicates
 
 import { Component, Injectable } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';

@@ -1,10 +1,11 @@
-// tslint:disable:member-ordering
-
 import { Component } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 class ParentClass {
   public pubParentProp = true;
+  public readonly pubReadonlyParentProp = true;
+  protected proParentProp = true;
+  protected readonly proReadonlyParentProp = true;
 
   public get pubParentPropGet(): boolean {
     return this.pubParentProp;
@@ -13,12 +14,10 @@ class ParentClass {
     this.pubParentProp = value;
   }
 
-  public readonly pubReadonlyParentProp = true;
   public get pubReadonlyParentPropGet(): boolean {
     return this.pubReadonlyParentProp;
   }
 
-  protected proParentProp = true;
   protected get proParentPropGet(): boolean {
     return this.proParentProp;
   }
@@ -26,7 +25,6 @@ class ParentClass {
     this.proParentProp = value;
   }
 
-  protected readonly proReadonlyParentProp = true;
   protected get proReadonlyParentPropGet(): boolean {
     return this.proReadonlyParentProp;
   }
@@ -68,6 +66,9 @@ class ParentClass {
 })
 class TargetComponent extends ParentClass {
   public pubChildProp = true;
+  public readonly pubReadonlyChildProp = true;
+  protected proChildProp = true;
+  protected readonly proReadonlyChildProp = true;
 
   public get pubChildPropGet(): boolean {
     return this.pubChildProp;
@@ -76,12 +77,10 @@ class TargetComponent extends ParentClass {
     this.pubChildProp = value;
   }
 
-  public readonly pubReadonlyChildProp = true;
   public get pubReadonlyChildPropGet(): boolean {
     return this.pubReadonlyChildProp;
   }
 
-  protected proChildProp = true;
   protected get proChildPropGet(): boolean {
     return this.proChildProp;
   }
@@ -89,7 +88,6 @@ class TargetComponent extends ParentClass {
     this.proChildProp = value;
   }
 
-  protected readonly proReadonlyChildProp = true;
   protected get proReadonlyChildPropGet(): boolean {
     return this.proReadonlyChildProp;
   }

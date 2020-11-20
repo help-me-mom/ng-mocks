@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import { CommonModule } from '@angular/common';
 import {
   Component,

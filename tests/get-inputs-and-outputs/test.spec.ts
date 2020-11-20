@@ -1,4 +1,4 @@
-// tslint:disable:strict-type-predicates
+// tslint:disable strict-type-predicates
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 

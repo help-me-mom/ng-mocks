@@ -1,5 +1,3 @@
-// tslint:disable:no-unnecessary-class
-
 import { Component, Injectable as InjectableSource, NgModule, VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';

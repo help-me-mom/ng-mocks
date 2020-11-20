@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { CommonModule } from '@angular/common';
 import { Component, Input, NgModule, Pipe, PipeTransform } from '@angular/core';

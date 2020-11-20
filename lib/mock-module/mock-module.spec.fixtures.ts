@@ -102,7 +102,6 @@ export class AppRoutingModule {}
 class RealModuleWithProvidersModule {}
 
 // Factory to setup module with provider.
-/* tslint:disable:no-unnecessary-class */
 class ModuleProvider {
   public static withFlag(flag: boolean): NgModuleWithProviders {
     return {
@@ -116,7 +115,6 @@ class ModuleProvider {
     };
   }
 }
-/* tslint:enable:no-unnecessary-class */
 
 // Encapsulating module with provider in some random module.
 @NgModule({

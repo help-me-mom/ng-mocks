@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 

@@ -927,21 +927,43 @@ to play with.
 
 ```typescript
 describe('MockProvider', () => {
+  const mockObj = { value: 123 };
+
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
+      imports: [CommonModule],
       providers: [
-        MockProvider(DependencyService),
-        MockProvider(DEPENDENCY_TOKEN, 'mock token'),
+        MockProvider(Dependency1Service),
+        MockProvider(Dependency2Service, { name: 'd2:mock' }),
+        MockProvider(UNK_TOKEN, 'mock token'),
+        MockProvider(STR_TOKEN, 'mock'),
+        MockProvider(OBJ_TOKEN, mockObj),
+        MockProvider('pri', 'pri'),
       ],
     }).compileComponents(),
   );
 
   it('uses mock providers', () => {
+    // overriding the token's data that does affect the provided token.
+    mockObj.value = 321;
     const fixture = TestBed.createComponent(TargetComponent);
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerHTML).not.toContain('target');
-    expect(fixture.nativeElement.innerHTML).toContain('mock token');
+    expect(
+      fixture.debugElement.injector.get(Dependency1Service).echo(),
+    ).toBeUndefined();
+    expect(
+      fixture.debugElement.injector.get(Dependency2Service).echo(),
+    ).toBeUndefined();
+    expect(fixture.debugElement.injector.get(OBJ_TOKEN)).toBe(
+      mockObj,
+    );
+    expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
+    expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');
+    expect(fixture.nativeElement.innerHTML).toContain('"mock token"');
+    expect(fixture.nativeElement.innerHTML).toContain('"mock"');
+    expect(fixture.nativeElement.innerHTML).toContain('"value": 321');
+    expect(fixture.nativeElement.innerHTML).toContain('"pri"');
   });
 });
 ```
@@ -1396,9 +1418,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   `,
 })
 class AppComponent {
-  @Input() public title = 'My Application';
-
   @Output() public logoClick = new EventEmitter<void>();
+  @Input() public title = 'My Application';
 }
 
 // A dependency component out of which we want to create a mock
@@ -1406,21 +1427,20 @@ class AppComponent {
 @Component({
   selector: 'app-header',
   template: `
-    <a (click)="logo.emit()"
-      ><img src="assets/logo.png" *ngIf="showLogo"
-    /></a>
+    <a (click)="logo.emit()">
+      <img src="assets/logo.png" *ngIf="showLogo" />
+    </a>
     {{ title }}
     <template [ngTemplateOutlet]="menu"></template>
   `,
 })
 class AppHeaderComponent {
-  @Input() public showLogo: boolean;
-  @Input() public title: string;
+  @Output() public readonly logo = new EventEmitter<void>();
 
-  @Output() public logo: EventEmitter<void>;
+  @ContentChild('menu') public menu?: TemplateRef<ElementRef>;
 
-  @ContentChild('menu', { read: false } as any)
-  public menu: TemplateRef<ElementRef>;
+  @Input() public showLogo = false;
+  @Input() public title = '';
 }
 
 // The module where our components are declared.
@@ -1492,8 +1512,8 @@ describe('MAIN', () => {
     // Instead of TestBed.createComponent(AppComponent) in beforeEach
     // MockRender might be used directly in tests.
     const fixture = MockRender(AppComponent, {
-      title: 'Fake Application',
       logoClick: logoClickSpy,
+      title: 'Fake Application',
     });
     // It creates a helper component
     // with the next template:
@@ -2238,6 +2258,7 @@ describe('MockInstance', () => {
       const subject = new Subject<void>();
       subject.complete();
       ngMocks.stub(instance, {
+        injector,
         // comment the next line to check the failure.
         update$: subject,
       });

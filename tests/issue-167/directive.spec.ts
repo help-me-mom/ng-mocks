@@ -1,5 +1,3 @@
-// tslint:disable:prefer-function-over-method variable-name
-
 import { Component, Directive, forwardRef, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -29,31 +27,31 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: '[target]',
 })
 export class TargetDirective implements ControlValueAccessor, Validator {
-  public __registerOnChange: any;
-  public __registerOnTouched: any;
-  public __registerOnValidatorChange: any;
-  public __setDisabledState: any;
-  public __validate: any;
-  public __writeValue: any;
+  public valRegisterOnChange: any;
+  public valRegisterOnTouched: any;
+  public valRegisterOnValidatorChange: any;
+  public valSetDisabledState: any;
+  public valValidate: any;
+  public valWriteValue: any;
 
   public registerOnChange(fn: any): void {
-    this.__registerOnChange = [fn];
+    this.valRegisterOnChange = [fn];
   }
 
   public registerOnTouched(fn: any): void {
-    this.__registerOnTouched = [fn];
+    this.valRegisterOnTouched = [fn];
   }
 
   public registerOnValidatorChange(fn: any): void {
-    this.__registerOnValidatorChange = [fn];
+    this.valRegisterOnValidatorChange = [fn];
   }
 
   public setDisabledState(state: boolean): void {
-    this.__setDisabledState = [state];
+    this.valSetDisabledState = [state];
   }
 
   public validate(): ValidationErrors {
-    this.__validate = [];
+    this.valValidate = [];
 
     return {
       mock: true,
@@ -61,7 +59,7 @@ export class TargetDirective implements ControlValueAccessor, Validator {
   }
 
   public writeValue(value: any): void {
-    this.__writeValue = [value];
+    this.valWriteValue = [value];
   }
 }
 

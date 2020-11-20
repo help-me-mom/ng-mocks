@@ -1,5 +1,3 @@
-// tslint:disable:ban-ts-ignore
-
 import {
   Component,
   Inject,

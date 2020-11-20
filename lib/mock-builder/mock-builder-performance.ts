@@ -97,7 +97,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // we need to reset testing module in case if we are in bullet mode but current module doesn't match.
     if (ngMocksUniverse.global.has('bullet') && ngMocksUniverse.global.has('bullet:reset')) {
-      // tslint:disable-next-line:no-console
+      // tslint:disable-next-line no-console
       console.warn('ngMocks.faster has zero effect due to changes in testing module between runs');
       ngMocksUniverse.global.delete('bullet');
       TestBed.resetTestingModule();
@@ -110,7 +110,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return promise;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalProviders(prototype: any, source: any): boolean {
     // a case of multi vs non-multi
     if (Array.isArray(prototype) !== Array.isArray(source)) {
@@ -174,7 +173,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return true;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalRender(prototype: any, source: any): boolean {
     if (prototype === source) {
       return true;
@@ -314,7 +312,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return true;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalVariables(prototype: any, source: any): boolean {
     if (prototype === source) {
       return true;

@@ -142,8 +142,8 @@ describe('MockHelper:getDirective', () => {
     const componentA = ngMocks.find(fixture.debugElement, AComponent);
     expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
 
-    const componentB = ngMocks.find(fixture.debugElement, BComponent, null); // tslint:disable-line:no-null-keyword
-    expect(componentB).toBe(null); // tslint:disable-line:no-null-keyword
+    const componentB = ngMocks.find(fixture.debugElement, BComponent, null);
+    expect(componentB).toBe(null);
   });
 
   it('find selector: string', () => {
@@ -151,8 +151,8 @@ describe('MockHelper:getDirective', () => {
     const componentB = ngMocks.find(fixture.debugElement, 'component-b');
     expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
 
-    const componentA = ngMocks.find(fixture.debugElement, 'component-a', null); // tslint:disable-line:no-null-keyword
-    expect(componentA).toBe(null); // tslint:disable-line:no-null-keyword
+    const componentA = ngMocks.find(fixture.debugElement, 'component-a', null);
+    expect(componentA).toBe(null);
   });
 
   it('find selector: missed string', () => {

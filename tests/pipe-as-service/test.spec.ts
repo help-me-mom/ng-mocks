@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import { Component, Injectable, NgModule, Pipe, PipeTransform } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';

@@ -5,7 +5,7 @@
     "inlineSources": false,
     "sourceMap": true
   },
-  "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts"],
+  "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts", "karma.conf.ts"],
   "exclude": ["e2e", "node_modules"],
   "include": ["lib/**/*", "examples/**/*", "tests/**/*", "tests-failures/**/*"]
 }

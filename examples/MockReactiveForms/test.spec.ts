@@ -1,5 +1,3 @@
-// tslint:disable:prefer-function-over-method
-
 import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';

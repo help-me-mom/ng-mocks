@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import {
   Component,
   ContentChild,
@@ -131,14 +129,14 @@ describe('MockDirective', () => {
 
   it('should have the input set on the mock component', () => {
     const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
-    const element = debugElement.injector.get(ExampleDirective); // tslint:disable-line
+    const element = debugElement.injector.get(ExampleDirective);
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
   });
 
   it('triggers output bound behavior for extended outputs', () => {
     const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
-    const element = debugElement.injector.get(ExampleDirective); // tslint:disable-line
+    const element = debugElement.injector.get(ExampleDirective);
 
     element.someOutput.emit(true);
     expect(component.emitted).toEqual(true);

@@ -1,4 +1,4 @@
-// tslint:disable:variable-name ban-ts-ignore
+// tslint:disable variable-name ban-ts-ignore
 
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 

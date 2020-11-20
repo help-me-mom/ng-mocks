@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
@@ -76,7 +74,7 @@ describe('MockService', () => {
     expect(MockService(-1)).toBeUndefined();
     expect(MockService(NaN)).toBeUndefined();
     expect(MockService('')).toBeUndefined();
-    expect(MockService(null)).toBeUndefined(); // tslint:disable-line:no-null-keyword
+    expect(MockService(null)).toBeUndefined();
     expect(MockService(undefined)).toBeUndefined();
   });
 
@@ -169,7 +167,7 @@ describe('MockService', () => {
       child1: {
         child11: {
           func1: () => 0,
-          nullValue: null, // tslint:disable-line:no-null-keyword
+          nullValue: null,
           undefinedValue: undefined,
         },
         number0: 0,

@@ -1,5 +1,3 @@
-// tslint:disable:no-parameter-properties
-
 import { CommonModule } from '@angular/common';
 import { ContentChild, Directive, NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';

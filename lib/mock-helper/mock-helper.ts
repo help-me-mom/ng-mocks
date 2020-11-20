@@ -1,5 +1,3 @@
-// tslint:disable:variable-name
-
 import { EventEmitter, InjectionToken, Provider } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 

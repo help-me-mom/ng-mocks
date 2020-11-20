@@ -1,4 +1,4 @@
-// tslint:disable:no-duplicate-imports
+// tslint:disable no-duplicate-imports
 
 import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
 import * as core from '@angular/core';

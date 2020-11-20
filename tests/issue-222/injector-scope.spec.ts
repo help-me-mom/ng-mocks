@@ -1,5 +1,3 @@
-// tslint:disable:no-unnecessary-class
-
 import { Component, Inject, Injectable as InjectableSource, NgModule, PLATFORM_ID, VERSION } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MockBuilder, MockRender } from 'ng-mocks';

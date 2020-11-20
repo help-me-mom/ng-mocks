@@ -1,9 +1,11 @@
-// tslint:disable:arrow-return-shorthand
+// tslint:disable arrow-return-shorthand
 
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+
+import { staticFalse } from '../../tests';
 
 // Our main component that we want to test.
 @Component({
@@ -38,7 +40,7 @@ class AppComponent {
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
 
-  @ContentChild('menu', { read: false } as any) public menu: TemplateRef<ElementRef> | undefined;
+  @ContentChild('menu', staticFalse) public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
 }

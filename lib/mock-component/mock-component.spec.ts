@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import {
   Component,
   ContentChild,

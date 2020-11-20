@@ -1,4 +1,4 @@
-// tslint:disable:no-console no-var-requires
+// tslint:disable no-console no-var-requires no-require-imports
 
 import { KarmaTypescriptConfig } from 'karma-typescript';
 

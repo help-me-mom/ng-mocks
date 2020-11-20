@@ -1,5 +1,3 @@
-// tslint:disable:no-void-expression
-
 import { Location } from '@angular/common';
 import { Component, Injectable, NgModule, VERSION } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';

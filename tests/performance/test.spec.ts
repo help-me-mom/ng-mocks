@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { Component, Injectable, NgModule } from '@angular/core';
 import { MockBuilder, ngMocks } from 'ng-mocks';

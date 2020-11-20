@@ -1,4 +1,4 @@
-// tslint:disable:strict-type-predicates
+// tslint:disable strict-type-predicates
 
 import { Component, NgModule, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';

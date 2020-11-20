@@ -63,7 +63,6 @@ export function MockPipe<TPipe extends PipeTransform>(
   @Pipe(options)
   @MockOf(pipe)
   class PipeMock extends Mock implements PipeTransform {
-    // tslint:disable-next-line:prefer-function-over-method
     public transform(value: any, ...args: any[]): any {
       return transform(value, ...args);
     }

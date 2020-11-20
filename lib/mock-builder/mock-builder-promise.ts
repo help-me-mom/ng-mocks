@@ -398,6 +398,7 @@ export class MockBuilderPromise implements IMockBuilder {
     };
   }
 
+  /* istanbul ignore next */
   public async catch(reject?: ((reason: any) => PromiseLike<never>) | undefined | null): Promise<IMockBuilderResult> {
     return this.then().catch(reject);
   }
@@ -409,6 +410,7 @@ export class MockBuilderPromise implements IMockBuilder {
     return this;
   }
 
+  /* istanbul ignore next */
   public async finally(callback?: (() => void) | null | undefined): Promise<IMockBuilderResult> {
     return this.then().finally(callback);
   }
@@ -424,7 +426,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
     // a magic to support modules with providers.
     if (providers) {
-      this.defProviders.set(def, [...(existing || []), ...providers]);
+      this.defProviders.set(def, [...(existing || /* istanbul ignore next */ []), ...providers]);
     }
 
     if (config) {
@@ -457,7 +459,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
     // a magic to support modules with providers.
     if (providers) {
-      this.defProviders.set(def, [...(existing || []), ...providers]);
+      this.defProviders.set(def, [...(existing || /* istanbul ignore next */ []), ...providers]);
     }
 
     if (mock !== defaultMock) {
@@ -481,7 +483,10 @@ export class MockBuilderPromise implements IMockBuilder {
       const multi = typeof provider === 'object' && provider.provide && provider.multi;
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
       this.wipe(provide);
-      this.providerDef.set(provide, multi ? [...(Array.isArray(existing) ? existing : []), provider] : provider);
+      this.providerDef.set(
+        provide,
+        multi ? [...(Array.isArray(existing) ? existing : /* istanbul ignore next */ []), provider] : provider,
+      );
     }
 
     return this;

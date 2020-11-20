@@ -1,5 +1,3 @@
-// tslint:disable:member-ordering
-
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -22,27 +20,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetService {
   protected called = false;
 
-  public ctor() {
-    this.called = true;
-  }
-
-  public onInit() {
-    this.called = true;
-  }
-
-  public onDestroy() {
-    this.called = true;
-  }
-
-  public onChanges() {
-    this.called = true;
-  }
-
-  public afterViewInit() {
-    this.called = true;
-  }
-
-  public afterViewChecked() {
+  public afterContentChecked() {
     this.called = true;
   }
 
@@ -50,7 +28,27 @@ class TargetService {
     this.called = true;
   }
 
-  public afterContentChecked() {
+  public afterViewChecked() {
+    this.called = true;
+  }
+
+  public afterViewInit() {
+    this.called = true;
+  }
+
+  public ctor() {
+    this.called = true;
+  }
+
+  public onChanges() {
+    this.called = true;
+  }
+
+  public onDestroy() {
+    this.called = true;
+  }
+
+  public onInit() {
     this.called = true;
   }
 }
@@ -68,32 +66,32 @@ class TargetComponent
     this.service.ctor();
   }
 
-  public ngOnInit(): void {
-    this.service.onInit();
-  }
-
-  public ngOnDestroy(): void {
-    this.service.onDestroy();
-  }
-
-  public ngOnChanges(): void {
-    this.service.onChanges();
-  }
-
-  public ngAfterViewInit(): void {
-    this.service.afterViewInit();
-  }
-
-  public ngAfterViewChecked(): void {
-    this.service.afterViewChecked();
+  public ngAfterContentChecked(): void {
+    this.service.afterContentChecked();
   }
 
   public ngAfterContentInit(): void {
     this.service.afterContentInit();
   }
 
-  public ngAfterContentChecked(): void {
-    this.service.afterContentChecked();
+  public ngAfterViewChecked(): void {
+    this.service.afterViewChecked();
+  }
+
+  public ngAfterViewInit(): void {
+    this.service.afterViewInit();
+  }
+
+  public ngOnChanges(): void {
+    this.service.onChanges();
+  }
+
+  public ngOnDestroy(): void {
+    this.service.onDestroy();
+  }
+
+  public ngOnInit(): void {
+    this.service.onInit();
   }
 }
 

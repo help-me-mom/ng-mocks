@@ -1,4 +1,4 @@
-// tslint:disable:strict-type-predicates
+// tslint:disable strict-type-predicates
 
 import { Component, Injectable, NgModule } from '@angular/core';
 import { inject } from '@angular/core/testing';

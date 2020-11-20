@@ -88,7 +88,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   (window as any).ngMocksParent = parent;
   /* istanbul ignore next */
   try {
-    // tslint:disable-next-line:no-eval
+    // tslint:disable-next-line no-eval
     eval(`
         class child extends window.ngMocksParent {
         }

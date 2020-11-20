@@ -1,5 +1,3 @@
-// tslint:disable:prefer-function-over-method no-string-literal
-
 import { MockService, ngMocks } from 'ng-mocks';
 
 class Example {

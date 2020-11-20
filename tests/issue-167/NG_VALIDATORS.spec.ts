@@ -1,5 +1,3 @@
-// tslint:disable:prefer-function-over-method variable-name
-
 import { Component, Directive, forwardRef, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, NG_VALIDATORS, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
@@ -16,15 +14,15 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: '[target]',
 })
 export class TargetDirective implements Validator {
-  public __registerOnValidatorChange: any;
-  public __validate: any;
+  public pubRegisterOnValidatorChange: any;
+  public pubValidate: any;
 
   public registerOnValidatorChange(fn: any): void {
-    this.__registerOnValidatorChange = [fn];
+    this.pubRegisterOnValidatorChange = [fn];
   }
 
   public validate(): ValidationErrors {
-    this.__validate = [];
+    this.pubValidate = [];
 
     return {
       validator: true,

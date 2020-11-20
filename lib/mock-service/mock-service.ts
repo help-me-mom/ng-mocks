@@ -1,5 +1,3 @@
-// tslint:disable:no-misused-new unified-signatures
-
 import { AnyType } from '../common/core.types';
 import ngMocksStub from '../mock-helper/mock-helper.stub';
 

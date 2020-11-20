@@ -1,5 +1,3 @@
-// tslint:disable:interface-name
-
 import { DebugElement, DebugNode, Provider } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
