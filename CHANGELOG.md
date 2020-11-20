@@ -1,3 +1,10 @@
+# [11.1.0](https://github.com/ike18t/ng-mocks/compare/v11.0.0...v11.1.0) (2020-11-20)
+
+
+### Features
+
+* overrides for MockService ([6492a3e](https://github.com/ike18t/ng-mocks/commit/6492a3ee9c984111465555e62a3327d2389e5b84))
+
 # [11.0.0](https://github.com/ike18t/ng-mocks/compare/v10.5.4...v11.0.0) (2020-11-15)
 
 
