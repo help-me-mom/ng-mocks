@@ -263,7 +263,7 @@ beforeEach(() =>
 );
 ```
 
-Profit. Subscribe, like, share! [to the top](#content).
+Profit. Subscribe, like, share! [to the top](#table-of-contents).
 
 Below more detailed documentation begins, please bear with us.
 
@@ -488,7 +488,7 @@ describe('MockComponent', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -686,7 +686,7 @@ describe('MockDirective:Structural', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -784,7 +784,7 @@ describe('MockPipe', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -836,7 +836,7 @@ const instance = MockService({
 instance.nested.func = () => 'My Custom Behavior';
 ```
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -949,7 +949,7 @@ describe('MockProvider', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -1063,7 +1063,7 @@ describe('MockModule', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -1241,7 +1241,7 @@ describe('MockObservable', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -1349,7 +1349,7 @@ describe('MockForms', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -1546,7 +1546,7 @@ Our tests:
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -1982,7 +1982,7 @@ beforeEach(() =>
 );
 ```
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2120,7 +2120,7 @@ describe('MockRender', () => {
 });
 ```
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2262,7 +2262,7 @@ describe('MockInstance', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2472,7 +2472,7 @@ ngMocks.stub(instance, {
 
 `ngMocks.reset()` resets cache of [`ngMocks`](#ngmocks).
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2555,7 +2555,7 @@ This function verifies tokens.
 
 - `isNgInjectionToken( TOKEN )` - checks whether `TOKEN` is a token
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2602,7 +2602,7 @@ const createComponent = createComponentFactory({
 
 Profit. Subscribe, like, share!
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2708,7 +2708,7 @@ describe('beforeEach:manual-spy', () => {
 </p>
 </details>
 
-[to the top](#content)
+[to the top](#table-of-contents)
 
 ---
 
@@ -2730,4 +2730,4 @@ In case of jest add it to `src/setupJest.ts`.
 import 'ng-mocks/dist/jest';
 ```
 
-[to the top](#content)
+[to the top](#table-of-contents)
