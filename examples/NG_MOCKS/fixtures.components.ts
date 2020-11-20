@@ -25,8 +25,8 @@ import {
   template: '',
 })
 export class ComponentContentChild<T> {
-  @ContentChild('block', { ...staticFalse }) public readonly injectedBlock: TemplateRef<any>;
-  @Input() public items?: T[];
+  @ContentChild('block', staticFalse) public readonly injectedBlock: TemplateRef<any> | undefined;
+  @Input() public items: T[] = [];
 }
 
 @Component({

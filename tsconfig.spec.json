@@ -7,5 +7,5 @@
   },
   "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts"],
   "exclude": ["e2e", "node_modules"],
-  "include": ["lib/**/*", "examples/**/*", "tests/**/*"]
+  "include": ["lib/**/*", "examples/**/*", "tests/**/*", "tests-failures/**/*"]
 }

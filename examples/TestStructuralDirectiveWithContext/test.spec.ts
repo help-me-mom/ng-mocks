@@ -20,12 +20,13 @@ class TargetDirective {
   @Input() public set target(items: string[]) {
     this.viewContainerRef.clear();
 
-    items.forEach((value, index) =>
+    for (let index = 0; index <= items.length; index += 1) {
+      const value = items[index];
       this.viewContainerRef.createEmbeddedView(this.templateRef, {
         $implicit: value,
         myIndex: index,
-      }),
-    );
+      });
+    }
   }
 }
 

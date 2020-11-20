@@ -4,7 +4,7 @@ import { MockModule } from 'ng-mocks';
 
 @Injectable()
 class ExampleProvider {
-  public a: number;
+  public a = 0;
 }
 @NgModule({
   providers: [ExampleProvider],
@@ -25,13 +25,13 @@ describe('issue-186:real', () => {
 
   it('should not be able to pass state between tests (setup phase)', () => {
     exampleProviderFromSetupPhase = exampleProvider;
-    expect(exampleProvider.a).toBeUndefined();
+    expect(exampleProvider.a).toEqual(0);
     exampleProvider.a = 11;
   });
 
   it('should not be able to pass state between tests (validation phase)', () => {
     expect(exampleProvider).not.toBe(exampleProviderFromSetupPhase);
-    expect(exampleProvider.a).toBeUndefined();
+    expect(exampleProvider.a).toEqual(0);
   });
 });
 

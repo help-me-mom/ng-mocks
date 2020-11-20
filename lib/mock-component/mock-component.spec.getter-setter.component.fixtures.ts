@@ -9,11 +9,16 @@ export class GetterSetterComponent {
   public normalInput?: boolean;
 
   public normalProperty = false;
+
+  protected value: any;
+
   public get myGetter() {
     return true;
   }
 
-  public set mySetter(value: string) {}
+  public set mySetter(value: string) {
+    this.value = value;
+  }
 
   public normalMethod(): boolean {
     return this.myGetter;

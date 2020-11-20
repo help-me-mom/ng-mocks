@@ -5,7 +5,7 @@ import { Component, Directive, EventEmitter, Input, NgModule, Output } from '@an
   template: '<a (click)="output.emit()">{{ input }}</a>',
 })
 export class TargetComponent {
-  @Input('input1') public input: string;
+  @Input('input1') public input = '';
   @Output('output1') public output = new EventEmitter();
 }
 
@@ -13,7 +13,7 @@ export class TargetComponent {
   selector: 'target',
 })
 export class Target2Directive {
-  @Input('input2') public input: string;
+  @Input('input2') public input = '';
   @Input('inputUnused') public input2: undefined;
   @Output('output2') public output = new EventEmitter();
 }
@@ -22,7 +22,7 @@ export class Target2Directive {
   selector: 'target',
 })
 export class Target3Directive {
-  @Input('input3') public input: string;
+  @Input('input3') public input = '';
   @Output('output3') public output = new EventEmitter();
 }
 

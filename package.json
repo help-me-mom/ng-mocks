@@ -59,6 +59,7 @@
     "prettier:check": "prettier -c \"**/*.*\"",
     "prettier:stage": "pretty-quick --staged",
     "release": "export $(cat .env) && semantic-release",
+    "ts:check": "tsc -p tsconfig.spec.json --noEmit",
     "test": "karma start",
     "test:debug": "npm run test:watch -- --browsers=Chrome",
     "test:watch": "karma start --auto-watch --single-run=false",
@@ -162,7 +163,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged && npm run lint",
+      "pre-commit": "lint-staged && npm run lint && npm run ts:check",
       "post-commit": "git update-index --again"
     }
   },

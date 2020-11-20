@@ -5,7 +5,7 @@ import { MockedPipe } from '../mock-pipe/types';
 
 import { getTestBedInjection } from './core.helpers';
 import { NG_MOCKS } from './core.tokens';
-import { Type } from './core.types';
+import { AnyType, Type } from './core.types';
 import { isMockedNgDefOf } from './func.is-mocked-ng-def-of';
 import ngMocksUniverse from './ng-mocks-universe';
 
@@ -14,35 +14,35 @@ import ngMocksUniverse from './ng-mocks-universe';
  *
  * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
  */
-export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'm'): Type<MockedModule<T>>;
+export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'm'): Type<MockedModule<T>>;
 
 /**
  * Returns a def of a mock component based on a mock component or a source component.
  *
  * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
  */
-export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'c'): Type<MockedComponent<T>>;
+export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'c'): Type<MockedComponent<T>>;
 
 /**
  * Returns a def of a mock directive based on a mock directive or a source directive.
  *
  * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
  */
-export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'd'): Type<MockedDirective<T>>;
+export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'd'): Type<MockedDirective<T>>;
 
 /**
  * Returns a def of a mock pipe based on a mock pipe or a source pipe.
  *
  * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
  */
-export function getMockedNgDefOf<T>(declaration: Type<T>, type: 'p'): Type<MockedPipe<T>>;
+export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'p'): Type<MockedPipe<T>>;
 
 /**
  * Returns a def of a mock class based on a mock class or a source class decorated by a ng type.
  *
  * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
  */
-export function getMockedNgDefOf(declaration: Type<any>): Type<any>;
+export function getMockedNgDefOf(declaration: AnyType<any>): Type<any>;
 
 export function getMockedNgDefOf(declaration: any, type?: any): any {
   const source = declaration.mockOf ? declaration.mockOf : declaration;

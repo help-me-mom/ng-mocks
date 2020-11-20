@@ -8,8 +8,7 @@ import { staticFalse } from '../../tests';
   template: `child`,
 })
 class DependencyComponent {
-  @ContentChild('something', { ...staticFalse })
-  public injectedSomething: TemplateRef<{}>;
+  @ContentChild('something', staticFalse) public injectedSomething: TemplateRef<{}> | undefined;
 
   @Input()
   public someInput = '';
@@ -24,7 +23,7 @@ class DependencyComponent {
 })
 class TestedComponent {
   public value = '';
-  public trigger = (obj: any) => {};
+  public trigger = (obj: any) => obj;
 }
 
 describe('MockComponent', () => {

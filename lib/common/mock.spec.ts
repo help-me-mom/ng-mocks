@@ -48,21 +48,17 @@ class ChildComponentClass extends ParentClass implements PipeTransform, ControlV
     return this.childValue;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public registerOnChange(fn: any): void {}
+  public registerOnChange = (fn: any) => fn;
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public registerOnTouched(fn: any): void {}
+  public registerOnTouched = (fn: any) => fn;
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public setDisabledState(isDisabled: boolean): void {}
+  public setDisabledState = (isDisabled: boolean) => isDisabled;
 
   public transform(): string {
     return typeof this.childValue;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public writeValue(obj: any): void {}
+  public writeValue = (obj: any) => obj;
 }
 
 @Directive({
@@ -75,21 +71,17 @@ class ChildDirectiveClass extends ParentClass implements PipeTransform, ControlV
     return this.childValue;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public registerOnChange(fn: any): void {}
+  public registerOnChange = (fn: any) => fn;
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public registerOnTouched(fn: any): void {}
+  public registerOnTouched = (fn: any) => fn;
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public setDisabledState(isDisabled: boolean): void {}
+  public setDisabledState = (isDisabled: boolean) => isDisabled;
 
   public transform(): string {
     return typeof this.childValue;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
-  public writeValue(obj: any): void {}
+  public writeValue = (obj: any) => obj;
 }
 
 @Pipe({
@@ -173,21 +165,17 @@ describe('Mock prototype', () => {
       this.test = value;
     }
 
-    // tslint:disable-next-line:prefer-function-over-method
-    public registerOnChange(fn: any): void {}
+    public registerOnChange = (fn: any) => fn;
 
-    // tslint:disable-next-line:prefer-function-over-method
-    public registerOnTouched(fn: any): void {}
+    public registerOnTouched = (fn: any) => fn;
 
-    // tslint:disable-next-line:prefer-function-over-method
-    public setDisabledState(isDisabled: boolean): void {}
+    public setDisabledState = (isDisabled: boolean) => isDisabled;
 
     public testMethod(): string {
       return this.test;
     }
 
-    // tslint:disable-next-line:prefer-function-over-method
-    public writeValue(obj: any): void {}
+    public writeValue = (obj: any): void => obj;
   }
 
   it('should get all mock things and in the same time respect prototype', () => {

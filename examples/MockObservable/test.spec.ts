@@ -15,7 +15,7 @@ class TargetService {
   template: `{{ list | json }}`,
 })
 class TargetComponent {
-  public list: number[];
+  public list: number[] = [];
 
   public constructor(service: TargetService) {
     service.value$.subscribe(list => (this.list = list));

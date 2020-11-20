@@ -1,4 +1,4 @@
-// tslint:disable:variable-name
+// tslint:disable:variable-name ban-ts-ignore
 
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
@@ -8,6 +8,7 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
   public readonly __ngMocksMockControlValueAccessor: true = true;
 
   /* istanbul ignore next */
+  // @ts-ignore
   public __simulateChange = (value: any) => {};
 
   /* istanbul ignore next */
@@ -28,11 +29,14 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
     this.__simulateValidatorChange = fn;
   }
 
+  // @ts-ignore
   public setDisabledState(isDisabled: boolean): void {}
 
+  // @ts-ignore
   public validate(control: AbstractControl): ValidationErrors | null {
     return null;
   }
 
+  // @ts-ignore
   public writeValue(value: any) {}
 }

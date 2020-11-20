@@ -7,7 +7,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   template: '{{items.length}}',
 })
 export class ItemListComponent {
-  @Input() public items: string[];
+  @Input() public items: string[] = [];
 }
 
 describe('ChangeDetectionStrategy.OnPush:real', () => {

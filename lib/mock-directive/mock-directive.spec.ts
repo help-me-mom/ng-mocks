@@ -35,11 +35,15 @@ class TargetService {}
   selector: '[exampleDirective]',
 })
 class ExampleDirective {
-  @Input() public exampleDirective: string;
+  @Input() public exampleDirective = '';
   @Output() public readonly someOutput = new EventEmitter<boolean>();
-  @Input('bah') public something: string;
+  @Input('bah') public something = '';
+
+  protected s: any;
 
   public performAction(s: string) {
+    this.s = s;
+
     return this;
   }
 }
@@ -61,11 +65,15 @@ class GettersAndSettersDirective {
 
   public normalProperty = false;
 
+  protected value: any;
+
   public get myGetter() {
     return true;
   }
 
-  public set mySetter(value: string) {}
+  public set mySetter(value: string) {
+    this.value = value;
+  }
 
   public normalMethod(): boolean {
     return this.myGetter;
@@ -83,12 +91,14 @@ class GettersAndSettersDirective {
   `,
 })
 class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, { ...staticFalse }) public childDirective: ExampleDirective;
+  @ViewChild(ExampleDirective, staticFalse) public childDirective?: ExampleDirective;
   public emitted = false;
   public readonly foo = new FormControl('');
 
   public performActionOnChild(s: string): void {
-    this.childDirective.performAction(s);
+    if (this.childDirective) {
+      this.childDirective.performAction(s);
+    }
   }
 }
 
@@ -185,7 +195,7 @@ describe('MockDirective', () => {
   });
 
   it('should allow spying of viewchild directive methods', () => {
-    const spy = component.childDirective.performAction;
+    const spy = component.childDirective ? component.childDirective.performAction : null;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
@@ -214,15 +224,15 @@ describe('MockDirective', () => {
       selector: 'never',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) public o1: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) public o2: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) public o3: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) public o4: QueryList<any>;
+      @ContentChild('i1', { read: true } as any) public o1?: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) public o2?: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) public o3?: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) public o4?: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) public o5: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) public o6: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) public o7: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) public o8: QueryList<any>;
+      @ContentChild('i5', { read: false } as any) public o5?: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) public o6?: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) public o7?: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) public o8?: QueryList<any>;
     }
 
     const actual = MockDirective(MyClass) as any;

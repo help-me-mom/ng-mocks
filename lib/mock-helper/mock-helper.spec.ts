@@ -1,9 +1,9 @@
 import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { isMockOf } from 'ng-mocks';
 
 import { MockDirective } from '../mock-directive/mock-directive';
-import { MockedDirective } from '../mock-directive/types';
 import { MockRender } from '../mock-render/mock-render';
 
 import { ngMocks } from './mock-helper';
@@ -13,11 +13,15 @@ import { ngMocks } from './mock-helper';
   selector: '[exampleDirective]',
 })
 export class ExampleDirective {
-  @Input() public exampleDirective: string;
+  @Input() public exampleDirective = '';
   @Output() public someOutput = new EventEmitter<boolean>();
-  @Input('bah') public something: string;
+  @Input('bah') public something = '';
+
+  protected s: any;
 
   public performAction(s: string) {
+    this.s = s;
+
     return this;
   }
 }
@@ -75,11 +79,11 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // we need to render mock structural directives manually
-    ngMocks
-      .findInstances(fixture.debugElement, ExampleStructuralDirective)
-      .forEach((item: MockedDirective<ExampleStructuralDirective>) => {
-        item.__render();
-      });
+    for (const instance of ngMocks.findInstances(fixture.debugElement, ExampleStructuralDirective)) {
+      if (isMockOf(instance, ExampleStructuralDirective, 'd')) {
+        instance.__render();
+      }
+    }
     fixture.detectChanges();
 
     // Using helper.
@@ -99,11 +103,11 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // we need to render mock structural directives manually
-    ngMocks
-      .findInstances(fixture.debugElement, ExampleStructuralDirective)
-      .forEach((item: MockedDirective<ExampleStructuralDirective>) => {
-        item.__render();
-      });
+    for (const instance of ngMocks.findInstances(fixture.debugElement, ExampleStructuralDirective)) {
+      if (isMockOf(instance, ExampleStructuralDirective, 'd')) {
+        instance.__render();
+      }
+    }
     fixture.detectChanges();
 
     // Using helper.

@@ -3,11 +3,9 @@
     "lib": ["dom", "es7"],
     "module": "commonjs",
     "target": "es5",
-    "noImplicitAny": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "downlevelIteration": true,
-    "noUnusedLocals": true,
     "inlineSourceMap": true,
     "inlineSources": true,
     "declaration": true,
@@ -17,13 +15,24 @@
     "removeComments": false,
     "experimentalDecorators": true,
     "types": ["node", "jasmine", "jest"],
-    "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
       "ng-mocks": ["index"],
       "ng-mocks/dist/*": ["./*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictNullChecks": true
   },
   "include": ["index.ts", "jasmine.ts", "jest.ts"]
 }

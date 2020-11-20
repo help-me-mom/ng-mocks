@@ -23,7 +23,9 @@ export const getInjection = <I>(token: Type<I> | InjectionToken<I>): I => {
 
 export const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
   if (Array.isArray(values)) {
-    values.forEach((value: T | T[]) => flatten(value, result));
+    for (const value of values) {
+      flatten(value, result);
+    }
   } else {
     result.push(values);
   }

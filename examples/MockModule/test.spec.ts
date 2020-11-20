@@ -9,8 +9,8 @@ import { staticFalse } from '../../tests';
   template: `dependency`,
 })
 class DependencyComponent {
-  @ContentChild('something', { ...staticFalse })
-  public injectedSomething: TemplateRef<{}>;
+  @ContentChild('something', staticFalse)
+  public injectedSomething?: TemplateRef<{}>;
 
   @Input()
   public someInput = '';

@@ -6,7 +6,7 @@ import { isMockOf, MockBuilder, MockedComponentFixture, MockRender, ngMocks } fr
   template: `{{ target }}`,
 })
 class TargetComponent {
-  @Input() public readonly target: string;
+  @Input() public readonly target = '';
 }
 
 @Component({

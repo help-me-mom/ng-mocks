@@ -88,7 +88,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
 
     mockTemplate += selector ? `<${selector}` : '';
     if (selector && inputs) {
-      inputs.forEach((definition: string) => {
+      for (const definition of inputs) {
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
         if (alias && params) {
@@ -100,10 +100,10 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
         } else if (noParams) {
           mockTemplate += ` [${property}]="${property}"`;
         }
-      });
+      }
     }
     if (selector && outputs) {
-      outputs.forEach((definition: string) => {
+      for (const definition of outputs) {
         const [property, alias] = definition.split(': ');
         /* istanbul ignore else */
         if (alias && params) {
@@ -115,7 +115,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
         } else if (noParams) {
           mockTemplate += ` (${property})="${property}.emit($event)"`;
         }
-      });
+      }
     }
     mockTemplate += selector ? `></${selector}>` : '';
   }

@@ -43,8 +43,8 @@ class TargetPipe implements PipeTransform {
   template: `{{ value | target }} - {{ piped }}`,
 })
 class TargetComponent implements OnInit {
-  public piped: string;
-  @Input() public value: string;
+  public piped = '';
+  @Input() public value = '';
 
   protected pipe: TargetPipe;
 

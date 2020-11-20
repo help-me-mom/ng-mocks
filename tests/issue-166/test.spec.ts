@@ -5,9 +5,9 @@ import { MockService, ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
 class MyService {
-  public readonly onErrorSet$: Observable<string>;
-  public readonly onSuccessSet$: Observable<string>;
-  public readonly onWarningSet$: Observable<string>;
+  public readonly onErrorSet$?: Observable<string>;
+  public readonly onSuccessSet$?: Observable<string>;
+  public readonly onWarningSet$?: Observable<string>;
 
   protected value = 'MyService';
 

@@ -36,12 +36,11 @@ class AppComponent {
   `,
 })
 class AppHeaderComponent {
-  @Output() public logo: EventEmitter<void>;
+  @Output() public readonly logo = new EventEmitter<void>();
 
-  @ContentChild('menu', { read: false } as any)
-  public menu: TemplateRef<ElementRef>;
-  @Input() public showLogo: boolean;
-  @Input() public title: string;
+  @ContentChild('menu', { read: false } as any) public menu: TemplateRef<ElementRef> | undefined;
+  @Input() public showLogo = false;
+  @Input() public title = '';
 }
 
 // The module where our components are declared.

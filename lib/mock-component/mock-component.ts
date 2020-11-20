@@ -160,7 +160,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     /* istanbul ignore next */
     public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
       super(injector);
-      this.__ngMocksInstall(changeDetector, injector);
+      this.__ngMocksInstall(changeDetector);
     }
 
     public ngAfterContentInit(): void {
@@ -179,7 +179,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
       }
     }
 
-    private __ngMocksInstall(changeDetector: ChangeDetectorRef, injector: Injector): void {
+    private __ngMocksInstall(changeDetector: ChangeDetectorRef): void {
       // Providing method to hide any @ContentChild based on its selector.
       (this as any).__hide = (contentChildSelector: string) => {
         const key = viewChildRefs.get(contentChildSelector);

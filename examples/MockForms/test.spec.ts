@@ -16,9 +16,9 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `dependency`,
 })
 class DependencyComponent implements ControlValueAccessor {
-  public registerOnChange(fn: any): void {}
-  public registerOnTouched(fn: any): void {}
-  public writeValue(obj: any): void {}
+  public registerOnChange = (fn: any): void => fn;
+  public registerOnTouched = (fn: any): void => fn;
+  public writeValue = (obj: any): void => obj;
 }
 
 @Component({

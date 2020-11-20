@@ -19,7 +19,12 @@ export class CustomFormControlComponent implements ControlValueAccessor {
   @Input() public disabled = false;
   public value = '';
 
-  public onChange = (value: string) => {};
+  protected change: any;
+
+  public onChange = (value: string): void => {
+    this.change = value;
+  };
+
   public onTouched = () => {};
 
   public registerOnChange(fn: (rating: string) => void): void {

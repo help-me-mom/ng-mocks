@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, ContentChild, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { staticFalse } from '../../tests';
+
 @Component({
   selector: 'app-child',
   template: `dependency`,
 })
 class DependencyComponent {
-  @ContentChild('something', { static: false } as any) public injectedSomething: TemplateRef<{}>;
+  @ContentChild('something', staticFalse) public injectedSomething?: TemplateRef<{}>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();
 }

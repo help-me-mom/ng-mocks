@@ -61,25 +61,17 @@ class ProvidedService {
   `,
 })
 class TargetComponent {
-  public readonly fake: TargetService;
   public readonly injected: TargetService;
-  public readonly provided: ProvidedService;
-  public readonly service: TargetService;
-  public readonly token: string;
 
   public constructor(
-    @Inject(FakeService) fake: TargetService,
-    @Optional() @Inject(TOKEN) @SkipSelf() token: string,
-    @Optional() @SkipSelf() service: TargetService,
-    @Inject(TOKEN) @Optional() @SkipSelf() token2: string,
-    provided: ProvidedService,
+    @Inject(FakeService) public readonly fake: TargetService,
+    @Optional() @Inject(TOKEN) @SkipSelf() public readonly token: string,
+    @Optional() @SkipSelf() public readonly service: TargetService,
+    @Inject(TOKEN) @Optional() @SkipSelf() public readonly token2: string,
+    public readonly provided: ProvidedService,
     injector: Injector,
   ) {
-    this.fake = fake;
-    this.service = service;
     this.injected = injector.get(TargetService);
-    this.provided = provided;
-    this.token = token;
   }
 }
 

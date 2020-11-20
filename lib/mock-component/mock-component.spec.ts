@@ -60,12 +60,14 @@ import { MockedComponent } from './types';
   `,
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, { ...staticTrue }) public childComponent: ChildComponent;
-  public emitted: string;
+  @ViewChild(ChildComponent, staticTrue) public childComponent?: ChildComponent;
+  public emitted = '';
   public readonly formControl = new FormControl('');
 
   public performActionOnChild(s: string): void {
-    this.childComponent.performAction(s);
+    if (this.childComponent) {
+      this.childComponent.performAction(s);
+    }
   }
 }
 
@@ -163,7 +165,7 @@ describe('MockComponent', () => {
   });
 
   it('should allow spying of viewchild component methods', () => {
-    const spy = component.childComponent.performAction;
+    const spy = component.childComponent ? component.childComponent.performAction : null;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
@@ -284,15 +286,15 @@ describe('MockComponent', () => {
       template: '',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) public o1: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) public o2: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) public o3: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) public o4: QueryList<any>;
+      @ContentChild('i1', { read: true } as any) public o1?: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) public o2?: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) public o3?: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) public o4?: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) public o5: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) public o6: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) public o7: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) public o8: QueryList<any>;
+      @ContentChild('i5', { read: false } as any) public o5?: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) public o6?: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) public o7?: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) public o8?: QueryList<any>;
     }
 
     const actual = MockComponent(MyClass) as any;

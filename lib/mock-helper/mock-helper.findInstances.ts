@@ -14,9 +14,9 @@ function nestedCheck<T>(
     result.push(element);
   }
   const childNodes = node?.childNodes || [];
-  childNodes.forEach(childNode => {
+  for (const childNode of childNodes) {
     nestedCheck(result, childNode, callback);
-  });
+  }
 }
 
 export default <T>(...args: any[]): T[] => {

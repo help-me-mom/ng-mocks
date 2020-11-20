@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, Injectable, ViewChild } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
 
+import { staticFalse } from '..';
+
 @Injectable()
 export class TargetChildService {
   public print(): string {
@@ -43,14 +45,13 @@ export class TargetComponent {
   template: '<target></target>',
 })
 export class RealComponent implements AfterViewInit {
-  @ViewChild(TargetComponent, {
-    static: false,
-  } as any)
-  protected child: TargetComponent;
+  @ViewChild(TargetComponent, staticFalse) protected child?: TargetComponent;
 
   public ngAfterViewInit() {
-    this.child.service.print();
-    this.child.service.child.print();
+    if (this.child) {
+      this.child.service.print();
+      this.child.service.child.print();
+    }
   }
 }
 

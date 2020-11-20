@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
 })
 export class ChildComponent {
   public performAction(s: string) {
-    return this;
+    return s ? this : this;
   }
 }
