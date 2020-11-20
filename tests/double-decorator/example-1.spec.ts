@@ -24,11 +24,7 @@ class TargetProvider extends TargetDirective {
   template: '{{ service.name }}',
 })
 class TargetComponent {
-  public readonly service: TargetProvider;
-
-  public constructor(service: TargetProvider) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetProvider) {}
 }
 
 @NgModule({

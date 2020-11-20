@@ -7,11 +7,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   template: ` "name:{{ name }}" `,
 })
 class TargetComponent {
-  public readonly name: string;
-
-  public constructor(@Inject('name') name: string) {
-    this.name = name;
-  }
+  public constructor(@Inject('name') public readonly name: string) {}
 }
 
 @NgModule({

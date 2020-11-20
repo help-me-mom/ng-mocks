@@ -9,12 +9,9 @@ export class RenderRealComponent {
   @Output() public click = new EventEmitter<{}>();
   @Input() public content = '';
 
-  public readonly document: Document;
-
   public realName = '';
 
-  public constructor(@Inject(DOCUMENT) document: Document) {
-    this.document = document;
+  public constructor(@Inject(DOCUMENT) public readonly document: Document) {
     this.document.getElementById('test');
   }
 

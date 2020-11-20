@@ -20,9 +20,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
       // avoiding influences on cache when users extend the testing module.
       return {
-        declarations: [...(ngModule.declarations || [])],
-        imports: [...(ngModule.imports || [])],
-        providers: [...(ngModule.providers || [])],
+        declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
+        imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
+        providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
       };
     }
 
@@ -76,9 +76,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // avoiding influences on cache when users extend the testing module.
     return {
-      declarations: [...(ngModule.declarations || [])],
-      imports: [...(ngModule.imports || [])],
-      providers: [...(ngModule.providers || [])],
+      declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
+      imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
+      providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
     };
   }
 

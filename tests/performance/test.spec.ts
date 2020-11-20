@@ -16,11 +16,7 @@ class TargetService {
   template: '{{ service.count }}',
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({

@@ -7,11 +7,7 @@ import { TargetService } from './fixtures.services';
   template: '<internal></internal>{{ service.called }}',
 })
 export class TargetComponent {
-  public readonly service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @Component({

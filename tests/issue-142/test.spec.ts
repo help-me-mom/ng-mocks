@@ -19,11 +19,7 @@ export class TargetModule {
     };
   }
 
-  public readonly targetToken: boolean = false;
-
-  public constructor(@Inject(TARGET_TOKEN) targetToken: boolean) {
-    this.targetToken = targetToken;
-  }
+  public constructor(@Inject(TARGET_TOKEN) public readonly targetToken: boolean) {}
 }
 
 @Component({

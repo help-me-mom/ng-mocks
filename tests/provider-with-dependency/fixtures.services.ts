@@ -16,9 +16,5 @@ export class ServiceReplacedParent extends ServiceParent {
 
 @Injectable()
 export class ServiceChild {
-  public readonly parent: ServiceParent;
-
-  public constructor(parent: ServiceParent) {
-    this.parent = parent;
-  }
+  public constructor(public readonly parent: ServiceParent) {}
 }

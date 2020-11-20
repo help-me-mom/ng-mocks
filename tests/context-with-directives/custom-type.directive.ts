@@ -4,10 +4,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
   selector: '[type]',
 })
 export class CustomTypeDirective {
-  public template: TemplateRef<any>;
   @Input('type') public type = '';
 
-  public constructor(template: TemplateRef<any>) {
-    this.template = template;
-  }
+  public constructor(public template: TemplateRef<any>) {}
 }

@@ -12,11 +12,7 @@ export class TargetChildService {
 
 @Injectable()
 export class TargetService {
-  public child: TargetChildService;
-
-  public constructor(child: TargetChildService) {
-    this.child = child;
-  }
+  public constructor(public child: TargetChildService) {}
 
   public print(): string {
     return this.constructor.name;
@@ -29,11 +25,7 @@ export class TargetService {
   template: 'target {{ service.print() }}',
 })
 export class TargetComponent {
-  public service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public service: TargetService) {}
 
   public someMethod() {
     return this.constructor.name;

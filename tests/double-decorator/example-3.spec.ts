@@ -20,11 +20,7 @@ class BaseClass {
   template: '{{ service.name }}',
 })
 class MyComponent {
-  public readonly service: BaseClass;
-
-  public constructor(service: BaseClass) {
-    this.service = service;
-  }
+  public constructor(public readonly service: BaseClass) {}
 }
 
 @NgModule({

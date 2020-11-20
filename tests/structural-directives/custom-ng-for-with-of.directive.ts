@@ -11,13 +11,11 @@ export interface ICustomNgForContext {
   selector: '[customNgForWithOf]',
 })
 export class CustomNgForWithOfDirective {
-  protected templateRef: TemplateRef<ICustomNgForContext>;
-  protected viewContainerRef: ViewContainerRef;
+  public constructor(
+    protected templateRef: TemplateRef<ICustomNgForContext>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
 
-  public constructor(templateRef: TemplateRef<ICustomNgForContext>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
   @Input('customNgForWithOfOf') public set setItems(items: string[]) {
     this.viewContainerRef.clear();
 

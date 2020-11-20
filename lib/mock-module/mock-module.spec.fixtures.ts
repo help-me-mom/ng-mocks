@@ -6,11 +6,7 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 
 @Directive({ selector: '[example-directive]' })
 export class ExampleDirective implements OnInit {
-  protected node: ElementRef;
-
-  public constructor(node: ElementRef) {
-    this.node = node;
-  }
+  public constructor(protected node: ElementRef) {}
 
   public ngOnInit(): void {
     this.node.nativeElement.innerText = 'ExampleDirective';

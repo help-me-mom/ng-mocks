@@ -27,11 +27,7 @@ class TargetPipe implements PipeTransform {
   `,
 })
 class TargetComponent {
-  public readonly service: TargetPipe;
-
-  public constructor(service: TargetPipe) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetPipe) {}
 }
 
 @NgModule({

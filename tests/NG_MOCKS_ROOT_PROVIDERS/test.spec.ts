@@ -19,11 +19,7 @@ class Target1Service {
   template: `{{ service.name }}`,
 })
 class Target1Component {
-  public readonly service: Target1Service;
-
-  public constructor(service: Target1Service) {
-    this.service = service;
-  }
+  public constructor(public readonly service: Target1Service) {}
 }
 
 @NgModule({
@@ -44,11 +40,7 @@ class Target2Service {
   template: `{{ service.name }}`,
 })
 class Target2Component {
-  public readonly service: Target2Service;
-
-  public constructor(service: Target2Service) {
-    this.service = service;
-  }
+  public constructor(public readonly service: Target2Service) {}
 }
 
 @NgModule({

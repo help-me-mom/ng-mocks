@@ -25,11 +25,7 @@ class MyProvider extends BaseClass {}
   template: '{{ service.name }}',
 })
 class MyComponent {
-  public readonly service: MyProvider;
-
-  public constructor(service: MyProvider) {
-    this.service = service;
-  }
+  public constructor(public readonly service: MyProvider) {}
 }
 
 @NgModule({

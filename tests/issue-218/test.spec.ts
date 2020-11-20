@@ -16,11 +16,7 @@ const TOKEN_PREFIX = new InjectionToken('PREFIX');
 
 @Injectable()
 class PrefixService {
-  public readonly prefix: string;
-
-  public constructor(@Inject(TOKEN_PREFIX) prefix: string) {
-    this.prefix = prefix;
-  }
+  public constructor(@Inject(TOKEN_PREFIX) public readonly prefix: string) {}
 }
 
 @Pipe({
@@ -46,11 +42,7 @@ class TargetComponent implements OnInit {
   public piped = '';
   @Input() public value = '';
 
-  protected pipe: TargetPipe;
-
-  public constructor(pipe: TargetPipe) {
-    this.pipe = pipe;
-  }
+  public constructor(protected pipe: TargetPipe) {}
 
   public ngOnInit(): void {
     this.piped = this.pipe.transform(this.value);

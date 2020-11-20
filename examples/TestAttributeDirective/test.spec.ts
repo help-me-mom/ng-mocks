@@ -10,11 +10,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetDirective {
   @Input() public color = 'yellow';
 
-  protected ref: ElementRef;
-
-  public constructor(ref: ElementRef) {
-    this.ref = ref;
-  }
+  public constructor(protected ref: ElementRef) {}
 
   @HostListener('mouseenter') public onMouseEnter() {
     this.ref.nativeElement.style.backgroundColor = this.color;

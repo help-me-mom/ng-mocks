@@ -28,13 +28,10 @@ class Target2Service {
 class TargetComponent implements OnInit {
   public echo = '';
 
-  protected readonly target1Service: Target1Service;
-  protected readonly target2Service: Target2Service;
-
-  public constructor(target1Service: Target1Service, target2Service: Target2Service) {
-    this.target1Service = target1Service;
-    this.target2Service = target2Service;
-  }
+  public constructor(
+    protected readonly target1Service: Target1Service,
+    protected readonly target2Service: Target2Service,
+  ) {}
 
   public ngOnInit(): void {
     this.echo = `${this.target1Service.echo()}${this.target2Service.echo()}`;

@@ -16,11 +16,7 @@ class Target2Service {}
   template: 'com-1',
 })
 class Target1Component {
-  public service: Target1Service;
-
-  public constructor(service: Target1Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target1Service) {}
 }
 
 @Component({
@@ -28,11 +24,7 @@ class Target1Component {
   template: 'com-2',
 })
 class Target2Component {
-  public service: Target2Service;
-
-  public constructor(service: Target2Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target2Service) {}
 }
 
 @Directive({
@@ -40,22 +32,14 @@ class Target2Component {
   selector: 'dir-1',
 })
 class Target1Directive {
-  public service: Target1Service;
-
-  public constructor(service: Target1Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target1Service) {}
 }
 
 @Directive({
   selector: 'dir-2',
 })
 class Target2Directive {
-  public service: Target2Service;
-
-  public constructor(service: Target2Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target2Service) {}
 }
 
 @Pipe({

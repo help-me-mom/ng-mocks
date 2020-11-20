@@ -27,11 +27,7 @@ class DependencyModule {
     };
   }
 
-  public readonly service: DependencyService;
-
-  public constructor(service: DependencyService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: DependencyService) {}
 }
 
 @Component({
@@ -39,11 +35,7 @@ class DependencyModule {
   template: '{{ service.echo() }}',
 })
 class TargetComponent {
-  public readonly service: DependencyService;
-
-  public constructor(service: DependencyService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: DependencyService) {}
 }
 
 @NgModule({

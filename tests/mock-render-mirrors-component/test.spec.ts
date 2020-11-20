@@ -24,13 +24,10 @@ export class TargetComponent {
   public var1 = '';
   public var2 = '';
 
-  // required for DefaultRenderComponent generation assertion.
-  protected readonly cdf: ChangeDetectorRef;
   protected var3 = '';
 
-  public constructor(cdf: ChangeDetectorRef) {
-    this.cdf = cdf;
-  }
+  // required for DefaultRenderComponent generation assertion.
+  public constructor(protected readonly cdf: ChangeDetectorRef) {}
 
   public test(var2: string): void {
     this.var3 = this.var2;

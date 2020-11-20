@@ -12,11 +12,7 @@ function Injectable(...args: any[]): any {
   providedIn: 'root',
 })
 class KeepService {
-  public readonly id: any;
-
-  public constructor(@Inject(PLATFORM_ID) id: any) {
-    this.id = id;
-  }
+  public constructor(@Inject(PLATFORM_ID) public readonly id: any) {}
 
   public echo(): any {
     return this.id;

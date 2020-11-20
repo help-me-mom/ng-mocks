@@ -78,11 +78,7 @@ class TargetComponent {
   template: `{{ module.name }}`,
 })
 class ModuleComponent {
-  public readonly module: ModuleService;
-
-  public constructor(module: ModuleService) {
-    this.module = module;
-  }
+  public constructor(public readonly module: ModuleService) {}
 }
 
 @NgModule({

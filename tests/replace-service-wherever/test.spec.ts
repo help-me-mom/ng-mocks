@@ -31,11 +31,7 @@ class ReplacementService {
   template: `{{ service.name }} {{ service.called ? 'called' : '' }}`,
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({
@@ -44,10 +40,7 @@ class TargetComponent {
   providers: [TargetService],
 })
 class TargetModule {
-  protected service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
+  public constructor(protected service: TargetService) {
     this.service.echo();
   }
 }

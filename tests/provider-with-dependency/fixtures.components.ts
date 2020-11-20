@@ -7,9 +7,5 @@ import { ServiceChild } from './fixtures.services';
   template: '{{ child.parent.echo() }}',
 })
 export class InternalComponent {
-  public readonly child: ServiceChild;
-
-  public constructor(child: ServiceChild) {
-    this.child = child;
-  }
+  public constructor(public readonly child: ServiceChild) {}
 }

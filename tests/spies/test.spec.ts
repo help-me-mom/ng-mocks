@@ -18,10 +18,7 @@ class TargetService {
   template: '<ng-content></ng-content>',
 })
 class TargetComponent {
-  protected service: TargetService;
-
-  public constructor(service: TargetService) {
-    this.service = service;
+  public constructor(protected service: TargetService) {
     this.service.echo('constructor');
   }
 

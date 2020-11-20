@@ -6,11 +6,7 @@ const TARGET_TOKEN = new InjectionToken('MY_TOKEN_SINGLE');
 
 @Injectable()
 class TargetService {
-  public readonly tokens: string[] = [];
-
-  public constructor(@Inject(TARGET_TOKEN) tokens: string[]) {
-    this.tokens = tokens;
-  }
+  public constructor(@Inject(TARGET_TOKEN) public readonly tokens: string[]) {}
 }
 
 @NgModule({

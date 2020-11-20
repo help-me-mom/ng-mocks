@@ -5,11 +5,7 @@ import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 // A service we want to replace via useClass.
 @Injectable()
 class Service1 {
-  public name: string;
-
-  public constructor(name: string) {
-    this.name = name;
-  }
+  public constructor(public name: string) {}
 }
 
 // A service replacing the Service1.
