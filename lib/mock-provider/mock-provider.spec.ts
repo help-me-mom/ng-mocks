@@ -13,9 +13,11 @@ describe('mock-provider', () => {
   it('returns undefined for tokens', () => {
     const actual = MockProvider(TARGET_TOKEN);
     expect(actual).toEqual({
+      deps: [Injector],
       provide: TARGET_TOKEN,
-      useValue: undefined,
+      useFactory: jasmine.anything(),
     });
+    expect(actual.useFactory()).toBeUndefined();
   });
 
   it('returns factories for services', () => {
@@ -36,13 +38,17 @@ describe('mock-provider', () => {
     const actual = MockProviders(TARGET_TOKEN, TargetService);
     expect(actual.length).toEqual(2);
     expect(actual[0]).toEqual({
+      deps: [Injector],
       provide: TARGET_TOKEN,
-      useValue: undefined,
+      useFactory: jasmine.anything(),
     });
+    expect(actual[0].useFactory()).toBeUndefined();
+
     expect(actual[1]).toEqual({
       deps: [Injector],
       provide: TargetService,
       useFactory: jasmine.anything(),
     });
+    expect(actual[1].useFactory()).toEqual(jasmine.any(TargetService));
   });
 });
