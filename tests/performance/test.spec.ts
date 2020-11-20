@@ -6,7 +6,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 @Injectable()
 class TargetService {
   public count = 0;
-  constructor() {
+  public constructor() {
     this.count += 1;
   }
 }
@@ -18,7 +18,7 @@ class TargetService {
 class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }
@@ -72,7 +72,7 @@ describe('performance:wrong', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).mock(TargetService, {
       count: 5,
-    })
+    }),
   );
 
   it('creates a module on first call', () => {

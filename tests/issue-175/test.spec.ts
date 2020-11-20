@@ -18,7 +18,7 @@ class Target2Service {}
 class Target1Component {
   public service: Target1Service;
 
-  constructor(service: Target1Service) {
+  public constructor(service: Target1Service) {
     this.service = service;
   }
 }
@@ -30,7 +30,7 @@ class Target1Component {
 class Target2Component {
   public service: Target2Service;
 
-  constructor(service: Target2Service) {
+  public constructor(service: Target2Service) {
     this.service = service;
   }
 }
@@ -42,7 +42,7 @@ class Target2Component {
 class Target1Directive {
   public service: Target1Service;
 
-  constructor(service: Target1Service) {
+  public constructor(service: Target1Service) {
     this.service = service;
   }
 }
@@ -53,7 +53,7 @@ class Target1Directive {
 class Target2Directive {
   public service: Target2Service;
 
-  constructor(service: Target2Service) {
+  public constructor(service: Target2Service) {
     this.service = service;
   }
 }
@@ -64,7 +64,7 @@ class Target2Directive {
 class Target1Pipe implements PipeTransform {
   protected name = 'pip1';
 
-  transform(): string {
+  public transform(): string {
     return this.name;
   }
 }
@@ -75,7 +75,7 @@ class Target1Pipe implements PipeTransform {
 class Target2Pipe implements PipeTransform {
   protected name = 'pip2';
 
-  transform(): string {
+  public transform(): string {
     return this.name;
   }
 }

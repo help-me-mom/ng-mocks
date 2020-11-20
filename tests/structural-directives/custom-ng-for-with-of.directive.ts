@@ -11,7 +11,14 @@ export interface ICustomNgForContext {
   selector: '[customNgForWithOf]',
 })
 export class CustomNgForWithOfDirective {
-  @Input('customNgForWithOfOf') set setItems(items: string[]) {
+  protected templateRef: TemplateRef<ICustomNgForContext>;
+  protected viewContainerRef: ViewContainerRef;
+
+  public constructor(templateRef: TemplateRef<ICustomNgForContext>, viewContainerRef: ViewContainerRef) {
+    this.templateRef = templateRef;
+    this.viewContainerRef = viewContainerRef;
+  }
+  @Input('customNgForWithOfOf') public set setItems(items: string[]) {
     this.viewContainerRef.clear();
 
     items.forEach((value, index) =>
@@ -20,15 +27,7 @@ export class CustomNgForWithOfDirective {
         myFirst: index === 0,
         myIndex: index,
         myLast: index + 1 === items.length,
-      })
+      }),
     );
-  }
-
-  protected templateRef: TemplateRef<ICustomNgForContext>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(templateRef: TemplateRef<ICustomNgForContext>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
   }
 }

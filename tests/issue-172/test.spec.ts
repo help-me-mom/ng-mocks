@@ -31,7 +31,7 @@ class TargetComponent implements OnInit {
   protected readonly target1Service: Target1Service;
   protected readonly target2Service: Target2Service;
 
-  constructor(target1Service: Target1Service, target2Service: Target2Service) {
+  public constructor(target1Service: Target1Service, target2Service: Target2Service) {
     this.target1Service = target1Service;
     this.target2Service = target2Service;
   }
@@ -51,7 +51,7 @@ describe('issue-172:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('renders echo', () => {
@@ -64,7 +64,7 @@ describe('issue-172:test', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('renders echo', () => {
@@ -92,7 +92,7 @@ describe('issue-172:mock', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).mock(Target1Service, {
       echo: () => 'MockService',
-    })
+    }),
   );
 
   it('renders the mock echo', () => {
@@ -105,7 +105,7 @@ describe('issue-172:restore', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('renders echo', () => {

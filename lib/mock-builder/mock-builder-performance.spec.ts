@@ -48,7 +48,7 @@ class Target2Service {}
 export class Target2Module {}
 
 describe('MockBuilderPerformance', () => {
-  afterEach(() => ngMocks.reset());
+  afterEach(ngMocks.reset);
 
   it('accepts the same beforeCC', () => {
     const beforeCC = () => undefined;

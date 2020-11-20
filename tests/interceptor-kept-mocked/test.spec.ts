@@ -1,11 +1,11 @@
 import {
-  HTTP_INTERCEPTORS,
   HttpClient,
   HttpClientModule,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
@@ -23,7 +23,7 @@ class Target1Interceptor implements HttpInterceptor {
         setHeaders: {
           target1: this.value,
         },
-      })
+      }),
     );
   }
 }
@@ -38,7 +38,7 @@ class Target2Interceptor implements HttpInterceptor {
         setHeaders: {
           target2: this.value,
         },
-      })
+      }),
     );
   }
 }
@@ -68,7 +68,7 @@ describe('interceptor-kept-mock', () => {
   beforeEach(() =>
     MockBuilder(Target1Interceptor, TargetModule)
       .keep(HTTP_INTERCEPTORS)
-      .replace(HttpClientModule, HttpClientTestingModule)
+      .replace(HttpClientModule, HttpClientTestingModule),
   );
 
   beforeAll(() => {

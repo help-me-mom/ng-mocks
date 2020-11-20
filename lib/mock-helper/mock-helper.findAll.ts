@@ -14,5 +14,6 @@ export default (...args: any[]) => {
   const debugElement = el || getLastFixture()?.debugElement;
 
   const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
+
   return debugElement?.queryAll(term) || [];
 };

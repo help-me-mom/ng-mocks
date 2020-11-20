@@ -21,7 +21,7 @@ export class TargetModule {
 
   public readonly targetToken: boolean = false;
 
-  constructor(@Inject(TARGET_TOKEN) targetToken: boolean) {
+  public constructor(@Inject(TARGET_TOKEN) targetToken: boolean) {
     this.targetToken = targetToken;
   }
 }
@@ -37,7 +37,7 @@ describe('issue-142', () => {
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
       imports: [MockModule(TargetModule.forRoot())],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('test', () => {

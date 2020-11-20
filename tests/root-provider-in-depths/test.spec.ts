@@ -34,7 +34,7 @@ class TargetService {
 class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }
@@ -51,7 +51,7 @@ describe('root-provider-in-depths', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('creates component with very nested service', () => {

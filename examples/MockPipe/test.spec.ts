@@ -3,7 +3,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({ name: 'dependency' })
 class DependencyPipe implements PipeTransform {
-  transform = (name: string): string => `hi ${name}`;
+  public transform = (name: string): string => `hi ${name}`;
 }
 
 @Component({

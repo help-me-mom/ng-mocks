@@ -12,7 +12,7 @@ class MockService {}
 class TargetComponent {
   public readonly service: MockService;
 
-  constructor(service: MockService) {
+  public constructor(service: MockService) {
     this.service = service;
   }
 }

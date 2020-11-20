@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method variable-name
+// tslint:disable:prefer-function-over-method variable-name
 
 import { Component, Directive, forwardRef, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -25,6 +25,7 @@ export class TargetDirective implements Validator {
 
   public validate(): ValidationErrors {
     this.__validate = [];
+
     return {
       validator: true,
     };
@@ -50,7 +51,7 @@ describe('issue-167:NG_VALIDATORS:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('should trigger validation w/o an error', () => {

@@ -25,11 +25,11 @@ const defaultTransform = (...args: any[]): void => undefined;
  */
 export function MockPipe<TPipe extends PipeTransform>(
   pipe: AnyType<TPipe>,
-  transform?: TPipe['transform']
+  transform?: TPipe['transform'],
 ): Type<MockedPipe<TPipe>>;
 export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
-  transform: TPipe['transform'] = defaultTransform
+  transform: TPipe['transform'] = defaultTransform,
 ): Type<MockedPipe<TPipe>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.

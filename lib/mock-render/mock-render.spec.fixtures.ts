@@ -6,14 +6,14 @@ import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
   template: '<span (click)="click.emit($event)">{{ content }}</span>',
 })
 export class RenderRealComponent {
-  @Output() click = new EventEmitter<{}>();
-  @Input() content = '';
+  @Output() public click = new EventEmitter<{}>();
+  @Input() public content = '';
 
   public readonly document: Document;
 
   public realName = '';
 
-  constructor(@Inject(DOCUMENT) document: Document) {
+  public constructor(@Inject(DOCUMENT) document: Document) {
     this.document = document;
     this.document.getElementById('test');
   }

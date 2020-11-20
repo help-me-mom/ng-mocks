@@ -1,7 +1,6 @@
 {
   "extends": ["tslint:all", "tslint-jasmine-rules"],
   "rules": {
-    "align": false,
     "arrow-parens": false,
     "comment-format": false,
     "completed-docs": false,
@@ -9,8 +8,6 @@
     "deprecation": false,
     "file-name-casing": false,
     "max-classes-per-file": false,
-    "member-access": false,
-    "newline-before-return": false,
     "newline-per-chained-call": false,
     "no-any": false,
     "no-default-export": false,
@@ -20,24 +17,31 @@
     "no-floating-promises": false,
     "no-focused-tests": true,
     "no-implicit-dependencies": [true, "dev", ["ng-mocks"]],
-    "no-inferred-empty-object-type": false,
     "no-magic-numbers": false,
     "no-null-keyword": false,
     "no-null-undefined-union": false,
-    "no-require-imports": false,
+    "no-parameter-properties": false,
+    "no-redundant-jsdoc": false,
     "no-submodule-imports": false,
     "no-unbound-method": false,
     "no-unsafe-any": false,
-    "no-use-before-declare": false,
     "only-arrow-functions": false,
+    "prefer-function-over-method": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always", "strict-bound-class-methods"],
-    "space-before-function-paren": false,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always",
+        "method": "never",
+        "constructor": "never"
+      }
+    ],
     "strict-boolean-expressions": false,
     "strict-comparisons": [true, { "allow-object-equal-comparison": true }],
-    "trailing-comma": [true, { "esSpecCompliant": true }],
     "typedef": false,
-    "unified-signatures": false,
-    "variable-name": [true, "allow-leading-underscore"]
+    "unified-signatures": false
   }
 }

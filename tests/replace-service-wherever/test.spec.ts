@@ -9,6 +9,7 @@ class TargetService {
 
   public echo(): string {
     this.called = true;
+
     return this.name;
   }
 }
@@ -20,6 +21,7 @@ class ReplacementService {
 
   public echo(): string {
     this.called = true;
+
     return this.name;
   }
 }
@@ -31,7 +33,7 @@ class ReplacementService {
 class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }
@@ -44,7 +46,7 @@ class TargetComponent {
 class TargetModule {
   protected service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
     this.service.echo();
   }
@@ -54,7 +56,7 @@ describe('replace-service-wherever:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('uses service everywhere', () => {
@@ -70,7 +72,7 @@ describe('replace-service-wherever:mock', () => {
     MockBuilder(TargetComponent, TargetModule).provide({
       provide: TargetService,
       useClass: ReplacementService,
-    })
+    }),
   );
 
   it('uses service everywhere', () => {

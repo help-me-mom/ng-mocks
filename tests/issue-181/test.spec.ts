@@ -1,4 +1,4 @@
-// tslint:disable: no-parameter-properties
+// tslint:disable:no-parameter-properties
 
 import { CommonModule } from '@angular/common';
 import { ContentChild, Directive, NgModule } from '@angular/core';

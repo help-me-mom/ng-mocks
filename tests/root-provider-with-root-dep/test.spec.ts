@@ -21,7 +21,7 @@ class TargetService {
   public readonly name2: string;
   public readonly name3: string;
 
-  constructor(@Inject(TOKEN) name: string, @Inject(TOKEN) name2: string, @Inject(TOKEN) name3: string) {
+  public constructor(@Inject(TOKEN) name: string, @Inject(TOKEN) name2: string, @Inject(TOKEN) name3: string) {
     this.name = name;
     this.name2 = name2;
     this.name3 = name3;
@@ -35,7 +35,7 @@ class TargetService {
 class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }
@@ -57,7 +57,7 @@ describe('root-provider-with-root-dep', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('finds tokens', () => {

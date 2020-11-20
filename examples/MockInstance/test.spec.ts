@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 class ChildComponent {
   public readonly update$: Observable<void>;
 
-  constructor() {
+  public constructor() {
     const subject = new Subject<void>();
     this.update$ = subject;
     subject.complete();
@@ -28,7 +28,7 @@ class RealComponent implements AfterViewInit {
   } as any)
   protected child: ChildComponent;
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.child.update$.subscribe();
   }
 }

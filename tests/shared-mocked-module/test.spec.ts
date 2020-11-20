@@ -11,10 +11,10 @@ describe('SharedMockModule:real', () => {
     expect(fixture).toBeDefined();
     const content = fixture.debugElement.nativeElement.innerHTML;
     expect(content).toContain(
-      '<child-1-component>child:1 <my-component>real content</my-component></child-1-component>'
+      '<child-1-component>child:1 <my-component>real content</my-component></child-1-component>',
     );
     expect(content).toContain(
-      '<child-2-component>child:2 <my-component>real content</my-component></child-2-component>'
+      '<child-2-component>child:2 <my-component>real content</my-component></child-2-component>',
     );
   });
 });

@@ -66,6 +66,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       },
@@ -87,6 +88,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -100,6 +102,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -123,17 +126,17 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   @MockOf(directive, { outputs, setNgValueAccessor })
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
     /* istanbul ignore next */
-    constructor(
+    public constructor(
       injector: Injector,
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef
+      @Optional() viewContainer?: ViewContainerRef,
     ) {
       super(injector);
       this.__ngMocksInstall(element, template, viewContainer);
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
       if (config && config.render) {
         const { $implicit, variables } =
           config.render !== true
@@ -149,7 +152,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     private __ngMocksInstall(
       element?: ElementRef,
       template?: TemplateRef<any>,
-      viewContainer?: ViewContainerRef
+      viewContainer?: ViewContainerRef,
     ): void {
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.

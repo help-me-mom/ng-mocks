@@ -35,6 +35,7 @@ export default (...args: any[]) => {
         continue;
       }
       const directive: any = get(el, token);
+
       return directive[prop];
     }
   }

@@ -28,7 +28,7 @@ export class TargetComponent {
   protected readonly cdf: ChangeDetectorRef;
   protected var3 = '';
 
-  constructor(cdf: ChangeDetectorRef) {
+  public constructor(cdf: ChangeDetectorRef) {
     this.cdf = cdf;
   }
 
@@ -114,7 +114,7 @@ describe('mock-render-mirrors-component', () => {
       {
         input1: '1',
         input3: '3',
-      }
+      },
     );
     expect(fixture3).toBeDefined();
     expect(fixture3.componentInstance.input3).toBe('3');

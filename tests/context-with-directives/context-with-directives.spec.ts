@@ -32,17 +32,17 @@ describe('context-with-directives:real', () => {
 
     // template should be rendered under .template
     expect(ngMocks.find(fixture.debugElement, '.template').nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(
-      ' template w/ directive w/o binding '
+      ' template w/ directive w/o binding ',
     );
 
     // template1 should be rendered under .template1
     expect(ngMocks.find(fixture.debugElement, '.template1').nativeElement.innerHTML.replace(/\s+/gm, ' ')).toContain(
-      ' template w/ directive w/ binding 1 '
+      ' template w/ directive w/ binding 1 ',
     );
 
     // template2 should not be rendered
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).not.toContain(
-      ' template w/ directive w/ binding w/o render '
+      ' template w/ directive w/ binding w/o render ',
     );
 
     // unused ng-templates shouldn't be rendered at all
@@ -51,10 +51,10 @@ describe('context-with-directives:real', () => {
 
     // ng-content contains header and footer
     expect(ngMocks.find(fixture.debugElement, '.nested').nativeElement.innerHTML.replace(/\s+/, ' ')).toContain(
-      '<div>header</div>'
+      '<div>header</div>',
     );
     expect(ngMocks.find(fixture.debugElement, '.nested').nativeElement.innerHTML.replace(/\s+/, ' ')).toContain(
-      '<div>footer</div>'
+      '<div>footer</div>',
     );
   });
 });

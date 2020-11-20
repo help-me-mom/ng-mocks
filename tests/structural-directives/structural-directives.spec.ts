@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import { MockBuilder, MockDirective, MockedDirective, MockRender, ngMocks } from 'ng-mocks';
 
 import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
@@ -6,7 +8,7 @@ import { CustomNgIfDirective } from './custom-ng-if.directive';
 
 describe('structural-directive-as-ng-for:real', () => {
   beforeEach(() =>
-    MockBuilder().keep(CustomNgForWithOfDirective).keep(CustomNgForWithoutOfDirective).keep(CustomNgIfDirective)
+    MockBuilder().keep(CustomNgForWithOfDirective).keep(CustomNgForWithoutOfDirective).keep(CustomNgIfDirective),
   );
 
   it('renders customNgForWithOf properly', () => {
@@ -19,7 +21,7 @@ describe('structural-directive-as-ng-for:real', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // every value should be rendered correctly.
@@ -38,7 +40,7 @@ describe('structural-directive-as-ng-for:real', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // every value should be rendered correctly.
@@ -56,7 +58,7 @@ describe('structural-directive-as-ng-for:real', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // only first div should be rendered.
@@ -67,7 +69,7 @@ describe('structural-directive-as-ng-for:real', () => {
 
 describe('structural-directive-as-ng-for:mock', () => {
   beforeEach(() =>
-    MockBuilder().mock(CustomNgIfDirective).mock(CustomNgForWithOfDirective).mock(CustomNgForWithoutOfDirective)
+    MockBuilder().mock(CustomNgIfDirective).mock(CustomNgForWithOfDirective).mock(CustomNgForWithoutOfDirective),
   );
 
   it('mocks customNgIf properly', () => {
@@ -80,7 +82,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // we need to render mock structural directives manually
@@ -89,7 +91,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       .forEach((item: MockedDirective<CustomNgIfDirective>) =>
         item.__render(undefined, {
           fromDirective: undefined,
-        })
+        }),
       );
     fixture.detectChanges();
 
@@ -133,7 +135,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // we need to render mock structural directives manually
@@ -187,7 +189,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       `,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // we need to render mock structural directives manually
@@ -249,7 +251,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       {
         values1: ['string1', 'string2', 'string3'],
         values2: ['string4', 'string5', 'string6'],
-      }
+      },
     );
 
     // we need to render mock structural directives manually
@@ -264,14 +266,14 @@ describe('structural-directive-as-ng-for:mock', () => {
     // Looking for first directive.
     mockDirective = ngMocks.get(
       ngMocks.find(fixture.debugElement, '[data-type="node-1"]'),
-      MockDirective(CustomNgForWithoutOfDirective)
+      MockDirective(CustomNgForWithoutOfDirective),
     );
     expect(mockDirective.setItems).toEqual(['string1', 'string2', 'string3']);
 
     // Looking for second directive.
     mockDirective = ngMocks.get(
       ngMocks.find(fixture.debugElement, '[data-type="node-2"]'),
-      MockDirective(CustomNgForWithoutOfDirective)
+      MockDirective(CustomNgForWithoutOfDirective),
     );
     expect(mockDirective.setItems).toEqual(['string4', 'string5', 'string6']);
   });

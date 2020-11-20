@@ -9,7 +9,7 @@ import { ServiceChild } from './fixtures.services';
 export class InternalComponent {
   public readonly child: ServiceChild;
 
-  constructor(child: ServiceChild) {
+  public constructor(child: ServiceChild) {
     this.child = child;
   }
 }

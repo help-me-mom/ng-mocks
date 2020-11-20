@@ -43,7 +43,7 @@ describe('correct-module-exports-11:proper', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [MockModule(TargetModule)],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('fails on not exported module', () => {

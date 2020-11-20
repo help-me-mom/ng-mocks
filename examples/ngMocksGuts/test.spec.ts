@@ -52,27 +52,24 @@ class Target2Component {}
 })
 class Target1Component {
   @Input() public greeting: string | null = null;
-  public readonly target: string;
   @Output() public readonly update: EventEmitter<void> = new EventEmitter();
 
-  constructor(@Inject(TARGET1) target: string) {
-    this.target = target;
-  }
+  public constructor(@Inject(TARGET1) public readonly target: string) {}
 }
 
 @Directive({
   selector: '[target1]',
 })
 class Target1Directive implements OnDestroy {
-  public readonly service: Target1Service;
   @Output() public readonly target1: EventEmitter<void> = new EventEmitter();
 
-  constructor(service: Target1Service) {
-    this.service = service;
-    this.service.callback = () => this.target1.emit();
+  public constructor(public readonly service: Target1Service) {
+    this.service.callback = () => {
+      this.target1.emit();
+    };
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.service.callback = () => undefined;
   }
 }

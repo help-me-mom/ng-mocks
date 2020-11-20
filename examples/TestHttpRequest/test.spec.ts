@@ -8,13 +8,9 @@ import { Observable } from 'rxjs';
 // A service that does http requests.
 @Injectable()
 class TargetService {
-  protected http: HttpClient;
+  public constructor(protected http: HttpClient) {}
 
-  constructor(http: HttpClient) {
-    this.http = http;
-  }
-
-  fetch(): Observable<boolean[]> {
+  public fetch(): Observable<boolean[]> {
     return this.http.get<boolean[]>('/data');
   }
 }

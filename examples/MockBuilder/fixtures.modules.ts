@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
@@ -30,7 +31,6 @@ import {
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
   INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
-import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [

@@ -4,7 +4,7 @@ import { MockModule } from 'ng-mocks';
 
 @Injectable()
 class ExampleProvider {
-  a: number;
+  public a: number;
 }
 @NgModule({
   providers: [ExampleProvider],

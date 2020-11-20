@@ -22,9 +22,9 @@ export class CustomRootComponent implements AfterContentInit {
   public template: TemplateRef<any>;
   public template1: TemplateRef<any>;
   public template2: TemplateRef<any>;
-  @ContentChildren(CustomTypeDirective) templates: QueryList<any>;
+  @ContentChildren(CustomTypeDirective) public templates: QueryList<any>;
 
-  ngAfterContentInit(): void {
+  public ngAfterContentInit(): void {
     this.templates.forEach((template: CustomTypeDirective) => {
       switch (template.type) {
         case 'template1':

@@ -12,15 +12,15 @@ class TargetDirective {
 
   protected ref: ElementRef;
 
-  constructor(ref: ElementRef) {
+  public constructor(ref: ElementRef) {
     this.ref = ref;
   }
 
-  @HostListener('mouseenter') onMouseEnter() {
+  @HostListener('mouseenter') public onMouseEnter() {
     this.ref.nativeElement.style.backgroundColor = this.color;
   }
 
-  @HostListener('mouseleave') onMouseLeave() {
+  @HostListener('mouseleave') public onMouseLeave() {
     this.ref.nativeElement.style.backgroundColor = null;
   }
 }

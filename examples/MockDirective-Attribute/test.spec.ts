@@ -6,10 +6,10 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class DependencyDirective {
   @Input('dependency-input')
-  someInput = '';
+  public someInput = '';
 
   @Output('dependency-output')
-  someOutput = new EventEmitter();
+  public someOutput = new EventEmitter();
 }
 
 @Component({
@@ -17,8 +17,8 @@ class DependencyDirective {
   template: ` <span dependency [dependency-input]="value" (dependency-output)="trigger($event)"></span> `,
 })
 class TestedComponent {
-  value = '';
-  trigger = () => {};
+  public value = '';
+  public trigger = () => {};
 }
 
 describe('MockDirective:Attribute', () => {

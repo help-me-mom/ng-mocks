@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
@@ -22,7 +24,7 @@ class BaseClass {
 class MyComponent {
   public readonly service: BaseClass;
 
-  constructor(service: BaseClass) {
+  public constructor(service: BaseClass) {
     this.service = service;
   }
 }

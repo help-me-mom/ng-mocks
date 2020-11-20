@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -58,7 +60,7 @@ class Target1Component {
   public readonly target: string;
   @Output() public readonly update: EventEmitter<void> = new EventEmitter();
 
-  constructor(@Inject(TARGET1) target: string) {
+  public constructor(@Inject(TARGET1) target: string) {
     this.target = target;
   }
 }
@@ -70,12 +72,12 @@ class Target1Directive implements OnDestroy {
   public readonly service: Target1Service;
   @Output() public readonly target1: EventEmitter<void> = new EventEmitter();
 
-  constructor(service: Target1Service) {
+  public constructor(service: Target1Service) {
     this.service = service;
     this.service.callback = () => this.target1.emit();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.service.callback = () => undefined;
   }
 }
@@ -548,7 +550,7 @@ describe('mock-helper.guts', () => {
     expect(ngModule).toEqual(
       jasmine.objectContaining({
         imports: [CommonModule, Target2Module],
-      })
+      }),
     );
   });
 
@@ -557,7 +559,7 @@ describe('mock-helper.guts', () => {
     expect(ngModule).toEqual(
       jasmine.objectContaining({
         imports: [CommonModule, getMockedNgDefOf(Target2Module)],
-      })
+      }),
     );
   });
 
@@ -574,7 +576,7 @@ describe('mock-helper.guts', () => {
     const ngModule = ngMocks.guts(
       [Target1Service, Target1Service],
       [Target1Module, Target1Module],
-      [Target1Pipe, Target1Pipe]
+      [Target1Pipe, Target1Pipe],
     );
     expect(ngModule).toEqual({
       declarations: [getMockedNgDefOf(Target1Component), getMockedNgDefOf(Target1Directive)],
@@ -665,7 +667,7 @@ describe('mock-helper.guts', () => {
     const ngModule = ngMocks.guts(
       [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1],
       null,
-      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1]
+      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1],
     );
     expect(ngModule).toEqual({
       declarations: [],

@@ -7,7 +7,7 @@ import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 class Service1 {
   public name: string;
 
-  constructor(name: string) {
+  public constructor(name: string) {
     this.name = name;
   }
 }
@@ -21,11 +21,7 @@ class Service2 extends Service1 {
 // A service we want to test and to replace via useClass.
 @Injectable()
 class Target1Service {
-  public readonly service: Service1;
-
-  constructor(service: Service1) {
-    this.service = service;
-  }
+  public constructor(public readonly service: Service1) {}
 }
 
 // A service replacing the Target1Service.

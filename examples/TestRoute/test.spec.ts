@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -106,7 +108,7 @@ describe('TestRoute:Component', () => {
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing.
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([]))
+    MockBuilder(TargetComponent, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])),
   );
 
   it('navigates between pages', fakeAsync(() => {

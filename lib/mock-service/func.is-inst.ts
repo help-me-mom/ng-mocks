@@ -8,5 +8,6 @@ export default (value: any): boolean => {
   if (value.ngMetadataName === 'InjectionToken') {
     return false;
   }
+
   return typeof Object.getPrototypeOf(value) === 'object';
 };

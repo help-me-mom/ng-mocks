@@ -16,10 +16,11 @@ class ServiceMock {
 }
 
 describe('provider-with-dependency:real', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TargetModule],
     });
+
     return TestBed.compileComponents();
   });
 
@@ -30,7 +31,7 @@ describe('provider-with-dependency:real', () => {
 });
 
 describe('provider-with-dependency:provided', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TargetModule],
       providers: [
@@ -40,6 +41,7 @@ describe('provider-with-dependency:provided', () => {
         },
       ],
     });
+
     return TestBed.compileComponents();
   });
 
@@ -50,7 +52,7 @@ describe('provider-with-dependency:provided', () => {
 });
 
 describe('provider-with-dependency:mock', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     const ngModule = MockBuilder()
       .keep(TargetModule)
       .provide({
@@ -59,6 +61,7 @@ describe('provider-with-dependency:mock', () => {
       })
       .build();
     TestBed.configureTestingModule(ngModule);
+
     return TestBed.compileComponents();
   });
 

@@ -8,12 +8,12 @@ import { MockPipe, MockPipes } from './mock-pipe';
 
 @Pipe({ name: 'mockPipe' })
 export class ExamplePipe implements PipeTransform {
-  transform = (args: string): string => 'hi';
+  public transform = (args: string): string => 'hi';
 }
 
 @Pipe({ name: 'anotherMockPipe' })
 export class AnotherExamplePipe implements PipeTransform {
-  transform = (args: string): string => 'hi';
+  public transform = (args: string): string => 'hi';
 }
 
 @Component({
@@ -24,7 +24,7 @@ export class AnotherExamplePipe implements PipeTransform {
   `,
 })
 export class ExampleComponent {
-  someStuff = 'bah';
+  public someStuff = 'bah';
 }
 
 describe('MockPipe', () => {

@@ -18,7 +18,7 @@ export class ServiceReplacedParent extends ServiceParent {
 export class ServiceChild {
   public readonly parent: ServiceParent;
 
-  constructor(parent: ServiceParent) {
+  public constructor(parent: ServiceParent) {
     this.parent = parent;
   }
 }

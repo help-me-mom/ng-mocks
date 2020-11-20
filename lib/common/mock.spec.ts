@@ -33,7 +33,7 @@ class ChildModuleClass extends ParentClass implements PipeTransform {
     return this.childValue;
   }
 
-  transform(): string {
+  public transform(): string {
     return typeof this.childValue;
   }
 }
@@ -102,7 +102,7 @@ class ChildPipeClass extends ParentClass implements PipeTransform {
     return this.childValue;
   }
 
-  transform(): string {
+  public transform(): string {
     return typeof this.childValue;
   }
 }

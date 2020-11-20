@@ -51,7 +51,7 @@ export const ngMocks: {
   find<T, D>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     component: Type<T>,
-    notFoundValue: D
+    notFoundValue: D,
   ): D | MockedDebugElement<T>;
 
   /**
@@ -75,7 +75,7 @@ export const ngMocks: {
   find<T = any, D = undefined>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
     cssSelector: string,
-    notFoundValue: D
+    notFoundValue: D,
   ): D | MockedDebugElement<T>;
 
   /**
@@ -88,7 +88,7 @@ export const ngMocks: {
    */
   findAll<T>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
-    component: Type<T>
+    component: Type<T>,
   ): Array<MockedDebugElement<T>>;
 
   /**
@@ -101,7 +101,7 @@ export const ngMocks: {
    */
   findAll<T = any>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
-    cssSelector: string
+    cssSelector: string,
   ): Array<MockedDebugElement<T>>;
 
   /**
@@ -125,7 +125,7 @@ export const ngMocks: {
   findInstance<T, D>(
     debugNode: MockedDebugNode | ComponentFixture<any>,
     instanceClass: Type<T>,
-    notFoundValue: D
+    notFoundValue: D,
   ): D | T;
 
   /**
@@ -172,7 +172,7 @@ export const ngMocks: {
       | Array<AnyType<any> | InjectionToken<any> | NgModuleWithProviders | Provider>
       | null
       | undefined,
-    exclude?: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>> | null | undefined
+    exclude?: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>> | null | undefined,
   ): TestModuleMetadata;
 
   /**

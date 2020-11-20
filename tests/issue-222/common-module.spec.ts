@@ -20,7 +20,7 @@ describe('issue-222:CommonModule', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [CommonModule, MockModule(CommonModule), MockModule(TargetModule)],
-    })
+    }),
   );
 
   it('correctly handles kept and the mock CommonModule', () => {

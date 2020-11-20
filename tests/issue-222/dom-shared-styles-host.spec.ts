@@ -14,7 +14,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
           backgroundColor: 'yellow',
           height: '200px',
           opacity: 1,
-        })
+        }),
       ),
       state(
         'closed',
@@ -22,7 +22,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
           backgroundColor: 'green',
           height: '100px',
           opacity: 0.5,
-        })
+        }),
       ),
       transition('open => closed', [animate('1s')]),
       transition('closed => open', [animate('0.5s')]),
@@ -32,9 +32,9 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: ` <div [@openClose]="isOpen ? 'open' : 'closed'">The box is now {{ isOpen ? 'Open' : 'Closed' }}!</div> `,
 })
 class TargetComponent {
-  isOpen = true;
+  public isOpen = true;
 
-  toggle() {
+  public toggle() {
     this.isOpen = !this.isOpen;
   }
 }

@@ -13,11 +13,11 @@ import { ngMocks } from './mock-helper';
   selector: '[exampleDirective]',
 })
 export class ExampleDirective {
-  @Input() exampleDirective: string;
-  @Output() someOutput = new EventEmitter<boolean>();
-  @Input('bah') something: string;
+  @Input() public exampleDirective: string;
+  @Output() public someOutput = new EventEmitter<boolean>();
+  @Input('bah') public something: string;
 
-  performAction(s: string) {
+  public performAction(s: string) {
     return this;
   }
 }
@@ -26,7 +26,7 @@ export class ExampleDirective {
   selector: '[exampleStructuralDirective]',
 })
 export class ExampleStructuralDirective {
-  @Input() exampleStructuralDirective = true;
+  @Input() public exampleStructuralDirective = true;
 }
 
 @Component({
@@ -119,7 +119,7 @@ describe('MockHelper:getDirective', () => {
     expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
 
     expect(() => ngMocks.find(componentA, BComponent)).toThrowError(
-      'Cannot find an element via ngMocks.find(BComponent)'
+      'Cannot find an element via ngMocks.find(BComponent)',
     );
   });
 
@@ -129,7 +129,7 @@ describe('MockHelper:getDirective', () => {
     expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
 
     expect(() => ngMocks.find(componentB, AComponent)).toThrowError(
-      'Cannot find an element via ngMocks.find(AComponent)'
+      'Cannot find an element via ngMocks.find(AComponent)',
     );
   });
 
@@ -181,7 +181,7 @@ describe('MockHelper:getDirective', () => {
   it('findInstance throws an error', () => {
     const fixture = MockRender(`<component-a></component-a>`);
     expect(() => ngMocks.findInstance(fixture.debugElement, BComponent)).toThrowError(
-      /Cannot find an instance via ngMocks.findInstance\(BComponent\)/
+      /Cannot find an instance via ngMocks.findInstance\(BComponent\)/,
     );
   });
 

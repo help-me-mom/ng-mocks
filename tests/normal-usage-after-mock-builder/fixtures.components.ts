@@ -9,7 +9,7 @@ import { TargetService } from './fixtures.services';
 export class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }

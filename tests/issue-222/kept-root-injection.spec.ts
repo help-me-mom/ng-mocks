@@ -23,14 +23,14 @@ class TargetService {
 
 @NgModule({})
 class MockModule {
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     service.echo();
   }
 }
 
 @NgModule({})
 class KeepModule {
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     service.echo();
   }
 }

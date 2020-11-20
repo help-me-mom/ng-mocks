@@ -26,7 +26,7 @@ class TargetProvider extends TargetDirective {
 class TargetComponent {
   public readonly service: TargetProvider;
 
-  constructor(service: TargetProvider) {
+  public constructor(service: TargetProvider) {
     this.service = service;
   }
 }
@@ -42,7 +42,7 @@ describe('double-decorator:example-1', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('provides correct service', () => {

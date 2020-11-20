@@ -11,6 +11,7 @@ export default <D, I>(def: D, mock: () => I): FactoryProvider => ({
     if (injector && instance && config && config.init) {
       config.init(instance, injector);
     }
+
     return instance;
   },
 });

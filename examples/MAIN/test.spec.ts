@@ -1,3 +1,5 @@
+// tslint:disable:arrow-return-shorthand
+
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -19,9 +21,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   `,
 })
 class AppComponent {
-  @Input() public title = 'My Application';
-
   @Output() public logoClick = new EventEmitter<void>();
+  @Input() public title = 'My Application';
 }
 
 // A dependency component out of which we want to create a mock
@@ -35,13 +36,12 @@ class AppComponent {
   `,
 })
 class AppHeaderComponent {
-  @Input() public showLogo: boolean;
-  @Input() public title: string;
-
   @Output() public logo: EventEmitter<void>;
 
   @ContentChild('menu', { read: false } as any)
   public menu: TemplateRef<ElementRef>;
+  @Input() public showLogo: boolean;
+  @Input() public title: string;
 }
 
 // The module where our components are declared.
@@ -113,8 +113,8 @@ describe('MAIN', () => {
     // Instead of TestBed.createComponent(AppComponent) in beforeEach
     // MockRender might be used directly in tests.
     const fixture = MockRender(AppComponent, {
-      title: 'Fake Application',
       logoClick: logoClickSpy,
+      title: 'Fake Application',
     });
     // It creates a helper component
     // with the next template:

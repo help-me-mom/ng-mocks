@@ -5,25 +5,25 @@ import { Component, Directive, EventEmitter, Input, NgModule, Output } from '@an
   template: '<a (click)="output.emit()">{{ input }}</a>',
 })
 export class TargetComponent {
-  @Input('input1') input: string;
-  @Output('output1') output = new EventEmitter();
+  @Input('input1') public input: string;
+  @Output('output1') public output = new EventEmitter();
 }
 
 @Directive({
   selector: 'target',
 })
 export class Target2Directive {
-  @Input('input2') input: string;
-  @Input('inputUnused') input2: undefined;
-  @Output('output2') output = new EventEmitter();
+  @Input('input2') public input: string;
+  @Input('inputUnused') public input2: undefined;
+  @Output('output2') public output = new EventEmitter();
 }
 
 @Directive({
   selector: 'target',
 })
 export class Target3Directive {
-  @Input('input3') input: string;
-  @Output('output3') output = new EventEmitter();
+  @Input('input3') public input: string;
+  @Output('output3') public output = new EventEmitter();
 }
 
 @NgModule({

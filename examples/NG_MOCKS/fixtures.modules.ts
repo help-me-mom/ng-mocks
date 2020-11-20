@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
@@ -13,10 +14,10 @@ import {
 import { DirectiveWeDontWantToMimic, DirectiveWeWantToMimic, MyDirective } from './fixtures.directives';
 import {
   MyPipe,
-  WeDontWantToMimicPipe,
   PipeWeWantToCustomize,
-  WeWantToMimicPipe,
   PipeWeWantToRestore,
+  WeDontWantToMimicPipe,
+  WeWantToMimicPipe,
 } from './fixtures.pipes';
 import {
   MyService1,
@@ -30,7 +31,6 @@ import {
   INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE,
   INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
-import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [

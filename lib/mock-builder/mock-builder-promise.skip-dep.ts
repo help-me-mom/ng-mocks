@@ -31,5 +31,6 @@ export default (provide: any): boolean => {
   if (typeof provide === 'function' && skip) {
     return true;
   }
+
   return false;
 };

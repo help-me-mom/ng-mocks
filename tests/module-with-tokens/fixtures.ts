@@ -10,9 +10,9 @@ export const MY_TOKEN_MULTI = new InjectionToken('MY_TOKEN_MULTI');
   template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
 })
 export class TargetComponent {
-  constructor(
+  public constructor(
     @Inject(MY_TOKEN_SINGLE) public readonly tokenSingle: string,
-    @Inject(MY_TOKEN_MULTI) public readonly tokenMulti: string[]
+    @Inject(MY_TOKEN_MULTI) public readonly tokenMulti: string[],
   ) {}
 }
 

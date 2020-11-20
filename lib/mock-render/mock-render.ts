@@ -20,6 +20,7 @@ function solveOutput(output: any): string {
   if (output && typeof output === 'object' && output instanceof Subject) {
     return '.next($event)';
   }
+
   return '=$event';
 }
 
@@ -29,7 +30,7 @@ function solveOutput(output: any): string {
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   template: Type<MComponent>,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions
+  detectChanges?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
@@ -38,7 +39,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
 function MockRender<MComponent extends Record<keyof any, any>>(
-  template: Type<MComponent>
+  template: Type<MComponent>,
 ): MockedComponentFixture<MComponent>;
 
 /**
@@ -47,7 +48,7 @@ function MockRender<MComponent extends Record<keyof any, any>>(
 function MockRender<MComponent = any, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions
+  detectChanges?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
@@ -60,7 +61,7 @@ function MockRender<MComponent = any>(template: string): MockedComponentFixture<
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   template: string | Type<MComponent>,
   params?: TComponent,
-  flags: boolean | IMockRenderOptions = true
+  flags: boolean | IMockRenderOptions = true,
 ): MockedComponentFixture<MComponent, TComponent> {
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
   const isComponent = typeof template !== 'string';
@@ -126,7 +127,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
 
   const component = Component(options)(
     class MockRenderComponent {
-      constructor() {
+      public constructor() {
         for (const key of Object.keys(params || {})) {
           (this as any)[key] = (params as any)[key];
         }
@@ -143,7 +144,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
           }
         }
       }
-    } as Type<TComponent>
+    } as Type<TComponent>,
   );
 
   // Soft reset of TestBed.

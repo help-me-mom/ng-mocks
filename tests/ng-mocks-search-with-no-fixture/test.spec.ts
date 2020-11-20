@@ -29,7 +29,7 @@ class TargetModule {}
 describe('ng-mocks-search-with-no-fixture:no-fixture', () => {
   it('.find type', () => {
     expect(() => ngMocks.find(TargetComponent)).toThrowError(
-      /Cannot find an element via ngMocks.find\(TargetComponent\)/
+      /Cannot find an element via ngMocks.find\(TargetComponent\)/,
     );
     expect(ngMocks.find(TargetComponent, undefined)).toBeUndefined();
   });
@@ -51,7 +51,7 @@ describe('ng-mocks-search-with-no-fixture:no-fixture', () => {
 
   it('.findInstance', () => {
     expect(() => ngMocks.findInstance(TargetComponent)).toThrowError(
-      /Cannot find an instance via ngMocks.findInstance\(TargetComponent\)/
+      /Cannot find an instance via ngMocks.findInstance\(TargetComponent\)/,
     );
     expect(ngMocks.findInstance(TargetComponent, undefined)).toBeUndefined();
   });
@@ -77,7 +77,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find(MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.find(MissedComponent)).toThrowError(
-        /Cannot find an element via ngMocks.find\(MissedComponent\)/
+        /Cannot find an element via ngMocks.find\(MissedComponent\)/,
       );
     });
 
@@ -88,7 +88,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find<MissedComponent>('missed', undefined)).toBeUndefined();
       expect(() => ngMocks.find<MissedComponent>('missed')).toThrowError(
-        /Cannot find an element via ngMocks.find\(missed\)/
+        /Cannot find an element via ngMocks.find\(missed\)/,
       );
     });
 
@@ -115,7 +115,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.findInstance(MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.findInstance(MissedComponent)).toThrowError(
-        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/
+        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/,
       );
     });
 
@@ -136,7 +136,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find(fixture, MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.find(fixture, MissedComponent)).toThrowError(
-        /Cannot find an element via ngMocks.find\(MissedComponent\)/
+        /Cannot find an element via ngMocks.find\(MissedComponent\)/,
       );
     });
 
@@ -147,7 +147,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find<MissedComponent>(fixture, 'missed', undefined)).toBeUndefined();
       expect(() => ngMocks.find<MissedComponent>(fixture, 'missed')).toThrowError(
-        /Cannot find an element via ngMocks.find\(missed\)/
+        /Cannot find an element via ngMocks.find\(missed\)/,
       );
     });
 
@@ -174,7 +174,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.findInstance(fixture, MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.findInstance(fixture, MissedComponent)).toThrowError(
-        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/
+        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/,
       );
     });
 
@@ -195,7 +195,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find(fixture.debugElement, MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.find(fixture.debugElement, MissedComponent)).toThrowError(
-        /Cannot find an element via ngMocks.find\(MissedComponent\)/
+        /Cannot find an element via ngMocks.find\(MissedComponent\)/,
       );
     });
 
@@ -206,7 +206,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.find<MissedComponent>(fixture.debugElement, 'missed', undefined)).toBeUndefined();
       expect(() => ngMocks.find<MissedComponent>(fixture.debugElement, 'missed')).toThrowError(
-        /Cannot find an element via ngMocks.find\(missed\)/
+        /Cannot find an element via ngMocks.find\(missed\)/,
       );
     });
 
@@ -233,7 +233,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
 
       expect(ngMocks.findInstance(fixture.debugElement, MissedComponent, undefined)).toBeUndefined();
       expect(() => ngMocks.findInstance(fixture.debugElement, MissedComponent)).toThrowError(
-        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/
+        /Cannot find an instance via ngMocks.findInstance\(MissedComponent\)/,
       );
     });
 

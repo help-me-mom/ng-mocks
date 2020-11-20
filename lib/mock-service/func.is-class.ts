@@ -12,5 +12,6 @@ export default (value: any): boolean => {
   if (proto.match(/^class\b/) !== null) {
     return true;
   }
+
   return proto.match(/^function\s*\(/) === null;
 };

@@ -64,38 +64,35 @@ class TargetComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked {
   @Input() public input: string | null = null;
 
-  protected readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
+  public constructor(protected readonly service: TargetService) {
     this.service.ctor();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.service.onInit();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.service.onDestroy();
   }
 
-  ngOnChanges(): void {
+  public ngOnChanges(): void {
     this.service.onChanges();
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.service.afterViewInit();
   }
 
-  ngAfterViewChecked(): void {
+  public ngAfterViewChecked(): void {
     this.service.afterViewChecked();
   }
 
-  ngAfterContentInit(): void {
+  public ngAfterContentInit(): void {
     this.service.afterContentInit();
   }
 
-  ngAfterContentChecked(): void {
+  public ngAfterContentChecked(): void {
     this.service.afterContentChecked();
   }
 }
@@ -119,7 +116,7 @@ describe('TestLifecycleHooks', () => {
       {
         input: '',
       },
-      { detectChanges: false }
+      { detectChanges: false },
     );
 
     const service: TargetService = TestBed.get(TargetService);

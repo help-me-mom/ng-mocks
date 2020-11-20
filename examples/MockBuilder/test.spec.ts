@@ -159,7 +159,7 @@ describe('MockBuilder:deep', () => {
     expect(content).toContain('<div>MyComponent2: <component-2>More callbacks</component-2></div>');
     expect(content).toContain('<div>MyComponent3: <component-3></component-3></div>');
     expect(content).toContain(
-      '<div>ComponentWeDontWantToMimic: <dont-want>ComponentWeDontWantToMimic</dont-want></div>'
+      '<div>ComponentWeDontWantToMimic: <dont-want>ComponentWeDontWantToMimic</dont-want></div>',
     );
     expect(content).toContain('<div>ComponentWeWantToMimic: <do-want></do-want></div>');
     expect(content).toContain('<div>ComponentStructural: -$implicit- b</div>');
@@ -176,7 +176,7 @@ describe('MockBuilder:deep', () => {
     expect(content).toContain('<div>PipeWeWantToRestore: PipeWeWantToRestore:text</div>');
 
     expect(content).toContain(
-      '<div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC</div>'
+      '<div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC</div>',
     );
     expect(content).toContain('<div>INJECTION_TOKEN_WE_WANT_TO_MIMIC: </div>');
     expect(content).toContain('<div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: My_Token</div>');
@@ -211,7 +211,7 @@ describe('MockBuilder:promise', () => {
       })
       .beforeCompileComponents(testBed => {
         testBed.overrideTemplate(MyComponent2, 'More callbacks');
-      })
+      }),
   );
 
   it('should render content ignoring all dependencies', () => {

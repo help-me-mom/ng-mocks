@@ -20,13 +20,13 @@ describe('module-with-tokens:mock-0', () => {
         multi: true,
         provide: MY_TOKEN_MULTI,
         useValue: 'V3',
-      })
+      }),
   );
 
   it('fails to render all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"V1" [ "V2", "V3" ]</internal-component>'
+      '<internal-component>"V1" [ "V2", "V3" ]</internal-component>',
     );
   });
 });
@@ -39,7 +39,7 @@ describe('module-with-tokens:mock-1', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component> [ null, null ]</internal-component>'
+      '<internal-component> [ null, null ]</internal-component>',
     );
   });
 });
@@ -49,13 +49,15 @@ describe('module-with-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
       .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE')
-      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI')
+      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI'),
   );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]</internal-component>'
+      '<internal-component>' +
+        '"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]' +
+        '</internal-component>',
     );
   });
 });
@@ -87,7 +89,7 @@ describe('module-with-tokens:real', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
+      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });
 });
@@ -99,7 +101,7 @@ describe('module-with-tokens:keep', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>'
+      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });
 });

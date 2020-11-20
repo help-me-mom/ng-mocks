@@ -1,9 +1,11 @@
+// tslint:disable:no-void-expression
+
 import { Location } from '@angular/common';
 import { Component, Injectable, NgModule, VERSION } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CanActivate, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockBuilder, MockRender, NG_MOCKS_GUARDS, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks, NG_MOCKS_GUARDS } from 'ng-mocks';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
@@ -17,15 +19,9 @@ class LoginService {
 // A guard we want to test.
 @Injectable()
 class LoginGuard implements CanActivate {
-  protected router: Router;
-  protected service: LoginService;
+  public constructor(protected router: Router, protected service: LoginService) {}
 
-  constructor(router: Router, service: LoginService) {
-    this.router = router;
-    this.service = service;
-  }
-
-  canActivate(): boolean | Observable<boolean> {
+  public canActivate(): boolean | Observable<boolean> {
     if (this.service.isLoggedIn) {
       return true;
     }
@@ -40,7 +36,7 @@ class LoginGuard implements CanActivate {
 class MockGuard implements CanActivate {
   protected readonly allow = true;
 
-  canActivate(): boolean {
+  public canActivate(): boolean {
     return this.allow;
   }
 }
@@ -105,13 +101,14 @@ describe('TestRoutingGuard', () => {
     MockBuilder(LoginGuard, TargetModule)
       .exclude(NG_MOCKS_GUARDS)
       .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]))
+      .keep(RouterTestingModule.withRoutes([])),
   );
 
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
     if (parseInt(VERSION.major, 10) <= 6) {
       pending('Need Angular > 6');
+
       return;
     }
 

@@ -14,11 +14,7 @@ class TargetService {
   template: `{{ service.value }}`,
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 describe('TestProviderInComponent', () => {

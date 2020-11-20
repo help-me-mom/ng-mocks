@@ -61,5 +61,6 @@ export default <T = MockedFunction>(instance: any, name: string, ...args: string
   }
 
   Object.defineProperty(instance, name, mockDef);
+
   return mock;
 };

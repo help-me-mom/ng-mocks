@@ -16,7 +16,7 @@ describe('injected-ng-templates:real', () => {
       </custom-injection>`,
       {
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // every value should be rendered correctly.
@@ -44,7 +44,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       {
         outside: 'string0',
         values: ['string1', 'string2', 'string3'],
-      }
+      },
     );
 
     // By default @ContentChild('block') shouldn't be rendered at all.

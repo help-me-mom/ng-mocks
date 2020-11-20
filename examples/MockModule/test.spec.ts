@@ -10,13 +10,13 @@ import { staticFalse } from '../../tests';
 })
 class DependencyComponent {
   @ContentChild('something', { ...staticFalse })
-  injectedSomething: TemplateRef<{}>;
+  public injectedSomething: TemplateRef<{}>;
 
   @Input()
-  someInput = '';
+  public someInput = '';
 
   @Output()
-  someOutput = new EventEmitter();
+  public someOutput = new EventEmitter();
 }
 
 @NgModule({
@@ -31,8 +31,8 @@ class DependencyModule {}
   template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
 })
 class TestedComponent {
-  value = '';
-  trigger = () => {};
+  public value = '';
+  public trigger = () => {};
 }
 
 describe('MockModule', () => {

@@ -1,3 +1,5 @@
+// tslint:disable:strict-type-predicates
+
 import { Component, NgModule, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, EventManager } from '@angular/platform-browser';
@@ -8,7 +10,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `<a (click)="title = 'test'">click</a>`,
 })
 export class AppComponent {
-  title = 'ng-routing-test';
+  public title = 'ng-routing-test';
 }
 
 @Component({
@@ -16,7 +18,7 @@ export class AppComponent {
   template: `<a (click)="title = 'test'">click</a>`,
 })
 export class MockComponent {
-  title = 'ng-routing-test';
+  public title = 'ng-routing-test';
 }
 
 @NgModule({

@@ -12,7 +12,7 @@ import { staticFalse } from '..';
   `,
 })
 export class CustomInjectionComponent<T> {
-  @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;
-  @Input() items?: T[];
-  @ViewChild('child', { ...staticFalse }) ownChild: ViewContainerRef;
+  @ContentChild('block', { ...staticFalse }) public injectedBlock: TemplateRef<any>;
+  @Input() public items?: T[];
+  @ViewChild('child', { ...staticFalse }) public ownChild: ViewContainerRef;
 }

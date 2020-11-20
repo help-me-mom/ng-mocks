@@ -16,25 +16,25 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   `,
 })
 export class CustomFormControlComponent implements ControlValueAccessor {
-  @Input() disabled = false;
+  @Input() public disabled = false;
   public value = '';
 
-  onChange = (value: string) => {};
-  onTouched = () => {};
+  public onChange = (value: string) => {};
+  public onTouched = () => {};
 
-  registerOnChange(fn: (rating: string) => void): void {
+  public registerOnChange(fn: (rating: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
+  public setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-  writeValue(value: string): void {
+  public writeValue(value: string): void {
     this.value = value;
   }
 }

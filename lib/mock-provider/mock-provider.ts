@@ -35,6 +35,7 @@ export function MockProvider(provide: any, overrides: any = defaultValue): Provi
     if (!value) {
       return overrides;
     }
+
     return ngMocksStub(value, overrides);
   });
 }

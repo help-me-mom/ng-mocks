@@ -16,11 +16,9 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `dependency`,
 })
 class DependencyComponent implements ControlValueAccessor {
-  registerOnChange(fn: any): void {}
-
-  registerOnTouched(fn: any): void {}
-
-  writeValue(obj: any): void {}
+  public registerOnChange(fn: any): void {}
+  public registerOnTouched(fn: any): void {}
+  public writeValue(obj: any): void {}
 }
 
 @Component({
@@ -28,7 +26,7 @@ class DependencyComponent implements ControlValueAccessor {
   template: ` <app-child [formControl]="formControl"></app-child> `,
 })
 class TestedComponent {
-  formControl = new FormControl();
+  public readonly formControl = new FormControl();
 }
 
 describe('MockReactiveForms', () => {

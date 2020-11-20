@@ -12,7 +12,7 @@ export class TargetChildService {
 export class TargetService {
   public child: TargetChildService;
 
-  constructor(child: TargetChildService) {
+  public constructor(child: TargetChildService) {
     this.child = child;
   }
 
@@ -29,7 +29,7 @@ export class TargetService {
 export class TargetComponent {
   public service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 
@@ -48,7 +48,7 @@ export class RealComponent implements AfterViewInit {
   } as any)
   protected child: TargetComponent;
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.child.service.print();
     this.child.service.child.print();
   }

@@ -236,8 +236,8 @@ parameter.
 TestBed.configureTestingModule(
   ngMocks.guts(
     AppBaseComponent, // <- is not touched
-    [AppBaseModule, AppModule]
-  )
+    [AppBaseModule, AppModule],
+  ),
 );
 ```
 
@@ -259,7 +259,7 @@ beforeEach(() =>
     .mock(TranslatePipe, v => `translated:${v}`)
     .mock(SearchService, {
       search: of([]),
-    })
+    }),
 );
 ```
 
@@ -361,7 +361,7 @@ and [`MockRender`](#mockrender):
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyComponent)
+    MockBuilder(TargetComponent).mock(DependencyComponent),
   );
 
   it('should create', () => {
@@ -383,7 +383,7 @@ to play with.
 ```typescript
 describe('MockComponent', () => {
   beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyComponent)
+    MockBuilder(TestedComponent).mock(DependencyComponent),
   );
 
   it('sends the correct value to the child input', () => {
@@ -397,7 +397,7 @@ describe('MockComponent', () => {
     // but properly typed.
     const mockComponent = ngMocks.find<DependencyComponent>(
       fixture,
-      'app-child'
+      'app-child',
     ).componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
@@ -478,7 +478,7 @@ describe('MockComponent', () => {
     // We can use this selector to assert exactly its content.
     const mockNgTemplate = ngMocks.find(
       fixture.debugElement,
-      '[data-key="something"]'
+      '[data-key="something"]',
     ).nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });
@@ -552,7 +552,7 @@ and [`MockRender`](#mockrender):
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyDirective)
+    MockBuilder(TargetComponent).mock(DependencyDirective),
   );
 
   it('should create', () => {
@@ -574,7 +574,7 @@ to play with.
 ```typescript
 describe('MockDirective:Attribute', () => {
   beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyDirective)
+    MockBuilder(TestedComponent).mock(DependencyDirective),
   );
 
   it('sends the correct value to the input', () => {
@@ -588,7 +588,7 @@ describe('MockDirective:Attribute', () => {
     // but easier and more precise.
     const mockDirective = ngMocks.get(
       ngMocks.find(fixture.debugElement, 'span'),
-      DependencyDirective
+      DependencyDirective,
     );
 
     // Let's pretend DependencyDirective has 'someInput'
@@ -613,7 +613,7 @@ describe('MockDirective:Attribute', () => {
     // but easier and more precise.
     const mockDirective = ngMocks.get(
       ngMocks.find(fixture.debugElement, 'span'),
-      DependencyDirective
+      DependencyDirective,
     );
 
     // Again, let's pretend DependencyDirective has an output called
@@ -653,7 +653,7 @@ describe('MockDirective:Structural', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent).mock(DependencyDirective, {
       // render: true, // <-- a flag to render the directive by default
-    })
+    }),
   );
 
   it('renders content of the child structural directive', () => {
@@ -662,13 +662,13 @@ describe('MockDirective:Structural', () => {
     // Let's assert that nothing has been rendered inside of
     // the structural directive by default.
     expect(
-      fixture.debugElement.nativeElement.innerHTML
+      fixture.debugElement.nativeElement.innerHTML,
     ).not.toContain('>content<');
 
     // And let's render it manually now.
     const mockDirective = ngMocks.findInstance(
       fixture.debugElement,
-      DependencyDirective
+      DependencyDirective,
     );
     if (isMockOf(mockDirective, DependencyDirective, 'd')) {
       mockDirective.__render();
@@ -677,7 +677,7 @@ describe('MockDirective:Structural', () => {
 
     // The content of the structural directive should be rendered.
     expect(fixture.debugElement.nativeElement.innerHTML).toContain(
-      '>content<'
+      '>content<',
     );
   });
 });
@@ -768,8 +768,8 @@ describe('MockPipe', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent).mock(
       DependencyPipe,
-      (...args: string[]) => JSON.stringify(args)
-    )
+      (...args: string[]) => JSON.stringify(args),
+    ),
   );
 
   it('transforms values to json', () => {
@@ -903,7 +903,7 @@ describe('Test', () => {
       .mock(ObservableService, {
         prop$: EMPTY,
         getStream$: () => EMPTY,
-      })
+      }),
   );
 
   it('should create', () => {
@@ -934,7 +934,7 @@ describe('MockProvider', () => {
         MockProvider(DependencyService),
         MockProvider(DEPENDENCY_TOKEN, 'mock token'),
       ],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('uses mock providers', () => {
@@ -1018,7 +1018,7 @@ and [`MockRender`](#mockrender):
 ```typescript
 describe('Test', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyModule)
+    MockBuilder(TargetComponent).mock(DependencyModule),
   );
 
   it('should create', () => {
@@ -1048,7 +1048,7 @@ to play with.
 ```typescript
 describe('MockModule', () => {
   beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyModule)
+    MockBuilder(TestedComponent).mock(DependencyModule),
   );
 
   it('renders TestedComponent with its dependencies', () => {
@@ -1160,7 +1160,7 @@ beforeEach(() => {
 
   return MockBuilder(TodoComponent).mock(
     TodoService,
-    todoServiceMock
+    todoServiceMock,
   );
 });
 
@@ -1198,7 +1198,7 @@ describe('MockObservable', () => {
     MockInstance(TargetService, instance =>
       ngMocks.stub(instance, {
         value$, // even it is a read-only property we can override.
-      })
+      }),
     );
   });
 
@@ -1269,7 +1269,7 @@ describe('MockReactiveForms', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent)
       .mock(DependencyComponent)
-      .keep(ReactiveFormsModule)
+      .keep(ReactiveFormsModule),
   );
 
   it('sends the correct value to the mock form component', () => {
@@ -1279,7 +1279,7 @@ describe('MockReactiveForms', () => {
     // Let's find the mock form component.
     const mockControl = ngMocks.find(
       fixture.debugElement,
-      DependencyComponent
+      DependencyComponent,
     ).componentInstance;
 
     // Let's simulate its change, like a user does it.
@@ -1314,7 +1314,7 @@ describe('MockForms', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent)
       .mock(DependencyComponent)
-      .keep(FormsModule)
+      .keep(FormsModule),
   );
 
   it('sends the correct value to the mock form component', async () => {
@@ -1324,7 +1324,7 @@ describe('MockForms', () => {
     // Let's find the mock form component.
     const mockControl = ngMocks.find(
       fixture.debugElement,
-      DependencyComponent
+      DependencyComponent,
     ).componentInstance;
 
     // Let's simulate its change, like a user does it.
@@ -1518,7 +1518,7 @@ describe('MAIN', () => {
     fixture.componentInstance.title = 'Updated Application';
     fixture.detectChanges();
     expect(header.componentInstance.title).toBe(
-      'Updated Application'
+      'Updated Application',
     );
 
     // Checking that AppComponent listens on outputs of
@@ -1619,7 +1619,7 @@ describe('MockBuilder:simple', () => {
     const fixture = MockRender(MyComponent);
     expect(fixture).toBeDefined();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain(
-      '<div>My Content</div>'
+      '<div>My Content</div>',
     );
   });
 });
@@ -1691,7 +1691,7 @@ beforeEach(() =>
     .keep(SomeDirective)
     .keep(SomePipe)
     .keep(SomeService)
-    .keep(SomeInjectionToken)
+    .keep(SomeInjectionToken),
 );
 ```
 
@@ -1709,7 +1709,7 @@ beforeEach(() =>
     .mock(SomeDirective)
     .mock(SomePipe)
     .mock(SomeService)
-    .mock(SomeInjectionToken)
+    .mock(SomeInjectionToken),
 );
 ```
 
@@ -1719,8 +1719,8 @@ For pipes, we can set their handlers as the 2nd parameter of `.mock`.
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(
     SomePipe,
-    value => 'My Custom Content'
-  )
+    value => 'My Custom Content',
+  ),
 );
 ```
 
@@ -1731,7 +1731,7 @@ They are added as `useValue` in providers.
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .mock(SomeService3, anything1)
-    .mock(SOME_TOKEN, anything2)
+    .mock(SOME_TOKEN, anything2),
 );
 ```
 
@@ -1747,7 +1747,7 @@ beforeEach(() =>
     .exclude(SomeDirective)
     .exclude(SomePipe)
     .exclude(SomeDependency)
-    .exclude(SomeInjectionToken)
+    .exclude(SomeInjectionToken),
 );
 ```
 
@@ -1763,7 +1763,7 @@ beforeEach(() =>
     .replace(SomeModule, SomeOtherModule)
     .replace(SomeComponent, SomeOtherComponent)
     .replace(SomeDirective, SomeOtherDirective)
-    .replace(SomePipe, SomeOtherPipe)
+    .replace(SomePipe, SomeOtherPipe),
 );
 ```
 
@@ -1773,8 +1773,8 @@ In case of `HttpClientTestingModule` you can use `.replace` too.
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).replace(
     HttpClientModule,
-    HttpClientTestingModule
-  )
+    HttpClientTestingModule,
+  ),
 );
 ```
 
@@ -1784,7 +1784,7 @@ In case of `RouterTestingModule` you need to use [`.keep`](#mockbuilderkeep) for
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule)
     .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([]))
+    .keep(RouterTestingModule.withRoutes([])),
 );
 ```
 
@@ -1798,7 +1798,7 @@ beforeEach(() =>
     .provide(MyService)
     .provide([SomeService1, SomeService2])
     .provide({ provide: SomeComponent3, useValue: anything1 })
-    .provide({ provide: SOME_TOKEN, useFactory: () => anything2 })
+    .provide({ provide: SOME_TOKEN, useFactory: () => anything2 }),
 );
 ```
 
@@ -1816,7 +1816,7 @@ beforeEach(() =>
     })
     .mock(SomeDeclaration2, {
       export: true,
-    })
+    }),
 );
 ```
 
@@ -1835,7 +1835,7 @@ beforeEach(() =>
     .mock(MyNestedModule, {
       exportAll: true,
       export: true,
-    })
+    }),
 );
 ```
 
@@ -1867,7 +1867,7 @@ beforeEach(() =>
     })
     .replace(SomeModuleComponentDirectivePipeProvider1, anything1, {
       dependency: true,
-    })
+    }),
 );
 ```
 
@@ -1879,7 +1879,7 @@ If we want to render a structural directive by default. Now we can do that via a
 beforeEach(() =>
   MockBuilder(MyComponent, MyModule).mock(MyDirective, {
     render: true,
-  })
+  }),
 );
 ```
 
@@ -1892,7 +1892,7 @@ beforeEach(() =>
       $implicit: something1,
       variables: { something2: something3 },
     },
-  })
+  }),
 );
 ```
 
@@ -1908,7 +1908,7 @@ beforeEach(() =>
         variables: { something2: something3 },
       },
     },
-  })
+  }),
 );
 ```
 
@@ -1919,7 +1919,7 @@ The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guard
 
 ```typescript
 beforeEach(() =>
-  MockBuilder(MyGuard, MyModule).exclude(NG_MOCKS_GUARDS)
+  MockBuilder(MyGuard, MyModule).exclude(NG_MOCKS_GUARDS),
 );
 ```
 
@@ -1931,7 +1931,7 @@ then all interceptors will be excluded except the explicitly configured ones.
 
 ```typescript
 beforeEach(() =>
-  MockBuilder(MyInterceptor, MyModule).exclude(NG_MOCKS_INTERCEPTORS)
+  MockBuilder(MyInterceptor, MyModule).exclude(NG_MOCKS_INTERCEPTORS),
 );
 ```
 
@@ -1947,8 +1947,8 @@ we need to pass `NG_MOCKS_ROOT_PROVIDERS` token into [`.mock`](#mockbuildermock)
 beforeEach(() =>
   MockBuilder(
     MyComponentWithRootServices,
-    MyModuleWithRootTokens
-  ).mock(NG_MOCKS_ROOT_PROVIDERS)
+    MyModuleWithRootTokens,
+  ).mock(NG_MOCKS_ROOT_PROVIDERS),
 );
 ```
 
@@ -1959,8 +1959,8 @@ For that, we need to keep `NG_MOCKS_ROOT_PROVIDERS` token.
 beforeEach(() =>
   MockBuilder(
     MyComponentWithRootServices,
-    MyModuleWithRootTokens
-  ).keep(NG_MOCKS_ROOT_PROVIDERS)
+    MyModuleWithRootTokens,
+  ).keep(NG_MOCKS_ROOT_PROVIDERS),
 );
 ```
 
@@ -1978,7 +1978,7 @@ beforeEach(() =>
     .keep(SomeModule)
     .mock(SomeModule)
     .keep(SomeModule)
-    .mock(SomeModule)
+    .mock(SomeModule),
 );
 ```
 
@@ -2036,7 +2036,7 @@ const fixture = MockRender(
         useValue: MockService(Document),
       },
     ],
-  }
+  },
 );
 ```
 
@@ -2076,13 +2076,13 @@ describe('MockRender', () => {
       {
         myListener1: spy,
         myParam1: 'something1',
-      }
+      },
     );
 
     // ngMocks.input helps to get the current value of an input on
     // a related debugElement without knowing its owner.
     expect(ngMocks.input(fixture.point, 'value1')).toEqual(
-      'something1'
+      'something1',
     );
     expect(ngMocks.input(fixture.point, 'value2')).toEqual('check');
 
@@ -2103,7 +2103,7 @@ describe('MockRender', () => {
 
     // Checking the inputs.
     expect(ngMocks.input(fixture.point, 'value1')).toEqual(
-      'something2'
+      'something2',
     );
     expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
 
@@ -2194,8 +2194,8 @@ beforeAll(() =>
       });
       // if you want you can use injector.get(SomeService) for more
       // complicated customization.
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -2253,7 +2253,7 @@ describe('MockInstance', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
     expect(() => MockRender(RealComponent)).not.toThrowError(
-      /Cannot read property 'subscribe' of undefined/
+      /Cannot read property 'subscribe' of undefined/,
     );
   });
 });
@@ -2306,7 +2306,7 @@ const ngModuleMeta = ngMocks.guts(Component, ItsModule);
 const ngModuleMeta = ngMocks.guts(
   [Component1, Component2, Service3],
   [ModuleToMock, DirectiveToMock, WhateverToMock],
-  [ServiceToExclude, DirectiveToExclude]
+  [ServiceToExclude, DirectiveToExclude],
 );
 ```
 
@@ -2314,7 +2314,7 @@ const ngModuleMeta = ngMocks.guts(
 const ngModuleMeta = ngMocks.guts(
   null,
   ModuleToMock,
-  ComponentToExclude
+  ComponentToExclude,
 );
 ```
 
@@ -2341,7 +2341,7 @@ const directive1 = ngMocks.findInstance(Directive1);
 const directive2 = ngMocks.findInstance(fixture, Directive2);
 const directive3 = ngMocks.findInstance(
   fixture.debugElement,
-  Directive3
+  Directive3,
 );
 ```
 
@@ -2358,7 +2358,7 @@ const directives1 = ngMocks.findInstances(Directive1);
 const directives2 = ngMocks.findInstances(fixture, Directive2);
 const directives3 = ngMocks.findInstances(
   fixture.debugElement,
-  Directive3
+  Directive3,
 );
 ```
 
@@ -2621,7 +2621,7 @@ describe('performance:correct', () => {
 
   // The TestBed is not going to be changed between tests.
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(TargetService)
+    MockBuilder(TargetComponent, TargetModule).keep(TargetService),
   );
 
   it('...', () => {
@@ -2700,7 +2700,7 @@ describe('beforeEach:manual-spy', () => {
   // A normal setup of the TestBed, TargetService will be replaced
   // with its mock copy.
   beforeEach(() =>
-    MockBuilder(TargetComponent).mock(TargetService, mock)
+    MockBuilder(TargetComponent).mock(TargetService, mock),
   );
 });
 ```

@@ -1,4 +1,4 @@
-// tslint:disable: member-ordering
+// tslint:disable:member-ordering
 
 import { Component } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -35,6 +35,7 @@ class ParentClass {
     if (value !== undefined) {
       this.pubParentPropSet = value;
     }
+
     return this.pubParentPropGet;
   }
 
@@ -46,6 +47,7 @@ class ParentClass {
     if (value !== undefined) {
       this.proParentPropSet = value;
     }
+
     return this.proParentPropGet;
   }
 
@@ -96,6 +98,7 @@ class TargetComponent extends ParentClass {
     if (value !== undefined) {
       this.pubChildPropSet = value;
     }
+
     return this.pubChildPropGet;
   }
 
@@ -107,6 +110,7 @@ class TargetComponent extends ParentClass {
     if (value !== undefined) {
       this.proChildPropSet = value;
     }
+
     return this.proChildPropGet;
   }
 

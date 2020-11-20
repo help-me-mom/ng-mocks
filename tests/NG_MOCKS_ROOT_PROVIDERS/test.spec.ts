@@ -21,7 +21,7 @@ class Target1Service {
 class Target1Component {
   public readonly service: Target1Service;
 
-  constructor(service: Target1Service) {
+  public constructor(service: Target1Service) {
     this.service = service;
   }
 }
@@ -46,7 +46,7 @@ class Target2Service {
 class Target2Component {
   public readonly service: Target2Service;
 
-  constructor(service: Target2Service) {
+  public constructor(service: Target2Service) {
     this.service = service;
   }
 }

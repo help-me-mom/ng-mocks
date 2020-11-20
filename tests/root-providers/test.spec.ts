@@ -14,7 +14,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MockBuilder, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
 
 // Because of A5 we need to cast Injectable to any type.
 // But because of A10+ we need to do it via a middle function.
@@ -67,13 +67,13 @@ class TargetComponent {
   public readonly service: TargetService;
   public readonly token: string;
 
-  constructor(
+  public constructor(
     @Inject(FakeService) fake: TargetService,
     @Optional() @Inject(TOKEN) @SkipSelf() token: string,
     @Optional() @SkipSelf() service: TargetService,
     @Inject(TOKEN) @Optional() @SkipSelf() token2: string,
     provided: ProvidedService,
-    injector: Injector
+    injector: Injector,
   ) {
     this.fake = fake;
     this.service = service;
@@ -90,7 +90,7 @@ class TargetComponent {
 class ModuleComponent {
   public readonly module: ModuleService;
 
-  constructor(module: ModuleService) {
+  public constructor(module: ModuleService) {
     this.module = module;
   }
 }
@@ -114,7 +114,7 @@ describe('root-providers', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('finds tokens', () => {
@@ -157,7 +157,7 @@ describe('root-providers', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).mock(TargetService, TargetService, {
         dependency: true,
-      })
+      }),
     );
 
     it('uses mock providers', () => {
@@ -213,7 +213,7 @@ describe('root-providers', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).keep(TargetService, {
         dependency: true,
-      })
+      }),
     );
 
     it('uses mock providers', () => {

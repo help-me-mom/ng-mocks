@@ -20,9 +20,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
       // avoiding influences on cache when users extend the testing module.
       return {
-        declarations: [...ngModule.declarations],
-        imports: [...ngModule.imports],
-        providers: [...ngModule.providers],
+        declarations: [...(ngModule.declarations || [])],
+        imports: [...(ngModule.imports || [])],
+        providers: [...(ngModule.providers || [])],
       };
     }
 
@@ -76,16 +76,16 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // avoiding influences on cache when users extend the testing module.
     return {
-      declarations: [...ngModule.declarations],
-      imports: [...ngModule.imports],
-      providers: [...ngModule.providers],
+      declarations: [...(ngModule.declarations || [])],
+      imports: [...(ngModule.imports || [])],
+      providers: [...(ngModule.providers || [])],
     };
   }
 
-  public then<TResult1 = IMockBuilderResult, TResult2 = never>(
-    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
-    reject?: (reason: any) => PromiseLike<TResult2>
-  ): PromiseLike<TResult1 | TResult2> {
+  public async then<TResult1 = IMockBuilderResult>(
+    fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
+    reject?: ((reason: any) => PromiseLike<never>) | undefined | null,
+  ): Promise<TResult1> {
     if (
       ngMocksUniverse.global.has('bullet') &&
       ngMocksUniverse.global.has('builder:module') &&
@@ -167,8 +167,10 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       if (prototypeDef === thisDef) {
         continue;
       }
+
       return false;
     }
+
     return true;
   }
 
@@ -333,6 +335,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
         return false;
       }
     }
+
     return true;
   }
 }

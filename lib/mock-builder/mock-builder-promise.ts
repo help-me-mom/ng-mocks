@@ -24,7 +24,8 @@ import { IMockBuilder, IMockBuilderConfig, IMockBuilderResult } from './types';
 
 const defaultMock = {}; // simulating Symbol
 
-export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMockBuilder {
+export class MockBuilderPromise implements IMockBuilder {
+  public readonly [Symbol.toStringTag] = 'MockBuilder';
   protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
   protected configDef: Map<Type<any> | InjectionToken<any>, any> = new Map();
   protected defProviders: Map<Type<any> | InjectionToken<any>, Provider[]> = new Map();
@@ -37,6 +38,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
 
   public beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this {
     this.beforeCC.add(callback);
+
     return this;
   }
 
@@ -108,7 +110,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
             ? MockPipe(def, instance)
             : instance && typeof instance === 'object' && typeof instance.transform === 'function'
             ? MockPipe(def, instance.transform)
-            : MockPipe(def)
+            : MockPipe(def),
         );
       }
 
@@ -118,8 +120,8 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
         ngMocksUniverse.builtProviders.set(
           def,
           mockServiceHelper.useFactory(def, () =>
-            isFunc ? ngMocks.stub(MockService(def), { transform: instance }) : instance
-          )
+            isFunc ? ngMocks.stub(MockService(def), { transform: instance }) : instance,
+          ),
         );
       } else if (isNgDef(def, 'i')) {
         ngMocksUniverse.builtProviders.set(def, MockProvider(def));
@@ -129,7 +131,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
         const instance = this.defValue.get(def);
         ngMocksUniverse.builtProviders.set(
           def,
-          mockServiceHelper.useFactory(def, () => instance)
+          mockServiceHelper.useFactory(def, () => instance),
         );
       } else if (!isNgDef(def)) {
         ngMocksUniverse.builtProviders.set(def, MockProvider(def));
@@ -184,7 +186,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
                 ngModule: loModule,
                 providers: loProviders,
               }
-            : loModule
+            : loModule,
         );
       } else {
         declarations.push(ngMocksUniverse.builtDeclarations.get(def));
@@ -396,11 +398,19 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
     };
   }
 
+  public async catch(reject?: ((reason: any) => PromiseLike<never>) | undefined | null): Promise<IMockBuilderResult> {
+    return this.then().catch(reject);
+  }
+
   public exclude(def: any): this {
     this.wipe(def);
     this.excludeDef.add(def);
 
     return this;
+  }
+
+  public async finally(callback?: (() => void) | null | undefined): Promise<IMockBuilderResult> {
+    return this.then().finally(callback);
   }
 
   public keep(input: any, config?: IMockBuilderConfig): this {
@@ -414,7 +424,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
 
     // a magic to support modules with providers.
     if (providers) {
-      this.defProviders.set(def, [...existing, ...providers]);
+      this.defProviders.set(def, [...(existing || []), ...providers]);
     }
 
     if (config) {
@@ -447,7 +457,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
 
     // a magic to support modules with providers.
     if (providers) {
-      this.defProviders.set(def, [...existing, ...providers]);
+      this.defProviders.set(def, [...(existing || []), ...providers]);
     }
 
     if (mock !== defaultMock) {
@@ -471,15 +481,16 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
       const multi = typeof provider === 'object' && provider.provide && provider.multi;
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
       this.wipe(provide);
-      this.providerDef.set(provide, multi ? [...existing, provider] : provider);
+      this.providerDef.set(provide, multi ? [...(Array.isArray(existing) ? existing : []), provider] : provider);
     }
+
     return this;
   }
 
   public replace(source: Type<any>, destination: Type<any>, config?: IMockBuilderConfig): this {
     if (!isNgDef(destination) || !isNgDef(source) || isNgDef(destination, 'i') || isNgDef(source, 'i')) {
       throw new Error(
-        'Cannot replace the declaration, both have to be a Module, a Component, a Directive or a Pipe, for Providers use `.mock` or `.provide`'
+        'Cannot replace the declaration, both have to be a Module, a Component, a Directive or a Pipe, for Providers use `.mock` or `.provide`',
       );
     }
 
@@ -492,13 +503,14 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
     } else {
       this.configDef.delete(source);
     }
+
     return this;
   }
 
-  public then<TResult1 = IMockBuilderResult, TResult2 = never>(
-    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
-    reject?: (reason: any) => PromiseLike<TResult2>
-  ): PromiseLike<TResult1 | TResult2> {
+  public async then<TResult1 = IMockBuilderResult>(
+    fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
+    reject?: ((reason: any) => PromiseLike<any>) | undefined | null,
+  ): Promise<TResult1> {
     const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
       const testBed = TestBed.configureTestingModule(this.build());
       for (const callback of mapValues(this.beforeCC)) {
@@ -509,6 +521,7 @@ export class MockBuilderPromise implements PromiseLike<IMockBuilderResult>, IMoc
         resolve({ testBed });
       });
     });
+
     return promise.then(fulfill, reject);
   }
 

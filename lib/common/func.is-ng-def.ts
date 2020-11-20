@@ -51,5 +51,6 @@ export function isNgDef(declaration: any, ngType?: string): declaration is Type<
   const isDirective = (!ngType || ngType === 'd') && isNgType(declaration, 'Directive');
   const isPipe = (!ngType || ngType === 'p') && isNgType(declaration, 'Pipe');
   const isInjectable = (!ngType || ngType === 'i') && isNgType(declaration, 'Injectable');
+
   return isModule || isComponent || isDirective || isPipe || isInjectable;
 }

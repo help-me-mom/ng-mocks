@@ -12,8 +12,8 @@ describe('issue-151', () => {
   describe('mock AppRoutingModule', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        MockBuilder(AppComponent, AppModule).keep(RouterModule).keep(RouterTestingModule).build()
-      )
+        MockBuilder(AppComponent, AppModule).keep(RouterModule).keep(RouterTestingModule).build(),
+      ),
     );
 
     beforeEach(async () => {

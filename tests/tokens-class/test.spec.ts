@@ -6,7 +6,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 class Class1Service {
   public readonly name: string = 'class1';
 
-  constructor(name: string) {
+  public constructor(name: string) {
     this.name = name;
   }
 }

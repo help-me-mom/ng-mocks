@@ -13,7 +13,7 @@ import {
 } from './fixtures.components';
 import { DirectiveWeDontWantToMimic, DirectiveWeWantToMimic } from './fixtures.directives';
 import { ModuleWeDontWantToMimic, ModuleWeWantToMimicBesidesMyModule, MyModule } from './fixtures.modules';
-import { WeDontWantToMimicPipe, WeWantToMimicPipe, PipeWeWantToRestore } from './fixtures.pipes';
+import { PipeWeWantToRestore, WeDontWantToMimicPipe, WeWantToMimicPipe } from './fixtures.pipes';
 import { ServiceWeDontWantToMimic, ServiceWeWantToCustomize, ServiceWeWantToMimic } from './fixtures.services';
 import {
   INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC,

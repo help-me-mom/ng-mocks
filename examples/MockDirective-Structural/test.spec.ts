@@ -6,10 +6,10 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class DependencyDirective {
   @Input('dependency')
-  someInput = '';
+  public someInput = '';
 
   @Output('dependency-output')
-  someOutput = new EventEmitter();
+  public someOutput = new EventEmitter();
 }
 
 @Component({
@@ -17,8 +17,8 @@ class DependencyDirective {
   template: ` <span *dependency="value" (dependency-output)="trigger($event)">content</span>`,
 })
 class TestedComponent {
-  value = '';
-  trigger = () => {};
+  public value = '';
+  public trigger = () => {};
 }
 
 describe('MockDirective:Structural', () => {
@@ -29,7 +29,7 @@ describe('MockDirective:Structural', () => {
   beforeEach(() =>
     MockBuilder(TestedComponent).mock(DependencyDirective, {
       // render: true, // <-- a flag to render the directive by default
-    })
+    }),
   );
 
   it('renders content of the child structural directive', () => {

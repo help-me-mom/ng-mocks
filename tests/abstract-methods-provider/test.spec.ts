@@ -4,14 +4,14 @@ import { MockBuilder } from 'ng-mocks';
 
 @Injectable()
 abstract class LoggerInterface {
-  abstract log(message: string): void;
+  public abstract log(message: string): void;
 }
 
 @Injectable()
 class Logger implements LoggerInterface {
   public lastMessage = '';
 
-  log(message: string): void {
+  public log(message: string): void {
     this.lastMessage = message;
   }
 }

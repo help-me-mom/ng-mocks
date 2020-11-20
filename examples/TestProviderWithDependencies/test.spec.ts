@@ -7,7 +7,7 @@ import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 class Service1 {
   protected name = 'service1';
 
-  trigger(): string {
+  public trigger(): string {
     return this.name;
   }
 }
@@ -16,7 +16,7 @@ class Service1 {
 class Service2 {
   protected name = 'service2';
 
-  trigger(): string {
+  public trigger(): string {
     return this.name;
   }
 }
@@ -28,7 +28,7 @@ class TargetService {
   public readonly value1: string;
   public readonly value2: string;
 
-  constructor(dep1: Service1, dep2: Service2) {
+  public constructor(dep1: Service1, dep2: Service2) {
     this.value1 = dep1.trigger();
     this.value2 = dep2.trigger();
   }

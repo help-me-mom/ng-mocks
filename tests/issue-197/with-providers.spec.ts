@@ -15,7 +15,7 @@ class DependencyService {
 
 @NgModule({})
 class DependencyModule {
-  static withProviders(): NgModuleWithProviders<DependencyModule> {
+  public static withProviders(): NgModuleWithProviders<DependencyModule> {
     return {
       ngModule: DependencyModule,
       providers: [
@@ -31,7 +31,7 @@ class DependencyModule {
 
   public readonly service: DependencyService;
 
-  constructor(service: DependencyService) {
+  public constructor(service: DependencyService) {
     this.service = service;
   }
 }
@@ -43,7 +43,7 @@ class DependencyModule {
 class TargetComponent {
   public readonly service: DependencyService;
 
-  constructor(service: DependencyService) {
+  public constructor(service: DependencyService) {
     this.service = service;
   }
 }
@@ -54,12 +54,12 @@ class TargetComponent {
 class TargetModule {}
 
 describe('issue-197:with-providers:manually-injection', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     const module = MockBuilder(TargetComponent, TargetModule).build();
 
     return TestBed.configureTestingModule({
       declarations: module.declarations,
-      imports: [...module.imports, DependencyModule.withProviders()],
+      imports: [...(module.imports || []), DependencyModule.withProviders()],
       providers: module.providers,
     }).compileComponents();
   });

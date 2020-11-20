@@ -1,4 +1,4 @@
-// tslint:disable: prefer-function-over-method variable-name
+// tslint:disable:prefer-function-over-method variable-name
 
 import { Component, Directive, forwardRef, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -54,6 +54,7 @@ export class TargetDirective implements ControlValueAccessor, Validator {
 
   public validate(): ValidationErrors {
     this.__validate = [];
+
     return {
       mock: true,
     };
@@ -86,7 +87,7 @@ describe('issue-167:directive:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [TargetModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('should create an instance', () => {

@@ -16,7 +16,7 @@ function Injectable(...args: any[]): any {
 class KeepService {
   public readonly id: any;
 
-  constructor(@Inject(PLATFORM_ID) id: any) {
+  public constructor(@Inject(PLATFORM_ID) id: any) {
     this.id = id;
   }
 
@@ -27,7 +27,7 @@ class KeepService {
 
 @NgModule({})
 class KeepModule {
-  constructor(service: KeepService) {
+  public constructor(service: KeepService) {
     service.echo();
   }
 }

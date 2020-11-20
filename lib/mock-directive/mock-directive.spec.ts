@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import {
   Component,
   ContentChild,
@@ -33,11 +35,11 @@ class TargetService {}
   selector: '[exampleDirective]',
 })
 class ExampleDirective {
-  @Input() exampleDirective: string;
-  @Output() someOutput = new EventEmitter<boolean>();
-  @Input('bah') something: string;
+  @Input() public exampleDirective: string;
+  @Output() public readonly someOutput = new EventEmitter<boolean>();
+  @Input('bah') public something: string;
 
-  performAction(s: string) {
+  public performAction(s: string) {
     return this;
   }
 }
@@ -47,7 +49,7 @@ class ExampleDirective {
   selector: '[exampleStructuralDirective]',
 })
 class ExampleStructuralDirective {
-  @Input() exampleStructuralDirective = true;
+  @Input() public exampleStructuralDirective = true;
 }
 
 @Directive({
@@ -59,13 +61,13 @@ class GettersAndSettersDirective {
 
   public normalProperty = false;
 
-  get myGetter() {
+  public get myGetter() {
     return true;
   }
 
-  set mySetter(value: string) {}
+  public set mySetter(value: string) {}
 
-  normalMethod(): boolean {
+  public normalMethod(): boolean {
     return this.myGetter;
   }
 }
@@ -81,11 +83,11 @@ class GettersAndSettersDirective {
   `,
 })
 class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, { ...staticFalse }) childDirective: ExampleDirective;
-  emitted = false;
-  foo = new FormControl('');
+  @ViewChild(ExampleDirective, { ...staticFalse }) public childDirective: ExampleDirective;
+  public emitted = false;
+  public readonly foo = new FormControl('');
 
-  performActionOnChild(s: string): void {
+  public performActionOnChild(s: string): void {
     this.childDirective.performAction(s);
   }
 }
@@ -147,9 +149,10 @@ describe('MockDirective', () => {
   });
 
   it('should display structural directive content', () => {
-    const mockDirective = ngMocks.findInstance(fixture.debugElement, ExampleStructuralDirective) as MockedDirective<
-      ExampleStructuralDirective
-    >;
+    const mockDirective = ngMocks.findInstance(
+      fixture.debugElement,
+      ExampleStructuralDirective,
+    ) as MockedDirective<ExampleStructuralDirective>;
 
     // structural directives should be rendered first.
     mockDirective.__render();
@@ -188,9 +191,10 @@ describe('MockDirective', () => {
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockDirective = ngMocks.findInstance(fixture.debugElement, GettersAndSettersDirective) as MockedDirective<
-      GettersAndSettersDirective
-    >;
+    const mockDirective = ngMocks.findInstance(
+      fixture.debugElement,
+      GettersAndSettersDirective,
+    ) as MockedDirective<GettersAndSettersDirective>;
     expect(() => mockDirective.__render()).not.toThrow();
     expect(mockDirective.normalMethod).toBeDefined();
     expect(mockDirective.myGetter).not.toBeDefined();
@@ -210,15 +214,15 @@ describe('MockDirective', () => {
       selector: 'never',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) o1: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) o2: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) o3: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) o4: QueryList<any>;
+      @ContentChild('i1', { read: true } as any) public o1: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) public o2: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) public o3: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) public o4: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) o5: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) o6: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) o7: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) o8: QueryList<any>;
+      @ContentChild('i5', { read: false } as any) public o5: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) public o6: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) public o7: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) public o8: QueryList<any>;
     }
 
     const actual = MockDirective(MyClass) as any;

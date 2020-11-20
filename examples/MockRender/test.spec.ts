@@ -7,14 +7,9 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `dependency`,
 })
 class DependencyComponent {
-  @ContentChild('something', { static: false } as any)
-  injectedSomething: TemplateRef<{}>;
-
-  @Input()
-  someInput = '';
-
-  @Output()
-  someOutput = new EventEmitter();
+  @ContentChild('something', { static: false } as any) public injectedSomething: TemplateRef<{}>;
+  @Input() public someInput = '';
+  @Output() public readonly someOutput = new EventEmitter();
 }
 
 @NgModule({
@@ -28,14 +23,9 @@ class DependencyModule {}
   template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
 })
 class TestedComponent {
-  @Output()
-  trigger = new EventEmitter();
-
-  @Input()
-  value1 = '';
-
-  @Input()
-  value2 = '';
+  @Output() public readonly trigger = new EventEmitter();
+  @Input() public value1 = '';
+  @Input() public value2 = '';
 }
 
 describe('MockRender', () => {
@@ -62,7 +52,7 @@ describe('MockRender', () => {
       {
         myListener1: spy,
         myParam1: 'something1',
-      }
+      },
     );
 
     // ngMocks.input helps to get the current value of an input on

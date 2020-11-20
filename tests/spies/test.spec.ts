@@ -1,3 +1,5 @@
+// tslint:disable:strict-type-predicates
+
 import { Component, Injectable, NgModule } from '@angular/core';
 import { inject } from '@angular/core/testing';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
@@ -18,7 +20,7 @@ class TargetService {
 class TargetComponent {
   protected service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
     this.service.echo('constructor');
   }

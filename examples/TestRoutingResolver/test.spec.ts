@@ -1,3 +1,5 @@
+// tslint:disable:no-void-expression
+
 import { Location } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -12,7 +14,7 @@ import { map } from 'rxjs/operators';
 class DataService {
   protected flag = true;
 
-  data(): Observable<boolean> {
+  public data(): Observable<boolean> {
     return from([this.flag]);
   }
 }
@@ -20,13 +22,9 @@ class DataService {
 // A resolver we want to test.
 @Injectable()
 class DataResolver implements Resolve<{ flag: boolean }> {
-  protected service: DataService;
+  public constructor(protected service: DataService) {}
 
-  constructor(service: DataService) {
-    this.service = service;
-  }
-
-  resolve() {
+  public resolve() {
     return combineLatest([this.service.data()]).pipe(map(([flag]) => ({ flag })));
   }
 }
@@ -36,7 +34,7 @@ class DataResolver implements Resolve<{ flag: boolean }> {
 class MockResolver implements Resolve<{ mock: boolean }> {
   protected mock = true;
 
-  resolve() {
+  public resolve() {
     return of({ mock: this.mock });
   }
 }
@@ -113,7 +111,7 @@ describe('TestRoutingResolver', () => {
         data: {
           flag: false,
         },
-      })
+      }),
     );
   }));
 });

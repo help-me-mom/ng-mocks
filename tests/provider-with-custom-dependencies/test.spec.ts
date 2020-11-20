@@ -34,7 +34,7 @@ class TargetService {
   public readonly optional?: { name: string };
   public readonly service: { name: string };
 
-  constructor(service: Dep1Service, optional: Dep1Service, flag?: undefined) {
+  public constructor(service: Dep1Service, optional: Dep1Service, flag?: undefined) {
     this.service = service;
     this.optional = optional;
     this.flag = flag;
@@ -52,7 +52,7 @@ class TargetService {
 class TargetComponent {
   public readonly service: TargetService;
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     this.service = service;
   }
 }
@@ -85,7 +85,7 @@ describe('provider-with-custom-dependencies', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('creates component with custom dependencies', () => {
@@ -118,7 +118,7 @@ describe('provider-with-custom-dependencies', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).keep(TargetService).keep(Dep2Service, {
         dependency: true,
-      })
+      }),
     );
 
     it('creates component with kept Dep2Service', () => {

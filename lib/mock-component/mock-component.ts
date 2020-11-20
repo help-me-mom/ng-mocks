@@ -77,6 +77,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
           read: ViewContainerRef,
           static: false,
         } as any);
+
         return `<div *ngIf="mockRender_${query.selector}" data-key="${query.selector}"><ng-template #__${query.selector}></ng-template></div>`;
       })
       .join('');
@@ -96,6 +97,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       },
@@ -118,6 +120,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -131,6 +134,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -154,7 +158,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
   @MockOf(component, { outputs, setNgValueAccessor })
   class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
     /* istanbul ignore next */
-    constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
+    public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
       super(injector);
       this.__ngMocksInstall(changeDetector, injector);
     }

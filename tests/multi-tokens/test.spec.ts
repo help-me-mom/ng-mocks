@@ -8,7 +8,7 @@ const TARGET_TOKEN = new InjectionToken('MY_TOKEN_SINGLE');
 class TargetService {
   public readonly tokens: string[] = [];
 
-  constructor(@Inject(TARGET_TOKEN) tokens: string[]) {
+  public constructor(@Inject(TARGET_TOKEN) tokens: string[]) {
     this.tokens = tokens;
   }
 }
@@ -62,7 +62,7 @@ describe('multi-tokens:real', () => {
           useFactory: () => '6',
         },
       ],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('returns all provided tokens', () => {
@@ -85,7 +85,7 @@ describe('multi-tokens:builder', () => {
         multi: true,
         provide: TARGET_TOKEN,
         useFactory: () => '6',
-      })
+      }),
   );
 
   it('returns all provided tokens', () => {
@@ -108,7 +108,7 @@ describe('multi-tokens:builder:mock', () => {
         multi: true,
         provide: TARGET_TOKEN,
         useFactory: () => '6',
-      })
+      }),
   );
 
   it('returns all provided tokens', () => {

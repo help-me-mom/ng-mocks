@@ -11,11 +11,7 @@ class Service1 {
 // A service we want to use.
 @Injectable()
 class TargetService {
-  public readonly service: Service1;
-
-  constructor(service: Service1) {
-    this.service = service;
-  }
+  public constructor(public readonly service: Service1) {}
 }
 
 // A module that provides all services.

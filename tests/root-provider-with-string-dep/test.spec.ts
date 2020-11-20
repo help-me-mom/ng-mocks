@@ -9,7 +9,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 class TargetComponent {
   public readonly name: string;
 
-  constructor(@Inject('name') service: string) {
+  public constructor(@Inject('name') name: string) {
     this.name = name;
   }
 }
@@ -31,7 +31,7 @@ describe('root-provider-with-string-dep', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('finds tokens', () => {
