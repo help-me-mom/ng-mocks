@@ -1,3 +1,10 @@
+## [11.1.1](https://github.com/ike18t/ng-mocks/compare/v11.1.0...v11.1.1) (2020-11-21)
+
+
+### Bug Fixes
+
+* latest typescript ([e976ed9](https://github.com/ike18t/ng-mocks/commit/e976ed928ed52726365e7dbe48c842108490af30))
+
 # [11.1.0](https://github.com/ike18t/ng-mocks/compare/v11.0.0...v11.1.0) (2020-11-20)
 
 
