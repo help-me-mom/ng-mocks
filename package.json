@@ -110,6 +110,10 @@
     "typescript": "~4.1.2",
     "zone.js": "~0.10.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ike18t/ng-mocks.git"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",

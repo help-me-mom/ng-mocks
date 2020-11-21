@@ -31,10 +31,6 @@
       "url": "https://sudo.eu"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ike18t/ng-mocks.git"
-  },
   "bugs": {
     "url": "https://github.com/ike18t/ng-mocks/issues"
   },

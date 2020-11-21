@@ -4,7 +4,7 @@ release:
 plugins:
   - '@semantic-release/commit-analyzer'
   - - '@semantic-release/exec'
-    - prepareCmd: npm run install && npm run lint && npm run ts:check && npm run test && npm run build
+    - prepareCmd: npm install && npm run lint && npm run ts:check && npm run test && npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md
