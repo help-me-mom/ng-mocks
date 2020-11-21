@@ -1,5 +1,3 @@
-// tslint:disable:no-misused-new unified-signatures
-
 import { AnyType } from '../common/core.types';
 import ngMocksStub from '../mock-helper/mock-helper.stub';
 
@@ -39,7 +37,7 @@ export function MockService(service: any, ...args: any[]): any {
     value = mockServiceHelper.createMockFromPrototype(service.prototype);
   } else if (isFunc(service)) {
     value = mockServiceHelper.mockFunction(
-      `func:${mockNamePrefix ? mockNamePrefix : service.name || 'arrow-function'}`
+      `func:${mockNamePrefix ? mockNamePrefix : service.name || 'arrow-function'}`,
     );
   } else if (Array.isArray(service)) {
     value = [];
@@ -57,5 +55,6 @@ export function MockService(service: any, ...args: any[]): any {
   if (overrides) {
     ngMocksStub(value, overrides);
   }
+
   return value;
 }

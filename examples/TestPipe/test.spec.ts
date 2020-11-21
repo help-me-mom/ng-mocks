@@ -7,7 +7,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   name: 'target',
 })
 class TargetPipe implements PipeTransform {
-  transform(value: string[], asc = true): string {
+  public transform(value: string[], asc = true): string {
     let result = [...(value || [])].sort();
     if (!asc) {
       result = result.reverse();

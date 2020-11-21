@@ -1,5 +1,3 @@
-// tslint:disable:prefer-function-over-method
-
 import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
@@ -16,11 +14,9 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `dependency`,
 })
 class DependencyComponent implements ControlValueAccessor {
-  registerOnChange(fn: any): void {}
-
-  registerOnTouched(fn: any): void {}
-
-  writeValue(obj: any): void {}
+  public registerOnChange = (fn: any): void => fn;
+  public registerOnTouched = (fn: any): void => fn;
+  public writeValue = (obj: any): void => obj;
 }
 
 @Component({
@@ -28,7 +24,7 @@ class DependencyComponent implements ControlValueAccessor {
   template: ` <app-child [ngModel]="value" (ngModelChange)="value = $event"></app-child> `,
 })
 class TestedComponent {
-  value: any;
+  public value: any;
 }
 
 describe('MockForms', () => {

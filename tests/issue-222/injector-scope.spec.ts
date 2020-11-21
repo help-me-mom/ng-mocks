@@ -1,5 +1,3 @@
-// tslint:disable:no-unnecessary-class
-
 import { Component, Inject, Injectable as InjectableSource, NgModule, PLATFORM_ID, VERSION } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -14,11 +12,7 @@ function Injectable(...args: any[]): any {
   providedIn: 'root',
 })
 class KeepService {
-  public readonly id: any;
-
-  constructor(@Inject(PLATFORM_ID) id: any) {
-    this.id = id;
-  }
+  public constructor(@Inject(PLATFORM_ID) public readonly id: any) {}
 
   public echo(): any {
     return this.id;
@@ -27,7 +21,7 @@ class KeepService {
 
 @NgModule({})
 class KeepModule {
-  constructor(service: KeepService) {
+  public constructor(service: KeepService) {
     service.echo();
   }
 }

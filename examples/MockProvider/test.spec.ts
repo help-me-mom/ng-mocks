@@ -30,28 +30,14 @@ class Dependency2Service {
   template: `"{{ dep1.name }}" "{{ dep2.name }}" "{{ unk }}" "{{ pri }}" "{{ str }}" "{{ obj | json }}"`,
 })
 class TargetComponent {
-  public readonly dep1: Dependency1Service;
-  public readonly dep2: Dependency2Service;
-  public readonly obj: any;
-  public readonly pri: string;
-  public readonly str: string;
-  public readonly unk: string;
-
-  constructor(
-    dep1: Dependency1Service,
-    dep2: Dependency2Service,
-    @Inject(UNK_TOKEN) unk: string,
-    @Inject(STR_TOKEN) str: string,
-    @Inject(OBJ_TOKEN) obj: any,
-    @Inject('pri') pri: string
-  ) {
-    this.dep1 = dep1;
-    this.dep2 = dep2;
-    this.unk = unk;
-    this.str = str;
-    this.obj = obj;
-    this.pri = pri;
-  }
+  public constructor(
+    public readonly dep1: Dependency1Service,
+    public readonly dep2: Dependency2Service,
+    @Inject(UNK_TOKEN) public readonly unk: string,
+    @Inject(STR_TOKEN) public readonly str: string,
+    @Inject(OBJ_TOKEN) public readonly obj: any,
+    @Inject('pri') public readonly pri: string,
+  ) {}
 }
 
 describe('MockProvider', () => {
@@ -69,7 +55,7 @@ describe('MockProvider', () => {
         MockProvider(OBJ_TOKEN, mockObj),
         MockProvider('pri', 'pri'),
       ],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('uses mock providers', () => {

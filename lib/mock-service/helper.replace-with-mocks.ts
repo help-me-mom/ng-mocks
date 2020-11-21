@@ -71,8 +71,10 @@ const replaceWithMocks = (value: any): any => {
 
   if (updated) {
     Object.setPrototypeOf(mock, Object.getPrototypeOf(value));
+
     return mock;
   }
+
   return value;
 };
 

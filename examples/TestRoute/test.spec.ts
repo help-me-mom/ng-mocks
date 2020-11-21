@@ -106,7 +106,7 @@ describe('TestRoute:Component', () => {
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing.
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([]))
+    MockBuilder(TargetComponent, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])),
   );
 
   it('navigates between pages', fakeAsync(() => {

@@ -48,7 +48,7 @@ describe('TestToken', () => {
   // initialization we need to pass its module as the second
   // parameter.
   beforeEach(() =>
-    MockBuilder().mock(TargetModule).keep(TOKEN_CLASS).keep(TOKEN_EXISTING).keep(TOKEN_FACTORY).keep(TOKEN_VALUE)
+    MockBuilder().mock(TargetModule).keep(TOKEN_CLASS).keep(TOKEN_EXISTING).keep(TOKEN_FACTORY).keep(TOKEN_VALUE),
   );
 
   it('creates TOKEN_CLASS', () => {

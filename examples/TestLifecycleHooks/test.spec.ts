@@ -1,5 +1,3 @@
-// tslint:disable:member-ordering
-
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -22,27 +20,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetService {
   protected called = false;
 
-  public ctor() {
-    this.called = true;
-  }
-
-  public onInit() {
-    this.called = true;
-  }
-
-  public onDestroy() {
-    this.called = true;
-  }
-
-  public onChanges() {
-    this.called = true;
-  }
-
-  public afterViewInit() {
-    this.called = true;
-  }
-
-  public afterViewChecked() {
+  public afterContentChecked() {
     this.called = true;
   }
 
@@ -50,7 +28,27 @@ class TargetService {
     this.called = true;
   }
 
-  public afterContentChecked() {
+  public afterViewChecked() {
+    this.called = true;
+  }
+
+  public afterViewInit() {
+    this.called = true;
+  }
+
+  public ctor() {
+    this.called = true;
+  }
+
+  public onChanges() {
+    this.called = true;
+  }
+
+  public onDestroy() {
+    this.called = true;
+  }
+
+  public onInit() {
     this.called = true;
   }
 }
@@ -64,39 +62,36 @@ class TargetComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked {
   @Input() public input: string | null = null;
 
-  protected readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
+  public constructor(protected readonly service: TargetService) {
     this.service.ctor();
   }
 
-  ngOnInit(): void {
-    this.service.onInit();
+  public ngAfterContentChecked(): void {
+    this.service.afterContentChecked();
   }
 
-  ngOnDestroy(): void {
-    this.service.onDestroy();
-  }
-
-  ngOnChanges(): void {
-    this.service.onChanges();
-  }
-
-  ngAfterViewInit(): void {
-    this.service.afterViewInit();
-  }
-
-  ngAfterViewChecked(): void {
-    this.service.afterViewChecked();
-  }
-
-  ngAfterContentInit(): void {
+  public ngAfterContentInit(): void {
     this.service.afterContentInit();
   }
 
-  ngAfterContentChecked(): void {
-    this.service.afterContentChecked();
+  public ngAfterViewChecked(): void {
+    this.service.afterViewChecked();
+  }
+
+  public ngAfterViewInit(): void {
+    this.service.afterViewInit();
+  }
+
+  public ngOnChanges(): void {
+    this.service.onChanges();
+  }
+
+  public ngOnDestroy(): void {
+    this.service.onDestroy();
+  }
+
+  public ngOnInit(): void {
+    this.service.onInit();
   }
 }
 
@@ -119,7 +114,7 @@ describe('TestLifecycleHooks', () => {
       {
         input: '',
       },
-      { detectChanges: false }
+      { detectChanges: false },
     );
 
     const service: TargetService = TestBed.get(TargetService);

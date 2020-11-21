@@ -41,6 +41,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
     if (changed) {
       changed(true);
     }
+
     return;
   }
 
@@ -60,6 +61,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
       if (changed) {
         changed(true);
       }
+
       return;
     }
     const interceptor = def.useExisting || def.useClass;
@@ -68,6 +70,7 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
       if (changed) {
         changed(true);
       }
+
       return;
     }
   }

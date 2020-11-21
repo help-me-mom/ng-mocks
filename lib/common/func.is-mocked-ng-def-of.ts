@@ -23,7 +23,7 @@ export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType: 'm')
 export function isMockedNgDefOf<T>(
   declaration: any,
   type: Type<T>,
-  ngType: 'c'
+  ngType: 'c',
 ): declaration is Type<MockedComponent<T>>;
 
 /**
@@ -34,7 +34,7 @@ export function isMockedNgDefOf<T>(
 export function isMockedNgDefOf<T>(
   declaration: any,
   type: Type<T>,
-  ngType: 'd'
+  ngType: 'd',
 ): declaration is Type<MockedDirective<T>>;
 
 /**
@@ -45,7 +45,7 @@ export function isMockedNgDefOf<T>(
 export function isMockedNgDefOf<T extends PipeTransform>(
   declaration: any,
   type: Type<T>,
-  ngType: 'p'
+  ngType: 'p',
 ): declaration is Type<MockedPipe<T>>;
 
 /**

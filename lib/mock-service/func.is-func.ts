@@ -7,5 +7,6 @@ export default (value: any): boolean => {
   if (proto.match(/^\(/) !== null) {
     return true;
   }
+
   return proto.match(/^function\s*\(/) !== null;
 };

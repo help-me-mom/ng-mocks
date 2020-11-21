@@ -7,7 +7,7 @@ import findInstances from './mock-helper.findInstances';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-export default <T>(...args: any[]) => {
+export default (...args: any[]) => {
   const el: undefined | MockedDebugElement =
     typeof args[0] !== 'object' ? undefined : args[0].debugElement ? args[0].debugElement : args[0];
   const sel: Type<any> = el ? args[1] : args[0];

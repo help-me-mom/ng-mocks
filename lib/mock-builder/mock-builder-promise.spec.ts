@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { Component, Directive, Injectable, InjectionToken, NgModule, Pipe, PipeTransform } from '@angular/core';
 

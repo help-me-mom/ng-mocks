@@ -1,3 +1,5 @@
+/* tslint:disable variable-name */
+
 import { Type } from './core.types';
 import { ngMocksMockConfig } from './mock';
 
@@ -7,7 +9,6 @@ import { ngMocksMockConfig } from './mock';
 // by name (which will now include the original class' name.
 // Additionally, if we set breakpoints, we can inspect the actual class being
 // replaced with a mock copy by looking into the 'mockOf' property on the class.
-/* tslint:disable-next-line variable-name */
 export const MockOf = (mockClass: Type<any>, config?: ngMocksMockConfig) => (constructor: Type<any>) => {
   Object.defineProperties(constructor, {
     mockOf: { value: mockClass },

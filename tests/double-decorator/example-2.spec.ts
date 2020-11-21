@@ -24,11 +24,7 @@ class TargetProvider extends TargetDirective {
   template: '{{ service.name }}',
 })
 class TargetComponent {
-  public readonly service: TargetProvider;
-
-  constructor(service: TargetProvider) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetProvider) {}
 }
 
 @NgModule({
@@ -42,7 +38,7 @@ describe('double-decorator:example-2', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('provides correct service', () => {

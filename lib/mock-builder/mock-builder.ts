@@ -16,7 +16,7 @@ import { IMockBuilder } from './types';
  */
 export function MockBuilder(
   keepDeclaration?: AnyType<any> | InjectionToken<any> | null | undefined,
-  itsModuleToMock?: AnyType<any> | null | undefined
+  itsModuleToMock?: AnyType<any> | null | undefined,
 ): IMockBuilder {
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
@@ -69,6 +69,7 @@ export function MockBuilder(
         if (ngMocksUniverse.global.has('bullet:customized')) {
           ngMocksUniverse.global.set('bullet:reset', true);
         }
+
         return TestBed;
       }
       ngMocksUniverse.global.delete('bullet:customized');
@@ -106,5 +107,6 @@ export function MockBuilder(
       exportAll: true,
     });
   }
+
   return instance;
 }

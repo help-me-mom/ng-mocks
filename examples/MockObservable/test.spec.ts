@@ -15,9 +15,9 @@ class TargetService {
   template: `{{ list | json }}`,
 })
 class TargetComponent {
-  public list: number[];
+  public list: number[] = [];
 
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     service.value$.subscribe(list => (this.list = list));
   }
 }
@@ -43,7 +43,7 @@ describe('MockObservable', () => {
     MockInstance(TargetService, instance =>
       ngMocks.stub(instance, {
         value$, // even it is a read-only property we can override.
-      })
+      }),
     );
   });
 

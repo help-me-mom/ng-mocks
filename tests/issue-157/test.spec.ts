@@ -4,8 +4,8 @@ import {
   ControlValueAccessor,
   FormControl,
   FormGroup,
-  NG_VALUE_ACCESSOR,
   NgControl,
+  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -23,7 +23,7 @@ export class ActualEmptyComponent {}
 export class ActualInjectionComponent implements ControlValueAccessor {
   protected value: any = undefined;
 
-  constructor(@Self() @Optional() ngControl: NgControl) {
+  public constructor(@Self() @Optional() ngControl: NgControl) {
     if (ngControl) {
       ngControl.valueAccessor = this;
     }
@@ -109,7 +109,7 @@ describe('issue-157:real', () => {
     TestBed.configureTestingModule({
       declarations: [ActualEmptyComponent, ActualInjectionComponent, ActualTokenComponent, ActualTokenDirective],
       imports: [ReactiveFormsModule],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('does not throw on both declarations of valueAccessor', () => {
@@ -126,8 +126,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -143,8 +143,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 
@@ -160,8 +160,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -177,8 +177,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 
@@ -194,8 +194,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -211,8 +211,8 @@ describe('issue-157:real', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 });
@@ -223,7 +223,7 @@ describe('issue-157:mock', () => {
       .mock(ActualEmptyComponent)
       .mock(ActualInjectionComponent)
       .mock(ActualTokenComponent)
-      .mock(ActualTokenDirective)
+      .mock(ActualTokenDirective),
   );
 
   it('does not throw on both declarations of valueAccessor', () => {
@@ -240,8 +240,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -257,8 +257,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 
@@ -274,8 +274,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -291,8 +291,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 
@@ -308,8 +308,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).not.toThrow();
   });
 
@@ -325,8 +325,8 @@ describe('issue-157:mock', () => {
           form: new FormGroup({
             field: new FormControl(),
           }),
-        }
-      )
+        },
+      ),
     ).toThrow();
   });
 });

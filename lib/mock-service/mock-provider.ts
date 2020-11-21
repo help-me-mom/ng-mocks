@@ -49,6 +49,7 @@ export default function (provider: any): Provider | undefined {
           }
         }
       }
+
       return instance;
     });
   }
@@ -75,6 +76,7 @@ export default function (provider: any): Provider | undefined {
     if (ngMocksUniverse.config.has('multi')) {
       (ngMocksUniverse.config.get('multi') as Set<any>).add(provide);
     }
+
     return undefined;
   }
 

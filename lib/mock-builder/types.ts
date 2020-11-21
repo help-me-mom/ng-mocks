@@ -1,5 +1,3 @@
-// tslint:disable:interface-name
-
 import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -60,7 +58,7 @@ export type IMockBuilderConfig =
   | IMockBuilderConfigComponent
   | IMockBuilderConfigDirective;
 
-export interface IMockBuilder {
+export interface IMockBuilder extends Promise<IMockBuilderResult> {
   beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this;
 
   /**
@@ -152,12 +150,4 @@ export interface IMockBuilder {
    * @see https://github.com/ike18t/ng-mocks#mockbuilderreplace
    */
   replace(source: Type<any>, destination: Type<any>, config?: IMockBuilderConfig): this;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-factory
-   */
-  then<TResult1 = IMockBuilderResult, TResult2 = never>(
-    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
-    reject?: (reason: any) => PromiseLike<TResult2>
-  ): PromiseLike<TResult1 | TResult2>;
 }

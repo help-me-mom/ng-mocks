@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
-  APP_INITIALIZER,
   ApplicationModule,
+  APP_INITIALIZER,
   Component,
   FactoryProvider,
   InjectionToken,
@@ -43,7 +43,7 @@ import {
   `,
 })
 class ComponentSubject {
-  test = 'test';
+  public test = 'test';
 }
 
 @Component({

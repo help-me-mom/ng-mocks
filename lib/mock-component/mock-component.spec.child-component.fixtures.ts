@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: 'some template',
 })
 export class ChildComponent {
-  performAction(s: string) {
-    return this;
+  public performAction(s: string) {
+    return s ? this : this;
   }
 }

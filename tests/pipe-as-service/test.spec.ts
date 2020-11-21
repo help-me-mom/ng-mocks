@@ -27,11 +27,7 @@ class TargetPipe implements PipeTransform {
   `,
 })
 class TargetComponent {
-  public readonly service: TargetPipe;
-
-  constructor(service: TargetPipe) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetPipe) {}
 }
 
 @NgModule({
@@ -77,8 +73,8 @@ describe('pipe-as-service', () => {
           echo: () => 'echo',
           name: 'mock',
           transform: () => 'transform',
-        })
-      )
+        }),
+      ),
     );
     afterAll(MockReset);
 
@@ -114,8 +110,8 @@ describe('pipe-as-service', () => {
           echo: () => 'echo',
           name: 'mock',
           transform: () => 'transform',
-        })
-      )
+        }),
+      ),
     );
     afterAll(MockReset);
 
@@ -147,7 +143,7 @@ describe('pipe-as-service', () => {
       MockBuilder(TargetComponent, TargetModule).mock(TargetPipe, {
         name: 'test',
         transform: () => 'transform',
-      })
+      }),
     );
 
     it('fails because of the missed function', () => {
@@ -161,7 +157,7 @@ describe('pipe-as-service', () => {
         echo: () => 'echo',
         name: 'test',
         transform: () => 'transform',
-      })
+      }),
     );
 
     it('renders correctly', () => {

@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -43,7 +43,7 @@ describe('correct-module-exports-11:proper', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [MockModule(TargetModule)],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('fails on not exported module', () => {

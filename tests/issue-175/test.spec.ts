@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { Component, Directive, Injectable, NgModule, Pipe, PipeTransform } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -16,11 +16,7 @@ class Target2Service {}
   template: 'com-1',
 })
 class Target1Component {
-  public service: Target1Service;
-
-  constructor(service: Target1Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target1Service) {}
 }
 
 @Component({
@@ -28,11 +24,7 @@ class Target1Component {
   template: 'com-2',
 })
 class Target2Component {
-  public service: Target2Service;
-
-  constructor(service: Target2Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target2Service) {}
 }
 
 @Directive({
@@ -40,22 +32,14 @@ class Target2Component {
   selector: 'dir-1',
 })
 class Target1Directive {
-  public service: Target1Service;
-
-  constructor(service: Target1Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target1Service) {}
 }
 
 @Directive({
   selector: 'dir-2',
 })
 class Target2Directive {
-  public service: Target2Service;
-
-  constructor(service: Target2Service) {
-    this.service = service;
-  }
+  public constructor(public service: Target2Service) {}
 }
 
 @Pipe({
@@ -64,7 +48,7 @@ class Target2Directive {
 class Target1Pipe implements PipeTransform {
   protected name = 'pip1';
 
-  transform(): string {
+  public transform(): string {
     return this.name;
   }
 }
@@ -75,7 +59,7 @@ class Target1Pipe implements PipeTransform {
 class Target2Pipe implements PipeTransform {
   protected name = 'pip2';
 
-  transform(): string {
+  public transform(): string {
     return this.name;
   }
 }

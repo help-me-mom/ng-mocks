@@ -11,24 +11,22 @@ export interface ICustomNgForContext {
   selector: '[customNgForWithOf]',
 })
 export class CustomNgForWithOfDirective {
-  @Input('customNgForWithOfOf') set setItems(items: string[]) {
+  public constructor(
+    protected templateRef: TemplateRef<ICustomNgForContext>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
+
+  @Input('customNgForWithOfOf') public set setItems(items: string[]) {
     this.viewContainerRef.clear();
 
-    items.forEach((value, index) =>
+    for (let index = 0; index < items.length; index += 1) {
+      const value = items[index];
       this.viewContainerRef.createEmbeddedView(this.templateRef, {
         $implicit: value,
         myFirst: index === 0,
         myIndex: index,
         myLast: index + 1 === items.length,
-      })
-    );
-  }
-
-  protected templateRef: TemplateRef<ICustomNgForContext>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(templateRef: TemplateRef<ICustomNgForContext>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
+      });
+    }
   }
 }

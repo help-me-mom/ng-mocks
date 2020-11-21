@@ -7,15 +7,9 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: '[target]',
 })
 class TargetDirective {
-  protected templateRef: TemplateRef<any>;
-  protected viewContainerRef: ViewContainerRef;
+  public constructor(protected templateRef: TemplateRef<any>, protected viewContainerRef: ViewContainerRef) {}
 
-  constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
-
-  @Input() set target(value: any) {
+  @Input() public set target(value: any) {
     if (value) {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
@@ -39,7 +33,7 @@ describe('TestStructuralDirective', () => {
     `,
       {
         value: false,
-      }
+      },
     );
 
     // Because the value is false the "content" should not be

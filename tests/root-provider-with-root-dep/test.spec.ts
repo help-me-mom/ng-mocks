@@ -17,15 +17,11 @@ const TOKEN = new (InjectionToken as any)('TOKEN', {
   providedIn: 'root',
 })
 class TargetService {
-  public readonly name: string;
-  public readonly name2: string;
-  public readonly name3: string;
-
-  constructor(@Inject(TOKEN) name: string, @Inject(TOKEN) name2: string, @Inject(TOKEN) name3: string) {
-    this.name = name;
-    this.name2 = name2;
-    this.name3 = name3;
-  }
+  public constructor(
+    @Inject(TOKEN) public readonly name: string,
+    @Inject(TOKEN) public readonly name2: string,
+    @Inject(TOKEN) public readonly name3: string,
+  ) {}
 }
 
 @Component({
@@ -33,11 +29,7 @@ class TargetService {
   template: ` "name:{{ service ? service.name : '' }}" `,
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({
@@ -57,7 +49,7 @@ describe('root-provider-with-root-dep', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('finds tokens', () => {

@@ -16,11 +16,7 @@ const TOKEN_PREFIX = new InjectionToken('PREFIX');
 
 @Injectable()
 class PrefixService {
-  public readonly prefix: string;
-
-  constructor(@Inject(TOKEN_PREFIX) prefix: string) {
-    this.prefix = prefix;
-  }
+  public constructor(@Inject(TOKEN_PREFIX) public readonly prefix: string) {}
 }
 
 @Pipe({
@@ -29,11 +25,11 @@ class PrefixService {
 class TargetPipe implements PipeTransform {
   protected prefix: string;
 
-  constructor(service: PrefixService) {
+  public constructor(service: PrefixService) {
     this.prefix = service.prefix;
   }
 
-  transform(value: string): string {
+  public transform(value: string): string {
     return `${this.prefix}:${value}`;
   }
 }
@@ -43,16 +39,12 @@ class TargetPipe implements PipeTransform {
   template: `{{ value | target }} - {{ piped }}`,
 })
 class TargetComponent implements OnInit {
-  public piped: string;
-  @Input() value: string;
+  public piped = '';
+  @Input() public value = '';
 
-  protected pipe: TargetPipe;
+  public constructor(protected pipe: TargetPipe) {}
 
-  constructor(pipe: TargetPipe) {
-    this.pipe = pipe;
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.piped = this.pipe.transform(this.value);
   }
 }
@@ -120,7 +112,7 @@ describe('issue-218:guts:mock', () => {
 
 describe('issue-218:guts:keep', () => {
   beforeEach(() =>
-    TestBed.configureTestingModule(ngMocks.guts([TargetComponent, TargetPipe], TargetModule)).compileComponents()
+    TestBed.configureTestingModule(ngMocks.guts([TargetComponent, TargetPipe], TargetModule)).compileComponents(),
   );
 
   it('renders how we replaced it with a mock copy', () => {

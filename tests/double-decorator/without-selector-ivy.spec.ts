@@ -1,3 +1,5 @@
+// tslint:disable no-duplicate-imports
+
 import * as core from '@angular/core';
 import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -23,11 +25,7 @@ class MyProvider extends BaseClass {}
   template: '{{ service.name }}',
 })
 class MyComponent {
-  public readonly service: MyProvider;
-
-  constructor(service: MyProvider) {
-    this.service = service;
-  }
+  public constructor(public readonly service: MyProvider) {}
 }
 
 @NgModule({

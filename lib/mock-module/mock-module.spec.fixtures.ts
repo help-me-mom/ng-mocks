@@ -6,25 +6,21 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 
 @Directive({ selector: '[example-directive]' })
 export class ExampleDirective implements OnInit {
-  protected node: ElementRef;
+  public constructor(protected node: ElementRef) {}
 
-  constructor(node: ElementRef) {
-    this.node = node;
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.node.nativeElement.innerText = 'ExampleDirective';
   }
 }
 
 @Pipe({ name: 'examplePipe' })
 export class ExamplePipe implements PipeTransform {
-  transform = (text: string) => `Example: ${text}`;
+  public transform = (text: string) => `Example: ${text}`;
 }
 
 @Injectable()
 export class ExampleService {
-  get = (id: number) => `Got: ${id}`;
+  public get = (id: number) => `Got: ${id}`;
 }
 
 @Component({
@@ -102,9 +98,8 @@ export class AppRoutingModule {}
 class RealModuleWithProvidersModule {}
 
 // Factory to setup module with provider.
-/* tslint:disable:no-unnecessary-class */
 class ModuleProvider {
-  static withFlag(flag: boolean): NgModuleWithProviders {
+  public static withFlag(flag: boolean): NgModuleWithProviders {
     return {
       ngModule: RealModuleWithProvidersModule,
       providers: [
@@ -116,7 +111,6 @@ class ModuleProvider {
     };
   }
 }
-/* tslint:enable:no-unnecessary-class */
 
 // Encapsulating module with provider in some random module.
 @NgModule({
@@ -140,7 +134,7 @@ export class CustomService {
 export class CustomWithServiceComponent {
   public name: string;
 
-  constructor(service: CustomService) {
+  public constructor(service: CustomService) {
     this.name = service.getSomething();
   }
 }

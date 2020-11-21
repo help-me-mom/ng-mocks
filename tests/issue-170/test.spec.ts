@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, Injectable, ViewChild } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
 
+import { staticFalse } from '..';
+
 @Injectable()
 export class TargetChildService {
   public print(): string {
@@ -10,11 +12,7 @@ export class TargetChildService {
 
 @Injectable()
 export class TargetService {
-  public child: TargetChildService;
-
-  constructor(child: TargetChildService) {
-    this.child = child;
-  }
+  public constructor(public child: TargetChildService) {}
 
   public print(): string {
     return this.constructor.name;
@@ -27,11 +25,7 @@ export class TargetService {
   template: 'target {{ service.print() }}',
 })
 export class TargetComponent {
-  public service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public service: TargetService) {}
 
   public someMethod() {
     return this.constructor.name;
@@ -43,14 +37,13 @@ export class TargetComponent {
   template: '<target></target>',
 })
 export class RealComponent implements AfterViewInit {
-  @ViewChild(TargetComponent, {
-    static: false,
-  } as any)
-  protected child: TargetComponent;
+  @ViewChild(TargetComponent, staticFalse) protected child?: TargetComponent;
 
-  ngAfterViewInit() {
-    this.child.service.print();
-    this.child.service.child.print();
+  public ngAfterViewInit() {
+    if (this.child) {
+      this.child.service.print();
+      this.child.service.child.print();
+    }
   }
 }
 

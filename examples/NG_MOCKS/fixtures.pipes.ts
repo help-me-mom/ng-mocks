@@ -7,7 +7,7 @@ export class MyPipe implements PipeTransform {
   protected prefix = 'MyPipe:';
 
   public transform(value: any, ...args: any[]): any {
-    return this.prefix + value;
+    return `${this.prefix}${value}:${args.length}`;
   }
 }
 
@@ -18,7 +18,7 @@ export class WeDontWantToMimicPipe implements PipeTransform {
   protected prefix = 'PipeWeDontWantToMimic:';
 
   public transform(value: any, ...args: any[]): any {
-    return this.prefix + value;
+    return `${this.prefix}${value}:${args.length}`;
   }
 }
 
@@ -29,7 +29,7 @@ export class WeWantToMimicPipe implements PipeTransform {
   protected prefix = 'PipeWeWantToMimic:';
 
   public transform(value: any, ...args: any[]): any {
-    return this.prefix + value;
+    return `${this.prefix}${value}:${args.length}`;
   }
 }
 
@@ -40,7 +40,7 @@ export class PipeWeWantToCustomize implements PipeTransform {
   protected prefix = 'PipeWeWantToCustomize:';
 
   public transform(value: any, ...args: any[]): any {
-    return this.prefix + value;
+    return `${this.prefix}${value}:${args.length}`;
   }
 }
 
@@ -51,6 +51,6 @@ export class PipeWeWantToRestore implements PipeTransform {
   protected prefix = 'PipeWeWantToRestore:';
 
   public transform(value: any, ...args: any[]): any {
-    return this.prefix + value;
+    return `${this.prefix}${value}:${args.length}`;
   }
 }

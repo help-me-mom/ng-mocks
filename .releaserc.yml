@@ -4,12 +4,13 @@ release:
 plugins:
   - '@semantic-release/commit-analyzer'
   - - '@semantic-release/exec'
-    - prepareCmd: npm run lint && npm run test && npm run build
+    - prepareCmd: npm run install && npm run lint && npm run ts:check && npm run test && npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md
   - - '@semantic-release/npm'
-    - tarballDir: tmp
+    - pkgRoot: dist
+      tarballDir: tmp
       npmPublish: false
   - - '@semantic-release/github'
     - assets:
@@ -25,6 +26,5 @@ plugins:
         - released
         - >-
           v${nextRelease.version}
-      addReleases: 'bottom'
   - - '@semantic-release/git'
-    - message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+    - message: 'chore(release): v${nextRelease.version}'

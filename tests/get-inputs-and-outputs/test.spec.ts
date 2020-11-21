@@ -1,3 +1,5 @@
+// tslint:disable strict-type-predicates
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { Target2Directive, Target3Directive, TargetComponent, TargetModule } from './fixtures';
@@ -22,7 +24,7 @@ describe('get-inputs-and-outputs', () => {
         (output2)="output2($event)"
         (output3)="output3($event)"
       ></target>`,
-      params
+      params,
     );
 
     const componentElement = fixture.point;
@@ -63,7 +65,7 @@ describe('get-inputs-and-outputs', () => {
     expect(ngMocks.input(componentElement, 'input2')).toEqual('2');
     expect(ngMocks.input(componentElement, 'inputUnused')).toEqual(undefined);
     expect(() => ngMocks.input(componentElement, 'inputUndefined')).toThrowError(
-      'Cannot find inputUndefined input via ngMocks.input'
+      'Cannot find inputUndefined input via ngMocks.input',
     );
     expect(ngMocks.input(componentElement, 'input3')).toEqual('3');
     if ((params.output1 as any).mockReset) {
@@ -89,7 +91,7 @@ describe('get-inputs-and-outputs', () => {
     ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
     expect(() => ngMocks.output(componentElement, 'outputUndefined')).toThrowError(
-      'Cannot find outputUndefined output via ngMocks.output'
+      'Cannot find outputUndefined output via ngMocks.output',
     );
   });
 });

@@ -58,12 +58,14 @@ import { MockedComponent } from './types';
   `,
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, { ...staticTrue }) childComponent: ChildComponent;
-  emitted: string;
-  formControl = new FormControl('');
+  @ViewChild(ChildComponent, staticTrue) public childComponent?: ChildComponent;
+  public emitted = '';
+  public readonly formControl = new FormControl('');
 
-  performActionOnChild(s: string): void {
-    this.childComponent.performAction(s);
+  public performActionOnChild(s: string): void {
+    if (this.childComponent) {
+      this.childComponent.performAction(s);
+    }
   }
 }
 
@@ -81,7 +83,7 @@ describe('MockComponent', () => {
           SimpleComponent,
           TemplateOutletComponent,
           ChildComponent,
-          CustomFormControlComponent
+          CustomFormControlComponent,
         ),
       ],
       imports: [FormsModule, ReactiveFormsModule],
@@ -161,15 +163,16 @@ describe('MockComponent', () => {
   });
 
   it('should allow spying of viewchild component methods', () => {
-    const spy = component.childComponent.performAction;
+    const spy = component.childComponent ? component.childComponent.performAction : null;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
 
   it('should set getters and setters to undefined instead of function', () => {
-    const mockComponent = ngMocks.findInstance(fixture.debugElement, GetterSetterComponent) as MockedDirective<
-      GetterSetterComponent
-    >;
+    const mockComponent = ngMocks.findInstance(
+      fixture.debugElement,
+      GetterSetterComponent,
+    ) as MockedDirective<GetterSetterComponent>;
 
     expect(mockComponent.normalMethod).toBeDefined();
     expect(mockComponent.myGetter).not.toBeDefined();
@@ -181,7 +184,7 @@ describe('MockComponent', () => {
     it('should allow you simulate the component being touched', () => {
       fixture.detectChanges();
       const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
-        By.css('custom-form-control')
+        By.css('custom-form-control'),
       ).componentInstance;
       customFormControl.__simulateTouch();
       expect(component.formControl.touched).toBe(true);
@@ -190,7 +193,7 @@ describe('MockComponent', () => {
     it('should allow you simulate a value being set', () => {
       fixture.detectChanges();
       const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
-        By.css('custom-form-control')
+        By.css('custom-form-control'),
       ).componentInstance;
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
@@ -212,7 +215,7 @@ describe('MockComponent', () => {
       const ngContent = templateOutlet;
       expect(ngContent).toBeTruthy();
       expect(ngContent.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(
-        'ng-content body header ng-content body footer'
+        'ng-content body header ng-content body footer',
       );
 
       // looking for 1st templateRef.
@@ -281,15 +284,15 @@ describe('MockComponent', () => {
       template: '',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) o1: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) o2: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) o3: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) o4: QueryList<any>;
+      @ContentChild('i1', { read: true } as any) public o1?: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any) public o2?: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any) public o3?: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any) public o4?: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) o5: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) o6: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) o7: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) o8: QueryList<any>;
+      @ContentChild('i5', { read: false } as any) public o5?: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any) public o6?: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any) public o7?: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any) public o8?: QueryList<any>;
     }
 
     const actual = MockComponent(MyClass) as any;

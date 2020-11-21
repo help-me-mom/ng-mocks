@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { CommonModule } from '@angular/common';
 import { Component, Input, NgModule, Pipe, PipeTransform } from '@angular/core';
@@ -50,7 +50,7 @@ describe('export-all', () => {
   // The goal is to get access to declarations of the mock TargetModule
   // when TargetComponent is used externally.
   describe('valid', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       // Thanks A5 for any
       const ngModule: any = MockBuilder()
         .mock(TargetModule, {
@@ -85,14 +85,14 @@ describe('export-all', () => {
         fail('an error expected');
       } catch (e) {
         expect(e.message).toMatch(
-          /Multiple components match node with tagname target|The pipe 'target' could not be found/
+          /Multiple components match node with tagname target|The pipe 'target' could not be found/,
         );
       }
     });
   });
 
   describe('no-exclude', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       // Thanks A5 for any
       const ngModule: any = MockBuilder()
         .mock(TargetModule, {
@@ -108,7 +108,7 @@ describe('export-all', () => {
 
     it('fails on no exclude due to a conflict in declarations', () => {
       expect(() => MockRender(TargetComponent)).toThrowError(
-        /Multiple components match node with tagname target|Conflicting components: MockOfTargetComponent,TargetComponent/
+        /Multiple components match node with tagname target|Conflicting components: MockOfTargetComponent,TargetComponent/,
       );
     });
   });

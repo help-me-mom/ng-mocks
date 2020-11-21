@@ -37,7 +37,7 @@ export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'd'): i
 export function isMockOf<T extends PipeTransform>(
   instance: any,
   declaration: Type<T>,
-  ngType: 'p'
+  ngType: 'p',
 ): instance is MockedPipe<T>;
 
 /**

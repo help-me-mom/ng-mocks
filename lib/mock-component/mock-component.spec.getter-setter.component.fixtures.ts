@@ -5,18 +5,22 @@ import { Component, Input } from '@angular/core';
   template: '',
 })
 export class GetterSetterComponent {
-  get myGetter() {
-    return true;
-  }
-
-  set mySetter(value: string) {}
-
   @Input()
   public normalInput?: boolean;
 
   public normalProperty = false;
 
-  normalMethod(): boolean {
+  protected value: any;
+
+  public get myGetter() {
+    return true;
+  }
+
+  public set mySetter(value: string) {
+    this.value = value;
+  }
+
+  public normalMethod(): boolean {
     return this.myGetter;
   }
 }

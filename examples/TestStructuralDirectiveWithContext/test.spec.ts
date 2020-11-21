@@ -12,23 +12,21 @@ export interface ITargetContext {
   selector: '[target]',
 })
 class TargetDirective {
-  protected templateRef: TemplateRef<ITargetContext>;
-  protected viewContainerRef: ViewContainerRef;
+  public constructor(
+    protected templateRef: TemplateRef<ITargetContext>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
 
-  constructor(templateRef: TemplateRef<ITargetContext>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
-
-  @Input() set target(items: string[]) {
+  @Input() public set target(items: string[]) {
     this.viewContainerRef.clear();
 
-    items.forEach((value, index) =>
+    for (let index = 0; index <= items.length; index += 1) {
+      const value = items[index];
       this.viewContainerRef.createEmbeddedView(this.templateRef, {
         $implicit: value,
         myIndex: index,
-      })
-    );
+      });
+    }
   }
 }
 
@@ -46,7 +44,7 @@ describe('TestStructuralDirectiveWithContext', () => {
         </div>`,
       {
         values: ['hello', 'world'],
-      }
+      },
     );
 
     // Let's assert that the 'values' have been rendered as expected

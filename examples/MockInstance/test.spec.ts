@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injector, ViewChild } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 class ChildComponent {
   public readonly update$: Observable<void>;
 
-  constructor() {
+  public constructor(public readonly injector: Injector) {
     const subject = new Subject<void>();
     this.update$ = subject;
     subject.complete();
@@ -26,10 +26,12 @@ class RealComponent implements AfterViewInit {
   @ViewChild(ChildComponent, {
     static: false,
   } as any)
-  protected child: ChildComponent;
+  protected child?: ChildComponent;
 
-  ngAfterViewInit() {
-    this.child.update$.subscribe();
+  public ngAfterViewInit() {
+    if (this.child) {
+      this.child.update$.subscribe();
+    }
   }
 }
 
@@ -47,6 +49,7 @@ describe('MockInstance', () => {
       const subject = new Subject<void>();
       subject.complete();
       ngMocks.stub(instance, {
+        injector,
         // comment the next line to check the failure.
         update$: subject,
       });

@@ -1,25 +1,23 @@
-// tslint:disable: prefer-function-over-method no-string-literal
-
-import { MockService } from 'ng-mocks';
+import { MockService, ngMocks } from 'ng-mocks';
 
 class Example {
-  private _dynamicGet = 'return value from dynamicGet';
+  private readonly privateDynamicGet = 'return value from dynamicGet';
 
-  private _dynamicMethod = 'return value from dynamicMethod';
+  private readonly privateDynamicMethod = 'return value from dynamicMethod';
 
-  get dynamicGet() {
-    return this._dynamicGet;
+  public get dynamicGet() {
+    return this.privateDynamicGet;
   }
 
-  get hardCodedGet() {
+  public get hardCodedGet() {
     return 'return value from hardCodedGet';
   }
 
-  dynamicMethod() {
-    return this._dynamicMethod;
+  public dynamicMethod() {
+    return this.privateDynamicMethod;
   }
 
-  hardCodedMethod() {
+  public hardCodedMethod() {
     return 'return value from hardCodedMethod';
   }
 }
@@ -31,7 +29,9 @@ describe('issue-177', () => {
     // Properties
     expect(mockExample.hardCodedGet).toBeUndefined();
     expect(mockExample.dynamicGet).toBeUndefined();
-    mockExample['_dynamicGet'] = 'value set in test to _dynamicGet';
+    ngMocks.stub(mockExample, {
+      privateDynamicGet: 'value set in test to _dynamicGet',
+    } as any);
     expect(mockExample.dynamicGet).toBeUndefined();
     (mockExample as any).dynamicGet = 'test';
     expect(mockExample.dynamicGet).toBe('test');
@@ -39,7 +39,9 @@ describe('issue-177', () => {
     // Methods
     expect(mockExample.hardCodedMethod()).toBeUndefined();
     expect(mockExample.dynamicMethod()).toBeUndefined();
-    mockExample['_dynamicMethod'] = 'value set in test to _dynamicMethod';
+    ngMocks.stub(mockExample, {
+      privateDynamicMethod: 'value set in test to _dynamicMethod',
+    } as any);
     expect(mockExample.dynamicMethod()).toBeUndefined();
   });
 });

@@ -29,8 +29,8 @@ import {
   `,
 })
 export class ComponentContentChild<T> {
-  @ContentChild('block', { ...staticFalse }) injectedBlock: TemplateRef<any>;
-  @Input() items?: T[];
+  @ContentChild('block', staticFalse) public injectedBlock: TemplateRef<any> | undefined;
+  @Input() public items: T[] | undefined;
 }
 
 @Component({
@@ -59,9 +59,9 @@ export class ComponentContentChild<T> {
     <div>PipeWeWantToCustomize: {{ 'text' | PipeWeWantToCustomize }}</div>
     <div>PipeWeWantToRestore: {{ 'text' | PipeWeWantToRestore }}</div>
 
-    <div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: {{ t1v }}</div>
-    <div>INJECTION_TOKEN_WE_WANT_TO_MIMIC: {{ t2v }}</div>
-    <div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: {{ t3v }}</div>
+    <div>INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC: {{ t1 }}</div>
+    <div>INJECTION_TOKEN_WE_WANT_TO_MIMIC: {{ t2 }}</div>
+    <div>INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE: {{ t3 }}</div>
 
     <div>anythingWeWant1: {{ anythingWeWant1?.getName() }}</div>
     <div>anythingWeWant2: {{ anythingWeWant2?.getName() }}</div>
@@ -83,49 +83,21 @@ export class ComponentContentChild<T> {
   `,
 })
 export class MyComponent {
-  public readonly anythingWeWant1: AnythingWeWant1;
-  public readonly anythingWeWant2: AnythingWeWant2;
-  public readonly myCustomProvider1: MyCustomProvider1;
-  public readonly myCustomProvider2: MyCustomProvider2;
-  public readonly myCustomProvider3: MyCustomProvider3;
-  public readonly myService1: MyService1;
-  public readonly myService2: MyService2;
-  public readonly serviceWeDontWantToMimic: ServiceWeDontWantToMimic;
-  public readonly serviceWeWantToCustomize: ServiceWeWantToCustomize;
-  public readonly serviceWeWantToMimic: ServiceWeWantToMimic;
-  public readonly t1v: string;
-  public readonly t2v: string;
-  public readonly t3v: string;
-
-  constructor(
-    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC) t1: string,
-    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MIMIC) t2: string,
-    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE) t3: string,
-    @Optional() anythingWeWant1: AnythingWeWant1,
-    @Optional() anythingWeWant2: AnythingWeWant2,
-    @Optional() myCustomProvider1: MyCustomProvider1,
-    @Optional() myCustomProvider2: MyCustomProvider2,
-    @Optional() myCustomProvider3: MyCustomProvider3,
-    @Optional() myService1: MyService1,
-    @Optional() myService2: MyService2,
-    @Optional() serviceWeDontWantToMimic: ServiceWeDontWantToMimic,
-    @Optional() serviceWeWantToMimic: ServiceWeWantToMimic,
-    @Optional() serviceWeWantToCustomize: ServiceWeWantToCustomize
-  ) {
-    this.t1v = t1;
-    this.t2v = t2;
-    this.t3v = t3;
-    this.anythingWeWant1 = anythingWeWant1;
-    this.anythingWeWant2 = anythingWeWant2;
-    this.myCustomProvider1 = myCustomProvider1;
-    this.myCustomProvider2 = myCustomProvider2;
-    this.myCustomProvider3 = myCustomProvider3;
-    this.myService1 = myService1;
-    this.myService2 = myService2;
-    this.serviceWeDontWantToMimic = serviceWeDontWantToMimic;
-    this.serviceWeWantToCustomize = serviceWeWantToCustomize;
-    this.serviceWeWantToMimic = serviceWeWantToMimic;
-  }
+  public constructor(
+    @Optional() @Inject(INJECTION_TOKEN_WE_DONT_WANT_TO_MIMIC) public t1: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_MIMIC) public t2: string,
+    @Optional() @Inject(INJECTION_TOKEN_WE_WANT_TO_CUSTOMIZE) public t3: string,
+    @Optional() public anythingWeWant1: AnythingWeWant1,
+    @Optional() public anythingWeWant2: AnythingWeWant2,
+    @Optional() public myCustomProvider1: MyCustomProvider1,
+    @Optional() public myCustomProvider2: MyCustomProvider2,
+    @Optional() public myCustomProvider3: MyCustomProvider3,
+    @Optional() public myService1: MyService1,
+    @Optional() public myService2: MyService2,
+    @Optional() public serviceWeDontWantToMimic: ServiceWeDontWantToMimic,
+    @Optional() public serviceWeWantToMimic: ServiceWeWantToMimic,
+    @Optional() public serviceWeWantToCustomize: ServiceWeWantToCustomize,
+  ) {}
 }
 
 @Component({

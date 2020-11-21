@@ -12,5 +12,6 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
       Object.defineProperty(instance, key, def);
     }
   }
+
   return instance;
 };

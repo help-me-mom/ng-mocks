@@ -9,10 +9,7 @@ import { TargetService } from './fixtures.services';
   providers: [TargetService],
 })
 export class TargetModule {
-  protected service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
+  public constructor(protected service: TargetService) {
     this.service.call();
   }
 }

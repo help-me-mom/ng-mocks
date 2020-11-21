@@ -178,6 +178,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
     if (ngMocksUniverse.builtDeclarations.has(def) && ngMocksUniverse.builtDeclarations.get(def) === null) {
       changed = changed || true;
       resolutions.set(def, undefined);
+
       return;
     }
 
@@ -217,6 +218,7 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
 
     resolutions.set(def, mockDef);
     changed = changed || mockDef !== def;
+
     return mockDef;
   };
 

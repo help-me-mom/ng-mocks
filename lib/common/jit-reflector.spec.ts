@@ -8,9 +8,10 @@ describe('JitReflector', () => {
       parameters: jasmine.createSpy('parameters'),
       propMetadata: jasmine.createSpy('propMetadata'),
     };
-    constructor() {
+
+    public constructor() {
       super();
-      this._reflectionCapabilities = this.mock;
+      this.reflectionCapabilities = this.mock;
     }
   }
 

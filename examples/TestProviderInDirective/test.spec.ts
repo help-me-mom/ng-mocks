@@ -15,25 +15,14 @@ class TargetService {
   selector: '[target]',
 })
 class TargetDirective implements OnInit {
-  public readonly service: TargetService;
+  public constructor(
+    public readonly service: TargetService,
+    protected ref: ElementRef,
+    protected templateRef: TemplateRef<void>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
 
-  protected ref: ElementRef;
-  protected templateRef: TemplateRef<void>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(
-    service: TargetService,
-    ref: ElementRef,
-    templateRef: TemplateRef<void>,
-    viewContainerRef: ViewContainerRef
-  ) {
-    this.service = service;
-    this.ref = ref;
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.viewContainerRef.clear();
     if (this.service.value) {
       this.viewContainerRef.createEmbeddedView(this.templateRef);

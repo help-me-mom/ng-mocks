@@ -4,11 +4,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class Class1Service {
-  public readonly name: string = 'class1';
-
-  constructor(name: string) {
-    this.name = name;
-  }
+  public constructor(public readonly name: string) {}
 }
 
 @Injectable()

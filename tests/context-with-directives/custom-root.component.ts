@@ -19,13 +19,13 @@ import { CustomTypeDirective } from './custom-type.directive';
 export class CustomRootComponent implements AfterContentInit {
   public context = ['0'];
   public context1 = ['1'];
-  public template: TemplateRef<any>;
-  public template1: TemplateRef<any>;
-  public template2: TemplateRef<any>;
-  @ContentChildren(CustomTypeDirective) templates: QueryList<any>;
+  public template?: TemplateRef<any>;
+  public template1?: TemplateRef<any>;
+  public template2?: TemplateRef<any>;
+  @ContentChildren(CustomTypeDirective) public templates?: QueryList<any>;
 
-  ngAfterContentInit(): void {
-    this.templates.forEach((template: CustomTypeDirective) => {
+  public ngAfterContentInit(): void {
+    (this.templates || []).forEach((template: CustomTypeDirective) => {
       switch (template.type) {
         case 'template1':
           this.template1 = template.template;

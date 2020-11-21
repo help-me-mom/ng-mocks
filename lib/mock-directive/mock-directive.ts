@@ -15,7 +15,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { flatten } from '../common/core.helpers';
 import { directiveResolver } from '../common/core.reflect';
-import { AnyType, Type } from '../common/core.types';
+import { Type } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
@@ -34,7 +34,7 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-directive
  */
-export function MockDirective<TDirective>(directive: AnyType<TDirective>): Type<MockedDirective<TDirective>>;
+export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>>;
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
@@ -66,6 +66,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       },
@@ -87,6 +88,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -100,6 +102,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
         useExisting: (() => {
           const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
           value.__ngMocksSkip = true;
+
           return value;
         })(),
       });
@@ -123,17 +126,17 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   @MockOf(directive, { outputs, setNgValueAccessor })
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
     /* istanbul ignore next */
-    constructor(
+    public constructor(
       injector: Injector,
       @Optional() element?: ElementRef,
       @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef
+      @Optional() viewContainer?: ViewContainerRef,
     ) {
       super(injector);
       this.__ngMocksInstall(element, template, viewContainer);
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
       if (config && config.render) {
         const { $implicit, variables } =
           config.render !== true
@@ -149,7 +152,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     private __ngMocksInstall(
       element?: ElementRef,
       template?: TemplateRef<any>,
-      viewContainer?: ViewContainerRef
+      viewContainer?: ViewContainerRef,
     ): void {
       // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
       // In our case we don't if we should render it or not and due to this we do nothing.

@@ -30,15 +30,11 @@ class Dep3Service {
 
 @Injectable()
 class TargetService {
-  public readonly flag: undefined;
-  public readonly optional?: { name: string };
-  public readonly service: { name: string };
-
-  constructor(service: Dep1Service, optional: Dep1Service, flag?: undefined) {
-    this.service = service;
-    this.optional = optional;
-    this.flag = flag;
-  }
+  public constructor(
+    public readonly service: Dep1Service,
+    public readonly optional: Dep1Service,
+    public readonly flag?: undefined,
+  ) {}
 }
 
 @Component({
@@ -50,11 +46,7 @@ class TargetService {
   `,
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({
@@ -85,7 +77,7 @@ describe('provider-with-custom-dependencies', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('creates component with custom dependencies', () => {
@@ -118,7 +110,7 @@ describe('provider-with-custom-dependencies', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).keep(TargetService).keep(Dep2Service, {
         dependency: true,
-      })
+      }),
     );
 
     it('creates component with kept Dep2Service', () => {

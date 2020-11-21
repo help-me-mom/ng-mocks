@@ -12,6 +12,7 @@ const mockFunction: {
       if (setValue) {
         setValue(val);
       }
+
       return value;
     };
   }

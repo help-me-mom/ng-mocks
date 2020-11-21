@@ -11,12 +11,13 @@ describe('module-with-factory-tokens:real', () => {
   it('renders all tokens', () => {
     if (parseInt(VERSION.major, 10) <= 5) {
       pending('Need Angular > 5');
+
       return;
     }
 
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>'
+      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',
     );
   });
 });
@@ -29,12 +30,13 @@ describe('module-with-factory-tokens:keep', () => {
   it('renders all tokens', () => {
     if (parseInt(VERSION.major, 10) <= 5) {
       pending('Need Angular > 5');
+
       return;
     }
 
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>'
+      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',
     );
   });
 });
@@ -52,7 +54,7 @@ describe('module-with-factory-tokens:mock-0', () => {
         multi: true,
         provide: MY_TOKEN_MULTI,
         useValue: 'V2',
-      })
+      }),
   );
 
   it('fails to render all tokens', () => {
@@ -79,13 +81,13 @@ describe('module-with-factory-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
       .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE')
-      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI')
+      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI'),
   );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>"MOCK_MY_TOKEN_SINGLE" "MOCK_MY_TOKEN_MULTI"</internal-component>'
+      '<internal-component>"MOCK_MY_TOKEN_SINGLE" "MOCK_MY_TOKEN_MULTI"</internal-component>',
     );
   });
 });
@@ -102,12 +104,13 @@ describe('module-with-factory-tokens:mock-3', () => {
   it('renders all tokens', () => {
     if (parseInt(VERSION.major, 10) <= 5) {
       pending('Need Angular > 5');
+
       return;
     }
 
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>'
+      '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',
     );
   });
 });

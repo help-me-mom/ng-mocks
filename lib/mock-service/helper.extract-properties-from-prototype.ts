@@ -16,5 +16,6 @@ export default <T>(service: T): string[] => {
     }
     prototype = Object.getPrototypeOf(prototype);
   }
+
   return result;
 };

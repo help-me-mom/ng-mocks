@@ -35,29 +35,29 @@ export class ControlComponent implements ControlValueAccessor {
   public value: any;
   public change: any = () => undefined;
 
-  changeTouch(): void {
+  public changeTouch(): void {
     this.touch();
   }
 
-  changeValue(obj: any): void {
+  public changeValue(obj: any): void {
     this.change(obj);
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: any): void {
     this.change = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any): void {
     this.touch = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
+  public setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 
   public touch: any = () => undefined;
 
-  writeValue(obj: any): void {
+  public writeValue(obj: any): void {
     this.value = obj;
   }
 }

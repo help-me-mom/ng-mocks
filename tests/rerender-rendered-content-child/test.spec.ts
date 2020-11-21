@@ -20,7 +20,7 @@ describe('Rerender of a rendered @ContentChild', () => {
     </ccc>`,
       {
         outside: '1',
-      }
+      },
     );
     expect(fixture).toBeDefined();
     expect(fixture.debugElement.nativeElement.innerHTML).toContain('$implicit 1');

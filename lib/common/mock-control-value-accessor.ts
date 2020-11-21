@@ -1,4 +1,4 @@
-// tslint:disable:variable-name
+// tslint:disable variable-name ban-ts-ignore
 
 import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
@@ -8,29 +8,35 @@ export class MockControlValueAccessor extends Mock implements ControlValueAccess
   public readonly __ngMocksMockControlValueAccessor: true = true;
 
   /* istanbul ignore next */
-  __simulateChange = (value: any) => {};
+  // @ts-ignore
+  public __simulateChange = (value: any) => {};
 
   /* istanbul ignore next */
-  __simulateTouch = () => {};
+  public __simulateTouch = () => {};
 
   /* istanbul ignore next */
-  __simulateValidatorChange = () => {};
+  public __simulateValidatorChange = () => {};
 
-  registerOnChange(fn: (value: any) => void): void {
+  public registerOnChange(fn: (value: any) => void): void {
     this.__simulateChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.__simulateTouch = fn;
   }
 
-  registerOnValidatorChange(fn: () => void): void {
+  public registerOnValidatorChange(fn: () => void): void {
     this.__simulateValidatorChange = fn;
   }
 
-  setDisabledState = (isDisabled: boolean): void => {};
+  // @ts-ignore
+  public setDisabledState(isDisabled: boolean): void {}
 
-  validate = (control: AbstractControl): ValidationErrors | null => null;
+  // @ts-ignore
+  public validate(control: AbstractControl): ValidationErrors | null {
+    return null;
+  }
 
-  writeValue = (value: any) => {};
+  // @ts-ignore
+  public writeValue(value: any) {}
 }

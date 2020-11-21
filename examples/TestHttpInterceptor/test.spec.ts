@@ -1,11 +1,11 @@
 import {
-  HTTP_INTERCEPTORS,
   HttpClient,
   HttpClientModule,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
@@ -24,7 +24,7 @@ class TargetInterceptor implements HttpInterceptor {
         setHeaders: {
           'My-Custom': this.value,
         },
-      })
+      }),
     );
   }
 }
@@ -40,7 +40,7 @@ class MockInterceptor implements HttpInterceptor {
         setHeaders: {
           'My-Mock': this.value,
         },
-      })
+      }),
     );
   }
 }
@@ -75,7 +75,7 @@ describe('TestHttpInterceptor', () => {
     MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
-      .replace(HttpClientModule, HttpClientTestingModule)
+      .replace(HttpClientModule, HttpClientTestingModule),
   );
 
   it('triggers interceptor', () => {

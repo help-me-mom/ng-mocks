@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+// tslint:disable no-console
 
 import { Component, Injectable, NgModule } from '@angular/core';
 import { MockBuilder, ngMocks } from 'ng-mocks';
@@ -6,7 +6,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 @Injectable()
 class TargetService {
   public count = 0;
-  constructor() {
+  public constructor() {
     this.count += 1;
   }
 }
@@ -16,11 +16,7 @@ class TargetService {
   template: '{{ service.count }}',
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({
@@ -72,7 +68,7 @@ describe('performance:wrong', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).mock(TargetService, {
       count: 5,
-    })
+    }),
   );
 
   it('creates a module on first call', () => {

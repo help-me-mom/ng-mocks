@@ -10,11 +10,7 @@ class MockService {}
   template: `target`,
 })
 class TargetComponent {
-  public readonly service: MockService;
-
-  constructor(service: MockService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: MockService) {}
 }
 
 @NgModule({

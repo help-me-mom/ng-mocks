@@ -1,3 +1,5 @@
+// tslint:disable strict-type-predicates
+
 import { Component, Injectable } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
 
@@ -6,7 +8,7 @@ class TargetService {
   public prop = 0;
   private readonly value = 1;
 
-  method(): number {
+  public method(): number {
     return this.value;
   }
 }
@@ -16,11 +18,7 @@ class TargetService {
   template: 'target',
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 describe('examples:performance', () => {

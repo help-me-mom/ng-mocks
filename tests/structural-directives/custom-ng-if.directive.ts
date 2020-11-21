@@ -4,19 +4,13 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
   selector: '[customNgIf]',
 })
 export class CustomNgIfDirective {
-  @Input('customNgIf') set setValue(value: any) {
+  public constructor(protected templateRef: TemplateRef<any>, protected viewContainerRef: ViewContainerRef) {}
+
+  @Input('customNgIf') public set setValue(value: any) {
     if (value) {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainerRef.clear();
     }
-  }
-
-  protected templateRef: TemplateRef<any>;
-  protected viewContainerRef: ViewContainerRef;
-
-  constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef) {
-    this.templateRef = templateRef;
-    this.viewContainerRef = viewContainerRef;
   }
 }

@@ -32,11 +32,7 @@ class TargetService {
   template: `{{ service.name }}`,
 })
 class TargetComponent {
-  public readonly service: TargetService;
-
-  constructor(service: TargetService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: TargetService) {}
 }
 
 @NgModule({
@@ -51,7 +47,7 @@ describe('root-provider-in-depths', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
         imports: [TargetModule],
-      }).compileComponents()
+      }).compileComponents(),
     );
 
     it('creates component with very nested service', () => {

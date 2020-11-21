@@ -24,13 +24,10 @@ export class TargetComponent {
   public var1 = '';
   public var2 = '';
 
-  // required for DefaultRenderComponent generation assertion.
-  protected readonly cdf: ChangeDetectorRef;
   protected var3 = '';
 
-  constructor(cdf: ChangeDetectorRef) {
-    this.cdf = cdf;
-  }
+  // required for DefaultRenderComponent generation assertion.
+  public constructor(protected readonly cdf: ChangeDetectorRef) {}
 
   public test(var2: string): void {
     this.var3 = this.var2;
@@ -114,7 +111,7 @@ describe('mock-render-mirrors-component', () => {
       {
         input1: '1',
         input3: '3',
-      }
+      },
     );
     expect(fixture3).toBeDefined();
     expect(fixture3.componentInstance.input3).toBe('3');

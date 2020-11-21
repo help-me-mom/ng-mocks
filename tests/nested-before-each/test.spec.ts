@@ -11,6 +11,7 @@ describe('nested-before-each', () => {
   beforeEach(() => {
     level = 0;
     mock = MockComponent(InternalComponent);
+
     return MockBuilder(mock);
   });
 
@@ -45,6 +46,7 @@ describe('nested-before-all', () => {
     level = 0;
     mock = MockComponent(InternalComponent);
     TestBed.resetTestingModule();
+
     return MockBuilder(mock);
   });
 

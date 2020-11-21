@@ -19,11 +19,7 @@ export class TargetModule {
     };
   }
 
-  public readonly targetToken: boolean = false;
-
-  constructor(@Inject(TARGET_TOKEN) targetToken: boolean) {
-    this.targetToken = targetToken;
-  }
+  public constructor(@Inject(TARGET_TOKEN) public readonly targetToken: boolean) {}
 }
 
 @Component({
@@ -37,7 +33,7 @@ describe('issue-142', () => {
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
       imports: [MockModule(TargetModule.forRoot())],
-    }).compileComponents()
+    }).compileComponents(),
   );
 
   it('test', () => {

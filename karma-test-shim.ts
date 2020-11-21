@@ -1,8 +1,7 @@
-// tslint:disable: no-import-side-effect ordered-imports
+// tslint:disable no-import-side-effect ordered-imports
 Error.stackTraceLimit = Infinity;
 
-import 'core-js/es6';
-import 'core-js/es7';
+import 'core-js';
 
 import 'zone.js/dist/zone';
 import 'zone.js/dist/long-stack-trace-zone';

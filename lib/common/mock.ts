@@ -1,4 +1,4 @@
-// tslint:disable: no-bitwise variable-name interface-over-type-literal
+// tslint:disable variable-name
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
@@ -17,7 +17,7 @@ export class Mock {
 
   protected readonly __ngMocksConfig?: ngMocksMockConfig;
 
-  constructor(@Optional() injector?: Injector) {
+  public constructor(@Optional() injector?: Injector) {
     const mockOf = (this.constructor as any).mockOf;
 
     if (injector && this.__ngMocksConfig && this.__ngMocksConfig.setNgValueAccessor) {

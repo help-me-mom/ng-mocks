@@ -7,16 +7,16 @@ import getLastFixture from './func.get-last-fixture';
 function nestedCheck<T>(
   result: T[],
   node: MockedDebugNode & { childNodes?: MockedDebugNode[] },
-  callback: (node: MockedDebugNode) => undefined | T
+  callback: (node: MockedDebugNode) => undefined | T,
 ) {
   const element = callback(node);
   if (element) {
     result.push(element);
   }
   const childNodes = node?.childNodes || [];
-  childNodes.forEach(childNode => {
+  for (const childNode of childNodes) {
     nestedCheck(result, childNode, callback);
-  });
+  }
 }
 
 export default <T>(...args: any[]): T[] => {
@@ -34,5 +34,6 @@ export default <T>(...args: any[]): T[] => {
       return undefined;
     }
   });
+
   return result;
 };

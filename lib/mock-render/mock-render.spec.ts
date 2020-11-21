@@ -55,7 +55,7 @@ describe('MockRender', () => {
       {
         mockClick: spy,
         mockContent: 'injected content',
-      }
+      },
     );
     expect(fixture).toBeTruthy();
 
@@ -84,7 +84,7 @@ describe('MockRender', () => {
       {
         mockContent: 'injected content',
       },
-      false
+      false,
     );
     expect(fixture.debugElement.nativeElement.innerText).not.toContain('injected content');
     fixture.detectChanges();
@@ -107,7 +107,7 @@ describe('MockRender', () => {
 
   it('returns a pointer with a provided template', () => {
     const fixture: MockedComponentFixture<RenderRealComponent> = MockRender(
-      `<render-real-component></render-real-component>`
+      `<render-real-component></render-real-component>`,
     );
     // because template can include more than 1 component, be wrapped by any html element etc.
     expect(fixture.point).toBeDefined();
@@ -132,7 +132,7 @@ describe('MockRender', () => {
             useValue: mock,
           },
         ],
-      }
+      },
     );
     expect(mock.getElementById).toHaveBeenCalledWith('test');
   });

@@ -41,7 +41,7 @@ class HelloModule {}
 
 describe('issue-178', () => {
   beforeEach(
-    () => MockBuilder(HelloComponent, HelloModule).replace(RouterModule, RouterTestingModule) // <- causes the issue
+    () => MockBuilder(HelloComponent, HelloModule).replace(RouterModule, RouterTestingModule), // <- causes the issue
   );
 
   it('should create the component', () => {

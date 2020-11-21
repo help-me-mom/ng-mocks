@@ -8,7 +8,7 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
  */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
-  init?: (instance: T, injector: Injector | undefined) => void
+  init?: (instance: T, injector: Injector | undefined) => void,
 ): void;
 
 /**
@@ -18,7 +18,7 @@ export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
   config?: {
     init?(instance: T, injector: Injector | undefined): void;
-  }
+  },
 ): void;
 
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T>, data?: any) {

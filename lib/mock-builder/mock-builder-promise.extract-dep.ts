@@ -13,5 +13,6 @@ export default (decorators?: any[]): any => {
       provide = decorator;
     }
   }
+
   return provide;
 };

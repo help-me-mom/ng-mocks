@@ -1,5 +1,3 @@
-// tslint:disable:no-unnecessary-class
-
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, NgModuleWithProviders } from 'ng-mocks';
@@ -15,7 +13,7 @@ class DependencyService {
 
 @NgModule({})
 class DependencyModule {
-  static withProviders(): NgModuleWithProviders<DependencyModule> {
+  public static withProviders(): NgModuleWithProviders<DependencyModule> {
     return {
       ngModule: DependencyModule,
       providers: [
@@ -29,11 +27,7 @@ class DependencyModule {
     };
   }
 
-  public readonly service: DependencyService;
-
-  constructor(service: DependencyService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: DependencyService) {}
 }
 
 @Component({
@@ -41,11 +35,7 @@ class DependencyModule {
   template: '{{ service.echo() }}',
 })
 class TargetComponent {
-  public readonly service: DependencyService;
-
-  constructor(service: DependencyService) {
-    this.service = service;
-  }
+  public constructor(public readonly service: DependencyService) {}
 }
 
 @NgModule({
@@ -54,12 +44,12 @@ class TargetComponent {
 class TargetModule {}
 
 describe('issue-197:with-providers:manually-injection', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     const module = MockBuilder(TargetComponent, TargetModule).build();
 
     return TestBed.configureTestingModule({
       declarations: module.declarations,
-      imports: [...module.imports, DependencyModule.withProviders()],
+      imports: [...(module.imports || []), DependencyModule.withProviders()],
       providers: module.providers,
     }).compileComponents();
   });

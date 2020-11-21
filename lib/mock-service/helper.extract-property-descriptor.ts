@@ -7,4 +7,6 @@ export default <T>(service: T, prop: string): PropertyDescriptor | undefined => 
     }
     prototype = Object.getPrototypeOf(prototype);
   }
+
+  return undefined;
 };

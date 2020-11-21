@@ -8,14 +8,13 @@ import { staticFalse } from '../../tests';
   template: `child`,
 })
 class DependencyComponent {
-  @ContentChild('something', { ...staticFalse })
-  injectedSomething: TemplateRef<{}>;
+  @ContentChild('something', staticFalse) public injectedSomething: TemplateRef<{}> | undefined;
 
   @Input()
-  someInput = '';
+  public someInput = '';
 
   @Output()
-  someOutput = new EventEmitter();
+  public someOutput = new EventEmitter();
 }
 
 @Component({
@@ -23,8 +22,8 @@ class DependencyComponent {
   template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
 })
 class TestedComponent {
-  value = '';
-  trigger = (obj: any) => {};
+  public value = '';
+  public trigger = (obj: any) => obj;
 }
 
 describe('MockComponent', () => {

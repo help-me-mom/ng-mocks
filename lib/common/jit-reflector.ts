@@ -2,40 +2,44 @@ import { CompileReflector, ExternalReference } from '@angular/compiler';
 import { ɵReflectionCapabilities as ReflectionCapabilities, ɵstringify as stringify } from '@angular/core';
 
 export class JitReflector implements CompileReflector {
-  protected _reflectionCapabilities: ReflectionCapabilities;
+  protected reflectionCapabilities: ReflectionCapabilities;
 
-  constructor() {
-    this._reflectionCapabilities = new ReflectionCapabilities();
+  public constructor() {
+    this.reflectionCapabilities = new ReflectionCapabilities();
   }
 
-  annotations(typeOrFunc: any): any[] {
-    return this._reflectionCapabilities.annotations(typeOrFunc);
+  public annotations(typeOrFunc: any): any[] {
+    return this.reflectionCapabilities.annotations(typeOrFunc);
   }
 
-  componentModuleUrl = (type: any) => `./${stringify(type)}`;
+  public componentModuleUrl(type: any): string {
+    return `./${stringify(type)}`;
+  }
 
   // This does not exist in Angular 5.1.x but is required to exist in 5.2+
-  guards = (): Record<keyof any, any> => ({});
-
-  hasLifecycleHook(type: any, lcProperty: string): boolean {
-    return this._reflectionCapabilities.hasLifecycleHook(type, lcProperty);
+  public guards(): Record<keyof any, any> {
+    return {};
   }
 
-  parameters(typeOrFunc: any): any[][] {
-    return this._reflectionCapabilities.parameters(typeOrFunc);
+  public hasLifecycleHook(type: any, lcProperty: string): boolean {
+    return this.reflectionCapabilities.hasLifecycleHook(type, lcProperty);
   }
 
-  propMetadata(typeOrFunc: any): { [key: string]: any[] } {
-    return this._reflectionCapabilities.propMetadata(typeOrFunc);
+  public parameters(typeOrFunc: any): any[][] {
+    return this.reflectionCapabilities.parameters(typeOrFunc);
   }
 
-  resolveExternalReference = (ref: ExternalReference): any => ref.runtime;
+  public propMetadata(typeOrFunc: any): { [key: string]: any[] } {
+    return this.reflectionCapabilities.propMetadata(typeOrFunc);
+  }
 
-  shallowAnnotations = (): any[] => {
+  public resolveExternalReference = (ref: ExternalReference): any => ref.runtime;
+
+  public shallowAnnotations(): any[] {
     throw new Error('Not supported in JIT mode');
-  };
+  }
 
-  tryAnnotations(typeOrFunc: any): any[] {
+  public tryAnnotations(typeOrFunc: any): any[] {
     return this.annotations(typeOrFunc);
   }
 }

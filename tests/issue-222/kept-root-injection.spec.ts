@@ -1,5 +1,3 @@
-// tslint:disable:no-unnecessary-class
-
 import { Component, Injectable as InjectableSource, NgModule, VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
@@ -23,14 +21,14 @@ class TargetService {
 
 @NgModule({})
 class MockModule {
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     service.echo();
   }
 }
 
 @NgModule({})
 class KeepModule {
-  constructor(service: TargetService) {
+  public constructor(service: TargetService) {
     service.echo();
   }
 }

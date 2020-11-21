@@ -20,9 +20,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
       // avoiding influences on cache when users extend the testing module.
       return {
-        declarations: [...ngModule.declarations],
-        imports: [...ngModule.imports],
-        providers: [...ngModule.providers],
+        declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
+        imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
+        providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
       };
     }
 
@@ -76,16 +76,16 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // avoiding influences on cache when users extend the testing module.
     return {
-      declarations: [...ngModule.declarations],
-      imports: [...ngModule.imports],
-      providers: [...ngModule.providers],
+      declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
+      imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
+      providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
     };
   }
 
-  public then<TResult1 = IMockBuilderResult, TResult2 = never>(
-    fulfill?: (value: IMockBuilderResult) => PromiseLike<TResult1>,
-    reject?: (reason: any) => PromiseLike<TResult2>
-  ): PromiseLike<TResult1 | TResult2> {
+  public async then<TResult1 = IMockBuilderResult>(
+    fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
+    reject?: ((reason: any) => PromiseLike<never>) | undefined | null,
+  ): Promise<TResult1> {
     if (
       ngMocksUniverse.global.has('bullet') &&
       ngMocksUniverse.global.has('builder:module') &&
@@ -97,7 +97,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // we need to reset testing module in case if we are in bullet mode but current module doesn't match.
     if (ngMocksUniverse.global.has('bullet') && ngMocksUniverse.global.has('bullet:reset')) {
-      // tslint:disable-next-line:no-console
+      // tslint:disable-next-line no-console
       console.warn('ngMocks.faster has zero effect due to changes in testing module between runs');
       ngMocksUniverse.global.delete('bullet');
       TestBed.resetTestingModule();
@@ -110,7 +110,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return promise;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalProviders(prototype: any, source: any): boolean {
     // a case of multi vs non-multi
     if (Array.isArray(prototype) !== Array.isArray(source)) {
@@ -167,12 +166,13 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       if (prototypeDef === thisDef) {
         continue;
       }
+
       return false;
     }
+
     return true;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalRender(prototype: any, source: any): boolean {
     if (prototype === source) {
       return true;
@@ -312,7 +312,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return true;
   }
 
-  // tslint:disable-next-line:prefer-function-over-method
   private equalVariables(prototype: any, source: any): boolean {
     if (prototype === source) {
       return true;
@@ -333,6 +332,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
         return false;
       }
     }
+
     return true;
   }
 }

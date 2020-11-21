@@ -70,6 +70,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       imports.push(keepFlat.indexOf(def.ngModule) === -1 ? MockModule(def) : def);
+
       return;
     }
 
@@ -83,6 +84,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       imports.push(def);
+
       return;
     }
 
@@ -96,6 +98,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       imports.push(MockModule(def));
+
       return;
     }
 
@@ -123,6 +126,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       for (const toMock of meta.providers ? flatten(meta.providers) : []) {
         resolveProvider(toMock);
       }
+
       return;
     }
 
@@ -136,6 +140,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       declarations.push(keepFlat.indexOf(def) === -1 ? MockComponent(def) : def);
+
       return;
     }
 
@@ -149,6 +154,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       declarations.push(keepFlat.indexOf(def) === -1 ? MockDirective(def) : def);
+
       return;
     }
 
@@ -162,6 +168,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
       }
 
       declarations.push(keepFlat.indexOf(def) === -1 ? MockPipe(def) : def);
+
       return;
     }
 
