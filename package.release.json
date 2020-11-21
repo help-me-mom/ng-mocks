@@ -1,0 +1,51 @@
+{
+  "name": "ng-mocks",
+  "version": "0.0.0",
+  "description": "A library creating angular mock components, directives, pipes, services, providers and modules in unit tests, which also includes shallow rendering and precise stubs to dump child dependencies.",
+  "keywords": [
+    "angular unit tests",
+    "angular testing",
+    "mock component",
+    "mock directive",
+    "mock pipe",
+    "mock provider",
+    "mock service",
+    "shallow render",
+    "shallow rendering",
+    "an angular test example",
+    "mocking TestBed how to",
+    "stub child dependency",
+    "stubbing",
+    "dumb",
+    "create mock dummy child copies"
+  ],
+  "author": {
+    "name": "Isaac Datlof",
+    "email": "ike18t@gmail.com",
+    "url": "https://github.com/ike18t"
+  },
+  "maintainers": [
+    {
+      "name": "MG.",
+      "email": "m@sudo.eu",
+      "url": "https://sudo.eu"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ike18t/ng-mocks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ike18t/ng-mocks/issues"
+  },
+  "homepage": "https://ng-mocks.github.io/",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "@angular/compiler": ">=5.x <=11.x",
+    "@angular/core": ">=5.x <=11.x",
+    "@angular/forms": ">=5.x <=11.x",
+    "@angular/platform-browser": ">=5.x <=11.x"
+  }
+}
