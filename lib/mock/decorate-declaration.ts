@@ -1,11 +1,11 @@
 import { Component, Directive, Provider, ViewChild } from '@angular/core';
-import ngMocksUniverse from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
 import { MockOf } from '../common/mock-of';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockServiceHelper from '../mock-service/helper';
 import cloneProviders from '../mock/clone-providers';
 import toExistingProvider from '../mock/to-existing-provider';
