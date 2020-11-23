@@ -1,4 +1,3 @@
-import { core } from '@angular/compiler';
 import { Component, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
@@ -10,7 +9,7 @@ import mockServiceHelper from '../mock-service/helper';
 
 import { IMockRenderOptions, MockedComponentFixture } from './types';
 
-function solveOutput(output: any): string {
+const solveOutput = (output: any): string => {
   if (typeof output === 'function') {
     return '($event)';
   }
@@ -22,7 +21,110 @@ function solveOutput(output: any): string {
   }
 
   return '=$event';
-}
+};
+
+const installProxy = (componentInstance: Record<keyof any, any>, pointComponentInstance: Record<keyof any, any>) => {
+  const keys = [
+    ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
+    ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
+    ...Object.keys(pointComponentInstance),
+  ];
+  const exists = [...Object.getOwnPropertyNames(componentInstance), ...Object.keys(componentInstance)];
+  for (const key of keys) {
+    if (exists.indexOf(key) !== -1) {
+      continue;
+    }
+    const def = mockServiceHelper.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
+    const keyType = def ? undefined : typeof pointComponentInstance[key];
+    if (def?.value || keyType === 'function') {
+      Object.defineProperty(componentInstance, key, {
+        value: (...args: any[]) => pointComponentInstance[key](...args),
+
+        configurable: true,
+        enumerable: true,
+        writable: true,
+      });
+    } else {
+      Object.defineProperty(componentInstance, key, {
+        get: () => pointComponentInstance[key],
+        set: (v: any) => (pointComponentInstance[key] = v),
+
+        configurable: true,
+        enumerable: true,
+      });
+    }
+    exists.push(key);
+  }
+};
+
+const generateTemplate = (declaration: any, { selector, params, inputs, outputs }: any): string => {
+  let mockTemplate = '';
+
+  if (typeof declaration === 'string') {
+    mockTemplate = declaration;
+  } else {
+    mockTemplate += selector ? `<${selector}` : '';
+    if (selector && inputs) {
+      for (const definition of inputs) {
+        const [property, alias] = definition.split(': ');
+        /* istanbul ignore else */
+        if (alias && params) {
+          mockTemplate += ` [${alias}]="${alias}"`;
+        } else if (property && params) {
+          mockTemplate += ` [${property}]="${property}"`;
+        } else if (alias && !params) {
+          mockTemplate += ` [${alias}]="${property}"`;
+        } else if (!params) {
+          mockTemplate += ` [${property}]="${property}"`;
+        }
+      }
+    }
+    if (selector && outputs) {
+      for (const definition of outputs) {
+        const [property, alias] = definition.split(': ');
+        /* istanbul ignore else */
+        if (alias && params) {
+          mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
+        } else if (property && params) {
+          mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
+        } else if (alias && !params) {
+          mockTemplate += ` (${alias})="${property}.emit($event)"`;
+        } else if (!params) {
+          mockTemplate += ` (${property})="${property}.emit($event)"`;
+        }
+      }
+    }
+    mockTemplate += selector ? `></${selector}>` : '';
+  }
+
+  return mockTemplate;
+};
+
+const generateComponent = ({ params, options, inputs, outputs }: any) => {
+  class MockRenderComponent {
+    public constructor() {
+      for (const key of Object.keys(params || {})) {
+        (this as any)[key] = params[key];
+      }
+      if (!params && inputs) {
+        for (const definition of inputs) {
+          const [property] = definition.split(': ');
+          (this as any)[property] = undefined;
+        }
+      }
+      if (!params && outputs) {
+        for (const definition of outputs) {
+          const [property] = definition.split(': ');
+          (this as any)[property] = new EventEmitter();
+        }
+      }
+    }
+  }
+
+  Component(options)(MockRenderComponent);
+
+  return MockRenderComponent;
+};
 
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
@@ -64,88 +166,29 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   flags: boolean | IMockRenderOptions = true,
 ): MockedComponentFixture<MComponent, TComponent> {
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
-  const isComponent = typeof template !== 'string';
-  const noParams = !params;
 
-  let inputs: string[] | undefined = [];
-  let outputs: string[] | undefined = [];
-  let selector: string | undefined = '';
-  let mockTemplate = '';
-  if (typeof template === 'string') {
-    mockTemplate = template;
-  } else {
-    let meta: core.Directive;
-    try {
-      meta = directiveResolver.resolve(template);
-    } catch (e) {
-      /* istanbul ignore next */
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
-
+  let inputs: string[] | undefined;
+  let outputs: string[] | undefined;
+  let selector: string | undefined;
+  try {
+    const meta = typeof template !== 'string' ? directiveResolver.resolve(template) : {};
     inputs = meta.inputs;
     outputs = meta.outputs;
     selector = meta.selector;
-
-    mockTemplate += selector ? `<${selector}` : '';
-    if (selector && inputs) {
-      for (const definition of inputs) {
-        const [property, alias] = definition.split(': ');
-        /* istanbul ignore else */
-        if (alias && params) {
-          mockTemplate += ` [${alias}]="${alias}"`;
-        } else if (property && params) {
-          mockTemplate += ` [${property}]="${property}"`;
-        } else if (alias && noParams) {
-          mockTemplate += ` [${alias}]="${property}"`;
-        } else if (noParams) {
-          mockTemplate += ` [${property}]="${property}"`;
-        }
-      }
-    }
-    if (selector && outputs) {
-      for (const definition of outputs) {
-        const [property, alias] = definition.split(': ');
-        /* istanbul ignore else */
-        if (alias && params) {
-          mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
-        } else if (property && params) {
-          mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
-        } else if (alias && noParams) {
-          mockTemplate += ` (${alias})="${property}.emit($event)"`;
-        } else if (noParams) {
-          mockTemplate += ` (${property})="${property}.emit($event)"`;
-        }
-      }
-    }
-    mockTemplate += selector ? `></${selector}>` : '';
+  } catch (e) {
+    /* istanbul ignore next */
+    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
+
+  const mockTemplate = generateTemplate(template, { selector, params, inputs, outputs });
+
   const options: Component = {
     providers: flagsObject.providers,
     selector: 'mock-render',
     template: mockTemplate,
   };
 
-  const component = Component(options)(
-    class MockRenderComponent {
-      public constructor() {
-        for (const key of Object.keys(params || {})) {
-          (this as any)[key] = (params as any)[key];
-        }
-        if (noParams && isComponent && inputs && inputs.length) {
-          for (const definition of inputs) {
-            const [property] = definition.split(': ');
-            (this as any)[property] = undefined;
-          }
-        }
-        if (noParams && isComponent && outputs && outputs.length) {
-          for (const definition of outputs) {
-            const [property] = definition.split(': ');
-            (this as any)[property] = new EventEmitter();
-          }
-        }
-      }
-    } as Type<TComponent>,
-  );
+  const component = generateComponent({ params, options, inputs, outputs });
 
   // Soft reset of TestBed.
   ngMocks.flushTestBed();
@@ -156,56 +199,17 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   });
 
   const fixture: any = TestBed.createComponent(component);
-
   if (flagsObject.detectChanges) {
     fixture.detectChanges();
   }
+  fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
 
-  fixture.point = fixture.debugElement.children[0];
-  if (!fixture.point) {
-    fixture.point = fixture.debugElement.childNodes[0];
-  }
-  let pointComponentInstance: any;
-  try {
-    // ivy throws Error: Expecting instance of DOM Element
-    pointComponentInstance = fixture.point?.componentInstance;
-  } catch (e) {
-    // nothing to do
-  }
-  if (noParams && pointComponentInstance) {
-    const keys = [
-      ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
-      ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
-      ...Object.keys(pointComponentInstance),
-    ];
-    const exists = [
-      ...Object.getOwnPropertyNames(fixture.componentInstance),
-      ...Object.keys(fixture.componentInstance),
-    ];
-    for (const key of keys) {
-      if (exists.indexOf(key) !== -1) {
-        continue;
-      }
-      const def = mockServiceHelper.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
-      const keyType = def ? undefined : typeof pointComponentInstance[key];
-      if (def?.value || keyType === 'function') {
-        Object.defineProperty(fixture.componentInstance, key, {
-          value: (...args: any[]) => pointComponentInstance[key](...args),
-
-          configurable: true,
-          enumerable: true,
-          writable: true,
-        });
-      } else {
-        Object.defineProperty(fixture.componentInstance, key, {
-          get: () => pointComponentInstance[key],
-          set: (v: any) => (pointComponentInstance[key] = v),
-
-          configurable: true,
-          enumerable: true,
-        });
-      }
-      exists.push(key);
+  if (!params) {
+    try {
+      // ivy throws Error: Expecting instance of DOM Element
+      installProxy(fixture.componentInstance, fixture.point?.componentInstance);
+    } catch (e) {
+      // nothing to do
     }
   }
 
