@@ -28,7 +28,7 @@ class ComponentMockBase extends MockControlValueAccessor implements AfterContent
   }
 
   public ngAfterContentInit(): void {
-    const config: any = this.__ngMocksConfig?.config;
+    const config = (this.__ngMocksConfig as any).config;
     if (!(this as any).__rendered && config && config.render) {
       for (const block of Object.keys(config.render)) {
         const { $implicit, variables } =
@@ -45,11 +45,11 @@ class ComponentMockBase extends MockControlValueAccessor implements AfterContent
   }
 
   private __ngMocksInstall(changeDetector: ChangeDetectorRef): void {
-    const refs: any = this.__ngMocksConfig?.viewChildRefs;
+    const refs = (this.__ngMocksConfig as any).viewChildRefs;
 
     // Providing method to hide any @ContentChild based on its selector.
     (this as any).__hide = (contentChildSelector: string) => {
-      const key = refs?.get(contentChildSelector);
+      const key = refs.get(contentChildSelector);
       if (key) {
         (this as any)[`mockRender_${contentChildSelector}`] = false;
         changeDetector.detectChanges();
@@ -58,7 +58,7 @@ class ComponentMockBase extends MockControlValueAccessor implements AfterContent
 
     // Providing a method to render any @ContentChild based on its selector.
     (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
-      const key = refs?.get(contentChildSelector);
+      const key = refs.get(contentChildSelector);
       let templateRef: TemplateRef<any>;
       let viewContainer: ViewContainerRef;
       if (key) {

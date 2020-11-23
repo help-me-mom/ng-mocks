@@ -24,7 +24,7 @@ class DirectiveMockBase extends MockControlValueAccessor implements OnInit {
   }
 
   public ngOnInit(): void {
-    const config: any = this.__ngMocksConfig?.config;
+    const config = (this.__ngMocksConfig as any).config;
     if (config?.render) {
       const { $implicit, variables } =
         config.render !== true

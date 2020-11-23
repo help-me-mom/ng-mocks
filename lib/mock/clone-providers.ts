@@ -12,7 +12,7 @@ export default (mockType: AnyType<any>, providers?: any[]): { providers: Provide
   let setNgValueAccessor: boolean | undefined;
   const resolutions = new Map();
 
-  for (const providerDef of flatten(providers || [])) {
+  for (const providerDef of flatten(providers || /* istanbul ignore next */ [])) {
     const provide =
       providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
     if (provide === NG_VALIDATORS) {

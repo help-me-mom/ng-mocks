@@ -22,7 +22,7 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
     }
 
     /* istanbul ignore if */
-    for (const attrDef of meta[attr] || []) {
+    for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
       const [prop, alias = ''] = attrDef.split(':', 2).map(v => v.trim());
       if (!alias && prop !== sel) {
         continue;
