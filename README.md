@@ -75,7 +75,7 @@ I'm open to contributions.
   - [`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element)
 
 - [How to test Angular application](https://ng-mocks.github.io/)
-- [How to configure CI to execute Angular tests automatically](http://satantime.github.io/puppeteer-node/)
+- [How to configure CI to execute Angular tests automatically](https://satantime.github.io/puppeteer-node/)
 
 ---
 
