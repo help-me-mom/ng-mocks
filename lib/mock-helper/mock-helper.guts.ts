@@ -12,6 +12,15 @@ import { MockModule } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
 import MockProvider from '../mock-service/mock-provider';
 
+const skipDef = (def: any, skip: any[], exclude: any[]): boolean => {
+  if (skip.indexOf(def) !== -1) {
+    return true;
+  }
+  skip.push(def);
+
+  return exclude.indexOf(def) !== -1;
+};
+
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
   const declarations: any[] = [];
   const imports: any[] = [];
@@ -75,11 +84,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'm') && keepFlat.indexOf(def) !== -1) {
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
@@ -89,11 +94,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'm') && skipDestruction && keepFlat.indexOf(def) === -1) {
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
@@ -103,12 +104,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'm') && keepFlat.indexOf(def) === -1) {
-      /* istanbul ignore if: unreachable due to the skipDestruction flag */
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
@@ -131,11 +127,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'c')) {
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
@@ -145,11 +137,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'd')) {
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
@@ -159,11 +147,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     }
 
     if (isNgDef(def, 'p')) {
-      if (skip.indexOf(def) !== -1) {
-        return;
-      }
-      skip.push(def);
-      if (excludeFlat.indexOf(def) !== -1) {
+      if (skipDef(def, skip, excludeFlat)) {
         return;
       }
 
