@@ -1,7 +1,8 @@
 {
+  "name": "ng-mocks",
   "private": true,
   "scripts": {
-    "build": "npm run clean && tsc && cp CHANGELOG.md dist && cp README.md dist && cp LICENSE dist && cp package.release.json dist/package.json",
+    "build": "npm run clean && tsc && cp CHANGELOG.md dist && cp README.md dist && cp LICENSE dist && cp package.release.json dist/package.json && cp -R examples dist",
     "build:all": "npm run lint && npm run build && npm run test",
     "i:a": "npm run i:a5 & npm run i:a6 & npm run i:a7 & npm run i:a8 & npm run i:a9 & npm run i:a10 & npm run i:a11 & wait",
     "i:a5": "npm run i:a5es5 && npm run i:a5es2015",
@@ -112,7 +113,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ike18t/ng-mocks.git"
+    "url": "https://github.com/ike18t/ng-mocks"
   },
   "husky": {
     "hooks": {

@@ -38,7 +38,7 @@ Or you could use `ng-mocks` to create mock declarations out of them, and have th
 I'm open to contributions.
 
 - [ask a question on gitter](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues)
+- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
 - or submit a PR
 
 ## Table of contents
@@ -68,29 +68,14 @@ I'm open to contributions.
 - [Making tests faster](#making-angular-tests-faster)
 - [Auto Spy](#auto-spy)
 
-* [How to fix](https://ng-mocks.github.io/)
-  - [`TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
-  - [`Error: Type is part of the declarations of 2 modules`](https://ng-mocks.github.io/how-to-fix-error-type-is-part-of-the-declarations-of-2-modules.html)
-  - [`Error: Directive has no selector, please add it!`](https://ng-mocks.github.io/how-to-fix-error-directive-has-no-selector-please-add-it.html)
-  - [`Template parse errors: <component> is not a known element`](https://ng-mocks.github.io/how-to-fix-template-parse-errors-component-is-not-a-known-element.html)
+* [How to fix](#how-to-fix-an-error-in-angular-tests)
+  - [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+  - [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+  - [`Error: Directive has no selector, please add it!`](#how-to-fix-error-directive-has-no-selector-please-add-it)
+  - [`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element)
 
 - [How to test Angular application](https://ng-mocks.github.io/)
-  - [testing a component](https://ng-mocks.github.io/how-to-test-a-component.html)
-  - [testing a provider of a component](https://ng-mocks.github.io/how-to-test-a-provider-of-a-component.html)
-  - [testing an attribute directive](https://ng-mocks.github.io/how-to-test-an-attribute-directive.html)
-  - [testing a provider of a directive](https://ng-mocks.github.io/how-to-test-a-provider-of-a-directive.html)
-  - [testing a structural directive](https://ng-mocks.github.io/how-to-test-a-structural-directive.html)
-  - [testing a structural directive with a context](https://ng-mocks.github.io/how-to-test-a-structural-directive-with-a-context.html)
-  - [testing a pipe](https://ng-mocks.github.io/how-to-test-a-pipe.html)
-  - [testing ngOnChanges lifecycle hook](https://ng-mocks.github.io/how-to-test-ngonchanges-lifecycle-hook.html)
-  - [testing a provider](https://ng-mocks.github.io/how-to-test-a-provider.html)
-  - [testing a token](https://ng-mocks.github.io/how-to-test-a-token.html)
-  - [testing a multi token](https://ng-mocks.github.io/how-to-test-a-multi-token.html)
-  - [testing a route](https://ng-mocks.github.io/how-to-test-a-route.html)
-  - [testing a routing guard](https://ng-mocks.github.io/how-to-test-a-routing-guard.html)
-  - [testing a routing resolver](https://ng-mocks.github.io/how-to-test-a-routing-resolver.html)
-  - [testing a http request](https://ng-mocks.github.io/how-to-test-a-http-request.html)
-  - [testing a http interceptor](https://ng-mocks.github.io/how-to-test-a-http-interceptor.html)
+- [How to configure CI to execute Angular tests automatically](http://satantime.github.io/puppeteer-node/)
 
 ---
 
@@ -914,7 +899,7 @@ describe('Test', () => {
 ```
 
 **Please note**: The most common error developers meet, when they create mock services, is "**TypeError: Cannot read property 'subscribe' of undefined**".
-If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html).
+If you are encountering it too, please read a section called [How to fix `TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
 
 <details><summary>Click to see <strong>a usage example of mock providers in Angular tests</strong></summary>
 <p>
@@ -999,7 +984,7 @@ a type of `MockedModule<T>` and provides:
 
 If you get an error like: "**Type is part of the declarations of 2 modules**",
 then consider usage of [`MockBuilder`](#mockbuilder).
-More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](https://ng-mocks.github.io/how-to-fix-error-type-is-part-of-the-declarations-of-2-modules.html).
+More detailed information about its cause and a solution you can read in a section called [How to fix `Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules).
 
 Let's imagine an Angular application where `TargetComponent` depends on a module of `DependencyModule`
 and we would like to use its mock copy in a test.
@@ -2161,8 +2146,8 @@ It supports: Modules, Components, Directives, Pipes and Services.
 
 You definitely need it when a test fails like:
 
-- [TypeError: Cannot read property 'subscribe' of undefined](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
-- [TypeError: Cannot read property 'pipe' of undefined](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html)
+- [TypeError: Cannot read property 'subscribe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [TypeError: Cannot read property 'pipe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
 - or any other issue like reading properties or calling methods of undefined
 
 Let's pretend a situation when our component uses `ViewChild` to access a child component instance.
@@ -2179,7 +2164,7 @@ class RealComponent implements AfterViewInit {
 ```
 
 When we test `RealComponent` we would like to have a mock `ChildComponent`, and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would be return `undefined`,
-therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](https://ng-mocks.github.io/how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined.html).
+therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
 
 If it was a service, we would use `providers` to set a proper mock instance of the service.
 
@@ -2750,5 +2735,180 @@ In case of jest add it to `src/setupJest.ts`.
 ```typescript
 import 'ng-mocks/dist/jest';
 ```
+
+[to the top](#table-of-contents)
+
+---
+
+## How to fix an error in Angular tests
+
+We may encounter different unpleasant issues, when we create mock declarations in testing environment.
+
+There is a list of most common issues and their solutions below,
+feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you are facing or struggling with them or anything else.
+
+- [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
+- [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
+- [`Error: Directive has no selector, please add it!`](#how-to-fix-error-directive-has-no-selector-please-add-it)
+- [`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element)
+
+---
+
+### How to fix `TypeError: Cannot read property 'subscribe' of undefined`
+
+This issue means that something has been replaced with a mock copy and returns a dummy result (`undefined`) instead of observable streams.
+
+There is an answer for this error in the section called [How to create a mock observable](#how-to-create-a-mock-observable),
+if the error has been triggered by a mock service, and its property is of type of `undefined`.
+
+Or you might check [`MockInstance`](#mockinstance) in case if the error has been caused by a mock component or a mock directive.
+
+[to the top](#table-of-contents)
+
+---
+
+### How to fix `Error: Type is part of the declarations of 2 modules`
+
+If you encounter the issue, highly likely it means that a mock declaration,
+usually a mock module, contains something, that is declared in the `TestBed` module directly.
+
+Let's imagine a situation that we have a module which exports declarations, for example directives, we need in our test.
+In the same time, we have another module that has another declarations, our component depends on,
+we would like to create a mock copy out of it, but, in the same time, it imports the same module we want to keep as it is
+via an import in `TestBed`.
+
+```typescript
+TestBed.configureTestingModule({
+  imports: [
+    SharedModule,
+    MockModule(ModuleWithServicesAndSharedModule),
+  ],
+  declarations: [ComponentToTest],
+});
+```
+
+The problem is clear: when we create the mock module, [`MockModule`](#how-to-create-a-mock-module) recursively creates its mock dependencies, and, therefore, it creates a mock copy of `SharedModule`.
+Now imported and mock declarations are part of 2 modules.
+
+To solve this, we need to let [`MockModule`](#how-to-create-a-mock-module) know, that `SharedModule` should stay as it is.
+
+There are good and bad news.
+The bad news is that [`MockModule`](#how-to-create-a-mock-module) does not support that,
+but the good news is that `ng-mocks` has [`MockBuilder`](#mockbuilder) for such a complicated case.
+The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuilder) instead of [`MockModule`](#how-to-create-a-mock-module).
+A possible solution might looks like:
+
+```typescript
+beforeEach(() =>
+  MockBuilder(ComponentToTest)
+    .keep(SharedModule)
+    .mock(ModuleWithServicesAndSharedModule),
+);
+```
+
+The configuration says that we want to test `ComponentToTest`, which depends on `SharedModule` and `ModuleWithServicesAndSharedModule`, but `SharedModule` should stay as it is.
+
+Now, during the building process, [`MockBuilder`](#mockbuilder) will keep `SharedModule` as it is, although it is a dependency of the mock module, and that avoids declarations of the same things in 2 modules.
+
+More detailed information how to use it you can find in the section called [`MockBuilder`](#mockbuilder).
+
+[to the top](#table-of-contents)
+
+---
+
+### How to fix Error: Directive has no selector, please add it!
+
+This issue means that a module imports a declaration (usually a parent class) which does not have a selector.
+Such directives and components are created during a [migration](https://angular.io/guide/migration-undecorated-classes)
+if their parent classes haven't been decorated yet.
+
+The right fix is to remove these declarations from modules, only final classes should be specified in there.
+
+If you cannot remove them for a reason, for example it is a 3rd-party library,
+then you need to write tests with usage of [`MockBuilder`](#mockbuilder) and its [`.exclude`](#mockbuilderexclude) feature.
+
+```typescript
+beforeEach(() =>
+  MockBuilder(MyComponent, MyModule).exclude(ParentDirective),
+);
+```
+
+That fixes declarations of the module and resolves the error,
+a directive without a selector has been gone from the module definition.
+
+[to the top](#table-of-contents)
+
+---
+
+### How to fix Template parse errors: \<component\> is not a known element
+
+This error might happen in a test when we have a mock module of the module
+a testing component depends on, but its declarations have not been exported.
+
+```typescript
+@NgModule({
+  declarations: [DependencyComponent],
+})
+class MyModule {}
+```
+
+```typescript
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    declarations: [
+      MyComponent, // <- the only declaration we care about.
+    ],
+    imports: [MockModule(MyModule)],
+  });
+  return TestBed.compileComponents();
+});
+```
+
+In this case, a test will throw `Template parse errors: <DependencyComponent> is not a known element`.
+
+The problem here is that `DependencyComponent` isn't exported,
+and to get access to a mock `DependencyComponent` we need either
+to declare it on the same level where `MyComponent` has been declared
+or to export `DependencyComponent`.
+
+there are 3 solutions to do it:
+
+1. to call [`MockComponent`](#how-to-create-a-mock-component) on it directly in the `TestBed`
+
+   ```typescript
+   beforeEach(() => {
+     TestBed.configureTestingModule({
+       declarations: [
+         MyComponent,
+         MockComponent(DependencyComponent),
+       ],
+     });
+     return TestBed.compileComponents();
+   });
+   ```
+
+2. to use [`ngMocks.guts`](#ngmocksguts),
+   it does the same things as the first solution,
+   but provides mocks of all imports and declarations from `MyModule`.
+
+   ```typescript
+   beforeEach(() => {
+     TestBed.configureTestingModule(
+       ngMocks.guts(MyComponent, MyModule),
+     );
+     return TestBed.compileComponents();
+   });
+   ```
+
+3. to use [`MockBuilder`](#mockbuilder),
+   its behavior differs from the solutions above. It creates a mock `MyModule`,
+   that exports all its imports and declarations including a mock `DependencyComponent`.
+
+   ```typescript
+   beforeEach(() => MockBuilder(MyComponent, MyModule));
+   ```
+
+Profit. More detailed information about pros and cons of each approach you can read in
+[motivation and easy start from ng-mocks](#motivation-and-easy-start).
 
 [to the top](#table-of-contents)

@@ -24,17 +24,38 @@
     "email": "ike18t@gmail.com",
     "url": "https://github.com/ike18t"
   },
-  "maintainers": [
+  "contributors": [
+    {
+      "name": "Isaac Datlof",
+      "email": "ike18t@gmail.com",
+      "url": "https://github.com/ike18t"
+    },
     {
       "name": "MG.",
       "email": "m@sudo.eu",
       "url": "https://sudo.eu"
     }
   ],
-  "bugs": {
-    "url": "https://github.com/ike18t/ng-mocks/issues"
+  "maintainers": [
+    {
+      "name": "Isaac Datlof",
+      "email": "ike18t@gmail.com",
+      "url": "https://github.com/ike18t"
+    },
+    {
+      "name": "MG.",
+      "email": "m@sudo.eu",
+      "url": "https://sudo.eu"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ike18t/ng-mocks"
   },
-  "homepage": "https://ng-mocks.github.io/",
+  "bugs": {
+    "url": "https://github.com/ike18t/ng-mocks/issues/new"
+  },
+  "homepage": "https://ng-mocks.github.io",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
