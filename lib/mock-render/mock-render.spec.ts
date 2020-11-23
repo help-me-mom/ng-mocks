@@ -9,14 +9,19 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
 import { MockRender } from './mock-render';
-import { RenderRealComponent, WithoutSelectorComponent } from './mock-render.spec.fixtures';
+import { EmptyComponent, RenderRealComponent, WithoutSelectorComponent } from './mock-render.spec.fixtures';
 import { MockedComponentFixture, MockedDebugElement, MockedDebugNode } from './types';
 
 describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RenderRealComponent, WithoutSelectorComponent],
+      declarations: [RenderRealComponent, WithoutSelectorComponent, EmptyComponent],
     });
+  });
+
+  it('respects no inputs and outputs', () => {
+    const fixture = MockRender(EmptyComponent);
+    expect(fixture.nativeElement.innerHTML).toEqual('<empty>empty</empty>');
   });
 
   it('respects observables', () => {

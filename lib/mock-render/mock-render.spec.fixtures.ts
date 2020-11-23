@@ -32,3 +32,9 @@ export class RenderRealComponent {
   template: 'WithoutSelectorComponent',
 })
 export class WithoutSelectorComponent {}
+
+@Component({
+  selector: 'empty',
+  template: 'empty',
+})
+export class EmptyComponent {}

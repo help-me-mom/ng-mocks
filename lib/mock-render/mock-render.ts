@@ -69,44 +69,22 @@ const installProxy = (componentInstance: Record<keyof any, any>, pointComponentI
   }
 };
 
-const generateTemplateInputs = (selector: any, params: any, inputs: any) => {
+const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
   let mockTemplate = '';
 
-  if (selector && inputs) {
-    for (const definition of inputs) {
-      const [property, alias] = definition.split(': ');
-      /* istanbul ignore else */
-      if (alias && params) {
-        mockTemplate += ` [${alias}]="${alias}"`;
-      } else if (property && params) {
-        mockTemplate += ` [${property}]="${property}"`;
-      } else if (alias && !params) {
-        mockTemplate += ` [${alias}]="${property}"`;
-      } else if (!params) {
-        mockTemplate += ` [${property}]="${property}"`;
-      }
-    }
-  }
+  const wrap = (prop: string) => (type === 'i' ? `[${prop}]` : `(${prop})`);
 
-  return mockTemplate;
-};
-
-const generateTemplateOutputs = (selector: any, params: any, outputs: any) => {
-  let mockTemplate = '';
-
-  if (selector && outputs) {
-    for (const definition of outputs) {
-      const [property, alias] = definition.split(': ');
-      /* istanbul ignore else */
-      if (alias && params) {
-        mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
-      } else if (property && params) {
-        mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
-      } else if (alias && !params) {
-        mockTemplate += ` (${alias})="${property}.emit($event)"`;
-      } else if (!params) {
-        mockTemplate += ` (${property})="${property}.emit($event)"`;
-      }
+  for (const definition of attr) {
+    const [property, alias] = definition.split(': ');
+    /* istanbul ignore else */
+    if (alias && params) {
+      mockTemplate += ` ${wrap(alias)}="${alias}${type === 'o' ? solveOutput(params[alias]) : ''}"`;
+    } else if (property && params) {
+      mockTemplate += ` ${wrap(property)}="${property}${type === 'o' ? solveOutput(params[property]) : ''}"`;
+    } else if (alias && !params) {
+      mockTemplate += ` ${wrap(alias)}="${property}${type === 'o' ? '.emit($event)' : ''}"`;
+    } else if (!params) {
+      mockTemplate += ` ${wrap(property)}="${property}${type === 'o' ? '.emit($event)' : ''}"`;
     }
   }
 
@@ -120,15 +98,15 @@ const generateTemplate = (declaration: any, { selector, params, inputs, outputs 
     mockTemplate = declaration;
   } else if (selector) {
     mockTemplate += `<${selector}`;
-    mockTemplate += generateTemplateInputs(selector, params, inputs);
-    mockTemplate += generateTemplateOutputs(selector, params, outputs);
+    mockTemplate += generateTemplateAttr(params, inputs, 'i');
+    mockTemplate += generateTemplateAttr(params, outputs, 'o');
     mockTemplate += `></${selector}>`;
   }
 
   return mockTemplate;
 };
 
-const generateComponent = ({ params, options, inputs, outputs }: any) => {
+const generateFixture = ({ params, options, inputs, outputs }: any) => {
   class MockRenderComponent {
     public constructor() {
       for (const key of Object.keys(params || {})) {
@@ -151,7 +129,15 @@ const generateComponent = ({ params, options, inputs, outputs }: any) => {
 
   Component(options)(MockRenderComponent);
 
-  return MockRenderComponent;
+  // Soft reset of TestBed.
+  ngMocks.flushTestBed();
+
+  // Injection of our template.
+  TestBed.configureTestingModule({
+    declarations: [MockRenderComponent],
+  });
+
+  return TestBed.createComponent(MockRenderComponent);
 };
 
 /**
@@ -216,17 +202,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
     template: mockTemplate,
   };
 
-  const component = generateComponent({ params, options, inputs, outputs });
-
-  // Soft reset of TestBed.
-  ngMocks.flushTestBed();
-
-  // Injection of our template.
-  TestBed.configureTestingModule({
-    declarations: [component],
-  });
-
-  const fixture: any = TestBed.createComponent(component);
+  const fixture: any = generateFixture({ params, options, inputs, outputs });
   if (flagsObject.detectChanges) {
     fixture.detectChanges();
   }
