@@ -20,6 +20,62 @@ import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedComponent } from './types';
 
+class ComponentMockBase extends MockControlValueAccessor implements AfterContentInit {
+  /* istanbul ignore next */
+  public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
+    super(injector);
+    this.__ngMocksInstall(changeDetector);
+  }
+
+  public ngAfterContentInit(): void {
+    const config: any = this.__ngMocksConfig?.config;
+    if (!(this as any).__rendered && config && config.render) {
+      for (const block of Object.keys(config.render)) {
+        const { $implicit, variables } =
+          config.render[block] !== true
+            ? config.render[block]
+            : {
+                $implicit: undefined,
+                variables: {},
+              };
+        (this as any).__render(block, $implicit, variables);
+      }
+      (this as any).__rendered = true;
+    }
+  }
+
+  private __ngMocksInstall(changeDetector: ChangeDetectorRef): void {
+    const refs: any = this.__ngMocksConfig?.viewChildRefs;
+
+    // Providing method to hide any @ContentChild based on its selector.
+    (this as any).__hide = (contentChildSelector: string) => {
+      const key = refs?.get(contentChildSelector);
+      if (key) {
+        (this as any)[`mockRender_${contentChildSelector}`] = false;
+        changeDetector.detectChanges();
+      }
+    };
+
+    // Providing a method to render any @ContentChild based on its selector.
+    (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
+      const key = refs?.get(contentChildSelector);
+      let templateRef: TemplateRef<any>;
+      let viewContainer: ViewContainerRef;
+      if (key) {
+        (this as any)[`mockRender_${contentChildSelector}`] = true;
+        changeDetector.detectChanges();
+        viewContainer = (this as any)[`__mockView_${key}`];
+        templateRef = (this as any)[key];
+        if (viewContainer && templateRef) {
+          viewContainer.clear();
+          viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
+          changeDetector.detectChanges();
+        }
+      }
+    };
+  }
+}
+
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
   return components.map(MockComponent);
 }
@@ -81,73 +137,16 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     }
   }
 
-  const config = ngMocksUniverse.config.get(component);
-
-  class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
+  class ComponentMock extends ComponentMockBase {
     /* istanbul ignore next */
     public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
-      super(injector);
-      this.__ngMocksInstall(changeDetector);
-    }
-
-    public ngAfterContentInit(): void {
-      if (!(this as any).__rendered && config && config.render) {
-        for (const block of Object.keys(config.render)) {
-          const { $implicit, variables } =
-            config.render[block] !== true
-              ? config.render[block]
-              : {
-                  $implicit: undefined,
-                  variables: {},
-                };
-          (this as any).__render(block, $implicit, variables);
-        }
-        (this as any).__rendered = true;
-      }
-    }
-
-    private __ngMocksInstall(changeDetector: ChangeDetectorRef): void {
-      // Providing method to hide any @ContentChild based on its selector.
-      (this as any).__hide = (contentChildSelector: string) => {
-        const key = viewChildRefs.get(contentChildSelector);
-        if (key) {
-          (this as any)[`mockRender_${contentChildSelector}`] = false;
-          changeDetector.detectChanges();
-        }
-      };
-
-      // Providing a method to render any @ContentChild based on its selector.
-      (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
-        const key = viewChildRefs.get(contentChildSelector);
-        let templateRef: TemplateRef<any>;
-        let viewContainer: ViewContainerRef;
-        if (key) {
-          (this as any)[`mockRender_${contentChildSelector}`] = true;
-          changeDetector.detectChanges();
-          viewContainer = (this as any)[`__mockView_${key}`];
-          templateRef = (this as any)[key];
-          if (viewContainer && templateRef) {
-            viewContainer.clear();
-            viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
-            changeDetector.detectChanges();
-          }
-        }
-      };
+      super(changeDetector, injector);
     }
   }
   (ComponentMock as any).parameters = [ChangeDetectorRef, Injector];
 
-  const mockMeta = {
-    inputs,
-    outputs,
-    providers,
-    queries,
-  };
-  const mockParams = {
-    exportAs,
-    selector,
-    template,
-  };
+  const mockMeta = { inputs, outputs, providers, queries, viewChildRefs };
+  const mockParams = { exportAs, selector, template };
   const options = decorateDeclaration(component, ComponentMock, mockMeta, mockParams);
   Component(options)(ComponentMock);
 

@@ -7,6 +7,18 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilderPromise } from './mock-builder-promise';
 import { IMockBuilderResult } from './types';
 
+const requiredMetadata = (
+  ngModule: TestModuleMetadata,
+): {
+  declarations: any[];
+  imports: any[];
+  providers: any[];
+} => ({
+  declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
+  imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
+  providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
+});
+
 export class MockBuilderPerformance extends MockBuilderPromise {
   public build(): NgModule {
     let ngModule: TestModuleMetadata;
@@ -19,11 +31,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       ngModule = ngMocksUniverse.global.get('builder:module');
 
       // avoiding influences on cache when users extend the testing module.
-      return {
-        declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
-        imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
-        providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
-      };
+      return requiredMetadata(ngModule);
     }
 
     // removal of cached promise in case of mismatch
@@ -75,11 +83,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     ngMocksUniverse.global.set('builder:module', ngModule);
 
     // avoiding influences on cache when users extend the testing module.
-    return {
-      declarations: [...(ngModule.declarations || /* istanbul ignore next */ [])],
-      imports: [...(ngModule.imports || /* istanbul ignore next */ [])],
-      providers: [...(ngModule.providers || /* istanbul ignore next */ [])],
-    };
+    return requiredMetadata(ngModule);
   }
 
   public async then<TResult1 = IMockBuilderResult>(

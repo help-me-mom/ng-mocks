@@ -1,4 +1,5 @@
 import { Component, Directive, Provider, ViewChild } from '@angular/core';
+import ngMocksUniverse from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
@@ -17,6 +18,7 @@ export default <T extends Component | Directive>(
     outputs?: string[];
     providers?: Provider[];
     queries?: Record<string, ViewChild>;
+    viewChildRefs?: Map<string, string>;
   },
   params: T,
 ): T => {
@@ -32,8 +34,10 @@ export default <T extends Component | Directive>(
       mockServiceHelper.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
   }
   MockOf(source, {
+    config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
     setNgValueAccessor: data.setNgValueAccessor,
+    viewChildRefs: meta.viewChildRefs,
   })(mock);
 
   /* istanbul ignore else */

@@ -11,6 +11,50 @@ import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedDirective } from './types';
 
+class DirectiveMockBase extends MockControlValueAccessor implements OnInit {
+  /* istanbul ignore next */
+  public constructor(
+    injector: Injector,
+    element?: ElementRef,
+    template?: TemplateRef<any>,
+    viewContainer?: ViewContainerRef,
+  ) {
+    super(injector);
+    this.__ngMocksInstall(element, template, viewContainer);
+  }
+
+  public ngOnInit(): void {
+    const config: any = this.__ngMocksConfig?.config;
+    if (config?.render) {
+      const { $implicit, variables } =
+        config.render !== true
+          ? config.render
+          : {
+              $implicit: undefined,
+              variables: {},
+            };
+      (this as any).__render($implicit, variables);
+    }
+  }
+
+  private __ngMocksInstall(element?: ElementRef, template?: TemplateRef<any>, viewContainer?: ViewContainerRef): void {
+    // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
+    // In our case we don't if we should render it or not and due to this we do nothing.
+    (this as any).__element = element;
+    (this as any).__template = template;
+    (this as any).__viewContainer = viewContainer;
+    (this as any).__isStructural = template && viewContainer;
+
+    // Providing method to render mock values.
+    (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
+      if (viewContainer && template) {
+        viewContainer.clear();
+        viewContainer.createEmbeddedView(template, { ...variables, $implicit });
+      }
+    };
+  }
+}
+
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
 }
@@ -41,52 +85,15 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   }
   const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 
-  const config = ngMocksUniverse.config.get(directive);
-
-  class DirectiveMock extends MockControlValueAccessor implements OnInit {
+  class DirectiveMock extends DirectiveMockBase {
     /* istanbul ignore next */
     public constructor(
       injector: Injector,
-      @Optional() element?: ElementRef,
-      @Optional() template?: TemplateRef<any>,
-      @Optional() viewContainer?: ViewContainerRef,
-    ) {
-      super(injector);
-      this.__ngMocksInstall(element, template, viewContainer);
-    }
-
-    public ngOnInit(): void {
-      if (config && config.render) {
-        const { $implicit, variables } =
-          config.render !== true
-            ? config.render
-            : {
-                $implicit: undefined,
-                variables: {},
-              };
-        (this as any).__render($implicit, variables);
-      }
-    }
-
-    private __ngMocksInstall(
       element?: ElementRef,
       template?: TemplateRef<any>,
       viewContainer?: ViewContainerRef,
-    ): void {
-      // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
-      // In our case we don't if we should render it or not and due to this we do nothing.
-      (this as any).__element = element;
-      (this as any).__template = template;
-      (this as any).__viewContainer = viewContainer;
-      (this as any).__isStructural = template && viewContainer;
-
-      // Providing method to render mock values.
-      (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
-        if (viewContainer && template) {
-          viewContainer.clear();
-          viewContainer.createEmbeddedView(template, { ...variables, $implicit });
-        }
-      };
+    ) {
+      super(injector, element, template, viewContainer);
     }
   }
   (DirectiveMock as any).parameters = [
@@ -96,16 +103,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     [ViewContainerRef, new Optional()],
   ];
 
-  const mockMeta = {
-    inputs,
-    outputs,
-    providers,
-    queries,
-  };
-  const mockParams = {
-    exportAs,
-    selector,
-  };
+  const mockMeta = { inputs, outputs, providers, queries };
+  const mockParams = { exportAs, selector };
   const options = decorateDeclaration(directive, DirectiveMock, mockMeta, mockParams);
   Directive(options)(DirectiveMock);
 

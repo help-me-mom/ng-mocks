@@ -3,13 +3,16 @@
 import { EventEmitter, Injector, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
+import { IMockBuilderConfig } from '../mock-builder/types';
 import mockServiceHelper from '../mock-service/helper';
 
 import ngMocksUniverse from './ng-mocks-universe';
 
 export type ngMocksMockConfig = {
+  config?: IMockBuilderConfig;
   outputs?: string[];
   setNgValueAccessor?: boolean;
+  viewChildRefs?: Map<string, string>;
 };
 
 export class Mock {
