@@ -110,22 +110,22 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   if (!isNgInjectionToken(provider) || def !== mockDef) {
     resolutions.set(provider, mockDef);
   }
-  let differs = false;
-  if (def === provider && mockDef !== def) {
-    differs = true;
-  } else if (
-    def !== provider &&
-    (!mockDef ||
-      def.provide !== mockDef.provide ||
-      def.useValue !== mockDef.useValue ||
-      def.useClass !== mockDef.useClass ||
-      def.useExisting !== mockDef.useExisting ||
-      def.useFactory !== mockDef.useFactory ||
-      def.deps !== mockDef.deps)
-  ) {
-    differs = true;
+  let providerDiffers = false;
+  let defDiffers = !mockDef;
+  if (def && mockDef) {
+    defDiffers = defDiffers || def.provide !== mockDef.provide;
+    defDiffers = defDiffers || def.useValue !== mockDef.useValue;
+    defDiffers = defDiffers || def.useClass !== mockDef.useClass;
+    defDiffers = defDiffers || def.useExisting !== mockDef.useExisting;
+    defDiffers = defDiffers || def.useFactory !== mockDef.useFactory;
+    defDiffers = defDiffers || def.deps !== mockDef.deps;
   }
-  if (changed && differs) {
+  if (def === provider && mockDef !== def) {
+    providerDiffers = true;
+  } else if (def !== provider && defDiffers) {
+    providerDiffers = true;
+  }
+  if (changed && providerDiffers) {
     changed(true);
   }
 

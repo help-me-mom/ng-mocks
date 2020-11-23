@@ -1,29 +1,13 @@
 import { core } from '@angular/compiler';
-import {
-  Directive,
-  ElementRef,
-  forwardRef,
-  Injector,
-  OnInit,
-  Optional,
-  Provider,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
+import { Directive, ElementRef, Injector, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { flatten } from '../common/core.helpers';
 import { directiveResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
-import decorateInputs from '../common/decorate.inputs';
-import decorateOutputs from '../common/decorate.outputs';
-import decorateQueries from '../common/decorate.queries';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
-import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
-import mockServiceHelper from '../mock-service/helper';
+import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedDirective } from './types';
 
@@ -34,7 +18,6 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-directive
  */
-export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>>;
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
   // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
@@ -58,72 +41,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   }
   const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 
-  const options: Directive = {
-    exportAs,
-    providers: [
-      {
-        provide: directive,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      },
-    ],
-    selector,
-  };
-
-  const resolutions = new Map();
-  const resolveProvider = (def: Provider) => mockServiceHelper.resolveProvider(def, resolutions);
-
-  let setNgValueAccessor: undefined | boolean;
-  for (const providerDef of flatten(providers || [])) {
-    const provide =
-      providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
-    if (options.providers && provide === NG_VALIDATORS) {
-      options.providers.push({
-        multi: true,
-        provide,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      });
-      continue;
-    }
-    if (setNgValueAccessor === undefined && options.providers && provide === NG_VALUE_ACCESSOR) {
-      setNgValueAccessor = false;
-      options.providers.push({
-        multi: true,
-        provide,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => DirectiveMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      });
-      continue;
-    }
-
-    const mock = resolveProvider(providerDef);
-    /* istanbul ignore else */
-    if (options.providers && mock) {
-      options.providers.push(mock);
-    }
-  }
-  if (setNgValueAccessor === undefined) {
-    setNgValueAccessor =
-      mockServiceHelper.extractMethodsFromPrototype(directive.prototype).indexOf('writeValue') !== -1;
-  }
-
   const config = ngMocksUniverse.config.get(directive);
 
-  @Directive(options)
-  @MockOf(directive, { outputs, setNgValueAccessor })
   class DirectiveMock extends MockControlValueAccessor implements OnInit {
     /* istanbul ignore next */
     public constructor(
@@ -170,13 +89,25 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
       };
     }
   }
+  (DirectiveMock as any).parameters = [
+    Injector,
+    [ElementRef, new Optional()],
+    [TemplateRef, new Optional()],
+    [ViewContainerRef, new Optional()],
+  ];
 
-  /* istanbul ignore else */
-  if (queries) {
-    decorateInputs(DirectiveMock, inputs, Object.keys(queries));
-  }
-  decorateOutputs(DirectiveMock, outputs);
-  decorateQueries(DirectiveMock, queries);
+  const mockMeta = {
+    inputs,
+    outputs,
+    providers,
+    queries,
+  };
+  const mockParams = {
+    exportAs,
+    selector,
+  };
+  const options = decorateDeclaration(directive, DirectiveMock, mockMeta, mockParams);
+  Directive(options)(DirectiveMock);
 
   /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheDirective')) {

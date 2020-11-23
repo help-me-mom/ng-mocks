@@ -108,8 +108,8 @@ export function MockModule(module: any): any {
     mockModule = extendClass(parent);
 
     // the last thing is to apply decorators.
-    NgModule(mockModuleDef)(mockModule as any);
-    MockOf(ngModule)(mockModule as any);
+    NgModule(mockModuleDef)(mockModule);
+    MockOf(ngModule)(mockModule);
   }
   if (!mockModule) {
     mockModule = ngModule;

@@ -20,6 +20,7 @@ import { MockService } from '../mock-service/mock-service';
 
 import extractDep from './mock-builder-promise.extract-dep';
 import skipDep from './mock-builder-promise.skip-dep';
+import { MockBuilderStash } from './mock-builder-stash';
 import { IMockBuilder, IMockBuilderConfig, IMockBuilderResult } from './types';
 
 const defaultMock = {}; // simulating Symbol
@@ -35,6 +36,7 @@ export class MockBuilderPromise implements IMockBuilder {
   protected mockDef: Set<Type<any> | InjectionToken<any>> = new Set();
   protected providerDef: Map<Type<any> | InjectionToken<any>, Provider> = new Map();
   protected replaceDef: Set<Type<any> | InjectionToken<any>> = new Set();
+  protected stash: MockBuilderStash = new MockBuilderStash();
 
   public beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this {
     this.beforeCC.add(callback);
@@ -43,30 +45,9 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   public build(): NgModule {
-    const backup = {
-      builtDeclarations: ngMocksUniverse.builtDeclarations,
-      builtProviders: ngMocksUniverse.builtProviders,
-      cacheDeclarations: ngMocksUniverse.cacheDeclarations,
-      cacheProviders: ngMocksUniverse.cacheProviders,
-      config: ngMocksUniverse.config,
-      flags: ngMocksUniverse.flags,
-      touches: ngMocksUniverse.touches,
-    };
+    this.stash.backup();
+    ngMocksUniverse.flags.add('cachePipe');
 
-    ngMocksUniverse.builtDeclarations = new Map();
-    ngMocksUniverse.builtProviders = new Map();
-    ngMocksUniverse.cacheDeclarations = new Map();
-    ngMocksUniverse.cacheProviders = new Map();
-    ngMocksUniverse.config = new Map();
-    ngMocksUniverse.flags = new Set([
-      'cacheComponent',
-      'cacheDirective',
-      'cacheModule',
-      'cachePipe',
-      'cacheProvider',
-      'correctModuleExports',
-    ]);
-    ngMocksUniverse.touches = new Set();
     ngMocksUniverse.config.set('multi', new Set()); // collecting multi flags of providers.
     ngMocksUniverse.config.set('deps', new Set()); // collecting all deps of providers.
     ngMocksUniverse.config.set('depsSkip', new Set()); // collecting all declarations of kept modules.
@@ -387,9 +368,7 @@ export class MockBuilderPromise implements IMockBuilder {
       overrides.set(value, override);
     }
 
-    for (const key of Object.keys(backup)) {
-      ngMocksUniverse[key] = (backup as any)[key];
-    }
+    this.stash.restore();
 
     return {
       declarations,

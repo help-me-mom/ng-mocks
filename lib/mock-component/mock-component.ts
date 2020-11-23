@@ -3,28 +3,20 @@ import {
   AfterContentInit,
   ChangeDetectorRef,
   Component,
-  forwardRef,
   Injector,
-  Provider,
   Query,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { flatten } from '../common/core.helpers';
 import { directiveResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
-import decorateInputs from '../common/decorate.inputs';
-import decorateOutputs from '../common/decorate.outputs';
-import decorateQueries from '../common/decorate.queries';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
-import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
-import mockServiceHelper from '../mock-service/helper';
+import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedComponent } from './types';
 
@@ -89,73 +81,8 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     }
   }
 
-  const options: Component = {
-    exportAs,
-    providers: [
-      {
-        provide: component,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      },
-    ],
-    selector,
-    template,
-  };
-
-  const resolutions = new Map();
-  const resolveProvider = (def: Provider) => mockServiceHelper.resolveProvider(def, resolutions);
-
-  let setNgValueAccessor: undefined | boolean;
-  for (const providerDef of flatten(providers || [])) {
-    const provide =
-      providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
-    if (options.providers && provide === NG_VALIDATORS) {
-      options.providers.push({
-        multi: true,
-        provide,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      });
-      continue;
-    }
-    if (setNgValueAccessor === undefined && options.providers && provide === NG_VALUE_ACCESSOR) {
-      setNgValueAccessor = false;
-      options.providers.push({
-        multi: true,
-        provide,
-        useExisting: (() => {
-          const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => ComponentMock);
-          value.__ngMocksSkip = true;
-
-          return value;
-        })(),
-      });
-      continue;
-    }
-
-    const mock = resolveProvider(providerDef);
-    /* istanbul ignore else */
-    if (options.providers && mock) {
-      options.providers.push(mock);
-    }
-  }
-  if (setNgValueAccessor === undefined) {
-    setNgValueAccessor =
-      mockServiceHelper.extractMethodsFromPrototype(component.prototype).indexOf('writeValue') !== -1;
-  }
-
   const config = ngMocksUniverse.config.get(component);
 
-  @Component(options)
-  @MockOf(component, { outputs, setNgValueAccessor })
   class ComponentMock extends MockControlValueAccessor implements AfterContentInit {
     /* istanbul ignore next */
     public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
@@ -208,13 +135,21 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
       };
     }
   }
+  (ComponentMock as any).parameters = [ChangeDetectorRef, Injector];
 
-  /* istanbul ignore else */
-  if (queries) {
-    decorateInputs(ComponentMock, inputs, Object.keys(queries));
-  }
-  decorateOutputs(ComponentMock, outputs);
-  decorateQueries(ComponentMock, queries);
+  const mockMeta = {
+    inputs,
+    outputs,
+    providers,
+    queries,
+  };
+  const mockParams = {
+    exportAs,
+    selector,
+    template,
+  };
+  const options = decorateDeclaration(component, ComponentMock, mockMeta, mockParams);
+  Component(options)(ComponentMock);
 
   /* istanbul ignore else */
   if (ngMocksUniverse.flags.has('cacheComponent')) {
