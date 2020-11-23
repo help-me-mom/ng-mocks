@@ -6,6 +6,16 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockServiceHelper from './helper';
 import MockProvider from './mock-provider';
 
+const anyDiffers = (a: any, b: any, ...keys: string[]): boolean => {
+  for (const key of keys) {
+    if (a[key] !== b[key]) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 // tries to resolve a provider based on current universe state.
 export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) => void) => {
   const provider = typeof def === 'object' && def.provide ? def.provide : def;
@@ -112,13 +122,8 @@ export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) 
   }
   let providerDiffers = false;
   let defDiffers = !mockDef;
-  if (def && mockDef) {
-    defDiffers = defDiffers || def.provide !== mockDef.provide;
-    defDiffers = defDiffers || def.useValue !== mockDef.useValue;
-    defDiffers = defDiffers || def.useClass !== mockDef.useClass;
-    defDiffers = defDiffers || def.useExisting !== mockDef.useExisting;
-    defDiffers = defDiffers || def.useFactory !== mockDef.useFactory;
-    defDiffers = defDiffers || def.deps !== mockDef.deps;
+  if (def && mockDef && !defDiffers) {
+    defDiffers = anyDiffers(def, mockDef, 'provide', 'useValue', 'useClass', 'useExisting', 'useFactory', 'deps');
   }
   if (def === provider && mockDef !== def) {
     providerDiffers = true;
