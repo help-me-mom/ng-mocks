@@ -50,18 +50,18 @@ const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
   }
 };
 
-const applyMethods = (instance: Mock, prototype: AnyType<any>) => {
+const applyMethods = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
   for (const method of mockServiceHelper.extractMethodsFromPrototype(prototype)) {
-    if ((this as any)[method] || Object.getOwnPropertyDescriptor(this, method)) {
+    if (instance[method] || Object.getOwnPropertyDescriptor(instance, method)) {
       continue;
     }
     mockServiceHelper.mock(instance, method);
   }
 };
 
-const applyProps = (instance: Mock, prototype: AnyType<any>) => {
+const applyProps = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
   for (const prop of mockServiceHelper.extractPropertiesFromPrototype(prototype)) {
-    if ((this as any)[prop] || Object.getOwnPropertyDescriptor(this, prop)) {
+    if (instance[prop] || Object.getOwnPropertyDescriptor(instance, prop)) {
       continue;
     }
     mockServiceHelper.mock(instance, prop, 'get');

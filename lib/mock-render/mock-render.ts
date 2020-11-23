@@ -23,38 +23,94 @@ const solveOutput = (output: any): string => {
   return '=$event';
 };
 
+const defineProperty = (componentInstance: any, key: string, params: any) => {
+  Object.defineProperty(componentInstance, key, {
+    ...params,
+    configurable: true,
+    enumerable: true,
+    ...(params.value ? { writable: true } : {}),
+  });
+};
+
+const extractAllKeys = (instance: object) => [
+  ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(instance)),
+  ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(instance)),
+  ...Object.keys(instance),
+];
+
+const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
+
 const installProxy = (componentInstance: Record<keyof any, any>, pointComponentInstance: Record<keyof any, any>) => {
-  const keys = [
-    ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
-    ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(pointComponentInstance)),
-    ...Object.keys(pointComponentInstance),
-  ];
-  const exists = [...Object.getOwnPropertyNames(componentInstance), ...Object.keys(componentInstance)];
+  const keys = extractAllKeys(pointComponentInstance);
+  const exists = extractOwnKeys(componentInstance);
+
   for (const key of keys) {
     if (exists.indexOf(key) !== -1) {
       continue;
     }
+
     const def = mockServiceHelper.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
     const keyType = def ? undefined : typeof pointComponentInstance[key];
-    if (def?.value || keyType === 'function') {
-      Object.defineProperty(componentInstance, key, {
-        value: (...args: any[]) => pointComponentInstance[key](...args),
 
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
-    } else {
-      Object.defineProperty(componentInstance, key, {
-        get: () => pointComponentInstance[key],
-        set: (v: any) => (pointComponentInstance[key] = v),
+    defineProperty(
+      componentInstance,
+      key,
+      def?.value || keyType === 'function'
+        ? {
+            value: (...args: any[]) => pointComponentInstance[key](...args),
+          }
+        : {
+            get: () => pointComponentInstance[key],
+            set: (v: any) => (pointComponentInstance[key] = v),
+          },
+    );
 
-        configurable: true,
-        enumerable: true,
-      });
-    }
     exists.push(key);
   }
+};
+
+const generateTemplateInputs = (selector: any, params: any, inputs: any) => {
+  let mockTemplate = '';
+
+  if (selector && inputs) {
+    for (const definition of inputs) {
+      const [property, alias] = definition.split(': ');
+      /* istanbul ignore else */
+      if (alias && params) {
+        mockTemplate += ` [${alias}]="${alias}"`;
+      } else if (property && params) {
+        mockTemplate += ` [${property}]="${property}"`;
+      } else if (alias && !params) {
+        mockTemplate += ` [${alias}]="${property}"`;
+      } else if (!params) {
+        mockTemplate += ` [${property}]="${property}"`;
+      }
+    }
+  }
+
+  return mockTemplate;
+};
+
+const generateTemplateOutputs = (selector: any, params: any, outputs: any) => {
+  let mockTemplate = '';
+
+  if (selector && outputs) {
+    for (const definition of outputs) {
+      const [property, alias] = definition.split(': ');
+      /* istanbul ignore else */
+      if (alias && params) {
+        mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
+      } else if (property && params) {
+        mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
+      } else if (alias && !params) {
+        mockTemplate += ` (${alias})="${property}.emit($event)"`;
+      } else if (!params) {
+        mockTemplate += ` (${property})="${property}.emit($event)"`;
+      }
+    }
+  }
+
+  return mockTemplate;
 };
 
 const generateTemplate = (declaration: any, { selector, params, inputs, outputs }: any): string => {
@@ -62,39 +118,11 @@ const generateTemplate = (declaration: any, { selector, params, inputs, outputs 
 
   if (typeof declaration === 'string') {
     mockTemplate = declaration;
-  } else {
-    mockTemplate += selector ? `<${selector}` : '';
-    if (selector && inputs) {
-      for (const definition of inputs) {
-        const [property, alias] = definition.split(': ');
-        /* istanbul ignore else */
-        if (alias && params) {
-          mockTemplate += ` [${alias}]="${alias}"`;
-        } else if (property && params) {
-          mockTemplate += ` [${property}]="${property}"`;
-        } else if (alias && !params) {
-          mockTemplate += ` [${alias}]="${property}"`;
-        } else if (!params) {
-          mockTemplate += ` [${property}]="${property}"`;
-        }
-      }
-    }
-    if (selector && outputs) {
-      for (const definition of outputs) {
-        const [property, alias] = definition.split(': ');
-        /* istanbul ignore else */
-        if (alias && params) {
-          mockTemplate += ` (${alias})="${alias}${solveOutput(params[alias])}"`;
-        } else if (property && params) {
-          mockTemplate += ` (${property})="${property}${solveOutput(params[property])}"`;
-        } else if (alias && !params) {
-          mockTemplate += ` (${alias})="${property}.emit($event)"`;
-        } else if (!params) {
-          mockTemplate += ` (${property})="${property}.emit($event)"`;
-        }
-      }
-    }
-    mockTemplate += selector ? `></${selector}>` : '';
+  } else if (selector) {
+    mockTemplate += `<${selector}`;
+    mockTemplate += generateTemplateInputs(selector, params, inputs);
+    mockTemplate += generateTemplateOutputs(selector, params, outputs);
+    mockTemplate += `></${selector}>`;
   }
 
   return mockTemplate;
