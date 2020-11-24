@@ -26,7 +26,9 @@ export default (mockType: AnyType<any>, providers?: any[]): { providers: Provide
     }
 
     const mock = helperMockService.resolveProvider(providerDef, resolutions);
-    result.push(mock);
+    if (mock) {
+      result.push(mock);
+    }
   }
 
   return {
