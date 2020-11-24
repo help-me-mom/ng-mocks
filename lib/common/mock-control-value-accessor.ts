@@ -7,14 +7,14 @@ import { Mock } from './mock';
 export class MockControlValueAccessor extends Mock implements ControlValueAccessor, Validator {
   public readonly __ngMocksMockControlValueAccessor: true = true;
 
-  /* istanbul ignore next */
+  // istanbul ignore next
   // @ts-ignore
   public __simulateChange = (value: any) => {};
 
-  /* istanbul ignore next */
+  // istanbul ignore next
   public __simulateTouch = () => {};
 
-  /* istanbul ignore next */
+  // istanbul ignore next
   public __simulateValidatorChange = () => {};
 
   public registerOnChange(fn: (value: any) => void): void {

@@ -17,7 +17,7 @@ import { ngModuleResolver } from '../common/core.reflect';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockRender } from '../mock-render/mock-render';
-import MockProvider from '../mock-service/mock-provider';
+import mockProvider from '../mock-service/mock-provider';
 
 import { MockModule } from './mock-module';
 import {
@@ -199,7 +199,7 @@ describe('WithServiceModule', () => {
   });
 });
 
-describe('MockProvider', () => {
+describe('mockProvider', () => {
   const CUSTOM_TOKEN = new InjectionToken('TOKEN');
 
   @NgModule({
@@ -229,33 +229,33 @@ describe('MockProvider', () => {
   });
 
   it('should return undefined on any token', () => {
-    expect(MockProvider(CUSTOM_TOKEN)).toBeUndefined();
-    expect(MockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
-    expect(MockProvider(APP_INITIALIZER)).toBeUndefined();
+    expect(mockProvider(CUSTOM_TOKEN)).toBeUndefined();
+    expect(mockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
+    expect(mockProvider(APP_INITIALIZER)).toBeUndefined();
   });
 
   it('should return default value on primitives', () => {
-    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: undefined })).toEqual({
+    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: undefined })).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: undefined,
     });
-    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: 123 })).toEqual({
+    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: 123 })).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: 0,
     });
-    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: true })).toEqual({
+    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: true })).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: false,
     });
-    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' })).toEqual({
+    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' })).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: '',
     });
-    expect(MockProvider({ provide: CUSTOM_TOKEN, useValue: null })).toEqual({
+    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: null })).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: null,
     });
-    const mock: FactoryProvider = MockProvider({
+    const mock: FactoryProvider = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: {
         func: () => undefined,

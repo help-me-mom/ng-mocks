@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
 
-import config from './core.config';
+import coreConfig from './core.config';
 import { AnyType } from './core.types';
 
-/* istanbul ignore next */
+// istanbul ignore next
 const getGlobal = (): any => window || global;
 
 getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
@@ -12,7 +12,7 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   cacheDeclarations: new Map(),
   cacheProviders: new Map(),
   config: new Map(),
-  flags: new Set<string>(config.flags),
+  flags: new Set<string>(coreConfig.flags),
   global: new Map(),
   touches: new Set<AnyType<any> | InjectionToken<any>>(),
 };

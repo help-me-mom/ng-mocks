@@ -2,8 +2,8 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement } from '../mock-render/types';
 
-import getLastFixture from './func.get-last-fixture';
-import findInstances from './mock-helper.findInstances';
+import funcGetLastFixture from './func.get-last-fixture';
+import mockHelperFindInstances from './mock-helper.findInstances';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
@@ -14,9 +14,9 @@ export default (...args: any[]) => {
   const notFoundValue: any =
     el && args.length === 3 ? args[2] : !el && args.length === 2 ? args[1] : defaultNotFoundValue;
 
-  const debugElement = el || getLastFixture()?.debugElement;
+  const debugElement = el || funcGetLastFixture()?.debugElement;
 
-  const result = findInstances(debugElement, getSourceOfMock(sel));
+  const result = mockHelperFindInstances(debugElement, getSourceOfMock(sel));
   if (result.length) {
     return result[0];
   }

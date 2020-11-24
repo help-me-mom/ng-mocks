@@ -8,7 +8,7 @@ import { AnyType } from './core.types';
 // (when I restart tests with refreshing browser manually).
 // https://github.com/ike18t/ng-mocks/issues/109
 export default function (cls: AnyType<any>, inputs?: string[], exclude?: string[]) {
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (inputs) {
     for (const input of inputs) {
       const [key, alias] = input.split(': ');

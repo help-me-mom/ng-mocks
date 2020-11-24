@@ -2,7 +2,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-import flushTestBed from './mock-helper.flushTestBed';
+import mockHelperFlushTestBed from './mock-helper.flushTestBed';
 
 export default () => {
   beforeAll(() => {
@@ -13,7 +13,7 @@ export default () => {
   });
 
   afterEach(() => {
-    flushTestBed();
+    mockHelperFlushTestBed();
     for (const fixture of (getTestBed() as any)._activeFixtures || /* istanbul ignore next */ []) {
       fixture.destroy();
     }

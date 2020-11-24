@@ -8,7 +8,7 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
 
-import mockServiceHelper from './helper';
+import helperMockService from './helper.mock-service';
 import { MockService } from './mock-service';
 
 class DeepParentClass {
@@ -91,6 +91,7 @@ describe('MockService', () => {
   });
 
   it('should convert normal functions to an empty object because it is a class signature', () => {
+    // tslint:disable-next-line:no-function-expression
     const mockService = MockService(function test() {
       return 0;
     });
@@ -277,22 +278,22 @@ describe('MockService', () => {
     ngMocksUniverse.cacheDeclarations.set(A, B);
 
     const instance = new Test();
-    const updated = mockServiceHelper.replaceWithMocks(instance);
+    const updated = helperMockService.replaceWithMocks(instance);
     expect(updated).toEqual(jasmine.any(Test));
     expect(updated.getMember()).toBe(B);
   });
 
   it('keeps setter when we add getter', () => {
     const value = {};
-    mockServiceHelper.mock(value, 'prop', 'set');
-    mockServiceHelper.mock(value, 'prop', 'get');
+    helperMockService.mock(value, 'prop', 'set');
+    helperMockService.mock(value, 'prop', 'get');
     const def = Object.getOwnPropertyDescriptor(value, 'prop') || {};
     expect(def.get).toBeDefined();
     expect(def.set).toBeDefined();
   });
 
   it('returns undefined on undefined in replaceWithMocks', () => {
-    expect(mockServiceHelper.replaceWithMocks(null)).toEqual(null);
+    expect(helperMockService.replaceWithMocks(null)).toEqual(null);
   });
 });
 
@@ -378,7 +379,7 @@ describe('replaceWithMocks', () => {
 });
 
 describe('resolveProvider', () => {
-  it('ignores useFactory and useValue interceptors with excluded NG_MOCKS_INTERCEPTORS', async () => {
+  it('ignores helperUseFactory and useValue interceptors with excluded NG_MOCKS_INTERCEPTORS', async () => {
     @NgModule({
       imports: [HttpClientModule],
       providers: [

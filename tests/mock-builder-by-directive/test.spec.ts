@@ -14,10 +14,7 @@ describe('MockBuilderByDirective:real', () => {
 });
 
 describe('MockBuilderByDirective:mock', () => {
-  beforeEach(async done => {
-    await MockBuilder().mock(TargetModule);
-    done();
-  });
+  beforeEach(() => MockBuilder().mock(TargetModule));
 
   it('should find mock', () => {
     const fixture = MockRender(InternalComponent);

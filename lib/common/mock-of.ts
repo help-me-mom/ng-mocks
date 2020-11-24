@@ -1,4 +1,4 @@
-/* tslint:disable variable-name */
+// tslint:disable variable-name
 
 import { AnyType } from './core.types';
 import { ngMocksMockConfig } from './mock';

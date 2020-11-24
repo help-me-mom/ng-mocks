@@ -20,10 +20,7 @@ describe('SharedMockModule:real', () => {
 });
 
 describe('SharedMockModule:mock', () => {
-  beforeEach(async done => {
-    await MockBuilder(TargetComponent).keep(TargetModule).mock(MyComponent);
-    done();
-  });
+  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule).mock(MyComponent));
 
   // The expectation is to verify that only MyComponent was replaced with a mock copy, even it was deeply nested.
   it('should render', () => {

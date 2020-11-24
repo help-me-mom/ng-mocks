@@ -31,10 +31,7 @@ describe('InternalOnly:real', () => {
 });
 
 describe('InternalOnly:mock', () => {
-  beforeEach(async done => {
-    await MockBuilder().mock(TargetModule).mock(InternalComponent, { export: true });
-    done();
-  });
+  beforeEach(() => MockBuilder().mock(TargetModule).mock(InternalComponent, { export: true }));
 
   // The expectation is to see that InternalComponent was exported and can be accessed from the test.
   it('should render', () => {

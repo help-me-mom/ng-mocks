@@ -12,7 +12,7 @@ import decorateDeclaration from '../mock/decorate-declaration';
 import { MockedDirective } from './types';
 
 class DirectiveMockBase extends MockControlValueAccessor implements OnInit {
-  /* istanbul ignore next */
+  // istanbul ignore next
   public constructor(
     injector: Injector,
     element?: ElementRef,
@@ -80,13 +80,13 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   try {
     meta = directiveResolver.resolve(directive);
   } catch (e) {
-    /* istanbul ignore next */
+    // istanbul ignore next
     throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
   const { selector, exportAs, inputs, outputs, queries, providers } = meta;
 
   class DirectiveMock extends DirectiveMockBase {
-    /* istanbul ignore next */
+    // istanbul ignore next
     public constructor(
       injector: Injector,
       element?: ElementRef,
@@ -108,7 +108,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
   const options = decorateDeclaration(directive, DirectiveMock, mockMeta, mockParams);
   Directive(options)(DirectiveMock);
 
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (ngMocksUniverse.flags.has('cacheDirective')) {
     ngMocksUniverse.cacheDeclarations.set(directive, DirectiveMock);
   }

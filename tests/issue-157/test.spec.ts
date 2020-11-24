@@ -21,7 +21,7 @@ export class ActualEmptyComponent {}
   template: '',
 })
 export class ActualInjectionComponent implements ControlValueAccessor {
-  protected value: any = undefined;
+  protected value: any;
 
   public constructor(@Self() @Optional() ngControl: NgControl) {
     if (ngControl) {
@@ -57,7 +57,7 @@ export class ActualInjectionComponent implements ControlValueAccessor {
   template: '',
 })
 export class ActualTokenComponent implements ControlValueAccessor {
-  protected value: any = undefined;
+  protected value: any;
 
   public registerOnChange(fn: any): void {
     this.change = fn;
@@ -86,7 +86,7 @@ export class ActualTokenComponent implements ControlValueAccessor {
   selector: '[actualToken]',
 })
 export class ActualTokenDirective implements ControlValueAccessor {
-  protected value: any = undefined;
+  protected value: any;
 
   public registerOnChange(fn: any): void {
     this.change = fn;

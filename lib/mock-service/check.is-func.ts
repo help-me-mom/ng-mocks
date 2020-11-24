@@ -3,7 +3,7 @@ export default (value: any): boolean => {
     return false;
   }
   const proto = value.toString();
-  /* istanbul ignore next */
+  // istanbul ignore next
   if (proto.match(/^\(/) !== null) {
     return true;
   }

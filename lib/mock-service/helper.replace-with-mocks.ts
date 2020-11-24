@@ -41,11 +41,9 @@ const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Rec
   let mock: Record<keyof any, any> = {};
   let updated = false;
 
+  const builtDeclarations = ngMocksUniverse.builtDeclarations;
   for (const key of Object.keys(value)) {
-    if (
-      ngMocksUniverse.builtDeclarations.has(value[key]) &&
-      ngMocksUniverse.builtDeclarations.get(value[key]) === null
-    ) {
+    if (builtDeclarations.has(value[key]) && builtDeclarations.get(value[key]) === null) {
       updated = updated || true;
       continue;
     }

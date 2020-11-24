@@ -1,4 +1,4 @@
-import config from '../common/core.config';
+import coreConfig from '../common/core.config';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 export default (): void => {
@@ -7,6 +7,6 @@ export default (): void => {
   ngMocksUniverse.cacheProviders = new Map();
   ngMocksUniverse.config = new Map();
   ngMocksUniverse.global = new Map();
-  ngMocksUniverse.flags = new Set(config.flags);
+  ngMocksUniverse.flags = new Set(coreConfig.flags);
   ngMocksUniverse.touches = new Set();
 };

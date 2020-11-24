@@ -14,10 +14,7 @@ describe('ExportsOnly:real', () => {
 });
 
 describe('ExportsOnly:mock1', () => {
-  beforeEach(async done => {
-    await MockBuilder().mock(TargetModule);
-    done();
-  });
+  beforeEach(() => MockBuilder().mock(TargetModule));
 
   // The expectation is to see that InternalModule was exported and it can be accessed from the test.
   it('should render', () => {
@@ -29,10 +26,7 @@ describe('ExportsOnly:mock1', () => {
 });
 
 describe('ExportsOnly:mock2', () => {
-  beforeEach(async done => {
-    await MockBuilder().mock(TargetModule).mock(InternalComponent);
-    done();
-  });
+  beforeEach(() => MockBuilder().mock(TargetModule).mock(InternalComponent));
 
   // The expectation is to see that InternalModule was exported and it can be accessed from the test.
   it('should render', () => {
@@ -44,10 +38,7 @@ describe('ExportsOnly:mock2', () => {
 });
 
 describe('ExportsOnly:mock3', () => {
-  beforeEach(async done => {
-    await MockBuilder().keep(TargetModule);
-    done();
-  });
+  beforeEach(() => MockBuilder().keep(TargetModule));
 
   // The expectation is to see that InternalModule was exported and it can be accessed from the test.
   it('should render', () => {

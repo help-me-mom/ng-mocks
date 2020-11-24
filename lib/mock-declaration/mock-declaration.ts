@@ -17,8 +17,7 @@ export function MockDeclaration<T>(
   declaration: Type<T>,
 ): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>> {
   if (isNgDef(declaration, 'p')) {
-    // TODO remove any when support of A5 has been stopped.
-    return MockPipe(declaration) as any;
+    return MockPipe(declaration);
   }
   if (isNgDef(declaration, 'c')) {
     return MockComponent(declaration);

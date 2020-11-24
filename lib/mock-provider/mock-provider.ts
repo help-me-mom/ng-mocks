@@ -1,8 +1,8 @@
 import { FactoryProvider, InjectionToken, Provider } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
-import ngMocksStub from '../mock-helper/mock-helper.stub';
-import useFactory from '../mock-service/helper.use-factory';
+import mockHelperStub from '../mock-helper/mock-helper.stub';
+import helperUseFactory from '../mock-service/helper.use-factory';
 import { MockService } from '../mock-service/mock-service';
 
 const defaultValue = {};
@@ -27,7 +27,7 @@ export function MockProvider<I>(provider: InjectionToken<I> | string, useValue?:
 export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): FactoryProvider;
 
 export function MockProvider(provide: any, overrides: any = defaultValue): Provider {
-  return useFactory(provide, () => {
+  return helperUseFactory(provide, () => {
     const value = MockService(provide);
     if (overrides === defaultValue) {
       return value;
@@ -36,6 +36,6 @@ export function MockProvider(provide: any, overrides: any = defaultValue): Provi
       return overrides;
     }
 
-    return ngMocksStub(value, overrides);
+    return mockHelperStub(value, overrides);
   });
 }

@@ -1,14 +1,14 @@
-import isFunc from './func.is-func';
+import checkIsFunc from './check.is-func';
 
 export default (value: any): boolean => {
   if (typeof value !== 'function') {
     return false;
   }
-  if (isFunc(value)) {
+  if (checkIsFunc(value)) {
     return false;
   }
   const proto = value.toString();
-  /* istanbul ignore next */
+  // istanbul ignore next
   if (proto.match(/^class\b/) !== null) {
     return true;
   }

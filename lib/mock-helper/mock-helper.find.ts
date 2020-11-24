@@ -4,7 +4,7 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement } from '../mock-render/types';
 
-import getLastFixture from './func.get-last-fixture';
+import funcGetLastFixture from './func.get-last-fixture';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
@@ -15,7 +15,7 @@ export default (...args: any[]) => {
   const notFoundValue: any =
     el && args.length === 3 ? args[2] : !el && args.length === 2 ? args[1] : defaultNotFoundValue;
 
-  const debugElement = el || getLastFixture()?.debugElement;
+  const debugElement = el || funcGetLastFixture()?.debugElement;
 
   const term = typeof sel === 'string' ? By.css(sel) : By.directive(getSourceOfMock(sel));
   const result = debugElement?.query(term);

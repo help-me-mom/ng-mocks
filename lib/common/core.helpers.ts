@@ -7,7 +7,7 @@ import { Type } from './core.types';
 export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
-    /* istanbul ignore next */
+    // istanbul ignore next
     return testBed.inject ? testBed.inject(token) : testBed.get(token);
   } catch (e) {
     return undefined;
@@ -17,7 +17,7 @@ export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | 
 export const getInjection = <I>(token: Type<I> | InjectionToken<I>): I => {
   const testBed: any = getTestBed();
 
-  /* istanbul ignore next */
+  // istanbul ignore next
   return testBed.inject ? testBed.inject(token) : testBed.get(token);
 };
 
@@ -86,7 +86,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
 
   // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
   (window as any).ngMocksParent = parent;
-  /* istanbul ignore next */
+  // istanbul ignore next
   try {
     // tslint:disable-next-line no-eval
     eval(`

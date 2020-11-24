@@ -2,7 +2,7 @@ import { core } from '@angular/compiler';
 import { NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import ngConfig from '../common/core.config';
+import coreConfig from '../common/core.config';
 import { extendClass, flatten } from '../common/core.helpers';
 import { ngModuleResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
@@ -15,49 +15,10 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockPipe } from '../mock-pipe/mock-pipe';
-import mockServiceHelper from '../mock-service/helper';
+import helperMockService from '../mock-service/helper.mock-service';
 
-/**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
- */
-export function MockModule<T>(module: Type<T>): Type<T>;
-
-/**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
- */
-export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
-export function MockModule(module: any): any {
-  let ngModule: Type<any>;
-  let ngModuleProviders: Provider[] | undefined;
-  let mockModule: typeof ngModule | undefined;
-  let mockModuleProviders: typeof ngModuleProviders;
-  let mockModuleDef: NgModule | undefined;
+const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
   let toggleSkipMockFlag = false;
-
-  if (isNgModuleDefWithProviders(module)) {
-    ngModule = module.ngModule;
-    if (module.providers) {
-      ngModuleProviders = module.providers;
-    }
-  } else {
-    ngModule = module;
-  }
-
-  // We are inside of an 'it'.
-  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
-  if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(ngModule, 'm');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
-
-  // Every module should be replaced with its mock copy only once to avoid errors like:
-  // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
-  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {
-    mockModule = ngMocksUniverse.cacheDeclarations.get(ngModule);
-  }
 
   const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
     .get('resolution')
@@ -74,75 +35,194 @@ export function MockModule(module: any): any {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.add('skipMock');
   }
-
-  if (ngConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
+  if (coreConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.add('skipMock');
   }
 
-  // Now we check if we need to keep the original module or to replace it with some other.
-  if (!mockModule && ngMocksUniverse.builtDeclarations.has(ngModule)) {
-    const instance = ngMocksUniverse.builtDeclarations.get(ngModule);
-    if (isNgDef(instance, 'm') && instance !== ngModule) {
-      mockModule = instance;
-    }
-  }
+  return toggleSkipMockFlag;
+};
 
-  if (!mockModule) {
-    let meta: core.NgModule;
-    try {
-      meta = ngModuleResolver.resolve(ngModule);
-    } catch (e) {
-      /* istanbul ignore next */
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
-
-    const [changed, ngModuleDef] = MockNgDef(meta, ngModule);
-    if (changed) {
-      mockModuleDef = ngModuleDef;
-    }
-  }
-
-  if (mockModuleDef) {
-    const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
-    mockModule = extendClass(parent);
-
-    // the last thing is to apply decorators.
-    NgModule(mockModuleDef)(mockModule);
-    MockOf(ngModule)(mockModule);
-  }
-  if (!mockModule) {
-    mockModule = ngModule;
-  }
-
-  // We should always cache the result, in global scope it always will be a mock.
-  // In MockBuilder scope it will be reset later anyway.
-  /* istanbul ignore else */
-  if (ngMocksUniverse.flags.has('cacheModule')) {
-    ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
-  }
-
-  if (ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
-  }
-
-  if (ngModuleProviders) {
-    const [changed, ngModuleDef] = MockNgDef({ providers: ngModuleProviders });
-    mockModuleProviders = changed ? ngModuleDef.providers : ngModuleProviders;
-  }
-
+const postprocessToggleFlag = (toggleSkipMockFlag: boolean): void => {
   if (toggleSkipMockFlag && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.delete('skipMock');
   } else if (toggleSkipMockFlag && !ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.add('skipMock');
   }
+};
 
-  return mockModule === ngModule && mockModuleProviders === ngModuleProviders
+const extractModuleAndProviders = (
+  module: any,
+): {
+  ngModule: Type<any>;
+  ngModuleProviders: Provider[] | undefined;
+} => {
+  let ngModule: Type<any>;
+  let ngModuleProviders: Provider[] | undefined;
+
+  if (isNgModuleDefWithProviders(module)) {
+    ngModule = module.ngModule;
+    if (module.providers) {
+      ngModuleProviders = module.providers;
+    }
+  } else {
+    ngModule = module;
+  }
+
+  return {
+    ngModule,
+    ngModuleProviders,
+  };
+};
+
+const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
+  // Every module should be replaced with its mock copy only once to avoid errors like:
+  // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
+  if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {
+    return ngMocksUniverse.cacheDeclarations.get(ngModule);
+  }
+
+  // Now we check if we need to keep the original module or to replace it with some other.
+  if (ngMocksUniverse.builtDeclarations.has(ngModule)) {
+    const instance = ngMocksUniverse.builtDeclarations.get(ngModule);
+    if (isNgDef(instance, 'm') && instance !== ngModule) {
+      return instance;
+    }
+  }
+
+  return undefined;
+};
+
+const getMockModuleDef = (ngModule: Type<any>, mockModule?: Type<any>): NgModule | undefined => {
+  if (!mockModule) {
+    let meta: core.NgModule;
+    try {
+      meta = ngModuleResolver.resolve(ngModule);
+    } catch (e) {
+      // istanbul ignore next
+      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+    }
+
+    const [changed, ngModuleDef] = MockNgDef(meta, ngModule);
+    if (changed) {
+      return ngModuleDef;
+    }
+  }
+
+  return undefined;
+};
+
+const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any> => {
+  const mockModuleDef = getMockModuleDef(ngModule, mockModule);
+
+  if (mockModuleDef) {
+    const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
+    const mock = extendClass(parent);
+
+    // the last thing is to apply decorators.
+    NgModule(mockModuleDef)(mock);
+    MockOf(ngModule)(mock);
+
+    return mock;
+  }
+
+  return mockModule || ngModule;
+};
+
+const getMockProviders = (ngModuleProviders: Provider[] | undefined): Provider[] | undefined => {
+  if (ngModuleProviders) {
+    const [changed, ngModuleDef] = MockNgDef({ providers: ngModuleProviders });
+
+    return changed ? ngModuleDef.providers : ngModuleProviders;
+  }
+
+  return undefined;
+};
+
+const generateReturn = (
+  module: any,
+  ngModule: Type<any>,
+  ngModuleProviders: Provider[] | undefined,
+  mockModule: Type<any>,
+  mockModuleProviders: Provider[] | undefined,
+): any =>
+  mockModule === ngModule && mockModuleProviders === ngModuleProviders
     ? module
     : isNgModuleDefWithProviders(module)
     ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
     : mockModule;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
+ */
+export function MockModule<T>(module: Type<T>): Type<T>;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-module
+ */
+export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
+
+export function MockModule(module: any): any {
+  const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
+
+  // We are inside of an 'it'.
+  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
+  if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
+    try {
+      return getMockedNgDefOf(ngModule, 'm');
+    } catch (error) {
+      // looks like an in-test mock.
+    }
+  }
+  const toggleSkipMockFlag = preprocessToggleFlag(ngModule);
+  let mockModule = getExistingMockModule(ngModule);
+  mockModule = detectMockModule(ngModule, mockModule);
+
+  // We should always cache the result, in global scope it always will be a mock.
+  // In MockBuilder scope it will be reset later anyway.
+  // istanbul ignore else
+  if (ngMocksUniverse.flags.has('cacheModule')) {
+    ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
+  }
+  if (ngMocksUniverse.flags.has('skipMock')) {
+    ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
+  }
+
+  const mockModuleProviders = getMockProviders(ngModuleProviders);
+  postprocessToggleFlag(toggleSkipMockFlag);
+
+  return generateReturn(module, ngModule, ngModuleProviders, mockModule, mockModuleProviders);
 }
+
+const processDef = (def: any) => {
+  // First we mock modules.
+  if (isNgDef(def, 'm')) {
+    return MockModule(def);
+  }
+  if (isNgModuleDefWithProviders(def)) {
+    return MockModule(def);
+  }
+
+  // Then we check decisions whether we should keep or replace a def.
+  if (ngMocksUniverse.builtDeclarations.has(def)) {
+    return ngMocksUniverse.builtDeclarations.get(def);
+  }
+
+  // And then we mock what we have if it wasn't blocked by the skipMock.
+  if (ngMocksUniverse.flags.has('skipMock')) {
+    return def;
+  }
+  if (isNgDef(def, 'c')) {
+    return MockComponent(def);
+  }
+  if (isNgDef(def, 'd')) {
+    return MockDirective(def);
+  }
+  // istanbul ignore else
+  if (isNgDef(def, 'p')) {
+    return MockPipe(def);
+  }
+};
 
 /**
  * Can be changed at any time.
@@ -165,12 +245,11 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
 
   // resolveProvider is a special case because of the def structure.
   const resolveProvider = (def: Provider) =>
-    mockServiceHelper.resolveProvider(def, resolutions, (flag: boolean) => {
-      changed = changed || flag;
+    helperMockService.resolveProvider(def, resolutions, () => {
+      changed = changed || true;
     });
 
   const resolve = (def: any) => {
-    let mockDef: typeof def;
     if (resolutions.has(def)) {
       return resolutions.get(def);
     }
@@ -181,37 +260,12 @@ export function MockNgDef(ngModuleDef: NgModule, ngModule?: Type<any>): [boolean
 
       return;
     }
-
     ngMocksUniverse.touches.add(isNgModuleDefWithProviders(def) ? def.ngModule : def);
 
-    // First we mock modules.
-    if (isNgDef(def, 'm')) {
-      mockDef = MockModule(def);
-    }
-    if (!mockDef && isNgModuleDefWithProviders(def)) {
-      mockDef = MockModule(def);
+    const mockDef = processDef(def);
+    if (mockDef && mockDef.ngModule && isNgModuleDefWithProviders(def)) {
       resolutions.set(def.ngModule, mockDef.ngModule);
     }
-
-    // Then we check decisions whether we should keep or replace a def.
-    if (!mockDef && ngMocksUniverse.builtDeclarations.has(def)) {
-      mockDef = ngMocksUniverse.builtDeclarations.get(def);
-    }
-
-    // And then we mock what we have if it wasn't blocked by the skipMock.
-    if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
-      mockDef = def;
-    }
-    if (!mockDef && isNgDef(def, 'c')) {
-      mockDef = MockComponent(def);
-    }
-    if (!mockDef && isNgDef(def, 'd')) {
-      mockDef = MockDirective(def);
-    }
-    if (!mockDef && isNgDef(def, 'p')) {
-      mockDef = MockPipe(def);
-    }
-
     if (ngMocksUniverse.flags.has('skipMock')) {
       ngMocksUniverse.config.get('depsSkip')?.add(mockDef);
     }

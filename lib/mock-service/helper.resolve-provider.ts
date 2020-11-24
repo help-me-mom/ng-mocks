@@ -3,8 +3,8 @@ import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-import mockServiceHelper from './helper';
-import MockProvider from './mock-provider';
+import helperMockService from './helper.mock-service';
+import mockProvider from './mock-provider';
 
 const anyDiffers = (a: any, b: any, ...keys: string[]): boolean => {
   for (const key of keys) {
@@ -16,127 +16,162 @@ const anyDiffers = (a: any, b: any, ...keys: string[]): boolean => {
   return false;
 };
 
-// tries to resolve a provider based on current universe state.
-export default (def: any, resolutions: Map<any, any>, changed?: (flag: boolean) => void) => {
-  const provider = typeof def === 'object' && def.provide ? def.provide : def;
-  const multi = def !== provider && !!def.multi;
+const createFromResolution = (provide: any, resolution: any, multi?: boolean) => {
+  let mockDef = resolution;
 
-  //  we shouldn't touch our system providers.
-  if (typeof def === 'object' && def.useExisting && def.useExisting.__ngMocksSkip) {
-    return def;
+  const existingMock = ngMocksUniverse.builtProviders.get(provide);
+  if (existingMock) {
+    mockDef = existingMock;
   }
 
-  let mockDef: typeof def;
-  if (resolutions.has(provider)) {
-    mockDef = resolutions.get(provider);
-    const existingMock = ngMocksUniverse.builtProviders.get(provider);
-    if (existingMock) {
-      mockDef = existingMock;
-    }
-
-    // A case when a provider is actually a component, directive, pipe.
-    if (typeof mockDef === 'function') {
-      mockDef = {
-        provide: provider,
-        useClass: mockDef,
-      };
-    }
-
-    return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
+  // A case when a provider is actually a component, directive, pipe.
+  if (typeof mockDef === 'function') {
+    mockDef = {
+      provide,
+      useClass: mockDef,
+    };
   }
 
-  //  we shouldn't touch excluded providers.
-  if (ngMocksUniverse.builtProviders.has(provider) && ngMocksUniverse.builtProviders.get(provider) === null) {
-    /* istanbul ignore else */
-    if (changed) {
-      changed(true);
-    }
+  return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
+};
 
-    return;
-  }
-
-  if (provider !== def && def.deps) {
-    extractDependency(def.deps, ngMocksUniverse.config.get('deps'));
-  }
-
+const excludeInterceptors = (provider: any, provide: any): boolean => {
   if (
     ngMocksUniverse.builtProviders.has(NG_MOCKS_INTERCEPTORS) &&
     ngMocksUniverse.builtProviders.get(NG_MOCKS_INTERCEPTORS) === null &&
-    isNgInjectionToken(provider) &&
-    provider.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
-    provider !== def
+    isNgInjectionToken(provide) &&
+    provide.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
+    provide !== provider
   ) {
-    if (def.useFactory || def.useValue) {
-      /* istanbul ignore else */
-      if (changed) {
-        changed(true);
-      }
-
-      return;
+    if (provider.useFactory || provider.useValue) {
+      return true;
     }
-    const interceptor = def.useExisting || def.useClass;
+    const interceptor = provider.useExisting || provider.useClass;
     if (!ngMocksUniverse.builtProviders.has(interceptor) || ngMocksUniverse.builtProviders.get(interceptor) === null) {
-      /* istanbul ignore else */
-      if (changed) {
-        changed(true);
-      }
-
-      return;
+      return true;
     }
   }
 
-  // Then we check decisions whether we should keep or replace a def.
-  if (ngMocksUniverse.builtProviders.has(provider)) {
-    mockDef = ngMocksUniverse.builtProviders.get(provider);
-    if (mockDef === provider) {
-      mockDef = def;
+  return false;
+};
+
+const parseProvider = (
+  provider: any,
+  callback: any,
+): {
+  change: () => void;
+  multi: boolean;
+  provide: any;
+} => {
+  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+  const multi = provider !== provide && !!provider.multi;
+
+  return {
+    change: () => {
+      if (callback) {
+        callback();
+      }
+    },
+    multi,
+    provide,
+  };
+};
+
+// if the provider is a value, we need to go through the value and to replace all mock instances.
+const replaceWithMocks = (provider: any, provide: any, mockDef: any) => {
+  if (provide !== provider && mockDef && mockDef.useValue) {
+    const useValue = helperMockService.replaceWithMocks(mockDef.useValue);
+
+    return useValue === mockDef.useValue
+      ? mockDef
+      : {
+          ...mockDef,
+          useValue,
+        };
+  }
+
+  return mockDef;
+};
+
+const createMockProvider = (provider: any, provide: any) => {
+  let mockDef: any;
+
+  // Then we check decisions whether we should keep or replace a provider.
+  if (ngMocksUniverse.builtProviders.has(provide)) {
+    mockDef = ngMocksUniverse.builtProviders.get(provide);
+    if (mockDef === provide) {
+      mockDef = provider;
     } else if (mockDef === undefined) {
       mockDef = {
-        provide: provider,
+        provide,
         useValue: undefined,
       };
     }
   }
 
   if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('depsSkip')?.add(provider);
-    mockDef = def;
+    ngMocksUniverse.config.get('depsSkip')?.add(provide);
+    mockDef = provider;
   }
   if (!mockDef) {
-    mockDef = MockProvider(def);
-  }
-  // if provider is a value, we need to go through the value and to replace all mock instances.
-  if (provider !== def && mockDef && mockDef.useValue) {
-    const useValue = mockServiceHelper.replaceWithMocks(mockDef.useValue);
-    mockDef =
-      useValue === mockDef.useValue
-        ? mockDef
-        : {
-            ...mockDef,
-            useValue,
-          };
+    mockDef = mockProvider(provider);
   }
 
-  if (!isNgInjectionToken(provider) || def !== mockDef) {
-    resolutions.set(provider, mockDef);
-  }
+  return replaceWithMocks(provider, provide, mockDef);
+};
+
+const areEqualDefs = (mockDef: any, provider: any, provide: any): boolean => {
   let providerDiffers = false;
   let defDiffers = !mockDef;
-  if (def && mockDef && !defDiffers) {
-    defDiffers = anyDiffers(def, mockDef, 'provide', 'useValue', 'useClass', 'useExisting', 'useFactory', 'deps');
+  if (provider && mockDef && !defDiffers) {
+    defDiffers = anyDiffers(provider, mockDef, 'provide', 'useValue', 'useClass', 'useExisting', 'useFactory', 'deps');
   }
-  if (def === provider && mockDef !== def) {
+  if (provider === provide && mockDef !== provider) {
     providerDiffers = true;
-  } else if (def !== provider && defDiffers) {
+  } else if (provider !== provide && defDiffers) {
     providerDiffers = true;
-  }
-  if (changed && providerDiffers) {
-    changed(true);
   }
 
+  return !providerDiffers;
+};
+
+const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
+  //  we shouldn't touch excluded providers.
+  if (ngMocksUniverse.builtProviders.has(provide) && ngMocksUniverse.builtProviders.get(provide) === null) {
+    return true;
+  }
+
+  if (provide !== provider && provider.deps) {
+    extractDependency(provider.deps, ngMocksUniverse.config.get('deps'));
+  }
+
+  return excludeInterceptors(provider, provide);
+};
+
+// tries to resolve a provider based on current universe state.
+export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
+  const { provide, multi, change } = parseProvider(provider, changed);
+  //  we shouldn't touch our system providers.
+  if (typeof provider === 'object' && provider.useExisting && provider.useExisting.__ngMocksSkip) {
+    return provider;
+  }
+  if (isPreconfiguredDependency(provider, provide)) {
+    return change();
+  }
+  if (resolutions.has(provide)) {
+    return createFromResolution(provide, resolutions.get(provide), multi);
+  }
+
+  const mockDef = createMockProvider(provider, provide);
+  if (!isNgInjectionToken(provide) || provider !== mockDef) {
+    resolutions.set(provide, mockDef);
+  }
+  if (!areEqualDefs(mockDef, provider, provide)) {
+    change();
+  }
   // Touching only when we really provide a value.
   if (mockDef) {
-    ngMocksUniverse.touches.add(provider);
+    ngMocksUniverse.touches.add(provide);
   }
 
   return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;

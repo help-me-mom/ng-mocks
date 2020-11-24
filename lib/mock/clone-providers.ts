@@ -3,7 +3,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
-import mockServiceHelper from '../mock-service/helper';
+import helperMockService from '../mock-service/helper.mock-service';
 
 import toExistingProvider from './to-existing-provider';
 
@@ -25,7 +25,7 @@ export default (mockType: AnyType<any>, providers?: any[]): { providers: Provide
       continue;
     }
 
-    const mock = mockServiceHelper.resolveProvider(providerDef, resolutions);
+    const mock = helperMockService.resolveProvider(providerDef, resolutions);
     result.push(mock);
   }
 

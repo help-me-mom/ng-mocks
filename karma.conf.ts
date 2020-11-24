@@ -1,4 +1,4 @@
-// tslint:disable no-console no-var-requires no-require-imports
+// tslint:disable no-console no-var-requires no-require-imports max-func-body-length
 
 import { KarmaTypescriptConfig } from 'karma-typescript';
 

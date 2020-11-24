@@ -2,7 +2,7 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 
-import getLastFixture from './func.get-last-fixture';
+import funcGetLastFixture from './func.get-last-fixture';
 
 function nestedCheck<T>(
   result: T[],
@@ -24,7 +24,7 @@ export default <T>(...args: any[]): T[] => {
     typeof args[0] !== 'object' ? undefined : args[0].debugElement ? args[0].debugElement : args[0];
   const sel: Type<any> = el ? args[1] : args[0];
 
-  const debugElement = el || getLastFixture()?.debugElement;
+  const debugElement = el || funcGetLastFixture()?.debugElement;
 
   const result: T[] = [];
   nestedCheck<T>(result, debugElement, node => {

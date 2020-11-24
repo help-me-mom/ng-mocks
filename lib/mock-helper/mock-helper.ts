@@ -6,18 +6,18 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { MockedFunction } from '../mock-service/types';
 
-import ngMocksFaster from './mock-helper.faster';
-import ngMocksFind from './mock-helper.find';
-import ngMocksFindAll from './mock-helper.findAll';
-import ngMocksFindInstance from './mock-helper.findInstance';
-import ngMocksFindInstances from './mock-helper.findInstances';
-import ngMocksFlushTestBed from './mock-helper.flushTestBed';
-import ngMocksGet from './mock-helper.get';
-import ngMocksGuts from './mock-helper.guts';
-import ngMocksInput from './mock-helper.input';
-import ngMocksOutput from './mock-helper.output';
-import ngMocksReset from './mock-helper.reset';
-import ngMocksStub from './mock-helper.stub';
+import mockHelperFaster from './mock-helper.faster';
+import mockHelperFind from './mock-helper.find';
+import mockHelperFindAll from './mock-helper.findAll';
+import mockHelperFindInstance from './mock-helper.findInstance';
+import mockHelperFindInstances from './mock-helper.findInstances';
+import mockHelperFlushTestBed from './mock-helper.flushTestBed';
+import mockHelperGet from './mock-helper.get';
+import mockHelperGuts from './mock-helper.guts';
+import mockHelperInput from './mock-helper.input';
+import mockHelperOutput from './mock-helper.output';
+import mockHelperReset from './mock-helper.reset';
+import mockHelperStub from './mock-helper.stub';
 
 /**
  * @see https://github.com/ike18t/ng-mocks#ngmocks
@@ -208,16 +208,16 @@ export const ngMocks: {
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
-  faster: ngMocksFaster,
-  find: ngMocksFind,
-  findAll: ngMocksFindAll,
-  findInstance: ngMocksFindInstance,
-  findInstances: ngMocksFindInstances,
-  flushTestBed: ngMocksFlushTestBed,
-  get: ngMocksGet,
-  guts: ngMocksGuts,
-  input: ngMocksInput,
-  output: ngMocksOutput,
-  reset: ngMocksReset,
-  stub: ngMocksStub,
+  faster: mockHelperFaster,
+  find: mockHelperFind,
+  findAll: mockHelperFindAll,
+  findInstance: mockHelperFindInstance,
+  findInstances: mockHelperFindInstances,
+  flushTestBed: mockHelperFlushTestBed,
+  get: mockHelperGet,
+  guts: mockHelperGuts,
+  input: mockHelperInput,
+  output: mockHelperOutput,
+  reset: mockHelperReset,
+  stub: mockHelperStub,
 };

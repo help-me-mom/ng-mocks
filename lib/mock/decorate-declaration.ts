@@ -6,7 +6,7 @@ import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
 import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
-import mockServiceHelper from '../mock-service/helper';
+import helperMockService from '../mock-service/helper.mock-service';
 import cloneProviders from '../mock/clone-providers';
 import toExistingProvider from '../mock/to-existing-provider';
 
@@ -24,14 +24,11 @@ export default <T extends Component | Directive>(
 ): T => {
   const data = cloneProviders(mock, meta.providers || []);
   const providers = [toExistingProvider(source, mock), ...data.providers];
-  const options: T = {
-    ...params,
-    providers,
-  };
+  const options: T = { ...params, providers };
 
   if (data.setNgValueAccessor === undefined) {
     data.setNgValueAccessor =
-      mockServiceHelper.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
+      helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
   }
   MockOf(source, {
     config: ngMocksUniverse.config.get(source),
@@ -40,7 +37,7 @@ export default <T extends Component | Directive>(
     viewChildRefs: meta.viewChildRefs,
   })(mock);
 
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (meta.queries) {
     decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
   }

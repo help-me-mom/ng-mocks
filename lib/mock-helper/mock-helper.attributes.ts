@@ -3,7 +3,7 @@ import { core } from '@angular/compiler';
 import { directiveResolver } from '../common/core.reflect';
 import { MockedDebugElement } from '../mock-render/types';
 
-import get from './mock-helper.get';
+import mockHelperGet from './mock-helper.get';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
@@ -17,11 +17,11 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
     try {
       meta = directiveResolver.resolve(token);
     } catch (e) {
-      /* istanbul ignore next */
+      // istanbul ignore next
       throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
     }
 
-    /* istanbul ignore if */
+    // istanbul ignore if
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
       const [prop, alias = ''] = attrDef.split(':', 2).map(v => v.trim());
       if (!alias && prop !== sel) {
@@ -30,7 +30,7 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
       if (alias && alias !== sel) {
         continue;
       }
-      const directive: any = get(el, token);
+      const directive: any = mockHelperGet(el, token);
 
       return directive[prop];
     }

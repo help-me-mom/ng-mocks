@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { MetadataOverride, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapEntries } from '../common/core.helpers';
 import { NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/core.tokens';
@@ -11,6 +11,45 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockBuilderPerformance } from './mock-builder-performance';
 import { IMockBuilder } from './types';
 
+const extractTokens = (
+  providers: any,
+): {
+  mocks?: Map<any, any>;
+  overrides?: Map<AnyType<any>, MetadataOverride<any>>;
+} => {
+  let mocks: Map<any, any> | undefined;
+  let overrides: Map<AnyType<any>, MetadataOverride<any>> | undefined;
+
+  for (const provide of flatten(providers || [])) {
+    if (typeof provide !== 'object') {
+      continue;
+    }
+    if (provide.provide === NG_MOCKS) {
+      mocks = provide.useValue;
+    }
+    if (provide.provide === NG_MOCKS_OVERRIDES) {
+      overrides = provide.useValue;
+    }
+  }
+
+  return {
+    mocks,
+    overrides,
+  };
+};
+
+const applyOverrides = (testBed: TestBedStatic, overrides: Map<AnyType<any>, MetadataOverride<any>>): void => {
+  for (const [def, override] of mapEntries(overrides)) {
+    (TestBed as any).ngMocksOverrides.add(def);
+    // istanbul ignore else
+    if (isNgDef(def, 'c')) {
+      testBed.overrideComponent(def, override);
+    } else if (isNgDef(def, 'd')) {
+      testBed.overrideDirective(def, override);
+    }
+  }
+};
+
 /**
  * @see https://github.com/ike18t/ng-mocks#mockbuilder
  */
@@ -20,22 +59,10 @@ export function MockBuilder(
 ): IMockBuilder {
   if (!(TestBed as any).ngMocks) {
     const configureTestingModule = TestBed.configureTestingModule;
+
     TestBed.configureTestingModule = (moduleDef: TestModuleMetadata) => {
       ngMocksUniverse.global.set('bullet:customized', true);
-      let mocks: Map<any, any> | undefined;
-      let overrides: Map<AnyType<any>, MetadataOverride<any>> = new Map();
-
-      for (const provide of flatten(moduleDef.providers || [])) {
-        if (typeof provide !== 'object') {
-          continue;
-        }
-        if (provide.provide === NG_MOCKS) {
-          mocks = provide.useValue;
-        }
-        if (provide.provide === NG_MOCKS_OVERRIDES) {
-          overrides = provide.useValue;
-        }
-      }
+      const { mocks, overrides } = extractTokens(moduleDef.providers);
 
       if (mocks) {
         ngMocks.flushTestBed();
@@ -45,19 +72,14 @@ export function MockBuilder(
         return testBed;
       }
 
-      /* istanbul ignore else */
+      // istanbul ignore else
       // Now we can apply overrides.
       if (!(TestBed as any).ngMocksOverrides) {
         (TestBed as any).ngMocksOverrides = new Set();
       }
-      for (const [def, override] of mapEntries(overrides)) {
-        (TestBed as any).ngMocksOverrides.add(def);
-        /* istanbul ignore else */
-        if (isNgDef(def, 'c')) {
-          testBed.overrideComponent(def, override);
-        } else if (isNgDef(def, 'd')) {
-          testBed.overrideDirective(def, override);
-        }
+      // istanbul ignore else
+      if (overrides) {
+        applyOverrides(testBed, overrides);
       }
 
       return testBed;
@@ -79,7 +101,7 @@ export function MockBuilder(
       if ((TestBed as any).ngMocksOverrides) {
         ngMocks.flushTestBed();
         for (const def of (TestBed as any).ngMocksOverrides) {
-          /* istanbul ignore else */
+          // istanbul ignore else
           if (isNgDef(def, 'c')) {
             TestBed.overrideComponent(def, {});
           } else if (isNgDef(def, 'd')) {

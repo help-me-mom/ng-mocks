@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { directiveResolver } from '../common/core.reflect';
 import { Type } from '../common/core.types';
 import { ngMocks } from '../mock-helper/mock-helper';
-import mockServiceHelper from '../mock-service/helper';
+import helperMockService from '../mock-service/helper.mock-service';
 
 import { IMockRenderOptions, MockedComponentFixture } from './types';
 
@@ -32,38 +32,37 @@ const defineProperty = (componentInstance: any, key: string, params: any) => {
   });
 };
 
+const createProperty = (pointComponentInstance: Record<keyof any, any>, key: string) => {
+  const def = helperMockService.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
+  const keyType = def ? undefined : typeof pointComponentInstance[key];
+
+  return def?.value || keyType === 'function'
+    ? {
+        value: (...args: any[]) => pointComponentInstance[key](...args),
+      }
+    : {
+        get: () => pointComponentInstance[key],
+        set: (v: any) => (pointComponentInstance[key] = v),
+      };
+};
+
 const extractAllKeys = (instance: object) => [
-  ...mockServiceHelper.extractPropertiesFromPrototype(Object.getPrototypeOf(instance)),
-  ...mockServiceHelper.extractMethodsFromPrototype(Object.getPrototypeOf(instance)),
+  ...helperMockService.extractPropertiesFromPrototype(Object.getPrototypeOf(instance)),
+  ...helperMockService.extractMethodsFromPrototype(Object.getPrototypeOf(instance)),
   ...Object.keys(instance),
 ];
 
 const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
 
 const installProxy = (componentInstance: Record<keyof any, any>, pointComponentInstance: Record<keyof any, any>) => {
-  const keys = extractAllKeys(pointComponentInstance);
   const exists = extractOwnKeys(componentInstance);
 
-  for (const key of keys) {
+  for (const key of extractAllKeys(pointComponentInstance)) {
     if (exists.indexOf(key) !== -1) {
       continue;
     }
 
-    const def = mockServiceHelper.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
-    const keyType = def ? undefined : typeof pointComponentInstance[key];
-
-    defineProperty(
-      componentInstance,
-      key,
-      def?.value || keyType === 'function'
-        ? {
-            value: (...args: any[]) => pointComponentInstance[key](...args),
-          }
-        : {
-            get: () => pointComponentInstance[key],
-            set: (v: any) => (pointComponentInstance[key] = v),
-          },
-    );
+    defineProperty(componentInstance, key, createProperty(pointComponentInstance, key));
 
     exists.push(key);
   }
@@ -76,7 +75,7 @@ const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
 
   for (const definition of attr) {
     const [property, alias] = definition.split(': ');
-    /* istanbul ignore else */
+    // istanbul ignore else
     if (alias && params) {
       mockTemplate += ` ${wrap(alias)}="${alias}${type === 'o' ? solveOutput(params[alias]) : ''}"`;
     } else if (property && params) {
@@ -112,32 +111,37 @@ const generateFixture = ({ params, options, inputs, outputs }: any) => {
       for (const key of Object.keys(params || {})) {
         (this as any)[key] = params[key];
       }
-      if (!params && inputs) {
-        for (const definition of inputs) {
-          const [property] = definition.split(': ');
-          (this as any)[property] = undefined;
-        }
+      for (const definition of !params && inputs ? inputs : []) {
+        const [property] = definition.split(': ');
+        (this as any)[property] = undefined;
       }
-      if (!params && outputs) {
-        for (const definition of outputs) {
-          const [property] = definition.split(': ');
-          (this as any)[property] = new EventEmitter();
-        }
+      for (const definition of !params && outputs ? outputs : []) {
+        const [property] = definition.split(': ');
+        (this as any)[property] = new EventEmitter();
       }
     }
   }
 
   Component(options)(MockRenderComponent);
-
-  // Soft reset of TestBed.
   ngMocks.flushTestBed();
-
-  // Injection of our template.
   TestBed.configureTestingModule({
     declarations: [MockRenderComponent],
   });
 
   return TestBed.createComponent(MockRenderComponent);
+};
+
+const tryWhen = (flag: boolean, callback: () => void) => {
+  if (!flag) {
+    return;
+  }
+
+  try {
+    // ivy throws Error: Expecting instance of DOM Element
+    callback();
+  } catch (e) {
+    // nothing to do
+  }
 };
 
 /**
@@ -185,37 +189,21 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   let outputs: string[] | undefined;
   let selector: string | undefined;
   try {
-    const meta = typeof template !== 'string' ? directiveResolver.resolve(template) : {};
-    inputs = meta.inputs;
-    outputs = meta.outputs;
-    selector = meta.selector;
+    ({ inputs = undefined, outputs = undefined, selector = undefined } =
+      typeof template !== 'string' ? directiveResolver.resolve(template) : {});
   } catch (e) {
-    /* istanbul ignore next */
+    // istanbul ignore next
     throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
 
   const mockTemplate = generateTemplate(template, { selector, params, inputs, outputs });
-
-  const options: Component = {
-    providers: flagsObject.providers,
-    selector: 'mock-render',
-    template: mockTemplate,
-  };
-
+  const options: Component = { providers: flagsObject.providers, selector: 'mock-render', template: mockTemplate };
   const fixture: any = generateFixture({ params, options, inputs, outputs });
   if (flagsObject.detectChanges) {
     fixture.detectChanges();
   }
   fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
-
-  if (!params) {
-    try {
-      // ivy throws Error: Expecting instance of DOM Element
-      installProxy(fixture.componentInstance, fixture.point?.componentInstance);
-    } catch (e) {
-      // nothing to do
-    }
-  }
+  tryWhen(!params, () => installProxy(fixture.componentInstance, fixture.point?.componentInstance));
 
   return fixture;
 }

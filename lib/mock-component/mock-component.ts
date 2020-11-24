@@ -20,11 +20,55 @@ import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedComponent } from './types';
 
+const mixRender = (
+  instance: MockControlValueAccessor & Record<keyof any, any>,
+  changeDetector: ChangeDetectorRef,
+): void => {
+  // istanbul ignore next
+  const refs = instance.__ngMocksConfig?.viewChildRefs || new Map();
+
+  // Providing a method to render any @ContentChild based on its selector.
+  instance.__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
+    const key = refs.get(contentChildSelector);
+    let templateRef: TemplateRef<any>;
+    let viewContainer: ViewContainerRef;
+    if (key) {
+      instance[`mockRender_${contentChildSelector}`] = true;
+      changeDetector.detectChanges();
+      viewContainer = instance[`__mockView_${key}`];
+      templateRef = instance[key];
+      if (viewContainer && templateRef) {
+        viewContainer.clear();
+        viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
+        changeDetector.detectChanges();
+      }
+    }
+  };
+};
+
+const mixHide = (
+  instance: MockControlValueAccessor & Record<keyof any, any>,
+  changeDetector: ChangeDetectorRef,
+): void => {
+  // istanbul ignore next
+  const refs = instance.__ngMocksConfig?.viewChildRefs || new Map();
+
+  // Providing method to hide any @ContentChild based on its selector.
+  instance.__hide = (contentChildSelector: string) => {
+    const key = refs.get(contentChildSelector);
+    if (key) {
+      instance[`mockRender_${contentChildSelector}`] = false;
+      changeDetector.detectChanges();
+    }
+  };
+};
+
 class ComponentMockBase extends MockControlValueAccessor implements AfterContentInit {
-  /* istanbul ignore next */
+  // istanbul ignore next
   public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
     super(injector);
-    this.__ngMocksInstall(changeDetector);
+    mixRender(this, changeDetector);
+    mixHide(this, changeDetector);
   }
 
   public ngAfterContentInit(): void {
@@ -42,37 +86,6 @@ class ComponentMockBase extends MockControlValueAccessor implements AfterContent
       }
       (this as any).__rendered = true;
     }
-  }
-
-  private __ngMocksInstall(changeDetector: ChangeDetectorRef): void {
-    const refs = (this.__ngMocksConfig as any).viewChildRefs;
-
-    // Providing method to hide any @ContentChild based on its selector.
-    (this as any).__hide = (contentChildSelector: string) => {
-      const key = refs.get(contentChildSelector);
-      if (key) {
-        (this as any)[`mockRender_${contentChildSelector}`] = false;
-        changeDetector.detectChanges();
-      }
-    };
-
-    // Providing a method to render any @ContentChild based on its selector.
-    (this as any).__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
-      const key = refs.get(contentChildSelector);
-      let templateRef: TemplateRef<any>;
-      let viewContainer: ViewContainerRef;
-      if (key) {
-        (this as any)[`mockRender_${contentChildSelector}`] = true;
-        changeDetector.detectChanges();
-        viewContainer = (this as any)[`__mockView_${key}`];
-        templateRef = (this as any)[key];
-        if (viewContainer && templateRef) {
-          viewContainer.clear();
-          viewContainer.createEmbeddedView(templateRef, { ...variables, $implicit } as any);
-          changeDetector.detectChanges();
-        }
-      }
-    };
   }
 }
 
@@ -101,14 +114,14 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
   try {
     meta = directiveResolver.resolve(component);
   } catch (e) {
-    /* istanbul ignore next */
+    // istanbul ignore next
     throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
   }
   const { exportAs, inputs, outputs, queries, selector, providers } = meta;
 
   let template = `<ng-content></ng-content>`;
   const viewChildRefs = new Map<string, string>();
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (queries) {
     const queriesKeys = Object.keys(queries);
     const templateQueries = queriesKeys
@@ -138,7 +151,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
   }
 
   class ComponentMock extends ComponentMockBase {
-    /* istanbul ignore next */
+    // istanbul ignore next
     public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
       super(changeDetector, injector);
     }
@@ -150,7 +163,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
   const options = decorateDeclaration(component, ComponentMock, mockMeta, mockParams);
   Component(options)(ComponentMock);
 
-  /* istanbul ignore else */
+  // istanbul ignore else
   if (ngMocksUniverse.flags.has('cacheComponent')) {
     ngMocksUniverse.cacheDeclarations.set(component, ComponentMock);
   }

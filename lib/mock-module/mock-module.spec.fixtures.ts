@@ -89,7 +89,7 @@ export class LogicRootModule {}
 })
 export class AppRoutingModule {}
 
-/* Assets for ModuleWithProviders BEGIN */
+// BEGIN: Assets for ModuleWithProviders
 
 // Simple module, one of components requires some special provider.
 @NgModule({
@@ -143,4 +143,4 @@ export class CustomWithServiceComponent {
 })
 export class WithServiceModule {}
 
-/* Assets for ModuleWithProviders END */
+// END: Assets for ModuleWithProviders

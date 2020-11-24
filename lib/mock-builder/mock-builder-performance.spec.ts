@@ -194,14 +194,14 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
   });
-  it('accepts the same providerDef useFactory', () => {
+  it('accepts the same providerDef helperUseFactory', () => {
     const factory = () => 1;
     const ngModule1 = MockBuilder().provide({ provide: Target1Service, useFactory: factory }).build();
     const ngModule2 = MockBuilder().provide({ provide: Target1Service, useFactory: factory }).build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
-  it('fails on a different providerDef useFactory', () => {
+  it('fails on a different providerDef helperUseFactory', () => {
     const ngModule1 = MockBuilder()
       .provide({ provide: Target1Service, useFactory: () => 1 })
       .build();

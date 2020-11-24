@@ -5,7 +5,7 @@ import { NgControl } from '@angular/forms';
 import { AnyType } from 'ng-mocks/dist/lib/common/core.types';
 
 import { IMockBuilderConfig } from '../mock-builder/types';
-import mockServiceHelper from '../mock-service/helper';
+import helperMockService from '../mock-service/helper.mock-service';
 
 import ngMocksUniverse from './ng-mocks-universe';
 
@@ -38,11 +38,11 @@ const applyOutputs = (instance: Mock & Record<keyof any, any>) => {
 
 const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
   for (const prop of [
-    ...mockServiceHelper.extractMethodsFromPrototype(prototype),
-    ...mockServiceHelper.extractPropertiesFromPrototype(prototype),
+    ...helperMockService.extractMethodsFromPrototype(prototype),
+    ...helperMockService.extractPropertiesFromPrototype(prototype),
   ]) {
-    const descriptor = mockServiceHelper.extractPropertyDescriptor(prototype, prop);
-    /* istanbul ignore next */
+    const descriptor = helperMockService.extractPropertyDescriptor(prototype, prop);
+    // istanbul ignore next
     if (!descriptor) {
       continue;
     }
@@ -51,21 +51,21 @@ const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
 };
 
 const applyMethods = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
-  for (const method of mockServiceHelper.extractMethodsFromPrototype(prototype)) {
+  for (const method of helperMockService.extractMethodsFromPrototype(prototype)) {
     if (instance[method] || Object.getOwnPropertyDescriptor(instance, method)) {
       continue;
     }
-    mockServiceHelper.mock(instance, method);
+    helperMockService.mock(instance, method);
   }
 };
 
 const applyProps = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
-  for (const prop of mockServiceHelper.extractPropertiesFromPrototype(prototype)) {
+  for (const prop of helperMockService.extractPropertiesFromPrototype(prototype)) {
     if (instance[prop] || Object.getOwnPropertyDescriptor(instance, prop)) {
       continue;
     }
-    mockServiceHelper.mock(instance, prop, 'get');
-    mockServiceHelper.mock(instance, prop, 'set');
+    helperMockService.mock(instance, prop, 'get');
+    helperMockService.mock(instance, prop, 'set');
   }
 };
 

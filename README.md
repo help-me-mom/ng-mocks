@@ -6,7 +6,7 @@
 
 # ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
-`ng-mocks` is a library providing **helper functions for creating mock components, directives, pipes, modules and services in Angular**.
+`ng-mocks` is a library providing helper functions for **creating mock components, directives, pipes, modules and services in Angular**.
 Whether you need a mock child component, or any other annoying dependency, `ng-mocks` has a tool to turn this declaration into its mock copy,
 keeping its interface as it is, but suppressing its implementation.
 
@@ -73,6 +73,8 @@ I'm open to contributions.
   - [`Error: Type is part of the declarations of 2 modules`](#how-to-fix-error-type-is-part-of-the-declarations-of-2-modules)
   - [`Error: Directive has no selector, please add it!`](#how-to-fix-error-directive-has-no-selector-please-add-it)
   - [`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element)
+
+### External resources
 
 - [How to test Angular application](https://ng-mocks.github.io/)
 - [How to configure CI to execute Angular tests automatically](https://satantime.github.io/puppeteer-node/)
@@ -978,7 +980,7 @@ a type of `MockedModule<T>` and provides:
 - dummy abstract methods for services with a `useClass` definition
 - mock dummies of tokens with a `useClass` definition
 - respect of tokens with a `useExisting` definition
-- empty objects instead of tokens with a `useFactory` definition
+- empty objects instead of tokens with a `helperUseFactory` definition
 - base primitives instead of tokens with a `useValue` definition
 - mock copies of tokens with a `useValue` definition
 
