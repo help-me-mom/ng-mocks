@@ -1,6 +1,7 @@
 import { Provider } from '@angular/core';
 
 import coreConfig from '../common/core.config';
+import { Type } from '../common/core.types';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -9,44 +10,51 @@ import { MockService } from './mock-service';
 
 const { neverMockProvidedFunction, neverMockToken } = coreConfig;
 
+const applyMissedClassProperties = (instance: any, useClass: Type<any>) => {
+  const existing = Object.getOwnPropertyNames(instance);
+  const child = MockService(useClass);
+
+  for (const name of Object.getOwnPropertyNames(child)) {
+    if (existing.indexOf(name) !== -1) {
+      continue;
+    }
+    const def = Object.getOwnPropertyDescriptor(child, name);
+    // istanbul ignore else
+    if (def) {
+      Object.defineProperty(instance, name, def);
+    }
+  }
+};
+
 const createFactoryProvider = (provider: any, provide: any) =>
   helperUseFactory(provide, () => {
     const instance = MockService(provide);
     // Magic below adds missed properties to the instance to
     // fulfill missed abstract methods.
     if (provide !== provider && Object.keys(provider).indexOf('useClass') !== -1) {
-      const existing = Object.getOwnPropertyNames(instance);
-      const child = MockService(provider.useClass);
-      for (const name of Object.getOwnPropertyNames(child)) {
-        if (existing.indexOf(name) !== -1) {
-          continue;
-        }
-        const def = Object.getOwnPropertyDescriptor(child, name);
-        // istanbul ignore else
-        if (def) {
-          Object.defineProperty(instance, name, def);
-        }
-      }
+      applyMissedClassProperties(instance, provider.useClass);
     }
 
     return instance;
   });
+
+const normalizePrimitives = (value: any) =>
+  typeof value === 'boolean'
+    ? false
+    : typeof value === 'number'
+    ? 0
+    : typeof value === 'string'
+    ? ''
+    : value === null
+    ? null
+    : undefined;
 
 const createValueProvider = (provider: any, provide: any) =>
   provider.useValue && typeof provider.useValue === 'object'
     ? helperUseFactory(provide, () => MockService(provider.useValue))
     : {
         provide,
-        useValue:
-          typeof provider.useValue === 'boolean'
-            ? false
-            : typeof provider.useValue === 'number'
-            ? 0
-            : typeof provider.useValue === 'string'
-            ? ''
-            : provider.useValue === null
-            ? null
-            : undefined,
+        useValue: normalizePrimitives(provider.useValue),
       };
 
 const createClassProvider = (provider: any, provide: any) =>
@@ -55,11 +63,13 @@ const createClassProvider = (provider: any, provide: any) =>
     ? provider
     : helperUseFactory(provide, () => MockService(provider.useClass));
 
-const createMockProvider = (provider: any, provide: any): Provider | undefined => {
+const createMockProvider = (provider: any, provide: any, cacheProviders: Map<any, any>): Provider | undefined => {
   let mockProvider: Provider | undefined;
-
   if (typeof provide === 'function') {
     mockProvider = createFactoryProvider(provider, provide);
+  }
+  if (provide === provider && mockProvider && cacheProviders) {
+    cacheProviders.set(provide, mockProvider);
   }
 
   return mockProvider;
@@ -112,10 +122,6 @@ export default function (provider: any): Provider | undefined {
   if (provide === provider && cacheProviders && cacheProviders.has(provide)) {
     return cacheProviders.get(provide);
   }
-  const mockProvider = createMockProvider(provider, provide);
-  if (provide === provider && mockProvider && cacheProviders) {
-    cacheProviders.set(provide, mockProvider);
-  }
 
-  return mockProvider || handleProvider(provider, provide);
+  return createMockProvider(provider, provide, cacheProviders) || handleProvider(provider, provide);
 }

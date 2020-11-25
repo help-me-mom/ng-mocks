@@ -12,12 +12,15 @@ import helperMockService from '../mock-service/helper.mock-service';
 
 import { MockModule } from './mock-module';
 
+const processDefMap: Array<[any, any]> = [
+  ['c', MockComponent],
+  ['d', MockDirective],
+  ['p', MockPipe],
+];
+
 const processDef = (def: any) => {
-  if (isNgDef(def, 'm')) {
-    return MockModule(def);
-  }
-  if (isNgModuleDefWithProviders(def)) {
-    return MockModule(def);
+  if (isNgDef(def, 'm') || isNgModuleDefWithProviders(def)) {
+    return MockModule(def as any);
   }
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return ngMocksUniverse.builtDeclarations.get(def);
@@ -25,15 +28,10 @@ const processDef = (def: any) => {
   if (ngMocksUniverse.flags.has('skipMock')) {
     return def;
   }
-  if (isNgDef(def, 'c')) {
-    return MockComponent(def);
-  }
-  if (isNgDef(def, 'd')) {
-    return MockDirective(def);
-  }
-  // istanbul ignore else
-  if (isNgDef(def, 'p')) {
-    return MockPipe(def);
+  for (const [flag, func] of processDefMap) {
+    if (isNgDef(def, flag)) {
+      return func(def);
+    }
   }
 };
 

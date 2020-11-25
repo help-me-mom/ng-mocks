@@ -68,23 +68,21 @@ const installProxy = (componentInstance: Record<keyof any, any>, pointComponentI
   }
 };
 
+const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i' ? `[${prop}]` : `(${prop})`);
+
+const generateTemplateAttrWithParams = (params: any, prop: string, type: 'i' | 'o'): string =>
+  ` ${generateTemplateAttrWrap(prop, type)}="${prop}${type === 'o' ? solveOutput(params[prop]) : ''}"`;
+
+const generateTemplateAttrWithoutParams = (key: string, value: string, type: 'i' | 'o'): string =>
+  ` ${generateTemplateAttrWrap(key, type)}="${value}${type === 'o' ? '.emit($event)' : ''}"`;
+
 const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
   let mockTemplate = '';
-
-  const wrap = (prop: string) => (type === 'i' ? `[${prop}]` : `(${prop})`);
-
   for (const definition of attr) {
     const [property, alias] = definition.split(': ');
-    // istanbul ignore else
-    if (alias && params) {
-      mockTemplate += ` ${wrap(alias)}="${alias}${type === 'o' ? solveOutput(params[alias]) : ''}"`;
-    } else if (property && params) {
-      mockTemplate += ` ${wrap(property)}="${property}${type === 'o' ? solveOutput(params[property]) : ''}"`;
-    } else if (alias && !params) {
-      mockTemplate += ` ${wrap(alias)}="${property}${type === 'o' ? '.emit($event)' : ''}"`;
-    } else if (!params) {
-      mockTemplate += ` ${wrap(property)}="${property}${type === 'o' ? '.emit($event)' : ''}"`;
-    }
+    mockTemplate += params
+      ? generateTemplateAttrWithParams(params, alias || property, type)
+      : generateTemplateAttrWithoutParams(alias || property, property, type);
   }
 
   return mockTemplate;
@@ -105,20 +103,29 @@ const generateTemplate = (declaration: any, { selector, params, inputs, outputs 
   return mockTemplate;
 };
 
+const applyParamsToFixtureInstance = (
+  instance: Record<keyof any, any>,
+  params: any,
+  inputs: string[],
+  outputs: string[],
+): void => {
+  for (const key of Object.keys(params || {})) {
+    instance[key] = params[key];
+  }
+  for (const definition of !params && inputs ? inputs : []) {
+    const [property] = definition.split(': ');
+    instance[property] = undefined;
+  }
+  for (const definition of !params && outputs ? outputs : []) {
+    const [property] = definition.split(': ');
+    instance[property] = new EventEmitter();
+  }
+};
+
 const generateFixture = ({ params, options, inputs, outputs }: any) => {
   class MockRenderComponent {
     public constructor() {
-      for (const key of Object.keys(params || {})) {
-        (this as any)[key] = params[key];
-      }
-      for (const definition of !params && inputs ? inputs : []) {
-        const [property] = definition.split(': ');
-        (this as any)[property] = undefined;
-      }
-      for (const definition of !params && outputs ? outputs : []) {
-        const [property] = definition.split(': ');
-        (this as any)[property] = new EventEmitter();
-      }
+      applyParamsToFixtureInstance(this, params, inputs, outputs);
     }
   }
 
@@ -189,7 +196,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   let outputs: string[] | undefined;
   let selector: string | undefined;
   if (typeof template !== 'string') {
-    ({ inputs = undefined, outputs = undefined, selector = undefined } = coreReflectDirectiveResolve(template));
+    ({ inputs, outputs, selector } = coreReflectDirectiveResolve(template));
   }
 
   const mockTemplate = generateTemplate(template, { selector, params, inputs, outputs });

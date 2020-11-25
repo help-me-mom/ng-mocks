@@ -9,6 +9,22 @@ import { AnyType, Type } from './core.types';
 import { isMockedNgDefOf } from './func.is-mocked-ng-def-of';
 import ngMocksUniverse from './ng-mocks-universe';
 
+const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
+  if (mocks && !mocks.has(source)) {
+    throw new Error(`There is no mock for ${source.name}`);
+  }
+  let mock = mocks ? mocks.get(source) : undefined;
+
+  // If we are not in the MockBuilder env we can rely on the current cache.
+  if (!mock && source !== declaration) {
+    mock = declaration;
+  } else if (!mock && ngMocksUniverse.cacheDeclarations.has(source)) {
+    mock = ngMocksUniverse.cacheDeclarations.get(source);
+  }
+
+  return mock;
+};
+
 /**
  * Returns a def of a mock module based on a mock module or a source module.
  *
@@ -48,18 +64,7 @@ export function getMockedNgDefOf(declaration: any, type?: any): any {
   const source = declaration.mockOf ? declaration.mockOf : declaration;
   const mocks = getTestBedInjection(NG_MOCKS);
 
-  if (mocks && !mocks.has(source)) {
-    throw new Error(`There is no mock for ${source.name}`);
-  }
-  let mock = mocks ? mocks.get(source) : undefined;
-
-  // If we are not in the MockBuilder env we can rely on the current cache.
-  if (!mock && source !== declaration) {
-    mock = declaration;
-  } else if (!mock && ngMocksUniverse.cacheDeclarations.has(source)) {
-    mock = ngMocksUniverse.cacheDeclarations.get(source);
-  }
-
+  const mock = getMock(declaration, source, mocks);
   if (mock && !type) {
     return mock;
   }
