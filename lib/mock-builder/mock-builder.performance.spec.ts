@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { Component, Directive, Injectable, InjectionToken, NgModule } from '@angular/core';
 
 import { ngMocks } from '../mock-helper/mock-helper';

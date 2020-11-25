@@ -1,4 +1,3 @@
-import { core } from '@angular/compiler';
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -11,7 +10,7 @@ import {
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { directiveResolver } from '../common/core.reflect';
+import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
@@ -89,6 +88,61 @@ class ComponentMockBase extends MockControlValueAccessor implements AfterContent
   }
 }
 
+const viewChildArgs: any = { read: ViewContainerRef, static: false };
+const viewChildTemplate = (selector: string): string =>
+  `<div *ngIf="mockRender_${selector}" data-key="${selector}"><ng-template #__${selector}></ng-template></div>`;
+
+const generateTemplate = (
+  queries?: Record<keyof any, any>,
+): {
+  template: string;
+  viewChildRefs: Map<string, string>;
+} => {
+  const parts = [`<ng-content></ng-content>`];
+  const viewChildRefs = new Map<string, string>();
+  // istanbul ignore if
+  if (!queries) {
+    return { template: parts.join(''), viewChildRefs };
+  }
+
+  for (const key of Object.keys(queries)) {
+    const query: Query = queries[key];
+    if (query.isViewQuery || typeof query.selector !== 'string') {
+      continue; // ignoring all internal @ViewChild, Type based selector doesn't work properly anyway.
+    }
+    viewChildRefs.set(query.selector, key);
+    queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, viewChildArgs);
+    parts.push(viewChildTemplate(query.selector));
+  }
+
+  return {
+    template: parts.join(''),
+    viewChildRefs,
+  };
+};
+
+const createMockClass = (): Type<any> => {
+  class ComponentMock extends ComponentMockBase {
+    // istanbul ignore next
+    public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
+      super(changeDetector, injector);
+    }
+  }
+
+  (ComponentMock as any).parameters = [ChangeDetectorRef, Injector];
+
+  return ComponentMock;
+};
+
+const decorateClass = (component: Type<any>, mock: Type<any>): void => {
+  const meta = coreReflectDirectiveResolve(component);
+  const { exportAs, inputs, outputs, queries, selector, providers } = meta;
+  const { template, viewChildRefs } = generateTemplate(queries);
+  const mockMeta = { inputs, outputs, providers, queries, viewChildRefs };
+  const mockParams = { exportAs, selector, template };
+  Component(decorateDeclaration(component, mock, mockMeta, mockParams))(mock);
+};
+
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
   return components.map(MockComponent);
 }
@@ -97,8 +151,7 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-component
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
-  // we are inside of an 'it'.
-  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
+  // We are inside of an 'it'. It's fine to to return a mock copy.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(component, 'c');
@@ -110,63 +163,13 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     return ngMocksUniverse.cacheDeclarations.get(component);
   }
 
-  let meta: core.Directive | undefined;
-  try {
-    meta = directiveResolver.resolve(component);
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-  const { exportAs, inputs, outputs, queries, selector, providers } = meta;
-
-  let template = `<ng-content></ng-content>`;
-  const viewChildRefs = new Map<string, string>();
-  // istanbul ignore else
-  if (queries) {
-    const queriesKeys = Object.keys(queries);
-    const templateQueries = queriesKeys
-      .map((key: string) => {
-        const query: Query = queries[key];
-        if (query.isViewQuery) {
-          return ''; // ignoring all internal @ViewChild.
-        }
-        if (typeof query.selector !== 'string') {
-          return ''; // in case of a mock component, Type based selector doesn't work properly anyway.
-        }
-        viewChildRefs.set(query.selector, key);
-        queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, {
-          read: ViewContainerRef,
-          static: false,
-        } as any);
-
-        return `<div *ngIf="mockRender_${query.selector}" data-key="${query.selector}"><ng-template #__${query.selector}></ng-template></div>`;
-      })
-      .join('');
-    if (templateQueries) {
-      template = `
-        ${template}
-        ${templateQueries}
-      `;
-    }
-  }
-
-  class ComponentMock extends ComponentMockBase {
-    // istanbul ignore next
-    public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
-      super(changeDetector, injector);
-    }
-  }
-  (ComponentMock as any).parameters = [ChangeDetectorRef, Injector];
-
-  const mockMeta = { inputs, outputs, providers, queries, viewChildRefs };
-  const mockParams = { exportAs, selector, template };
-  const options = decorateDeclaration(component, ComponentMock, mockMeta, mockParams);
-  Component(options)(ComponentMock);
+  const mock = createMockClass();
+  decorateClass(component, mock);
 
   // istanbul ignore else
   if (ngMocksUniverse.flags.has('cacheComponent')) {
-    ngMocksUniverse.cacheDeclarations.set(component, ComponentMock);
+    ngMocksUniverse.cacheDeclarations.set(component, mock);
   }
 
-  return ComponentMock as any;
+  return mock as any;
 }

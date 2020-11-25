@@ -29,10 +29,10 @@ module.exports = {
       .filter(file => !file.match(/^e2e\//i))
       .map(file => `'${file}'`);
 
-    if (filesForLint.length) {
-      commands.push(`npm run lint -- --fix --force ${filesForLint.join(' ')}`);
-    }
     commands.push(`prettier --write ${files.join(' ')}`);
+    if (filesForLint.length) {
+      commands.push(`npm run lint`);
+    }
 
     return commands;
   },

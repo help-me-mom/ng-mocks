@@ -2,8 +2,8 @@
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { AnyType } from 'ng-mocks/dist/lib/common/core.types';
 
+import { AnyType } from '../common/core.types';
 import { IMockBuilderConfig } from '../mock-builder/types';
 import helperMockService from '../mock-service/helper.mock-service';
 

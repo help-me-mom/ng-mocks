@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { Component, Directive, forwardRef, Optional, Self } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {

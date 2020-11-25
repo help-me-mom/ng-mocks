@@ -12,22 +12,18 @@ export default (mockType: AnyType<any>, providers?: any[]): { providers: Provide
   let setNgValueAccessor: boolean | undefined;
   const resolutions = new Map();
 
-  for (const providerDef of flatten(providers || /* istanbul ignore next */ [])) {
-    const provide =
-      providerDef && typeof providerDef === 'object' && providerDef.provide ? providerDef.provide : providerDef;
+  for (const provider of flatten(providers || /* istanbul ignore next */ [])) {
+    const provide = provider && typeof provider === 'object' && provider.provide ? provider.provide : provider;
     if (provide === NG_VALIDATORS) {
       result.push(toExistingProvider(provide, mockType, true));
-      continue;
-    }
-    if (setNgValueAccessor === undefined && provide === NG_VALUE_ACCESSOR) {
+    } else if (setNgValueAccessor === undefined && provide === NG_VALUE_ACCESSOR) {
       setNgValueAccessor = false;
       result.push(toExistingProvider(provide, mockType, true));
-      continue;
-    }
-
-    const mock = helperMockService.resolveProvider(providerDef, resolutions);
-    if (mock) {
-      result.push(mock);
+    } else {
+      const mock = helperMockService.resolveProvider(provider, resolutions);
+      if (mock) {
+        result.push(mock);
+      }
     }
   }
 

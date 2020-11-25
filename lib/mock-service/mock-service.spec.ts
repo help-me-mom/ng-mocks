@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';

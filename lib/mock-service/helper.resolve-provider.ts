@@ -93,21 +93,28 @@ const replaceWithMocks = (provider: any, provide: any, mockDef: any) => {
   return mockDef;
 };
 
-const createMockProvider = (provider: any, provide: any) => {
-  let mockDef: any;
-
+const createPredefinedMockProvider = (provider: any, provide: any): any => {
   // Then we check decisions whether we should keep or replace a provider.
   if (ngMocksUniverse.builtProviders.has(provide)) {
-    mockDef = ngMocksUniverse.builtProviders.get(provide);
+    const mockDef = ngMocksUniverse.builtProviders.get(provide);
     if (mockDef === provide) {
-      mockDef = provider;
-    } else if (mockDef === undefined) {
-      mockDef = {
+      return provider;
+    }
+    if (mockDef === undefined) {
+      return {
         provide,
         useValue: undefined,
       };
     }
+
+    return mockDef;
   }
+
+  return undefined;
+};
+
+const createMockProvider = (provider: any, provide: any, resolutions: Map<any, any>, change: () => void) => {
+  let mockDef = createPredefinedMockProvider(provider, provide);
 
   if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.config.get('depsSkip')?.add(provide);
@@ -117,7 +124,19 @@ const createMockProvider = (provider: any, provide: any) => {
     mockDef = mockProvider(provider);
   }
 
-  return replaceWithMocks(provider, provide, mockDef);
+  mockDef = replaceWithMocks(provider, provide, mockDef);
+  if (!isNgInjectionToken(provide) || provider !== mockDef) {
+    resolutions.set(provide, mockDef);
+  }
+  if (!areEqualDefs(mockDef, provider, provide)) {
+    change();
+  }
+  // Touching only when we really provide a value.
+  if (mockDef) {
+    ngMocksUniverse.touches.add(provide);
+  }
+
+  return mockDef;
 };
 
 const areEqualDefs = (mockDef: any, provider: any, provide: any): boolean => {
@@ -162,17 +181,7 @@ export default (provider: any, resolutions: Map<any, any>, changed?: () => void)
     return createFromResolution(provide, resolutions.get(provide), multi);
   }
 
-  const mockDef = createMockProvider(provider, provide);
-  if (!isNgInjectionToken(provide) || provider !== mockDef) {
-    resolutions.set(provide, mockDef);
-  }
-  if (!areEqualDefs(mockDef, provider, provide)) {
-    change();
-  }
-  // Touching only when we really provide a value.
-  if (mockDef) {
-    ngMocksUniverse.touches.add(provide);
-  }
+  const mockDef = createMockProvider(provider, provide, resolutions, change);
 
   return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };

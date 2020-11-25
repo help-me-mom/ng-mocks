@@ -14,21 +14,18 @@ const createName = (name: string, mockName?: string, instance?: any, accessType?
   }.${name}${accessType || ''}`;
 
 const generateMockDef = (def: any, mock: any, accessType?: string): PropertyDescriptor => ({
-  // keeping setter if we adding getter
   ...(accessType === 'get' && def && def.set
     ? {
         set: def.set,
       }
     : {}),
 
-  // keeping getter if we adding setter
   ...(accessType === 'set' && def && def.get
     ? {
         get: def.get,
       }
     : {}),
 
-  // to allow replacement for functions
   ...(accessType
     ? {}
     : {

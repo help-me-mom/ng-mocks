@@ -28,6 +28,18 @@ const getPipeName = (pipe: Type<any>): string => {
 
 const defaultTransform = (): void => undefined;
 
+const getMockClass = (pipe: Type<any>, transform: PipeTransform['transform']): Type<any> => {
+  @Pipe({ name: getPipeName(pipe) })
+  @MockOf(pipe)
+  class PipeMock extends Mock implements PipeTransform {
+    public transform(value: any, ...args: any[]): any {
+      return transform(value, ...args);
+    }
+  }
+
+  return PipeMock;
+};
+
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-pipe
  */
@@ -40,8 +52,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
   transform: TPipe['transform'] = defaultTransform,
 ): Type<MockedPipe<TPipe>> {
-  // We are inside of an 'it'.
-  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
+  // We are inside of an 'it'. It's fine to return a mock copy.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(pipe, 'p');
@@ -54,17 +65,10 @@ export function MockPipe<TPipe extends PipeTransform>(
     return ngMocksUniverse.cacheDeclarations.get(pipe);
   }
 
-  @Pipe({ name: getPipeName(pipe) })
-  @MockOf(pipe)
-  class PipeMock extends Mock implements PipeTransform {
-    public transform(value: any, ...args: any[]): any {
-      return transform(value, ...args);
-    }
-  }
-
+  const mock = getMockClass(pipe, transform);
   if (ngMocksUniverse.flags.has('cachePipe')) {
-    ngMocksUniverse.cacheDeclarations.set(pipe, PipeMock);
+    ngMocksUniverse.cacheDeclarations.set(pipe, mock);
   }
 
-  return PipeMock as any;
+  return mock as any;
 }

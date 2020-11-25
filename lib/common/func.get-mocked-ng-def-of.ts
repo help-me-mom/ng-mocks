@@ -48,7 +48,6 @@ export function getMockedNgDefOf(declaration: any, type?: any): any {
   const source = declaration.mockOf ? declaration.mockOf : declaration;
   const mocks = getTestBedInjection(NG_MOCKS);
 
-  // If mocks exists, we are in the MockBuilder env and it's enough for the check.
   if (mocks && !mocks.has(source)) {
     throw new Error(`There is no mock for ${source.name}`);
   }
@@ -68,6 +67,5 @@ export function getMockedNgDefOf(declaration: any, type?: any): any {
     return mock;
   }
 
-  // Looks like the def hasn't been replaced with its mock copy.
   throw new Error(`There is no mock for ${source.name}`);
 }

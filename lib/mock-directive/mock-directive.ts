@@ -1,8 +1,7 @@
-import { core } from '@angular/compiler';
 import { Directive, ElementRef, Injector, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { directiveResolver } from '../common/core.reflect';
+import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
@@ -55,6 +54,37 @@ class DirectiveMockBase extends MockControlValueAccessor implements OnInit {
   }
 }
 
+const createMockClass = (): Type<any> => {
+  class DirectiveMock extends DirectiveMockBase {
+    // istanbul ignore next
+    public constructor(
+      injector: Injector,
+      element?: ElementRef,
+      template?: TemplateRef<any>,
+      viewContainer?: ViewContainerRef,
+    ) {
+      super(injector, element, template, viewContainer);
+    }
+  }
+  (DirectiveMock as any).parameters = [
+    Injector,
+    [ElementRef, new Optional()],
+    [TemplateRef, new Optional()],
+    [ViewContainerRef, new Optional()],
+  ];
+
+  return DirectiveMock;
+};
+
+const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
+  const meta = coreReflectDirectiveResolve(directive);
+  const { selector, exportAs, inputs, outputs, queries, providers } = meta;
+  const mockMeta = { inputs, outputs, providers, queries };
+  const mockParams = { exportAs, selector };
+  const options = decorateDeclaration(directive, mock, mockMeta, mockParams);
+  Directive(options)(mock);
+};
+
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
 }
@@ -76,42 +106,13 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return ngMocksUniverse.cacheDeclarations.get(directive);
   }
 
-  let meta: core.Directive;
-  try {
-    meta = directiveResolver.resolve(directive);
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-  const { selector, exportAs, inputs, outputs, queries, providers } = meta;
-
-  class DirectiveMock extends DirectiveMockBase {
-    // istanbul ignore next
-    public constructor(
-      injector: Injector,
-      element?: ElementRef,
-      template?: TemplateRef<any>,
-      viewContainer?: ViewContainerRef,
-    ) {
-      super(injector, element, template, viewContainer);
-    }
-  }
-  (DirectiveMock as any).parameters = [
-    Injector,
-    [ElementRef, new Optional()],
-    [TemplateRef, new Optional()],
-    [ViewContainerRef, new Optional()],
-  ];
-
-  const mockMeta = { inputs, outputs, providers, queries };
-  const mockParams = { exportAs, selector };
-  const options = decorateDeclaration(directive, DirectiveMock, mockMeta, mockParams);
-  Directive(options)(DirectiveMock);
+  const mock = createMockClass();
+  decorateClass(directive, mock);
 
   // istanbul ignore else
   if (ngMocksUniverse.flags.has('cacheDirective')) {
-    ngMocksUniverse.cacheDeclarations.set(directive, DirectiveMock);
+    ngMocksUniverse.cacheDeclarations.set(directive, mock);
   }
 
-  return DirectiveMock as any;
+  return mock as any;
 }

@@ -4,12 +4,20 @@ import { MockedDebugElement } from '../mock-render/types';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-export default <T>(...args: any[]) => {
-  const el: MockedDebugElement = args[0];
-  const sel: Type<T> = args[1];
-  const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
+const parseArgs = <T>(
+  args: any[],
+): {
+  el: MockedDebugElement;
+  notFoundValue: any;
+  sel: Type<T>;
+} => ({
+  el: args[0],
+  notFoundValue: args.length === 3 ? args[2] : defaultNotFoundValue,
+  sel: args[1],
+});
 
-  // Looking for related attribute directive.
+export default <T>(...args: any[]) => {
+  const { el, sel, notFoundValue } = parseArgs<T>(args);
   try {
     return el.injector.get(getSourceOfMock(sel));
   } catch (error) {
@@ -17,7 +25,6 @@ export default <T>(...args: any[]) => {
   }
 
   // Looking for related structural directive.
-  // It's located as prev node.
   const prevNode = el.nativeNode.previousSibling;
   const matches =
     !prevNode || prevNode.nodeName !== '#comment' || !el || !el.parent

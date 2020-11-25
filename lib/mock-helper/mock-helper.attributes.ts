@@ -1,6 +1,4 @@
-import { core } from '@angular/compiler';
-
-import { directiveResolver } from '../common/core.reflect';
+import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { MockedDebugElement } from '../mock-render/types';
 
 import mockHelperGet from './mock-helper.get';
@@ -13,26 +11,16 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
   const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
 
   for (const token of el.providerTokens) {
-    let meta: core.Directive;
-    try {
-      meta = directiveResolver.resolve(token);
-    } catch (e) {
-      // istanbul ignore next
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
+    const meta = coreReflectDirectiveResolve(token);
 
     // istanbul ignore if
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
       const [prop, alias = ''] = attrDef.split(':', 2).map(v => v.trim());
-      if (!alias && prop !== sel) {
+      if ((!alias && prop !== sel) || (alias && alias !== sel)) {
         continue;
       }
-      if (alias && alias !== sel) {
-        continue;
-      }
-      const directive: any = mockHelperGet(el, token);
 
-      return directive[prop];
+      return mockHelperGet(el, token)[prop];
     }
   }
   if (notFoundValue !== defaultNotFoundValue) {

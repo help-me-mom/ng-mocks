@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 

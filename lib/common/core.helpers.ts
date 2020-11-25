@@ -80,12 +80,12 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
   }
 };
 
+// First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
+// The next step is to respect constructor parameters as the parent class via jitReflector.
 export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
   let child: any;
-  const parent: any = base;
 
-  // first we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
-  (window as any).ngMocksParent = parent;
+  (window as any).ngMocksParent = base;
   // istanbul ignore next
   try {
     // tslint:disable-next-line no-eval
@@ -96,14 +96,12 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
       `);
     child = (window as any).ngMocksResult;
   } catch (e) {
-    class ClassEs5 extends parent {}
+    class ClassEs5 extends (window as any).ngMocksParent {}
 
     child = ClassEs5;
   }
   (window as any).ngMocksParent = undefined;
-
-  // the next step is to respect constructor parameters as the parent class.
-  child.parameters = jitReflector.parameters(parent);
+  child.parameters = jitReflector.parameters(base);
 
   return child;
 };

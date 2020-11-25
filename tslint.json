@@ -13,11 +13,11 @@
     "interface-name": false,
     "interface-over-type-literal": false,
     "max-classes-per-file": false,
+    "max-file-line-count": [true, 250],
     "max-func-body-length": [
       true,
       25,
       {
-        "ignore-comments": true,
         "ignore-parameters-to-function-regex": "^(([fx]?(describe|it))|beforeEach|fakeAsync|inject)$"
       }
     ],

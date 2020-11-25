@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { CommonModule } from '@angular/common';
 import {
   Component,

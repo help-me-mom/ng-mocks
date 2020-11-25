@@ -65,18 +65,14 @@ const createMockProvider = (provider: any, provide: any): Provider | undefined =
   return mockProvider;
 };
 
+// Tokens are special subject, we can skip adding them because in a mock module they are useless.
+// The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
+// If a testing module / component requires omitted tokens then they should be provided manually
+// during creation of TestBed module.
 const handleProvider = (provider: any, provide: any) => {
-  // Not sure if this case is possible, all classes should be already
-  // replaced with their mock copies by the code above, below we
-  // should have only tokens and string literals with a proper definition.
   if (provide === provider) {
     return undefined;
   }
-
-  // Tokens are special subject, we can skip adding them because in a mock module they are useless.
-  // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
-  // If a testing module / component requires omitted tokens then they should be provided manually
-  // during creation of TestBed module.
   if (provider.multi) {
     ngMocksUniverse.config.get('multi')?.add(provide);
 
@@ -84,8 +80,6 @@ const handleProvider = (provider: any, provide: any) => {
   }
 
   let mockProvider: any;
-
-  // if a token has a primitive type, we can return its initial state.
   // istanbul ignore else
   if (Object.keys(provider).indexOf('useValue') !== -1) {
     mockProvider = createValueProvider(provider, provide);
