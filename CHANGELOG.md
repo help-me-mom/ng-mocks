@@ -1,3 +1,25 @@
+## [11.1.2](https://github.com/ike18t/ng-mocks/compare/v11.1.1...v11.1.2) (2020-11-25)
+
+
+### Bug Fixes
+
+* issue with mock multi token providers ([774f171](https://github.com/ike18t/ng-mocks/commit/774f171a907789829c4b4c7387b88e4824c29472))
+
+
+### Performance Improvements
+
+* cc cognitive complexity ([8ac1fac](https://github.com/ike18t/ng-mocks/commit/8ac1fac6eff12b72611674a355e20f10304f3dac))
+* cc cognitive complexity ([7f677f4](https://github.com/ike18t/ng-mocks/commit/7f677f4b1641bc2a4cf052f2080356de61ec6da8))
+* cc cognitive complexity ([3d0e118](https://github.com/ike18t/ng-mocks/commit/3d0e118ebc7d839c5c96590d9145b19b10c0574a))
+* cc cognitive complexity ([11859ad](https://github.com/ike18t/ng-mocks/commit/11859adcb43f51be73c3b685bf641a14ff07be76))
+* cc cognitive complexity ([74783a9](https://github.com/ike18t/ng-mocks/commit/74783a9f26b977feae2184e9e2ef98282e996c0e))
+* cc complex logical expression ([b7c1b76](https://github.com/ike18t/ng-mocks/commit/b7c1b76dec7d5cbdf21ed4bc00f662ac5780e526))
+* cc duplicates ([4e81ff9](https://github.com/ike18t/ng-mocks/commit/4e81ff97d74e0fd94bae00fd553f2210c49246b8))
+* cc duplicates ([73f607a](https://github.com/ike18t/ng-mocks/commit/73f607a2aa4828fd51b71119624e1057adcccc5e))
+* cc duplicates ([6bebb6b](https://github.com/ike18t/ng-mocks/commit/6bebb6b119c9569880c750810020aee9b9373163))
+* cc duplicates ([f258991](https://github.com/ike18t/ng-mocks/commit/f25899140ebb7696bf9be3394a8ff84db99768c0))
+* cc duplicates ([8553dcb](https://github.com/ike18t/ng-mocks/commit/8553dcb3e2ca464fb11837c6032fdb0154d84f36))
+
 ## [11.1.1](https://github.com/ike18t/ng-mocks/compare/v11.1.0...v11.1.1) (2020-11-21)
 
 
