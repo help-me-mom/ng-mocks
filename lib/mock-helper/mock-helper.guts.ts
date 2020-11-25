@@ -1,8 +1,7 @@
-import { core } from '@angular/compiler';
 import { TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
-import { ngModuleResolver } from '../common/core.reflect';
+import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
@@ -51,21 +50,21 @@ const createMeta = ({ keep, skip, exclude, imports, declarations, providers }: D
   return { declarations, imports, providers };
 };
 
+const typeMap: Array<[any, string]> = [
+  ['m', 'module'],
+  ['c', 'component'],
+  ['d', 'directive'],
+  ['p', 'pipe'],
+];
+
 const getType = (def: any): string => {
   if (isNgModuleDefWithProviders(def)) {
     return 'module-with-providers';
   }
-  if (isNgDef(def, 'm')) {
-    return 'module';
-  }
-  if (isNgDef(def, 'c')) {
-    return 'component';
-  }
-  if (isNgDef(def, 'd')) {
-    return 'directive';
-  }
-  if (isNgDef(def, 'p')) {
-    return 'pipe';
+  for (const [flag, value] of typeMap) {
+    if (isNgDef(def, flag)) {
+      return value;
+    }
   }
 
   return '';
@@ -83,20 +82,12 @@ const handleModuleWithProviders = (data: Data, def: any): void => {
   data.imports.push(data.keep.has(def.ngModule) ? def : MockModule(def));
 };
 
-const handleModule = (data: Data, def: any, callback: any): void => {
+const handleDeclaration = (data: Data, def: any, callback: any, bucket: any[]): void => {
   if (skipDef(def, data.skip, data.exclude)) {
     return;
   }
 
-  data.imports.push(data.keep.has(def) ? def : callback(def));
-};
-
-const handleDeclaration = (data: Data, def: any, callback: any): void => {
-  if (skipDef(def, data.skip, data.exclude)) {
-    return;
-  }
-
-  data.declarations.push(data.keep.has(def) ? def : callback(def));
+  bucket.push(data.keep.has(def) ? def : callback(def));
 };
 
 const handleDestructuring = (data: Data, def: any, callback: any): void => {
@@ -104,14 +95,7 @@ const handleDestructuring = (data: Data, def: any, callback: any): void => {
     return;
   }
 
-  let meta: core.NgModule;
-  try {
-    meta = ngModuleResolver.resolve(def);
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-
+  const meta = coreReflectModuleResolve(def);
   for (const toMock of flatten([meta.declarations, meta.imports])) {
     callback(data, toMock);
   }
@@ -143,17 +127,17 @@ const resolve = (data: Data, def: any, skipDestruction = true): void => {
   if (type === 'module-with-providers') {
     handleModuleWithProviders(data, def);
   } else if (type === 'module' && data.keep.has(def)) {
-    handleModule(data, def, MockModule); // MockModule won't be called because the def is kept.
+    handleDeclaration(data, def, MockModule, data.imports); // MockModule won't be called because the def is kept.
   } else if (type === 'module' && skipDestruction && !data.keep.has(def)) {
-    handleModule(data, def, MockModule);
+    handleDeclaration(data, def, MockModule, data.imports);
   } else if (type === 'module' && !data.keep.has(def)) {
     handleDestructuring(data, def, resolve);
   } else if (type === 'component') {
-    handleDeclaration(data, def, MockComponent);
+    handleDeclaration(data, def, MockComponent, data.declarations);
   } else if (type === 'directive') {
-    handleDeclaration(data, def, MockDirective);
+    handleDeclaration(data, def, MockDirective, data.declarations);
   } else if (type === 'pipe') {
-    handleDeclaration(data, def, MockPipe);
+    handleDeclaration(data, def, MockPipe, data.declarations);
   } else {
     resolveProvider(data, def);
   }

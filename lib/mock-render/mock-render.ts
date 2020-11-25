@@ -2,7 +2,7 @@ import { Component, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 
-import { directiveResolver } from '../common/core.reflect';
+import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperMockService from '../mock-service/helper.mock-service';
@@ -188,12 +188,8 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   let inputs: string[] | undefined;
   let outputs: string[] | undefined;
   let selector: string | undefined;
-  try {
-    ({ inputs = undefined, outputs = undefined, selector = undefined } =
-      typeof template !== 'string' ? directiveResolver.resolve(template) : {});
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
+  if (typeof template !== 'string') {
+    ({ inputs = undefined, outputs = undefined, selector = undefined } = coreReflectDirectiveResolve(template));
   }
 
   const mockTemplate = generateTemplate(template, { selector, params, inputs, outputs });

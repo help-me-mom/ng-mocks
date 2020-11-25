@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { pipeResolver } from '../common/core.reflect';
+import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { Mock } from '../common/mock';
@@ -17,19 +17,10 @@ export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<Pipe
   return pipes.map(pipe => MockPipe(pipe, undefined));
 }
 
-const getPipeName = (pipe: Type<any>): string => {
-  try {
-    return pipeResolver.resolve(pipe).name;
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-};
-
 const defaultTransform = (): void => undefined;
 
 const getMockClass = (pipe: Type<any>, transform: PipeTransform['transform']): Type<any> => {
-  @Pipe({ name: getPipeName(pipe) })
+  @Pipe({ name: coreReflectPipeResolve(pipe).name })
   @MockOf(pipe)
   class PipeMock extends Mock implements PipeTransform {
     public transform(value: any, ...args: any[]): any {

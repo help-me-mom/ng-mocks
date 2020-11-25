@@ -4,7 +4,7 @@
     "arrow-parens": false,
     "comment-format": false,
     "completed-docs": false,
-    "cyclomatic-complexity": false,
+    "cyclomatic-complexity": [true, 15],
     "deprecation": false,
     "export-name": false,
     "file-name-casing": false,

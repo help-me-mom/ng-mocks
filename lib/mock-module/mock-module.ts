@@ -1,10 +1,9 @@
-import { core } from '@angular/compiler';
 import { NgModule, Provider } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreConfig from '../common/core.config';
 import { extendClass } from '../common/core.helpers';
-import { ngModuleResolver } from '../common/core.reflect';
+import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { isNgDef } from '../common/func.is-ng-def';
@@ -93,14 +92,7 @@ const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
 
 const getMockModuleDef = (ngModule: Type<any>, mockModule?: Type<any>): NgModule | undefined => {
   if (!mockModule) {
-    let meta: core.NgModule;
-    try {
-      meta = ngModuleResolver.resolve(ngModule);
-    } catch (e) {
-      // istanbul ignore next
-      throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-    }
-
+    const meta = coreReflectModuleResolve(ngModule);
     const [changed, ngModuleDef] = mockNgDef(meta, ngModule);
     if (changed) {
       return ngModuleDef;
