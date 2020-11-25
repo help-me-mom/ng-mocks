@@ -1,12 +1,6 @@
 import { NgModule } from '@angular/core';
 
 import { ngModuleResolver } from './core.reflect';
+import coreReflectBody from './core.reflect.body';
 
-export default (def: any): NgModule => {
-  try {
-    return ngModuleResolver.resolve(def);
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-};
+export default (def: any): NgModule => coreReflectBody((arg: any) => ngModuleResolver.resolve(arg))(def);

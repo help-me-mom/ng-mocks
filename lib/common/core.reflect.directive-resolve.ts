@@ -1,12 +1,6 @@
 import { Directive } from '@angular/core';
 
 import { directiveResolver } from './core.reflect';
+import coreReflectBody from './core.reflect.body';
 
-export default (def: any): Directive => {
-  try {
-    return directiveResolver.resolve(def);
-  } catch (e) {
-    // istanbul ignore next
-    throw new Error('ng-mocks is not in JIT mode and cannot resolve declarations');
-  }
-};
+export default (def: any): Directive => coreReflectBody((arg: any) => directiveResolver.resolve(arg))(def);

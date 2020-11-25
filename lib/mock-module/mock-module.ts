@@ -14,25 +14,27 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import mockNgDef from './mock-ng-def';
 
+const flagMock = (resolution?: string): boolean => resolution === 'mock' && ngMocksUniverse.flags.has('skipMock');
+
+const flagKeep = (resolution?: string): boolean => resolution === 'keep' && !ngMocksUniverse.flags.has('skipMock');
+
+const flagReplace = (resolution?: string): boolean =>
+  resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock');
+
+const flagNever = (ngModule?: any): boolean =>
+  coreConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock');
+
 const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
   let toggleSkipMockFlag = false;
 
   const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
     .get('resolution')
     ?.get(ngModule);
-  if (resolution === 'mock' && ngMocksUniverse.flags.has('skipMock')) {
+  if (flagMock(resolution)) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.delete('skipMock');
   }
-  if (resolution === 'keep' && !ngMocksUniverse.flags.has('skipMock')) {
-    toggleSkipMockFlag = true;
-    ngMocksUniverse.flags.add('skipMock');
-  }
-  if (resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock')) {
-    toggleSkipMockFlag = true;
-    ngMocksUniverse.flags.add('skipMock');
-  }
-  if (coreConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock')) {
+  if (flagKeep(resolution) || flagReplace(resolution) || flagNever(ngModule)) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.add('skipMock');
   }

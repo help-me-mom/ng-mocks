@@ -7,12 +7,6 @@ export default (prototype: any, source: any): boolean => {
   if ((typeof prototype === 'boolean' || typeof source === 'boolean') && prototype !== source) {
     return false;
   }
-  if (prototype.$implicit !== source.$implicit) {
-    return false;
-  }
-  if (!equalVariables(prototype.variables, source.variables)) {
-    return false;
-  }
 
-  return true;
+  return prototype.$implicit === source.$implicit && equalVariables(prototype.variables, source.variables);
 };
