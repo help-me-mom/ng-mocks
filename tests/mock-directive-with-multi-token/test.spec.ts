@@ -19,6 +19,6 @@ describe('mock-directive-with-multi-token', () => {
   beforeEach(() => MockBuilder(null, TargetDirective));
 
   it('does not have the token', () => {
-    expect(() => MockRender(`<target></target>`)).not.toThrowError(/Encountered undefined provider/);
+    expect(() => MockRender(`<target></target>`)).not.toThrow();
   });
 });

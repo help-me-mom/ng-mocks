@@ -93,11 +93,11 @@ const handleProvider = (provider: any, provide: any) => {
   // istanbul ignore else
   if (Object.keys(provider).indexOf('useValue') !== -1) {
     mockProvider = createValueProvider(provider, provide);
-  } else if (!mockProvider && Object.keys(provider).indexOf('useExisting') !== -1) {
+  } else if (Object.keys(provider).indexOf('useExisting') !== -1) {
     mockProvider = provider;
-  } else if (!mockProvider && Object.keys(provider).indexOf('useClass') !== -1) {
+  } else if (Object.keys(provider).indexOf('useClass') !== -1) {
     mockProvider = createClassProvider(provider, provide);
-  } else if (!mockProvider && Object.keys(provider).indexOf('useFactory') !== -1) {
+  } else if (Object.keys(provider).indexOf('useFactory') !== -1) {
     mockProvider = helperUseFactory(provide, () => ({}));
   }
 
