@@ -14,6 +14,12 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   config: new Map(),
   flags: new Set<string>(coreConfig.flags),
   global: new Map(),
+  isExcludedDef: (def: any): boolean =>
+    getGlobal().ngMocksUniverse.builtDeclarations.has(def) &&
+    getGlobal().ngMocksUniverse.builtDeclarations.get(def) === null,
+  isProvidedDef: (def: any): boolean =>
+    getGlobal().ngMocksUniverse.builtDeclarations.has(def) &&
+    getGlobal().ngMocksUniverse.builtDeclarations.get(def) !== null,
   touches: new Set<AnyType<any> | InjectionToken<any>>(),
 };
 

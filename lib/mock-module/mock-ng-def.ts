@@ -77,7 +77,7 @@ const createResolve = (resolutions: Map<any, any>, change: (flag?: boolean) => v
   if (resolutions.has(def)) {
     return resolutions.get(def);
   }
-  if (ngMocksUniverse.builtDeclarations.has(def) && ngMocksUniverse.builtDeclarations.get(def) === null) {
+  if (ngMocksUniverse.isExcludedDef(def)) {
     resolutions.set(def, undefined);
 
     return change();
