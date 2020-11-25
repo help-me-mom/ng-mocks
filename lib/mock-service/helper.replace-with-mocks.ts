@@ -1,18 +1,21 @@
 import { NG_MOCKS_GUARDS } from '../common/core.tokens';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+const isExcludeDef = (def: any): boolean =>
+  ngMocksUniverse.builtDeclarations.has(def) && ngMocksUniverse.builtDeclarations.get(def) === null;
+
+const isKeepDef = (def: any): boolean =>
+  ngMocksUniverse.builtDeclarations.has(def) && ngMocksUniverse.builtDeclarations.get(def) !== null;
+
 const handleSection = (section: any[]) => {
   const guards: any[] = [];
 
   for (const guard of section) {
-    if (ngMocksUniverse.builtDeclarations.has(guard) && ngMocksUniverse.builtDeclarations.get(guard) !== null) {
+    if (isKeepDef(guard)) {
       guards.push(guard);
       continue;
     }
-    if (
-      ngMocksUniverse.builtDeclarations.has(NG_MOCKS_GUARDS) &&
-      ngMocksUniverse.builtDeclarations.get(NG_MOCKS_GUARDS) === null
-    ) {
+    if (isExcludeDef(NG_MOCKS_GUARDS)) {
       continue;
     }
     guards.push(guard);
@@ -26,7 +29,7 @@ const handleArray = (value: any[], callback: any): [boolean, any[]] => {
   let updated = false;
 
   for (const valueItem of value) {
-    if (ngMocksUniverse.builtDeclarations.has(valueItem) && ngMocksUniverse.builtDeclarations.get(valueItem) === null) {
+    if (isExcludeDef(valueItem)) {
       updated = updated || true;
       continue;
     }
@@ -41,9 +44,8 @@ const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Rec
   let mock: Record<keyof any, any> = {};
   let updated = false;
 
-  const builtDeclarations = ngMocksUniverse.builtDeclarations;
   for (const key of Object.keys(value)) {
-    if (builtDeclarations.has(value[key]) && builtDeclarations.get(value[key]) === null) {
+    if (isExcludeDef(value[key])) {
       updated = updated || true;
       continue;
     }

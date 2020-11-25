@@ -20,6 +20,16 @@ import parseMockArguments from './promise/parse-mock-arguments';
 import { BuilderData } from './promise/types';
 import { IMockBuilder, IMockBuilderConfig, IMockBuilderResult } from './types';
 
+const normaliseModule = (
+  module: any,
+): {
+  def: Type<any>;
+  providers?: Provider[];
+} =>
+  isNgModuleDefWithProviders(module)
+    ? { def: module.ngModule, providers: module.providers }
+    : { def: module, providers: undefined };
+
 const defaultMock = {}; // simulating Symbol
 
 export class MockBuilderPromise implements IMockBuilder {
@@ -79,9 +89,7 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   public keep(input: any, config?: IMockBuilderConfig): this {
-    const { def, providers } = isNgModuleDefWithProviders(input)
-      ? { def: input.ngModule, providers: input.providers }
-      : { def: input, providers: undefined };
+    const { def, providers } = normaliseModule(input);
 
     const existing = this.keepDef.has(def) ? this.defProviders.get(def) : [];
     this.wipe(def);
@@ -102,9 +110,7 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   public mock(input: any, a1: any = defaultMock, a2?: any): this {
-    const { def, providers } = isNgModuleDefWithProviders(input)
-      ? { def: input.ngModule, providers: input.providers }
-      : { def: input, providers: undefined };
+    const { def, providers } = normaliseModule(input);
 
     const { config, mock } = parseMockArguments(def, a1, a2, defaultMock);
 

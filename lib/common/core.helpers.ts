@@ -66,13 +66,8 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
       continue;
     }
     for (const flag of dep) {
-      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'Optional') {
-        continue;
-      }
-      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'SkipSelf') {
-        continue;
-      }
-      if (flag && typeof flag === 'object' && flag.ngMetadataName === 'Self') {
+      const name = flag && typeof flag === 'object' ? flag.ngMetadataName : undefined;
+      if (name === 'Optional' || name === 'SkipSelf' || name === 'Self') {
         continue;
       }
       set.add(flag);

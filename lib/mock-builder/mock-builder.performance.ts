@@ -6,9 +6,9 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilderPromise } from './mock-builder.promise';
 import addEntitiesToMap from './performance/add-entities-to-map';
 import addValuesToSet from './performance/add-values-to-set';
-import areEqualConfigs from './performance/are-equal-configs';
+import areEqualConfigParams from './performance/are-equal-config-params';
 import areEqualMaps from './performance/are-equal-maps';
-import areEqualMapsOfProviderDefs from './performance/are-equal-maps-of-provider-defs';
+import areEqualProviders from './performance/are-equal-providers';
 import areEqualSets from './performance/are-equal-sets';
 import getEmptyConfig from './performance/get-empty-config';
 import requiredMetadata from './performance/required-metadata';
@@ -92,11 +92,11 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       }
     }
     for (const key of ['providerDef', 'defProviders']) {
-      if (!areEqualMapsOfProviderDefs((this as any)[key], prototype[key])) {
+      if (!areEqualMaps((this as any)[key], prototype[key], areEqualProviders)) {
         return false;
       }
     }
 
-    return areEqualConfigs(this.configDef, prototype.configDef);
+    return areEqualMaps(this.configDef, prototype.configDef, areEqualConfigParams);
   }
 }

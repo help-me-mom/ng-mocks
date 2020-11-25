@@ -1,6 +1,6 @@
 import { mapKeys } from '../../common/core.helpers';
 
-export default (source: Map<any, any>, destination: Map<any, any>): boolean => {
+export default (source: Map<any, any>, destination: Map<any, any>, compare = (a: any, b: any) => a === b): boolean => {
   if (!destination || destination.size !== source.size) {
     return false;
   }
@@ -8,7 +8,7 @@ export default (source: Map<any, any>, destination: Map<any, any>): boolean => {
     if (!destination.has(value)) {
       return false;
     }
-    if (destination.get(value) !== source.get(value)) {
+    if (!compare(destination.get(value), source.get(value))) {
       return false;
     }
   }

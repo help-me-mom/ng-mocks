@@ -40,30 +40,27 @@ const flatToExisting = <T, R>(data: T | T[], callback: (arg: T) => R | undefined
     .map(callback)
     .filter((item): item is R => !!item);
 
+type processMeta = 'declarations' | 'entryComponents' | 'bootstrap' | 'providers' | 'imports' | 'exports';
+
 const processMeta = (
-  { declarations, entryComponents, bootstrap, providers, imports, exports }: NgModule,
+  ngModule: NgModule,
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
 ): NgModule => {
   const mockModuleDef: NgModule = {};
 
-  if (declarations && declarations.length) {
-    mockModuleDef.declarations = flatToExisting(declarations, resolve);
-  }
-  if (entryComponents && entryComponents.length) {
-    mockModuleDef.entryComponents = flatToExisting(entryComponents, resolve);
-  }
-  if (bootstrap && bootstrap.length) {
-    mockModuleDef.bootstrap = flatToExisting(bootstrap, resolve);
-  }
-  if (providers && providers.length) {
-    mockModuleDef.providers = flatToExisting(providers, resolveProvider);
-  }
-  if (imports && imports.length) {
-    mockModuleDef.imports = flatToExisting(imports, resolve);
-  }
-  if (exports && exports.length) {
-    mockModuleDef.exports = flatToExisting(exports, resolve);
+  const keys: Array<[processMeta, (def: any) => any]> = [
+    ['declarations', resolve],
+    ['entryComponents', resolve],
+    ['bootstrap', resolve],
+    ['providers', resolveProvider],
+    ['imports', resolve],
+    ['exports', resolve],
+  ];
+  for (const [key, callback] of keys) {
+    if (ngModule[key]?.length) {
+      mockModuleDef[key] = flatToExisting(ngModule[key], callback);
+    }
   }
 
   return mockModuleDef;
@@ -114,8 +111,8 @@ const resolveDefForExport = (
   }
 
   // If we export a declaration, then we have to export its module too.
-  const config = ngMocksUniverse.config.get(instance) || {};
-  if (config.export && ngModule) {
+  const config = ngMocksUniverse.config.get(instance);
+  if (config?.export && ngModule) {
     if (!moduleConfig.export) {
       ngMocksUniverse.config.set(ngModule, {
         ...moduleConfig,
@@ -124,7 +121,7 @@ const resolveDefForExport = (
     }
   }
 
-  if (correctExports && !config.export && !moduleConfig.exportAll) {
+  if (correctExports && !moduleConfig.exportAll && !config?.export) {
     return undefined;
   }
 

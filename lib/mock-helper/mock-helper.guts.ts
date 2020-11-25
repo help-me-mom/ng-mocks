@@ -57,13 +57,13 @@ const typeMap: Array<[any, string]> = [
   ['p', 'pipe'],
 ];
 
-const getType = (def: any): string => {
+const getType = (def: any, keep: Set<any>): string => {
   if (isNgModuleDefWithProviders(def)) {
     return 'module-with-providers';
   }
   for (const [flag, value] of typeMap) {
     if (isNgDef(def, flag)) {
-      return value;
+      return flag === 'm' && keep.has(def) ? `${value}-keep` : value;
     }
   }
 
@@ -117,27 +117,29 @@ const resolveProvider = ({ skip, keep, providers, exclude }: Data, def: any): vo
   }
 };
 
+const resolveMap: Record<string, any> = {
+  component: MockComponent,
+  directive: MockDirective,
+  pipe: MockPipe,
+};
+
 const resolve = (data: Data, def: any, skipDestruction = true): void => {
   if (!def) {
     return;
   }
 
-  const type = getType(def);
+  const type = getType(def, data.keep);
 
   if (type === 'module-with-providers') {
     handleModuleWithProviders(data, def);
-  } else if (type === 'module' && data.keep.has(def)) {
+  } else if (type === 'module-keep') {
     handleDeclaration(data, def, MockModule, data.imports); // MockModule won't be called because the def is kept.
-  } else if (type === 'module' && skipDestruction && !data.keep.has(def)) {
+  } else if (type === 'module' && skipDestruction) {
     handleDeclaration(data, def, MockModule, data.imports);
-  } else if (type === 'module' && !data.keep.has(def)) {
+  } else if (type === 'module') {
     handleDestructuring(data, def, resolve);
-  } else if (type === 'component') {
-    handleDeclaration(data, def, MockComponent, data.declarations);
-  } else if (type === 'directive') {
-    handleDeclaration(data, def, MockDirective, data.declarations);
-  } else if (type === 'pipe') {
-    handleDeclaration(data, def, MockPipe, data.declarations);
+  } else if (resolveMap[type]) {
+    handleDeclaration(data, def, resolveMap[type], data.declarations);
   } else {
     resolveProvider(data, def);
   }

@@ -1,8 +1,9 @@
 import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
-import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
+import { MockedDebugNode } from '../mock-render/types';
 
 import funcGetLastFixture from './func.get-last-fixture';
+import funcParseFindArgs from './func.parseFindArgs';
 
 function nestedCheck<T>(
   result: T[],
@@ -20,10 +21,7 @@ function nestedCheck<T>(
 }
 
 export default <T>(...args: any[]): T[] => {
-  const el: undefined | MockedDebugElement =
-    typeof args[0] !== 'object' ? undefined : args[0].debugElement ? args[0].debugElement : args[0];
-  const sel: Type<any> = el ? args[1] : args[0];
-
+  const { el, sel } = funcParseFindArgs<Type<T>>(args);
   const debugElement = el || funcGetLastFixture()?.debugElement;
 
   const result: T[] = [];

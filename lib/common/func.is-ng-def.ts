@@ -3,6 +3,15 @@ import { PipeTransform } from '@angular/core';
 import { Type } from './core.types';
 import { isNgType } from './func.is-ng-type';
 
+const isModuleCheck = (def: any, ngType?: string): boolean => (!ngType || ngType === 'm') && isNgType(def, 'NgModule');
+const isComponentCheck = (def: any, ngType?: string): boolean =>
+  (!ngType || ngType === 'c') && isNgType(def, 'Component');
+const isDirectiveCheck = (def: any, ngType?: string): boolean =>
+  (!ngType || ngType === 'd') && isNgType(def, 'Directive');
+const isPipeCheck = (def: any, ngType?: string): boolean => (!ngType || ngType === 'p') && isNgType(def, 'Pipe');
+const isInjectableCheck = (def: any, ngType?: string): boolean =>
+  (!ngType || ngType === 'i') && isNgType(def, 'Injectable');
+
 /**
  * Checks whether a class was decorated by @NgModule.
  *
@@ -46,11 +55,11 @@ export function isNgDef(declaration: any, ngType: 'i'): declaration is Type<any>
 export function isNgDef(declaration: any): declaration is Type<any>;
 
 export function isNgDef(declaration: any, ngType?: string): declaration is Type<any> {
-  const isModule = (!ngType || ngType === 'm') && isNgType(declaration, 'NgModule');
-  const isComponent = (!ngType || ngType === 'c') && isNgType(declaration, 'Component');
-  const isDirective = (!ngType || ngType === 'd') && isNgType(declaration, 'Directive');
-  const isPipe = (!ngType || ngType === 'p') && isNgType(declaration, 'Pipe');
-  const isInjectable = (!ngType || ngType === 'i') && isNgType(declaration, 'Injectable');
+  const isModule = isModuleCheck(declaration, ngType);
+  const isComponent = isComponentCheck(declaration, ngType);
+  const isDirective = isDirectiveCheck(declaration, ngType);
+  const isPipe = isPipeCheck(declaration, ngType);
+  const isInjectable = isInjectableCheck(declaration, ngType);
 
   return isModule || isComponent || isDirective || isPipe || isInjectable;
 }

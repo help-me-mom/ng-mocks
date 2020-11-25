@@ -104,13 +104,19 @@ const handleProvider = (provider: any, provide: any) => {
   return mockProvider;
 };
 
+const isNeverMockFunction = (provide: any): boolean =>
+  typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1;
+
+const isNeverMockToken = (provide: any): boolean =>
+  isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1;
+
 export default function (provider: any): Provider | undefined {
   const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
 
-  if (typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1) {
+  if (isNeverMockFunction(provide)) {
     return provider;
   }
-  if (isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1) {
+  if (isNeverMockToken(provide)) {
     return undefined;
   }
 

@@ -35,14 +35,15 @@ const createFromResolution = (provide: any, resolution: any, multi?: boolean) =>
   return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };
 
+const isSuitableProvider = (provider: any, provide: any): boolean =>
+  ngMocksUniverse.builtProviders.has(NG_MOCKS_INTERCEPTORS) &&
+  ngMocksUniverse.builtProviders.get(NG_MOCKS_INTERCEPTORS) === null &&
+  isNgInjectionToken(provide) &&
+  provide.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
+  provide !== provider;
+
 const excludeInterceptors = (provider: any, provide: any): boolean => {
-  if (
-    ngMocksUniverse.builtProviders.has(NG_MOCKS_INTERCEPTORS) &&
-    ngMocksUniverse.builtProviders.get(NG_MOCKS_INTERCEPTORS) === null &&
-    isNgInjectionToken(provide) &&
-    provide.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
-    provide !== provider
-  ) {
+  if (isSuitableProvider(provider, provide)) {
     if (provider.useFactory || provider.useValue) {
       return true;
     }
