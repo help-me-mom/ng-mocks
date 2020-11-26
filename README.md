@@ -76,7 +76,7 @@ I'm open to contributions.
 
 ### External resources
 
-- [How to test Angular application](https://ng-mocks.github.io/)
+- [How to test Angular applications](https://ng-mocks.github.io/)
 - [How to configure CI to execute Angular tests automatically](https://satantime.github.io/puppeteer-node/)
 
 ---
