@@ -1,3 +1,10 @@
+## [11.1.3](https://github.com/ike18t/ng-mocks/compare/v11.1.2...v11.1.3) (2020-11-26)
+
+
+### Bug Fixes
+
+* clear return statements in the docs ([44b12e4](https://github.com/ike18t/ng-mocks/commit/44b12e4f4db8017f5c03fd325e8a61b5fb1a2ea3))
+
 ## [11.1.2](https://github.com/ike18t/ng-mocks/compare/v11.1.1...v11.1.2) (2020-11-25)
 
 
