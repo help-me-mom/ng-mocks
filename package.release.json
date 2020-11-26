@@ -59,6 +59,11 @@
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["examples", "dist"],
+  "standard": {},
+  "scripts": {
+    "test": "karma start"
+  },
   "peerDependencies": {
     "@angular/compiler": ">=5.x <=11.x",
     "@angular/core": ">=5.x <=11.x",

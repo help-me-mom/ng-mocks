@@ -1,8 +1,8 @@
-[![chat on gitter](https://badges.gitter.im/ng-mocks/community.svg)](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![npm version](https://badge.fury.io/js/ng-mocks.svg)](https://badge.fury.io/js/ng-mocks)
-[![build status](https://travis-ci.org/ike18t/ng-mocks.svg?branch=master)](https://travis-ci.org/ike18t/ng-mocks)
-[![coverage status](https://coveralls.io/repos/github/ike18t/ng-mocks/badge.svg?branch=master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
-[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks.svg?branch=master)](https://lgtm.com/projects/g/ike18t/ng-mocks)
+[![chat on gitter](https://img.shields.io/gitter/room/ike18t/ng-mocks)](https://gitter.im/ng-mocks/community)
+[![npm version](https://img.shields.io/npm/v/ng-mocks)](https://www.npmjs.com/package/ng-mocks)
+[![build status](https://img.shields.io/travis/ike18t/ng-mocks/master)](https://travis-ci.org/ike18t/ng-mocks)
+[![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks)
+[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks)
 
 # ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
