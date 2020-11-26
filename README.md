@@ -1,13 +1,13 @@
 [![chat on gitter](https://img.shields.io/gitter/room/ike18t/ng-mocks)](https://gitter.im/ng-mocks/community)
 [![npm version](https://img.shields.io/npm/v/ng-mocks)](https://www.npmjs.com/package/ng-mocks)
-[![build status](https://img.shields.io/travis/ike18t/ng-mocks/master)](https://travis-ci.org/ike18t/ng-mocks)
-[![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks)
-[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks)
+[![build status](https://img.shields.io/travis/ike18t/ng-mocks/master)](https://travis-ci.org/github/ike18t/ng-mocks/branches)
+[![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
+[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
 # ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
 
-`ng-mocks` is a library providing helper functions for **creating mock components, directives, pipes, modules and services in Angular**.
-Whether you need a mock child component, or any other annoying dependency, `ng-mocks` has a tool to turn this declaration into its mock copy,
+`ng-mocks` is a library for testing Angular 5+ applications which provides helper functions for **creating mock components**, directives, pipes, modules and services.
+Whether you need a **mock child component**, or any other annoying dependency, `ng-mocks` has a tool to turn this declaration into its mock copy,
 keeping its interface as it is, but suppressing its implementation.
 
 The current version of the library has been tested and can be used with:
@@ -31,7 +31,7 @@ There is a brief summary of the latest changes in [CHANGELOG](https://github.com
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
-Or you could use `ng-mocks` to create mock declarations out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+Or you could use `ng-mocks` to **create mock declarations** out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
 ### Find an issue or have a question or a request?
 
@@ -241,13 +241,13 @@ an error during execution due to a missed observable in its mock copy,
 the code would look like:
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(AppBaseComponent, AppBaseModule)
+beforeEach(() => {
+  return MockBuilder(AppBaseComponent, AppBaseModule)
     .mock(TranslatePipe, v => `translated:${v}`)
     .mock(SearchService, {
       search: of([]),
-    }),
-);
+    });
+});
 ```
 
 Profit. Subscribe, like, share! [to the top](#table-of-contents).
@@ -347,9 +347,9 @@ and [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyComponent),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent).mock(DependencyComponent);
+  });
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
@@ -369,9 +369,9 @@ to play with.
 
 ```typescript
 describe('MockComponent', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyComponent),
-  );
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyComponent);
+  });
 
   it('sends the correct value to the child input', () => {
     const fixture = MockRender(TestedComponent);
@@ -538,9 +538,9 @@ and [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyDirective),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent).mock(DependencyDirective);
+  });
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
@@ -560,9 +560,9 @@ to play with.
 
 ```typescript
 describe('MockDirective:Attribute', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyDirective),
-  );
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyDirective);
+  });
 
   it('sends the correct value to the input', () => {
     const fixture = MockRender(TestedComponent);
@@ -637,11 +637,11 @@ describe('MockDirective:Structural', () => {
   // Because they might require a context which should be provided.
   // Usually a developer knows the context and can render it
   // manually with proper setup.
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyDirective, {
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyDirective, {
       // render: true, // <-- a flag to render the directive by default
-    }),
-  );
+    });
+  });
 
   it('renders content of the child structural directive', () => {
     const fixture = MockRender(TestedComponent);
@@ -732,6 +732,7 @@ and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent).mock(DependencyPipe));
 
   it('should create', () => {
@@ -752,12 +753,12 @@ to play with.
 
 ```typescript
 describe('MockPipe', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(
       DependencyPipe,
       (...args: string[]) => JSON.stringify(args),
-    ),
-  );
+    );
+  });
 
   it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
@@ -884,14 +885,14 @@ and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent)
+  beforeEach(() => {
+    return MockBuilder(TargetComponent)
       .mock(DependencyService)
       .mock(ObservableService, {
         prop$: EMPTY,
         getStream$: () => EMPTY,
-      }),
-  );
+      });
+  });
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
@@ -1026,9 +1027,9 @@ and [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent).mock(DependencyModule),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent).mock(DependencyModule);
+  });
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
@@ -1042,6 +1043,7 @@ simply pass its module as the second parameter of [`MockBuilder`](#mockbuilder).
 Everything in `TargetModule` will be replaced with their mock copies, but not `TargetComponent`, it will stay as it is:
 
 ```typescript
+// Do not forget to return the promise of MockBuilder.
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 ```
 
@@ -1056,9 +1058,9 @@ to play with.
 
 ```typescript
 describe('MockModule', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyModule),
-  );
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyModule);
+  });
 
   it('renders TestedComponent with its dependencies', () => {
     const fixture = MockRender(TestedComponent);
@@ -1197,6 +1199,7 @@ describe('MockObservable', () => {
   // Because we want to test the component, we pass it as the first
   // parameter of MockBuilder. To create its mock dependencies
   // we pass its module as the second parameter.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   // Now we need to customize the mock copy of the service.
@@ -1275,11 +1278,11 @@ to play with.
 
 ```typescript
 describe('MockReactiveForms', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent)
+  beforeEach(() => {
+    return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
-      .keep(ReactiveFormsModule),
-  );
+      .keep(ReactiveFormsModule);
+  });
 
   it('sends the correct value to the mock form component', () => {
     const fixture = MockRender(TestedComponent);
@@ -1320,11 +1323,11 @@ to play with.
 
 ```typescript
 describe('MockForms', () => {
-  beforeEach(() =>
-    MockBuilder(TestedComponent)
+  beforeEach(() => {
+    return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
-      .keep(FormsModule),
-  );
+      .keep(FormsModule);
+  });
 
   it('sends the correct value to the mock form component', async () => {
     const fixture = MockRender(TestedComponent);
@@ -1614,6 +1617,7 @@ to play with.
 
 ```typescript
 describe('MockBuilder:simple', () => {
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(MyComponent, MyModule));
   // The same as
   // beforeEach(() => TestBed.configureTestingModule({{
@@ -1668,6 +1672,7 @@ const ngModule = MockBuilder()
 If you do not plan further customization of `ngModule` then you do not need to call `.build()`. Simply return result of `MockBuilder` in `beforeEach`.
 
 ```typescript
+// Do not forget to return the promise of MockBuilder.
 beforeEach(() => MockBuilder(MyComponent, MyModule));
 ```
 
@@ -1689,8 +1694,8 @@ beforeEach(() => {
 If we want to keep a module, component, directive, pipe or provider as it is. We should use `.keep`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .keep(SomeModule)
     .keep(SomeModule.forSome())
     .keep(SomeModule.forAnother())
@@ -1698,8 +1703,8 @@ beforeEach(() =>
     .keep(SomeDirective)
     .keep(SomePipe)
     .keep(SomeService)
-    .keep(SomeInjectionToken),
-);
+    .keep(SomeInjectionToken);
+});
 ```
 
 #### MockBuilder.mock
@@ -1707,8 +1712,8 @@ beforeEach(() =>
 If we want to create a mock copy out of anything, even a part of a kept module we should use `.mock`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .mock(SomeModule)
     .mock(SomeModule.forSome())
     .mock(SomeModule.forAnother())
@@ -1716,30 +1721,30 @@ beforeEach(() =>
     .mock(SomeDirective)
     .mock(SomePipe)
     .mock(SomeService)
-    .mock(SomeInjectionToken),
-);
+    .mock(SomeInjectionToken);
+});
 ```
 
 For pipes, we can set their handlers as the 2nd parameter of `.mock`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).mock(
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).mock(
     SomePipe,
     value => 'My Custom Content',
-  ),
-);
+  );
+});
 ```
 
 For services and tokens, we can optionally provide their mock values.
 They are added as `useValue` in providers.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .mock(SomeService3, anything1)
-    .mock(SOME_TOKEN, anything2),
-);
+    .mock(SOME_TOKEN, anything2);
+});
 ```
 
 #### MockBuilder.exclude
@@ -1747,15 +1752,15 @@ beforeEach(() =>
 If we want to exclude something, even a part of a kept module we should use `.exclude`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .exclude(SomeModule)
     .exclude(SomeComponent)
     .exclude(SomeDirective)
     .exclude(SomePipe)
     .exclude(SomeDependency)
-    .exclude(SomeInjectionToken),
-);
+    .exclude(SomeInjectionToken);
+});
 ```
 
 #### MockBuilder.replace
@@ -1765,34 +1770,34 @@ The replacement has to be decorated with the same decorator as the source.
 It is not impossible to replace a provider / service, we should use [`.provide`](#mockbuilderprovide) or [`.mock`](#mockbuildermock) for that.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .replace(SomeModule, SomeOtherModule)
     .replace(SomeComponent, SomeOtherComponent)
     .replace(SomeDirective, SomeOtherDirective)
-    .replace(SomePipe, SomeOtherPipe),
-);
+    .replace(SomePipe, SomeOtherPipe);
+});
 ```
 
 In case of `HttpClientTestingModule` you can use `.replace` too.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).replace(
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).replace(
     HttpClientModule,
     HttpClientTestingModule,
-  ),
-);
+  );
+});
 ```
 
 In case of `RouterTestingModule` you need to use [`.keep`](#mockbuilderkeep) for both of the modules and to pass an empty array into `.withRoutes`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([])),
-);
+    .keep(RouterTestingModule.withRoutes([]));
+});
 ```
 
 #### MockBuilder.provide
@@ -1800,13 +1805,13 @@ beforeEach(() =>
 If we want to add or replace providers / services we should use `.provide`. It has the same interface as a regular provider.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .provide(MyService)
     .provide([SomeService1, SomeService2])
     .provide({ provide: SomeComponent3, useValue: anything1 })
-    .provide({ provide: SOME_TOKEN, useFactory: () => anything2 }),
-);
+    .provide({ provide: SOME_TOKEN, useFactory: () => anything2 });
+});
 ```
 
 #### MockBuilder `export` flag
@@ -1816,15 +1821,15 @@ then we need to mark it with the `export` flag.
 Does not matter how deep it is. It will be exported to the level of `TestingModule`.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .keep(SomeDeclaration1, {
       export: true,
     })
     .mock(SomeDeclaration2, {
       export: true,
-    }),
-);
+    });
+});
 ```
 
 #### MockBuilder `exportAll` flag
@@ -1834,16 +1839,16 @@ we need to mark the module with the `exportAll` flag. Then all its imports and d
 If the module is nested, then add the [`export`](#mockbuilder-export-flag) flag beside `exportAll` too.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent)
+beforeEach(() => {
+  return MockBuilder(MyComponent)
     .keep(MyModule, {
       exportAll: true,
     })
     .mock(MyNestedModule, {
       exportAll: true,
       export: true,
-    }),
-);
+    });
+});
 ```
 
 #### MockBuilder `dependency` flag
@@ -1855,27 +1860,29 @@ Tokens and Services are added as providers to the `TestingModule`.
 If we do not want something to be added to the `TestingModule` at all, then we need to mark it with the `dependency` flag.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
-    .keep(SomeModuleComponentDirectivePipeProvider1, {
-      dependency: true,
-    })
-    .mock(SomeModuleComponentDirectivePipe, {
-      dependency: true,
-    })
-    // Pass the same def as a mock instance, if you want only to
-    // specify the config.
-    .mock(SomeProvider, SomeProvider, {
-      dependency: true,
-    })
-    // Or provide a mock instance together with the config.
-    .mock(SomeProvider, mockInstance, {
-      dependency: true,
-    })
-    .replace(SomeModuleComponentDirectivePipeProvider1, anything1, {
-      dependency: true,
-    }),
-);
+beforeEach(() => {
+  return (
+    MockBuilder(MyComponent, MyModule)
+      .keep(SomeModuleComponentDirectivePipeProvider1, {
+        dependency: true,
+      })
+      .mock(SomeModuleComponentDirectivePipe, {
+        dependency: true,
+      })
+      // Pass the same def as a mock instance, if you want only to
+      // specify the config.
+      .mock(SomeProvider, SomeProvider, {
+        dependency: true,
+      })
+      // Or provide a mock instance together with the config.
+      .mock(SomeProvider, mockInstance, {
+        dependency: true,
+      })
+      .replace(SomeModuleComponentDirectivePipeProvider1, anything1, {
+        dependency: true,
+      })
+  );
+});
 ```
 
 #### MockBuilder `render` flag
@@ -1883,31 +1890,31 @@ beforeEach(() =>
 If we want to render a structural directive by default. Now we can do that via adding the `render` flag in its config.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).mock(MyDirective, {
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).mock(MyDirective, {
     render: true,
-  }),
-);
+  });
+});
 ```
 
 If the directive has own context and variables. Then instead of setting `render` to true we can set the context.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).mock(MyDirective, {
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).mock(MyDirective, {
     render: {
       $implicit: something1,
       variables: { something2: something3 },
     },
-  }),
-);
+  });
+});
 ```
 
 If we use `ContentChild` in a component, and we want to render it by default, we should use its id for that in the same way as for a mock directive.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).mock(MyComponent, {
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).mock(MyComponent, {
     render: {
       blockId: true,
       blockWithContext: {
@@ -1915,8 +1922,8 @@ beforeEach(() =>
         variables: { something2: something3 },
       },
     },
-  }),
-);
+  });
+});
 ```
 
 #### `NG_MOCKS_GUARDS` token
@@ -1925,9 +1932,9 @@ If we want to test guards we need to [`.keep`](#mockbuilderkeep) them, but what 
 The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guards from routes** except the explicitly configured ones.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyGuard, MyModule).exclude(NG_MOCKS_GUARDS),
-);
+beforeEach(() => {
+  return MockBuilder(MyGuard, MyModule).exclude(NG_MOCKS_GUARDS);
+});
 ```
 
 #### `NG_MOCKS_INTERCEPTORS` token
@@ -1937,9 +1944,11 @@ To **remove all interceptors in an angular test** we need to exclude `NG_MOCKS_I
 then all interceptors will be excluded except the explicitly configured ones.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyInterceptor, MyModule).exclude(NG_MOCKS_INTERCEPTORS),
-);
+beforeEach(() => {
+  return MockBuilder(MyInterceptor, MyModule).exclude(
+    NG_MOCKS_INTERCEPTORS,
+  );
+});
 ```
 
 #### `NG_MOCKS_ROOT_PROVIDERS` token
@@ -1951,24 +1960,24 @@ If we want to replace all root providers with their mock copies in an angular te
 we need to pass `NG_MOCKS_ROOT_PROVIDERS` token into [`.mock`](#mockbuildermock).
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(
+beforeEach(() => {
+  return MockBuilder(
     MyComponentWithRootServices,
     MyModuleWithRootTokens,
-  ).mock(NG_MOCKS_ROOT_PROVIDERS),
-);
+  ).mock(NG_MOCKS_ROOT_PROVIDERS);
+});
 ```
 
 In contrast to that, we might want to keep all root providers for mock declarations.
 For that, we need to keep `NG_MOCKS_ROOT_PROVIDERS` token.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(
+beforeEach(() => {
+  return MockBuilder(
     MyComponentWithRootServices,
     MyModuleWithRootTokens,
-  ).keep(NG_MOCKS_ROOT_PROVIDERS),
-);
+  ).keep(NG_MOCKS_ROOT_PROVIDERS);
+});
 ```
 
 If we do not pass `NG_MOCKS_ROOT_PROVIDERS` anywhere,
@@ -1980,13 +1989,13 @@ All other root providers will be replaced with their mock copies, even for kept 
 Anytime we can change our decision. The last action on the same object wins. SomeModule will be replaced with its mock copy.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
     .keep(SomeModule)
     .mock(SomeModule)
     .keep(SomeModule)
-    .mock(SomeModule),
-);
+    .mock(SomeModule);
+});
 ```
 
 [to the top](#table-of-contents)
@@ -2060,6 +2069,7 @@ to play with.
 
 ```typescript
 describe('MockRender', () => {
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
 
   it('renders template', () => {
@@ -2234,6 +2244,7 @@ to play with.
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock copy.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
   beforeAll(() => {
@@ -2628,9 +2639,11 @@ describe('performance:correct', () => {
   ngMocks.faster(); // <-- add it before
 
   // The TestBed is not going to be changed between tests.
-  beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(TargetService),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent, TargetModule).keep(
+      TargetService,
+    );
+  });
 
   it('...', () => {
     // ...
@@ -2659,6 +2672,7 @@ describe('beforeEach:mock-instance', () => {
 
   // A normal setup of the TestBed, TargetService will be replaced
   // with its mock copy.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
 
   // Configuring behavior of the mock TargetService.
@@ -2707,9 +2721,9 @@ describe('beforeEach:manual-spy', () => {
 
   // A normal setup of the TestBed, TargetService will be replaced
   // with its mock copy.
-  beforeEach(() =>
-    MockBuilder(TargetComponent).mock(TargetService, mock),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent).mock(TargetService, mock);
+  });
 });
 ```
 
@@ -2801,11 +2815,11 @@ The only problem now is to rewrite `beforeEach` to use [`MockBuilder`](#mockbuil
 A possible solution might looks like:
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(ComponentToTest)
+beforeEach(() => {
+  return MockBuilder(ComponentToTest)
     .keep(SharedModule)
-    .mock(ModuleWithServicesAndSharedModule),
-);
+    .mock(ModuleWithServicesAndSharedModule);
+});
 ```
 
 The configuration says that we want to test `ComponentToTest`, which depends on `SharedModule` and `ModuleWithServicesAndSharedModule`, but `SharedModule` should stay as it is.
@@ -2830,9 +2844,9 @@ If you cannot remove them for a reason, for example it is a 3rd-party library,
 then you need to write tests with usage of [`MockBuilder`](#mockbuilder) and its [`.exclude`](#mockbuilderexclude) feature.
 
 ```typescript
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule).exclude(ParentDirective),
-);
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule).exclude(ParentDirective);
+});
 ```
 
 That fixes declarations of the module and resolves the error,
@@ -2907,6 +2921,7 @@ there are 3 solutions to do it:
    that exports all its imports and declarations including a mock `DependencyComponent`.
 
    ```typescript
+   // Do not forget to return the promise of MockBuilder.
    beforeEach(() => MockBuilder(MyComponent, MyModule));
    ```
 
