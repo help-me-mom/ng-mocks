@@ -46,7 +46,9 @@ class TargetModule {}
 describe('tokens-class', () => {
   ngMocks.faster();
 
-  beforeEach(() => MockBuilder().mock(TargetModule).keep(Class2Service));
+  beforeEach(() =>
+    MockBuilder().mock(TargetModule).keep(Class2Service),
+  );
 
   it('resolves Class1Service as a mock instance', () => {
     const actual = TestBed.get(Class1Service);

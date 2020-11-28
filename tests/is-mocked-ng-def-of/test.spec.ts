@@ -1,5 +1,17 @@
-import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { isMockedNgDefOf, MockComponent, MockDirective, MockModule, MockPipe } from 'ng-mocks';
+import {
+  Component,
+  Directive,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
+import {
+  isMockedNgDefOf,
+  MockComponent,
+  MockDirective,
+  MockModule,
+  MockPipe,
+} from 'ng-mocks';
 
 @Pipe({
   name: 'target',

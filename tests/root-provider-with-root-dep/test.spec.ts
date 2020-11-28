@@ -1,4 +1,11 @@
-import { Component, Inject, Injectable as InjectableSource, InjectionToken, NgModule, VERSION } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Injectable as InjectableSource,
+  InjectionToken,
+  NgModule,
+  VERSION,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -55,7 +62,9 @@ describe('root-provider-with-root-dep', () => {
     it('finds tokens', () => {
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
-      expect(fixture.nativeElement.innerHTML).toContain('"name:token"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"name:token"',
+      );
     });
   });
 

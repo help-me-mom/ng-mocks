@@ -2,7 +2,10 @@
 
 import { Component, NgModule, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { BrowserModule, EventManager } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  EventManager,
+} from '@angular/platform-browser';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -37,7 +40,9 @@ describe('issue-162', () => {
     TestBed.resetTestingModule();
     const target: EventManager = TestBed.get(EventManager);
     expect(target.addEventListener).toEqual(jasmine.any(Function));
-    expect((target.addEventListener as any).__ngMocks).toBeUndefined();
+    expect(
+      (target.addEventListener as any).__ngMocks,
+    ).toBeUndefined();
     TestBed.resetTestingModule();
   });
 
@@ -60,12 +65,28 @@ describe('issue-162', () => {
 
     // creating spies
     if (typeof jest !== 'undefined') {
-      getSpy = jest.spyOn(fixture.point.componentInstance, 'title', 'get');
-      setSpy = jest.spyOn(fixture.point.componentInstance, 'title', 'set');
+      getSpy = jest.spyOn(
+        fixture.point.componentInstance,
+        'title',
+        'get',
+      );
+      setSpy = jest.spyOn(
+        fixture.point.componentInstance,
+        'title',
+        'set',
+      );
       getSpy.mockReturnValue('spy');
     } else if (typeof jasmine !== 'undefined') {
-      getSpy = spyOnProperty(fixture.point.componentInstance, 'title', 'get');
-      setSpy = spyOnProperty(fixture.point.componentInstance, 'title', 'set');
+      getSpy = spyOnProperty(
+        fixture.point.componentInstance,
+        'title',
+        'get',
+      );
+      setSpy = spyOnProperty(
+        fixture.point.componentInstance,
+        'title',
+        'set',
+      );
       getSpy.and.returnValue('spy');
     }
 

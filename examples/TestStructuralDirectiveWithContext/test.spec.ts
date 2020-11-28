@@ -1,4 +1,9 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  Input,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 export interface ITargetContext {
@@ -34,6 +39,7 @@ describe('TestStructuralDirectiveWithContext', () => {
   // Because we want to test the directive, we pass it as the first
   // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('renders passed values', () => {
@@ -41,7 +47,8 @@ describe('TestStructuralDirectiveWithContext', () => {
       `
         <div *target="values; let value; let index = myIndex">
         {{index}}: {{ value }}
-        </div>`,
+        </div>
+      `,
       {
         values: ['hello', 'world'],
       },

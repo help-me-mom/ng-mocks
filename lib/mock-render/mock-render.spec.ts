@@ -9,19 +9,33 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
 import { MockRender } from './mock-render';
-import { EmptyComponent, RenderRealComponent, WithoutSelectorComponent } from './mock-render.spec.fixtures';
-import { MockedComponentFixture, MockedDebugElement, MockedDebugNode } from './types';
+import {
+  EmptyComponent,
+  RenderRealComponent,
+  WithoutSelectorComponent,
+} from './mock-render.spec.fixtures';
+import {
+  MockedComponentFixture,
+  MockedDebugElement,
+  MockedDebugNode,
+} from './types';
 
 describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RenderRealComponent, WithoutSelectorComponent, EmptyComponent],
+      declarations: [
+        RenderRealComponent,
+        WithoutSelectorComponent,
+        EmptyComponent,
+      ],
     });
   });
 
   it('respects no inputs and outputs', () => {
     const fixture = MockRender(EmptyComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<empty>empty</empty>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<empty>empty</empty>',
+    );
   });
 
   it('respects observables', () => {
@@ -65,15 +79,21 @@ describe('MockRender', () => {
     expect(fixture).toBeTruthy();
 
     // Asserting inputs.
-    expect(fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(`before injected content after`);
+    expect(
+      fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim(),
+    ).toEqual(`before injected content after`);
 
     // Asserting dynamic changes on inputs.
     fixture.componentInstance.mockContent = 'dynamic content';
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(`before dynamic content after`);
+    expect(
+      fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim(),
+    ).toEqual(`before dynamic content after`);
 
     // Asserting outputs.
-    const spanElement = fixture.debugElement.query(By.css('render-real-component span'));
+    const spanElement = fixture.debugElement.query(
+      By.css('render-real-component span'),
+    );
     expect(spanElement).toBeTruthy();
     spanElement.triggerEventHandler('click', assertPayload);
     expect(spy).toHaveBeenCalledWith(assertPayload);
@@ -91,9 +111,13 @@ describe('MockRender', () => {
       },
       false,
     );
-    expect(fixture.debugElement.nativeElement.innerText).not.toContain('injected content');
+    expect(fixture.nativeElement.innerText).not.toContain(
+      'injected content',
+    );
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerText).toContain('injected content');
+    expect(fixture.nativeElement.innerText).toContain(
+      'injected content',
+    );
   });
 
   it('binds inputs and outputs with a provided component', () => {
@@ -116,12 +140,16 @@ describe('MockRender', () => {
     );
     // because template can include more than 1 component, be wrapped by any html element etc.
     expect(fixture.point).toBeDefined();
-    expect(fixture.point.componentInstance).toEqual(jasmine.any(RenderRealComponent));
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(RenderRealComponent),
+    );
   });
 
   it('returns pointer with a provided component', () => {
     const fixture = MockRender(RenderRealComponent);
-    expect(fixture.point.componentInstance).toEqual(jasmine.any(RenderRealComponent));
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(RenderRealComponent),
+    );
   });
 
   it('returns pointer with a provided component', () => {
@@ -144,7 +172,7 @@ describe('MockRender', () => {
 
   it('does not render a component without selector', () => {
     const fixture = MockRender(WithoutSelectorComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('');
+    expect(fixture.nativeElement.innerHTML).toEqual('');
   });
 
   it('assigns outputs to a literals', () => {
@@ -155,7 +183,9 @@ describe('MockRender', () => {
     const expected = {
       value: Math.random(),
     };
-    ngMocks.find(fixture.debugElement, 'span').triggerEventHandler('click', expected);
+    ngMocks
+      .find(fixture.debugElement, 'span')
+      .triggerEventHandler('click', expected);
     expect(fixture.componentInstance.click as any).toEqual(expected);
   });
 
@@ -168,8 +198,12 @@ describe('MockRender', () => {
       value: Math.random(),
     };
     let actual: any;
-    fixture.componentInstance.click.pipe(first()).subscribe(value => (actual = value));
-    ngMocks.find(fixture.debugElement, 'span').triggerEventHandler('click', expected);
+    fixture.componentInstance.click
+      .pipe(first())
+      .subscribe(value => (actual = value));
+    ngMocks
+      .find(fixture.debugElement, 'span')
+      .triggerEventHandler('click', expected);
     expect(actual).toEqual(expected);
   });
 

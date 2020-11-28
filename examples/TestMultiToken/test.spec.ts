@@ -45,6 +45,7 @@ describe('TestMultiToken', () => {
   // Because we want to test the token, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its initialization
   // we need to pass its module as the second parameter.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TOKEN_MULTI, TargetModule));
 
   it('creates TOKEN_MULTI', () => {
@@ -58,7 +59,8 @@ describe('TestMultiToken', () => {
     expect(tokens[0].name).toEqual('class');
 
     // Verifying that the token is an instance of ServiceExisting.
-    // But because it has been replaced with its mock copy we should see an empty name.
+    // But because it has been replaced with its mock copy
+    // we should see an empty name.
     expect(tokens[1]).toEqual(jasmine.any(ServiceExisting));
     expect(tokens[1].name).toBeUndefined();
 

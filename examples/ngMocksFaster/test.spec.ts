@@ -1,7 +1,13 @@
 // tslint:disable strict-type-predicates
 
 import { Component, Injectable } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -27,14 +33,18 @@ describe('examples:performance', () => {
 
     // A normal setup of the TestBed, TargetService will be replaced
     // with its mock copy.
-    beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
+    beforeEach(() => {
+      return MockBuilder(TargetComponent).mock(TargetService);
+    });
 
     // Configuring behavior of the mock TargetService.
     beforeAll(() => {
       MockInstance(TargetService, {
         init: instance => {
           instance.method =
-            typeof jest === 'undefined' ? jasmine.createSpy().and.returnValue(5) : jest.fn().mockReturnValue(5);
+            typeof jest === 'undefined'
+              ? jasmine.createSpy().and.returnValue(5)
+              : jest.fn().mockReturnValue(5);
           // in case of jest
           // instance.method = jest.fn().mockReturnValue(5);
           instance.prop = 123;
@@ -51,7 +61,9 @@ describe('examples:performance', () => {
       expect(fixture.point.componentInstance.service.prop).toBe(123);
       const actual = fixture.point.componentInstance.service.method();
       expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
+      expect(
+        fixture.point.componentInstance.service.method,
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('test:2', () => {
@@ -60,7 +72,9 @@ describe('examples:performance', () => {
       expect(fixture.point.componentInstance.service.prop).toBe(123);
       const actual = fixture.point.componentInstance.service.method();
       expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
+      expect(
+        fixture.point.componentInstance.service.method,
+      ).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -71,7 +85,12 @@ describe('examples:performance', () => {
     // allows its pointer being the same between tests
     // and this let ngMocks.faster do its job.
     const mock = {
-      method: typeof jest === 'undefined' ? jasmine.createSpy().and.returnValue(5) : jest.fn().mockReturnValue(5),
+      method:
+        typeof jest === 'undefined'
+          ? jasmine.createSpy().and.returnValue(5)
+          : jest.fn().mockReturnValue(5),
+      // in case of jest
+      // instance.method = jest.fn().mockReturnValue(5);
       prop: 123,
     };
 
@@ -87,7 +106,9 @@ describe('examples:performance', () => {
 
     // A normal setup of the TestBed, TargetService will be replaced
     // with its mock copy.
-    beforeEach(() => MockBuilder(TargetComponent).mock(TargetService, mock));
+    beforeEach(() => {
+      return MockBuilder(TargetComponent).mock(TargetService, mock);
+    });
 
     it('test:1', () => {
       const fixture = MockRender(TargetComponent);
@@ -95,7 +116,9 @@ describe('examples:performance', () => {
       expect(fixture.point.componentInstance.service.prop).toBe(123);
       const actual = fixture.point.componentInstance.service.method();
       expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
+      expect(
+        fixture.point.componentInstance.service.method,
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('test:2', () => {
@@ -104,7 +127,9 @@ describe('examples:performance', () => {
       expect(fixture.point.componentInstance.service.prop).toBe(123);
       const actual = fixture.point.componentInstance.service.method();
       expect(actual).toBe(5);
-      expect(fixture.point.componentInstance.service.method).toHaveBeenCalledTimes(1);
+      expect(
+        fixture.point.componentInstance.service.method,
+      ).toHaveBeenCalledTimes(1);
     });
   });
 });

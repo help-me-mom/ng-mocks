@@ -19,12 +19,18 @@ class TargetModule {}
 describe('issue-222:CommonModule', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [CommonModule, MockModule(CommonModule), MockModule(TargetModule)],
+      imports: [
+        CommonModule,
+        MockModule(CommonModule),
+        MockModule(TargetModule),
+      ],
     }),
   );
 
   it('correctly handles kept and the mock CommonModule', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<target></target>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<target></target>',
+    );
   });
 });

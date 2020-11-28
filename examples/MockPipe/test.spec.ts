@@ -1,5 +1,5 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Pipe({ name: 'dependency' })
 class DependencyPipe implements PipeTransform {
@@ -7,18 +7,24 @@ class DependencyPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'tested',
-  template: ` <span>{{ 'foo' | dependency }}</span> `,
+  selector: 'component',
+  template: `{{ 'foo' | dependency }}`,
 })
 class TestedComponent {}
 
 describe('MockPipe', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyPipe, (...args: string[]) => JSON.stringify(args)));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(
+      DependencyPipe,
+      (...args: string[]) => JSON.stringify(args),
+    );
+  });
 
   it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
 
-    const pipeElement = ngMocks.find(fixture.debugElement, 'span');
-    expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<component>["foo"]</component>',
+    );
   });
 });

@@ -22,6 +22,7 @@ describe('TestProviderInComponent', () => {
   // parameter of MockBuilder.
   // Because we do not care about TargetComponent, we pass it as
   // the second parameter for being replaced with a mock copy.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService, TargetComponent));
 
   it('has access to the service via a component', () => {

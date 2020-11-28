@@ -38,8 +38,14 @@ describe('issue-181:real', () => {
         </ng-template>
       </app-target>
     `);
-    expect(ngMocks.findInstance(fixture.debugElement, TargetComponent).header).toBeTruthy();
-    expect(ngMocks.findInstance(fixture.debugElement, TargetDirective).header).toBeTruthy();
+    expect(
+      ngMocks.findInstance(fixture.debugElement, TargetComponent)
+        .header,
+    ).toBeTruthy();
+    expect(
+      ngMocks.findInstance(fixture.debugElement, TargetDirective)
+        .header,
+    ).toBeTruthy();
   });
 });
 
@@ -55,7 +61,13 @@ describe('issue-181:mock', () => {
         </ng-template>
       </app-target>
     `);
-    expect(ngMocks.findInstance(fixture.debugElement, TargetComponent).header).toBeTruthy();
-    expect(ngMocks.findInstance(fixture.debugElement, TargetDirective).header).toBeTruthy();
+    expect(
+      ngMocks.findInstance(fixture.debugElement, TargetComponent)
+        .header,
+    ).toBeTruthy();
+    expect(
+      ngMocks.findInstance(fixture.debugElement, TargetDirective)
+        .header,
+    ).toBeTruthy();
   });
 });

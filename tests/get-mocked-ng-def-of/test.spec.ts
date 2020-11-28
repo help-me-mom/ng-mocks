@@ -1,5 +1,19 @@
-import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { getMockedNgDefOf, MockBuilder, MockComponent, MockDirective, MockModule, MockPipe, ngMocks } from 'ng-mocks';
+import {
+  Component,
+  Directive,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
+import {
+  getMockedNgDefOf,
+  MockBuilder,
+  MockComponent,
+  MockDirective,
+  MockModule,
+  MockPipe,
+  ngMocks,
+} from 'ng-mocks';
 
 @Pipe({
   name: 'target',
@@ -49,8 +63,12 @@ describe('getMockedNgDefOf:legacy', () => {
 
   it('throws an error outside of MockBuilder', () => {
     MockPipe(TargetPipe);
-    expect(() => getMockedNgDefOf(TargetPipe, 'p')).toThrowError(/There is no mock for TargetPipe/);
-    expect(() => getMockedNgDefOf(TargetPipe)).toThrowError(/There is no mock for TargetPipe/);
+    expect(() => getMockedNgDefOf(TargetPipe, 'p')).toThrowError(
+      /There is no mock for TargetPipe/,
+    );
+    expect(() => getMockedNgDefOf(TargetPipe)).toThrowError(
+      /There is no mock for TargetPipe/,
+    );
   });
 });
 

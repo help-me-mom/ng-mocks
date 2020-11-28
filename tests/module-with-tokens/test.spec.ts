@@ -1,6 +1,11 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { MY_TOKEN_MULTI, MY_TOKEN_SINGLE, TargetComponent, TargetModule } from './fixtures';
+import {
+  MY_TOKEN_MULTI,
+  MY_TOKEN_SINGLE,
+  TargetComponent,
+  TargetModule,
+} from './fixtures';
 
 // Preferred way.
 // Because tokens are provided in the testbed module with custom values the test should render them.
@@ -25,7 +30,9 @@ describe('module-with-tokens:mock-0', () => {
 
   it('fails to render all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+    expect(
+      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
+    ).toEqual(
       '<internal-component>"V1" [ "V2", "V3" ]</internal-component>',
     );
   });
@@ -34,11 +41,17 @@ describe('module-with-tokens:mock-0', () => {
 // Because all tokens are replaced with mock copies in the module the test should render empty values.
 // interesting is that for multi it's null, not undefined.
 describe('module-with-tokens:mock-1', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(MY_TOKEN_SINGLE).mock(MY_TOKEN_MULTI));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule)
+      .mock(MY_TOKEN_SINGLE)
+      .mock(MY_TOKEN_MULTI),
+  );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+    expect(
+      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
+    ).toEqual(
       '<internal-component> [ null, null ]</internal-component>',
     );
   });
@@ -54,7 +67,9 @@ describe('module-with-tokens:mock-2', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+    expect(
+      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
+    ).toEqual(
       '<internal-component>' +
         '"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]' +
         '</internal-component>',
@@ -71,7 +86,8 @@ describe('module-with-tokens:mock-3', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('does not fail to render all tokens', () => {
-    expect(() => MockRender(TargetComponent)).not.toThrowError(/InjectionToken/);
+    // InjectionToken
+    expect(() => MockRender(TargetComponent)).not.toThrow();
   });
 
   it('renders mock tokens with respect of multi flag', () => {
@@ -88,7 +104,9 @@ describe('module-with-tokens:real', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+    expect(
+      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
+    ).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });
@@ -96,11 +114,17 @@ describe('module-with-tokens:real', () => {
 
 // Because all tokens are kept in the module the test should render them correctly.
 describe('module-with-tokens:keep', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(MY_TOKEN_SINGLE).keep(MY_TOKEN_MULTI));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule)
+      .keep(MY_TOKEN_SINGLE)
+      .keep(MY_TOKEN_MULTI),
+  );
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML.replace(/\s+/gm, ' ')).toEqual(
+    expect(
+      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
+    ).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });

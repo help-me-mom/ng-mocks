@@ -9,7 +9,9 @@ describe('ExportsOnly:real', () => {
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('<internal-component>internal</internal-component>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<internal-component>internal</internal-component>',
+    );
   });
 });
 
@@ -20,20 +22,26 @@ describe('ExportsOnly:mock1', () => {
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content).toEqual('<internal-component></internal-component>');
+    const content = fixture.nativeElement.innerHTML;
+    expect(content).toEqual(
+      '<internal-component></internal-component>',
+    );
   });
 });
 
 describe('ExportsOnly:mock2', () => {
-  beforeEach(() => MockBuilder().mock(TargetModule).mock(InternalComponent));
+  beforeEach(() =>
+    MockBuilder().mock(TargetModule).mock(InternalComponent),
+  );
 
   // The expectation is to see that InternalModule was exported and it can be accessed from the test.
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content).toEqual('<internal-component></internal-component>');
+    const content = fixture.nativeElement.innerHTML;
+    expect(content).toEqual(
+      '<internal-component></internal-component>',
+    );
   });
 });
 
@@ -44,6 +52,8 @@ describe('ExportsOnly:mock3', () => {
   it('should render', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('<internal-component>internal</internal-component>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<internal-component>internal</internal-component>',
+    );
   });
 });

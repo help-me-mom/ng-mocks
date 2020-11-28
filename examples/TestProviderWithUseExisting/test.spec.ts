@@ -38,6 +38,7 @@ describe('TestProviderWithUseExisting', () => {
   // Because we want to test the service, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its initialization
   // we need to pass its module as the second parameter.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   beforeAll(() => {

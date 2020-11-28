@@ -1,5 +1,7 @@
 import { InjectionToken, Provider } from '@angular/core';
-import { NgModuleWithProviders, Type } from 'ng-mocks';
+
+import { Type } from '../../common/core.types';
+import { NgModuleWithProviders } from '../../common/func.is-ng-module-def-with-providers';
 
 export type BuilderData = {
   configDef: Map<Type<any> | InjectionToken<any>, any>;

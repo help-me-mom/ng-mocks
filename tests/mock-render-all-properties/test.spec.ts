@@ -57,11 +57,14 @@ class ParentClass {
 @Component({
   selector: 'target',
   template: `
-    'pubChildProp:{{ pubChildProp }}' 'pubChildPropGet:{{ pubChildPropGet }}' 'pubReadonlyChildProp:{{
-      pubReadonlyChildProp
-    }}' 'pubReadonlyChildPropGet:{{ pubReadonlyChildPropGet }}' 'pubParentProp:{{ pubParentProp }}' 'pubParentPropGet:{{
+    'pubChildProp:{{ pubChildProp }}' 'pubChildPropGet:{{
+      pubChildPropGet
+    }}' 'pubReadonlyChildProp:{{ pubReadonlyChildProp }}'
+    'pubReadonlyChildPropGet:{{ pubReadonlyChildPropGet }}'
+    'pubParentProp:{{ pubParentProp }}' 'pubParentPropGet:{{
       pubParentPropGet
-    }}' 'pubParentParentProp:{{ pubReadonlyParentProp }}' 'pubParentParentPropGet:{{ pubReadonlyParentPropGet }}'
+    }}' 'pubParentParentProp:{{ pubReadonlyParentProp }}'
+    'pubParentParentPropGet:{{ pubReadonlyParentPropGet }}'
   `,
 })
 class TargetComponent extends ParentClass {

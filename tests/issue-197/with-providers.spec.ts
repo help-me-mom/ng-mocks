@@ -1,6 +1,10 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockRender, NgModuleWithProviders } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NgModuleWithProviders,
+} from 'ng-mocks';
 
 @Injectable()
 class DependencyService {
@@ -49,33 +53,50 @@ describe('issue-197:with-providers:manually-injection', () => {
 
     return TestBed.configureTestingModule({
       declarations: module.declarations,
-      imports: [...(module.imports || []), DependencyModule.withProviders()],
+      imports: [
+        ...(module.imports || []),
+        DependencyModule.withProviders(),
+      ],
       providers: module.providers,
     }).compileComponents();
   });
 
   it('creates component with provided dependencies', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<target>via-provider</target>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<target>via-provider</target>',
+    );
   });
 });
 
 describe('issue-197:with-providers:keep', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(DependencyModule.withProviders()));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).keep(
+      DependencyModule.withProviders(),
+    ),
+  );
 
   it('creates component with provided dependencies', () => {
     const fixture = MockRender(TargetComponent);
 
-    expect(fixture.nativeElement.innerHTML).toEqual('<target>via-provider</target>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<target>via-provider</target>',
+    );
   });
 });
 
 describe('issue-197:with-providers:mock', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(DependencyModule.withProviders()));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).mock(
+      DependencyModule.withProviders(),
+    ),
+  );
 
   it('creates component with provided dependencies', () => {
     const fixture = MockRender(TargetComponent);
 
-    expect(fixture.nativeElement.innerHTML).toEqual('<target></target>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<target></target>',
+    );
   });
 });

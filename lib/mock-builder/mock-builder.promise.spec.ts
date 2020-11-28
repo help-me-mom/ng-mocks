@@ -1,6 +1,14 @@
 // tslint:disable no-console
 
-import { Component, Directive, Injectable, InjectionToken, NgModule, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Directive,
+  Injectable,
+  InjectionToken,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 
 import { getTestBedInjection } from '../common/core.helpers';
 
@@ -67,7 +75,9 @@ describe('MockBuilderPromise', () => {
   });
 
   it('skips dependencies in mock providers', async () => {
-    await MockBuilder().mock(TargetService, TargetService, { dependency: true });
+    await MockBuilder().mock(TargetService, TargetService, {
+      dependency: true,
+    });
     expect(getTestBedInjection(TargetService)).toBeFalsy();
   });
 
@@ -127,7 +137,11 @@ describe('MockBuilderPromise', () => {
   });
 
   it('throws an error on a services replacement', () => {
-    expect(() => MockBuilder().replace(TargetModule, TargetService)).toThrowError(/Cannot replace the declaration/);
-    expect(() => MockBuilder().replace(TargetService, TargetModule)).toThrowError(/Cannot replace the declaration/);
+    expect(() =>
+      MockBuilder().replace(TargetModule, TargetService),
+    ).toThrowError(/Cannot replace the declaration/);
+    expect(() =>
+      MockBuilder().replace(TargetService, TargetModule),
+    ).toThrowError(/Cannot replace the declaration/);
   });
 });

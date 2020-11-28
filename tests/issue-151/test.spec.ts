@@ -12,7 +12,10 @@ describe('issue-151', () => {
   describe('mock AppRoutingModule', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        MockBuilder(AppComponent, AppModule).keep(RouterModule).keep(RouterTestingModule).build(),
+        MockBuilder(AppComponent, AppModule)
+          .keep(RouterModule)
+          .keep(RouterTestingModule)
+          .build(),
       ),
     );
 
@@ -27,7 +30,9 @@ describe('issue-151', () => {
 
     it('should create the app', () => {
       // asserting that app-hello is replaced with a mock copy (no content) and detected by router.
-      expect(fixture.nativeElement.innerHTML).toContain('<app-hello></app-hello>');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '<app-hello></app-hello>',
+      );
     });
   });
 });

@@ -1,6 +1,17 @@
-import { Component, Directive, forwardRef, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive,
+  forwardRef,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { FormControl, NG_VALIDATORS, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
+import {
+  FormControl,
+  NG_VALIDATORS,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -63,12 +74,19 @@ describe('issue-167:NG_VALIDATORS:real', () => {
 });
 
 describe('issue-167:NG_VALIDATORS:mock', () => {
-  beforeEach(() => MockBuilder(RealComponent, TargetModule).keep(ReactiveFormsModule));
+  beforeEach(() =>
+    MockBuilder(RealComponent, TargetModule).keep(
+      ReactiveFormsModule,
+    ),
+  );
 
   it('should trigger validation w/o an error', () => {
     const fixture = MockRender(RealComponent);
 
-    const mock = ngMocks.findInstance(fixture.debugElement, TargetDirective);
+    const mock = ngMocks.findInstance(
+      fixture.debugElement,
+      TargetDirective,
+    );
     spyOn(mock, 'validate').and.returnValue({
       mock: true,
     });

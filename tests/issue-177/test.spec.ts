@@ -3,7 +3,8 @@ import { MockService, ngMocks } from 'ng-mocks';
 class Example {
   private readonly privateDynamicGet = 'return value from dynamicGet';
 
-  private readonly privateDynamicMethod = 'return value from dynamicMethod';
+  private readonly privateDynamicMethod =
+    'return value from dynamicMethod';
 
   public get dynamicGet() {
     return this.privateDynamicGet;

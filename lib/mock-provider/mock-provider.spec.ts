@@ -49,6 +49,8 @@ describe('mock-provider', () => {
       provide: TargetService,
       useFactory: jasmine.anything(),
     });
-    expect(actual[1].useFactory()).toEqual(jasmine.any(TargetService));
+    expect(actual[1].useFactory()).toEqual(
+      jasmine.any(TargetService),
+    );
   });
 });

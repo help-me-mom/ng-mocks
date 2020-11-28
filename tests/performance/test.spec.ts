@@ -30,7 +30,9 @@ describe('performance:correct', () => {
 
   beforeAll(() => {
     backupWarn = console.warn;
-    console.warn = jasmine.createSpy('console').and.callFake(console.log);
+    console.warn = jasmine
+      .createSpy('console')
+      .and.callFake(console.log);
   });
 
   afterAll(() => {
@@ -39,7 +41,9 @@ describe('performance:correct', () => {
 
   ngMocks.faster();
 
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).keep(TargetService),
+  );
 
   it('creates a module on first call', () => {
     expect(console.warn).not.toHaveBeenCalled();
@@ -76,6 +80,8 @@ describe('performance:wrong', () => {
   });
 
   it('reuses a module on second call', () => {
-    expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/ngMocks.faster/));
+    expect(console.warn).toHaveBeenCalledWith(
+      jasmine.stringMatching(/ngMocks.faster/),
+    );
   });
 });

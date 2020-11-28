@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, ngMocks } from 'ng-mocks';
+import { TestBed } from '@angular/core/testing';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
 // A simple service, might have contained more logic,
@@ -8,6 +14,10 @@ import { Observable, Subject } from 'rxjs';
 @Injectable()
 class TargetService {
   public readonly value$: Observable<number[]> = new Observable();
+
+  public getValue$(): Observable<number[]> {
+    return this.value$;
+  }
 }
 
 @Component({
@@ -33,6 +43,7 @@ describe('MockObservable', () => {
   // Because we want to test the component, we pass it as the first
   // parameter of MockBuilder. To create its mock dependencies
   // we pass its module as the second parameter.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   // Now we need to customize the mock copy of the service.
@@ -79,5 +90,10 @@ describe('MockObservable', () => {
     expect(fixture.nativeElement.innerHTML).not.toContain('1');
     expect(fixture.nativeElement.innerHTML).not.toContain('2');
     expect(fixture.nativeElement.innerHTML).not.toContain('3');
+
+    // Checking that a sibling method has been replaced
+    // with a mock copy too.
+    expect(TestBed.get(TargetService).getValue$).toBeDefined();
+    expect(TestBed.get(TargetService).getValue$()).toBeUndefined();
   });
 });

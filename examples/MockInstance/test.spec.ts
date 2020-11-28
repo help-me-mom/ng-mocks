@@ -1,5 +1,16 @@
-import { AfterViewInit, Component, Injector, ViewChild } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
+import {
+  AfterViewInit,
+  Component,
+  Injector,
+  ViewChild,
+} from '@angular/core';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
 // A child component that contains update$ the parent component wants to listen to.
@@ -38,6 +49,7 @@ class RealComponent implements AfterViewInit {
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock copy.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
   beforeAll(() => {
@@ -64,6 +76,6 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => MockRender(RealComponent)).not.toThrowError(/Cannot read property 'subscribe' of undefined/);
+    expect(() => MockRender(RealComponent)).not.toThrow();
   });
 });

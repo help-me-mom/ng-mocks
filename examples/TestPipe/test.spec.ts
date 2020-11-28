@@ -23,6 +23,7 @@ describe('TestPipe', () => {
   // Because we want to test the pipe, we pass it as the first
   // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetPipe));
 
   it('sorts strings', () => {

@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, Injectable, InjectionToken } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Injectable,
+  InjectionToken,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockProvider } from 'ng-mocks';
 
 const UNK_TOKEN = new InjectionToken('UNK_TOKEN');
 const STR_TOKEN = new InjectionToken<string>('STR_TOKEN');
-const OBJ_TOKEN = new InjectionToken<{ name: string; value: number }>('OBJ_TOKEN');
+const OBJ_TOKEN = new InjectionToken<{ name: string; value: number }>(
+  'OBJ_TOKEN',
+);
 
 @Injectable()
 class Dependency1Service {
@@ -27,7 +34,11 @@ class Dependency2Service {
 
 @Component({
   selector: 'target',
-  template: `"{{ dep1.name }}" "{{ dep2.name }}" "{{ unk }}" "{{ pri }}" "{{ str }}" "{{ obj | json }}"`,
+  template: `
+    "{{ dep1.name }}" "{{ dep2.name }}" "{{ unk }}" "{{ pri }}" "{{
+      str
+    }}" "{{ obj | json }}"
+  `,
 })
 class TargetComponent {
   public constructor(
@@ -63,9 +74,15 @@ describe('MockProvider', () => {
     mockObj.value = 321;
     const fixture = TestBed.createComponent(TargetComponent);
     fixture.detectChanges();
-    expect(fixture.debugElement.injector.get(Dependency1Service).echo()).toBeUndefined();
-    expect(fixture.debugElement.injector.get(Dependency2Service).echo()).toBeUndefined();
-    expect(fixture.debugElement.injector.get(OBJ_TOKEN)).toBe(mockObj as any);
+    expect(
+      fixture.debugElement.injector.get(Dependency1Service).echo(),
+    ).toBeUndefined();
+    expect(
+      fixture.debugElement.injector.get(Dependency2Service).echo(),
+    ).toBeUndefined();
+    expect(fixture.debugElement.injector.get(OBJ_TOKEN)).toBe(
+      mockObj as any,
+    );
     expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
     expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');
     expect(fixture.nativeElement.innerHTML).toContain('"mock token"');

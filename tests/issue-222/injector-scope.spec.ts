@@ -1,4 +1,11 @@
-import { Component, Inject, Injectable as InjectableSource, NgModule, PLATFORM_ID, VERSION } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Injectable as InjectableSource,
+  NgModule,
+  PLATFORM_ID,
+  VERSION,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -45,9 +52,12 @@ describe('issue-222:INJECTOR_SCOPE', () => {
     }
   });
 
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(KeepModule));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).keep(KeepModule),
+  );
 
   it('does not mock INJECTOR_SCOPE, fails on ivy only', () => {
-    expect(() => MockRender(TargetComponent)).not.toThrowError(/No provider for KeepService/);
+    // No provider for KeepService
+    expect(() => MockRender(TargetComponent)).not.toThrow();
   });
 });

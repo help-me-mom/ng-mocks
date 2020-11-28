@@ -1,4 +1,12 @@
-import { Component, Injectable as InjectableSource, NgModule, Optional, Self, SkipSelf, VERSION } from '@angular/core';
+import {
+  Component,
+  Injectable as InjectableSource,
+  NgModule,
+  Optional,
+  Self,
+  SkipSelf,
+  VERSION,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -40,7 +48,8 @@ class TargetService {
 @Component({
   selector: 'target',
   template: `
-    "service:{{ service.service ? service.service.name : 'missed' }}" "optional:{{
+    "service:{{ service.service ? service.service.name : 'missed' }}"
+    "optional:{{
       service.optional ? service.optional.name : 'missed'
     }}"
   `,
@@ -58,7 +67,11 @@ class TargetComponent {
       useValue: undefined,
     },
     {
-      deps: [Dep2Service, [new Optional(), new SkipSelf(), new Self(), Dep3Service], 'test'],
+      deps: [
+        Dep2Service,
+        [new Optional(), new SkipSelf(), new Self(), Dep3Service],
+        'test',
+      ],
       provide: TargetService,
       useClass: TargetService,
     },
@@ -84,43 +97,63 @@ describe('provider-with-custom-dependencies', () => {
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
       // Injects root dependency correctly.
-      expect(fixture.nativeElement.innerHTML).toContain('"service:dep-2"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"service:dep-2"',
+      );
       // Skips unprovided local dependency.
-      expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"optional:missed"',
+      );
       // The dependency should not be provided in TestBed.
-      expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);
+      expect(() => TestBed.get(Dep3Service)).toThrowError(
+        /No provider for Dep3Service/,
+      );
     });
   });
 
   describe('mock-builder:mock', () => {
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).keep(TargetService),
+    );
 
     it('creates component with mock custom dependencies', () => {
       const fixture = MockRender(TargetComponent);
       // Injects root dependency correctly, it is not missed, it is replaced with a mock copy.
       expect(fixture.nativeElement.innerHTML).toContain('"service:"');
       // Skips unprovided local dependency despite its mock copy.
-      expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"optional:missed"',
+      );
       // The dependency should not be provided in TestBed.
-      expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);
+      expect(() => TestBed.get(Dep3Service)).toThrowError(
+        /No provider for Dep3Service/,
+      );
     });
   });
 
   describe('mock-builder:keep', () => {
     beforeEach(() =>
-      MockBuilder(TargetComponent, TargetModule).keep(TargetService).keep(Dep2Service, {
-        dependency: true,
-      }),
+      MockBuilder(TargetComponent, TargetModule)
+        .keep(TargetService)
+        .keep(Dep2Service, {
+          dependency: true,
+        }),
     );
 
     it('creates component with kept Dep2Service', () => {
       const fixture = MockRender(TargetComponent);
       // Injects root dependency correctly, it is not missed, it is replaced with a mock copy.
-      expect(fixture.nativeElement.innerHTML).toContain('"service:dep-2"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"service:dep-2"',
+      );
       // Skips unprovided local dependency despite its mock copy.
-      expect(fixture.nativeElement.innerHTML).toContain('"optional:missed"');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '"optional:missed"',
+      );
       // The dependency should not be provided in TestBed.
-      expect(() => TestBed.get(Dep3Service)).toThrowError(/No provider for Dep3Service/);
+      expect(() => TestBed.get(Dep3Service)).toThrowError(
+        /No provider for Dep3Service/,
+      );
     });
   });
 });

@@ -1,6 +1,10 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { FakeComponent, RealComponent, TargetComponent } from './fixtures.components';
+import {
+  FakeComponent,
+  RealComponent,
+  TargetComponent,
+} from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('normal-usage-after-mock-builder:real1', () => {
@@ -8,16 +12,24 @@ describe('normal-usage-after-mock-builder:real1', () => {
 
   it('renders real component because we did not use MockBuilder.replace yet', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<root><internal>real</internal>1</root>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<root><internal>real</internal>1</root>',
+    );
   });
 });
 
 describe('normal-usage-after-mock-builder:mock', () => {
-  beforeEach(() => MockBuilder().keep(TargetModule).replace(RealComponent, FakeComponent, { dependency: true }));
+  beforeEach(() =>
+    MockBuilder()
+      .keep(TargetModule)
+      .replace(RealComponent, FakeComponent, { dependency: true }),
+  );
 
   it('renders fake component because we used MockBuilder.replace', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<root><internal>fake</internal>1</root>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<root><internal>fake</internal>1</root>',
+    );
   });
 });
 
@@ -26,6 +38,8 @@ describe('normal-usage-after-mock-builder:real2', () => {
 
   it('has to render real component after MockBuilder.replace', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<root><internal>real</internal>1</root>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<root><internal>real</internal>1</root>',
+    );
   });
 });

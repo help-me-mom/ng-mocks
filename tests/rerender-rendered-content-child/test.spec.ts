@@ -1,4 +1,9 @@
-import { MockBuilder, MockComponent, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockComponent,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 import { ContentChildComponent } from './fixtures.components';
 
@@ -23,20 +28,23 @@ describe('Rerender of a rendered @ContentChild', () => {
       },
     );
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('$implicit 1');
+    expect(fixture.nativeElement.innerHTML).toContain('$implicit 1');
 
     fixture.componentInstance.outside = '2';
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('$implicit 2');
+    expect(fixture.nativeElement.innerHTML).toContain('$implicit 2');
 
-    const component = ngMocks.find(fixture.debugElement, MockComponent(ContentChildComponent)).componentInstance;
+    const component = ngMocks.find(
+      fixture.debugElement,
+      MockComponent(ContentChildComponent),
+    ).componentInstance;
 
     component.__render('block', 'updated');
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('updated 2');
+    expect(fixture.nativeElement.innerHTML).toContain('updated 2');
 
     fixture.componentInstance.outside = '3';
     fixture.detectChanges();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('updated 3');
+    expect(fixture.nativeElement.innerHTML).toContain('updated 3');
   });
 });

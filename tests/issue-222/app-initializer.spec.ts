@@ -22,24 +22,38 @@ describe('issue-222:APP_INITIALIZER:mock', () => {
 
   it('correctly handles APP_INITIALIZER in a mock module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<router-outlet></router-outlet>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<router-outlet></router-outlet>',
+    );
   });
 });
 
 describe('issue-222:APP_INITIALIZER:keep', () => {
-  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule).mock(APP_BASE_HREF, ''));
+  beforeEach(() =>
+    MockBuilder(TargetComponent)
+      .keep(TargetModule)
+      .mock(APP_BASE_HREF, ''),
+  );
 
   it('correctly handles APP_INITIALIZER in a kept module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<router-outlet></router-outlet>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<router-outlet></router-outlet>',
+    );
   });
 });
 
 describe('issue-222:APP_INITIALIZER:guts', () => {
-  beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule(
+      ngMocks.guts(TargetComponent, TargetModule),
+    ).compileComponents(),
+  );
 
   it('correctly handles APP_INITIALIZER in a kept module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<router-outlet></router-outlet>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<router-outlet></router-outlet>',
+    );
   });
 });

@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+} from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({

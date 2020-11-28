@@ -1,6 +1,17 @@
-import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive as DirectiveSource,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 
 // Because of A5 we need to cast Directive to any type
 // To let it accept 0 parameters.
@@ -30,12 +41,16 @@ class ModuleWithComponent {}
 
 describe('double-decorator:example-3', () => {
   describe('default', () => {
-    beforeEach(() => TestBed.configureTestingModule({ declarations: [MyComponent] }));
+    beforeEach(() =>
+      TestBed.configureTestingModule({ declarations: [MyComponent] }),
+    );
 
     it('does not fail', () => {
       const fixture = MockRender(MyComponent);
 
-      expect(fixture.nativeElement.innerHTML).toEqual('<target>directive</target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>directive</target>',
+      );
     });
   });
 
@@ -45,15 +60,23 @@ describe('double-decorator:example-3', () => {
       name: 'mock',
     });
 
-    beforeAll(() => MockInstance(BaseClass, instance => ngMocks.stub(instance, myProviderMock())));
+    beforeAll(() =>
+      MockInstance(BaseClass, instance =>
+        ngMocks.stub(instance, myProviderMock()),
+      ),
+    );
     afterAll(MockReset);
 
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).mock(BaseClass));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent).mock(BaseClass),
+    );
 
     it('does not fail', () => {
       const fixture = MockRender(MyComponent);
 
-      expect(fixture.nativeElement.innerHTML).toEqual('<target>mock</target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>mock</target>',
+      );
     });
   });
 
@@ -63,12 +86,19 @@ describe('double-decorator:example-3', () => {
       name: 'mock',
     });
 
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).mock(BaseClass, myProviderMock()));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent).mock(
+        BaseClass,
+        myProviderMock(),
+      ),
+    );
 
     it('does not fail', () => {
       const fixture = MockRender(MyComponent);
 
-      expect(fixture.nativeElement.innerHTML).toEqual('<target>mock</target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>mock</target>',
+      );
     });
   });
 });

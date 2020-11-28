@@ -2,7 +2,12 @@
 
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockModule, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockModule,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 @Component({
   selector: 'internal',
@@ -47,21 +52,31 @@ describe('correct-module-exports-11:proper', () => {
   );
 
   it('fails on not exported module', () => {
-    expect(() => MockRender(InternalComponent)).toThrowError(/'internal' is not a known element/);
+    expect(() => MockRender(InternalComponent)).toThrowError(
+      /'internal' is not a known element/,
+    );
   });
 
   it('renders an exported module', () => {
     const fixture = MockRender(ExternalComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<external></external>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<external></external>',
+    );
   });
 });
 
 describe('correct-module-exports-11:guts', () => {
-  beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(null, TargetModule)).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule(
+      ngMocks.guts(null, TargetModule),
+    ).compileComponents(),
+  );
 
   it('renders an internal module', () => {
     const fixture = MockRender(InternalComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<internal></internal>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<internal></internal>',
+    );
   });
 });
 
@@ -70,6 +85,8 @@ describe('correct-module-exports-11:builder', () => {
 
   it('renders an internal module', () => {
     const fixture = MockRender(InternalComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('<internal></internal>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<internal></internal>',
+    );
   });
 });

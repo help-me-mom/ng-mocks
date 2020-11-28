@@ -58,7 +58,11 @@ class TargetRoutingModule {}
 class TargetModule {}
 
 describe('TestRoute:Route', () => {
-  beforeEach(() => MockBuilder(RouterModule, TargetModule).keep(RouterTestingModule.withRoutes([])));
+  beforeEach(() => {
+    return MockBuilder(RouterModule, TargetModule).keep(
+      RouterTestingModule.withRoutes([]),
+    );
+  });
 
   it('renders /1 with Target1Component', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
@@ -74,7 +78,7 @@ describe('TestRoute:Route', () => {
 
     // We should see Target1Component component on /1 page.
     expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
+    expect(() => ngMocks.find(Target1Component)).not.toThrow();
   }));
 
   it('renders /2 with Target2Component', fakeAsync(() => {
@@ -91,7 +95,7 @@ describe('TestRoute:Route', () => {
 
     // We should see Target2Component component on /2 page.
     expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(fixture, Target2Component)).not.toThrow();
+    expect(() => ngMocks.find(Target2Component)).not.toThrow();
   }));
 });
 
@@ -105,9 +109,11 @@ describe('TestRoute:Component', () => {
   // RouterModule to have its routes, and to add
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing.
-  beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(RouterModule).keep(RouterTestingModule.withRoutes([])),
-  );
+  beforeEach(() => {
+    return MockBuilder(TargetComponent, TargetModule)
+      .keep(RouterModule)
+      .keep(RouterTestingModule.withRoutes([]));
+  });
 
   it('navigates between pages', fakeAsync(() => {
     const fixture = MockRender(TargetComponent);
@@ -123,11 +129,11 @@ describe('TestRoute:Component', () => {
     // By default our routes do not have a component.
     // Therefore non of them should be rendered.
     expect(location.path()).toEqual('/');
-    expect(() => ngMocks.find(fixture, Target1Component)).toThrow();
-    expect(() => ngMocks.find(fixture, Target2Component)).toThrow();
+    expect(() => ngMocks.find(Target1Component)).toThrow();
+    expect(() => ngMocks.find(Target2Component)).toThrow();
 
     // Let's extract our navigation links.
-    const links = ngMocks.findAll(fixture, 'a');
+    const links = ngMocks.findAll('a');
 
     // Checking where we land if we click the first link.
     if (fixture.ngZone) {
@@ -143,7 +149,7 @@ describe('TestRoute:Component', () => {
     }
     // We should see Target1Component component on /1 page.
     expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
+    expect(() => ngMocks.find(Target1Component)).not.toThrow();
 
     // Checking where we land if we click the second link.
     if (fixture.ngZone) {
@@ -157,6 +163,6 @@ describe('TestRoute:Component', () => {
     }
     // We should see Target2Component component on /2 page.
     expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(fixture, Target2Component)).not.toThrow();
+    expect(() => ngMocks.find(Target2Component)).not.toThrow();
   }));
 });

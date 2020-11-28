@@ -1,6 +1,12 @@
 // tslint:disable max-file-line-count
 
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -65,11 +71,16 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // Looking for original.
-    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const debugElement = fixture.debugElement.query(
+      By.directive(ExampleDirective),
+    );
     const element = debugElement.injector.get(ExampleDirective);
 
     // Using helper.
-    const elementFromHelper = ngMocks.get(fixture.debugElement.query(By.css('div')), ExampleDirective);
+    const elementFromHelper = ngMocks.get(
+      fixture.debugElement.query(By.css('div')),
+      ExampleDirective,
+    );
 
     // Verification.
     expect(elementFromHelper).toBe(element);
@@ -81,7 +92,10 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // we need to render mock structural directives manually
-    for (const instance of ngMocks.findInstances(fixture.debugElement, ExampleStructuralDirective)) {
+    for (const instance of ngMocks.findInstances(
+      fixture.debugElement,
+      ExampleStructuralDirective,
+    )) {
       if (isMockOf(instance, ExampleStructuralDirective, 'd')) {
         instance.__render();
       }
@@ -89,14 +103,19 @@ describe('MockHelper:getDirective', () => {
     fixture.detectChanges();
 
     // Using helper.
-    const elementFromHelper = ngMocks.get(fixture.debugElement.query(By.css('div')), ExampleStructuralDirective);
+    const elementFromHelper = ngMocks.get(
+      fixture.debugElement.query(By.css('div')),
+      ExampleStructuralDirective,
+    );
     expect(elementFromHelper).toBeTruthy();
     if (!elementFromHelper) {
       return;
     }
 
     // Verification.
-    expect(elementFromHelper.exampleStructuralDirective).toEqual(false);
+    expect(elementFromHelper.exampleStructuralDirective).toEqual(
+      false,
+    );
   });
 
   it('should return right structural directive via getDirectiveOrFail', () => {
@@ -105,7 +124,10 @@ describe('MockHelper:getDirective', () => {
     `);
 
     // we need to render mock structural directives manually
-    for (const instance of ngMocks.findInstances(fixture.debugElement, ExampleStructuralDirective)) {
+    for (const instance of ngMocks.findInstances(
+      fixture.debugElement,
+      ExampleStructuralDirective,
+    )) {
       if (isMockOf(instance, ExampleStructuralDirective, 'd')) {
         instance.__render();
       }
@@ -113,16 +135,23 @@ describe('MockHelper:getDirective', () => {
     fixture.detectChanges();
 
     // Using helper.
-    const elementFromHelper = ngMocks.get(fixture.debugElement.query(By.css('div')), ExampleStructuralDirective);
+    const elementFromHelper = ngMocks.get(
+      fixture.debugElement.query(By.css('div')),
+      ExampleStructuralDirective,
+    );
 
     // Verification.
-    expect(elementFromHelper.exampleStructuralDirective).toEqual(false);
+    expect(elementFromHelper.exampleStructuralDirective).toEqual(
+      false,
+    );
   });
 
   it('find selector: T', () => {
     const fixture = MockRender(`<component-a></component-a>`);
     const componentA = ngMocks.find(fixture.debugElement, AComponent);
-    expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
+    expect(componentA.componentInstance).toEqual(
+      jasmine.any(AComponent),
+    );
 
     expect(() => ngMocks.find(componentA, BComponent)).toThrowError(
       'Cannot find an element via ngMocks.find(BComponent)',
@@ -131,8 +160,13 @@ describe('MockHelper:getDirective', () => {
 
   it('find selector: string', () => {
     const fixture = MockRender(`<component-b></component-b>`);
-    const componentB = ngMocks.find(fixture.debugElement, 'component-b');
-    expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
+    const componentB = ngMocks.find(
+      fixture.debugElement,
+      'component-b',
+    );
+    expect(componentB.componentInstance).toEqual(
+      jasmine.any(BComponent),
+    );
 
     expect(() => ngMocks.find(componentB, AComponent)).toThrowError(
       'Cannot find an element via ngMocks.find(AComponent)',
@@ -142,58 +176,99 @@ describe('MockHelper:getDirective', () => {
   it('find selector: T', () => {
     const fixture = MockRender(`<component-a></component-a>`);
     const componentA = ngMocks.find(fixture.debugElement, AComponent);
-    expect(componentA.componentInstance).toEqual(jasmine.any(AComponent));
+    expect(componentA.componentInstance).toEqual(
+      jasmine.any(AComponent),
+    );
 
-    const componentB = ngMocks.find(fixture.debugElement, BComponent, null);
+    const componentB = ngMocks.find(
+      fixture.debugElement,
+      BComponent,
+      null,
+    );
     expect(componentB).toBe(null);
   });
 
   it('find selector: string', () => {
     const fixture = MockRender(`<component-b></component-b>`);
-    const componentB = ngMocks.find(fixture.debugElement, 'component-b');
-    expect(componentB.componentInstance).toEqual(jasmine.any(BComponent));
+    const componentB = ngMocks.find(
+      fixture.debugElement,
+      'component-b',
+    );
+    expect(componentB.componentInstance).toEqual(
+      jasmine.any(BComponent),
+    );
 
-    const componentA = ngMocks.find(fixture.debugElement, 'component-a', null);
+    const componentA = ngMocks.find(
+      fixture.debugElement,
+      'component-a',
+      null,
+    );
     expect(componentA).toBe(null);
   });
 
   it('find selector: missed string', () => {
     const fixture = MockRender(`<component-b></component-b>`);
-    expect(() => ngMocks.find(fixture.debugElement, 'component-a')).toThrowError(/Cannot find an element/);
+    expect(() =>
+      ngMocks.find(fixture.debugElement, 'component-a'),
+    ).toThrowError(/Cannot find an element/);
   });
 
   it('findAll selector: T', () => {
-    const fixture = MockRender(`<component-a></component-a><component-a></component-a>`);
+    const fixture = MockRender(
+      `<component-a></component-a><component-a></component-a>`,
+    );
     const componentA = ngMocks.findAll(fixture, AComponent);
     expect(componentA.length).toBe(2);
-    expect(componentA[0].componentInstance).toEqual(jasmine.any(AComponent));
-    expect(componentA[1].componentInstance).toEqual(jasmine.any(AComponent));
+    expect(componentA[0].componentInstance).toEqual(
+      jasmine.any(AComponent),
+    );
+    expect(componentA[1].componentInstance).toEqual(
+      jasmine.any(AComponent),
+    );
 
-    const componentB = ngMocks.findAll(fixture.debugElement, BComponent);
+    const componentB = ngMocks.findAll(
+      fixture.debugElement,
+      BComponent,
+    );
     expect(componentB.length).toBe(0);
   });
 
   it('findAll selector: string', () => {
-    const fixture = MockRender(`<component-b></component-b><component-b></component-b>`);
+    const fixture = MockRender(
+      `<component-b></component-b><component-b></component-b>`,
+    );
     const componentB = ngMocks.findAll(fixture, 'component-b');
     expect(componentB.length).toEqual(2);
-    expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));
-    expect(componentB[0].componentInstance).toEqual(jasmine.any(BComponent));
+    expect(componentB[0].componentInstance).toEqual(
+      jasmine.any(BComponent),
+    );
+    expect(componentB[0].componentInstance).toEqual(
+      jasmine.any(BComponent),
+    );
 
-    const componentA = ngMocks.findAll(fixture.debugElement, 'component-a');
+    const componentA = ngMocks.findAll(
+      fixture.debugElement,
+      'component-a',
+    );
     expect(componentA.length).toBe(0);
   });
 
   it('findInstance throws an error', () => {
     const fixture = MockRender(`<component-a></component-a>`);
-    expect(() => ngMocks.findInstance(fixture.debugElement, BComponent)).toThrowError(
+    expect(() =>
+      ngMocks.findInstance(fixture.debugElement, BComponent),
+    ).toThrowError(
       /Cannot find an instance via ngMocks.findInstance\(BComponent\)/,
     );
   });
 
   it('findInstance returns default value', () => {
     const fixture = MockRender(`<component-a></component-a>`);
-    const instance = ngMocks.findInstance(fixture.debugElement, BComponent, undefined);
+    const instance = ngMocks.findInstance(
+      fixture.debugElement,
+      BComponent,
+      undefined,
+    );
     expect(instance).toBeUndefined();
   });
 
@@ -216,14 +291,19 @@ describe('MockHelper:getDirective', () => {
   it('input throws', () => {
     const fixture = MockRender(`<div></div>`);
     const node = ngMocks.find(fixture.debugElement, 'div');
-    expect(() => ngMocks.input(node, 'default')).toThrowError(/Cannot find default input/);
+    expect(() => ngMocks.input(node, 'default')).toThrowError(
+      /Cannot find default input/,
+    );
   });
 
   it('output returns emitter', () => {
     const spy = jasmine.createSpy('someOutput');
-    const fixture = MockRender(`<div (someOutput)="spy($event)" exampleDirective></div>`, {
-      spy,
-    });
+    const fixture = MockRender(
+      `<div (someOutput)="spy($event)" exampleDirective></div>`,
+      {
+        spy,
+      },
+    );
 
     const node = ngMocks.find(fixture.debugElement, 'div');
     const output = ngMocks.output(node, 'someOutput');
@@ -233,9 +313,12 @@ describe('MockHelper:getDirective', () => {
 
   it('output returns default value', () => {
     const spy = jasmine.createSpy('someOutput');
-    const fixture = MockRender(`<div (someOutput)="spy($event)" exampleDirective></div>`, {
-      spy,
-    });
+    const fixture = MockRender(
+      `<div (someOutput)="spy($event)" exampleDirective></div>`,
+      {
+        spy,
+      },
+    );
 
     const node = ngMocks.find(fixture.debugElement, 'div');
     const output = ngMocks.output(node, 'default', undefined);
@@ -245,17 +328,25 @@ describe('MockHelper:getDirective', () => {
   it('output throws', () => {
     const fixture = MockRender(`<div></div>`);
     const node = ngMocks.find(fixture.debugElement, 'div');
-    expect(() => ngMocks.output(node, 'default')).toThrowError(/Cannot find default output/);
+    expect(() => ngMocks.output(node, 'default')).toThrowError(
+      /Cannot find default output/,
+    );
   });
 
   it('get returns default value', () => {
     const fixture = MockRender('<div></div>');
-    const actual = ngMocks.get(fixture.debugElement, ExampleDirective, undefined);
+    const actual = ngMocks.get(
+      fixture.debugElement,
+      ExampleDirective,
+      undefined,
+    );
     expect(actual).toBeUndefined();
   });
 
   it('get throws an error', () => {
     const fixture = MockRender('<div></div>');
-    expect(() => ngMocks.get(fixture.debugElement, ExampleDirective)).toThrowError(/Cannot find ExampleDirective/);
+    expect(() =>
+      ngMocks.get(fixture.debugElement, ExampleDirective),
+    ).toThrowError(/Cannot find ExampleDirective/);
   });
 });

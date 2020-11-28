@@ -14,7 +14,11 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
@@ -83,15 +87,26 @@ class GettersAndSettersDirective {
 @Component({
   selector: 'example-component-container',
   template: `
-    <div [exampleDirective]="'bye'" [bah]="'hi'" #f="foo" (someOutput)="emitted = $event"></div>
+    <div
+      [exampleDirective]="'bye'"
+      [bah]="'hi'"
+      #f="foo"
+      (someOutput)="emitted = $event"
+    ></div>
     <div exampleDirective></div>
-    <div id="example-structural-directive" *exampleStructuralDirective="true">hi</div>
+    <div
+      id="example-structural-directive"
+      *exampleStructuralDirective="true"
+    >
+      hi
+    </div>
     <input [formControl]="fooControl" />
     <div getters-and-setters></div>
   `,
 })
 class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, staticFalse) public childDirective?: ExampleDirective;
+  @ViewChild(ExampleDirective, staticFalse)
+  public childDirective?: ExampleDirective;
   public emitted = false;
   public readonly foo = new FormControl('');
 
@@ -125,19 +140,25 @@ describe('MockDirective', () => {
   });
 
   it('should have use a selector of the original component', () => {
-    const element = fixture.debugElement.query(By.directive(ExampleDirective));
+    const element = fixture.debugElement.query(
+      By.directive(ExampleDirective),
+    );
     expect(element).not.toBeNull();
   });
 
   it('should have the input set on the mock component', () => {
-    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const debugElement = fixture.debugElement.query(
+      By.directive(ExampleDirective),
+    );
     const element = debugElement.injector.get(ExampleDirective);
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
   });
 
   it('triggers output bound behavior for extended outputs', () => {
-    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const debugElement = fixture.debugElement.query(
+      By.directive(ExampleDirective),
+    );
     const element = debugElement.injector.get(ExampleDirective);
 
     element.someOutput.emit(true);
@@ -145,8 +166,12 @@ describe('MockDirective', () => {
   });
 
   it('should memoize the return value by argument', () => {
-    expect(MockDirective(ExampleDirective)).toEqual(MockDirective(ExampleDirective));
-    expect(MockDirective(ExampleDirective)).not.toEqual(ExampleDirective);
+    expect(MockDirective(ExampleDirective)).toEqual(
+      MockDirective(ExampleDirective),
+    );
+    expect(MockDirective(ExampleDirective)).not.toEqual(
+      ExampleDirective,
+    );
   });
 
   it('can mock formControlDirective from angular', () => {
@@ -154,7 +179,9 @@ describe('MockDirective', () => {
     // I found that FormControlDirective is one of those weird directives.
     // Since I don't know how they did it, I don't know how to test it except to write this
     // Test around a known-odd directive.
-    const debugElement = fixture.debugElement.query(By.directive(ExampleDirective));
+    const debugElement = fixture.debugElement.query(
+      By.directive(ExampleDirective),
+    );
     expect(debugElement).not.toBeNull();
   });
 
@@ -169,23 +196,31 @@ describe('MockDirective', () => {
     fixture.detectChanges();
     expect(mockDirective.exampleStructuralDirective).toBeTruthy();
 
-    const debugElement = fixture.debugElement.query(By.css('#example-structural-directive'));
+    const debugElement = fixture.debugElement.query(
+      By.css('#example-structural-directive'),
+    );
     expect(debugElement.nativeElement.innerHTML).toContain('hi');
   });
 
   it('renders with true', async () => {
-    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
-      render: true,
-    });
+    await MockBuilder(ExampleComponentContainer).mock(
+      ExampleStructuralDirective,
+      {
+        render: true,
+      },
+    );
     expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
   });
 
   it('renders with $implicit', async () => {
-    await MockBuilder(ExampleComponentContainer).mock(ExampleStructuralDirective, {
-      render: {
-        $implicit: true,
+    await MockBuilder(ExampleComponentContainer).mock(
+      ExampleStructuralDirective,
+      {
+        render: {
+          $implicit: true,
+        },
       },
-    });
+    );
     expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
   });
 
@@ -195,7 +230,9 @@ describe('MockDirective', () => {
   });
 
   it('should allow spying of viewchild directive methods', () => {
-    const spy = component.childDirective ? component.childDirective.performAction : null;
+    const spy = component.childDirective
+      ? component.childDirective.performAction
+      : null;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
@@ -213,10 +250,17 @@ describe('MockDirective', () => {
   });
 
   it('mocks several directives', () => {
-    const mocks = MockDirectives(GettersAndSettersDirective, ExampleStructuralDirective);
+    const mocks = MockDirectives(
+      GettersAndSettersDirective,
+      ExampleStructuralDirective,
+    );
     expect(mocks.length).toEqual(2);
-    expect(isMockedNgDefOf(mocks[0], GettersAndSettersDirective, 'd')).toBeTruthy();
-    expect(isMockedNgDefOf(mocks[1], ExampleStructuralDirective, 'd')).toBeTruthy();
+    expect(
+      isMockedNgDefOf(mocks[0], GettersAndSettersDirective, 'd'),
+    ).toBeTruthy();
+    expect(
+      isMockedNgDefOf(mocks[1], ExampleStructuralDirective, 'd'),
+    ).toBeTruthy();
   });
 
   it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {
@@ -224,15 +268,23 @@ describe('MockDirective', () => {
       selector: 'never',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) public o1?: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) public o2?: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) public o3?: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) public o4?: QueryList<any>;
+      @ContentChild('i1', { read: true } as any)
+      public o1?: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any)
+      public o2?: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any)
+      public o3?: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any)
+      public o4?: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) public o5?: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) public o6?: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) public o7?: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) public o8?: QueryList<any>;
+      @ContentChild('i5', { read: false } as any)
+      public o5?: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any)
+      public o6?: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any)
+      public o7?: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any)
+      public o8?: QueryList<any>;
     }
 
     const actual = MockDirective(MyClass) as any;

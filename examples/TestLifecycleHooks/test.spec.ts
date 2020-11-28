@@ -59,7 +59,14 @@ class TargetService {
   template: ``,
 })
 class TargetComponent
-  implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked {
+  implements
+    OnInit,
+    OnDestroy,
+    OnChanges,
+    AfterViewInit,
+    AfterViewChecked,
+    AfterContentInit,
+    AfterContentChecked {
   @Input() public input: string | null = null;
 
   public constructor(protected readonly service: TargetService) {
@@ -105,6 +112,7 @@ class TargetModule {}
 describe('TestLifecycleHooks', () => {
   ngMocks.faster();
 
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('triggers lifecycle hooks correctly via MockRender', () => {
@@ -146,7 +154,8 @@ describe('TestLifecycleHooks', () => {
     fixture.componentInstance.input = 'change';
     fixture.detectChanges();
 
-    // Only OnChange, AfterViewChecked, AfterContentChecked should be triggered.
+    // Only OnChange, AfterViewChecked, AfterContentChecked
+    // should be triggered.
     expect(service.ctor).toHaveBeenCalledTimes(1);
     expect(service.onInit).toHaveBeenCalledTimes(1);
     expect(service.onDestroy).toHaveBeenCalledTimes(0);

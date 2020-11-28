@@ -1,5 +1,9 @@
 import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -21,21 +25,31 @@ class DependencyComponent implements ControlValueAccessor {
 
 @Component({
   selector: 'tested',
-  template: ` <app-child [ngModel]="value" (ngModelChange)="value = $event"></app-child> `,
+  template: `
+    <app-child
+      [ngModel]="value"
+      (ngModelChange)="value = $event"
+    ></app-child>
+  `,
 })
 class TestedComponent {
   public value: any;
 }
 
 describe('MockForms', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent).keep(FormsModule));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent)
+      .mock(DependencyComponent)
+      .keep(FormsModule);
+  });
 
   it('sends the correct value to the mock form component', async () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
     // Let's find the mock form component.
-    const mockControl = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
+    const mockControl = ngMocks.find(DependencyComponent)
+      .componentInstance;
 
     // Let's simulate its change, like a user does it.
     if (isMockOf(mockControl, DependencyComponent, 'c')) {

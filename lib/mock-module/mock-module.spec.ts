@@ -11,7 +11,11 @@ import {
   Injector,
   NgModule,
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -60,7 +64,10 @@ describe('MockModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ComponentSubject],
-      imports: [MockModule(ParentModule), MockModule(ModuleWithProvidersModule)],
+      imports: [
+        MockModule(ParentModule),
+        MockModule(ModuleWithProvidersModule),
+      ],
     })
       .compileComponents()
       .then(() => {
@@ -70,8 +77,9 @@ describe('MockModule', () => {
   }));
 
   it('should do stuff', () => {
-    const mockComponent = fixture.debugElement.query(By.directive(MockComponent(ExampleComponent)))
-      .componentInstance as ExampleComponent;
+    const mockComponent = fixture.debugElement.query(
+      By.directive(MockComponent(ExampleComponent)),
+    ).componentInstance as ExampleComponent;
     expect(mockComponent).not.toBeNull();
   });
 });
@@ -82,7 +90,10 @@ describe('SameImportsModules', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
-      imports: [MockModule(SameImports1Module), MockModule(SameImports2Module)],
+      imports: [
+        MockModule(SameImports1Module),
+        MockModule(SameImports2Module),
+      ],
     })
       .compileComponents()
       .then(() => {
@@ -92,7 +103,9 @@ describe('SameImportsModules', () => {
   }));
 
   it('should be imported correctly', () => {
-    expect(fixture.componentInstance).toEqual(jasmine.any(SameImportsComponent));
+    expect(fixture.componentInstance).toEqual(
+      jasmine.any(SameImportsComponent),
+    );
     expect(fixture.nativeElement.innerText).toEqual('same imports');
   });
 });
@@ -118,7 +131,9 @@ describe('NeverMockModules', () => {
   }));
 
   it('should not fail when we pass them to MockModule', () => {
-    expect(fixture.componentInstance).toEqual(jasmine.any(SameImportsComponent));
+    expect(fixture.componentInstance).toEqual(
+      jasmine.any(SameImportsComponent),
+    );
     expect(fixture.nativeElement.innerText).toEqual('same imports');
   });
 });
@@ -139,7 +154,9 @@ describe('RouterModule', () => {
   }));
 
   it('should not fail when we pass RouterModule to MockModule', () => {
-    expect(fixture.componentInstance).toEqual(jasmine.any(ExampleComponent));
+    expect(fixture.componentInstance).toEqual(
+      jasmine.any(ExampleComponent),
+    );
     expect(fixture.nativeElement.innerText).toEqual('My Example');
   });
 });
@@ -164,7 +181,9 @@ describe('Usage of cached nested module', () => {
     }));
 
     it('should be able to find component', () => {
-      expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
+      expect(fixture.componentInstance).toEqual(
+        jasmine.any(ExampleConsumerComponent),
+      );
     });
   });
 
@@ -182,7 +201,9 @@ describe('Usage of cached nested module', () => {
     }));
 
     it('should be able to find component', () => {
-      expect(fixture.componentInstance).toEqual(jasmine.any(ExampleConsumerComponent));
+      expect(fixture.componentInstance).toEqual(
+        jasmine.any(ExampleConsumerComponent),
+      );
     });
   });
 });
@@ -237,23 +258,33 @@ describe('mockProvider', () => {
   });
 
   it('should return default value on primitives', () => {
-    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: undefined })).toEqual({
+    expect(
+      mockProvider({ provide: CUSTOM_TOKEN, useValue: undefined }),
+    ).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: undefined,
     });
-    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: 123 })).toEqual({
+    expect(
+      mockProvider({ provide: CUSTOM_TOKEN, useValue: 123 }),
+    ).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: 0,
     });
-    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: true })).toEqual({
+    expect(
+      mockProvider({ provide: CUSTOM_TOKEN, useValue: true }),
+    ).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: false,
     });
-    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' })).toEqual({
+    expect(
+      mockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' }),
+    ).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: '',
     });
-    expect(mockProvider({ provide: CUSTOM_TOKEN, useValue: null })).toEqual({
+    expect(
+      mockProvider({ provide: CUSTOM_TOKEN, useValue: null }),
+    ).toEqual({
       provide: CUSTOM_TOKEN,
       useValue: null,
     });

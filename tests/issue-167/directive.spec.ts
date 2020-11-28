@@ -1,4 +1,9 @@
-import { Component, Directive, forwardRef, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive,
+  forwardRef,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   ControlValueAccessor,
@@ -26,7 +31,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   ],
   selector: '[target]',
 })
-export class TargetDirective implements ControlValueAccessor, Validator {
+export class TargetDirective
+  implements ControlValueAccessor, Validator {
   public valRegisterOnChange: any;
   public valRegisterOnTouched: any;
   public valRegisterOnValidatorChange: any;
@@ -91,7 +97,9 @@ describe('issue-167:directive:real', () => {
   it('should create an instance', () => {
     const fixture = MockRender(RealComponent);
 
-    const mock = ngMocks.find(fixture.debugElement, TargetDirective).injector.get(TargetDirective);
+    const mock = ngMocks
+      .find(fixture.debugElement, TargetDirective)
+      .injector.get(TargetDirective);
     spyOn(mock, 'validate').and.returnValue({
       updated: true,
     });
@@ -107,12 +115,18 @@ describe('issue-167:directive:real', () => {
 });
 
 describe('issue-167:directive:mock', () => {
-  beforeEach(() => MockBuilder(RealComponent, TargetModule).keep(ReactiveFormsModule));
+  beforeEach(() =>
+    MockBuilder(RealComponent, TargetModule).keep(
+      ReactiveFormsModule,
+    ),
+  );
 
   it('should create an instance', () => {
     const fixture = MockRender(RealComponent);
 
-    const mock = ngMocks.find(fixture.debugElement, TargetDirective).injector.get(TargetDirective);
+    const mock = ngMocks
+      .find(fixture.debugElement, TargetDirective)
+      .injector.get(TargetDirective);
     spyOn(mock, 'validate').and.returnValue({
       updated: true,
     });

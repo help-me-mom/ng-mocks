@@ -10,7 +10,10 @@ describe('MockBuilderKeepsApplicationModule:real', () => {
 
   it('should render', () => {
     const fixture = MockRender(TargetComponent);
-    const element = ngMocks.find(fixture.debugElement, TargetComponent);
+    const element = ngMocks.find(
+      fixture.debugElement,
+      TargetComponent,
+    );
     expect(element).toBeDefined();
     expect(TestBed.get(TARGET_TOKEN)).toBeDefined();
     expect(TestBed.get(APP_INITIALIZER)).toBeDefined();
@@ -23,7 +26,10 @@ describe('MockBuilderKeepsApplicationModule:mock', () => {
 
   it('should render', () => {
     const fixture = MockRender(TargetComponent);
-    const element = ngMocks.find(fixture.debugElement, TargetComponent);
+    const element = ngMocks.find(
+      fixture.debugElement,
+      TargetComponent,
+    );
     expect(element).toBeDefined();
     expect(TestBed.get(TARGET_TOKEN)).toEqual('');
     if (parseInt(VERSION.major, 10) < 9) {

@@ -1,5 +1,15 @@
-import { AfterViewInit, Component, Injectable, ViewChild } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender, MockReset } from 'ng-mocks';
+import {
+  AfterViewInit,
+  Component,
+  Injectable,
+  ViewChild,
+} from '@angular/core';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 import { staticFalse } from '..';
 
@@ -37,7 +47,8 @@ export class TargetComponent {
   template: '<target></target>',
 })
 export class RealComponent implements AfterViewInit {
-  @ViewChild(TargetComponent, staticFalse) protected child?: TargetComponent;
+  @ViewChild(TargetComponent, staticFalse)
+  protected child?: TargetComponent;
 
   public ngAfterViewInit() {
     if (this.child) {

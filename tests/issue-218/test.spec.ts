@@ -16,7 +16,9 @@ const TOKEN_PREFIX = new InjectionToken('PREFIX');
 
 @Injectable()
 class PrefixService {
-  public constructor(@Inject(TOKEN_PREFIX) public readonly prefix: string) {}
+  public constructor(
+    @Inject(TOKEN_PREFIX) public readonly prefix: string,
+  ) {}
 }
 
 @Pipe({
@@ -70,7 +72,9 @@ describe('issue-218:real', () => {
       value: 'test',
     });
 
-    expect(fixture.nativeElement.innerHTML).toContain('>real:test - real:test<');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '>real:test - real:test<',
+    );
   });
 });
 
@@ -87,19 +91,27 @@ describe('issue-218:builder:mock', () => {
 });
 
 describe('issue-218:builder:keep', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetPipe));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).keep(TargetPipe),
+  );
 
   it('renders how we replaced it with a mock copy', () => {
     const fixture = MockRender(TargetComponent, {
       value: 'test',
     });
 
-    expect(fixture.nativeElement.innerHTML).toContain('>undefined:test - undefined:test<');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '>undefined:test - undefined:test<',
+    );
   });
 });
 
 describe('issue-218:guts:mock', () => {
-  beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule(
+      ngMocks.guts(TargetComponent, TargetModule),
+    ).compileComponents(),
+  );
 
   it('renders emptiness', () => {
     const fixture = MockRender(TargetComponent, {
@@ -112,7 +124,9 @@ describe('issue-218:guts:mock', () => {
 
 describe('issue-218:guts:keep', () => {
   beforeEach(() =>
-    TestBed.configureTestingModule(ngMocks.guts([TargetComponent, TargetPipe], TargetModule)).compileComponents(),
+    TestBed.configureTestingModule(
+      ngMocks.guts([TargetComponent, TargetPipe], TargetModule),
+    ).compileComponents(),
   );
 
   it('renders how we replaced it with a mock copy', () => {
@@ -120,6 +134,8 @@ describe('issue-218:guts:keep', () => {
       value: 'test',
     });
 
-    expect(fixture.nativeElement.innerHTML).toContain('>undefined:test - undefined:test<');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '>undefined:test - undefined:test<',
+    );
   });
 });

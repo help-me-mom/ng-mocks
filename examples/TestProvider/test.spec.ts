@@ -14,6 +14,7 @@ class TargetService {
 }
 
 describe('TestProvider', () => {
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService));
 
   it('returns value on echo', () => {

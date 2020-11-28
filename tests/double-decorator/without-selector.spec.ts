@@ -1,6 +1,11 @@
 // tslint:disable no-duplicate-imports
 
-import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive as DirectiveSource,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import * as core from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -44,31 +49,45 @@ describe('double-decorator:without-selector', () => {
   describe('default', () => {
     it('fails', async () => {
       try {
-        await TestBed.configureTestingModule({ imports: [ModuleWithComponent] }).compileComponents();
+        await TestBed.configureTestingModule({
+          imports: [ModuleWithComponent],
+        }).compileComponents();
         fail('should fail');
       } catch (error) {
-        expect(error.message).toMatch(/Directive BaseClass has no selector/);
+        expect(error.message).toMatch(
+          /Directive BaseClass has no selector/,
+        );
       }
     });
   });
 
   // The only solution.
   describe('hot-fix', () => {
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).exclude(BaseClass).mock(MyProvider));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent)
+        .exclude(BaseClass)
+        .mock(MyProvider),
+    );
 
     it('fixes the issue via exclude', () => {
       const fixture = MockRender(MyComponent);
-      expect(fixture.nativeElement.innerHTML).toContain('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '<target></target>',
+      );
     });
   });
 
   describe('the-issue', () => {
     it('fails', async () => {
       try {
-        await MockBuilder(MyComponent, ModuleWithComponent).mock(MyProvider);
+        await MockBuilder(MyComponent, ModuleWithComponent).mock(
+          MyProvider,
+        );
         fail('should fail');
       } catch (error) {
-        expect(error.message).toMatch(/Directive MockOfBaseClass has no selector/);
+        expect(error.message).toMatch(
+          /Directive MockOfBaseClass has no selector/,
+        );
       }
     });
   });
@@ -76,10 +95,14 @@ describe('double-decorator:without-selector', () => {
   describe('keep', () => {
     it('fails', async () => {
       try {
-        await MockBuilder(MyComponent, ModuleWithComponent).keep(MyProvider);
+        await MockBuilder(MyComponent, ModuleWithComponent).keep(
+          MyProvider,
+        );
         fail('should fail');
       } catch (error) {
-        expect(error.message).toMatch(/Directive MockOfBaseClass has no selector/);
+        expect(error.message).toMatch(
+          /Directive MockOfBaseClass has no selector/,
+        );
       }
     });
   });

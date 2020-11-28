@@ -1,6 +1,12 @@
 // tslint:disable max-file-line-count
 
-import { Component, Directive, forwardRef, Optional, Self } from '@angular/core';
+import {
+  Component,
+  Directive,
+  forwardRef,
+  Optional,
+  Self,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   ControlValueAccessor,
@@ -22,7 +28,8 @@ export class ActualEmptyComponent {}
   selector: 'actual-injection',
   template: '',
 })
-export class ActualInjectionComponent implements ControlValueAccessor {
+export class ActualInjectionComponent
+  implements ControlValueAccessor {
   protected value: any;
 
   public constructor(@Self() @Optional() ngControl: NgControl) {
@@ -109,7 +116,12 @@ export class ActualTokenDirective implements ControlValueAccessor {
 describe('issue-157:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      declarations: [ActualEmptyComponent, ActualInjectionComponent, ActualTokenComponent, ActualTokenDirective],
+      declarations: [
+        ActualEmptyComponent,
+        ActualInjectionComponent,
+        ActualTokenComponent,
+        ActualTokenDirective,
+      ],
       imports: [ReactiveFormsModule],
     }).compileComponents(),
   );

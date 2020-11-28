@@ -26,7 +26,9 @@ describe('provider-with-dependency:real', () => {
 
   it('should render "parent"', () => {
     const fixture = MockRender(InternalComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<internal-component>replaced</internal-component>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<internal-component>replaced</internal-component>',
+    );
   });
 });
 
@@ -47,7 +49,9 @@ describe('provider-with-dependency:provided', () => {
 
   it('should render "parent"', () => {
     const fixture = MockRender(InternalComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<internal-component>mock</internal-component>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<internal-component>mock</internal-component>',
+    );
   });
 });
 
@@ -67,6 +71,8 @@ describe('provider-with-dependency:mock', () => {
 
   it('should render "parent" even the providers where patched', () => {
     const fixture = MockRender(InternalComponent);
-    expect(fixture.debugElement.nativeElement.innerHTML).toEqual('<internal-component>mock</internal-component>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<internal-component>mock</internal-component>',
+    );
   });
 });

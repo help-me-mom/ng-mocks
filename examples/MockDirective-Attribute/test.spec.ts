@@ -1,4 +1,10 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -14,7 +20,13 @@ class DependencyDirective {
 
 @Component({
   selector: 'tested',
-  template: ` <span dependency [dependency-input]="value" (dependency-output)="trigger($event)"></span> `,
+  template: `
+    <span
+      dependency
+      [dependency-input]="value"
+      (dependency-output)="trigger($event)"
+    ></span>
+  `,
 })
 class TestedComponent {
   public value = '';
@@ -22,7 +34,9 @@ class TestedComponent {
 }
 
 describe('MockDirective:Attribute', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyDirective));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyDirective);
+  });
 
   it('sends the correct value to the input', () => {
     const fixture = MockRender(TestedComponent);
@@ -33,7 +47,10 @@ describe('MockDirective:Attribute', () => {
     //   By.css('span')
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
-    const mockDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
+    const mockDirective = ngMocks.get(
+      ngMocks.find('span'),
+      DependencyDirective,
+    );
 
     // Let's pretend DependencyDirective has 'someInput'
     // as an input. TestedComponent sets its value via
@@ -55,7 +72,10 @@ describe('MockDirective:Attribute', () => {
     //   By.css('span')
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
-    const mockDirective = ngMocks.get(ngMocks.find(fixture.debugElement, 'span'), DependencyDirective);
+    const mockDirective = ngMocks.get(
+      ngMocks.find('span'),
+      DependencyDirective,
+    );
 
     // Again, let's pretend DependencyDirective has an output called
     // 'someOutput'. TestedComponent listens on the output via

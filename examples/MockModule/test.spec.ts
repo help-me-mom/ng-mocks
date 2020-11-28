@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
@@ -28,7 +36,12 @@ class DependencyModule {}
 
 @Component({
   selector: 'tested',
-  template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
+  template: `
+    <app-child
+      [someInput]="value"
+      (someOutput)="trigger($event)"
+    ></app-child>
+  `,
 })
 class TestedComponent {
   public value = '';
@@ -36,7 +49,9 @@ class TestedComponent {
 }
 
 describe('MockModule', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyModule));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyModule);
+  });
 
   it('renders TestedComponent with its dependencies', () => {
     const fixture = MockRender(TestedComponent);

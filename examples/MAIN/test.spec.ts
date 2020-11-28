@@ -1,7 +1,16 @@
-// tslint:disable arrow-return-shorthand
+// tslint:disable arrow-return-shorthand  strict-type-predicates
 
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
@@ -11,7 +20,11 @@ import { staticFalse } from '../../tests';
 @Component({
   selector: 'app-root',
   template: `
-    <app-header [showLogo]="true" [title]="title" (logo)="logoClick.emit()">
+    <app-header
+      [showLogo]="true"
+      [title]="title"
+      (logo)="logoClick.emit()"
+    >
       <ng-template #menu>
         <ul>
           <li><a [routerLink]="['/home']">Home</a></li>
@@ -32,15 +45,17 @@ class AppComponent {
 @Component({
   selector: 'app-header',
   template: `
-    <a (click)="logo.emit()"><img src="assets/logo.png" *ngIf="showLogo" /></a>
+    <a (click)="logo.emit()">
+      <img src="assets/logo.png" *ngIf="showLogo" />
+    </a>
     {{ title }}
     <template [ngTemplateOutlet]="menu"></template>
   `,
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-
-  @ContentChild('menu', staticFalse) public menu?: TemplateRef<ElementRef>;
+  @ContentChild('menu', staticFalse)
+  public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
 }
@@ -107,7 +122,8 @@ describe('MAIN', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy = jasmine.createSpy();
+    const logoClickSpy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     // in case of jest
     // const logoClickSpy = jest.fn();
 
@@ -139,7 +155,9 @@ describe('MAIN', () => {
     // Checking that AppComponents updates AppHeaderComponent.
     fixture.componentInstance.title = 'Updated Application';
     fixture.detectChanges();
-    expect(header.componentInstance.title).toBe('Updated Application');
+    expect(header.componentInstance.title).toBe(
+      'Updated Application',
+    );
 
     // Checking that AppComponent listens on outputs of
     // AppHeaderComponent.

@@ -1,4 +1,9 @@
-import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive as DirectiveSource,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -54,12 +59,19 @@ describe('double-decorator:example-1', () => {
       name: 'mock',
     });
 
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(TargetProvider, myProviderMock()));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).mock(
+        TargetProvider,
+        myProviderMock(),
+      ),
+    );
 
     it('provides correct decoration of the directive', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toEqual('<target>mock</target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>mock</target>',
+      );
     });
   });
 });

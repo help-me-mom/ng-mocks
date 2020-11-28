@@ -10,8 +10,16 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { staticTrue } from '../../tests';
@@ -41,11 +49,19 @@ import { MockedComponent } from './types';
       (someOutput2)="emitted = $event"
     >
     </simple-component>
-    <simple-component [someInput]="'hi again'" #f="seeimple"></simple-component>
+    <simple-component
+      [someInput]="'hi again'"
+      #f="seeimple"
+    ></simple-component>
     <empty-component></empty-component>
-    <custom-form-control [formControl]="formControl"></custom-form-control>
+    <custom-form-control
+      [formControl]="formControl"
+    ></custom-form-control>
     <empty-component id="ng-content-component">doh</empty-component>
-    <empty-component id="ngmodel-component" [(ngModel)]="someOutputHasEmitted"></empty-component>
+    <empty-component
+      id="ngmodel-component"
+      [(ngModel)]="someOutputHasEmitted"
+    ></empty-component>
     <child-component></child-component>
     <template-outlet-component id="element-with-content-and-template">
       ng-content body header
@@ -55,12 +71,17 @@ import { MockedComponent } from './types';
       <ng-template #block2><span>block 2 body</span></ng-template>
       ng-content body footer
     </template-outlet-component>
-    <empty-component id="element-without-content-and-template"></empty-component>
-    <empty-component id="element-with-content-only">child of element-with-content-only</empty-component>
+    <empty-component
+      id="element-without-content-and-template"
+    ></empty-component>
+    <empty-component id="element-with-content-only"
+      >child of element-with-content-only</empty-component
+    >
   `,
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, staticTrue) public childComponent?: ChildComponent;
+  @ViewChild(ChildComponent, staticTrue)
+  public childComponent?: ChildComponent;
   public emitted = '';
   public readonly formControl = new FormControl('');
 
@@ -99,64 +120,90 @@ describe('MockComponent', () => {
 
   it('should have use a selector of the original component', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.css('simple-component'));
+    const mockComponent = fixture.debugElement.query(
+      By.css('simple-component'),
+    );
     expect(mockComponent).not.toBeNull();
   });
 
   it('should have the input set on the mock component', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    const mockComponent = fixture.debugElement.query(
+      By.directive(SimpleComponent),
+    ).componentInstance;
     expect(mockComponent.someInput).toEqual('hi');
     expect(mockComponent.someInput2).toEqual('bye');
   });
 
   it('has no issues with multiple decorators on an input', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent));
+    const mockComponent = fixture.debugElement.query(
+      By.directive(SimpleComponent),
+    );
     expect(mockComponent.componentInstance.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    const mockComponent = fixture.debugElement.query(
+      By.directive(SimpleComponent),
+    ).componentInstance;
     mockComponent.someOutput1.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
   it('should trigger output bound behavior for extended outputs', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.directive(SimpleComponent)).componentInstance;
+    const mockComponent = fixture.debugElement.query(
+      By.directive(SimpleComponent),
+    ).componentInstance;
     mockComponent.someOutput2.emit('hi');
     expect(component.emitted).toEqual('hi');
   });
 
   it('the mock should have an ng-content body', () => {
     fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(By.css('#ng-content-component'));
+    const mockComponent = fixture.debugElement.query(
+      By.css('#ng-content-component'),
+    );
     expect(mockComponent.nativeElement.innerText).toContain('doh');
   });
 
   it('should give each instance of a mock component its own event emitter', () => {
-    const mockComponents = fixture.debugElement.queryAll(By.directive(SimpleComponent));
+    const mockComponents = fixture.debugElement.queryAll(
+      By.directive(SimpleComponent),
+    );
     const mockComponent1 = mockComponents[0].componentInstance;
     const mockComponent2 = mockComponents[1].componentInstance;
-    expect(mockComponent1.someOutput1).not.toEqual(mockComponent2.someOutput1);
+    expect(mockComponent1.someOutput1).not.toEqual(
+      mockComponent2.someOutput1,
+    );
   });
 
   it('should work with components w/o inputs or outputs', () => {
-    const mockComponent = fixture.debugElement.query(By.directive(EmptyComponent));
+    const mockComponent = fixture.debugElement.query(
+      By.directive(EmptyComponent),
+    );
     expect(mockComponent).not.toBeNull();
   });
 
   it('should allow ngModel bindings', () => {
-    const mockComponent = fixture.debugElement.query(By.css('#ngmodel-component'));
+    const mockComponent = fixture.debugElement.query(
+      By.css('#ngmodel-component'),
+    );
     expect(mockComponent).not.toBeNull();
   });
 
   it('should memoize the return value by argument', () => {
-    expect(MockComponent(EmptyComponent)).toBe(MockComponent(EmptyComponent));
-    expect(MockComponent(SimpleComponent)).toBe(MockComponent(SimpleComponent));
-    expect(MockComponent(EmptyComponent)).not.toBe(MockComponent(SimpleComponent));
+    expect(MockComponent(EmptyComponent)).toBe(
+      MockComponent(EmptyComponent),
+    );
+    expect(MockComponent(SimpleComponent)).toBe(
+      MockComponent(SimpleComponent),
+    );
+    expect(MockComponent(EmptyComponent)).not.toBe(
+      MockComponent(SimpleComponent),
+    );
   });
 
   it('should set ViewChild components correctly', () => {
@@ -165,7 +212,9 @@ describe('MockComponent', () => {
   });
 
   it('should allow spying of viewchild component methods', () => {
-    const spy = component.childComponent ? component.childComponent.performAction : null;
+    const spy = component.childComponent
+      ? component.childComponent.performAction
+      : null;
     component.performActionOnChild('test');
     expect(spy).toHaveBeenCalledWith('test');
   });
@@ -210,43 +259,61 @@ describe('MockComponent', () => {
       fixture.detectChanges();
 
       // a mock component with @ViewChild was created without errors.
-      const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-and-template'));
+      const templateOutlet = fixture.debugElement.query(
+        By.css('#element-with-content-and-template'),
+      );
       expect(templateOutlet).toBeTruthy();
 
       // looking for ng-content.
       const ngContent = templateOutlet;
       expect(ngContent).toBeTruthy();
-      expect(ngContent.nativeElement.innerText.replace(/\s+/gim, ' ').trim()).toEqual(
-        'ng-content body header ng-content body footer',
-      );
+      expect(
+        ngContent.nativeElement.innerText
+          .replace(/\s+/gim, ' ')
+          .trim(),
+      ).toEqual('ng-content body header ng-content body footer');
 
       // looking for 1st templateRef.
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block1');
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
+        'block1',
+      );
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeTruthy();
-      expect(block1.nativeElement.innerText.trim()).toEqual('block 1 body');
+      expect(block1.nativeElement.innerText.trim()).toEqual(
+        'block 1 body',
+      );
 
       // looking for 2nd templateRef.
       block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block2');
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
+        'block2',
+      );
       block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
-      expect(block2.nativeElement.innerText.trim()).toEqual('block 2 body');
+      expect(block2.nativeElement.innerText.trim()).toEqual(
+        'block 2 body',
+      );
 
       // looking for 3rd templateRef.
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render('block3');
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
+        'block3',
+      );
       fixture.detectChanges();
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
       expect(block3.nativeElement.innerText.trim()).toEqual('');
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__hide('block3');
+      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__hide(
+        'block3',
+      );
       fixture.detectChanges();
-      expect(templateOutlet.query(By.css('[data-key="block3"]'))).toBeFalsy();
+      expect(
+        templateOutlet.query(By.css('[data-key="block3"]')),
+      ).toBeFalsy();
     });
 
     it('ignores missed blocks', () => {
@@ -264,7 +331,9 @@ describe('MockComponent', () => {
       fixture.detectChanges();
 
       // a mock component was created without errors.
-      const templateOutlet = fixture.debugElement.query(By.css('#element-without-content-and-template'));
+      const templateOutlet = fixture.debugElement.query(
+        By.css('#element-without-content-and-template'),
+      );
       expect(templateOutlet).toBeTruthy();
       expect(templateOutlet.nativeElement.innerHTML).toBeFalsy();
     });
@@ -273,11 +342,15 @@ describe('MockComponent', () => {
       fixture.detectChanges();
 
       // a mock component was created without errors.
-      const templateOutlet = fixture.debugElement.query(By.css('#element-with-content-only'));
+      const templateOutlet = fixture.debugElement.query(
+        By.css('#element-with-content-only'),
+      );
       expect(templateOutlet).toBeTruthy();
 
       // content has right value
-      expect(templateOutlet.nativeElement.innerHTML.trim()).toEqual('child of element-with-content-only');
+      expect(templateOutlet.nativeElement.innerHTML.trim()).toEqual(
+        'child of element-with-content-only',
+      );
     });
   });
 
@@ -286,15 +359,23 @@ describe('MockComponent', () => {
       template: '',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any) public o1?: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any) public o2?: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any) public o3?: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any) public o4?: QueryList<any>;
+      @ContentChild('i1', { read: true } as any)
+      public o1?: TemplateRef<any>;
+      @ContentChildren('i2', { read: true } as any)
+      public o2?: TemplateRef<any>;
+      @ViewChild('i3', { read: true } as any)
+      public o3?: QueryList<any>;
+      @ViewChildren('i4', { read: true } as any)
+      public o4?: QueryList<any>;
 
-      @ContentChild('i5', { read: false } as any) public o5?: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any) public o6?: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any) public o7?: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any) public o8?: QueryList<any>;
+      @ContentChild('i5', { read: false } as any)
+      public o5?: TemplateRef<any>;
+      @ContentChildren('i6', { read: false } as any)
+      public o6?: TemplateRef<any>;
+      @ViewChild('i7', { read: false } as any)
+      public o7?: QueryList<any>;
+      @ViewChildren('i8', { read: false } as any)
+      public o8?: QueryList<any>;
     }
 
     const actual = MockComponent(MyClass) as any;

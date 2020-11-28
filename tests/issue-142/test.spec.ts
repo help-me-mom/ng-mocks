@@ -1,4 +1,9 @@
-import { Component, Inject, InjectionToken, NgModule } from '@angular/core';
+import {
+  Component,
+  Inject,
+  InjectionToken,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockModule } from 'ng-mocks';
 
@@ -19,7 +24,9 @@ export class TargetModule {
     };
   }
 
-  public constructor(@Inject(TARGET_TOKEN) public readonly targetToken: boolean) {}
+  public constructor(
+    @Inject(TARGET_TOKEN) public readonly targetToken: boolean,
+  ) {}
 }
 
 @Component({

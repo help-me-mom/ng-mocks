@@ -7,7 +7,10 @@ import {
   HttpRequest,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
@@ -17,7 +20,10 @@ import { Observable } from 'rxjs';
 class Target1Interceptor implements HttpInterceptor {
   protected value = '1';
 
-  public intercept(request: HttpRequest<void>, next: HttpHandler): Observable<HttpEvent<void>> {
+  public intercept(
+    request: HttpRequest<void>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<void>> {
     return next.handle(
       request.clone({
         setHeaders: {
@@ -32,7 +38,10 @@ class Target1Interceptor implements HttpInterceptor {
 class Target2Interceptor implements HttpInterceptor {
   protected value = '2';
 
-  public intercept(request: HttpRequest<void>, next: HttpHandler): Observable<HttpEvent<void>> {
+  public intercept(
+    request: HttpRequest<void>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<void>> {
     return next.handle(
       request.clone({
         setHeaders: {
@@ -73,7 +82,9 @@ describe('interceptor-kept-mock', () => {
 
   beforeAll(() => {
     MockInstance(Target2Interceptor, {
-      init: instance => (instance.intercept = (request, next) => next.handle(request)),
+      init: instance =>
+        (instance.intercept = (request, next) =>
+          next.handle(request)),
     });
   });
 
@@ -81,7 +92,9 @@ describe('interceptor-kept-mock', () => {
 
   it('triggers interceptor', () => {
     const client: HttpClient = TestBed.get(HttpClient);
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
+    const httpMock: HttpTestingController = TestBed.get(
+      HttpTestingController,
+    );
 
     // Let's do a simply request.
     client.get('/target').subscribe();

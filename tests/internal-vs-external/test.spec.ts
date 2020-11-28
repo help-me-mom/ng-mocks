@@ -2,7 +2,10 @@
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { ExternalComponent, InternalComponent } from './fixtures.components';
+import {
+  ExternalComponent,
+  InternalComponent,
+} from './fixtures.components';
 import { TargetModule } from './fixtures.modules';
 
 describe('InternalVsExternal:real', () => {
@@ -28,10 +31,14 @@ describe('InternalVsExternal:real', () => {
   it('should render', () => {
     const fixture = MockRender(ExternalComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content).toContain('external <internal-component>internal</internal-component>');
+    const content = fixture.nativeElement.innerHTML;
+    expect(content).toContain(
+      'external <internal-component>internal</internal-component>',
+    );
 
-    expect(() => MockRender(InternalComponent)).toThrowError(/'internal-component' is not a known element/);
+    expect(() => MockRender(InternalComponent)).toThrowError(
+      /'internal-component' is not a known element/,
+    );
   });
 });
 
@@ -59,10 +66,14 @@ describe('InternalVsExternal:mock', () => {
   it('should render', () => {
     const fixture = MockRender(ExternalComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content).toEqual('<external-component></external-component>');
+    const content = fixture.nativeElement.innerHTML;
+    expect(content).toEqual(
+      '<external-component></external-component>',
+    );
 
-    expect(() => MockRender(InternalComponent)).toThrowError(/'internal-component' is not a known element/);
+    expect(() => MockRender(InternalComponent)).toThrowError(
+      /'internal-component' is not a known element/,
+    );
   });
 });
 
@@ -72,8 +83,10 @@ describe('InternalVsExternal:legacy', () => {
   it('should render', () => {
     const fixture = MockRender(ExternalComponent);
     expect(fixture).toBeDefined();
-    const content = fixture.debugElement.nativeElement.innerHTML;
-    expect(content).toEqual('<external-component></external-component>');
+    const content = fixture.nativeElement.innerHTML;
+    expect(content).toEqual(
+      '<external-component></external-component>',
+    );
 
     // the code below will fail because the MockModule outside of the MockBuilder exports everything.
     // try {

@@ -36,7 +36,9 @@ class TargetModule {}
 describe('tokens-existing', () => {
   ngMocks.faster();
 
-  beforeEach(() => MockBuilder().mock(TargetModule).keep(Exist2Service));
+  beforeEach(() =>
+    MockBuilder().mock(TargetModule).keep(Exist2Service),
+  );
 
   it('resolves TOKEN_EXISTING_MOCK as a mock service', () => {
     const actual = TestBed.get(TOKEN_EXISTING_MOCK);

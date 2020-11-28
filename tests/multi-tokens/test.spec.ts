@@ -1,4 +1,9 @@
-import { Inject, Injectable, InjectionToken, NgModule } from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  InjectionToken,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { getInjection, MockBuilder } from 'ng-mocks';
 
@@ -6,7 +11,9 @@ const TARGET_TOKEN = new InjectionToken('MY_TOKEN_SINGLE');
 
 @Injectable()
 class TargetService {
-  public constructor(@Inject(TARGET_TOKEN) public readonly tokens: string[]) {}
+  public constructor(
+    @Inject(TARGET_TOKEN) public readonly tokens: string[],
+  ) {}
 }
 
 @NgModule({

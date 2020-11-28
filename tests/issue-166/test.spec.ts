@@ -21,7 +21,8 @@ class MyService {
 
 describe('issue-166', () => {
   it('accepts spies', () => {
-    const spy = typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
+    const spy =
+      typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
     const stub = ngMocks.stub(MockService(MyService), {
       onErrorSet$: new Subject<string>(),
       onWarningSet$: new Subject<string>(),

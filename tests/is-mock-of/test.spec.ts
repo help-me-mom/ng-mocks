@@ -1,5 +1,17 @@
-import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
-import { isMockOf, MockComponent, MockDirective, MockModule, MockPipe } from 'ng-mocks';
+import {
+  Component,
+  Directive,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
+import {
+  isMockOf,
+  MockComponent,
+  MockDirective,
+  MockModule,
+  MockPipe,
+} from 'ng-mocks';
 
 @Pipe({
   name: 'target',
@@ -32,7 +44,9 @@ describe('isMockOf', () => {
   it('detects module', () => {
     const mock = MockModule(TargetModule);
     expect(isMockOf(new mock(), TargetModule, 'm')).toBeTruthy();
-    expect(isMockOf(new TargetModule(), TargetModule, 'm')).toBeFalsy();
+    expect(
+      isMockOf(new TargetModule(), TargetModule, 'm'),
+    ).toBeFalsy();
   });
 
   it('detects pipe', () => {
@@ -44,18 +58,24 @@ describe('isMockOf', () => {
   it('detects directive', () => {
     const mock = MockDirective(TargetDirective);
     expect(isMockOf(new mock(), TargetDirective, 'd')).toBeTruthy();
-    expect(isMockOf(new TargetDirective(), TargetDirective, 'd')).toBeFalsy();
+    expect(
+      isMockOf(new TargetDirective(), TargetDirective, 'd'),
+    ).toBeFalsy();
   });
 
   it('detects components', () => {
     const mock = MockComponent(TargetComponent);
     expect(isMockOf(new mock(), TargetComponent, 'c')).toBeTruthy();
-    expect(isMockOf(new TargetComponent(), TargetComponent, 'c')).toBeFalsy();
+    expect(
+      isMockOf(new TargetComponent(), TargetComponent, 'c'),
+    ).toBeFalsy();
   });
 
   it('detects mocks', () => {
     const mock = MockComponent(TargetComponent);
     expect(isMockOf(new mock(), TargetComponent)).toBeTruthy();
-    expect(isMockOf(new TargetComponent(), TargetComponent)).toBeFalsy();
+    expect(
+      isMockOf(new TargetComponent(), TargetComponent),
+    ).toBeFalsy();
   });
 });

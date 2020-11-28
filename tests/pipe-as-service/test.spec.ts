@@ -1,6 +1,18 @@
-import { Component, Injectable, NgModule, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Injectable,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockRender, MockReset, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 
 @Pipe({
   name: 'target',
@@ -21,9 +33,9 @@ class TargetPipe implements PipeTransform {
 @Component({
   selector: 'target',
   template: `
-    'pipe:{{ '123' | target }}' 's:transform:{{ service.transform('123') }}' 's:name:{{ service.name }}' 's:echo:{{
-      service.echo()
-    }}'
+    'pipe:{{ '123' | target }}' 's:transform:{{
+      service.transform('123')
+    }}' 's:name:{{ service.name }}' 's:echo:{{ service.echo() }}'
   `,
 })
 class TargetComponent {
@@ -39,33 +51,55 @@ class TargetModule {}
 
 describe('pipe-as-service', () => {
   describe('default', () => {
-    beforeEach(() => TestBed.configureTestingModule({ imports: [TargetModule] }).compileComponents());
+    beforeEach(() =>
+      TestBed.configureTestingModule({
+        imports: [TargetModule],
+      }).compileComponents(),
+    );
 
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toContain(`'pipe:["123"]'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:["123"]'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:name:target'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:target'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'pipe:["123"]'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:["123"]'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:name:target'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:echo:target'`,
+      );
     });
   });
 
   describe('guts', () => {
-    beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)));
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetComponent, TargetModule),
+      ),
+    );
 
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(`'pipe:'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:'`,
+      );
       expect(fixture.nativeElement.innerHTML).toContain(`'s:name:'`);
       expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:'`);
     });
   });
 
   describe('guts:mock-instance', () => {
-    beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)));
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetComponent, TargetModule),
+      ),
+    );
 
     beforeAll(() =>
       MockInstance(TargetPipe, instance =>
@@ -81,10 +115,18 @@ describe('pipe-as-service', () => {
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toContain(`'pipe:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:name:mock'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:echo'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'pipe:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:name:mock'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:echo:echo'`,
+      );
     });
   });
 
@@ -95,7 +137,9 @@ describe('pipe-as-service', () => {
       const fixture = MockRender(TargetComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(`'pipe:'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:'`,
+      );
       expect(fixture.nativeElement.innerHTML).toContain(`'s:name:'`);
       expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:'`);
     });
@@ -118,21 +162,38 @@ describe('pipe-as-service', () => {
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toContain(`'pipe:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:name:mock'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:echo'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'pipe:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:name:mock'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:echo:echo'`,
+      );
     });
   });
 
   describe('mock-builder:pipe-function', () => {
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(TargetPipe, () => 'transform'));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).mock(
+        TargetPipe,
+        () => 'transform',
+      ),
+    );
 
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toContain(`'pipe:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:transform'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'pipe:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:transform'`,
+      );
       expect(fixture.nativeElement.innerHTML).toContain(`'s:name:'`);
       expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:'`);
     });
@@ -147,7 +208,9 @@ describe('pipe-as-service', () => {
     );
 
     it('fails because of the missed function', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(/.echo is not a function/);
+      expect(() => MockRender(TargetComponent)).toThrowError(
+        /.echo is not a function/,
+      );
     });
   });
 
@@ -163,10 +226,18 @@ describe('pipe-as-service', () => {
     it('renders correctly', () => {
       const fixture = MockRender(TargetComponent);
 
-      expect(fixture.nativeElement.innerHTML).toContain(`'pipe:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:transform:transform'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:name:test'`);
-      expect(fixture.nativeElement.innerHTML).toContain(`'s:echo:echo'`);
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'pipe:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:transform:transform'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:name:test'`,
+      );
+      expect(fixture.nativeElement.innerHTML).toContain(
+        `'s:echo:echo'`,
+      );
     });
   });
 });

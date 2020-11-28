@@ -1,4 +1,10 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -14,7 +20,11 @@ class DependencyDirective {
 
 @Component({
   selector: 'tested',
-  template: ` <span *dependency="value" (dependency-output)="trigger($event)">content</span>`,
+  template: ` <span
+    *dependency="value"
+    (dependency-output)="trigger($event)"
+    >content</span
+  >`,
 })
 class TestedComponent {
   public value = '';
@@ -26,27 +36,29 @@ describe('MockDirective:Structural', () => {
   // Because they might require a context which should be provided.
   // Usually a developer knows the context and can render it
   // manually with proper setup.
-  beforeEach(() =>
-    MockBuilder(TestedComponent).mock(DependencyDirective, {
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyDirective, {
       // render: true, // <-- a flag to render the directive by default
-    }),
-  );
+    });
+  });
 
   it('renders content of the child structural directive', () => {
     const fixture = MockRender(TestedComponent);
 
     // Let's assert that nothing has been rendered inside of
     // the structural directive by default.
-    expect(fixture.debugElement.nativeElement.innerHTML).not.toContain('>content<');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      '>content<',
+    );
 
     // And let's render it manually now.
-    const mockDirective = ngMocks.findInstance(fixture.debugElement, DependencyDirective);
+    const mockDirective = ngMocks.findInstance(DependencyDirective);
     if (isMockOf(mockDirective, DependencyDirective, 'd')) {
       mockDirective.__render();
       fixture.detectChanges();
     }
 
     // The content of the structural directive should be rendered.
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain('>content<');
+    expect(fixture.nativeElement.innerHTML).toContain('>content<');
   });
 });

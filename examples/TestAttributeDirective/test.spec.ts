@@ -1,4 +1,9 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+} from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // The purpose of the directive is to add a background color
@@ -27,6 +32,7 @@ describe('TestAttributeDirective', () => {
   // Because we want to test the directive, we pass it as the first
   // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('uses default background color', () => {
@@ -34,7 +40,9 @@ describe('TestAttributeDirective', () => {
 
     // By default, without the mouse enter, there is no background
     // color on the div.
-    expect(fixture.nativeElement.innerHTML).not.toContain('style="background-color: yellow;"');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      'style="background-color: yellow;"',
+    );
 
     // Let's simulate the mouse enter event.
     // fixture.point is out root element from the rendered template,
@@ -43,13 +51,17 @@ describe('TestAttributeDirective', () => {
     fixture.point.triggerEventHandler('mouseenter', null);
 
     // Let's assert the color.
-    expect(fixture.nativeElement.innerHTML).toContain('style="background-color: yellow;"');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: yellow;"',
+    );
 
     // Now let's simulate the mouse mouse leave event.
     fixture.point.triggerEventHandler('mouseleave', null);
 
     // And assert that the background color is gone now.
-    expect(fixture.nativeElement.innerHTML).not.toContain('style="background-color: yellow;"');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      'style="background-color: yellow;"',
+    );
   });
 
   it('sets provided background color', () => {
@@ -63,13 +75,17 @@ describe('TestAttributeDirective', () => {
 
     // Let's assert that the background color is red.
     fixture.point.triggerEventHandler('mouseenter', null);
-    expect(fixture.nativeElement.innerHTML).toContain('style="background-color: red;"');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: red;"',
+    );
 
     // Let's switch the color, we don't need `.point`, because we
     // access a middle component of MockRender.
     fixture.componentInstance.color = 'blue';
     fixture.detectChanges(); // shaking the template
     fixture.point.triggerEventHandler('mouseenter', null);
-    expect(fixture.nativeElement.innerHTML).toContain('style="background-color: blue;"');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'style="background-color: blue;"',
+    );
   });
 });

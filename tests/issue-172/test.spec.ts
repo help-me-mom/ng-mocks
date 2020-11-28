@@ -1,4 +1,9 @@
-import { Component, Injectable, NgModule, OnInit } from '@angular/core';
+import {
+  Component,
+  Injectable,
+  NgModule,
+  OnInit,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -53,7 +58,9 @@ describe('issue-172:real', () => {
 
   it('renders echo', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<app-target>Target1ServiceTarget2Service</app-target>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<app-target>Target1ServiceTarget2Service</app-target>',
+    );
   });
 });
 
@@ -81,7 +88,9 @@ describe('issue-172:test', () => {
       },
     });
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<app-target>MockServiceTarget2Service</app-target>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<app-target>MockServiceTarget2Service</app-target>',
+    );
   });
 });
 
@@ -94,7 +103,9 @@ describe('issue-172:mock', () => {
 
   it('renders the mock echo', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<app-target>MockServiceTarget2Service</app-target>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<app-target>MockServiceTarget2Service</app-target>',
+    );
   });
 });
 
@@ -107,6 +118,8 @@ describe('issue-172:restore', () => {
 
   it('renders echo', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('<app-target>Target1ServiceTarget2Service</app-target>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<app-target>Target1ServiceTarget2Service</app-target>',
+    );
   });
 });

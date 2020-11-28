@@ -47,9 +47,14 @@ describe('TestToken', () => {
   // the chain on MockBuilder. To correctly satisfy their
   // initialization we need to pass its module as the second
   // parameter.
-  beforeEach(() =>
-    MockBuilder().mock(TargetModule).keep(TOKEN_CLASS).keep(TOKEN_EXISTING).keep(TOKEN_FACTORY).keep(TOKEN_VALUE),
-  );
+  beforeEach(() => {
+    return MockBuilder()
+      .mock(TargetModule)
+      .keep(TOKEN_CLASS)
+      .keep(TOKEN_EXISTING)
+      .keep(TOKEN_FACTORY)
+      .keep(TOKEN_VALUE);
+  });
 
   it('creates TOKEN_CLASS', () => {
     const token = TestBed.get(TOKEN_CLASS);

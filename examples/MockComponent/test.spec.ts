@@ -1,4 +1,11 @@
-import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
@@ -8,7 +15,9 @@ import { staticFalse } from '../../tests';
   template: `child`,
 })
 class DependencyComponent {
-  @ContentChild('something', staticFalse) public injectedSomething: TemplateRef<{}> | undefined;
+  @ContentChild('something', staticFalse) public injectedSomething:
+    | TemplateRef<{}>
+    | undefined;
 
   @Input()
   public someInput = '';
@@ -19,7 +28,12 @@ class DependencyComponent {
 
 @Component({
   selector: 'tested',
-  template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
+  template: `
+    <app-child
+      [someInput]="value"
+      (someOutput)="trigger($event)"
+    ></app-child>
+  `,
 })
 class TestedComponent {
   public value = '';
@@ -27,7 +41,9 @@ class TestedComponent {
 }
 
 describe('MockComponent', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent).mock(DependencyComponent);
+  });
 
   it('sends the correct value to the child input', () => {
     const fixture = MockRender(TestedComponent);
@@ -38,7 +54,9 @@ describe('MockComponent', () => {
     //   By.css('app-child')
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find<DependencyComponent>(fixture, 'app-child').componentInstance;
+    const mockComponent = ngMocks.find<DependencyComponent>(
+      'app-child',
+    ).componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. TestedComponent sets its value via
@@ -60,7 +78,8 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find(fixture, DependencyComponent).componentInstance;
+    const mockComponent = ngMocks.find(DependencyComponent)
+      .componentInstance;
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. TestedComponent listens on the output via
@@ -115,7 +134,8 @@ describe('MockComponent', () => {
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockNgTemplate = ngMocks.find(fixture.debugElement, '[data-key="something"]').nativeElement.innerHTML;
+    const mockNgTemplate = ngMocks.find('[data-key="something"]')
+      .nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });
 });

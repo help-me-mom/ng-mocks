@@ -1,7 +1,13 @@
 // tslint:disable no-console
 
 import { CommonModule } from '@angular/common';
-import { Component, Input, NgModule, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Input,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -17,7 +23,9 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target',
-  template: `<ng-container *ngIf="!value">{{ value | target }}</ng-container>`,
+  template: `<ng-container *ngIf="!value">{{
+    value | target
+  }}</ng-container>`,
 })
 class TargetComponent {
   @Input() public readonly value: string | null = null;
@@ -73,7 +81,10 @@ describe('export-all', () => {
   describe('no-export', () => {
     it('fails on no exportAll due to lack of access to non-exported declarations', async () => {
       // Thanks A5 for any
-      const ngModule: any = MockBuilder().mock(TargetModule).exclude(TargetComponent).build();
+      const ngModule: any = MockBuilder()
+        .mock(TargetModule)
+        .exclude(TargetComponent)
+        .build();
       const testBed = TestBed.configureTestingModule({
         ...ngModule,
         declarations: [...ngModule.declarations, TargetComponent],

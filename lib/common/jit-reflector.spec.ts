@@ -47,9 +47,15 @@ describe('JitReflector', () => {
     const expectedLcProperty = 'string';
     instance.mock.hasLifecycleHook.and.returnValue(false);
 
-    const actual = instance.hasLifecycleHook(expectedType, expectedLcProperty);
+    const actual = instance.hasLifecycleHook(
+      expectedType,
+      expectedLcProperty,
+    );
 
-    expect(instance.mock.hasLifecycleHook).toHaveBeenCalledWith(expectedType, expectedLcProperty);
+    expect(instance.mock.hasLifecycleHook).toHaveBeenCalledWith(
+      expectedType,
+      expectedLcProperty,
+    );
     expect(actual).toEqual(false);
   });
 
@@ -83,7 +89,9 @@ describe('JitReflector', () => {
   });
 
   it('shallowAnnotations', () => {
-    expect(() => instance.shallowAnnotations()).toThrowError(/Not supported in JIT mode/);
+    expect(() => instance.shallowAnnotations()).toThrowError(
+      /Not supported in JIT mode/,
+    );
   });
 
   it('tryAnnotations', () => {

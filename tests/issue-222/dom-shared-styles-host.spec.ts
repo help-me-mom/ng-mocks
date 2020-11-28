@@ -1,4 +1,10 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,7 +35,11 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     ]),
   ],
   selector: 'target',
-  template: ` <div [@openClose]="isOpen ? 'open' : 'closed'">The box is now {{ isOpen ? 'Open' : 'Closed' }}!</div> `,
+  template: `
+    <div [@openClose]="isOpen ? 'open' : 'closed'">
+      The box is now {{ isOpen ? 'Open' : 'Closed' }}!
+    </div>
+  `,
 })
 class TargetComponent {
   public isOpen = true;
@@ -50,7 +60,9 @@ describe('issue-222:DomSharedStylesHost:mock', () => {
 
   it('correctly handles DomSharedStylesHost in a mock module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('The box is now Open!');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'The box is now Open!',
+    );
     // Animations are replaced with a mock copy, therefore no styles.
     expect(fixture.nativeElement.innerHTML).not.toContain('yellow');
   });
@@ -61,18 +73,26 @@ describe('issue-222:DomSharedStylesHost:keep', () => {
 
   it('correctly handles DomSharedStylesHost in a kept module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('The box is now Open!');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'The box is now Open!',
+    );
     // Animations are kept, therefore we should get styles.
     expect(fixture.nativeElement.innerHTML).toContain('yellow');
   });
 });
 
 describe('issue-222:DomSharedStylesHost:guts', () => {
-  beforeEach(() => TestBed.configureTestingModule(ngMocks.guts(TargetComponent, TargetModule)).compileComponents());
+  beforeEach(() =>
+    TestBed.configureTestingModule(
+      ngMocks.guts(TargetComponent, TargetModule),
+    ).compileComponents(),
+  );
 
   it('correctly handles DomSharedStylesHost in a mock module', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('The box is now Open!');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'The box is now Open!',
+    );
     // Animations are replaced with a mock copy, therefore no styles.
     expect(fixture.nativeElement.innerHTML).not.toContain('yellow');
   });

@@ -1,7 +1,12 @@
 // tslint:disable no-duplicate-imports
 
 import * as core from '@angular/core';
-import { Component, Directive as DirectiveSource, Injectable, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive as DirectiveSource,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -42,35 +47,55 @@ describe('double-decorator-ivy:without-selector', () => {
   });
 
   describe('default', () => {
-    beforeEach(() => TestBed.configureTestingModule({ imports: [ModuleWithComponent] }).compileComponents());
+    beforeEach(() =>
+      TestBed.configureTestingModule({
+        imports: [ModuleWithComponent],
+      }).compileComponents(),
+    );
 
     it('fails', () => {
-      expect(() => MockRender(MyComponent)).toThrowError(/Directive BaseClass has no selector/);
+      expect(() => MockRender(MyComponent)).toThrowError(
+        /Directive BaseClass has no selector/,
+      );
     });
   });
 
   describe('hot-fix', () => {
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).exclude(BaseClass).mock(MyProvider));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent)
+        .exclude(BaseClass)
+        .mock(MyProvider),
+    );
 
     it('fixes the issue via exclude', () => {
       const fixture = MockRender(MyComponent);
-      expect(fixture.nativeElement.innerHTML).toContain('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toContain(
+        '<target></target>',
+      );
     });
   });
 
   describe('the-issue', () => {
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).mock(MyProvider));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent).mock(MyProvider),
+    );
 
     it('fails', () => {
-      expect(() => MockRender(MyComponent)).toThrowError(/Directive MockOfBaseClass has no selector/);
+      expect(() => MockRender(MyComponent)).toThrowError(
+        /Directive MockOfBaseClass has no selector/,
+      );
     });
   });
 
   describe('keep', () => {
-    beforeEach(() => MockBuilder(MyComponent, ModuleWithComponent).keep(MyProvider));
+    beforeEach(() =>
+      MockBuilder(MyComponent, ModuleWithComponent).keep(MyProvider),
+    );
 
     it('fails', () => {
-      expect(() => MockRender(MyComponent)).toThrowError(/Directive MockOfBaseClass has no selector/);
+      expect(() => MockRender(MyComponent)).toThrowError(
+        /Directive MockOfBaseClass has no selector/,
+      );
     });
   });
 });

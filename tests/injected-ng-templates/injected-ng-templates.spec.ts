@@ -1,5 +1,10 @@
 import { DebugElement } from '@angular/core';
-import { MockBuilder, MockComponent, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockComponent,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 import { CustomInjectionComponent } from './custom-injection.component';
 
@@ -20,9 +25,15 @@ describe('injected-ng-templates:real', () => {
     );
 
     // every value should be rendered correctly.
-    expect(fixture.nativeElement.innerHTML).toContain('<div>string1</div>');
-    expect(fixture.nativeElement.innerHTML).toContain('<div>string2</div>');
-    expect(fixture.nativeElement.innerHTML).toContain('<div>string3</div>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<div>string1</div>',
+    );
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<div>string2</div>',
+    );
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<div>string3</div>',
+    );
   });
 });
 
@@ -48,10 +59,17 @@ describe('structural-directive-as-ng-for:mock', () => {
     );
 
     // By default @ContentChild('block') shouldn't be rendered at all.
-    block = ngMocks.find(fixture.debugElement, '[data-key="block"]', undefined);
+    block = ngMocks.find(
+      fixture.debugElement,
+      '[data-key="block"]',
+      undefined,
+    );
     expect(block).toBeUndefined();
 
-    const mockComponent = ngMocks.find(fixture.debugElement, MockComponent(CustomInjectionComponent)).componentInstance;
+    const mockComponent = ngMocks.find(
+      fixture.debugElement,
+      MockComponent(CustomInjectionComponent),
+    ).componentInstance;
 
     // Now we want to render @ContentChild('block') with some context.
     mockComponent.__render('block', 'string1', {
@@ -59,7 +77,9 @@ describe('structural-directive-as-ng-for:mock', () => {
     });
     fixture.detectChanges();
     block = ngMocks.find(fixture.debugElement, '[data-key="block"]');
-    expect(block.nativeElement.innerHTML).toContain('<div>string0 string1 test1</div>');
+    expect(block.nativeElement.innerHTML).toContain(
+      '<div>string0 string1 test1</div>',
+    );
 
     // Now we want to render @ContentChild('block') with another context.
     mockComponent.__render('block', 'string2', {
@@ -67,6 +87,8 @@ describe('structural-directive-as-ng-for:mock', () => {
     });
     fixture.detectChanges();
     block = ngMocks.find(fixture.debugElement, '[data-key="block"]');
-    expect(block.nativeElement.innerHTML).toContain('<div>string0 string2 test2</div>');
+    expect(block.nativeElement.innerHTML).toContain(
+      '<div>string0 string2 test2</div>',
+    );
   });
 });

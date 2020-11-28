@@ -15,7 +15,13 @@ import {
   PipeTransform,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDirective, MockModule, MockPipe, MockService, ngMocks } from 'ng-mocks';
+import {
+  MockDirective,
+  MockModule,
+  MockPipe,
+  MockService,
+  ngMocks,
+} from 'ng-mocks';
 
 const TARGET1 = new InjectionToken('TARGET1');
 
@@ -47,21 +53,26 @@ class Target2Component {}
 @Component({
   selector: 'target1',
   template: `<div (target1)="update.emit()">
-    {{ greeting }} {{ greeting | target1 }} <target2>{{ target }}</target2>
+    {{ greeting }} {{ greeting | target1 }}
+    <target2>{{ target }}</target2>
   </div>`,
 })
 class Target1Component {
   @Input() public greeting: string | null = null;
-  @Output() public readonly update: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public readonly update: EventEmitter<void> = new EventEmitter();
 
-  public constructor(@Inject(TARGET1) public readonly target: string) {}
+  public constructor(
+    @Inject(TARGET1) public readonly target: string,
+  ) {}
 }
 
 @Directive({
   selector: '[target1]',
 })
 class Target1Directive implements OnDestroy {
-  @Output() public readonly target1: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public readonly target1: EventEmitter<void> = new EventEmitter();
 
   public constructor(public readonly service: Target1Service) {
     this.service.callback = () => {
@@ -121,7 +132,9 @@ describe('ngMocks.guts:NO_ERRORS_SCHEMA', () => {
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<target2></target2>',
+    );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();
@@ -135,7 +148,11 @@ describe('ngMocks.guts:legacy', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MockPipe(Target1Pipe), MockDirective(Target1Directive), Target1Component],
+      declarations: [
+        MockPipe(Target1Pipe),
+        MockDirective(Target1Directive),
+        Target1Component,
+      ],
       imports: [CommonModule, MockModule(Target2Module)],
       providers: [
         {
@@ -154,7 +171,9 @@ describe('ngMocks.guts:legacy', () => {
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<target2></target2>',
+    );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();
@@ -167,14 +186,18 @@ describe('ngMocks.guts:normal', () => {
   let component: Target1Component;
 
   beforeEach(() => {
-    TestBed.configureTestingModule(ngMocks.guts(Target1Component, Target1Module));
+    TestBed.configureTestingModule(
+      ngMocks.guts(Target1Component, Target1Module),
+    );
     fixture = TestBed.createComponent(Target1Component);
     component = fixture.componentInstance;
   });
 
   it('creates component', () => {
     expect(component).toEqual(jasmine.any(Target1Component));
-    expect(fixture.nativeElement.innerHTML).toContain('<target2></target2>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<target2></target2>',
+    );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
     fixture.detectChanges();

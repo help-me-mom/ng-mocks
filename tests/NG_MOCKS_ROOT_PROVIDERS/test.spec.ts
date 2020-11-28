@@ -1,5 +1,14 @@
-import { Component, Injectable as InjectableSource, NgModule, VERSION } from '@angular/core';
-import { MockBuilder, MockRender, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
+import {
+  Component,
+  Injectable as InjectableSource,
+  NgModule,
+  VERSION,
+} from '@angular/core';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+} from 'ng-mocks';
 
 // Because of A5 we need to cast Injectable to any type.
 // But because of A10+ we need to do it via a middle function.
@@ -63,20 +72,32 @@ describe('NG_MOCKS_ROOT_PROVIDERS', () => {
   });
 
   describe('default for a kept module', () => {
-    beforeEach(() => MockBuilder(Target1Component, CombinedModule).keep(Target1Module));
+    beforeEach(() =>
+      MockBuilder(Target1Component, CombinedModule).keep(
+        Target1Module,
+      ),
+    );
 
     it('keeps its global service', () => {
       const fixture = MockRender(Target1Component);
-      expect(fixture.nativeElement.innerHTML).toEqual('<target-1>target-1</target-1>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target-1>target-1</target-1>',
+      );
     });
   });
 
   describe('mock the token', () => {
-    beforeEach(() => MockBuilder(Target1Component, CombinedModule).keep(Target1Module).mock(NG_MOCKS_ROOT_PROVIDERS));
+    beforeEach(() =>
+      MockBuilder(Target1Component, CombinedModule)
+        .keep(Target1Module)
+        .mock(NG_MOCKS_ROOT_PROVIDERS),
+    );
 
     it('mocks global service for a kept module', () => {
       const fixture = MockRender(Target1Component);
-      expect(fixture.nativeElement.innerHTML).toEqual('<target-1></target-1>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target-1></target-1>',
+      );
     });
   });
 
@@ -85,16 +106,24 @@ describe('NG_MOCKS_ROOT_PROVIDERS', () => {
 
     it('mocks its global service', () => {
       const fixture = MockRender(Target1Component);
-      expect(fixture.nativeElement.innerHTML).toEqual('<target-1></target-1>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target-1></target-1>',
+      );
     });
   });
 
   describe('keep the token', () => {
-    beforeEach(() => MockBuilder(Target1Component, CombinedModule).keep(NG_MOCKS_ROOT_PROVIDERS));
+    beforeEach(() =>
+      MockBuilder(Target1Component, CombinedModule).keep(
+        NG_MOCKS_ROOT_PROVIDERS,
+      ),
+    );
 
     it('keeps global service for a mock module', () => {
       const fixture = MockRender(Target1Component);
-      expect(fixture.nativeElement.innerHTML).toEqual('<target-1>target-1</target-1>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target-1>target-1</target-1>',
+      );
     });
   });
 });

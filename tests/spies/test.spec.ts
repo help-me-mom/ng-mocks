@@ -2,7 +2,12 @@
 
 import { Component, Injectable, NgModule } from '@angular/core';
 import { inject } from '@angular/core/testing';
-import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  MockService,
+  ngMocks,
+} from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -38,7 +43,10 @@ describe('spies:real', () => {
 
   it('should render', () => {
     const fixture = MockRender(TargetComponent);
-    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
+    const component = ngMocks.find(
+      fixture.debugElement,
+      TargetComponent,
+    ).componentInstance;
     expect(component).toBeDefined();
     expect(component.echo()).toEqual('TargetComponent');
   });
@@ -54,19 +62,28 @@ describe('spies:manual-mock', () => {
     }
     (spy as any).manual = true;
 
-    return MockBuilder(TargetComponent, TargetModule).mock(TargetService, spy);
+    return MockBuilder(TargetComponent, TargetModule).mock(
+      TargetService,
+      spy,
+    );
   });
 
-  it('should get manually mock service', inject([TargetService], (targetService: TargetService) => {
-    expect((targetService as any).manual).toBe(true);
-    const fixture = MockRender(TargetComponent);
-    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
-    expect(component).toBeDefined();
-    expect(targetService.echo).toHaveBeenCalledTimes(1);
-    expect(targetService.echo).toHaveBeenCalledWith('constructor');
-    expect(component.echo()).toEqual('fake');
-    expect(targetService.echo).toHaveBeenCalledTimes(2);
-  }));
+  it('should get manually mock service', inject(
+    [TargetService],
+    (targetService: TargetService) => {
+      expect((targetService as any).manual).toBe(true);
+      const fixture = MockRender(TargetComponent);
+      const component = ngMocks.find(
+        fixture.debugElement,
+        TargetComponent,
+      ).componentInstance;
+      expect(component).toBeDefined();
+      expect(targetService.echo).toHaveBeenCalledTimes(1);
+      expect(targetService.echo).toHaveBeenCalledWith('constructor');
+      expect(component.echo()).toEqual('fake');
+      expect(targetService.echo).toHaveBeenCalledTimes(2);
+    },
+  ));
 });
 
 describe('spies:auto-mock', () => {
@@ -75,14 +92,21 @@ describe('spies:auto-mock', () => {
   it('should get an existing mock service', () => {
     const fixture = MockRender(TargetComponent);
     const targetService = fixture.point.injector.get(TargetService);
-    const component = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
+    const component = ngMocks.find(
+      fixture.debugElement,
+      TargetComponent,
+    ).componentInstance;
     expect(component).toBeDefined();
     expect(targetService.echo).toHaveBeenCalledTimes(1);
     expect(targetService.echo).toHaveBeenCalledWith('constructor');
     if (typeof jest !== 'undefined') {
-      ngMocks.stub<any>(targetService, 'echo').mockReturnValue('faked');
+      ngMocks
+        .stub<any>(targetService, 'echo')
+        .mockReturnValue('faked');
     } else if (typeof jasmine !== 'undefined') {
-      ngMocks.stub<any>(targetService, 'echo').and.returnValue('faked');
+      ngMocks
+        .stub<any>(targetService, 'echo')
+        .and.returnValue('faked');
     }
     expect(component.echo()).toEqual('faked');
     expect(targetService.echo).toHaveBeenCalledTimes(2);

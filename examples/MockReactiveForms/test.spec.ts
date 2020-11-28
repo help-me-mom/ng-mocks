@@ -1,5 +1,10 @@
 import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -28,14 +33,19 @@ class TestedComponent {
 }
 
 describe('MockReactiveForms', () => {
-  beforeEach(() => MockBuilder(TestedComponent).mock(DependencyComponent).keep(ReactiveFormsModule));
+  beforeEach(() => {
+    return MockBuilder(TestedComponent)
+      .mock(DependencyComponent)
+      .keep(ReactiveFormsModule);
+  });
 
   it('sends the correct value to the mock form component', () => {
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
 
     // Let's find the mock form component.
-    const mockControl = ngMocks.find(fixture.debugElement, DependencyComponent).componentInstance;
+    const mockControl = ngMocks.find(DependencyComponent)
+      .componentInstance;
 
     // Let's simulate its change, like a user does it.
     if (isMockOf(mockControl, DependencyComponent, 'c')) {

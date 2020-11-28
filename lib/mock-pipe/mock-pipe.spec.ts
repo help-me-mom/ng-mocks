@@ -1,5 +1,9 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
@@ -20,7 +24,9 @@ export class AnotherExamplePipe implements PipeTransform {
   selector: 'example-component',
   template: `
     <span id="examplePipe">{{ someStuff | mockPipe: 'foo' }}</span>
-    <span id="anotherExamplePipe">{{ someStuff | anotherMockPipe: 'fighters' }}</span>
+    <span id="anotherExamplePipe">{{
+      someStuff | anotherMockPipe: 'fighters'
+    }}</span>
   `,
 })
 export class ExampleComponent {
@@ -34,7 +40,9 @@ describe('MockPipe', () => {
     const mocks = MockPipes(ExamplePipe, AnotherExamplePipe);
     expect(mocks.length).toEqual(2);
     expect(isMockedNgDefOf(mocks[0], ExamplePipe, 'p')).toBeTruthy();
-    expect(isMockedNgDefOf(mocks[1], AnotherExamplePipe, 'p')).toBeTruthy();
+    expect(
+      isMockedNgDefOf(mocks[1], AnotherExamplePipe, 'p'),
+    ).toBeTruthy();
   });
 
   it('used default transform', () => {
@@ -46,7 +54,11 @@ describe('MockPipe', () => {
   describe('Base tests-jasmine', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [ExampleComponent, MockPipe(ExamplePipe, () => 'foo'), MockPipe(AnotherExamplePipe)],
+        declarations: [
+          ExampleComponent,
+          MockPipe(ExamplePipe, () => 'foo'),
+          MockPipe(AnotherExamplePipe),
+        ],
       }).compileComponents();
     }));
 
@@ -56,12 +68,18 @@ describe('MockPipe', () => {
     });
 
     it('should not display the word hi that is printed by the pipe, because it is replaced with its mock copy', () => {
-      expect(fixture.debugElement.query(By.css('#anotherExamplePipe')).nativeElement.innerHTML).toEqual('');
+      expect(
+        fixture.debugElement.query(By.css('#anotherExamplePipe'))
+          .nativeElement.innerHTML,
+      ).toEqual('');
     });
 
     describe('with transform override', () => {
       it('should return the result of the provided transform function', () => {
-        expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('foo');
+        expect(
+          fixture.debugElement.query(By.css('#examplePipe'))
+            .nativeElement.innerHTML,
+        ).toEqual('foo');
       });
     });
   });
@@ -69,7 +87,11 @@ describe('MockPipe', () => {
   describe('Cache check', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [ExampleComponent, MockPipe(ExamplePipe, () => 'bar'), MockPipe(AnotherExamplePipe)],
+        declarations: [
+          ExampleComponent,
+          MockPipe(ExamplePipe, () => 'bar'),
+          MockPipe(AnotherExamplePipe),
+        ],
       }).compileComponents();
     }));
 
@@ -79,7 +101,10 @@ describe('MockPipe', () => {
     });
 
     it('should return the result of the new provided transform function', () => {
-      expect(fixture.debugElement.query(By.css('#examplePipe')).nativeElement.innerHTML).toEqual('bar');
+      expect(
+        fixture.debugElement.query(By.css('#examplePipe'))
+          .nativeElement.innerHTML,
+      ).toEqual('bar');
     });
 
     it('returns cached version', () => {

@@ -4,10 +4,13 @@
 [![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 [![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
-# ng-mocks - ease of creating mock declarations out of annoying dependencies in Angular unit tests
+# Create mock components and more out of annoying dependencies in Angular tests
 
-`ng-mocks` is a library for testing Angular 5+ applications which provides helper functions for **creating mock components**, directives, pipes, modules and services.
-Whether you need a **mock child component**, or any other annoying dependency, `ng-mocks` has a tool to turn this declaration into its mock copy,
+`ng-mocks` is a library which provides helper functions for
+**creating mock components**, directives, pipes, modules and services
+for easy testing of Angular 5+ applications.
+Whether you need a **mock child component**, or any other annoying dependency,
+`ng-mocks` has a tool to turn this declaration into its mock copy,
 keeping its interface as it is, but suppressing its implementation.
 
 The current version of the library has been tested and can be used with:
@@ -383,7 +386,6 @@ describe('MockComponent', () => {
     // ).componentInstance
     // but properly typed.
     const mockComponent = ngMocks.find<DependencyComponent>(
-      fixture,
       'app-child',
     ).componentInstance;
 
@@ -407,7 +409,7 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find(fixture, DependencyComponent)
+    const mockComponent = ngMocks.find(DependencyComponent)
       .componentInstance;
 
     // Again, let's pretend DependencyComponent has an output
@@ -463,10 +465,8 @@ describe('MockComponent', () => {
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockNgTemplate = ngMocks.find(
-      fixture.debugElement,
-      '[data-key="something"]',
-    ).nativeElement.innerHTML;
+    const mockNgTemplate = ngMocks.find('[data-key="something"]')
+      .nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });
 });
@@ -574,7 +574,7 @@ describe('MockDirective:Attribute', () => {
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
     const mockDirective = ngMocks.get(
-      ngMocks.find(fixture.debugElement, 'span'),
+      ngMocks.find('span'),
       DependencyDirective,
     );
 
@@ -599,7 +599,7 @@ describe('MockDirective:Attribute', () => {
     // ).injector.get(DependencyDirective)
     // but easier and more precise.
     const mockDirective = ngMocks.get(
-      ngMocks.find(fixture.debugElement, 'span'),
+      ngMocks.find('span'),
       DependencyDirective,
     );
 
@@ -648,24 +648,19 @@ describe('MockDirective:Structural', () => {
 
     // Let's assert that nothing has been rendered inside of
     // the structural directive by default.
-    expect(
-      fixture.debugElement.nativeElement.innerHTML,
-    ).not.toContain('>content<');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      '>content<',
+    );
 
     // And let's render it manually now.
-    const mockDirective = ngMocks.findInstance(
-      fixture.debugElement,
-      DependencyDirective,
-    );
+    const mockDirective = ngMocks.findInstance(DependencyDirective);
     if (isMockOf(mockDirective, DependencyDirective, 'd')) {
       mockDirective.__render();
       fixture.detectChanges();
     }
 
     // The content of the structural directive should be rendered.
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain(
-      '>content<',
-    );
+    expect(fixture.nativeElement.innerHTML).toContain('>content<');
   });
 });
 ```
@@ -763,8 +758,9 @@ describe('MockPipe', () => {
   it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
 
-    const pipeElement = ngMocks.find(fixture.debugElement, 'span');
-    expect(pipeElement.nativeElement.innerHTML).toEqual('["foo"]');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<component>["foo"]</component>',
+    );
   });
 });
 ```
@@ -1112,17 +1108,16 @@ If we created a fixture, we would face an error about reading properties of `und
 returns a spy, if [auto spy](#auto-spy) has been configured, or `undefined`. Therefore, neither has the `subscribe` property.
 
 Obviously, to solve this, we need to get the method to return an observable stream.
-For that, we could create a mock copy via [`MockService`](#how-to-create-a-mock-service) and to pass it as the second parameter into [`MockProvider`](#how-to-create-a-mock-provider).
+For that, we could extend a mock copy via passing overrides as the second parameter into [`MockProvider`](#how-to-create-a-mock-provider).
 
 ```typescript
-const todoServiceMock = MockService(TodoService);
-ngMocks.stub(todoServiceMock, {
-  list$: () => EMPTY,
-});
-
 TestBed.configureTestingModule({
   declarations: [TodoComponent],
-  providers: [MockProvider(TodoService, todoServiceMock)],
+  providers: [
+    MockProvider(TodoService, {
+      list$: () => EMPTY,
+    }),
+  ],
 });
 ```
 
@@ -1138,14 +1133,14 @@ let todoServiceList$: Subject<any>; // <- a context variable.
 
 beforeEach(() => {
   todoServiceList$ = new Subject(); // <- create the subject.
-  const todoServiceMock = MockService(TodoService);
-  ngMocks.stub(todoServiceMock, {
-    list$: () => todoServiceList$,
-  });
 
   TestBed.configureTestingModule({
     declarations: [TodoComponent],
-    providers: [MockProvider(TodoService, todoServiceMock)],
+    providers: [
+      MockProvider(TodoService, {
+        list$: () => todoServiceList$,
+      }),
+    ],
   });
 });
 
@@ -1164,15 +1159,10 @@ let todoServiceList$: Subject<any>; // <- a context variable.
 
 beforeEach(() => {
   todoServiceList$ = new Subject(); // <- create the subject.
-  const todoServiceMock = MockService(TodoService);
-  ngMocks.stub(todoServiceMock, {
+
+  return MockBuilder(TodoComponent).mock(TodoService, {
     list$: () => todoServiceList$,
   });
-
-  return MockBuilder(TodoComponent).mock(
-    TodoService,
-    todoServiceMock,
-  );
 });
 
 it('test', () => {
@@ -1246,6 +1236,11 @@ describe('MockObservable', () => {
     expect(fixture.nativeElement.innerHTML).not.toContain('1');
     expect(fixture.nativeElement.innerHTML).not.toContain('2');
     expect(fixture.nativeElement.innerHTML).not.toContain('3');
+
+    // Checking that a sibling method has been replaced
+    // with a mock copy too.
+    expect(TestBed.inject(TargetService).getValue$).toBeDefined();
+    expect(TestBed.inject(TargetService).getValue$()).toBeUndefined();
   });
 });
 ```
@@ -1289,10 +1284,8 @@ describe('MockReactiveForms', () => {
     const component = fixture.point.componentInstance;
 
     // Let's find the mock form component.
-    const mockControl = ngMocks.find(
-      fixture.debugElement,
-      DependencyComponent,
-    ).componentInstance;
+    const mockControl = ngMocks.find(DependencyComponent)
+      .componentInstance;
 
     // Let's simulate its change, like a user does it.
     if (isMockOf(mockControl, DependencyComponent, 'c')) {
@@ -1334,10 +1327,8 @@ describe('MockForms', () => {
     const component = fixture.point.componentInstance;
 
     // Let's find the mock form component.
-    const mockControl = ngMocks.find(
-      fixture.debugElement,
-      DependencyComponent,
-    ).componentInstance;
+    const mockControl = ngMocks.find(DependencyComponent)
+      .componentInstance;
 
     // Let's simulate its change, like a user does it.
     if (isMockOf(mockControl, DependencyComponent, 'c')) {
@@ -1426,9 +1417,7 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-
   @ContentChild('menu') public menu?: TemplateRef<ElementRef>;
-
   @Input() public showLogo = false;
   @Input() public title = '';
 }
@@ -1612,12 +1601,11 @@ and has a rich toolkit that supports:
 The source file is here:
 [MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.simple.spec.ts)
 to play with.
 
 ```typescript
 describe('MockBuilder:simple', () => {
-  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(MyComponent, MyModule));
   // The same as
   // beforeEach(() => TestBed.configureTestingModule({{
@@ -1629,7 +1617,7 @@ describe('MockBuilder:simple', () => {
   it('should render content ignoring all dependencies', () => {
     const fixture = MockRender(MyComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.debugElement.nativeElement.innerHTML).toContain(
+    expect(fixture.nativeElement.innerHTML).toContain(
       '<div>My Content</div>',
     );
   });
@@ -2110,6 +2098,9 @@ describe('MockRender', () => {
 
   it('renders inputs and outputs automatically', () => {
     const spy = jasmine.createSpy();
+    // in case of jest
+    // const logoClickSpy = jest.fn();
+
     // Generates a template like:
     // <tested [value1]="value1" [value2]="value2"
     // (trigger)="trigger"></tested>.
@@ -2271,9 +2262,7 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => MockRender(RealComponent)).not.toThrowError(
-      /Cannot read property 'subscribe' of undefined/,
-    );
+    expect(() => MockRender(RealComponent)).not.toThrow();
   });
 });
 ```

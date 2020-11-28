@@ -1,4 +1,9 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  Input,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 // This directive is the same as `ngIf`,
@@ -7,7 +12,10 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: '[target]',
 })
 class TargetDirective {
-  public constructor(protected templateRef: TemplateRef<any>, protected viewContainerRef: ViewContainerRef) {}
+  public constructor(
+    protected templateRef: TemplateRef<any>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
 
   @Input() public set target(value: any) {
     if (value) {
@@ -22,6 +30,7 @@ describe('TestStructuralDirective', () => {
   // Because we want to test the directive, we pass it as the first
   // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('hides and renders its content', () => {

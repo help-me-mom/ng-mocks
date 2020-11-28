@@ -1,6 +1,14 @@
-import { Component, Directive, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Directive,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 
-import { MockDeclaration, MockDeclarations } from './mock-declaration';
+import {
+  MockDeclaration,
+  MockDeclarations,
+} from './mock-declaration';
 
 @Component({
   selector: 'empty-template-container',
@@ -30,7 +38,11 @@ class Target {
 
 describe('MockDeclaration', () => {
   it('should process a set correctly', () => {
-    const mocks: any[] = MockDeclarations(TargetComponent, TargetDirective, TargetPipe);
+    const mocks: any[] = MockDeclarations(
+      TargetComponent,
+      TargetDirective,
+      TargetPipe,
+    );
     expect(mocks.length).toEqual(3);
     expect(mocks[0].nameConstructor).toEqual('ComponentMock');
     expect(mocks[1].nameConstructor).toEqual('DirectiveMock');

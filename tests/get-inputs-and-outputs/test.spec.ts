@@ -2,7 +2,12 @@
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { Target2Directive, Target3Directive, TargetComponent, TargetModule } from './fixtures';
+import {
+  Target2Directive,
+  Target3Directive,
+  TargetComponent,
+  TargetModule,
+} from './fixtures';
 
 describe('get-inputs-and-outputs', () => {
   beforeEach(() => MockBuilder(TargetModule));
@@ -11,9 +16,18 @@ describe('get-inputs-and-outputs', () => {
     const params = {
       input1: '1',
       input2: '2',
-      output1: typeof jest !== 'undefined' ? jest.fn().mockName('output1') : jasmine.createSpy('output1'),
-      output2: typeof jest !== 'undefined' ? jest.fn().mockName('output2') : jasmine.createSpy('output2'),
-      output3: typeof jest !== 'undefined' ? jest.fn().mockName('output3') : jasmine.createSpy('output3'),
+      output1:
+        typeof jest !== 'undefined'
+          ? jest.fn().mockName('output1')
+          : jasmine.createSpy('output1'),
+      output2:
+        typeof jest !== 'undefined'
+          ? jest.fn().mockName('output2')
+          : jasmine.createSpy('output2'),
+      output3:
+        typeof jest !== 'undefined'
+          ? jest.fn().mockName('output3')
+          : jasmine.createSpy('output3'),
     };
     const fixture = MockRender<TargetComponent, typeof params>(
       `<target
@@ -29,8 +43,14 @@ describe('get-inputs-and-outputs', () => {
 
     const componentElement = fixture.point;
     const component = fixture.point.componentInstance;
-    const directive2 = ngMocks.get(componentElement, Target2Directive);
-    const directive3 = ngMocks.get(componentElement, Target3Directive);
+    const directive2 = ngMocks.get(
+      componentElement,
+      Target2Directive,
+    );
+    const directive3 = ngMocks.get(
+      componentElement,
+      Target3Directive,
+    );
 
     expect(component.input).toEqual('1');
     if ((params.output1 as any).mockReset) {
@@ -63,8 +83,12 @@ describe('get-inputs-and-outputs', () => {
     // a really simple wait that allows us to skip pain of knowing directives.
     expect(ngMocks.input(componentElement, 'input1')).toEqual('1');
     expect(ngMocks.input(componentElement, 'input2')).toEqual('2');
-    expect(ngMocks.input(componentElement, 'inputUnused')).toEqual(undefined);
-    expect(() => ngMocks.input(componentElement, 'inputUndefined')).toThrowError(
+    expect(ngMocks.input(componentElement, 'inputUnused')).toEqual(
+      undefined,
+    );
+    expect(() =>
+      ngMocks.input(componentElement, 'inputUndefined'),
+    ).toThrowError(
       'Cannot find inputUndefined input via ngMocks.input',
     );
     expect(ngMocks.input(componentElement, 'input3')).toEqual('3');
@@ -90,7 +114,9 @@ describe('get-inputs-and-outputs', () => {
     }
     ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
-    expect(() => ngMocks.output(componentElement, 'outputUndefined')).toThrowError(
+    expect(() =>
+      ngMocks.output(componentElement, 'outputUndefined'),
+    ).toThrowError(
       'Cannot find outputUndefined output via ngMocks.output',
     );
   });

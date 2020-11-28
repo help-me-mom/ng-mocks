@@ -53,20 +53,26 @@ class Target2Component {}
 
 @Component({
   selector: 'target1',
-  template: `<div (target1)="update.emit()">{{ greeting | target1 }} {{ target }}</div>`,
+  template: `<div (target1)="update.emit()">
+    {{ greeting | target1 }} {{ target }}
+  </div>`,
 })
 class Target1Component {
   @Input() public readonly greeting: string | null = null;
-  @Output() public readonly update: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public readonly update: EventEmitter<void> = new EventEmitter();
 
-  public constructor(@Inject(TARGET1) public readonly target: string) {}
+  public constructor(
+    @Inject(TARGET1) public readonly target: string,
+  ) {}
 }
 
 @Directive({
   selector: '[target1]',
 })
 class Target1Directive implements OnDestroy {
-  @Output() public readonly target1: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public readonly target1: EventEmitter<void> = new EventEmitter();
 
   public constructor(public readonly service: Target1Service) {
     this.service.callback = () => this.target1.emit();
@@ -128,18 +134,36 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(3);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'p')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p'),
+      ).toBeTruthy();
       expect(isNgDef(ngModule.declarations[1], 'c')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[1], Target1Component, 'c')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[1],
+          Target1Component,
+          'c',
+        ),
+      ).toBeFalsy();
       expect(isNgDef(ngModule.declarations[2], 'd')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[2], Target1Directive, 'd')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[2],
+          Target1Directive,
+          'd',
+        ),
+      ).toBeTruthy();
     }
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(isNgDef(ngModule.imports[0], 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[0], CommonModule, 'm')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[0], CommonModule, 'm'),
+      ).toBeFalsy();
       expect(isNgDef(ngModule.imports[1], 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm'),
+      ).toBeTruthy();
     }
     expect(ngModule.providers?.length).toEqual(2);
     if (ngModule.providers) {
@@ -160,7 +184,9 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(isNgDef(ngModule.imports[0], 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[0], Target1Module, 'm')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[0], Target1Module, 'm'),
+      ).toBeFalsy();
     }
   });
 
@@ -172,7 +198,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[0].ngModule, Target1Module, 'm')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeFalsy();
     }
   });
 
@@ -181,7 +213,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'c')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Component, 'c')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Component,
+          'c',
+        ),
+      ).toBeFalsy();
     }
   });
 
@@ -190,7 +228,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'd')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Directive, 'd')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Directive,
+          'd',
+        ),
+      ).toBeFalsy();
     }
   });
 
@@ -199,7 +243,9 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'p')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p')).toBeFalsy();
+      expect(
+        isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p'),
+      ).toBeFalsy();
     }
   });
 
@@ -226,7 +272,10 @@ describe('mock-helper.guts', () => {
   });
 
   it('keeps tokens', () => {
-    const ngModule = ngMocks.guts(TARGET1, { provide: TARGET1, useValue: 123 });
+    const ngModule = ngMocks.guts(TARGET1, {
+      provide: TARGET1,
+      useValue: 123,
+    });
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toEqual({
@@ -246,7 +295,9 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
-      expect(isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm'),
+      ).toBeTruthy();
     }
   });
 
@@ -258,7 +309,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[0].ngModule, Target1Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeTruthy();
     }
   });
 
@@ -267,7 +324,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'c')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Component, 'c')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Component,
+          'c',
+        ),
+      ).toBeTruthy();
     }
   });
 
@@ -276,7 +339,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'd')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Directive, 'd')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Directive,
+          'd',
+        ),
+      ).toBeTruthy();
     }
   });
 
@@ -285,7 +354,9 @@ describe('mock-helper.guts', () => {
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(isNgDef(ngModule.declarations[0], 'p')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p'),
+      ).toBeTruthy();
     }
   });
 
@@ -302,7 +373,10 @@ describe('mock-helper.guts', () => {
   });
 
   it('mocks tokens', () => {
-    const ngModule = ngMocks.guts(TARGET2, { provide: TARGET1, useValue: 123 });
+    const ngModule = ngMocks.guts(TARGET2, {
+      provide: TARGET1,
+      useValue: 123,
+    });
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toEqual({
@@ -326,7 +400,13 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
-      expect(isMockedNgDefOf(ngModule.imports[0].ngModule, Target1Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeTruthy();
     }
   });
 
@@ -339,16 +419,24 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips an existing mock module', () => {
-    const ngModule = ngMocks.guts(null, [Target1Module, Target1CopyModule]);
+    const ngModule = ngMocks.guts(null, [
+      Target1Module,
+      Target1CopyModule,
+    ]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
-      expect(ngModule.imports[1]).toBe(getMockedNgDefOf(Target2Module));
+      expect(ngModule.imports[1]).toBe(
+        getMockedNgDefOf(Target2Module),
+      );
     }
   });
 
   it('skips 2nd kept module', () => {
-    const ngModule = ngMocks.guts(Target2Module, [Target1Module, Target1CopyModule]);
+    const ngModule = ngMocks.guts(Target2Module, [
+      Target1Module,
+      Target1CopyModule,
+    ]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
@@ -357,20 +445,30 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips the 2nd mock module', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target1CopyModule]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Module,
+      Target1CopyModule,
+    ]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
-      expect(isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm'),
+      ).toBeTruthy();
     }
   });
 
   it('skips the 2nd nested mock module', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Module, Target3Module]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Module,
+      Target3Module,
+    ]);
     expect(ngModule.imports?.length).toEqual(2);
     if (ngModule.imports) {
       expect(ngModule.imports[0]).toBe(CommonModule);
-      expect(isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm'),
+      ).toBeTruthy();
     }
   });
 
@@ -404,12 +502,21 @@ describe('mock-helper.guts', () => {
     ]);
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
-      expect(isMockedNgDefOf(ngModule.imports[0].ngModule, Target1Module, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeTruthy();
     }
   });
 
   it('skips 2nd kept component', () => {
-    const ngModule = ngMocks.guts(Target1Component, [Target1Component, Target1Component]);
+    const ngModule = ngMocks.guts(Target1Component, [
+      Target1Component,
+      Target1Component,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(ngModule.declarations[0]).toBe(Target1Component);
@@ -417,15 +524,27 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips the 2nd mock component', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Component, Target1Component]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Component,
+      Target1Component,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Component, 'c')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Component,
+          'c',
+        ),
+      ).toBeTruthy();
     }
   });
 
   it('skips 2nd kept directive', () => {
-    const ngModule = ngMocks.guts(Target1Directive, [Target1Directive, Target1Directive]);
+    const ngModule = ngMocks.guts(Target1Directive, [
+      Target1Directive,
+      Target1Directive,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(ngModule.declarations[0]).toBe(Target1Directive);
@@ -433,15 +552,27 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips the 2nd mock directive', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Directive, Target1Directive]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Directive,
+      Target1Directive,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Directive, 'd')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.declarations[0],
+          Target1Directive,
+          'd',
+        ),
+      ).toBeTruthy();
     }
   });
 
   it('skips 2nd kept pipe', () => {
-    const ngModule = ngMocks.guts(Target1Pipe, [Target1Pipe, Target1Pipe]);
+    const ngModule = ngMocks.guts(Target1Pipe, [
+      Target1Pipe,
+      Target1Pipe,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
       expect(ngModule.declarations[0]).toBe(Target1Pipe);
@@ -449,15 +580,23 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips the 2nd mock pipe', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Pipe, Target1Pipe]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Pipe,
+      Target1Pipe,
+    ]);
     expect(ngModule.declarations?.length).toEqual(1);
     if (ngModule.declarations) {
-      expect(isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(ngModule.declarations[0], Target1Pipe, 'p'),
+      ).toBeTruthy();
     }
   });
 
   it('skips 2nd kept service', () => {
-    const ngModule = ngMocks.guts(Target1Service, [Target1Service, Target1Service]);
+    const ngModule = ngMocks.guts(Target1Service, [
+      Target1Service,
+      Target1Service,
+    ]);
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toBe(Target1Service);
@@ -465,7 +604,10 @@ describe('mock-helper.guts', () => {
   });
 
   it('skips the 2nd mock service', () => {
-    const ngModule = ngMocks.guts(TARGET1, [Target1Service, Target1Service]);
+    const ngModule = ngMocks.guts(TARGET1, [
+      Target1Service,
+      Target1Service,
+    ]);
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toEqual({
@@ -541,7 +683,10 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes 2nd nested kept module', () => {
-    const ngModule = ngMocks.guts(Target2Module, [Target1Module, Target3Module]);
+    const ngModule = ngMocks.guts(Target2Module, [
+      Target1Module,
+      Target3Module,
+    ]);
     expect(ngModule).toEqual(
       jasmine.objectContaining({
         imports: [CommonModule, Target2Module],
@@ -550,7 +695,10 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes the 2nd mock kept module', () => {
-    const ngModule = ngMocks.guts(null, [Target1Module, Target3Module]);
+    const ngModule = ngMocks.guts(null, [
+      Target1Module,
+      Target3Module,
+    ]);
     expect(ngModule).toEqual(
       jasmine.objectContaining({
         imports: [CommonModule, getMockedNgDefOf(Target2Module)],
@@ -574,7 +722,10 @@ describe('mock-helper.guts', () => {
       [Target1Pipe, Target1Pipe],
     );
     expect(ngModule).toEqual({
-      declarations: [getMockedNgDefOf(Target1Component), getMockedNgDefOf(Target1Directive)],
+      declarations: [
+        getMockedNgDefOf(Target1Component),
+        getMockedNgDefOf(Target1Directive),
+      ],
       imports: [CommonModule, getMockedNgDefOf(Target2Module)],
       providers: [
         Target1Service,
@@ -587,7 +738,11 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes mock providers', () => {
-    const ngModule = ngMocks.guts(null, Target1Service, Target1Service);
+    const ngModule = ngMocks.guts(
+      null,
+      Target1Service,
+      Target1Service,
+    );
     expect(ngModule).toEqual({
       declarations: [],
       imports: [],
@@ -596,7 +751,11 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes mock module with providers', () => {
-    const ngModule = ngMocks.guts(null, { ngModule: Target1Module, providers: [] }, Target1Module);
+    const ngModule = ngMocks.guts(
+      null,
+      { ngModule: Target1Module, providers: [] },
+      Target1Module,
+    );
     expect(ngModule).toEqual({
       declarations: [],
       imports: [],
@@ -614,7 +773,11 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes nested kept module', () => {
-    const ngModule = ngMocks.guts(Target2Module, Target3Module, Target2Module);
+    const ngModule = ngMocks.guts(
+      Target2Module,
+      Target3Module,
+      Target2Module,
+    );
     expect(ngModule).toEqual({
       declarations: [],
       imports: [CommonModule],
@@ -632,7 +795,11 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes mock component', () => {
-    const ngModule = ngMocks.guts(null, Target1Component, Target1Component);
+    const ngModule = ngMocks.guts(
+      null,
+      Target1Component,
+      Target1Component,
+    );
     expect(ngModule).toEqual({
       declarations: [],
       imports: [],
@@ -641,7 +808,11 @@ describe('mock-helper.guts', () => {
   });
 
   it('excludes mock directive', () => {
-    const ngModule = ngMocks.guts(null, Target1Directive, Target1Directive);
+    const ngModule = ngMocks.guts(
+      null,
+      Target1Directive,
+      Target1Directive,
+    );
     expect(ngModule).toEqual({
       declarations: [],
       imports: [],
@@ -660,9 +831,23 @@ describe('mock-helper.guts', () => {
 
   it('excludes kept declarations', () => {
     const ngModule = ngMocks.guts(
-      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1],
+      [
+        Target1Module,
+        Target1Component,
+        Target1Directive,
+        Target1Pipe,
+        Target1Service,
+        TARGET1,
+      ],
       null,
-      [Target1Module, Target1Component, Target1Directive, Target1Pipe, Target1Service, TARGET1],
+      [
+        Target1Module,
+        Target1Component,
+        Target1Directive,
+        Target1Pipe,
+        Target1Service,
+        TARGET1,
+      ],
     );
     expect(ngModule).toEqual({
       declarations: [],

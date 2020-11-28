@@ -1,4 +1,9 @@
-import { Component, Injectable as InjectableSource, NgModule, VERSION } from '@angular/core';
+import {
+  Component,
+  Injectable as InjectableSource,
+  NgModule,
+  VERSION,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
 
@@ -57,7 +62,9 @@ describe('issue-222:kept-root-injection', () => {
   });
 
   describe('real', () => {
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(KeepModule));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).keep(KeepModule),
+    );
 
     it('does not mock kept dependency', () => {
       const service: TargetService = TestBed.get(TargetService);
@@ -66,7 +73,11 @@ describe('issue-222:kept-root-injection', () => {
   });
 
   describe('NG_MOCKS_ROOT_PROVIDERS', () => {
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).mock(NG_MOCKS_ROOT_PROVIDERS).keep(KeepModule));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule)
+        .mock(NG_MOCKS_ROOT_PROVIDERS)
+        .keep(KeepModule),
+    );
 
     it('does not mock kept dependency', () => {
       const service: TargetService = TestBed.get(TargetService);

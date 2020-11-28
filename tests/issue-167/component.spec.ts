@@ -27,7 +27,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'target',
   template: 'target',
 })
-export class TargetComponent implements ControlValueAccessor, Validator {
+export class TargetComponent
+  implements ControlValueAccessor, Validator {
   public valRegisterOnChange: any;
   public valRegisterOnTouched: any;
   public valRegisterOnValidatorChange: any;
@@ -92,7 +93,8 @@ describe('issue-167:component:real', () => {
   it('should create an instance', () => {
     const fixture = MockRender(RealComponent);
 
-    const mock = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
+    const mock = ngMocks.find(fixture.debugElement, TargetComponent)
+      .componentInstance;
     spyOn(mock, 'validate').and.returnValue({
       updated: true,
     });
@@ -108,12 +110,17 @@ describe('issue-167:component:real', () => {
 });
 
 describe('issue-167:component:mock', () => {
-  beforeEach(() => MockBuilder(RealComponent, TargetModule).keep(ReactiveFormsModule));
+  beforeEach(() =>
+    MockBuilder(RealComponent, TargetModule).keep(
+      ReactiveFormsModule,
+    ),
+  );
 
   it('should create an instance', () => {
     const fixture = MockRender(RealComponent);
 
-    const mock = ngMocks.find(fixture.debugElement, TargetComponent).componentInstance;
+    const mock = ngMocks.find(fixture.debugElement, TargetComponent)
+      .componentInstance;
     spyOn(mock, 'validate').and.returnValue({
       updated: true,
     });

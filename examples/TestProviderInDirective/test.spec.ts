@@ -1,4 +1,11 @@
-import { Directive, ElementRef, Injectable, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Injectable,
+  OnInit,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
@@ -37,6 +44,7 @@ describe('TestProviderInDirective', () => {
   // parameter of MockBuilder.
   // Because we do not care about TargetDirective, we pass it as
   // the second parameter for being replaced with a mock copy.
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService, TargetDirective));
 
   it('has access to the service via a directive', () => {

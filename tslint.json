@@ -2,6 +2,7 @@
   "extends": ["tslint:all", "tslint-jasmine-rules", "tslint-microsoft-contrib/recommended"],
   "rules": {
     "arrow-parens": false,
+    "arrow-return-shorthand": false,
     "comment-format": false,
     "completed-docs": false,
     "cyclomatic-complexity": [true, 10],

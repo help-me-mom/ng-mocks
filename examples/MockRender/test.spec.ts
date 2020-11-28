@@ -1,5 +1,15 @@
+// tslint:disable strict-type-predicates
+
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, EventEmitter, Input, NgModule, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
@@ -9,7 +19,8 @@ import { staticFalse } from '../../tests';
   template: `dependency`,
 })
 class DependencyComponent {
-  @ContentChild('something', staticFalse) public injectedSomething?: TemplateRef<{}>;
+  @ContentChild('something', staticFalse)
+  public injectedSomething?: TemplateRef<{}>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();
 }
@@ -22,7 +33,12 @@ class DependencyModule {}
 
 @Component({
   selector: 'tested',
-  template: ` <app-child [someInput]="value" (someOutput)="trigger($event)"></app-child> `,
+  template: `
+    <app-child
+      [someInput]="value"
+      (someOutput)="trigger($event)"
+    ></app-child>
+  `,
 })
 class TestedComponent {
   @Output() public readonly trigger = new EventEmitter();
@@ -31,10 +47,12 @@ class TestedComponent {
 }
 
 describe('MockRender', () => {
+  // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
 
   it('renders template', () => {
-    const spy = jasmine.createSpy();
+    const spy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     // in case of jest
     // const spy = jest.fn();
 
@@ -59,7 +77,9 @@ describe('MockRender', () => {
 
     // ngMocks.input helps to get the current value of an input on
     // a related debugElement without knowing its owner.
-    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something1');
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual(
+      'something1',
+    );
     expect(ngMocks.input(fixture.point, 'value2')).toEqual('check');
 
     // ngMocks.output does the same with outputs.
@@ -68,7 +88,11 @@ describe('MockRender', () => {
   });
 
   it('renders inputs and outputs automatically', () => {
-    const spy = jasmine.createSpy();
+    const spy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    // in case of jest
+    // const logoClickSpy = jest.fn();
+
     // Generates a template like:
     // <tested [value1]="value1" [value2]="value2"
     // (trigger)="trigger"></tested>.
@@ -78,7 +102,9 @@ describe('MockRender', () => {
     });
 
     // Checking the inputs.
-    expect(ngMocks.input(fixture.point, 'value1')).toEqual('something2');
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual(
+      'something2',
+    );
     expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
 
     // Checking the outputs.

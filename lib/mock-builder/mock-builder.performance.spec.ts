@@ -1,6 +1,12 @@
 // tslint:disable max-file-line-count
 
-import { Component, Directive, Injectable, InjectionToken, NgModule } from '@angular/core';
+import {
+  Component,
+  Directive,
+  Injectable,
+  InjectionToken,
+  NgModule,
+} from '@angular/core';
 
 import { ngMocks } from '../mock-helper/mock-helper';
 
@@ -55,8 +61,14 @@ describe('MockBuilderPerformance', () => {
   it('accepts the same beforeCC', () => {
     const beforeCC = () => undefined;
 
-    const ngModule1 = MockBuilder().mock(Target1Module).beforeCompileComponents(beforeCC).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).beforeCompileComponents(beforeCC).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .beforeCompileComponents(beforeCC)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .beforeCompileComponents(beforeCC)
+      .build();
 
     expect(ngModule1.imports?.[0]).toBe(ngModule2.imports?.[0]);
   });
@@ -64,7 +76,10 @@ describe('MockBuilderPerformance', () => {
     const beforeCC = () => undefined;
 
     const ngModule1 = MockBuilder().mock(Target1Module).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).beforeCompileComponents(beforeCC).build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .beforeCompileComponents(beforeCC)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
@@ -72,8 +87,14 @@ describe('MockBuilderPerformance', () => {
     const beforeCC1 = () => undefined;
     const beforeCC2 = () => undefined;
 
-    const ngModule1 = MockBuilder().mock(Target1Module).beforeCompileComponents(beforeCC1).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).beforeCompileComponents(beforeCC2).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .beforeCompileComponents(beforeCC1)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .beforeCompileComponents(beforeCC2)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
@@ -98,46 +119,82 @@ describe('MockBuilderPerformance', () => {
   });
 
   it('accepts the same replaceDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module).replace(Target1Component, Target2Component).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).replace(Target1Component, Target2Component).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module)
+      .replace(Target1Component, Target2Component)
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .replace(Target1Component, Target2Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).toBe(ngModule2.imports?.[0]);
   });
   it('fails on a different size replaceDef', () => {
     const ngModule1 = MockBuilder().keep(Target1Module).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).replace(Target1Component, Target2Component).build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .replace(Target1Component, Target2Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
   it('fails on a missed replaceDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module).replace(Target1Component, Target2Component).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).replace(Target1Directive, Target2Directive).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module)
+      .replace(Target1Component, Target2Component)
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .replace(Target1Directive, Target2Directive)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
 
   it('accepts the same excludeDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module).exclude(Target1Component).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).exclude(Target1Component).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module)
+      .exclude(Target1Component)
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .exclude(Target1Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).toBe(ngModule2.imports?.[0]);
   });
   it('fails on a different size excludeDef', () => {
     const ngModule1 = MockBuilder().keep(Target1Module).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).exclude(Target1Component).build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .exclude(Target1Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
   it('fails on a missed excludeDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module).exclude(Target1Component).build();
-    const ngModule2 = MockBuilder().keep(Target1Module).exclude(Target2Component).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module)
+      .exclude(Target1Component)
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module)
+      .exclude(Target2Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
 
   it('accepts the same mockDef', () => {
-    const ngModule1 = MockBuilder().mock(Target1Module).mock(Target1Component).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).mock(Target1Component).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Component)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Component)
+      .build();
 
     expect(ngModule1.imports?.[0]).toBe(ngModule2.imports?.[0]);
   });
@@ -164,42 +221,70 @@ describe('MockBuilderPerformance', () => {
     const ngModule1 = MockBuilder().build();
     const ngModule2 = MockBuilder().provide(Target1Service).build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a missed providerDef', () => {
     const ngModule1 = MockBuilder().provide(Target1Service).build();
     const ngModule2 = MockBuilder().provide(Target2Service).build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts on the same providerDef useValue', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1 }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useValue: 1 }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1 })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1 })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different providerDef useValue', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1 }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useValue: 2 }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1 })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 2 })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same providerDef useValue', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useClass: Target2Service }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useClass: Target2Service }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useClass: Target2Service })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useClass: Target2Service })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different providerDef useValue', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useClass: Target1Service }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useClass: Target2Service }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useClass: Target1Service })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useClass: Target2Service })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same providerDef helperUseFactory', () => {
     const factory = () => 1;
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useFactory: factory }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useFactory: factory }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useFactory: factory })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useFactory: factory })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
@@ -211,19 +296,43 @@ describe('MockBuilderPerformance', () => {
       .provide({ provide: Target1Service, useFactory: () => 2 })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same providerDef useExisting', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useExisting: Target2Service }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useExisting: Target2Service }).build();
+    const ngModule1 = MockBuilder()
+      .provide({
+        provide: Target1Service,
+        useExisting: Target2Service,
+      })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({
+        provide: Target1Service,
+        useExisting: Target2Service,
+      })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different providerDef useExisting', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useExisting: Target1Service }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useExisting: Target2Service }).build();
+    const ngModule1 = MockBuilder()
+      .provide({
+        provide: Target1Service,
+        useExisting: Target1Service,
+      })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({
+        provide: Target1Service,
+        useExisting: Target2Service,
+      })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same providerDef', () => {
     const def = { provide: Target1Service };
@@ -233,37 +342,63 @@ describe('MockBuilderPerformance', () => {
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different providerDef', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a different multi flags', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1 }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useValue: 1, multi: true }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1 })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1, multi: true })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same multi flags', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1, multi: true }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useValue: 1, multi: true }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1, multi: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1, multi: true })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different multi size', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1, multi: true }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1, multi: true })
+      .build();
     const ngModule2 = MockBuilder()
       .provide({ provide: Target1Service, useValue: 1, multi: true })
       .provide({ provide: Target1Service, useValue: 2, multi: true })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a different multi values', () => {
-    const ngModule1 = MockBuilder().provide({ provide: Target1Service, useValue: 1, multi: true }).build();
-    const ngModule2 = MockBuilder().provide({ provide: Target1Service, useValue: 2, multi: true }).build();
+    const ngModule1 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 1, multi: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .provide({ provide: Target1Service, useValue: 2, multi: true })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
 
   it('accepts the same defProviders', () => {
@@ -391,28 +526,60 @@ describe('MockBuilderPerformance', () => {
   });
 
   it('accepts the same defValue', () => {
-    const ngModule1 = MockBuilder().mock(Target1Module).mock(Target1Service, 1).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).mock(Target1Service, 1).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service, 1)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service, 1)
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on a different size defValue', () => {
-    const ngModule1 = MockBuilder().mock(Target1Module).mock(Target1Service).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).mock(Target1Service, 1).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service, 1)
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a missed defValue', () => {
-    const ngModule1 = MockBuilder().mock(Target1Module).mock(Target1Service).mock(Target2Service, 2).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).mock(Target2Service).mock(Target1Service, 1).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service)
+      .mock(Target2Service, 2)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target2Service)
+      .mock(Target1Service, 1)
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a different defValue', () => {
-    const ngModule1 = MockBuilder().mock(Target1Module).mock(Target1Service, 1).build();
-    const ngModule2 = MockBuilder().mock(Target1Module).mock(Target1Service, 2).build();
+    const ngModule1 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service, 1)
+      .build();
+    const ngModule2 = MockBuilder()
+      .mock(Target1Module)
+      .mock(Target1Service, 2)
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
 
   it('accepts the same size configDef', () => {
@@ -425,54 +592,98 @@ describe('MockBuilderPerformance', () => {
     const ngModule1 = MockBuilder().keep(Target1Module).build();
     const ngModule2 = MockBuilder().keep(Target1Module, {}).build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on a missed configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module).keep(Target2Module, {}).build();
-    const ngModule2 = MockBuilder().keep(Target2Module).keep(Target1Module, {}).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module)
+      .keep(Target2Module, {})
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target2Module)
+      .keep(Target1Module, {})
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same configDef', () => {
     const config = {};
-    const ngModule1 = MockBuilder().keep(Target1Module, config).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, config).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, config)
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, config)
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on different dependency configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { dependency: true }).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, { dependency: false }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { dependency: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { dependency: false })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different export configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { export: true }).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, { export: false }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { export: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { export: false })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different exportAll configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { exportAll: true }).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, { exportAll: false }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { exportAll: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { exportAll: false })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same render configDef', () => {
     const render = {};
-    const ngModule1 = MockBuilder().keep(Target1Module, { render }).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, { render }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { render })
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { render })
+      .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on different render flag configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { render: true }).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, { render: false }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { render: true })
+      .build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { render: false })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different render length configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { render: {} }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { render: {} })
+      .build();
     const ngModule2 = MockBuilder()
       .keep(Target1Module, {
         render: {
@@ -481,7 +692,9 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different render.$implicit configDef', () => {
     const ngModule1 = MockBuilder()
@@ -499,7 +712,9 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('accepts the same render.variables configDef', () => {
     const variables = {};
@@ -543,7 +758,9 @@ describe('MockBuilderPerformance', () => {
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on missed definition configDef', () => {
-    const ngModule1 = MockBuilder().keep(Target1Module, { render: {} }).build();
+    const ngModule1 = MockBuilder()
+      .keep(Target1Module, { render: {} })
+      .build();
     const ngModule2 = MockBuilder()
       .keep(Target1Module, {
         render: {
@@ -553,10 +770,16 @@ describe('MockBuilderPerformance', () => {
         },
       })
       .build();
-    const ngModule3 = MockBuilder().keep(Target1Module, { render: {} }).build();
+    const ngModule3 = MockBuilder()
+      .keep(Target1Module, { render: {} })
+      .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
-    expect(ngModule2.providers?.[0]).not.toBe(ngModule3.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
+    expect(ngModule2.providers?.[0]).not.toBe(
+      ngModule3.providers?.[0],
+    );
   });
   it('fails on different render.variables configDef', () => {
     const ngModule1 = MockBuilder()
@@ -579,7 +802,9 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different values in render.variables configDef', () => {
     const ngModule1 = MockBuilder()
@@ -601,7 +826,9 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different amount of blocks in render configDef', () => {
     const ngModule1 = MockBuilder()
@@ -620,7 +847,9 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
   it('fails on different block definitions in render configDef', () => {
     const ngModule1 = MockBuilder()
@@ -642,6 +871,8 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
 
-    expect(ngModule1.providers?.[0]).not.toBe(ngModule2.providers?.[0]);
+    expect(ngModule1.providers?.[0]).not.toBe(
+      ngModule2.providers?.[0],
+    );
   });
 });

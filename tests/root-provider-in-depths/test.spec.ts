@@ -38,7 +38,13 @@ class TargetComponent {
 @NgModule({
   declarations: [TargetComponent],
   exports: [TargetComponent],
-  providers: [Nested1Service, [Nested2Service, [Nested3Service, [Nested4Service, [TargetService]]]]],
+  providers: [
+    Nested1Service,
+    [
+      Nested2Service,
+      [Nested3Service, [Nested4Service, [TargetService]]],
+    ],
+  ],
 })
 class TargetModule {}
 
@@ -58,7 +64,9 @@ describe('root-provider-in-depths', () => {
   });
 
   describe('mock-builder', () => {
-    beforeEach(() => MockBuilder(TargetComponent, TargetModule).keep(TargetService));
+    beforeEach(() =>
+      MockBuilder(TargetComponent, TargetModule).keep(TargetService),
+    );
 
     it('creates component with very nested service', () => {
       const fixture = MockRender(TargetComponent);

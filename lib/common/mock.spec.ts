@@ -1,6 +1,12 @@
 // tslint:disable max-file-line-count
 
-import { Component, Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Directive,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { MockComponent } from '../mock-component/mock-component';
@@ -43,7 +49,9 @@ class ChildModuleClass extends ParentClass implements PipeTransform {
 @Component({
   template: '',
 })
-class ChildComponentClass extends ParentClass implements PipeTransform, ControlValueAccessor {
+class ChildComponentClass
+  extends ParentClass
+  implements PipeTransform, ControlValueAccessor {
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -66,7 +74,9 @@ class ChildComponentClass extends ParentClass implements PipeTransform, ControlV
 @Directive({
   selector: 'mock',
 })
-class ChildDirectiveClass extends ParentClass implements PipeTransform, ControlValueAccessor {
+class ChildDirectiveClass
+  extends ParentClass
+  implements PipeTransform, ControlValueAccessor {
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -106,16 +116,24 @@ describe('Mock', () => {
     const instance = new (MockModule(ChildModuleClass))();
     expect(instance).toEqual(jasmine.any(ChildModuleClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
-    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
-    expect(instance.parentMethod()).toBeUndefined('mock to an empty function');
-    expect(instance.childMethod()).toBeUndefined('mock to an empty function');
+    expect(
+      (instance as any).__ngMocksMockControlValueAccessor,
+    ).toEqual(undefined);
+    expect(instance.parentMethod()).toBeUndefined(
+      'mock to an empty function',
+    );
+    expect(instance.childMethod()).toBeUndefined(
+      'mock to an empty function',
+    );
   });
 
   it('should affect as MockComponent', () => {
     const instance = new (MockComponent(ChildComponentClass))();
     expect(instance).toEqual(jasmine.any(ChildComponentClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
-    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(true);
+    expect(
+      (instance as any).__ngMocksMockControlValueAccessor,
+    ).toEqual(true);
 
     const spy = jasmine.createSpy('spy');
     instance.registerOnChange(spy);
@@ -130,7 +148,9 @@ describe('Mock', () => {
     const instance = new (MockDirective(ChildDirectiveClass))();
     expect(instance).toEqual(jasmine.any(ChildDirectiveClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
-    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(true);
+    expect(
+      (instance as any).__ngMocksMockControlValueAccessor,
+    ).toEqual(true);
 
     const spy = jasmine.createSpy('spy');
     instance.registerOnChange(spy);
@@ -145,7 +165,9 @@ describe('Mock', () => {
     const instance = new (MockPipe(ChildPipeClass))();
     expect(instance).toEqual(jasmine.any(ChildPipeClass));
     expect((instance as any).__ngMocksMock).toEqual(true);
-    expect((instance as any).__ngMocksMockControlValueAccessor).toEqual(undefined);
+    expect(
+      (instance as any).__ngMocksMockControlValueAccessor,
+    ).toEqual(undefined);
     expect(instance.parentMethod()).toBeUndefined();
     expect(instance.childMethod()).toBeUndefined();
   });
@@ -241,7 +263,9 @@ describe('definitions', () => {
     class TestComponent extends TestMock {}
 
     const instance: any = new TestComponent();
-    expect(Object.getOwnPropertyDescriptor(instance, 'test')).toBeDefined();
+    expect(
+      Object.getOwnPropertyDescriptor(instance, 'test'),
+    ).toBeDefined();
   });
 
   it('skips existing properties from mockOf', () => {
