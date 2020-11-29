@@ -201,10 +201,14 @@ describe('pipe-as-service', () => {
 
   describe('mock-builder:pipe-mock-cut', () => {
     beforeEach(() =>
-      MockBuilder(TargetComponent, TargetModule).mock(TargetPipe, {
-        name: 'test',
-        transform: () => 'transform',
-      }),
+      MockBuilder(TargetComponent, TargetModule).mock(
+        TargetPipe,
+        {
+          name: 'test',
+          transform: () => 'transform',
+        },
+        { precise: true },
+      ),
     );
 
     it('fails because of the missed function', () => {

@@ -1586,6 +1586,7 @@ and has a rich toolkit that supports:
 * [`.exclude()`](#mockbuilderexclude)
 * [`.replace()`](#mockbuilderreplace)
 * [`.provide()`](#mockbuilderprovide)
+* [`precise` flag](#mockbuilder-precise-flag)
 * [`export` flag](#mockbuilder-export-flag)
 * [`exportAll` flag](#mockbuilder-exportall-flag)
 * [`dependency` flag](#mockbuilder-dependency-flag)
@@ -1799,6 +1800,37 @@ beforeEach(() => {
     .provide([SomeService1, SomeService2])
     .provide({ provide: SomeComponent3, useValue: anything1 })
     .provide({ provide: SOME_TOKEN, useFactory: () => anything2 });
+});
+```
+
+#### MockBuilder `precise` flag
+
+By default, when [`.mock(MyService, mock)`](#mockbuildermock) is used it creates a mock copy via
+[`MockService(MyService, mock)`](#how-to-create-a-mock-service).
+In some cases we might want to use the exactly passed mock object instead of that.
+For this behavior we need to set `precise` flag to `true`.
+
+```typescript
+declare class MyService {
+  p1: boolean;
+  getP1(): boolean;
+}
+const mock = {
+  p1: true,
+};
+
+beforeEach(() => {
+  return (
+    MockBuilder(MyComponent, MyModule)
+      // its instance !== mock, but instance.p1 === mock.p1
+      // instance.getP1() returns undefined
+      .mock(MyService, mock)
+      // its intance === mock, therefore instance.p1 === mock.p1
+      // and instance.getP1 does not exist.
+      .mock(MyService, mock, {
+        precise: true,
+      })
+  );
 });
 ```
 
