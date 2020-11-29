@@ -1,3 +1,10 @@
+## [11.1.4](https://github.com/ike18t/ng-mocks/compare/v11.1.3...v11.1.4) (2020-11-29)
+
+
+### Bug Fixes
+
+* a contemporary example ([d0e5efc](https://github.com/ike18t/ng-mocks/commit/d0e5efc435f40445718d6ce64604996073b37783))
+
 ## [11.1.3](https://github.com/ike18t/ng-mocks/compare/v11.1.2...v11.1.3) (2020-11-26)
 
 
