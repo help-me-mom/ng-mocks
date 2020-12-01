@@ -8,11 +8,12 @@
     "cyclomatic-complexity": [true, 10],
     "deprecation": false,
     "export-name": false,
-    "file-name-casing": false,
+    "file-name-casing": [true, "kebab-case"],
     "function-name": false,
     "insecure-random": false,
     "interface-name": false,
     "interface-over-type-literal": false,
+    "invalid-void": false,
     "max-classes-per-file": false,
     "max-file-line-count": [true, 250],
     "max-func-body-length": [

@@ -28,7 +28,7 @@ const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
   let toggleSkipMockFlag = false;
 
   const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
-    .get('resolution')
+    .get('ngMocksDepsResolution')
     ?.get(ngModule);
   if (flagMock(resolution)) {
     toggleSkipMockFlag = true;
@@ -172,7 +172,7 @@ export function MockModule(module: any): any {
     ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
   }
   if (ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('depsSkip')?.add(mockModule);
+    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockModule);
   }
   const mockModuleProviders = getMockProviders(ngModuleProviders);
   postprocessToggleFlag(toggleSkipMockFlag);

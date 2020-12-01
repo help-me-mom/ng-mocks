@@ -1123,6 +1123,16 @@ TestBed.configureTestingModule({
 
 Profit, now initialization of the component with the mock service does not throw the error anymore.
 
+If we want to do it in all tests, we might use [`ngMocks.defaultMock`](#ngmocksdefaultmock).
+
+```typescript
+ngMocks.defaultMock(TodoService, () => ({
+  list$: () => EMPTY,
+}));
+```
+
+Then, every time tests need mock `TodoService`, its `list$()` will return `EMPTY` until it has been set explicitly in `TestBed`.
+
 Nevertheless, usually, we want not only to return a stub result as `EMPTY` observable stream,
 but also to provide a fake subject, that would simulate its calls.
 
@@ -1429,7 +1439,7 @@ class AppHeaderComponent {
 })
 class AppModule {}
 
-describe('MAIN', () => {
+describe('main', () => {
   // Usually we would have something like that.
   // beforeEach(() => {
   //   TestBed.configureTestingModule({
@@ -2311,6 +2321,7 @@ describe('MockInstance', () => {
 `ngMocks` provides functions to get attribute and structural directives from an element, find components and create mock objects.
 
 - [`.guts()`](#ngmocksguts)
+- [`.defaultMock()`](#ngmocksdefaultmock)
 - [`.get()`](#ngmocksget)
 - [`.findInstance()`](#ngmocksfindinstance)
 - [`.findInstances()`](#ngmocksfindinstances)
@@ -2356,6 +2367,50 @@ const ngModuleMeta = ngMocks.guts(
   ModuleToMock,
   ComponentToExclude,
 );
+```
+
+#### ngMocks.defaultMock
+
+Sets default mock values for the whole application.
+
+- `ngMocks.defaultMock(MyClass, (instance, injector) => overrides)` - adds an override for a class
+- `ngMocks.defaultMock(TOKEN, (value, injector) => value)` - adds an override for a token
+- `ngMocks.defaultMock(MyClass)` - removes overrides
+- `ngMocks.defaultMock(TOKEN)` - removes overrides
+
+The best place to set up default mocks is `src/test.ts` for jasmine or `src/setupJest.ts` for jest.
+
+For example if a service or a component has a property that should be `Observable`.
+Then, we can configure it to be an `EMPTY` stream in the whole test suite.
+
+```typescript
+declare class MyComponent {
+  public url: string;
+  public stream$: Observable<void>;
+  public getStream(): Observable<void>;
+}
+
+// the returned object will be applied to the component instance.
+ngMocks.defaultMock(MyComponent, () => ({
+  stream$: EMPTY,
+  getStream: () => EMPTY,
+}));
+
+// manuall override.
+ngMocks.defaultMock(MyComponent, instance => {
+  instance.stream$ = EMPTY;
+});
+
+// overriding tokens.
+ngMocks.defaultMock(MY_TOKEN, () => 'DEFAULT_VALUE');
+
+// url will be 'DEFAULT_VALUE'.
+ngMocks.defaultMock(MyComponent, (_, injector) => ({
+  url: injector.get(MY_TOKEN),
+}));
+
+// removing all overrdeis.
+ngMocks.defaultMock(MyComponent);
 ```
 
 #### ngMocks.get

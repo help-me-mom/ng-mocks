@@ -1,14 +1,17 @@
 import { isNgDef } from '../../common/func.is-ng-def';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
-import helperMockService from '../../mock-service/helper.mock-service';
+import mockHelperStub from '../../mock-helper/mock-helper.stub';
+import helperUseFactory from '../../mock-service/helper.use-factory';
 import mockProvider from '../../mock-service/mock-provider';
-import { MockService } from '../../mock-service/mock-service';
 import { IMockBuilderConfigMock } from '../types';
 
-const createInstance = (def: any, instance: any, config: IMockBuilderConfigMock, isFunc: boolean): any => {
+const createInstance = (existing: any, instance: any, config: IMockBuilderConfigMock, isFunc: boolean): any => {
   const params = isFunc ? { transform: instance } : instance;
+  if (config.precise) {
+    return params;
+  }
 
-  return config.precise ? instance : MockService(def, params);
+  return mockHelperStub(existing, params);
 };
 
 export default (def: any, defValue: Map<any, any>): void => {
@@ -18,7 +21,7 @@ export default (def: any, defValue: Map<any, any>): void => {
     const isFunc = isNgDef(def, 'p') && typeof instance === 'function';
     ngMocksUniverse.builtProviders.set(
       def,
-      helperMockService.useFactory(def, () => createInstance(def, instance, config, isFunc)),
+      helperUseFactory(def, undefined, existing => createInstance(existing, instance, config, isFunc)),
     );
   } else if (isNgDef(def, 'i')) {
     ngMocksUniverse.builtProviders.set(def, mockProvider(def));
@@ -28,7 +31,7 @@ export default (def: any, defValue: Map<any, any>): void => {
     const instance = defValue.get(def);
     ngMocksUniverse.builtProviders.set(
       def,
-      helperMockService.useFactory(def, () => instance),
+      helperUseFactory(def, undefined, () => instance),
     );
   } else if (!isNgDef(def)) {
     ngMocksUniverse.builtProviders.set(def, mockProvider(def));

@@ -3,8 +3,10 @@
 import { EventEmitter, Injector, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
+import { mapValues } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
 import { IMockBuilderConfig } from '../mock-builder/types';
+import mockHelperStub from '../mock-helper/mock-helper.stub';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import ngMocksUniverse from './ng-mocks-universe';
@@ -76,6 +78,22 @@ export type ngMocksMockConfig = {
   viewChildRefs?: Map<string, string>;
 };
 
+const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void => {
+  const configGlobal: Set<any> | undefined = ngMocksUniverse.getOverrides().get(mockOf);
+  const callbacks = configGlobal ? mapValues(configGlobal) : [];
+  if (ngMocksUniverse.config.get(mockOf)?.init) {
+    callbacks.push(ngMocksUniverse.config.get(mockOf).init);
+  }
+
+  for (const callback of callbacks) {
+    const overrides = callback(instance, injector);
+    if (!overrides) {
+      continue;
+    }
+    mockHelperStub(instance, overrides);
+  }
+};
+
 export class Mock {
   public readonly __ngMocksConfig?: ngMocksMockConfig;
   public readonly __ngMocksMock: true = true;
@@ -92,9 +110,6 @@ export class Mock {
     // and faking prototype
     Object.setPrototypeOf(this, mockOf.prototype);
 
-    const config = ngMocksUniverse.config.get(mockOf);
-    if (config && config.init && config.init) {
-      config.init(this, injector);
-    }
+    applyOverrides(this, mockOf, injector);
   }
 }

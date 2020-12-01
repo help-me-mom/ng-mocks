@@ -2,8 +2,8 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 
 import funcGetLastFixture from './func.get-last-fixture';
-import funcParseFindArgs from './func.parseFindArgs';
-import mockHelperFindInstances from './mock-helper.findInstances';
+import funcParseFindArgs from './func.parse-find-args';
+import mockHelperFindInstances from './mock-helper.find-instances';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 

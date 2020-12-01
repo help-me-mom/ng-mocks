@@ -89,7 +89,7 @@ const createResolve = (resolutions: Map<any, any>, change: (flag?: boolean) => v
     resolutions.set(def.ngModule, mockDef.ngModule);
   }
   if (ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('depsSkip')?.add(mockDef);
+    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockDef);
   }
   resolutions.set(def, mockDef);
   change(mockDef !== def);

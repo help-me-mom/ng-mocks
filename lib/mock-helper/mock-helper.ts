@@ -1,4 +1,4 @@
-import { EventEmitter, InjectionToken, Provider } from '@angular/core';
+import { EventEmitter, InjectionToken, Injector, Provider } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType, Type } from '../common/core.types';
@@ -6,12 +6,13 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { MockedFunction } from '../mock-service/types';
 
+import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFind from './mock-helper.find';
-import mockHelperFindAll from './mock-helper.findAll';
-import mockHelperFindInstance from './mock-helper.findInstance';
-import mockHelperFindInstances from './mock-helper.findInstances';
-import mockHelperFlushTestBed from './mock-helper.flushTestBed';
+import mockHelperFindAll from './mock-helper.find-all';
+import mockHelperFindInstance from './mock-helper.find-instance';
+import mockHelperFindInstances from './mock-helper.find-instances';
+import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 import mockHelperGet from './mock-helper.get';
 import mockHelperGuts from './mock-helper.guts';
 import mockHelperInput from './mock-helper.input';
@@ -23,6 +24,27 @@ import mockHelperStub from './mock-helper.stub';
  * @see https://github.com/ike18t/ng-mocks#ngmocks
  */
 export const ngMocks: {
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   */
+  defaultMock<T>(
+    token: InjectionToken<T>,
+    handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+  ): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   */
+  defaultMock<T = any>(
+    token: string,
+    handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+  ): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   */
+  defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
+
   /**
    * @see https://github.com/ike18t/ng-mocks#making-angular-tests-faster
    */
@@ -208,6 +230,7 @@ export const ngMocks: {
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
+  defaultMock: mockHelperDefaultMock,
   faster: mockHelperFaster,
   find: mockHelperFind,
   findAll: mockHelperFindAll,

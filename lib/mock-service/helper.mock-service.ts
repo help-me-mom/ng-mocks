@@ -30,7 +30,18 @@ getGlobal().ngMockshelperMockService = getGlobal().ngMockshelperMockService || {
   useFactory: helperUseFactory,
 };
 
-export default (() => getGlobal().ngMockshelperMockService)();
+export default ((): {
+  createMockFromPrototype: typeof helperCreateMockFromPrototype;
+  extractMethodsFromPrototype: typeof helperExtractMethodsFromPrototype;
+  extractPropertiesFromPrototype: typeof helperExtractPropertiesFromPrototype;
+  extractPropertyDescriptor: typeof helperExtractPropertyDescriptor;
+  mock: typeof helperMock;
+  mockFunction: typeof helperMockFunction;
+  registerMockFunction: (func: CustomMockFunction | undefined) => void;
+  replaceWithMocks: typeof helperReplaceWithMocks;
+  resolveProvider: typeof helperResolveProvider;
+  useFactory: typeof helperUseFactory;
+} => getGlobal().ngMockshelperMockService)();
 
 export const registerMockFunction: (func: CustomMockFunction | undefined) => void = getGlobal().ngMockshelperMockService
   .registerMockFunction;

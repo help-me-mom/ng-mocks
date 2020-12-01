@@ -27,15 +27,18 @@ export function MockProvider<I>(provider: InjectionToken<I> | string, useValue?:
 export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): FactoryProvider;
 
 export function MockProvider(provide: any, overrides: any = defaultValue): Provider {
-  return helperUseFactory(provide, () => {
-    const value = MockService(provide);
-    if (overrides === defaultValue) {
-      return value;
-    }
-    if (!value) {
-      return overrides;
-    }
+  return helperUseFactory(
+    provide,
+    () => MockService(provide),
+    value => {
+      if (overrides === defaultValue) {
+        return value;
+      }
+      if (!value) {
+        return overrides;
+      }
 
-    return mockHelperStub(value, overrides);
-  });
+      return mockHelperStub(value, overrides);
+    },
+  );
 }

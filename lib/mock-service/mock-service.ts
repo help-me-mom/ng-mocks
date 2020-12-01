@@ -32,7 +32,7 @@ const mockVariable = (service: any, prefix: string, callback: typeof MockService
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service
  */
-export function MockService(service?: boolean | number | string | null): undefined;
+export function MockService(service: boolean | number | string | null | undefined): undefined;
 
 /**
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-service

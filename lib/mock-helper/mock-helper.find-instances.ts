@@ -3,7 +3,7 @@ import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugNode } from '../mock-render/types';
 
 import funcGetLastFixture from './func.get-last-fixture';
-import funcParseFindArgs from './func.parseFindArgs';
+import funcParseFindArgs from './func.parse-find-args';
 
 function nestedCheck<T>(
   result: T[],

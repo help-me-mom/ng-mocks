@@ -19,10 +19,14 @@ export default ({
 }: BuilderData): Map<any, any> => {
   ngMocksUniverse.flags.add('cachePipe');
 
-  ngMocksUniverse.config.set('multi', new Set()); // collecting multi flags of providers.
-  ngMocksUniverse.config.set('deps', new Set()); // collecting all deps of providers.
-  ngMocksUniverse.config.set('depsSkip', new Set()); // collecting all declarations of kept modules.
-  ngMocksUniverse.config.set('resolution', new Map()); // flags to understand how to mock nested declarations.
+  // collecting multi flags of providers.
+  ngMocksUniverse.config.set('ngMocksMulti', new Set());
+  // collecting all deps of providers.
+  ngMocksUniverse.config.set('ngMocksDeps', new Set());
+  // collecting all declarations of kept modules.
+  ngMocksUniverse.config.set('ngMocksDepsSkip', new Set());
+  // flags to understand how to mock nested declarations.
+  ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
   for (const [k, v] of mapEntries(configDef)) {
     ngMocksUniverse.config.set(k, v);
   }

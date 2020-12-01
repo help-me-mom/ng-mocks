@@ -245,10 +245,12 @@ describe('mockProvider', () => {
     const def = ngModuleResolver.resolve(mock);
     expect(def.providers).toEqual([
       {
+        deps: [Injector],
         provide: CUSTOM_TOKEN,
-        useValue: '',
+        useFactory: jasmine.anything(),
       },
     ]);
+    expect(def.providers?.[0].useFactory()).toEqual('');
   });
 
   it('should return undefined on any token', () => {
@@ -258,36 +260,61 @@ describe('mockProvider', () => {
   });
 
   it('should return default value on primitives', () => {
-    expect(
-      mockProvider({ provide: CUSTOM_TOKEN, useValue: undefined }),
-    ).toEqual({
+    const p1: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: undefined,
     });
-    expect(
-      mockProvider({ provide: CUSTOM_TOKEN, useValue: 123 }),
-    ).toEqual({
+    expect(p1).toEqual({
+      deps: [Injector],
       provide: CUSTOM_TOKEN,
-      useValue: 0,
+      useFactory: jasmine.anything(),
     });
-    expect(
-      mockProvider({ provide: CUSTOM_TOKEN, useValue: true }),
-    ).toEqual({
+    expect(p1.useFactory()).toEqual(undefined);
+
+    const p2: any = mockProvider({
       provide: CUSTOM_TOKEN,
-      useValue: false,
+      useValue: 123,
     });
-    expect(
-      mockProvider({ provide: CUSTOM_TOKEN, useValue: 'true' }),
-    ).toEqual({
+    expect(p2).toEqual({
+      deps: [Injector],
       provide: CUSTOM_TOKEN,
-      useValue: '',
+      useFactory: jasmine.anything(),
     });
-    expect(
-      mockProvider({ provide: CUSTOM_TOKEN, useValue: null }),
-    ).toEqual({
+    expect(p2.useFactory()).toEqual(0);
+
+    const p3: any = mockProvider({
+      provide: CUSTOM_TOKEN,
+      useValue: true,
+    });
+    expect(p3).toEqual({
+      deps: [Injector],
+      provide: CUSTOM_TOKEN,
+      useFactory: jasmine.anything(),
+    });
+    expect(p3.useFactory()).toEqual(false);
+
+    const p4: any = mockProvider({
+      provide: CUSTOM_TOKEN,
+      useValue: 'true',
+    });
+    expect(p4).toEqual({
+      deps: [Injector],
+      provide: CUSTOM_TOKEN,
+      useFactory: jasmine.anything(),
+    });
+    expect(p4.useFactory()).toEqual('');
+
+    const p5: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: null,
     });
+    expect(p5).toEqual({
+      deps: [Injector],
+      provide: CUSTOM_TOKEN,
+      useFactory: jasmine.anything(),
+    });
+    expect(p5.useFactory()).toEqual(null);
+
     const mock: FactoryProvider = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: {
