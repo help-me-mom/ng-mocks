@@ -2,21 +2,18 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugNode } from '../mock-render/types';
 
+import funcGetFromNode from './func.get-from-node';
 import funcGetLastFixture from './func.get-last-fixture';
 import funcParseFindArgs from './func.parse-find-args';
 
-function nestedCheck<T>(
-  result: T[],
-  node: MockedDebugNode & { childNodes?: MockedDebugNode[] },
-  callback: (node: MockedDebugNode) => undefined | T,
-) {
-  const element = callback(node);
-  if (element) {
-    result.push(element);
-  }
-  const childNodes = node?.childNodes || [];
-  for (const childNode of childNodes) {
-    nestedCheck(result, childNode, callback);
+interface DebugNode {
+  childNodes?: MockedDebugNode[];
+}
+
+function nestedCheck<T>(result: T[], node: MockedDebugNode & DebugNode, proto: Type<T>) {
+  funcGetFromNode(result, node, proto);
+  for (const childNode of node?.childNodes || []) {
+    nestedCheck(result, childNode, proto);
   }
 }
 
@@ -25,13 +22,7 @@ export default <T>(...args: any[]): T[] => {
   const debugElement = el || funcGetLastFixture()?.debugElement;
 
   const result: T[] = [];
-  nestedCheck<T>(result, debugElement, node => {
-    try {
-      return node.injector.get(getSourceOfMock(sel));
-    } catch (error) {
-      return undefined;
-    }
-  });
+  nestedCheck<T>(result, debugElement, getSourceOfMock(sel));
 
   return result;
 };

@@ -2435,7 +2435,7 @@ const directive = ngMocks.get(fixture.debugElement, Directive);
 
 #### ngMocks.findInstance
 
-Returns the first found attribute or structural directive which belongs to the current element or its any child.
+Returns the first found component, directive, pipe or service which belongs to the current element or its any child.
 If the element isn't specified then the current fixture is used.
 
 - `ngMocks.findInstance( fixture?, directive, notFoundValue? )`
@@ -2448,11 +2448,13 @@ const directive3 = ngMocks.findInstance(
   fixture.debugElement,
   Directive3,
 );
+const pipe = ngMocks.findInstance(fixture.debugElement, MyPipe);
+const service = ngMocks.findInstance(fixture, MyService);
 ```
 
 #### ngMocks.findInstances
 
-Returns an array of all found attribute or structural directives which belong to the current element and all its children.
+Returns an array of all found components, directives, pipes or services which belong to the current element and all its children.
 If the element isn't specified then the current fixture is used.
 
 - `ngMocks.findInstances( fixture?, directive )`
@@ -2465,6 +2467,8 @@ const directives3 = ngMocks.findInstances(
   fixture.debugElement,
   Directive3,
 );
+const pipes = ngMocks.findInstances(fixture.debugElement, MyPipe);
+const services = ngMocks.findInstance(fixture, MyService);
 ```
 
 #### ngMocks.find

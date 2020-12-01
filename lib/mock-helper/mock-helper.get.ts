@@ -2,6 +2,8 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement } from '../mock-render/types';
 
+import funcGetFromNode from './func.get-from-node';
+
 const defaultNotFoundValue = {}; // simulating Symbol
 
 const parseArgs = <T>(
@@ -18,10 +20,10 @@ const parseArgs = <T>(
 
 export default <T>(...args: any[]) => {
   const { el, sel, notFoundValue } = parseArgs<T>(args);
-  try {
-    return el.injector.get(getSourceOfMock(sel));
-  } catch (error) {
-    // looks like the directive is structural.
+
+  const res1 = funcGetFromNode([], el, getSourceOfMock(sel));
+  if (res1.length) {
+    return res1[0];
   }
 
   // Looking for related structural directive.
@@ -31,13 +33,12 @@ export default <T>(...args: any[]) => {
       ? []
       : el.parent.queryAllNodes(node => node.nativeNode === prevNode);
   const matchedNode = matches[0];
-  try {
-    return matchedNode.injector.get(getSourceOfMock(sel));
-  } catch (error) {
-    // nothing to do
+  const res2 = funcGetFromNode([], matchedNode, getSourceOfMock(sel));
+  if (res2.length) {
+    return res2[0];
   }
   if (notFoundValue !== defaultNotFoundValue) {
     return notFoundValue;
   }
-  throw new Error(`Cannot find ${sel.name} directive via ngMocks.get`);
+  throw new Error(`Cannot find ${sel.name} instance via ngMocks.get`);
 };
