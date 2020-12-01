@@ -26,7 +26,7 @@ export class MockBuilderStash {
 
   public restore(): void {
     for (const key of Object.keys(this.data)) {
-      ngMocksUniverse[key] = (this.data as any)[key];
+      (ngMocksUniverse as any)[key] = (this.data as any)[key];
     }
   }
 }

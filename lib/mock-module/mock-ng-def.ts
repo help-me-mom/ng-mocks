@@ -42,25 +42,37 @@ const flatToExisting = <T, R>(data: T | T[], callback: (arg: T) => R | undefined
 
 type processMeta = 'declarations' | 'entryComponents' | 'bootstrap' | 'providers' | 'imports' | 'exports';
 
+const configureProcessMetaKeys = (
+  resolve: (def: any) => any,
+  resolveProvider: (def: Provider) => any,
+): Array<[processMeta, (def: any) => any]> => [
+  ['declarations', resolve],
+  ['entryComponents', resolve],
+  ['bootstrap', resolve],
+  ['providers', resolveProvider],
+  ['imports', resolve],
+  ['exports', resolve],
+];
+
 const processMeta = (
   ngModule: NgModule,
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
 ): NgModule => {
   const mockModuleDef: NgModule = {};
+  const keys = configureProcessMetaKeys(resolve, resolveProvider);
 
-  const keys: Array<[processMeta, (def: any) => any]> = [
-    ['declarations', resolve],
-    ['entryComponents', resolve],
-    ['bootstrap', resolve],
-    ['providers', resolveProvider],
-    ['imports', resolve],
-    ['exports', resolve],
-  ];
+  const cachePipe = ngMocksUniverse.flags.has('cachePipe');
+  if (!cachePipe) {
+    ngMocksUniverse.flags.add('cachePipe');
+  }
   for (const [key, callback] of keys) {
     if (ngModule[key]?.length) {
       mockModuleDef[key] = flatToExisting(ngModule[key], callback);
     }
+  }
+  if (!cachePipe) {
+    ngMocksUniverse.flags.delete('cachePipe');
   }
 
   return mockModuleDef;

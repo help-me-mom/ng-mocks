@@ -6,6 +6,19 @@ import { AnyType } from './core.types';
 // istanbul ignore next
 const getGlobal = (): any => window || global;
 
+interface NgMocksUniverse {
+  builtDeclarations: Map<any, any>;
+  builtProviders: Map<any, any>;
+  cacheDeclarations: Map<any, any>;
+  cacheProviders: Map<any, any>;
+  config: Map<any, any>;
+  flags: Set<string>;
+  global: Map<any, any>;
+  isExcludedDef: (def: any) => boolean;
+  isProvidedDef: (def: any) => boolean;
+  touches: Set<AnyType<any> | InjectionToken<any> | string>;
+}
+
 getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   builtDeclarations: new Map(),
   builtProviders: new Map(),
@@ -29,4 +42,4 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
  *
  * @internal
  */
-export default (() => getGlobal().ngMocksUniverse)();
+export default ((): NgMocksUniverse => getGlobal().ngMocksUniverse)();

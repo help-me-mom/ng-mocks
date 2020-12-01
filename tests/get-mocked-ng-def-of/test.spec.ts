@@ -43,12 +43,6 @@ class TargetDirective {}
 class TargetModule {}
 
 describe('getMockedNgDefOf:legacy', () => {
-  it('returns mock for a module', () => {
-    const mock = MockModule(TargetModule);
-    expect(getMockedNgDefOf(TargetModule, 'm')).toBe(mock);
-    expect(getMockedNgDefOf(TargetModule)).toBe(mock);
-  });
-
   it('returns mock for a component', () => {
     const mock = MockComponent(TargetComponent);
     expect(getMockedNgDefOf(TargetComponent, 'c')).toBe(mock);
@@ -69,6 +63,12 @@ describe('getMockedNgDefOf:legacy', () => {
     expect(() => getMockedNgDefOf(TargetPipe)).toThrowError(
       /There is no mock for TargetPipe/,
     );
+  });
+
+  it('returns mock for a module', () => {
+    const mock = MockModule(TargetModule);
+    expect(getMockedNgDefOf(TargetModule, 'm')).toBe(mock);
+    expect(getMockedNgDefOf(TargetModule)).toBe(mock);
   });
 });
 
