@@ -7,9 +7,14 @@
 # Create mock components and more out of annoying dependencies in Angular tests
 
 `ng-mocks` is a library which provides helper functions for
-**creating mock components**, directives, pipes, modules and services
+**creating [mock components](#how-to-create-a-mock-component)**,
+[directives](#how-to-create-a-mock-directive),
+[pipes](#how-to-create-a-mock-pipe),
+[modules](#how-to-create-a-mock-module) and
+[services](#how-to-create-a-mock-provider)
 for easy testing of Angular 5+ applications.
-Whether you need a **mock child component**, or any other annoying dependency,
+Whether you need a **[mock child component](#how-to-create-a-mock-component)**,
+or any other [annoying dependency](#how-to-create-mock-dependencies-in-an-angular-application),
 `ng-mocks` has a tool to turn this declaration into its mock copy,
 keeping its interface as it is, but suppressing its implementation.
 
@@ -34,7 +39,9 @@ There is a brief summary of the latest changes in [CHANGELOG](https://github.com
 ## Why use this?
 
 Sure, you could flip a flag on schema errors to make your component dependencies not matter.
-Or you could use `ng-mocks` to **create mock declarations** out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+Or you could use `ng-mocks` to
+**create [mock declarations](#how-to-create-mock-dependencies-in-an-angular-application)**
+out of them, and have the ability to assert on their inputs or emit on an output to assert on a side effect.
 
 ### Find an issue or have a question or a request?
 
@@ -90,7 +97,8 @@ Angular testing is fun and easy until you've met complex dependencies,
 and setting up the `TestBed` becomes really annoying and time consuming.
 
 `ng-mocks` helps to bring fun and ease back allowing developers
-**to create mock child components** and stub dependencies via a few lines of code with help of
+**to create [mock child components](#how-to-create-a-mock-component)**
+and stub dependencies via a few lines of code with help of
 [`MockComponent`](#how-to-create-a-mock-component),
 [`MockDirective`](#how-to-create-a-mock-directive),
 [`MockPipe`](#how-to-create-a-mock-pipe),
@@ -128,7 +136,8 @@ This means that our base component depends on:
 etc.
 
 We could easily test it with `schemas: [NO_ERRORS_SCHEMA]`
-to avoid `Template parse errors: <component> is not a known element`,
+to avoid
+[`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element),
 and it would work, but in this case we have zero guarantee, that our tests will fail
 if an interface of a dependency has been changed and requires
 code updates. Therefore, we have to avoid `NO_ERRORS_SCHEMA`.
@@ -161,7 +170,8 @@ And... nobody knows which dependencies the dependencies have.
 Although, we definitely know that we do not want to worry about them.
 
 That's where `ng-mocks` comes for help. Simply pass all the dependencies
-into **helper functions to get their mock copies** and to avoid a dependency hassle.
+into **[helper functions](#how-to-create-mock-dependencies-in-an-angular-application) to get their mock copies**
+and to avoid a dependency hassle.
 
 ```typescript
 TestBed.configureTestingModule({
