@@ -38,16 +38,22 @@ const createFactoryProvider = (provider: any, provide: any) =>
     return instance;
   });
 
-const normalizePrimitives = (value: any) =>
-  typeof value === 'boolean'
-    ? false
-    : typeof value === 'number'
-    ? 0
-    : typeof value === 'string'
-    ? ''
-    : value === null
-    ? null
-    : undefined;
+const normalizePrimitivesMap: Array<[(value: any) => boolean, any]> = [
+  [value => typeof value === 'boolean', false],
+  [value => typeof value === 'number', 0],
+  [value => typeof value === 'string', ''],
+  [value => value === null, null],
+];
+
+const normalizePrimitives = (value: any): any => {
+  for (const [check, result] of normalizePrimitivesMap) {
+    if (check(value)) {
+      return result;
+    }
+  }
+
+  return undefined;
+};
 
 const createValueProvider = (provider: any, provide: any) =>
   helperUseFactory(provide, () =>

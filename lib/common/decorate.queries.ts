@@ -2,6 +2,13 @@ import { ContentChild, ContentChildren, Query, ViewChild, ViewChildren } from '@
 
 import { AnyType } from './core.types';
 
+const map: any = {
+  ContentChild,
+  ContentChildren,
+  ViewChild,
+  ViewChildren,
+};
+
 // Looks like an A9 bug, that queries from @Component aren't processed.
 // Also we have to pass prototype, not the class.
 // The same issue happens with outputs, but time to time
@@ -12,18 +19,8 @@ export default function (cls: AnyType<any>, queries?: { [key: string]: Query }) 
   if (queries) {
     for (const key of Object.keys(queries)) {
       const query: any = queries[key];
-      if (query.ngMetadataName === 'ContentChild') {
-        ContentChild(query.selector, query)(cls.prototype, key);
-      }
-      if (query.ngMetadataName === 'ContentChildren') {
-        ContentChildren(query.selector, query)(cls.prototype, key);
-      }
-      if (query.ngMetadataName === 'ViewChild') {
-        ViewChild(query.selector, query)(cls.prototype, key);
-      }
-      if (query.ngMetadataName === 'ViewChildren') {
-        ViewChildren(query.selector, query)(cls.prototype, key);
-      }
+      const decorator = map[query.ngMetadataName];
+      decorator(query.selector, query)(cls.prototype, key);
     }
   }
 }

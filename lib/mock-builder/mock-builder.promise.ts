@@ -30,6 +30,24 @@ const normaliseModule = (
     ? { def: module.ngModule, providers: module.providers }
     : { def: module, providers: undefined };
 
+const parseProvider = (
+  provider: any,
+): {
+  multi: boolean;
+  provide: any;
+} => {
+  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+  const multi = typeof provider === 'object' && provider.provide && provider.multi;
+
+  return {
+    multi,
+    provide,
+  };
+};
+
+const generateProviderValue = (provider: any, existing: any, multi: boolean): any =>
+  multi ? [...(Array.isArray(existing) ? existing : /* istanbul ignore next */ []), provider] : provider;
+
 const defaultMock = {}; // simulating Symbol
 
 export class MockBuilderPromise implements IMockBuilder {
@@ -131,14 +149,10 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public provide(def: Provider): this {
     for (const provider of flatten(def)) {
-      const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
-      const multi = typeof provider === 'object' && provider.provide && provider.multi;
+      const { provide, multi } = parseProvider(provider);
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
       this.wipe(provide);
-      this.providerDef.set(
-        provide,
-        multi ? [...(Array.isArray(existing) ? existing : /* istanbul ignore next */ []), provider] : provider,
-      );
+      this.providerDef.set(provide, generateProviderValue(provider, existing, multi));
     }
 
     return this;

@@ -6,27 +6,41 @@ import checkIsFunc from './check.is-func';
 import checkIsInst from './check.is-inst';
 import helperMockService from './helper.mock-service';
 
-const mockVariable = (service: any, prefix: string, callback: typeof MockService) => {
-  let value: any;
-
-  if (checkIsClass(service)) {
-    value = helperMockService.createMockFromPrototype(service.prototype);
-  } else if (checkIsFunc(service)) {
-    value = helperMockService.mockFunction(`func:${prefix || service.name || 'arrow-function'}`);
-  } else if (Array.isArray(service)) {
-    value = [];
-  } else if (checkIsInst(service)) {
-    value = helperMockService.createMockFromPrototype(service.constructor.prototype);
-    for (const property of Object.keys(service)) {
-      const mock: any = callback(service[property], `${prefix || 'instance'}.${property}`);
-      if (mock !== undefined) {
-        value[property] = mock;
+const mockVariableMap: Array<
+  [(def: any) => boolean, (service: any, prefix: string, callback: typeof MockService) => any]
+> = [
+  [checkIsClass, (service: any) => helperMockService.createMockFromPrototype(service.prototype)],
+  [
+    checkIsFunc,
+    (service: any, prefix: string) =>
+      helperMockService.mockFunction(`func:${prefix || service.name || 'arrow-function'}`),
+  ],
+  [def => Array.isArray(def), () => []],
+  [
+    checkIsInst,
+    (service, prefix, callback) => {
+      const value = helperMockService.createMockFromPrototype(service.constructor.prototype);
+      for (const property of Object.keys(service)) {
+        const mock: any = callback(service[property], `${prefix || 'instance'}.${property}`);
+        if (mock !== undefined) {
+          value[property] = mock;
+        }
       }
-    }
-    Object.setPrototypeOf(value, Object.getPrototypeOf(service));
-  }
+      Object.setPrototypeOf(value, Object.getPrototypeOf(service));
 
-  return value;
+      return value;
+    },
+  ],
+];
+
+const mockVariable = (service: any, prefix: string, callback: typeof MockService) => {
+  for (const [check, createMock] of mockVariableMap) {
+    if (!check(service)) {
+      continue;
+    }
+
+    return createMock(service, prefix, callback);
+  }
 };
 
 /**

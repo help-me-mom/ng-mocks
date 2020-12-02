@@ -13,40 +13,38 @@ interface NgMocksUniverse {
   cacheProviders: Map<any, any>;
   config: Map<any, any>;
   flags: Set<string>;
+  getOverrides: () => Map<any, any>;
   global: Map<any, any>;
   isExcludedDef: (def: any) => boolean;
   isProvidedDef: (def: any) => boolean;
   touches: Set<AnyType<any> | InjectionToken<any> | string>;
 }
 
-getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
-  builtDeclarations: new Map(),
-  builtProviders: new Map(),
-  cacheDeclarations: new Map(),
-  cacheProviders: new Map(),
-  config: new Map(),
-  flags: new Set<string>(coreConfig.flags),
-  getOverrides: (): Map<any, any> => {
-    if (!getGlobal().ngMocksUniverse.global.has('overrides')) {
-      getGlobal().ngMocksUniverse.global.set('overrides', new Map());
-    }
+getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {};
+const ngMocksUniverse = getGlobal().ngMocksUniverse;
 
-    return getGlobal().ngMocksUniverse.global.get('overrides');
-  },
-  global: new Map(),
-  isExcludedDef: (def: any): boolean =>
-    getGlobal().ngMocksUniverse.builtDeclarations.has(def) &&
-    getGlobal().ngMocksUniverse.builtDeclarations.get(def) === null,
-  isProvidedDef: (def: any): boolean =>
-    getGlobal().ngMocksUniverse.builtDeclarations.has(def) &&
-    getGlobal().ngMocksUniverse.builtDeclarations.get(def) !== null,
-  touches: new Set<AnyType<any> | InjectionToken<any>>(),
+ngMocksUniverse.builtDeclarations = new Map();
+ngMocksUniverse.builtProviders = new Map();
+ngMocksUniverse.cacheDeclarations = new Map();
+ngMocksUniverse.cacheProviders = new Map();
+ngMocksUniverse.config = new Map();
+ngMocksUniverse.flags = new Set(coreConfig.flags);
+ngMocksUniverse.global = new Map();
+ngMocksUniverse.touches = new Set();
+
+ngMocksUniverse.getOverrides = (): Map<any, any> => {
+  if (!ngMocksUniverse.global.has('overrides')) {
+    ngMocksUniverse.global.set('overrides', new Map());
+  }
+
+  return ngMocksUniverse.global.get('overrides');
 };
 
-/**
- * DO NOT USE this object outside of the library.
- * It can be changed any time without a notice.
- *
- * @internal
- */
-export default ((): NgMocksUniverse => getGlobal().ngMocksUniverse)();
+const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.builtDeclarations.has(def);
+const getBuildDeclaration = (def: any): any => ngMocksUniverse.builtDeclarations.get(def);
+
+ngMocksUniverse.isExcludedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) === null;
+
+ngMocksUniverse.isProvidedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) !== null;
+
+export default ((): NgMocksUniverse => ngMocksUniverse)();

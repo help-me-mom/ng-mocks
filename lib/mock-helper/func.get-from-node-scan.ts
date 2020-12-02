@@ -16,6 +16,10 @@ const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boo
   return node === el.nativeNode;
 };
 
+const isNotObject = (node: any): boolean => !node || typeof node !== 'object';
+
+const shouldBeScanned = (scanned: any[], node: any): boolean => scanned.indexOf(node) === -1 && Array.isArray(node);
+
 const scan = <T>(
   {
     result,
@@ -38,11 +42,11 @@ const scan = <T>(
 
   for (const raw of nodes) {
     const node = normalize(raw);
-    if (!node || typeof node !== 'object') {
+    if (isNotObject(node)) {
       continue;
     }
 
-    if (scanned.indexOf(node) === -1 && Array.isArray(node)) {
+    if (shouldBeScanned(scanned, node)) {
       scan({ result, el, nodes: node, normalize, proto }, gather, scanned);
     }
 
