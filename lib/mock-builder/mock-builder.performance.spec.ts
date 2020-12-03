@@ -660,20 +660,20 @@ describe('MockBuilderPerformance', () => {
   it('accepts the same render configDef', () => {
     const render = {};
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, { render })
+      .mock(Target1Module, { render })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, { render })
+      .mock(Target1Module, { render })
       .build();
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
   it('fails on different render flag configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, { render: true })
+      .mock(Target1Module, { render: true })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, { render: false })
+      .mock(Target1Module, { render: false })
       .build();
 
     expect(ngModule1.providers?.[0]).not.toBe(
@@ -682,10 +682,10 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different render length configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, { render: {} })
+      .mock(Target1Module, { render: {} })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {},
         },
@@ -698,14 +698,14 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different render.$implicit configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           $implicit: true,
         },
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           $implicit: false,
         },
@@ -719,14 +719,14 @@ describe('MockBuilderPerformance', () => {
   it('accepts the same render.variables configDef', () => {
     const variables = {};
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables,
         },
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables,
         },
@@ -737,7 +737,7 @@ describe('MockBuilderPerformance', () => {
   });
   it('accepts equal render.variables configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 1,
@@ -746,7 +746,7 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 1,
@@ -759,10 +759,10 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on missed definition configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, { render: {} })
+      .mock(Target1Module, { render: {} })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 2,
@@ -771,7 +771,7 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
     const ngModule3 = MockBuilder()
-      .keep(Target1Module, { render: {} })
+      .mock(Target1Module, { render: {} })
       .build();
 
     expect(ngModule1.providers?.[0]).not.toBe(
@@ -783,7 +783,7 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different render.variables configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 1,
@@ -792,7 +792,7 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 1,
@@ -808,7 +808,7 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different values in render.variables configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 1,
@@ -817,7 +817,7 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           variables: {
             flag: 2,
@@ -832,14 +832,14 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different amount of blocks in render configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           block1: {},
         },
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           block1: {},
           block2: {},
@@ -853,7 +853,7 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on different block definitions in render configDef', () => {
     const ngModule1 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           block1: {
             $implicit: true,
@@ -862,7 +862,7 @@ describe('MockBuilderPerformance', () => {
       })
       .build();
     const ngModule2 = MockBuilder()
-      .keep(Target1Module, {
+      .mock(Target1Module, {
         render: {
           block1: {
             $implicit: false,

@@ -114,7 +114,7 @@ const resetTestingModule = (
  * @see https://github.com/ike18t/ng-mocks#mockbuilder
  */
 export function MockBuilder(
-  keepDeclaration?: AnyType<any> | InjectionToken<any> | null | undefined,
+  keepDeclaration?: string | AnyType<any> | InjectionToken<any> | null | undefined,
   itsModuleToMock?: AnyType<any> | null | undefined,
 ): IMockBuilder {
   if (!(TestBed as any).ngMocks) {

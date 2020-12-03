@@ -4,7 +4,11 @@ import { MockBuilder } from 'ng-mocks';
 
 describe('issue-197:abstract', () => {
   const expected = {};
-  beforeEach(() => MockBuilder().mock(DomSanitizer, expected));
+  beforeEach(() => {
+    return MockBuilder().mock(DomSanitizer, expected, {
+      precise: true,
+    });
+  });
 
   it('mocks abstract classes', () => {
     const actual = TestBed.get(DomSanitizer);
