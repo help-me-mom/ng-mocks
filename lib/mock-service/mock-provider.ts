@@ -63,7 +63,7 @@ const createClassProvider = (provider: any, provide: any) =>
     ? provider
     : helperUseFactory(provide, () => MockService(provider.useClass));
 
-const createMockProvider = (provider: any, provide: any, cacheProviders: Map<any, any>): Provider | undefined => {
+const createMockProvider = (provider: any, provide: any, cacheProviders?: Map<any, any>): Provider | undefined => {
   let mockProvider: Provider | undefined;
   if (typeof provide === 'function') {
     mockProvider = createFactoryProvider(provider, provide);

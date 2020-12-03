@@ -145,16 +145,18 @@ const resolve = (data: Data, def: any, skipDestruction = true): void => {
   }
 };
 
+const generateData = (keep: any, mock: any, exclude: any): Data => ({
+  declarations: [],
+  exclude: new Set(flatten(exclude || [])),
+  imports: [],
+  keep: new Set(flatten(keep || [])),
+  mock: new Set(flatten(mock || [])),
+  providers: [],
+  skip: new Set(),
+});
+
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
-  const data: Data = {
-    declarations: [],
-    exclude: new Set(flatten(exclude || [])),
-    imports: [],
-    keep: new Set(flatten(keep || [])),
-    mock: new Set(flatten(mock || [])),
-    providers: [],
-    skip: new Set(),
-  };
+  const data: Data = generateData(keep, mock, exclude);
 
   for (const def of mapValues(data.mock)) {
     resolve(data, def, false);
