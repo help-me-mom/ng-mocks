@@ -54,6 +54,16 @@ export const mapEntries = <K, T>(set: Map<K, T>): Array<[K, T]> => {
   return result;
 };
 
+const extractDependencyArray = (deps: any[], set: Set<any>): void => {
+  for (const flag of deps) {
+    const name = flag && typeof flag === 'object' ? flag.ngMetadataName : undefined;
+    if (name === 'Optional' || name === 'SkipSelf' || name === 'Self') {
+      continue;
+    }
+    set.add(flag);
+  }
+};
+
 // Accepts an array of dependencies from providers, skips injections flags,
 // and adds the providers to the set.
 export const extractDependency = (deps: any[], set?: Set<any>): void => {
@@ -65,13 +75,7 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
       set.add(dep);
       continue;
     }
-    for (const flag of dep) {
-      const name = flag && typeof flag === 'object' ? flag.ngMetadataName : undefined;
-      if (name === 'Optional' || name === 'SkipSelf' || name === 'Self') {
-        continue;
-      }
-      set.add(flag);
-    }
+    extractDependencyArray(dep, set);
   }
 };
 

@@ -6,12 +6,14 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import { MockService } from '../mock-service/mock-service';
 
+const applyCallbackToken = (def: any): boolean => isNgInjectionToken(def) || typeof def === 'string';
+
 const applyCallback = (def: any, inst: any, callbacks: any[], injector?: Injector, overrides?: any): void => {
   let instance: any = inst;
 
   for (const callback of callbacks) {
     const override = callback(instance, injector);
-    if (isNgInjectionToken(def) || typeof def === 'string') {
+    if (applyCallbackToken(def)) {
       instance = override;
       continue;
     }

@@ -103,6 +103,8 @@ const generateTemplate = (declaration: any, { selector, params, inputs, outputs 
   return mockTemplate;
 };
 
+const applyParamsToFixtureInstanceGetData = (params: any, keys: string[]) => (!params && keys ? keys : []);
+
 const applyParamsToFixtureInstance = (
   instance: Record<keyof any, any>,
   params: any,
@@ -112,11 +114,11 @@ const applyParamsToFixtureInstance = (
   for (const key of Object.keys(params || {})) {
     instance[key] = params[key];
   }
-  for (const definition of !params && inputs ? inputs : []) {
+  for (const definition of applyParamsToFixtureInstanceGetData(params, inputs)) {
     const [property] = definition.split(': ');
     instance[property] = undefined;
   }
-  for (const definition of !params && outputs ? outputs : []) {
+  for (const definition of applyParamsToFixtureInstanceGetData(params, outputs)) {
     const [property] = definition.split(': ');
     instance[property] = new EventEmitter();
   }

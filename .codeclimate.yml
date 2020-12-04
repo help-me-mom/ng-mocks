@@ -7,10 +7,12 @@ exclude_patterns:
   - 'examples/'
   - 'node_modules/'
   - 'test-reports/'
+  - 'tests-failures/'
   - 'tests/'
   - 'tmp/'
   - '.codeclimate.yml'
   - '.dockerignore'
+  - '.editorconfig'
   - '.gitignore'
   - '.lintstagedrc.js'
   - '.nvmrc'
@@ -36,3 +38,12 @@ plugins:
     config:
       languages:
         typescript:
+checks:
+  method-complexity:
+    config:
+      threshold: 10
+  return-statements:
+    enabled: false
+  similar-code:
+    config:
+      threshold: 70

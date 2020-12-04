@@ -20,7 +20,7 @@ export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<Pipe
 const defaultTransform = (): void => undefined;
 
 const getMockClass = (pipe: Type<any>, transform: PipeTransform['transform']): Type<any> => {
-  @Pipe({ name: coreReflectPipeResolve(pipe).name })
+  @Pipe(coreReflectPipeResolve(pipe))
   @MockOf(pipe)
   class PipeMock extends Mock implements PipeTransform {
     public constructor(@Optional() injector?: Injector) {

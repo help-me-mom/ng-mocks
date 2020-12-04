@@ -34,6 +34,10 @@ const handleArray = (value: any[], callback: any): [boolean, any[]] => {
   return [updated, mock];
 };
 
+const handleItemKeys = ['canActivate', 'canActivateChild', 'canDeactivate', 'canLoad'];
+const handleItemGetGuards = (mock: any, section: string) =>
+  Array.isArray(mock[section]) ? handleSection(mock[section]) : mock[section];
+
 const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Record<keyof any, any>] => {
   let mock: Record<keyof any, any> = {};
   let updated = false;
@@ -48,8 +52,8 @@ const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Rec
   }
 
   // Removal of guards.
-  for (const section of ['canActivate', 'canActivateChild', 'canDeactivate', 'canLoad']) {
-    const guards: any[] = Array.isArray(mock[section]) ? handleSection(mock[section]) : mock[section];
+  for (const section of handleItemKeys) {
+    const guards: any[] = handleItemGetGuards(mock, section);
     if (guards && mock[section].length !== guards.length) {
       updated = updated || true;
       mock = { ...mock, [section]: guards };
