@@ -1,3 +1,17 @@
+# [11.2.0](https://github.com/ike18t/ng-mocks/compare/v11.1.4...v11.2.0) (2020-12-04)
+
+
+### Bug Fixes
+
+* ngMocks.guts reuses mock pipes ([13dd2c9](https://github.com/ike18t/ng-mocks/commit/13dd2c9a13d7d4452271714a765ab0f366bb1adc)), closes [#241](https://github.com/ike18t/ng-mocks/issues/241)
+
+
+### Features
+
+* global configuration for default mocks ([29715f8](https://github.com/ike18t/ng-mocks/commit/29715f8726add098481a67d51aa6a4d12c714e03)), closes [#226](https://github.com/ike18t/ng-mocks/issues/226)
+* impure pipes support + `.get`, `.findInstance` can find them in fixtures ([efa6337](https://github.com/ike18t/ng-mocks/commit/efa63379ae157c72cdb41579bc109751b3a99b65)), closes [#240](https://github.com/ike18t/ng-mocks/issues/240)
+* now `.mock` extends by default, use `precise` flag to get old behavior ([bf576fd](https://github.com/ike18t/ng-mocks/commit/bf576fd6294a2359ce52c3ba6a13607447e07f99))
+
 ## [11.1.4](https://github.com/ike18t/ng-mocks/compare/v11.1.3...v11.1.4) (2020-11-29)
 
 
