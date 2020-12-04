@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 
 import funcGetLastFixture from './func.get-last-fixture';
-import funcParseFindArgs from './func.parseFindArgs';
+import funcParseFindArgs from './func.parse-find-args';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 

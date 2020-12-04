@@ -56,7 +56,7 @@ const parseArgs = (
   return { accessType, mockName };
 };
 
-export default <T = MockedFunction>(instance: any, name: string, ...args: string[]): T => {
+export default <T = MockedFunction>(instance: any, name: string, ...args: Array<string | undefined>): T => {
   const { accessType, mockName } = parseArgs(args);
 
   const def = Object.getOwnPropertyDescriptor(instance, name);

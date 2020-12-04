@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Injector, Optional, Pipe, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
@@ -23,6 +23,15 @@ const getMockClass = (pipe: Type<any>, transform: PipeTransform['transform']): T
   @Pipe({ name: coreReflectPipeResolve(pipe).name })
   @MockOf(pipe)
   class PipeMock extends Mock implements PipeTransform {
+    public constructor(@Optional() injector?: Injector) {
+      super(injector);
+
+      // need to override overrides
+      if (transform !== defaultTransform) {
+        this.transform = transform;
+      }
+    }
+
     public transform(value: any, ...args: any[]): any {
       return transform(value, ...args);
     }

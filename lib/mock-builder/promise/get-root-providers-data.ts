@@ -7,8 +7,8 @@ export default (): {
 } => {
   // We need buckets here to process first all depsSkip, then deps and only after that all other defs.
   const buckets: any[] = [
-    mapValues(ngMocksUniverse.config.get('depsSkip')),
-    mapValues(ngMocksUniverse.config.get('deps')),
+    mapValues(ngMocksUniverse.config.get('ngMocksDepsSkip')),
+    mapValues(ngMocksUniverse.config.get('ngMocksDeps')),
     mapValues(ngMocksUniverse.touches),
   ];
 

@@ -67,7 +67,7 @@ class AppHeaderComponent {
 })
 class AppModule {}
 
-describe('MAIN', () => {
+describe('main', () => {
   // Usually we would have something like that.
   // beforeEach(() => {
   //   TestBed.configureTestingModule({

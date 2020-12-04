@@ -2,7 +2,8 @@ import { mapValues } from '../../common/core.helpers';
 import { NG_MOCKS_ROOT_PROVIDERS } from '../../common/core.tokens';
 import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
-import helperMockService from '../../mock-service/helper.mock-service';
+import helperResolveProvider from '../../mock-service/helper.resolve-provider';
+import helperUseFactory from '../../mock-service/helper.use-factory';
 
 import getRootProviderParameters from './get-root-provider-parameters';
 import { BuilderData, NgMeta } from './types';
@@ -14,12 +15,13 @@ export default (ngModule: NgMeta, { keepDef, mockDef }: BuilderData): void => {
   if (parameters.size) {
     const parametersMap = new Map();
     for (const parameter of mapValues(parameters)) {
-      const mock = helperMockService.resolveProvider(parameter, parametersMap);
+      const mock = helperResolveProvider(parameter, parametersMap);
       if (mock) {
         ngModule.providers.push(mock);
       } else if (isNgInjectionToken(parameter)) {
-        const multi = ngMocksUniverse.config.has('multi') && ngMocksUniverse.config.get('multi').has(parameter);
-        ngModule.providers.push(helperMockService.useFactory(parameter, () => (multi ? [] : undefined)));
+        const multi =
+          ngMocksUniverse.config.has('ngMocksMulti') && ngMocksUniverse.config.get('ngMocksMulti').has(parameter);
+        ngModule.providers.push(helperUseFactory(parameter, () => (multi ? [] : undefined)));
       }
     }
   }

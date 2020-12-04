@@ -7,5 +7,5 @@ export default (provide: any): boolean => {
     return true;
   }
 
-  return ngMocksUniverse.config.get('depsSkip').has(provide);
+  return ngMocksUniverse.config.get('ngMocksDepsSkip').has(provide);
 };

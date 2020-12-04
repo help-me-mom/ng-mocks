@@ -2,7 +2,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-import mockHelperFlushTestBed from './mock-helper.flushTestBed';
+import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 
 export default () => {
   beforeAll(() => {

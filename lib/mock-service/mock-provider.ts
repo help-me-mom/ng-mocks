@@ -50,12 +50,11 @@ const normalizePrimitives = (value: any) =>
     : undefined;
 
 const createValueProvider = (provider: any, provide: any) =>
-  provider.useValue && typeof provider.useValue === 'object'
-    ? helperUseFactory(provide, () => MockService(provider.useValue))
-    : {
-        provide,
-        useValue: normalizePrimitives(provider.useValue),
-      };
+  helperUseFactory(provide, () =>
+    provider.useValue && typeof provider.useValue === 'object'
+      ? MockService(provider.useValue)
+      : normalizePrimitives(provider.useValue),
+  );
 
 const createClassProvider = (provider: any, provide: any) =>
   ngMocksUniverse.builtProviders.has(provider.useClass) &&
@@ -84,7 +83,7 @@ const handleProvider = (provider: any, provide: any) => {
     return undefined;
   }
   if (provider.multi) {
-    ngMocksUniverse.config.get('multi')?.add(provide);
+    ngMocksUniverse.config.get('ngMocksMulti')?.add(provide);
 
     return undefined;
   }

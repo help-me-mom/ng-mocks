@@ -15,7 +15,7 @@ export default (ngModule: NgMeta, { providerDef }: BuilderData): void => {
     ngMocksUniverse.touches.add(provide);
 
     if (provide !== provider && (provider as any).deps) {
-      extractDependency((provider as any).deps, ngMocksUniverse.config.get('deps'));
+      extractDependency((provider as any).deps, ngMocksUniverse.config.get('ngMocksDeps'));
     }
   }
 };

@@ -26,6 +26,13 @@ getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {
   cacheProviders: new Map(),
   config: new Map(),
   flags: new Set<string>(coreConfig.flags),
+  getOverrides: (): Map<any, any> => {
+    if (!getGlobal().ngMocksUniverse.global.has('overrides')) {
+      getGlobal().ngMocksUniverse.global.set('overrides', new Map());
+    }
+
+    return getGlobal().ngMocksUniverse.global.get('overrides');
+  },
   global: new Map(),
   isExcludedDef: (def: any): boolean =>
     getGlobal().ngMocksUniverse.builtDeclarations.has(def) &&

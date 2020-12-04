@@ -173,9 +173,11 @@ describe('mock-helper.guts', () => {
         useFactory: jasmine.anything(),
       });
       expect(ngModule.providers[1]).toEqual({
+        deps: [Injector],
         provide: TARGET1,
-        useValue: '',
+        useFactory: jasmine.anything(),
       });
+      expect(ngModule.providers[1].useFactory(null)).toEqual('');
     }
   });
 
@@ -380,9 +382,11 @@ describe('mock-helper.guts', () => {
     expect(ngModule.providers?.length).toEqual(1);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toEqual({
+        deps: [Injector],
         provide: TARGET1,
-        useValue: 0,
+        useFactory: jasmine.anything(),
       });
+      expect(ngModule.providers[0].useFactory(null)).toEqual(0);
     }
   });
 
@@ -656,13 +660,17 @@ describe('mock-helper.guts', () => {
     expect(ngModule.providers?.length).toEqual(2);
     if (ngModule.providers) {
       expect(ngModule.providers[0]).toEqual({
+        deps: [Injector],
         provide: TARGET1,
-        useValue: 0,
+        useFactory: jasmine.anything(),
       });
+      expect(ngModule.providers[0].useFactory()).toEqual(0);
       expect(ngModule.providers[1]).toEqual({
+        deps: [Injector],
         provide: TARGET1,
-        useValue: 0,
+        useFactory: jasmine.anything(),
       });
+      expect(ngModule.providers[1].useFactory()).toEqual(0);
     }
   });
 
@@ -730,8 +738,9 @@ describe('mock-helper.guts', () => {
       providers: [
         Target1Service,
         {
+          deps: [Injector],
           provide: TARGET1,
-          useValue: '',
+          useFactory: jasmine.anything(),
         },
       ],
     });

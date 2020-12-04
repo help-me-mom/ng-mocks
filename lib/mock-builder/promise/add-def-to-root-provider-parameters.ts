@@ -6,7 +6,7 @@ import { BuilderData } from './types';
 
 export default (parameters: Set<any>, mockDef: BuilderData['mockDef'], def: any): void => {
   if (!skipDep(def)) {
-    if (mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('depsSkip').has(def)) {
+    if (mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('ngMocksDepsSkip').has(def)) {
       parameters.add(def);
     }
   }

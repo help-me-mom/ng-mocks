@@ -23,10 +23,10 @@ export default (mockDef: BuilderData['mockDef']): Set<any> => {
           continue;
         }
         checkRootProviderDependency(provide, touched, bucket);
-        if (mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('depsSkip').has(def)) {
+        if (mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('ngMocksDepsSkip').has(def)) {
           parameters.add(provide);
         } else {
-          ngMocksUniverse.config.get('depsSkip').add(provide);
+          ngMocksUniverse.config.get('ngMocksDepsSkip').add(provide);
         }
       }
     }

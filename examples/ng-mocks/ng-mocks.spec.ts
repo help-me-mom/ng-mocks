@@ -36,7 +36,7 @@ import {
   INJECTION_TOKEN_WE_WANT_TO_MIMIC,
 } from './fixtures.tokens';
 
-describe('NG_MOCKS:deep', () => {
+describe('ng-mocks:deep', () => {
   beforeEach(async () => {
     const ngModule = MockBuilder(MyComponent, MyModule)
       .keep(ModuleWeDontWantToMimic)

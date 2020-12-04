@@ -118,7 +118,7 @@ const createMockProvider = (provider: any, provide: any, resolutions: Map<any, a
   let mockDef = createPredefinedMockProvider(provider, provide);
 
   if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('depsSkip')?.add(provide);
+    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(provide);
     mockDef = provider;
   }
   if (!mockDef) {
@@ -162,7 +162,7 @@ const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
   }
 
   if (provide !== provider && provider.deps) {
-    extractDependency(provider.deps, ngMocksUniverse.config.get('deps'));
+    extractDependency(provider.deps, ngMocksUniverse.config.get('ngMocksDeps'));
   }
 
   return excludeInterceptors(provider, provide);
