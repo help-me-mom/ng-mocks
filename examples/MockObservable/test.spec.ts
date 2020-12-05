@@ -46,7 +46,7 @@ describe('MockObservable', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  // Now we need to customize the mock copy of the service.
+  // Now we need to customize the mock object of the service.
   // value$ is our access point to the stream.
   const value$: Subject<number[]> = new Subject();
   beforeAll(() => {
@@ -92,7 +92,7 @@ describe('MockObservable', () => {
     expect(fixture.nativeElement.innerHTML).not.toContain('3');
 
     // Checking that a sibling method has been replaced
-    // with a mock copy too.
+    // with a mock object too.
     expect(TestBed.get(TargetService).getValue$).toBeDefined();
     expect(TestBed.get(TargetService).getValue$()).toBeUndefined();
   });

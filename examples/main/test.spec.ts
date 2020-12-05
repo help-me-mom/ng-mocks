@@ -85,7 +85,7 @@ class AppHeaderComponent {
 class AppModule {}
 
 describe('main', () => {
-  // Usually we would have something like that.
+  // Usually, we would have something like that.
   // beforeEach(() => {
   //   TestBed.configureTestingModule({
   //     imports: [
@@ -171,7 +171,7 @@ describe('main', () => {
     // The same as fixture.debugElement.query(
     //   By.directive(AppHeaderComponent)
     // );
-    // but typesafe and fails if nothing has been found.
+    // but type safe and fails if nothing has been found.
     const header = ngMocks.find(AppHeaderComponent);
 
     // Verifies how AppComponent uses AppHeaderComponent.

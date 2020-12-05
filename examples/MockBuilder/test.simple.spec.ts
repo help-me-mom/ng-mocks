@@ -10,7 +10,7 @@ describe('MockBuilder:simple', () => {
   // beforeEach(() => TestBed.configureTestingModule({{
   //   imports: [MockModule(MyModule)],
   // }).compileComponents());
-  // but MyComponent has not been replaced with a mock copy for
+  // but MyComponent has not been replaced with a mock object for
   // the testing purposes.
 
   it('should render content ignoring all dependencies', () => {

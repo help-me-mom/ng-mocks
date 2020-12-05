@@ -48,15 +48,15 @@ class RealComponent implements AfterViewInit {
 
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
-  // with its mock copy.
+  // with its mock object.
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
   beforeAll(() => {
-    // Because TargetComponent is replaced with its mock copy,
+    // Because TargetComponent is replaced with its mock object,
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
-    // Let's fix it via defining customization for the mock copy.
+    // Let's fix it via defining customization for the mock object.
     MockInstance(ChildComponent, (instance, injector) => {
       const subject = new Subject<void>();
       subject.complete();
