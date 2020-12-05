@@ -1485,14 +1485,18 @@ describe('main', () => {
   //       CommonModule,
   //       RouterModule.forRoot([]),
   //     ],
-  //     declarations: [AppComponent, AppHeaderComponent],
+  //     declarations: [
+  //       AppComponent,
+  //       AppHeaderComponent,
+  //       TranslatePipe,
+  //     ],
   //   });
   //
   //   fixture = TestBed.createComponent(AppComponent);
   //   fixture.detectChanges();
   // });
-  // But, usually, instead of AppHeaderComponent we want to have
-  // a mock object.
+  // But, usually, instead of AppHeaderComponent and TranslatePipe
+  // we want to have mocks.
 
   // With ng-mocks it can be defined in the next way.
   beforeEach(() => {
@@ -1500,7 +1504,7 @@ describe('main', () => {
     // everything in AppModule will be replaced with their mocks.
     return (
       MockBuilder(AppComponent, AppModule)
-        // Adding a special config how to how to create
+        // Adding a special config how to create
         // a mock AppHeaderComponent.
         .mock(AppHeaderComponent, {
           render: {
@@ -1521,6 +1525,7 @@ describe('main', () => {
     //   declarations: [
     //     AppComponent, // <- keeping it as it is.
     //     MockComponent(AppHeaderComponent),
+    //     MockPipe(TranslatePipe, v => `fake:${v}`),
     //   ],
     // });
     // return testBed.compileComponents();
@@ -1531,6 +1536,8 @@ describe('main', () => {
     //   AppModule,
     // ));
     // return testBed.compileComponents();
+    // But in this case TranslatePipe will return undefined,
+    // if we don't customize it via MockInstance or defaultMock.
   });
 
   it('asserts behavior of AppComponent', () => {
@@ -1559,7 +1566,7 @@ describe('main', () => {
     // but typesafe and fails if nothing has been found.
     const header = ngMocks.find(AppHeaderComponent);
 
-    // Asserting how AppComponent uses AppHeaderComponent.
+    // Verifies how AppComponent uses AppHeaderComponent.
     expect(header.componentInstance.showLogo).toBe(true);
     expect(header.componentInstance.title).toBe('Fake Application');
 
@@ -1576,7 +1583,7 @@ describe('main', () => {
     header.componentInstance.logo.emit();
     expect(logoClickSpy).toHaveBeenCalled();
 
-    // Asserting that AppComponent passes the right menu into
+    // Verifies that AppComponent passes the right menu into
     // AppHeaderComponent.
     const links = ngMocks.findAll(header, 'a');
     expect(links.length).toBe(2);
