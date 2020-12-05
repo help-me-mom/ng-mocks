@@ -1,6 +1,13 @@
-import { AfterContentInit, Component, ContentChildren, QueryList, TemplateRef } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, Directive, Input, QueryList, TemplateRef } from '@angular/core';
 
-import { CustomTypeDirective } from './custom-type.directive';
+@Directive({
+  selector: '[type]',
+})
+export class CustomTypeDirective {
+  @Input('type') public type = '';
+
+  public constructor(public template: TemplateRef<any>) {}
+}
 
 @Component({
   selector: 'custom-root',

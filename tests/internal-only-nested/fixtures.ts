@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 
-import { InternalComponent } from './fixtures.components';
+@Component({
+  selector: 'internal-component',
+  template: 'internal',
+})
+export class InternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent],

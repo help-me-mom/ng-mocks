@@ -1,4 +1,5 @@
-import { Component, ContentChild, TemplateRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ContentChild, NgModule, TemplateRef } from '@angular/core';
 
 import { staticFalse } from '..';
 
@@ -9,3 +10,10 @@ import { staticFalse } from '..';
 export class ContentChildComponent {
   @ContentChild('block', staticFalse) public injectedBlock?: TemplateRef<any>;
 }
+
+@NgModule({
+  declarations: [ContentChildComponent],
+  exports: [ContentChildComponent],
+  imports: [CommonModule],
+})
+export class ContentChildModule {}

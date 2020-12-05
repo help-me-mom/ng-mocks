@@ -5,8 +5,11 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { MyComponent, TargetComponent } from './fixtures.components';
-import { TargetModule } from './fixtures.modules';
+import {
+  MyComponent,
+  TargetComponent,
+  TargetModule,
+} from './fixtures';
 
 describe('SharedMockModule:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

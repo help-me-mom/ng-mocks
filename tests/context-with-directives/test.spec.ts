@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { CustomRootComponent } from './custom-root.component';
-import { CustomTypeDirective } from './custom-type.directive';
+import { CustomRootComponent, CustomTypeDirective } from './fixtures';
 
 describe('context-with-directives:real', () => {
   beforeEach(() =>

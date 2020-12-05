@@ -1,6 +1,10 @@
-import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Component, InjectionToken, NgModule } from '@angular/core';
 
-import { TargetComponent } from './fixtures.components';
+@Component({
+  selector: 'target-component',
+  template: 'target',
+})
+export class TargetComponent {}
 
 export const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
 

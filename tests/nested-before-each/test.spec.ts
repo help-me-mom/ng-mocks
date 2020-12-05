@@ -2,7 +2,7 @@ import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockComponent } from 'ng-mocks';
 
-import { InternalComponent } from './fixtures.components';
+import { InternalComponent } from './fixtures';
 
 describe('nested-before-each', () => {
   let level = 0;

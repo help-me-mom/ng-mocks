@@ -1,6 +1,9 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { MyComponent1, MyComponent2 } from './fixtures.components';
+import {
+  MyComponent1,
+  MyComponent2,
+} from './spec.components.fixtures';
 
 describe('MockBuilder:promise', () => {
   beforeEach(() => {
@@ -23,9 +26,7 @@ describe('MockBuilder:promise', () => {
   });
 
   it('should render content ignoring all dependencies', () => {
-    const fixture = MockRender(
-      '<component-1></component-1><component-2></component-2>',
-    );
+    const fixture = MockRender('<c-1></c-1><c-2></c-2>');
     expect(fixture).toBeDefined();
     expect(fixture.nativeElement.innerHTML).toContain(
       'If we need to tune testBed',

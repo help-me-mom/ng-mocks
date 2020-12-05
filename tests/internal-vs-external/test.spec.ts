@@ -5,8 +5,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 import {
   ExternalComponent,
   InternalComponent,
-} from './fixtures.components';
-import { TargetModule } from './fixtures.modules';
+  TargetModule,
+} from './fixtures';
 
 describe('InternalVsExternal:real', () => {
   // Thanks Ivy, it doesn't throw an error and we have to use injector.

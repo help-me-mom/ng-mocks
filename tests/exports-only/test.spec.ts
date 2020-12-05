@@ -1,7 +1,6 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { InternalComponent } from './fixtures.components';
-import { TargetModule } from './fixtures.modules';
+import { InternalComponent, TargetModule } from './fixtures';
 
 describe('ExportsOnly:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

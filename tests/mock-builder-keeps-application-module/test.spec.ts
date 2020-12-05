@@ -2,8 +2,11 @@ import { APP_ID, APP_INITIALIZER, VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { TargetComponent } from './fixtures.components';
-import { TargetModule, TARGET_TOKEN } from './fixtures.modules';
+import {
+  TargetComponent,
+  TargetModule,
+  TARGET_TOKEN,
+} from './fixtures';
 
 describe('MockBuilderKeepsApplicationModule:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

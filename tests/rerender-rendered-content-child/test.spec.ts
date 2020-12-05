@@ -5,7 +5,7 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { ContentChildComponent } from './fixtures.components';
+import { ContentChildComponent } from './fixtures';
 
 describe('Rerender of a rendered @ContentChild', () => {
   beforeEach(async () => {

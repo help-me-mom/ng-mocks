@@ -2,8 +2,7 @@
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { InternalComponent } from './fixtures.components';
-import { TargetModule } from './fixtures.modules';
+import { InternalComponent, TargetModule } from './fixtures';
 
 describe('InternalOnlyNested:real', () => {
   // Thanks Ivy, it doesn't throw an error and we have to use injector.

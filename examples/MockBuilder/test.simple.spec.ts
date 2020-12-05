@@ -1,7 +1,7 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { MyComponent } from './fixtures.components';
-import { MyModule } from './fixtures.modules';
+import { MyComponent } from './spec.components.fixtures';
+import { MyModule } from './spec.modules.fixtures';
 
 describe('MockBuilder:simple', () => {
   // Do not forget to return the promise of MockBuilder.

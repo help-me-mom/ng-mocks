@@ -4,8 +4,8 @@ import {
   FakeComponent,
   RealComponent,
   TargetComponent,
-} from './fixtures.components';
-import { TargetModule } from './fixtures.modules';
+  TargetModule,
+} from './fixtures';
 
 describe('normal-usage-after-mock-builder:real1', () => {
   beforeEach(() => MockBuilder(TargetModule));

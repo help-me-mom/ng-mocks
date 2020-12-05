@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'MyPipe',
+  name: 'my',
 })
 export class MyPipe implements PipeTransform {
   protected prefix = 'MyPipe:';
@@ -12,10 +12,10 @@ export class MyPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'WeDontWantToMimic',
+  name: 'keep',
 })
-export class WeDontWantToMimicPipe implements PipeTransform {
-  protected prefix = 'PipeWeDontWantToMimic:';
+export class KeepPipe implements PipeTransform {
+  protected prefix = 'KeepPipe:';
 
   public transform(value: any, ...args: any[]): any {
     return `${this.prefix}${value}:${args.length}`;
@@ -23,10 +23,10 @@ export class WeDontWantToMimicPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'WeWantToMimic',
+  name: 'mock',
 })
-export class WeWantToMimicPipe implements PipeTransform {
-  protected prefix = 'PipeWeWantToMimic:';
+export class MockPipe implements PipeTransform {
+  protected prefix = 'MockPipe:';
 
   public transform(value: any, ...args: any[]): any {
     return `${this.prefix}${value}:${args.length}`;
@@ -34,10 +34,10 @@ export class WeWantToMimicPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'PipeWeWantToCustomize',
+  name: 'customize',
 })
-export class PipeWeWantToCustomize implements PipeTransform {
-  protected prefix = 'PipeWeWantToCustomize:';
+export class CustomizePipe implements PipeTransform {
+  protected prefix = 'CustomizePipe:';
 
   public transform(value: any, ...args: any[]): any {
     return `${this.prefix}${value}:${args.length}`;
@@ -45,10 +45,10 @@ export class PipeWeWantToCustomize implements PipeTransform {
 }
 
 @Pipe({
-  name: 'PipeWeWantToRestore',
+  name: 'restore',
 })
-export class PipeWeWantToRestore implements PipeTransform {
-  protected prefix = 'PipeWeWantToRestore:';
+export class RestorePipe implements PipeTransform {
+  protected prefix = 'RestorePipe:';
 
   public transform(value: any, ...args: any[]): any {
     return `${this.prefix}${value}:${args.length}`;

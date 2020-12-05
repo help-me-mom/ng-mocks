@@ -9,9 +9,9 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { CustomNgForWithOfDirective } from './custom-ng-for-with-of.directive';
-import { CustomNgForWithoutOfDirective } from './custom-ng-for-without-of.directive';
-import { CustomNgIfDirective } from './custom-ng-if.directive';
+import { CustomNgForWithOfDirective } from './spec.custom-ng-for-with-of.directive.fixtures';
+import { CustomNgForWithoutOfDirective } from './spec.custom-ng-for-without-of.directive.fixtures';
+import { CustomNgIfDirective } from './spec.custom-ng-if.directive.fixtures';
 
 describe('structural-directive-as-ng-for:real', () => {
   beforeEach(() =>

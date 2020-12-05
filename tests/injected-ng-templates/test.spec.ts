@@ -6,7 +6,7 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { CustomInjectionComponent } from './custom-injection.component';
+import { CustomInjectionComponent } from './fixtures';
 
 describe('injected-ng-templates:real', () => {
   beforeEach(() => MockBuilder(CustomInjectionComponent));

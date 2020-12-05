@@ -19,8 +19,8 @@ export class MyService2 {
 }
 
 @Injectable()
-export class ServiceWeDontWantToMimic {
-  protected value = 'ServiceWeDontWantToMimic';
+export class ServiceKeep {
+  protected value = 'serviceKeep';
 
   public getName() {
     return this.value;
@@ -28,8 +28,8 @@ export class ServiceWeDontWantToMimic {
 }
 
 @Injectable()
-export class ServiceWeWantToMimic {
-  protected value = 'ServiceWeWantToMimic';
+export class ServiceMock {
+  protected value = 'serviceMock';
 
   public getName() {
     return this.value;
@@ -37,8 +37,8 @@ export class ServiceWeWantToMimic {
 }
 
 @Injectable()
-export class ServiceWeWantToCustomize {
-  protected value = 'ServiceWeWantToCustomize';
+export class ServiceCustomize {
+  protected value = 'serviceCustomize';
 
   public getName() {
     return this.value;
@@ -46,8 +46,8 @@ export class ServiceWeWantToCustomize {
 }
 
 @Injectable()
-export class AnythingWeWant1 {
-  protected value = 'AnythingWeWant1';
+export class AnythingKeep1 {
+  protected value = 'AnythingKeep1';
 
   public getName() {
     return this.value;
@@ -64,8 +64,8 @@ export class TheSameAsAnyProvider {
 }
 
 @Injectable()
-export class AnythingWeWant2 {
-  protected value = 'AnythingWeWant2';
+export class AnythingKeep2 {
+  protected value = 'AnythingKeep2';
 
   public getName() {
     return this.value;
