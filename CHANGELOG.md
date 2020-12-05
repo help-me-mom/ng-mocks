@@ -1,3 +1,10 @@
+## [11.2.2](https://github.com/ike18t/ng-mocks/compare/v11.2.1...v11.2.2) (2020-12-05)
+
+
+### Performance Improvements
+
+* build with artifacts ([a1fc37f](https://github.com/ike18t/ng-mocks/commit/a1fc37fef8bafcc54208c2a994410c68d54b71bb))
+
 ## [11.2.1](https://github.com/ike18t/ng-mocks/compare/v11.2.0...v11.2.1) (2020-12-05)
 
 
