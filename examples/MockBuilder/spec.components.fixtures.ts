@@ -46,8 +46,7 @@ export class ComponentContentChild<T> {
       MockDirective 1: <span *d-mock="let z = a">render {{ z.b }}</span>
     </div>
     <div>
-      MockDirective 2:
-      <ng-template d-mock let-z>render {{ z.a }}</ng-template>
+      MockDirective 2: <ng-template d-mock let-z>render {{ z.a }}</ng-template>
     </div>
 
     <div>MyPipe: {{ 'text' | my }}</div>
