@@ -1,3 +1,10 @@
+## [11.2.1](https://github.com/ike18t/ng-mocks/compare/v11.2.0...v11.2.1) (2020-12-05)
+
+
+### Bug Fixes
+
+* auto-spy covers pipes with default transform ([980b4d7](https://github.com/ike18t/ng-mocks/commit/980b4d753f9fc8b52c790629ab82c8e9f9b1a924))
+
 # [11.2.0](https://github.com/ike18t/ng-mocks/compare/v11.1.4...v11.2.0) (2020-12-04)
 
 
