@@ -9,12 +9,25 @@ import {
   Input,
   NgModule,
   Output,
+  Pipe,
+  PipeTransform,
   TemplateRef,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { staticFalse } from '../../tests';
+
+@Pipe({
+  name: 'translate',
+})
+class TranslatePipe implements PipeTransform {
+  public transform(value: string): string {
+    // Just for the test purpose
+    // we don't use any translation services.
+    return `translated:${value}`;
+  }
+}
 
 // Our main component that we want to test.
 @Component({
@@ -27,8 +40,12 @@ import { staticFalse } from '../../tests';
     >
       <ng-template #menu>
         <ul>
-          <li><a [routerLink]="['/home']">Home</a></li>
-          <li><a [routerLink]="['/about']">Home</a></li>
+          <li>
+            <a [routerLink]="['/home']">{{ 'Home' | translate }}</a>
+          </li>
+          <li>
+            <a [routerLink]="['/about']">{{ 'About' | translate }}</a>
+          </li>
         </ul>
       </ng-template>
     </app-header>
@@ -62,7 +79,7 @@ class AppHeaderComponent {
 
 // The module where our components are declared.
 @NgModule({
-  declarations: [AppComponent, AppHeaderComponent],
+  declarations: [AppComponent, AppHeaderComponent, TranslatePipe],
   imports: [CommonModule, RouterModule.forRoot([])],
 })
 class AppModule {}
@@ -82,12 +99,12 @@ describe('main', () => {
   //   fixture.detectChanges();
   // });
   // But, usually, instead of AppHeaderComponent we want to have
-  // a mock copy.
+  // a mock object.
 
   // With ng-mocks it can be defined in the next way.
   beforeEach(() => {
     // AppComponent will stay as it is,
-    // everything in AppModule will be replaced with their mock copies.
+    // everything in AppModule will be replaced with their mocks.
     return (
       MockBuilder(AppComponent, AppModule)
         // Adding a special config how to how to create
@@ -99,6 +116,8 @@ describe('main', () => {
             menu: true,
           },
         })
+        // a fake transform handler.
+        .mock(TranslatePipe, v => `fake:${v}`)
     );
     // the same as
     // TestBed.configureTestingModule({
@@ -169,10 +188,15 @@ describe('main', () => {
     // AppHeaderComponent.
     const links = ngMocks.findAll(header, 'a');
     expect(links.length).toBe(2);
+    const [link1, link2] = links;
 
+    // Checking that TranslatePipe has been used.
+    expect(link1.nativeElement.innerHTML).toEqual('fake:Home');
     // An easy way to get a value of an input. The same as
     // links[0].injector.get(RouterLinkWithHref).routerLink
-    expect(ngMocks.input(links[0], 'routerLink')).toEqual(['/home']);
-    expect(ngMocks.input(links[1], 'routerLink')).toEqual(['/about']);
+    expect(ngMocks.input(link1, 'routerLink')).toEqual(['/home']);
+
+    expect(link2.nativeElement.innerHTML).toEqual('fake:About');
+    expect(ngMocks.input(link2, 'routerLink')).toEqual(['/about']);
   });
 });

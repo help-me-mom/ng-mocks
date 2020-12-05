@@ -128,5 +128,8 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "renovate": {
+    "enabled": true
   }
 }

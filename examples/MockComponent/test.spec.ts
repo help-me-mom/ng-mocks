@@ -78,8 +78,7 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find(DependencyComponent)
-      .componentInstance;
+    const mockComponent = ngMocks.findInstance(DependencyComponent);
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. TestedComponent listens on the output via

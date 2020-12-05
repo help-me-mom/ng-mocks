@@ -61,5 +61,8 @@
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
     "typescript": "~3.7.5"
+  },
+  "renovate": {
+    "enabled": false
   }
 }

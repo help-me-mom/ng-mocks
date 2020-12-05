@@ -12,8 +12,8 @@
 [pipes](#how-to-create-a-mock-pipe),
 [services](#how-to-create-a-mock-provider) and
 [modules](#how-to-create-a-mock-module)
-in tests of Angular 5+ applications.
-Whether you need a [mock child component](#how-to-create-a-mock-component),
+in tests for Angular 5+ applications.
+When you need a [mock child component](#how-to-create-a-mock-component),
 or any other [annoying dependency](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application),
 `ng-mocks` has tools to turn these declarations into their mocks,
 keeping interfaces as they are, but suppressing their implementation.
@@ -307,7 +307,8 @@ of all aspects might be useful in writing fully isolated unit tests.
 
 ### How to create a mock component
 
-There is a `MockComponent` function. It covers almost all needs for mock behavior.
+There is a `MockComponent` function.
+It covers everything you need to turn a component into its mock declaration.
 
 - `MockComponent( MyComponent )` - returns a mock class of `MyComponent` component.
 - `MockComponents( MyComponent1, SomeComponent2, ... )` - returns an array of mocks.
@@ -425,8 +426,7 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find(DependencyComponent)
-      .componentInstance;
+    const mockComponent = ngMocks.findInstance(DependencyComponent);
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. TestedComponent listens on the output via
@@ -497,7 +497,8 @@ describe('MockComponent', () => {
 
 ### How to create a mock directive
 
-There is a `MockDirective` function covering almost all needs for mock behavior.
+There is a `MockDirective` function.
+It turns a directive into its mock declaration.
 
 - `MockDirective( MyDirective )` - returns a mock class of `MyDirective` directive.
 - `MockDirectives( MyDirective1, MyDirective2, ... )` - returns an array of mocks.
@@ -690,10 +691,10 @@ describe('MockDirective:Structural', () => {
 
 ### How to create a mock pipe
 
-`MockPipe` is a function that creates mock pipes for needs in Angular testing.
+`ngmocks` has a `MockPipe` function that creates mock pipes with an empty or a custom handler.
 
 - `MockPipe( MyPipe )` - returns a mock class of `MyPipe` pipe that always transforms to `undefined`.
-- `MockPipe( MyPipe, value => 'stub behavior' )` - returns a mock class of `MyPipe` pipe.
+- `MockPipe( MyPipe, value => 'fake' )` - returns a mock class of `MyPipe` pipe that transforms to `fake`.
 - `MockPipes( MyPipe1, MyPipe2, ... )` - returns an array of mocks.
 
 **A mock pipe** respects the interface of its original pipe as
@@ -733,7 +734,7 @@ To **create a mock pipe** simply pass its class into `MockPipe`:
 TestBed.configureTestingModule({
   declarations: [
     TargetComponent,
-    MockPipe(DependencyPipe), // <- profit
+    MockPipe(DependencyPipe, value => `mock:${value}`), // <- profit
   ],
 });
 ```
@@ -749,6 +750,11 @@ describe('Test', () => {
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.point.componentInstance).toBeDefined();
+    expect(fixture.nativeElement.innerHTML).toContain('mock:foo');
+
+    // An instance of DependencyPipe from the fixture if we need it.
+    const pipe = ngMocks.findInstance(DependencyPipe);
+    expect(pipe).toBeDefined();
   });
 });
 ```
@@ -764,11 +770,19 @@ to play with.
 
 ```typescript
 describe('MockPipe', () => {
+  // A fake transform function.
+  const fakeTransform = (...args: string[]) => JSON.stringify(args);
+
+  // A spy, just in case if we want to verify
+  // how the pipe has been called.
+  const spy = jasmine
+    .createSpy('transform')
+    .and.callFake(fakeTransform);
+  // in case of jest
+  // const spy = jest.fn().mockImplementation(fakeTransform);
+
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(
-      DependencyPipe,
-      (...args: string[]) => JSON.stringify(args),
-    );
+    return MockBuilder(TestedComponent).mock(DependencyPipe, spy);
   });
 
   it('transforms values to json', () => {
@@ -777,6 +791,12 @@ describe('MockPipe', () => {
     expect(fixture.nativeElement.innerHTML).toEqual(
       '<component>["foo"]</component>',
     );
+
+    // Also we can find an instance of the pipe in
+    // the fixture if it's needed.
+    const pipe = ngMocks.findInstance(DependencyPipe);
+    expect(pipe.transform).toHaveBeenCalledWith('foo');
+    expect(pipe.transform).toHaveBeenCalledTimes(1);
   });
 });
 ```
@@ -1392,19 +1412,16 @@ Prefix it with `fdescribe` or `fit` on
 to play with.
 
 ```typescript
-import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ContentChild,
-  ElementRef,
-  EventEmitter,
-  Input,
-  NgModule,
-  Output,
-  TemplateRef,
-} from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+@Pipe({
+  name: 'translate',
+})
+class TranslatePipe implements PipeTransform {
+  public transform(value: string): string {
+    // Just for the test purpose
+    // we don't use any translation services.
+    return `translated:${value}`;
+  }
+}
 
 // Our main component that we want to test.
 @Component({
@@ -1417,8 +1434,12 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     >
       <ng-template #menu>
         <ul>
-          <li><a [routerLink]="['/home']">Home</a></li>
-          <li><a [routerLink]="['/about']">Home</a></li>
+          <li>
+            <a [routerLink]="['/home']">{{ 'Home' | translate }}</a>
+          </li>
+          <li>
+            <a [routerLink]="['/about']">{{ 'About' | translate }}</a>
+          </li>
         </ul>
       </ng-template>
     </app-header>
@@ -1451,7 +1472,7 @@ class AppHeaderComponent {
 
 // The module where our components are declared.
 @NgModule({
-  declarations: [AppComponent, AppHeaderComponent],
+  declarations: [AppComponent, AppHeaderComponent, TranslatePipe],
   imports: [CommonModule, RouterModule.forRoot([])],
 })
 class AppModule {}
@@ -1488,6 +1509,8 @@ describe('main', () => {
             menu: true,
           },
         })
+        // a fake transform handler.
+        .mock(TranslatePipe, v => `fake:${v}`)
     );
     // the same as
     // TestBed.configureTestingModule({
@@ -1557,11 +1580,16 @@ describe('main', () => {
     // AppHeaderComponent.
     const links = ngMocks.findAll(header, 'a');
     expect(links.length).toBe(2);
+    const [link1, link2] = links;
 
+    // Checking that TranslatePipe has been used.
+    expect(link1.nativeElement.innerHTML).toEqual('fake:Home');
     // An easy way to get a value of an input. The same as
     // links[0].injector.get(RouterLinkWithHref).routerLink
-    expect(ngMocks.input(links[0], 'routerLink')).toEqual(['/home']);
-    expect(ngMocks.input(links[1], 'routerLink')).toEqual(['/about']);
+    expect(ngMocks.input(link1, 'routerLink')).toEqual(['/home']);
+
+    expect(link2.nativeElement.innerHTML).toEqual('fake:About');
+    expect(ngMocks.input(link2, 'routerLink')).toEqual(['/about']);
   });
 });
 ```
@@ -1834,7 +1862,7 @@ beforeEach(() => {
 By default, when [`.mock(MyService, mock)`](#mockbuildermock) is used it creates a mock object via
 [`MockService(MyService, mock)`](#how-to-create-a-mock-service).
 In some cases we might want to use the exactly passed mock object instead of extension.
-For this behavior we need to set `precise` flag to `true`.
+For this behavior we need to set `precise` flag to `true`. Tokens are always precise.
 
 ```typescript
 declare class MyService {
@@ -2832,7 +2860,7 @@ describe('beforeEach:manual-spy', () => {
 
 ### Auto Spy
 
-If you want **automatically spy all functions in Angular tests** then
+If you want **automatically to spy all methods of components, directives, pipes and services in Angular tests** then
 add the next code to `src/test.ts`.
 
 ```typescript
