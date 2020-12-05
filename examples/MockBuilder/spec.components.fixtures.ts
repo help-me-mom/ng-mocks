@@ -34,35 +34,14 @@ export class ComponentContentChild<T> {
   template: `
     <div>My Content</div>
 
-    <div>
-      MyComponent1:
-      <c-1></c-1>
-    </div>
-    <div>
-      MyComponent2:
-      <c-2></c-2>
-    </div>
-    <div>
-      MyComponent3:
-      <c-3></c-3>
-    </div>
-    <div>
-      KeepComponent:
-      <c-keep></c-keep>
-    </div>
-    <div>
-      MockComponent:
-      <c-mock></c-mock>
-    </div>
+    <div>MyComponent1: <c-1></c-1></div>
+    <div>MyComponent2: <c-2></c-2></div>
+    <div>MyComponent3: <c-3></c-3></div>
+    <div>KeepComponent: <c-keep></c-keep></div>
+    <div>MockComponent: <c-mock></c-mock></div>
 
-    <div>
-      MyDirective:
-      <d-my></d-my>
-    </div>
-    <div>
-      KeepDirective:
-      <d-keep></d-keep>
-    </div>
+    <div>MyDirective: <d-my></d-my></div>
+    <div>KeepDirective: <d-keep></d-keep></div>
     <div>
       MockDirective 1: <span *d-mock="let z = a">render {{ z.b }}</span>
     </div>

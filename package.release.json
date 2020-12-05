@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "0.0.0",
-  "description": "An Angular 5+ library for creating mock components, directives, pipes, services, providers and modules in unit tests, which also includes shallow rendering, precise stubs to dump child dependencies, and supports jasmine and jest.",
+  "description": "An Angular 5+ testing library for creating mock components, directives, pipes, services and modules out of annoying dependencies in unit tests, which includes shallow rendering, precise stubs to dump child dependencies, and supports jasmine and jest.",
   "keywords": [
     "angular",
     "test",

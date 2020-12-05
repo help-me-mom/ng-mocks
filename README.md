@@ -6,16 +6,16 @@
 
 # Create mock components and more out of annoying dependencies in Angular tests
 
-`ng-mocks` is a library which provides helper functions for
+`ng-mocks` is a testing library which helps with
 **creating [mock components](#how-to-create-a-mock-component)**,
 [directives](#how-to-create-a-mock-directive),
 [pipes](#how-to-create-a-mock-pipe),
-[modules](#how-to-create-a-mock-module) and
-[services](#how-to-create-a-mock-provider)
-for easy testing of Angular 5+ applications.
+[services](#how-to-create-a-mock-provider) and
+[modules](#how-to-create-a-mock-module)
+in tests of Angular 5+ applications.
 Whether you need a [mock child component](#how-to-create-a-mock-component),
 or any other [annoying dependency](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application),
-`ng-mocks` has a tool to turn these declarations into their mocks,
+`ng-mocks` has tools to turn these declarations into their mocks,
 keeping interfaces as they are, but suppressing their implementation.
 
 The current version of the library has been tested and can be used with:
@@ -1386,9 +1386,9 @@ describe('MockForms', () => {
 ## Extensive example of mocks in Angular tests
 
 The source file is here:
-[MAIN](https://github.com/ike18t/ng-mocks/blob/master/examples/MAIN/test.spec.ts).<br>
+[main](https://github.com/ike18t/ng-mocks/blob/master/examples/main/test.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MAIN/test.spec.ts)
+[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/main/test.spec.ts)
 to play with.
 
 ```typescript
@@ -1626,7 +1626,7 @@ and has a rich toolkit that supports:
 <p>
 
 The source file is here:
-[MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.spec.ts).<br>
+[MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.simple.spec.ts).<br>
 Prefix it with `fdescribe` or `fit` on
 [codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.simple.spec.ts)
 to play with.
