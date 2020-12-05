@@ -43,6 +43,8 @@ describe('issue-240:classic', () => {
     const pure = ngMocks.get(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
 
+    // We don't have auto-spies, because we provided callbacks.
+    // Now we need to install spies.
     spyOn(pure, 'transform');
     spyOn(impure, 'transform');
 

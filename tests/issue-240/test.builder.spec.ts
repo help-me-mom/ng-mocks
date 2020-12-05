@@ -16,18 +16,20 @@ describe('issue-240:builder', () => {
     const pure = ngMocks.findInstance(PurePipe);
     const impure = ngMocks.get(fixture.point, ImpurePipe);
 
-    spyOn(pure, 'transform');
-    spyOn(impure, 'transform');
+    // Without auto-spy we need the code below.
+    // Calls would start with 0.
+    // spyOn(pure, 'transform');
+    // spyOn(impure, 'transform');
 
-    expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(0);
-
-    fixture.detectChanges();
-    expect(pure.transform).toHaveBeenCalledTimes(0);
+    expect(pure.transform).toHaveBeenCalledTimes(1);
     expect(impure.transform).toHaveBeenCalledTimes(2);
 
     fixture.detectChanges();
-    expect(pure.transform).toHaveBeenCalledTimes(0);
+    expect(pure.transform).toHaveBeenCalledTimes(1);
     expect(impure.transform).toHaveBeenCalledTimes(4);
+
+    fixture.detectChanges();
+    expect(pure.transform).toHaveBeenCalledTimes(1);
+    expect(impure.transform).toHaveBeenCalledTimes(6);
   });
 });
