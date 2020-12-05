@@ -691,7 +691,7 @@ describe('MockDirective:Structural', () => {
 
 ### How to create a mock pipe
 
-`ngmocks` has a `MockPipe` function that creates mock pipes with an empty or a custom handler.
+`ng-mocks` has a `MockPipe` function that creates mock pipes with an empty or a custom handler.
 
 - `MockPipe( MyPipe )` - returns a mock class of `MyPipe` pipe that always transforms to `undefined`.
 - `MockPipe( MyPipe, value => 'fake' )` - returns a mock class of `MyPipe` pipe that transforms to `fake`.
