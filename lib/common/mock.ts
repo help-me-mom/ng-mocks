@@ -73,6 +73,7 @@ const applyProps = (instance: Mock & Record<keyof any, any>, prototype: AnyType<
 
 export type ngMocksMockConfig = {
   config?: IMockBuilderConfig;
+  init?: (instance: any) => void;
   outputs?: string[];
   setNgValueAccessor?: boolean;
   viewChildRefs?: Map<string, string>;
@@ -81,6 +82,9 @@ export type ngMocksMockConfig = {
 const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void => {
   const configGlobal: Set<any> | undefined = ngMocksUniverse.getOverrides().get(mockOf);
   const callbacks = configGlobal ? mapValues(configGlobal) : [];
+  if (instance.__ngMocksConfig?.init) {
+    callbacks.push(instance.__ngMocksConfig.init);
+  }
   if (ngMocksUniverse.config.get(mockOf)?.init) {
     callbacks.push(ngMocksUniverse.config.get(mockOf).init);
   }
