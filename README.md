@@ -744,8 +744,12 @@ and call [`MockRender`](#mockrender):
 
 ```typescript
 describe('Test', () => {
-  // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(TargetComponent).mock(DependencyPipe));
+  beforeEach(() => {
+    return MockBuilder(TargetComponent).mock(
+      DependencyPipe,
+      value => `mock:${value}`,
+    );
+  });
 
   it('should create', () => {
     const fixture = MockRender(TargetComponent);
