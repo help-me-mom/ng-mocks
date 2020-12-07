@@ -13,7 +13,7 @@
 [services](#how-to-create-a-mock-provider) and
 [modules](#how-to-create-a-mock-module)
 in tests for Angular 5+ applications.
-When you need a [mock child component](#how-to-create-a-mock-component),
+When you have [a noisy child component](#how-to-create-a-mock-component),
 or any other [annoying dependency](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application),
 `ng-mocks` has tools to turn these declarations into their mocks,
 keeping interfaces as they are, but suppressing their implementation.
