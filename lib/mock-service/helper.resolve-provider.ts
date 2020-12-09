@@ -1,5 +1,6 @@
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
+import funcGetProvider from '../common/func.get-provider';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -64,7 +65,7 @@ const parseProvider = (
   multi: boolean;
   provide: any;
 } => {
-  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+  const provide = funcGetProvider(provider);
   const multi = provider !== provide && !!provider.multi;
 
   return {
@@ -172,7 +173,7 @@ const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
 export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
   const { provide, multi, change } = parseProvider(provider, changed);
   //  we shouldn't touch our system providers.
-  if (typeof provider === 'object' && provider.useExisting && provider.useExisting.__ngMocksSkip) {
+  if (provider && typeof provider === 'object' && provider.useExisting && provider.useExisting.__ngMocksSkip) {
     return provider;
   }
   if (isPreconfiguredDependency(provider, provide)) {

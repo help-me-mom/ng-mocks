@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
+import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 
@@ -36,8 +37,8 @@ const parseProvider = (
   multi: boolean;
   provide: any;
 } => {
-  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
-  const multi = typeof provider === 'object' && provider.provide && provider.multi;
+  const provide = funcGetProvider(provider);
+  const multi = provide !== provider && provider.multi;
 
   return {
     multi,
