@@ -2,6 +2,7 @@ import { Provider } from '@angular/core';
 
 import coreConfig from '../common/core.config';
 import { Type } from '../common/core.types';
+import funcGetProvider from '../common/func.get-provider';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -116,7 +117,7 @@ const isNeverMockToken = (provide: any): boolean =>
   isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1;
 
 export default function (provider: any): Provider | undefined {
-  const provide = typeof provider === 'object' && provider.provide ? provider.provide : provider;
+  const provide = funcGetProvider(provider);
 
   if (isNeverMockFunction(provide)) {
     return provider;

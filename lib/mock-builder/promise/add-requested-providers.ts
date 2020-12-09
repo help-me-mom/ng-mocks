@@ -1,4 +1,5 @@
 import { extractDependency, flatten, mapValues } from '../../common/core.helpers';
+import funcGetProvider from '../../common/func.get-provider';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import { BuilderData, NgMeta } from './types';
@@ -11,7 +12,7 @@ export default (ngModule: NgMeta, { providerDef }: BuilderData): void => {
 
   // Analyzing providers.
   for (const provider of flatten(ngModule.providers)) {
-    const provide = typeof provider === 'object' && (provider as any).provide ? (provider as any).provide : provider;
+    const provide = funcGetProvider(provider);
     ngMocksUniverse.touches.add(provide);
 
     if (provide !== provider && (provider as any).deps) {

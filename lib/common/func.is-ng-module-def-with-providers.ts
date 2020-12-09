@@ -11,4 +11,7 @@ export interface NgModuleWithProviders<T = any> {
 
 // Checks if an object implements ModuleWithProviders.
 export const isNgModuleDefWithProviders = (declaration: any): declaration is NgModuleWithProviders =>
-  declaration.ngModule !== undefined && isNgDef(declaration.ngModule, 'm');
+  declaration &&
+  typeof declaration === 'object' &&
+  declaration.ngModule !== undefined &&
+  isNgDef(declaration.ngModule, 'm');

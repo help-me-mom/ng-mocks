@@ -2,6 +2,7 @@ import { TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
+import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
@@ -105,7 +106,7 @@ const handleDestructuring = (data: Data, def: any, callback: any): void => {
 };
 
 const resolveProvider = ({ skip, keep, providers, exclude }: Data, def: any): void => {
-  const provider = typeof def === 'object' && def.provide ? def.provide : def;
+  const provider = funcGetProvider(def);
   skip.add(provider);
   if (exclude.has(provider)) {
     return;
