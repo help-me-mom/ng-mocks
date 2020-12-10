@@ -26,14 +26,14 @@ export default <T extends Component | Directive>(
   const providers = [toExistingProvider(source, mock), ...data.providers];
   const options: T = { ...params, providers };
 
-  if (data.setNgValueAccessor === undefined) {
-    data.setNgValueAccessor =
+  if (data.setControlValueAccessor === undefined) {
+    data.setControlValueAccessor =
       helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
   }
   MockOf(source, {
     config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
-    setNgValueAccessor: data.setNgValueAccessor,
+    setControlValueAccessor: data.setControlValueAccessor,
     viewChildRefs: meta.viewChildRefs,
   })(mock);
 

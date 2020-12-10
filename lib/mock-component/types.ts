@@ -1,7 +1,7 @@
-import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 
 export type MockedComponent<T> = T &
-  MockControlValueAccessor & {
+  LegacyControlValueAccessor & {
     /**
      *  Helper function to hide rendered @ContentChild() template.
      */

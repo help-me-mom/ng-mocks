@@ -1,9 +1,9 @@
 import { ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 
 export type MockedDirective<T> = T &
-  MockControlValueAccessor & {
+  LegacyControlValueAccessor & {
     /**
      * Pointer to current element in case of Attribute Directives.
      */

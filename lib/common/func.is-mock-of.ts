@@ -6,6 +6,7 @@ import { MockedModule } from '../mock-module/types';
 import { MockedPipe } from '../mock-pipe/types';
 
 import { Type } from './core.types';
+import funcIsMock from './func.is-mock';
 import { isNgDef } from './func.is-ng-def';
 
 /**
@@ -49,8 +50,7 @@ export function isMockOf<T>(instance: any, declaration: Type<T>): instance is T;
 
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType?: any): instance is T {
   return (
-    typeof instance === 'object' &&
-    instance.__ngMocksMock &&
+    funcIsMock(instance) &&
     instance.constructor === declaration &&
     (ngType ? isNgDef(instance.constructor, ngType) : isNgDef(instance.constructor))
   );

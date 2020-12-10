@@ -4,13 +4,13 @@ import { getTestBed } from '@angular/core/testing';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
-import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedDirective } from './types';
 
-class DirectiveMockBase extends MockControlValueAccessor implements OnInit {
+class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   // istanbul ignore next
   public constructor(
     injector: Injector,

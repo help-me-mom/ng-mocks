@@ -9,7 +9,7 @@ import { ngMocksMockConfig } from './mock';
 // by name (which will now include the original class' name.
 // Additionally, if we set breakpoints, we can inspect the actual class being
 // replaced with a mock copy by looking into the 'mockOf' property on the class.
-export const MockOf = (mockClass: AnyType<any>, config?: ngMocksMockConfig) => (constructor: AnyType<any>) => {
+export const MockOf = (mockClass: AnyType<any>, config: ngMocksMockConfig = {}) => (constructor: AnyType<any>) => {
   Object.defineProperties(constructor, {
     mockOf: { value: mockClass },
     name: { value: `MockOf${mockClass.name}` },

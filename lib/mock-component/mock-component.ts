@@ -13,18 +13,17 @@ import { getTestBed } from '@angular/core/testing';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
-import { MockControlValueAccessor } from '../common/mock-control-value-accessor';
+import funcIsMock from '../common/func.is-mock';
+import { MockConfig } from '../common/mock';
+import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import decorateDeclaration from '../mock/decorate-declaration';
 
 import { MockedComponent } from './types';
 
-const mixRender = (
-  instance: MockControlValueAccessor & Record<keyof any, any>,
-  changeDetector: ChangeDetectorRef,
-): void => {
+const mixRender = (instance: MockConfig & Record<keyof any, any>, changeDetector: ChangeDetectorRef): void => {
   // istanbul ignore next
-  const refs = instance.__ngMocksConfig?.viewChildRefs || new Map();
+  const refs = instance.__ngMocksConfig.viewChildRefs || new Map();
 
   // Providing a method to render any @ContentChild based on its selector.
   instance.__render = (contentChildSelector: string, $implicit?: any, variables?: Record<keyof any, any>) => {
@@ -45,12 +44,9 @@ const mixRender = (
   };
 };
 
-const mixHide = (
-  instance: MockControlValueAccessor & Record<keyof any, any>,
-  changeDetector: ChangeDetectorRef,
-): void => {
+const mixHide = (instance: MockConfig & Record<keyof any, any>, changeDetector: ChangeDetectorRef): void => {
   // istanbul ignore next
-  const refs = instance.__ngMocksConfig?.viewChildRefs || new Map();
+  const refs = instance.__ngMocksConfig.viewChildRefs || new Map();
 
   // Providing method to hide any @ContentChild based on its selector.
   instance.__hide = (contentChildSelector: string) => {
@@ -62,12 +58,14 @@ const mixHide = (
   };
 };
 
-class ComponentMockBase extends MockControlValueAccessor implements AfterContentInit {
+class ComponentMockBase extends LegacyControlValueAccessor implements AfterContentInit {
   // istanbul ignore next
   public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
     super(injector);
-    mixRender(this, changeDetector);
-    mixHide(this, changeDetector);
+    if (funcIsMock(this)) {
+      mixRender(this, changeDetector);
+      mixHide(this, changeDetector);
+    }
   }
 
   public ngAfterContentInit(): void {

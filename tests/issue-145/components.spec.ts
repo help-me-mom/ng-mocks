@@ -35,7 +35,7 @@ export class ComponentValueAccessor {}
 })
 export class ComponentValidator {}
 
-describe('issue-145', () => {
+describe('issue-145:components', () => {
   it('does not add NG_VALUE_ACCESSOR to components', () => {
     const mock = MockComponent(ComponentDefault);
     const { providers } = directiveResolver.resolve(mock);
@@ -58,7 +58,7 @@ describe('issue-145', () => {
       {
         multi: true,
         provide: NG_VALUE_ACCESSOR,
-        useExisting: jasmine.anything(),
+        useFactory: jasmine.anything(),
       },
     ]);
   });
@@ -74,7 +74,7 @@ describe('issue-145', () => {
       {
         multi: true,
         provide: NG_VALIDATORS,
-        useExisting: jasmine.anything(),
+        useFactory: jasmine.anything(),
       },
     ]);
   });
