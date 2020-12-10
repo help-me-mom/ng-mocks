@@ -3,18 +3,25 @@
 import {
   Component,
   Directive,
+  EventEmitter,
   NgModule,
   Pipe,
   PipeTransform,
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
+import {
+  MockAsyncValidatorProxy,
+  MockControlValueAccessorProxy,
+  MockValidatorProxy,
+} from '../common/mock-control-value-accessor-proxy';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockModule } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
 
 import { Type } from './core.types';
+import { isMockOf } from './func.is-mock-of';
 import { Mock } from './mock';
 import { MockOf } from './mock-of';
 
@@ -68,7 +75,9 @@ class ChildComponentClass
     return typeof this.childValue;
   }
 
-  public writeValue = (obj: any) => obj;
+  public writeValue(obj: any) {
+    return obj;
+  }
 }
 
 @Directive({
@@ -93,7 +102,9 @@ class ChildDirectiveClass
     return typeof this.childValue;
   }
 
-  public writeValue = (obj: any) => obj;
+  public writeValue(obj: any) {
+    return obj;
+  }
 }
 
 @Pipe({
@@ -115,10 +126,7 @@ describe('Mock', () => {
   it('should affect as MockModule', () => {
     const instance = new (MockModule(ChildModuleClass))();
     expect(instance).toEqual(jasmine.any(ChildModuleClass));
-    expect((instance as any).__ngMocksMock).toEqual(true);
-    expect(
-      (instance as any).__ngMocksMockControlValueAccessor,
-    ).toEqual(undefined);
+    expect(isMockOf(instance, ChildModuleClass, 'm')).toEqual(true);
     expect(instance.parentMethod()).toBeUndefined(
       'mock to an empty function',
     );
@@ -128,15 +136,18 @@ describe('Mock', () => {
   });
 
   it('should affect as MockComponent', () => {
+    const proxy = new MockControlValueAccessorProxy(
+      ChildComponentClass,
+    );
     const instance = new (MockComponent(ChildComponentClass))();
     expect(instance).toEqual(jasmine.any(ChildComponentClass));
-    expect((instance as any).__ngMocksMock).toEqual(true);
-    expect(
-      (instance as any).__ngMocksMockControlValueAccessor,
-    ).toEqual(true);
+    expect(isMockOf(instance, ChildComponentClass, 'c')).toEqual(
+      true,
+    );
 
+    proxy.instance = instance;
     const spy = jasmine.createSpy('spy');
-    instance.registerOnChange(spy);
+    proxy.registerOnChange(spy);
     instance.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
@@ -145,15 +156,18 @@ describe('Mock', () => {
   });
 
   it('should affect as MockDirective', () => {
+    const proxy = new MockControlValueAccessorProxy(
+      ChildComponentClass,
+    );
     const instance = new (MockDirective(ChildDirectiveClass))();
     expect(instance).toEqual(jasmine.any(ChildDirectiveClass));
-    expect((instance as any).__ngMocksMock).toEqual(true);
-    expect(
-      (instance as any).__ngMocksMockControlValueAccessor,
-    ).toEqual(true);
+    expect(isMockOf(instance, ChildDirectiveClass, 'd')).toEqual(
+      true,
+    );
 
+    proxy.instance = instance;
     const spy = jasmine.createSpy('spy');
-    instance.registerOnChange(spy);
+    proxy.registerOnChange(spy);
     instance.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
@@ -164,10 +178,7 @@ describe('Mock', () => {
   it('should affect as MockPipe', () => {
     const instance = new (MockPipe(ChildPipeClass))();
     expect(instance).toEqual(jasmine.any(ChildPipeClass));
-    expect((instance as any).__ngMocksMock).toEqual(true);
-    expect(
-      (instance as any).__ngMocksMockControlValueAccessor,
-    ).toEqual(undefined);
+    expect(isMockOf(instance, ChildPipeClass, 'p')).toEqual(true);
     expect(instance.parentMethod()).toBeUndefined();
     expect(instance.childMethod()).toBeUndefined();
   });
@@ -203,31 +214,33 @@ describe('Mock prototype', () => {
   }
 
   it('should get all mock things and in the same time respect prototype', () => {
+    const proxy = new MockControlValueAccessorProxy(CustomComponent);
     const mockDef = MockComponent(CustomComponent);
     const mock = new mockDef();
     expect(mock).toEqual(jasmine.any(CustomComponent));
+    proxy.instance = mock;
 
     // checking that it was processed through Mock
-    expect(mock.__ngMocksMock as any).toBe(true);
-    expect(mock.__ngMocksMockControlValueAccessor as any).toBe(true);
+    expect((mock as any).__ngMocksConfig).toBeDefined();
+    expect((mock as any).__simulateChange).toBeDefined();
 
     // checking that it was processed through MockControlValueAccessor
     const spy = jasmine.createSpy('spy');
-    mock.registerOnChange(spy);
+    proxy.registerOnChange(spy);
     mock.__simulateChange('test');
     expect(spy).toHaveBeenCalledWith('test');
 
-    // properties are replaced with their mock coplies too
+    // properties are replaced with their mock objects too
     expect(mock.test1).toBeUndefined();
     (mock as any).test1 = 'MyCustomValue';
     expect(mock.test1).toEqual('MyCustomValue');
 
-    // properties are replaced with their mock coplies too
+    // properties are replaced with their mock objects too
     expect(mock.test2).toBeUndefined();
     (mock as any).test2 = 'MyCustomValue';
     expect(mock.test2).toEqual('MyCustomValue');
 
-    // properties are replaced with their mock coplies too
+    // properties are replaced with their mock objects too
     expect(mock.test).toBeUndefined();
     (mock as any).test = 'MyCustomValue';
     expect(mock.test).toEqual('MyCustomValue');
@@ -239,12 +252,15 @@ describe('definitions', () => {
     class TargetComponent {}
 
     @MockOf(TargetComponent, {
-      outputs: ['__ngMocksMock'],
+      outputs: ['__ngMocksConfig', 'test'],
     })
     class TestComponent extends Mock {}
 
     const instance: any = new TestComponent();
-    expect(instance.__ngMocksMock).toEqual(true);
+    expect(instance.__ngMocksConfig).not.toEqual(
+      jasmine.any(EventEmitter),
+    );
+    expect(instance.test).toEqual(jasmine.any(EventEmitter));
   });
 
   it('adds missed properties to the instance', () => {
@@ -292,5 +308,26 @@ describe('definitions', () => {
 
     const instance: any = new TestComponent();
     expect(instance.test).toEqual(false);
+  });
+
+  it('allows empty instance of MockControlValueAccessorProxy', () => {
+    const proxy = new MockControlValueAccessorProxy();
+    proxy.registerOnChange(undefined);
+    proxy.registerOnTouched(undefined);
+    proxy.setDisabledState(true);
+    proxy.setDisabledState(false);
+    proxy.writeValue(undefined);
+  });
+
+  it('allows empty instance of MockValidatorProxy', () => {
+    const proxy = new MockValidatorProxy();
+    proxy.registerOnValidatorChange(undefined);
+    proxy.validate(undefined);
+  });
+
+  it('allows empty instance of MockAsyncValidatorProxy', () => {
+    const proxy = new MockAsyncValidatorProxy();
+    proxy.registerOnValidatorChange(undefined);
+    proxy.validate(undefined);
   });
 });

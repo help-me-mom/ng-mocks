@@ -1,42 +1,63 @@
 // tslint:disable variable-name ban-ts-ignore
 
-import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
-
 import { Mock } from './mock';
 
-export class MockControlValueAccessor extends Mock implements ControlValueAccessor, Validator {
-  public readonly __ngMocksMockControlValueAccessor: true = true;
+/**
+ * @deprecated use isMockControlValueAccessor or isMockValidator instead
+ * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+ * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+ */
+export class LegacyControlValueAccessor extends Mock {
+  /**
+   * @deprecated use isMockControlValueAccessor instead
+   * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+   */
+  public __simulateChange(value: any): void;
+  // istanbul ignore next
+  public __simulateChange() {
+    // nothing to do.
+  }
 
   // istanbul ignore next
-  // @ts-ignore
-  public __simulateChange = (value: any) => {};
+  /**
+   * @deprecated use isMockControlValueAccessor instead
+   * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+   */
+  public __simulateTouch() {
+    // nothing to do.
+  }
 
   // istanbul ignore next
-  public __simulateTouch = () => {};
-
-  // istanbul ignore next
-  public __simulateValidatorChange = () => {};
-
-  public registerOnChange(fn: (value: any) => void): void {
-    this.__simulateChange = fn;
+  /**
+   * @deprecated use isMockValidator instead
+   * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+   */
+  public __simulateValidatorChange() {
+    // nothing to do.
   }
+}
 
-  public registerOnTouched(fn: () => void): void {
-    this.__simulateTouch = fn;
-  }
+/**
+ * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+ */
+export interface MockControlValueAccessor {
+  /**
+   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   */
+  __simulateChange(value: any): void;
 
-  public registerOnValidatorChange(fn: () => void): void {
-    this.__simulateValidatorChange = fn;
-  }
+  /**
+   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   */
+  __simulateTouch(): void;
+}
 
-  // @ts-ignore
-  public setDisabledState(isDisabled: boolean): void {}
-
-  // @ts-ignore
-  public validate(control: AbstractControl): ValidationErrors | null {
-    return null;
-  }
-
-  // @ts-ignore
-  public writeValue(value: any) {}
+/**
+ * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+ */
+export interface MockValidator {
+  /**
+   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   */
+  __simulateValidatorChange(): void;
 }

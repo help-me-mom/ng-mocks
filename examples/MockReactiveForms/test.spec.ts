@@ -1,3 +1,5 @@
+// tslint:disable strict-type-predicates
+
 import { Component, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -5,7 +7,14 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import {
+  isMockControlValueAccessor,
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 
 @Component({
   providers: [
@@ -33,6 +42,27 @@ class TestedComponent {
 }
 
 describe('MockReactiveForms', () => {
+  // That's our spy on writeValue calls.
+  // With auto spy this code isn't needed.
+  const writeValue =
+    typeof jest === 'undefined'
+      ? jasmine.createSpy('writeValue')
+      : jest.fn();
+  // in case of jest
+  // const writeValue = jest.fn();
+
+  // Because of early calls of writeValue, we need to install
+  // the spy in the ctor call.
+  beforeAll(() =>
+    MockInstance(DependencyComponent, () => ({
+      writeValue,
+    })),
+  );
+
+  // To avoid influence in other tests
+  // we need to reset MockInstance effects.
+  afterAll(MockReset);
+
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -47,16 +77,19 @@ describe('MockReactiveForms', () => {
     const mockControl = ngMocks.find(DependencyComponent)
       .componentInstance;
 
+    // During initialization it should be called
+    // with null.
+    expect(writeValue).toHaveBeenCalledWith(null);
+
     // Let's simulate its change, like a user does it.
-    if (isMockOf(mockControl, DependencyComponent, 'c')) {
+    if (isMockControlValueAccessor(mockControl)) {
       mockControl.__simulateChange('foo');
     }
     expect(component.formControl.value).toBe('foo');
 
     // Let's check that change on existing formControl
     // causes calls of `writeValue` on the mock component.
-    spyOn(mockControl, 'writeValue');
     component.formControl.setValue('bar');
-    expect(mockControl.writeValue).toHaveBeenCalledWith('bar');
+    expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });

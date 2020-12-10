@@ -33,7 +33,7 @@ export class DirectiveValueAccessor {}
 export class DirectiveValidator {}
 
 // providers should be added to directives only in case if they were specified in the original directive.
-describe('issue-145', () => {
+describe('issue-145:directives', () => {
   it('does not add NG_VALUE_ACCESSOR to directives', () => {
     const mock = MockDirective(DirectiveDefault);
     const { providers } = directiveResolver.resolve(mock);
@@ -56,7 +56,7 @@ describe('issue-145', () => {
       {
         multi: true,
         provide: NG_VALUE_ACCESSOR,
-        useExisting: jasmine.anything(),
+        useFactory: jasmine.anything(),
       },
     ]);
   });
@@ -72,7 +72,7 @@ describe('issue-145', () => {
       {
         multi: true,
         provide: NG_VALIDATORS,
-        useExisting: jasmine.anything(),
+        useFactory: jasmine.anything(),
       },
     ]);
   });

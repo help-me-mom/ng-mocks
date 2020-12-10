@@ -13,7 +13,7 @@
 [services](#how-to-create-a-mock-provider) and
 [modules](#how-to-create-a-mock-module)
 in tests for Angular 5+ applications.
-When you need a [mock child component](#how-to-create-a-mock-component),
+When you have [a noisy child component](#how-to-create-a-mock-component),
 or any other [annoying dependency](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application),
 `ng-mocks` has tools to turn these declarations into their mocks,
 keeping interfaces as they are, but suppressing their implementation.
@@ -269,6 +269,8 @@ Profit.
 [like](https://github.com/ike18t/ng-mocks),
 [share](https://twitter.com/intent/tweet?text=Check+ng-mocks+package&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)!
 
+Have a question still? Don't hesitate to [contact us](#find-an-issue-or-have-a-question-or-a-request).
+
 [to the top](#table-of-contents).
 
 Below more detailed documentation begins, please bear with us.
@@ -313,6 +315,9 @@ It covers everything you need to turn a component into its mock declaration.
 - `MockComponent( MyComponent )` - returns a mock class of `MyComponent` component.
 - `MockComponents( MyComponent1, SomeComponent2, ... )` - returns an array of mocks.
 
+> **NOTE**: Information about [form control and their mocks](#how-to-create-a-mock-form-control)
+> is in a different section.
+
 **A mock component** respects the interface of its original component as
 a type of `MockedComponent<T>` and provides:
 
@@ -322,7 +327,7 @@ a type of `MockedComponent<T>` and provides:
 - supports `@ContentChild` with an `$implicit` context
   - `__render('id', $implicit, variables)` - renders a template
   - `__hide('id')` - hides a rendered template
-- supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
+- supports [`FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`](#how-to-create-a-mock-form-control)
   - `__simulateChange()` - calls `onChanged` on the mock component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
 - supports `exportAs`
@@ -503,6 +508,9 @@ It turns a directive into its mock declaration.
 - `MockDirective( MyDirective )` - returns a mock class of `MyDirective` directive.
 - `MockDirectives( MyDirective1, MyDirective2, ... )` - returns an array of mocks.
 
+> **NOTE**: Information about [form control and their mocks](#how-to-create-a-mock-form-control)
+> is in a different section.
+
 **a mock directive** respects the interface of its original directive as
 a type of `MockedDirective<T>` and provides:
 
@@ -510,7 +518,7 @@ a type of `MockedDirective<T>` and provides:
 - the same `Inputs` and `Outputs` with alias support
 - supports structural directives
   - `__render($implicit, variables)` - renders content
-- supports `FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`
+- supports [`FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`](#how-to-create-a-mock-form-control)
   - `__simulateChange()` - calls `onChanged` on the mock component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
 - supports `exportAs`
@@ -1305,13 +1313,34 @@ describe('MockObservable', () => {
 
 ### How to create a mock form control
 
-`ng-mocks` respects `ControlValueAccessor` interface if a directive, or a component implements it.
+`ng-mocks` respects `ControlValueAccessor` interface if [a directive](#how-to-create-a-mock-directive),
+or [a component](#how-to-create-a-mock-component) implements it.
 Apart from that, `ng-mocks` provides helper functions to emit changes and touches.
 
-A mock object of `ControlValueAccessor` provides:
+it supports both `FormsModule` and `ReactiveFormsModule`:
 
-- `__simulateChange()` - calls `onChanged` on the mock component bound to a `FormControl`
+- `ngModel`
+- `ngModelChange`
+- `formControl`
+- `NG_VALUE_ACCESSOR`
+- `ControlValueAccessor`
+- `NG_VALIDATORS`
+- `Validator`
+- `NG_ASYNC_VALIDATORS`
+- `AsyncValidator`
+
+A mock object of `ControlValueAccessor` additionally implements `MockControlValueAccessor` and provides:
+
+- `__simulateChange(value: any)` - calls `onChanged` on the mock component bound to a `FormControl`
 - `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
+
+* [`isMockControlValueAccessor(instance)`](#ismockcontrolvalueaccessor) - to verify `MockControlValueAccessor`
+
+A mock object of `Validator` or `AsyncValidator` additionally implements `MockValidator` and provides:
+
+- `__simulateValidatorChange()` - calls `updateValueAndValidity` on the mock component bound to a `FormControl`
+
+* [`isMockValidator(instance)`](#ismockvalidator) - to verify `MockValidator`
 
 <details><summary>Click to see <strong>a usage example of a mock FormControl with ReactiveForms in Angular tests</strong></summary>
 <p>
@@ -1324,6 +1353,24 @@ to play with.
 
 ```typescript
 describe('MockReactiveForms', () => {
+  // That's our spy on writeValue calls.
+  // With auto spy this code isn't needed.
+  const writeValue = jasmine.createSpy('writeValue');
+  // in case of jest
+  // const writeValue = jest.fn();
+
+  // Because of early calls of writeValue, we need to install
+  // the spy in the ctor call.
+  beforeAll(() =>
+    MockInstance(DependencyComponent, () => ({
+      writeValue,
+    })),
+  );
+
+  // To avoid influence in other tests
+  // we need to reset MockInstance effects.
+  afterAll(MockReset);
+
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -1338,17 +1385,20 @@ describe('MockReactiveForms', () => {
     const mockControl = ngMocks.find(DependencyComponent)
       .componentInstance;
 
+    // During initialization it should be called
+    // with null.
+    expect(writeValue).toHaveBeenCalledWith(null);
+
     // Let's simulate its change, like a user does it.
-    if (isMockOf(mockControl, DependencyComponent, 'c')) {
+    if (isMockControlValueAccessor(mockControl)) {
       mockControl.__simulateChange('foo');
     }
     expect(component.formControl.value).toBe('foo');
 
     // Let's check that change on existing formControl
     // causes calls of `writeValue` on the mock component.
-    spyOn(mockControl, 'writeValue');
     component.formControl.setValue('bar');
-    expect(mockControl.writeValue).toHaveBeenCalledWith('bar');
+    expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });
 ```
@@ -1367,6 +1417,24 @@ to play with.
 
 ```typescript
 describe('MockForms', () => {
+  // That's our spy on writeValue calls.
+  // With auto spy this code isn't needed.
+  const writeValue = jasmine.createSpy('writeValue');
+  // in case of jest
+  // const writeValue = jest.fn();
+
+  // Because of early calls of writeValue, we need to install
+  // the spy in the ctor call.
+  beforeAll(() =>
+    MockInstance(DependencyComponent, () => ({
+      writeValue,
+    })),
+  );
+
+  // To avoid influence in other tests
+  // we need to reset MockInstance effects.
+  afterAll(MockReset);
+
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -1381,8 +1449,12 @@ describe('MockForms', () => {
     const mockControl = ngMocks.find(DependencyComponent)
       .componentInstance;
 
+    // During initialization it should be called
+    // with null.
+    expect(writeValue).toHaveBeenCalledWith(null);
+
     // Let's simulate its change, like a user does it.
-    if (isMockOf(mockControl, DependencyComponent, 'c')) {
+    if (isMockControlValueAccessor(mockControl)) {
       mockControl.__simulateChange('foo');
       fixture.detectChanges();
       await fixture.whenStable();
@@ -1391,11 +1463,10 @@ describe('MockForms', () => {
 
     // Let's check that change on existing value
     // causes calls of `writeValue` on the mock component.
-    spyOn(mockControl, 'writeValue');
     component.value = 'bar';
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(mockControl.writeValue).toHaveBeenCalledWith('bar');
+    expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });
 ```
@@ -2637,6 +2708,8 @@ ngMocks.stub(instance, {
 For example, they are useful in situations when we want to render `ChildContent` of a mock component,
 or to touch a mock form control.
 
+- [isMockControlValueAccessor](#ismockcontrolvalueaccessor)
+- [isMockValidator](#ismockvalidator)
 - [isMockOf](#ismockof)
 - [isMockedNgDefOf](#ismockedngdefof)
 - [getMockedNgDefOf](#getmockedngdefof)
@@ -2644,20 +2717,68 @@ or to touch a mock form control.
 - [getSourceOfMock](#getsourceofmock)
 - [isNgInjectionToken](#isnginjectiontoken)
 
-#### isMockOf
+#### isMockControlValueAccessor
 
-This function helps when we want to use `ng-mocks` tools for rendering or change simulation,
-but typescript doesn't recognize `instance` as a mock object.
+This function helps when you need to access callbacks
+which were set via `registerOnChange` and `registerOnTouched`
+on a mock object that implements `ControlValueAccessor`,
+and to call `__simulateChange`, `__simulateTouch` to trigger them.
+It verifies whether an instance respects `MockControlValueAccessor` interface.
 
 You need it when you get an error like:
 
-- Property '\_\_render' does not exist on type ...
-- Property '\_\_simulateChange' does not exist on type ...
+- `Property '__simulateChange' does not exist on type ...`
+- `Property '__simulateTouch' does not exist on type ...`
 
 ```typescript
-if (isMockOf(instance, SomeClass, 'c')) {
-  instance.__render('block');
-  instance.__simulateChange(123);
+const instance = ngMocks.findInstance(MyCustomFormControl);
+// instance.__simulateChange('foo'); // doesn't work.
+if (isMockControlValueAccessor(instance)) {
+  // now works
+  instance.__simulateChange('foo');
+  instance.__simulateTouch();
+}
+```
+
+#### isMockValidator
+
+The function is useful when you need to access the callback
+which was set via `registerOnValidatorChange`
+on a mock object that implements `Validator` or `AsyncValidator`,
+and to call `__simulateValidatorChange` to trigger it.
+It verifies whether an instance respects `MockValidator` interface.
+
+You need it when you get an error like:
+
+- `Property '__simulateValidatorChange' does not exist on type ...`
+
+```typescript
+const instance = ngMocks.findInstance(MyValidatorDirective);
+// instance.simulateValidatorChange(); // doesn't work.
+if (isMockValidator(instance)) {
+  // now works
+  instance.__simulateValidatorChange();
+}
+```
+
+#### isMockOf
+
+This function helps when we want to use `ng-mocks` tools for rendering,
+but typescript doesn't recognize `instance` as a mock object.
+
+You need this when you get an error like:
+
+- `Property '__render' does not exist on type ...`
+- `Property '__hide' does not exist on type ...`
+
+```typescript
+if (isMockOf(instance, SomeComponent, 'c')) {
+  instance.__render('block', '$implicit');
+  instance.__hide('block');
+}
+if (isMockOf(instance, StructuralDirective, 'd')) {
+  instance.__render('$implicit');
+  instance.__hide();
 }
 ```
 
@@ -2755,7 +2876,10 @@ const createComponent = createComponentFactory({
 });
 ```
 
-Profit. Subscribe, like, share!
+Profit.
+[Subscribe](https://github.com/ike18t/ng-mocks),
+[like](https://github.com/ike18t/ng-mocks),
+[share](https://twitter.com/intent/tweet?text=Check+ng-mocks+package&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)!
 
 [to the top](#table-of-contents)
 
