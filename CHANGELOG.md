@@ -1,3 +1,12 @@
+## [11.2.3](https://github.com/ike18t/ng-mocks/compare/v11.2.2...v11.2.3) (2020-12-10)
+
+
+### Bug Fixes
+
+* **#246:** auto spy covers control value accessor too ([5c5b003](https://github.com/ike18t/ng-mocks/commit/5c5b003312b08664909f41b478806f02ca5051ee)), closes [#246](https://github.com/ike18t/ng-mocks/issues/246) [#246](https://github.com/ike18t/ng-mocks/issues/246)
+* **#248:** handling null and undefined in declarations ([13b9e4e](https://github.com/ike18t/ng-mocks/commit/13b9e4e36f500ca4de511cb125321a3d918ae5e8)), closes [#248](https://github.com/ike18t/ng-mocks/issues/248) [#248](https://github.com/ike18t/ng-mocks/issues/248)
+* correct overriding order for pipes ([750153d](https://github.com/ike18t/ng-mocks/commit/750153da57d3ad727439356daf3b86e27c7e8937))
+
 ## [11.2.2](https://github.com/ike18t/ng-mocks/compare/v11.2.0...v11.2.2) (2020-12-05)
 
 
