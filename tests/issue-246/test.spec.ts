@@ -11,9 +11,13 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-import { isMockControlValueAccessor } from 'ng-mocks/dist/lib/common/func.is-mock-control-value-accessor';
-import { isMockValidator } from 'ng-mocks/dist/lib/common/func.is-mock-validator';
+import {
+  isMockControlValueAccessor,
+  isMockValidator,
+  MockBuilder,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 @Component({
   providers: [

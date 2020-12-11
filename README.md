@@ -1334,13 +1334,13 @@ A mock object of `ControlValueAccessor` additionally implements `MockControlValu
 - `__simulateChange(value: any)` - calls `onChanged` on the mock component bound to a `FormControl`
 - `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
 
-* [`isMockControlValueAccessor(instance)`](#ismockcontrolvalueaccessor) - to verify `MockControlValueAccessor`
+* [`isMockControlValueAccessor( instance )`](#ismockcontrolvalueaccessor) - to verify `MockControlValueAccessor`
 
 A mock object of `Validator` or `AsyncValidator` additionally implements `MockValidator` and provides:
 
 - `__simulateValidatorChange()` - calls `updateValueAndValidity` on the mock component bound to a `FormControl`
 
-* [`isMockValidator(instance)`](#ismockvalidator) - to verify `MockValidator`
+* [`isMockValidator( instance )`](#ismockvalidator) - to verify `MockValidator`
 
 <details><summary>Click to see <strong>a usage example of a mock FormControl with ReactiveForms in Angular tests</strong></summary>
 <p>
