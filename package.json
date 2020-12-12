@@ -6,14 +6,14 @@
     "build:all": "npm run lint && npm run build && npm run test",
     "i:a": "npm run i:a5 & npm run i:a6 & npm run i:a7 & npm run i:a8 & npm run i:a9 & npm run i:a10 & npm run i:a11 & wait",
     "i:a5": "npm run i:a5es5 && npm run i:a5es2015",
-    "i:a5es5": "cd e2e/a5es5 && npm install --silent --quiet --no-progress",
-    "i:a5es2015": "cd e2e/a5es2015 && npm install --silent --quiet --no-progress",
-    "i:a6": "cd e2e/a6 && npm install --silent --quiet --no-progress",
-    "i:a7": "cd e2e/a7 && npm install --silent --quiet --no-progress",
-    "i:a8": "cd e2e/a8 && npm install --silent --quiet --no-progress",
-    "i:a9": "cd e2e/a9 && npm install --silent --quiet --no-progress",
-    "i:a10": "cd e2e/a10 && npm install --silent --quiet --no-progress",
-    "i:a11": "cd e2e/a11 && npm install --silent --quiet --no-progress",
+    "i:a5es5": "cd e2e/a5es5 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a5es2015": "cd e2e/a5es2015 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a6": "cd e2e/a6 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a7": "cd e2e/a7 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a8": "cd e2e/a8 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a9": "cd e2e/a9 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a10": "cd e2e/a10 && npm install --ignore-scripts --silent --quiet --no-progress",
+    "i:a11": "cd e2e/a11 && npm install --ignore-scripts --silent --quiet --no-progress",
     "s:a": "npm run s:a5 & npm run s:a6 & npm run s:a7 & npm run s:a8 & npm run s:a9 & npm run s:a10 & npm run s:a11 & wait",
     "s:a5": "npm run s:a5es5 && npm run s:a5es2015",
     "s:a5es5": "P=e2e/a5es5/node_modules/ng-mocks && rm -Rf $P && mkdir -p $P && cp -R dist/. $P",
@@ -137,7 +137,6 @@
     "rebaseWhen": "conflicted",
     "separateMajorMinor": true,
     "separateMinorPatch": true,
-    "separateMultipleMajor": true,
-    "includeForks": true
+    "separateMultipleMajor": true
   }
 }

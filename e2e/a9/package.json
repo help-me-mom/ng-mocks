@@ -18,13 +18,12 @@
     "test:jest:es2015:ivy": "jest --config jest.es2015ivy.js",
     "test:jest:es2015:no-ivy": "jest --config jest.es2015noivy.js",
     "test:jest:debug": "jest --watch",
-    "lint": "ng lint",
-    "puppeteer": "npm install puppeteer@~5.3.1 --no-save"
+    "lint": "ng lint"
   },
   "private": true,
   "peerDependencies": {
     "ng-mocks": "*",
-    "puppeteer": "~5.3.1"
+    "puppeteer": "5.5.0"
   },
   "dependencies": {
     "@angular/animations": "~9.0.7",

@@ -10,13 +10,12 @@
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
     "test:jest": "jest",
     "test:jest:debug": "jest --watch",
-    "lint": "ng lint",
-    "puppeteer": "npm install puppeteer@~5.3.1 --no-save"
+    "lint": "ng lint"
   },
   "private": true,
   "peerDependencies": {
     "ng-mocks": "*",
-    "puppeteer": "~5.3.1"
+    "puppeteer": "5.5.0"
   },
   "dependencies": {
     "@angular/animations": "^5.2.0",
