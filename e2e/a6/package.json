@@ -14,13 +14,12 @@
     "test:jest:es5": "jest --config ./jest.es5.js",
     "test:jest:es2015": "jest --config ./jest.es2015.js",
     "test:jest:debug": "jest --watch",
-    "lint": "ng lint",
-    "puppeteer": "npm install puppeteer@~5.3.1 --no-save"
+    "lint": "ng lint"
   },
   "private": true,
   "peerDependencies": {
     "ng-mocks": "*",
-    "puppeteer": "~5.3.1"
+    "puppeteer": "5.5.0"
   },
   "dependencies": {
     "@angular/animations": "^6.1.0",
