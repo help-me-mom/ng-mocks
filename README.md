@@ -1322,12 +1322,20 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 - `ngModel`
 - `ngModelChange`
 - `formControl`
-- `NG_VALUE_ACCESSOR`
-- `ControlValueAccessor`
+- `formControlName`
+
+* `NG_VALUE_ACCESSOR`
+* `ControlValueAccessor`
+* `writeValue`
+* `registerOnChange`
+* `registerOnTouched`
+
 - `NG_VALIDATORS`
 - `Validator`
 - `NG_ASYNC_VALIDATORS`
 - `AsyncValidator`
+- `registerOnValidatorChange`
+- `validate`
 
 A mock object of `ControlValueAccessor` additionally implements `MockControlValueAccessor` and provides:
 
