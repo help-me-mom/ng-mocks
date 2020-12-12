@@ -27,7 +27,10 @@ class ChildComponent {
   `,
 })
 class ParentComponent {
-  @ViewChild('child') public readonly child?: ChildComponent;
+  @ViewChild('child', {
+    static: false,
+  } as any)
+  public readonly child?: ChildComponent;
 }
 
 @NgModule({
