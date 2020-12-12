@@ -2307,23 +2307,29 @@ describe('MockRender', () => {
 `MockInstance` is useful when you want to configure spies of a declaration or a service before its render.
 It supports: Modules, Components, Directives, Pipes and Services.
 
-- `MockInstance( MyService, ( instance, injector ) => void)` - sets a callback to initialize an instance.
-- `MockInstance( MyService, config: {init: Function} )` - sets a config, currently only `init` is supported, it is the callback.
+- `MockInstance( MyService, ( instance, injector ) => void)` - sets the callback to initialize an instance.
+- `MockInstance( MyService, config: {init: Function} )` - sets the config, currently only `init` is supported, it is the callback.
 - `MockInstance( MyService )` - removes initialization from the service.
 - `MockReset()` - removes initialization from all services.
 
-You definitely need it when a test fails like:
+The time to use it is definitely when a test fails like:
 
 - [TypeError: Cannot read property 'subscribe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
 - [TypeError: Cannot read property 'pipe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
 - or any other issue like reading properties or calling methods of undefined
 
+Or you want to customize a mock declaration which is accessed via:
+
+- `@ViewChild`
+- `@ViewChildren`
+- `@ContentChild`
+- `@ContentChildren`
+
 Let's pretend a situation when our component uses `ViewChild` to access a child component instance.
-Its property has `protected` visibility, therefore, we cannot access it easily.
 
 ```typescript
 class RealComponent implements AfterViewInit {
-  @ViewChild(ChildComponent) protected child: ChildComponent;
+  @ViewChild(ChildComponent) public readonly child: ChildComponent;
 
   ngAfterViewInit() {
     this.child.update$.subscribe();
@@ -2331,24 +2337,9 @@ class RealComponent implements AfterViewInit {
 }
 ```
 
-When we test `RealComponent` we would like to have a mock `ChildComponent`, and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would be return `undefined`,
+When we test `RealComponent` we would like to have a mock `ChildComponent`,
+and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would be return `undefined`,
 therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined).
-
-If it was a service, we would use `providers` to set a proper mock object.
-
-```typescript
-TestBed.configureTestingModule({
-  declarations: [RealComponent],
-  providers: [
-    {
-      provide: ChildService,
-      useValue: {
-        update$: EMPTY,
-      },
-    },
-  ],
-});
-```
 
 In our case, we have a component instance created by Angular, and does not look like `TestBed` provides
 a solution here. That's where `ng-mocks` helps again with the `MockInstance` helper function.
@@ -2356,30 +2347,19 @@ It accepts a class as the first parameter, and a tiny callback describing how to
 
 ```typescript
 beforeAll(() =>
-  MockInstance(
-    ChildComponent,
-    (instance: ChildComponent, injector: Injector): void => {
-      // Now you can customize a mock object of ChildComponent.
-      // If you had used auto-spy then all its methods have been spied already
-      // here.
-      ngMocks.stub(instance, {
-        update$: EMPTY,
-      });
-      // if you want you can use injector.get(SomeService) for more
-      // complicated customization.
-    },
-  ),
+  MockInstance(ChildComponent, () => ({
+    // Now we can customize a mock object of ChildComponent in its ctor call.
+    // The object will be extended with the returned object.
+    update$: EMPTY,
+  })),
 );
 ```
 
-Profit. Now, when Angular creates an instance of `ChildComponent` the callback is called too and `update$` property
+Profit. Now, when Angular creates an instance of `ChildComponent` the callback is called in its ctor and `update$` property
 of the instance is an `Observable` instead of `undefined`.
 
-_Good to know_: you might notice `ngMocks.stub` usage instead of `instance.update$ = EMPTY`. This has been made with intention to
-show **how to create stub `readonly` properties in Angular**.
-
-After a test you can reset changes to avoid their influence in other tests via a call of
-`MockInstance` without the second parameter or simply
+After testing, you should reset changes to avoid their influence in other tests via a call of
+`MockInstance(ChildComponent)` without the second parameter or simply
 `MockReset()` to reset all customizations.
 
 ```typescript
@@ -2408,17 +2388,10 @@ describe('MockInstance', () => {
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
     // Let's fix it via defining customization for the mock object.
-    MockInstance(ChildComponent, (instance, injector) => {
-      const subject = new Subject<void>();
-      subject.complete();
-      ngMocks.stub(instance, {
-        injector,
-        // comment the next line to check the failure.
-        update$: subject,
-      });
-      // if you want you can use injector.get(Service) for more
-      // complicated customization.
-    });
+    MockInstance(ChildComponent, () => ({
+      // comment the next line to check the failure.
+      update$: EMPTY,
+    }));
   });
 
   // Do not forget to reset MockInstance back.

@@ -44,10 +44,10 @@ class Target5Module {}
 
 describe('issue-248', () => {
   it('does not fail', () => {
-    MockModule(Target1Module);
-    MockModule(Target2Module);
-    MockModule(Target3Module);
-    MockModule(Target4Module);
-    MockModule(Target5Module);
+    expect(() => MockModule(Target1Module)).not.toThrow();
+    expect(() => MockModule(Target2Module)).not.toThrow();
+    expect(() => MockModule(Target3Module)).not.toThrow();
+    expect(() => MockModule(Target4Module)).not.toThrow();
+    expect(() => MockModule(Target5Module)).not.toThrow();
   });
 });

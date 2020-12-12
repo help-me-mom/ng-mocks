@@ -9,9 +9,12 @@ import {
   MockInstance,
   MockRender,
   MockReset,
-  ngMocks,
 } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
+
+// A copy of EMPTY, which doesn't exist in A5.
+const EMPTY = new Subject<any>();
+EMPTY.complete();
 
 // A child component that contains update$ the parent component wants to listen to.
 @Component({
@@ -19,13 +22,9 @@ import { Observable, Subject } from 'rxjs';
   template: '{{ update$ | async }}',
 })
 class ChildComponent {
-  public readonly update$: Observable<void>;
+  public readonly update$: Observable<void> = EMPTY;
 
-  public constructor(public readonly injector: Injector) {
-    const subject = new Subject<void>();
-    this.update$ = subject;
-    subject.complete();
-  }
+  public constructor(public readonly injector: Injector) {}
 }
 
 // A parent component that uses @ViewChild to listen to update$ of its child component.
@@ -57,17 +56,10 @@ describe('MockInstance', () => {
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
     // Let's fix it via defining customization for the mock object.
-    MockInstance(ChildComponent, (instance, injector) => {
-      const subject = new Subject<void>();
-      subject.complete();
-      ngMocks.stub(instance, {
-        injector,
-        // comment the next line to check the failure.
-        update$: subject,
-      });
-      // if you want you can use injector.get(Service) for more
-      // complicated customization.
-    });
+    MockInstance(ChildComponent, () => ({
+      // comment the next line to check the failure.
+      update$: EMPTY,
+    }));
   });
 
   // Do not forget to reset MockInstance back.
