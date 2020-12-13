@@ -36,18 +36,33 @@ where you might check all the features. To focus on a particular one, simply pre
 
 There is a brief summary of the latest changes in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
 
-## Why use this?
+### How to read this?
 
-Sure, you could flip a flag on schema errors to make your component dependencies not matter.
-Or you could use `ng-mocks` to
-**create [mock declarations](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application)**
-out of them and have the ability to assert on their inputs or emit on an output to assert on a side effect.
+**Essential**
+
+1. Read titles from [TOC](#table-of-contents)
+1. Start with [Motivation and easy start](#motivation-and-easy-start)
+1. Check an [extensive example](#extensive-example-of-mocks-in-angular-tests)
+1. Search keywords you need on this page: `NgModel`, `ViewChild`, `mock service` etc
+
+**Additional**
+
+- Don't hesitate to [ask questions on gitter](https://gitter.im/ng-mocks/community)
+- Try one of the online sandboxes:
+  [CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts),
+  [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts)
+
+**TL;DR**
+
+- Read about [`MockRender`](#mockrender), [`MockInstance`](#mockinstance), [`ngMocks`](#ngmocks)
+- Read about [`MockBuilder`](#mockbuilder)
+- Check [guides and examples how to test Angular applications](https://ng-mocks.github.io/)
 
 ### Find an issue or have a question or a request?
 
-I'm open to contributions.
+We are open to contributions.
 
-- [ask a question on gitter](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+- [ask a question on gitter](https://gitter.im/ng-mocks/community)
 - [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
 - or submit a PR
 
