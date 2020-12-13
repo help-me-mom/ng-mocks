@@ -1,3 +1,10 @@
+## [11.2.4](https://github.com/ike18t/ng-mocks/compare/v11.2.3...v11.2.4) (2020-12-13)
+
+
+### Bug Fixes
+
+* now MockRender's proxy component respects outside params changes ([9297cd1](https://github.com/ike18t/ng-mocks/commit/9297cd13a47d258e8180e25ac1352982801a0282))
+
 ## [11.2.3](https://github.com/ike18t/ng-mocks/compare/v11.2.2...v11.2.3) (2020-12-10)
 
 
