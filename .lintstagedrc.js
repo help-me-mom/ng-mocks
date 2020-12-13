@@ -9,7 +9,7 @@ module.exports = {
       return [];
     }
 
-    commands.push(`prettier --write ${files.join(' ')}`);
+    commands.push(`prettier -u -w ${files.join(' ')}`);
 
     return commands;
   },
