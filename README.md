@@ -4,13 +4,13 @@
 [![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 [![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
-# Create mock components and more out of annoying dependencies in Angular tests
+# Mock components, services and more out of annoying dependencies in Angular tests
 
 `ng-mocks` is a testing library which helps with
-**creating [mock components](#how-to-create-a-mock-component)**,
+**creating [mock services](#how-to-create-a-mock-provider),
+[components](#how-to-create-a-mock-component)**,
 [directives](#how-to-create-a-mock-directive),
-[pipes](#how-to-create-a-mock-pipe),
-[services](#how-to-create-a-mock-provider) and
+[pipes](#how-to-create-a-mock-pipe) and
 [modules](#how-to-create-a-mock-module)
 in tests for Angular 5+ applications.
 When you have [a noisy child component](#how-to-create-a-mock-component),
