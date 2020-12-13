@@ -103,6 +103,8 @@ const resetTestingModule = (
 
     return TestBed;
   }
+  ngMocksUniverse.global.delete('builder:config');
+  ngMocksUniverse.global.delete('builder:module');
   ngMocksUniverse.global.delete('bullet:customized');
   ngMocksUniverse.global.delete('bullet:reset');
   applyNgMocksOverrides(TestBed);

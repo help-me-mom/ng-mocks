@@ -23,27 +23,17 @@ const solveOutput = (output: any): string => {
   return '=$event';
 };
 
-const defineProperty = (componentInstance: any, key: string, params: any) => {
-  Object.defineProperty(componentInstance, key, {
-    ...params,
-    configurable: true,
-    enumerable: true,
-    ...(params.value ? { writable: true } : {}),
-  });
-};
-
 const createProperty = (pointComponentInstance: Record<keyof any, any>, key: string) => {
-  const def = helperMockService.extractPropertyDescriptor(Object.getPrototypeOf(pointComponentInstance), key);
-  const keyType = def ? undefined : typeof pointComponentInstance[key];
-
-  return def?.value || keyType === 'function'
-    ? {
-        value: (...args: any[]) => pointComponentInstance[key](...args),
+  return {
+    get: () => {
+      if (typeof pointComponentInstance[key] === 'function') {
+        return (...args: any[]) => pointComponentInstance[key](...args);
       }
-    : {
-        get: () => pointComponentInstance[key],
-        set: (v: any) => (pointComponentInstance[key] = v),
-      };
+
+      return pointComponentInstance[key];
+    },
+    set: (v: any) => (pointComponentInstance[key] = v),
+  };
 };
 
 const extractAllKeys = (instance: object) => [
@@ -54,16 +44,21 @@ const extractAllKeys = (instance: object) => [
 
 const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
 
-const installProxy = (componentInstance: Record<keyof any, any>, pointComponentInstance: Record<keyof any, any>) => {
-  const exists = extractOwnKeys(componentInstance);
+const installProxy = (
+  componentInstance: Record<keyof any, any>,
+  pointComponentInstance?: Record<keyof any, any>,
+): void => {
+  if (!pointComponentInstance) {
+    return;
+  }
 
+  const exists = extractOwnKeys(componentInstance);
   for (const key of extractAllKeys(pointComponentInstance)) {
     if (exists.indexOf(key) !== -1) {
       continue;
     }
 
-    defineProperty(componentInstance, key, createProperty(pointComponentInstance, key));
-
+    Object.defineProperty(componentInstance, key, createProperty(pointComponentInstance, key));
     exists.push(key);
   }
 };
@@ -111,9 +106,7 @@ const applyParamsToFixtureInstance = (
   inputs: string[],
   outputs: string[],
 ): void => {
-  for (const key of Object.keys(params || {})) {
-    instance[key] = params[key];
-  }
+  installProxy(instance, params);
   for (const definition of applyParamsToFixtureInstanceGetData(params, inputs)) {
     const [property] = definition.split(': ');
     instance[property] = undefined;
@@ -156,7 +149,25 @@ const tryWhen = (flag: boolean, callback: () => void) => {
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
-function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
+function MockRender<MComponent>(
+  template: Type<MComponent>,
+  params: undefined,
+  detectChanges?: boolean | IMockRenderOptions,
+): MockedComponentFixture<MComponent, MComponent>;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender<MComponent, TComponent extends object>(
+  template: Type<MComponent>,
+  params: TComponent,
+  detectChanges?: boolean | IMockRenderOptions,
+): MockedComponentFixture<MComponent, TComponent>;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender<MComponent, TComponent extends object = Record<keyof any, any>>(
   template: Type<MComponent>,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions,
@@ -167,25 +178,32 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
  *
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
-function MockRender<MComponent extends Record<keyof any, any>>(
-  template: Type<MComponent>,
-): MockedComponentFixture<MComponent>;
+function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent, MComponent>;
+
+/**
+ * Without params we shouldn't autocomplete any keys of any types.
+ *
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender<MComponent = void>(template: string): MockedComponentFixture<MComponent>;
 
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
-function MockRender<MComponent = any, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
+function MockRender<MComponent = void>(
+  template: string,
+  params: Record<keyof any, any>,
+  detectChanges?: boolean | IMockRenderOptions,
+): MockedComponentFixture<MComponent, Record<keyof any, any>>;
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender<MComponent, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
   params: TComponent,
   detectChanges?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
-
-/**
- * Without params we shouldn't autocomplete any keys of any types.
- *
- * @see https://github.com/ike18t/ng-mocks#mockrender
- */
-function MockRender<MComponent = any>(template: string): MockedComponentFixture<MComponent>;
 
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   template: string | Type<MComponent>,
