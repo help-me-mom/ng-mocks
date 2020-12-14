@@ -5,7 +5,7 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.es5ivy.spec.json',
+      tsconfig: 'tsconfig.es5ivy.spec.json',
     },
   },
 };

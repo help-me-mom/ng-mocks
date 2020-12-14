@@ -22,32 +22,13 @@ jobs:
           command: npm run lint
       - run:
           name: Lint 2
-          command: ts:check
+          command: npm run ts:check
       - run:
           name: Build
           command: npm run build
       - run:
           name: Tests
           command: WITH_COVERAGE=1 npm run test
-      - run:
-          name: Collecting https://coveralls.io/github/ike18t/ng-mocks
-          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
-      - run:
-          name: Collecting https://codecov.io/gh/ike18t/ng-mocks
-          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info --disable=gcov
-      - run:
-          name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
-              > $HOME/codeclimate
-            chmod +x $HOME/codeclimate
-            $HOME/codeclimate before-build
-            $HOME/codeclimate format-coverage \
-              -t lcov test-reports/coverage/lcov/lcov.info \
-              -o test-reports/codeclimate.json
-            $HOME/codeclimate upload-coverage \
-              -r 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69 \
-              -i test-reports/codeclimate.json
       - store_test_results:
           path: ./test-reports
       - store_artifacts:
@@ -57,52 +38,113 @@ jobs:
           root: dist
           paths:
             - .
-  'Angular 5':
+  'Install':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
       - checkout
-      - attach_workspace:
-          at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
       - restore_cache:
-          key: a5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-      - run:
-          name: NPM Install
-          command: npm run i:a5es5 && npm run a5es2015
-      - save_cache:
-          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-          paths:
-            - ./e2e/a5es5/node_modules
-            - ./e2e/a5es2015/node_modules
-      - run:
-          name: Spreading Build
-          command: npm run s:a5
-      - run:
-          name: Spreading Tests
-          command: npm run s:test:a5
-      - run:
-          name: Unit Tests
-          command: npm run test:a5
-  'Angular 6':
-    docker:
-      - image: satantime/puppeteer-node:14-buster
-    steps:
-      - checkout
-      - attach_workspace:
-          at: dist
-      - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
       - restore_cache:
           key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+      - restore_cache:
+          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+      - restore_cache:
+          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+      - restore_cache:
+          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+      - restore_cache:
+          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+      - restore_cache:
+          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: NPM Install
-          command: npm run i:a6
+          command: npm run i:a
+      - save_cache:
+          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          paths:
+            - ./e2e/a5es5/node_modules
+      - save_cache:
+          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          paths:
+            - ./e2e/a5es2015/node_modules
       - save_cache:
           key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
           paths:
             - ./e2e/a6/node_modules
+      - save_cache:
+          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          paths:
+            - ./e2e/a7/node_modules
+      - save_cache:
+          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          paths:
+            - ./e2e/a8/node_modules
+      - save_cache:
+          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          paths:
+            - ./e2e/a9/node_modules
+      - save_cache:
+          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          paths:
+            - ./e2e/a10/node_modules
+      - save_cache:
+          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          paths:
+            - ./e2e/a11/node_modules
+  'Angular 5 ES5':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a5es5
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a5es5
+      - run:
+          name: Unit Tests
+          command: npm run test:a5es5
+  'Angular 5 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a5es2015
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a5es2015
+      - run:
+          name: Unit Tests
+          command: npm run test:a5es2015
+  'Angular 6 ES5':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a6
@@ -111,8 +153,28 @@ jobs:
           command: npm run s:test:a6
       - run:
           name: Unit Tests
-          command: npm run test:a6
-  'Angular 7':
+          command: npm run test:a6es5
+  'Angular 6 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a6
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a6
+      - run:
+          name: Unit Tests
+          command: npm run test:a6es2015
+  'Angular 7 ES5':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
@@ -123,13 +185,6 @@ jobs:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
-      - run:
-          name: NPM Install for E2E
-          command: npm run i:a7
-      - save_cache:
-          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
-          paths:
-            - ./e2e/a7/node_modules
       - run:
           name: Spreading Build
           command: npm run s:a7
@@ -138,8 +193,28 @@ jobs:
           command: npm run s:test:a7
       - run:
           name: Unit Tests
-          command: npm run test:a7
-  'Angular 8':
+          command: npm run test:a7es5
+  'Angular 7 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a7
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a7
+      - run:
+          name: Unit Tests
+          command: npm run test:a7es2015
+  'Angular 8 ES5':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
@@ -150,13 +225,6 @@ jobs:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
-      - run:
-          name: NPM Install for E2E
-          command: npm run i:a8
-      - save_cache:
-          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
-          paths:
-            - ./e2e/a8/node_modules
       - run:
           name: Spreading Build
           command: npm run s:a8
@@ -165,8 +233,28 @@ jobs:
           command: npm run s:test:a8
       - run:
           name: Unit Tests
-          command: npm run test:a8
-  'Angular 9':
+          command: npm run test:a8es5
+  'Angular 8 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a8
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a8
+      - run:
+          name: Unit Tests
+          command: npm run test:a8es2015
+  'Angular 9 ES5':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
@@ -177,13 +265,6 @@ jobs:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
-      - run:
-          name: NPM Install for E2E
-          command: npm run i:a9
-      - save_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
-          paths:
-            - ./e2e/a9/node_modules
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -192,8 +273,68 @@ jobs:
           command: npm run s:test:a9
       - run:
           name: Unit Tests
-          command: npm run test:a9
-  'Angular 10':
+          command: npm run test:a9es5
+  'Angular 9 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a9
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a9
+      - run:
+          name: Unit Tests
+          command: npm run test:a9es2015
+  'Angular 9 ES5 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a9
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a9
+      - run:
+          name: Unit Tests
+          command: npm run test:a9es5ivy
+  'Angular 9 ES2015 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a9
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a9
+      - run:
+          name: Unit Tests
+          command: npm run test:a9es2015ivy
+  'Angular 10 ES5':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
@@ -204,13 +345,6 @@ jobs:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
-      - run:
-          name: NPM Install for E2E
-          command: npm run i:a10
-      - save_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
-          paths:
-            - ./e2e/a10/node_modules
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -219,8 +353,68 @@ jobs:
           command: npm run s:test:a10
       - run:
           name: Unit Tests
-          command: npm run test:a10
-  'Angular 11':
+          command: npm run test:a10es5
+  'Angular 10 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a10
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a10
+      - run:
+          name: Unit Tests
+          command: npm run test:a10es2015
+  'Angular 10 ES5 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a10
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a10
+      - run:
+          name: Unit Tests
+          command: npm run test:a10es5ivy
+  'Angular 10 ES2015 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a10
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a10
+      - run:
+          name: Unit Tests
+          command: npm run test:a10es2015ivy
+  'Angular 11 ES5':
     docker:
       - image: satantime/puppeteer-node:14-buster
     steps:
@@ -232,12 +426,25 @@ jobs:
       - restore_cache:
           key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
-          name: NPM Install for E2E
-          command: npm run i:a11
-      - save_cache:
+          name: Spreading Build
+          command: npm run s:a11
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a11
+      - run:
+          name: Unit Tests
+          command: npm run test:a11es5
+  'Angular 11 ES2015':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
           key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
-          paths:
-            - ./e2e/a11/node_modules
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -246,27 +453,135 @@ jobs:
           command: npm run s:test:a11
       - run:
           name: Unit Tests
-          command: npm run test:a11
+          command: npm run test:a11es2015
+  'Angular 11 ES5 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a11
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a11
+      - run:
+          name: Unit Tests
+          command: npm run test:a11es5ivy
+  'Angular 11 ES2015 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a11
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a11
+      - run:
+          name: Unit Tests
+          command: npm run test:a11es2015ivy
 workflows:
   version: 2
   build:
     jobs:
-      - Core
-      - 'Angular 6':
+      - Core:
+          post-steps:
+            - when:
+              condition: [http://github.com/ike18t/ng-mocks, << pipeline.project.git_url >>]
+              steps:
+                - run:
+                    name: Collecting https://coveralls.io/github/ike18t/ng-mocks
+                    command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
+                - run:
+                    name: Collecting https://codecov.io/gh/ike18t/ng-mocks
+                    command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info --disable=gcov
+                - run:
+                    name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
+                    command: |
+                      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
+                        > $HOME/codeclimate
+                      chmod +x $HOME/codeclimate
+                      $HOME/codeclimate before-build
+                      $HOME/codeclimate format-coverage \
+                        -t lcov test-reports/coverage/lcov/lcov.info \
+                        -o test-reports/codeclimate.json
+                      $HOME/codeclimate upload-coverage \
+                        -r 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69 \
+                        -i test-reports/codeclimate.json
+      - 'Install':
           requires:
             - Core
-      - 'Angular 7':
+      - 'Angular 5 ES5':
           requires:
-            - Core
-      - 'Angular 8':
+            - Install
+      - 'Angular 5 ES2015':
           requires:
-            - Core
-      - 'Angular 9':
+            - Install
+      - 'Angular 6 ES5':
           requires:
-            - Core
-      - 'Angular 10':
+            - Install
+      - 'Angular 6 ES2015':
           requires:
-            - Core
-      - 'Angular 11':
+            - Install
+      - 'Angular 7 ES5':
           requires:
-            - Core
+            - Install
+      - 'Angular 7 ES2015':
+          requires:
+            - Install
+      - 'Angular 8 ES5':
+          requires:
+            - Install
+      - 'Angular 8 ES2015':
+          requires:
+            - Install
+      - 'Angular 9 ES5':
+          requires:
+            - Install
+      - 'Angular 9 ES2015':
+          requires:
+            - Install
+      - 'Angular 9 ES5 Ivy':
+          requires:
+            - Install
+      - 'Angular 9 ES2015 Ivy':
+          requires:
+            - Install
+      - 'Angular 10 ES5':
+          requires:
+            - Install
+      - 'Angular 10 ES2015':
+          requires:
+            - Install
+      - 'Angular 10 ES5 Ivy':
+          requires:
+            - Install
+      - 'Angular 10 ES2015 Ivy':
+          requires:
+            - Install
+      - 'Angular 11 ES5':
+          requires:
+            - Install
+      - 'Angular 11 ES2015':
+          requires:
+            - Install
+      - 'Angular 11 ES5 Ivy':
+          requires:
+            - Install
+      - 'Angular 11 ES2015 Ivy':
+          requires:
+            - Install

@@ -11,9 +11,9 @@
     "test:jasmine:es2015": "ng test --ts-config ./tsconfig.es2015.spec.json --progress=false",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
     "test:jest": "npm run test:jest:es5 && npm run test:jest:es2015",
-    "test:jest:es5": "jest --config ./jest.es5.js",
-    "test:jest:es2015": "jest --config ./jest.es2015.js",
-    "test:jest:debug": "jest --watch",
+    "test:jest:es5": "jest -w 1 --config ./jest.es5.js",
+    "test:jest:es2015": "jest -w 1 --config ./jest.es2015.js",
+    "test:jest:debug": "jest -w 1 --watch",
     "lint": "ng lint"
   },
   "private": true,
