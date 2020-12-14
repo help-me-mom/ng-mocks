@@ -128,16 +128,5 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "renovate": {
-    "ignorePaths": [
-      "e2e/**"
-    ],
-    "rangeStrategy": "pin",
-    "rebaseWhen": "conflicted",
-    "separateMajorMinor": true,
-    "separateMinorPatch": true,
-    "separateMultipleMajor": true,
-    "includeForks": true
   }
 }

@@ -1,0 +1,12 @@
+{
+  "extends": ["config:base"],
+  "rangeStrategy": "pin",
+  "rebaseWhen": "conflicted",
+  "separateMajorMinor": true,
+  "separateMinorPatch": true,
+  "separateMultipleMajor": true,
+  "includeForks": true,
+  "ignoreDeprecated": false,
+  "semanticCommitScope": "{{#if baseDir}}{{baseDir}}{{else}}deps{{/if}}",
+  "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}"
+}

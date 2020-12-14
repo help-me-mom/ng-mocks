@@ -25,6 +25,7 @@ exclude_patterns:
   - 'LICENSE'
   - 'karma-test-shim.ts'
   - 'karma.conf.ts'
+  - 'renovate.json'
   - '**/*.json'
   - '**/*.md'
   - '**/*.yml'

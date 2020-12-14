@@ -62,8 +62,5 @@
     "testPathIgnorePatterns": [
       "<rootDir>/src/test.ts"
     ]
-  },
-  "renovate": {
-    "enabled": false
   }
 }
