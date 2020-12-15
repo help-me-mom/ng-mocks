@@ -1,5 +1,5 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:base", ":semanticCommitTypeAll(chore)"],
   "rangeStrategy": "pin",
   "rebaseWhen": "conflicted",
   "separateMajorMinor": true,
