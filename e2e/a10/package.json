@@ -25,14 +25,14 @@
     "puppeteer": "5.5.0"
   },
   "dependencies": {
-    "@angular/animations": "10.2.3",
-    "@angular/common": "10.2.3",
-    "@angular/compiler": "10.2.3",
-    "@angular/core": "10.2.3",
-    "@angular/forms": "10.2.3",
-    "@angular/platform-browser": "10.2.3",
-    "@angular/platform-browser-dynamic": "10.2.3",
-    "@angular/router": "10.2.3",
+    "@angular/animations": "10.2.4",
+    "@angular/common": "10.2.4",
+    "@angular/compiler": "10.2.4",
+    "@angular/core": "10.2.4",
+    "@angular/forms": "10.2.4",
+    "@angular/platform-browser": "10.2.4",
+    "@angular/platform-browser-dynamic": "10.2.4",
+    "@angular/router": "10.2.4",
     "rxjs": "6.5.5",
     "tslib": "2.0.3",
     "zone.js": "0.10.3"
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1002.0",
     "@angular/cli": "10.2.0",
-    "@angular/compiler-cli": "10.2.3",
+    "@angular/compiler-cli": "10.2.4",
     "@types/jasmine": "3.5.14",
     "@types/jest": "26.0.19",
     "@types/node": "12.19.9",
