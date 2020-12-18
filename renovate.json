@@ -8,5 +8,578 @@
   "includeForks": true,
   "ignoreDeprecated": false,
   "semanticCommitScope": "{{#if baseDir}}{{baseDir}}{{else}}deps{{/if}}",
-  "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}"
+  "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}",
+  "packageRules": [
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=5"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["core-js"],
+      "allowedVersions": "<=2.4"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=5.5"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.8"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=22"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=5.2"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=2.8"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=6"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=4.2"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=2.0"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=2.2"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=1.1"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=0.2"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=4"
+    },
+    {
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=2.5"
+    },
+
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=6"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["core-js"],
+      "allowedVersions": "<=2.5"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.2"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=1"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.8"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<=0.8"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=23"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=6.0"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=2.8"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=4.2"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=3.1"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=2.2"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=1.1"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=0.2"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=7"
+    },
+    {
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=2.9"
+    },
+
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=7"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["core-js"],
+      "allowedVersions": "<=2.6"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.3"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=1"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.8"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<=0.13"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=24"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=7.1"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=2.8"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=4.2"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=4.4"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=2.2"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=1.1"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=0.2"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=7"
+    },
+    {
+      "paths": ["e2e/a7/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=3.2"
+    },
+
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.4"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=1"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.9"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<0.900"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=25"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=8.2"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=3.4"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=4.2"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=4.4"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=2.2"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=2.0"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=1.4"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=7"
+    },
+    {
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=3.5"
+    },
+
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=9"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.5"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=1"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.10"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<0.1000"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=25"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=8.2"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=3.5"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=12"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=4.2"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=4.4"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=3.1"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=2.0"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=1.5"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a9/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=3.7"
+    },
+
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=10"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.5"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=2"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.10"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<0.1100"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["@types/jest", "jest", "ts-jest"],
+      "allowedVersions": "<=26"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=8.3"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=3.5"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=12"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=5.0"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=5.2"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=3.1"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=3.1"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=1.5"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=3.9"
+    },
+
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=11"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["rxjs"],
+      "allowedVersions": "<=6.5"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["tslib"],
+      "allowedVersions": "<=2"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["zone.js"],
+      "allowedVersions": "<=0.10"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<0.1200"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["@types/jest", "jest"],
+      "allowedVersions": "<=26"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["jest-preset-angular"],
+      "allowedVersions": "<=8.3"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["@types/jasmine", "jasmine-core"],
+      "allowedVersions": "<=3.6"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["@types/node"],
+      "allowedVersions": "<=12"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["jasmine-spec-reporter"],
+      "allowedVersions": "<=5.0"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["karma"],
+      "allowedVersions": "<=5.2"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["karma-chrome-launcher"],
+      "allowedVersions": "<=3.1"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["karma-jasmine"],
+      "allowedVersions": "<=4.0"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["karma-jasmine-html-reporter"],
+      "allowedVersions": "<=1.5"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "<=8"
+    },
+    {
+      "paths": ["e2e/a11/package.json"],
+      "packageNames": ["typescript"],
+      "allowedVersions": "<=4.0"
+    }
+  ]
 }

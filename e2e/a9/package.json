@@ -33,7 +33,6 @@
     "@angular/platform-browser": "9.1.13",
     "@angular/platform-browser-dynamic": "9.1.13",
     "@angular/router": "9.1.13",
-    "classlist.js": "1.1.20150312",
     "rxjs": "6.5.5",
     "tslib": "1.14.1",
     "zone.js": "0.10.3"

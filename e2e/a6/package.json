@@ -30,7 +30,6 @@
     "@angular/platform-browser": "6.1.10",
     "@angular/platform-browser-dynamic": "6.1.10",
     "@angular/router": "6.1.10",
-    "classlist.js": "1.1.20150312",
     "core-js": "2.5.7",
     "rxjs": "6.2.2",
     "zone.js": "0.8.29"
@@ -43,7 +42,7 @@
     "@types/jasmine": "2.8.17",
     "@types/jest": "23.3.14",
     "@types/node": "8.9.5",
-    "jasmine-core": "2.99.1",
+    "jasmine-core": "2.8.0",
     "jasmine-spec-reporter": "4.2.1",
     "jest": "23.6.0",
     "jest-preset-angular": "6.0.2",
