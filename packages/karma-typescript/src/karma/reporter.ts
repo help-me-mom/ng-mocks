@@ -94,7 +94,7 @@ export class Reporter {
                 const isCoverageCheckFailed = (await Promise.all(coverageChecks))
                     .some(isCheckFailed => isCheckFailed);
 
-                if (isCoverageCheckFailed) {
+                if (isCoverageCheckFailed && config.karma.singleRun) {
                     process.exit(1);
                 }
             };
