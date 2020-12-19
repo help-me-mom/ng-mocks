@@ -1,2 +1,4 @@
 import 'jest-preset-angular';
-import 'ng-mocks/dist/jest';
+import { ngMocks } from 'ng-mocks';
+
+ngMocks.autoSpy('jest');

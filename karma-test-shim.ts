@@ -13,7 +13,9 @@ import 'zone.js/dist/fake-async-test';
 
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { ngMocks } from 'ng-mocks';
 
+ngMocks.autoSpy('jasmine');
 jasmine.getEnv().allowRespy(true);
 
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());

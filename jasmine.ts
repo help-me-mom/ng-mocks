@@ -1,5 +1,6 @@
 import { registerMockFunction } from 'ng-mocks';
 
-declare const jasmine: any;
-
+/**
+ * @deprecated will be removed in v12, use `ngMocks.autoSpy('jasmine')`.
+ */
 registerMockFunction(mockName => jasmine.createSpy(mockName));
