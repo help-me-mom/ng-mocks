@@ -1,11 +1,14 @@
+// tslint:disable max-file-line-count
+
 import { EventEmitter, InjectionToken, Injector, Provider } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
-import { MockedFunction } from '../mock-service/types';
+import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
+import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFind from './mock-helper.find';
@@ -24,6 +27,16 @@ import mockHelperStub from './mock-helper.stub';
  * @see https://github.com/ike18t/ng-mocks#ngmocks
  */
 export const ngMocks: {
+  /**
+   * @see https://github.com/ike18t/ng-mocks#auto-spy
+   */
+  autoSpy(type: 'jasmine' | 'jest' | 'default' | 'reset'): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#auto-spy
+   */
+  autoSpy(type: CustomMockFunction): void;
+
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
    */
@@ -230,6 +243,7 @@ export const ngMocks: {
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
+  autoSpy: mockHelperAutoSpy,
   defaultMock: mockHelperDefaultMock,
   faster: mockHelperFaster,
   find: mockHelperFind,

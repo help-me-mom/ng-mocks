@@ -3,8 +3,9 @@
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import 'ng-mocks/dist/jasmine';
+import { ngMocks } from 'ng-mocks';
 
+ngMocks.autoSpy('jasmine');
 declare const require: {
   context(
     path: string,

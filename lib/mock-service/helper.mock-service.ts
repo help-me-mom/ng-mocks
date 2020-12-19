@@ -43,5 +43,5 @@ export default ((): {
   useFactory: typeof helperUseFactory;
 } => getGlobal().ngMockshelperMockService)();
 
-export const registerMockFunction: (func: CustomMockFunction | undefined) => void = getGlobal().ngMockshelperMockService
-  .registerMockFunction;
+export const registerMockFunction: (func?: CustomMockFunction | undefined) => void = getGlobal()
+  .ngMockshelperMockService.registerMockFunction;

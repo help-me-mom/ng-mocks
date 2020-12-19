@@ -45,7 +45,6 @@ module.exports = (config: KarmaTypescriptConfig) => {
     files: [
       'karma-test-shim.ts',
       'index.ts',
-      'jasmine.ts',
       { pattern: 'lib/**/*.ts' },
       { pattern: 'examples/**/*.ts' },
       { pattern: 'tests/**/*.ts' },
