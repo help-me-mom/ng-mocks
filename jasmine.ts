@@ -1,6 +1,6 @@
-import { registerMockFunction } from 'ng-mocks';
+import { ngMocks } from 'ng-mocks';
 
 /**
- * @deprecated will be removed in v12, use `ngMocks.autoSpy('jasmine')`.
+ * @deprecated the file will be removed in v12, use `ngMocks.autoSpy('jasmine')`.
  */
-registerMockFunction(mockName => jasmine.createSpy(mockName));
+ngMocks.autoSpy('jasmine');

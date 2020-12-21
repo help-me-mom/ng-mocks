@@ -1,6 +1,6 @@
-import { registerMockFunction } from 'ng-mocks';
+import { ngMocks } from 'ng-mocks';
 
 /**
- * @deprecated will be removed in v12, use `ngMocks.autoSpy('jest')`.
+ * @deprecated the file will be removed in v12, use `ngMocks.autoSpy('jest')`.
  */
-registerMockFunction(name => jest.fn().mockName(name));
+ngMocks.autoSpy('jest');
