@@ -1,3 +1,10 @@
+## [11.2.6](https://github.com/ike18t/ng-mocks/compare/v11.2.5...v11.2.6) (2020-12-21)
+
+
+### Bug Fixes
+
+* **auto-spy:** in legacy parts too ([114ae22](https://github.com/ike18t/ng-mocks/commit/114ae227e97b4ba420feb749e270383e44f8ed2f))
+
 ## [11.2.5](https://github.com/ike18t/ng-mocks/compare/v11.2.4...v11.2.5) (2020-12-20)
 
 
