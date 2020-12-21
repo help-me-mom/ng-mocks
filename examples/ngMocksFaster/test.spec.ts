@@ -90,7 +90,7 @@ describe('examples:performance', () => {
           ? jasmine.createSpy().and.returnValue(5)
           : jest.fn().mockReturnValue(5),
       // in case of jest
-      // instance.method = jest.fn().mockReturnValue(5);
+      // method: jest.fn().mockReturnValue(5),
       prop: 123,
     };
 

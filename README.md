@@ -71,17 +71,17 @@ We are open to contributions.
 - [Motivation and easy start](#motivation-and-easy-start)
 - [How to install](#install)
 
-* [How to turn annoying declarations into mocks](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application)
-  - [mock components](#how-to-mock-components)
-  - [mock directives](#how-to-mock-directives)
-  - [mock pipes](#how-to-mock-pipes)
-  - [mock services](#how-to-mock-services)
-  - [mock providers](#how-to-mock-providers)
-  - [mock modules](#how-to-mock-modules)
-  - [mock observables](#how-to-mock-observables)
-  - [mock form controls](#how-to-mock-form-controls)
+* [Mocking in Angular tests](#how-to-turn-annoying-declarations-into-mocks-in-an-angular-application)
+  - [How to mock components](#how-to-mock-components)
+  - [How to mock directives](#how-to-mock-directives)
+  - [How to mock pipes](#how-to-mock-pipes)
+  - [How to mock services](#how-to-mock-services)
+  - [How to mock providers](#how-to-mock-providers)
+  - [How to mock modules](#how-to-mock-modules)
+  - [How to mock observables](#how-to-mock-observables)
+  - [How to mock form controls](#how-to-mock-form-controls)
 
-- [Extensive example](#extensive-example-of-mocks-in-angular-tests)
+- [Example of mocking with `ng-mocks`](#extensive-example-of-mocks-in-angular-tests)
 
 * [`MockBuilder` in details](#mockbuilder)
 * [`MockRender` in details](#mockrender)
@@ -90,8 +90,8 @@ We are open to contributions.
 * [Helper functions](#helper-functions)
 
 - [Usage with 3rd-party libraries](#usage-with-3rd-party-libraries)
-- [Making tests faster](#making-angular-tests-faster)
-- [Auto Spy](#auto-spy)
+- [Making Angular tests faster](#making-angular-tests-faster)
+- [Auto spies in Angular tests](#auto-spy)
 
 * [How to fix](#how-to-fix-an-error-in-angular-tests)
   - [`TypeError: Cannot read property 'subscribe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)

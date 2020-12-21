@@ -4,7 +4,6 @@
 ### Bug Fixes
 
 * **auto-spy:** as a function call instead of import ([3b7d8f7](https://github.com/ike18t/ng-mocks/commit/3b7d8f7f9d47c0e8804ab69dce1740a63cff55e5))
-* **e2e/a9:** update dependency zone.js to v0.10.3 ([b11ea30](https://github.com/ike18t/ng-mocks/commit/b11ea30ce3cf70171e72645870c5e840c1267c04))
 
 ## [11.2.4](https://github.com/ike18t/ng-mocks/compare/v11.2.3...v11.2.4) (2020-12-13)
 
