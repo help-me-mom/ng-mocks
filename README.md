@@ -29,9 +29,9 @@ The current version of the library has been tested and can be used with:
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 
 There are preconfigured sandboxes on
-[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
-and
 [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts)
+and
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
 where you might check all the features. To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
 There is a brief summary of the latest changes in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
@@ -49,8 +49,8 @@ There is a brief summary of the latest changes in [CHANGELOG](https://github.com
 
 - Don't hesitate to [ask questions on gitter](https://gitter.im/ng-mocks/community)
 - Try one of the online sandboxes:
-  [CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts),
-  [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts)
+  [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts),
+  [CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
 
 **TL;DR**
 
@@ -402,11 +402,9 @@ describe('Test', () => {
 <details><summary>Click to see <strong>a usage example of mock components in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockComponent](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockComponent/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent).
 
 ```typescript
 describe('MockComponent', () => {
@@ -593,11 +591,9 @@ describe('Test', () => {
 <details><summary>Click to see <strong>a usage example of mock attribute directives in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockDirective-Attribute](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Attribute/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute).
 
 ```typescript
 describe('MockDirective:Attribute', () => {
@@ -666,11 +662,9 @@ describe('MockDirective:Attribute', () => {
 It's important to render a structural directive with the right context first,
 if you want to assert on its nested elements.
 
-The source file is here:
-[MockDirective-Structural](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Structural/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural).
 
 ```typescript
 describe('MockDirective:Structural', () => {
@@ -790,11 +784,9 @@ describe('Test', () => {
 <details><summary>Click to see <strong>a usage example of mock pipes in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockPipe](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockPipe/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe).
 
 ```typescript
 describe('MockPipe', () => {
@@ -970,11 +962,9 @@ If you are encountering it too, please read a section called [How to fix `TypeEr
 <details><summary>Click to see <strong>a usage example of mock providers in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockProvider](https://github.com/ike18t/ng-mocks/blob/master/examples/MockProvider/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockProvider/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockProvider/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockProvider/test.spec.ts&initialpath=%3Fspec%3DMockProvider),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockProvider/test.spec.ts&initialpath=%3Fspec%3DMockProvider).
 
 ```typescript
 describe('MockProvider', () => {
@@ -1113,11 +1103,9 @@ beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 <details><summary>Click to see <strong>a usage example of mock modules in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockModule](https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockModule/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockModule/test.spec.ts&initialpath=%3Fspec%3DMockModule),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockModule/test.spec.ts&initialpath=%3Fspec%3DMockModule).
 
 ```typescript
 describe('MockModule', () => {
@@ -1256,11 +1244,9 @@ but it goes beyond the topic.
 <details><summary>Click to see <strong>a usage example of a mock observable in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockObservable](https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockObservable/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable).
 
 ```typescript
 describe('MockObservable', () => {
@@ -1372,11 +1358,9 @@ A mock object of `Validator` or `AsyncValidator` additionally implements `MockVa
 <details><summary>Click to see <strong>a usage example of a mock FormControl with ReactiveForms in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockReactiveForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockReactiveForms/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockReactiveForms/test.spec.ts&initialpath=%3Fspec%3DMockReactiveForms),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockReactiveForms/test.spec.ts&initialpath=%3Fspec%3DMockReactiveForms).
 
 ```typescript
 describe('MockReactiveForms', () => {
@@ -1436,11 +1420,9 @@ describe('MockReactiveForms', () => {
 <details><summary>Click to see <strong>a usage example of mock FormControl with ngModel in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockForms](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockForms/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockForms/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms).
 
 ```typescript
 describe('MockForms', () => {
@@ -1507,11 +1489,9 @@ describe('MockForms', () => {
 
 ## Extensive example of mocks in Angular tests
 
-The source file is here:
-[main](https://github.com/ike18t/ng-mocks/blob/master/examples/main/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/main/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/main/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain).
 
 ```typescript
 @Pipe({
@@ -1705,7 +1685,8 @@ describe('main', () => {
 
 Our tests:
 
-- [sandbox on codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/e2e.ts)
+- [sandbox on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/e2e.ts)
+- [sandbox on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/e2e.ts)
 - [examples from the doc](https://github.com/ike18t/ng-mocks/tree/master/examples)
 - [current e2e tests](https://github.com/ike18t/ng-mocks/tree/master/tests)
 
@@ -1762,11 +1743,9 @@ and has a rich toolkit that supports:
 <details><summary>Click to see <strong>a code sample demonstrating ease of creating mocks in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockBuilder](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.simple.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.simple.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockBuilder/test.simple.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockBuilder/test.simple.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Asimple),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockBuilder/test.simple.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Asimple).
 
 ```typescript
 describe('MockBuilder:simple', () => {
@@ -2246,11 +2225,9 @@ the render.
 
 There is **an example how to render a custom template in an Angular test** below.
 
-The source file is here:
-[MockRender](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockRender/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender).
 
 ```typescript
 describe('MockRender', () => {
@@ -2397,11 +2374,9 @@ afterAll(() => MockInstance(ChildComponent)); // <- resets ChildComponent.
 <details><summary>Click to see <strong>a usage example of mock services before initialization in Angular tests</strong></summary>
 <p>
 
-The source file is here:
-[MockInstance](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts).<br>
-Prefix it with `fdescribe` or `fit` on
-[codesandbox.io](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockInstance/test.spec.ts)
-to play with.
+[Source](https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts),
+[StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance),
+[CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance).
 
 ```typescript
 describe('MockInstance', () => {

@@ -13,7 +13,7 @@ describe('TestLifecycleHooks:string', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('triggers lifecycle hooks correctly via MockRender w/ params', () => {
+  it('triggers lifecycle hooks correctly via mock-render w/ params', () => {
     // First let's suppress detectChanges.
     const fixture = MockRender(
       '<target [input]="input"></target>',

@@ -28,7 +28,7 @@ class TargetComponent {
 }
 
 describe('examples:performance', () => {
-  describe('beforeEach:MockInstance', () => {
+  describe('beforeEach:mock-instance', () => {
     ngMocks.faster(); // <-- add it before
 
     // A normal setup of the TestBed, TargetService will be replaced

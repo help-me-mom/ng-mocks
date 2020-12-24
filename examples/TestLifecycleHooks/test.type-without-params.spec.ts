@@ -13,7 +13,7 @@ describe('TestLifecycleHooks:type-without-params', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('triggers lifecycle hooks correctly via MockRender w/o params', () => {
+  it('triggers lifecycle hooks correctly via mock-render w/o params', () => {
     // First let's suppress detectChanges.
     const fixture = MockRender(TargetComponent, undefined, {
       detectChanges: false,
