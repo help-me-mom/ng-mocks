@@ -82,9 +82,9 @@ describe('interceptor-kept-mock', () => {
 
   beforeAll(() => {
     MockInstance(Target2Interceptor, {
-      init: instance =>
-        (instance.intercept = (request, next) =>
-          next.handle(request)),
+      init: instance => {
+        instance.intercept = (request, next) => next.handle(request);
+      },
     });
   });
 

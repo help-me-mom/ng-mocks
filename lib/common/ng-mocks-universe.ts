@@ -13,6 +13,7 @@ interface NgMocksUniverse {
   cacheProviders: Map<any, any>;
   config: Map<any, any>;
   flags: Set<string>;
+  getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
   global: Map<any, any>;
   isExcludedDef: (def: any) => boolean;
@@ -21,7 +22,7 @@ interface NgMocksUniverse {
 }
 
 getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {};
-const ngMocksUniverse = getGlobal().ngMocksUniverse;
+const ngMocksUniverse: NgMocksUniverse = getGlobal().ngMocksUniverse;
 
 ngMocksUniverse.builtDeclarations = new Map();
 ngMocksUniverse.builtProviders = new Map();
@@ -32,7 +33,15 @@ ngMocksUniverse.flags = new Set(coreConfig.flags);
 ngMocksUniverse.global = new Map();
 ngMocksUniverse.touches = new Set();
 
-ngMocksUniverse.getOverrides = (): Map<any, any> => {
+ngMocksUniverse.getLocalMocks = () => {
+  if (!ngMocksUniverse.global.has('local-mocks')) {
+    ngMocksUniverse.global.set('local-mocks', []);
+  }
+
+  return ngMocksUniverse.global.get('local-mocks');
+};
+
+ngMocksUniverse.getOverrides = () => {
   if (!ngMocksUniverse.global.has('overrides')) {
     ngMocksUniverse.global.set('overrides', new Map());
   }
