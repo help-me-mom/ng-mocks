@@ -36,28 +36,6 @@ where you might check all the features. To focus on a particular one, simply pre
 
 There is a brief summary of the latest changes in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
 
-### How to read this?
-
-**Essential**
-
-1. Read titles from [TOC](#table-of-contents)
-1. Start with [Motivation and easy start](#motivation-and-easy-start)
-1. Check an [extensive example](#extensive-example-of-mocks-in-angular-tests)
-1. Search keywords you need on this page: `NgModel`, `ViewChild`, `mock service` etc
-
-**Additional**
-
-- Don't hesitate to [ask questions on gitter](https://gitter.im/ng-mocks/community)
-- Try one of the online sandboxes:
-  [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts),
-  [CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
-
-**TL;DR**
-
-- Read about [`MockRender`](#mockrender), [`MockInstance`](#mockinstance), [`ngMocks`](#ngmocks)
-- Read about [`MockBuilder`](#mockbuilder)
-- Check [guides and examples how to test Angular applications](https://ng-mocks.github.io/)
-
 ### Find an issue or have a question or a request?
 
 We are open to contributions.
@@ -68,6 +46,7 @@ We are open to contributions.
 
 ## Table of contents
 
+- [How to read this](#how-to-read-this)
 - [Motivation and easy start](#motivation-and-easy-start)
 - [How to install](#install)
 
@@ -104,7 +83,27 @@ We are open to contributions.
 - [How to test Angular applications](https://ng-mocks.github.io/)
 - [How to configure CI to execute Angular tests automatically](https://satantime.github.io/puppeteer-node/)
 
----
+### How to read this?
+
+**Essential**
+
+1. Read titles from [TOC](#table-of-contents)
+1. Start with [Motivation and easy start](#motivation-and-easy-start)
+1. Check an [extensive example](#extensive-example-of-mocks-in-angular-tests)
+1. Search keywords you need on this page: `NgModel`, `ViewChild`, `mock service` etc
+
+**Additional**
+
+- Don't hesitate to [ask questions on gitter](https://gitter.im/ng-mocks/community)
+- Try one of the online sandboxes:
+  [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts),
+  [CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts)
+
+**TL;DR**
+
+- Read about [`MockRender`](#mockrender), [`MockInstance`](#mockinstance), [`ngMocks`](#ngmocks)
+- Read about [`MockBuilder`](#mockbuilder)
+- Check [guides and examples how to test Angular applications](https://ng-mocks.github.io/)
 
 ## Motivation and easy start
 
@@ -291,8 +290,6 @@ Have a question still? Don't hesitate to [contact us](#find-an-issue-or-have-a-q
 
 Below more detailed documentation begins, please bear with us.
 
----
-
 ## Install
 
 For any Angular project you can use the latest version of the library.
@@ -304,8 +301,6 @@ NPM
 Yarn
 
 > yarn add ng-mocks --dev
-
----
 
 ## How to turn annoying declarations into mocks in an Angular application
 
@@ -321,12 +316,9 @@ of all aspects might be useful in writing fully isolated unit tests.
 - [mock observables](#how-to-mock-observables)
 - [mock form controls](#how-to-mock-form-controls)
 
----
-
 ### How to mock components
 
-There is a `MockComponent` function.
-It covers everything you need to turn a component into its mock declaration.
+**A mock component in Angular tests** can be created by `MockComponent` function.
 
 - `MockComponent( Component )` - returns a mock class of `Component` component.
 - `MockComponents( Component1, Component2, ... )` - returns an array of mocks.
@@ -512,12 +504,9 @@ describe('MockComponent', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock directives
 
-There is a `MockDirective` function.
-It turns a directive into its mock declaration.
+**A mock directive in Angular tests** can be created by `MockDirective` function.
 
 - `MockDirective( Directive )` - returns a mock class of `Directive` directive.
 - `MockDirectives( Directive1, Directive2, ... )` - returns an array of mocks.
@@ -525,7 +514,7 @@ It turns a directive into its mock declaration.
 > **NOTE**: Information about [form control and their mocks](#how-to-mock-form-controls)
 > is in a different section.
 
-**a mock directive** respects the interface of its original directive as
+**A mock directive** respects the interface of its original directive as
 a type of `MockedDirective<T>` and provides:
 
 - the same `selector`
@@ -705,11 +694,10 @@ describe('MockDirective:Structural', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock pipes
 
-`ng-mocks` has a `MockPipe` function that creates mock pipes with an empty or a custom handler.
+**A mock pipe in Angular tests** can be created by `MockPipe` function.
+The second parameter of the function accepts a custom transform callback.
 
 - `MockPipe( Pipe )` - returns a mock class of `Pipe` pipe that always transforms to `undefined`.
 - `MockPipe( Pipe, value => 'fake' )` - returns a mock class of `Pipe` pipe that transforms to `fake`.
@@ -826,12 +814,10 @@ describe('MockPipe', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock services
 
-`ng-mocks` provides a `MockService` function that tries its best
-to create **mock objects out of services**.
+**A mock service in Angular tests** can be created by `MockService` function.
+
 It tends to avoid a hassle of providing customized mock objects for huge services.
 Simply pass a class into it and its result will be a mock instance that respects the class,
 but all methods and properties are customizable dummies.
@@ -839,8 +825,8 @@ but all methods and properties are customizable dummies.
 - `MockService( Service, overrides? )` - returns a mock instance of `Service` class.
 - `MockService( Obj )` - returns a mock object of `Obj` object.
 
-> **NOTE**: Information about [provides and their mocks](#how-to-mock-providers)
-> is in the next section, and about [observables](#how-to-mock-observables) after it.
+> **NOTE**: Information about [mocking provides](#how-to-mock-providers)
+> is in the next section, and about [mocking observables](#how-to-mock-observables) after it.
 
 **A mock service instance** is based on its original class, and provides:
 
@@ -881,11 +867,9 @@ instance.nested.func = () => 'My Custom Behavior';
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock providers
 
-`MockProvider` might be useful If you want to create **a stub for a service** or a token in providers.
+**A mock provider in Angular tests** can be created by `MockProvider` function.
 
 - `MockProvider( Service, overrides? )` - creates a factory provider with `MockService(Service)` under the hood.
 - `MockProvider( TOKEN, useValue? )` - creates a factory provider that returns `undefined`.
@@ -1014,13 +998,11 @@ describe('MockProvider', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock modules
 
-There is a `MockModule` function covering almost all needs for mock behavior.
-**To create a mock module in Angular tests** with `ng-mocks` is quite easy.
-The library does it recursively for modules, and creates mocks for all imports, exports and their declarations.
+**A mock module in Angular tests** can be created by `MockModule`.
+
+A mock module is processed recursively. Mocks for all imports, exports and declarations will be created.
 
 - `MockModule( Module )` - returns a mock class of `Module` module.
 - `MockModule( Module.forRoots() )` - additionally to a mock class of `Module` module returns mock providers.
@@ -1127,9 +1109,12 @@ describe('MockModule', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock observables
+
+**A mock observable in Angular tests** can be created by
+[`MockProvider`](#how-to-mock-providers),
+[`MockInstance`](#mockinstance) or
+[`ngMocks.defaultMock`](#ngmocksdefaultmock).
 
 For example, if we have `TodoService.list$()`,
 that returns a type of `Observable<Array<Todo>>`,
@@ -1314,8 +1299,6 @@ describe('MockObservable', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### How to mock form controls
 
 `ng-mocks` respects `ControlValueAccessor` interface if [a directive](#how-to-mock-directives),
@@ -1372,15 +1355,11 @@ describe('MockReactiveForms', () => {
 
   // Because of early calls of writeValue, we need to install
   // the spy in the ctor call.
-  beforeAll(() =>
+  beforeEach(() =>
     MockInstance(DependencyComponent, () => ({
       writeValue,
     })),
   );
-
-  // To avoid influence in other tests
-  // we need to reset MockInstance effects.
-  afterAll(MockReset);
 
   beforeEach(() => {
     return MockBuilder(TestedComponent)
@@ -1434,15 +1413,11 @@ describe('MockForms', () => {
 
   // Because of early calls of writeValue, we need to install
   // the spy in the ctor call.
-  beforeAll(() =>
+  beforeEach(() =>
     MockInstance(DependencyComponent, () => ({
       writeValue,
     })),
   );
-
-  // To avoid influence in other tests
-  // we need to reset MockInstance effects.
-  afterAll(MockReset);
 
   beforeEach(() => {
     return MockBuilder(TestedComponent)
@@ -1484,8 +1459,6 @@ describe('MockForms', () => {
 </details>
 
 [to the top](#table-of-contents)
-
----
 
 ## Extensive example of mocks in Angular tests
 
@@ -1692,8 +1665,6 @@ Our tests:
 
 [to the top](#table-of-contents)
 
----
-
 ## Functions for easy builds of mocks and template rendering
 
 The section provides information about essential functions for creating mocks with minimum coding.
@@ -1702,8 +1673,6 @@ The section provides information about essential functions for creating mocks wi
 - [`MockRender`](#mockrender) - renders custom templates
 - [`MockInstance`](#mockinstance) - extends mocks on an early stage
 - [`ngMocks`](#ngmocks) - facilitates work with fixtures
-
----
 
 ### MockBuilder
 
@@ -2164,8 +2133,6 @@ beforeEach(() => {
 
 [to the top](#table-of-contents)
 
----
-
 ### MockRender
 
 `MockRender` is a simple tool that helps with **shallow rendering in Angular tests**
@@ -2304,19 +2271,86 @@ describe('MockRender', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### MockInstance
 
-`MockInstance` is useful when you want to configure spies of a declaration or a service before its render.
-It supports: Modules, Components, Directives, Pipes and Services.
+A mock instance of service or declaration in tests may be customized via `MockInstance`.
+It's useful, when you want to configure spies before its usage.
+It supports: Modules, Components, Directives, Pipes, Services and Tokens.
 
-- `MockInstance( Service, ( instance, injector ) => void)` - sets the callback to initialize an instance.
-- `MockInstance( Component, config: {init: Function} )` - sets the config, currently only `init` is supported, it is the callback.
-- `MockInstance( Service )` - removes initialization from the service.
-- `MockReset()` - removes initialization from all services.
+There are two ways how to customize a mock instance:
 
-The time to use it is definitely when a test fails like:
+- directly define properties and methods
+- return a desired shape
+
+```ts
+// setting values to instance
+MockInstance(Service, (instance, injector) => {
+  instance.prop1 = injector.get(SOME_TOKEN);
+  instance.method1 = jasmine.createSpy().and.returnValue(5);
+  instance.method2 = value => (instance.prop2 = value);
+});
+// returning a custom shape
+MockInstance(Service, (instance, injector) => ({
+  prop1: injector.get(SOME_TOKEN),
+  method1: jasmine.createSpy().and.returnValue(5),
+  method2: value => (instance.prop2 = value),
+}));
+// a simple shape
+MockInstance(Service, () => ({
+  prop1: 1,
+  method1: jasmine.createSpy(),
+  method2: jasmine.createSpy(),
+}));
+```
+
+In case of tokens, the handler should return the token value.
+
+```ts
+MockInstance(TOKEN, (instance, injector) => {
+  return injector.get(SOME_OTHER_TOKEN);
+});
+MockInstance(TOKEN, () => true);
+```
+
+In order to reset the handler, `MockInstance` should be called without it.
+
+```ts
+MockInstance(Service);
+MockInstance(TOKEN);
+// Or simply one call.
+// It resets all handlers for all declarations.
+MockReset();
+```
+
+Every call of `MockInstance` overrides the previous handler.
+`MockInstance` can be called anywhere,
+but if it's called in `beforeEach` or in `it`, then the handler has an effect only during the current spec.
+
+```ts
+beforeAll(() => MockInstance(TOKEN, () => true));
+// If we don't call MockReset,
+// then TOKEN will be true in other suites too.
+// To avoid this side effect, beforeEach should be used.
+afterAll(MockReset);
+
+it('test 1', () => {
+  // token is true
+  expect(TestBed.get(TOKEN)).toEqual(true);
+});
+
+it('test 2', () => {
+  // token is false
+  MockInstance(TOKEN, () => false);
+  expect(TestBed.get(TOKEN)).toEqual(false);
+});
+
+it('test 3', () => {
+  // token is true again
+  expect(TestBed.get(TOKEN)).toEqual(true);
+});
+```
+
+It's definitely the time to use it, when a test fails like:
 
 - [TypeError: Cannot read property 'subscribe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
 - [TypeError: Cannot read property 'pipe' of undefined](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined)
@@ -2350,7 +2384,7 @@ a solution here. That's where `ng-mocks` helps again with the `MockInstance` hel
 It accepts a class as the first parameter, and a tiny callback describing how to customize its instances as the second one.
 
 ```typescript
-beforeAll(() =>
+beforeEach(() =>
   MockInstance(ChildComponent, () => ({
     // Now we can customize a mock object of ChildComponent in its ctor call.
     // The object will be extended with the returned object.
@@ -2359,17 +2393,8 @@ beforeAll(() =>
 );
 ```
 
-Profit. Now, when Angular creates an instance of `ChildComponent` the callback is called in its ctor and `update$` property
+Profit. When Angular creates an instance of `ChildComponent`, the callback is called in its ctor, and `update$` property
 of the instance is an `Observable` instead of `undefined`.
-
-After testing, you should reset changes to avoid their influence in other tests via a call of
-`MockInstance(ChildComponent)` without the second parameter or simply
-`MockReset()` to reset all customizations.
-
-```typescript
-afterAll(() => MockInstance(ChildComponent)); // <- resets ChildComponent.
-// afterAll(MockReset); // <- or this one to reset all MockInstances.
-```
 
 <details><summary>Click to see <strong>a usage example of mock services before initialization in Angular tests</strong></summary>
 <p>
@@ -2385,7 +2410,7 @@ describe('MockInstance', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
-  beforeAll(() => {
+  beforeEach(() => {
     // Because TargetComponent is replaced with its mock object,
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
@@ -2395,9 +2420,6 @@ describe('MockInstance', () => {
       update$: EMPTY,
     }));
   });
-
-  // Do not forget to reset MockInstance back.
-  afterAll(MockReset);
 
   it('should render', () => {
     // Without the custom initialization rendering would fail here
@@ -2411,8 +2433,6 @@ describe('MockInstance', () => {
 </details>
 
 [to the top](#table-of-contents)
-
----
 
 ### ngMocks
 
@@ -2675,8 +2695,6 @@ ngMocks.stub(instance, {
 
 [to the top](#table-of-contents)
 
----
-
 ### Helper functions
 
 `ng-mocks` provides several functions which help with **detection of mock objects**.
@@ -2808,8 +2826,6 @@ This function verifies tokens.
 
 [to the top](#table-of-contents)
 
----
-
 ### Usage with 3rd-party libraries
 
 `ng-mocks` provides flexibility via [`ngMocks.guts`](#ngmocksguts) and [`MockBuilder`](#mockbuilder)
@@ -2857,8 +2873,6 @@ Profit.
 [share](https://twitter.com/intent/tweet?text=Check+ng-mocks+package&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)!
 
 [to the top](#table-of-contents)
-
----
 
 ### Making Angular tests faster
 
@@ -2967,8 +2981,6 @@ describe('beforeEach:manual-spy', () => {
 
 [to the top](#table-of-contents)
 
----
-
 ### Auto Spy
 
 By default, all mock methods are empty functions which return `undefined`.
@@ -3024,8 +3036,6 @@ afterEach(() => ngMocks.autoSpy('reset'));
 
 [to the top](#table-of-contents)
 
----
-
 ## How to fix an error in Angular tests
 
 We may encounter different unpleasant issues, when we create mocks in testing environment.
@@ -3038,8 +3048,6 @@ feel free to [contact us](#find-an-issue-or-have-a-question-or-a-request) if you
 - [`Error: Directive has no selector, please add it!`](#how-to-fix-error-directive-has-no-selector-please-add-it)
 - [`Template parse errors: <component> is not a known element`](#how-to-fix-template-parse-errors-component-is-not-a-known-element)
 
----
-
 ### How to fix `TypeError: Cannot read property 'subscribe' of undefined`
 
 This issue means that something has been replaced with a mock object and returns a dummy result (`undefined`) instead of observable streams.
@@ -3048,11 +3056,9 @@ There is an answer for this error in the section called [How to mock observables
 if the error has been triggered by a mock service, and its property is of type of `undefined`.
 
 Or you might check [`MockInstance`](#mockinstance) or [`ngMocks.defaultMock`](#ngmocksdefaultmock)
-in case if the error has been caused by a mock component or a mock directive.
+in the case if the error has been caused by a mock component or a mock directive.
 
 [to the top](#table-of-contents)
-
----
 
 ### How to fix `Error: Type is part of the declarations of 2 modules`
 
@@ -3101,8 +3107,6 @@ More detailed information how to use it you can find in the section called [`Moc
 
 [to the top](#table-of-contents)
 
----
-
 ### How to fix Error: Directive has no selector, please add it!
 
 This issue means that a module imports a declaration (usually a parent class) which does not have a selector.
@@ -3124,8 +3128,6 @@ That fixes declarations of the module and resolves the error,
 a directive without a selector has been gone from the module definition.
 
 [to the top](#table-of-contents)
-
----
 
 ### How to fix Template parse errors: \<component\> is not a known element
 
