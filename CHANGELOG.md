@@ -1,3 +1,11 @@
+## [11.2.7](https://github.com/ike18t/ng-mocks/compare/v11.2.6...v11.2.7) (2020-12-25)
+
+
+### Bug Fixes
+
+* **mock-intance:** graceful reset after specs ([2e395df](https://github.com/ike18t/ng-mocks/commit/2e395dfa48192d367fd13a691925160e97bcd33c))
+* **mock-intance:** supports tokens ([92abb82](https://github.com/ike18t/ng-mocks/commit/92abb82b3fa8e35c248dd3098fd47ab4543a3354))
+
 ## [11.2.6](https://github.com/ike18t/ng-mocks/compare/v11.2.5...v11.2.6) (2020-12-21)
 
 
