@@ -1,7 +1,7 @@
 os: linux
 language: node_js
 node_js:
-  - 10
+  - v14.15.3
 dist: trusty
 addons:
   chrome: stable
