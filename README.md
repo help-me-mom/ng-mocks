@@ -40,9 +40,9 @@ There is a brief summary of the latest changes in [CHANGELOG](https://github.com
 
 We are open to contributions.
 
-- [ask a question on gitter](https://gitter.im/ng-mocks/community)
-- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
-- or submit a PR
+- [chat on gitter](https://gitter.im/ng-mocks/community)
+- [ask a question on stackoverflow](https://stackoverflow.com/questions/ask?tags=ng-mocks%20angular%20testing%20mocking)
+- [report an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
 
 ## Table of contents
 
