@@ -1188,9 +1188,10 @@ beforeEach(() => {
 });
 
 it('test', () => {
-  const list$ = new Subject(); // <- create the subject.
+  const fakeList$ = new Subject(); // <- create the subject.
+  const list$ = jasmine.createSpy().and.returnValue(fakeList$);
   MockInstance(TodoService, () => ({
-    list$: jasmine.createSpy().and.returnValue(list$),
+    list$,
   }));
 
   const fixture = TestBed.createComponent(TodoComponent);
@@ -1200,7 +1201,7 @@ it('test', () => {
   expect(list$).toHaveBeenCalledTimes(1);
 
   // Let's simulate emits.
-  list$.next([]);
+  fakeList$.next([]);
 });
 ```
 
