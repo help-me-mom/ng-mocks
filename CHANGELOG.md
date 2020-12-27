@@ -1,3 +1,11 @@
+## [11.2.8](https://github.com/ike18t/ng-mocks/compare/v11.2.7...v11.2.8) (2020-12-27)
+
+
+### Bug Fixes
+
+* removal dependency on decorators ([92064d4](https://github.com/ike18t/ng-mocks/commit/92064d480011600cbbcee70245bda12449b4e4e5))
+* removal dependency on reflect-metadata ([57cedfb](https://github.com/ike18t/ng-mocks/commit/57cedfb08805095481b377cf84b9fd7329acd9e4))
+
 ## [11.2.7](https://github.com/ike18t/ng-mocks/compare/v11.2.6...v11.2.7) (2020-12-25)
 
 
