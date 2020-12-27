@@ -1,11 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import { extendClass } from '../common/core.helpers';
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
 import { Type } from '../common/core.types';
+import decorateMock from '../common/decorate.mock';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { Mock } from '../common/mock';
-import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperMockService from '../mock-service/helper.mock-service';
 
@@ -19,8 +20,9 @@ export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<Pipe
 }
 
 const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): Type<any> => {
-  @Pipe(coreReflectPipeResolve(pipe))
-  @MockOf(pipe, {
+  const mock = extendClass(Mock);
+  Pipe(coreReflectPipeResolve(pipe))(mock);
+  decorateMock(mock, pipe, {
     init: (instance: PipeTransform) => {
       if (transform) {
         instance.transform = transform;
@@ -29,10 +31,9 @@ const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): 
         helperMockService.mock(instance, 'transform', `${instance.constructor.name}.transform`);
       }
     },
-  })
-  class PipeMock extends Mock {}
+  });
 
-  return PipeMock;
+  return mock;
 };
 
 /**

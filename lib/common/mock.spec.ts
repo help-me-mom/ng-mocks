@@ -20,10 +20,10 @@ import { MockDirective } from '../mock-directive/mock-directive';
 import { MockModule } from '../mock-module/mock-module';
 import { MockPipe } from '../mock-pipe/mock-pipe';
 
-import { Type } from './core.types';
+import { extendClass } from './core.helpers';
+import decorateMock from './decorate.mock';
 import { isMockOf } from './func.is-mock-of';
 import { Mock } from './mock';
-import { MockOf } from './mock-of';
 
 class ParentClass {
   protected parentValue = true;
@@ -251,12 +251,12 @@ describe('definitions', () => {
   it('skips output properties from config', () => {
     class TargetComponent {}
 
-    @MockOf(TargetComponent, {
+    const testComponent = extendClass(Mock);
+    decorateMock(testComponent, TargetComponent, {
       outputs: ['__ngMocksConfig', 'test'],
-    })
-    class TestComponent extends Mock {}
+    });
 
-    const instance: any = new TestComponent();
+    const instance: any = new testComponent();
     expect(instance.__ngMocksConfig).not.toEqual(
       jasmine.any(EventEmitter),
     );
@@ -264,49 +264,38 @@ describe('definitions', () => {
   });
 
   it('adds missed properties to the instance', () => {
-    const customProperty = (constructor: Type<any>) => {
-      Object.defineProperty(constructor.prototype, 'test', {
-        get: () => false,
-      });
-    };
-
     class TargetComponent {}
 
-    @customProperty
-    class TestMock extends Mock {}
+    class TestMock extends Mock {
+      public get test(): boolean {
+        return false;
+      }
+    }
 
-    @MockOf(TargetComponent)
-    class TestComponent extends TestMock {}
-
-    const instance: any = new TestComponent();
+    const testComponent = extendClass(TestMock);
+    decorateMock(testComponent, TargetComponent);
+    const instance: any = new testComponent();
     expect(
       Object.getOwnPropertyDescriptor(instance, 'test'),
     ).toBeDefined();
   });
 
   it('skips existing properties from mockOf', () => {
-    const customPropertyFalse = (constructor: Type<any>) => {
-      Object.defineProperty(constructor.prototype, 'test', {
-        get: () => false,
-      });
-    };
+    class TargetComponent {
+      public get test(): boolean {
+        return true;
+      }
+    }
 
-    const customPropertyTrue = (constructor: Type<any>) => {
-      Object.defineProperty(constructor.prototype, 'test', {
-        get: () => true,
-      });
-    };
+    class TestMock extends Mock {
+      public get test(): boolean {
+        return false;
+      }
+    }
 
-    @customPropertyTrue
-    class TargetComponent {}
-
-    @customPropertyFalse
-    class TestMock extends Mock {}
-
-    @MockOf(TargetComponent)
-    class TestComponent extends TestMock {}
-
-    const instance: any = new TestComponent();
+    const testComponent = extendClass(TestMock);
+    decorateMock(testComponent, TargetComponent);
+    const instance: any = new testComponent();
     expect(instance.test).toEqual(false);
   });
 

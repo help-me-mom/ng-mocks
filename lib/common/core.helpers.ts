@@ -87,15 +87,15 @@ const extendClassicClass = <I extends object>(base: Type<I>): Type<I> => {
   try {
     // tslint:disable-next-line no-eval
     eval(`
-        class child extends window.ngMocksParent {
+        class MockMiddleware extends window.ngMocksParent {
         }
-        window.ngMocksResult = child
+        window.ngMocksResult = MockMiddleware
       `);
     child = (window as any).ngMocksResult;
   } catch (e) {
-    class ClassEs5 extends (window as any).ngMocksParent {}
+    class MockMiddleware extends (window as any).ngMocksParent {}
 
-    child = ClassEs5;
+    child = MockMiddleware;
   }
   (window as any).ngMocksParent = undefined;
 
@@ -112,7 +112,9 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
 
   const parameters = jitReflector.parameters(base);
   if (parameters.length) {
-    child.parameters = parameters;
+    Object.defineProperty(child, 'parameters', {
+      value: [...parameters],
+    });
   }
 
   return child;

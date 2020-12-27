@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
@@ -86,6 +87,10 @@ class ComponentMockBase extends LegacyControlValueAccessor implements AfterConte
   }
 }
 
+Object.defineProperty(ComponentMockBase, 'parameters', {
+  value: [[ChangeDetectorRef], [Injector]],
+});
+
 const viewChildArgs: any = { read: ViewContainerRef, static: false };
 const viewChildTemplate = (selector: string): string =>
   `<div *ngIf="mockRender_${selector}" data-key="${selector}"><ng-template #__${selector}></ng-template></div>`;
@@ -119,19 +124,6 @@ const generateTemplate = (
   };
 };
 
-const createMockClass = (): Type<any> => {
-  class ComponentMock extends ComponentMockBase {
-    // istanbul ignore next
-    public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
-      super(changeDetector, injector);
-    }
-  }
-
-  (ComponentMock as any).parameters = [ChangeDetectorRef, Injector];
-
-  return ComponentMock;
-};
-
 const decorateClass = (component: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(component);
   const { exportAs, inputs, outputs, queries, selector, providers } = meta;
@@ -161,7 +153,7 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     return ngMocksUniverse.cacheDeclarations.get(component);
   }
 
-  const mock = createMockClass();
+  const mock = extendClass(ComponentMockBase);
   decorateClass(component, mock);
 
   // istanbul ignore else

@@ -176,4 +176,6 @@ export class Mock {
   }
 }
 
-(Mock as any).parameters = [[Injector, new Optional()]];
+Object.defineProperty(Mock, 'parameters', {
+  value: [[Injector, new Optional()]],
+});

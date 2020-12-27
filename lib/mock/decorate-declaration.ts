@@ -2,13 +2,14 @@ import { Component, Directive, Provider, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
+import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
-import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperMockService from '../mock-service/helper.mock-service';
-import cloneProviders from '../mock/clone-providers';
-import toExistingProvider from '../mock/to-existing-provider';
+
+import cloneProviders from './clone-providers';
+import toExistingProvider from './to-existing-provider';
 
 export default <T extends Component | Directive>(
   source: AnyType<any>,
@@ -30,12 +31,12 @@ export default <T extends Component | Directive>(
     data.setControlValueAccessor =
       helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
   }
-  MockOf(source, {
+  decorateMock(mock, source, {
     config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
     setControlValueAccessor: data.setControlValueAccessor,
     viewChildRefs: meta.viewChildRefs,
-  })(mock);
+  });
 
   // istanbul ignore else
   if (meta.queries) {
