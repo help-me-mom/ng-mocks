@@ -5,11 +5,11 @@ import coreConfig from '../common/core.config';
 import { extendClass } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { Type } from '../common/core.types';
+import decorateMock from '../common/decorate.mock';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { Mock } from '../common/mock';
-import { MockOf } from '../common/mock-of';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import mockNgDef from './mock-ng-def';
@@ -113,7 +113,7 @@ const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any
 
     // the last thing is to apply decorators.
     NgModule(mockModuleDef)(mock);
-    MockOf(ngModule)(mock);
+    decorateMock(mock, ngModule);
 
     return mock;
   }

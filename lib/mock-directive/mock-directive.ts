@@ -1,6 +1,7 @@
 import { Directive, ElementRef, Injector, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
@@ -54,27 +55,9 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   }
 }
 
-const createMockClass = (): Type<any> => {
-  class DirectiveMock extends DirectiveMockBase {
-    // istanbul ignore next
-    public constructor(
-      injector: Injector,
-      element?: ElementRef,
-      template?: TemplateRef<any>,
-      viewContainer?: ViewContainerRef,
-    ) {
-      super(injector, element, template, viewContainer);
-    }
-  }
-  (DirectiveMock as any).parameters = [
-    Injector,
-    [ElementRef, new Optional()],
-    [TemplateRef, new Optional()],
-    [ViewContainerRef, new Optional()],
-  ];
-
-  return DirectiveMock;
-};
+Object.defineProperty(DirectiveMockBase, 'parameters', {
+  value: [[Injector], [ElementRef, new Optional()], [TemplateRef, new Optional()], [ViewContainerRef, new Optional()]],
+});
 
 const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(directive);
@@ -106,7 +89,7 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return ngMocksUniverse.cacheDeclarations.get(directive);
   }
 
-  const mock = createMockClass();
+  const mock = extendClass(DirectiveMockBase);
   decorateClass(directive, mock);
 
   // istanbul ignore else
