@@ -79,9 +79,7 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
   }
 };
 
-// First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
-// The next step is to respect constructor parameters as the parent class via jitReflector.
-export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
+const extendClassicClass = <I extends object>(base: Type<I>): Type<I> => {
   let child: any;
 
   (window as any).ngMocksParent = base;
@@ -100,7 +98,22 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
     child = ClassEs5;
   }
   (window as any).ngMocksParent = undefined;
-  child.parameters = jitReflector.parameters(base);
+
+  return child;
+};
+
+// First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
+// The next step is to respect constructor parameters as the parent class via jitReflector.
+export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
+  const child: typeof base &
+    Partial<{
+      parameters: any[][];
+    }> = extendClassicClass(base);
+
+  const parameters = jitReflector.parameters(base);
+  if (parameters.length) {
+    child.parameters = parameters;
+  }
 
   return child;
 };
