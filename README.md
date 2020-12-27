@@ -1177,29 +1177,32 @@ Then, every time tests need a mock object of `TodoService`, its `list$()` will r
 Nevertheless, usually, we want not only to return a stub result as `EMPTY` observable stream,
 but also to provide a fake subject, that would simulate its calls.
 
-A possible solution is to create a context variable of `Subject` type for that.
+A possible solution is to use [`MockInstance`](#mockinstance) within the `it` context:
 
 ```ts
-let todoServiceList$: Subject<any>; // <- a context variable.
+import { MockInstance } from './mock-instance';
 
 beforeEach(() => {
-  todoServiceList$ = new Subject(); // <- create the subject.
-
   TestBed.configureTestingModule({
     declarations: [TodoComponent],
-    providers: [
-      MockProvider(TodoService, {
-        list$: () => todoServiceList$,
-      }),
-    ],
+    providers: [MockProvider(TodoService)],
   });
 });
 
 it('test', () => {
+  const list$ = new Subject(); // <- create the subject.
+  MockInstance(TodoService, () => ({
+    list$: jasmine.createSpy().and.returnValue(list$),
+  }));
+
   const fixture = TestBed.createComponent(TodoComponent);
-  // Let's simulate emits.
-  todoServiceList$.next([]);
+  fixture.detectChanges();
+
   // Here we can do some assertions.
+  expect(list$).toHaveBeenCalledTimes(1);
+
+  // Let's simulate emits.
+  list$.next([]);
 });
 ```
 
