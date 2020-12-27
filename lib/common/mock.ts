@@ -157,7 +157,7 @@ export interface MockConfig {
 export class Mock {
   protected __ngMocksConfig!: ngMocksMockConfig;
 
-  public constructor(@Optional() injector?: Injector) {
+  public constructor(injector?: Injector) {
     const mockOf = (this.constructor as any).mockOf;
 
     // istanbul ignore else
@@ -175,3 +175,5 @@ export class Mock {
     applyOverrides(this, mockOf, injector);
   }
 }
+
+(Mock as any).parameters = [[Injector, new Optional()]];
