@@ -1180,8 +1180,6 @@ but also to provide a fake subject, that would simulate its calls.
 A possible solution is to use [`MockInstance`](#mockinstance) within the `it` context:
 
 ```ts
-import { MockInstance } from './mock-instance';
-
 beforeEach(() => {
   TestBed.configureTestingModule({
     declarations: [TodoComponent],
