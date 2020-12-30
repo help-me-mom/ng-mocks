@@ -4,8 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 import { Observable } from 'rxjs';
 
 // A service that does http requests.
@@ -39,9 +38,12 @@ describe('TestHttpRequest', () => {
   });
 
   it('sends a request', () => {
+    const fixture = MockRender('');
     // Let's extract the service and http controller for testing.
-    const service: TargetService = TestBed.get(TargetService);
-    const httpMock: HttpTestingController = TestBed.get(
+    const service: TargetService = fixture.debugElement.injector.get(
+      TargetService,
+    );
+    const httpMock: HttpTestingController = fixture.debugElement.injector.get(
       HttpTestingController,
     );
 

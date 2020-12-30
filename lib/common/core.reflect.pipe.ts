@@ -1,12 +1,5 @@
 import { MockPipeResolver } from '@angular/compiler/testing';
 
-import coreReflectJit from './core.reflect.jit';
-import ngMocksUniverse from './ng-mocks-universe';
+import coreReflectBodyGlobal from './core.reflect.body-global';
 
-export default (): MockPipeResolver => {
-  if (!ngMocksUniverse.global.has(MockPipeResolver)) {
-    ngMocksUniverse.global.set(MockPipeResolver, new MockPipeResolver(coreReflectJit()));
-  }
-
-  return ngMocksUniverse.global.get(MockPipeResolver);
-};
+export default coreReflectBodyGlobal(MockPipeResolver);

@@ -1,6 +1,10 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 // Dependency 1
 @Injectable()
@@ -66,7 +70,7 @@ describe('TestProviderWithDependencies', () => {
 
   it('creates TargetService', () => {
     // Creates an instance only if all dependencies are present.
-    const service = TestBed.get(TargetService);
+    const service = MockRender(TargetService).point.componentInstance;
 
     // Let's assert behavior.
     expect(service.value1).toEqual('mock1');

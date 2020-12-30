@@ -44,24 +44,38 @@ describe('MockDeclaration', () => {
       TargetPipe,
     );
     expect(mocks.length).toEqual(3);
-    expect(mocks[0].nameConstructor).toEqual('MockMiddleware');
-    expect(mocks[1].nameConstructor).toEqual('MockMiddleware');
-    expect(mocks[2].nameConstructor).toEqual('MockMiddleware');
+    expect(mocks[0].nameConstructor).toEqual(
+      'MockMiddlewareComponentMockBase',
+    );
+    expect(mocks[1].nameConstructor).toEqual(
+      'MockMiddlewareDirectiveMockBase',
+    );
+    expect(mocks[2].nameConstructor).toEqual('MockMiddlewareMock');
+    expect(mocks[0].name).toEqual('MockOfTargetComponent');
+    expect(mocks[1].name).toEqual('MockOfTargetDirective');
+    expect(mocks[2].name).toEqual('MockOfTargetPipe');
   });
 
   it('should process components with an empty template correctly', () => {
     const mock: any = MockDeclaration(TargetComponent);
-    expect(mock.nameConstructor).toEqual('MockMiddleware');
+    expect(mock.nameConstructor).toEqual(
+      'MockMiddlewareComponentMockBase',
+    );
+    expect(mock.name).toEqual('MockOfTargetComponent');
   });
 
   it('should process directives correctly', () => {
     const mock: any = MockDeclaration(TargetDirective);
-    expect(mock.nameConstructor).toEqual('MockMiddleware');
+    expect(mock.nameConstructor).toEqual(
+      'MockMiddlewareDirectiveMockBase',
+    );
+    expect(mock.name).toEqual('MockOfTargetDirective');
   });
 
   it('should process pipes correctly', () => {
     const mock: any = MockDeclaration(TargetPipe);
-    expect(mock.nameConstructor).toEqual('MockMiddleware');
+    expect(mock.nameConstructor).toEqual('MockMiddlewareMock');
+    expect(mock.name).toEqual('MockOfTargetPipe');
   });
 
   it('should skip unknown types', () => {

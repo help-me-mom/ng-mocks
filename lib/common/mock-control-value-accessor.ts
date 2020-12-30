@@ -42,12 +42,12 @@ export class LegacyControlValueAccessor extends Mock {
  */
 export interface MockControlValueAccessor {
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
    */
   __simulateChange(value: any): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
    */
   __simulateTouch(): void;
 }
@@ -57,7 +57,7 @@ export interface MockControlValueAccessor {
  */
 export interface MockValidator {
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-create-a-mock-form-control
+   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
    */
   __simulateValidatorChange(): void;
 }

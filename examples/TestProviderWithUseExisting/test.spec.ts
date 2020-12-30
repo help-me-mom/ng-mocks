@@ -1,6 +1,10 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 // A service we want to use.
 @Injectable()
@@ -53,7 +57,9 @@ describe('TestProviderWithUseExisting', () => {
   afterAll(MockReset);
 
   it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
+    const service = MockRender<
+      TargetService & Partial<{ name: string }>
+    >(TargetService).point.componentInstance;
 
     // Because Service2 has been replaced with a mock copy,
     // we are getting here a mock copy of Service2 instead of Service1.

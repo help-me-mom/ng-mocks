@@ -1,6 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, it might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -31,10 +30,11 @@ describe('TestProviderWithUseValue', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
+    const service = MockRender<TargetService>(TargetService).point
+      .componentInstance;
 
     // Let's assert received data.
-    expect(service).toEqual({
+    expect(service as any).toEqual({
       service: null,
     });
   });

@@ -1,6 +1,7 @@
-import { PipeTransform } from '@angular/core';
+import { InjectionToken, PipeTransform } from '@angular/core';
 
 import { Type } from './core.types';
+import { isNgInjectionToken } from './func.is-ng-injection-token';
 import { isNgType } from './func.is-ng-type';
 
 const isModuleCheck = (def: any, ngType?: string): boolean => (!ngType || ngType === 'm') && isNgType(def, 'NgModule');
@@ -48,6 +49,13 @@ export function isNgDef(declaration: any, ngType: 'p'): declaration is Type<Pipe
 export function isNgDef(declaration: any, ngType: 'i'): declaration is Type<any>;
 
 /**
+ * Checks whether a class was decorated by @Injectable.
+ *
+ * @see https://github.com/ike18t/ng-mocks#isngdef
+ */
+export function isNgDef(declaration: any, ngType: 't'): declaration is InjectionToken<any>;
+
+/**
  * Checks whether a class was decorated by a ng type.
  *
  * @see https://github.com/ike18t/ng-mocks#isngdef
@@ -55,6 +63,10 @@ export function isNgDef(declaration: any, ngType: 'i'): declaration is Type<any>
 export function isNgDef(declaration: any): declaration is Type<any>;
 
 export function isNgDef(declaration: any, ngType?: string): declaration is Type<any> {
+  if (ngType === 't') {
+    return isNgInjectionToken(declaration);
+  }
+
   const isModule = isModuleCheck(declaration, ngType);
   const isComponent = isComponentCheck(declaration, ngType);
   const isDirective = isDirectiveCheck(declaration, ngType);

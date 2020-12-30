@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreReflectJit from './core.reflect.jit';
-import { Type } from './core.types';
+import { AnyType, Type } from './core.types';
 
 export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
@@ -79,22 +79,22 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
   }
 };
 
-const extendClassicClass = <I extends object>(base: Type<I>): Type<I> => {
+const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
   let child: any;
 
+  // First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
+  // The next step is to respect constructor parameters as the parent class via jitReflector.
   (window as any).ngMocksParent = base;
   // istanbul ignore next
   try {
     // tslint:disable-next-line no-eval
     eval(`
-        class MockMiddleware extends window.ngMocksParent {
-        }
-        window.ngMocksResult = MockMiddleware
-      `);
+      class MockMiddleware extends window.ngMocksParent {}
+      window.ngMocksResult = MockMiddleware
+    `);
     child = (window as any).ngMocksResult;
   } catch (e) {
     class MockMiddleware extends (window as any).ngMocksParent {}
-
     child = MockMiddleware;
   }
   (window as any).ngMocksParent = undefined;
@@ -102,18 +102,20 @@ const extendClassicClass = <I extends object>(base: Type<I>): Type<I> => {
   return child;
 };
 
-// First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
-// The next step is to respect constructor parameters as the parent class via jitReflector.
-export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
-  const child: typeof base &
-    Partial<{
-      parameters: any[][];
-    }> = extendClassicClass(base);
+export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
+  const child: Type<I> = extendClassicClass(base);
+  Object.defineProperty(child, 'name', {
+    configurable: true,
+    value: `MockMiddleware${base.name}`,
+    writable: true,
+  });
 
   const parameters = coreReflectJit().parameters(base);
   if (parameters.length) {
     Object.defineProperty(child, 'parameters', {
+      configurable: true,
       value: [...parameters],
+      writable: true,
     });
   }
 

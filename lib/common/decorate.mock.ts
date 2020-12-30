@@ -1,11 +1,11 @@
 import { AnyType } from './core.types';
 import { ngMocksMockConfig } from './mock';
 
-export default function (base: AnyType<any>, mockClass: AnyType<any>, config: ngMocksMockConfig = {}): void {
-  Object.defineProperties(base, {
-    mockOf: { value: mockClass },
-    name: { value: `MockOf${mockClass.name}` },
-    nameConstructor: { value: base.name },
+export default function (mock: AnyType<any>, source: AnyType<any>, config: ngMocksMockConfig = {}): void {
+  Object.defineProperties(mock, {
+    mockOf: { value: source },
+    name: { value: `MockOf${source.name}` },
+    nameConstructor: { value: mock.name },
   });
-  base.prototype.__ngMocksConfig = config;
+  mock.prototype.__ngMocksConfig = config;
 }

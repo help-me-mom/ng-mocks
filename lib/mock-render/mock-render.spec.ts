@@ -170,9 +170,16 @@ describe('MockRender', () => {
     expect(mock.getElementById).toHaveBeenCalledWith('test');
   });
 
-  it('does not render a component without selector', () => {
+  it('does render a component without selector', () => {
     const fixture = MockRender(WithoutSelectorComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual('');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'WithoutSelectorComponent',
+    );
+  });
+
+  it('renders empty templates w/o point', () => {
+    const fixture = MockRender('');
+    expect(fixture.point).toBeUndefined();
   });
 
   it('assigns outputs to a literals', () => {

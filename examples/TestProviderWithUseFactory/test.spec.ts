@@ -1,6 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance } from 'ng-mocks';
+import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 // Dependency 1.
 @Injectable()
@@ -44,7 +43,7 @@ describe('TestProviderWithUseFactory', () => {
   });
 
   it('creates TargetService', () => {
-    const service = TestBed.get(TargetService);
+    const service = MockRender(TargetService).point.componentInstance;
 
     // Because Service1 has been replaced with a mock copy, we should get mock1 here.
     expect(service.service.name).toEqual('mock1');
