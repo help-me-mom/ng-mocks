@@ -1,6 +1,6 @@
 import { Pipe } from '@angular/core';
 
-import { pipeResolver } from './core.reflect';
 import coreReflectBody from './core.reflect.body';
+import coreReflectPipe from './core.reflect.pipe';
 
-export default (def: any): Pipe => coreReflectBody((arg: any) => pipeResolver.resolve(arg))(def);
+export default (def: any): Pipe => coreReflectBody((arg: any) => coreReflectPipe().resolve(arg))(def);

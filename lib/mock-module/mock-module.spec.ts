@@ -19,7 +19,7 @@ import {
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ngModuleResolver } from '../common/core.reflect';
+import coreReflectModule from '../common/core.reflect.module';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockRender } from '../mock-render/mock-render';
@@ -242,7 +242,7 @@ describe('mockProvider', () => {
 
   it('should skip multi tokens in a mock module', () => {
     const mock = MockModule(CustomTokenModule);
-    const def = ngModuleResolver.resolve(mock);
+    const def = coreReflectModule().resolve(mock);
     expect(def.providers).toEqual([
       {
         deps: [Injector],

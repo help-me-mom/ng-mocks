@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
-import { jitReflector } from './core.reflect';
+import coreReflectJit from './core.reflect.jit';
 import { Type } from './core.types';
 
 export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
@@ -110,7 +110,7 @@ export const extendClass = <I extends object>(base: Type<I>): Type<I> => {
       parameters: any[][];
     }> = extendClassicClass(base);
 
-  const parameters = jitReflector.parameters(base);
+  const parameters = coreReflectJit().parameters(base);
   if (parameters.length) {
     Object.defineProperty(child, 'parameters', {
       value: [...parameters],

@@ -1,4 +1,4 @@
-import { jitReflector } from '../../common/core.reflect';
+import coreReflectJit from '../../common/core.reflect.jit';
 import { NG_MOCKS_ROOT_PROVIDERS } from '../../common/core.tokens';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
@@ -17,7 +17,7 @@ export default (mockDef: BuilderData['mockDef']): Set<any> => {
     for (const def of bucket) {
       addDefToRootProviderParameters(parameters, mockDef, def);
 
-      for (const decorators of jitReflector.parameters(def)) {
+      for (const decorators of coreReflectJit().parameters(def)) {
         const provide: any = extractDep(decorators);
         if (skipRootProviderDependency(provide)) {
           continue;

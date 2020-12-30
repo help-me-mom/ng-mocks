@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
-import { directiveResolver } from 'ng-mocks/dist/lib/common/core.reflect';
+import coreReflectDirective from 'ng-mocks/dist/lib/common/core.reflect.directive';
 
 @Component({
   selector: 'component',
@@ -38,7 +38,7 @@ export class ComponentValidator {}
 describe('issue-145:components', () => {
   it('does not add NG_VALUE_ACCESSOR to components', () => {
     const mock = MockComponent(ComponentDefault);
-    const { providers } = directiveResolver.resolve(mock);
+    const { providers } = coreReflectDirective().resolve(mock);
     expect(providers).toEqual([
       {
         provide: ComponentDefault,
@@ -49,7 +49,7 @@ describe('issue-145:components', () => {
 
   it('adds NG_VALUE_ACCESSOR to components that provide it', () => {
     const mock = MockComponent(ComponentValueAccessor);
-    const { providers } = directiveResolver.resolve(mock);
+    const { providers } = coreReflectDirective().resolve(mock);
     expect(providers).toEqual([
       {
         provide: ComponentValueAccessor,
@@ -65,7 +65,7 @@ describe('issue-145:components', () => {
 
   it('respects NG_VALIDATORS too', () => {
     const mock = MockComponent(ComponentValidator);
-    const { providers } = directiveResolver.resolve(mock);
+    const { providers } = coreReflectDirective().resolve(mock);
     expect(providers).toEqual([
       {
         provide: ComponentValidator,
