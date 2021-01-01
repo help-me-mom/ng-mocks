@@ -1,3 +1,15 @@
+# [11.3.0](https://github.com/ike18t/ng-mocks/compare/v11.2.8...v11.3.0) (2021-01-01)
+
+
+### Bug Fixes
+
+* better umd support ([b9b068c](https://github.com/ike18t/ng-mocks/commit/b9b068c20cc3cf56b6cddea8efa28ea7f3a38316))
+
+
+### Features
+
+* **mock-render:** renders everything ([f33a132](https://github.com/ike18t/ng-mocks/commit/f33a1320a8cc98dd42dacb6c6cdcd5a190218580)), closes [#266](https://github.com/ike18t/ng-mocks/issues/266)
+
 ## [11.2.8](https://github.com/ike18t/ng-mocks/compare/v11.2.7...v11.2.8) (2020-12-27)
 
 
