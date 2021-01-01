@@ -73,7 +73,7 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
 }
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-a-directive
+ * @see https://github.com/ike18t/ng-mocks#how-to-mock-directives
  */
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.

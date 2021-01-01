@@ -1,5 +1,7 @@
-import { jitReflector } from './core.reflect';
-import { Type } from './core.types';
+import coreReflectJit from './core.reflect.jit';
+import { AnyType } from './core.types';
 
-export const isNgType = (declaration: Type<any>, type: string): boolean =>
-  jitReflector.annotations(declaration).some(annotation => annotation.ngMetadataName === type);
+export const isNgType = (declaration: AnyType<any>, type: string): boolean =>
+  coreReflectJit()
+    .annotations(declaration)
+    .some(annotation => annotation.ngMetadataName === type);

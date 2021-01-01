@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 
-import { directiveResolver } from './core.reflect';
-import coreReflectBody from './core.reflect.body';
+import coreReflectBodyCatch from './core.reflect.body-catch';
+import coreReflectDirective from './core.reflect.directive';
 
-export default (def: any): Directive => coreReflectBody((arg: any) => directiveResolver.resolve(arg))(def);
+export default (def: any): Directive => coreReflectBodyCatch((arg: any) => coreReflectDirective().resolve(arg))(def);

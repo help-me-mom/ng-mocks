@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
@@ -23,7 +22,9 @@ describe('TestLifecycleHooks:string', () => {
       },
     );
 
-    const service: TargetService = TestBed.get(TargetService);
+    const service: TargetService = fixture.point.injector.get(
+      TargetService,
+    );
 
     // By default nothing should be initialized, but ctor.
     expect(service.ctor).toHaveBeenCalledTimes(1); // changed

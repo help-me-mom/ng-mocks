@@ -6,7 +6,7 @@ import {
   InjectionToken,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockProvider } from 'ng-mocks';
+import { MockProvider, MockRender } from 'ng-mocks';
 
 const UNK_TOKEN = new InjectionToken('UNK_TOKEN');
 const STR_TOKEN = new InjectionToken<string>('STR_TOKEN');
@@ -72,15 +72,14 @@ describe('MockProvider', () => {
   it('uses mock providers', () => {
     // overriding the token's data that does affect the provided token.
     mockObj.value = 321;
-    const fixture = TestBed.createComponent(TargetComponent);
-    fixture.detectChanges();
+    const fixture = MockRender(TargetComponent);
     expect(
-      fixture.debugElement.injector.get(Dependency1Service).echo(),
+      fixture.point.injector.get(Dependency1Service).echo(),
     ).toBeUndefined();
     expect(
-      fixture.debugElement.injector.get(Dependency2Service).echo(),
+      fixture.point.injector.get(Dependency2Service).echo(),
     ).toBeUndefined();
-    expect(fixture.debugElement.injector.get(OBJ_TOKEN)).toBe(
+    expect(fixture.point.injector.get(OBJ_TOKEN)).toBe(
       mockObj as any,
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('"target"');

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import {
   MockBuilder,
   MockInstance,
@@ -93,7 +92,11 @@ describe('MockObservable', () => {
 
     // Checking that a sibling method has been replaced
     // with a mock object too.
-    expect(TestBed.get(TargetService).getValue$).toBeDefined();
-    expect(TestBed.get(TargetService).getValue$()).toBeUndefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$,
+    ).toBeDefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$(),
+    ).toBeUndefined();
   });
 });

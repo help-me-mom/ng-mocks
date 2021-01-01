@@ -1,102 +1,16 @@
-import { Component, EventEmitter } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
+import { Component, DebugElement, Directive, EventEmitter, InjectionToken } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
-import { Type } from '../common/core.types';
+import { AnyType, Type } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
 import { ngMocks } from '../mock-helper/mock-helper';
-import helperMockService from '../mock-service/helper.mock-service';
+import { MockService } from '../mock-service/mock-service';
 
+import funcGenerateTemplate from './func.generate-template';
+import funcInstallPropReader from './func.install-prop-reader';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
-
-const solveOutput = (output: any): string => {
-  if (typeof output === 'function') {
-    return '($event)';
-  }
-  if (output && typeof output === 'object' && output instanceof EventEmitter) {
-    return '.emit($event)';
-  }
-  if (output && typeof output === 'object' && output instanceof Subject) {
-    return '.next($event)';
-  }
-
-  return '=$event';
-};
-
-const createProperty = (pointComponentInstance: Record<keyof any, any>, key: string) => {
-  return {
-    get: () => {
-      if (typeof pointComponentInstance[key] === 'function') {
-        return (...args: any[]) => pointComponentInstance[key](...args);
-      }
-
-      return pointComponentInstance[key];
-    },
-    set: (v: any) => (pointComponentInstance[key] = v),
-  };
-};
-
-const extractAllKeys = (instance: object) => [
-  ...helperMockService.extractPropertiesFromPrototype(Object.getPrototypeOf(instance)),
-  ...helperMockService.extractMethodsFromPrototype(Object.getPrototypeOf(instance)),
-  ...Object.keys(instance),
-];
-
-const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
-
-const installProxy = (
-  componentInstance: Record<keyof any, any>,
-  pointComponentInstance?: Record<keyof any, any>,
-): void => {
-  if (!pointComponentInstance) {
-    return;
-  }
-
-  const exists = extractOwnKeys(componentInstance);
-  for (const key of extractAllKeys(pointComponentInstance)) {
-    if (exists.indexOf(key) !== -1) {
-      continue;
-    }
-
-    Object.defineProperty(componentInstance, key, createProperty(pointComponentInstance, key));
-    exists.push(key);
-  }
-};
-
-const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i' ? `[${prop}]` : `(${prop})`);
-
-const generateTemplateAttrWithParams = (params: any, prop: string, type: 'i' | 'o'): string =>
-  ` ${generateTemplateAttrWrap(prop, type)}="${prop}${type === 'o' ? solveOutput(params[prop]) : ''}"`;
-
-const generateTemplateAttrWithoutParams = (key: string, value: string, type: 'i' | 'o'): string =>
-  ` ${generateTemplateAttrWrap(key, type)}="${value}${type === 'o' ? '.emit($event)' : ''}"`;
-
-const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
-  let mockTemplate = '';
-  for (const definition of attr) {
-    const [property, alias] = definition.split(': ');
-    mockTemplate += params
-      ? generateTemplateAttrWithParams(params, alias || property, type)
-      : generateTemplateAttrWithoutParams(alias || property, property, type);
-  }
-
-  return mockTemplate;
-};
-
-const generateTemplate = (declaration: any, { selector, params, inputs, outputs }: any): string => {
-  let mockTemplate = '';
-
-  if (typeof declaration === 'string') {
-    mockTemplate = declaration;
-  } else if (selector) {
-    mockTemplate += `<${selector}`;
-    mockTemplate += generateTemplateAttr(params, inputs, 'i');
-    mockTemplate += generateTemplateAttr(params, outputs, 'o');
-    mockTemplate += `></${selector}>`;
-  }
-
-  return mockTemplate;
-};
 
 const applyParamsToFixtureInstanceGetData = (params: any, keys: string[]) => (!params && keys ? keys : []);
 
@@ -106,7 +20,7 @@ const applyParamsToFixtureInstance = (
   inputs: string[],
   outputs: string[],
 ): void => {
-  installProxy(instance, params);
+  funcInstallPropReader(instance, params);
   for (const definition of applyParamsToFixtureInstanceGetData(params, inputs)) {
     const [property] = definition.split(': ');
     instance[property] = undefined;
@@ -117,6 +31,37 @@ const applyParamsToFixtureInstance = (
   }
 };
 
+const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
+  const child = extendClass(template);
+  if (isNgDef(template, 'c')) {
+    Component(meta)(child);
+  } else {
+    Directive(meta)(child);
+  }
+  TestBed.configureTestingModule({
+    declarations: [child],
+  });
+};
+
+const reflectTemplate = (template: AnyType<any>): Directive => {
+  if (!isNgDef(template, 'c') && !isNgDef(template, 'd')) {
+    return {};
+  }
+
+  const meta = { ...coreReflectDirectiveResolve(template) };
+
+  if (meta.selector && meta.selector.match(/[\[\],]/)) {
+    meta.selector = '';
+  }
+
+  if (!meta.selector) {
+    meta.selector = `ng-mocks-${Date.now()}-${Math.round(Math.random() * 1000)}`;
+    registerTemplateMiddleware(template, meta);
+  }
+
+  return meta;
+};
+
 const generateFixture = ({ params, options, inputs, outputs }: any) => {
   class MockRenderComponent {
     public constructor() {
@@ -125,7 +70,6 @@ const generateFixture = ({ params, options, inputs, outputs }: any) => {
   }
 
   Component(options)(MockRenderComponent);
-  ngMocks.flushTestBed();
   TestBed.configureTestingModule({
     declarations: [MockRenderComponent],
   });
@@ -133,11 +77,49 @@ const generateFixture = ({ params, options, inputs, outputs }: any) => {
   return TestBed.createComponent(MockRenderComponent);
 };
 
+const fixtureFactory = <T>(template: any, meta: Directive, params: any, flags: any): ComponentFixture<T> => {
+  const mockTemplate = funcGenerateTemplate(template, { ...meta, params });
+  const options: Component = { providers: flags.providers, selector: 'mock-render', template: mockTemplate };
+  const fixture: any = generateFixture({ ...meta, params, options });
+  if (flags.detectChanges) {
+    fixture.detectChanges();
+  }
+
+  return fixture;
+};
+
+const isExpectedRender = (template: any): boolean =>
+  typeof template === 'string' || isNgDef(template, 'c') || isNgDef(template, 'd');
+
+const renderDeclaration = (fixture: any, template: any, params: any): void => {
+  fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
+  if (isNgDef(template, 'd')) {
+    Object.defineProperty(fixture.point, 'componentInstance', {
+      configurable: true,
+      get: () => ngMocks.get(fixture.point, template),
+    });
+  }
+  tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point?.componentInstance));
+};
+
+const renderInjection = (fixture: any, template: any, params: any): void => {
+  const instance = TestBed.get(template);
+  if (params) {
+    ngMocks.stub(instance, params);
+  }
+  fixture.point = MockService(DebugElement, {
+    childNodes: [],
+    children: [],
+    componentInstance: instance,
+    nativeElement: MockService(HTMLElement),
+  });
+  funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, true);
+};
+
 const tryWhen = (flag: boolean, callback: () => void) => {
   if (!flag) {
     return;
   }
-
   try {
     // ivy throws Error: Expecting instance of DOM Element
     callback();
@@ -145,6 +127,15 @@ const tryWhen = (flag: boolean, callback: () => void) => {
     // nothing to do
   }
 };
+
+/**
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender<MComponent>(
+  template: InjectionToken<MComponent>,
+  params?: undefined,
+  detectChanges?: boolean | IMockRenderOptions,
+): MockedComponentFixture<MComponent, void>;
 
 /**
  * @see https://github.com/ike18t/ng-mocks#mockrender
@@ -181,6 +172,13 @@ function MockRender<MComponent, TComponent extends object = Record<keyof any, an
 function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent, MComponent>;
 
 /**
+ * An empty string doesn't have point.
+ *
+ * @see https://github.com/ike18t/ng-mocks#mockrender
+ */
+function MockRender(template: ''): ComponentFixture<void> & { point: undefined };
+
+/**
  * Without params we shouldn't autocomplete any keys of any types.
  *
  * @see https://github.com/ike18t/ng-mocks#mockrender
@@ -206,27 +204,20 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any> = Reco
 ): MockedComponentFixture<MComponent, TComponent>;
 
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
-  template: string | Type<MComponent>,
+  template: string | Type<MComponent> | InjectionToken<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
-): MockedComponentFixture<MComponent, TComponent> {
+): any {
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
+  const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : reflectTemplate(template);
 
-  let inputs: string[] | undefined;
-  let outputs: string[] | undefined;
-  let selector: string | undefined;
-  if (typeof template !== 'string') {
-    ({ inputs, outputs, selector } = coreReflectDirectiveResolve(template));
+  ngMocks.flushTestBed();
+  const fixture: any = fixtureFactory(template, meta, params, flagsObject);
+  if (isExpectedRender(template)) {
+    renderDeclaration(fixture, template, params);
+  } else {
+    renderInjection(fixture, template, params);
   }
-
-  const mockTemplate = generateTemplate(template, { selector, params, inputs, outputs });
-  const options: Component = { providers: flagsObject.providers, selector: 'mock-render', template: mockTemplate };
-  const fixture: any = generateFixture({ params, options, inputs, outputs });
-  if (flagsObject.detectChanges) {
-    fixture.detectChanges();
-  }
-  fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
-  tryWhen(!params, () => installProxy(fixture.componentInstance, fixture.point?.componentInstance));
 
   return fixture;
 }

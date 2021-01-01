@@ -1,6 +1,10 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 // A service we want to replace via useClass.
 @Injectable()
@@ -66,7 +70,9 @@ describe('TestProviderWithUseClass', () => {
   afterAll(MockReset);
 
   it('respects all dependencies', () => {
-    const service = TestBed.get(Target1Service);
+    const service = MockRender<
+      Target1Service & Partial<Target2Service>
+    >(Target1Service).point.componentInstance;
 
     // Let's assert that service has a flag from Target2Service.
     expect(service.flag).toBeTruthy();

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
   Resolve,
@@ -91,9 +91,11 @@ describe('TestRoutingResolver', () => {
   // It is important to run routing tests in fakeAsync.
   it('provides data to on the route', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
-    const dataService: DataService = TestBed.get(DataService);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
+    const dataService: DataService = fixture.point.injector.get(
+      DataService,
+    );
 
     // DataService has been replaced with a mock copy,
     // let's set a custom value we will assert later on.

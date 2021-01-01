@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -18,7 +17,7 @@ describe('TestProvider', () => {
   beforeEach(() => MockBuilder(TargetService));
 
   it('returns value on echo', () => {
-    const service = TestBed.get(TargetService);
+    const service = MockRender(TargetService).point.componentInstance;
 
     expect(service.echo()).toEqual(service.value);
   });

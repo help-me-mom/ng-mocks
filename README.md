@@ -174,8 +174,7 @@ TestBed.configureTestingModule({
     // ...
   ],
   providers: [
-    LoginService,
-    DataService,
+    SearchService,
     // ...
   ],
 });
@@ -203,14 +202,36 @@ TestBed.configureTestingModule({
     // ...
   ],
   providers: [
-    MockProvider(LoginService),
-    MockProvider(DataService),
+    MockProvider(SearchService),
     // ...
   ],
 });
 ```
 
-Profit. Now we can forget about noise of child dependencies.
+If you have noticed `search$ | async` in the template, you made the right assumption:
+we need to provide a fake observable stream within the mock `SearchService` to avoid failures
+like [`Cannot read property 'pipe' of undefined`](#how-to-fix-typeerror-cannot-read-property-subscribe-of-undefined),
+when the component tries to execute `this.search$ = this.searchService.result$.pipe(...)` in `ngOnInit`.
+
+For example, we can implement it via [`MockInstance`](#mockinstance):
+
+```ts
+beforeEach(() =>
+  MockInstance(SearchService, () => ({
+    result$: EMPTY,
+  })),
+);
+```
+
+or to set it as default mock behavior for all tests via adding [`ngMocks.defaultMock`](#ngmocksdefaultmock) in the `test.ts` file:
+
+```ts
+ngMocks.defaultMock(SearchService, () => ({
+  result$: EMPTY,
+}));
+```
+
+Profit. Now, we can forget about noise of child dependencies.
 
 Nevertheless, if we count lines of mock declarations,
 we see that there are a lot of them, and looks like here might be dozens more for big
@@ -274,7 +295,7 @@ beforeEach(() => {
   return MockBuilder(AppBaseComponent, AppBaseModule)
     .mock(TranslatePipe, v => `translated:${v}`)
     .mock(SearchService, {
-      search: of([]),
+      result$: EMPTY,
     });
 });
 ```
@@ -331,14 +352,14 @@ a type of `MockedComponent<T>` and provides:
 
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
-- templates are pure `ng-content` tags to allow transclusion
-- supports `@ContentChild` with an `$implicit` context
+- templates with pure `ng-content` tags to allow transclusion
+- support of `@ContentChild` with an `$implicit` context
   - `__render('id', $implicit, variables)` - renders a template
   - `__hide('id')` - hides a rendered template
-- supports [`FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`](#how-to-mock-form-controls)
+- support of [`FormsModule`, `ReactiveFormsModule` and `ControlValueAccessor`](#how-to-mock-form-controls)
   - `__simulateChange()` - calls `onChanged` on the mock component bound to a `FormControl`
   - `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
-- supports `exportAs`
+- support of `exportAs`
 
 Let's pretend that in our Angular application `TargetComponent` depends on a child component of `DependencyComponent`
 and we want to use its mock object in a test.
@@ -972,17 +993,14 @@ describe('MockProvider', () => {
   it('uses mock providers', () => {
     // overriding the token's data that does affect the provided token.
     mockObj.value = 321;
-    const fixture = TestBed.createComponent(TargetComponent);
-    fixture.detectChanges();
+    const fixture = MockRender(TargetComponent);
     expect(
-      fixture.debugElement.injector.get(Dependency1Service).echo(),
+      fixture.point.injector.get(Dependency1Service).echo(),
     ).toBeUndefined();
     expect(
-      fixture.debugElement.injector.get(Dependency2Service).echo(),
+      fixture.point.injector.get(Dependency2Service).echo(),
     ).toBeUndefined();
-    expect(fixture.debugElement.injector.get(OBJ_TOKEN)).toBe(
-      mockObj,
-    );
+    expect(fixture.point.injector.get(OBJ_TOKEN)).toBe(mockObj);
     expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
     expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');
     expect(fixture.nativeElement.innerHTML).toContain('"mock token"');
@@ -1290,8 +1308,12 @@ describe('MockObservable', () => {
 
     // Checking that a sibling method has been replaced
     // with a mock object too.
-    expect(TestBed.inject(TargetService).getValue$).toBeDefined();
-    expect(TestBed.inject(TargetService).getValue$()).toBeUndefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$,
+    ).toBeDefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$(),
+    ).toBeUndefined();
   });
 });
 ```
@@ -2137,11 +2159,16 @@ beforeEach(() => {
 
 ### MockRender
 
-`MockRender` is a simple tool that helps with **shallow rendering in Angular tests**
-when we want to assert `Inputs`, `Outputs`, `ChildContent` and custom templates.
+**Shallow rendering in Angular tests** is provided via `MockRender` function.
+`MockRender` helps when we want to assert `Inputs`, `Outputs`, `ChildContent` and custom templates.
 
-The best thing about it is that `MockRender` properly triggers all lifecycle hooks
-and allows **to test `ngOnChanges` hook from `OnChanges` interface**.
+`MockRender` relies on Angular `TestBed` and provides:
+
+- shallow rendering of Components, Directives, Services, Tokens
+- rendering of custom templates
+- support of context providers
+- support of all lifecycle hooks (`ngOnInit`, `ngOnChanges` etc)
+- support of components without selectors
 
 **Please note**, that `MockRender(Component)` is not assignable to
 `ComponentFixture<Component>`. You should use either
@@ -2162,16 +2189,48 @@ It happens because `MockRender` generates an additional component to
 render the desired thing and its interface differs.
 
 It returns `MockedComponentFixture<T>` type. The difference is an additional `point` property.
-The best thing about it is that `fixture.point.componentInstance` is typed to the component's class instead of `any`.
+The best thing about it is that `fixture.point.componentInstance` is typed to the related class instead of `any`.
 
 ```ts
-const fixture = MockRender(ComponentToRender);
+// component
+const fixture = MockRender(AppComponent);
 fixture.componentInstance; // is a middle component, mostly useless
-fixture.point.componentInstance; // the thing we need
+fixture.point.componentInstance; // an instance of the AppComponent
+```
+
+```ts
+// directive
+const fixture = MockRender(AppDirective);
+fixture.componentInstance; // is a middle component, mostly useless
+fixture.point.componentInstance; // an instance of AppDirective
+```
+
+```ts
+// service
+const fixture = MockRender(TranslationService);
+fixture.componentInstance; // is a middle component, mostly useless
+fixture.point.componentInstance; // an instance of TranslationService
+```
+
+```ts
+// token
+const fixture = MockRender(APP_BASE_HREF);
+fixture.componentInstance; // is a middle component, mostly useless
+fixture.point.componentInstance; // a value of APP_BASE_HREF
+```
+
+```ts
+// custom template
+const fixture = MockRender<AppComponent>(
+  `<app-component [header]="value | translate"></app-component`,
+  { value: 'test' },
+);
+fixture.componentInstance; // is a middle component, mostly useless
+fixture.point.componentInstance; // an instance of AppComponent
 ```
 
 If you want, you can specify providers for the render passing them via the 3rd parameter.
-It is useful when you want to create mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
+It is useful when you want to provide mock system tokens / services such as `APP_INITIALIZER`, `DOCUMENT` etc.
 
 ```ts
 const fixture = MockRender(
@@ -2189,8 +2248,8 @@ const fixture = MockRender(
 );
 ```
 
-And do not forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to reflect changes in
-the render.
+Please, don't forget to call `fixture.detectChanges()` and / or `await fixture.whenStable()` to update the render
+if you have changed values of parameters.
 
 There is **an example how to render a custom template in an Angular test** below.
 
@@ -2812,6 +2871,7 @@ This function verifies how a class has been decorated.
 - `isNgDef( SomeClass, 'd' )` - checks whether `SomeClass` is a directive
 - `isNgDef( SomeClass, 'p' )` - checks whether `SomeClass` is a pipe
 - `isNgDef( SomeClass, 'i' )` - checks whether `SomeClass` is a service
+- `isNgDef( SomeClass, 't' )` - checks whether `SomeClass` is a token
 - `isNgDef( SomeClass )` - checks whether `SomeClass` is a module / component / directive / pipe / service.
 
 #### getSourceOfMock

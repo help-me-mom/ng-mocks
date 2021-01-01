@@ -1,6 +1,5 @@
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN_CLASS = new InjectionToken('CLASS');
 const TOKEN_EXISTING = new InjectionToken('EXISTING');
@@ -57,7 +56,8 @@ describe('TestToken', () => {
   });
 
   it('creates TOKEN_CLASS', () => {
-    const token = TestBed.get(TOKEN_CLASS);
+    const token = MockRender<ServiceClass>(TOKEN_CLASS).point
+      .componentInstance;
 
     // Verifying that the token is an instance of ServiceClass.
     expect(token).toEqual(jasmine.any(ServiceClass));
@@ -65,7 +65,8 @@ describe('TestToken', () => {
   });
 
   it('creates TOKEN_EXISTING', () => {
-    const token = TestBed.get(TOKEN_EXISTING);
+    const token = MockRender<ServiceExisting>(TOKEN_EXISTING).point
+      .componentInstance;
 
     // Verifying that the token is an instance of ServiceExisting.
     // But because it has been replaced with a mock copy,
@@ -75,14 +76,14 @@ describe('TestToken', () => {
   });
 
   it('creates TOKEN_FACTORY', () => {
-    const token = TestBed.get(TOKEN_FACTORY);
+    const token = MockRender(TOKEN_FACTORY).point.componentInstance;
 
     // Checking that we have here what factory has been created.
     expect(token).toEqual('FACTORY');
   });
 
   it('creates TOKEN_VALUE', () => {
-    const token = TestBed.get(TOKEN_VALUE);
+    const token = MockRender(TOKEN_VALUE).point.componentInstance;
 
     // Checking the set value.
     expect(token).toEqual('VALUE');
