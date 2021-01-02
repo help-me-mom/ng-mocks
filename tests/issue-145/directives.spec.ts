@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MockDirective } from 'ng-mocks';
-import coreReflectDirective from 'ng-mocks/dist/lib/common/core.reflect.directive';
+import coreReflectDirectiveResolve from 'ng-mocks/dist/lib/common/core.reflect.directive-resolve';
 
 @Directive({
   selector: 'directive',
@@ -36,7 +36,7 @@ export class DirectiveValidator {}
 describe('issue-145:directives', () => {
   it('does not add NG_VALUE_ACCESSOR to directives', () => {
     const mock = MockDirective(DirectiveDefault);
-    const { providers } = coreReflectDirective().resolve(mock);
+    const { providers } = coreReflectDirectiveResolve(mock);
     expect(providers).toEqual([
       {
         provide: DirectiveDefault,
@@ -47,7 +47,7 @@ describe('issue-145:directives', () => {
 
   it('adds NG_VALUE_ACCESSOR to directives that provide it', () => {
     const mock = MockDirective(DirectiveValueAccessor);
-    const { providers } = coreReflectDirective().resolve(mock);
+    const { providers } = coreReflectDirectiveResolve(mock);
     expect(providers).toEqual([
       {
         provide: DirectiveValueAccessor,
@@ -63,7 +63,7 @@ describe('issue-145:directives', () => {
 
   it('respects NG_VALIDATORS too', () => {
     const mock = MockDirective(DirectiveValidator);
-    const { providers } = coreReflectDirective().resolve(mock);
+    const { providers } = coreReflectDirectiveResolve(mock);
     expect(providers).toEqual([
       {
         provide: DirectiveValidator,

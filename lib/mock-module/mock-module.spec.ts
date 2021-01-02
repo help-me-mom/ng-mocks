@@ -19,7 +19,7 @@ import {
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import coreReflectModule from '../common/core.reflect.module';
+import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockRender } from '../mock-render/mock-render';
@@ -242,7 +242,7 @@ describe('mockProvider', () => {
 
   it('should skip multi tokens in a mock module', () => {
     const mock = MockModule(CustomTokenModule);
-    const def = coreReflectModule().resolve(mock);
+    const def = coreReflectModuleResolve(mock);
     expect(def.providers).toEqual([
       {
         deps: [Injector],
@@ -250,7 +250,11 @@ describe('mockProvider', () => {
         useFactory: jasmine.anything(),
       },
     ]);
-    expect(def.providers?.[0].useFactory()).toEqual('');
+
+    const provider: any = !Array.isArray(def.providers?.[0])
+      ? def.providers?.[0]
+      : undefined;
+    expect(provider?.useFactory()).toEqual('');
   });
 
   it('should return undefined on any token', () => {
