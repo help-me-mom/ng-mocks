@@ -7,7 +7,7 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   template: 'target',
@@ -60,6 +60,11 @@ describe('issue-248', () => {
     );
     expect(fixture.point.componentInstance.name).toEqual('component');
     expect(fixture.point.nativeElement.innerHTML).toEqual('target');
+
+    expect(ngMocks.find(TargetComponent)).toBe(fixture.point);
+    expect(ngMocks.findInstance(TargetComponent)).toBe(
+      fixture.point.componentInstance,
+    );
   });
 
   it('renders directives', () => {
@@ -82,6 +87,11 @@ describe('issue-248', () => {
       jasmine.any(TargetDirective),
     );
     expect(fixture.point.componentInstance.value).toEqual('321');
+
+    expect(ngMocks.find(TargetDirective)).toBe(fixture.point);
+    expect(ngMocks.findInstance(TargetDirective)).toBe(
+      fixture.point.componentInstance,
+    );
   });
 
   it('fails on not provided pipes', () => {

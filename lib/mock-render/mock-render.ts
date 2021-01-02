@@ -33,6 +33,17 @@ const applyParamsToFixtureInstance = (
 
 const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
   const child = extendClass(template);
+
+  let providers = meta.providers || [];
+  providers = [
+    ...providers,
+    {
+      provide: template,
+      useExisting: child,
+    },
+  ];
+  meta.providers = providers;
+
   if (isNgDef(template, 'c')) {
     Component(meta)(child);
   } else {
