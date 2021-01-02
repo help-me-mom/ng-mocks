@@ -1,3 +1,10 @@
+## [11.3.1](https://github.com/ike18t/ng-mocks/compare/v11.3.0...v11.3.1) (2021-01-02)
+
+
+### Bug Fixes
+
+* declarations w/o selectors are reachable with ngMocks helpers ([ac26d81](https://github.com/ike18t/ng-mocks/commit/ac26d81b83feda6538b172f1927c2f9299c3ad46)), closes [#266](https://github.com/ike18t/ng-mocks/issues/266)
+
 # [11.3.0](https://github.com/ike18t/ng-mocks/compare/v11.2.8...v11.3.0) (2021-01-01)
 
 
