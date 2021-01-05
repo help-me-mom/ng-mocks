@@ -25,7 +25,16 @@ jobs:
           command: npm run ts:check
       - run:
           name: Build
-          command: npm run build
+          command: |
+            npm run build
+            cd ./dist
+            npm pack
+            cd ..
+            mv ./dist/ng-mocks-0.0.0.tgz ./
+            rm -Rf ./dist
+            tar -xf ./ng-mocks-0.0.0.tgz package
+            rm ./ng-mocks-0.0.0.tgz
+            mv ./package ./dist
       - run:
           name: Tests
           command: WITH_COVERAGE=1 npm run test
