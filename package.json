@@ -107,7 +107,7 @@
     "@types/jest": "26.0.19",
     "@types/node": "14.14.19",
     "codecov": "3.8.1",
-    "core-js": "3.8.1",
+    "core-js": "3.8.2",
     "coveralls": "3.1.0",
     "husky": "4.3.6",
     "karma": "5.2.3",
