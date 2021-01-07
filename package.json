@@ -109,7 +109,7 @@
     "codecov": "3.8.1",
     "core-js": "3.8.2",
     "coveralls": "3.1.0",
-    "husky": "4.3.6",
+    "husky": "4.3.7",
     "karma": "5.2.3",
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage": "2.0.3",
