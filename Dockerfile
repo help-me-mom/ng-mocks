@@ -1,4 +1,4 @@
-FROM satantime/puppeteer-node:14.15.3-buster-slim
+FROM satantime/puppeteer-node:14.15.4-buster-slim
 
 WORKDIR /app
 ENTRYPOINT ["/docker-entrypoint.sh"]
