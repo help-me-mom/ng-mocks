@@ -20,13 +20,13 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of the library has been tested and can be used with:
 
-- Angular 5 (Jasmine, Jest, es5, es2015)
-- Angular 6 (Jasmine, Jest, es5, es2015)
-- Angular 7 (Jasmine, Jest, es5, es2015)
-- Angular 8 (Jasmine, Jest, es5, es2015)
-- Angular 9 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
+- Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
+- Angular 9 (Jasmine, Jest, Ivy, es5, es2015)
+- Angular 8 (Jasmine, Jest, es5, es2015)
+- Angular 7 (Jasmine, Jest, es5, es2015)
+- Angular 6 (Jasmine, Jest, es5, es2015)
+- Angular 5 (Jasmine, Jest, es5, es2015)
 
 There are preconfigured sandboxes on
 [StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts)
@@ -837,54 +837,116 @@ describe('MockPipe', () => {
 
 ### How to mock services
 
-**A mock service in Angular tests** can be created by `MockService` function.
+**A mock service in Angular tests** can be created by `ng-mocks` via several options.
+Every of the options has own benefits.
 
-It tends to avoid a hassle of providing customized mock objects for huge services.
-Simply pass a class into it and its result will be a mock instance that respects the class,
-but all methods and properties are customizable dummies.
+- [`ngMocks.defaultMock`](#ngmocksdefaultmock) - is useful to provide **default mock behavior** for services in the **entire test suites**.
+  For example, we have a service with a property that is an observable stream.
+  In tests, we would like to avoid failures like `Cannot read property 'subscribe' of undefined`,
+  when we are mocking the service.
 
-- `MockService( Service, overrides? )` - returns a mock instance of `Service` class.
-- `MockService( Obj )` - returns a mock object of `Obj` object.
+  It can be done like that:
 
-> **NOTE**: Information about [mocking provides](#how-to-mock-providers)
-> is in the next section, and about [mocking observables](#how-to-mock-observables) after it.
+  ```ts
+  // src/test.ts
+  ngMocks.defaultMock(MyService, () => ({
+    stream$: EMPTY,
+  }));
+  ```
 
-**A mock service instance** is based on its original class, and provides:
+  Profit, now mocks of `MyService` has an `EMPTY` stream in the `stream$` property and all its subscribes won't fail anymore.
+  More information you can find in the related section about [`ngMocks.defaultMock`](#ngmocksdefaultmock).
 
-- all methods are dummies like `() => undefined`
-- all properties have been linked via getters and setters <small>(might not work in some cases, use [`ngMocks.stub`](#ngmocks) then)</small>
-- respects [auto spy](#auto-spy) environment
+- [`MockProvider`](#how-to-mock-providers) - is useful when we are configuring `TestBed.configureTestingModule`
+  and would like to mock a service.
 
-A class with dozens of methods, where we want to change behavior of
-a single method, can be handled like that:
+  ```ts
+  TestBed.configureTestingModule({
+    providers: [MockProvider(MyService)],
+  });
+  ```
 
-```ts
-const instance = MockService(MyClass);
-// instance.method() returns undefined
-instance.method = () => 'My Custom Behavior';
-```
+  Now, in related tests, `MyService` will be replaced with its mock object where its `stream$` property is the `EMPTY` observable stream due to the
+  customization in the previous section about [`ngMocks.defaultMock`](#ngmocksdefaultmock).
 
-```ts
-const instance = MockService(MyClass, {
-  method: () => 'My Custom Behavior',
-});
-// instance.method() returns 'My Custom Behavior'
-```
+  Furthermore, we can pass a custom slice as the second parameter for extra customization.
+  It takes the effect after all customizations defined in [`ngMocks.defaultMock`](#ngmocksdefaultmock).
 
-It also supports objects. All properties that are not objects or functions will be omitted,
-the functions will become dummy functions.
+  ```ts
+  TestBed.configureTestingModule({
+    providers: [
+      MockProvider(MyService, {
+        stream$: throwError(new Error('broken stream')),
+      }),
+    ],
+  });
+  ```
 
-```ts
-const instance = MockService({
-  nested: {
-    prop: true,
-    func: () => 'hello',
-  },
-});
-// instance.nested.prop is undefined
-// instance.nested.func() returns undefined
-instance.nested.func = () => 'My Custom Behavior';
-```
+  This will override the `stream$` property, and now, all its subscribes will get an error in the related tests.
+  More information you can find in the related section about [`MockProvider`](#how-to-mock-providers).
+
+- [`MockInstance`](#mockinstance) - is useful when we need to customize behavior of a mock object in a particular test.
+  For example, we want the `stream$` to emit something.
+  **Notice**: [`MockProvider`](#how-to-mock-providers) should be called before [`MockRender`](#mockrender) or `TestBed.createComponent`.
+
+  ```ts
+  it('test', () => {
+    const stream$ = new Subject();
+    MockInstance(MyService, () => ({
+      stream$,
+    }));
+    const fixture = MockRender(MyComponent);
+
+    stream$.next(true); // a mock emit.
+    fixture.detectChanges();
+  });
+  ```
+
+  [`MockInstance`](#mockinstance) is the latest in the sequence and will be applied after
+  [`MockProvider`](#how-to-mock-providers), [`MockBuilder.mock`](#mockbuildermock)
+  and [`ngMocks.defaultMock`](#ngmocksdefaultmock).
+  More information you can find in the related section about [`MockInstance`](#mockinstance).
+
+- `MockService` - is useful when we need to create a mock instance of a class, or clone an object, but this class / object
+  do not belong to declarations or providers.
+
+  **A mock object** produced by `MockService` is based on its original class, and provides:
+
+  - all methods are dummies like `() => undefined`
+  - all properties have been linked via getters and setters <small>(might not work in some cases, use [`ngMocks.stub`](#ngmocks) then)</small>
+  - respects [auto spy](#auto-spy) environment
+
+  For example, we have a mock component which real copy has an `inputElement` property with an instance of [`HTMLInputElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement),
+  and some other component tries to `focus` on it like `this.viewChildRef.inputElement.focus()`, and another one tries to `blur`, etc.
+  But in our tests, these calls are just **side effects**, we would like to suppress them.
+
+  That is the case where `MockService` shines. Because it might be useful for other tests too, let's define this customization via [`ngMocks.defaultMock`](#ngmocksdefaultmock).
+  Also, its optional second parameter accepts a slice of the instance for extra customization.
+
+  ```ts
+  // src/test.ts
+  ngMocks.defaultMock(MyComponent, () => ({
+    inputElement: MockService(HTMLInputElement, {
+      tagName: 'DIV',
+    }),
+  }));
+  ```
+
+  Profit. Now, every time when a mock object of `MyComponent` is needed, its `inputElement` will be a mock object of `HTMLInputElement`,
+  and its dependants can safely call `.focus()`, `.blur()` along with other methods.
+
+To recap the section:
+
+- [`ngMocks.defaultMock`](#ngmocksdefaultmock) - customize mocks of declarations and providers **globally**.
+- [`MockProvider`](#how-to-mock-providers) - customizes mocks of declarations and providers **in suites**.
+- [`MockInstance`](#mockinstance) - customizes mocks of declarations and providers **in tests**.
+- `MockService` - creates **mock objects out of any classes** and objects.
+
+The priority of customizations is:
+
+- The first calls go to [`ngMocks.defaultMock`](#ngmocksdefaultmock)
+- The second calls go to [`MockProvider`](#how-to-mock-providers) and [`MockBuilder.mock`](#mockbuildermock)
+- The last call goes to [`MockInstance`](#mockinstance)
 
 [to the top](#table-of-contents)
 
