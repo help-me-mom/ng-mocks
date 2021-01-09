@@ -1,7 +1,6 @@
 // tslint:disable variable-name
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
-import { FormControlDirective, NgControl } from '@angular/forms';
 
 import { mapValues } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
@@ -12,6 +11,20 @@ import helperMockService from '../mock-service/helper.mock-service';
 import funcIsMock from './func.is-mock';
 import { MockControlValueAccessorProxy } from './mock-control-value-accessor-proxy';
 import ngMocksUniverse from './ng-mocks-universe';
+
+let FormControlDirective: any | undefined;
+let NgControl: any | undefined;
+try {
+  // tslint:disable-next-line no-require-imports no-var-requires
+  const module = require('@angular/forms');
+  // istanbul ignore else
+  if (module) {
+    FormControlDirective = module.FormControlDirective;
+    NgControl = module.NgControl;
+  }
+} catch (e) {
+  // nothing to do;
+}
 
 const setValueAccessor = (instance: MockConfig, injector?: Injector) => {
   if (injector && instance.__ngMocksConfig && instance.__ngMocksConfig.setControlValueAccessor) {
@@ -26,7 +39,8 @@ const setValueAccessor = (instance: MockConfig, injector?: Injector) => {
   }
 };
 
-const getRelatedNgControl = (injector: Injector): FormControlDirective => {
+// any because of optional @angular/forms
+const getRelatedNgControl = (injector: Injector): any => {
   try {
     return (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
   } catch (e) {
@@ -65,9 +79,12 @@ const applyNgValueAccessor = (instance: any, injector?: Injector) => {
   if (injector) {
     try {
       const ngControl: any = getRelatedNgControl(injector);
-      installValueAccessor(ngControl, instance);
-      installValidator(ngControl._rawValidators, instance);
-      installValidator(ngControl._rawAsyncValidators, instance);
+      // istanbul ignore else
+      if (ngControl) {
+        installValueAccessor(ngControl, instance);
+        installValidator(ngControl._rawValidators, instance);
+        installValidator(ngControl._rawAsyncValidators, instance);
+      }
     } catch (e) {
       // nothing to do.
     }

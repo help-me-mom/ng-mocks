@@ -1,5 +1,4 @@
-import { Provider } from '@angular/core';
-import { NG_ASYNC_VALIDATORS, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { InjectionToken, Provider } from '@angular/core';
 
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
@@ -13,14 +12,32 @@ import helperMockService from '../mock-service/helper.mock-service';
 
 import toFactoryProvider from './to-factory-provider';
 
+// tslint:disable variable-name
+let NG_ASYNC_VALIDATORS: InjectionToken<any> | undefined;
+let NG_VALIDATORS: InjectionToken<any> | undefined;
+let NG_VALUE_ACCESSOR: InjectionToken<any> | undefined;
+// tslint:enable variable-name
+try {
+  // tslint:disable-next-line no-require-imports no-var-requires
+  const module = require('@angular/forms');
+  // istanbul ignore else
+  if (module) {
+    NG_ASYNC_VALIDATORS = module.NG_ASYNC_VALIDATORS;
+    NG_VALIDATORS = module.NG_VALIDATORS;
+    NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
+  }
+} catch (e) {
+  // nothing to do;
+}
+
 const processProvider = (provider: any, mockType: AnyType<any>, resolutions: Map<any, any>): any => {
-  if (provider === NG_VALIDATORS) {
+  if (NG_VALIDATORS && provider === NG_VALIDATORS) {
     return toFactoryProvider(provider, () => new MockValidatorProxy(mockType));
   }
-  if (provider === NG_ASYNC_VALIDATORS) {
+  if (NG_ASYNC_VALIDATORS && provider === NG_ASYNC_VALIDATORS) {
     return toFactoryProvider(provider, () => new MockAsyncValidatorProxy(mockType));
   }
-  if (provider === NG_VALUE_ACCESSOR) {
+  if (NG_VALUE_ACCESSOR && provider === NG_VALUE_ACCESSOR) {
     return toFactoryProvider(provider, () => new MockControlValueAccessorProxy(mockType));
   }
 
