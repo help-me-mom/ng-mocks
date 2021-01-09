@@ -1,6 +1,7 @@
 {
   "name": "a11",
-  "version": "0.0.0",
+  "description": "Angular 11",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,10 +20,8 @@
     "test:jest:es2015:no-ivy": "jest -w 1 --config jest.es2015noivy.js",
     "test:jest:debug": "jest -w 1 --watch"
   },
-  "private": true,
   "peerDependencies": {
-    "ng-mocks": "*",
-    "puppeteer": "5.5.0"
+    "ng-mocks": "*"
   },
   "dependencies": {
     "@angular/animations": "11.0.7",
@@ -52,6 +51,7 @@
     "karma-chrome-launcher": "3.1.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.5.4",
+    "puppeteer": "5.5.0",
     "ts-node": "8.10.2",
     "typescript": "4.0.5"
   }

@@ -9,7 +9,9 @@ jobs:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: NPM Install
-          command: npm install
+          command: |
+            npm install --ignore-scripts && \
+            node ./node_modules/puppeteer/install.js
       - save_cache:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
@@ -53,56 +55,62 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
       - restore_cache:
-          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
       - restore_cache:
-          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
       - restore_cache:
-          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
       - restore_cache:
-          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
       - restore_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
       - restore_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
       - restore_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+      - restore_cache:
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: NPM Install
           command: npm run i:a
       - save_cache:
-          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
           paths:
             - ./e2e/a5es5/node_modules
       - save_cache:
-          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
           paths:
             - ./e2e/a5es2015/node_modules
       - save_cache:
-          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
           paths:
             - ./e2e/a6/node_modules
       - save_cache:
-          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
           paths:
             - ./e2e/a7/node_modules
       - save_cache:
-          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
           paths:
             - ./e2e/a8/node_modules
       - save_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
           paths:
             - ./e2e/a9/node_modules
       - save_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
           paths:
             - ./e2e/a10/node_modules
       - save_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
           paths:
             - ./e2e/a11/node_modules
+      - save_cache:
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          paths:
+            - ./e2e/am/node_modules
   'Angular 5 ES5':
     docker:
       - image: satantime/puppeteer-node:14.15.4-buster-slim
@@ -111,9 +119,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a5es5-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a5es5
@@ -131,9 +137,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a5es2015-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a5es2015
@@ -151,9 +155,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a6
@@ -171,9 +173,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a6-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a6
@@ -191,9 +191,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a7
@@ -211,9 +209,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a7-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a7
@@ -231,9 +227,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a8
@@ -251,9 +245,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a8-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a8
@@ -271,9 +263,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -291,9 +281,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -311,9 +299,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -331,9 +317,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a9-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -351,9 +335,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -371,9 +353,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -391,9 +371,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -411,9 +389,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a10-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -431,9 +407,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -451,9 +425,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -471,9 +443,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -491,9 +461,7 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: a11-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -511,18 +479,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: am-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
       - run:
-          name: Spreading Tests
-          command: npm run s:test:am
-      - run:
           name: Unit Tests
           command: npm run test:am:es5
+      - run:
+          name: Build
+          command: npm run build:am:es5
   'Angular Min ES2015':
     docker:
       - image: satantime/puppeteer-node:14.15.4-buster-slim
@@ -531,18 +497,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: am-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
       - run:
-          name: Spreading Tests
-          command: npm run s:test:am
-      - run:
           name: Unit Tests
           command: npm run test:am:es2015
+      - run:
+          name: Build
+          command: npm run build:am:es2015
   'Angular Min ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.15.4-buster-slim
@@ -551,18 +515,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: am-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
       - run:
-          name: Spreading Tests
-          command: npm run s:test:am
-      - run:
           name: Unit Tests
           command: npm run test:am:es5ivy
+      - run:
+          name: Build
+          command: npm run build:am:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.15.4-buster-slim
@@ -571,18 +533,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: am-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
       - run:
-          name: Spreading Tests
-          command: npm run s:test:am
-      - run:
           name: Unit Tests
           command: npm run test:am:es2015ivy
+      - run:
+          name: Build
+          command: npm run build:am:es2015ivy
 workflows:
   version: 2
   build:
