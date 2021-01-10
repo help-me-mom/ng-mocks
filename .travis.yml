@@ -17,6 +17,7 @@ jobs:
         - npm run lint
         - npm run ts:check
         - WITH_COVERAGE=1 npm run test
+        - npm run e2e
       after_success:
         # https://coveralls.io/github/ike18t/ng-mocks
         - ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
@@ -40,7 +41,7 @@ jobs:
           -i test-reports/codeclimate.json
     - name: 'E2E'
       script:
-        - npm run e2e
+        - npm run e2e:a
 before_cache:
   - echo '' > $HOME/.npm/anonymous-cli-metrics.json
   - mkdir -p $HOME/.npm/_cacache/index-v5/34/8e
