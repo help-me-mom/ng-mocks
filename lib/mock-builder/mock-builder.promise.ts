@@ -1,12 +1,12 @@
 import { NgModule, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import ngMocksUniverse from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
 import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderStash } from './mock-builder-stash';
 import addMissedKeepDeclarationsAndModules from './promise/add-missed-keep-declarations-and-modules';
