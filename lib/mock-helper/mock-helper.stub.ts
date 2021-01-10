@@ -9,6 +9,7 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
     const def = Object.getOwnPropertyDescriptor(override, key);
     // istanbul ignore else
     if (def) {
+      def.configurable = true;
       Object.defineProperty(instance, key, def);
     }
   }

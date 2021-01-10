@@ -54,18 +54,9 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(service, 'name', () => 'new' as any, 'get');
     expect(service.name).toEqual('new' as any);
 
-    // redefining the name
-    Object.defineProperty(service, 'name', {
-      configurable: false,
-      enumerable: false,
-      value: null,
-      writable: false,
-    });
-    expect(service.name).toEqual(null as any);
-
-    // restoring the name
-    ngMocks.stubMember(service, 'name', 'target');
-    expect(service.name).toEqual('target');
+    // fake property
+    ngMocks.stubMember(service as any, 'fake', 'fake');
+    expect((service as any).fake).toEqual('fake');
 
     // an empty object
     const test = {};

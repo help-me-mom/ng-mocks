@@ -22,6 +22,7 @@ const applyMissedClassProperties = (instance: any, useClass: Type<any>) => {
     const def = Object.getOwnPropertyDescriptor(child, name);
     // istanbul ignore else
     if (def) {
+      def.configurable = true;
       Object.defineProperty(instance, name, def);
     }
   }

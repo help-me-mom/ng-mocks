@@ -115,6 +115,7 @@ const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
     if (!descriptor) {
       continue;
     }
+    descriptor.configurable = true;
     Object.defineProperty(instance, prop, descriptor);
   }
 };
