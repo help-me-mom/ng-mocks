@@ -1,5 +1,6 @@
 import { NgModule, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import ngMocksUniverse from 'ng-mocks/dist/lib/common/ng-mocks-universe';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
@@ -72,6 +73,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public build(): NgModule {
     this.stash.backup();
+    ngMocksUniverse.config.set('mockNgDefResolver', new Map());
 
     const params = this.combineParams();
 
@@ -85,6 +87,7 @@ export class MockBuilderPromise implements IMockBuilder {
     ngModule.providers.push(createNgMocksTouchesToken());
     ngModule.providers.push(createNgMocksOverridesToken(this.replaceDef, this.defValue));
 
+    ngMocksUniverse.config.delete('mockNgDefResolver');
     this.stash.restore();
 
     return ngModule;
