@@ -2501,6 +2501,10 @@ describe('MockInstance', () => {
 
 - [`.guts()`](#ngmocksguts)
 - [`.defaultMock()`](#ngmocksdefaultmock)
+- [`.defaultExclude()`](#ngmocksdefaultexclude)
+- [`.defaultKeep()`](#ngmocksdefaultkeep)
+- [`.defaultReplace()`](#ngmocksdefaultreplace)
+- [`.defaultWipe()`](#ngmocksdefaultwipe)
 - [`.get()`](#ngmocksget)
 - [`.findInstance()`](#ngmocksfindinstance)
 - [`.findInstances()`](#ngmocksfindinstances)
@@ -2594,6 +2598,99 @@ ngMocks.defaultMock(MyComponent, (_, injector) => ({
 
 // removing all overrides.
 ngMocks.defaultMock(MyComponent);
+```
+
+#### ngMocks.defaultExclude
+
+`ngMocks.defaultExclude` marks declarations, services and tokens to be excluded during creating mock modules.
+
+It is useful when some of them have been provided in `TestBed.initTestEnvironment`,
+and we would like to get these versions in tests, although something declares or imports original ones.
+
+Let's imagine that we have `TranslationModule` and would like to use it as it is in tests, but with a mock backend.
+In the same time, we would like to avoid repeating setups in every test to recreate that.
+
+Therefore, we can configure it via `initTestEnvironment`, but there is a problem.
+If we import a module that imports `TranslationModule` in tests,
+then this effect of `initTestEnvironment` will be overloaded.
+
+To keep the effect, we need to exclude `TranslationModule` during the mocking process.
+That is where `ngMocks.defaultExclude` comes for help.
+
+```ts
+// test.ts
+@NgModule({
+  imports: [TranslationModule.forRoot(mockBackend)],
+  exports: [BrowserDynamicTestingModule, TranslationModule],
+})
+class TestEnvModule {}
+
+getTestBed().initTestEnvironment(
+  TestEnvModule,
+  platformBrowserDynamicTesting(),
+);
+
+ngMocks.defaultExclude(TranslationModule);
+```
+
+Now, if we call `MockModule(ModuleWithTranslationModule)`,
+the `TranslationModule` will be excluded out of the final mock module,
+and, consequently, the version from `initTestEnvironment` will be used.
+
+#### ngMocks.defaultKeep
+
+`ngMocks.defaultExclude` marks declarations, services and tokens to be avoided from the mocking process during creating mock modules.
+
+Let's mark the `APP_URL` token in order to be kept in mock modules.
+
+```ts
+// test.ts
+ngMocks.defaultKeep(APP_URL);
+```
+
+```ts
+// test.spec.ts
+// ...
+MockModule(ModuleWithService);
+// ...
+const url = TestBed.inject(APP_URL);
+// ...
+```
+
+The `url` is the original one.
+
+#### ngMocks.defaultReplace
+
+`ngMocks.defaultReplace` marks declarations and modules (but not services and tokens) to be replaced during creating mock modules.
+
+If we wanted to replace `BrowserAnimationsModule` with `NoopAnimationsModule` globally,
+we could do it like that:
+
+```ts
+// test.ts
+ngMocks.defaultReplace(BrowserAnimationsModule, NoopAnimationsModule);
+```
+
+Now, all mock modules which import `BrowserAnimationsModule` have `NoopAnimationsModule` instead.
+
+#### ngMocks.defaultWipe
+
+`ngMocks.defaultWipe` resets all customizations which have been done by any `ngMocks.default` function.
+
+```ts
+ngMocks.defaultMock(Service, () => ({
+  stream$: EMPTY,
+}));
+ngMocks.defaultExclude(Component);
+ngMocks.defaultKeep(Directive);
+ngMocks.defaultReplace(Pipe, FakePipe);
+
+ngMocks.defaultWipe(Service);
+ngMocks.defaultWipe(Component);
+ngMocks.defaultWipe(Directive);
+ngMocks.defaultWipe(Pipe);
+
+// All the things above will be mocked as usual
 ```
 
 #### ngMocks.get
