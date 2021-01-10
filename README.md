@@ -2856,10 +2856,13 @@ ngMocks.stub(instance, {
 ```ts
 // overriding the method
 ngMocks.stubMember(service, method, customCallback);
+
 // overriding the property's value
 ngMocks.stubMember(service, property, customValue);
+
 // overrding the getter, doesn't touch the existing setter
 ngMocks.stubMember(service, property, customGetter, 'get');
+
 // overrding the setter, doesn't touch the existing getter
 ngMocks.stubMember(service, property, customSetter, 'set');
 ```
