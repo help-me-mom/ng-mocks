@@ -35,6 +35,8 @@ class TargetModule {}
 ngMocks.defaultReplace(TargetPipe, FakePipe);
 
 describe('ng-mocks-default-replace:pipe', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockPipe', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({

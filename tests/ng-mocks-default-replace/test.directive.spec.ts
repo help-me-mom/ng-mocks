@@ -33,6 +33,8 @@ class TargetModule {}
 ngMocks.defaultReplace(TargetDirective, FakeDirective);
 
 describe('ng-mocks-default-replace:directive', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockDirective', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
@@ -42,7 +44,7 @@ describe('ng-mocks-default-replace:directive', () => {
 
     it('works as usual', () => {
       const fixture = MockRender('<target></target>');
-      expect(fixture.nativeElement.innerHTML).toEqual(
+      expect(fixture.nativeElement.innerHTML).toContain(
         '<target></target>',
       );
     });
@@ -99,7 +101,7 @@ describe('ng-mocks-default-replace:directive', () => {
 
     it('switches to mock', () => {
       const fixture = MockRender('<target></target>');
-      expect(fixture.nativeElement.innerHTML).toEqual(
+      expect(fixture.nativeElement.innerHTML).toContain(
         '<target></target>',
       );
     });
@@ -148,7 +150,7 @@ describe('ng-mocks-default-replace:directive', () => {
 
     it('switches to mock', () => {
       const fixture = MockRender('<target></target>');
-      expect(fixture.nativeElement.innerHTML).toEqual(
+      expect(fixture.nativeElement.innerHTML).toContain(
         '<target></target>',
       );
     });

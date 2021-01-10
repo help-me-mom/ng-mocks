@@ -2516,6 +2516,7 @@ describe('MockInstance', () => {
 - [`.faster()`](#ngmocksfaster)
 - [`.flushTestBed()`](#ngmocksflushtestbed)
 - [`.reset()`](#ngmocksreset)
+- [`.throwOnConsole()`](#ngmocksthrowonconsole)
 
 #### ngMocks.guts
 
@@ -2856,6 +2857,13 @@ ngMocks.stub(instance, {
 #### ngMocks.reset
 
 `ngMocks.reset()` resets cache of [`ngMocks`](#ngmocks).
+
+[to the top](#table-of-contents)
+
+#### ngMocks.throwOnConsole
+
+`ngMocks.throwOnConsole()` stubs `console.warn` and `console.error` to throw an error instead of printing into console.
+It is useful in `Ivy` enabled mode, because then some errors are printed instead of being thrown.
 
 [to the top](#table-of-contents)
 

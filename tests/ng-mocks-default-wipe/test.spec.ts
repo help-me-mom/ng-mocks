@@ -45,6 +45,8 @@ ngMocks.defaultReplace(TargetComponent, FakeComponent);
 ngMocks.defaultWipe(TargetComponent);
 
 describe('ng-mocks-default-replace', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockComponent', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({

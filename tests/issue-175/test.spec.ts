@@ -1,8 +1,6 @@
-// tslint:disable no-console
-
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
   Target1Component,
@@ -17,22 +15,7 @@ import {
 } from './fixtures';
 
 describe('issue-175', () => {
-  // Thanks Ivy, it doesn't throw an error and we have to use injector.
-  let backupWarn: typeof console.warn;
-  let backupError: typeof console.error;
-
-  beforeAll(() => {
-    backupWarn = console.warn;
-    backupError = console.error;
-    console.error = console.warn = (...args: any[]) => {
-      throw new Error(args.join(' '));
-    };
-  });
-
-  afterAll(() => {
-    console.error = backupError;
-    console.warn = backupWarn;
-  });
+  ngMocks.throwOnConsole();
 
   describe('module', () => {
     beforeEach(() =>

@@ -33,6 +33,8 @@ class TargetModule {}
 ngMocks.defaultKeep(TargetComponent);
 
 describe('ng-mocks-default-keep', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockComponent', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({

@@ -25,6 +25,8 @@ class Target2Component {
 class TargetModule {}
 
 describe('ng-mocks-default-exclude:override', () => {
+  ngMocks.throwOnConsole();
+
   afterAll(() => {
     ngMocks.defaultWipe(Target1Component);
     ngMocks.defaultWipe(Target2Component);

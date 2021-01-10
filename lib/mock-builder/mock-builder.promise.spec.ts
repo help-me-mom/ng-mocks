@@ -9,6 +9,7 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
+import { ngMocks } from 'ng-mocks';
 
 import { getTestBedInjection } from '../common/core.helpers';
 
@@ -47,22 +48,7 @@ class TargetDirective {}
 class TargetModule {}
 
 describe('MockBuilderPromise', () => {
-  // Thanks Ivy, it doesn't throw an error and we have to use injector.
-  let backupWarn: typeof console.warn;
-  let backupError: typeof console.error;
-
-  beforeAll(() => {
-    backupWarn = console.warn;
-    backupError = console.error;
-    console.error = console.warn = (...args: any[]) => {
-      throw new Error(args.join(' '));
-    };
-  });
-
-  afterAll(() => {
-    console.error = backupError;
-    console.warn = backupWarn;
-  });
+  ngMocks.throwOnConsole();
 
   it('skips dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService, { dependency: true });

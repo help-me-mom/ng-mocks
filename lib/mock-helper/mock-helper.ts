@@ -26,6 +26,7 @@ import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
 import mockHelperReset from './mock-helper.reset';
 import mockHelperStub from './mock-helper.stub';
+import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 
 /**
  * @see https://github.com/ike18t/ng-mocks#ngmocks
@@ -266,6 +267,13 @@ export const ngMocks: {
    * @see https://github.com/ike18t/ng-mocks#ngmocksstub
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
+
+  /**
+   * Thanks Ivy, it doesn't throw an error and we have to use injector.
+   *
+   * @see https://github.com/ike18t/ng-mocks#ngmocksthrowonconsole
+   */
+  throwOnConsole(): void;
 } = {
   autoSpy: mockHelperAutoSpy,
   defaultExclude: mockHelperDefaultExclude,
@@ -285,4 +293,5 @@ export const ngMocks: {
   output: mockHelperOutput,
   reset: mockHelperReset,
   stub: mockHelperStub,
+  throwOnConsole: mockHelperThrowOnConsole,
 };

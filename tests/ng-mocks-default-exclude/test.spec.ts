@@ -33,6 +33,8 @@ class TargetModule {}
 ngMocks.defaultExclude(TargetComponent);
 
 describe('ng-mocks-default-exclude', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockComponent', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({

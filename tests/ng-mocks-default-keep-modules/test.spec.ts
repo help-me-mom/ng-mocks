@@ -14,6 +14,8 @@ ngMocks.defaultKeep(Target2Module);
 ngMocks.defaultReplace(Target1Component, Fake1Component);
 
 describe('ng-mocks-default-keep-modules', () => {
+  ngMocks.throwOnConsole();
+
   beforeEach(() => {
     return TestBed.configureTestingModule({
       imports: [MockModule(Target3Module)],

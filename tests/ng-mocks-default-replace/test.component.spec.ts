@@ -33,6 +33,8 @@ class TargetModule {}
 ngMocks.defaultReplace(TargetComponent, FakeComponent);
 
 describe('ng-mocks-default-replace:component', () => {
+  ngMocks.throwOnConsole();
+
   describe('MockComponent', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
