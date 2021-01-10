@@ -11,7 +11,8 @@ jobs:
           name: NPM Install
           command: |
             npm install --ignore-scripts && \
-            node ./node_modules/puppeteer/install.js
+            node ./node_modules/puppeteer/install.js && \
+            ./node_modules/.bin/ngcc
       - save_cache:
           key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
