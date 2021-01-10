@@ -6,6 +6,14 @@ import { AnyType } from './core.types';
 // istanbul ignore next
 const getGlobal = (): any => window || global;
 
+const globalMap = (key: string) => () => {
+  if (!ngMocksUniverse.global.has(key)) {
+    ngMocksUniverse.global.set(key, new Map());
+  }
+
+  return ngMocksUniverse.global.get(key);
+};
+
 interface NgMocksUniverse {
   builtDeclarations: Map<any, any>;
   builtProviders: Map<any, any>;
@@ -47,21 +55,8 @@ ngMocksUniverse.getLocalMocks = () => {
   return ngMocksUniverse.global.get('local-mocks');
 };
 
-ngMocksUniverse.getOverrides = () => {
-  if (!ngMocksUniverse.global.has('overrides')) {
-    ngMocksUniverse.global.set('overrides', new Map());
-  }
-
-  return ngMocksUniverse.global.get('overrides');
-};
-
-ngMocksUniverse.getDefaults = () => {
-  if (!ngMocksUniverse.global.has('defaults')) {
-    ngMocksUniverse.global.set('defaults', new Map());
-  }
-
-  return ngMocksUniverse.global.get('defaults');
-};
+ngMocksUniverse.getOverrides = globalMap('overrides');
+ngMocksUniverse.getDefaults = globalMap('defaults');
 
 ngMocksUniverse.getResolution = (def: any) => {
   const set = ngMocksUniverse.config.get('ngMocksDepsResolution');
