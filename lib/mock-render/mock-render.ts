@@ -66,7 +66,7 @@ const reflectTemplate = (template: AnyType<any>): Directive => {
   }
 
   if (!meta.selector) {
-    meta.selector = `ng-mocks-${Date.now()}-${Math.round(Math.random() * 1000)}`;
+    meta.selector = `ng-mocks-${template.name}`;
     registerTemplateMiddleware(template, meta);
   }
 
