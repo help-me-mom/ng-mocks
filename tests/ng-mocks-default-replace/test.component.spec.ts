@@ -32,7 +32,7 @@ class TargetModule {}
 
 ngMocks.defaultReplace(TargetComponent, FakeComponent);
 
-describe('ng-mocks-default-replace', () => {
+describe('ng-mocks-default-replace:component', () => {
   describe('MockComponent', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
@@ -59,6 +59,63 @@ describe('ng-mocks-default-replace', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
         '<target>fake</target>',
+      );
+    });
+  });
+
+  describe('ngMocks.guts:default', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(null, TargetModule),
+      ).compileComponents(),
+    );
+
+    it('replaces out of the box', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>fake</target>',
+      );
+    });
+  });
+
+  describe('ngMocks.guts:exclude', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(null, TargetModule, TargetComponent),
+      ).compileComponents(),
+    );
+
+    it('switches to exclude', () => {
+      expect(() => MockRender('<target></target>')).toThrow();
+    });
+  });
+
+  describe('ngMocks.guts:mock', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(null, [TargetModule, TargetComponent]),
+      ).compileComponents(),
+    );
+
+    it('switches to mock', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target></target>',
+      );
+    });
+  });
+
+  describe('ngMocks.guts:keep', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetComponent, TargetModule),
+      ).compileComponents(),
+    );
+
+    it('switches to keep', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>target</target>',
       );
     });
   });

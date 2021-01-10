@@ -60,6 +60,48 @@ describe('ng-mocks-default-exclude', () => {
     });
   });
 
+  describe('ngMocks.guts:default', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(null, TargetModule),
+      ),
+    );
+
+    it('excludes out of the box', () => {
+      expect(() => MockRender('<target></target>')).toThrow();
+    });
+  });
+
+  describe('ngMocks.guts:keep', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetComponent, TargetModule),
+      ),
+    );
+
+    it('switches to keep', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>target</target>',
+      );
+    });
+  });
+
+  describe('ngMocks.guts:mock', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(null, [TargetModule, TargetComponent]),
+      ),
+    );
+
+    it('switches to mock', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target></target>',
+      );
+    });
+  });
+
   describe('MockBuilder:default', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 

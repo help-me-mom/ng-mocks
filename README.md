@@ -2604,6 +2604,8 @@ ngMocks.defaultMock(MyComponent);
 
 `ngMocks.defaultExclude` marks declarations, services and tokens to be excluded during creating mock modules.
 
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
 It is useful when some of them have been provided in `TestBed.initTestEnvironment`,
 and we would like to get these versions in tests, although something declares or imports original ones.
 
@@ -2641,6 +2643,8 @@ and, consequently, the version from `initTestEnvironment` will be used.
 
 `ngMocks.defaultExclude` marks declarations, services and tokens to be avoided from the mocking process during creating mock modules.
 
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
 Let's mark the `APP_URL` token in order to be kept in mock modules.
 
 ```ts
@@ -2662,6 +2666,8 @@ The `url` is the original one.
 #### ngMocks.defaultReplace
 
 `ngMocks.defaultReplace` marks declarations and modules (but not services and tokens) to be replaced during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
 
 If we wanted to replace `BrowserAnimationsModule` with `NoopAnimationsModule` globally,
 we could do it like that:

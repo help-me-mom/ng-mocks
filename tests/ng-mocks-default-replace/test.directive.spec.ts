@@ -1,42 +1,42 @@
-import { Component, NgModule } from '@angular/core';
+import { Directive, HostBinding, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   MockBuilder,
-  MockComponent,
+  MockDirective,
   MockModule,
   MockRender,
   ngMocks,
 } from 'ng-mocks';
 
-@Component({
+@Directive({
   selector: 'target',
-  template: '{{ name }}',
 })
-class TargetComponent {
+class TargetDirective {
+  @HostBinding('attr.name')
   public readonly name = 'target';
 }
 
-@Component({
+@Directive({
   selector: 'target',
-  template: '{{ name }}',
 })
-class FakeComponent {
+class FakeDirective {
+  @HostBinding('attr.name')
   public readonly name = 'fake';
 }
 
 @NgModule({
-  declarations: [TargetComponent],
-  exports: [TargetComponent],
+  declarations: [TargetDirective],
+  exports: [TargetDirective],
 })
 class TargetModule {}
 
-ngMocks.defaultKeep(TargetComponent);
+ngMocks.defaultReplace(TargetDirective, FakeDirective);
 
-describe('ng-mocks-default-keep', () => {
-  describe('MockComponent', () => {
+describe('ng-mocks-default-replace:directive', () => {
+  describe('MockDirective', () => {
     beforeEach(() =>
       TestBed.configureTestingModule({
-        declarations: [MockComponent(TargetComponent)],
+        declarations: [MockDirective(TargetDirective)],
       }),
     );
 
@@ -55,10 +55,10 @@ describe('ng-mocks-default-keep', () => {
       }),
     );
 
-    it('keeps out of the box', () => {
+    it('replaces out of the box', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target name="fake"></target>',
       );
     });
   });
@@ -70,10 +70,10 @@ describe('ng-mocks-default-keep', () => {
       ).compileComponents(),
     );
 
-    it('keeps out of the box', () => {
+    it('replaces out of the box', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target name="fake"></target>',
       );
     });
   });
@@ -81,7 +81,7 @@ describe('ng-mocks-default-keep', () => {
   describe('ngMocks.guts:exclude', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        ngMocks.guts(null, TargetModule, TargetComponent),
+        ngMocks.guts(null, TargetModule, TargetDirective),
       ).compileComponents(),
     );
 
@@ -93,7 +93,7 @@ describe('ng-mocks-default-keep', () => {
   describe('ngMocks.guts:mock', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        ngMocks.guts(null, [TargetModule, TargetComponent]),
+        ngMocks.guts(null, [TargetModule, TargetDirective]),
       ).compileComponents(),
     );
 
@@ -105,20 +105,35 @@ describe('ng-mocks-default-keep', () => {
     });
   });
 
+  describe('ngMocks.guts:keep', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetDirective, TargetModule),
+      ).compileComponents(),
+    );
+
+    it('switches to keep', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target name="target"></target>',
+      );
+    });
+  });
+
   describe('MockBuilder:default', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 
-    it('keeps out of the box', () => {
+    it('replaces out of the box', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target name="fake"></target>',
       );
     });
   });
 
   describe('MockBuilder:exclude', () => {
     beforeEach(() =>
-      MockBuilder(null, TargetModule).exclude(TargetComponent),
+      MockBuilder(null, TargetModule).exclude(TargetDirective),
     );
 
     it('switches to exclude', () => {
@@ -128,7 +143,7 @@ describe('ng-mocks-default-keep', () => {
 
   describe('MockBuilder:mock', () => {
     beforeEach(() =>
-      MockBuilder(null, TargetModule).mock(TargetComponent),
+      MockBuilder(null, TargetModule).mock(TargetDirective),
     );
 
     it('switches to mock', () => {
@@ -139,18 +154,15 @@ describe('ng-mocks-default-keep', () => {
     });
   });
 
-  describe('MockBuilder:replace', () => {
+  describe('MockBuilder:keep', () => {
     beforeEach(() =>
-      MockBuilder(null, TargetModule).replace(
-        TargetComponent,
-        FakeComponent,
-      ),
+      MockBuilder(null, TargetModule).keep(TargetDirective),
     );
 
-    it('switches to replace', () => {
+    it('switches to keep', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target name="target"></target>',
       );
     });
   });
