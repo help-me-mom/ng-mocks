@@ -38,8 +38,11 @@ jobs:
             rm ./ng-mocks-0.0.0.tgz
             mv ./package ./dist
       - run:
-          name: Tests
+          name: Unit Tests
           command: WITH_COVERAGE=1 npm run test
+      - run:
+          name: E2E Tests
+          command: npm run e2e
       - store_test_results:
           path: ./test-reports
       - store_artifacts:
