@@ -17,7 +17,7 @@ const anyDiffers = (a: any, b: any, ...keys: string[]): boolean => {
   return false;
 };
 
-const createFromResolution = (provide: any, resolution: any, multi?: boolean) => {
+const createFromResolution = (provide: any, resolution: any) => {
   let mockDef = resolution;
 
   const existingMock = ngMocksUniverse.builtProviders.get(provide);
@@ -33,7 +33,7 @@ const createFromResolution = (provide: any, resolution: any, multi?: boolean) =>
     };
   }
 
-  return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
+  return mockDef;
 };
 
 const isSuitableProvider = (provider: any, provide: any): boolean =>
@@ -115,7 +115,7 @@ const createPredefinedMockProvider = (provider: any, provide: any): any => {
   return undefined;
 };
 
-const createMockProvider = (provider: any, provide: any, resolutions: Map<any, any>, change: () => void) => {
+const createMockProvider = (provider: any, provide: any, change: () => void) => {
   let mockDef = createPredefinedMockProvider(provider, provide);
 
   if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
@@ -127,9 +127,6 @@ const createMockProvider = (provider: any, provide: any, resolutions: Map<any, a
   }
 
   mockDef = replaceWithMocks(provider, provide, mockDef);
-  if (!isNgInjectionToken(provide) || provider !== mockDef) {
-    resolutions.set(provide, mockDef);
-  }
   if (!areEqualDefs(mockDef, provider, provide)) {
     change();
   }
@@ -180,10 +177,10 @@ export default (provider: any, resolutions: Map<any, any>, changed?: () => void)
     return change();
   }
   if (resolutions.has(provide)) {
-    return createFromResolution(provide, resolutions.get(provide), multi);
+    return createFromResolution(provide, resolutions.get(provide));
   }
 
-  const mockDef = createMockProvider(provider, provide, resolutions, change);
+  const mockDef = createMockProvider(provider, provide, change);
 
   return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };
