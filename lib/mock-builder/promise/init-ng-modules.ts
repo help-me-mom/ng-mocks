@@ -18,7 +18,7 @@ export default ({ configDef, keepDef, mockDef, replaceDef }: BuilderData, defPro
     if (isNgDef(def, 'm')) {
       imports.push(initModule(def, defProviders));
     } else {
-      declarations.push(ngMocksUniverse.builtDeclarations.get(def));
+      declarations.push(ngMocksUniverse.getBuildDeclaration(def));
     }
 
     ngMocksUniverse.touches.add(def);

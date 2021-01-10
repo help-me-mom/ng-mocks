@@ -22,8 +22,8 @@ const processDef = (def: any) => {
   if (isNgDef(def, 'm') || isNgModuleDefWithProviders(def)) {
     return MockModule(def as any);
   }
-  if (ngMocksUniverse.builtDeclarations.has(def)) {
-    return ngMocksUniverse.builtDeclarations.get(def);
+  if (ngMocksUniverse.hasBuildDeclaration(def)) {
+    return ngMocksUniverse.getBuildDeclaration(def);
   }
   if (ngMocksUniverse.flags.has('skipMock')) {
     return def;

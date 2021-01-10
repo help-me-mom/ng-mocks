@@ -9,6 +9,7 @@ import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
 import mockHelperAutoSpy from './mock-helper.auto-spy';
+import mockHelperDefaultExclude from './mock-helper.default-exclude';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFind from './mock-helper.find';
@@ -36,6 +37,11 @@ export const ngMocks: {
    * @see https://github.com/ike18t/ng-mocks#auto-spy
    */
   autoSpy(type: CustomMockFunction): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultexclude
+   */
+  defaultExclude(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
@@ -244,6 +250,7 @@ export const ngMocks: {
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 } = {
   autoSpy: mockHelperAutoSpy,
+  defaultExclude: mockHelperDefaultExclude,
   defaultMock: mockHelperDefaultMock,
   faster: mockHelperFaster,
   find: mockHelperFind,

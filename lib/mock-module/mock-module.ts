@@ -27,9 +27,7 @@ const flagNever = (ngModule?: any): boolean =>
 const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
   let toggleSkipMockFlag = false;
 
-  const resolution: undefined | 'mock' | 'keep' | 'replace' | 'exclude' = ngMocksUniverse.config
-    .get('ngMocksDepsResolution')
-    ?.get(ngModule);
+  const resolution = ngMocksUniverse.getResolution(ngModule);
   if (flagMock(resolution)) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.delete('skipMock');
@@ -82,8 +80,8 @@ const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
-  if (ngMocksUniverse.builtDeclarations.has(ngModule)) {
-    const instance = ngMocksUniverse.builtDeclarations.get(ngModule);
+  if (ngMocksUniverse.hasBuildDeclaration(ngModule)) {
+    const instance = ngMocksUniverse.getBuildDeclaration(ngModule);
     if (isNgDef(instance, 'm') && instance !== ngModule) {
       return instance;
     }

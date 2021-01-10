@@ -14,9 +14,13 @@ interface NgMocksUniverse {
   config: Map<any, any>;
   configInstance: Map<any, any>;
   flags: Set<string>;
+  getBuildDeclaration: (def: any) => any | undefined;
+  getDefaults: () => Map<any, any>;
   getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
+  getResolution: (def: any) => undefined | 'mock' | 'keep' | 'replace' | 'exclude';
   global: Map<any, any>;
+  hasBuildDeclaration: (def: any) => boolean;
   isExcludedDef: (def: any) => boolean;
   isProvidedDef: (def: any) => boolean;
   touches: Set<AnyType<any> | InjectionToken<any> | string>;
@@ -51,8 +55,57 @@ ngMocksUniverse.getOverrides = () => {
   return ngMocksUniverse.global.get('overrides');
 };
 
-const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.builtDeclarations.has(def);
-const getBuildDeclaration = (def: any): any => ngMocksUniverse.builtDeclarations.get(def);
+ngMocksUniverse.getDefaults = () => {
+  if (!ngMocksUniverse.global.has('defaults')) {
+    ngMocksUniverse.global.set('defaults', new Map());
+  }
+
+  return ngMocksUniverse.global.get('defaults');
+};
+
+ngMocksUniverse.getResolution = (def: any) => {
+  const set = ngMocksUniverse.config.get('ngMocksDepsResolution');
+  if (set?.has(def)) {
+    return set.get(def);
+  }
+
+  if (!ngMocksUniverse.getDefaults().has(def)) {
+    return undefined;
+  }
+
+  const value = ngMocksUniverse.getDefaults().get(def);
+  if (!value) {
+    return 'exclude';
+  }
+  if (def === value) {
+    return 'keep';
+  }
+
+  return 'replace';
+};
+
+ngMocksUniverse.getBuildDeclaration = (def: any) => {
+  if (ngMocksUniverse.builtDeclarations.has(def)) {
+    return ngMocksUniverse.builtDeclarations.get(def);
+  }
+  if (ngMocksUniverse.getDefaults().has(def)) {
+    return ngMocksUniverse.getDefaults().get(def);
+  }
+};
+
+ngMocksUniverse.hasBuildDeclaration = (def: any) => {
+  if (ngMocksUniverse.builtDeclarations.has(def)) {
+    return true;
+  }
+  if (ngMocksUniverse.getDefaults().has(def)) {
+    return true;
+  }
+
+  return false;
+};
+
+const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.hasBuildDeclaration(def);
+const getBuildDeclaration = (def: any): any => ngMocksUniverse.getBuildDeclaration(def);
 
 ngMocksUniverse.isExcludedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) === null;
 
