@@ -270,24 +270,29 @@ export const ngMocks: {
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
    */
-  stubMember<T extends object, K extends keyof T>(instance: T, name: K, stub: () => T[K], encapsulation: 'get'): void;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
-   */
-  stubMember<T extends object, K extends keyof T>(
+  stubMember<T extends object, K extends keyof T, S extends () => T[K]>(
     instance: T,
     name: K,
-    stub: (value: T[K]) => void,
-    encapsulation: 'set',
-  ): void;
+    stub: S,
+    encapsulation: 'get',
+  ): S;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
    */
-  stubMember<T extends object, K extends keyof T>(instance: T, name: K, stub: T[K]): void;
+  stubMember<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
+    instance: T,
+    name: K,
+    stub: S,
+    encapsulation: 'set',
+  ): S;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   */
+  stubMember<T extends object, K extends keyof T, S extends T[K]>(instance: T, name: K, stub: S): S;
 
   /**
    * Thanks Ivy, it doesn't throw an error and we have to use injector.

@@ -1,4 +1,4 @@
-export default <T extends object>(instance: T, key: any, value: any, encapsulation?: 'get' | 'set'): void => {
+export default <T extends object>(instance: T, key: any, value: any, encapsulation?: 'get' | 'set'): any => {
   const def = Object.getOwnPropertyDescriptor(instance, key) || {};
 
   const descriptor: PropertyDescriptor = {
@@ -18,4 +18,6 @@ export default <T extends object>(instance: T, key: any, value: any, encapsulati
   }
 
   Object.defineProperty(instance, key, descriptor);
+
+  return value;
 };

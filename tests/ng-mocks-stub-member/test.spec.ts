@@ -4,6 +4,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 @Injectable()
 class TargetService {
   public readonly name = 'target';
+  public norm = 'normal';
 
   public echo(): string {
     return this.name;
@@ -70,5 +71,38 @@ describe('ng-mocks-stub-member', () => {
     const test = {};
     ngMocks.stubMember(test as any, 'name', 'test');
     expect((test as any).name).toEqual('test');
+  });
+
+  it('returns the passed value', () => {
+    const service = MockRender(TargetService).point.componentInstance;
+
+    // checking methods
+    expect(service.echo()).toEqual('target');
+    ngMocks
+      .stubMember(service, 'echo', jasmine.createSpy('echo'))
+      .and.returnValue('spy');
+    expect(service.echo()).toEqual('spy');
+
+    // checking getters
+    expect(service.name).toEqual('target');
+    ngMocks
+      .stubMember(service, 'name', jasmine.createSpy('name'), 'get')
+      .and.returnValue('spy');
+    expect(service.name).toEqual('spy');
+
+    // checking setters
+    ngMocks
+      .stubMember(service, 'name', jasmine.createSpy('name'), 'set')
+      .and.throwError('spy');
+    expect(() => ((service as any).name = 'target')).toThrowError(
+      'spy',
+    );
+
+    // checking real prop
+    expect(service.norm).toEqual('normal');
+    ngMocks
+      .stubMember(service, 'norm', jasmine.createSpy('norm'), 'get')
+      .and.returnValue('spy');
+    expect(service.norm).toEqual('spy');
   });
 });

@@ -2867,6 +2867,18 @@ ngMocks.stubMember(service, property, customGetter, 'get');
 ngMocks.stubMember(service, property, customSetter, 'set');
 ```
 
+It returns the passed value, therefore, this allows **fast chains for spies** and mocks.
+
+```ts
+ngMocks
+  .stubMember(service, 'handler', jasmine.createSpy('handler'))
+  .and.returnValue('fake');
+
+ngMocks
+  .stubMember(service, 'read', jasmine.createSpy('read'), 'set')
+  .and.toThrowError();
+```
+
 If we need to stub a method of a service in Angular tests:
 
 ```ts
