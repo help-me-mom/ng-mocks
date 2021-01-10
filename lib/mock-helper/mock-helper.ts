@@ -13,6 +13,7 @@ import mockHelperDefaultExclude from './mock-helper.default-exclude';
 import mockHelperDefaultKeep from './mock-helper.default-keep';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperDefaultReplace from './mock-helper.default-replace';
+import mockHelperDefaultWipe from './mock-helper.default-wipe';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFind from './mock-helper.find';
 import mockHelperFindAll from './mock-helper.find-all';
@@ -75,6 +76,11 @@ export const ngMocks: {
    * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultreplace
    */
   defaultReplace(source: AnyType<any>, destination: AnyType<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultwipe
+   */
+  defaultWipe(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#making-angular-tests-faster
@@ -266,6 +272,7 @@ export const ngMocks: {
   defaultKeep: mockHelperDefaultKeep,
   defaultMock: mockHelperDefaultMock,
   defaultReplace: mockHelperDefaultReplace,
+  defaultWipe: mockHelperDefaultWipe,
   faster: mockHelperFaster,
   find: mockHelperFind,
   findAll: mockHelperFindAll,
