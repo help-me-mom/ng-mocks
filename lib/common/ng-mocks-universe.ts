@@ -12,6 +12,7 @@ interface NgMocksUniverse {
   cacheDeclarations: Map<any, any>;
   cacheProviders: Map<any, any>;
   config: Map<any, any>;
+  configInstance: Map<any, any>;
   flags: Set<string>;
   getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
@@ -29,6 +30,7 @@ ngMocksUniverse.builtProviders = new Map();
 ngMocksUniverse.cacheDeclarations = new Map();
 ngMocksUniverse.cacheProviders = new Map();
 ngMocksUniverse.config = new Map();
+ngMocksUniverse.configInstance = new Map();
 ngMocksUniverse.flags = new Set(coreConfig.flags);
 ngMocksUniverse.global = new Map();
 ngMocksUniverse.touches = new Set();

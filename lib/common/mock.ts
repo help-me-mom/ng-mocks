@@ -154,8 +154,8 @@ const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void =
   if (instance.__ngMocksConfig.init) {
     callbacks.push(instance.__ngMocksConfig.init);
   }
-  if (ngMocksUniverse.config.get(mockOf)?.init) {
-    callbacks.push(ngMocksUniverse.config.get(mockOf).init);
+  if (ngMocksUniverse.configInstance.get(mockOf)?.init) {
+    callbacks.push(ngMocksUniverse.configInstance.get(mockOf).init);
   }
 
   for (const callback of callbacks) {

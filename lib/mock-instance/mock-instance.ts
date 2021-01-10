@@ -18,8 +18,10 @@ const reporter: jasmine.CustomReporter = {
     const set = ngMocksUniverse.getLocalMocks();
     while (set.length) {
       const [declaration, config] = set.pop() || /* istanbul ignore next */ [];
-      const universeConfig = ngMocksUniverse.config.has(declaration) ? ngMocksUniverse.config.get(declaration) : {};
-      ngMocksUniverse.config.set(declaration, {
+      const universeConfig = ngMocksUniverse.configInstance.has(declaration)
+        ? ngMocksUniverse.configInstance.get(declaration)
+        : {};
+      ngMocksUniverse.configInstance.set(declaration, {
         ...universeConfig,
         ...config,
       });
@@ -71,16 +73,18 @@ export function MockInstance<T>(
 
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, data?: any) {
   const config = typeof data === 'function' ? { init: data } : data;
-  const universeConfig = ngMocksUniverse.config.has(declaration) ? ngMocksUniverse.config.get(declaration) : {};
+  const universeConfig = ngMocksUniverse.configInstance.has(declaration)
+    ? ngMocksUniverse.configInstance.get(declaration)
+    : {};
   restore(declaration, universeConfig);
 
   if (config) {
-    ngMocksUniverse.config.set(declaration, {
+    ngMocksUniverse.configInstance.set(declaration, {
       ...universeConfig,
       ...config,
     });
   } else {
-    ngMocksUniverse.config.set(declaration, {
+    ngMocksUniverse.configInstance.set(declaration, {
       ...universeConfig,
       init: undefined,
     });
@@ -88,5 +92,5 @@ export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | Injecti
 }
 
 export function MockReset() {
-  ngMocksUniverse.config.clear();
+  ngMocksUniverse.configInstance.clear();
 }
