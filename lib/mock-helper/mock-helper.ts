@@ -26,6 +26,7 @@ import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
 import mockHelperReset from './mock-helper.reset';
 import mockHelperStub from './mock-helper.stub';
+import mockHelperStubMember from './mock-helper.stub-member';
 import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 
 /**
@@ -269,6 +270,26 @@ export const ngMocks: {
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 
   /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
+   */
+  stubMember<T extends object, K extends keyof T>(instance: T, name: K, stub: () => T[K], encapsulation: 'get'): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
+   */
+  stubMember<T extends object, K extends keyof T>(
+    instance: T,
+    name: K,
+    stub: (value: T[K]) => void,
+    encapsulation: 'set',
+  ): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubMember
+   */
+  stubMember<T extends object, K extends keyof T>(instance: T, name: K, stub: T[K]): void;
+
+  /**
    * Thanks Ivy, it doesn't throw an error and we have to use injector.
    *
    * @see https://github.com/ike18t/ng-mocks#ngmocksthrowonconsole
@@ -293,5 +314,6 @@ export const ngMocks: {
   output: mockHelperOutput,
   reset: mockHelperReset,
   stub: mockHelperStub,
+  stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperThrowOnConsole,
 };

@@ -8,6 +8,7 @@ export default (): void => {
   beforeAll(() => {
     backupWarn = console.warn;
     backupError = console.error;
+    // istanbul ignore next
     console.error = console.warn = (...args: any[]) => {
       throw new Error(args.join(' '));
     };

@@ -2513,6 +2513,7 @@ describe('MockInstance', () => {
 - [`.input()`](#ngmocksinput)
 - [`.output()`](#ngmocksoutput)
 - [`.stub()`](#ngmocksstub)
+- [`.stubMember()`](#ngmocksstubmember)
 - [`.faster()`](#ngmocksfaster)
 - [`.flushTestBed()`](#ngmocksflushtestbed)
 - [`.reset()`](#ngmocksreset)
@@ -2818,7 +2819,9 @@ const outputEmitter = ngMocks.output(debugElement, 'update');
 
 #### ngMocks.stub
 
-In case if we want to create stub methods / properties of a service.
+`ngMocks.stub` is needed in case if we want to create stub methods / properties of a service.
+
+> If there is an existing value / spy you want to set, then use [`ngMocks.stubMember`](#ngmocksstubmember).
 
 - `ngMocks.stub( service, method )`
 - `ngMocks.stub( service, methods )`
@@ -2844,6 +2847,57 @@ ngMocks.stub(instance, {
   existingProperty: true,
   existingMethod: jasmine.createSpy(),
 });
+```
+
+#### ngMocks.stubMember
+
+`ngMocks.stubMember` facilitates **injection of existing spies** or defined values **into instances**.
+
+```ts
+// overriding the method
+ngMocks.stubMember(service, method, customCallback);
+// overriding the property's value
+ngMocks.stubMember(service, property, customValue);
+// overrding the getter, doesn't touch the existing setter
+ngMocks.stubMember(service, property, customGetter, 'get');
+// overrding the setter, doesn't touch the existing getter
+ngMocks.stubMember(service, property, customSetter, 'set');
+```
+
+If we need to stub a method of a service in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+ngMocks.stubMember(service, 'handler', () => 'fake');
+// service.handler() === 'fake'
+```
+
+If we need to stub a property of a component in Angular tests:
+
+```ts
+const component = TestBed.createComponent(Component)
+  .componentInstance;
+ngMocks.stubMember(service, 'name', 'mock');
+// service.name === 'mock'
+```
+
+If we need to stub a getter in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+ngMocks.stubMember(service, 'name', () => 'mock', 'get');
+// service.name === 'mock'
+```
+
+If we need to stub a setter in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+let value: any;
+ngMocks.stubMember(service, 'name', v => (value = v), 'set');
+// value === undefined
+service.name = 'fake';
+// value === 'fake'
 ```
 
 #### ngMocks.faster
