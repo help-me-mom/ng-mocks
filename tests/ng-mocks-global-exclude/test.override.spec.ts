@@ -24,17 +24,17 @@ class Target2Component {
 })
 class TargetModule {}
 
-describe('ng-mocks-default-exclude:override', () => {
+describe('ng-mocks-global-exclude:override', () => {
   ngMocks.throwOnConsole();
 
   afterAll(() => {
-    ngMocks.defaultWipe(Target1Component);
-    ngMocks.defaultWipe(Target2Component);
+    ngMocks.globalWipe(Target1Component);
+    ngMocks.globalWipe(Target2Component);
   });
 
   describe('excluding Target1Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultExclude(Target1Component);
+      ngMocks.globalExclude(Target1Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],
@@ -51,7 +51,7 @@ describe('ng-mocks-default-exclude:override', () => {
 
   describe('excluding Target2Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultExclude(Target2Component);
+      ngMocks.globalExclude(Target2Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],

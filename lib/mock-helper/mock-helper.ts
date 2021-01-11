@@ -9,11 +9,7 @@ import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
 import mockHelperAutoSpy from './mock-helper.auto-spy';
-import mockHelperDefaultExclude from './mock-helper.default-exclude';
-import mockHelperDefaultKeep from './mock-helper.default-keep';
 import mockHelperDefaultMock from './mock-helper.default-mock';
-import mockHelperDefaultReplace from './mock-helper.default-replace';
-import mockHelperDefaultWipe from './mock-helper.default-wipe';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFind from './mock-helper.find';
 import mockHelperFindAll from './mock-helper.find-all';
@@ -21,6 +17,11 @@ import mockHelperFindInstance from './mock-helper.find-instance';
 import mockHelperFindInstances from './mock-helper.find-instances';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 import mockHelperGet from './mock-helper.get';
+import mockHelperGlobalExclude from './mock-helper.global-exclude';
+import mockHelperGlobalKeep from './mock-helper.global-keep';
+import mockHelperGlobalMock from './mock-helper.global-mock';
+import mockHelperGlobalReplace from './mock-helper.global-replace';
+import mockHelperGlobalWipe from './mock-helper.global-wipe';
 import mockHelperGuts from './mock-helper.guts';
 import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
@@ -44,16 +45,6 @@ export const ngMocks: {
   autoSpy(type: CustomMockFunction): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultexclude
-   */
-  defaultExclude(source: AnyType<any> | InjectionToken<any>): void;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultkeep
-   */
-  defaultKeep(source: AnyType<any> | InjectionToken<any>): void;
-
-  /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
    */
   defaultMock<T>(
@@ -73,16 +64,6 @@ export const ngMocks: {
    * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
    */
   defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultreplace
-   */
-  defaultReplace(source: AnyType<any>, destination: AnyType<any>): void;
-
-  /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultwipe
-   */
-  defaultWipe(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
    * @see https://github.com/ike18t/ng-mocks#making-angular-tests-faster
@@ -213,6 +194,31 @@ export const ngMocks: {
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
   /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalexclude
+   */
+  globalExclude(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalkeep
+   */
+  globalKeep(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalmock
+   */
+  globalMock(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalreplace
+   */
+  globalReplace(source: AnyType<any>, destination: AnyType<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalwipe
+   */
+  globalWipe(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksguts
    */
   guts(
@@ -302,11 +308,7 @@ export const ngMocks: {
   throwOnConsole(): void;
 } = {
   autoSpy: mockHelperAutoSpy,
-  defaultExclude: mockHelperDefaultExclude,
-  defaultKeep: mockHelperDefaultKeep,
   defaultMock: mockHelperDefaultMock,
-  defaultReplace: mockHelperDefaultReplace,
-  defaultWipe: mockHelperDefaultWipe,
   faster: mockHelperFaster,
   find: mockHelperFind,
   findAll: mockHelperFindAll,
@@ -314,6 +316,11 @@ export const ngMocks: {
   findInstances: mockHelperFindInstances,
   flushTestBed: mockHelperFlushTestBed,
   get: mockHelperGet,
+  globalExclude: mockHelperGlobalExclude,
+  globalKeep: mockHelperGlobalKeep,
+  globalMock: mockHelperGlobalMock,
+  globalReplace: mockHelperGlobalReplace,
+  globalWipe: mockHelperGlobalWipe,
   guts: mockHelperGuts,
   input: mockHelperInput,
   output: mockHelperOutput,

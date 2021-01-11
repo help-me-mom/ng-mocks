@@ -9,11 +9,11 @@ import {
   Target3Module,
 } from './fixtures';
 
-ngMocks.defaultExclude(Target2Component);
-ngMocks.defaultKeep(Target2Module);
-ngMocks.defaultReplace(Target1Component, Fake1Component);
+ngMocks.globalExclude(Target2Component);
+ngMocks.globalKeep(Target2Module);
+ngMocks.globalReplace(Target1Component, Fake1Component);
 
-describe('ng-mocks-default-keep-modules', () => {
+describe('ng-mocks-global-keep-modules', () => {
   ngMocks.throwOnConsole();
 
   beforeEach(() => {

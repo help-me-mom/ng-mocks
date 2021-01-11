@@ -3,10 +3,10 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 import { Target1Module } from './fixtures';
 
-ngMocks.defaultExclude(Target1Module);
+ngMocks.globalExclude(Target1Module);
 
 // The root module we pass into MockModule isn't excluded despite the setting.
-describe('ng-mocks-default-exclude-modules', () => {
+describe('ng-mocks-global-exclude-modules', () => {
   beforeEach(() => {
     return TestBed.configureTestingModule({
       imports: [MockModule(Target1Module)],

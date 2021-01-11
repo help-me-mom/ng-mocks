@@ -23,7 +23,7 @@ interface NgMocksUniverse {
   configInstance: Map<any, any>;
   flags: Set<string>;
   getBuildDeclaration: (def: any) => any | undefined;
-  getDefaults: () => Map<any, any>;
+  getDefaults: () => Map<any, undefined | ['mock' | 'keep' | 'replace' | 'exclude', any?]>;
   getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
   getResolution: (def: any) => undefined | 'mock' | 'keep' | 'replace' | 'exclude';
@@ -58,7 +58,7 @@ ngMocksUniverse.getLocalMocks = () => {
 ngMocksUniverse.getOverrides = globalMap('overrides');
 ngMocksUniverse.getDefaults = globalMap('defaults');
 
-ngMocksUniverse.getResolution = (def: any) => {
+ngMocksUniverse.getResolution = (def: any): undefined | 'mock' | 'keep' | 'replace' | 'exclude' => {
   const set = ngMocksUniverse.config.get('ngMocksDepsResolution');
   if (set?.has(def)) {
     return set.get(def);
@@ -68,35 +68,43 @@ ngMocksUniverse.getResolution = (def: any) => {
     return undefined;
   }
 
-  const value = ngMocksUniverse.getDefaults().get(def);
-  if (!value) {
-    return 'exclude';
-  }
-  if (def === value) {
-    return 'keep';
-  }
+  const [value] = ngMocksUniverse.getDefaults().get(def);
 
-  return 'replace';
+  return value;
 };
 
-ngMocksUniverse.getBuildDeclaration = (def: any) => {
+ngMocksUniverse.getBuildDeclaration = (def: any): undefined | null | any => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return ngMocksUniverse.builtDeclarations.get(def);
   }
-  if (ngMocksUniverse.getDefaults().has(def)) {
-    return ngMocksUniverse.getDefaults().get(def);
+  if (!ngMocksUniverse.getDefaults().has(def)) {
+    return;
+  }
+
+  const [mode, replacement] = ngMocksUniverse.getDefaults().get(def);
+
+  if (mode === 'exclude') {
+    return null;
+  }
+  if (mode === 'keep') {
+    return def;
+  }
+  if (mode === 'replace') {
+    return replacement;
   }
 };
 
-ngMocksUniverse.hasBuildDeclaration = (def: any) => {
+ngMocksUniverse.hasBuildDeclaration = (def: any): boolean => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return true;
   }
-  if (ngMocksUniverse.getDefaults().has(def)) {
-    return true;
+  if (!ngMocksUniverse.getDefaults().has(def)) {
+    return false;
   }
 
-  return false;
+  const [mode] = ngMocksUniverse.getDefaults().get(def);
+
+  return mode !== 'mock';
 };
 
 const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.hasBuildDeclaration(def);

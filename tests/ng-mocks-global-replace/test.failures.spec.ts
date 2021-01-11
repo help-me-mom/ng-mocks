@@ -26,16 +26,16 @@ class Fake2Service {
   public readonly name = 'fake2';
 }
 
-describe('ng-mocks-default-replace:failures', () => {
+describe('ng-mocks-global-replace:failures', () => {
   it('fails on services', () => {
     expect(() =>
-      ngMocks.defaultReplace(Target2Service, Fake2Service),
+      ngMocks.globalReplace(Target2Service, Fake2Service),
     ).toThrow();
   });
 
   it('fails on wrong types', () => {
     expect(() =>
-      ngMocks.defaultReplace(Target1Component, Fake1Directive),
+      ngMocks.globalReplace(Target1Component, Fake1Directive),
     ).toThrow();
   });
 });

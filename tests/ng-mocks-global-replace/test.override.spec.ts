@@ -40,15 +40,15 @@ class Fake2Component {
 })
 class TargetModule {}
 
-describe('ng-mocks-default-replace:override', () => {
+describe('ng-mocks-global-replace:override', () => {
   afterAll(() => {
-    ngMocks.defaultWipe(Target1Component);
-    ngMocks.defaultWipe(Target2Component);
+    ngMocks.globalWipe(Target1Component);
+    ngMocks.globalWipe(Target2Component);
   });
 
   describe('replacing Target1Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultReplace(Target1Component, Fake1Component);
+      ngMocks.globalReplace(Target1Component, Fake1Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],
@@ -67,7 +67,7 @@ describe('ng-mocks-default-replace:override', () => {
 
   describe('replacing Target2Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultReplace(Target2Component, Fake2Component);
+      ngMocks.globalReplace(Target2Component, Fake2Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],

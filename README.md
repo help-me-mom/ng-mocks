@@ -2501,10 +2501,11 @@ describe('MockInstance', () => {
 
 - [`.guts()`](#ngmocksguts)
 - [`.defaultMock()`](#ngmocksdefaultmock)
-- [`.defaultExclude()`](#ngmocksdefaultexclude)
-- [`.defaultKeep()`](#ngmocksdefaultkeep)
-- [`.defaultReplace()`](#ngmocksdefaultreplace)
-- [`.defaultWipe()`](#ngmocksdefaultwipe)
+- [`.globalExclude()`](#ngmocksglobalexclude)
+- [`.globalKeep()`](#ngmocksglobalkeep)
+- [`.globalMock()`](#ngmocksglobalmock)
+- [`.globalReplace()`](#ngmocksglobalreplace)
+- [`.globalWipe()`](#ngmocksglobalwipe)
 - [`.get()`](#ngmocksget)
 - [`.findInstance()`](#ngmocksfindinstance)
 - [`.findInstances()`](#ngmocksfindinstances)
@@ -2602,9 +2603,9 @@ ngMocks.defaultMock(MyComponent, (_, injector) => ({
 ngMocks.defaultMock(MyComponent);
 ```
 
-#### ngMocks.defaultExclude
+#### ngMocks.globalExclude
 
-`ngMocks.defaultExclude` marks declarations, services and tokens to be excluded during creating mock modules.
+`ngMocks.globalExclude` marks declarations, services and tokens to be excluded during creating mock modules.
 
 The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
 
@@ -2619,7 +2620,7 @@ If we import a module that imports `TranslationModule` in tests,
 then this effect of `initTestEnvironment` will be overloaded.
 
 To keep the effect, we need to exclude `TranslationModule` during the mocking process.
-That is where `ngMocks.defaultExclude` comes for help.
+That is where `ngMocks.globalExclude` comes for help.
 
 ```ts
 // test.ts
@@ -2634,16 +2635,16 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 
-ngMocks.defaultExclude(TranslationModule);
+ngMocks.globalExclude(TranslationModule);
 ```
 
 Now, if we call `MockModule(ModuleWithTranslationModule)`,
 the `TranslationModule` will be excluded out of the final mock module,
 and, consequently, the version from `initTestEnvironment` will be used.
 
-#### ngMocks.defaultKeep
+#### ngMocks.globalKeep
 
-`ngMocks.defaultExclude` marks declarations, services and tokens to be avoided from the mocking process during creating mock modules.
+`ngMocks.globalExclude` marks declarations, services and tokens to be avoided from the mocking process during creating mock modules.
 
 The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
 
@@ -2651,7 +2652,7 @@ Let's mark the `APP_URL` token in order to be kept in mock modules.
 
 ```ts
 // test.ts
-ngMocks.defaultKeep(APP_URL);
+ngMocks.globalKeep(APP_URL);
 ```
 
 ```ts
@@ -2665,9 +2666,35 @@ const url = TestBed.inject(APP_URL);
 
 The `url` is the original one.
 
-#### ngMocks.defaultReplace
+#### ngMocks.globalMock
 
-`ngMocks.defaultReplace` marks declarations and modules (but not services and tokens) to be replaced during creating mock modules.
+`ngMocks.globalMock` marks declarations, services and tokens to be mocked if they are appearing in kept modules during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
+Let's mark the `APP_URL` token in order to be mocked in its kept modules.
+
+```ts
+// test.ts
+ngMocks.globalKeep(AppModule);
+ngMocks.globalMock(APP_URL);
+ngMocks.defaultMock(APP_URL, () => 'mock');
+```
+
+```ts
+// test.spec.ts
+// ...
+MockModule(AppModule);
+// ...
+const url = TestBed.inject(APP_URL);
+// ...
+```
+
+The `url` is `mock`.
+
+#### ngMocks.globalReplace
+
+`ngMocks.globalReplace` marks declarations and modules (but not services and tokens) to be replaced during creating mock modules.
 
 The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
 
@@ -2676,27 +2703,27 @@ we could do it like that:
 
 ```ts
 // test.ts
-ngMocks.defaultReplace(BrowserAnimationsModule, NoopAnimationsModule);
+ngMocks.globalReplace(BrowserAnimationsModule, NoopAnimationsModule);
 ```
 
 Now, all mock modules which import `BrowserAnimationsModule` have `NoopAnimationsModule` instead.
 
-#### ngMocks.defaultWipe
+#### ngMocks.globalWipe
 
-`ngMocks.defaultWipe` resets all customizations which have been done by any `ngMocks.default` function.
+`ngMocks.globalWipe` resets all customizations which have been done by any `ngMocks.default` function.
 
 ```ts
 ngMocks.defaultMock(Service, () => ({
   stream$: EMPTY,
 }));
-ngMocks.defaultExclude(Component);
-ngMocks.defaultKeep(Directive);
-ngMocks.defaultReplace(Pipe, FakePipe);
+ngMocks.globalExclude(Component);
+ngMocks.globalKeep(Directive);
+ngMocks.globalReplace(Pipe, FakePipe);
 
-ngMocks.defaultWipe(Service);
-ngMocks.defaultWipe(Component);
-ngMocks.defaultWipe(Directive);
-ngMocks.defaultWipe(Pipe);
+ngMocks.globalWipe(Service);
+ngMocks.globalWipe(Component);
+ngMocks.globalWipe(Directive);
+ngMocks.globalWipe(Pipe);
 
 // All the things above will be mocked as usual
 ```

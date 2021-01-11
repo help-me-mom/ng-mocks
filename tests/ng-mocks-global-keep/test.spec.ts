@@ -30,9 +30,9 @@ class FakeComponent {
 })
 class TargetModule {}
 
-ngMocks.defaultKeep(TargetComponent);
+ngMocks.globalKeep(TargetComponent);
 
-describe('ng-mocks-default-keep', () => {
+describe('ng-mocks-global-keep', () => {
   ngMocks.throwOnConsole();
 
   describe('MockComponent', () => {

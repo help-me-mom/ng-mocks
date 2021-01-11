@@ -1,6 +1,6 @@
 import { TestModuleMetadata } from '@angular/core/testing';
 
-import { flatten, mapEntries, mapValues } from '../common/core.helpers';
+import { flatten, mapKeys, mapValues } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
@@ -178,7 +178,8 @@ const resolve = (data: Data, proto: any, skipDestruction = true): void => {
 };
 
 const generateDataWithUniverse = (keep: Set<any>, mock: Set<any>, exclude: Set<any>, optional: Map<any, any>): void => {
-  for (const [k, v] of mapEntries(ngMocksUniverse.getDefaults())) {
+  for (const k of mapKeys(ngMocksUniverse.getDefaults())) {
+    const v = ngMocksUniverse.getBuildDeclaration(k);
     if (keep.has(k) || mock.has(k) || exclude.has(k)) {
       continue;
     }
@@ -186,6 +187,8 @@ const generateDataWithUniverse = (keep: Set<any>, mock: Set<any>, exclude: Set<a
 
     if (v === null) {
       exclude.add(k);
+    } else if (v === undefined) {
+      mock.add(k);
     } else if (k === v) {
       keep.add(k);
     }
@@ -214,9 +217,15 @@ const generateData = (protoKeep: any, protoMock: any, protoExclude: any): Data =
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
   const data: Data = generateData(keep, mock, exclude);
 
+  ngMocksUniverse.config.set('mockNgDefResolver', new Map());
   for (const def of mapValues(data.mock)) {
+    if (data.optional.has(def)) {
+      continue;
+    }
     resolve(data, def, false);
   }
+  const meta = createMeta(data);
+  ngMocksUniverse.config.delete('mockNgDefResolver');
 
-  return createMeta(data);
+  return meta;
 };

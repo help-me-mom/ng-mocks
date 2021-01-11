@@ -118,7 +118,7 @@ const createPredefinedMockProvider = (provider: any, provide: any): any => {
 const createMockProvider = (provider: any, provide: any, change: () => void) => {
   let mockDef = createPredefinedMockProvider(provider, provide);
 
-  if (!mockDef && ngMocksUniverse.flags.has('skipMock')) {
+  if (!mockDef && ngMocksUniverse.flags.has('skipMock') && ngMocksUniverse.getResolution(provide) !== 'mock') {
     ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(provide);
     mockDef = provider;
   }

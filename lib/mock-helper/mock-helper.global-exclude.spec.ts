@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-import mockHelperDefaultExclude from './mock-helper.default-exclude';
+import mockHelperGlobalExclude from './mock-helper.global-exclude';
 
 @Component({
   selector: 'target',
@@ -19,7 +19,7 @@ describe('mock-helper.default-exclude', () => {
 
   it('resets cacheDeclarations', () => {
     ngMocksUniverse.cacheDeclarations.set(TargetComponent, null);
-    mockHelperDefaultExclude(TargetComponent);
+    mockHelperGlobalExclude(TargetComponent);
     expect(ngMocksUniverse.cacheDeclarations.size).toEqual(0);
   });
 
@@ -27,7 +27,7 @@ describe('mock-helper.default-exclude', () => {
     const config = new Set();
     config.add(TargetComponent);
     ngMocksUniverse.config.set('ngMocksDepsSkip', config);
-    mockHelperDefaultExclude(TargetComponent);
+    mockHelperGlobalExclude(TargetComponent);
     expect(
       ngMocksUniverse.config.get('ngMocksDepsSkip').size,
     ).toEqual(0);

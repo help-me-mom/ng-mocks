@@ -38,13 +38,13 @@ class ShadowComponent {
 })
 class TargetModule {}
 
-ngMocks.defaultExclude(TargetComponent);
-ngMocks.defaultKeep(TargetComponent);
+ngMocks.globalExclude(TargetComponent);
+ngMocks.globalKeep(TargetComponent);
 ngMocks.defaultMock(TargetComponent, () => ({ name: 'mock' }));
-ngMocks.defaultReplace(TargetComponent, FakeComponent);
-ngMocks.defaultWipe(TargetComponent);
+ngMocks.globalReplace(TargetComponent, FakeComponent);
+ngMocks.globalWipe(TargetComponent);
 
-describe('ng-mocks-default-replace', () => {
+describe('ng-mocks-global-replace', () => {
   ngMocks.throwOnConsole();
 
   describe('MockComponent', () => {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-import mockHelperDefaultKeep from './mock-helper.default-keep';
+import mockHelperGlobalMock from './mock-helper.global-mock';
 
 @Component({
   selector: 'target',
@@ -12,14 +12,14 @@ class TargetComponent {
   public readonly name = 'target';
 }
 
-describe('mock-helper.default-keep', () => {
+describe('mock-helper.default-mock', () => {
   afterAll(() => {
     ngMocksUniverse.config.delete('ngMocksDepsSkip');
   });
 
   it('resets cacheDeclarations', () => {
     ngMocksUniverse.cacheDeclarations.set(TargetComponent, null);
-    mockHelperDefaultKeep(TargetComponent);
+    mockHelperGlobalMock(TargetComponent);
     expect(ngMocksUniverse.cacheDeclarations.size).toEqual(0);
   });
 
@@ -27,7 +27,7 @@ describe('mock-helper.default-keep', () => {
     const config = new Set();
     config.add(TargetComponent);
     ngMocksUniverse.config.set('ngMocksDepsSkip', config);
-    mockHelperDefaultKeep(TargetComponent);
+    mockHelperGlobalMock(TargetComponent);
     expect(
       ngMocksUniverse.config.get('ngMocksDepsSkip').size,
     ).toEqual(0);

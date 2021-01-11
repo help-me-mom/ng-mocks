@@ -32,9 +32,9 @@ class FakePipe implements PipeTransform {
 })
 class TargetModule {}
 
-ngMocks.defaultReplace(TargetPipe, FakePipe);
+ngMocks.globalReplace(TargetPipe, FakePipe);
 
-describe('ng-mocks-default-replace:pipe', () => {
+describe('ng-mocks-global-replace:pipe', () => {
   ngMocks.throwOnConsole();
 
   describe('MockPipe', () => {

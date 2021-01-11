@@ -24,15 +24,15 @@ class Target2Component {
 })
 class TargetModule {}
 
-describe('ng-mocks-default-keep:override', () => {
+describe('ng-mocks-global-keep:override', () => {
   afterAll(() => {
-    ngMocks.defaultWipe(Target1Component);
-    ngMocks.defaultWipe(Target2Component);
+    ngMocks.globalWipe(Target1Component);
+    ngMocks.globalWipe(Target2Component);
   });
 
   describe('keeping Target1Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultKeep(Target1Component);
+      ngMocks.globalKeep(Target1Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],
@@ -51,7 +51,7 @@ describe('ng-mocks-default-keep:override', () => {
 
   describe('keeping Target2Component', () => {
     beforeEach(async () => {
-      ngMocks.defaultKeep(Target2Component);
+      ngMocks.globalKeep(Target2Component);
 
       return TestBed.configureTestingModule({
         imports: [MockModule(TargetModule)],

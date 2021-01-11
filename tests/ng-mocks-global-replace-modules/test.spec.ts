@@ -7,9 +7,9 @@ import {
   Target3Module,
 } from './fixtures';
 
-ngMocks.defaultReplace(Target1Module, Target2Module);
+ngMocks.globalReplace(Target1Module, Target2Module);
 
-describe('ng-mocks-default-replace-modules', () => {
+describe('ng-mocks-global-replace-modules', () => {
   beforeEach(() => {
     return TestBed.configureTestingModule({
       imports: [MockModule(Target3Module)],

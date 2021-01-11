@@ -30,9 +30,9 @@ class FakeComponent {
 })
 class TargetModule {}
 
-ngMocks.defaultExclude(TargetComponent);
+ngMocks.globalReplace(TargetComponent, FakeComponent);
 
-describe('ng-mocks-default-exclude', () => {
+describe('ng-mocks-global-replace:component', () => {
   ngMocks.throwOnConsole();
 
   describe('MockComponent', () => {
@@ -57,8 +57,11 @@ describe('ng-mocks-default-exclude', () => {
       }),
     );
 
-    it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+    it('replaces out of the box', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>fake</target>',
+      );
     });
   });
 
@@ -66,26 +69,26 @@ describe('ng-mocks-default-exclude', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
         ngMocks.guts(null, TargetModule),
-      ),
+      ).compileComponents(),
     );
 
-    it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+    it('replaces out of the box', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>fake</target>',
+      );
     });
   });
 
-  describe('ngMocks.guts:keep', () => {
+  describe('ngMocks.guts:exclude', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        ngMocks.guts(TargetComponent, TargetModule),
-      ),
+        ngMocks.guts(null, TargetModule, TargetComponent),
+      ).compileComponents(),
     );
 
-    it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
-      expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
-      );
+    it('switches to exclude', () => {
+      expect(() => MockRender('<target></target>')).toThrow();
     });
   });
 
@@ -93,7 +96,7 @@ describe('ng-mocks-default-exclude', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
         ngMocks.guts(null, [TargetModule, TargetComponent]),
-      ),
+      ).compileComponents(),
     );
 
     it('switches to mock', () => {
@@ -104,17 +107,11 @@ describe('ng-mocks-default-exclude', () => {
     });
   });
 
-  describe('MockBuilder:default', () => {
-    beforeEach(() => MockBuilder(null, TargetModule));
-
-    it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
-    });
-  });
-
-  describe('MockBuilder:keep', () => {
+  describe('ngMocks.guts:keep', () => {
     beforeEach(() =>
-      MockBuilder(null, TargetModule).keep(TargetComponent),
+      TestBed.configureTestingModule(
+        ngMocks.guts(TargetComponent, TargetModule),
+      ).compileComponents(),
     );
 
     it('switches to keep', () => {
@@ -122,6 +119,27 @@ describe('ng-mocks-default-exclude', () => {
       expect(fixture.nativeElement.innerHTML).toEqual(
         '<target>target</target>',
       );
+    });
+  });
+
+  describe('MockBuilder:default', () => {
+    beforeEach(() => MockBuilder(null, TargetModule));
+
+    it('replaces out of the box', () => {
+      const fixture = MockRender('<target></target>');
+      expect(fixture.nativeElement.innerHTML).toEqual(
+        '<target>fake</target>',
+      );
+    });
+  });
+
+  describe('MockBuilder:exclude', () => {
+    beforeEach(() =>
+      MockBuilder(null, TargetModule).exclude(TargetComponent),
+    );
+
+    it('switches to exclude', () => {
+      expect(() => MockRender('<target></target>')).toThrow();
     });
   });
 
@@ -138,18 +156,15 @@ describe('ng-mocks-default-exclude', () => {
     });
   });
 
-  describe('MockBuilder:replace', () => {
+  describe('MockBuilder:keep', () => {
     beforeEach(() =>
-      MockBuilder(null, TargetModule).replace(
-        TargetComponent,
-        FakeComponent,
-      ),
+      MockBuilder(null, TargetModule).keep(TargetComponent),
     );
 
-    it('switches to replace', () => {
+    it('switches to keep', () => {
       const fixture = MockRender('<target></target>');
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target>target</target>',
       );
     });
   });

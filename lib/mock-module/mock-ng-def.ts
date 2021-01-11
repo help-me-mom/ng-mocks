@@ -25,7 +25,7 @@ const processDef = (def: any) => {
   if (ngMocksUniverse.hasBuildDeclaration(def)) {
     return ngMocksUniverse.getBuildDeclaration(def);
   }
-  if (ngMocksUniverse.flags.has('skipMock')) {
+  if (ngMocksUniverse.flags.has('skipMock') && ngMocksUniverse.getResolution(def) !== 'mock') {
     return def;
   }
   for (const [flag, func] of processDefMap) {
