@@ -30,7 +30,7 @@
     "@angular/router": "7.2.16",
     "core-js": "2.6.12",
     "rxjs": "6.3.3",
-    "tslib": "1.9.3",
+    "tslib": "1.14.1",
     "zone.js": "0.8.29"
   },
   "devDependencies": {
