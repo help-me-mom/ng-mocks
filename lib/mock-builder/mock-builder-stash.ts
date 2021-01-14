@@ -11,6 +11,7 @@ export class MockBuilderStash {
       cacheDeclarations: ngMocksUniverse.cacheDeclarations,
       cacheProviders: ngMocksUniverse.cacheProviders,
       config: ngMocksUniverse.config,
+      configInstance: ngMocksUniverse.configInstance,
       flags: ngMocksUniverse.flags,
       touches: ngMocksUniverse.touches,
     };
@@ -20,6 +21,7 @@ export class MockBuilderStash {
     ngMocksUniverse.cacheDeclarations = new Map();
     ngMocksUniverse.cacheProviders = new Map();
     ngMocksUniverse.config = new Map();
+    ngMocksUniverse.configInstance = new Map();
     ngMocksUniverse.flags = new Set(coreConfig.flags);
     ngMocksUniverse.touches = new Set();
   }

@@ -9,7 +9,7 @@ export default (): ValueProvider => {
   const touches = new Set();
   for (const proto of mapValues(ngMocksUniverse.touches)) {
     const source: any = proto;
-    let value = ngMocksUniverse.builtDeclarations.get(source);
+    let value = ngMocksUniverse.getBuildDeclaration(source);
 
     // kept declarations should be based on their source.
     if (value === undefined) {

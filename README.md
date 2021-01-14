@@ -2501,6 +2501,11 @@ describe('MockInstance', () => {
 
 - [`.guts()`](#ngmocksguts)
 - [`.defaultMock()`](#ngmocksdefaultmock)
+- [`.globalExclude()`](#ngmocksglobalexclude)
+- [`.globalKeep()`](#ngmocksglobalkeep)
+- [`.globalMock()`](#ngmocksglobalmock)
+- [`.globalReplace()`](#ngmocksglobalreplace)
+- [`.globalWipe()`](#ngmocksglobalwipe)
 - [`.get()`](#ngmocksget)
 - [`.findInstance()`](#ngmocksfindinstance)
 - [`.findInstances()`](#ngmocksfindinstances)
@@ -2509,9 +2514,11 @@ describe('MockInstance', () => {
 - [`.input()`](#ngmocksinput)
 - [`.output()`](#ngmocksoutput)
 - [`.stub()`](#ngmocksstub)
+- [`.stubMember()`](#ngmocksstubmember)
 - [`.faster()`](#ngmocksfaster)
 - [`.flushTestBed()`](#ngmocksflushtestbed)
 - [`.reset()`](#ngmocksreset)
+- [`.throwOnConsole()`](#ngmocksthrowonconsole)
 
 #### ngMocks.guts
 
@@ -2594,6 +2601,131 @@ ngMocks.defaultMock(MyComponent, (_, injector) => ({
 
 // removing all overrides.
 ngMocks.defaultMock(MyComponent);
+```
+
+#### ngMocks.globalExclude
+
+`ngMocks.globalExclude` marks declarations, services and tokens to be excluded during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
+It is useful when some of them have been provided in `TestBed.initTestEnvironment`,
+and we would like to get these versions in tests, although something declares or imports original ones.
+
+Let's imagine that we have `TranslationModule` and would like to use it as it is in tests, but with a mock backend.
+In the same time, we would like to avoid repeating setups in every test to recreate that.
+
+Therefore, we can configure it via `initTestEnvironment`, but there is a problem.
+If we import a module that imports `TranslationModule` in tests,
+then this effect of `initTestEnvironment` will be overloaded.
+
+To keep the effect, we need to exclude `TranslationModule` during the mocking process.
+That is where `ngMocks.globalExclude` comes for help.
+
+```ts
+// test.ts
+@NgModule({
+  imports: [TranslationModule.forRoot(mockBackend)],
+  exports: [BrowserDynamicTestingModule, TranslationModule],
+})
+class TestEnvModule {}
+
+getTestBed().initTestEnvironment(
+  TestEnvModule,
+  platformBrowserDynamicTesting(),
+);
+
+ngMocks.globalExclude(TranslationModule);
+```
+
+Now, if we call `MockModule(ModuleWithTranslationModule)`,
+the `TranslationModule` will be excluded out of the final mock module,
+and, consequently, the version from `initTestEnvironment` will be used.
+
+#### ngMocks.globalKeep
+
+`ngMocks.globalExclude` marks declarations, services and tokens to be avoided from the mocking process during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
+Let's mark the `APP_URL` token in order to be kept in mock modules.
+
+```ts
+// test.ts
+ngMocks.globalKeep(APP_URL);
+```
+
+```ts
+// test.spec.ts
+// ...
+MockModule(ModuleWithService);
+// ...
+const url = TestBed.inject(APP_URL);
+// ...
+```
+
+The `url` is the original one.
+
+#### ngMocks.globalMock
+
+`ngMocks.globalMock` marks declarations, services and tokens to be mocked if they are appearing in kept modules during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
+Let's mark the `APP_URL` token in order to be mocked in its kept modules.
+
+```ts
+// test.ts
+ngMocks.globalKeep(AppModule);
+ngMocks.globalMock(APP_URL);
+ngMocks.defaultMock(APP_URL, () => 'mock');
+```
+
+```ts
+// test.spec.ts
+// ...
+MockModule(AppModule);
+// ...
+const url = TestBed.inject(APP_URL);
+// ...
+```
+
+The `url` is `mock`.
+
+#### ngMocks.globalReplace
+
+`ngMocks.globalReplace` marks declarations and modules (but not services and tokens) to be replaced during creating mock modules.
+
+The best place to do that is in `src/test.ts` for jasmine or in `src/setupJest.ts` for jest.
+
+If we wanted to replace `BrowserAnimationsModule` with `NoopAnimationsModule` globally,
+we could do it like that:
+
+```ts
+// test.ts
+ngMocks.globalReplace(BrowserAnimationsModule, NoopAnimationsModule);
+```
+
+Now, all mock modules which import `BrowserAnimationsModule` have `NoopAnimationsModule` instead.
+
+#### ngMocks.globalWipe
+
+`ngMocks.globalWipe` resets all customizations which have been done by any `ngMocks.default` function.
+
+```ts
+ngMocks.defaultMock(Service, () => ({
+  stream$: EMPTY,
+}));
+ngMocks.globalExclude(Component);
+ngMocks.globalKeep(Directive);
+ngMocks.globalReplace(Pipe, FakePipe);
+
+ngMocks.globalWipe(Service);
+ngMocks.globalWipe(Component);
+ngMocks.globalWipe(Directive);
+ngMocks.globalWipe(Pipe);
+
+// All the things above will be mocked as usual
 ```
 
 #### ngMocks.get
@@ -2714,7 +2846,9 @@ const outputEmitter = ngMocks.output(debugElement, 'update');
 
 #### ngMocks.stub
 
-In case if we want to create stub methods / properties of a service.
+`ngMocks.stub` is needed in case if we want to create stub methods / properties of a service.
+
+> If there is an existing value / spy you want to set, then use [`ngMocks.stubMember`](#ngmocksstubmember).
 
 - `ngMocks.stub( service, method )`
 - `ngMocks.stub( service, methods )`
@@ -2742,6 +2876,72 @@ ngMocks.stub(instance, {
 });
 ```
 
+#### ngMocks.stubMember
+
+`ngMocks.stubMember` facilitates **injection of existing spies** or defined values **into instances**.
+
+```ts
+// overriding the method
+ngMocks.stubMember(service, method, customCallback);
+
+// overriding the property's value
+ngMocks.stubMember(service, property, customValue);
+
+// overrding the getter, doesn't touch the existing setter
+ngMocks.stubMember(service, property, customGetter, 'get');
+
+// overrding the setter, doesn't touch the existing getter
+ngMocks.stubMember(service, property, customSetter, 'set');
+```
+
+It returns the passed value, therefore, this allows **fast chains for spies** and mocks.
+
+```ts
+ngMocks
+  .stubMember(service, 'handler', jasmine.createSpy('handler'))
+  .and.returnValue('fake');
+
+ngMocks
+  .stubMember(service, 'read', jasmine.createSpy('read'), 'set')
+  .and.toThrowError();
+```
+
+If we need to stub a method of a service in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+ngMocks.stubMember(service, 'handler', () => 'fake');
+// service.handler() === 'fake'
+```
+
+If we need to stub a property of a component in Angular tests:
+
+```ts
+const component = TestBed.createComponent(Component)
+  .componentInstance;
+ngMocks.stubMember(service, 'name', 'mock');
+// service.name === 'mock'
+```
+
+If we need to stub a getter in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+ngMocks.stubMember(service, 'name', () => 'mock', 'get');
+// service.name === 'mock'
+```
+
+If we need to stub a setter in Angular tests:
+
+```ts
+const service = TestBed.inject(Service);
+let value: any;
+ngMocks.stubMember(service, 'name', v => (value = v), 'set');
+// value === undefined
+service.name = 'fake';
+// value === 'fake'
+```
+
 #### ngMocks.faster
 
 `ngMocks.faster()` [optimizes setup](#making-angular-tests-faster) between tests in a suite.
@@ -2753,6 +2953,13 @@ ngMocks.stub(instance, {
 #### ngMocks.reset
 
 `ngMocks.reset()` resets cache of [`ngMocks`](#ngmocks).
+
+[to the top](#table-of-contents)
+
+#### ngMocks.throwOnConsole
+
+`ngMocks.throwOnConsole()` stubs `console.warn` and `console.error` to throw an error instead of printing into console.
+It is useful in `Ivy` enabled mode, because then some errors are printed instead of being thrown.
 
 [to the top](#table-of-contents)
 

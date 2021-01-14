@@ -6,6 +6,7 @@ import { Type } from '../common/core.types';
 import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderStash } from './mock-builder-stash';
 import addMissedKeepDeclarationsAndModules from './promise/add-missed-keep-declarations-and-modules';
@@ -72,6 +73,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public build(): NgModule {
     this.stash.backup();
+    ngMocksUniverse.config.set('mockNgDefResolver', new Map());
 
     const params = this.combineParams();
 
@@ -85,6 +87,7 @@ export class MockBuilderPromise implements IMockBuilder {
     ngModule.providers.push(createNgMocksTouchesToken());
     ngModule.providers.push(createNgMocksOverridesToken(this.replaceDef, this.defValue));
 
+    ngMocksUniverse.config.delete('mockNgDefResolver');
     this.stash.restore();
 
     return ngModule;

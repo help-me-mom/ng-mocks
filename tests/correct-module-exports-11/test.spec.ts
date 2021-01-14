@@ -28,22 +28,7 @@ class ExternalComponent {}
 class TargetModule {}
 
 describe('correct-module-exports-11:proper', () => {
-  // Thanks Ivy, it doesn't throw an error.
-  let backupWarn: typeof console.warn;
-  let backupError: typeof console.error;
-
-  beforeAll(() => {
-    backupWarn = console.warn;
-    backupError = console.error;
-    console.error = console.warn = (...args: any[]) => {
-      throw new Error(args.join(' '));
-    };
-  });
-
-  afterAll(() => {
-    console.error = backupError;
-    console.warn = backupWarn;
-  });
+  ngMocks.throwOnConsole();
 
   beforeEach(() =>
     TestBed.configureTestingModule({

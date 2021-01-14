@@ -17,11 +17,18 @@ import mockHelperFindInstance from './mock-helper.find-instance';
 import mockHelperFindInstances from './mock-helper.find-instances';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 import mockHelperGet from './mock-helper.get';
+import mockHelperGlobalExclude from './mock-helper.global-exclude';
+import mockHelperGlobalKeep from './mock-helper.global-keep';
+import mockHelperGlobalMock from './mock-helper.global-mock';
+import mockHelperGlobalReplace from './mock-helper.global-replace';
+import mockHelperGlobalWipe from './mock-helper.global-wipe';
 import mockHelperGuts from './mock-helper.guts';
 import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
 import mockHelperReset from './mock-helper.reset';
 import mockHelperStub from './mock-helper.stub';
+import mockHelperStubMember from './mock-helper.stub-member';
+import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 
 /**
  * @see https://github.com/ike18t/ng-mocks#ngmocks
@@ -187,6 +194,31 @@ export const ngMocks: {
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
   /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalexclude
+   */
+  globalExclude(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalkeep
+   */
+  globalKeep(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalmock
+   */
+  globalMock(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalreplace
+   */
+  globalReplace(source: AnyType<any>, destination: AnyType<any>): void;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalwipe
+   */
+  globalWipe(source: AnyType<any> | InjectionToken<any>): void;
+
+  /**
    * @see https://github.com/ike18t/ng-mocks#ngmocksguts
    */
   guts(
@@ -242,6 +274,38 @@ export const ngMocks: {
    * @see https://github.com/ike18t/ng-mocks#ngmocksstub
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   */
+  stubMember<T extends object, K extends keyof T, S extends () => T[K]>(
+    instance: T,
+    name: K,
+    stub: S,
+    encapsulation: 'get',
+  ): S;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   */
+  stubMember<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
+    instance: T,
+    name: K,
+    stub: S,
+    encapsulation: 'set',
+  ): S;
+
+  /**
+   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   */
+  stubMember<T extends object, K extends keyof T, S extends T[K]>(instance: T, name: K, stub: S): S;
+
+  /**
+   * Thanks Ivy, it doesn't throw an error and we have to use injector.
+   *
+   * @see https://github.com/ike18t/ng-mocks#ngmocksthrowonconsole
+   */
+  throwOnConsole(): void;
 } = {
   autoSpy: mockHelperAutoSpy,
   defaultMock: mockHelperDefaultMock,
@@ -252,9 +316,16 @@ export const ngMocks: {
   findInstances: mockHelperFindInstances,
   flushTestBed: mockHelperFlushTestBed,
   get: mockHelperGet,
+  globalExclude: mockHelperGlobalExclude,
+  globalKeep: mockHelperGlobalKeep,
+  globalMock: mockHelperGlobalMock,
+  globalReplace: mockHelperGlobalReplace,
+  globalWipe: mockHelperGlobalWipe,
   guts: mockHelperGuts,
   input: mockHelperInput,
   output: mockHelperOutput,
   reset: mockHelperReset,
   stub: mockHelperStub,
+  stubMember: mockHelperStubMember,
+  throwOnConsole: mockHelperThrowOnConsole,
 };

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 
 import { getTestBedInjection } from '../common/core.helpers';
+import mockHelperThrowOnConsole from '../mock-helper/mock-helper.throw-on-console';
 
 import { MockBuilder } from './mock-builder';
 
@@ -47,22 +48,7 @@ class TargetDirective {}
 class TargetModule {}
 
 describe('MockBuilderPromise', () => {
-  // Thanks Ivy, it doesn't throw an error and we have to use injector.
-  let backupWarn: typeof console.warn;
-  let backupError: typeof console.error;
-
-  beforeAll(() => {
-    backupWarn = console.warn;
-    backupError = console.error;
-    console.error = console.warn = (...args: any[]) => {
-      throw new Error(args.join(' '));
-    };
-  });
-
-  afterAll(() => {
-    console.error = backupError;
-    console.warn = backupWarn;
-  });
+  mockHelperThrowOnConsole();
 
   it('skips dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService, { dependency: true });

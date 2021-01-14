@@ -49,8 +49,8 @@ export default <D, I>(
     if (overrides) {
       callbacks.push(overrides);
     }
-    if (ngMocksUniverse.config.get(def)?.init) {
-      callbacks.push(ngMocksUniverse.config.get(def).init);
+    if (ngMocksUniverse.configInstance.get(def)?.init) {
+      callbacks.push(ngMocksUniverse.configInstance.get(def).init);
     }
 
     return applyCallback(def, instance, callbacks, injector, overrides);

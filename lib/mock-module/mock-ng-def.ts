@@ -22,10 +22,10 @@ const processDef = (def: any) => {
   if (isNgDef(def, 'm') || isNgModuleDefWithProviders(def)) {
     return MockModule(def as any);
   }
-  if (ngMocksUniverse.builtDeclarations.has(def)) {
-    return ngMocksUniverse.builtDeclarations.get(def);
+  if (ngMocksUniverse.hasBuildDeclaration(def)) {
+    return ngMocksUniverse.getBuildDeclaration(def);
   }
-  if (ngMocksUniverse.flags.has('skipMock')) {
+  if (ngMocksUniverse.flags.has('skipMock') && ngMocksUniverse.getResolution(def) !== 'mock') {
     return def;
   }
   for (const [flag, func] of processDefMap) {
@@ -86,18 +86,33 @@ const createResolveProvider = (resolutions: Map<any, any>, change: () => void): 
 const createResolveWithProviders = (def: any, mockDef: any): boolean =>
   mockDef && mockDef.ngModule && isNgModuleDefWithProviders(def);
 
+const createResolveExisting = (def: any, resolutions: Map<any, any>, change: (flag?: boolean) => void): any => {
+  const mockDef = resolutions.get(def);
+  if (def !== mockDef) {
+    change();
+  }
+
+  return mockDef;
+};
+
+const createResolveExcluded = (def: any, resolutions: Map<any, any>, change: (flag?: boolean) => void): void => {
+  resolutions.set(def, undefined);
+
+  change();
+};
+
 const createResolve = (resolutions: Map<any, any>, change: (flag?: boolean) => void): ((def: any) => any) => (
   def: any,
 ) => {
   if (resolutions.has(def)) {
-    return resolutions.get(def);
+    return createResolveExisting(def, resolutions, change);
   }
-  if (ngMocksUniverse.isExcludedDef(def)) {
-    resolutions.set(def, undefined);
 
-    return change();
+  const detectedDef = isNgModuleDefWithProviders(def) ? def.ngModule : def;
+  if (ngMocksUniverse.isExcludedDef(detectedDef)) {
+    return createResolveExcluded(def, resolutions, change);
   }
-  ngMocksUniverse.touches.add(isNgModuleDefWithProviders(def) ? def.ngModule : def);
+  ngMocksUniverse.touches.add(detectedDef);
 
   const mockDef = processDef(def);
   if (createResolveWithProviders(def, mockDef)) {
@@ -145,11 +160,11 @@ const resolveDefForExport = (
 
 const createResolvers = (
   change: () => void,
+  resolutions: Map<any, any>,
 ): {
   resolve: (def: any) => any;
   resolveProvider: (def: Provider) => any;
 } => {
-  const resolutions = new Map();
   const resolve = createResolve(resolutions, change);
   const resolveProvider = createResolveProvider(resolutions, change);
 
@@ -185,13 +200,21 @@ const addExports = (
 };
 
 export default (ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] => {
+  const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
+  if (!hasResolver) {
+    ngMocksUniverse.config.set('mockNgDefResolver', new Map());
+  }
   let changed = !ngMocksUniverse.flags.has('skipMock');
   const change = (flag = true) => {
     changed = changed || flag;
   };
-  const { resolve, resolveProvider } = createResolvers(change);
+  const { resolve, resolveProvider } = createResolvers(change, ngMocksUniverse.config.get('mockNgDefResolver'));
   const mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
   addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+
+  if (!hasResolver) {
+    ngMocksUniverse.config.delete('mockNgDefResolver');
+  }
 
   return [changed, mockModuleDef];
 };

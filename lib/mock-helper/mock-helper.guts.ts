@@ -1,11 +1,12 @@
 import { TestModuleMetadata } from '@angular/core/testing';
 
-import { flatten, mapValues } from '../common/core.helpers';
+import { flatten, mapKeys, mapValues } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockModule } from '../mock-module/mock-module';
@@ -18,6 +19,7 @@ type Data = {
   imports: any[];
   keep: Set<any>;
   mock: Set<any>;
+  optional: Map<any, any>;
   providers: any[];
   skip: Set<any>;
 };
@@ -31,21 +33,33 @@ const skipDef = (def: any, skip: Set<any>, exclude: Set<any>): boolean => {
   return exclude.has(def);
 };
 
-const createMeta = ({ keep, skip, exclude, imports, declarations, providers }: Data): TestModuleMetadata => {
-  for (const def of keep) {
-    if (skip.has(def) || exclude.has(def)) {
+const createMetaHandler = (
+  optional: Map<any, any>,
+  proto: any,
+  imports: any[],
+  declarations: any[],
+  providers: any[],
+): void => {
+  const def = optional.get(proto) || proto;
+
+  if (isNgDef(def, 'm')) {
+    imports.push(def);
+  } else if (isNgDef(def, 'c') || isNgDef(def, 'd')) {
+    declarations.push(def);
+  } else if (isNgDef(def, 'p')) {
+    declarations.push(def);
+    providers.push(def);
+  } else if (!isNgInjectionToken(def)) {
+    providers.push(def);
+  }
+};
+
+const createMeta = ({ keep, skip, optional, exclude, imports, declarations, providers }: Data): TestModuleMetadata => {
+  for (const proto of keep) {
+    if (skip.has(proto) || exclude.has(proto) || optional.has(proto)) {
       continue;
     }
-    if (isNgDef(def, 'm')) {
-      imports.push(def);
-    } else if (isNgDef(def, 'c') || isNgDef(def, 'd')) {
-      declarations.push(def);
-    } else if (isNgDef(def, 'p')) {
-      declarations.push(def);
-      providers.push(def);
-    } else if (!isNgInjectionToken(def)) {
-      providers.push(def);
-    }
+    createMetaHandler(optional, proto, imports, declarations, providers);
   }
 
   return { declarations, imports, providers };
@@ -124,13 +138,7 @@ const resolveMap: Record<string, any> = {
   pipe: MockPipe,
 };
 
-const resolve = (data: Data, def: any, skipDestruction = true): void => {
-  if (!def) {
-    return;
-  }
-
-  const type = getType(def, data.keep);
-
+const resolveHandler = (data: Data, type: string, def: any, skipDestruction: boolean): void => {
   if (type === 'module-with-providers') {
     handleModuleWithProviders(data, def);
   } else if (type === 'module-keep') {
@@ -146,22 +154,78 @@ const resolve = (data: Data, def: any, skipDestruction = true): void => {
   }
 };
 
-const generateData = (keep: any, mock: any, exclude: any): Data => ({
-  declarations: [],
-  exclude: new Set(flatten(exclude || [])),
-  imports: [],
-  keep: new Set(flatten(keep || [])),
-  mock: new Set(flatten(mock || [])),
-  providers: [],
-  skip: new Set(),
-});
+const resolve = (data: Data, proto: any, skipDestruction = true): void => {
+  if (!proto) {
+    return;
+  }
+
+  const type = getType(proto, data.keep);
+  let def: any;
+
+  // an attempt to replace declarations.
+  if (type !== 'module-with-providers') {
+    const value = data.optional.get(proto);
+    if (value && value !== proto) {
+      def = value;
+      data.keep.add(def);
+    }
+  }
+  if (!def) {
+    def = proto;
+  }
+
+  resolveHandler(data, type, def, skipDestruction);
+};
+
+const generateDataWithUniverse = (keep: Set<any>, mock: Set<any>, exclude: Set<any>, optional: Map<any, any>): void => {
+  for (const k of mapKeys(ngMocksUniverse.getDefaults())) {
+    const v = ngMocksUniverse.getBuildDeclaration(k);
+    if (keep.has(k) || mock.has(k) || exclude.has(k)) {
+      continue;
+    }
+    optional.set(k, v);
+
+    if (v === null) {
+      exclude.add(k);
+    } else if (v === undefined) {
+      mock.add(k);
+    } else if (k === v) {
+      keep.add(k);
+    }
+  }
+};
+
+const generateData = (protoKeep: any, protoMock: any, protoExclude: any): Data => {
+  const keep = new Set(flatten(protoKeep || []));
+  const mock = new Set(flatten(protoMock || []));
+  const exclude = new Set(flatten(protoExclude || []));
+  const optional = new Map();
+  generateDataWithUniverse(keep, mock, exclude, optional);
+
+  return {
+    declarations: [],
+    exclude,
+    imports: [],
+    keep,
+    mock,
+    optional,
+    providers: [],
+    skip: new Set(),
+  };
+};
 
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
   const data: Data = generateData(keep, mock, exclude);
 
+  ngMocksUniverse.config.set('mockNgDefResolver', new Map());
   for (const def of mapValues(data.mock)) {
+    if (data.optional.has(def)) {
+      continue;
+    }
     resolve(data, def, false);
   }
+  const meta = createMeta(data);
+  ngMocksUniverse.config.delete('mockNgDefResolver');
 
-  return createMeta(data);
+  return meta;
 };

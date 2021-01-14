@@ -8,6 +8,7 @@ exclude_patterns:
   - 'examples/'
   - 'node_modules/'
   - 'test-reports/'
+  - 'tests-angular/'
   - 'tests-failures/'
   - 'tests/'
   - 'tmp/'
@@ -32,6 +33,7 @@ exclude_patterns:
   - '**/*.yml'
   - '**/*.spec.ts'
   - '**/*.fixtures.ts'
+  - '**/karma.conf.js'
 plugins:
   structure:
     enabled: true
