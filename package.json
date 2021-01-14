@@ -140,7 +140,7 @@
     "prettier": "2.2.1",
     "puppeteer": "5.5.0",
     "rxjs": "6.6.3",
-    "semantic-release": "17.3.1",
+    "semantic-release": "17.3.2",
     "ts-node": "9.1.1",
     "tslib": "2.1.0",
     "tslint": "6.1.3",
