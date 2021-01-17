@@ -1,3 +1,29 @@
+# [11.4.0](https://github.com/ike18t/ng-mocks/compare/v11.3.1...v11.4.0) (2021-01-17)
+
+
+### Bug Fixes
+
+* descriptor.configurable = true ([68a8751](https://github.com/ike18t/ng-mocks/commit/68a87510e561445c74530391afe7577ed1249d18))
+* **guts:** respect ngMocks.default ([59bb586](https://github.com/ike18t/ng-mocks/commit/59bb58692ec3fb4119ce16f661e978aac64b3020))
+* **mock-instance:** a separate config scope ([a0c930c](https://github.com/ike18t/ng-mocks/commit/a0c930c2825b672e820e2ffbcf1c89e49e625e26))
+* **mock-module:** excludes modules with providers correctly ([b5cb39c](https://github.com/ike18t/ng-mocks/commit/b5cb39cd2964d4f1d3400414ed6b9a924f588986)), closes [#271](https://github.com/ike18t/ng-mocks/issues/271)
+* **mock-render:** static selector for declarations w/o selector ([8f39d1f](https://github.com/ike18t/ng-mocks/commit/8f39d1feeaa849df7af3a9bc339fbd974b832c83))
+* @angular/forms is optional ([bfaf495](https://github.com/ike18t/ng-mocks/commit/bfaf495ed68c728bdd47c54031227b1d7b6514ce))
+* avoiding cache in providers' declaration ([da98414](https://github.com/ike18t/ng-mocks/commit/da98414fb5f908701d661c0032f7c3352a7ff5be))
+* grouping similarities ([e1bc77b](https://github.com/ike18t/ng-mocks/commit/e1bc77baccfec41bf56227e232ba587bb802fff6))
+
+
+### Features
+
+* ngMocks.stubMember returns passed value ([27f5404](https://github.com/ike18t/ng-mocks/commit/27f540469799b27c5c5d0d3e42a2f86173144a1b))
+* renaming ngMocks.default to ngMocks.global ([d9f46d3](https://github.com/ike18t/ng-mocks/commit/d9f46d328979235220b6a25e2101bdb8658d78de))
+* **ng-mocks:** ngMocks.stubMember ([efcd175](https://github.com/ike18t/ng-mocks/commit/efcd175ee6b08f8ef5c549d0792141025c13fdcf))
+* **ng-mocks:** ngMocks.throwOnConsole ([7b0f2f8](https://github.com/ike18t/ng-mocks/commit/7b0f2f81c147133f691ad520ae9707baf97785f2))
+* ngMocks.defaultExclude ([bdd2821](https://github.com/ike18t/ng-mocks/commit/bdd2821b3881c8edfe69ce1f1c67dbf8a18b0f6e))
+* ngMocks.defaultKeep ([e89b876](https://github.com/ike18t/ng-mocks/commit/e89b87636d13fbeb93ecfb4b2bbd4fccf7240f2e))
+* ngMocks.defaultReplace ([330868f](https://github.com/ike18t/ng-mocks/commit/330868fe71a25faf62d07c18af49e8448b2a2d19))
+* ngMocks.defaultWipe ([cb71bdb](https://github.com/ike18t/ng-mocks/commit/cb71bdb6557243ebe580747acf387a54dbc803d1))
+
 ## [11.3.1](https://github.com/ike18t/ng-mocks/compare/v11.3.0...v11.3.1) (2021-01-02)
 
 
