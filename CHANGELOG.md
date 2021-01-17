@@ -15,14 +15,14 @@
 
 ### Features
 
-* ngMocks.stubMember returns passed value ([27f5404](https://github.com/ike18t/ng-mocks/commit/27f540469799b27c5c5d0d3e42a2f86173144a1b))
-* renaming ngMocks.default to ngMocks.global ([d9f46d3](https://github.com/ike18t/ng-mocks/commit/d9f46d328979235220b6a25e2101bdb8658d78de))
+* **ng-mocks:** ngMocks.stubMember returns passed value ([27f5404](https://github.com/ike18t/ng-mocks/commit/27f540469799b27c5c5d0d3e42a2f86173144a1b))
+* **ng-mocks:** renaming ngMocks.default to ngMocks.global ([d9f46d3](https://github.com/ike18t/ng-mocks/commit/d9f46d328979235220b6a25e2101bdb8658d78de))
 * **ng-mocks:** ngMocks.stubMember ([efcd175](https://github.com/ike18t/ng-mocks/commit/efcd175ee6b08f8ef5c549d0792141025c13fdcf))
 * **ng-mocks:** ngMocks.throwOnConsole ([7b0f2f8](https://github.com/ike18t/ng-mocks/commit/7b0f2f81c147133f691ad520ae9707baf97785f2))
-* ngMocks.defaultExclude ([bdd2821](https://github.com/ike18t/ng-mocks/commit/bdd2821b3881c8edfe69ce1f1c67dbf8a18b0f6e))
-* ngMocks.defaultKeep ([e89b876](https://github.com/ike18t/ng-mocks/commit/e89b87636d13fbeb93ecfb4b2bbd4fccf7240f2e))
-* ngMocks.defaultReplace ([330868f](https://github.com/ike18t/ng-mocks/commit/330868fe71a25faf62d07c18af49e8448b2a2d19))
-* ngMocks.defaultWipe ([cb71bdb](https://github.com/ike18t/ng-mocks/commit/cb71bdb6557243ebe580747acf387a54dbc803d1))
+* **ng-mocks:** ngMocks.globalExclude ([bdd2821](https://github.com/ike18t/ng-mocks/commit/bdd2821b3881c8edfe69ce1f1c67dbf8a18b0f6e))
+* **ng-mocks:** ngMocks.globalKeep ([e89b876](https://github.com/ike18t/ng-mocks/commit/e89b87636d13fbeb93ecfb4b2bbd4fccf7240f2e))
+* **ng-mocks:** ngMocks.globalReplace ([330868f](https://github.com/ike18t/ng-mocks/commit/330868fe71a25faf62d07c18af49e8448b2a2d19))
+* **ng-mocks:** ngMocks.globalWipe ([cb71bdb](https://github.com/ike18t/ng-mocks/commit/cb71bdb6557243ebe580747acf387a54dbc803d1))
 
 ## [11.3.1](https://github.com/ike18t/ng-mocks/compare/v11.3.0...v11.3.1) (2021-01-02)
 
