@@ -4,6 +4,7 @@ exclude_patterns:
   - '.circleci/'
   - 'dist/'
   - 'docker/'
+  - 'docs/'
   - 'e2e/'
   - 'examples/'
   - 'node_modules/'

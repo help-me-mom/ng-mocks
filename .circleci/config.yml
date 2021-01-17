@@ -44,6 +44,9 @@ jobs:
       - run:
           name: E2E Tests
           command: npm run e2e
+      - run:
+          name: Docs
+          command: npm run build:docs
       - store_test_results:
           path: ./test-reports
       - store_artifacts:

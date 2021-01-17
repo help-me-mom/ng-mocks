@@ -61,7 +61,7 @@ describe('mock-render-param-ref', () => {
     expect(newSpy).toHaveBeenCalledWith('v3');
   });
 
-  // If we don't pass params then only non inputs / outputs
+  // If we do not pass params then only non inputs / outputs
   // should be handles by proxy.
   it('keeps refs w/o params', () => {
     const fixture = MockRender(TargetComponent);

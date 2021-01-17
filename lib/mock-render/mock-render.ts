@@ -176,21 +176,21 @@ function MockRender<MComponent, TComponent extends object = Record<keyof any, an
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
- * Without params we shouldn't autocomplete any keys of any types.
+ * Without params we should not autocomplete any keys of any types.
  *
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
 function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent, MComponent>;
 
 /**
- * An empty string doesn't have point.
+ * An empty string does not have point.
  *
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */
 function MockRender(template: ''): ComponentFixture<void> & { point: undefined };
 
 /**
- * Without params we shouldn't autocomplete any keys of any types.
+ * Without params we should not autocomplete any keys of any types.
  *
  * @see https://github.com/ike18t/ng-mocks#mockrender
  */

@@ -79,7 +79,7 @@ describe('TestAttributeDirective', () => {
       'style="background-color: red;"',
     );
 
-    // Let's switch the color, we don't need `.point`, because we
+    // Let's switch the color, we do not need `.point`, because we
     // access a middle component of MockRender.
     fixture.componentInstance.color = 'blue';
     fixture.detectChanges(); // shaking the template

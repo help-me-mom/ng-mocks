@@ -142,7 +142,7 @@ const resolveHandler = (data: Data, type: string, def: any, skipDestruction: boo
   if (type === 'module-with-providers') {
     handleModuleWithProviders(data, def);
   } else if (type === 'module-keep') {
-    handleDeclaration(data, def, MockModule, data.imports); // MockModule won't be called because the def is kept.
+    handleDeclaration(data, def, MockModule, data.imports); // MockModule will not be called because the def is kept.
   } else if (type === 'module' && skipDestruction) {
     handleDeclaration(data, def, MockModule, data.imports);
   } else if (type === 'module') {

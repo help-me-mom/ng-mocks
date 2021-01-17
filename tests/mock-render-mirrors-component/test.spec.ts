@@ -103,7 +103,7 @@ describe('mock-render-mirrors-component', () => {
     // checking that the data has been proxied correctly
     expect(input1.nativeElement.innerHTML).toEqual('updatedInput1');
     expect(input2.nativeElement.innerHTML).toEqual('updatedInput2');
-    // doesn't work because we can't correctly detect it via defineProperty.
+    // does not work because we cannot correctly detect it via defineProperty.
     // expect(var1.nativeElement.innerHTML).toEqual('updatedVar1');
     expect(var2.nativeElement.innerHTML).toEqual('updatedVar2');
 
@@ -136,7 +136,7 @@ describe('mock-render-mirrors-component', () => {
     expect(fixture1.point.componentInstance.input1).toBe('1');
 
     // we have to provide DefaultRenderComponent in this case.
-    // the generated component isn't the same as the testing component.
+    // the generated component is not the same as the testing component.
     const fixture2: ComponentFixture<
       DefaultRenderComponent<TargetComponent>
     > = MockRender(TargetComponent);

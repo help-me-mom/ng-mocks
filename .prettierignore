@@ -1,6 +1,8 @@
 CHANGELOG.md
 
 dist/
+docs/**/*.md
+docs/.docusaurus
 e2e/a10/src/test
 e2e/a11/src/test
 e2e/a5es2015/src/test

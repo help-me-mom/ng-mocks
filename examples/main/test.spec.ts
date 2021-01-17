@@ -24,7 +24,7 @@ import { staticFalse } from '../../tests';
 class TranslatePipe implements PipeTransform {
   public transform(value: string): string {
     // Just for the test purpose
-    // we don't use any translation services.
+    // we do not use any translation services.
     return `translated:${value}`;
   }
 }
@@ -144,7 +144,7 @@ describe('main', () => {
     // ));
     // return testBed.compileComponents();
     // But in this case TranslatePipe will return undefined,
-    // if we don't customize it via MockInstance or defaultMock.
+    // if we do not customize it via MockInstance or defaultMock.
   });
 
   it('asserts behavior of AppComponent', () => {

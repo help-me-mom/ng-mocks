@@ -59,7 +59,7 @@
   "bugs": {
     "url": "https://github.com/ike18t/ng-mocks/issues/new"
   },
-  "homepage": "https://ng-mocks.github.io",
+  "homepage": "https://ng-mocks.sudo.eu",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

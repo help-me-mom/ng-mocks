@@ -60,7 +60,7 @@ describe('MockBuilder:ngMocks', () => {
       })
       .mock(TOKEN_CUSTOMIZE, 'My_Token')
 
-      // Now the pipe won't be replaced with its mock copy.
+      // Now the pipe will not be replaced with its mock copy.
       .keep(RestorePipe)
 
       // Even it belongs to the module we want to keep,
