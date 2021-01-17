@@ -36,8 +36,8 @@ describe('MockBuilderKeepsApplicationModule:mock', () => {
     expect(element).toBeDefined();
     expect(TestBed.get(TARGET_TOKEN)).toEqual('');
     if (parseInt(VERSION.major, 10) < 9) {
-      // somehow ivy doesn't provide APP_INITIALIZER out of the box and this assertion fails.
-      // our mock logic skips all multi tokens therefore this one isn't present anymore.
+      // somehow ivy does not provide APP_INITIALIZER out of the box and this assertion fails.
+      // our mock logic skips all multi tokens therefore this one is not present anymore.
       expect(TestBed.get(APP_INITIALIZER)).toBeDefined();
     }
     expect(TestBed.get(APP_ID)).toBeDefined();

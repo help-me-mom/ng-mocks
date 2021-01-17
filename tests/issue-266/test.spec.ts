@@ -80,7 +80,7 @@ describe('issue-248', () => {
     expect(fixture.point.componentInstance.name).toEqual('directive');
     expect(fixture.point.componentInstance.value).toEqual('123');
 
-    // DetectChanges doesn't break the pointer.
+    // DetectChanges does not break the pointer.
     params.value = '321';
     fixture.detectChanges();
     expect(fixture.point.componentInstance).toEqual(

@@ -85,7 +85,7 @@ export class RealComponent {
 class TargetModule {}
 
 // NG_VALIDATORS and NG_VALUE_ACCESSOR should work together without an issue.
-// material style of @Self() @Optional() ngControl?: NgControl doesn't work and throws
+// material style of @Self() @Optional() ngControl?: NgControl does not work and throws
 // Error: Circular dep for MockOfMyFormControlComponent
 describe('issue-167:directive:real', () => {
   beforeEach(() =>

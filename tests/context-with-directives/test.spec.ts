@@ -53,7 +53,7 @@ describe('context-with-directives:real', () => {
       fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
     ).not.toContain(' template w/ directive w/ binding w/o render ');
 
-    // unused ng-templates shouldn't be rendered at all
+    // unused ng-templates should not be rendered at all
     expect(
       fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
     ).not.toContain(' template w/o directive w/o binding ');

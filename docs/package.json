@@ -1,0 +1,35 @@
+{
+  "name": "ng-mocks-docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "../node_modules/.bin/docusaurus",
+    "start": "../node_modules/.bin/docusaurus start",
+    "build": "../node_modules/.bin/docusaurus build --out-dir ../dist/docs",
+    "swizzle": "../node_modules/.bin/docusaurus swizzle",
+    "deploy": "../node_modules/.bin/docusaurus deploy",
+    "serve": "../node_modules/.bin/docusaurus serve",
+    "clear": "../node_modules/.bin/docusaurus clear"
+  },
+  "peerDependencies": {
+    "@docusaurus/core": "2.0.0-alpha.70",
+    "@docusaurus/preset-classic": "2.0.0-alpha.70",
+    "@docusaurus/remark-plugin-npm2yarn": "2.0.0-alpha.70",
+    "@mdx-js/react": "1.6.22",
+    "clsx": "1.1.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

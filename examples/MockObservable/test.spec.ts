@@ -67,7 +67,7 @@ describe('MockObservable', () => {
     // Let's render the component.
     const fixture = MockRender(TargetComponent);
 
-    // We haven't emitted anything yet, let's check the template.
+    // We have not emitted anything yet, let's check the template.
     expect(fixture.nativeElement.innerHTML).not.toContain('1');
     expect(fixture.nativeElement.innerHTML).not.toContain('2');
     expect(fixture.nativeElement.innerHTML).not.toContain('3');

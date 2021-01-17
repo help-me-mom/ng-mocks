@@ -48,7 +48,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       return global.get(global.get('builder:module')).then(fulfill, reject);
     }
 
-    // we need to reset testing module in case if we are in bullet mode but current module doesn't match.
+    // we need to reset testing module in case if we are in bullet mode but current module does not match.
     if (global.has('bullet') && global.has('bullet:reset')) {
       // tslint:disable-next-line no-console
       console.warn('ngMocks.faster has zero effect due to changes in testing module between runs');

@@ -11,79 +11,106 @@
   "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}",
   "packageRules": [
     {
+      "paths": [
+        ".circleci/config.yml",
+        "Dockerfile",
+        "docker-compose.yml",
+        "docs/package.json",
+        "package.json",
+        "tests-angular/e2e/package.json"
+      ],
+      "additionalBranchPrefix": ["root/"]
+    },
+
+    {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=5"
+      "allowedVersions": "<=5",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["core-js"],
-      "allowedVersions": "<=2.4"
+      "allowedVersions": "<=2.4",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["rxjs"],
-      "allowedVersions": "<=5.5"
+      "allowedVersions": "<=5.5",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["zone.js"],
-      "allowedVersions": "<=0.8"
+      "allowedVersions": "<=0.8",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["@types/jest", "jest", "ts-jest"],
-      "allowedVersions": "<=22"
+      "allowedVersions": "<=22",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["jest-preset-angular"],
-      "allowedVersions": "<=5.2"
+      "allowedVersions": "<=5.2",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["@types/jasmine", "jasmine-core"],
-      "allowedVersions": "<=2.8"
+      "allowedVersions": "<=2.8",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["@types/node"],
-      "allowedVersions": "<=6"
+      "allowedVersions": "<=6",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["jasmine-spec-reporter"],
-      "allowedVersions": "<=4.2"
+      "allowedVersions": "<=4.2",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["karma"],
-      "allowedVersions": "<=2.0"
+      "allowedVersions": "<=2.0",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["karma-chrome-launcher"],
-      "allowedVersions": "<=2.2"
+      "allowedVersions": "<=2.2",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["karma-jasmine"],
-      "allowedVersions": "<=1.1"
+      "allowedVersions": "<=1.1",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["karma-jasmine-html-reporter"],
-      "allowedVersions": "<=0.2"
+      "allowedVersions": "<=0.2",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["ts-node"],
-      "allowedVersions": "<=4"
+      "allowedVersions": "<=4",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
     {
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["typescript"],
-      "allowedVersions": "<=2.5"
+      "allowedVersions": "<=2.5",
+      "additionalBranchPrefix": ["e2e/a5/"]
     },
 
     {

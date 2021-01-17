@@ -10,3 +10,7 @@ insert_final_newline = true
 max_line_length = 120
 tab_width = 2
 trim_trailing_whitespace = true
+
+[*.md]
+max_line_length = 70
+trim_trailing_whitespace = false

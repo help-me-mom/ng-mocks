@@ -48,7 +48,7 @@ export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
   transform?: TPipe['transform'],
 ): Type<MockedPipe<TPipe>> {
-  // We are inside of an 'it'. It's fine to return a mock copy.
+  // We are inside of an 'it'. It is fine to return a mock copy.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(pipe, 'p');

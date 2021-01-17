@@ -119,7 +119,7 @@ describe('MockBuilder:deep', () => {
       .provide(MyCustomProvider1)
       .provide([MyCustomProvider2, MyCustomProvider3])
 
-      // Now the pipe won't be replaced with its mock copy.
+      // Now the pipe will not be replaced with its mock copy.
       .keep(RestorePipe)
 
       // Extra configuration.

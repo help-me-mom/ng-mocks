@@ -9,7 +9,7 @@ import {
 } from './fixtures';
 
 // Because all tokens have factories the test should render them correctly.
-// There's no way to specify multi in a factory, so we don't get an array.
+// There is no way to specify multi in a factory, so we do not get an array.
 describe('module-with-factory-tokens:real', () => {
   beforeEach(() =>
     MockBuilder()
@@ -33,7 +33,7 @@ describe('module-with-factory-tokens:real', () => {
 });
 
 // Because all tokens are kept the test should render them correctly.
-// There's no way to specify multi in a factory, so we don't get an array.
+// There is no way to specify multi in a factory, so we do not get an array.
 describe('module-with-factory-tokens:keep', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
@@ -81,7 +81,7 @@ describe('module-with-factory-tokens:mock-0', () => {
 
 // Because all tokens are replaced with mock copies in the module the test should render empty values.
 // The tokens will be added to provides with undefined values.
-// Result of the render is an empty string because there's no way to pass multi.
+// Result of the render is an empty string because there is no way to pass multi.
 describe('module-with-factory-tokens:mock-1', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
@@ -98,7 +98,7 @@ describe('module-with-factory-tokens:mock-1', () => {
 });
 
 // Because all tokens are replaced with mock copies with custom values the test should render them.
-// There's no way to specify multi in a factory, so we don't get an array.
+// There is no way to specify multi in a factory, so we do not get an array.
 describe('module-with-factory-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
@@ -114,9 +114,9 @@ describe('module-with-factory-tokens:mock-2', () => {
   });
 });
 
-// And the most interesting case. Because we don't touch tokens at all and mock the module
+// And the most interesting case. Because we do not touch tokens at all and mock the module
 // the tokens will used as they are with their factories.
-// Unfortunately it's quite tough to guess which tokens we can keep, mocks or omit and now
+// Unfortunately, it is quite tough to guess which tokens we can keep, mocks or omit and now
 // a user is responsible to specify tokens for his mock.
 // UPD 2020-10-28: it has been fixed. Now all missed tokens are added to the TestModuleMeta,
 // therefore we have to keep them.

@@ -58,7 +58,7 @@ describe('structural-directive-as-ng-for:mock', () => {
       },
     );
 
-    // By default @ContentChild('block') shouldn't be rendered at all.
+    // By default @ContentChild('block') should not be rendered at all.
     block = ngMocks.find(
       fixture.debugElement,
       '[data-key="block"]',

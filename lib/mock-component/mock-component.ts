@@ -111,7 +111,7 @@ const generateTemplate = (
   for (const key of Object.keys(queries)) {
     const query: Query = queries[key];
     if (query.isViewQuery || typeof query.selector !== 'string') {
-      continue; // ignoring all internal @ViewChild, Type based selector doesn't work properly anyway.
+      continue; // ignoring all internal @ViewChild, Type based selector does not work properly anyway.
     }
     viewChildRefs.set(query.selector, key);
     queries[`__mockView_${key}`] = new ViewChild(`__${query.selector}`, viewChildArgs);
@@ -141,7 +141,7 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
  * @see https://github.com/ike18t/ng-mocks#how-to-mock-components
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
-  // We are inside of an 'it'. It's fine to to return a mock copy.
+  // We are inside of an 'it'. It is fine to to return a mock copy.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(component, 'c');

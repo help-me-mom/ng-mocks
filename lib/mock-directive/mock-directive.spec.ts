@@ -177,7 +177,7 @@ describe('MockDirective', () => {
   it('can mock formControlDirective from angular', () => {
     // Some angular directives set up their metadata in a different way than @Directive does
     // I found that FormControlDirective is one of those weird directives.
-    // Since I don't know how they did it, I don't know how to test it except to write this
+    // Since I do not know how they did it, I don't know how to test it except to write this
     // Test around a known-odd directive.
     const debugElement = fixture.debugElement.query(
       By.directive(ExampleDirective),

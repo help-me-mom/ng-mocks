@@ -12,7 +12,7 @@ import {
 } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
-// A copy of EMPTY, which doesn't exist in A5.
+// A copy of EMPTY, which does not exist in A5.
 const EMPTY = new Subject<any>();
 EMPTY.complete();
 

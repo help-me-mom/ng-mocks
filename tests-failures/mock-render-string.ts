@@ -18,14 +18,14 @@ fixture1.componentInstance.rw = '123';
 fixture1.componentInstance.rw = 123;
 // @ts-expect-error: fails due to unknown type.
 fixture1.componentInstance.ro = '123';
-// does not fail because it's undefined.
+// does not fail because it is undefined.
 fixture1.componentInstance = undefined;
-// @ts-expect-error: fails because it isn't defined
+// @ts-expect-error: fails because it is not defined
 fixture1.point.componentInstance = new TargetComponent();
-// @ts-expect-error: fails because it isn't defined
+// @ts-expect-error: fails because it is not defined
 fixture1.point.componentInstance = new WrongComponent();
 
-// If we provide a type only, then it's direct proxy
+// If we provide a type only, then it is direct proxy
 // and both componentInstance and point should have its type.
 const fixture2 = MockRender<TargetComponent>('test');
 // componentInstance works
@@ -34,7 +34,7 @@ fixture2.componentInstance.rw = '123';
 fixture2.componentInstance.rw = 123;
 // @ts-expect-error: fails due to readonly.
 fixture2.componentInstance.ro = '123';
-// @ts-expect-error: fails because it's defined.
+// @ts-expect-error: fails because it is defined.
 fixture2.componentInstance = undefined;
 // does not fail because of the correct type
 fixture2.point.componentInstance = new TargetComponent();
@@ -54,9 +54,9 @@ fixture3.componentInstance.rw = 123;
 fixture3.componentInstance.ro = '123';
 // @ts-expect-error: fails because params are defined.
 fixture3.componentInstance = undefined;
-// @ts-expect-error: fails because it isn't defined
+// @ts-expect-error: fails because it is not defined
 fixture3.point.componentInstance = new TargetComponent();
-// @ts-expect-error: fails because it isn't defined
+// @ts-expect-error: fails because it is not defined
 fixture3.point.componentInstance = new WrongComponent();
 
 // TODO try to make it precise

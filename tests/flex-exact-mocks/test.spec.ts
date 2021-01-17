@@ -67,11 +67,11 @@ describe('flex-exact-mocks:precise', () => {
     const service: TargetService = TestBed.get(TargetService);
     expect(service).toBe(mock as any);
 
-    // The flag doesn't affect tokens.
+    // The flag does not affect tokens.
     const token: typeof mockToken = TestBed.get(TOKEN);
     expect(token).toBe(mockToken);
 
-    // The flag doesn't affect strings.
+    // The flag does not affect strings.
     const str: typeof mockStr = TestBed.get('token');
     expect(str).toBe(mockStr);
   });

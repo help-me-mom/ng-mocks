@@ -52,7 +52,7 @@ describe('examples:performance', () => {
       });
     });
 
-    // Don't forget to reset the spy between runs.
+    // Do not forget to reset the spy between runs.
     afterAll(MockReset);
 
     it('test:1', () => {
@@ -94,7 +94,7 @@ describe('examples:performance', () => {
       prop: 123,
     };
 
-    // Don't forget to reset the spy between runs.
+    // Do not forget to reset the spy between runs.
     beforeEach(() => {
       if (typeof jest === 'undefined') {
         (mock.method as jasmine.Spy).calls.reset();

@@ -155,7 +155,7 @@ export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithPro
 export function MockModule(module: any): any {
   const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
 
-  // We are inside of an 'it'. It's fine to to return a mock copy.
+  // We are inside of an 'it'. It is fine to to return a mock copy.
   if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(ngModule, 'm');

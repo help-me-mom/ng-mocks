@@ -40,7 +40,7 @@ class TargetModule {}
 
 describe('MockViewChild', () => {
   // It failed instantly, because the mock instance of ChildComponent
-  // doesn't have form and form.valid would cause
+  // does not have form and form.valid would cause
   // "Cannot read property 'valid' of undefined".
   // Therefore we need to customize the mock instance before it has
   // been rendered.
@@ -54,14 +54,14 @@ describe('MockViewChild', () => {
     })),
   );
 
-  // Don't forget to clean up the customization.
+  // Do not forget to clean up the customization.
   afterAll(MockReset);
 
   // Normal test setup
   beforeEach(() => MockBuilder(ParentComponent, TargetModule));
 
   it('renders and finds the mock child component', () => {
-    // doesn't fail anymore.
+    // does not fail anymore.
     const fixture = MockRender(ParentComponent);
 
     // profit, now we can verify the template.

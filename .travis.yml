@@ -18,6 +18,7 @@ jobs:
         - npm run ts:check
         - WITH_COVERAGE=1 npm run test
         - npm run e2e
+        - npm run build:docs
       after_success:
         # https://coveralls.io/github/ike18t/ng-mocks
         - ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info

@@ -301,7 +301,7 @@ export const ngMocks: {
   stubMember<T extends object, K extends keyof T, S extends T[K]>(instance: T, name: K, stub: S): S;
 
   /**
-   * Thanks Ivy, it doesn't throw an error and we have to use injector.
+   * Thanks Ivy, it does not throw an error and we have to use injector.
    *
    * @see https://github.com/ike18t/ng-mocks#ngmocksthrowonconsole
    */

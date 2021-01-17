@@ -2,7 +2,7 @@ import { Input } from '@angular/core';
 
 import { AnyType } from './core.types';
 
-// Looks like an A9 bug, that queries from @Component aren't processed.
+// Looks like an A9 bug, that queries from @Component are not processed.
 // Also we have to pass prototype, not the class.
 // The same issue happens with outputs, but time to time
 // (when I restart tests with refreshing browser manually).

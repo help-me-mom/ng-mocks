@@ -16,7 +16,7 @@ export default (type: param) => {
   if (action === 'jasmine') {
     return registerMockFunction(mockName => jasmine.createSpy(mockName));
   }
-  // istanbul ignore if: because it's run with jasmine
+  // istanbul ignore if: because it is run with jasmine
   if (action === 'jest') {
     return registerMockFunction(name => jest.fn().mockName(name));
   }

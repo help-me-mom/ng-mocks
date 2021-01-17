@@ -18,7 +18,7 @@ fixture1.componentInstance.rw = '123';
 fixture1.componentInstance.rw = 123;
 // @ts-expect-error: fails due to unknown type.
 fixture1.componentInstance.ro = '123';
-// @ts-expect-error: fails because it's defined.
+// @ts-expect-error: fails because it is defined.
 fixture1.componentInstance = undefined;
 // does not fail because of the correct type
 fixture1.point.componentInstance = new TargetComponent();

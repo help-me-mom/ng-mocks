@@ -50,7 +50,7 @@ const applyOverrides = (testBed: TestBedStatic, overrides: Map<AnyType<any>, Met
   }
 };
 
-// Thanks Ivy and its TestBed.override - it doesn't clean up leftovers.
+// Thanks Ivy and its TestBed.override - it does not clean up leftovers.
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: any }): void => {
   if (testBed.ngMocksOverrides) {
     ngMocks.flushTestBed();

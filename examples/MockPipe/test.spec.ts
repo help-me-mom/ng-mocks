@@ -36,7 +36,7 @@ describe('MockPipe', () => {
     );
 
     // Also we can find an instance of the pipe in
-    // the fixture if it's needed.
+    // the fixture if it is needed.
     const pipe = ngMocks.findInstance(DependencyPipe);
     expect(pipe.transform).toHaveBeenCalledWith('foo');
     expect(pipe.transform).toHaveBeenCalledTimes(1);

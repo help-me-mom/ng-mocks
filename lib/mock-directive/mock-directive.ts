@@ -38,8 +38,8 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   }
 
   private __ngMocksInstall(element?: ElementRef, template?: TemplateRef<any>, viewContainer?: ViewContainerRef): void {
-    // Basically any directive on ng-template is treated as structural, even it doesn't control render process.
-    // In our case we don't if we should render it or not and due to this we do nothing.
+    // Basically any directive on ng-template is treated as structural, even it does not control render process.
+    // In our case we do not if we should render it or not and due to this we do nothing.
     (this as any).__element = element;
     (this as any).__template = template;
     (this as any).__viewContainer = viewContainer;
@@ -77,7 +77,7 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
  */
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   // We are inside of an 'it'.
-  // It's fine to to return a mock copy or to throw an exception if it wasn't replaced with its mock copy in TestBed.
+  // It is fine to to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(directive, 'd');

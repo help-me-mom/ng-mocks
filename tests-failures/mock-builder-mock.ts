@@ -60,7 +60,7 @@ MockBuilder()
   .mock('string_provider');
 
 // Modules, Components, Directives, Pipes
-// (actually any classes because we can't detect declaration with ts)
+// (actually any classes because we cannot detect declaration with ts)
 // support configuration.
 MockBuilder().mock(MyModule, { export: true });
 MockBuilder().mock(MyModule, { exportAll: true });

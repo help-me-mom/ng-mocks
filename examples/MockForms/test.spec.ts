@@ -46,8 +46,8 @@ class TestedComponent {
 }
 
 describe('MockForms', () => {
-  // That's our spy on writeValue calls.
-  // With auto spy this code isn't needed.
+  // That is our spy on writeValue calls.
+  // With auto spy this code is not needed.
   const writeValue =
     typeof jest === 'undefined'
       ? jasmine.createSpy('writeValue')

@@ -32,7 +32,7 @@ describe('InternalVsExternal:mock', () => {
 
   beforeEach(() => MockBuilder().mock(TargetModule));
 
-  // The expectation is to see that ExternalComponent was exported and InternalComponent wasn't.
+  // The expectation is to see that ExternalComponent was exported and InternalComponent was not.
   it('should render', () => {
     const fixture = MockRender(ExternalComponent);
     expect(fixture).toBeDefined();

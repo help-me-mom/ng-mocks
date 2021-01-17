@@ -154,7 +154,7 @@ const areEqualDefs = (mockDef: any, provider: any, provide: any): boolean => {
 };
 
 const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
-  //  we shouldn't touch excluded providers.
+  //  we should not touch excluded providers.
   if (ngMocksUniverse.builtProviders.has(provide) && ngMocksUniverse.builtProviders.get(provide) === null) {
     return true;
   }
@@ -169,7 +169,7 @@ const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
 // tries to resolve a provider based on current universe state.
 export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
   const { provide, multi, change } = parseProvider(provider, changed);
-  //  we shouldn't touch our system providers.
+  //  we should not touch our system providers.
   if (provider && typeof provider === 'object' && provider.useExisting && provider.useExisting.__ngMocksSkip) {
     return provider;
   }
