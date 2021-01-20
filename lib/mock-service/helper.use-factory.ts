@@ -4,6 +4,7 @@ import { mapValues } from '../common/core.helpers';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
+import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import { MockService } from '../mock-service/mock-service';
 
 const applyCallbackToken = (def: any): boolean => isNgInjectionToken(def) || typeof def === 'string';
@@ -49,9 +50,7 @@ export default <D, I>(
     if (overrides) {
       callbacks.push(overrides);
     }
-    if (ngMocksUniverse.configInstance.get(def)?.init) {
-      callbacks.push(ngMocksUniverse.configInstance.get(def).init);
-    }
+    callbacks.push(...mockInstanceApply(def));
 
     return applyCallback(def, instance, callbacks, injector, overrides);
   },

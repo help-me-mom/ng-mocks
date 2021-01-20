@@ -4,7 +4,7 @@ description: Introduction to ngMocks object and its purpose
 sidebar_label: Introduction
 ---
 
-`ngMocks` is a namespace which provides variety of helper functions which help to customize mocks,
+**ngMocks** is a namespace which provides variety of helper functions which help to customize mocks,
 access desired elements and instances in fixtures.
 
 ## Customizing mock behavior
