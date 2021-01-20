@@ -138,7 +138,7 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
 }
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-components
+ * @see https://ng-mocks.sudo.eu/api/MockComponent
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
   // We are inside of an 'it'. It is fine to to return a mock copy.

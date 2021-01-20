@@ -8,26 +8,26 @@ export interface IMockBuilderResult {
 }
 export interface IMockBuilderConfigAll {
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-dependency-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#dependency-flag
    */
   dependency?: boolean; //
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-export-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#export-flag
    */
   export?: boolean;
 }
 
 export interface IMockBuilderConfigModule {
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-exportall-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#exportall-flag
    */
   exportAll?: boolean;
 }
 
 export interface IMockBuilderConfigComponent {
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-render-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#render-flag
    */
   render?: {
     [blockName: string]:
@@ -41,7 +41,7 @@ export interface IMockBuilderConfigComponent {
 
 export interface IMockBuilderConfigDirective {
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-render-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#render-flag
    */
   render?:
     | boolean
@@ -53,7 +53,7 @@ export interface IMockBuilderConfigDirective {
 
 export interface IMockBuilderConfigMock {
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-precise-flag
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#precise-flag
    */
   precise?: boolean;
 }
@@ -68,37 +68,37 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
   beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilder-factory
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#factory-function
    */
   build(): NgModule;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilderexclude
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#exclude
    */
   exclude(def: any): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilderkeep
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#keep
    */
   keep(def: any, config?: IMockBuilderConfigAll & IMockBuilderConfigModule): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock<T extends PipeTransform>(pipe: AnyType<T>, mock: T['transform'], config?: IMockBuilderConfig): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock<T = any>(provider: string, mock: T, config?: IMockBuilderConfig): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock<T>(token: InjectionToken<T>, mock: InjectionToken<T> | T | undefined, config?: IMockBuilderConfig): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock<T>(
     provider: AnyType<T>,
@@ -107,22 +107,22 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
   ): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock<T>(def: AnyType<T>, config: IMockBuilderConfig): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuildermock
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#mock
    */
   mock(def: any): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilderprovide
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#provide
    */
   provide(def: Provider): this;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#mockbuilderreplace
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#replace
    */
   replace(
     source: AnyType<any>,

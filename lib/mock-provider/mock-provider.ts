@@ -12,17 +12,17 @@ export function MockProviders(...providers: Array<AnyType<any> | InjectionToken<
 }
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-providers
+ * @see https://ng-mocks.sudo.eu/api/MockProvider
  */
 export function MockProvider<I extends object>(instance: AnyType<I>, overrides?: Partial<I>): FactoryProvider;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-providers
+ * @see https://ng-mocks.sudo.eu/api/MockProvider
  */
 export function MockProvider<I>(provider: InjectionToken<I> | string, useValue?: Partial<I>): FactoryProvider;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-providers
+ * @see https://ng-mocks.sudo.eu/api/MockProvider
  */
 export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): FactoryProvider;
 

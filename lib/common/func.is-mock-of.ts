@@ -12,28 +12,28 @@ import { isNgDef } from './func.is-ng-def';
 /**
  * Checks whether the instance derives from a mock module.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'm'): instance is MockedModule<T>;
 
 /**
  * Checks whether the instance derives from a mock component.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'c'): instance is MockedComponent<T>;
 
 /**
  * Checks whether the instance derives from a mock directive.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'd'): instance is MockedDirective<T>;
 
 /**
  * Checks whether the instance derives from a mock pipe.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
  */
 export function isMockOf<T extends PipeTransform>(
   instance: any,
@@ -44,7 +44,7 @@ export function isMockOf<T extends PipeTransform>(
 /**
  * Checks whether the instance derives from a mock type.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>): instance is T;
 

@@ -28,35 +28,35 @@ const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
 /**
  * Returns a def of a mock module based on a mock module or a source module.
  *
- * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'm'): Type<MockedModule<T>>;
 
 /**
  * Returns a def of a mock component based on a mock component or a source component.
  *
- * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'c'): Type<MockedComponent<T>>;
 
 /**
  * Returns a def of a mock directive based on a mock directive or a source directive.
  *
- * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'd'): Type<MockedDirective<T>>;
 
 /**
  * Returns a def of a mock pipe based on a mock pipe or a source pipe.
  *
- * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'p'): Type<MockedPipe<T>>;
 
 /**
  * Returns a def of a mock class based on a mock class or a source class decorated by a ng type.
  *
- * @see https://github.com/ike18t/ng-mocks#getmockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
 export function getMockedNgDefOf(declaration: AnyType<any>): Type<any>;
 

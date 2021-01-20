@@ -31,21 +31,21 @@ import mockHelperStubMember from './mock-helper.stub-member';
 import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ngmocks
+ * @see https://ng-mocks.sudo.eu/api/ngMocks
  */
 export const ngMocks: {
   /**
-   * @see https://github.com/ike18t/ng-mocks#auto-spy
+   * @see https://ng-mocks.sudo.eu/extra/auto-spy
    */
   autoSpy(type: 'jasmine' | 'jest' | 'default' | 'reset'): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#auto-spy
+   * @see https://ng-mocks.sudo.eu/extra/auto-spy
    */
   autoSpy(type: CustomMockFunction): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T>(
     token: InjectionToken<T>,
@@ -53,7 +53,7 @@ export const ngMocks: {
   ): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T = any>(
     token: string,
@@ -61,32 +61,32 @@ export const ngMocks: {
   ): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksdefaultmock
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#making-angular-tests-faster
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/faster
    */
   faster(): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T>(component: Type<T>): MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T, D>(component: Type<T>, notFoundValue: D): D | MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T, D>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
@@ -95,22 +95,22 @@ export const ngMocks: {
   ): D | MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any>(cssSelector: string): MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any, D = undefined>(cssSelector: string, notFoundValue: D): D | MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfind
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any, D = undefined>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
@@ -119,12 +119,12 @@ export const ngMocks: {
   ): D | MockedDebugElement<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T>(component: Type<T>): Array<MockedDebugElement<T>>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
@@ -132,12 +132,12 @@ export const ngMocks: {
   ): Array<MockedDebugElement<T>>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T = any>(cssSelector: string): Array<MockedDebugElement<T>>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindall
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T = any>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
@@ -145,22 +145,22 @@ export const ngMocks: {
   ): Array<MockedDebugElement<T>>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findInstance<T>(instanceClass: Type<T>): T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findInstance<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findInstance<T, D>(instanceClass: Type<T>, notFoundValue: D): D | T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findInstance<T, D>(
     debugNode: MockedDebugNode | ComponentFixture<any>,
@@ -169,57 +169,57 @@ export const ngMocks: {
   ): D | T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstances
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
   findInstances<T>(instanceClass: Type<T>): T[];
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksfindinstances
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
   findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T[];
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksflushtestbed
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/flushTestBed
    */
   flushTestBed(): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksget
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
   get<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksget
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
   get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalexclude
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/globalExclude
    */
   globalExclude(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalkeep
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/globalKeep
    */
   globalKeep(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalmock
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/globalMock
    */
   globalMock(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalreplace
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/globalReplace
    */
   globalReplace(source: AnyType<any>, destination: AnyType<any>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksglobalwipe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/globalWipe
    */
   globalWipe(source: AnyType<any> | InjectionToken<any>): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksguts
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/guts
    */
   guts(
     keep:
@@ -241,42 +241,42 @@ export const ngMocks: {
   ): TestModuleMetadata;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksinput
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
   input<T = any>(debugNode: MockedDebugNode, input: string): T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksinput
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
   input<T = any, D = undefined>(debugNode: MockedDebugNode, input: string, notFoundValue: D): D | T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksoutput
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
   output<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksoutput
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
   output<T = any, D = undefined>(debugNode: MockedDebugNode, output: string, notFoundValue: D): D | EventEmitter<T>;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksreset
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reset
    */
   reset(): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstub
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/stub
    */
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstub
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/stub
    */
   stub<I extends object>(instance: I, overrides: Partial<I>): I;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
    */
   stubMember<T extends object, K extends keyof T, S extends () => T[K]>(
     instance: T,
@@ -286,7 +286,7 @@ export const ngMocks: {
   ): S;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
    */
   stubMember<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
     instance: T,
@@ -296,14 +296,14 @@ export const ngMocks: {
   ): S;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
    */
   stubMember<T extends object, K extends keyof T, S extends T[K]>(instance: T, name: K, stub: S): S;
 
   /**
    * Thanks Ivy, it does not throw an error and we have to use injector.
    *
-   * @see https://github.com/ike18t/ng-mocks#ngmocksthrowonconsole
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/throwOnConsole
    */
   throwOnConsole(): void;
 } = {

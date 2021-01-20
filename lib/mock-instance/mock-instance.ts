@@ -122,7 +122,7 @@ const mockInstanceMember = <T>(
 };
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+ * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
  */
 export function MockInstance<T extends object, K extends keyof T, S extends () => T[K]>(
   instance: Type<T> | AbstractType<T>,
@@ -132,7 +132,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends () =
 ): S;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+ * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
  */
 export function MockInstance<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
   instance: Type<T> | AbstractType<T>,
@@ -142,7 +142,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends (val
 ): S;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ngmocksstubmember
+ * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
  */
 export function MockInstance<T extends object, K extends keyof T, S extends T[K]>(
   instance: Type<T> | AbstractType<T>,
@@ -151,7 +151,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends T[K]
 ): S;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockinstance
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
@@ -159,7 +159,7 @@ export function MockInstance<T>(
 ): void;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockinstance
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
@@ -169,7 +169,7 @@ export function MockInstance<T>(
 ): void;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockinstance
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
@@ -177,7 +177,7 @@ export function MockInstance<T>(
 ): void;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockinstance
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,

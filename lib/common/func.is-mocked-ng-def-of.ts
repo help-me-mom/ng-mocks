@@ -11,14 +11,14 @@ import { isNgDef } from './func.is-ng-def';
 /**
  * Checks whether the declaration is a mock one and derives from the specified module.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
  */
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType: 'm'): declaration is Type<MockedModule<T>>;
 
 /**
  * Checks whether the declaration is a mock one and derives from the specified component.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
  */
 export function isMockedNgDefOf<T>(
   declaration: any,
@@ -29,7 +29,7 @@ export function isMockedNgDefOf<T>(
 /**
  * Checks whether the declaration is a mock one and derives from the specified directive.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
  */
 export function isMockedNgDefOf<T>(
   declaration: any,
@@ -40,7 +40,7 @@ export function isMockedNgDefOf<T>(
 /**
  * Checks whether the declaration is a mock one and derives from the specified pipe.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
  */
 export function isMockedNgDefOf<T extends PipeTransform>(
   declaration: any,
@@ -51,7 +51,7 @@ export function isMockedNgDefOf<T extends PipeTransform>(
 /**
  * Checks whether the declaration is a mock one and derives from the specified type.
  *
- * @see https://github.com/ike18t/ng-mocks#ismockedngdefof
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
  */
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>): declaration is Type<T>;
 

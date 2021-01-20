@@ -4,13 +4,13 @@ import { Mock } from './mock';
 
 /**
  * @deprecated use isMockControlValueAccessor or isMockValidator instead
- * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
- * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
  */
 export class LegacyControlValueAccessor extends Mock {
   /**
    * @deprecated use isMockControlValueAccessor instead
-   * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+   * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
    */
   public __simulateChange(value: any): void;
   // istanbul ignore next
@@ -21,7 +21,7 @@ export class LegacyControlValueAccessor extends Mock {
   // istanbul ignore next
   /**
    * @deprecated use isMockControlValueAccessor instead
-   * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+   * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
    */
   public __simulateTouch() {
     // nothing to do.
@@ -30,7 +30,7 @@ export class LegacyControlValueAccessor extends Mock {
   // istanbul ignore next
   /**
    * @deprecated use isMockValidator instead
-   * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+   * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
    */
   public __simulateValidatorChange() {
     // nothing to do.
@@ -38,26 +38,26 @@ export class LegacyControlValueAccessor extends Mock {
 }
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ismockcontrolvalueaccessor
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
  */
 export interface MockControlValueAccessor {
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
+   * @see https://ng-mocks.sudo.eu/extra/mock-form-controls
    */
   __simulateChange(value: any): void;
 
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
+   * @see https://ng-mocks.sudo.eu/extra/mock-form-controls
    */
   __simulateTouch(): void;
 }
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
  */
 export interface MockValidator {
   /**
-   * @see https://github.com/ike18t/ng-mocks#how-to-mock-form-controls
+   * @see https://ng-mocks.sudo.eu/extra/mock-form-controls
    */
   __simulateValidatorChange(): void;
 }
