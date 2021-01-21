@@ -44,22 +44,22 @@ const mockVariable = (service: any, prefix: string, callback: typeof MockService
 };
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-services
+ * @see https://ng-mocks.sudo.eu/api/MockService
  */
 export function MockService(service: boolean | number | string | null | undefined): undefined;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-services
+ * @see https://ng-mocks.sudo.eu/api/MockService
  */
 export function MockService<T>(service: AnyType<T>, overrides?: Partial<T>, mockNamePrefix?: string): T;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-services
+ * @see https://ng-mocks.sudo.eu/api/MockService
  */
 export function MockService<T>(service: AnyType<T>, mockNamePrefix?: string): T;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-services
+ * @see https://ng-mocks.sudo.eu/api/MockService
  */
 export function MockService<T = any>(service: object, mockNamePrefix?: string): T;
 

@@ -7,5 +7,10 @@ export default function (mock: AnyType<any>, source: AnyType<any>, config: ngMoc
     name: { value: `MockOf${source.name}` },
     nameConstructor: { value: mock.name },
   });
-  mock.prototype.__ngMocksConfig = config;
+  Object.defineProperty(mock.prototype, '__ngMocksConfig', {
+    configurable: true,
+    enumerable: false,
+    value: config,
+    writable: true,
+  });
 }

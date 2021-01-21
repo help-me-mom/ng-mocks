@@ -113,7 +113,7 @@ const resetTestingModule = (
 };
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockbuilder
+ * @see https://ng-mocks.sudo.eu/api/MockBuilder
  */
 export function MockBuilder(
   keepDeclaration?: string | AnyType<any> | InjectionToken<any> | null | undefined,

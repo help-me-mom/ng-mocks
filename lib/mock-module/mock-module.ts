@@ -143,12 +143,12 @@ const generateReturn = (
     : mockModule;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-modules
+ * @see https://ng-mocks.sudo.eu/api/MockModule
  */
 export function MockModule<T>(module: Type<T>): Type<T>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-modules
+ * @see https://ng-mocks.sudo.eu/api/MockModule
  */
 export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 

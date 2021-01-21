@@ -2,7 +2,7 @@ import funcIsMock from './func.is-mock';
 import { MockValidator } from './mock-control-value-accessor';
 
 /**
- * @see https://github.com/ike18t/ng-mocks#ismockvalidator
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
  */
 export const isMockValidator = <T>(value: T): value is T & MockValidator => {
   if (!funcIsMock(value)) {

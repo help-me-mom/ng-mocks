@@ -13,7 +13,7 @@ import helperMockService from '../mock-service/helper.mock-service';
 import { MockedPipe } from './types';
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-pipes
+ * @see https://ng-mocks.sudo.eu/api/MockPipe
  */
 export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<PipeTransform>> {
   return pipes.map(pipe => MockPipe(pipe, undefined));
@@ -37,7 +37,7 @@ const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): 
 };
 
 /**
- * @see https://github.com/ike18t/ng-mocks#how-to-mock-pipes
+ * @see https://ng-mocks.sudo.eu/api/MockPipe
  */
 export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,

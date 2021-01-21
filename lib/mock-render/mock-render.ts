@@ -140,7 +140,7 @@ const tryWhen = (flag: boolean, callback: () => void) => {
 };
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent>(
   template: InjectionToken<MComponent>,
@@ -149,7 +149,7 @@ function MockRender<MComponent>(
 ): MockedComponentFixture<MComponent, void>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent>(
   template: Type<MComponent>,
@@ -158,7 +158,7 @@ function MockRender<MComponent>(
 ): MockedComponentFixture<MComponent, MComponent>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent, TComponent extends object>(
   template: Type<MComponent>,
@@ -167,7 +167,7 @@ function MockRender<MComponent, TComponent extends object>(
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent, TComponent extends object = Record<keyof any, any>>(
   template: Type<MComponent>,
@@ -178,26 +178,26 @@ function MockRender<MComponent, TComponent extends object = Record<keyof any, an
 /**
  * Without params we should not autocomplete any keys of any types.
  *
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent, MComponent>;
 
 /**
  * An empty string does not have point.
  *
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender(template: ''): ComponentFixture<void> & { point: undefined };
 
 /**
  * Without params we should not autocomplete any keys of any types.
  *
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent = void>(template: string): MockedComponentFixture<MComponent>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent = void>(
   template: string,
@@ -206,7 +206,7 @@ function MockRender<MComponent = void>(
 ): MockedComponentFixture<MComponent, Record<keyof any, any>>;
 
 /**
- * @see https://github.com/ike18t/ng-mocks#mockrender
+ * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,

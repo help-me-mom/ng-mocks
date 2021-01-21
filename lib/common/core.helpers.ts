@@ -106,6 +106,7 @@ export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
   Object.defineProperty(child, 'name', {
     configurable: true,
+    enumerable: true,
     value: `MockMiddleware${base.name}`,
     writable: true,
   });
@@ -114,6 +115,7 @@ export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   if (parameters.length) {
     Object.defineProperty(child, 'parameters', {
       configurable: true,
+      enumerable: false,
       value: [...parameters],
       writable: true,
     });

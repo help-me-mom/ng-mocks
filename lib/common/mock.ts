@@ -6,6 +6,7 @@ import { mapValues } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
+import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import funcIsMock from './func.is-mock';
@@ -155,9 +156,7 @@ const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void =
   if (instance.__ngMocksConfig.init) {
     callbacks.push(instance.__ngMocksConfig.init);
   }
-  if (ngMocksUniverse.configInstance.get(mockOf)?.init) {
-    callbacks.push(ngMocksUniverse.configInstance.get(mockOf).init);
-  }
+  callbacks.push(...mockInstanceApply(mockOf));
 
   for (const callback of callbacks) {
     const overrides = callback(instance, injector);

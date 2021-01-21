@@ -16,49 +16,49 @@ const isInjectableCheck = (def: any, ngType?: string): boolean =>
 /**
  * Checks whether a class was decorated by @NgModule.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 'm'): declaration is Type<any>;
 
 /**
  * Checks whether a class was decorated by @Component.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 'c'): declaration is Type<any>;
 
 /**
  * Checks whether a class was decorated by @Directive.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 'd'): declaration is Type<any>;
 
 /**
  * Checks whether a class was decorated by @Pipe.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 'p'): declaration is Type<PipeTransform>;
 
 /**
  * Checks whether a class was decorated by @Injectable.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 'i'): declaration is Type<any>;
 
 /**
  * Checks whether a class was decorated by @Injectable.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any, ngType: 't'): declaration is InjectionToken<any>;
 
 /**
  * Checks whether a class was decorated by a ng type.
  *
- * @see https://github.com/ike18t/ng-mocks#isngdef
+ * @see https://ng-mocks.sudo.eu/api/helpers/isNgDef
  */
 export function isNgDef(declaration: any): declaration is Type<any>;
 

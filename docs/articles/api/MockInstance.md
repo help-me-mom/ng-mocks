@@ -4,26 +4,58 @@ description: Information how to customize mock components, directives, services 
 sidebar_label: MockInstance
 ---
 
-A mock instance of declarations or providers in tests may be customized via `MockInstance`.
-It is useful, when we want to configure spies before its usage.
+**MockInstance** helps to define **customizations for declarations** and providers in test suites
+before the desired instance have been created.
+
+It is useful, when we want to configure spies before their usage.
 It supports: modules, components, directives, pipes, services and tokens.
 
-There are two ways how to customize a mock instance:
+There are **three ways how to customize** a mock instance:
 
-- directly define properties and methods
-- return the desired shape
+- set desired values
+- manipulate the instance (with access to injector)
+- return the desired shape (with access to injector)
 
-## Customizing classes
+## Set desired values
+
+It helps to provide a predefined spy or value.
 
 ```ts
-// setting values to instance
+MockInstance(Service, 'methodName', () => 'fake');
+MockInstance(Service, 'propName', 'fake');
+MockInstance(Service, 'propName', () => 'fake', 'get');
+MockInstance(Service, 'propName', () => undefined, 'set');
+```
+
+It returns the provided value, that allows to customize spies.
+
+```ts
+MockInstance(Service, 'methodName', jasmine.createSpy())
+  .and.returnValue('fake');
+MockInstance(Service, 'propName', jest.fn(), 'get')
+  .mockReturnValue('fake');
+```
+
+## Manipulate the instance
+
+If we pass a callback as the second parameter to **MockInstance**,
+then we have access to the instance and to the related injector.
+
+```ts
 MockInstance(Service, (instance, injector) => {
   instance.prop1 = injector.get(SOME_TOKEN);
   instance.method1 = jasmine.createSpy().and.returnValue(5);
   instance.method2 = value => (instance.prop2 = value);
 });
+```
 
-// returning a custom shape
+## Return the desired shape
+
+If the callback of the second parameter of **MockInstance** returns something,
+then the returned value will be applied to the instance.
+
+```ts
+// with injector and spies
 MockInstance(Service, (instance, injector) => ({
   prop1: injector.get(SOME_TOKEN),
   method1: jasmine.createSpy().and.returnValue(5),
@@ -40,7 +72,7 @@ MockInstance(Service, () => ({
 
 ## Customizing tokens
 
-In case of tokens, the handler should return the token value.
+In case of tokens, a callback should return the token value.
 
 ```ts
 MockInstance(TOKEN, (instance, injector) => {
@@ -51,21 +83,22 @@ MockInstance(TOKEN, () => true);
 
 ## Resetting customization
 
-In order to reset the handler, `MockInstance` should be called without it.
+In order to reset the provided callback, `MockInstance` should be called without it.
 
 ```ts
 MockInstance(Service);
 MockInstance(TOKEN);
 // Or simply one call.
-// It resets all handlers for all declarations.
+// It resets all customizations for all declarations.
 MockReset();
 ```
 
 ## Overriding customization
 
-Every call of `MockInstance` overrides the previous handler.
+Every call of `MockInstance` overrides the previous callback.
 `MockInstance` can be called anywhere,
-but if it is called in `beforeEach` or in `it`, then the handler has its effect only during the current spec.
+but **suggested usage** is to call `MockInstance` in `beforeEach` or in `it`,
+then the callback has its effect only during the current spec.
 
 ```ts
 beforeAll(() => MockInstance(TOKEN, () => true));
@@ -127,19 +160,14 @@ a solution here. That is where `ng-mocks` helps again with the `MockInstance` he
 It accepts a class as the first parameter, and a tiny callback describing how to customize its instances as the second one.
 
 ```ts
-beforeEach(() =>
-  MockInstance(ChildComponent, () => ({
-    // Now we can customize a mock object
-    // of ChildComponent in its ctor call.
-    // The object will be extended
-    // with the returned object.
-    update$: EMPTY,
-  })),
-);
+// Now we can customize a mock object.
+// The update$ property of the object
+// will be set to EMPTY in its ctor call.
+beforeEach(() => MockInstance(ChildComponent, 'update$', EMPTY));
 ```
 
-Profit. When Angular creates an instance of `ChildComponent`, the callback is called in its ctor, and `update$` property
-of the instance is an `Observable` instead of `undefined`.
+Profit. When Angular creates an instance of `ChildComponent`, the rule is applied in its ctor, and `update$` property
+of the instance is not `undefined`, but an `Observable`.
 
 ## Advanced example
 
