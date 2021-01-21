@@ -12,7 +12,7 @@ class TargetService {
   }
 }
 
-describe('TestProvider', () => {
+describe('TestProviderCommon', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService));
 

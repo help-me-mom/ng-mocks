@@ -26,7 +26,7 @@ class TargetDirective {
   }
 }
 
-describe('TestStructuralDirective', () => {
+describe('TestStructuralDirectiveWithoutContext', () => {
   // Because we want to test the directive, we pass it as the first
   // parameter of MockBuilder. We can omit the second parameter,
   // because there are no dependencies.
