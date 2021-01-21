@@ -13,4 +13,4 @@ description: Brief summary how to read documentation about ng-mocks
 
 - Read about [MockRender](api/MockRender.md) and [MockInstance](api/MockInstance.md)
 - Read about [MockBuilder](api/MockBuilder.md) and [ngMocks](api/ngMocks.md)
-- Check [guides and examples how to test Angular applications](guides/index.md)
+- Check [guides and examples how to test Angular applications](guides.md)

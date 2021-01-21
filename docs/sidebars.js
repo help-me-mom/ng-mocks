@@ -92,7 +92,30 @@ module.exports = {
   guides: [
     {
       type: 'doc',
-      id: 'guides/index',
+      id: 'guides',
+    },
+    {
+      type: 'category',
+      label: 'How to test',
+      collapsed: false,
+      items: [
+        'guides/component',
+        'guides/component-provider',
+        'guides/directive-attribute',
+        'guides/directive-provider',
+        'guides/directive-structural',
+        'guides/directive-structural-context',
+        'guides/pipe',
+        'guides/ngonchanges',
+        'guides/provider',
+        'guides/token',
+        'guides/token-multi',
+        'guides/route',
+        'guides/routing-guard',
+        'guides/routing-resolver',
+        'guides/http-request',
+        'guides/http-interceptor',
+      ],
     },
   ],
 };
