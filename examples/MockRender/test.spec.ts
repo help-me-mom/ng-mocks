@@ -12,14 +12,12 @@ import {
 } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { staticFalse } from '../../tests';
-
 @Component({
   selector: 'app-child',
   template: `dependency`,
 })
 class DependencyComponent {
-  @ContentChild('something', staticFalse)
+  @ContentChild('something', { static: false } as any)
   public injectedSomething?: TemplateRef<{}>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();

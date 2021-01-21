@@ -10,11 +10,6 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-import {
-  MockAsyncValidatorProxy,
-  MockControlValueAccessorProxy,
-  MockValidatorProxy,
-} from '../common/mock-control-value-accessor-proxy';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
 import { MockModule } from '../mock-module/mock-module';
@@ -24,6 +19,11 @@ import { extendClass } from './core.helpers';
 import decorateMock from './decorate.mock';
 import { isMockOf } from './func.is-mock-of';
 import { Mock } from './mock';
+import {
+  MockAsyncValidatorProxy,
+  MockControlValueAccessorProxy,
+  MockValidatorProxy,
+} from './mock-control-value-accessor-proxy';
 
 class ParentClass {
   protected parentValue = true;

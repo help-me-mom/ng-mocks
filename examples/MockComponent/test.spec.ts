@@ -8,16 +8,13 @@ import {
 } from '@angular/core';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { staticFalse } from '../../tests';
-
 @Component({
   selector: 'app-child',
   template: `child`,
 })
 class DependencyComponent {
-  @ContentChild('something', staticFalse) public injectedSomething:
-    | TemplateRef<{}>
-    | undefined;
+  @ContentChild('something', { static: false } as any)
+  public injectedSomething: TemplateRef<{}> | undefined;
 
   @Input()
   public someInput = '';

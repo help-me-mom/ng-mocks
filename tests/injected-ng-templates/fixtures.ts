@@ -1,7 +1,5 @@
 import { Component, ContentChild, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 
-import { staticFalse } from '..';
-
 @Component({
   selector: 'custom-injection',
   template: `
@@ -12,7 +10,7 @@ import { staticFalse } from '..';
   `,
 })
 export class CustomInjectionComponent<T> {
-  @ContentChild('block', staticFalse) public injectedBlock?: TemplateRef<any>;
+  @ContentChild('block', { static: false } as any) public injectedBlock?: TemplateRef<any>;
   @Input() public items?: T[];
-  @ViewChild('child', staticFalse) public ownChild?: ViewContainerRef;
+  @ViewChild('child', { static: false } as any) public ownChild?: ViewContainerRef;
 }

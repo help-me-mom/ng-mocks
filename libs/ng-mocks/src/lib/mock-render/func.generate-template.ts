@@ -1,14 +1,11 @@
-import { EventEmitter } from '@angular/core';
-import { Subject } from 'rxjs';
-
 const solveOutput = (output: any): string => {
   if (typeof output === 'function') {
     return '($event)';
   }
-  if (output && typeof output === 'object' && output instanceof EventEmitter) {
+  if (output && typeof output === 'object' && typeof output.emit === 'function') {
     return '.emit($event)';
   }
-  if (output && typeof output === 'object' && output instanceof Subject) {
+  if (output && typeof output === 'object' && typeof output.next === 'function') {
     return '.next($event)';
   }
 

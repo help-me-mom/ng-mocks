@@ -1,3 +1,5 @@
+// tslint:disable no-implicit-dependencies
+
 import { CommonModule } from '@angular/common';
 import { Component, Directive, ElementRef, Injectable, NgModule, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { RouterModule } from '@angular/router';

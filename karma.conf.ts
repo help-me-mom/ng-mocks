@@ -44,8 +44,8 @@ module.exports = (config: KarmaTypescriptConfig) => {
     },
     files: [
       'karma-test-shim.ts',
-      'index.ts',
-      { pattern: 'lib/**/*.ts' },
+      'libs/ng-mocks/src/index.ts',
+      { pattern: 'libs/ng-mocks/src/lib/**/*.ts' },
       { pattern: 'examples/**/*.ts' },
       { pattern: 'tests/**/*.ts' },
     ],

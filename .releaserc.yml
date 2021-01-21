@@ -9,7 +9,7 @@ plugins:
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md
   - - '@semantic-release/npm'
-    - pkgRoot: dist
+    - pkgRoot: dist/libs/ng-mocks
       tarballDir: tmp
       npmPublish: false
   - - '@semantic-release/github'

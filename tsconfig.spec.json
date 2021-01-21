@@ -5,7 +5,13 @@
     "inlineSources": false,
     "sourceMap": true
   },
-  "files": ["index.ts", "jasmine.ts", "jest.ts", "karma-test-shim.ts", "karma.conf.ts"],
+  "files": [
+    "libs/ng-mocks/src/index.ts",
+    "libs/ng-mocks/src/jasmine.ts",
+    "libs/ng-mocks/src/jest.ts",
+    "karma-test-shim.ts",
+    "karma.conf.ts"
+  ],
   "exclude": ["e2e", "node_modules"],
-  "include": ["lib/**/*", "examples/**/*", "tests/**/*", "tests-failures/**/*"]
+  "include": ["libs/ng-mocks/src/lib/**/*", "examples/**/*", "tests/**/*", "tests-failures/**/*"]
 }

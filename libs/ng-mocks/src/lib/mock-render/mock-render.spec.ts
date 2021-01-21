@@ -1,3 +1,5 @@
+// tslint:disable no-implicit-dependencies
+
 import { DOCUMENT } from '@angular/common';
 import { DebugElement, DebugNode, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
