@@ -13,6 +13,11 @@
   "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}",
   "packageRules": [
     {
+      "paths": ["libs/ng-mocks/package.json"],
+      "enabled": false
+    },
+
+    {
       "paths": [
         ".circleci/config.yml",
         "Dockerfile",
