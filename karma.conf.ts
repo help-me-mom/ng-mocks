@@ -68,7 +68,9 @@ module.exports = (config: KarmaTypescriptConfig) => {
     port: 9876,
     preprocessors: {
       '**/*.ts': 'karma-typescript',
-      ...(process.env.WITH_COVERAGE === undefined ? {} : { 'lib/**/!(*.spec|*.fixtures).ts': 'coverage' }),
+      ...(process.env.WITH_COVERAGE === undefined
+        ? {}
+        : { 'libs/ng-mocks/src/lib/**/!(*.spec|*.fixtures).ts': 'coverage' }),
     },
     reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage'])],
     singleRun: true,
