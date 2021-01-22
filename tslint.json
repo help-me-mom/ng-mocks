@@ -33,7 +33,7 @@
     "no-empty": false,
     "no-floating-promises": false,
     "no-focused-tests": true,
-    "no-implicit-dependencies": [true, "dev", ["ng-mocks"]],
+    "no-implicit-dependencies": [true, "dev", ["ng-mocks", "@angular/forms"]],
     "no-magic-numbers": false,
     "no-null-keyword": false,
     "no-null-undefined-union": false,

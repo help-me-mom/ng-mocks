@@ -9,16 +9,16 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "declaration": true,
-    "outDir": "dist/dist",
-    "declarationDir": "dist/dist",
+    "outDir": "dist/libs/ng-mocks/dist",
+    "declarationDir": "dist/libs/ng-mocks/dist",
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
     "experimentalDecorators": true,
     "types": ["node", "jasmine", "jest"],
     "baseUrl": ".",
     "paths": {
-      "ng-mocks": ["index"],
-      "ng-mocks/dist/*": ["./*"]
+      "ng-mocks": ["libs/ng-mocks/src/index"],
+      "ng-mocks/dist/*": ["libs/ng-mocks/src/*"]
     },
     "skipLibCheck": true,
 
@@ -34,5 +34,5 @@
     "strictPropertyInitialization": true,
     "strictNullChecks": true
   },
-  "include": ["index.ts", "jasmine.ts", "jest.ts"]
+  "include": ["libs/ng-mocks/src/index.ts", "libs/ng-mocks/src/jasmine.ts", "libs/ng-mocks/src/jest.ts"]
 }

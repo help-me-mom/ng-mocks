@@ -1,7 +1,5 @@
 import { Component, ContentChild, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 
-import { staticFalse } from '../../tests';
-
 @Component({
   selector: 'template-outlet-component',
   template: `
@@ -13,14 +11,14 @@ import { staticFalse } from '../../tests';
 })
 export class TemplateOutletComponent {
   // injected.
-  @ContentChild('block1', staticFalse) public injectedBlock1?: TemplateRef<any>;
+  @ContentChild('block1', { static: false } as any) public injectedBlock1?: TemplateRef<any>;
 
   // injected.
-  @ContentChild('block2', staticFalse) public injectedBlock2?: TemplateRef<any>;
+  @ContentChild('block2', { static: false } as any) public injectedBlock2?: TemplateRef<any>;
 
   // undefined (not injected).
-  @ContentChild('block3', staticFalse) public injectedBlock3?: TemplateRef<any>;
+  @ContentChild('block3', { static: false } as any) public injectedBlock3?: TemplateRef<any>;
 
   // ref to own template.
-  @ViewChild('block4', staticFalse) public ownBlock3?: ElementRef;
+  @ViewChild('block4', { static: false } as any) public ownBlock3?: ElementRef;
 }

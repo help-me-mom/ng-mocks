@@ -2,13 +2,13 @@
 
 import { EventEmitter, Injector, Optional } from '@angular/core';
 
-import { mapValues } from '../common/core.helpers';
-import { AnyType } from '../common/core.types';
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import helperMockService from '../mock-service/helper.mock-service';
 
+import { mapValues } from './core.helpers';
+import { AnyType } from './core.types';
 import funcIsMock from './func.is-mock';
 import { MockControlValueAccessorProxy } from './mock-control-value-accessor-proxy';
 import ngMocksUniverse from './ng-mocks-universe';

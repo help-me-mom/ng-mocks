@@ -2,8 +2,7 @@
 
 import { AsyncValidator, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
-import { AnyType } from '../common/core.types';
-
+import { AnyType } from './core.types';
 import { MockControlValueAccessor, MockValidator } from './mock-control-value-accessor';
 
 const applyProxy = (proxy: any, method: string, value: any, storage?: string) => {

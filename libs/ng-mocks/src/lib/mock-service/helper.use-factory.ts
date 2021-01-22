@@ -5,7 +5,8 @@ import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import mockInstanceApply from '../mock-instance/mock-instance-apply';
-import { MockService } from '../mock-service/mock-service';
+
+import { MockService } from './mock-service';
 
 const applyCallbackToken = (def: any): boolean => isNgInjectionToken(def) || typeof def === 'string';
 

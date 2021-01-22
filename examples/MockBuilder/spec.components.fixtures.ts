@@ -1,7 +1,5 @@
 import { Component, ContentChild, Inject, Input, Optional, TemplateRef } from '@angular/core';
 
-import { staticFalse } from '../../tests';
-
 import {
   AnythingKeep1,
   AnythingKeep2,
@@ -25,7 +23,7 @@ import { TOKEN_CUSTOMIZE, TOKEN_KEEP, TOKEN_MOCK } from './spec.tokens.fixtures'
   `,
 })
 export class ComponentContentChild<T> {
-  @ContentChild('block', staticFalse) public readonly injectedBlock: TemplateRef<any> | undefined;
+  @ContentChild('block', { static: false } as any) public readonly injectedBlock: TemplateRef<any> | undefined;
   @Input() public items: T[] | undefined;
 }
 

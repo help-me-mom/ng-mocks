@@ -22,7 +22,6 @@ import {
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { staticFalse } from '../../tests';
 import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -105,7 +104,7 @@ class GettersAndSettersDirective {
   `,
 })
 class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, staticFalse)
+  @ViewChild(ExampleDirective, { static: false } as any)
   public childDirective?: ExampleDirective;
   public emitted = false;
   public readonly foo = new FormControl('');

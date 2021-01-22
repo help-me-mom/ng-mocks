@@ -30,14 +30,14 @@ jobs:
           name: Build
           command: |
             npm run build
-            cd ./dist
+            cd ./dist/libs/ng-mocks
             npm pack
             cd ..
-            mv ./dist/ng-mocks-0.0.0.tgz ./
-            rm -Rf ./dist
+            mv ./ng-mocks/ng-mocks-0.0.0.tgz ./
+            rm -Rf ./ng-mocks
             tar -xf ./ng-mocks-0.0.0.tgz package
             rm ./ng-mocks-0.0.0.tgz
-            mv ./package ./dist
+            mv ./package ./ng-mocks
       - run:
           name: Unit Tests
           command: WITH_COVERAGE=1 npm run test

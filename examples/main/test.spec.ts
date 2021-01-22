@@ -16,8 +16,6 @@ import {
 import { RouterModule } from '@angular/router';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { staticFalse } from '../../tests';
-
 @Pipe({
   name: 'translate',
 })
@@ -71,7 +69,7 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-  @ContentChild('menu', staticFalse)
+  @ContentChild('menu', { static: false } as any)
   public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';

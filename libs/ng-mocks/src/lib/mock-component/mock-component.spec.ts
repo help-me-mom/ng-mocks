@@ -22,7 +22,6 @@ import {
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { staticTrue } from '../../tests';
 import { isMockOf } from '../common/func.is-mock-of';
 import { MockedDirective } from '../mock-directive/types';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -80,7 +79,7 @@ import { MockedComponent } from './types';
   `,
 })
 export class ExampleComponentContainer {
-  @ViewChild(ChildComponent, staticTrue)
+  @ViewChild(ChildComponent, { static: true } as any)
   public childComponent?: ChildComponent;
   public emitted = '';
   public readonly formControl = new FormControl('');
