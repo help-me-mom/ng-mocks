@@ -1,3 +1,15 @@
+# [11.5.0](https://github.com/ike18t/ng-mocks/compare/v11.4.0...v11.5.0) (2021-01-22)
+
+
+### Bug Fixes
+
+* fixing doc urls ([5fc0ae3](https://github.com/ike18t/ng-mocks/commit/5fc0ae33714c761929a4e1e239a65f413ea07a5d))
+
+
+### Features
+
+* **mock-instance:** simpler interface ([0306643](https://github.com/ike18t/ng-mocks/commit/0306643c8bf44b4876aedf88b9375cda8490566f))
+
 # [11.4.0](https://github.com/ike18t/ng-mocks/compare/v11.3.1...v11.4.0) (2021-01-17)
 
 
