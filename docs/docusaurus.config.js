@@ -13,8 +13,8 @@ module.exports = {
   projectName: 'ng-mocks',
   themeConfig: {
     hideableSidebar: true,
-    googleAnalytics: {
-      trackingID: 'G-K71PB25P0S',
+    gtag: {
+      trackingID: 'G-EBEPX2CVNW',
     },
     navbar: {
       title: 'ng-mocks',
