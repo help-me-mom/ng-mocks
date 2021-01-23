@@ -1,12 +1,28 @@
 <IfModule mod_rewrite.c>
+    DirectorySlash Off
+    SetHandler some-handler
+
     RewriteEngine On
     RewriteBase /
+    RewriteOptions AllowNoSlash
 
     RewriteCond %{HTTP:CF-Visitor} '{"scheme":"http"}'
     RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R]
     RewriteCond %{HTTP:CF-Visitor} ^$
     RewriteCond %{HTTPS} !on
     RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R]
+
+    RewriteCond %{REQUEST_URI} /index.html$
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^(.*)/index.html$ /$1 [R=301,L]
+
+    RewriteCond %{REQUEST_URI} /$
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.*)/$ /$1 [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %{REQUEST_FILENAME}/index.html -f
+    RewriteRule ^(.*)$ /$1/index.html [END]
 </IfModule>
 
 ErrorDocument 404 /404.html
