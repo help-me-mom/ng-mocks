@@ -112,23 +112,28 @@ module.exports = {
       copyright: `Copyright &copy; ${new Date().getFullYear()}. Built with Docusaurus.`,
     },
   },
-  presets: [
+  themes: [
     [
-      '@docusaurus/preset-classic',
+      '@docusaurus/theme-classic',
       {
-        docs: {
-          path: 'articles',
-          routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars.js'),
-          showLastUpdateAuthor: true,
-          showLastUpdateTime: true,
-          editUrl: 'https://github.com/ike18t/ng-mocks/tree/master/docs/',
-          remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
+        customCss: require.resolve('./src/css/custom.css'),
       },
     ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        path: 'articles',
+        routeBasePath: '/',
+        sidebarPath: require.resolve('./sidebars.js'),
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        editUrl: 'https://github.com/ike18t/ng-mocks/tree/master/docs/',
+        remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
+      },
+    ],
+    '@docusaurus/plugin-sitemap',
+    '@docusaurus/plugin-google-gtag',
   ],
 };
