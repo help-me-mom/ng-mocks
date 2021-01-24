@@ -39,10 +39,15 @@ The current version of the library **has been tested** and **can be used** with:
 
 ```ts title="src/app.component.spec.ts"
 describe('app-component', () => {
-  // Mocking everything in AppModule except AppComponent
+  // We are going to test AppComponent.
+  // Therefore, we want to mock its dependencies,
+  // they are declared and imported in the module
+  // where AppComponent has been declared too.
+  // The next line says mock everything in AppModule,
+  // but keep AppComponent as it is.
   beforeEach(() => MockBuilder(AppComponent, AppModule));
 
-  // Mocking observables in dependencies
+  // Stubbing observables in AuthService for all tests in the suite.
   beforeEach(() =>
     MockInstance(AuthService, () => ({
       isLoggedIn$: EMPTY,
@@ -50,9 +55,22 @@ describe('app-component', () => {
     })),
   );
 
-  it('should be created', () => {
+  it('should be created and initialized', () => {
+    // Creating a spy on the 'check' method of the service.
+    // MockInstance allows to spy / stub properties and methods
+    // of declarations and providers before their instances
+    // have been initialized.
+    const spyCheck = MockInstance(
+      AuthService,
+      'check',
+      jasmine.createSpyObj('AuthService.check'),
+    ).and.returnValue(true);
+
     const fixture = MockRender(AppComponent);
+    // Checking that the component has been created.
     expect(fixture.point.componentInstance).toBeDefined();
+    // Checking that its ngOnInit method calls 'check' of the service.
+    expect(spyCheck).toHaveBeenCalled();
   });
 });
 ```
