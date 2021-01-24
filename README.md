@@ -45,7 +45,10 @@ describe('app-component', () => {
   // where AppComponent has been declared too.
   // The next line says mock everything in AppModule,
   // but keep AppComponent as it is.
-  beforeEach(() => MockBuilder(AppComponent, AppModule));
+  beforeEach(() => {
+    // The result of MockBuilder should be returned.
+    return MockBuilder(AppComponent, AppModule);
+  });
 
   // Stubbing observables in AuthService for all tests in the suite.
   beforeEach(() =>
