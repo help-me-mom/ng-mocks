@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
-import funcGetProvider from '../common/func.get-provider';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -19,6 +18,7 @@ import handleRootProviders from './promise/handle-root-providers';
 import initNgModules from './promise/init-ng-modules';
 import initUniverse from './promise/init-universe';
 import parseMockArguments from './promise/parse-mock-arguments';
+import parseProvider from './promise/parse-provider';
 import { BuilderData } from './promise/types';
 import { IMockBuilder, IMockBuilderConfig, IMockBuilderResult } from './types';
 
@@ -32,28 +32,16 @@ const normaliseModule = (
     ? { def: module.ngModule, providers: module.providers }
     : { def: module, providers: undefined };
 
-const parseProvider = (
-  provider: any,
-): {
-  multi: boolean;
-  provide: any;
-} => {
-  const provide = funcGetProvider(provider);
-  const multi = provide !== provider && provider.multi;
-
-  return {
-    multi,
-    provide,
-  };
-};
-
 const generateProviderValue = (provider: any, existing: any, multi: boolean): any =>
   multi ? [...(Array.isArray(existing) ? existing : /* istanbul ignore next */ []), provider] : provider;
 
 const defaultMock = {}; // simulating Symbol
 
+export interface MockBuilderPromise {
+  [Symbol.toStringTag]: 'Promise';
+}
+
 export class MockBuilderPromise implements IMockBuilder {
-  public readonly [Symbol.toStringTag] = 'MockBuilder';
   protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
   protected configDef: BuilderData['configDef'] = new Map();
   protected defProviders: BuilderData['defProviders'] = new Map();
@@ -64,6 +52,14 @@ export class MockBuilderPromise implements IMockBuilder {
   protected providerDef: BuilderData['providerDef'] = new Map();
   protected replaceDef: BuilderData['replaceDef'] = new Set();
   protected stash: MockBuilderStash = new MockBuilderStash();
+
+  public constructor() {
+    // istanbul ignore else
+    // tslint:disable-next-line strict-type-predicates
+    if (typeof Symbol !== 'undefined') {
+      (this as any)[Symbol.toStringTag] = 'Promise';
+    }
+  }
 
   public beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this {
     this.beforeCC.add(callback);
