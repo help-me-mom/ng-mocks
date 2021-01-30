@@ -1,20 +1,29 @@
 version: 2.1
+orbs:
+  win: circleci/windows@2.2.0
+parameters:
+  lockindex:
+    type: string
+    default: '1'
 jobs:
   Core:
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
       - run:
           name: NPM Install
           command: |
-            npm install --ignore-scripts && \
-            node ./node_modules/puppeteer/install.js && \
-            ./node_modules/.bin/ngcc
+            if [ ! -d "./node_modules/" ]; then
+              npm ci --no-optional --ignore-scripts && \
+              node ./node_modules/puppeteer/install.js && \
+              ./node_modules/.bin/ngcc
+            fi
       - save_cache:
-          key: root-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
       - run:
@@ -58,75 +67,104 @@ jobs:
             - .
   'Install':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
-          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es5/package-lock.json" }}
       - restore_cache:
-          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es2015/package-lock.json" }}
       - restore_cache:
-          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a6/package-lock.json" }}
       - restore_cache:
-          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a7/package-lock.json" }}
       - restore_cache:
-          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a8/package-lock.json" }}
       - restore_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
       - restore_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
       - restore_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
       - restore_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: NPM Install
-          command: npm run i:a
+          command: |
+            if [ ! -d "e2e/a5es5/node_modules/" ]; then
+              npm run i:ci:a5es5
+            fi
+            if [ ! -d "e2e/a5es2015/node_modules/" ]; then
+              npm run i:ci:a5es2015
+            fi
+            if [ ! -d "e2e/a6/node_modules/" ]; then
+              npm run i:ci:a6
+            fi
+            if [ ! -d "e2e/a7/node_modules/" ]; then
+              npm run i:ci:a7
+            fi
+            if [ ! -d "e2e/a8/node_modules/" ]; then
+              npm run i:ci:a8
+            fi
+            if [ ! -d "e2e/a9/node_modules/" ]; then
+              npm run i:ci:a9
+            fi
+            if [ ! -d "e2e/a10/node_modules/" ]; then
+              npm run i:ci:a10
+            fi
+            if [ ! -d "e2e/a11/node_modules/" ]; then
+              npm run i:ci:a11
+            fi
+            if [ ! -d "e2e/am/node_modules/" ]; then
+              npm run i:ci:am
+            fi
       - save_cache:
-          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es5/package-lock.json" }}
           paths:
             - ./e2e/a5es5/node_modules
       - save_cache:
-          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es2015/package-lock.json" }}
           paths:
             - ./e2e/a5es2015/node_modules
       - save_cache:
-          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a6/package-lock.json" }}
           paths:
             - ./e2e/a6/node_modules
       - save_cache:
-          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a7/package-lock.json" }}
           paths:
             - ./e2e/a7/node_modules
       - save_cache:
-          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a8/package-lock.json" }}
           paths:
             - ./e2e/a8/node_modules
       - save_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
           paths:
             - ./e2e/a9/node_modules
       - save_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
           paths:
             - ./e2e/a10/node_modules
       - save_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
           paths:
             - ./e2e/a11/node_modules
       - save_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
           paths:
             - ./e2e/am/node_modules
   'Angular 5 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a5es5-{{ checksum "package.json" }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          key: a5es5-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es5/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a5es5
@@ -138,13 +176,14 @@ jobs:
           command: npm run test:a5es5
   'Angular 5 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a5es2015-{{ checksum "package.json" }}-{{ checksum "e2e/a5es2015/package.json" }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es2015/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a5es2015
@@ -156,13 +195,14 @@ jobs:
           command: npm run test:a5es2015
   'Angular 6 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a6/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a6
@@ -174,13 +214,14 @@ jobs:
           command: npm run test:a6es5
   'Angular 6 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a6-{{ checksum "package.json" }}-{{ checksum "e2e/a6/package.json" }}-{{ checksum "e2e/a6/package-lock.json" }}
+          key: a6-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a6/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a6
@@ -192,13 +233,14 @@ jobs:
           command: npm run test:a6es2015
   'Angular 7 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a7/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a7
@@ -210,13 +252,14 @@ jobs:
           command: npm run test:a7es5
   'Angular 7 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a7-{{ checksum "package.json" }}-{{ checksum "e2e/a7/package.json" }}-{{ checksum "e2e/a7/package-lock.json" }}
+          key: a7-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a7/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a7
@@ -228,13 +271,14 @@ jobs:
           command: npm run test:a7es2015
   'Angular 8 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a8/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a8
@@ -246,13 +290,14 @@ jobs:
           command: npm run test:a8es5
   'Angular 8 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a8-{{ checksum "package.json" }}-{{ checksum "e2e/a8/package.json" }}-{{ checksum "e2e/a8/package-lock.json" }}
+          key: a8-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a8/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a8
@@ -264,13 +309,14 @@ jobs:
           command: npm run test:a8es2015
   'Angular 9 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -282,13 +328,14 @@ jobs:
           command: npm run test:a9es5
   'Angular 9 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -300,13 +347,14 @@ jobs:
           command: npm run test:a9es2015
   'Angular 9 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -318,13 +366,14 @@ jobs:
           command: npm run test:a9es5ivy
   'Angular 9 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a9-{{ checksum "package.json" }}-{{ checksum "e2e/a9/package.json" }}-{{ checksum "e2e/a9/package-lock.json" }}
+          key: a9-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a9/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a9
@@ -336,13 +385,14 @@ jobs:
           command: npm run test:a9es2015ivy
   'Angular 10 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -354,13 +404,14 @@ jobs:
           command: npm run test:a10es5
   'Angular 10 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -372,13 +423,14 @@ jobs:
           command: npm run test:a10es2015
   'Angular 10 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -390,13 +442,14 @@ jobs:
           command: npm run test:a10es5ivy
   'Angular 10 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a10-{{ checksum "package.json" }}-{{ checksum "e2e/a10/package.json" }}-{{ checksum "e2e/a10/package-lock.json" }}
+          key: a10-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a10/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a10
@@ -408,13 +461,14 @@ jobs:
           command: npm run test:a10es2015ivy
   'Angular 11 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -426,13 +480,14 @@ jobs:
           command: npm run test:a11es5
   'Angular 11 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -444,13 +499,14 @@ jobs:
           command: npm run test:a11es2015
   'Angular 11 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -462,13 +518,14 @@ jobs:
           command: npm run test:a11es5ivy
   'Angular 11 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: a11-{{ checksum "package.json" }}-{{ checksum "e2e/a11/package.json" }}-{{ checksum "e2e/a11/package-lock.json" }}
+          key: a11-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a11/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:a11
@@ -480,13 +537,14 @@ jobs:
           command: npm run test:a11es2015ivy
   'Angular Min ES5':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
@@ -498,13 +556,14 @@ jobs:
           command: npm run build:am:es5
   'Angular Min ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
@@ -516,13 +575,14 @@ jobs:
           command: npm run build:am:es2015
   'Angular Min ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
@@ -534,13 +594,14 @@ jobs:
           command: npm run build:am:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.15.4-buster-slim
+      - image: satantime/puppeteer-node:14.15.4-buster
+    resource_class: small
     steps:
       - checkout
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-{{ checksum "package.json" }}-{{ checksum "e2e/am/package.json" }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: am-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/am/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:am
@@ -550,6 +611,30 @@ jobs:
       - run:
           name: Build
           command: npm run build:am:es2015ivy
+  Core IE:
+    executor:
+      name: win/default
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if ((Test-Path "node_modules") -ne "True") {
+              npm ci --no-optional --ignore-scripts
+            }
+      - save_cache:
+          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Unit Tests
+          command: npm run test -- --reporters junit
+      - store_test_results:
+          path: ./test-reports
+    environment:
+      IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
 workflows:
   version: 2
   build:
@@ -578,6 +663,9 @@ workflows:
                       $HOME/codeclimate upload-coverage \
                         -r 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69 \
                         -i test-reports/codeclimate.json
+      - 'Core IE':
+          requires:
+            - Core
       - 'Install':
           requires:
             - Core

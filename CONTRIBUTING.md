@@ -1,13 +1,46 @@
-# How to contribute to ngMocks
+# How to contribute to ng-mocks
 
 The best way would be to discuss an issue or an improvement first:
 
-- [ask a question on gitter](https://gitter.im/ng-mocks/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues)
+- [ask a question on gitter](https://gitter.im/ng-mocks/community)
+- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
 
-## How to release ngMocks
+## How tu run unit tests locally
 
-It is possible on Unix based OS, Windows has not been supported.
+- open a terminal and execute
+
+  ```shell
+  npm run test
+  ```
+
+## How tu run E2E tests locally
+
+- install docker: https://hub.docker.com
+- install docker-compose: https://docs.docker.com/compose/install/
+- open a terminal and execute
+
+  ```shell
+  docker-compose up --build
+  ```
+
+## How to run tests in IE locally
+
+- login to a Windows OS: https://developer.microsoft.com/en-us/microsoft-edge/tools/vms
+- install git-scm: https://git-scm.com/download/win
+- install node and npm: https://nodejs.org
+- open Git Bash and execute
+
+  ```shell
+  export IE_BIN="/c/Program Files/Internet Explorer/iexplore.exe"
+  cd /c/ && rm -Rf ng-mocks && mkdir ng-mocks && cd ng-mocks
+  find /z/ng-mocks -maxdepth 1 -not -name ng-mocks -not -name .git -not -name e2e -not -name node_modules -exec cp -r {} . \;
+  npm ci --no-optional --ignore-scripts
+  npm run test
+  ```
+
+## How to release ng-mocks
+
+It is possible on Unix based OS, Windows OS has not been supported yet.
 
 You need to create a `.env` file with the next content:
 

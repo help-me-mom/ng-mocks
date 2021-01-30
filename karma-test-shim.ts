@@ -1,15 +1,25 @@
 // tslint:disable no-import-side-effect ordered-imports
 Error.stackTraceLimit = Infinity;
 
-import 'core-js';
+import 'core-js/proposals/reflect-metadata';
 
-import 'zone.js/dist/zone';
-import 'zone.js/dist/long-stack-trace-zone';
-import 'zone.js/dist/proxy';
-import 'zone.js/dist/sync-test';
-import 'zone.js/dist/jasmine-patch';
-import 'zone.js/dist/async-test';
-import 'zone.js/dist/fake-async-test';
+import 'core-js/modules/es.array.fill';
+import 'core-js/modules/es.array.find';
+import 'core-js/modules/es.array.from';
+import 'core-js/modules/es.array.iterator';
+import 'core-js/modules/es.function.name';
+import 'core-js/modules/es.object.assign';
+import 'core-js/modules/es.object.get-prototype-of';
+import 'core-js/modules/es.object.is';
+import 'core-js/modules/es.object.keys';
+import 'core-js/modules/es.string.code-point-at';
+import 'core-js/modules/es.string.ends-with';
+import 'core-js/modules/es.string.from-code-point';
+import 'core-js/modules/es.string.starts-with';
+import 'core-js/modules/es.symbol';
+
+import 'zone.js';
+import 'zone.js/testing';
 
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
