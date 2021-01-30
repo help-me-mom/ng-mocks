@@ -82,6 +82,7 @@ module.exports = {
         'troubleshooting/declarations-of-2-modules',
         'troubleshooting/no-selector',
         'troubleshooting/not-a-known-element',
+        'troubleshooting/internals-vs-externals',
       ],
     },
     {
