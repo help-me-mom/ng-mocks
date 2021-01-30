@@ -111,6 +111,7 @@ module.exports = {
         'guides/directive-structural',
         'guides/directive-structural-context',
         'guides/pipe',
+        'guides/view-child',
         'guides/ngonchanges',
         'guides/provider',
         'guides/token',
