@@ -77,7 +77,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-describe('ViewChild', () => {
+describe('TestViewChild', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('provides mock dependencies', () => {
