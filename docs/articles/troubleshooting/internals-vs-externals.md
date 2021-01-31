@@ -45,7 +45,7 @@ at first glance, it makes sense to mock it:
 ```ts
 TestBed.configureTestingModule({
   imports: [
-      MockModule(InternalModule),
+    MockModule(InternalModule),
   ],
   declarations: [
     InternalDirective,
@@ -79,7 +79,7 @@ at first glance, it makes sense to mock it:
 ```ts
 TestBed.configureTestingModule({
   imports: [
-      MockModule(InternalModule),
+    MockModule(InternalModule),
   ],
   declarations: [
     MyComponent,
@@ -111,14 +111,14 @@ and we have access to `InternalDirective` in the test:
 ```ts
 @NgModule({
   imports: [
-      MockModule(ExternalModule),
+    MockModule(ExternalModule),
   ],
   declarations: [
     MockComponent(MyComponent),
     InternalDirective,
   ],
   exports: [
-      MockComponent(MyComponent),
+    MockComponent(MyComponent),
     InternalDirective,
   ],
 })
@@ -142,7 +142,7 @@ so the definition of a testing module looks like:
 ```ts
 TestBed.configureTestingModule({
   imports: [
-      MockModule(ExternalModule),
+    MockModule(ExternalModule),
   ],
   declarations: [
     MockComponent(MyComponent),
