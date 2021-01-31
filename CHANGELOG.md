@@ -465,8 +465,8 @@
 
 * MockHelper with find, findAll and OrFail ([ecc4ac7](https://github.com/ike18t/ng-mocks/commit/ecc4ac7))
 * providers for MockRender ([cb656b7](https://github.com/ike18t/ng-mocks/commit/cb656b7)), closes [#102](https://github.com/ike18t/ng-mocks/issues/102)
-* support to inject a library-related service mocker ([e6be694](https://github.com/ike18t/ng-mocks/commit/e6be694)), closes [#87](https://github.com/ike18t/ng-mocks/issues/87) [#103](https://github.com/ike18t/ng-mocks/issues/103)
-* typecasted MockRender ([3bfe7bf](https://github.com/ike18t/ng-mocks/commit/3bfe7bf))
+* support injection a library-related service mocker ([e6be694](https://github.com/ike18t/ng-mocks/commit/e6be694)), closes [#87](https://github.com/ike18t/ng-mocks/issues/87) [#103](https://github.com/ike18t/ng-mocks/issues/103)
+* type-safe MockRender ([3bfe7bf](https://github.com/ike18t/ng-mocks/commit/3bfe7bf))
 
 
 

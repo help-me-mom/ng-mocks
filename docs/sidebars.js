@@ -87,6 +87,10 @@ module.exports = {
     },
     {
       type: 'doc',
+      id: 'migrations',
+    },
+    {
+      type: 'doc',
       id: 'need-help',
     },
   ],
