@@ -3,7 +3,6 @@ import {
   Component,
   ContentChildren,
   Directive,
-  ElementRef,
   Input,
   NgModule,
   QueryList,
@@ -42,7 +41,7 @@ class TableComponent {
   public declarationTpls?: QueryList<TemplateRef<CellDirective>>;
 
   @ContentChildren('div', {} as any)
-  public divs?: QueryList<ElementRef<HTMLElement>>;
+  public divs?: QueryList<any>; // TODO replace with ElementRef<HTMLElement> when A5 dies
 
   @ContentChildren('cell', {
     read: TemplateRef,

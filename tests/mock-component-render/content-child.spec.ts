@@ -39,7 +39,7 @@ class TableComponent {
   public declarationTpl?: TemplateRef<CellDirective>;
 
   @ContentChild('div', {} as any)
-  public div?: ElementRef<HTMLElement>;
+  public div?: any; // TODO replace with ElementRef<HTMLElement> when A5 dies
 
   @ContentChild('cell', {
     read: TemplateRef,
