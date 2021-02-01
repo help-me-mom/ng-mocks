@@ -147,7 +147,6 @@ export type ngMocksMockConfig = {
   isValidator?: boolean;
   outputs?: string[];
   setControlValueAccessor?: boolean;
-  viewChildRefs?: Map<string, string>;
 };
 
 const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void => {

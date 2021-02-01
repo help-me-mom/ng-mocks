@@ -19,7 +19,6 @@ export default <T extends Component | Directive>(
     outputs?: string[];
     providers?: Provider[];
     queries?: Record<string, ViewChild>;
-    viewChildRefs?: Map<string, string>;
   },
   params: T,
 ): T => {
@@ -35,7 +34,6 @@ export default <T extends Component | Directive>(
     config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
     setControlValueAccessor: data.setControlValueAccessor,
-    viewChildRefs: meta.viewChildRefs,
   });
 
   // istanbul ignore else

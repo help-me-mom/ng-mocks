@@ -41,16 +41,20 @@ fixture2.point.componentInstance = new TargetComponent();
 // @ts-expect-error: fails because of a wrong type
 fixture2.point.componentInstance = new WrongComponent();
 
-// TODO try to make it precise
 // if we provide params only then point is undefined,
-// and componentInstance is anything.
+// and componentInstance its params.
 const fixture3 = MockRender('test', { k1: 123, k2: '123' });
 fixture3.componentInstance.k1 = 123;
+// @ts-expect-error: fails because of wrong type.
 fixture3.componentInstance.k1 = '123';
+// @ts-expect-error: fails because of wrong type.
 fixture3.componentInstance.k2 = 123;
 fixture3.componentInstance.k2 = '123';
+// @ts-expect-error: fails because it does not exist.
 fixture3.componentInstance.rw = '123';
+// @ts-expect-error: fails because it does not exist.
 fixture3.componentInstance.rw = 123;
+// @ts-expect-error: fails because it does not exist.
 fixture3.componentInstance.ro = '123';
 // @ts-expect-error: fails because params are defined.
 fixture3.componentInstance = undefined;
