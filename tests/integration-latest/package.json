@@ -17,7 +17,7 @@
     "@types/jasmine": "^2.5.37",
     "date-fns": "^2.16.1",
     "jasmine-core": "^2.6.0",
-    "karma": "^5.0.0",
+    "karma": "^6.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",

@@ -13,7 +13,10 @@ export class Validator {
         if (this.config.bundlerOptions.validateSyntax) {
 
             try {
-                acorn.parse(bundle);
+                acorn.parse(bundle, {
+                    // defaults to TS "latest" version
+                    ecmaVersion: "latest"
+                });
             }
             catch (error) {
 
