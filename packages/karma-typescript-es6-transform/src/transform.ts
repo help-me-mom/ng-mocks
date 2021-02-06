@@ -59,7 +59,7 @@ const configure = (options?: babel.TransformOptions) : kt.Transform => {
 
             try {
                 context.source = babel.transform(context.source, options).code;
-                context.js.ast = acorn.parse(context.source, { sourceType: "module" });
+                context.js.ast = acorn.parse(context.source, { sourceType: "module", ecmaVersion: "latest" });
                 return callback(undefined, true);
             }
             catch (error) {
