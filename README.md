@@ -15,7 +15,7 @@
 
 Install via `npm`:
 
-```
+```bash
 npm install --save-dev karma-typescript
 ```
 
@@ -72,7 +72,6 @@ Support us with a monthly donation and help us continue our activities. [[Become
 <a href="https://opencollective.com/karma-typescript/backer/28/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/karma-typescript/backer/29/website" target="_blank"><img src="https://opencollective.com/karma-typescript/backer/29/avatar.svg"></a>
 
-
 ## Sponsors
 
 Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/karma-typescript#sponsor)]
@@ -108,5 +107,4 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/karma-typescript/sponsor/28/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/28/avatar.svg"></a>
 <a href="https://opencollective.com/karma-typescript/sponsor/29/website" target="_blank"><img src="https://opencollective.com/karma-typescript/sponsor/29/avatar.svg"></a>
 
-
-© 2016-2020 Erik Barke, Monounity
+© 2016-2021 Erik Barke, Monounity
