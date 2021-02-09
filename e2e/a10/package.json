@@ -54,6 +54,6 @@
     "puppeteer": "7.0.1",
     "ts-jest": "26.5.0",
     "ts-node": "8.10.2",
-    "typescript": "3.9.7"
+    "typescript": "3.9.8"
   }
 }
