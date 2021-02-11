@@ -107,6 +107,7 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
   if (isNgDef(template, 'd')) {
     Object.defineProperty(fixture.point, 'componentInstance', {
       configurable: true,
+      enumerable: true,
       get: () => ngMocks.get(fixture.point, template),
     });
   }

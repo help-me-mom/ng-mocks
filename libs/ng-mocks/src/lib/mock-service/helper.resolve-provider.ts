@@ -170,7 +170,7 @@ const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
 export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
   const { provide, multi, change } = parseProvider(provider, changed);
   //  we should not touch our system providers.
-  if (provider && typeof provider === 'object' && provider.useExisting && provider.useExisting.__ngMocksSkip) {
+  if (provider && typeof provider === 'object' && provider.useExisting && provider.useExisting.mockOf) {
     return provider;
   }
   if (isPreconfiguredDependency(provider, provide)) {

@@ -1,6 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import coreDefineProperty from './core.define-property';
 import coreReflectJit from './core.reflect.jit';
 import { AnyType, Type } from './core.types';
 
@@ -104,21 +105,11 @@ const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
 
 export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
-  Object.defineProperty(child, 'name', {
-    configurable: true,
-    enumerable: true,
-    value: `MockMiddleware${base.name}`,
-    writable: true,
-  });
+  coreDefineProperty(child, 'name', `MockMiddleware${base.name}`, true);
 
   const parameters = coreReflectJit().parameters(base);
   if (parameters.length) {
-    Object.defineProperty(child, 'parameters', {
-      configurable: true,
-      enumerable: false,
-      value: [...parameters],
-      writable: true,
-    });
+    coreDefineProperty(child, 'parameters', [...parameters]);
   }
 
   return child;

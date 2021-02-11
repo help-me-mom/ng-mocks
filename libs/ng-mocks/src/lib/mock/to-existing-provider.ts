@@ -1,13 +1,6 @@
-import { forwardRef } from '@angular/core';
+import { AnyType } from '../common/core.types';
 
-import { AnyType, Type } from '../common/core.types';
-
-export default (provide: AnyType<any>, type: AnyType<any>) => ({
+export default (provide: AnyType<any>, useExisting: AnyType<any>) => ({
   provide,
-  useExisting: (() => {
-    const value: Type<any> & { __ngMocksSkip?: boolean } = forwardRef(() => type);
-    value.__ngMocksSkip = true;
-
-    return value;
-  })(),
+  useExisting,
 });

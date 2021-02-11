@@ -7,6 +7,7 @@ import mockHelperStub from '../mock-helper/mock-helper.stub';
 import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import helperMockService from '../mock-service/helper.mock-service';
 
+import coreDefineProperty from './core.define-property';
 import { mapValues } from './core.helpers';
 import { AnyType } from './core.types';
 import funcIsMock from './func.is-mock';
@@ -175,6 +176,7 @@ export class Mock {
 
   public constructor(injector?: Injector) {
     const mockOf = (this.constructor as any).mockOf;
+    coreDefineProperty(this, '__ngMocksInjector', injector);
 
     // istanbul ignore else
     if (funcIsMock(this)) {
@@ -192,6 +194,4 @@ export class Mock {
   }
 }
 
-Object.defineProperty(Mock, 'parameters', {
-  value: [[Injector, new Optional()]],
-});
+coreDefineProperty(Mock, 'parameters', [[Injector, new Optional()]]);

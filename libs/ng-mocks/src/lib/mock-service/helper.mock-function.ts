@@ -1,3 +1,5 @@
+import coreDefineProperty from '../common/core.define-property';
+
 import { CustomMockFunction, MockedFunction } from './types';
 
 const mockFunction: {
@@ -22,9 +24,9 @@ const mockFunction: {
   let value: any;
   let setValue: any;
 
-  func.__ngMocks = true;
-  func.__ngMocksSet = (newSetValue: any) => (setValue = newSetValue);
-  func.__ngMocksGet = (newValue: any) => (value = newValue);
+  coreDefineProperty(func, '__ngMocks', true);
+  coreDefineProperty(func, '__ngMocksSet', (newSetValue: any) => (setValue = newSetValue));
+  coreDefineProperty(func, '__ngMocksGet', (newValue: any) => (value = newValue));
 
   return func;
 };

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import coreDefineProperty from '../common/core.define-property';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
@@ -69,6 +70,7 @@ const mixRenderApplyContext = (view: EmbeddedViewRef<any>, context: Record<any, 
 
 const mixRenderHandleViews = (
   vcr: ViewContainerRef,
+  cdr: ChangeDetectorRef,
   templates: any[],
   views: Array<EmbeddedViewRef<any>>,
   indices: undefined | number[],
@@ -90,6 +92,7 @@ const mixRenderHandleViews = (
     }
     mixRenderApplyContext(views[index], context);
   }
+  cdr.detectChanges();
 
   return index;
 };
@@ -112,7 +115,7 @@ const mixRender = (instance: MockConfig & Record<keyof any, any>, cdr: ChangeDet
     const templates = property instanceof QueryList ? property.toArray() : [property];
 
     const views = instance[`ngMocksRender_${type}_${selector}_views`] || [];
-    const index = mixRenderHandleViews(vcr, templates, views, indices, { ...variables, $implicit });
+    const index = mixRenderHandleViews(vcr, cdr, templates, views, indices, { ...variables, $implicit });
 
     mixRenderReorderViews(vcr, views, index);
     instance[`ngMocksRender_${type}_${selector}_views`] = views;
@@ -183,9 +186,7 @@ class ComponentMockBase extends LegacyControlValueAccessor implements AfterConte
   }
 }
 
-Object.defineProperty(ComponentMockBase, 'parameters', {
-  value: [[ChangeDetectorRef], [Injector]],
-});
+coreDefineProperty(ComponentMockBase, 'parameters', [[ChangeDetectorRef], [Injector]]);
 
 const decorateClass = (component: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(component);

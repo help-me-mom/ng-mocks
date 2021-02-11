@@ -1,9 +1,14 @@
-import { ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 
 export type MockedDirective<T> = T &
   LegacyControlValueAccessor & {
+    /**
+     * Pointer to ChangeDetectorRef.
+     */
+    __cdr?: ChangeDetectorRef;
+
     /**
      * Pointer to current element in case of Attribute Directives.
      */
@@ -20,7 +25,13 @@ export type MockedDirective<T> = T &
     __template?: TemplateRef<any>;
 
     /**
+     * Pointer to ViewContainerRef.
+     */
+    __vcr?: ViewContainerRef;
+
+    /**
      * Pointer to the view of Structural Directives.
+     * @deprecated use this.__vcr
      */
     __viewContainer?: ViewContainerRef;
 
