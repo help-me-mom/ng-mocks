@@ -153,7 +153,7 @@
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.5.4",
     "karma-junit-reporter": "2.0.1",
-    "karma-typescript": "5.2.0",
+    "karma-typescript": "5.3.0",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
     "puppeteer": "7.0.4",
