@@ -68,4 +68,4 @@ karmaTypescriptConfig: {
 
 This software is licensed with the MIT license.
 
-© 2016-2020 Erik Barke, Monounity
+© 2016-2021 Erik Barke, Monounity
