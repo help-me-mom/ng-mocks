@@ -1,20 +1,17 @@
-// tslint:disable max-file-line-count
+// tslint:disable max-file-line-count object-literal-sort-keys
 
 import {
   Component,
   ContentChild,
   ContentChildren,
   DebugElement,
+  ElementRef,
   QueryList,
   TemplateRef,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   FormControl,
   FormsModule,
@@ -95,8 +92,8 @@ describe('MockComponent', () => {
   let component: ExampleComponentContainer;
   let fixture: ComponentFixture<ExampleComponentContainer>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
         MockComponents(
@@ -109,13 +106,11 @@ describe('MockComponent', () => {
         ),
       ],
       imports: [FormsModule, ReactiveFormsModule],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ExampleComponentContainer);
-        component = fixture.componentInstance;
-      });
-  }));
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ExampleComponentContainer);
+    component = fixture.componentInstance;
+  });
 
   it('should have use a selector of the original component', () => {
     fixture.detectChanges();
@@ -358,23 +353,23 @@ describe('MockComponent', () => {
       template: '',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any)
+      @ContentChild('i1', { read: TemplateRef } as any)
       public o1?: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any)
-      public o2?: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any)
-      public o3?: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any)
-      public o4?: QueryList<any>;
+      @ContentChildren('i2', { read: TemplateRef } as any)
+      public o2?: QueryList<TemplateRef<any>>;
+      @ViewChild('i3', { read: TemplateRef } as any)
+      public o3?: TemplateRef<any>;
+      @ViewChildren('i4', { read: TemplateRef } as any)
+      public o4?: QueryList<TemplateRef<any>>;
 
-      @ContentChild('i5', { read: false } as any)
-      public o5?: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any)
-      public o6?: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any)
-      public o7?: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any)
-      public o8?: QueryList<any>;
+      @ContentChild('i5', { read: ElementRef } as any)
+      public o5?: ElementRef;
+      @ContentChildren('i6', { read: ElementRef } as any)
+      public o6?: QueryList<ElementRef>;
+      @ViewChild('i7', { read: ElementRef } as any)
+      public o7?: ElementRef;
+      @ViewChildren('i8', { read: ElementRef } as any)
+      public o8?: QueryList<ElementRef>;
     }
 
     const actual = MockComponent(MyClass) as any;
@@ -384,7 +379,7 @@ describe('MockComponent', () => {
           descendants: true,
           first: true,
           isViewQuery: false,
-          read: true,
+          read: TemplateRef,
           selector: 'i1',
         }),
       ],
@@ -393,7 +388,7 @@ describe('MockComponent', () => {
           descendants: false,
           first: false,
           isViewQuery: false,
-          read: true,
+          read: TemplateRef,
           selector: 'i2',
         }),
       ],
@@ -402,7 +397,7 @@ describe('MockComponent', () => {
           descendants: true,
           first: true,
           isViewQuery: true,
-          read: true,
+          read: TemplateRef,
           selector: 'i3',
         }),
       ],
@@ -411,7 +406,7 @@ describe('MockComponent', () => {
           descendants: true,
           first: false,
           isViewQuery: true,
-          read: true,
+          read: TemplateRef,
           selector: 'i4',
         }),
       ],
@@ -420,7 +415,7 @@ describe('MockComponent', () => {
           descendants: true,
           first: true,
           isViewQuery: false,
-          read: false,
+          read: ElementRef,
           selector: 'i5',
         }),
       ],
@@ -429,7 +424,7 @@ describe('MockComponent', () => {
           descendants: false,
           first: false,
           isViewQuery: false,
-          read: false,
+          read: ElementRef,
           selector: 'i6',
         }),
       ],
@@ -438,7 +433,7 @@ describe('MockComponent', () => {
           descendants: true,
           first: true,
           isViewQuery: true,
-          read: false,
+          read: ElementRef,
           selector: 'i7',
         }),
       ],
@@ -447,44 +442,61 @@ describe('MockComponent', () => {
           descendants: true,
           first: false,
           isViewQuery: true,
-          read: false,
+          read: ElementRef,
           selector: 'i8',
         }),
       ],
 
-      __mockView_o1: [
+      __mockView_key_i1: [
         jasmine.objectContaining({
           descendants: true,
           first: true,
           isViewQuery: true,
-          selector: '__i1',
+          selector: 'key_i1',
           static: false,
         }),
       ],
-      __mockView_o2: [
+      __mockTpl_key_i1: [
+        jasmine.objectContaining({
+          descendants: true,
+          first: true,
+          isViewQuery: false,
+          selector: 'i1',
+        }),
+      ],
+      __mockView_prop_o1: [
         jasmine.objectContaining({
           descendants: true,
           first: true,
           isViewQuery: true,
-          selector: '__i2',
+          selector: 'prop_o1',
           static: false,
         }),
       ],
-      __mockView_o5: [
+
+      __mockView_key_i2: [
         jasmine.objectContaining({
           descendants: true,
           first: true,
           isViewQuery: true,
-          selector: '__i5',
+          selector: 'key_i2',
           static: false,
         }),
       ],
-      __mockView_o6: [
+      __mockTpl_key_i2: [
+        jasmine.objectContaining({
+          descendants: false,
+          first: false,
+          isViewQuery: false,
+          selector: 'i2',
+        }),
+      ],
+      __mockView_prop_o2: [
         jasmine.objectContaining({
           descendants: true,
           first: true,
           isViewQuery: true,
-          selector: '__i6',
+          selector: 'prop_o2',
           static: false,
         }),
       ],

@@ -107,6 +107,7 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
   if (isNgDef(template, 'd')) {
     Object.defineProperty(fixture.point, 'componentInstance', {
       configurable: true,
+      enumerable: true,
       get: () => ngMocks.get(fixture.point, template),
     });
   }
@@ -199,11 +200,11 @@ function MockRender<MComponent = void>(template: string): MockedComponentFixture
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
-function MockRender<MComponent = void>(
+function MockRender<MComponent = void, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
-  params: Record<keyof any, any>,
+  params: TComponent,
   detectChanges?: boolean | IMockRenderOptions,
-): MockedComponentFixture<MComponent, Record<keyof any, any>>;
+): MockedComponentFixture<MComponent, TComponent>;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender

@@ -1,3 +1,5 @@
+import { Directive } from '@angular/core';
+
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { MockedDebugElement } from '../mock-render/types';
 
@@ -5,13 +7,30 @@ import mockHelperGet from './mock-helper.get';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
+const parseArgs = (args: any[]): [MockedDebugElement, string, any] => [
+  args[0],
+  args[1],
+  args.length === 3 ? args[2] : defaultNotFoundValue,
+];
+
+const getMeta = (token: any): Directive | undefined => {
+  try {
+    return coreReflectDirectiveResolve(token);
+  } catch (e) {
+    // Looks like it is a token.
+  }
+
+  return undefined;
+};
+
 export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
-  const el: MockedDebugElement = args[0];
-  const sel: string = args[1];
-  const notFoundValue: any = args.length === 3 ? args[2] : defaultNotFoundValue;
+  const [el, sel, notFoundValue] = parseArgs(args);
 
   for (const token of el.providerTokens) {
-    const meta = coreReflectDirectiveResolve(token);
+    const meta = getMeta(token);
+    if (!meta) {
+      continue;
+    }
 
     // istanbul ignore if
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {

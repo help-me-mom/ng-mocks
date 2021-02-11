@@ -19,11 +19,10 @@ export default <T extends Component | Directive>(
     outputs?: string[];
     providers?: Provider[];
     queries?: Record<string, ViewChild>;
-    viewChildRefs?: Map<string, string>;
   },
   params: T,
 ): T => {
-  const data = cloneProviders(mock, meta.providers || []);
+  const data = cloneProviders(source, mock, meta.providers || []);
   const providers = [toExistingProvider(source, mock), ...data.providers];
   const options: T = { ...params, providers };
 
@@ -35,7 +34,6 @@ export default <T extends Component | Directive>(
     config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
     setControlValueAccessor: data.setControlValueAccessor,
-    viewChildRefs: meta.viewChildRefs,
   });
 
   // istanbul ignore else

@@ -1,0 +1,79 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ContentChildren,
+  Directive,
+  Input,
+  NgModule,
+  QueryList,
+  TemplateRef,
+} from '@angular/core';
+import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+
+@Directive({
+  selector: '[xdTpl]',
+})
+class XdTplDirective {
+  @Input() public readonly xdTpl: 'header' | 'footer' | null = null;
+
+  public constructor(public readonly tpl: TemplateRef<any>) {}
+}
+
+@Component({
+  selector: 'xd-card',
+  template: 'xd-card',
+})
+class XdCardComponent {
+  @ContentChildren(XdTplDirective, {} as any)
+  public readonly templates?: QueryList<XdTplDirective>;
+}
+
+@Component({
+  selector: 'target',
+  template: `
+    <xd-card>
+      <ng-template xdTpl="header">My Header</ng-template>
+      <ng-template xdTpl="footer">My Footer</ng-template>
+    </xd-card>
+  `,
+})
+class TargetComponent {}
+
+@NgModule({
+  declarations: [XdTplDirective, XdCardComponent, TargetComponent],
+  imports: [CommonModule],
+})
+class TargetModule {}
+
+describe('TestTemplateRefByDirective', () => {
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+
+  it('receives right templates', () => {
+    MockRender(TargetComponent);
+
+    // looking for the element
+    // which is produced
+    // by the desired component
+    const container = ngMocks.find('xd-card');
+
+    // fetching elements with directives
+    const [header, footer] = ngMocks.findInstances(
+      container,
+      XdTplDirective,
+    );
+
+    // asserting header
+    expect(header.xdTpl).toEqual('header');
+    if (isMockOf(header, XdTplDirective, 'd')) {
+      header.__render();
+    }
+    expect(container.nativeElement.innerHTML).toContain('My Header');
+
+    // asserting footer
+    expect(footer.xdTpl).toEqual('footer');
+    if (isMockOf(footer, XdTplDirective, 'd')) {
+      footer.__render();
+    }
+    expect(container.nativeElement.innerHTML).toContain('My Footer');
+  });
+});

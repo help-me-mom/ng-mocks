@@ -1,6 +1,16 @@
-import { Directive, ElementRef, Injector, OnInit, Optional, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  Injector,
+  OnInit,
+  Optional,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
+import coreDefineProperty from '../common/core.define-property';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
@@ -15,12 +25,13 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   // istanbul ignore next
   public constructor(
     injector: Injector,
+    vcr: ViewContainerRef,
+    cdr: ChangeDetectorRef,
     element?: ElementRef,
     template?: TemplateRef<any>,
-    viewContainer?: ViewContainerRef,
   ) {
     super(injector);
-    this.__ngMocksInstall(element, template, viewContainer);
+    this.__ngMocksInstall(vcr, cdr, element, template);
   }
 
   public ngOnInit(): void {
@@ -37,27 +48,39 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
     }
   }
 
-  private __ngMocksInstall(element?: ElementRef, template?: TemplateRef<any>, viewContainer?: ViewContainerRef): void {
+  private __ngMocksInstall(
+    vcr: ViewContainerRef,
+    cdr: ChangeDetectorRef,
+    element?: ElementRef,
+    template?: TemplateRef<any>,
+  ): void {
     // Basically any directive on ng-template is treated as structural, even it does not control render process.
     // In our case we do not if we should render it or not and due to this we do nothing.
-    (this as any).__element = element;
-    (this as any).__template = template;
-    (this as any).__viewContainer = viewContainer;
-    (this as any).__isStructural = template && viewContainer;
+    coreDefineProperty(this, '__element', element);
+    coreDefineProperty(this, '__template', template);
+    coreDefineProperty(this, '__viewContainer', vcr);
+    coreDefineProperty(this, '__vcr', vcr);
+    coreDefineProperty(this, '__cdr', cdr);
+    coreDefineProperty(this, '__isStructural', template && vcr);
 
     // Providing method to render mock values.
     (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
-      if (viewContainer && template) {
-        viewContainer.clear();
-        viewContainer.createEmbeddedView(template, { ...variables, $implicit });
+      if (vcr && template) {
+        vcr.clear();
+        vcr.createEmbeddedView(template, { ...variables, $implicit });
+        cdr.detectChanges();
       }
     };
   }
 }
 
-Object.defineProperty(DirectiveMockBase, 'parameters', {
-  value: [[Injector], [ElementRef, new Optional()], [TemplateRef, new Optional()], [ViewContainerRef, new Optional()]],
-});
+coreDefineProperty(DirectiveMockBase, 'parameters', [
+  [Injector],
+  [ViewContainerRef],
+  [ChangeDetectorRef],
+  [ElementRef, new Optional()],
+  [TemplateRef, new Optional()],
+]);
 
 const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(directive);
