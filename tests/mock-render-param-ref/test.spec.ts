@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
@@ -65,7 +70,9 @@ describe('mock-render-param-ref', () => {
   // should be handles by proxy.
   it('keeps refs w/o params', () => {
     const fixture = MockRender(TargetComponent);
-    expect(fixture.point.componentInstance).not.toBe(fixture.componentInstance);
+    expect(fixture.point.componentInstance).not.toBe(
+      fixture.componentInstance,
+    );
 
     const spyOutput = jasmine.createSpy('output');
     fixture.componentInstance.output.subscribe(spyOutput);
@@ -77,6 +84,8 @@ describe('mock-render-param-ref', () => {
     const spyThis = jasmine.createSpy('this');
     fixture.componentInstance.outputThis.subscribe(spyThis);
     fixture.componentInstance.emitThis();
-    expect(spyThis).toHaveBeenCalledWith(fixture.point.componentInstance);
+    expect(spyThis).toHaveBeenCalledWith(
+      fixture.point.componentInstance,
+    );
   });
 });

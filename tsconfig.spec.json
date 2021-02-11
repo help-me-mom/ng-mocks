@@ -13,5 +13,5 @@
     "karma.conf.ts"
   ],
   "exclude": ["e2e", "node_modules"],
-  "include": ["libs/ng-mocks/src/lib/**/*", "examples/**/*", "tests/**/*", "tests-failures/**/*"]
+  "include": ["libs/ng-mocks/src/lib/**/*", "examples/**/*.spec.ts", "tests/**/*.spec.ts", "tests-failures/**/*"]
 }

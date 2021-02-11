@@ -87,7 +87,7 @@ describe('mat-table:props', () => {
 
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('binds outputs', () => {
+  it('binds inputs', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
     const tableEl = ngMocks.find(MatTable);

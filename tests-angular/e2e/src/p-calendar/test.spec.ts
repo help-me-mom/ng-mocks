@@ -29,70 +29,82 @@ describe('p-calendar:directives', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('binds inputs', () => {
+    // Rendering TargetComponent and accessing its instance.
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const calendarEl = ngMocks.find(Calendar);
 
+    // Looking for a debug element of `p-calendar`.
+    const calendarEl = ngMocks.find('p-calendar');
+
+    // Asserting bound properties.
     const actual = ngMocks.input(calendarEl, 'ngModel');
     expect(actual).toBe(targetComponent.dateValue);
   });
 
   it('binds outputs', () => {
+    // Rendering TargetComponent and accessing its instance.
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const calendarEl = ngMocks.find(Calendar);
 
+    // Looking for a debug element of `p-calendar`.
+    const calendarEl = ngMocks.find('p-calendar');
+
+    // Simulating an emit.
     const expected = new Date();
     ngMocks.output(calendarEl, 'ngModelChange').emit(expected);
+
+    // Asserting the effect of the emit.
     expect(targetComponent.dateValue).toEqual(expected);
   });
 
   it('provides correct template for pTemplate="header"', () => {
+    // Rendering TargetComponent.
     MockRender(TargetComponent);
-    const calendarEl = ngMocks.find(Calendar);
 
-    // nothing has been rendered
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Header',
-    );
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Footer',
-    );
+    // Looking for a debug element of `p-calendar`.
+    const calendarEl = ngMocks.find('p-calendar');
 
-    // checking header
+    // Looking for the instance of PrimeTemplate.
+    // 'header' is the first one.
     const [header] = ngMocks.findInstances(calendarEl, PrimeTemplate);
+
+    // Asserting that it is the header.
+    expect(header.name).toEqual('header');
+
+    // Verifying that the directive has been mocked.
+    // And rendering it.
     if (isMockOf(header, PrimeTemplate, 'd')) {
       header.__render();
     }
+
+    // Asserting the rendered template.
     expect(calendarEl.nativeElement.innerHTML).toContain('Header');
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Footer',
-    );
   });
 
   it('provides correct template for pTemplate="footer"', () => {
+    // Rendering TargetComponent.
     MockRender(TargetComponent);
-    const calendarEl = ngMocks.find(Calendar);
 
-    // nothing has been rendered
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Header',
-    );
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Footer',
-    );
+    // Looking for a debug element of `p-calendar`.
+    const calendarEl = ngMocks.find('p-calendar');
 
-    // checking footer
+    // Looking for the instance of PrimeTemplate.
+    // 'footer' is the second one.
     const [, footer] = ngMocks.findInstances(
       calendarEl,
       PrimeTemplate,
     );
+
+    // Asserting that it is the footer.
+    expect(footer.name).toEqual('footer');
+
+    // Verifying that the directive has been mocked.
+    // And rendering it.
     if (isMockOf(footer, PrimeTemplate, 'd')) {
       footer.__render();
     }
-    expect(calendarEl.nativeElement.innerHTML).not.toContain(
-      'Header',
-    );
+
+    // Asserting the rendered template.
     expect(calendarEl.nativeElement.innerHTML).toContain('Footer');
   });
 });
