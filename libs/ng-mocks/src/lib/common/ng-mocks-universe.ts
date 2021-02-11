@@ -64,11 +64,12 @@ ngMocksUniverse.getResolution = (def: any): undefined | 'mock' | 'keep' | 'repla
     return set.get(def);
   }
 
-  if (!ngMocksUniverse.getDefaults().has(def)) {
+  const defValue = ngMocksUniverse.getDefaults().get(def);
+  if (!defValue) {
     return undefined;
   }
 
-  const [value] = ngMocksUniverse.getDefaults().get(def);
+  const [value] = defValue;
 
   return value;
 };
@@ -77,11 +78,13 @@ ngMocksUniverse.getBuildDeclaration = (def: any): undefined | null | any => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return ngMocksUniverse.builtDeclarations.get(def);
   }
-  if (!ngMocksUniverse.getDefaults().has(def)) {
+
+  const defValue = ngMocksUniverse.getDefaults().get(def);
+  if (!defValue) {
     return;
   }
 
-  const [mode, replacement] = ngMocksUniverse.getDefaults().get(def);
+  const [mode, replacement] = defValue;
 
   if (mode === 'exclude') {
     return null;
@@ -98,11 +101,13 @@ ngMocksUniverse.hasBuildDeclaration = (def: any): boolean => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return true;
   }
-  if (!ngMocksUniverse.getDefaults().has(def)) {
+
+  const defValue = ngMocksUniverse.getDefaults().get(def);
+  if (!defValue) {
     return false;
   }
 
-  const [mode] = ngMocksUniverse.getDefaults().get(def);
+  const [mode] = defValue;
 
   return mode !== 'mock';
 };
