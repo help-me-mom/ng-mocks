@@ -132,7 +132,7 @@
     "@docusaurus/remark-plugin-npm2yarn": "2.0.0-alpha.70",
     "@docusaurus/theme-classic": "2.0.0-alpha.70",
     "@mdx-js/react": "1.6.22",
-    "@ng-select/ng-select": "6.0.0",
+    "@ng-select/ng-select": "6.1.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/exec": "5.0.0",
     "@semantic-release/git": "9.0.0",
