@@ -27,6 +27,7 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
+- Angular 12 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
 - Angular 9 (Jasmine, Jest, Ivy, es5, es2015)

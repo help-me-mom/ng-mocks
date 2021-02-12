@@ -5,12 +5,14 @@ docs/**/*.md
 docs/.docusaurus
 e2e/a10/src/test
 e2e/a11/src/test
+e2e/a12/src/test
 e2e/a5es2015/src/test
 e2e/a5es5/src/test
 e2e/a6/src/test
 e2e/a7/src/test
 e2e/a8/src/test
 e2e/a9/src/test
+e2e/am/src/test
 node_modules/
 test-reports/
 tmp/
