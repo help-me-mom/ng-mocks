@@ -2,6 +2,7 @@
   "name": "ng-mocks",
   "private": true,
   "scripts": {
+    "postinstall": "husky install",
     "release": "export $(cat .env) && semantic-release",
     "build": "npm run clean && tsc && cp CHANGELOG.md dist/libs/ng-mocks && cp README.md dist/libs/ng-mocks && cp LICENSE dist/libs/ng-mocks && cp libs/ng-mocks/package.json dist/libs/ng-mocks/package.json && cp -R examples dist/libs/ng-mocks",
     "build:all": "npm run lint && npm run build && npm run test",
@@ -176,14 +177,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ike18t/ng-mocks"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run test",
-      "pre-commit": "lint-staged && npm run lint && npm run ts:check",
-      "post-commit": "git update-index --again"
-    }
   },
   "commitlint": {
     "extends": [
