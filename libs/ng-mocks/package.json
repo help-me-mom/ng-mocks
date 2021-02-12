@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "0.0.0",
-  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests, which includes shallow rendering, precise stubs to dump child dependencies, supports Angular 5 6 7 8 9 10 11, jasmine and jest.",
+  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests, which includes shallow rendering, precise stubs to dump child dependencies, supports Angular 5 6 7 8 9 10 11 12, jasmine and jest.",
   "keywords": [
     "angular",
     "test",
@@ -72,9 +72,9 @@
     "test": "karma start"
   },
   "peerDependencies": {
-    "@angular/common": ">=5.x <=11.x",
-    "@angular/compiler": ">=5.x <=11.x",
-    "@angular/core": ">=5.x <=11.x",
-    "@angular/platform-browser": ">=5.x <=11.x"
+    "@angular/common": ">=5.x <=12.x",
+    "@angular/compiler": ">=5.x <=12.x",
+    "@angular/core": ">=5.x <=12.x",
+    "@angular/platform-browser": ">=5.x <=12.x"
   }
 }
