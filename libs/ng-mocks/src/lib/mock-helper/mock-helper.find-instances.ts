@@ -18,11 +18,14 @@ function nestedCheck<T>(result: T[], node: MockedDebugNode & DebugNode, proto: T
 }
 
 export default <T>(...args: any[]): T[] => {
-  const { el, sel } = funcParseFindArgs<Type<T>>(args);
+  const { el, sel } = funcParseFindArgs(args);
   const debugElement = el || funcGetLastFixture()?.debugElement;
+  if (typeof sel !== 'function') {
+    throw new Error('Only classes are accepted');
+  }
 
   const result: T[] = [];
-  nestedCheck<T>(result, debugElement, getSourceOfMock(sel));
+  nestedCheck(result, debugElement, getSourceOfMock(sel));
 
   return result;
 };

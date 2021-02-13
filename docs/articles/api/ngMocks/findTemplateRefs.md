@@ -1,0 +1,39 @@
+---
+title: ngMocks.findTemplateRefs
+description: Documentation about ngMocks.findTemplateRefs from ng-mocks library
+---
+
+Returns an array of all found `TemplateRef` which belong to the current element and all its children.
+If the element is not specified, then the current fixture is used.
+
+- `ngMocks.findTemplateRefs( fixture?, directive )`
+- `ngMocks.findTemplateRefs( debugElement?, id )`
+- `ngMocks.findTemplateRefs( debugElement?, [attribute, value?] )`
+
+Assume, that a template has the next code.
+
+```html
+<ng-template myTpl="header"></ng-template>
+<ng-template myTpl="footer"></ng-template>
+```
+
+Then, we can find `ng-template` like that:
+
+```ts
+// returns 2 elements
+const allByDirective = ngMocks.findTemplateRef(MyTplDirective);
+
+// returns 2 elements
+const allByAttribute = ngMocks.findTemplateRef(['myTpl']);
+
+// returns 1 element
+const onlyHeaders = ngMocks.findTemplateRef(['myTpl', 'header']);
+
+// returns 1 element
+const onlyFooters = ngMocks.findTemplateRef(['myTpl', 'footer']);
+
+// returns 0 elements
+const empty = ngMocks.findTemplateRef(['myTpl', 'body']);
+```
+
+More information can be found in [`ngMocks.findTemplateRef`](./findTemplateRef.md).

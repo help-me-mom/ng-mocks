@@ -27,6 +27,8 @@ access desired elements and instances in fixtures.
 * [`findAll()`](ngMocks/findAll.md)
 * [`findInstance()`](ngMocks/findInstance.md)
 * [`findInstances()`](ngMocks/findInstances.md)
+* [`findTemplateRef()`](ngMocks/findTemplateRef.md)
+* [`findTemplateRefs()`](ngMocks/findTemplateRefs.md)
 
 ## Stubbing methods and properties
 

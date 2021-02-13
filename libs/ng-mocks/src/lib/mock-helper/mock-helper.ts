@@ -1,6 +1,6 @@
 // tslint:disable max-file-line-count
 
-import { EventEmitter, InjectionToken, Injector, Provider } from '@angular/core';
+import { EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType, Type } from '../common/core.types';
@@ -15,6 +15,8 @@ import mockHelperFind from './mock-helper.find';
 import mockHelperFindAll from './mock-helper.find-all';
 import mockHelperFindInstance from './mock-helper.find-instance';
 import mockHelperFindInstances from './mock-helper.find-instances';
+import mockHelperFindTemplateRef from './mock-helper.find-template-ref';
+import mockHelperFindTemplateRefs from './mock-helper.find-template-refs';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 import mockHelperGet from './mock-helper.get';
 import mockHelperGlobalExclude from './mock-helper.global-exclude';
@@ -97,24 +99,30 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
-  find<T = any>(cssSelector: string): MockedDebugElement<T>;
+  find<T = any>(cssSelector: string | [string] | [string, string | number]): MockedDebugElement<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
-  find<T = any>(debugElement: MockedDebugElement | ComponentFixture<any>, cssSelector: string): MockedDebugElement<T>;
+  find<T = any>(
+    debugElement: MockedDebugElement | ComponentFixture<any>,
+    cssSelector: string | [string] | [string, string | number],
+  ): MockedDebugElement<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
-  find<T = any, D = undefined>(cssSelector: string, notFoundValue: D): D | MockedDebugElement<T>;
+  find<T = any, D = undefined>(
+    cssSelector: string | [string] | [string, string | number],
+    notFoundValue: D,
+  ): D | MockedDebugElement<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any, D = undefined>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
-    cssSelector: string,
+    cssSelector: string | [string] | [string, string | number],
     notFoundValue: D,
   ): D | MockedDebugElement<T>;
 
@@ -134,14 +142,14 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
-  findAll<T = any>(cssSelector: string): Array<MockedDebugElement<T>>;
+  findAll<T = any>(cssSelector: string | [string] | [string, string | number]): Array<MockedDebugElement<T>>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T = any>(
     debugElement: MockedDebugElement | ComponentFixture<any>,
-    cssSelector: string,
+    cssSelector: string | [string] | [string, string | number],
   ): Array<MockedDebugElement<T>>;
 
   /**
@@ -177,6 +185,54 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
   findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T[];
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   */
+  findTemplateRef<T = any>(selector: string | [string] | [string, any] | AnyType<any>): TemplateRef<T>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   */
+  findTemplateRef<T = any, D = undefined>(
+    selector: string | [string] | [string, any] | AnyType<any>,
+    notFoundValue: D,
+  ): D | TemplateRef<T>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   */
+  findTemplateRef<T = any>(
+    debugNode: MockedDebugNode | ComponentFixture<any>,
+    selector: string | [string] | [string, any] | AnyType<any>,
+  ): TemplateRef<T>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   */
+  findTemplateRef<T = any, D = undefined>(
+    debugNode: MockedDebugNode | ComponentFixture<any>,
+    selector: string | [string] | [string, any] | AnyType<any>,
+    notFoundValue: D,
+  ): D | TemplateRef<T>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
+   */
+  findTemplateRefs<T = any>(selector: string | [string] | [string, any] | AnyType<any>): Array<TemplateRef<T>>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
+   */
+  findTemplateRefs<T = any>(selector: string | [string] | [string, any] | AnyType<any>): Array<TemplateRef<T>>;
+
+  /**
+   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
+   */
+  findTemplateRefs<T = any>(
+    debugNode: MockedDebugNode | ComponentFixture<any>,
+    selector: string | [string] | [string, any] | AnyType<any>,
+  ): Array<TemplateRef<T>>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/flushTestBed
@@ -314,6 +370,8 @@ export const ngMocks: {
   findAll: mockHelperFindAll,
   findInstance: mockHelperFindInstance,
   findInstances: mockHelperFindInstances,
+  findTemplateRef: mockHelperFindTemplateRef,
+  findTemplateRefs: mockHelperFindTemplateRefs,
   flushTestBed: mockHelperFlushTestBed,
   get: mockHelperGet,
   globalExclude: mockHelperGlobalExclude,
