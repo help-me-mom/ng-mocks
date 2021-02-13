@@ -8,7 +8,7 @@ import funcGetFromNodeScan from './func.get-from-node-scan';
 
 const detectContext = (node: DebugNode): any => {
   let current = node;
-  let context = current.nativeNode.__ngContext__;
+  let context = current.nativeNode?.__ngContext__;
   while (!context && current.parent) {
     current = current.parent;
     context = current.nativeNode.__ngContext__;
@@ -25,7 +25,6 @@ export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, pro
   }
 
   const el = funcGetFromNodeElement(node);
-
   funcGetFromNodeScan(
     {
       el,

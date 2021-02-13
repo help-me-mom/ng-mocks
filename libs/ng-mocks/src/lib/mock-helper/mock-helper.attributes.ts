@@ -11,6 +11,16 @@ const parseArgs = (args: any[]): [MockedDebugElement | null | undefined, string,
   args.length === 3 ? args[2] : defaultNotFoundValue,
 ];
 
+const attrMatches = (attribute: string, selector: string): string | undefined => {
+  const [prop, alias = ''] = attribute.split(':', 2).map(v => v.trim());
+
+  if ((!alias && prop === selector) || (!!alias && alias === selector)) {
+    return prop;
+  }
+
+  return undefined;
+};
+
 const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'inputs' | 'outputs', sel: string) => {
   for (const token of el?.providerTokens || []) {
     const meta = funcParseProviderTokensDirectives(el, token);
@@ -19,12 +29,10 @@ const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'input
     }
 
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
-      const [prop, alias = ''] = attrDef.split(':', 2).map(v => v.trim());
-      if ((!alias && prop !== sel) || (alias && alias !== sel)) {
-        continue;
+      const prop = attrMatches(attrDef, sel);
+      if (prop) {
+        return mockHelperGet(el, token)[prop];
       }
-
-      return mockHelperGet(el, token)[prop];
     }
   }
 

@@ -39,6 +39,28 @@ describe('func.get-from-node-ivy', () => {
     expect(result).toEqual([proto]);
   });
 
+  it('disables on arrays', () => {
+    const result: any[] = [];
+    const proto = new Proto();
+    const node: any = {
+      nativeNode: {},
+      parent: {
+        nativeNode: {
+          __ngContext__: {
+            lView: [
+              [] /* now proto should not be collected */,
+              proto,
+            ],
+          },
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+
+    expect(result).toEqual([]);
+  });
+
   it('handles empty context', () => {
     const result: any[] = [];
     const node: any = {
@@ -67,6 +89,20 @@ describe('func.get-from-node-ivy', () => {
 
     funcGetFromNodeIvy(result, node, Proto);
     expect(result).toEqual([proto]);
+  });
+
+  it('handles missed nativeNode', () => {
+    const result: any[] = [];
+    const node: any = {
+      parent: {
+        nativeNode: {
+          __ngContext__: [],
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+    expect(result).toEqual([]);
   });
 
   it('skips node with _debugContext', () => {

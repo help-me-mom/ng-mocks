@@ -14,6 +14,7 @@ const getMeta = (token: any): Directive | undefined => {
 };
 
 export default (el: DebugNode | null | undefined, token: any): Directive | undefined => {
+  // istanbul ignore if
   if (!el) {
     return undefined;
   }
