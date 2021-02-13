@@ -27,7 +27,7 @@ export interface Node {
   parent?: (DebugNode & Node) | null;
 }
 
-export default <T>(result: T[], node: DebugNode & Node, proto: Type<T>): T[] => {
+export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: Type<T>): T[] => {
   funcGetFromNodeInjector(result, node, proto);
   funcGetFromNodeStandard(result, node, proto);
   funcGetFromNodeIvy(result, node, proto);

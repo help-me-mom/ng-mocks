@@ -13,7 +13,11 @@ const getMeta = (token: any): Directive | undefined => {
   return undefined;
 };
 
-export default (el: DebugNode, token: any): Directive | undefined => {
+export default (el: DebugNode | null | undefined, token: any): Directive | undefined => {
+  if (!el) {
+    return undefined;
+  }
+
   try {
     const provider = funcGetProvider(token);
     const instance = el.injector.get(provider);

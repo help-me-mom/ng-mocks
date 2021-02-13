@@ -20,7 +20,7 @@ const normalize = (item: any): any => {
   return null;
 };
 
-export default <T>(result: T[], node: DebugNode & Node, proto: Type<T>): void => {
+export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: Type<T>): void => {
   if (!node || !node._debugContext) {
     return;
   }

@@ -5,16 +5,14 @@ import mockHelperGet from './mock-helper.get';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-const parseArgs = (args: any[]): [MockedDebugElement, string, any] => [
+const parseArgs = (args: any[]): [MockedDebugElement | null | undefined, string, any] => [
   args[0],
   args[1],
   args.length === 3 ? args[2] : defaultNotFoundValue,
 ];
 
-export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
-  const [el, sel, notFoundValue] = parseArgs(args);
-
-  for (const token of el.providerTokens) {
+const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'inputs' | 'outputs', sel: string) => {
+  for (const token of el?.providerTokens || []) {
     const meta = funcParseProviderTokensDirectives(el, token);
     if (!meta) {
       continue;
@@ -28,6 +26,18 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
 
       return mockHelperGet(el, token)[prop];
     }
+  }
+
+  throw new Error('Not found');
+};
+
+export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
+  const [el, sel, notFoundValue] = parseArgs(args);
+
+  try {
+    return detectAttribute(el, attr, sel);
+  } catch (e) {
+    // nothing to do
   }
   if (notFoundValue !== defaultNotFoundValue) {
     return notFoundValue;

@@ -1,4 +1,3 @@
-import funcGetLastFixture from './func.get-last-fixture';
 import funcParseFindArgs from './func.parse-find-args';
 import funcParseFindArgsName from './func.parse-find-args-name';
 import mockHelperFindTemplateRefs from './mock-helper.find-template-refs';
@@ -7,9 +6,8 @@ const defaultNotFoundValue = {}; // simulating Symbol
 
 export default (...args: any[]) => {
   const { el, sel, notFoundValue } = funcParseFindArgs(args, defaultNotFoundValue);
-  const debugElement = el || funcGetLastFixture()?.debugElement;
 
-  const result = debugElement ? mockHelperFindTemplateRefs(debugElement, sel) : [];
+  const result = el ? mockHelperFindTemplateRefs(el, sel) : [];
   if (result.length) {
     return result[0];
   }

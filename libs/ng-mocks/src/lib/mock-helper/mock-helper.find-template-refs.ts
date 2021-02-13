@@ -3,7 +3,6 @@ import { TemplateRef } from '@angular/core';
 import { Type } from '../common/core.types';
 import { MockedDebugNode } from '../mock-render/types';
 
-import funcGetLastFixture from './func.get-last-fixture';
 import funcParseFindArgs from './func.parse-find-args';
 import funcParseProviderTokensDirectives from './func.parse-provider-tokens-directives';
 import mockHelperInput from './mock-helper.input';
@@ -121,12 +120,11 @@ const getDetector = (selector: string | Type<any> | [string] | [string, any] | a
 
 export default (...args: any[]): Array<TemplateRef<any>> => {
   const { el, sel } = funcParseFindArgs(args);
-  const debugElement = el || funcGetLastFixture()?.debugElement;
 
   const detector = getDetector(sel);
 
   const result: Array<TemplateRef<any>> = [];
-  nestedCheck(result, debugElement, node => {
+  nestedCheck(result, el, node => {
     const value = detector(node);
     if (value) {
       result.push(value);
