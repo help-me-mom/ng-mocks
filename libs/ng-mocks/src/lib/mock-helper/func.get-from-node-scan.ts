@@ -3,6 +3,11 @@ import { DebugNode } from '@angular/core';
 import { Type } from '../common/core.types';
 
 const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boolean => {
+  // LContainer should stop the scan.
+  if (Array.isArray(node)) {
+    return false;
+  }
+
   if (!el || !node.nodeName) {
     return gather;
   }
@@ -12,8 +17,7 @@ const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boo
     return node.parentNode === el.nativeNode;
   }
 
-  // checking if an injectedNode belongs to the current element.
-  return node === el.nativeNode;
+  return false;
 };
 
 const isNotObject = (node: any): boolean => !node || typeof node !== 'object';

@@ -8,7 +8,7 @@ import funcGetFromNodeScan from './func.get-from-node-scan';
 
 const detectContext = (node: DebugNode): any => {
   let current = node;
-  let context = current.nativeNode.__ngContext__;
+  let context = current.nativeNode?.__ngContext__;
   while (!context && current.parent) {
     current = current.parent;
     context = current.nativeNode.__ngContext__;
@@ -19,13 +19,12 @@ const detectContext = (node: DebugNode): any => {
 
 const contextToNodes = (context: any): any => (Array.isArray(context) ? context : context?.lView);
 
-export default <T>(result: T[], node: DebugNode & Node, proto: Type<T>): void => {
+export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: Type<T>): void => {
   if (!node || node._debugContext) {
     return;
   }
 
   const el = funcGetFromNodeElement(node);
-
   funcGetFromNodeScan(
     {
       el,

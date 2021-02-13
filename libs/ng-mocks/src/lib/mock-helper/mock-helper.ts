@@ -80,7 +80,10 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
-  find<T>(debugElement: MockedDebugElement | ComponentFixture<any>, component: Type<T>): MockedDebugElement<T>;
+  find<T>(
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
+    component: Type<T>,
+  ): MockedDebugElement<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
@@ -91,7 +94,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T, D>(
-    debugElement: MockedDebugElement | ComponentFixture<any>,
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
     component: Type<T>,
     notFoundValue: D,
   ): D | MockedDebugElement<T>;
@@ -105,7 +108,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any>(
-    debugElement: MockedDebugElement | ComponentFixture<any>,
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
     cssSelector: string | [string] | [string, string | number],
   ): MockedDebugElement<T>;
 
@@ -121,7 +124,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/find
    */
   find<T = any, D = undefined>(
-    debugElement: MockedDebugElement | ComponentFixture<any>,
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
     cssSelector: string | [string] | [string, string | number],
     notFoundValue: D,
   ): D | MockedDebugElement<T>;
@@ -135,7 +138,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T>(
-    debugElement: MockedDebugElement | ComponentFixture<any>,
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
     component: Type<T>,
   ): Array<MockedDebugElement<T>>;
 
@@ -148,7 +151,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findAll
    */
   findAll<T = any>(
-    debugElement: MockedDebugElement | ComponentFixture<any>,
+    debugElement: MockedDebugElement | ComponentFixture<any> | undefined | null,
     cssSelector: string | [string] | [string, string | number],
   ): Array<MockedDebugElement<T>>;
 
@@ -160,7 +163,7 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T;
+  findInstance<T>(debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null, instanceClass: Type<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
@@ -171,7 +174,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findInstance<T, D>(
-    debugNode: MockedDebugNode | ComponentFixture<any>,
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     instanceClass: Type<T>,
     notFoundValue: D,
   ): D | T;
@@ -184,7 +187,7 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
-  findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any>, instanceClass: Type<T>): T[];
+  findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null, instanceClass: Type<T>): T[];
 
   /**
    * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
@@ -203,7 +206,7 @@ export const ngMocks: {
    * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findTemplateRef<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any>,
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
   ): TemplateRef<T>;
 
@@ -211,7 +214,7 @@ export const ngMocks: {
    * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
   findTemplateRef<T = any, D = undefined>(
-    debugNode: MockedDebugNode | ComponentFixture<any>,
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
     notFoundValue: D,
   ): D | TemplateRef<T>;
@@ -230,7 +233,7 @@ export const ngMocks: {
    * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
   findTemplateRefs<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any>,
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
   ): Array<TemplateRef<T>>;
 
@@ -242,12 +245,12 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T>(debugNode: MockedDebugNode, directive: Type<T>): T;
+  get<T>(debugNode: MockedDebugNode | undefined | null, directive: Type<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T, D>(debugNode: MockedDebugNode, directive: Type<T>, notFoundValue: D): D | T;
+  get<T, D>(debugNode: MockedDebugNode | undefined | null, directive: Type<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/globalExclude
@@ -299,22 +302,26 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
-  input<T = any>(debugNode: MockedDebugNode, input: string): T;
+  input<T = any>(debugNode: MockedDebugNode | undefined | null, input: string): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
-  input<T = any, D = undefined>(debugNode: MockedDebugNode, input: string, notFoundValue: D): D | T;
+  input<T = any, D = undefined>(debugNode: MockedDebugNode | undefined | null, input: string, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
-  output<T = any>(debugNode: MockedDebugNode, output: string): EventEmitter<T>;
+  output<T = any>(debugNode: MockedDebugNode | undefined | null, output: string): EventEmitter<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
-  output<T = any, D = undefined>(debugNode: MockedDebugNode, output: string, notFoundValue: D): D | EventEmitter<T>;
+  output<T = any, D = undefined>(
+    debugNode: MockedDebugNode | undefined | null,
+    output: string,
+    notFoundValue: D,
+  ): D | EventEmitter<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reset

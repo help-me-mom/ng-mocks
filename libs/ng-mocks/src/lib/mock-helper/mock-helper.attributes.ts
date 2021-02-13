@@ -5,29 +5,47 @@ import mockHelperGet from './mock-helper.get';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-const parseArgs = (args: any[]): [MockedDebugElement, string, any] => [
+const parseArgs = (args: any[]): [MockedDebugElement | null | undefined, string, any] => [
   args[0],
   args[1],
   args.length === 3 ? args[2] : defaultNotFoundValue,
 ];
 
-export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
-  const [el, sel, notFoundValue] = parseArgs(args);
+const attrMatches = (attribute: string, selector: string): string | undefined => {
+  const [prop, alias = ''] = attribute.split(':', 2).map(v => v.trim());
 
-  for (const token of el.providerTokens) {
+  if ((!alias && prop === selector) || (!!alias && alias === selector)) {
+    return prop;
+  }
+
+  return undefined;
+};
+
+const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'inputs' | 'outputs', sel: string) => {
+  for (const token of el?.providerTokens || []) {
     const meta = funcParseProviderTokensDirectives(el, token);
     if (!meta) {
       continue;
     }
 
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
-      const [prop, alias = ''] = attrDef.split(':', 2).map(v => v.trim());
-      if ((!alias && prop !== sel) || (alias && alias !== sel)) {
-        continue;
+      const prop = attrMatches(attrDef, sel);
+      if (prop) {
+        return mockHelperGet(el, token)[prop];
       }
-
-      return mockHelperGet(el, token)[prop];
     }
+  }
+
+  throw new Error('Not found');
+};
+
+export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
+  const [el, sel, notFoundValue] = parseArgs(args);
+
+  try {
+    return detectAttribute(el, attr, sel);
+  } catch (e) {
+    // nothing to do
   }
   if (notFoundValue !== defaultNotFoundValue) {
     return notFoundValue;

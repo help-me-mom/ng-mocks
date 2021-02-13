@@ -9,7 +9,7 @@ const defaultNotFoundValue = {}; // simulating Symbol
 const parseArgs = <T>(
   args: any[],
 ): {
-  el: MockedDebugElement;
+  el: MockedDebugElement | null | undefined;
   notFoundValue: any;
   sel: Type<T>;
 } => ({
@@ -27,7 +27,7 @@ export default <T>(...args: any[]) => {
   }
 
   // Looking for related structural directive.
-  const prevNode = el.nativeNode.previousSibling;
+  const prevNode = el?.nativeNode.previousSibling;
   const matches =
     !prevNode || prevNode.nodeName !== '#comment' || !el || !el.parent
       ? []
