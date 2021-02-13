@@ -23,3 +23,17 @@ const elements1 = ngMocks.findAll('div.item1');
 const elements2 = ngMocks.findAll(fixture, 'div.item2');
 const elements3 = ngMocks.findAll(fixture.debugElement, 'div.item3');
 ```
+
+`cssSelector` supports a tuple to generate an attribute css selector:
+
+```ts
+const elements1 = ngMocks.findAll(['data-key']);
+// the same as
+const elements2 = ngMocks.findAll('[data-key]');
+```
+
+```ts
+const elements1 = ngMocks.findAll(['data-key', 5]);
+// the same as
+const elements2 = ngMocks.findAll('[data-key="5"]');
+```

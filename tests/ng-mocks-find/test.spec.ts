@@ -1,0 +1,17 @@
+import { MockRender, ngMocks } from 'ng-mocks';
+
+describe('ng-mocks-find', () => {
+  it('find attributes', () => {
+    const fixture = MockRender(
+      `<div data-1="1" data-2="test" data-3></div>`,
+    );
+
+    const el1 = ngMocks.find(['data-1', 1]);
+    const el2 = ngMocks.find(fixture, ['data-2', 'test']);
+    const el3 = ngMocks.find(fixture.debugElement, ['data-3']);
+
+    expect(el1).toBeDefined();
+    expect(el1).toEqual(el2);
+    expect(el1).toEqual(el3);
+  });
+});

@@ -42,6 +42,8 @@ module.exports = {
         'api/ngMocks/findAll',
         'api/ngMocks/findInstance',
         'api/ngMocks/findInstances',
+        'api/ngMocks/findTemplateRef',
+        'api/ngMocks/findTemplateRefs',
         'api/ngMocks/stub',
         'api/ngMocks/stubMember',
         'api/ngMocks/guts',

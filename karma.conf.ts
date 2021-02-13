@@ -8,7 +8,7 @@ process.on('infrastructure_error', error => {
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
-module.exports = (config: KarmaTypescriptConfig) => {
+export default (config: KarmaTypescriptConfig) => {
   config.set({
     autoWatch: false,
     browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
