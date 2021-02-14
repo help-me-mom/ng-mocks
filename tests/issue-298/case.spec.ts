@@ -39,6 +39,9 @@ describe('issue-298:case', () => {
       expect(instance1).not.toBe(instance2);
       expect(instance1).not.toBe(instance3);
       expect(instance2).not.toBe(instance3);
+      expect(instance1.value).toEqual('d1');
+      expect(instance2.value).toEqual('d2');
+      expect(instance3.value).toEqual('d3');
     });
   });
 
@@ -66,6 +69,9 @@ describe('issue-298:case', () => {
       expect(instances1.length).toEqual(1);
       expect(instances2.length).toEqual(1);
       expect(instances3.length).toEqual(1);
+      expect(instances1[0].value).toEqual('d1');
+      expect(instances2[0].value).toEqual('d2');
+      expect(instances3[0].value).toEqual('d3');
     });
   });
 });
