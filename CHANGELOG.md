@@ -1,3 +1,20 @@
+# [11.6.0](https://github.com/ike18t/ng-mocks/compare/v11.5.0...v11.6.0) (2021-02-14)
+
+
+### Bug Fixes
+
+* all find functions can handle undefined debug element ([397ecf8](https://github.com/ike18t/ng-mocks/commit/397ecf8b731cdb8aee7effd16f6d0dca536bc0f3))
+* better types ([bd7f72b](https://github.com/ike18t/ng-mocks/commit/bd7f72b4841c1e603ddb592de53f7bd44541c208))
+* correct stop of search in ivy tree ([952986e](https://github.com/ike18t/ng-mocks/commit/952986e89a76bb0a1effd7fe2ee030782694cce3)), closes [#298](https://github.com/ike18t/ng-mocks/issues/298)
+* issue of useExisting and mat components ([0714da8](https://github.com/ike18t/ng-mocks/commit/0714da82100f38f4f34d74e77245855a09478cfa))
+
+
+### Features
+
+* find TemplateRef / ng-template ([093eea7](https://github.com/ike18t/ng-mocks/commit/093eea7b7a8a818f060192eb354623e3abd88b74)), closes [#290](https://github.com/ike18t/ng-mocks/issues/290)
+* support of A12 ([4627fe2](https://github.com/ike18t/ng-mocks/commit/4627fe23ca496db610d8911ff6b1c1e97c6f70e8)), closes [#293](https://github.com/ike18t/ng-mocks/issues/293)
+* **#288:** correct render for ContentChild properties ([5fec515](https://github.com/ike18t/ng-mocks/commit/5fec51598613422f531b60f12058563209abb929)), closes [#288](https://github.com/ike18t/ng-mocks/issues/288)
+
 # [11.5.0](https://github.com/ike18t/ng-mocks/compare/v11.4.0...v11.5.0) (2021-01-22)
 
 
