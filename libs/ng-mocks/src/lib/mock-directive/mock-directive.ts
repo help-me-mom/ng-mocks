@@ -64,13 +64,13 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
     coreDefineProperty(this, '__isStructural', template && vcr);
 
     // Providing method to render mock values.
-    (this as any).__render = ($implicit?: any, variables?: Record<keyof any, any>) => {
+    coreDefineProperty(this, '__render', ($implicit?: any, variables?: Record<keyof any, any>) => {
       if (vcr && template) {
         vcr.clear();
         vcr.createEmbeddedView(template, { ...variables, $implicit });
         cdr.detectChanges();
       }
-    };
+    });
   }
 }
 

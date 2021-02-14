@@ -17,12 +17,12 @@ export type MockedComponentSelector<T> =
 export type MockedComponent<T> = T &
   LegacyControlValueAccessor & {
     /**
-     *  Helper function to hide rendered @ContentChild() template.
+     * @deprecated use ngMocks.hide instead
      */
     __hide(contentChildSelector: MockedComponentSelector<T>): void;
 
     /**
-     * Helper function to render any @ContentChild() template with any context.
+     * @deprecated use ngMocks.render instead
      */
     __render(
       contentChildSelector: MockedComponentSelector<T>,

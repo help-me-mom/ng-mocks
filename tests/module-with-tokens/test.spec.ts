@@ -1,4 +1,4 @@
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
   MY_TOKEN_MULTI,
@@ -30,9 +30,7 @@ describe('module-with-tokens:mock-0', () => {
 
   it('fails to render all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual(
+    expect(ngMocks.formatHtml(fixture)).toEqual(
       '<internal-component>"V1" [ "V2", "V3" ]</internal-component>',
     );
   });
@@ -49,9 +47,7 @@ describe('module-with-tokens:mock-1', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual(
+    expect(ngMocks.formatHtml(fixture)).toEqual(
       '<internal-component> [ null, null ]</internal-component>',
     );
   });
@@ -67,9 +63,7 @@ describe('module-with-tokens:mock-2', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual(
+    expect(ngMocks.formatHtml(fixture)).toEqual(
       '<internal-component>' +
         '"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]' +
         '</internal-component>',
@@ -104,9 +98,7 @@ describe('module-with-tokens:real', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual(
+    expect(ngMocks.formatHtml(fixture)).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });
@@ -122,9 +114,7 @@ describe('module-with-tokens:keep', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual(
+    expect(ngMocks.formatHtml(fixture)).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
     );
   });

@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[dependency]',
@@ -53,10 +53,7 @@ describe('MockDirective:Structural', () => {
 
     // And let's render it manually now.
     const mockDirective = ngMocks.findInstance(DependencyDirective);
-    if (isMockOf(mockDirective, DependencyDirective, 'd')) {
-      mockDirective.__render();
-      fixture.detectChanges();
-    }
+    ngMocks.render(mockDirective, mockDirective);
 
     // The content of the structural directive should be rendered.
     expect(fixture.nativeElement.innerHTML).toContain('>content<');

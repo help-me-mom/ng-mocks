@@ -17,16 +17,23 @@ access desired elements and instances in fixtures.
 * [`globalReplace()`](ngMocks/globalReplace.md)
 * [`globalWipe()`](ngMocks/globalWipe.md)
 
+## Manipulating `ng-template`
+
+- [`render()`](ngMocks/render.md)
+- [`hide()`](ngMocks/hide.md)
+
 ## Accessing elements and instances
 
 - [`input()`](ngMocks/input.md)
 - [`output()`](ngMocks/output.md)
 
-* [`get()`](ngMocks/get.md)
 * [`find()`](ngMocks/find.md)
 * [`findAll()`](ngMocks/findAll.md)
-* [`findInstance()`](ngMocks/findInstance.md)
-* [`findInstances()`](ngMocks/findInstances.md)
+
+- [`get()`](ngMocks/get.md)
+- [`findInstance()`](ngMocks/findInstance.md)
+- [`findInstances()`](ngMocks/findInstances.md)
+
 * [`findTemplateRef()`](ngMocks/findTemplateRef.md)
 * [`findTemplateRefs()`](ngMocks/findTemplateRefs.md)
 
@@ -40,6 +47,7 @@ access desired elements and instances in fixtures.
 - [`guts()`](ngMocks/guts.md)
 - [`faster()`](ngMocks/faster.md)
 - [`throwOnConsole()`](ngMocks/throwOnConsole.md)
+- `formatHtml()` - removes comments and sequences of spaces and new lines
 
 * [`flushTestBed()`](ngMocks/flushTestBed.md)
 * [`reset()`](ngMocks/reset.md)

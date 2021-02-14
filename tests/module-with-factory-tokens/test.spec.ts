@@ -1,5 +1,5 @@
 import { VERSION } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
   MY_TOKEN_MULTI,
@@ -73,9 +73,7 @@ describe('module-with-factory-tokens:mock-0', () => {
 
   it('fails to render all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toContain('"V1" [ "V2" ]');
+    expect(ngMocks.formatHtml(fixture)).toContain('"V1" [ "V2" ]');
   });
 });
 
@@ -91,9 +89,9 @@ describe('module-with-factory-tokens:mock-1', () => {
 
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
-    expect(
-      fixture.nativeElement.innerHTML.replace(/\s+/gm, ' '),
-    ).toEqual('<internal-component> </internal-component>');
+    expect(ngMocks.formatHtml(fixture)).toEqual(
+      '<internal-component> </internal-component>',
+    );
   });
 });
 

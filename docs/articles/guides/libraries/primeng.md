@@ -27,7 +27,7 @@ To test it, we need to:
 - assert templates
 
 :::note
-Information about testing `ng-template` and its `TemplateRef` is taken from the [section about testing TemplateRef](../../extra/templateref.md).
+Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](../../api/ngMocks/render.md).
 :::
 
 ## Spec file
@@ -92,17 +92,16 @@ it('binds outputs', () => {
 
 ## Testing pTemplate="header" template
 
-To test the `ng-template`, we should find which directive belongs to `pTemplate` attribute.
-It is `PrimeTemplate`.
-
-The test repeats steps for [Templates by directive](../../extra/templateref.md#templates-by-directive).
+To test the `ng-template`,
+we should find `TemplateRef` which belongs to `pTemplate` attribute with the provided value,
+render it, and assert the rendered html.
 
 The tools from `ng-mocks` we need:
 
 - [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
 - [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `p-calendar`
-- [`ngMocks.findInstances`](../../api/ngMocks/findInstances.md): to find the instance of `PrimeTemplate`
-- [`isMockOf`](../../api/helpers/isMockOf.md): to verify that `PrimeTemplate` has been mocked to render it
+- [`ngMocks.findTemplateRef`](../../api/ngMocks/findTemplateRef.md): to find a template which belongs `pTemplate`
+- [`ngMocks.render`](../../api/ngMocks/render.md): to render the template
 
 ```ts
 it('provides correct template for pTemplate="header"', () => {
@@ -112,18 +111,16 @@ it('provides correct template for pTemplate="header"', () => {
   // Looking for a debug element of `p-calendar`.
   const calendarEl = ngMocks.find('p-calendar');
 
-  // Looking for the instance of PrimeTemplate.
-  // 'header' is the first one.
-  const [header] = ngMocks.findInstances(calendarEl, PrimeTemplate);
+  // Looking for the template of 'header'.
+  const header = ngMocks.findTemplateRef(
+    calendarEl,
+    // attr name and its value
+    ['pTemplate', 'header'],
+  );
 
-  // Asserting that it is the header.
-  expect(header.name).toEqual('header');
-
-  // Verifying that the directive has been mocked.
-  // And rendering it.
-  if (isMockOf(header, PrimeTemplate, 'd')) {
-    header.__render();
-  }
+  // Verifies that the directive has been mocked.
+  // And renders it.
+  ngMocks.render(calendarEl.componentInstance, header);
 
   // Asserting the rendered template.
   expect(calendarEl.nativeElement.innerHTML).toContain('Header');
@@ -142,21 +139,16 @@ it('provides correct template for pTemplate="footer"', () => {
   // Looking for a debug element of `p-calendar`.
   const calendarEl = ngMocks.find('p-calendar');
 
-  // Looking for the instance of PrimeTemplate.
-  // 'footer' is the second one.
-  const [, footer] = ngMocks.findInstances(
+  // Looking for the template of 'footer'.
+  const footer = ngMocks.findTemplateRef(
     calendarEl,
-    PrimeTemplate,
+    // attr name and its value
+    ['pTemplate', 'footer'],
   );
 
-  // Asserting that it is the footer.
-  expect(footer.name).toEqual('footer');
-
-  // Verifying that the directive has been mocked.
-  // And rendering it.
-  if (isMockOf(footer, PrimeTemplate, 'd')) {
-    footer.__render();
-  }
+  // Verifies that the directive has been mocked.
+  // And renders it.
+  ngMocks.render(calendarEl.componentInstance, footer);
 
   // Asserting the rendered template.
   expect(calendarEl.nativeElement.innerHTML).toContain('Footer');

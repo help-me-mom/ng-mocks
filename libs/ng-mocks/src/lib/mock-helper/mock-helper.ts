@@ -18,6 +18,7 @@ import mockHelperFindInstances from './mock-helper.find-instances';
 import mockHelperFindTemplateRef from './mock-helper.find-template-ref';
 import mockHelperFindTemplateRefs from './mock-helper.find-template-refs';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
+import mockHelperFormatHtml from './mock-helper.format-html';
 import mockHelperGet from './mock-helper.get';
 import mockHelperGlobalExclude from './mock-helper.global-exclude';
 import mockHelperGlobalKeep from './mock-helper.global-keep';
@@ -31,6 +32,8 @@ import mockHelperReset from './mock-helper.reset';
 import mockHelperStub from './mock-helper.stub';
 import mockHelperStubMember from './mock-helper.stub-member';
 import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
+import mockHelperHide from './render/mock-helper.hide';
+import mockHelperRender from './render/mock-helper.render';
 
 /**
  * @see https://ng-mocks.sudo.eu/api/ngMocks
@@ -190,20 +193,16 @@ export const ngMocks: {
   findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null, instanceClass: Type<T>): T[];
 
   /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
-   */
-  findTemplateRef<T = any>(selector: string | [string] | [string, any] | AnyType<any>): TemplateRef<T>;
-
-  /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
   findTemplateRef<T = any, D = undefined>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
     notFoundValue: D,
   ): D | TemplateRef<T>;
 
   /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
   findTemplateRef<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -211,36 +210,39 @@ export const ngMocks: {
   ): TemplateRef<T>;
 
   /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
   findTemplateRef<T = any, D = undefined>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
     notFoundValue: D,
   ): D | TemplateRef<T>;
 
   /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
-  findTemplateRefs<T = any>(selector: string | [string] | [string, any] | AnyType<any>): Array<TemplateRef<T>>;
+  findTemplateRef<T = any>(selector: string | [string] | [string, any] | AnyType<any>): TemplateRef<T>;
 
   /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
-   */
-  findTemplateRefs<T = any>(selector: string | [string] | [string, any] | AnyType<any>): Array<TemplateRef<T>>;
-
-  /**
-   * TODO @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRefs
    */
   findTemplateRefs<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any] | AnyType<any>,
   ): Array<TemplateRef<T>>;
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRefs
+   */
+  findTemplateRefs<T = any>(selector: string | [string] | [string, any] | AnyType<any>): Array<TemplateRef<T>>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/flushTestBed
    */
   flushTestBed(): void;
+
+  /**
+   * Removes comments and sequences of spaces and new lines.
+   */
+  formatHtml(html: string | HTMLElement | { nativeElement: HTMLElement }): string;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
@@ -300,6 +302,16 @@ export const ngMocks: {
   ): TestModuleMetadata;
 
   /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/hide
+   */
+  hide(instance: object, tpl?: TemplateRef<any>): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/hide
+   */
+  hide(instance: object, directive: object): void;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
   input<T = any>(debugNode: MockedDebugNode | undefined | null, input: string): T;
@@ -322,6 +334,16 @@ export const ngMocks: {
     output: string,
     notFoundValue: D,
   ): D | EventEmitter<T>;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/render
+   */
+  render(instance: object, template: TemplateRef<any>, $implicit?: any, variables?: Record<keyof any, any>): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/render
+   */
+  render(instance: object, directive: object, $implicit?: any, variables?: Record<keyof any, any>): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reset
@@ -380,6 +402,7 @@ export const ngMocks: {
   findTemplateRef: mockHelperFindTemplateRef,
   findTemplateRefs: mockHelperFindTemplateRefs,
   flushTestBed: mockHelperFlushTestBed,
+  formatHtml: mockHelperFormatHtml,
   get: mockHelperGet,
   globalExclude: mockHelperGlobalExclude,
   globalKeep: mockHelperGlobalKeep,
@@ -387,8 +410,10 @@ export const ngMocks: {
   globalReplace: mockHelperGlobalReplace,
   globalWipe: mockHelperGlobalWipe,
   guts: mockHelperGuts,
+  hide: mockHelperHide,
   input: mockHelperInput,
   output: mockHelperOutput,
+  render: mockHelperRender,
   reset: mockHelperReset,
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,

@@ -30,13 +30,12 @@ export type MockedDirective<T> = T &
     __vcr?: ViewContainerRef;
 
     /**
-     * Pointer to the view of Structural Directives.
      * @deprecated use this.__vcr
      */
     __viewContainer?: ViewContainerRef;
 
     /**
-     * Helper function to render any Structural Directive with any context.
+     * @deprecated use ngMocks.hide instead
      */
     __render($implicit?: any, variables?: Record<keyof any, any>): void;
   };

@@ -10,6 +10,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
@@ -376,128 +377,147 @@ describe('MockComponent', () => {
     expect(actual.__prop__metadata__).toEqual({
       o1: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
+          selector: 'i1',
           isViewQuery: false,
           read: TemplateRef,
-          selector: 'i1',
+          ngMetadataName: 'ContentChild',
         }),
       ],
       o2: [
         jasmine.objectContaining({
-          descendants: false,
-          first: false,
+          selector: 'i2',
           isViewQuery: false,
           read: TemplateRef,
-          selector: 'i2',
+          ngMetadataName: 'ContentChildren',
         }),
       ],
       o3: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
+          selector: 'i3',
           isViewQuery: true,
           read: TemplateRef,
-          selector: 'i3',
+          ngMetadataName: 'ViewChild',
         }),
       ],
       o4: [
         jasmine.objectContaining({
-          descendants: true,
-          first: false,
+          selector: 'i4',
           isViewQuery: true,
           read: TemplateRef,
-          selector: 'i4',
+          ngMetadataName: 'ViewChildren',
         }),
       ],
       o5: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
+          selector: 'i5',
           isViewQuery: false,
           read: ElementRef,
-          selector: 'i5',
+          ngMetadataName: 'ContentChild',
         }),
       ],
       o6: [
         jasmine.objectContaining({
-          descendants: false,
-          first: false,
+          selector: 'i6',
           isViewQuery: false,
           read: ElementRef,
-          selector: 'i6',
+          ngMetadataName: 'ContentChildren',
         }),
       ],
       o7: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
+          selector: 'i7',
           isViewQuery: true,
           read: ElementRef,
-          selector: 'i7',
+          ngMetadataName: 'ViewChild',
         }),
       ],
       o8: [
         jasmine.objectContaining({
-          descendants: true,
-          first: false,
+          selector: 'i8',
           isViewQuery: true,
           read: ElementRef,
-          selector: 'i8',
+          ngMetadataName: 'ViewChildren',
+        }),
+      ],
+
+      __ngMocksVcr_o1: [
+        jasmine.objectContaining({
+          selector: 'i1',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChild',
+        }),
+      ],
+      __ngMocksVcr_o2: [
+        jasmine.objectContaining({
+          selector: 'i2',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChildren',
+        }),
+      ],
+      __ngMocksVcr_o5: [
+        jasmine.objectContaining({
+          selector: 'i5',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChild',
+        }),
+      ],
+      __ngMocksVcr_o6: [
+        jasmine.objectContaining({
+          selector: 'i6',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChildren',
         }),
       ],
 
       __mockView_key_i1: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
           selector: 'key_i1',
+          isViewQuery: true,
           static: false,
+          ngMetadataName: 'ViewChild',
         }),
       ],
       __mockTpl_key_i1: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: false,
           selector: 'i1',
+          isViewQuery: false,
+          ngMetadataName: 'ContentChild',
         }),
       ],
       __mockView_prop_o1: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
           selector: 'prop_o1',
+          isViewQuery: true,
           static: false,
+          ngMetadataName: 'ViewChild',
         }),
       ],
 
       __mockView_key_i2: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
           selector: 'key_i2',
+          isViewQuery: true,
           static: false,
+          ngMetadataName: 'ViewChild',
         }),
       ],
       __mockTpl_key_i2: [
         jasmine.objectContaining({
-          descendants: false,
-          first: false,
-          isViewQuery: false,
           selector: 'i2',
+          isViewQuery: false,
+          ngMetadataName: 'ContentChildren',
         }),
       ],
       __mockView_prop_o2: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
           selector: 'prop_o2',
+          isViewQuery: true,
           static: false,
+          ngMetadataName: 'ViewChild',
         }),
       ],
     });

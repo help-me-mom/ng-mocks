@@ -99,28 +99,28 @@ const mixRenderHandleViews = (
 
 const mixRender = (instance: MockConfig & Record<keyof any, any>, cdr: ChangeDetectorRef): void => {
   // Providing a method to render any @ContentChild based on its selector.
-  instance.__render = (
-    contentChildSelector: string | [string, ...number[]],
-    $implicit?: any,
-    variables?: Record<keyof any, any>,
-  ) => {
-    const [type, key, selector, indices] = getKey(contentChildSelector);
+  coreDefineProperty(
+    instance,
+    '__render',
+    (contentChildSelector: string | [string, ...number[]], $implicit?: any, variables?: Record<keyof any, any>) => {
+      const [type, key, selector, indices] = getKey(contentChildSelector);
 
-    const vcr = mixRenderPrepareVcr(instance, type, selector, cdr);
-    if (!vcr) {
-      return;
-    }
+      const vcr = mixRenderPrepareVcr(instance, type, selector, cdr);
+      if (!vcr) {
+        return;
+      }
 
-    const property: any = instance[key];
-    const templates = property instanceof QueryList ? property.toArray() : [property];
+      const property: any = instance[key];
+      const templates = property instanceof QueryList ? property.toArray() : [property];
 
-    const views = instance[`ngMocksRender_${type}_${selector}_views`] || [];
-    const index = mixRenderHandleViews(vcr, cdr, templates, views, indices, { ...variables, $implicit });
+      const views = instance[`ngMocksRender_${type}_${selector}_views`] || [];
+      const index = mixRenderHandleViews(vcr, cdr, templates, views, indices, { ...variables, $implicit });
 
-    mixRenderReorderViews(vcr, views, index);
-    instance[`ngMocksRender_${type}_${selector}_views`] = views;
-    cdr.detectChanges();
-  };
+      mixRenderReorderViews(vcr, views, index);
+      instance[`ngMocksRender_${type}_${selector}_views`] = views;
+      cdr.detectChanges();
+    },
+  );
 };
 
 const mixHideHandler = (
@@ -143,7 +143,7 @@ const mixHideHandler = (
 
 const mixHide = (instance: MockConfig & Record<keyof any, any>, changeDetector: ChangeDetectorRef): void => {
   // Providing method to hide any @ContentChild based on its selector.
-  instance.__hide = (contentChildSelector: string | [string, ...number[]]) => {
+  coreDefineProperty(instance, '__hide', (contentChildSelector: string | [string, ...number[]]) => {
     const [type, , selector, indices] = getKey(contentChildSelector);
 
     if (!instance[`ngMocksRender_${type}_${selector}`]) {
@@ -155,7 +155,7 @@ const mixHide = (instance: MockConfig & Record<keyof any, any>, changeDetector: 
       instance[`ngMocksRender_${type}_${selector}`] = false;
     }
     changeDetector.detectChanges();
-  };
+  });
 };
 
 class ComponentMockBase extends LegacyControlValueAccessor implements AfterContentInit {

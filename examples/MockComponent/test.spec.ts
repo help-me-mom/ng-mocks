@@ -6,7 +6,7 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'app-child',
@@ -58,7 +58,7 @@ describe('MockComponent', () => {
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. TestedComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
-    // the mock component so you can assert on it.
+    // the mock component so we can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
@@ -123,14 +123,14 @@ describe('MockComponent', () => {
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
     const mockComponent = fixture.point.componentInstance;
-    if (isMockOf(mockComponent, DependencyComponent, 'c')) {
-      mockComponent.__render('something');
-      fixture.detectChanges();
-    }
+    ngMocks.render(
+      mockComponent,
+      ngMocks.findTemplateRef('something'),
+    );
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockNgTemplate = ngMocks.find('[data-key="something"]')
+    const mockNgTemplate = ngMocks.find(DependencyComponent)
       .nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });

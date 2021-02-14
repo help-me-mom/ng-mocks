@@ -1,13 +1,10 @@
 import { Component, NgModule } from '@angular/core';
 import {
-  MatCellDef,
-  MatHeaderCellDef,
   MatHeaderRowDef,
   MatRowDef,
-  MatTable,
   MatTableModule,
 } from '@angular/material/table';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 export interface PeriodicElement {
   name: string;
@@ -90,7 +87,7 @@ describe('mat-table:props', () => {
   it('binds inputs', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
     expect(ngMocks.input(tableEl, 'dataSource')).toBe(
       targetComponent.dataSource,
@@ -99,26 +96,26 @@ describe('mat-table:props', () => {
 
   it('provides correct template for matColumnDef="position"', () => {
     MockRender(TargetComponent);
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
-    const [header] = ngMocks.findInstances(tableEl, MatHeaderCellDef);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<th mat-header-cell="">No.</th>',
     );
-    if (isMockOf(header, MatHeaderCellDef, 'd')) {
-      header.__render();
-    }
+    const [header] = ngMocks.findTemplateRefs(tableEl, [
+      'matHeaderCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, header);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<th mat-header-cell="">No.</th>',
     );
 
-    const [cell] = ngMocks.findInstances(tableEl, MatCellDef);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<td mat-cell=""> testPosition </td>',
     );
-    if (isMockOf(cell, MatCellDef, 'd')) {
-      cell.__render({ position: 'testPosition' });
-    }
+    const [cell] = ngMocks.findTemplateRefs(tableEl, ['matCellDef']);
+    ngMocks.render(tableEl.componentInstance, cell, {
+      position: 'testPosition',
+    });
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<td mat-cell=""> testPosition </td>',
     );
@@ -126,29 +123,28 @@ describe('mat-table:props', () => {
 
   it('provides correct template for matColumnDef="name"', () => {
     MockRender(TargetComponent);
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
-    const [, header] = ngMocks.findInstances(
-      tableEl,
-      MatHeaderCellDef,
-    );
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<th mat-header-cell="">Name</th>',
     );
-    if (isMockOf(header, MatHeaderCellDef, 'd')) {
-      header.__render();
-    }
+    const [, header] = ngMocks.findTemplateRefs(tableEl, [
+      'matHeaderCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, header);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<th mat-header-cell="">Name</th>',
     );
 
-    const [, cell] = ngMocks.findInstances(tableEl, MatCellDef);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<td mat-cell="">testName</td>',
     );
-    if (isMockOf(cell, MatCellDef, 'd')) {
-      cell.__render({ name: 'testName' });
-    }
+    const [, cell] = ngMocks.findTemplateRefs(tableEl, [
+      'matCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, cell, {
+      name: 'testName',
+    });
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<td mat-cell="">testName</td>',
     );
@@ -156,29 +152,28 @@ describe('mat-table:props', () => {
 
   it('provides correct template for matColumnDef="weight"', () => {
     MockRender(TargetComponent);
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
-    const [, , header] = ngMocks.findInstances(
-      tableEl,
-      MatHeaderCellDef,
-    );
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<th mat-header-cell="">Weight</th>',
     );
-    if (isMockOf(header, MatHeaderCellDef, 'd')) {
-      header.__render();
-    }
+    const [, , header] = ngMocks.findTemplateRefs(tableEl, [
+      'matHeaderCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, header);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<th mat-header-cell="">Weight</th>',
     );
 
-    const [, , cell] = ngMocks.findInstances(tableEl, MatCellDef);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<td mat-cell=""> testWeight </td>',
     );
-    if (isMockOf(cell, MatCellDef, 'd')) {
-      cell.__render({ weight: 'testWeight' });
-    }
+    const [, , cell] = ngMocks.findTemplateRefs(tableEl, [
+      'matCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, cell, {
+      weight: 'testWeight',
+    });
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<td mat-cell=""> testWeight </td>',
     );
@@ -186,29 +181,28 @@ describe('mat-table:props', () => {
 
   it('provides correct template for matColumnDef="symbol"', () => {
     MockRender(TargetComponent);
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
-    const [, , , header] = ngMocks.findInstances(
-      tableEl,
-      MatHeaderCellDef,
-    );
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<th mat-header-cell="">Symbol</th>',
     );
-    if (isMockOf(header, MatHeaderCellDef, 'd')) {
-      header.__render();
-    }
+    const [, , , header] = ngMocks.findTemplateRefs(tableEl, [
+      'matHeaderCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, header);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<th mat-header-cell="">Symbol</th>',
     );
 
-    const [, , , cell] = ngMocks.findInstances(tableEl, MatCellDef);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<td mat-cell=""> testSymbol </td>',
     );
-    if (isMockOf(cell, MatCellDef, 'd')) {
-      cell.__render({ symbol: 'testSymbol' });
-    }
+    const [, , , cell] = ngMocks.findTemplateRefs(tableEl, [
+      'matCellDef',
+    ]);
+    ngMocks.render(tableEl.componentInstance, cell, {
+      symbol: 'testSymbol',
+    });
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<td mat-cell=""> testSymbol </td>',
     );
@@ -217,16 +211,14 @@ describe('mat-table:props', () => {
   it('provides correct template for mat-header-row', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
     const header = ngMocks.findInstance(tableEl, MatHeaderRowDef);
     expect(header.columns).toBe(targetComponent.displayedColumns);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<tr mat-header-row=""></tr>',
     );
-    if (isMockOf(header, MatHeaderRowDef, 'd')) {
-      header.__render();
-    }
+    ngMocks.render(tableEl.componentInstance, header);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<tr mat-header-row=""></tr>',
     );
@@ -235,16 +227,14 @@ describe('mat-table:props', () => {
   it('provides correct template for mat-row', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find(MatTable);
+    const tableEl = ngMocks.find('[mat-table]');
 
     const row = ngMocks.findInstance(tableEl, MatRowDef);
     expect(row.columns).toBe(targetComponent.displayedColumns);
     expect(tableEl.nativeElement.innerHTML).not.toContain(
       '<tr mat-row=""></tr>',
     );
-    if (isMockOf(row, MatRowDef, 'd')) {
-      row.__render();
-    }
+    ngMocks.render(tableEl.componentInstance, row);
     expect(tableEl.nativeElement.innerHTML).toContain(
       '<tr mat-row=""></tr>',
     );
