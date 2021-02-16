@@ -49,7 +49,7 @@ const processTokens = (mockType: AnyType<any>, provider: any) => {
 const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>, provider: any) => {
   const provide = funcGetProvider(provider);
   if (provider !== provide && provider.useExisting === sourceType) {
-    return toExistingProvider(provider, mockType);
+    return toExistingProvider(provide, mockType);
   }
   if (
     provider !== provide &&

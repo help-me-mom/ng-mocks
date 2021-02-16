@@ -1,10 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  NgSelectComponent,
-  NgSelectModule,
-} from '@ng-select/ng-select';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
@@ -64,8 +61,8 @@ describe('ng-select:props', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
 
-    // Looking for a debug element of `NgSelectComponent`.
-    const ngSelectEl = ngMocks.find(NgSelectComponent);
+    // Looking for a debug element of the ng-select.
+    const ngSelectEl = ngMocks.find('ng-select');
 
     // Asserting bound properties.
     expect(ngMocks.input(ngSelectEl, 'items')).toBe(
@@ -86,8 +83,8 @@ describe('ng-select:props', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
 
-    // Looking for a debug element of `NgSelectComponent`.
-    const ngSelectEl = ngMocks.find(NgSelectComponent);
+    // Looking for a debug element of the ng-select.
+    const ngSelectEl = ngMocks.find('ng-select');
 
     // Simulating an emit.
     ngMocks.output(ngSelectEl, 'ngModelChange').emit('test');
@@ -100,26 +97,28 @@ describe('ng-select:props', () => {
     // Rendering TargetComponent.
     MockRender(TargetComponent);
 
-    // Looking for the instance of `NgSelectComponent`.
-    const ngSelect = ngMocks.findInstance(NgSelectComponent);
+    // Looking for a debug element of the ng-select.
+    const ngSelectEl = ngMocks.find('ng-select');
 
-    // Verifying that the instance has been mocked.
-    // And rendering its property,
-    // which points to the desired TemplateRef.
-    if (isMockOf(ngSelect, NgSelectComponent, 'c')) {
-      ngSelect.__render(
-        ['labelTemplate'],
-        {},
-        // Providing context variables.
-        { item: { name: 'test' } },
-      );
-    }
+    // Looking for the ng-label-tmp template
+    const ngLabelTmp = ngMocks.findTemplateRef(
+      ngSelectEl,
+      // attr name
+      ['ng-label-tmp'],
+    );
 
-    // Looking for a debug element of the rendered TemplateRef.
-    const tplEl = ngMocks.find('[data-prop="labelTemplate"]');
+    // Verifies that ngSelect can access ngLabelTmp,
+    // and renders it.
+    ngMocks.render(
+      ngSelectEl.componentInstance,
+      ngLabelTmp,
+      {},
+      // Providing context variables.
+      { item: { name: 'test' } },
+    );
 
     // Asserting the rendered html.
-    expect(tplEl.nativeElement.innerHTML).toContain(
+    expect(ngSelectEl.nativeElement.innerHTML).toContain(
       '<strong>test</strong>',
     );
   });
@@ -128,32 +127,34 @@ describe('ng-select:props', () => {
     // Rendering TargetComponent and accessing its instance.
     MockRender(TargetComponent);
 
-    // Looking for the instance of `NgSelectComponent`.
-    const ngSelect = ngMocks.findInstance(NgSelectComponent);
+    // Looking for a debug element of the ng-select.
+    const ngSelectEl = ngMocks.find('ng-select');
 
-    // Verifying that the instance has been mocked.
-    // And rendering its property,
-    // which points to the desired TemplateRef.
-    if (isMockOf(ngSelect, NgSelectComponent, 'c')) {
-      ngSelect.__render(
-        ['optgroupTemplate'],
-        {},
-        // Providing context variables.
-        {
-          index: 7,
-          item: {
-            avatar: 'test.jpeg',
-            name: 'test',
-          },
+    // Looking for the ng-optgroup-tmp template
+    const ngOptgroupTmp = ngMocks.findTemplateRef(
+      ngSelectEl,
+      // attr name
+      ['ng-optgroup-tmp'],
+    );
+
+    // Verifies that ngSelect can access ngOptgroupTmp,
+    // and renders it.
+    ngMocks.render(
+      ngSelectEl.componentInstance,
+      ngOptgroupTmp,
+      {},
+      // Providing context variables.
+      {
+        index: 7,
+        item: {
+          avatar: 'test.jpeg',
+          name: 'test',
         },
-      );
-    }
-
-    // Looking for a debug element of the rendered TemplateRef.
-    const tplEl = ngMocks.find('[data-prop="optgroupTemplate"]');
+      },
+    );
 
     // Asserting the rendered html.
-    expect(tplEl.nativeElement.innerHTML).toContain(
+    expect(ngSelectEl.nativeElement.innerHTML).toContain(
       '7 <img src="test.jpeg" alt="test">',
     );
   });
@@ -162,31 +163,34 @@ describe('ng-select:props', () => {
     // Rendering TargetComponent and accessing its instance.
     MockRender(TargetComponent);
 
-    // Looking for the instance of `NgSelectComponent`.
-    const ngSelect = ngMocks.findInstance(NgSelectComponent);
+    // Looking for a debug element of the ng-select.
+    const ngSelectEl = ngMocks.find('ng-select');
+
+    // Looking for the ng-option-tmp template
+    const ngOptionTmp = ngMocks.findTemplateRef(
+      ngSelectEl,
+      // attr name
+      ['ng-option-tmp'],
+    );
 
     // Verifying that the instance has been mocked.
     // And rendering its property,
     // which points to the desired TemplateRef.
-    if (isMockOf(ngSelect, NgSelectComponent, 'c')) {
-      ngSelect.__render(
-        ['optionTemplate'],
-        {},
-        // Providing context variables.
-        {
-          item: {
-            name: 'test',
-          },
-          searchTerm: 'search',
+    ngMocks.render(
+      ngSelectEl.componentInstance,
+      ngOptionTmp,
+      {},
+      // Providing context variables.
+      {
+        item: {
+          name: 'test',
         },
-      );
-    }
-
-    // Looking for a debug element of the rendered TemplateRef.
-    const labelEl = ngMocks.find('[data-prop="optionTemplate"]');
+        searchTerm: 'search',
+      },
+    );
 
     // Asserting the rendered html.
-    expect(labelEl.nativeElement.innerHTML).toContain(
+    expect(ngSelectEl.nativeElement.innerHTML).toContain(
       '<span class="ng-option-tmp">search test</span>',
     );
   });

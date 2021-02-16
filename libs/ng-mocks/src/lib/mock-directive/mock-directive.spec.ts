@@ -1,10 +1,11 @@
-// tslint:disable max-file-line-count
+// tslint:disable max-file-line-count object-literal-sort-keys
 
 import {
   Component,
   ContentChild,
   ContentChildren,
   Directive,
+  ElementRef,
   EventEmitter,
   Injectable,
   Input,
@@ -13,6 +14,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   async,
@@ -267,97 +269,122 @@ describe('MockDirective', () => {
       selector: 'never',
     })
     class MyClass {
-      @ContentChild('i1', { read: true } as any)
+      @ContentChild('i1', { read: TemplateRef } as any)
       public o1?: TemplateRef<any>;
-      @ContentChildren('i2', { read: true } as any)
-      public o2?: TemplateRef<any>;
-      @ViewChild('i3', { read: true } as any)
-      public o3?: QueryList<any>;
-      @ViewChildren('i4', { read: true } as any)
-      public o4?: QueryList<any>;
+      @ContentChildren('i2', { read: TemplateRef } as any)
+      public o2?: QueryList<TemplateRef<any>>;
+      @ViewChild('i3', { read: TemplateRef } as any)
+      public o3?: TemplateRef<any>;
+      @ViewChildren('i4', { read: TemplateRef } as any)
+      public o4?: QueryList<TemplateRef<any>>;
 
-      @ContentChild('i5', { read: false } as any)
-      public o5?: TemplateRef<any>;
-      @ContentChildren('i6', { read: false } as any)
-      public o6?: TemplateRef<any>;
-      @ViewChild('i7', { read: false } as any)
-      public o7?: QueryList<any>;
-      @ViewChildren('i8', { read: false } as any)
-      public o8?: QueryList<any>;
+      @ContentChild('i5', { read: ElementRef } as any)
+      public o5?: ElementRef;
+      @ContentChildren('i6', { read: ElementRef } as any)
+      public o6?: QueryList<ElementRef>;
+      @ViewChild('i7', { read: ElementRef } as any)
+      public o7?: ElementRef;
+      @ViewChildren('i8', { read: ElementRef } as any)
+      public o8?: QueryList<ElementRef>;
     }
 
     const actual = MockDirective(MyClass) as any;
     expect(actual.__prop__metadata__).toEqual({
       o1: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: false,
-          read: true,
           selector: 'i1',
+          isViewQuery: false,
+          read: TemplateRef,
+          ngMetadataName: 'ContentChild',
         }),
       ],
       o2: [
         jasmine.objectContaining({
-          descendants: false,
-          first: false,
-          isViewQuery: false,
-          read: true,
           selector: 'i2',
+          isViewQuery: false,
+          read: TemplateRef,
+          ngMetadataName: 'ContentChildren',
         }),
       ],
       o3: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
-          read: true,
           selector: 'i3',
+          isViewQuery: true,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
         }),
       ],
       o4: [
         jasmine.objectContaining({
-          descendants: true,
-          first: false,
-          isViewQuery: true,
-          read: true,
           selector: 'i4',
+          isViewQuery: true,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChildren',
         }),
       ],
       o5: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: false,
-          read: false,
           selector: 'i5',
+          isViewQuery: false,
+          read: ElementRef,
+          ngMetadataName: 'ContentChild',
         }),
       ],
       o6: [
         jasmine.objectContaining({
-          descendants: false,
-          first: false,
-          isViewQuery: false,
-          read: false,
           selector: 'i6',
+          isViewQuery: false,
+          read: ElementRef,
+          ngMetadataName: 'ContentChildren',
         }),
       ],
       o7: [
         jasmine.objectContaining({
-          descendants: true,
-          first: true,
-          isViewQuery: true,
-          read: false,
           selector: 'i7',
+          isViewQuery: true,
+          read: ElementRef,
+          ngMetadataName: 'ViewChild',
         }),
       ],
       o8: [
         jasmine.objectContaining({
-          descendants: true,
-          first: false,
-          isViewQuery: true,
-          read: false,
           selector: 'i8',
+          isViewQuery: true,
+          read: ElementRef,
+          ngMetadataName: 'ViewChildren',
+        }),
+      ],
+
+      __ngMocksVcr_o1: [
+        jasmine.objectContaining({
+          selector: 'i1',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChild',
+        }),
+      ],
+      __ngMocksVcr_o2: [
+        jasmine.objectContaining({
+          selector: 'i2',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChildren',
+        }),
+      ],
+      __ngMocksVcr_o5: [
+        jasmine.objectContaining({
+          selector: 'i5',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChild',
+        }),
+      ],
+      __ngMocksVcr_o6: [
+        jasmine.objectContaining({
+          selector: 'i6',
+          isViewQuery: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ContentChildren',
         }),
       ],
     });

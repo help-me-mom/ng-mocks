@@ -5,11 +5,28 @@ import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
+import { ngMocksMockConfig } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import cloneProviders from './clone-providers';
 import toExistingProvider from './to-existing-provider';
+
+const buildConfig = (
+  source: AnyType<any>,
+  meta: {
+    inputs?: string[];
+    outputs?: string[];
+    providers?: Provider[];
+    queries?: Record<string, ViewChild>;
+  },
+  setControlValueAccessor: boolean,
+): ngMocksMockConfig => ({
+  config: ngMocksUniverse.config.get(source),
+  outputs: meta.outputs,
+  queryScanKeys: [],
+  setControlValueAccessor,
+});
 
 export default <T extends Component | Directive>(
   source: AnyType<any>,
@@ -30,18 +47,16 @@ export default <T extends Component | Directive>(
     data.setControlValueAccessor =
       helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
   }
-  decorateMock(mock, source, {
-    config: ngMocksUniverse.config.get(source),
-    outputs: meta.outputs,
-    setControlValueAccessor: data.setControlValueAccessor,
-  });
+
+  const config: ngMocksMockConfig = buildConfig(source, meta, data.setControlValueAccessor);
+  decorateMock(mock, source, config);
 
   // istanbul ignore else
   if (meta.queries) {
     decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
   }
   decorateOutputs(mock, meta.outputs);
-  decorateQueries(mock, meta.queries);
+  config.queryScanKeys = decorateQueries(mock, meta.queries);
 
   return options;
 };

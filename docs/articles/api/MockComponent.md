@@ -27,9 +27,7 @@ The class of a mock component has:
 - the same `selector`
 - the same `@Inputs` and `@Outputs` with alias support
 - templates with pure `<ng-content>` tags to allow transclusion
-- support of `@ContentChild` with an `$implicit` context
-  - `__render('id', $implicit?, variables?)` - renders a template
-  - `__hide('id')` - hides a rendered template
+- support of `@ContentChild` and `@ContentChildren`
 - support of `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - support of `exportAs`
 
@@ -191,14 +189,11 @@ describe('MockComponent', () => {
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
     const mockComponent = fixture.point.componentInstance;
-    if (isMockOf(mockComponent, DependencyComponent, 'c')) {
-      mockComponent.__render('something');
-      fixture.detectChanges();
-    }
+    ngMocks.render(mockComponent, ngMocks.findTemplateRef('something'));
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockNgTemplate = ngMocks.find('[data-key="something"]')
+    const mockNgTemplate = ngMocks.find(DependencyComponent)
       .nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });

@@ -16,6 +16,7 @@ module.exports = {
         'api/MockProvider',
         'api/MockService',
         'api/MockModule',
+        'extra/templateref',
       ],
     },
     {
@@ -35,11 +36,13 @@ module.exports = {
         'api/ngMocks/globalMock',
         'api/ngMocks/globalReplace',
         'api/ngMocks/globalWipe',
+        'api/ngMocks/render',
+        'api/ngMocks/hide',
         'api/ngMocks/input',
         'api/ngMocks/output',
-        'api/ngMocks/get',
         'api/ngMocks/find',
         'api/ngMocks/findAll',
+        'api/ngMocks/get',
         'api/ngMocks/findInstance',
         'api/ngMocks/findInstances',
         'api/ngMocks/findTemplateRef',
@@ -74,13 +77,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Extra',
-      items: [
-        'extra/customize-mocks',
-        'extra/mock-observables',
-        'extra/mock-form-controls',
-        'extra/templateref',
-        'extra/with-3rd-party',
-      ],
+      items: ['extra/customize-mocks', 'extra/mock-observables', 'extra/mock-form-controls', 'extra/with-3rd-party'],
     },
     {
       type: 'category',

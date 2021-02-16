@@ -22,15 +22,13 @@ if (isMockOf(instance, SomeClass, 'm')) {
 // checks whether `instance` is
 // an instance of `MockedComponent<SomeClass>`
 if (isMockOf(instance, SomeClass, 'c')) {
-  instance.__render('block', '$implicit');
-  instance.__hide('block');
+  // yes it is
 }
 
 // checks whether `instance` is
 // an instance of `MockedDirective<SomeClass>`
 if (isMockOf(instance, SomeClass, 'd')) {
-  instance.__render('$implicit');
-  instance.__hide();
+  // yes it is
 }
 
 // checks whether `instance` is

@@ -1,8 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-import { PrimeTemplate } from 'primeng/api';
-import { Calendar, CalendarModule } from 'primeng/calendar';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'target',
@@ -64,18 +63,15 @@ describe('p-calendar:directives', () => {
     // Looking for a debug element of `p-calendar`.
     const calendarEl = ngMocks.find('p-calendar');
 
-    // Looking for the instance of PrimeTemplate.
-    // 'header' is the first one.
-    const [header] = ngMocks.findInstances(calendarEl, PrimeTemplate);
+    // Looking for the template of 'header'.
+    const header = ngMocks.findTemplateRef(calendarEl, [
+      'pTemplate',
+      'header',
+    ]);
 
-    // Asserting that it is the header.
-    expect(header.name).toEqual('header');
-
-    // Verifying that the directive has been mocked.
-    // And rendering it.
-    if (isMockOf(header, PrimeTemplate, 'd')) {
-      header.__render();
-    }
+    // Verifies that the directive has been mocked.
+    // And renders it.
+    ngMocks.render(calendarEl.componentInstance, header);
 
     // Asserting the rendered template.
     expect(calendarEl.nativeElement.innerHTML).toContain('Header');
@@ -88,21 +84,15 @@ describe('p-calendar:directives', () => {
     // Looking for a debug element of `p-calendar`.
     const calendarEl = ngMocks.find('p-calendar');
 
-    // Looking for the instance of PrimeTemplate.
-    // 'footer' is the second one.
-    const [, footer] = ngMocks.findInstances(
-      calendarEl,
-      PrimeTemplate,
-    );
+    // Looking for the template of 'footer'.
+    const footer = ngMocks.findTemplateRef(calendarEl, [
+      'pTemplate',
+      'footer',
+    ]);
 
-    // Asserting that it is the footer.
-    expect(footer.name).toEqual('footer');
-
-    // Verifying that the directive has been mocked.
-    // And rendering it.
-    if (isMockOf(footer, PrimeTemplate, 'd')) {
-      footer.__render();
-    }
+    // Verifies that the directive has been mocked.
+    // And renders it.
+    ngMocks.render(calendarEl.componentInstance, footer);
 
     // Asserting the rendered template.
     expect(calendarEl.nativeElement.innerHTML).toContain('Footer');

@@ -33,7 +33,7 @@ The best way would be to discuss an issue or an improvement first:
   ```shell
   export IE_BIN="/c/Program Files/Internet Explorer/iexplore.exe"
   cd /c/ && rm -Rf ng-mocks && mkdir ng-mocks && cd ng-mocks
-  find /z/ng-mocks -maxdepth 1 -not -name ng-mocks -not -name .git -not -name e2e -not -name node_modules -exec cp -r {} . \;
+  find /z/ng-mocks -maxdepth 1 -not -name ng-mocks -not -name .git -not -name docs -not -name e2e -not -name node_modules -exec cp -r {} . \;
   npm ci --no-optional --ignore-scripts
   npm run test
   ```

@@ -147,6 +147,7 @@ export type ngMocksMockConfig = {
   isControlValueAccessor?: boolean;
   isValidator?: boolean;
   outputs?: string[];
+  queryScanKeys?: string[];
   setControlValueAccessor?: boolean;
 };
 
@@ -177,6 +178,9 @@ export class Mock {
   public constructor(injector?: Injector) {
     const mockOf = (this.constructor as any).mockOf;
     coreDefineProperty(this, '__ngMocksInjector', injector);
+    for (const key of this.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {
+      coreDefineProperty(this, `__ngMocksVcr_${key}`, undefined);
+    }
 
     // istanbul ignore else
     if (funcIsMock(this)) {

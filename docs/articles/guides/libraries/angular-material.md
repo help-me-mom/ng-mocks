@@ -35,7 +35,7 @@ A test of such a template requires to:
 - assert the rest of templates
 
 :::note
-Information about testing `ng-template` and its `TemplateRef` is taken from the [guide about testing TemplateRef](../../extra/templateref.md).
+Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](../../api/ngMocks/render.md).
 :::
 
 ## Spec file
@@ -77,52 +77,39 @@ it('binds inputs', () => {
 
 ## Testing matColumnDef and matCellDef templates
 
-To test the `ng-template`, we should find which directives belong to `matColumnDef` and `matCellDef` attributes.
-They are `MatHeaderCellDef` and `MatCellDef`.
-
-The test repeats steps for [Templates by directive](../../extra/templateref.md#templates-by-directive).
+To test the `ng-template`,
+we should find `TemplateRef` which belongs to `matColumnDef` and `matCellDef` attributes,
+render them, and assert the rendered html.
 
 The tools from `ng-mocks` we need:
 
 - [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `p-calendar`
-- [`ngMocks.findInstances`](../../api/ngMocks/findInstances.md): to find the instance of `PrimeTemplate`
-- [`isMockOf`](../../api/helpers/isMockOf.md): to verify that `PrimeTemplate` has been mocked to render it
+- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `mat-table`
+- [`ngMocks.findTemplateRefs`](../../api/ngMocks/findTemplateRefs.md): to find a templates which belong `matColumnDef` and `matCellDef`
+- [`ngMocks.render`](../../api/ngMocks/render.md): to render the templates
 
 ```ts
 it('provides correct template for matColumnDef="position"', () => {
-  // Rendering TargetComponent.
   MockRender(TargetComponent);
+  const tableEl = ngMocks.find('[mat-table]');
 
-  // Looking for a debug element of `MatTable`.
-  const tableEl = ngMocks.find(MatTable);
-
-  // Looking for the instance of MatHeaderCellDef.
-  // The first one belongs to 'position'.
-  const [header] = ngMocks.findInstances(tableEl, MatHeaderCellDef);
-
-  // Verifying that the directive has been mocked.
-  // And rendering it.
-  if (isMockOf(header, MatHeaderCellDef, 'd')) {
-    header.__render();
-  }
-
-  // Asserting the rendered template.
+  expect(tableEl.nativeElement.innerHTML).not.toContain(
+    '<th mat-header-cell="">No.</th>',
+  );
+  const [header] = ngMocks.findTemplateRefs(
+    tableEl,
+    ['matHeaderCellDef'],
+  );
+  ngMocks.render(tableEl.componentInstance, header);
   expect(tableEl.nativeElement.innerHTML).toContain(
     '<th mat-header-cell="">No.</th>',
   );
 
-  // Looking for the instance of MatCellDef.
-  // The first one belongs to 'position'.
-  const [cell] = ngMocks.findInstances(tableEl, MatCellDef);
-
-  // Verifying that the directive has been mocked.
-  // And rendering it.
-  if (isMockOf(cell, MatCellDef, 'd')) {
-    cell.__render({ position: 'testPosition' });
-  }
-
-  // Asserting the rendered template.
+  expect(tableEl.nativeElement.innerHTML).not.toContain(
+    '<td mat-cell=""> testPosition </td>',
+  );
+  const [cell] = ngMocks.findTemplateRefs(tableEl, ['matCellDef']);
+  ngMocks.render(tableEl.componentInstance, cell, { position: 'testPosition' });
   expect(tableEl.nativeElement.innerHTML).toContain(
     '<td mat-cell=""> testPosition </td>',
   );
@@ -136,28 +123,22 @@ The approach to test `mat-header-row` is the same as above.
 We need to find which directive belongs to `mat-header-row`,
 it is `MatHeaderRowDef`.
 
+The tools from `ng-mocks` we need:
+
+- [`ngMocks.findInstance`](../../api/ngMocks/findInstance.md): to find the instance of `MatHeaderRowDef`
+
 ```ts
 it('provides correct template for mat-header-row', () => {
-  // Rendering TargetComponent and accessing its instance.
   const targetComponent = MockRender(TargetComponent).point
     .componentInstance;
+  const tableEl = ngMocks.find('[mat-table]');
 
-  // Looking for a debug element of `MatTable`.
-  const tableEl = ngMocks.find(MatTable);
-
-  // Looking for the instance of `MatHeaderRowDef`.
   const header = ngMocks.findInstance(tableEl, MatHeaderRowDef);
-
-  // Asserting its inputs.
   expect(header.columns).toBe(targetComponent.displayedColumns);
-
-  // Verifying that the instance has been mocked.
-  // And rendering it.
-  if (isMockOf(header, MatHeaderRowDef, 'd')) {
-    header.__render();
-  }
-
-  // Asserting the rendered html.
+  expect(tableEl.nativeElement.innerHTML).not.toContain(
+    '<tr mat-header-row=""></tr>',
+  );
+  ngMocks.render(tableEl.componentInstance, header);
   expect(tableEl.nativeElement.innerHTML).toContain(
     '<tr mat-header-row=""></tr>',
   );
@@ -173,26 +154,16 @@ it is `MatRowDef`.
 
 ```ts
 it('provides correct template for mat-row', () => {
-  // Rendering TargetComponent and accessing its instance.
   const targetComponent = MockRender(TargetComponent).point
     .componentInstance;
+  const tableEl = ngMocks.find('[mat-table]');
 
-  // Looking for a debug element of `MatTable`.
-  const tableEl = ngMocks.find(MatTable);
-
-  // Looking for the instance of `MatRowDef`.
   const row = ngMocks.findInstance(tableEl, MatRowDef);
-
-  // Asserting its inputs.
   expect(row.columns).toBe(targetComponent.displayedColumns);
-
-  // Verifying that the instance has been mocked.
-  // And rendering it.
-  if (isMockOf(row, MatRowDef, 'd')) {
-    row.__render();
-  }
-
-  // Asserting the rendered html.
+  expect(tableEl.nativeElement.innerHTML).not.toContain(
+    '<tr mat-row=""></tr>',
+  );
+  ngMocks.render(tableEl.componentInstance, row);
   expect(tableEl.nativeElement.innerHTML).toContain(
     '<tr mat-row=""></tr>',
   );

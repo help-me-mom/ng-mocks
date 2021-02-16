@@ -4,6 +4,15 @@ description: Information how to render ng-templates and structural directives wh
 sidebar_label: Testing TemplateRef
 ---
 
+:::warning This functionality has been **deprecated**
+
+Please use:
+
+- [ngMocks.render](../api/ngMocks/render.md)
+- [ngMocks.hide](../api/ngMocks/hide.md)
+
+:::
+
 Templates are often used in UI component libraries such as
 **Angular Material**, **NG Bootstrap**, **PrimeNG**, **ng-select** etc.
 They bring **flexibility via templates** when we want
@@ -129,17 +138,13 @@ const [header, footer] = ngMocks.findInstances(
 
 // asserting header
 expect(header.xdTpl).toEqual('header');
-if (isMockOf(header, XdTplDirective, 'd')) {
-  header.__render();
-}
+ngMocks.render(header, header);
 expect(container.nativeElement.innerHTML)
   .toContain('My Header');
 
 // asserting footer
 expect(footer.xdTpl).toEqual('footer');
-if (isMockOf(footer, XdTplDirective, 'd')) {
-  footer.__render();
-}
+ngMocks.render(footer, footer);
 expect(container.nativeElement.innerHTML)
   .toContain('My Footer');
 ```
@@ -166,9 +171,7 @@ For example, we know that `XdCardComponent` uses `ContentChildren` on `tpls` pro
 Then we can use a special interface of `__render` method for properties. To do so, we need to a tuple as the first parameter.
 
 ```ts
-if (isMockOf(component, XdCardComponent, 'c')) {
-  component.__render(['tpls']);
-}
+ngMocks.render(component, ngMocks.findTemplateRef('header'));
 ```
 
 This call will render the whole `QueryList` if it is `ContentChildren` or `TemplateRef` if it is `ContentChild`.
@@ -176,18 +179,13 @@ This call will render the whole `QueryList` if it is `ContentChildren` or `Templ
 If we want to render only particular element, then we can pass its index in the tuple.
 
 ```ts
-if (isMockOf(component, XdCardComponent, 'c')) {
-  component.__render(['tpls', 1]); // footer
-}
+ngMocks.render(component, ngMocks.findTemplateRef('footer'));
 ```
 
-The sample approach works for `__hide`.
+The sample approach works for `hide`.
 
 ```ts
-if (isMockOf(component, XdCardComponent, 'c')) {
-  component.__hide(['tpls', 1]); // footer
-  component.__hide(['tpls']); // all
-}
+ngMocks.hide(component);
 ```
 
 The templates will be rendered under a special element with `data-prop` attribute.

@@ -8,7 +8,7 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[xdTpl]',
@@ -64,16 +64,12 @@ describe('TestTemplateRefByDirective', () => {
 
     // asserting header
     expect(header.xdTpl).toEqual('header');
-    if (isMockOf(header, XdTplDirective, 'd')) {
-      header.__render();
-    }
+    ngMocks.render(header, header);
     expect(container.nativeElement.innerHTML).toContain('My Header');
 
     // asserting footer
     expect(footer.xdTpl).toEqual('footer');
-    if (isMockOf(footer, XdTplDirective, 'd')) {
-      footer.__render();
-    }
+    ngMocks.render(footer, footer);
     expect(container.nativeElement.innerHTML).toContain('My Footer');
   });
 });

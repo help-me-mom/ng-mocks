@@ -5,7 +5,7 @@ import {
   NgModule,
   TemplateRef,
 } from '@angular/core';
-import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'xd-card',
@@ -46,17 +46,15 @@ describe('TestTemplateRefById', () => {
     const component = ngMocks.findInstance(XdCardComponent);
 
     // checking that the component is a mock
-    if (isMockOf(component, XdCardComponent, 'c')) {
-      component.__render('header');
-      component.__render('footer');
-    }
+    ngMocks.render(component, ngMocks.findTemplateRef('header'));
+    ngMocks.render(component, ngMocks.findTemplateRef('footer'));
+
+    const container = ngMocks.find(XdCardComponent);
 
     // asserting header
-    const header = ngMocks.find('[data-key="header"]');
-    expect(header.nativeElement.innerHTML).toContain('My Header');
+    expect(container.nativeElement.innerHTML).toContain('My Header');
 
     // asserting footer
-    const footer = ngMocks.find('[data-key="footer"]');
-    expect(footer.nativeElement.innerHTML).toContain('My Footer');
+    expect(container.nativeElement.innerHTML).toContain('My Footer');
   });
 });
