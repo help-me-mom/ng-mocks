@@ -17,6 +17,8 @@ import toFactoryProvider from './to-factory-provider';
 let NG_ASYNC_VALIDATORS: InjectionToken<any> | undefined;
 let NG_VALIDATORS: InjectionToken<any> | undefined;
 let NG_VALUE_ACCESSOR: InjectionToken<any> | undefined;
+let FormControlDirective: any | undefined;
+let NgControl: any | undefined;
 // tslint:enable variable-name
 try {
   // tslint:disable-next-line no-require-imports no-var-requires
@@ -26,6 +28,8 @@ try {
     NG_ASYNC_VALIDATORS = module.NG_ASYNC_VALIDATORS;
     NG_VALIDATORS = module.NG_VALIDATORS;
     NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
+    FormControlDirective = module.FormControlDirective;
+    NgControl = module.NgControl;
   }
 } catch (e) {
   // nothing to do;
@@ -48,6 +52,12 @@ const processTokens = (mockType: AnyType<any>, provider: any) => {
 
 const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>, provider: any) => {
   const provide = funcGetProvider(provider);
+
+  // Check tests/issue-302/test.spec.ts
+  if (provide === NgControl || provide === FormControlDirective) {
+    return undefined;
+  }
+
   if (provider !== provide && provider.useExisting === sourceType) {
     return toExistingProvider(provide, mockType);
   }
@@ -57,7 +67,7 @@ const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>,
     provider.useExisting.__forward_ref__ &&
     provider.useExisting() === sourceType
   ) {
-    return toExistingProvider(provider, mockType);
+    return toExistingProvider(provide, mockType);
   }
 
   return undefined;
