@@ -39,26 +39,26 @@ describe('context-with-directives:real', () => {
       ngMocks.formatHtml(
         ngMocks.find(fixture.debugElement, '.template'),
       ),
-    ).toContain(' template w/ directive w/o binding ');
+    ).toContain('template w/ directive w/o binding');
 
     // template1 should be rendered under .template1
     expect(
       ngMocks.formatHtml(
         ngMocks.find(fixture.debugElement, '.template1'),
       ),
-    ).toContain(' template w/ directive w/ binding 1 ');
+    ).toContain('template w/ directive w/ binding 1');
 
     // template2 should not be rendered
     expect(ngMocks.formatHtml(fixture)).not.toContain(
-      ' template w/ directive w/ binding w/o render ',
+      'template w/ directive w/ binding w/o render',
     );
 
     // unused ng-templates should not be rendered at all
     expect(ngMocks.formatHtml(fixture)).not.toContain(
-      ' template w/o directive w/o binding ',
+      'template w/o directive w/o binding',
     );
     expect(ngMocks.formatHtml(fixture)).not.toContain(
-      ' template w/o directive w/ binding ',
+      'template w/o directive w/ binding',
     );
 
     // ng-content contains header and footer
@@ -113,6 +113,6 @@ describe('context-with-directives:mock', () => {
     // No templates should be rendered when we mock them.
     // The reason for that is that only directive knows when to render it, that means if we want to render,
     // we should do that manually.
-    expect(ngMocks.formatHtml(fixture)).not.toContain(' template ');
+    expect(ngMocks.formatHtml(fixture)).not.toContain('template');
   });
 });

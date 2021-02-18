@@ -1,4 +1,4 @@
-import { Type } from '../common/core.types';
+import { AnyType } from '../common/core.types';
 import funcGetLastFixture from '../mock-helper/func.get-last-fixture';
 import { MockedDebugElement } from '../mock-render/types';
 
@@ -24,7 +24,7 @@ export default (
 ): {
   el: undefined | MockedDebugElement;
   notFoundValue: any;
-  sel: string | Type<any> | [string] | [string, any];
+  sel: string | AnyType<any> | [string] | [string, any];
 } => {
   const el = detectEl(args);
   const sel = detectSel(args, el);

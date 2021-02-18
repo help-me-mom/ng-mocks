@@ -8,6 +8,8 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
+import mockHelperCrawl from './crawl/mock-helper.crawl';
+import mockHelperCrawlAll from './crawl/mock-helper.crawl-all';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
@@ -15,8 +17,6 @@ import mockHelperFind from './mock-helper.find';
 import mockHelperFindAll from './mock-helper.find-all';
 import mockHelperFindInstance from './mock-helper.find-instance';
 import mockHelperFindInstances from './mock-helper.find-instances';
-import mockHelperFindTemplateRef from './mock-helper.find-template-ref';
-import mockHelperFindTemplateRefs from './mock-helper.find-template-refs';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 import mockHelperFormatHtml from './mock-helper.format-html';
 import mockHelperGet from './mock-helper.get';
@@ -34,6 +34,8 @@ import mockHelperStubMember from './mock-helper.stub-member';
 import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 import mockHelperHide from './render/mock-helper.hide';
 import mockHelperRender from './render/mock-helper.render';
+import mockHelperFindTemplateRef from './template-ref/mock-helper.find-template-ref';
+import mockHelperFindTemplateRefs from './template-ref/mock-helper.find-template-refs';
 
 /**
  * @see https://ng-mocks.sudo.eu/api/ngMocks
@@ -351,6 +353,89 @@ export const ngMocks: {
   reset(): void;
 
   /**
+   * TODO describe
+   */
+  reveal<T>(selector: AnyType<T>): MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: AnyType<T>,
+  ): MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T = any>(selector: string | [string] | [string, any]): MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T = any>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: string | [string] | [string, any],
+  ): MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T, D>(selector: AnyType<T>, notFoundValue: D): D | MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T, D>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: AnyType<T>,
+    notFoundValue: D,
+  ): D | MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T = any, D = undefined>(
+    selector: string | [string] | [string, any],
+    notFoundValue: D,
+  ): D | MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  reveal<T = any, D = undefined>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: string | [string] | [string, any],
+    notFoundValue: D,
+  ): D | MockedDebugElement<T>;
+
+  /**
+   * TODO describe
+   */
+  revealAll<T>(selector: AnyType<T>): Array<MockedDebugElement<T>>;
+
+  /**
+   * TODO describe
+   */
+  revealAll<T = any>(selector: string | [string] | [string, any]): Array<MockedDebugElement<T>>;
+
+  /**
+   * TODO describe
+   */
+  revealAll<T>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: AnyType<T>,
+  ): Array<MockedDebugElement<T>>;
+
+  /**
+   * TODO describe
+   */
+  revealAll<T = any>(
+    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    selector: string | [string] | [string, any],
+  ): Array<MockedDebugElement<T>>;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/stub
    */
   stub<T = MockedFunction, I = any>(instance: I, name: keyof I, style?: 'get' | 'set'): T;
@@ -415,6 +500,8 @@ export const ngMocks: {
   output: mockHelperOutput,
   render: mockHelperRender,
   reset: mockHelperReset,
+  reveal: mockHelperCrawl,
+  revealAll: mockHelperCrawlAll,
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperThrowOnConsole,

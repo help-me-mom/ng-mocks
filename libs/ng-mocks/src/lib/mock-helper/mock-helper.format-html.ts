@@ -8,5 +8,7 @@ export default (html: string | HTMLElement | { nativeElement: HTMLElement }): st
   return value
     .replace(new RegExp('\\s+', 'mg'), ' ')
     .replace(new RegExp('<!--.*?-->', 'mg'), '')
-    .replace(new RegExp('\\s+', 'mg'), ' ');
+    .replace(new RegExp('\\s+', 'mg'), ' ')
+    .replace(new RegExp('>\\s+<', 'mg'), '><')
+    .trim();
 };
