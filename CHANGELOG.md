@@ -1,3 +1,16 @@
+# [11.7.0](https://github.com/ike18t/ng-mocks/compare/v11.6.0...v11.7.0) (2021-02-19)
+
+
+### Bug Fixes
+
+* cannot set property 'form' of undefined ([a7b60e9](https://github.com/ike18t/ng-mocks/commit/a7b60e9f35b51820c0ce51061f31a33a0c2c53f2)), closes [#302](https://github.com/ike18t/ng-mocks/issues/302)
+* correct replacement of useExisting providers ([6908e5f](https://github.com/ike18t/ng-mocks/commit/6908e5f7577b382ae5dfe8f3857b3f4f3e0b1959))
+
+
+### Features
+
+* improved TemplateRef render ([151ff34](https://github.com/ike18t/ng-mocks/commit/151ff34ee4ab7438e2a08982f643e4aca9bd22c0)), closes [#291](https://github.com/ike18t/ng-mocks/issues/291)
+
 # [11.6.0](https://github.com/ike18t/ng-mocks/compare/v11.5.0...v11.6.0) (2021-02-14)
 
 
