@@ -402,4 +402,55 @@ describe('ng-mocks-reveal:test', () => {
       defaultValue,
     );
   });
+
+  it('skips itself', () => {
+    const loFixture = MockRender(`
+      <ng-container block="1">
+        <ng-container block="2">
+          <ng-container block="3"></ng-container>
+        </ng-container>
+      </ng-container>
+    `);
+
+    const block1El = ngMocks.reveal(loFixture, BlockDirective);
+    const block1 = ngMocks.get(block1El, BlockDirective);
+    expect(block1.name).toEqual('1');
+
+    const block2El = ngMocks.reveal(block1El, BlockDirective);
+    const block2 = ngMocks.get(block2El, BlockDirective);
+    expect(block2.name).toEqual('2');
+
+    const block3El = ngMocks.reveal(block2El, BlockDirective);
+    const block3 = ngMocks.get(block3El, BlockDirective);
+    expect(block3.name).toEqual('3');
+
+    expect(() =>
+      ngMocks.reveal(block3El, BlockDirective),
+    ).toThrowError(
+      'Cannot find a DebugElement via ngMocks.reveal(BlockDirective)',
+    );
+
+    {
+      const blocks = ngMocks.revealAll(loFixture, BlockDirective);
+      expect(blocks.length).toEqual(3);
+      expect(blocks[0]).toBe(block1El);
+      expect(blocks[1]).toBe(block2El);
+      expect(blocks[2]).toBe(block3El);
+    }
+    {
+      const blocks = ngMocks.revealAll(block1El, BlockDirective);
+      expect(blocks.length).toEqual(2);
+      expect(blocks[0]).toBe(block2El);
+      expect(blocks[1]).toBe(block3El);
+    }
+    {
+      const blocks = ngMocks.revealAll(block2El, BlockDirective);
+      expect(blocks.length).toEqual(1);
+      expect(blocks[0]).toBe(block3El);
+    }
+    {
+      const blocks = ngMocks.revealAll(block3El, BlockDirective);
+      expect(blocks.length).toEqual(0);
+    }
+  });
 });

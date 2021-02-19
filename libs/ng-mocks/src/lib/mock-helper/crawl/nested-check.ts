@@ -1,54 +1,49 @@
-import { DebugElement } from '@angular/core';
-
 import { MockedDebugNode } from '../../mock-render/types';
 
 import detectTextNode from './detect-text-node';
+import elDefCompare from './el-def-compare';
+import elDefGetNode from './el-def-get-node';
+import elDefGetParent from './el-def-get-parent';
+import nestedCheckChildren from './nested-check-children';
 
-interface ElDef {
-  nodeIndex: number;
-  parent: null | ElDef;
-}
+const detectParent = (node: MockedDebugNode, parent: MockedDebugNode | undefined): MockedDebugNode | undefined => {
+  if (parent) {
+    return parent;
+  }
 
-interface DebugNode {
-  childNodes?: DebugNode[];
-  injector?: {
-    elDef?: ElDef;
-  };
-  parent: null | DebugNode;
-}
+  const expected = elDefGetParent(node);
+  const currentParent = node.parent ? elDefGetNode(node.parent) : undefined;
+  if (node.parent && elDefCompare(expected, currentParent)) {
+    return node.parent;
+  }
+  for (const childNode of node.parent?.childNodes || []) {
+    const childElDef = elDefGetNode(childNode);
+    if (elDefCompare(expected, childElDef)) {
+      return childNode;
+    }
+  }
 
-const isDebugNode = (value: unknown): value is DebugElement & DebugNode => {
-  return !!value && typeof value === 'object';
+  return undefined;
 };
 
-// normal and ivy
-const getNodeElDef = (node: any) => {
-  return node.injector.elDef || node.injector._tNode || undefined;
-};
-
-const getParentElDef = (node: any) => {
-  return detectTextNode(node) ? undefined : node.injector.elDef?.parent || node.injector._tNode?.parent;
-};
-
-const getElDef = (node: any): [any, any] => {
-  return [getNodeElDef(node), getParentElDef(node)];
-};
-
-const nestedCheck = (node: MockedDebugNode | undefined, check: (node: MockedDebugNode) => void | boolean): boolean => {
-  if (!isDebugNode(node)) {
+const nestedCheck = (
+  node: MockedDebugNode | undefined,
+  parent: MockedDebugNode | undefined,
+  check: (node: MockedDebugNode, parent?: MockedDebugNode) => void | boolean,
+  includeTextNode = false,
+): boolean => {
+  if (!node) {
     return false;
   }
-  if (check(node)) {
+  if (!includeTextNode && detectTextNode(node)) {
+    return false;
+  }
+  if (check(node, detectParent(node, parent))) {
     return true;
   }
 
-  const [elDef, elDefParent] = getElDef(node);
-  for (const childNode of node.childNodes || (elDefParent && node.parent?.childNodes) || []) {
-    const childNodeParent = getParentElDef(childNode);
-    if (childNodeParent && childNodeParent !== elDef) {
-      continue;
-    }
-    if (nestedCheck(childNode, check)) {
+  for (const childNode of nestedCheckChildren(node)) {
+    if (nestedCheck(childNode, node, check, includeTextNode)) {
       return true;
     }
   }

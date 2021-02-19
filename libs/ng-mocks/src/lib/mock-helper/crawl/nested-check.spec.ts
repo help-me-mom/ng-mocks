@@ -8,7 +8,7 @@ describe('nested-check', () => {
     };
     const check = jasmine.createSpy();
 
-    nestedCheck(node, check);
+    nestedCheck(node, undefined, check);
   });
 
   it('handles missed parent def', () => {
@@ -23,6 +23,6 @@ describe('nested-check', () => {
     };
     const check = jasmine.createSpy();
 
-    nestedCheck(node, check);
+    nestedCheck(node, undefined, check);
   });
 });

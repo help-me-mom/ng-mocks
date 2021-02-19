@@ -14,7 +14,7 @@ export default (...args: any[]) => {
 
   const result: Array<TemplateRef<any>> = [];
   const detector = detectCrawler(sel);
-  nestedCheck(el, detectTemplateRef(result, detector, 1));
+  nestedCheck(el, undefined, detectTemplateRef(result, detector, 1));
   if (result.length) {
     return result[0];
   }

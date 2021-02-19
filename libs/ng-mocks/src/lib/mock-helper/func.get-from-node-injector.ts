@@ -9,12 +9,8 @@ export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, pro
     return;
   }
 
-  try {
-    const instance = node.injector.get(proto);
-    if (result.indexOf(instance) === -1) {
-      result.push(instance);
-    }
-  } catch (error) {
-    // nothing to do
+  const instance = node.injector.get(proto, null);
+  if (instance && result.indexOf(instance) === -1) {
+    result.push(instance);
   }
 };

@@ -9,7 +9,8 @@ import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
 import mockHelperCrawl from './crawl/mock-helper.crawl';
-import mockHelperCrawlAll from './crawl/mock-helper.crawl-all';
+import mockHelperReveal from './crawl/mock-helper.reveal';
+import mockHelperRevealAll from './crawl/mock-helper.reveal-all';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
@@ -50,6 +51,18 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/extra/auto-spy
    */
   autoSpy(type: CustomMockFunction): void;
+
+  /**
+   * TODO describe
+   */
+  crawl(
+    debugElement: MockedDebugNode,
+    callback: (
+      node: MockedDebugNode | MockedDebugElement,
+      parent?: MockedDebugNode | MockedDebugElement,
+    ) => boolean | void,
+    includeTextNodes?: boolean,
+  ): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
@@ -244,17 +257,20 @@ export const ngMocks: {
   /**
    * Removes comments and sequences of spaces and new lines.
    */
-  formatHtml(html: string | HTMLElement | { nativeElement: HTMLElement }): string;
+  formatHtml(
+    html: string | HTMLElement | { nativeNode: any } | { nativeElement: any } | { debugElement: any },
+    outer?: boolean,
+  ): string;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T>(debugNode: MockedDebugNode | undefined | null, directive: Type<T>): T;
+  get<T>(debugNode: MockedDebugNode | undefined | null, directive: AnyType<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T, D>(debugNode: MockedDebugNode | undefined | null, directive: Type<T>, notFoundValue: D): D | T;
+  get<T, D>(debugNode: MockedDebugNode | undefined | null, directive: AnyType<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/globalExclude
@@ -355,7 +371,7 @@ export const ngMocks: {
   /**
    * TODO describe
    */
-  reveal<T>(selector: AnyType<T>): MockedDebugElement<T>;
+  reveal<T>(selector: AnyType<T>): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
@@ -363,12 +379,12 @@ export const ngMocks: {
   reveal<T>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: AnyType<T>,
-  ): MockedDebugElement<T>;
+  ): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
    */
-  reveal<T = any>(selector: string | [string] | [string, any]): MockedDebugElement<T>;
+  reveal<T = any>(selector: string | [string] | [string, any]): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
@@ -376,12 +392,12 @@ export const ngMocks: {
   reveal<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any],
-  ): MockedDebugElement<T>;
+  ): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
    */
-  reveal<T, D>(selector: AnyType<T>, notFoundValue: D): D | MockedDebugElement<T>;
+  reveal<T, D>(selector: AnyType<T>, notFoundValue: D): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
@@ -390,7 +406,7 @@ export const ngMocks: {
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: AnyType<T>,
     notFoundValue: D,
-  ): D | MockedDebugElement<T>;
+  ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
@@ -398,7 +414,7 @@ export const ngMocks: {
   reveal<T = any, D = undefined>(
     selector: string | [string] | [string, any],
     notFoundValue: D,
-  ): D | MockedDebugElement<T>;
+  ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
@@ -407,17 +423,17 @@ export const ngMocks: {
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any],
     notFoundValue: D,
-  ): D | MockedDebugElement<T>;
+  ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * TODO describe
    */
-  revealAll<T>(selector: AnyType<T>): Array<MockedDebugElement<T>>;
+  revealAll<T>(selector: AnyType<T>): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
    * TODO describe
    */
-  revealAll<T = any>(selector: string | [string] | [string, any]): Array<MockedDebugElement<T>>;
+  revealAll<T = any>(selector: string | [string] | [string, any]): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
    * TODO describe
@@ -425,7 +441,7 @@ export const ngMocks: {
   revealAll<T>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: AnyType<T>,
-  ): Array<MockedDebugElement<T>>;
+  ): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
    * TODO describe
@@ -433,7 +449,7 @@ export const ngMocks: {
   revealAll<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
     selector: string | [string] | [string, any],
-  ): Array<MockedDebugElement<T>>;
+  ): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/stub
@@ -478,6 +494,7 @@ export const ngMocks: {
   throwOnConsole(): void;
 } = {
   autoSpy: mockHelperAutoSpy,
+  crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,
   faster: mockHelperFaster,
   find: mockHelperFind,
@@ -500,8 +517,8 @@ export const ngMocks: {
   output: mockHelperOutput,
   render: mockHelperRender,
   reset: mockHelperReset,
-  reveal: mockHelperCrawl,
-  revealAll: mockHelperCrawlAll,
+  reveal: mockHelperReveal,
+  revealAll: mockHelperRevealAll,
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperThrowOnConsole,

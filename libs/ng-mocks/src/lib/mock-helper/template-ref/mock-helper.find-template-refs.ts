@@ -11,7 +11,7 @@ export default (...args: any[]): Array<TemplateRef<any>> => {
 
   const result: Array<TemplateRef<any>> = [];
   const detector = detectCrawler(sel);
-  nestedCheck(el, detectTemplateRef(result, detector));
+  nestedCheck(el, undefined, detectTemplateRef(result, detector));
 
   return result;
 };
