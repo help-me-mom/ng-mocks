@@ -157,7 +157,7 @@
     "codecov": "3.8.1",
     "core-js": "3.9.0",
     "coveralls": "3.1.0",
-    "husky": "5.0.9",
+    "husky": "5.1.1",
     "jasmine-core": "3.6.0",
     "jasmine-spec-reporter": "6.0.0",
     "karma": "6.1.1",
