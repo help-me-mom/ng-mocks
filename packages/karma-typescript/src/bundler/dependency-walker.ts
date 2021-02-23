@@ -41,6 +41,7 @@ export class DependencyWalker {
 
                 if (lodash.isMap(resolvedModules)) { // Typescript 2.2+
                     resolvedModules.forEach((resolvedModule: any, moduleName: string) => {
+                        if (resolvedModule.extension === ".d.ts") return
                         this.addBundleItem(queued, resolvedModule, moduleName, ambientModuleNames);
                     });
                 }
