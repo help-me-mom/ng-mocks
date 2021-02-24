@@ -8,6 +8,7 @@ description: Documentation about ngMocks.hide from ng-mocks library
 ```ts
 ngMocks.hide(declarationInst);
 ngMocks.hide(declarationInst, templateRef);
+ngMocks.hide(declarationInst, debugNode);
 ngMocks.hide(declarationInst, structuralDir);
 ```
 

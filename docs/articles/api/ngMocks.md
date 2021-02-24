@@ -30,12 +30,17 @@ access desired elements and instances in fixtures.
 * [`find()`](ngMocks/find.md)
 * [`findAll()`](ngMocks/findAll.md)
 
-- [`get()`](ngMocks/get.md)
-- [`findInstance()`](ngMocks/findInstance.md)
-- [`findInstances()`](ngMocks/findInstances.md)
+- [`reveal()`](ngMocks/reveal.md)
+- [`revealAll()`](ngMocks/revealAll.md)
 
-* [`findTemplateRef()`](ngMocks/findTemplateRef.md)
-* [`findTemplateRefs()`](ngMocks/findTemplateRefs.md)
+* [`get()`](ngMocks/get.md)
+* [`findInstance()`](ngMocks/findInstance.md)
+* [`findInstances()`](ngMocks/findInstances.md)
+
+- [`findTemplateRef()`](ngMocks/findTemplateRef.md)
+- [`findTemplateRefs()`](ngMocks/findTemplateRefs.md)
+
+* [`crawl()`](ngMocks/crawl.md)
 
 ## Stubbing methods and properties
 
@@ -47,7 +52,7 @@ access desired elements and instances in fixtures.
 - [`guts()`](ngMocks/guts.md)
 - [`faster()`](ngMocks/faster.md)
 - [`throwOnConsole()`](ngMocks/throwOnConsole.md)
-- `formatHtml()` - removes comments and sequences of spaces and new lines
+- [`formatHtml()`](ngMocks/formatHtml.md)
 
 * [`flushTestBed()`](ngMocks/flushTestBed.md)
 * [`reset()`](ngMocks/reset.md)

@@ -15,6 +15,12 @@ ngMocks.render(declarationInst, templateRef, context, variables);
 ```
 
 ```ts
+ngMocks.render(declarationInst, debugNode);
+ngMocks.render(declarationInst, debugNode, context);
+ngMocks.render(declarationInst, debugNode, context, variables);
+```
+
+```ts
 ngMocks.render(declarationInst, structuralDir);
 ngMocks.render(declarationInst, structuralDir, context);
 ngMocks.render(declarationInst, structuralDir, context, variables);
