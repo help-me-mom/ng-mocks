@@ -39,6 +39,8 @@ const handleArray = (formatCallback: any, html: any) => {
   return formatCallback((html as any[]).map(item => format(item, true)).join(''));
 };
 
+const handleText = (html: Text): string => html.nodeValue ?? html.textContent ?? html.wholeText;
+
 const handlePrimitives = (formatCallback: any, html: any, outer: boolean) => {
   if (typeof html === 'string' || html === undefined) {
     return normalizeHtml(html);
@@ -53,7 +55,7 @@ const handlePrimitives = (formatCallback: any, html: any, outer: boolean) => {
     return formatCallback(outer ? html.outerHTML : html.innerHTML);
   }
   if (isText(html)) {
-    const value = normalizeText(html.nodeValue ?? html.textContent ?? html.wholeText);
+    const value = normalizeText(handleText(html));
 
     return outer ? value : value.trim();
   }

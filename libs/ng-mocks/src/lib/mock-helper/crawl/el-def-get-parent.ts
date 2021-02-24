@@ -15,24 +15,32 @@ const getVcr = (node: any, child: any): undefined | ViewContainerRef => {
   return coreInjector(ViewContainerRef, child.injector);
 };
 
+const getScanViewRefRootNodes = (node: any, child: any): Array<[number, any]> => {
+  const vcr = getVcr(node, child);
+  if (!vcr) {
+    return [];
+  }
+
+  const result: Array<[number, any]> = [];
+  for (let vrIndex = 0; vrIndex < vcr.length; vrIndex += 1) {
+    const vr = vcr.get(vrIndex);
+    for (let rnIndex = 0; rnIndex < (vr as any).rootNodes.length; rnIndex += 1) {
+      result.push([rnIndex, (vr as any).rootNodes[rnIndex]]);
+    }
+  }
+
+  return result;
+};
+
 const scanViewRef = (node: DebugElement) => {
   let result: any;
   let index: any;
 
   for (const child of node.parent?.childNodes || []) {
-    const vcr = getVcr(node, child);
-    if (!vcr) {
-      continue;
-    }
-
-    for (let vrIndex = 0; vrIndex < vcr.length; vrIndex += 1) {
-      const vr = vcr.get(vrIndex);
-      for (let rnIndex = 0; rnIndex < (vr as any).rootNodes.length; rnIndex += 1) {
-        const rootNode = (vr as any).rootNodes[rnIndex];
-        if (rootNode === node.nativeNode && (index === undefined || rnIndex < index)) {
-          result = elDefGetNode(child);
-          index = rnIndex;
-        }
+    for (const [rnIndex, rootNode] of getScanViewRefRootNodes(node, child)) {
+      if (rootNode === node.nativeNode && (index === undefined || rnIndex < index)) {
+        result = elDefGetNode(child);
+        index = rnIndex;
       }
     }
   }
