@@ -56,7 +56,7 @@ In this test we need to verify that `mat-table` data from out component's instan
 The tools from `ng-mocks` we need:
 
 - [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `MatTable`
+- [`ngMocks.reveal`](../../api/ngMocks/reveal.md): to find a debug element of `MatTable`
 - [`ngMocks.input`](../../api/ngMocks/input.md): to get an input's value
 
 ```ts
@@ -66,7 +66,7 @@ it('binds inputs', () => {
     .componentInstance;
 
   // Looking for a debug element of `MatTable`.
-  const tableEl = ngMocks.find(MatTable);
+  const tableEl = ngMocks.reveal(['mat-table']);
 
   // Asserting bound properties.
   expect(ngMocks.input(tableEl, 'dataSource')).toBe(
@@ -84,33 +84,35 @@ render them, and assert the rendered html.
 The tools from `ng-mocks` we need:
 
 - [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `mat-table`
-- [`ngMocks.findTemplateRefs`](../../api/ngMocks/findTemplateRefs.md): to find a templates which belong `matColumnDef` and `matCellDef`
+- [`ngMocks.reveal`](../../api/ngMocks/reveal.md): to find debug elements of `mat-table` and `ng-container`
+- [`ngMocks.formatHtml`](../../api/ngMocks/formatHtml.md): to get html of a `ng-container`
 - [`ngMocks.render`](../../api/ngMocks/render.md): to render the templates
 
 ```ts
 it('provides correct template for matColumnDef="position"', () => {
   MockRender(TargetComponent);
-  const tableEl = ngMocks.find('[mat-table]');
+  // looking for the table and container
+  const tableEl = ngMocks.reveal(['mat-table']);
+  const containerEl = ngMocks.reveal(['matColumnDef', 'position']);
 
-  expect(tableEl.nativeElement.innerHTML).not.toContain(
+  // checking that there are no artifacts around
+  expect(ngMocks.formatHtml(containerEl)).toEqual('');
+
+  // checking header
+  const headerEl = ngMocks.reveal(containerEl, [
+    'matHeaderCellDef',
+  ]);
+  ngMocks.render(tableEl.componentInstance, headerEl);
+  expect(ngMocks.formatHtml(headerEl)).toEqual(
     '<th mat-header-cell="">No.</th>',
   );
-  const [header] = ngMocks.findTemplateRefs(
-    tableEl,
-    ['matHeaderCellDef'],
-  );
-  ngMocks.render(tableEl.componentInstance, header);
-  expect(tableEl.nativeElement.innerHTML).toContain(
-    '<th mat-header-cell="">No.</th>',
-  );
 
-  expect(tableEl.nativeElement.innerHTML).not.toContain(
-    '<td mat-cell=""> testPosition </td>',
-  );
-  const [cell] = ngMocks.findTemplateRefs(tableEl, ['matCellDef']);
-  ngMocks.render(tableEl.componentInstance, cell, { position: 'testPosition' });
-  expect(tableEl.nativeElement.innerHTML).toContain(
+  // checking cell
+  const cellEl = ngMocks.reveal(containerEl, ['matCellDef']);
+  ngMocks.render(tableEl.componentInstance, cellEl, {
+    position: 'testPosition',
+  });
+  expect(ngMocks.formatHtml(cellEl)).toEqual(
     '<td mat-cell=""> testPosition </td>',
   );
 });
@@ -131,15 +133,15 @@ The tools from `ng-mocks` we need:
 it('provides correct template for mat-header-row', () => {
   const targetComponent = MockRender(TargetComponent).point
     .componentInstance;
-  const tableEl = ngMocks.find('[mat-table]');
+  const tableEl = ngMocks.reveal(['mat-table']);
+
+  // checking that there are no artifacts around
+  expect(ngMocks.formatHtml(tableEl)).toEqual('');
 
   const header = ngMocks.findInstance(tableEl, MatHeaderRowDef);
   expect(header.columns).toBe(targetComponent.displayedColumns);
-  expect(tableEl.nativeElement.innerHTML).not.toContain(
-    '<tr mat-header-row=""></tr>',
-  );
   ngMocks.render(tableEl.componentInstance, header);
-  expect(tableEl.nativeElement.innerHTML).toContain(
+  expect(ngMocks.formatHtml(tableEl)).toContain(
     '<tr mat-header-row=""></tr>',
   );
 });
@@ -156,15 +158,15 @@ it is `MatRowDef`.
 it('provides correct template for mat-row', () => {
   const targetComponent = MockRender(TargetComponent).point
     .componentInstance;
-  const tableEl = ngMocks.find('[mat-table]');
+  const tableEl = ngMocks.reveal(['mat-table']);
+
+  // checking that there are no artifacts around
+  expect(ngMocks.formatHtml(tableEl)).toEqual('');
 
   const row = ngMocks.findInstance(tableEl, MatRowDef);
   expect(row.columns).toBe(targetComponent.displayedColumns);
-  expect(tableEl.nativeElement.innerHTML).not.toContain(
-    '<tr mat-row=""></tr>',
-  );
   ngMocks.render(tableEl.componentInstance, row);
-  expect(tableEl.nativeElement.innerHTML).toContain(
+  expect(ngMocks.formatHtml(tableEl)).toContain(
     '<tr mat-row=""></tr>',
   );
 });

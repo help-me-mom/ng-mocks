@@ -12,7 +12,6 @@ import {
   MockBuilder,
   MockInstance,
   MockRender,
-  MockReset,
   ngMocks,
 } from 'ng-mocks';
 
@@ -53,15 +52,11 @@ describe('MockReactiveForms', () => {
 
   // Because of early calls of writeValue, we need to install
   // the spy in the ctor call.
-  beforeAll(() =>
+  beforeEach(() =>
     MockInstance(DependencyComponent, () => ({
       writeValue,
     })),
   );
-
-  // To avoid influence in other tests
-  // we need to reset MockInstance effects.
-  afterAll(MockReset);
 
   beforeEach(() => {
     return MockBuilder(TestedComponent)

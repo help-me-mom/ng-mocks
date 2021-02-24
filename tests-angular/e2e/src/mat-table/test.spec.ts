@@ -85,10 +85,14 @@ describe('mat-table:props', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('binds inputs', () => {
+    // Rendering TargetComponent and accessing its instance.
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find('[mat-table]');
 
+    // Looking for a debug element of `MatTable`.
+    const tableEl = ngMocks.reveal(['mat-table']);
+
+    // Asserting bound properties.
     expect(ngMocks.input(tableEl, 'dataSource')).toBe(
       targetComponent.dataSource,
     );
@@ -97,7 +101,7 @@ describe('mat-table:props', () => {
   it('provides correct template for matColumnDef="position"', () => {
     MockRender(TargetComponent);
     // looking for the table and container
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
     const containerEl = ngMocks.reveal(['matColumnDef', 'position']);
 
     // checking that there are no artifacts around
@@ -125,7 +129,7 @@ describe('mat-table:props', () => {
   it('provides correct template for matColumnDef="name" via reveal and debugNode', () => {
     MockRender(TargetComponent);
     // looking for the table and container
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
     const containerEl = ngMocks.reveal(['matColumnDef', 'name']);
 
     // checking that there are no artifacts around
@@ -153,7 +157,7 @@ describe('mat-table:props', () => {
   it('provides correct template for matColumnDef="weight" via findTemplateRef', () => {
     MockRender(TargetComponent);
     // looking for the table and container
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
     const containerEl = ngMocks.reveal(['matColumnDef', 'weight']);
 
     // checking that there are no artifacts around
@@ -181,7 +185,7 @@ describe('mat-table:props', () => {
   it('provides correct template for matColumnDef="symbol"', () => {
     MockRender(TargetComponent);
     // looking for the table and container
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
     const containerEl = ngMocks.reveal(['matColumnDef', 'symbol']);
 
     // checking that there are no artifacts around
@@ -209,7 +213,7 @@ describe('mat-table:props', () => {
   it('provides correct template for mat-header-row', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
 
     // checking that there are no artifacts around
     expect(ngMocks.formatHtml(tableEl)).toEqual('');
@@ -225,7 +229,7 @@ describe('mat-table:props', () => {
   it('provides correct template for mat-row', () => {
     const targetComponent = MockRender(TargetComponent).point
       .componentInstance;
-    const tableEl = ngMocks.find('[mat-table]');
+    const tableEl = ngMocks.reveal(['mat-table']);
 
     // checking that there are no artifacts around
     expect(ngMocks.formatHtml(tableEl)).toEqual('');

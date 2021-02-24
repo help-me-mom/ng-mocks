@@ -255,7 +255,7 @@ export const ngMocks: {
   flushTestBed(): void;
 
   /**
-   * Removes comments and sequences of spaces and new lines.
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/formatHtml
    */
   formatHtml(
     html: string | HTMLElement | { nativeNode: any } | { nativeElement: any } | { debugElement: any },
@@ -374,12 +374,12 @@ export const ngMocks: {
   reset(): void;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T>(selector: AnyType<T>): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -387,12 +387,12 @@ export const ngMocks: {
   ): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any>(selector: string | [string] | [string, any]): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -400,12 +400,12 @@ export const ngMocks: {
   ): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T, D>(selector: AnyType<T>, notFoundValue: D): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T, D>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -414,7 +414,7 @@ export const ngMocks: {
   ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any, D = undefined>(
     selector: string | [string] | [string, any],
@@ -422,7 +422,7 @@ export const ngMocks: {
   ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any, D = undefined>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -431,17 +431,17 @@ export const ngMocks: {
   ): D | MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
   revealAll<T>(selector: AnyType<T>): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
   revealAll<T = any>(selector: string | [string] | [string, any]): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
   revealAll<T>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
@@ -449,7 +449,7 @@ export const ngMocks: {
   ): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
   revealAll<T = any>(
     debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,

@@ -55,7 +55,7 @@ describe('MockDirective:Attribute', () => {
     // Let's pretend DependencyDirective has 'someInput'
     // as an input. TestedComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
-    // the mock directive so you can assert on it.
+    // the mock directive so we can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
