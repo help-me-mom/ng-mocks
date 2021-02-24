@@ -104,25 +104,25 @@ describe('mat-table:props', () => {
     expect(ngMocks.formatHtml(containerEl)).toEqual('');
 
     // checking header
-    const header = ngMocks.findTemplateRef(containerEl, [
+    const headerEl = ngMocks.reveal(containerEl, [
       'matHeaderCellDef',
     ]);
-    ngMocks.render(tableEl.componentInstance, header);
-    expect(ngMocks.formatHtml(containerEl)).toContain(
+    ngMocks.render(tableEl.componentInstance, headerEl);
+    expect(ngMocks.formatHtml(headerEl)).toEqual(
       '<th mat-header-cell="">No.</th>',
     );
 
     // checking cell
-    const cell = ngMocks.findTemplateRef(containerEl, ['matCellDef']);
-    ngMocks.render(tableEl.componentInstance, cell, {
+    const cellEl = ngMocks.reveal(containerEl, ['matCellDef']);
+    ngMocks.render(tableEl.componentInstance, cellEl, {
       position: 'testPosition',
     });
-    expect(ngMocks.formatHtml(containerEl)).toContain(
+    expect(ngMocks.formatHtml(cellEl)).toEqual(
       '<td mat-cell=""> testPosition </td>',
     );
   });
 
-  it('provides correct template for matColumnDef="name"', () => {
+  it('provides correct template for matColumnDef="name" via reveal and debugNode', () => {
     MockRender(TargetComponent);
     // looking for the table and container
     const tableEl = ngMocks.find('[mat-table]');
@@ -132,25 +132,25 @@ describe('mat-table:props', () => {
     expect(ngMocks.formatHtml(containerEl)).toEqual('');
 
     // checking header
-    const header = ngMocks.findTemplateRef(containerEl, [
+    const headerEl = ngMocks.reveal(containerEl, [
       'matHeaderCellDef',
     ]);
-    ngMocks.render(tableEl.componentInstance, header);
-    expect(ngMocks.formatHtml(containerEl)).toContain(
+    ngMocks.render(tableEl.componentInstance, headerEl);
+    expect(ngMocks.formatHtml(headerEl)).toEqual(
       '<th mat-header-cell="">Name</th>',
     );
 
     // checking cell
-    const cell = ngMocks.findTemplateRef(containerEl, ['matCellDef']);
-    ngMocks.render(tableEl.componentInstance, cell, {
+    const cellEl = ngMocks.reveal(containerEl, ['matCellDef']);
+    ngMocks.render(tableEl.componentInstance, cellEl, {
       name: 'testName',
     });
-    expect(ngMocks.formatHtml(containerEl)).toContain(
+    expect(ngMocks.formatHtml(cellEl)).toEqual(
       '<td mat-cell="">testName</td>',
     );
   });
 
-  it('provides correct template for matColumnDef="weight"', () => {
+  it('provides correct template for matColumnDef="weight" via findTemplateRef', () => {
     MockRender(TargetComponent);
     // looking for the table and container
     const tableEl = ngMocks.find('[mat-table]');

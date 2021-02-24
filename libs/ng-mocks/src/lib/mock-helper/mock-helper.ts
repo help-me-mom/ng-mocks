@@ -1,6 +1,6 @@
 // tslint:disable max-file-line-count
 
-import { EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
+import { DebugNode, EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType, Type } from '../common/core.types';
@@ -53,7 +53,7 @@ export const ngMocks: {
   autoSpy(type: CustomMockFunction): void;
 
   /**
-   * TODO describe
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/crawl
    */
   crawl(
     debugElement: MockedDebugNode,
@@ -322,7 +322,7 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/hide
    */
-  hide(instance: object, tpl?: TemplateRef<any>): void;
+  hide(instance: object, tpl?: TemplateRef<any> | DelayNode): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/hide
@@ -356,7 +356,12 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/render
    */
-  render(instance: object, template: TemplateRef<any>, $implicit?: any, variables?: Record<keyof any, any>): void;
+  render(
+    instance: object,
+    template: TemplateRef<any> | DebugNode,
+    $implicit?: any,
+    variables?: Record<keyof any, any>,
+  ): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/render

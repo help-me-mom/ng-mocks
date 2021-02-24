@@ -1,5 +1,6 @@
 import { TemplateRef } from '@angular/core';
 
+import coreInjector from '../../common/core.injector';
 import { MockedDebugNode } from '../../mock-render/types';
 import detectTextNode from '../crawl/detect-text-node';
 
@@ -9,7 +10,7 @@ export default (
   limit = 0,
 ): ((node: MockedDebugNode) => boolean) => node => {
   try {
-    const instance = !detectTextNode(node) && detector(node) ? node.injector.get(TemplateRef) : undefined;
+    const instance = !detectTextNode(node) && detector(node) ? coreInjector(TemplateRef, node.injector) : undefined;
     if (instance) {
       result.push(instance);
     }

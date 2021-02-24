@@ -30,8 +30,6 @@ describe('issue-289', () => {
 
     // now only the 1st template is visible
     {
-      // double check we don't change elements via lookup.
-      expect(fixture.debugElement.childNodes.length).toEqual(3);
       const templates = ngMocks.revealAll(fixture, TplDirective);
       // double check we don't change elements via lookup.
       expect(fixture.debugElement.childNodes.length).toEqual(3);
@@ -43,8 +41,6 @@ describe('issue-289', () => {
       ngMocks.render(block1, block1);
       // cool stuff
       expect(ngMocks.formatHtml(block1El)).toEqual('tpl1');
-      // double check we don't change elements via lookup.
-      expect(fixture.debugElement.childNodes.length).toEqual(6);
     }
     // but at least something
     expect(ngMocks.formatHtml(fixture)).toEqual('1 tpl1 2');

@@ -1,5 +1,7 @@
 import { DebugElement, ViewContainerRef } from '@angular/core';
 
+import coreInjector from '../../common/core.injector';
+
 import elDefGetNode from './el-def-get-node';
 
 const getVcr = (node: any, child: any): undefined | ViewContainerRef => {
@@ -10,7 +12,7 @@ const getVcr = (node: any, child: any): undefined | ViewContainerRef => {
     return undefined;
   }
 
-  return child.injector.get(ViewContainerRef, null) || undefined;
+  return coreInjector(ViewContainerRef, child.injector);
 };
 
 const scanViewRef = (node: DebugElement) => {
