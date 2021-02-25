@@ -174,7 +174,7 @@
     "puppeteer": "7.1.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "rxjs": "6.6.3",
+    "rxjs": "6.6.6",
     "semantic-release": "17.3.9",
     "ts-node": "9.1.1",
     "tslib": "2.1.0",
