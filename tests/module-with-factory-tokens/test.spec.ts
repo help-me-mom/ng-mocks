@@ -90,7 +90,7 @@ describe('module-with-factory-tokens:mock-1', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component> </internal-component>',
+      '<internal-component></internal-component>',
     );
   });
 });

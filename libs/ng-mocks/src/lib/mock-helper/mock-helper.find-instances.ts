@@ -1,22 +1,8 @@
-import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
-import { MockedDebugNode } from '../mock-render/types';
 
+import mockHelperCrawl from './crawl/mock-helper.crawl';
 import funcGetFromNode from './func.get-from-node';
 import funcParseFindArgs from './func.parse-find-args';
-
-interface DebugNode {
-  childNodes?: MockedDebugNode[];
-}
-
-function nestedCheck<T>(result: T[], node: (MockedDebugNode & DebugNode) | undefined, proto: Type<T>) {
-  if (node) {
-    funcGetFromNode(result, node, proto);
-  }
-  for (const childNode of node?.childNodes || []) {
-    nestedCheck(result, childNode, proto);
-  }
-}
 
 export default <T>(...args: any[]): T[] => {
   const { el, sel } = funcParseFindArgs(args);
@@ -24,8 +10,15 @@ export default <T>(...args: any[]): T[] => {
     throw new Error('Only classes are accepted');
   }
 
+  const declaration = getSourceOfMock(sel);
   const result: T[] = [];
-  nestedCheck(result, el, getSourceOfMock(sel));
+  mockHelperCrawl(
+    el,
+    node => {
+      funcGetFromNode(result, node, declaration);
+    },
+    true,
+  );
 
   return result;
 };

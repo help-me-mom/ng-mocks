@@ -4,12 +4,7 @@ import {
   Injector,
   ViewChild,
 } from '@angular/core';
-import {
-  MockBuilder,
-  MockInstance,
-  MockRender,
-  MockReset,
-} from 'ng-mocks';
+import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
 
 // A copy of EMPTY, which does not exist in A5.
@@ -51,7 +46,7 @@ describe('MockInstance', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
 
-  beforeAll(() => {
+  beforeEach(() => {
     // Because TargetComponent is replaced with its mock object,
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
@@ -61,9 +56,6 @@ describe('MockInstance', () => {
       update$: EMPTY,
     }));
   });
-
-  // Do not forget to reset MockInstance back.
-  afterAll(MockReset);
 
   it('should render', () => {
     // Without the custom initialization rendering would fail here

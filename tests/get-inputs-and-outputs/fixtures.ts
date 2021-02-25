@@ -1,6 +1,14 @@
-import { Component, Directive, EventEmitter, Input, NgModule, Output } from '@angular/core';
+import { Component, Directive, EventEmitter, InjectionToken, Input, NgModule, Output } from '@angular/core';
+
+const TARGET = new InjectionToken('TARGET');
 
 @Component({
+  providers: [
+    {
+      provide: TARGET,
+      useValue: 'test',
+    },
+  ],
   selector: 'target',
   template: '<a (click)="output.emit()">{{ input }}</a>',
 })
@@ -10,6 +18,12 @@ export class TargetComponent {
 }
 
 @Directive({
+  providers: [
+    {
+      provide: TARGET,
+      useValue: 'test',
+    },
+  ],
   selector: 'target',
 })
 export class Target2Directive {
@@ -19,6 +33,12 @@ export class Target2Directive {
 }
 
 @Directive({
+  providers: [
+    {
+      provide: TARGET,
+      useValue: 'test',
+    },
+  ],
   selector: 'target',
 })
 export class Target3Directive {
@@ -29,5 +49,11 @@ export class Target3Directive {
 @NgModule({
   declarations: [TargetComponent, Target2Directive, Target3Directive],
   exports: [TargetComponent, Target2Directive, Target3Directive],
+  providers: [
+    {
+      provide: TARGET,
+      useValue: 'test',
+    },
+  ],
 })
 export class TargetModule {}

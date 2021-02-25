@@ -3,7 +3,7 @@ import { MockedDirective } from '../mock-directive/types';
 import { MockedModule } from '../mock-module/types';
 import { MockedPipe } from '../mock-pipe/types';
 
-import { getTestBedInjection } from './core.helpers';
+import coreInjector from './core.injector';
 import { NG_MOCKS } from './core.tokens';
 import { AnyType, Type } from './core.types';
 import { isMockedNgDefOf } from './func.is-mocked-ng-def-of';
@@ -62,7 +62,7 @@ export function getMockedNgDefOf(declaration: AnyType<any>): Type<any>;
 
 export function getMockedNgDefOf(declaration: any, type?: any): any {
   const source = declaration.mockOf ? declaration.mockOf : declaration;
-  const mocks = getTestBedInjection(NG_MOCKS);
+  const mocks = coreInjector(NG_MOCKS);
 
   const mock = getMock(declaration, source, mocks);
   if (mock && !type) {

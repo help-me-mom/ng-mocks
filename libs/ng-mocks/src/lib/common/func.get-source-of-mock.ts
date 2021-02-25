@@ -3,42 +3,42 @@ import { MockedDirective } from '../mock-directive/types';
 import { MockedModule } from '../mock-module/types';
 import { MockedPipe } from '../mock-pipe/types';
 
-import { Type } from './core.types';
+import { AnyType, Type } from './core.types';
 
 /**
  * Returns an original type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getSourceOfMock
  */
-export function getSourceOfMock<T>(declaration: Type<MockedModule<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: AnyType<MockedModule<T>>): Type<T>;
 
 /**
  * Returns an original type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getSourceOfMock
  */
-export function getSourceOfMock<T>(declaration: Type<MockedComponent<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: AnyType<MockedComponent<T>>): Type<T>;
 
 /**
  * Returns an original type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getSourceOfMock
  */
-export function getSourceOfMock<T>(declaration: Type<MockedDirective<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: AnyType<MockedDirective<T>>): Type<T>;
 
 /**
  * Returns an original type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getSourceOfMock
  */
-export function getSourceOfMock<T>(declaration: Type<MockedPipe<T>>): Type<T>;
+export function getSourceOfMock<T>(declaration: AnyType<MockedPipe<T>>): Type<T>;
 
 /**
  * Returns an original type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getSourceOfMock
  */
-export function getSourceOfMock<T>(declaration: Type<T>): Type<T>;
+export function getSourceOfMock<T>(declaration: AnyType<T>): Type<T>;
 
 /**
  * Returns an original type.
