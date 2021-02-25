@@ -30,6 +30,7 @@
     "karma-typescript": "latest",
     "karma-typescript-angular2-transform": "latest",
     "rxjs": "^6.5.4",
+    "csstype": "^3.0.7",
     "typescript": "latest"
   }
 }
