@@ -212,8 +212,6 @@ export class Resolver {
                 }
             }
 
-
-
             bopts = {
                 basedir: bundleItem.filename ? path.dirname(bundleItem.filename) : this.config.karma.basePath,
                 extensions: this.config.bundlerOptions.resolve.extensions,

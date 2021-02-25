@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+// Testing a type only import
 import { Properties } from 'csstype'
 
 @Component({
