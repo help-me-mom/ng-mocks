@@ -20,9 +20,9 @@
     "test:jasmine:debug": "npm run ng test -- --watch --browsers Chrome"
   },
   "peerDependencies": {
-    "@angular-devkit/build-angular": "0.1102.1",
+    "@angular-devkit/build-angular": "0.1102.2",
     "@angular/animations": "11.2.3",
-    "@angular/cli": "11.2.1",
+    "@angular/cli": "11.2.2",
     "@angular/cdk": "11.2.2",
     "@angular/common": "11.2.3",
     "@angular/compiler": "11.2.3",
