@@ -1,3 +1,12 @@
+# [11.8.0](https://github.com/ike18t/ng-mocks/compare/v11.7.0...v11.8.0) (2021-02-25)
+
+
+### Features
+
+* find ng-container via ngMocks.reveal and revealAll ([71390b2](https://github.com/ike18t/ng-mocks/commit/71390b2ceff4b812a75ffff24838f4866a4d736c)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
+* ngMocks.render and .hide support debugNodes ([55a1b4c](https://github.com/ike18t/ng-mocks/commit/55a1b4c5e225dee691a2f80ea320c7c9336b918b))
+* respect of virtual dom with ngMocks.crawl ([030b29f](https://github.com/ike18t/ng-mocks/commit/030b29f26ccd68f8c2f8fb93c8466df4675eacb4)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
+
 # [11.7.0](https://github.com/ike18t/ng-mocks/compare/v11.6.0...v11.7.0) (2021-02-19)
 
 
