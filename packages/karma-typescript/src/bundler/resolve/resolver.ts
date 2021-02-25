@@ -195,16 +195,24 @@ export class Resolver {
                 return onFilenameResolved();
             }
 
-            // This is probably a compiler path module (.d.ts)
-            if (bundleItem.isNpmModule() && bundleItem.isTypingsFile() &&
-                bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
-                const filepath = PathTool.fixWindowsPath(bundleItem.filename);
-                const matches = filepath.match(/\/node_modules\/(.*)\//);
-                if (matches && matches[1]) {
-                    moduleName = matches[1];
-                    this.log.debug("Resolved module name [%s] to [%s]", bundleItem.moduleName, moduleName);
+            
+            if (bundleItem.isNpmModule() && bundleItem.isTypingsFile()) {
+                // This is probably a compiler path module (.d.ts)
+                if (bundleItem.filename.indexOf(bundleItem.moduleName) === -1) {
+                  const filepath = PathTool.fixWindowsPath(bundleItem.filename);
+                  const matches = filepath.match(/\/node_modules\/(.*)\//);
+                  if (matches && matches[1]) {
+                      moduleName = matches[1];
+                      this.log.debug("Resolved module name [%s] to [%s]", bundleItem.moduleName, moduleName);
+                  }
+                }
+                // This is probably a type only module import
+                else {
+                  return onFilenameResolved()
                 }
             }
+
+
 
             bopts = {
                 basedir: bundleItem.filename ? path.dirname(bundleItem.filename) : this.config.karma.basePath,

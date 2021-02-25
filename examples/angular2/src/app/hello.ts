@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Properties } from 'csstype'
 
 @Component({
     selector: "app-hello",
