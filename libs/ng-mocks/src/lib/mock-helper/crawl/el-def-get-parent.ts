@@ -50,7 +50,6 @@ const scanViewRef = (node: DebugElement) => {
 
 export default (node: any) => {
   return (
-    (undefined as any) ||
     node.injector._tNode?.parent || // ivy
     node.injector.elDef?.parent || // classic
     scanViewRef(node) ||

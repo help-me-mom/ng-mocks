@@ -5,12 +5,14 @@ import {
   Injector,
   OnInit,
   Optional,
+  Self,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
+import coreForm from '../common/core.form';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
@@ -25,12 +27,13 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   // istanbul ignore next
   public constructor(
     injector: Injector,
-    vcr: ViewContainerRef,
+    ngControl: any, // NgControl
     cdr: ChangeDetectorRef,
-    element?: ElementRef,
-    template?: TemplateRef<any>,
+    vcr: ViewContainerRef,
+    element: ElementRef | null = null,
+    template: TemplateRef<any> | null = null,
   ) {
-    super(injector);
+    super(injector, ngControl);
     this.__ngMocksInstall(vcr, cdr, element, template);
   }
 
@@ -51,8 +54,8 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
   private __ngMocksInstall(
     vcr: ViewContainerRef,
     cdr: ChangeDetectorRef,
-    element?: ElementRef,
-    template?: TemplateRef<any>,
+    element: ElementRef | null,
+    template: TemplateRef<any> | null,
   ): void {
     // Basically any directive on ng-template is treated as structural, even it does not control render process.
     // In our case we do not if we should render it or not and due to this we do nothing.
@@ -76,10 +79,11 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
 
 coreDefineProperty(DirectiveMockBase, 'parameters', [
   [Injector],
-  [ViewContainerRef],
+  [coreForm.NgControl || /* istanbul ignore next */ (() => undefined), new Optional(), new Self()],
   [ChangeDetectorRef],
-  [ElementRef, new Optional()],
-  [TemplateRef, new Optional()],
+  [ViewContainerRef],
+  [ElementRef, new Optional(), new Self()],
+  [TemplateRef, new Optional(), new Self()],
 ]);
 
 const decorateClass = (directive: Type<any>, mock: Type<any>): void => {

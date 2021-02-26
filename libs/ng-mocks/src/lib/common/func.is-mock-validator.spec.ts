@@ -7,7 +7,6 @@ import {
 import {
   AbstractControl,
   AsyncValidator,
-  NgControl,
   NG_ASYNC_VALIDATORS,
   NG_VALIDATORS,
   ValidationErrors,
@@ -72,12 +71,7 @@ describe('isMockValidator', () => {
       valueAccessor: {},
     };
     const injector = MockService(Injector);
-    ngMocks.stub(injector, 'get');
-    spyOn(injector, 'get')
-      .withArgs(NgControl, undefined, 0b1010)
-      .and.returnValue(ngControl);
-
-    const instanceInjected = new mockClass(null, injector);
+    const instanceInjected = new mockClass(injector, ngControl);
     expect(isMockValidator(instanceInjected)).toEqual(true);
   });
 
@@ -95,11 +89,7 @@ describe('isMockValidator', () => {
     };
     const injector = MockService(Injector);
     ngMocks.stub(injector, 'get');
-    spyOn(injector, 'get')
-      .withArgs(NgControl, undefined, 0b1010)
-      .and.returnValue(ngControl);
-
-    const instanceInjected = new mockClass(injector);
+    const instanceInjected = new mockClass(injector, ngControl);
     expect(isMockValidator(instanceInjected)).toEqual(true);
   });
 });

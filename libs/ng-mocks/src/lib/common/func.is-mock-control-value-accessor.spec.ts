@@ -1,9 +1,7 @@
 import { Component, Directive, Injector } from '@angular/core';
-import { NgControl } from '@angular/forms';
 
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
-import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
 import { isMockControlValueAccessor } from './func.is-mock-control-value-accessor';
@@ -40,12 +38,7 @@ describe('isMockControlValueAccessor', () => {
 
     const ngControl = {};
     const injector = MockService(Injector);
-    ngMocks.stub(injector, 'get');
-    spyOn(injector, 'get')
-      .withArgs(NgControl, undefined, 0b1010)
-      .and.returnValue(ngControl);
-
-    const instanceInjected = new mockClass(null, injector);
+    const instanceInjected = new mockClass(null, injector, ngControl);
     expect(isMockControlValueAccessor(instanceInjected)).toEqual(
       true,
     );
@@ -63,12 +56,7 @@ describe('isMockControlValueAccessor', () => {
 
     const ngControl = {};
     const injector = MockService(Injector);
-    ngMocks.stub(injector, 'get');
-    spyOn(injector, 'get')
-      .withArgs(NgControl, undefined, 0b1010)
-      .and.returnValue(ngControl);
-
-    const instanceInjected = new mockClass(injector);
+    const instanceInjected = new mockClass(injector, ngControl);
     expect(isMockControlValueAccessor(instanceInjected)).toEqual(
       true,
     );
