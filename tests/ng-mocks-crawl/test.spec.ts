@@ -1,3 +1,5 @@
+// tslint:disable strict-type-predicates
+
 import { MockRender, ngMocks } from 'ng-mocks';
 
 describe('ng-mocks-crawl', () => {
@@ -106,7 +108,10 @@ describe('ng-mocks-crawl', () => {
   });
 
   it('skips text nodes', () => {
-    const spy = jasmine.createSpy();
+    const spy =
+      typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
+    // in case of jest
+    // const spy = jest.fn();
     const node: any = {
       injector: {},
       nativeNode: {

@@ -89,6 +89,18 @@ describe('issue-162', () => {
       );
       getSpy.and.returnValue('spy');
     }
+    // in case of jest
+    // getSpy = jest.spyOn(
+    //   fixture.point.componentInstance,
+    //   'title',
+    //   'get',
+    // );
+    // setSpy = jest.spyOn(
+    //   fixture.point.componentInstance,
+    //   'title',
+    //   'set',
+    // );
+    // getSpy.mockReturnValue('spy');
 
     expect(fixture.point.componentInstance.title).toEqual('spy');
     fixture.point.componentInstance.title = 'updated';
