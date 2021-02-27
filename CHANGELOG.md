@@ -3,9 +3,9 @@
 
 ### Features
 
-* find ng-container via ngMocks.reveal and revealAll ([71390b2](https://github.com/ike18t/ng-mocks/commit/71390b2ceff4b812a75ffff24838f4866a4d736c)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
-* ngMocks.render and .hide support debugNodes ([55a1b4c](https://github.com/ike18t/ng-mocks/commit/55a1b4c5e225dee691a2f80ea320c7c9336b918b))
-* respect of virtual dom with ngMocks.crawl ([030b29f](https://github.com/ike18t/ng-mocks/commit/030b29f26ccd68f8c2f8fb93c8466df4675eacb4)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
+* find ng-container via [ngMocks.reveal](https://ng-mocks.sudo.eu/api/ngMocks/reveal) and [revealAll](https://ng-mocks.sudo.eu/api/ngMocks/revealAll) ([71390b2](https://github.com/ike18t/ng-mocks/commit/71390b2ceff4b812a75ffff24838f4866a4d736c)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
+* [ngMocks.render](https://ng-mocks.sudo.eu/api/ngMocks/render) and [.hide](https://ng-mocks.sudo.eu/api/ngMocks/hide) support debugNodes ([55a1b4c](https://github.com/ike18t/ng-mocks/commit/55a1b4c5e225dee691a2f80ea320c7c9336b918b))
+* respect of virtual dom with [ngMocks.crawl](https://ng-mocks.sudo.eu/api/ngMocks/crawl) ([030b29f](https://github.com/ike18t/ng-mocks/commit/030b29f26ccd68f8c2f8fb93c8466df4675eacb4)), closes [#289](https://github.com/ike18t/ng-mocks/issues/289)
 
 # [11.7.0](https://github.com/ike18t/ng-mocks/compare/v11.6.0...v11.7.0) (2021-02-19)
 
@@ -18,7 +18,7 @@
 
 ### Features
 
-* improved TemplateRef render ([151ff34](https://github.com/ike18t/ng-mocks/commit/151ff34ee4ab7438e2a08982f643e4aca9bd22c0)), closes [#291](https://github.com/ike18t/ng-mocks/issues/291)
+* improved TemplateRef [render](https://ng-mocks.sudo.eu/api/ngMocks/render) ([151ff34](https://github.com/ike18t/ng-mocks/commit/151ff34ee4ab7438e2a08982f643e4aca9bd22c0)), closes [#291](https://github.com/ike18t/ng-mocks/issues/291)
 
 # [11.6.0](https://github.com/ike18t/ng-mocks/compare/v11.5.0...v11.6.0) (2021-02-14)
 

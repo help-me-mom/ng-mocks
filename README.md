@@ -26,6 +26,7 @@ The current version of the library **has been tested** and **can be used** with:
 ## Important links
 
 - **[Documentation with examples](https://ng-mocks.sudo.eu)**
+- [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md)
 - [GitHub repo](https://github.com/ike18t/ng-mocks)
 - [NPM package](https://www.npmjs.com/package/ng-mocks)
 
