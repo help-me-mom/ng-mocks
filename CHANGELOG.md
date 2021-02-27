@@ -3,12 +3,12 @@
 
 ### Bug Fixes
 
-* **#305:** better injection of NgControl ([f85f497](https://github.com/ike18t/ng-mocks/commit/f85f497f0dab32363e67980a9f1dc37b0b321208)), closes [#305](https://github.com/ike18t/ng-mocks/issues/305) [#305](https://github.com/ike18t/ng-mocks/issues/305)
+* **#305:** better injection of NgControl ([f85f497](https://github.com/ike18t/ng-mocks/commit/f85f497f0dab32363e67980a9f1dc37b0b321208)), closes [#305](https://github.com/ike18t/ng-mocks/issues/305)
 
 
 ### Features
 
-* simpler tools for form controls ngMocks.change and ngMocks.touch ([753b975](https://github.com/ike18t/ng-mocks/commit/753b97547b8f4ee4f7b0c2709ad3ce4d6e0961fe))
+* simpler tools for form controls [ngMocks.change](https://ng-mocks.sudo.eu/api/ngMocks/change) and [ngMocks.touch](https://ng-mocks.sudo.eu/api/ngMocks/touch) ([753b975](https://github.com/ike18t/ng-mocks/commit/753b97547b8f4ee4f7b0c2709ad3ce4d6e0961fe))
 
 # [11.8.0](https://github.com/ike18t/ng-mocks/compare/v11.7.0...v11.8.0) (2021-02-25)
 
