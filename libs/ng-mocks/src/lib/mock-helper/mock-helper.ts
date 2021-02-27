@@ -11,6 +11,8 @@ import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 import mockHelperCrawl from './crawl/mock-helper.crawl';
 import mockHelperReveal from './crawl/mock-helper.reveal';
 import mockHelperRevealAll from './crawl/mock-helper.reveal-all';
+import mockHelperChange from './cva/mock-helper.change';
+import mockHelperTouch from './cva/mock-helper.touch';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
@@ -51,6 +53,11 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/extra/auto-spy
    */
   autoSpy(type: CustomMockFunction): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/change
+   */
+  change(el: DebugNode, value: any): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/crawl
@@ -497,8 +504,14 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/throwOnConsole
    */
   throwOnConsole(): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/touch
+   */
+  touch(el: DebugNode): void;
 } = {
   autoSpy: mockHelperAutoSpy,
+  change: mockHelperChange,
   crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,
   faster: mockHelperFaster,
@@ -527,4 +540,5 @@ export const ngMocks: {
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperThrowOnConsole,
+  touch: mockHelperTouch,
 };

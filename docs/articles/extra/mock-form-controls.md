@@ -6,7 +6,7 @@ sidebar_label: Mock form controls
 
 `ng-mocks` respects `ControlValueAccessor` interface if [a directive](../api/MockDirective.md),
 or [a component](../api/MockComponent.md) implements it.
-Apart from that, `ng-mocks` provides helper functions to emit changes and touches.
+Apart from that, `ng-mocks` provides helper functions to emit [changes](../api/ngMocks/change.md) and [touches](../api/ngMocks/touch.md).
 
 it supports both `FormsModule` and `ReactiveFormsModule`:
 
@@ -28,22 +28,13 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 - `registerOnValidatorChange`
 - `validate`
 
-## MockControlValueAccessor
+## Related tools
 
-A mock object of `ControlValueAccessor` additionally implements `MockControlValueAccessor` and provides:
+- [`ngMocks.change()`](../api/ngMocks/change.md)
+- [`ngMocks.touch()`](../api/ngMocks/touch.md)
 
-- `__simulateChange(value: any)` - calls `onChanged` on the mock component bound to a `FormControl`
-- `__simulateTouch()` - calls `onTouched` on the mock component bound to a `FormControl`
-
-* [`isMockControlValueAccessor( instance )`](../api/helpers/isMockControlValueAccessor.md) - to verify `MockControlValueAccessor`
-
-## MockValidator
-
-A mock object of `Validator` or `AsyncValidator` additionally implements `MockValidator` and provides:
-
-- `__simulateValidatorChange()` - calls `updateValueAndValidity` on the mock component bound to a `FormControl`
-
-* [`isMockValidator( instance )`](../api/helpers/isMockValidator.md) - to verify `MockValidator`
+* [`isMockControlValueAccessor()`](../api/helpers/isMockControlValueAccessor.md)
+* [`isMockValidator()`](../api/helpers/isMockValidator.md)
 
 ## Advanced example
 
@@ -55,20 +46,6 @@ Please, pay attention to comments in the code.
 
 ```ts
 describe('MockReactiveForms', () => {
-  // That is our spy on writeValue calls.
-  // With auto spy this code is not needed.
-  const writeValue = jasmine.createSpy('writeValue');
-  // in case of jest
-  // const writeValue = jest.fn();
-
-  // Because of early calls of writeValue, we need to install
-  // the spy in the ctor call.
-  beforeEach(() =>
-    MockInstance(DependencyComponent, () => ({
-      writeValue,
-    })),
-  );
-
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -76,21 +53,27 @@ describe('MockReactiveForms', () => {
   });
 
   it('sends the correct value to the mock form component', () => {
+    // That is our spy on writeValue calls.
+    // With auto spy this code is not needed.
+    const writeValue = jasmine.createSpy('writeValue');
+    // in case of jest
+    // const writeValue = jest.fn();
+
+    // Because of early calls of writeValue, we need to install
+    // the spy via MockInstance before the render.
+    MockInstance(DependencyComponent, 'writeValue', writeValue);
+
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
-
-    // Let's find the mock form component.
-    const mockControl = ngMocks.find(DependencyComponent)
-      .componentInstance;
 
     // During initialization it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's simulate its change, like a user does it.
-    if (isMockControlValueAccessor(mockControl)) {
-      mockControl.__simulateChange('foo');
-    }
+    // Let's find the form control element
+    // and simulate its change, like a user does it.
+    const mockControlEl = ngMocks.find(DependencyComponent);
+    ngMocks.change(mockControlEl, 'foo');
     expect(component.formControl.value).toBe('foo');
 
     // Let's check that change on existing formControl
@@ -108,20 +91,6 @@ A usage example of mock FormControl with ngModel in Angular tests
 
 ```ts
 describe('MockForms', () => {
-  // That is our spy on writeValue calls.
-  // With auto spy this code is not needed.
-  const writeValue = jasmine.createSpy('writeValue');
-  // in case of jest
-  // const writeValue = jest.fn();
-
-  // Because of early calls of writeValue, we need to install
-  // the spy in the ctor call.
-  beforeEach(() =>
-    MockInstance(DependencyComponent, () => ({
-      writeValue,
-    })),
-  );
-
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -129,23 +98,28 @@ describe('MockForms', () => {
   });
 
   it('sends the correct value to the mock form component', async () => {
+    // That is our spy on writeValue calls.
+    // With auto spy this code is not needed.
+    const writeValue = jasmine.createSpy('writeValue');
+    // in case of jest
+    // const writeValue = jest.fn();
+
+    // Because of early calls of writeValue, we need to install
+    // the spy via MockInstance before the render.
+    MockInstance(DependencyComponent, 'writeValue', writeValue);
+
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
-
-    // Let's find the mock form component.
-    const mockControl = ngMocks.find(DependencyComponent)
-      .componentInstance;
 
     // During initialization it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's simulate its change, like a user does it.
-    if (isMockControlValueAccessor(mockControl)) {
-      mockControl.__simulateChange('foo');
-      fixture.detectChanges();
-      await fixture.whenStable();
-    }
+    // Let's find the form control element
+    // and simulate its change, like a user does it.
+    const mockControlEl = ngMocks.find(DependencyComponent);
+    ngMocks.change(mockControlEl, 'foo');
+    await fixture.whenStable();
     expect(component.value).toBe('foo');
 
     // Let's check that change on existing value

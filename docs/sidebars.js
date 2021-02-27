@@ -36,6 +36,8 @@ module.exports = {
         'api/ngMocks/globalMock',
         'api/ngMocks/globalReplace',
         'api/ngMocks/globalWipe',
+        'api/ngMocks/change',
+        'api/ngMocks/touch',
         'api/ngMocks/render',
         'api/ngMocks/hide',
         'api/ngMocks/input',
