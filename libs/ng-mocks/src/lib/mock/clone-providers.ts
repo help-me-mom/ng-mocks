@@ -1,5 +1,6 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 
+import coreForm from '../common/core.form';
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
 import funcGetProvider from '../common/func.get-provider';
@@ -13,37 +14,15 @@ import helperMockService from '../mock-service/helper.mock-service';
 import toExistingProvider from './to-existing-provider';
 import toFactoryProvider from './to-factory-provider';
 
-// tslint:disable variable-name
-let NG_ASYNC_VALIDATORS: InjectionToken<any> | undefined;
-let NG_VALIDATORS: InjectionToken<any> | undefined;
-let NG_VALUE_ACCESSOR: InjectionToken<any> | undefined;
-let FormControlDirective: any | undefined;
-let NgControl: any | undefined;
-// tslint:enable variable-name
-try {
-  // tslint:disable-next-line no-require-imports no-var-requires
-  const module = require('@angular/forms');
-  // istanbul ignore else
-  if (module) {
-    NG_ASYNC_VALIDATORS = module.NG_ASYNC_VALIDATORS;
-    NG_VALIDATORS = module.NG_VALIDATORS;
-    NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
-    FormControlDirective = module.FormControlDirective;
-    NgControl = module.NgControl;
-  }
-} catch (e) {
-  // nothing to do;
-}
-
 const processTokens = (mockType: AnyType<any>, provider: any) => {
   const provide = funcGetProvider(provider);
-  if (NG_VALIDATORS && provide === NG_VALIDATORS) {
+  if (coreForm.NG_VALIDATORS && provide === coreForm.NG_VALIDATORS) {
     return toFactoryProvider(provide, () => new MockValidatorProxy(mockType));
   }
-  if (NG_ASYNC_VALIDATORS && provide === NG_ASYNC_VALIDATORS) {
+  if (coreForm.NG_ASYNC_VALIDATORS && provide === coreForm.NG_ASYNC_VALIDATORS) {
     return toFactoryProvider(provide, () => new MockAsyncValidatorProxy(mockType));
   }
-  if (NG_VALUE_ACCESSOR && provide === NG_VALUE_ACCESSOR) {
+  if (coreForm.NG_VALUE_ACCESSOR && provide === coreForm.NG_VALUE_ACCESSOR) {
     return toFactoryProvider(provide, () => new MockControlValueAccessorProxy(mockType));
   }
 
@@ -54,7 +33,7 @@ const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>,
   const provide = funcGetProvider(provider);
 
   // Check tests/issue-302/test.spec.ts
-  if (provide === NgControl || provide === FormControlDirective) {
+  if (provide === coreForm.NgControl || provide === coreForm.FormControlDirective) {
     return undefined;
   }
 
@@ -106,7 +85,7 @@ export default (
 
   for (const provider of flatten(providers || /* istanbul ignore next */ [])) {
     const provide = funcGetProvider(provider);
-    if (provide === NG_VALUE_ACCESSOR) {
+    if (provide === coreForm.NG_VALUE_ACCESSOR) {
       setControlValueAccessor = false;
     }
     const mock = processProvider(sourceType, mockType, provider, resolutions);

@@ -17,6 +17,11 @@ access desired elements and instances in fixtures.
 * [`globalReplace()`](ngMocks/globalReplace.md)
 * [`globalWipe()`](ngMocks/globalWipe.md)
 
+## Simulating form control events
+
+- [`change()`](ngMocks/change.md)
+- [`touch()`](ngMocks/touch.md)
+
 ## Manipulating `ng-template`
 
 - [`render()`](ngMocks/render.md)

@@ -8,7 +8,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import {
-  isMockControlValueAccessor,
   MockBuilder,
   MockInstance,
   MockRender,
@@ -41,23 +40,6 @@ class TestedComponent {
 }
 
 describe('MockReactiveForms', () => {
-  // That is our spy on writeValue calls.
-  // With auto spy this code is not needed.
-  const writeValue =
-    typeof jest === 'undefined'
-      ? jasmine.createSpy('writeValue')
-      : jest.fn();
-  // in case of jest
-  // const writeValue = jest.fn();
-
-  // Because of early calls of writeValue, we need to install
-  // the spy in the ctor call.
-  beforeEach(() =>
-    MockInstance(DependencyComponent, () => ({
-      writeValue,
-    })),
-  );
-
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)
@@ -65,21 +47,30 @@ describe('MockReactiveForms', () => {
   });
 
   it('sends the correct value to the mock form component', () => {
+    // That is our spy on writeValue calls.
+    // With auto spy this code is not needed.
+    const writeValue =
+      typeof jest === 'undefined'
+        ? jasmine.createSpy('writeValue')
+        : jest.fn();
+    // in case of jest
+    // const writeValue = jest.fn();
+
+    // Because of early calls of writeValue, we need to install
+    // the spy via MockInstance before the render.
+    MockInstance(DependencyComponent, 'writeValue', writeValue);
+
     const fixture = MockRender(TestedComponent);
     const component = fixture.point.componentInstance;
-
-    // Let's find the mock form component.
-    const mockControl = ngMocks.find(DependencyComponent)
-      .componentInstance;
 
     // During initialization it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's simulate its change, like a user does it.
-    if (isMockControlValueAccessor(mockControl)) {
-      mockControl.__simulateChange('foo');
-    }
+    // Let's find the form control element
+    // and simulate its change, like a user does it.
+    const mockControlEl = ngMocks.find(DependencyComponent);
+    ngMocks.change(mockControlEl, 'foo');
     expect(component.formControl.value).toBe('foo');
 
     // Let's check that change on existing formControl

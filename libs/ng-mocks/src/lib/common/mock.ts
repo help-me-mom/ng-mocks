@@ -1,6 +1,6 @@
 // tslint:disable variable-name
 
-import { EventEmitter, Injector, Optional } from '@angular/core';
+import { EventEmitter, Injector, Optional, Self } from '@angular/core';
 
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
@@ -8,32 +8,18 @@ import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import coreDefineProperty from './core.define-property';
+import coreForm from './core.form';
 import { mapValues } from './core.helpers';
 import { AnyType } from './core.types';
 import funcIsMock from './func.is-mock';
 import { MockControlValueAccessorProxy } from './mock-control-value-accessor-proxy';
 import ngMocksUniverse from './ng-mocks-universe';
 
-let FormControlDirective: any | undefined;
-let NgControl: any | undefined;
-try {
-  // tslint:disable-next-line no-require-imports no-var-requires
-  const module = require('@angular/forms');
-  // istanbul ignore else
-  if (module) {
-    FormControlDirective = module.FormControlDirective;
-    NgControl = module.NgControl;
-  }
-} catch (e) {
-  // nothing to do;
-}
-
-const setValueAccessor = (instance: MockConfig, injector?: Injector) => {
-  if (injector && instance.__ngMocksConfig && instance.__ngMocksConfig.setControlValueAccessor) {
+const setValueAccessor = (instance: any, ngControl?: any) => {
+  if (ngControl && instance.__ngMocksConfig && instance.__ngMocksConfig.setControlValueAccessor) {
     try {
-      const ngControl = (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
       if (ngControl && !ngControl.valueAccessor) {
-        ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.constructor);
+        ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.__ngMocksCtor);
       }
     } catch (e) {
       // nothing to do.
@@ -41,18 +27,9 @@ const setValueAccessor = (instance: MockConfig, injector?: Injector) => {
   }
 };
 
-// any because of optional @angular/forms
-const getRelatedNgControl = (injector: Injector): any => {
-  try {
-    return (injector.get as any)(/* A5 */ NgControl, undefined, 0b1010);
-  } catch (e) {
-    return (injector.get as any)(/* A5 */ FormControlDirective, undefined, 0b1010);
-  }
-};
-
 // connecting to NG_VALUE_ACCESSOR
 const installValueAccessor = (ngControl: any, instance: any) => {
-  if (!ngControl.valueAccessor.instance && ngControl.valueAccessor.target === instance.constructor) {
+  if (!ngControl.valueAccessor.instance && ngControl.valueAccessor.target === instance.__ngMocksCtor) {
     ngControl.valueAccessor.instance = instance;
     helperMockService.mock(instance, 'registerOnChange');
     helperMockService.mock(instance, 'registerOnTouched');
@@ -66,7 +43,7 @@ const installValueAccessor = (ngControl: any, instance: any) => {
 // connecting to NG_ASYNC_VALIDATORS
 const installValidator = (validators: any[], instance: any) => {
   for (const validator of validators) {
-    if (!validator.instance && validator.target === instance.constructor) {
+    if (!validator.instance && validator.target === instance.__ngMocksCtor) {
       validator.instance = instance;
       helperMockService.mock(instance, 'registerOnValidatorChange');
       helperMockService.mock(instance, 'validate');
@@ -75,21 +52,18 @@ const installValidator = (validators: any[], instance: any) => {
   }
 };
 
-const applyNgValueAccessor = (instance: any, injector?: Injector) => {
-  setValueAccessor(instance, injector);
+const applyNgValueAccessor = (instance: any, ngControl: any) => {
+  setValueAccessor(instance, ngControl);
 
-  if (injector) {
-    try {
-      const ngControl: any = getRelatedNgControl(injector);
-      // istanbul ignore else
-      if (ngControl) {
-        installValueAccessor(ngControl, instance);
-        installValidator(ngControl._rawValidators, instance);
-        installValidator(ngControl._rawAsyncValidators, instance);
-      }
-    } catch (e) {
-      // nothing to do.
+  try {
+    // istanbul ignore else
+    if (ngControl) {
+      installValueAccessor(ngControl, instance);
+      installValidator(ngControl._rawValidators, instance);
+      installValidator(ngControl._rawAsyncValidators, instance);
     }
+  } catch (e) {
+    // nothing to do.
   }
 };
 
@@ -175,16 +149,20 @@ export interface MockConfig {
 export class Mock {
   protected __ngMocksConfig!: ngMocksMockConfig;
 
-  public constructor(injector?: Injector) {
+  public constructor(
+    injector: Injector | null = null,
+    ngControl: any | null = null, // NgControl
+  ) {
     const mockOf = (this.constructor as any).mockOf;
     coreDefineProperty(this, '__ngMocksInjector', injector);
+    coreDefineProperty(this, '__ngMocksCtor', this.constructor);
     for (const key of this.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {
       coreDefineProperty(this, `__ngMocksVcr_${key}`, undefined);
     }
 
     // istanbul ignore else
     if (funcIsMock(this)) {
-      applyNgValueAccessor(this, injector);
+      applyNgValueAccessor(this, ngControl);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
       applyMethods(this, mockOf.prototype);
@@ -194,8 +172,11 @@ export class Mock {
     // and faking prototype
     Object.setPrototypeOf(this, mockOf.prototype);
 
-    applyOverrides(this, mockOf, injector);
+    applyOverrides(this, mockOf, injector ?? undefined);
   }
 }
 
-coreDefineProperty(Mock, 'parameters', [[Injector, new Optional()]]);
+coreDefineProperty(Mock, 'parameters', [
+  [Injector, new Optional()],
+  [coreForm.NgControl || /* istanbul ignore next */ (() => undefined), new Optional(), new Self()],
+]);

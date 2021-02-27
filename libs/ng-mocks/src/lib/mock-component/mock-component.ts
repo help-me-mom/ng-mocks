@@ -4,13 +4,16 @@ import {
   Component,
   EmbeddedViewRef,
   Injector,
+  Optional,
   QueryList,
+  Self,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
+import coreForm from '../common/core.form';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
@@ -160,8 +163,12 @@ const mixHide = (instance: MockConfig & Record<keyof any, any>, changeDetector: 
 
 class ComponentMockBase extends LegacyControlValueAccessor implements AfterContentInit {
   // istanbul ignore next
-  public constructor(changeDetector: ChangeDetectorRef, injector: Injector) {
-    super(injector);
+  public constructor(
+    injector: Injector,
+    ngControl: any, // NgControl
+    changeDetector: ChangeDetectorRef,
+  ) {
+    super(injector, ngControl);
     if (funcIsMock(this)) {
       mixRender(this, changeDetector);
       mixHide(this, changeDetector);
@@ -186,7 +193,11 @@ class ComponentMockBase extends LegacyControlValueAccessor implements AfterConte
   }
 }
 
-coreDefineProperty(ComponentMockBase, 'parameters', [[ChangeDetectorRef], [Injector]]);
+coreDefineProperty(ComponentMockBase, 'parameters', [
+  [Injector],
+  [coreForm.NgControl || /* istanbul ignore next */ (() => undefined), new Optional(), new Self()],
+  [ChangeDetectorRef],
+]);
 
 const decorateClass = (component: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(component);
