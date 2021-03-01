@@ -15,7 +15,7 @@ export class BundleItem {
     }
 
     public isScript(): boolean {
-        return (this.filename && /\.(js|jsx|mjs|ts|tsx)$/.test(this.filename))
+        return (this.filename && !this.isTypingsFile() && /\.(js|jsx|mjs|ts|tsx)$/.test(this.filename))
             || this.transformedScript;
     }
 
