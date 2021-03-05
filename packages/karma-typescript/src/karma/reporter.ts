@@ -106,12 +106,12 @@ export class Reporter {
     private getReportDestination(browser: any, reportConfig: any, reportType: any) {
 
         if (lodash.isPlainObject(reportConfig)) {
-            let subdirectory = reportConfig.subdirectory || browser.name;
+            let subdirectory = reportConfig.subdirectory ?? browser.name;
             if (typeof subdirectory === "function") {
                 subdirectory = subdirectory(browser);
             }
 
-            return path.join(reportConfig.directory || "coverage", subdirectory);
+            return path.join(reportConfig.directory ?? "coverage", subdirectory);
         }
 
         if (lodash.isString(reportConfig) && reportConfig.length > 0) {
