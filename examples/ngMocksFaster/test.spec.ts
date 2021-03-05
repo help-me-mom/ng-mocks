@@ -101,6 +101,8 @@ describe('examples:performance', () => {
       } else {
         mock.method = jest.fn().mockReturnValue(5);
       }
+      // in case of jest
+      // mock.method = jest.fn().mockReturnValue(5);
       mock.prop = 123;
     });
 

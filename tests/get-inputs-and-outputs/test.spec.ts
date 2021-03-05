@@ -20,14 +20,20 @@ describe('get-inputs-and-outputs', () => {
         typeof jest !== 'undefined'
           ? jest.fn().mockName('output1')
           : jasmine.createSpy('output1'),
+      // in case of jest
+      // output1: jest.fn().mockName('output1'),
       output2:
         typeof jest !== 'undefined'
           ? jest.fn().mockName('output2')
           : jasmine.createSpy('output2'),
+      // in case of jest
+      // output2: jest.fn().mockName('output2'),
       output3:
         typeof jest !== 'undefined'
           ? jest.fn().mockName('output3')
           : jasmine.createSpy('output3'),
+      // in case of jest
+      // output3: jest.fn().mockName('output3'),
     };
     const fixture = MockRender<TargetComponent, typeof params>(
       `<target
@@ -58,6 +64,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output1 as jasmine.Spy).calls.reset();
     }
+    // in case of jest
+    // (params.output1 as jest.Mock).mockReset();
     component.output.emit();
     expect(params.output1).toHaveBeenCalled();
 
@@ -68,6 +76,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output2 as jasmine.Spy).calls.reset();
     }
+    // in case of jest
+    // (params.output2 as jest.Mock).mockReset();
     directive2.output.emit();
     expect(params.output2).toHaveBeenCalled();
 
@@ -77,6 +87,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output3 as jasmine.Spy).calls.reset();
     }
+    // in case of jest
+    // (params.output3 as jest.Mock).mockReset();
     directive3.output.emit();
     expect(params.output3).toHaveBeenCalled();
 
@@ -97,6 +109,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output1 as jasmine.Spy).calls.reset();
     }
+    // in case of jest
+    // (params.output1 as jest.Mock).mockReset();
     ngMocks.output(componentElement, 'output1').emit();
     expect(params.output1).toHaveBeenCalled();
     if ((params.output2 as any).mockReset) {
@@ -104,7 +118,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output2 as jasmine.Spy).calls.reset();
     }
-
+    // in case of jest
+    // (params.output2 as jest.Mock).mockReset();
     ngMocks.output(componentElement, 'output2').emit();
     expect(params.output2).toHaveBeenCalled();
     if ((params.output3 as any).mockReset) {
@@ -112,6 +127,8 @@ describe('get-inputs-and-outputs', () => {
     } else {
       (params.output3 as jasmine.Spy).calls.reset();
     }
+    // in case of jest
+    // (params.output3 as jest.Mock).mockReset();
     ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
     expect(() =>

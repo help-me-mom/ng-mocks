@@ -16,11 +16,9 @@ import { MockControlValueAccessorProxy } from './mock-control-value-accessor-pro
 import ngMocksUniverse from './ng-mocks-universe';
 
 const setValueAccessor = (instance: any, ngControl?: any) => {
-  if (ngControl && instance.__ngMocksConfig && instance.__ngMocksConfig.setControlValueAccessor) {
+  if (ngControl && !ngControl.valueAccessor && instance.__ngMocksConfig.setControlValueAccessor) {
     try {
-      if (ngControl && !ngControl.valueAccessor) {
-        ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.__ngMocksCtor);
-      }
+      ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.__ngMocksCtor);
     } catch (e) {
       // nothing to do.
     }
