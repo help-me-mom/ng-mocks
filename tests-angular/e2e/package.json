@@ -34,7 +34,7 @@
     "@angular/platform-browser-dynamic": "11.2.4",
     "@angular/router": "11.2.4",
     "@ng-select/ng-select": "6.1.0",
-    "@types/jasmine": "3.6.5",
+    "@types/jasmine": "3.6.6",
     "@types/node": "12.20.4",
     "jasmine-core": "3.6.0",
     "jasmine-spec-reporter": "6.0.0",
