@@ -65,8 +65,12 @@
   "types": "dist/index.d.ts",
   "files": [
     "examples",
+    "migrations.json",
     "dist"
   ],
+  "ng-update": {
+    "migrations": "./migrations.json"
+  },
   "standard": {},
   "scripts": {
     "test": "karma start"
