@@ -1,3 +1,10 @@
+## [11.9.1](https://github.com/ike18t/ng-mocks/compare/v11.9.0...v11.9.1) (2021-03-14)
+
+
+### Bug Fixes
+
+* supporting schematics for updates ([8e30404](https://github.com/ike18t/ng-mocks/commit/8e3040487ef9bf1889a1117718fb0b593f2c38fc))
+
 # [11.9.0](https://github.com/ike18t/ng-mocks/compare/v11.8.0...v11.9.0) (2021-02-27)
 
 
