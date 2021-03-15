@@ -39,7 +39,7 @@
     "tempDir": "./coverage/.nyc_output"
   },
   "dependencies": {
-    "acorn": "^8.0.1",
+    "acorn": "^8.1.0",
     "log4js": "^6.3.0",
     "magic-string": "^0.25.7"
   },
