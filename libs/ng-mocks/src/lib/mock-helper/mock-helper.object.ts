@@ -3,6 +3,8 @@ import mockHelperReveal from './crawl/mock-helper.reveal';
 import mockHelperRevealAll from './crawl/mock-helper.reveal-all';
 import mockHelperChange from './cva/mock-helper.change';
 import mockHelperTouch from './cva/mock-helper.touch';
+import mockHelperFormatHtml from './format/mock-helper.format-html';
+import mockHelperFormatText from './format/mock-helper.format-text';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
@@ -11,7 +13,6 @@ import mockHelperFindAll from './mock-helper.find-all';
 import mockHelperFindInstance from './mock-helper.find-instance';
 import mockHelperFindInstances from './mock-helper.find-instances';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
-import mockHelperFormatHtml from './mock-helper.format-html';
 import mockHelperGet from './mock-helper.get';
 import mockHelperGlobalExclude from './mock-helper.global-exclude';
 import mockHelperGlobalKeep from './mock-helper.global-keep';
@@ -44,6 +45,7 @@ export default {
   findTemplateRefs: mockHelperFindTemplateRefs,
   flushTestBed: mockHelperFlushTestBed,
   formatHtml: mockHelperFormatHtml,
+  formatText: mockHelperFormatText,
   get: mockHelperGet,
   globalExclude: mockHelperGlobalExclude,
   globalKeep: mockHelperGlobalKeep,

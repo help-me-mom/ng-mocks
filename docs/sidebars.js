@@ -58,6 +58,7 @@ module.exports = {
         'api/ngMocks/faster',
         'api/ngMocks/throwOnConsole',
         'api/ngMocks/formatHtml',
+        'api/ngMocks/formatText',
         'api/ngMocks/flushTestBed',
         'api/ngMocks/reset',
       ],
