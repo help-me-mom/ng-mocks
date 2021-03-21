@@ -8,6 +8,7 @@ import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-prov
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
+import { FORMAT_SET, FORMAT_SINGLE } from './format/types';
 import mockHelperObject from './mock-helper.object';
 
 /**
@@ -234,10 +235,22 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/formatHtml
    */
-  formatHtml(
-    html: string | HTMLElement | { nativeNode: any } | { nativeElement: any } | { debugElement: any },
-    outer?: boolean,
-  ): string;
+  formatHtml(html: FORMAT_SINGLE, outer?: boolean): string;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/formatHtml
+   */
+  formatHtml(html: FORMAT_SET, outer?: boolean): string[];
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/formatText
+   */
+  formatText(text: FORMAT_SINGLE, outer?: boolean): string;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/formatText
+   */
+  formatText(text: FORMAT_SET, outer?: boolean): string[];
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
