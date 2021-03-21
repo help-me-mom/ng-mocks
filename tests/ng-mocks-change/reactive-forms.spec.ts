@@ -3,6 +3,7 @@ import {
   ControlValueAccessor,
   DefaultValueAccessor,
   FormControl,
+  FormsModule,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -29,17 +30,19 @@ class CustomDirective implements ControlValueAccessor {
   selector: 'my',
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
+    <input data-testid="ngModel" [(ngModel)]="value" />
     <custom [formControl]="myControl"></custom>
   `,
 })
 class MyComponent {
   public readonly myControl = new FormControl();
+  public value: any = null;
 }
 
 @NgModule({
   declarations: [MyComponent, CustomDirective],
   exports: [MyComponent],
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
 })
 class MyModule {}
 
@@ -80,6 +83,16 @@ describe('ng-mocks-change:reactive-forms:mock', () => {
     expect(component.myControl.value).toEqual(null);
     ngMocks.change(valueAccessorEl, 123);
     expect(component.myControl.value).toEqual(123);
+  });
+
+  it('correctly changes ngModel', () => {
+    const component = MockRender(MyComponent).point.componentInstance;
+    const valueAccessorEl = ngMocks.find(['data-testid', 'ngModel']);
+
+    // normal change
+    expect(component.value).toEqual(null);
+    ngMocks.change(valueAccessorEl, 123);
+    expect(component.value).toEqual(123);
   });
 
   it('throws on bad element', () => {
