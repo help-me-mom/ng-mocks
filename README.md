@@ -87,7 +87,7 @@ Profit.
 Please support, if you like it:
 
 - [give a star on GitHub](https://github.com/ike18t/ng-mocks)
-- [share on twitter](https://twitter.com/intent/tweet?text=Check+ng-mocks+package&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
+- [share on twitter](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
 
 Thank you!
 
