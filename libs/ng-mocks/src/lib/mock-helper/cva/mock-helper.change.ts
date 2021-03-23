@@ -50,11 +50,14 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
   return false;
 };
 
+const hasListener = (el: DebugElement): boolean =>
+  el.listeners.filter(listener => listener.name === 'input').length > 0;
+
 const keys = ['onChange', '_onChange', 'changeFn', '_onChangeCallback', 'onModelChange'];
 
 export default (el: DebugElement, value: any): void => {
   const valueAccessor = funcGetVca(el);
-  if (handleKnown(valueAccessor, value)) {
+  if (handleKnown(valueAccessor, value) || hasListener(el)) {
     triggerInput(el, value);
 
     return;
@@ -62,8 +65,8 @@ export default (el: DebugElement, value: any): void => {
 
   for (const key of keys) {
     if (typeof valueAccessor[key] === 'function') {
-      triggerInput(el, value);
-      // valueAccessor[key](value);
+      valueAccessor.writeValue(value);
+      valueAccessor[key](value);
 
       return;
     }
