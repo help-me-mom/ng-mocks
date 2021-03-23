@@ -33,11 +33,14 @@ const handleKnown = (valueAccessor: any): boolean => {
   return false;
 };
 
+const hasListener = (el: DebugElement): boolean =>
+  el.listeners.filter(listener => listener.name === 'focus' || listener.name === 'blur').length > 0;
+
 const keys = ['onTouched', '_onTouched', '_cvaOnTouch', '_markAsTouched', '_onTouchedCallback', 'onModelTouched'];
 
 export default (el: DebugElement): void => {
   const valueAccessor = funcGetVca(el);
-  if (handleKnown(valueAccessor)) {
+  if (handleKnown(valueAccessor) || hasListener(el)) {
     triggerTouch(el);
 
     return;
@@ -45,8 +48,7 @@ export default (el: DebugElement): void => {
 
   for (const key of keys) {
     if (typeof valueAccessor[key] === 'function') {
-      triggerTouch(el);
-      // valueAccessor[key]();
+      valueAccessor[key]();
 
       return;
     }
