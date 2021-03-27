@@ -31,6 +31,14 @@ export const ngMocks: {
   change(el: DebugNode, value: any): void;
 
   /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/click
+   */
+  click(
+    debugElement: MockedDebugElement | HTMLElement | ComponentFixture<any> | undefined | null,
+    payload?: Partial<MouseEvent>,
+  ): void;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/crawl
    */
   crawl(
@@ -62,6 +70,15 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/event
+   */
+  event(
+    event: string,
+    init?: EventInit,
+    overrides?: Partial<UIEvent | KeyboardEvent | MouseEvent | TouchEvent | Event>,
+  ): Event;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/faster
@@ -492,4 +509,18 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/touch
    */
   touch(el: DebugNode): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/trigger
+   */
+  trigger(debugElement: MockedDebugElement | undefined | null, event: Event): void;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/trigger
+   */
+  trigger(
+    debugElement: MockedDebugElement | HTMLElement | ComponentFixture<any> | undefined | null,
+    event: string,
+    payload?: Partial<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>,
+  ): void;
 } = mockHelperObject;

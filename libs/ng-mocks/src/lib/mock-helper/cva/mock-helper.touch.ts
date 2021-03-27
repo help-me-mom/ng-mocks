@@ -2,19 +2,14 @@ import { DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
+import mockHelperTrigger from '../events/mock-helper.trigger';
 
 import funcGetVca from './func.get-vca';
 
 // default html behavior
 const triggerTouch = (el: DebugElement): void => {
-  const target = el.nativeElement;
-  el.triggerEventHandler('focus', {
-    target,
-  });
-
-  el.triggerEventHandler('blur', {
-    target,
-  });
+  mockHelperTrigger(el, 'focus');
+  mockHelperTrigger(el, 'blur');
 };
 
 const handleKnown = (valueAccessor: any): boolean => {

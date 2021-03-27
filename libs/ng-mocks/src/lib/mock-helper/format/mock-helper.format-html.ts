@@ -8,6 +8,7 @@ const normalizeValue = (html: string | undefined): string =>
     ? html
         .replace(new RegExp('\\s+', 'mg'), ' ')
         .replace(new RegExp('<!--.*?-->', 'mg'), '')
+        .replace(new RegExp('<!--.*?', 'mg'), '')
         .replace(new RegExp('\\s+', 'mg'), ' ')
         .replace(new RegExp('>\\s+<', 'mg'), '><')
     : '';
