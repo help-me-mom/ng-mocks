@@ -1,6 +1,6 @@
 [![chat on gitter](https://img.shields.io/gitter/room/ike18t/ng-mocks)](https://gitter.im/ng-mocks/community)
 [![npm version](https://img.shields.io/npm/v/ng-mocks)](https://www.npmjs.com/package/ng-mocks)
-[![build status](https://img.shields.io/github/workflow/status/ike18t/ng-mocks/ci)](https://github.com/ike18t/ng-mocks/actions/workflows/ci.yaml?query=branch%3Amaster)
+[![build status](https://img.shields.io/github/workflow/status/ike18t/ng-mocks/build)](https://github.com/ike18t/ng-mocks/actions/workflows/ci.yaml?query=branch%3Amaster)
 [![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 [![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
