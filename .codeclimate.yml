@@ -2,6 +2,7 @@
 version: '2'
 exclude_patterns:
   - '.circleci/'
+  - '.github/'
   - '.husky/'
   - 'dist/'
   - 'docker/'
@@ -23,7 +24,6 @@ exclude_patterns:
   - '.prettierignore'
   - '.prettierrc.yml'
   - '.releaserc.yml'
-  - '.travis.yml'
   - 'CODEOWNERS'
   - 'Dockerfile'
   - 'LICENSE'
