@@ -1,33 +1,33 @@
 name: build
 
 on:
-  push:
-    branches: [$default-branch]
-  pull_request:
-    branches: [$default-branch]
+  - push
+  - pull_request
 
 jobs:
   Core:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node v${{ matrix.node-version }}
+      - name: Node
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.16.0
+
+      - name: node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-root-v1-${{ hashFiles('./package-lock.json') }}
 
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          if [ ! -d "./node_modules/" ]; then
-            npm ci --no-optional --ignore-scripts && \
-            node ./node_modules/puppeteer/install.js && \
-            ./node_modules/.bin/ngcc
-          fi
+          npm ci --no-optional --ignore-scripts && \
+          node ./node_modules/puppeteer/install.js
+
       - name: Prettier Check
         run: npm run prettier:check
       - name: Lint Check
@@ -48,31 +48,1137 @@ jobs:
           mv ./package ./ng-mocks
 
       - name: Unit Tests
-        run: WITH_COVERAGE=1 npm run test
-
-      - name: E2E
-        run: npm run e2e
+        run: npm run test
+        env:
+          WITH_COVERAGE: '1'
 
       - name: Building Docs
         run: npm run build:docs
 
-      - name: Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v2
         with:
-          files: test-reports/**/*.xml
+          check_name: Core Coverage
+          report_paths: test-reports/specs-junit.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Workspace
         uses: actions/upload-artifact@v2
         with:
           name: workspace
-          path: |
-            dist
+          path: ./dist
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: coverage
-          path: |
-            test-reports/coverage
+          name: Core Test Reports
+          path: test-reports
+
+      - name: https://coveralls.io/github/ike18t/ng-mocks
+        if: always()
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./test-reports/coverage/lcov/lcov.info
+
+      - name: https://codecov.io/gh/ike18t/ng-mocks
+        if: always()
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./test-reports/coverage/lcov/lcov.info
+
+      - name: https://codeclimate.com/github/ike18t/ng-mocks
+        if: always()
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69
+        with:
+          coverageLocations: ./test-reports/coverage/lcov/lcov.info:lcov
+
+  E2E:
+    needs: Core
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-e2e-v1-${{ hashFiles('./package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci --no-optional --ignore-scripts && \
+          node ./node_modules/puppeteer/install.js && \
+          ./node_modules/.bin/ngcc
+
+      - name: E2E
+        run: npm run e2e
+
+  IE11:
+    needs: Core
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-root-v1-${{ hashFiles('./package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --no-optional --ignore-scripts
+
+      - name: Unit Tests
+        run: npm run test -- --reporters dots,junit
+        env:
+          IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v2
+        with:
+          check_name: IE11 Coverage
+          report_paths: test-reports/specs-junit.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: IE11 Test Reports
+          path: test-reports
+
+  Install:
+    needs: Core
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a5es5/node_modules
+        id: a5es5
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a5es5/node_modules
+          key: ${{ runner.os }}-a5es5-v1-${{ hashFiles('./e2e/a5es5/package-lock.json') }}
+
+      - name: Install A5 es5 dependencies
+        if: steps.a5es5.outputs.cache-hit != 'true'
+        run: npm run i:ci:a5es5
+
+      - name: e2e/a5es2015/node_modules
+        id: a5es2015
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a5es2015/node_modules
+          key: ${{ runner.os }}-a5es2015-v1-${{ hashFiles('./e2e/a5es2015/package-lock.json') }}
+
+      - name: Install A5 es2015 dependencies
+        if: steps.a5es2015.outputs.cache-hit != 'true'
+        run: npm run i:ci:a5es2015
+
+      - name: e2e/a6/node_modules
+        id: a6
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a6/node_modules
+          key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
+
+      - name: Install A6 dependencies
+        if: steps.a6.outputs.cache-hit != 'true'
+        run: npm run i:ci:a6
+
+      - name: e2e/a7/node_modules
+        id: a7
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a7/node_modules
+          key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
+
+      - name: Install A7 dependencies
+        if: steps.a7.outputs.cache-hit != 'true'
+        run: npm run i:ci:a7
+
+      - name: e2e/a8/node_modules
+        id: a8
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a8/node_modules
+          key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
+
+      - name: Install A8 dependencies
+        if: steps.a8.outputs.cache-hit != 'true'
+        run: npm run i:ci:a8
+
+      - name: e2e/a9/node_modules
+        id: a9
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a9/node_modules
+          key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
+
+      - name: Install A9 dependencies
+        if: steps.a9.outputs.cache-hit != 'true'
+        run: npm run i:ci:a9
+
+      - name: e2e/a10/node_modules
+        id: a10
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a10/node_modules
+          key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
+
+      - name: Install A10 dependencies
+        if: steps.a10.outputs.cache-hit != 'true'
+        run: npm run i:ci:a10
+
+      - name: e2e/a11/node_modules
+        id: a11
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a11/node_modules
+          key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
+
+      - name: Install A11 dependencies
+        if: steps.a11.outputs.cache-hit != 'true'
+        run: npm run i:ci:a11
+
+      - name: e2e/a12/node_modules
+        id: a12
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a12/node_modules
+          key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
+
+      - name: Install A12 dependencies
+        if: steps.a12.outputs.cache-hit != 'true'
+        run: npm run i:ci:a12
+
+      - name: e2e/am/node_modules
+        id: am
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/am/node_modules
+          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+
+      - name: Install A Min dependencies
+        if: steps.am.outputs.cache-hit != 'true'
+        run: npm run i:ci:am
+
+  a5es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A5 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a5es5/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a5es5/node_modules
+          key: ${{ runner.os }}-a5es5-v1-${{ hashFiles('./e2e/a5es5/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a5es5
+      - name: Spreading Tests
+        run: npm run s:test:a5es5
+      - name: Unit Tests
+        run: npm run test:a5es5
+
+  a5es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A5 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a5es2015/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a5es2015/node_modules
+          key: ${{ runner.os }}-a5es2015-v1-${{ hashFiles('./e2e/a5es2015/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a5es2015
+      - name: Spreading Tests
+        run: npm run s:test:a5es2015
+      - name: Unit Tests
+        run: npm run test:a5es2015
+
+  a6es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A6 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a6/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a6/node_modules
+          key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a6
+      - name: Spreading Tests
+        run: npm run s:test:a6
+      - name: Unit Tests
+        run: npm run test:a6es5
+
+  a6es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A6 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a6/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a6/node_modules
+          key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a6
+      - name: Spreading Tests
+        run: npm run s:test:a6
+      - name: Unit Tests
+        run: npm run test:a6es2015
+
+  a7es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A7 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a7/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a7/node_modules
+          key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a7
+      - name: Spreading Tests
+        run: npm run s:test:a7
+      - name: Unit Tests
+        run: npm run test:a7es5
+
+  a7es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A7 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a7/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a7/node_modules
+          key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a7
+      - name: Spreading Tests
+        run: npm run s:test:a7
+      - name: Unit Tests
+        run: npm run test:a7es2015
+
+  a8es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A8 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a8/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a8/node_modules
+          key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a8
+      - name: Spreading Tests
+        run: npm run s:test:a8
+      - name: Unit Tests
+        run: npm run test:a8es5
+
+  a8es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A8 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a8/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a8/node_modules
+          key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a8
+      - name: Spreading Tests
+        run: npm run s:test:a8
+      - name: Unit Tests
+        run: npm run test:a8es2015
+
+  a9es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A9 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a9/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a9/node_modules
+          key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a9
+      - name: Spreading Tests
+        run: npm run s:test:a9
+      - name: Unit Tests
+        run: npm run test:a9es5
+
+  a9es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A9 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a9/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a9/node_modules
+          key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a9
+      - name: Spreading Tests
+        run: npm run s:test:a9
+      - name: Unit Tests
+        run: npm run test:a9es2015
+
+  a9es5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A9 es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a9/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a9/node_modules
+          key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a9
+      - name: Spreading Tests
+        run: npm run s:test:a9
+      - name: Unit Tests
+        run: npm run test:a9es5ivy
+
+  a9es2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A9 es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a9/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a9/node_modules
+          key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a9
+      - name: Spreading Tests
+        run: npm run s:test:a9
+      - name: Unit Tests
+        run: npm run test:a9es2015ivy
+
+  a10es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A10 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a10/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a10/node_modules
+          key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a10
+      - name: Spreading Tests
+        run: npm run s:test:a10
+      - name: Unit Tests
+        run: npm run test:a10es5
+
+  a10es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A10 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a10/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a10/node_modules
+          key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a10
+      - name: Spreading Tests
+        run: npm run s:test:a10
+      - name: Unit Tests
+        run: npm run test:a10es2015
+
+  a10es5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A10 es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a10/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a10/node_modules
+          key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a10
+      - name: Spreading Tests
+        run: npm run s:test:a10
+      - name: Unit Tests
+        run: npm run test:a10es5ivy
+
+  a10es2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A10 es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a10/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a10/node_modules
+          key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a10
+      - name: Spreading Tests
+        run: npm run s:test:a10
+      - name: Unit Tests
+        run: npm run test:a10es2015ivy
+
+  a11es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A11 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a11/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a11/node_modules
+          key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a11
+      - name: Spreading Tests
+        run: npm run s:test:a11
+      - name: Unit Tests
+        run: npm run test:a11es5
+
+  a11es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A11 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a11/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a11/node_modules
+          key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a11
+      - name: Spreading Tests
+        run: npm run s:test:a11
+      - name: Unit Tests
+        run: npm run test:a11es2015
+
+  a11es5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A11 es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a11/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a11/node_modules
+          key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a11
+      - name: Spreading Tests
+        run: npm run s:test:a11
+      - name: Unit Tests
+        run: npm run test:a11es5ivy
+
+  a11es2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A11 es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a11/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a11/node_modules
+          key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a11
+      - name: Spreading Tests
+        run: npm run s:test:a11
+      - name: Unit Tests
+        run: npm run test:a11es2015ivy
+
+  a12es5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A12 es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a12/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a12/node_modules
+          key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a12
+      - name: Spreading Tests
+        run: npm run s:test:a12
+      - name: Unit Tests
+        run: npm run test:a12es5
+
+  a12es2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A12 es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a12/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a12/node_modules
+          key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a12
+      - name: Spreading Tests
+        run: npm run s:test:a12
+      - name: Unit Tests
+        run: npm run test:a12es2015
+
+  a12es5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A12 es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a12/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a12/node_modules
+          key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a12
+      - name: Spreading Tests
+        run: npm run s:test:a12
+      - name: Unit Tests
+        run: npm run test:a12es5ivy
+
+  a12es2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A12 es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a12/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/a12/node_modules
+          key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:a12
+      - name: Spreading Tests
+        run: npm run s:test:a12
+      - name: Unit Tests
+        run: npm run test:a12es2015ivy
+
+  ames5:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Min es5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/am/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/am/node_modules
+          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:am
+      - name: Unit Tests
+        run: npm run test:am:es5
+      - name: Build
+        run: npm run build:am:es5
+
+  ames2015:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Min es2015
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/am/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/am/node_modules
+          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:am
+      - name: Unit Tests
+        run: npm run test:am:es2015
+      - name: Build
+        run: npm run build:am:es2015
+
+  ames5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Min es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/am/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/am/node_modules
+          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:am
+      - name: Unit Tests
+        run: npm run test:am:es5ivy
+      - name: Build
+        run: npm run build:am:es5ivy
+
+  ames2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Min es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/am/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./e2e/am/node_modules
+          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: ./dist
+
+      - name: Spreading Build
+        run: npm run s:am
+      - name: Unit Tests
+        run: npm run test:am:es2015ivy
+      - name: Build
+        run: npm run build:am:es2015ivy
