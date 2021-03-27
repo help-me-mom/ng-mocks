@@ -1,0 +1,78 @@
+name: build
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+
+jobs:
+  Core:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node v${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          if [ ! -d "./node_modules/" ]; then
+            npm ci --no-optional --ignore-scripts && \
+            node ./node_modules/puppeteer/install.js && \
+            ./node_modules/.bin/ngcc
+          fi
+      - name: Prettier Check
+        run: npm run prettier:check
+      - name: Lint Check
+        run: npm run lint
+      - name: TS Check
+        run: npm run ts:check
+
+      - name: Build
+        run: |
+          npm run build
+          cd ./dist/libs/ng-mocks
+          npm pack
+          cd ..
+          mv ./ng-mocks/ng-mocks-0.0.0.tgz ./
+          rm -Rf ./ng-mocks
+          tar -xf ./ng-mocks-0.0.0.tgz package
+          rm ./ng-mocks-0.0.0.tgz
+          mv ./package ./ng-mocks
+
+      - name: Unit Tests
+        run: WITH_COVERAGE=1 npm run test
+
+      - name: E2E
+        run: npm run e2e
+
+      - name: Building Docs
+        run: npm run build:docs
+
+      - name: Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: test-reports/**/*.xml
+
+      - name: Workspace
+        uses: actions/upload-artifact@v2
+        with:
+          name: workspace
+          path: |
+            dist
+
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: coverage
+          path: |
+            test-reports/coverage
