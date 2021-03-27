@@ -150,7 +150,7 @@
     "@semantic-release/github": "7.2.0",
     "@semantic-release/npm": "7.0.10",
     "@types/core-js": "2.5.4",
-    "@types/jasmine": "3.6.8",
+    "@types/jasmine": "3.6.9",
     "@types/jest": "26.0.22",
     "@types/node": "14.14.37",
     "clsx": "1.1.1",
