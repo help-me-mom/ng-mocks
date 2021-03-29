@@ -2,30 +2,25 @@ import { DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
+import mockHelperTrigger from '../events/mock-helper.trigger';
 import mockHelperStubMember from '../mock-helper.stub-member';
 
 import funcGetVca from './func.get-vca';
 
 // default html behavior
 const triggerInput = (el: DebugElement, value: any): void => {
-  const target = el.nativeElement;
-  el.triggerEventHandler('focus', {
-    target,
-  });
+  mockHelperTrigger(el, 'focus');
 
-  const descriptor = Object.getOwnPropertyDescriptor(target, 'value');
-  mockHelperStubMember(target, 'value', value);
-  el.triggerEventHandler('input', {
-    target,
-  });
+  const descriptor = Object.getOwnPropertyDescriptor(el.nativeElement, 'value');
+  mockHelperStubMember(el.nativeElement, 'value', value);
+  mockHelperTrigger(el, 'input');
+  mockHelperTrigger(el, 'change');
   if (descriptor) {
-    Object.defineProperty(target, 'value', descriptor);
-    target.value = value;
+    Object.defineProperty(el.nativeElement, 'value', descriptor);
+    el.nativeElement.value = value;
   }
 
-  el.triggerEventHandler('blur', {
-    target,
-  });
+  mockHelperTrigger(el, 'blur');
 };
 
 const handleKnown = (valueAccessor: any, value: any): boolean => {
@@ -51,7 +46,7 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
 };
 
 const hasListener = (el: DebugElement): boolean =>
-  el.listeners.filter(listener => listener.name === 'input').length > 0;
+  el.listeners.filter(listener => listener.name === 'input' || listener.name === 'change').length > 0;
 
 const keys = ['onChange', '_onChange', 'changeFn', '_onChangeCallback', 'onModelChange'];
 

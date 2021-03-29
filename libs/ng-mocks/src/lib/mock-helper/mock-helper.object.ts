@@ -3,6 +3,9 @@ import mockHelperReveal from './crawl/mock-helper.reveal';
 import mockHelperRevealAll from './crawl/mock-helper.reveal-all';
 import mockHelperChange from './cva/mock-helper.change';
 import mockHelperTouch from './cva/mock-helper.touch';
+import mockHelperClick from './events/mock-helper.click';
+import mockHelperEvent from './events/mock-helper.event';
+import mockHelperTrigger from './events/mock-helper.trigger';
 import mockHelperFormatHtml from './format/mock-helper.format-html';
 import mockHelperFormatText from './format/mock-helper.format-text';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
@@ -34,8 +37,10 @@ import mockHelperFindTemplateRefs from './template-ref/mock-helper.find-template
 export default {
   autoSpy: mockHelperAutoSpy,
   change: mockHelperChange,
+  click: mockHelperClick,
   crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,
+  event: mockHelperEvent,
   faster: mockHelperFaster,
   find: mockHelperFind,
   findAll: mockHelperFindAll,
@@ -64,4 +69,5 @@ export default {
   stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperThrowOnConsole,
   touch: mockHelperTouch,
+  trigger: mockHelperTrigger,
 };

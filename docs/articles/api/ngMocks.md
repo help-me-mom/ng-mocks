@@ -22,6 +22,12 @@ access desired elements and instances in fixtures.
 - [`change()`](ngMocks/change.md)
 - [`touch()`](ngMocks/touch.md)
 
+## Simulating HTML events
+
+- [`click()`](ngMocks/click.md)
+- [`trigger()`](ngMocks/trigger.md)
+- [`event()`](ngMocks/event.md)
+
 ## Manipulating `ng-template`
 
 - [`render()`](ngMocks/render.md)
