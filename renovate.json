@@ -7,7 +7,7 @@
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "separateMultipleMajor": true,
-  "includeForks": true,
+  "includeForks": false,
   "ignoreDeprecated": false,
   "semanticCommitScope": "{{#if baseDir}}{{baseDir}}{{else}}deps{{/if}}",
   "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}",
