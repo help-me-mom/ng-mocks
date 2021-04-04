@@ -1,3 +1,18 @@
+# [11.10.0](https://github.com/ike18t/ng-mocks/compare/v11.9.1...v11.10.0) (2021-04-04)
+
+
+### Bug Fixes
+
+* **#316:** better support for typeIn and ngModel ([7d03c2d](https://github.com/ike18t/ng-mocks/commit/7d03c2dbe770bab188370fb96d0b4b6b5e18cbe5)), closes [#316](https://github.com/ike18t/ng-mocks/issues/316)
+* **#320:** full implementation of ngMocks.touch and ngMocks.change ([fd81409](https://github.com/ike18t/ng-mocks/commit/fd81409591d67c931f5686fd23210829179b8e75)), closes [#320](https://github.com/ike18t/ng-mocks/issues/320)
+* **#324:** smarter touches and changes ([fa418d0](https://github.com/ike18t/ng-mocks/commit/fa418d0440876a9eab55564e75e3807b9a60687c)), closes [#324](https://github.com/ike18t/ng-mocks/issues/324)
+
+
+### Features
+
+* **#314:** ngMocks.formatText ([fa3cea7](https://github.com/ike18t/ng-mocks/commit/fa3cea73f5709fbc03ae2a8999281876289ccd43)), closes [#314](https://github.com/ike18t/ng-mocks/issues/314)
+* **#315:** ngMocks.trigger and ngMocks.click ([2ae6e5a](https://github.com/ike18t/ng-mocks/commit/2ae6e5ab0de6f1e3505cf26ac5752a63a458e059)), closes [#315](https://github.com/ike18t/ng-mocks/issues/315)
+
 ## [11.9.1](https://github.com/ike18t/ng-mocks/compare/v11.9.0...v11.9.1) (2021-03-14)
 
 
