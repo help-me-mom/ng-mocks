@@ -18,7 +18,7 @@
     "max-file-line-count": [true, 250],
     "max-func-body-length": [
       true,
-      25,
+      30,
       {
         "ignore-parameters-to-function-regex": "^(([fx]?(describe|it))|beforeEach|fakeAsync|inject)$"
       }

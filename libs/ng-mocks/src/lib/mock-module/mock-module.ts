@@ -7,6 +7,7 @@ import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { Mock } from '../common/mock';
@@ -153,6 +154,8 @@ export function MockModule<T>(module: Type<T>): Type<T>;
 export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 
 export function MockModule(module: any): any {
+  funcImportExists(module, 'MockModule');
+
   const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
 
   // We are inside of an 'it'. It is fine to to return a mock copy.
