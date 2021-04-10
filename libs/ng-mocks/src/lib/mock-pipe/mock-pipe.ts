@@ -6,6 +6,7 @@ import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
 import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
+import funcImportExists from '../common/func.import-exists';
 import { Mock } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperMockService from '../mock-service/helper.mock-service';
@@ -48,6 +49,8 @@ export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,
   transform?: TPipe['transform'],
 ): Type<MockedPipe<TPipe>> {
+  funcImportExists(pipe, 'MockPipe');
+
   // We are inside of an 'it'. It is fine to return a mock copy.
   if ((getTestBed() as any)._instantiated) {
     try {

@@ -1,6 +1,7 @@
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AbstractType, Type } from '../common/core.types';
+import funcImportExists from '../common/func.import-exists';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 const stack: any[][] = [[]];
@@ -187,6 +188,8 @@ export function MockInstance<T>(
 ): void;
 
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, ...args: any[]) {
+  funcImportExists(declaration, 'MockInstance');
+
   const { key, value, accessor, data } = parseMockInstanceArgs(args);
   if (key) {
     return mockInstanceMember(declaration, key, value, accessor);

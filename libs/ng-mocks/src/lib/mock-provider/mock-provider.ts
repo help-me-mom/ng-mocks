@@ -1,6 +1,7 @@
 import { FactoryProvider, InjectionToken, Provider } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
+import funcImportExists from '../common/func.import-exists';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import helperUseFactory from '../mock-service/helper.use-factory';
 import { MockService } from '../mock-service/mock-service';
@@ -27,6 +28,8 @@ export function MockProvider<I>(provider: InjectionToken<I> | string, useValue?:
 export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): FactoryProvider;
 
 export function MockProvider(provide: any, overrides: any = defaultValue): Provider {
+  funcImportExists(provide, 'MockProvider');
+
   return helperUseFactory(
     provide,
     () => MockService(provide),

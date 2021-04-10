@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { AnyType, Type } from '../common/core.types';
+import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
@@ -220,6 +221,8 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {
+  funcImportExists(template, 'MockRender');
+
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
   const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : reflectTemplate(template);
 
