@@ -812,7 +812,7 @@
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
       "packageNames": ["typescript"],
-      "allowedVersions": "<=4.1"
+      "allowedVersions": "<=4.3"
     }
   ]
 }
