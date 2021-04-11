@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 
 import coreConfig from '../../common/core.config';
+import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
@@ -25,9 +26,8 @@ export default (provide: any): boolean => {
   }
 
   // Empty providedIn or things for a platform have to be skipped.
-  let skip = !provide.ɵprov?.providedIn || provide.ɵprov.providedIn === 'platform';
-  // istanbul ignore next: A6
-  skip = skip && (!provide.ngInjectableDef?.providedIn || provide.ngInjectableDef.providedIn === 'platform');
+  const providedIn = coreReflectProvidedIn(provide);
+  const skip = !providedIn || providedIn === 'platform';
   if (typeof provide === 'function' && skip) {
     return true;
   }
