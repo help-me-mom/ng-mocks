@@ -155,7 +155,7 @@
       "additionalBranchPrefix": "e2e/a6/",
       "paths": ["e2e/a6/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<=0.8"
+      "allowedVersions": "/0\\.8\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a6/",
@@ -258,7 +258,7 @@
       "additionalBranchPrefix": "e2e/a7/",
       "paths": ["e2e/a7/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<=0.13"
+      "allowedVersions": "/0\\.13\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a7/",
@@ -355,7 +355,7 @@
       "additionalBranchPrefix": "e2e/a8/",
       "paths": ["e2e/a8/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<0.900"
+      "allowedVersions": "/0\\.8\\d\\d\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a8/",
@@ -452,7 +452,7 @@
       "additionalBranchPrefix": "e2e/a9/",
       "paths": ["e2e/a9/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<0.1000"
+      "allowedVersions": "/0\\.9\\d\\d\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a9/",
@@ -549,7 +549,7 @@
       "additionalBranchPrefix": "e2e/a10/",
       "paths": ["e2e/a10/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<0.1100"
+      "allowedVersions": "/0\\.10\\d\\d\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a10/",
@@ -646,7 +646,7 @@
       "additionalBranchPrefix": "e2e/a11/",
       "paths": ["e2e/a11/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<0.1200"
+      "allowedVersions": "/0\\.11\\d\\d\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a11/",
@@ -745,7 +745,7 @@
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<0.1300",
+      "allowedVersions": "/0\\.12\\d\\d\\./",
       "ignoreUnstable": false
     },
     {
