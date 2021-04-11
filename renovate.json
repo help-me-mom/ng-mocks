@@ -34,7 +34,7 @@
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=5"
+      "allowedVersions": "/^5\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a5/",
@@ -125,7 +125,7 @@
       "additionalBranchPrefix": "e2e/a6/",
       "paths": ["e2e/a6/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=6"
+      "allowedVersions": "/^6\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a6/",
@@ -228,7 +228,7 @@
       "additionalBranchPrefix": "e2e/a7/",
       "paths": ["e2e/a7/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=7"
+      "allowedVersions": "/^7\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a7/",
@@ -331,7 +331,7 @@
       "additionalBranchPrefix": "e2e/a8/",
       "paths": ["e2e/a8/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=8"
+      "allowedVersions": "/^8\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a8/",
@@ -428,7 +428,7 @@
       "additionalBranchPrefix": "e2e/a9/",
       "paths": ["e2e/a9/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=9"
+      "allowedVersions": "/^9\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a9/",
@@ -525,7 +525,7 @@
       "additionalBranchPrefix": "e2e/a10/",
       "paths": ["e2e/a10/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=10"
+      "allowedVersions": "/^10\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a10/",
@@ -622,7 +622,7 @@
       "additionalBranchPrefix": "e2e/a11/",
       "paths": ["e2e/a11/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=11"
+      "allowedVersions": "/^11\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a11/",
@@ -720,7 +720,7 @@
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=12",
+      "allowedVersions": "/^12\\./",
       "ignoreUnstable": false
     },
     {
