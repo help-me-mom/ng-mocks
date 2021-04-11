@@ -733,7 +733,7 @@
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
       "packageNames": ["tslib"],
-      "allowedVersions": "<=2.0"
+      "allowedVersions": "<=2.2"
     },
     {
       "additionalBranchPrefix": "e2e/a12/",
