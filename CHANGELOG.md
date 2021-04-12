@@ -1,3 +1,11 @@
+## [11.10.1](https://github.com/ike18t/ng-mocks/compare/v11.10.0...v11.10.1) (2021-04-12)
+
+
+### Bug Fixes
+
+* **#354:** better error instead of is not in JIT mode ([45f05fb](https://github.com/ike18t/ng-mocks/commit/45f05fb94e86487ea0c5c40fe024b16b2ca7803a)), closes [#354](https://github.com/ike18t/ng-mocks/issues/354)
+* **#377:** respect of providedIn in Injectable ([91aba4b](https://github.com/ike18t/ng-mocks/commit/91aba4bd33ce67d37c727bc2e8b29d90e3cb42e1)), closes [#377](https://github.com/ike18t/ng-mocks/issues/377)
+
 # [11.10.0](https://github.com/ike18t/ng-mocks/compare/v11.9.1...v11.10.0) (2021-04-04)
 
 
