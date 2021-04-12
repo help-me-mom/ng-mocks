@@ -6,6 +6,7 @@ import addDefToRootProviderParameters from './add-def-to-root-provider-parameter
 import checkRootProviderDependency from './check-root-provider-dependency';
 import extractDep from './extract-dep';
 import getRootProvidersData from './get-root-providers-data';
+import handleProvidedInDependency from './handle-provided-in-dependency';
 import skipRootProviderDependency from './skip-root-provider-dependency';
 import { BuilderData } from './types';
 
@@ -19,6 +20,7 @@ export default (mockDef: BuilderData['mockDef']): Set<any> => {
 
       for (const decorators of coreReflectJit().parameters(def)) {
         const provide: any = extractDep(decorators);
+        handleProvidedInDependency(provide);
         if (skipRootProviderDependency(provide)) {
           continue;
         }
