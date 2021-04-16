@@ -8,6 +8,10 @@ import { BuilderData, NgMeta } from './types';
 export default (ngModule: NgMeta, { keepDef, configDef }: BuilderData): void => {
   // Adding missed kept providers to test bed.
   for (const def of mapValues(keepDef)) {
+    if (isNgDef(def, 'm') && !ngModule.imports.includes(def)) {
+      ngModule.imports = ngModule.imports.concat(ngMocksUniverse.cacheDeclarations.get(def));
+    }
+
     if (!isNgDef(def, 'i') && isNgDef(def)) {
       continue;
     }

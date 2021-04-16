@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockBuilder, MockRender } from 'ng-mocks';
+
+@NgModule({
+  imports: [ReactiveFormsModule],
+})
+export class TestModule {}
 
 @Component({
   selector: 'app-form',
@@ -23,7 +28,7 @@ describe('issue-377:classic', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [FormComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, TestModule],
     }).compileComponents(),
   );
 
@@ -34,7 +39,9 @@ describe('issue-377:classic', () => {
 
 describe('issue-377:mock', () => {
   beforeEach(() =>
-    MockBuilder(FormComponent).keep(ReactiveFormsModule),
+    MockBuilder(FormComponent)
+      .keep(ReactiveFormsModule)
+      .mock(TestModule),
   );
 
   it('sets TestBed correctly', () => {
