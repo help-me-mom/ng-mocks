@@ -14,6 +14,7 @@ import addRequestedProviders from './promise/add-requested-providers';
 import createNgMocksOverridesToken from './promise/create-ng-mocks-overrides-token';
 import createNgMocksToken from './promise/create-ng-mocks-token';
 import createNgMocksTouchesToken from './promise/create-ng-mocks-touches-token';
+import handleEntryComponents from './promise/handle-entry-components';
 import handleRootProviders from './promise/handle-root-providers';
 import initNgModules from './promise/init-ng-modules';
 import initUniverse from './promise/init-universe';
@@ -78,6 +79,7 @@ export class MockBuilderPromise implements IMockBuilder {
     addMissedMockDeclarationsAndModules(ngModule, params);
     addRequestedProviders(ngModule, params);
     handleRootProviders(ngModule, params);
+    handleEntryComponents(ngModule);
 
     ngModule.providers.push(createNgMocksToken());
     ngModule.providers.push(createNgMocksTouchesToken());

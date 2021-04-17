@@ -1,6 +1,5 @@
 // tslint:disable no-duplicate-imports
 
-import * as core from '@angular/core';
 import {
   Component,
   ComponentFactoryResolver,
@@ -52,16 +51,7 @@ describe('issue-296:without-entry', () => {
 
   it('behaves correctly with and without ivy', () => {
     const render = () => MockRender(TargetComponent);
-    if ((core as any).ɵivyEnabled) {
-      // ivy does not fail
-      expect(render).not.toThrow();
-    }
-    if (!(core as any).ɵivyEnabled) {
-      // no-ivy fails with @NgModule.entryComponents
-      expect(render).toThrowError(
-        /No component factory found for ModalComponent/,
-      );
-    }
+    expect(render).not.toThrow();
   });
 });
 
