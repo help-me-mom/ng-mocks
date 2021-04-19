@@ -18,6 +18,13 @@
     },
 
     {
+      "paths": ["package.json", "docs/package.json"],
+      "packagePatterns": ["^@docusaurus/"],
+      "allowedVersions": "/^\\d+\\.\\d+\\.\\d+(-[^\\.]+\\.\\d+)?$/",
+      "ignoreUnstable": false
+    },
+
+    {
       "paths": [
         ".circleci/config.yml",
         "Dockerfile",
