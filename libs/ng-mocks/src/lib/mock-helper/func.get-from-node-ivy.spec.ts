@@ -121,4 +121,102 @@ describe('func.get-from-node-ivy', () => {
     funcGetFromNodeIvy(result, node, Proto);
     expect(result).toEqual([]);
   });
+
+  it('handles root node indexes instead of contexts', () => {
+    const result: any[] = [];
+    const proto = new Proto();
+
+    const lView = [];
+    lView[1] = {};
+    lView[20] = 6;
+    lView[21] = [proto];
+
+    const node: any = {
+      nativeNode: {},
+      parent: {
+        injector: {
+          _lView: lView,
+        },
+        nativeNode: {
+          __ngContext__: 6,
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+    expect(result).toEqual([proto]);
+  });
+
+  it('skips unknown root node indexes', () => {
+    const result: any[] = [];
+
+    const node: any = {
+      nativeNode: {},
+      parent: {
+        injector: {},
+        nativeNode: {
+          __ngContext__: 6,
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+    expect(result).toEqual([]);
+  });
+
+  it('handles child node indexes instead of contexts', () => {
+    const result: any[] = [];
+    const proto = new Proto();
+
+    const lView = [];
+    lView[1] = {};
+    lView[20] = 6;
+    lView[21] = [proto];
+
+    const rootLView = [];
+    rootLView[1] = {};
+    rootLView[20] = 0;
+    rootLView[21] = lView;
+
+    const node: any = {
+      nativeNode: {},
+      parent: {
+        injector: {
+          _lView: rootLView,
+        },
+        nativeNode: {
+          __ngContext__: 6,
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+    expect(result).toEqual([proto]);
+  });
+
+  it('skips unknown child node with indexes', () => {
+    const result: any[] = [];
+    const proto = new Proto();
+
+    const lView = [];
+    lView[21] = [proto];
+
+    const rootLView = [];
+    rootLView[21] = lView;
+
+    const node: any = {
+      nativeNode: {},
+      parent: {
+        injector: {
+          _lView: rootLView,
+        },
+        nativeNode: {
+          __ngContext__: 6,
+        },
+      },
+    };
+
+    funcGetFromNodeIvy(result, node, Proto);
+    expect(result).toEqual([]);
+  });
 });
