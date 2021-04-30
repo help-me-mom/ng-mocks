@@ -23,6 +23,10 @@
       "allowedVersions": "/^\\d+\\.\\d+\\.\\d+(-[^\\.]+\\.\\d+)?$/",
       "ignoreUnstable": false
     },
+    {
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\./"
+    },
 
     {
       "paths": [
