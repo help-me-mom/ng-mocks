@@ -32,9 +32,10 @@ export default (queries?: Record<keyof any, any>): string => {
       continue;
     }
     if (typeof query.selector === 'string') {
-      queries[`__mockView_key_${query.selector}`] = new ViewChild(`key_${query.selector}`, viewChildArgs);
-      queries[`__mockTpl_key_${query.selector}`] = query;
-      parts.push(viewChildTemplate(query.selector, 'key'));
+      const selector = query.selector.replace(new RegExp('[^a-z0-9-_]+', 'mg'), ' ').trim().replace(' ', '_');
+      queries[`__mockView_key_${selector}`] = new ViewChild(`key_${selector}`, viewChildArgs);
+      queries[`__mockTpl_key_${selector}`] = query;
+      parts.push(viewChildTemplate(selector, 'key'));
     }
     queries[`__mockView_prop_${key}`] = new ViewChild(`prop_${key}`, viewChildArgs);
     parts.push(viewChildTemplate(key, 'prop'));
