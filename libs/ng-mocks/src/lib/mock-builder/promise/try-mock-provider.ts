@@ -5,8 +5,8 @@ import helperUseFactory from '../../mock-service/helper.use-factory';
 import mockProvider from '../../mock-service/mock-provider';
 import { IMockBuilderConfigMock } from '../types';
 
-const createInstance = (existing: any, instance: any, config: IMockBuilderConfigMock, isFunc: boolean): any => {
-  const params = isFunc ? { transform: instance } : instance;
+const createInstance = (existing: any, instance: any, config: IMockBuilderConfigMock, isPipeFunc: boolean): any => {
+  const params = isPipeFunc ? { transform: instance } : instance;
   if (config.precise) {
     return params;
   }
@@ -18,10 +18,10 @@ export default (def: any, defValue: Map<any, any>): void => {
   if (isNgDef(def, 'i') && defValue.has(def)) {
     const config: IMockBuilderConfigMock = ngMocksUniverse.config.get(def) || {};
     const instance = defValue.get(def);
-    const isFunc = isNgDef(def, 'p') && typeof instance === 'function';
+    const isPipeFunc = isNgDef(def, 'p') && typeof instance === 'function';
     ngMocksUniverse.builtProviders.set(
       def,
-      helperUseFactory(def, undefined, existing => createInstance(existing, instance, config, isFunc)),
+      helperUseFactory(def, undefined, existing => createInstance(existing, instance, config, isPipeFunc)),
     );
   } else if (isNgDef(def, 'i')) {
     ngMocksUniverse.builtProviders.set(def, mockProvider(def));

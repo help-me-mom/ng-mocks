@@ -1,4 +1,6 @@
+import helperCreateClone from './helper.create-clone';
 import helperCreateMockFromPrototype from './helper.create-mock-from-prototype';
+import helperDefinePropertyDescriptor from './helper.define-property-descriptor';
 import helperExtractMethodsFromPrototype from './helper.extract-methods-from-prototype';
 import helperExtractPropertiesFromPrototype from './helper.extract-properties-from-prototype';
 import helperExtractPropertyDescriptor from './helper.extract-property-descriptor';
@@ -20,7 +22,9 @@ getGlobal().ngMockshelperMockService = getGlobal().ngMockshelperMockService || {
     getGlobal().ngMockshelperMockService.mockFunction.customMockFunction = func;
   },
 
+  createClone: helperCreateClone,
   createMockFromPrototype: helperCreateMockFromPrototype,
+  definePropertyDescriptor: helperDefinePropertyDescriptor,
   extractMethodsFromPrototype: helperExtractMethodsFromPrototype,
   extractPropertiesFromPrototype: helperExtractPropertiesFromPrototype,
   extractPropertyDescriptor: helperExtractPropertyDescriptor,
@@ -31,7 +35,9 @@ getGlobal().ngMockshelperMockService = getGlobal().ngMockshelperMockService || {
 };
 
 export default ((): {
+  createClone: typeof helperCreateClone;
   createMockFromPrototype: typeof helperCreateMockFromPrototype;
+  definePropertyDescriptor: typeof helperDefinePropertyDescriptor;
   extractMethodsFromPrototype: typeof helperExtractMethodsFromPrototype;
   extractPropertiesFromPrototype: typeof helperExtractPropertiesFromPrototype;
   extractPropertyDescriptor: typeof helperExtractPropertyDescriptor;

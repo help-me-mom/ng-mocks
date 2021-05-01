@@ -30,7 +30,7 @@ const applyCallback = (def: any, inst: any, callbacks: any[], injector?: Injecto
       continue;
     }
 
-    mockHelperStub(instance, override);
+    instance = mockHelperStub(instance, override);
   }
 
   return instance;

@@ -85,12 +85,7 @@ const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
     ...helperMockService.extractPropertiesFromPrototype(prototype),
   ]) {
     const descriptor = helperMockService.extractPropertyDescriptor(prototype, prop);
-    // istanbul ignore next
-    if (!descriptor) {
-      continue;
-    }
-    descriptor.configurable = true;
-    Object.defineProperty(instance, prop, descriptor);
+    helperMockService.definePropertyDescriptor(instance, prop, descriptor);
   }
 };
 
