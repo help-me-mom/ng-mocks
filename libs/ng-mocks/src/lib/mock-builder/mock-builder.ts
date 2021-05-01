@@ -1,9 +1,11 @@
-import { InjectionToken } from '@angular/core';
-import { MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
+import { InjectionToken, NgModule } from '@angular/core';
+import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
+import coreConfig from '../common/core.config';
 import { flatten, mapEntries } from '../common/core.helpers';
+import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { NG_MOCKS, NG_MOCKS_OVERRIDES } from '../common/core.tokens';
-import { AnyType } from '../common/core.types';
+import { AnyType, Type } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -50,6 +52,96 @@ const applyOverrides = (testBed: TestBedStatic, overrides: Map<AnyType<any>, Met
   }
 };
 
+const applyPlatformOverridesNormalization = (
+  module: Type<any> | Array<Type<any>>,
+  mocks: Map<any, any>,
+  resetSet: Set<any>,
+  track: Set<any>,
+  callback: any,
+): module is Type<any> => {
+  // istanbul ignore if
+  if (Array.isArray(module)) {
+    for (const moduleCtor of module) {
+      callback(moduleCtor, mocks, resetSet, track);
+    }
+
+    return false;
+  }
+  // istanbul ignore if
+  if (track.has(module)) {
+    return false;
+  }
+  track.add(module);
+
+  return true;
+};
+
+const applyPlatformOverride = (overrides: any, ctorDef: AnyType<any>, mock: AnyType<any>, prop: string): boolean => {
+  const bucketAdd: any[] = overrides.add[prop] || [];
+  bucketAdd.push(mock);
+  overrides.add[prop] = bucketAdd;
+
+  const bucketRemove: any[] = overrides.remove[prop] || [];
+  bucketRemove.push(ctorDef);
+  overrides.remove[prop] = bucketRemove;
+
+  return true;
+};
+
+const applyPlatformOverridesGetMock = (mocks: Map<any, any>, ctorDef: any): AnyType<any> | undefined => {
+  const mock = mocks.get(ctorDef);
+  if (mock && mock !== ctorDef && coreConfig.neverMockModule.indexOf(ctorDef) !== -1) {
+    return mock;
+  }
+
+  return undefined;
+};
+
+const applyPlatformOverridesData = (module: AnyType<any>): Array<['imports' | 'exports', any]> => {
+  const result: Array<['imports' | 'exports', any]> = [];
+  const meta = coreReflectModuleResolve(module);
+  for (const prop of ['imports', 'exports'] as const) {
+    for (const ctorDef of meta[prop] || []) {
+      result.push([prop, ctorDef]);
+    }
+  }
+
+  return result;
+};
+
+const applyPlatformOverrides = (
+  module: Type<any> | Array<Type<any>>,
+  mocks: Map<any, any>,
+  resetSet: Set<any>,
+  track: Set<any>,
+): void => {
+  // istanbul ignore if
+  if (!applyPlatformOverridesNormalization(module, mocks, resetSet, track, applyPlatformOverrides)) {
+    return;
+  }
+
+  let changed = false;
+  const overrides: MetadataOverride<NgModule> = { add: {}, remove: {} };
+
+  for (const [prop, ctorDef] of applyPlatformOverridesData(module)) {
+    if (!isNgDef(ctorDef, 'm')) {
+      continue;
+    }
+
+    const mock = applyPlatformOverridesGetMock(mocks, ctorDef);
+    if (mock) {
+      changed = applyPlatformOverride(overrides, ctorDef, mock, prop);
+    } else {
+      applyPlatformOverrides(ctorDef, mocks, resetSet, track);
+    }
+  }
+
+  if (changed) {
+    resetSet.add(module);
+    TestBed.overrideModule(module, overrides);
+  }
+};
+
 // Thanks Ivy and its TestBed.override - it does not clean up leftovers.
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: any }): void => {
   if (testBed.ngMocksOverrides) {
@@ -60,6 +152,8 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: any
         testBed.overrideComponent(def, {});
       } else if (isNgDef(def, 'd')) {
         testBed.overrideDirective(def, {});
+      } else if (isNgDef(def, 'm')) {
+        testBed.overrideModule(def, {});
       }
     }
     testBed.ngMocksOverrides = undefined;
@@ -75,9 +169,9 @@ const configureTestingModule = (
   if (mocks) {
     ngMocks.flushTestBed();
   }
-  const testBed = original.call(TestBed, moduleDef);
+  const testBedStatic = original.call(TestBed, moduleDef);
   if (!mocks) {
-    return testBed;
+    return testBedStatic;
   }
 
   // istanbul ignore else
@@ -87,10 +181,11 @@ const configureTestingModule = (
   }
   // istanbul ignore else
   if (overrides) {
-    applyOverrides(testBed, overrides);
+    applyOverrides(testBedStatic, overrides);
   }
+  applyPlatformOverrides(getTestBed().ngModule, mocks, (TestBed as any).ngMocksOverrides, new Set());
 
-  return testBed;
+  return testBedStatic;
 };
 
 const resetTestingModule = (
