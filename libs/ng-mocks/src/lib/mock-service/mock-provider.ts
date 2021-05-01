@@ -6,12 +6,14 @@ import funcGetProvider from '../common/func.get-provider';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+import helperDefinePropertyDescriptor from './helper.define-property-descriptor';
+import helperExtractPropertyDescriptor from './helper.extract-property-descriptor';
 import helperUseFactory from './helper.use-factory';
 import { MockService } from './mock-service';
 
 const { neverMockProvidedFunction, neverMockToken } = coreConfig;
 
-const applyMissedClassProperties = (instance: any, useClass: Type<any>) => {
+const applyMissingClassProperties = (instance: any, useClass: Type<any>) => {
   const existing = Object.getOwnPropertyNames(instance);
   const child = MockService(useClass);
 
@@ -19,12 +21,8 @@ const applyMissedClassProperties = (instance: any, useClass: Type<any>) => {
     if (existing.indexOf(name) !== -1) {
       continue;
     }
-    const def = Object.getOwnPropertyDescriptor(child, name);
-    // istanbul ignore else
-    if (def) {
-      def.configurable = true;
-      Object.defineProperty(instance, name, def);
-    }
+    const def = helperExtractPropertyDescriptor(child, name);
+    helperDefinePropertyDescriptor(instance, name, def);
   }
 };
 
@@ -34,7 +32,7 @@ const createFactoryProvider = (provider: any, provide: any) =>
     // Magic below adds missed properties to the instance to
     // fulfill missed abstract methods.
     if (provide !== provider && Object.keys(provider).indexOf('useClass') !== -1) {
-      applyMissedClassProperties(instance, provider.useClass);
+      applyMissingClassProperties(instance, provider.useClass);
     }
 
     return instance;

@@ -5,14 +5,22 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
   if (typeof override === 'string') {
     return helperMockService.mock(instance, override, style);
   }
-  for (const key of Object.getOwnPropertyNames(override)) {
-    const def = Object.getOwnPropertyDescriptor(override, key);
-    // istanbul ignore else
-    if (def) {
-      def.configurable = true;
-      Object.defineProperty(instance, key, def);
-    }
+
+  // if someone is giving us a function, then we should swap instance and overrides.
+  // so in the end the function can be called, but it also has all desired properties.
+  let correctInstance = instance;
+  let applyOverrides = override;
+  const skipProps = ['__zone_symbol__unconfigurables'];
+  if (typeof override === 'function') {
+    correctInstance = helperMockService.createClone(override);
+    applyOverrides = instance;
+    skipProps.push(...Object.getOwnPropertyNames(correctInstance));
   }
 
-  return instance;
+  for (const key of Object.getOwnPropertyNames(applyOverrides)) {
+    const desc = skipProps.indexOf(key) === -1 ? Object.getOwnPropertyDescriptor(applyOverrides, key) : undefined;
+    helperMockService.definePropertyDescriptor(correctInstance, key, desc);
+  }
+
+  return correctInstance;
 };
