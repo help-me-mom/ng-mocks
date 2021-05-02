@@ -1,17 +1,35 @@
+import coreDefineProperty from '../common/core.define-property';
+import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import helperMockService from '../mock-service/helper.mock-service';
 
-const createProperty = (pointComponentInstance: Record<keyof any, any>, key: string) => {
-  return {
-    configurable: true,
-    get: () => {
-      if (typeof pointComponentInstance[key] === 'function') {
-        return (...args: any[]) => pointComponentInstance[key](...args);
-      }
+const createPropertyGet = (
+  key: keyof any & string,
+  reader: Record<keyof any, any>,
+  source: Record<keyof any, any>,
+) => () => {
+  if (typeof source[key] === 'function') {
+    if (reader[`__ngMocks_${key}__origin`] !== source[key]) {
+      const clone = helperMockService.createClone(source[key], reader, source);
+      coreDefineProperty(reader, `__ngMocks_${key}`, clone, false);
+      coreDefineProperty(reader, `__ngMocks_${key}__origin`, source[key], false);
+    }
 
-      return pointComponentInstance[key];
-    },
-    set: (v: any) => (pointComponentInstance[key] = v),
-  };
+    return reader[`__ngMocks_${key}`];
+  }
+
+  return source[key];
+};
+
+const createPropertySet = (key: keyof any & string, reader: Record<keyof any, any>, source: Record<keyof any, any>) => (
+  newValue: any,
+) => {
+  if (reader[`__ngMocks_${key}`]) {
+    reader[`__ngMocks_${key}`] = undefined;
+  }
+  if (reader[`__ngMocks_${key}__origin`]) {
+    reader[`__ngMocks_${key}__origin`] = undefined;
+  }
+  source[key] = newValue;
 };
 
 const extractAllKeys = (instance: object) => [
@@ -31,7 +49,10 @@ export default (reader: Record<keyof any, any>, source?: Record<keyof any, any>,
     if (!force && exists.indexOf(key) !== -1) {
       continue;
     }
-    Object.defineProperty(reader, key, createProperty(source, key));
+    helperDefinePropertyDescriptor(reader, key, {
+      get: createPropertyGet(key, reader, source),
+      set: createPropertySet(key, reader, source),
+    });
     exists.push(key);
   }
 };

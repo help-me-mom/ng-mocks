@@ -16,7 +16,7 @@ export default (instance: any, prop: keyof any, desc?: PropertyDescriptor): bool
     Object.defineProperty(instance, prop, {
       ...desc,
       configurable: true,
-      ...(desc.writable === false ? { writable: true } : {}),
+      ...((desc.get === undefined && desc.set === undefined) || desc.writable === false ? { writable: true } : {}),
     });
   } else {
     instance[prop] = desc.value;

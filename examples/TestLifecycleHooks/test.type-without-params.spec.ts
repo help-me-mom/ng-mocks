@@ -13,8 +13,12 @@ describe('TestLifecycleHooks:type-without-params', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('triggers lifecycle hooks correctly via mock-render w/o params', () => {
+    const params: Partial<TargetComponent> = {
+      input: undefined,
+    };
+
     // First let's suppress detectChanges.
-    const fixture = MockRender(TargetComponent, undefined, {
+    const fixture = MockRender(TargetComponent, params, {
       detectChanges: false,
     });
 

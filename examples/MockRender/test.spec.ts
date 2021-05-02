@@ -40,8 +40,8 @@ class DependencyModule {}
 })
 class TestedComponent {
   @Output() public readonly trigger = new EventEmitter();
-  @Input() public value1 = '';
-  @Input() public value2 = '';
+  @Input() public value1 = 'default1';
+  @Input() public value2 = 'default2';
 }
 
 describe('MockRender', () => {
@@ -103,7 +103,9 @@ describe('MockRender', () => {
     expect(ngMocks.input(fixture.point, 'value1')).toEqual(
       'something2',
     );
-    expect(ngMocks.input(fixture.point, 'value2')).toBeUndefined();
+    expect(ngMocks.input(fixture.point, 'value2')).toEqual(
+      'default2',
+    );
 
     // Checking the outputs.
     ngMocks.output(fixture.point, 'trigger').emit('foo2');
