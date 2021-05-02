@@ -29,7 +29,7 @@ we can get the form, blocks and their inputs like:
 // roots
 const formEl = ngMocks.reveal('app-form');
 const personalEl = ngMocks.reveal(formEl, ['block', 'personal']);
-const addressEl = ngMocks.reveal(formEl, ['block', 'address']);
+const addressEl = ngMocks.reveal('app-form', ['block', 'address']);
 
 // 2 elements
 const personalEls = ngMocks.revealAll(personalEl, AppInputDirective);

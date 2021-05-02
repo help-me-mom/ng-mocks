@@ -1,8 +1,8 @@
 import { DebugElement, Predicate } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { AnyType } from '../common/core.types';
-import { getSourceOfMock } from '../common/func.get-source-of-mock';
+import { AnyType } from '../../common/core.types';
+import { getSourceOfMock } from '../../common/func.get-source-of-mock';
 
 export default (selector: string | AnyType<any> | [string] | [string, any]): Predicate<DebugElement> => {
   return Array.isArray(selector)

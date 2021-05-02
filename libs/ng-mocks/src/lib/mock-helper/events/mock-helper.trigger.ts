@@ -1,9 +1,12 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
+import { DebugNodeSelector } from '../../common/core.types';
+import mockHelperFind from '../find/mock-helper.find';
 import isDebugNode from '../format/is-debug-node';
 import isFixture from '../format/is-fixture';
 import isHtmlElement from '../format/is-html-element';
+import funcGetLastFixture from '../func.get-last-fixture';
 import mockHelperStub from '../mock-helper.stub';
 
 import mockHelperEvent from './mock-helper.event';
@@ -36,10 +39,11 @@ const getNativeElement = (
 };
 
 export default (
-  debugElement: DebugElement | HTMLElement | ComponentFixture<any> | undefined | null,
+  selector: DebugElement | HTMLElement | ComponentFixture<any> | DebugNodeSelector,
   eventName: string | UIEvent | KeyboardEvent | MouseEvent | TouchEvent | Event,
   payload?: Partial<UIEvent | KeyboardEvent | MouseEvent | TouchEvent | Event>,
 ) => {
+  const debugElement = isHtmlElement(selector) ? selector : mockHelperFind(funcGetLastFixture(), selector, undefined);
   const nativeElement = getNativeElement(debugElement);
 
   if (!nativeElement) {

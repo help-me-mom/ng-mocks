@@ -126,4 +126,11 @@ describe('ng-mocks-crawl', () => {
     ngMocks.crawl(node, spy, true);
     expect(spy).toHaveBeenCalledWith(node, undefined);
   });
+
+  it('handles missing fixture', () => {
+    const spy = jasmine.createSpy('callback');
+    ngMocks.crawl('div', spy);
+    ngMocks.crawl(['attr'], spy);
+    expect(spy).not.toHaveBeenCalled();
+  });
 });

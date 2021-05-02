@@ -1,3 +1,6 @@
+import { DebugNode } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
+
 // It has to be an interface.
 export interface AbstractType<T> extends Function {
   prototype: T;
@@ -10,3 +13,12 @@ export interface Type<T> extends Function {
 }
 
 export type AnyType<T> = Type<T> | AbstractType<T>;
+
+export type DebugNodeSelector =
+  | DebugNode
+  | ComponentFixture<any>
+  | string
+  | [string]
+  | [string, string | number]
+  | null
+  | undefined;

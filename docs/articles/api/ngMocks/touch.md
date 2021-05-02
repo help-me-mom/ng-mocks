@@ -29,4 +29,12 @@ ngMocks.touch(valueAccessorEl);
 expect(component.myControl.touched).toEqual(true);
 ```
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+```ts
+ngMocks.touch(['data-testid', 'inputControl']);
+ngMocks.touch('input');
+ngMocks.touch('[data-testid="inputControl"]');
+```
+
 Profit!

@@ -10,6 +10,10 @@ If the element is not specified, then the current fixture is used.
 - `ngMocks.findTemplateRef( debugElement?, id, notFoundValue? )`
 - `ngMocks.findTemplateRef( debugElement?, [attribute, value?], notFoundValue? )`
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+- `ngMocks.findTemplateRef( cssSelector?, [attribute, value?], notFoundValue? )`
+
 ## Directive
 
 Assume, that a template has the next code.

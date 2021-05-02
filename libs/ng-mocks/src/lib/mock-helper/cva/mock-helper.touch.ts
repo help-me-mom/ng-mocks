@@ -1,8 +1,12 @@
 import { DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
+import { DebugNodeSelector } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import mockHelperTrigger from '../events/mock-helper.trigger';
+import mockHelperFind from '../find/mock-helper.find';
+import funcGetLastFixture from '../func.get-last-fixture';
+import funcParseFindArgsName from '../func.parse-find-args-name';
 
 import funcGetVca from './func.get-vca';
 
@@ -33,7 +37,12 @@ const hasListener = (el: DebugElement): boolean =>
 
 const keys = ['onTouched', '_onTouched', '_cvaOnTouch', '_markAsTouched', '_onTouchedCallback', 'onModelTouched'];
 
-export default (el: DebugElement): void => {
+export default (sel: DebugElement | DebugNodeSelector): void => {
+  const el = mockHelperFind(funcGetLastFixture(), sel, undefined);
+  if (!el) {
+    throw new Error(`Cannot find an element via ngMocks.touch(${funcParseFindArgsName(sel)})`);
+  }
+
   const valueAccessor = funcGetVca(el);
   if (handleKnown(valueAccessor) || hasListener(el)) {
     triggerTouch(el);

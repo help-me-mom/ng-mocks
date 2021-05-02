@@ -8,6 +8,13 @@ It avoids the issue of knowing the name of a component / directive the input bel
 
 - `ngMocks.input( debugElement, input, notFoundValue? )`
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+- `ngMocks.input( cssSelector, input, notFoundValue? )`
+
 ```ts
 const inputValue = ngMocks.input(debugElement, 'param1');
+```
+```ts
+const inputValue = ngMocks.input('app-component', 'param1');
 ```

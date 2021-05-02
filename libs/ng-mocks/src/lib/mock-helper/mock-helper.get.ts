@@ -2,7 +2,9 @@ import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement } from '../mock-render/types';
 
+import mockHelperFind from './find/mock-helper.find';
 import funcGetFromNode from './func.get-from-node';
+import funcGetLastFixture from './func.get-last-fixture';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
@@ -20,18 +22,19 @@ const parseArgs = <T>(
 
 export default <T>(...args: any[]) => {
   const { el, sel, notFoundValue } = parseArgs<T>(args);
+  const root = mockHelperFind(funcGetLastFixture(), el, undefined);
 
-  const res1 = funcGetFromNode([], el, getSourceOfMock(sel));
+  const res1 = funcGetFromNode([], root, getSourceOfMock(sel));
   if (res1.length) {
     return res1[0];
   }
 
   // Looking for related structural directive.
-  const prevNode = el?.nativeNode.previousSibling;
+  const prevNode = root?.nativeNode.previousSibling;
   const matches =
-    !prevNode || prevNode.nodeName !== '#comment' || !el || !el.parent
+    !prevNode || prevNode.nodeName !== '#comment' || !root || !root.parent
       ? []
-      : el.parent.queryAllNodes(node => node.nativeNode === prevNode);
+      : root.parent.queryAllNodes(node => node.nativeNode === prevNode);
   const matchedNode = matches[0];
   const res2 = funcGetFromNode([], matchedNode, getSourceOfMock(sel));
   if (res2.length) {

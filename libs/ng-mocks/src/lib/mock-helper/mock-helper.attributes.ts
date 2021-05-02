@@ -1,5 +1,7 @@
 import { MockedDebugElement } from '../mock-render/types';
 
+import mockHelperFind from './find/mock-helper.find';
+import funcGetLastFixture from './func.get-last-fixture';
 import funcParseProviderTokensDirectives from './func.parse-provider-tokens-directives';
 import mockHelperGet from './mock-helper.get';
 
@@ -43,7 +45,7 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
   const [el, sel, notFoundValue] = parseArgs(args);
 
   try {
-    return detectAttribute(el, attr, sel);
+    return detectAttribute(mockHelperFind(funcGetLastFixture(), el, undefined), attr, sel);
   } catch (e) {
     // nothing to do
   }
