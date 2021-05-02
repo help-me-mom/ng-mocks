@@ -29,6 +29,21 @@ ngMocks.change(el, 123);
 expect(component.value).toEqual(123);
 ```
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+```ts
+ngMocks.change('input', 123);
+```
+```ts
+ngMocks.change('[data-testid="inputControl"]', 123);
+```
+```ts
+ngMocks.change(['data-testid'], 123);
+```
+```ts
+ngMocks.change(['data-testid', 'inputControl'], 123);
+```
+
 Profit!
 
 It supports both `FormsModule` and `ReactiveFormsModule`.

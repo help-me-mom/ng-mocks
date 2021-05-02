@@ -59,7 +59,8 @@ ngMocks.reveal('never-possible');
 
 ## Narrowing context
 
-`ngMocks.reveal` supports `ComponentFixture`, `DebugElements` and `DebugNodes`.
+`ngMocks.reveal` supports `ComponentFixture`, `DebugElements`, `DebugNodes`
+and selectors which are supported by [`ngMocks.find`](./find.md).
 If none has been provided, then the latest known fixture is used.
 
 In a template like:
@@ -83,7 +84,17 @@ const formEl = ngMocks.reveal(fixture, 'app-form');
 
 // searches inside of formEl
 const input2El = ngMocks.reveal(formEl, ['appInput']);
+
+// searches inside of app-form
+const input3El = ngMocks.reveal('app-form', ['appInput']);
 ```
+
+:::important
+If you use css selectors to narrow context,
+then please pay attention that the first parameter is a css selector,
+whereas the second one is a special selector for this helper.
+Although they look the same.   
+:::
 
 ## Query by declaration
 

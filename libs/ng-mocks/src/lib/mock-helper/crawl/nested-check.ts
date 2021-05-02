@@ -27,7 +27,7 @@ const detectParent = (node: MockedDebugNode, parent: MockedDebugNode | undefined
 };
 
 const nestedCheck = (
-  node: MockedDebugNode | undefined,
+  node: MockedDebugNode | null | undefined,
   parent: MockedDebugNode | undefined,
   check: (node: MockedDebugNode, parent?: MockedDebugNode) => void | boolean,
   includeTextNode = false,

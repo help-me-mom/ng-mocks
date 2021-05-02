@@ -3,7 +3,7 @@
 import { DebugNode, EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
-import { AnyType, Type } from '../common/core.types';
+import { AnyType, DebugNodeSelector, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
@@ -28,21 +28,18 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/change
    */
-  change(el: DebugNode, value: any): void;
+  change(elSelector: DebugNodeSelector, value: any): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/click
    */
-  click(
-    debugElement: MockedDebugElement | HTMLElement | ComponentFixture<any> | undefined | null,
-    payload?: Partial<MouseEvent>,
-  ): void;
+  click(elSelector: HTMLElement | DebugNodeSelector, payload?: Partial<MouseEvent>): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/crawl
    */
   crawl(
-    debugElement: MockedDebugNode,
+    elSelector: DebugNodeSelector,
     callback: (
       node: MockedDebugNode | MockedDebugElement,
       parent?: MockedDebugNode | MockedDebugElement,
@@ -171,42 +168,38 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T>(instanceClass: Type<T>): T;
+  findInstance<T>(instanceClass: AnyType<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T>(debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null, instanceClass: Type<T>): T;
+  findInstance<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T, D>(instanceClass: Type<T>, notFoundValue: D): D | T;
+  findInstance<T, D>(instanceClass: AnyType<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T, D>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
-    instanceClass: Type<T>,
-    notFoundValue: D,
-  ): D | T;
+  findInstance<T, D>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
-  findInstances<T>(instanceClass: Type<T>): T[];
+  findInstances<T>(instanceClass: AnyType<T>): T[];
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
-  findInstances<T>(debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null, instanceClass: Type<T>): T[];
+  findInstances<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>): T[];
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
   findTemplateRef<T = any, D = undefined>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any] | AnyType<any>,
     notFoundValue: D,
   ): D | TemplateRef<T>;
@@ -215,7 +208,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
    */
   findTemplateRef<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any] | AnyType<any>,
   ): TemplateRef<T>;
 
@@ -236,7 +229,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRefs
    */
   findTemplateRefs<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any] | AnyType<any>,
   ): Array<TemplateRef<T>>;
   /**
@@ -272,12 +265,12 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T>(debugNode: MockedDebugNode | undefined | null, directive: AnyType<T>): T;
+  get<T>(elSelector: DebugNodeSelector, directive: AnyType<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T, D>(debugNode: MockedDebugNode | undefined | null, directive: AnyType<T>, notFoundValue: D): D | T;
+  get<T, D>(elSelector: DebugNodeSelector, directive: AnyType<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/globalExclude
@@ -339,26 +332,22 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
-  input<T = any>(debugNode: MockedDebugNode | undefined | null, input: string): T;
+  input<T = any>(elSelector: DebugNodeSelector, input: string): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
-  input<T = any, D = undefined>(debugNode: MockedDebugNode | undefined | null, input: string, notFoundValue: D): D | T;
+  input<T = any, D = undefined>(elSelector: DebugNodeSelector, input: string, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
-  output<T = any>(debugNode: MockedDebugNode | undefined | null, output: string): EventEmitter<T>;
+  output<T = any>(elSelector: DebugNodeSelector, output: string): EventEmitter<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/output
    */
-  output<T = any, D = undefined>(
-    debugNode: MockedDebugNode | undefined | null,
-    output: string,
-    notFoundValue: D,
-  ): D | EventEmitter<T>;
+  output<T = any, D = undefined>(elSelector: DebugNodeSelector, output: string, notFoundValue: D): D | EventEmitter<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/render
@@ -388,10 +377,7 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
-  reveal<T>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
-    selector: AnyType<T>,
-  ): MockedDebugNode<T> | MockedDebugElement<T>;
+  reveal<T>(elSelector: DebugNodeSelector, selector: AnyType<T>): MockedDebugNode<T> | MockedDebugElement<T>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
@@ -402,7 +388,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any],
   ): MockedDebugNode<T> | MockedDebugElement<T>;
 
@@ -415,7 +401,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T, D>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: AnyType<T>,
     notFoundValue: D,
   ): D | MockedDebugNode<T> | MockedDebugElement<T>;
@@ -432,7 +418,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/reveal
    */
   reveal<T = any, D = undefined>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any],
     notFoundValue: D,
   ): D | MockedDebugNode<T> | MockedDebugElement<T>;
@@ -450,16 +436,13 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
-  revealAll<T>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
-    selector: AnyType<T>,
-  ): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
+  revealAll<T>(elSelector: DebugNodeSelector, selector: AnyType<T>): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/revealAll
    */
   revealAll<T = any>(
-    debugNode: MockedDebugNode | ComponentFixture<any> | undefined | null,
+    elSelector: DebugNodeSelector,
     selector: string | [string] | [string, any],
   ): Array<MockedDebugNode<T> | MockedDebugElement<T>>;
 
@@ -508,18 +491,18 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/touch
    */
-  touch(el: DebugNode): void;
+  touch(elSelector: DebugNode | DebugNodeSelector): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/trigger
    */
-  trigger(debugElement: MockedDebugElement | undefined | null, event: Event): void;
+  trigger(elSelector: DebugNodeSelector, event: Event): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/trigger
    */
   trigger(
-    debugElement: MockedDebugElement | HTMLElement | ComponentFixture<any> | undefined | null,
+    elSelector: HTMLElement | DebugNodeSelector,
     event: string,
     payload?: Partial<UIEvent | KeyboardEvent | MouseEvent | TouchEvent>,
   ): void;

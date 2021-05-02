@@ -27,5 +27,20 @@ ngMocks.click(el.nativeElement, {
 });
 ```
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+```ts
+ngMocks.click('a');
+```
+```ts
+ngMocks.click('[data-role="link"]');
+```
+```ts
+ngMocks.click(['data-role']);
+```
+```ts
+ngMocks.click(['data-role', 'linke']);
+```
+
 Under the hood `ngMocks.click` uses [`ngMocks.trigger`](./trigger.md),
 therefore all features of [`ngMocks.trigger`](./trigger.md) can be used.

@@ -1,38 +1,39 @@
-import { AnyType } from '../common/core.types';
-import funcGetLastFixture from '../mock-helper/func.get-last-fixture';
-import { MockedDebugElement } from '../mock-render/types';
+import isDebugNode from './format/is-debug-node';
+import isFixture from './format/is-fixture';
+import funcGetLastFixture from './func.get-last-fixture';
 
-const detectEl = (args: any[]): undefined | MockedDebugElement => {
-  return Array.isArray(args[0]) || typeof args[0] !== 'object'
-    ? undefined
-    : args[0]?.debugElement
-    ? args[0].debugElement
-    : args[0];
+const isSelector = (value: any): boolean => {
+  if (typeof value === 'string') {
+    return true;
+  }
+  if (Array.isArray(value) && typeof value[0] === 'string') {
+    return true;
+  }
+  if (isFixture(value)) {
+    return true;
+  }
+  if (isDebugNode(value)) {
+    return true;
+  }
+
+  return true;
 };
 
-const detectSel = (args: any[], el: any) => {
-  return el || !args[0] ? args[1] : args[0];
-};
+export default (args: any[], isValidValue: (value: any) => boolean, defaultNotFoundValue?: any): [any, any, any] => {
+  let el;
+  let sel;
+  let notFoundValue = defaultNotFoundValue;
+  if (args.length === 3) {
+    [el, sel, notFoundValue] = args;
+  } else if (args.length === 1) {
+    el = funcGetLastFixture();
+    [sel] = args;
+  } else if (isValidValue(args[1]) && isSelector(args[0])) {
+    [el, sel] = args;
+  } else {
+    el = funcGetLastFixture();
+    [sel, notFoundValue] = args;
+  }
 
-const detectNotFound = (args: any[], el: any, defaultNotFoundValue: any): any => {
-  return args.length === 3 ? args[2] : !el && args[0] && args.length === 2 ? args[1] : defaultNotFoundValue;
-};
-
-export default (
-  args: any[],
-  defaultNotFoundValue?: any,
-): {
-  el: undefined | MockedDebugElement;
-  notFoundValue: any;
-  sel: string | AnyType<any> | [string] | [string, any];
-} => {
-  const el = detectEl(args);
-  const sel = detectSel(args, el);
-  const notFoundValue = detectNotFound(args, el, defaultNotFoundValue);
-
-  return {
-    el: el ?? (args[0] && funcGetLastFixture()?.debugElement) ?? undefined,
-    notFoundValue,
-    sel,
-  };
+  return [el, sel, notFoundValue];
 };

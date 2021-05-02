@@ -19,6 +19,13 @@ ngMocks.trigger(el, 'mouseleave', {
 });
 ```
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+```ts
+ngMocks.trigger('input[name="address"]', 'focus');
+ngMocks.trigger(['name', 'address'], 'blur');
+```
+
 ## Key combinations
 
 In order to simulate shot keys and test their handlers,

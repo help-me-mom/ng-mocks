@@ -1,8 +1,12 @@
 import { DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
+import { DebugNodeSelector } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import mockHelperTrigger from '../events/mock-helper.trigger';
+import mockHelperFind from '../find/mock-helper.find';
+import funcGetLastFixture from '../func.get-last-fixture';
+import funcParseFindArgsName from '../func.parse-find-args-name';
 import mockHelperStubMember from '../mock-helper.stub-member';
 
 import funcGetVca from './func.get-vca';
@@ -50,7 +54,12 @@ const hasListener = (el: DebugElement): boolean =>
 
 const keys = ['onChange', '_onChange', 'changeFn', '_onChangeCallback', 'onModelChange'];
 
-export default (el: DebugElement, value: any): void => {
+export default (selector: DebugNodeSelector, value: any): void => {
+  const el = mockHelperFind(funcGetLastFixture(), selector, undefined);
+  if (!el) {
+    throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
+  }
+
   const valueAccessor = funcGetVca(el);
   if (handleKnown(valueAccessor, value) || hasListener(el)) {
     triggerInput(el, value);

@@ -26,6 +26,12 @@ a different amount of text nodes for the same template.
 ngMocks.crawl(debugElement, callback, textNodes);
 ```
 
+or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+
+```ts
+ngMocks.crawl('div.root', callback, textNodes);
+```
+
 ## Example: first div
 
 A simple example, how we can find a div element.

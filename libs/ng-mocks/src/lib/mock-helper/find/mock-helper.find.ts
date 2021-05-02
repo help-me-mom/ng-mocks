@@ -1,13 +1,16 @@
+import { DebugElement } from '@angular/core';
+
+import isDebugNode from '../format/is-debug-node';
+import funcParseFindArgsName from '../func.parse-find-args-name';
+
 import funcParseFindArgs from './func.parse-find-args';
-import funcParseFindArgsName from './func.parse-find-args-name';
 import funcParseFindTerm from './func.parse-find-term';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-export default (...args: any[]) => {
-  const { el, sel, notFoundValue } = funcParseFindArgs(args, defaultNotFoundValue);
-
-  const result = el?.query(funcParseFindTerm(sel));
+export default (...args: any[]): DebugElement => {
+  const [el, sel, notFoundValue] = funcParseFindArgs(args, defaultNotFoundValue);
+  const result = isDebugNode(sel) ? sel : el?.query(funcParseFindTerm(sel));
   if (result) {
     return result;
   }
