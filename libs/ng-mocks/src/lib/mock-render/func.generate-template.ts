@@ -17,16 +17,17 @@ const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i
 const generateTemplateAttrWithParams = (params: any, prop: string, type: 'i' | 'o'): string =>
   ` ${generateTemplateAttrWrap(prop, type)}="${prop}${type === 'o' ? solveOutput(params[prop]) : ''}"`;
 
-const generateTemplateAttrWithoutParams = (key: string, value: string, type: 'i' | 'o'): string =>
-  ` ${generateTemplateAttrWrap(key, type)}="${value}${type === 'o' ? '.emit($event)' : ''}"`;
-
 const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
+  if (!params) {
+    return '';
+  }
+
   let mockTemplate = '';
+  const keys = Object.getOwnPropertyNames(params);
   for (const definition of attr) {
     const [property, alias] = definition.split(': ');
-    mockTemplate += params
-      ? generateTemplateAttrWithParams(params, alias || property, type)
-      : generateTemplateAttrWithoutParams(alias || property, property, type);
+    mockTemplate +=
+      keys.indexOf(alias || property) === -1 ? '' : generateTemplateAttrWithParams(params, alias || property, type);
   }
 
   return mockTemplate;

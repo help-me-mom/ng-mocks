@@ -3,11 +3,11 @@ import helperExtractMethodsFromPrototype from './helper.extract-methods-from-pro
 import helperExtractPropertiesFromPrototype from './helper.extract-properties-from-prototype';
 import helperExtractPropertyDescriptor from './helper.extract-property-descriptor';
 
-export default (service: any): any => {
+export default (service: any, bindFrom?: object, bindTo?: object): any => {
   const instance = function () {
     // tslint:disable-next-line:ban-ts-ignore
     // @ts-ignore
-    return service.apply(this, arguments);
+    return service.apply(bindFrom === this ? bindTo : this, arguments);
   };
 
   for (const prop of [

@@ -1,4 +1,4 @@
-import { Component, DebugElement, Directive, EventEmitter, InjectionToken } from '@angular/core';
+import { Component, DebugElement, Directive, InjectionToken } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { extendClass } from '../common/core.helpers';
@@ -12,25 +12,6 @@ import { MockService } from '../mock-service/mock-service';
 import funcGenerateTemplate from './func.generate-template';
 import funcInstallPropReader from './func.install-prop-reader';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
-
-const applyParamsToFixtureInstanceGetData = (params: any, keys: string[]) => (!params && keys ? keys : []);
-
-const applyParamsToFixtureInstance = (
-  instance: Record<keyof any, any>,
-  params: any,
-  inputs: string[],
-  outputs: string[],
-): void => {
-  funcInstallPropReader(instance, params);
-  for (const definition of applyParamsToFixtureInstanceGetData(params, inputs)) {
-    const [property] = definition.split(': ');
-    instance[property] = undefined;
-  }
-  for (const definition of applyParamsToFixtureInstanceGetData(params, outputs)) {
-    const [property] = definition.split(': ');
-    instance[property] = new EventEmitter();
-  }
-};
 
 const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
   const child = extendClass(template);
@@ -74,10 +55,10 @@ const reflectTemplate = (template: AnyType<any>): Directive => {
   return meta;
 };
 
-const generateFixture = ({ params, options, inputs, outputs }: any) => {
+const generateFixture = ({ params, options }: any) => {
   class MockRenderComponent {
     public constructor() {
-      applyParamsToFixtureInstance(this, params, inputs, outputs);
+      funcInstallPropReader(this, params);
     }
   }
 
@@ -91,7 +72,11 @@ const generateFixture = ({ params, options, inputs, outputs }: any) => {
 
 const fixtureFactory = <T>(template: any, meta: Directive, params: any, flags: any): ComponentFixture<T> => {
   const mockTemplate = funcGenerateTemplate(template, { ...meta, params });
-  const options: Component = { providers: flags.providers, selector: 'mock-render', template: mockTemplate };
+  const options: Component = {
+    providers: flags.providers,
+    selector: 'mock-render',
+    template: mockTemplate,
+  };
   const fixture: any = generateFixture({ ...meta, params, options });
   if (flags.detectChanges) {
     fixture.detectChanges();
