@@ -211,8 +211,14 @@ const resetTestingModule = (
  * @see https://ng-mocks.sudo.eu/api/MockBuilder
  */
 export function MockBuilder(
-  keepDeclaration?: string | AnyType<any> | InjectionToken<any> | null | undefined,
-  itsModuleToMock?: AnyType<any> | null | undefined,
+  keepDeclaration?:
+    | string
+    | AnyType<any>
+    | InjectionToken<any>
+    | Array<string | AnyType<any> | InjectionToken<any>>
+    | null
+    | undefined,
+  itsModuleToMock?: AnyType<any> | Array<AnyType<any>> | null | undefined,
 ): IMockBuilder {
   if (!(TestBed as any).ngMocks) {
     TestBed.configureTestingModule = configureTestingModule(TestBed.configureTestingModule);
@@ -223,14 +229,18 @@ export function MockBuilder(
   const instance = new MockBuilderPerformance();
 
   if (keepDeclaration) {
-    instance.keep(keepDeclaration, {
-      export: true,
-    });
+    for (const declaration of flatten(keepDeclaration)) {
+      instance.keep(declaration, {
+        export: true,
+      });
+    }
   }
   if (itsModuleToMock) {
-    instance.mock(itsModuleToMock, {
-      exportAll: true,
-    });
+    for (const declaration of flatten(itsModuleToMock)) {
+      instance.mock(declaration, {
+        exportAll: true,
+      });
+    }
   }
 
   return instance;

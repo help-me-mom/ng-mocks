@@ -131,6 +131,7 @@ module.exports = {
         'guides/provider',
         'guides/token',
         'guides/token-multi',
+        'guides/lazy-loaded-module',
         'guides/route',
         'guides/routing-guard',
         'guides/routing-resolver',
