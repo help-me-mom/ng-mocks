@@ -28,6 +28,18 @@ jobs:
           npm ci --no-optional --ignore-scripts && \
           node ./node_modules/puppeteer/install.js
 
+      - name: docs/node_modules
+        id: docscache
+        uses: actions/cache@v2
+        with:
+          path: docs/node_modules
+          key: ${{ runner.os }}-root-v1-${{ hashFiles('./docs/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.docscache.outputs.cache-hit != 'true'
+        run: |
+          cd docs && npm ci --no-optional --ignore-scripts && cd ..
+
       - name: Prettier Check
         run: npm run prettier:check
       - name: Lint Check
