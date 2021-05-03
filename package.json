@@ -156,7 +156,7 @@
     "@types/node": "14.14.43",
     "clsx": "1.1.1",
     "codecov": "3.8.1",
-    "core-js": "3.11.1",
+    "core-js": "3.11.2",
     "coveralls": "3.1.0",
     "husky": "6.0.0",
     "jasmine-core": "3.7.1",
