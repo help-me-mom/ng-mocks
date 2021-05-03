@@ -13,6 +13,8 @@ jobs:
       - checkout
       - restore_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
       - run:
           name: NPM Install
           command: |
@@ -20,10 +22,17 @@ jobs:
               npm ci --no-optional --ignore-scripts && \
               node ./node_modules/puppeteer/install.js
             fi
+            if [ ! -d "./docs/node_modules/" ]; then
+              cd docs && npm ci --no-optional --ignore-scripts && cd ..
+            fi
       - save_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+      - save_cache:
+          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
+          paths:
+            - ./docs/node_modules
       - run:
           name: Prettier
           command: npm run prettier:check

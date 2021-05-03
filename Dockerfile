@@ -6,6 +6,7 @@ CMD ["npm", "run", "e2e:a"]
 
 VOLUME /npm
 VOLUME /app/node_modules
+VOLUME /app/docs/node_modules
 VOLUME /app/e2e/a5es5/node_modules
 VOLUME /app/e2e/a5es2015/node_modules
 VOLUME /app/e2e/a6/node_modules
