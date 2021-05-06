@@ -1,4 +1,13 @@
 // Extracts dependency among flags of parameters.
+
+const detectForwardRed = (provide: any): any => {
+  if (typeof provide === 'function' && provide.__forward_ref__) {
+    return provide();
+  }
+
+  return provide;
+};
+
 export default (decorators?: any[]): any => {
   if (!decorators) {
     return;
@@ -14,5 +23,5 @@ export default (decorators?: any[]): any => {
     }
   }
 
-  return provide;
+  return detectForwardRed(provide);
 };
