@@ -143,7 +143,12 @@ module.exports = {
       type: 'category',
       label: 'Testing libraries',
       collapsed: false,
-      items: ['guides/libraries/ng-select', 'guides/libraries/angular-material', 'guides/libraries/primeng'],
+      items: [
+        'guides/libraries/ng-select',
+        'guides/libraries/angular-material',
+        'guides/libraries/primeng',
+        'guides/libraries/ngrx',
+      ],
     },
   ],
 };
