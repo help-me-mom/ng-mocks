@@ -164,7 +164,7 @@
     "karma-jasmine-html-reporter": "1.6.0",
     "karma-junit-reporter": "2.0.1",
     "karma-typescript": "5.5.1",
-    "lint-staged": "10.5.4",
+    "lint-staged": "11.0.0",
     "npm": "6.14.13",
     "prettier": "2.2.1",
     "primeng": "11.4.0",
