@@ -152,7 +152,7 @@ class RealComponent implements AfterViewInit {
 ```
 
 When we test `RealComponent` we would like to have a mock `ChildComponent`,
-and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would be return `undefined`,
+and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would return `undefined`,
 therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](../troubleshooting/read-property-of-undefined.md).
 
 In our case, we have a component instance created by Angular, and does not look like `TestBed` provides
@@ -166,7 +166,7 @@ It accepts a class as the first parameter, and a tiny callback describing how to
 beforeEach(() => MockInstance(ChildComponent, 'update$', EMPTY));
 ```
 
-Profit. When Angular creates an instance of `ChildComponent`, the rule is applied in its ctor, and `update$` property
+Profit. When Angular creates an instance of `ChildComponent`, the rule is applied in its constructor, and `update$` property
 of the instance is not `undefined`, but an `Observable`.
 
 ## Advanced example
