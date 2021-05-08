@@ -7,7 +7,7 @@ There is a `ngMocks.faster` feature that optimizes setup of similar test modules
 and reduces required time on their execution.
 
 Imagine a situation when `beforeEach` creates the same setup used by dozens of `it`.
-This is the case where `ngMocks.faster` might be useful, simply call it before `beforeEach` and
+This is the case where `ngMocks.faster` might be useful, simply call it before `beforeAll` and
 **the Angular tests will run faster**.
 
 ```ts
@@ -15,7 +15,7 @@ describe('performance:correct', () => {
   ngMocks.faster(); // <-- add it before
 
   // The TestBed is not going to be changed between tests.
-  beforeEach(() => {
+  beforeAll(() => {
     return MockBuilder(TargetComponent, TargetModule).keep(TargetService);
   });
 
@@ -34,11 +34,10 @@ describe('performance:correct', () => {
 If a test creates spies in `beforeEach` then this should be tuned,
 because `ngMocks.faster` will detect this difference and display a notice.
 
-A possible solution is usage of [MockInstance](../MockInstance.md) or to move creation of spies
-outside of `beforeEach`.
+A possible solution is usage of [MockInstance](../MockInstance.md) instead of manual declaration,
+or to move creation of spies outside of `beforeEach`.
 
-<details><summary>Click to see <strong>an example of MockInstance</strong></summary>
-<p>
+## Example of MockInstance
 
 ```ts
 describe('beforeEach:mock-instance', () => {
@@ -66,11 +65,7 @@ describe('beforeEach:mock-instance', () => {
 });
 ```
 
-</p>
-</details>
-
-<details><summary>Click to see <strong>an example of optimizing spies in beforeEach</strong></summary>
-<p>
+## Example of optimizing spies in beforeEach
 
 ```ts
 describe('beforeEach:manual-spy', () => {
@@ -101,5 +96,45 @@ describe('beforeEach:manual-spy', () => {
 });
 ```
 
-</p>
-</details>
+## MockRender
+
+Usage of `ngMocks.faster()` covers [`MockRender`](../MockRender.md) too.
+
+With its help, `MockRender` can be called in either `beforeEach` or `beforeAll`.
+`beforeAll` won't reset its fixture after a test, and the fixture can be used in the next test.
+Please pay attention that state of components also stays the same.
+
+```ts
+describe('issue-488:faster', () => {
+  let fixture: MockedComponentFixture<MyComponent>;
+
+  ngMocks.faster();
+
+  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  beforeAll(() => fixture = MockRender(MyComponent));
+
+  it('first test has initial render', () => {
+    expect(ngMocks.formatText(fixture)).toEqual('1');
+
+    fixture.point.componentInstance.value += 1;
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('2');
+
+    fixture.point.componentInstance.reset();
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('0');
+  });
+
+  it('second test continues the prev state', () => {
+    expect(ngMocks.formatText(fixture)).toEqual('0');
+
+    fixture.point.componentInstance.value += 1;
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('1');
+
+    fixture.point.componentInstance.reset();
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('0');
+  });
+});
+```

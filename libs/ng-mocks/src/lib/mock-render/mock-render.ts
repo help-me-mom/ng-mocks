@@ -5,6 +5,7 @@ import coreDefineProperty from '../common/core.define-property';
 import { Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
@@ -25,7 +26,10 @@ const generateFixture = ({ params, options }: any) => {
     declarations: [MockRenderComponent],
   });
 
-  return TestBed.createComponent(MockRenderComponent);
+  const fixture = TestBed.createComponent(MockRenderComponent);
+  coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('reporter-stack-id'));
+
+  return fixture;
 };
 
 const fixtureFactory = <T>(template: any, meta: Directive, params: any, flags: any): ComponentFixture<T> => {
