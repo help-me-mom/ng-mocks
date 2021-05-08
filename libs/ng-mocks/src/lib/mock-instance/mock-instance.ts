@@ -123,7 +123,7 @@ const mockInstanceMember = <T>(
 };
 
 /**
- * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T extends object, K extends keyof T, S extends () => T[K]>(
   instance: Type<T> | AbstractType<T>,
@@ -133,7 +133,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends () =
 ): S;
 
 /**
- * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
   instance: Type<T> | AbstractType<T>,
@@ -143,7 +143,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends (val
 ): S;
 
 /**
- * @see https://ng-mocks.sudo.eu/api/ngMocks/stubMember
+ * @see https://ng-mocks.sudo.eu/api/MockInstance
  */
 export function MockInstance<T extends object, K extends keyof T, S extends T[K]>(
   instance: Type<T> | AbstractType<T>,

@@ -43,6 +43,7 @@ describe('ng-mocks-global-exclude:override', () => {
 
     it('cannot find Target1Component', () => {
       expect(() => MockRender('<target2></target2>')).not.toThrow();
+      ngMocks.flushTestBed();
       expect(() => MockRender('<target1></target1>')).toThrowError(
         /'target1' is not a known element/,
       );

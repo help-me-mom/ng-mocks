@@ -137,6 +137,7 @@ describe('mock-render-mirrors-component', () => {
 
     // we have to provide DefaultRenderComponent in this case.
     // the generated component is not the same as the testing component.
+    ngMocks.flushTestBed();
     const fixture2: ComponentFixture<
       DefaultRenderComponent<TargetComponent>
     > = MockRender(TargetComponent);
@@ -146,6 +147,7 @@ describe('mock-render-mirrors-component', () => {
     expect(fixture2.componentInstance.input1).toBe('1');
 
     // full declaration of the mock fixture type.
+    ngMocks.flushTestBed();
     const fixture3: MockedComponentFixture<
       TargetComponent,
       Record<'input1' | 'input3', string>
@@ -158,6 +160,7 @@ describe('mock-render-mirrors-component', () => {
     expect(fixture3.point.componentInstance.input1).toBe('1');
 
     // full declaration of the default fixture type.
+    ngMocks.flushTestBed();
     const fixture4: ComponentFixture<
       Record<'input1' | 'input3', string>
     > = MockRender(TargetComponent, {

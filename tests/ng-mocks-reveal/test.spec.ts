@@ -404,6 +404,7 @@ describe('ng-mocks-reveal:test', () => {
   });
 
   it('skips itself', () => {
+    ngMocks.flushTestBed();
     const loFixture = MockRender(`
       <ng-container block="1">
         <ng-container block="2">

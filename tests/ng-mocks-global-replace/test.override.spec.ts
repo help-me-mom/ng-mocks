@@ -59,6 +59,7 @@ describe('ng-mocks-global-replace:override', () => {
       expect(
         MockRender('<target2></target2>').nativeElement.innerHTML,
       ).toContain('<target2></target2>');
+      ngMocks.flushTestBed();
       expect(
         MockRender('<target1></target1>').nativeElement.innerHTML,
       ).toContain('<target1>fake1</target1>');
@@ -78,6 +79,7 @@ describe('ng-mocks-global-replace:override', () => {
       expect(
         MockRender('<target2></target2>').nativeElement.innerHTML,
       ).toContain('<target2>fake2</target2>');
+      ngMocks.flushTestBed();
       expect(
         MockRender('<target1></target1>').nativeElement.innerHTML,
       ).toContain('<target1>fake1</target1>');

@@ -146,91 +146,85 @@ describe('MockBuilder:deep', () => {
     return TestBed.compileComponents();
   });
 
-  it('should render', inject(
+  it('should render', () => {
+    const fixture = MockRender(MyComponent);
+    expect(fixture).toBeDefined();
+    const content = fixture.nativeElement.innerHTML.replace(
+      /<!--.*?-->/gm,
+      '',
+    );
+    expect(content).toContain('<div>My Content</div>');
+
+    expect(content).toContain(
+      '<div>MyComponent1: <c-1>If we need to tune testBed</c-1></div>',
+    );
+    expect(content).toContain(
+      '<div>MyComponent2: <c-2>More callbacks</c-2></div>',
+    );
+    expect(content).toContain('<div>MyComponent3: <c-3></c-3></div>');
+    expect(content).toContain(
+      '<div>KeepComponent: <c-keep>KeepComponent</c-keep></div>',
+    );
+    expect(content).toContain(
+      '<div>MockComponent: <c-mock></c-mock></div>',
+    );
+    expect(content).toContain(
+      '<div>ComponentStructural: -$implicit- b</div>',
+    );
+
+    expect(content).toContain(
+      '<div>MyDirective: <d-my></d-my></div>',
+    );
+    expect(content).toContain(
+      '<div>KeepDirective: <d-keep></d-keep></div>',
+    );
+    expect(content).toContain(
+      'MockDirective 1: <span>render b</span>',
+    );
+    expect(content).toContain('MockDirective 2: render $');
+
+    expect(content).toContain('<div>MyPipe: MyPipe:text:0</div>');
+    expect(content).toContain('<div>KeepPipe: KeepPipe:text:0</div>');
+    expect(content).toContain('<div>MockPipe: </div>');
+    expect(content).toContain(
+      '<div>CustomizePipe: My Custom Result</div>',
+    );
+    expect(content).toContain(
+      '<div>RestorePipe: RestorePipe:text:0</div>',
+    );
+
+    expect(content).toContain('<div>TOKEN_KEEP: TOKEN_KEEP</div>');
+    expect(content).toContain('<div>TOKEN_MOCK: </div>');
+    expect(content).toContain('<div>TOKEN_CUSTOMIZE: My_Token</div>');
+
+    expect(content).toContain(
+      '<div>AnythingKeep1: TheSameAsAnyProvider</div>',
+    );
+    expect(content).toContain(
+      '<div>AnythingKeep2: TheSameAsAnyProvider</div>',
+    );
+    expect(content).toContain(
+      '<div>myCustomProvider1: MyCustomProvider1</div>',
+    );
+    expect(content).toContain(
+      '<div>myCustomProvider2: MyCustomProvider2</div>',
+    );
+    expect(content).toContain(
+      '<div>myCustomProvider3: MyCustomProvider3</div>',
+    );
+
+    expect(content).toContain('<div>myService1: </div>');
+    expect(content).toContain('<div>myService2: MyService2</div>');
+    expect(content).toContain('<div>serviceKeep: serviceKeep</div>');
+    expect(content).toContain(
+      '<div>serviceCustomize: My Customized String</div>',
+    );
+    expect(content).toContain('<div>serviceMock: </div>');
+  });
+
+  it('replaces HttpBackend', inject(
     [HttpBackend],
     (httpBackend: HttpBackend) => {
-      const fixture = MockRender(MyComponent);
-      expect(fixture).toBeDefined();
-      const content = fixture.nativeElement.innerHTML.replace(
-        /<!--.*?-->/gm,
-        '',
-      );
-      expect(content).toContain('<div>My Content</div>');
-
-      expect(content).toContain(
-        '<div>MyComponent1: <c-1>If we need to tune testBed</c-1></div>',
-      );
-      expect(content).toContain(
-        '<div>MyComponent2: <c-2>More callbacks</c-2></div>',
-      );
-      expect(content).toContain(
-        '<div>MyComponent3: <c-3></c-3></div>',
-      );
-      expect(content).toContain(
-        '<div>KeepComponent: <c-keep>KeepComponent</c-keep></div>',
-      );
-      expect(content).toContain(
-        '<div>MockComponent: <c-mock></c-mock></div>',
-      );
-      expect(content).toContain(
-        '<div>ComponentStructural: -$implicit- b</div>',
-      );
-
-      expect(content).toContain(
-        '<div>MyDirective: <d-my></d-my></div>',
-      );
-      expect(content).toContain(
-        '<div>KeepDirective: <d-keep></d-keep></div>',
-      );
-      expect(content).toContain(
-        'MockDirective 1: <span>render b</span>',
-      );
-      expect(content).toContain('MockDirective 2: render $');
-
-      expect(content).toContain('<div>MyPipe: MyPipe:text:0</div>');
-      expect(content).toContain(
-        '<div>KeepPipe: KeepPipe:text:0</div>',
-      );
-      expect(content).toContain('<div>MockPipe: </div>');
-      expect(content).toContain(
-        '<div>CustomizePipe: My Custom Result</div>',
-      );
-      expect(content).toContain(
-        '<div>RestorePipe: RestorePipe:text:0</div>',
-      );
-
-      expect(content).toContain('<div>TOKEN_KEEP: TOKEN_KEEP</div>');
-      expect(content).toContain('<div>TOKEN_MOCK: </div>');
-      expect(content).toContain(
-        '<div>TOKEN_CUSTOMIZE: My_Token</div>',
-      );
-
-      expect(content).toContain(
-        '<div>AnythingKeep1: TheSameAsAnyProvider</div>',
-      );
-      expect(content).toContain(
-        '<div>AnythingKeep2: TheSameAsAnyProvider</div>',
-      );
-      expect(content).toContain(
-        '<div>myCustomProvider1: MyCustomProvider1</div>',
-      );
-      expect(content).toContain(
-        '<div>myCustomProvider2: MyCustomProvider2</div>',
-      );
-      expect(content).toContain(
-        '<div>myCustomProvider3: MyCustomProvider3</div>',
-      );
-
-      expect(content).toContain('<div>myService1: </div>');
-      expect(content).toContain('<div>myService2: MyService2</div>');
-      expect(content).toContain(
-        '<div>serviceKeep: serviceKeep</div>',
-      );
-      expect(content).toContain(
-        '<div>serviceCustomize: My Customized String</div>',
-      );
-      expect(content).toContain('<div>serviceMock: </div>');
-
       // Checking that replacement works.
       expect(httpBackend.constructor).toBeDefined();
       expect(httpBackend.constructor.name).toEqual(

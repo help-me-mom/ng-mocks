@@ -1,7 +1,6 @@
 // tslint:disable strict-type-predicates
 
 import { Component, Injectable, NgModule } from '@angular/core';
-import { inject } from '@angular/core/testing';
 import {
   MockBuilder,
   MockRender,
@@ -70,22 +69,22 @@ describe('spies:manual-mock', () => {
     );
   });
 
-  it('should get manually mock service', inject(
-    [TargetService],
-    (targetService: TargetService) => {
-      expect((targetService as any).manual).toBe(true);
-      const fixture = MockRender(TargetComponent);
-      const component = ngMocks.find(
-        fixture.debugElement,
-        TargetComponent,
-      ).componentInstance;
-      expect(component).toBeDefined();
-      expect(targetService.echo).toHaveBeenCalledTimes(1);
-      expect(targetService.echo).toHaveBeenCalledWith('constructor');
-      expect(component.echo()).toEqual('fake');
-      expect(targetService.echo).toHaveBeenCalledTimes(2);
-    },
-  ));
+  it('should get manually mock service', () => {
+    const fixture = MockRender(TargetComponent);
+
+    const targetService = ngMocks.findInstance(TargetService);
+    expect((targetService as any).manual).toBe(true);
+
+    const component = ngMocks.find(
+      fixture.debugElement,
+      TargetComponent,
+    ).componentInstance;
+    expect(component).toBeDefined();
+    expect(targetService.echo).toHaveBeenCalledTimes(1);
+    expect(targetService.echo).toHaveBeenCalledWith('constructor');
+    expect(component.echo()).toEqual('fake');
+    expect(targetService.echo).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('spies:auto-mock', () => {
