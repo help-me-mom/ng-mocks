@@ -2,60 +2,42 @@ import { InjectionToken, Injector } from '@angular/core';
 
 import { AbstractType, Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
+import ngMocksStack, { NgMocksStack } from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-const stack: any[][] = [[]];
-const stackPush = () => {
-  stack.push([]);
-};
-const stackPop = () => {
-  for (const declaration of stack.pop() || /* istanbul ignore next */ []) {
+let currentStack: NgMocksStack;
+ngMocksStack.subscribePush(state => {
+  currentStack = state;
+});
+ngMocksStack.subscribePop((state, stack) => {
+  for (const declaration of state.mockInstance || /* istanbul ignore next */ []) {
     ngMocksUniverse.configInstance.get(declaration)?.overloads?.pop();
   }
-  // istanbul ignore if
-  if (stack.length === 0) {
-    stack.push([]);
+  currentStack = stack[stack.length - 1];
+});
+
+ngMocksStack.subscribePush(() => {
+  // On start we have to flush any caches,
+  // they are not from this spec.
+  const set = ngMocksUniverse.getLocalMocks();
+  set.splice(0, set.length);
+});
+ngMocksStack.subscribePop(() => {
+  const set = ngMocksUniverse.getLocalMocks();
+  while (set.length) {
+    const [declaration, config] = set.pop() || /* istanbul ignore next */ [];
+    const universeConfig = ngMocksUniverse.configInstance.has(declaration)
+      ? ngMocksUniverse.configInstance.get(declaration)
+      : {};
+    ngMocksUniverse.configInstance.set(declaration, {
+      ...universeConfig,
+      ...config,
+    });
   }
-};
+});
 
-const reporterStack: jasmine.CustomReporter = {
-  jasmineDone: stackPop,
-  jasmineStarted: stackPush,
-  specDone: stackPop,
-  specStarted: stackPush,
-  suiteDone: stackPop,
-  suiteStarted: stackPush,
-};
-
-const reporter: jasmine.CustomReporter = {
-  specDone: () => {
-    const set = ngMocksUniverse.getLocalMocks();
-    while (set.length) {
-      const [declaration, config] = set.pop() || /* istanbul ignore next */ [];
-      const universeConfig = ngMocksUniverse.configInstance.has(declaration)
-        ? ngMocksUniverse.configInstance.get(declaration)
-        : {};
-      ngMocksUniverse.configInstance.set(declaration, {
-        ...universeConfig,
-        ...config,
-      });
-    }
-  },
-  specStarted: () => {
-    // On start we have to flush any caches,
-    // they are not from this spec.
-    const set = ngMocksUniverse.getLocalMocks();
-    set.splice(0, set.length);
-  },
-};
-
-let installReporter = true;
 const restore = (declaration: any, config: any): void => {
-  if (installReporter) {
-    jasmine.getEnv().addReporter(reporter);
-    installReporter = false;
-  }
-
+  ngMocksStack.install();
   ngMocksUniverse.getLocalMocks().push([declaration, config]);
 };
 
@@ -101,23 +83,21 @@ const mockInstanceConfig = <T>(declaration: Type<T> | AbstractType<T> | Injectio
   }
 };
 
-let installStackReporter = true;
 const mockInstanceMember = <T>(
   declaration: Type<T> | AbstractType<T> | InjectionToken<T>,
   name: string,
   stub: any,
   encapsulation?: 'get' | 'set',
 ) => {
-  if (installStackReporter) {
-    jasmine.getEnv().addReporter(reporterStack);
-    installStackReporter = false;
-  }
+  ngMocksStack.install();
   const config = ngMocksUniverse.configInstance.has(declaration) ? ngMocksUniverse.configInstance.get(declaration) : {};
   const overloads = config.overloads || [];
   overloads.push([name, stub, encapsulation]);
   config.overloads = overloads;
   ngMocksUniverse.configInstance.set(declaration, config);
-  stack[stack.length - 1].push(declaration);
+  const mockInstances = currentStack.mockInstance ?? [];
+  mockInstances.push(declaration);
+  currentStack.mockInstance = mockInstances;
 
   return stub;
 };
