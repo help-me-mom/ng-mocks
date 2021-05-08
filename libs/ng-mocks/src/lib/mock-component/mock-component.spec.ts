@@ -312,6 +312,7 @@ describe('MockComponent', () => {
     });
 
     it('ignores missed blocks', () => {
+      ngMocks.flushTestBed();
       const loFixture = MockRender(TemplateOutletComponent);
       const loComponent: any = loFixture.point.componentInstance;
       if (isMockOf(loComponent, TemplateOutletComponent, 'c')) {

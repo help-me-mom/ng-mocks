@@ -1,9 +1,8 @@
 import { Component, DebugElement, Directive, InjectionToken } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
-import { extendClass } from '../common/core.helpers';
-import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
-import { AnyType, Type } from '../common/core.types';
+import coreDefineProperty from '../common/core.define-property';
+import { Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -11,49 +10,8 @@ import { MockService } from '../mock-service/mock-service';
 
 import funcGenerateTemplate from './func.generate-template';
 import funcInstallPropReader from './func.install-prop-reader';
+import funcReflectTemplate from './func.reflect-template';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
-
-const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
-  const child = extendClass(template);
-
-  let providers = meta.providers || [];
-  providers = [
-    ...providers,
-    {
-      provide: template,
-      useExisting: child,
-    },
-  ];
-  meta.providers = providers;
-
-  if (isNgDef(template, 'c')) {
-    Component(meta)(child);
-  } else {
-    Directive(meta)(child);
-  }
-  TestBed.configureTestingModule({
-    declarations: [child],
-  });
-};
-
-const reflectTemplate = (template: AnyType<any>): Directive => {
-  if (!isNgDef(template, 'c') && !isNgDef(template, 'd')) {
-    return {};
-  }
-
-  const meta = { ...coreReflectDirectiveResolve(template) };
-
-  if (meta.selector && meta.selector.match(/[\[\],]/)) {
-    meta.selector = '';
-  }
-
-  if (!meta.selector) {
-    meta.selector = `ng-mocks-${template.name}`;
-    registerTemplateMiddleware(template, meta);
-  }
-
-  return meta;
-};
 
 const generateFixture = ({ params, options }: any) => {
   class MockRenderComponent {
@@ -126,13 +84,33 @@ const tryWhen = (flag: boolean, callback: () => void) => {
   }
 };
 
+const handleFixtureError = (e: any) => {
+  if (
+    e &&
+    typeof e === 'object' &&
+    typeof e.message === 'string' &&
+    e.message.startsWith('Cannot configure the test module')
+  ) {
+    const message = [
+      'Forgot to flush TestBed?',
+      'MockRender cannot be used without a reset after TestBed.get / TestBed.inject / TestBed.createComponent and another MockRender in the same test.',
+      'To flush TestBed, add a call of ngMocks.flushTestBed() before the call of MockRender, or pass `reset: true` to MockRender options.',
+      'If you want to mock a service before rendering, consider usage of MockInstance.',
+    ].join(' ');
+    const error = new Error(message);
+    coreDefineProperty(error, 'parent', e, false);
+    throw error;
+  }
+  throw e;
+};
+
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent>(
   template: InjectionToken<MComponent>,
-  params?: undefined,
-  detectChanges?: boolean | IMockRenderOptions,
+  params?: undefined | null,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, void>;
 
 /**
@@ -140,8 +118,8 @@ function MockRender<MComponent>(
  */
 function MockRender<MComponent>(
   template: Type<MComponent>,
-  params: undefined,
-  detectChanges?: boolean | IMockRenderOptions,
+  params: undefined | null,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, MComponent>;
 
 /**
@@ -150,7 +128,7 @@ function MockRender<MComponent>(
 function MockRender<MComponent, TComponent extends object>(
   template: Type<MComponent>,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
@@ -159,7 +137,7 @@ function MockRender<MComponent, TComponent extends object>(
 function MockRender<MComponent, TComponent extends object = Record<keyof any, any>>(
   template: Type<MComponent>,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
@@ -186,10 +164,19 @@ function MockRender<MComponent = void>(template: string): MockedComponentFixture
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
+function MockRender<MComponent = void>(
+  template: string,
+  params: undefined | null,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
+): MockedComponentFixture<MComponent, void>;
+
+/**
+ * @see https://ng-mocks.sudo.eu/api/MockRender
+ */
 function MockRender<MComponent = void, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 /**
@@ -198,7 +185,7 @@ function MockRender<MComponent = void, TComponent extends Record<keyof any, any>
 function MockRender<MComponent, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
   template: string,
   params: TComponent,
-  detectChanges?: boolean | IMockRenderOptions,
+  detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
 
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
@@ -208,18 +195,25 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
 ): any {
   funcImportExists(template, 'MockRender');
 
-  const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : flags;
-  const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : reflectTemplate(template);
+  const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : { ...flags };
+  const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : funcReflectTemplate(template);
 
-  ngMocks.flushTestBed();
-  const fixture: any = fixtureFactory(template, meta, params, flagsObject);
-  if (isExpectedRender(template)) {
-    renderDeclaration(fixture, template, params);
-  } else {
-    renderInjection(fixture, template, params);
+  const testBed: any = getTestBed();
+  if (flagsObject.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
+    ngMocks.flushTestBed();
   }
+  try {
+    const fixture: any = fixtureFactory(template, meta, params, flagsObject);
+    if (isExpectedRender(template)) {
+      renderDeclaration(fixture, template, params);
+    } else {
+      renderInjection(fixture, template, params);
+    }
 
-  return fixture;
+    return fixture;
+  } catch (e) {
+    handleFixtureError(e);
+  }
 }
 
 export { MockRender };

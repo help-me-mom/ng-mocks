@@ -21,9 +21,9 @@ describe('InternalVsExternal:real', () => {
       'external <internal-component>internal</internal-component>',
     );
 
-    expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal-component' is not a known element/,
-    );
+    expect(() =>
+      MockRender(InternalComponent, null, { reset: true }),
+    ).toThrowError(/'internal-component' is not a known element/);
   });
 });
 
@@ -41,9 +41,9 @@ describe('InternalVsExternal:mock', () => {
       '<external-component></external-component>',
     );
 
-    expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal-component' is not a known element/,
-    );
+    expect(() =>
+      MockRender(InternalComponent, null, { reset: true }),
+    ).toThrowError(/'internal-component' is not a known element/);
   });
 });
 

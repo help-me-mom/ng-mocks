@@ -12,6 +12,7 @@ export interface MockedDebugElement<T = any> extends DebugElement, MockedDebugNo
 export interface IMockRenderOptions {
   detectChanges?: boolean;
   providers?: Provider[];
+  reset?: boolean;
 }
 
 export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> extends ComponentFixture<F> {

@@ -17,6 +17,8 @@ sidebar_label: MockRender
 
 ## Important to know
 
+### Returned type
+
 :::caution
 The `fixture` of `MockRender(Component)` is not assignable to
 `ComponentFixture<Component>`.
@@ -31,7 +33,44 @@ It returns `MockedComponentFixture<T>` type. The difference is an additional `po
 The best thing about it is that `fixture.point.componentInstance` is typed to the related class,
 and **supports not only components, but also directives, services and tokens**.
 
-### Example with a component
+### One MockRender per one test
+
+`MockRender` creates a special wrapper component which should be injected into `TestBed`.
+The component is needed in order to render a custom template, which is provided or generated based on parameters.
+An injection of a component into `TestBed` is possible only if `TestBed` has not been used yet.
+
+Because of this,
+usage of `MockRender` after usage of `TestBed.get`, `TestBed.inject`, `TestBed.createComponent` or another `MockRender`
+triggers an error about dirty `TestBed`.
+
+However, it is still possible to use `MockRender` more than once in a test.
+It requires a reset of `TestBed` (check [`ngMocks.flushTestBed`](./ngMocks/flushTestBed.md)).
+Please pay attention, that this makes all existing service instances obsolete.
+
+```ts
+it('two renders', () => {
+  MockRender('<div>1</div>'); // ok
+  MockRender('<div>2</div>'); // err
+});
+
+// The right way to use MockRender.
+it('first of two renders', () => {
+  MockRender('<div>1</div>'); // ok
+});
+it('the second of two renders', () => {
+  MockRender('<div>2</div>'); // ok
+});
+
+// Possible, but not recommended.
+it('two renders', () => {
+  MockRender('<div>1</div>'); // ok
+  ngMocks.flushTestBed();
+  MockRender('<div>2</div>'); // ok
+  MockRender('<div>3</div>', {}, {reset: true}); // ok
+});
+```
+
+## Example with a component
 
 ```ts
 const fixture = MockRender(AppComponent);
@@ -43,7 +82,7 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
-### Example with a directive
+## Example with a directive
 
 ```ts
 const fixture = MockRender(AppDirective);
@@ -55,7 +94,7 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
-### Example with a service
+## Example with a service
 
 ```ts
 const fixture = MockRender(TranslationService);
@@ -67,7 +106,7 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
-### Example with a token
+## Example with a token
 
 ```ts
 const fixture = MockRender(APP_BASE_HREF);
@@ -79,7 +118,7 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
-### Example with a custom template
+## Example with a custom template
 
 ```ts
 // custom template
@@ -97,7 +136,7 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
-### Example with providers
+## Example with providers
 
 If we want, we can specify providers for the render passing them via the 3rd parameter.
 It is useful, when we want to **provide mock system tokens / services** such as `APP_INITIALIZER`, `DOCUMENT` etc.

@@ -22,9 +22,9 @@ It helps to provide a predefined spy or value.
 
 ```ts
 MockInstance(Service, 'methodName', () => 'fake');
-MockInstance(Service, 'propName', 'fake');
-MockInstance(Service, 'propName', () => 'fake', 'get');
-MockInstance(Service, 'propName', () => undefined, 'set');
+MockInstance(Component, 'propName', 'fake');
+MockInstance(Directive, 'propName', () => 'fake', 'get');
+MockInstance(Pipe, 'propName', () => undefined, 'set');
 ```
 
 It returns the provided value, that allows to customize spies.
