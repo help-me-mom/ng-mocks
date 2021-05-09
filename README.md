@@ -113,7 +113,7 @@ describe('app-component', () => {
     ).and.returnValue(true);
 
     // MockRender creates a wrapper component with
-    // a template like <app-root></app-root>
+    // a template like <app-root ...allInputs></app-root>
     // and renders it.
     // It helps to assert lifecycle hooks.
     // https://ng-mocks.sudo.eu/api/MockRender
@@ -162,7 +162,7 @@ describe('app-component', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(AppComponent, params);
 
-    // the button should be disabled with params.check = false
+    // the button should be disabled with params.allowCheck = false
     // https://ng-mocks.sudo.eu/api/ngMocks/find
     expect(ngMocks.find('button.check').disabled).toEqual(true);
 

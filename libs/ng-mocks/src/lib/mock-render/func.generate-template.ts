@@ -18,12 +18,13 @@ const generateTemplateAttrWithParams = (params: any, prop: string, type: 'i' | '
   ` ${generateTemplateAttrWrap(prop, type)}="${prop}${type === 'o' ? solveOutput(params[prop]) : ''}"`;
 
 const generateTemplateAttr = (params: any, attr: any, type: 'i' | 'o') => {
-  if (!params) {
+  // unprovided params for inputs should render empty placeholders
+  if (!params && type === 'o') {
     return '';
   }
 
   let mockTemplate = '';
-  const keys = Object.getOwnPropertyNames(params);
+  const keys = params ? Object.getOwnPropertyNames(params) : attr;
   for (const definition of attr) {
     const [property, alias] = definition.split(': ');
     mockTemplate +=

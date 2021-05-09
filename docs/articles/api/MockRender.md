@@ -70,6 +70,218 @@ it('two renders', () => {
 });
 ```
 
+## Testing ChangeDetectionStrategy.OnPush
+
+Have you ever tried to use `TestBed.createComponent(OnPushComponent)`
+with a `ChangeDetectionStrategy.OnPush` component?
+
+Then you know its sad story, there is no rerender on inputs change.
+
+`MockRender` covers this case, and you can check how changes of inputs and outputs
+affect rendering of your components and directives.
+
+```ts
+const fixture = MockRender(OnPushComponent);
+
+fixture.componentInstance.myInput = 5;
+fixture.detectChanges();
+expect(ngMocks.formatText(fixture)).toContain(':5:');
+
+fixture.componentInstance.myInput = 6;
+fixture.detectChanges();
+expect(ngMocks.formatText(fixture)).toContain(':6:');
+```
+
+More details how inputs and outputs are handled by `MockRender` are described in the sections below.
+
+## Params, Inputs and Outputs
+
+`MockRender` accepts as the second parameter as `params` for the generated template.
+The intention of the `params` is to provide flexibility and to allow control of `inputs`, `outputs` and template variables.
+
+If a component or a directive has been passed into `MockRender`,
+then `MockRender` generates a template based on its `selector`, `inputs`, `outputs` and provided `params`.
+
+It is essential to know how `MockRender` handles `params` in order to understand which template is being generated.
+
+### No params
+
+If `MockRender` has been called with no `params` or `null` or `undefined` as `params`,
+then it automatically binds all `inputs` and ignores all `outputs`.
+Therefore, no default values will be used in the tested component, all `inputs` will receive `null`.
+
+:::tip
+Why `null`?
+
+Because `Angular` uses `null` when optional chain has failed: `<my-comp [input]="data?.set?.value"></my-comp>`.
+Despite its default value, if the chain has failed then `input` is `null`.
+
+Being likewise, `MockRender` provides this behavior by default.
+:::
+
+For example, we have a component `MyComponent`
+which has two `inputs`: `input1` and `input2`,
+and has two `outputs`: `update1` and `update2`.
+
+Then any call like
+
+```ts
+MockRender(MyComponent);
+MockRender(MyComponent, null);
+MockRender(MyComponent, undefined);
+```
+
+generates a template like
+
+```html
+<my-component [input1]="input1" [input2]="input2"></my-component>
+```
+
+where `input1` and `input2` are properties of the wrapper component and equal to `null`.
+
+```ts
+expect(fixture.componentInstance.input1).toEqual(null);
+expect(fixture.componentInstance.input2).toEqual(null);
+
+expect(fixture.point.componentInstance.input1).toEqual(null);
+expect(fixture.point.componentInstance.input1).toEqual(null);
+```
+
+If we change props of `fixture.componentInstance`, then, after `fixture.detectChanges()`,
+the tested component will receive updated values.
+
+```ts
+expect(fixture.componentInstance.input1).toEqual(null);
+expect(fixture.point.componentInstance.input1).toEqual(null);
+
+fixture.componentInstance.input1 = 1;
+// still old value
+expect(fixture.point.componentInstance.input1).toEqual(null);
+
+fixture.detectChanges();
+// now it works
+expect(fixture.point.componentInstance.input1).toEqual(1);
+```
+
+Please proceed to the next section, if you want to use / test default values. 
+
+### Empty params
+
+In order to test default values, we can provide an empty object as `params`.
+In this case, `MockRender` handles `inputs` and `outputs` only if they have been set in the provided objects.
+
+For example, we have a component `MyComponent`
+which has two `inputs`: `input1` and `input2`,
+and has two `outputs`: `update1` and `update2`.
+
+Then a call like
+
+```ts
+MockRender(MyComponent, {});
+```
+
+generates a template like
+
+```html
+<my-component></my-component>
+```
+
+If we access the `inputs`, then we will get their default values:
+```ts
+expect(fixture.point.componentInstance.input1).toEqual('default1');
+expect(fixture.point.componentInstance.input1).toEqual('default2');
+```
+
+The wrapper component is useless in this case,
+and changes should be done on the instance of the tested component (`point`).
+
+### Provided params
+
+`MockRender` tries to generate a template for a wrapper component, based on provided `params`.
+Only `params` which have the same name as `inputs` and `outputs` affect the template.
+
+#### Inputs
+
+It is quite simple in case of `inputs`, `MockRender` simply generates `[propName]="propName"`.
+
+For example, we have a component `MyComponent`
+which has three `inputs`: `input1`, `input2` and `input3`,
+
+Then a call like
+
+```ts
+const params = {input1: 1, input2: 2};
+const fixture = MockRender(MyComponent, params);
+```
+
+generates a template like
+
+```html
+<my-component [input1]="input1" [input2]="input2"></my-component>
+```
+
+where `input1` and `input2` belong to the passed object and any change in the object will affect values in the template,
+and `input3` is ignored and will have its default value.
+
+```ts
+expect(fixture.point.componentInstance.input1).toEqual(1);
+
+params.input1 = 3;
+fixture.detectChanges();
+expect(fixture.point.componentInstance.input1).toEqual(3);
+```
+
+#### Outputs
+
+The story differs a bit with `outputs`. `MockRender` detects types of properties and generates different pieces in templates.
+
+Currently, `MockRender` handles the next types:
+
+- functions
+- event emitters
+- subjects
+- literals
+
+For example, we have a component `MyComponent`
+which has four `outputs`: `o1`, `o2`, `o3` and `o4`,
+
+Then a call like
+
+```ts
+const params = {
+  o1: undefined,
+  o2: jasmine.createSpy('o2'),
+  o3: new EventEmitter(),
+  o4: new Subject(),
+};
+const fixture = MockRender(MyComponent, params);
+```
+
+generates a template like
+
+```html
+<my-component
+  (o1)="o1=$event"
+  (o2)="o2($event)"
+  (o3)="o3.emit($event)"
+  (o4)="o4.next($event)"
+></my-component>
+```
+
+Any emit on the `outputs` will trigger the related action:
+
+```ts
+expect(params.o1).toEqual(undefined);
+expect(params.o2).not.toHaveBeenCalled();
+
+fixture.point.componentInstance.o1.emit(1);
+fixture.point.componentInstance.o2.emit(2);
+
+expect(params.o1).toEqual(1);
+expect(params.o2).toHaveBeenCalledWith(2);
+```
+
+
 ## Example with a component
 
 ```ts
