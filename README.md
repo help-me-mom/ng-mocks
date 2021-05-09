@@ -39,7 +39,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 ## Very short introduction
 
-Global configuration for mocks.
+Global configuration for mocks in `src/test.ts`.
 In case of jest `src/setupJest.ts` should be used.
 
 ```ts title="src/test.ts"
@@ -163,6 +163,7 @@ describe('app-component', () => {
     const fixture = MockRender(AppComponent, params);
 
     // the button should be disabled with params.check = false
+    // https://ng-mocks.sudo.eu/api/ngMocks/find
     expect(ngMocks.find('button.check').disabled).toEqual(true);
 
     // enabling the button
@@ -171,6 +172,7 @@ describe('app-component', () => {
     expect(ngMocks.find('button.check').disabled).toEqual(false);
 
     // clicking the button in order to trigger the check
+    // https://ng-mocks.sudo.eu/api/ngMocks/click
     ngMocks.click('button.check');
 
     // The spy in params.user should be notified about the output.
