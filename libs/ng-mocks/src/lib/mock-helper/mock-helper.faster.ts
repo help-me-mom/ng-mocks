@@ -20,8 +20,13 @@ const resetFixtures = (stack: NgMocksStack) => {
   }
 };
 
+let needInstall = true;
 export default () => {
-  ngMocksStack.install();
+  // istanbul ignore next
+  if (needInstall) {
+    ngMocksStack.install();
+    needInstall = false;
+  }
 
   beforeAll(() => {
     if (ngMocksUniverse.global.has('bullet:customized')) {

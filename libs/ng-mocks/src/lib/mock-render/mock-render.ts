@@ -7,6 +7,7 @@ import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
+import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import { MockService } from '../mock-service/mock-service';
 
 import funcGenerateTemplate from './func.generate-template';
@@ -14,9 +15,18 @@ import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
 
-const generateFixture = ({ params, options }: any) => {
+const generateFixture = ({ params, options, inputs }: any) => {
   class MockRenderComponent {
     public constructor() {
+      if (!params) {
+        for (const input of inputs || []) {
+          let value: any = null;
+          helperDefinePropertyDescriptor(this, input, {
+            get: () => value,
+            set: (newValue: any) => (value = newValue),
+          });
+        }
+      }
       funcInstallPropReader(this, params);
     }
   }
@@ -53,9 +63,7 @@ const isExpectedRender = (template: any): boolean =>
 const renderDeclaration = (fixture: any, template: any, params: any): void => {
   fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
   if (isNgDef(template, 'd')) {
-    Object.defineProperty(fixture.point, 'componentInstance', {
-      configurable: true,
-      enumerable: true,
+    helperDefinePropertyDescriptor(fixture.point, 'componentInstance', {
       get: () => ngMocks.get(fixture.point, template),
     });
   }

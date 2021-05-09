@@ -36,8 +36,13 @@ ngMocksStack.subscribePop(() => {
   }
 });
 
+let needInstall = true;
 const restore = (declaration: any, config: any): void => {
-  ngMocksStack.install();
+  // istanbul ignore next
+  if (needInstall) {
+    ngMocksStack.install();
+    needInstall = false;
+  }
   ngMocksUniverse.getLocalMocks().push([declaration, config]);
 };
 
@@ -89,7 +94,11 @@ const mockInstanceMember = <T>(
   stub: any,
   encapsulation?: 'get' | 'set',
 ) => {
-  ngMocksStack.install();
+  // istanbul ignore next
+  if (needInstall) {
+    ngMocksStack.install();
+    needInstall = false;
+  }
   const config = ngMocksUniverse.configInstance.has(declaration) ? ngMocksUniverse.configInstance.get(declaration) : {};
   const overloads = config.overloads || [];
   overloads.push([name, stub, encapsulation]);

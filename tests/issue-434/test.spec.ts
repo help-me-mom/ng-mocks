@@ -31,7 +31,7 @@ describe('issue-434', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('keeps the default prop value on no props', () => {
-    const fixture = MockRender(TargetComponent);
+    const fixture = MockRender(TargetComponent, {});
     expect(ngMocks.formatText(fixture)).toEqual('default1:default2');
   });
 

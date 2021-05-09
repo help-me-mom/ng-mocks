@@ -3,6 +3,7 @@ import { DebugElement } from '@angular/core';
 import coreForm from '../../common/core.form';
 import { DebugNodeSelector } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
+import helperDefinePropertyDescriptor from '../../mock-service/helper.define-property-descriptor';
 import mockHelperTrigger from '../events/mock-helper.trigger';
 import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
@@ -20,7 +21,7 @@ const triggerInput = (el: DebugElement, value: any): void => {
   mockHelperTrigger(el, 'input');
   mockHelperTrigger(el, 'change');
   if (descriptor) {
-    Object.defineProperty(el.nativeElement, 'value', descriptor);
+    helperDefinePropertyDescriptor(el.nativeElement, 'value', descriptor);
     el.nativeElement.value = value;
   }
 
