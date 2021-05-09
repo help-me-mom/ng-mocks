@@ -39,43 +39,145 @@ The current version of the library **has been tested** and **can be used** with:
 
 ## Very short introduction
 
+Global configuration for mocks.
+In case of jest `src/setupJest.ts` should be used.
+
+```ts title="src/test.ts"
+// All methods in mock declarations and providers
+// will be automatically spied on their creation.
+// https://ng-mocks.sudo.eu/extra/auto-spy
+ngMocks.autoSpy('jasmine'); // or jest
+
+// ngMocks.defaultMock helps to customize
+// mock declarations and providers globally.
+// Here it stubs observables in AuthService.
+// Therefore, we don't need to stub them every time
+// in a test once we want to supress their logic.
+// https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
+ngMocks.defaultMock(AuthService, () => ({
+  isLoggedIn$: EMPTY,
+  currentUser$: EMPTY,
+}));
+```
+
+An example of a spec with tests.
+
 ```ts title="src/app.component.spec.ts"
+// We are going to test AppComponent.
+// Therefore, we want to mock its dependencies.
+// Usually, they are declared and imported in the module
+// where AppComponent has been declared too.
+//
+// Apart from that, we want to speed up tests,
+// because TestBed will be the same for all tests
+// in this suite.
 describe('app-component', () => {
-  // We are going to test AppComponent.
-  // Therefore, we want to mock its dependencies,
-  // they are declared and imported in the module
-  // where AppComponent has been declared too.
+  // Allows to use MockBuilder and MockRender
+  // in beforeAll and helps to avoid recreation
+  // of the same TestBed for every test.
+  // https://ng-mocks.sudo.eu/api/ngMocks/faster
+  ngMocks.faster();
+
   // The next line says mock everything in AppModule,
   // but keep AppComponent as it is.
-  beforeEach(() => {
+  beforeAll(() => {
     // The result of MockBuilder should be returned.
+    // https://ng-mocks.sudo.eu/api/MockBuilder
     return MockBuilder(AppComponent, AppModule);
   });
 
-  // Stubbing observables in AuthService for all tests in the suite.
-  beforeEach(() =>
-    MockInstance(AuthService, () => ({
-      isLoggedIn$: EMPTY,
-      currentUser$: EMPTY,
-    })),
-  );
+  // MockInstance helps to customize
+  // mock declarations and providers.
+  beforeEach(() => {
+    // A spy on a method which returns children.
+    // When an instance of ChildCompnent is being created,
+    // the method will be replaced with the spy.
+    // https://ng-mocks.sudo.eu/api/MockInstance
+    MockInstance(
+      ChildCompnent,
+      'list',
+      jasmine.createSpy(),
+    ).and.returnValue([]);
+  });
 
   it('should be created and initialized', () => {
     // Creating a spy on the 'check' method of the service.
     // MockInstance allows to spy / stub properties and methods
     // of declarations and providers before their instances
     // have been initialized.
+    // https://ng-mocks.sudo.eu/api/MockInstance
     const spyCheck = MockInstance(
       AuthService,
       'check',
       jasmine.createSpyObj('AuthService.check'),
     ).and.returnValue(true);
 
+    // MockRender creates a wrapper component with
+    // a template like <app-root></app-root>
+    // and renders it.
+    // It helps to assert lifecycle hooks.
+    // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(AppComponent);
+
     // Checking that the component has been created.
     expect(fixture.point.componentInstance).toBeDefined();
+
     // Checking that its ngOnInit method calls 'check' of the service.
     expect(spyCheck).toHaveBeenCalled();
+  });
+
+  it('verifies the check user button', () => {
+    // A fake user data.
+    const user = {
+      id: 1,
+      name: 'Foo Bar',
+    };
+
+    // A spy on a getter property which returns user data.
+    // https://ng-mocks.sudo.eu/api/MockInstance
+    MockInstance(
+      AuthService,
+      'user',
+      jasmine.createSpy(),
+      'get',
+    ).and.returnValue(user);
+
+    // Params for input and outputs in AppComponent.
+    const params = {
+      allowCheck: false,
+      user: jasmine.createSpy('user'),
+    };
+
+    // if AppComponent has [allowCheck] is an input and
+    // (user) is an output, then MockRender creates
+    // a wrapper component with a template like:
+    //
+    // <app-root
+    //   [allowCheck]="params.allowCheck"
+    //   (user)="params.user($event)"
+    // ></app-root>
+    //
+    // And renders it.
+    //
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const fixture = MockRender(AppComponent, params);
+
+    // the button should be disabled with params.check = false
+    expect(ngMocks.find('button.check').disabled).toEqual(true);
+
+    // enabling the button
+    params.allowCheck = true;
+    fixture.detectChanges();
+    expect(ngMocks.find('button.check').disabled).toEqual(false);
+
+    // clicking the button in order to trigger the check
+    ngMocks.click('button.check');
+
+    // The spy in params.user should be notified about the output.
+    expect(params.user).toHaveBeenCalledWith({
+      id: 1,
+      name: 'Foo Bar',
+    });
   });
 });
 ```

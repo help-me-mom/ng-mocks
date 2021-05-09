@@ -40,3 +40,11 @@ In the header menu we can find **preconfigured sandboxes**, where we could **che
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
 Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
+
+### Quick Navigation
+
+- [How to read this manual](./tl-dr.md)
+- [Making tests faster](./api/ngMocks/faster.md)
+- [Autospy everything](./extra/auto-spy.md)
+- [Testing inputs, outputs and lifecycle hooks](./api/MockRender.md)
+- [Mocking methods in components before their initialization](./api/MockInstance.md)
