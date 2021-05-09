@@ -1,3 +1,24 @@
+# [11.11.0](https://github.com/ike18t/ng-mocks/compare/v11.10.1...v11.11.0) (2021-05-09)
+
+
+### Bug Fixes
+
+* **mock-builder:** overrides mock modules for platform [#435](https://github.com/ike18t/ng-mocks/issues/435) ([bf469bc](https://github.com/ike18t/ng-mocks/commit/bf469bc3085d2b4ab4d65dec3b076e306d7ee5d3))
+* **mock-builder:** respecting forward-ref and modules with providers [#312](https://github.com/ike18t/ng-mocks/issues/312) ([4a099b8](https://github.com/ike18t/ng-mocks/commit/4a099b80c46397810a17e876e3a13fb2d6484648))
+* overrides as functions are properly cloned [#455](https://github.com/ike18t/ng-mocks/issues/455) ([9310d34](https://github.com/ike18t/ng-mocks/commit/9310d34e9106ac6866092bd3a6d5c33748eb3b4c))
+* skipping wrong query selectors [#445](https://github.com/ike18t/ng-mocks/issues/445) ([6750939](https://github.com/ike18t/ng-mocks/commit/6750939376f5f1fcaa11f03f822cbe4aefbbf59b))
+* supporting new structure of lView ([8d3cadf](https://github.com/ike18t/ng-mocks/commit/8d3cadfafe1a21d129c57cd562236f92a514d59b))
+* **#333:** register mock components with entryComponents ([3a53431](https://github.com/ike18t/ng-mocks/commit/3a53431a22b731f53d245bf8ef7021c97db1df65)), closes [#333](https://github.com/ike18t/ng-mocks/issues/333)
+
+
+### Features
+
+* **faster:** supports MockRender in beforeAll [#488](https://github.com/ike18t/ng-mocks/issues/488) ([df4418c](https://github.com/ike18t/ng-mocks/commit/df4418c60382e9ce89defbdd0ffdc1a3728d39a7))
+* **mock-builder:** accepts arrays in params [#386](https://github.com/ike18t/ng-mocks/issues/386) ([c8d8e40](https://github.com/ike18t/ng-mocks/commit/c8d8e40be503cce5d580ca4d64717d4ebf9c5114))
+* **mock-render:** generates tpl only for provided inputs and outputs [#434](https://github.com/ike18t/ng-mocks/issues/434) ([23d45a2](https://github.com/ike18t/ng-mocks/commit/23d45a2f4c9f191ff6edcec8d985dba20c9a4ceb))
+* **mock-render:** throws on wrong usage [#488](https://github.com/ike18t/ng-mocks/issues/488) ([b4a62bc](https://github.com/ike18t/ng-mocks/commit/b4a62bc5f594606db07de04f63c2bef44f57b2e2))
+* almost all ngMocks helpers support css selectors [#317](https://github.com/ike18t/ng-mocks/issues/317) ([b348842](https://github.com/ike18t/ng-mocks/commit/b348842033bddb1ab82e57a62c0fc1a4e7940feb))
+
 ## [11.10.1](https://github.com/ike18t/ng-mocks/compare/v11.10.0...v11.10.1) (2021-04-12)
 
 
