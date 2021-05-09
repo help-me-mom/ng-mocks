@@ -1,3 +1,10 @@
+## [11.11.1](https://github.com/ike18t/ng-mocks/compare/v11.11.0...v11.11.1) (2021-05-09)
+
+
+### Bug Fixes
+
+* **mock-render:** binds all inputs on no params [#522](https://github.com/ike18t/ng-mocks/issues/522) ([dd5abba](https://github.com/ike18t/ng-mocks/commit/dd5abba942f8e51f61542dec10b67aaa94a24513))
+
 # [11.11.0](https://github.com/ike18t/ng-mocks/compare/v11.10.1...v11.11.0) (2021-05-09)
 
 
