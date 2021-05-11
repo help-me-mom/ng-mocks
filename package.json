@@ -167,7 +167,7 @@
     "karma-typescript": "5.5.1",
     "lint-staged": "11.0.0",
     "npm": "6.14.13",
-    "prettier": "2.2.1",
+    "prettier": "2.3.0",
     "primeng": "11.4.1",
     "puppeteer": "9.1.1",
     "rxjs": "6.6.7",
