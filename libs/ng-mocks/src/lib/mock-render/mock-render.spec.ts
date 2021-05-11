@@ -137,9 +137,8 @@ describe('MockRender', () => {
   });
 
   it('returns a pointer with a provided template', () => {
-    const fixture: MockedComponentFixture<RenderRealComponent> = MockRender(
-      `<render-real-component></render-real-component>`,
-    );
+    const fixture: MockedComponentFixture<RenderRealComponent> =
+      MockRender(`<render-real-component></render-real-component>`);
     // because template can include more than 1 component, be wrapped by any html element etc.
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
@@ -217,15 +216,17 @@ describe('MockRender', () => {
   });
 
   it('assigns DebugNodes and DebugElements to Mocks and back', () => {
-    const debugNode = ({} as any) as DebugNode;
-    const debugElement = ({} as any) as DebugElement;
-    const mockDebugNode = ({} as any) as MockedDebugNode<string>;
-    const mockDebugElement = ({} as any) as MockedDebugElement<string>;
+    const debugNode = {} as any as DebugNode;
+    const debugElement = {} as any as DebugElement;
+    const mockDebugNode = {} as any as MockedDebugNode<string>;
+    const mockDebugElement = {} as any as MockedDebugElement<string>;
 
     const debugNodeToMockedDebugNode: MockedDebugNode = debugNode;
-    const debugElementToMockedDebugElement: MockedDebugElement = debugElement;
+    const debugElementToMockedDebugElement: MockedDebugElement =
+      debugElement;
     const mockedDebugNodeToDebugNode: DebugNode = mockDebugNode;
-    const mockedDebugElementToDebugElement: DebugElement = mockDebugElement;
+    const mockedDebugElementToDebugElement: DebugElement =
+      mockDebugElement;
 
     const valueNode: string = mockDebugNode.componentInstance;
     const valueElement: string = mockDebugElement.componentInstance;

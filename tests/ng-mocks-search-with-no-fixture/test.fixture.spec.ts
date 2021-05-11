@@ -97,9 +97,8 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     });
 
     it('.findInstances', () => {
-      const componentInstances = ngMocks.findInstances(
-        TargetComponent,
-      );
+      const componentInstances =
+        ngMocks.findInstances(TargetComponent);
       expect(
         isMockOf(componentInstances[0], TargetComponent),
       ).toBeTruthy();

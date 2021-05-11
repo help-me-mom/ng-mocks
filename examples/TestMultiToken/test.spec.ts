@@ -48,8 +48,8 @@ describe('TestMultiToken', () => {
   beforeEach(() => MockBuilder(TOKEN_MULTI, TargetModule));
 
   it('creates TOKEN_MULTI', () => {
-    const tokens = MockRender<any[]>(TOKEN_MULTI).point
-      .componentInstance;
+    const tokens =
+      MockRender<any[]>(TOKEN_MULTI).point.componentInstance;
 
     expect(tokens).toEqual(jasmine.any(Array));
     expect(tokens.length).toEqual(4);

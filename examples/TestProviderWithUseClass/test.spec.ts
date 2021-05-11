@@ -70,9 +70,10 @@ describe('TestProviderWithUseClass', () => {
   afterAll(MockReset);
 
   it('respects all dependencies', () => {
-    const service = MockRender<
-      Target1Service & Partial<Target2Service>
-    >(Target1Service).point.componentInstance;
+    const service =
+      MockRender<Target1Service & Partial<Target2Service>>(
+        Target1Service,
+      ).point.componentInstance;
 
     // Let's assert that service has a flag from Target2Service.
     expect(service.flag).toBeTruthy();

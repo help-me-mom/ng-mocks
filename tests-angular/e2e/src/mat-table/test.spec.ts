@@ -86,8 +86,8 @@ describe('mat-table:props', () => {
 
   it('binds inputs', () => {
     // Rendering TargetComponent and accessing its instance.
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of `MatTable`.
     const tableEl = ngMocks.reveal(['mat-table']);
@@ -211,8 +211,8 @@ describe('mat-table:props', () => {
   });
 
   it('provides correct template for mat-header-row', () => {
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
     const tableEl = ngMocks.reveal(['mat-table']);
 
     // checking that there are no artifacts around
@@ -227,8 +227,8 @@ describe('mat-table:props', () => {
   });
 
   it('provides correct template for mat-row', () => {
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
     const tableEl = ngMocks.reveal(['mat-table']);
 
     // checking that there are no artifacts around

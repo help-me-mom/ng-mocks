@@ -11,8 +11,8 @@ describe('mock-component-render:hide', () => {
   beforeEach(() => MockBuilder().mock(TargetComponent));
 
   it('does not fail on fake hides', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
 
     if (isMockOf(component, TargetComponent, 'c')) {
       expect(() => component.__hide('fakeKey')).not.toThrow();

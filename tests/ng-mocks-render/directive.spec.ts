@@ -131,9 +131,8 @@ describe('ng-mocks-render:directive', () => {
   it('renders self directives', () => {
     let html = '';
     const fixture = MockRender(TargetComponent);
-    const [directiveHeader, directiveBody] = ngMocks.findInstances(
-      TplDirective,
-    );
+    const [directiveHeader, directiveBody] =
+      ngMocks.findInstances(TplDirective);
 
     html = ngMocks.formatHtml(fixture.nativeElement);
     expect(html).toContain(':step:1: :step:2:');

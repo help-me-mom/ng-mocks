@@ -17,9 +17,8 @@ interface InjectedFn {
   hello: () => number;
 }
 
-const injectedFn: InjectionToken<InjectedFn> = new (InjectionToken as any)(
-  'InjectedFn',
-  {
+const injectedFn: InjectionToken<InjectedFn> =
+  new (InjectionToken as any)('InjectedFn', {
     factory: () => {
       const fn = jasmine.createSpy('Base') as any;
       fn.hello = jasmine.createSpy('Inner');
@@ -27,8 +26,7 @@ const injectedFn: InjectionToken<InjectedFn> = new (InjectionToken as any)(
       return fn;
     },
     providedIn: 'root',
-  },
-);
+  });
 
 @Component({ template: '' })
 export class TestWithoutDecoratorComponent {

@@ -24,8 +24,8 @@ describe('mock-instance-member:reset', () => {
 
   it('does not fail', () => {
     MockInstance(TargetComponent, 'global', 'mock');
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     expect(component.global).toEqual('mock');
     // Because of this call it resets all overloads
     // and would proper handling can cause failures in reporter.

@@ -58,7 +58,8 @@ class ChildModuleClass extends ParentClass implements PipeTransform {
 })
 class ChildComponentClass
   extends ParentClass
-  implements PipeTransform, ControlValueAccessor {
+  implements PipeTransform, ControlValueAccessor
+{
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -85,7 +86,8 @@ class ChildComponentClass
 })
 class ChildDirectiveClass
   extends ParentClass
-  implements PipeTransform, ControlValueAccessor {
+  implements PipeTransform, ControlValueAccessor
+{
   protected childValue = true;
 
   public childMethod(): boolean {

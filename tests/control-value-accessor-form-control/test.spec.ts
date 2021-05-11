@@ -18,8 +18,10 @@ describe('control-value-accessor-form-control:real', () => {
 
   it('respects our formControl', () => {
     const fixture = MockRender(TargetComponent, {}, false);
-    const mock = ngMocks.find(fixture.debugElement, ControlComponent)
-      .componentInstance;
+    const mock = ngMocks.find(
+      fixture.debugElement,
+      ControlComponent,
+    ).componentInstance;
     spyOn(mock, 'writeValue').and.callThrough();
     spyOn(mock, 'setDisabledState').and.callThrough();
     fixture.detectChanges();

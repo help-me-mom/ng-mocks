@@ -94,8 +94,8 @@ describe('issue-312', () => {
     );
 
     it('detects injected services', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component.root).toEqual(jasmine.any(RootService));
       expect(component.root.name).toEqual('RootService');
       expect(component.standard).toEqual(null);
@@ -112,8 +112,8 @@ describe('issue-312', () => {
     beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
     it('detects injected services', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component.root).toEqual(jasmine.any(RootService));
       expect(component.root.name).toEqual('RootService');
       expect(component.standard).toEqual(null);
@@ -130,8 +130,8 @@ describe('issue-312', () => {
     beforeEach(() => MockBuilder(TargetComponent).mock(TargetModule));
 
     it('detects injected services', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component.root).toEqual(jasmine.any(RootService));
       expect(component.root.name).toBeUndefined();
       expect(component.standard).toEqual(null);

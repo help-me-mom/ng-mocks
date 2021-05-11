@@ -35,8 +35,8 @@ describe('mat-input', () => {
     beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
     it('changes values', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       const input1 = ngMocks.find(['name', 'form-control']);
       const input2 = ngMocks.find(['name', 'ng-model']);
 
