@@ -29,8 +29,8 @@ describe('p-calendar:directives', () => {
 
   it('binds inputs', () => {
     // Rendering TargetComponent and accessing its instance.
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of `p-calendar`.
     const calendarEl = ngMocks.find('p-calendar');
@@ -42,8 +42,8 @@ describe('p-calendar:directives', () => {
 
   it('binds outputs', () => {
     // Rendering TargetComponent and accessing its instance.
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of `p-calendar`.
     const calendarEl = ngMocks.find('p-calendar');

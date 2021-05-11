@@ -51,9 +51,10 @@ describe('MockComponent', () => {
     //   By.css('app-child')
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find<DependencyComponent>(
-      'app-child',
-    ).componentInstance;
+    const mockComponent =
+      ngMocks.find<DependencyComponent>(
+        'app-child',
+      ).componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. TestedComponent sets its value via

@@ -22,9 +22,8 @@ describe('TestLifecycleHooks:string', () => {
       },
     );
 
-    const service: TargetService = fixture.point.injector.get(
-      TargetService,
-    );
+    const service: TargetService =
+      fixture.point.injector.get(TargetService);
 
     // By default nothing should be initialized, but ctor.
     expect(service.ctor).toHaveBeenCalledTimes(1); // changed

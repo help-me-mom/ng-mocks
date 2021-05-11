@@ -32,7 +32,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: '[target]',
 })
 export class TargetDirective
-  implements ControlValueAccessor, Validator {
+  implements ControlValueAccessor, Validator
+{
   public valRegisterOnChange: any;
   public valRegisterOnTouched: any;
   public valRegisterOnValidatorChange: any;

@@ -68,8 +68,8 @@ describe('ng-mocks-trigger:click', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('is able to click for all subscribers via ngMocks.click', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     if (fromEvent) {
       expect(component.clickFromEvent).toBeUndefined();
     }
@@ -95,8 +95,8 @@ describe('ng-mocks-trigger:click', () => {
   });
 
   it('is able to click for all subscribers via ngMocks.touch with string', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     if (fromEvent) {
       expect(component.clickFromEvent).toBeUndefined();
     }
@@ -122,8 +122,8 @@ describe('ng-mocks-trigger:click', () => {
   });
 
   it('is able to click for all subscribers via ngMocks.touch with event', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     if (fromEvent) {
       expect(component.clickFromEvent).toBeUndefined();
     }

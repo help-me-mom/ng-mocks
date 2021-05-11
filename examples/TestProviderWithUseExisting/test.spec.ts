@@ -57,9 +57,10 @@ describe('TestProviderWithUseExisting', () => {
   afterAll(MockReset);
 
   it('creates TargetService', () => {
-    const service = MockRender<
-      TargetService & Partial<{ name: string }>
-    >(TargetService).point.componentInstance;
+    const service =
+      MockRender<TargetService & Partial<{ name: string }>>(
+        TargetService,
+      ).point.componentInstance;
 
     // Because Service2 has been replaced with a mock copy,
     // we are getting here a mock copy of Service2 instead of Service1.

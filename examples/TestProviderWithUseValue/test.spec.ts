@@ -30,8 +30,9 @@ describe('TestProviderWithUseValue', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   it('creates TargetService', () => {
-    const service = MockRender<TargetService>(TargetService).point
-      .componentInstance;
+    const service =
+      MockRender<TargetService>(TargetService).point
+        .componentInstance;
 
     // Let's assert received data.
     expect(service as any).toEqual({

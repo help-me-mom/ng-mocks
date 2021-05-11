@@ -23,9 +23,8 @@ describe('TestLifecycleHooks', () => {
       { detectChanges: false },
     );
 
-    const service: TargetService = fixture.point.injector.get(
-      TargetService,
-    );
+    const service: TargetService =
+      fixture.point.injector.get(TargetService);
 
     // By default nothing should be initialized, but ctor.
     expect(service.ctor).toHaveBeenCalledTimes(1); // changed
@@ -97,9 +96,8 @@ describe('TestLifecycleHooks', () => {
     const fixture = TestBed.createComponent(TargetComponent);
     fixture.componentInstance.input = '';
 
-    const service: TargetService = fixture.debugElement.injector.get(
-      TargetService,
-    );
+    const service: TargetService =
+      fixture.debugElement.injector.get(TargetService);
 
     // By default nothing should be initialized.
     expect(service.onChanges).toHaveBeenCalledTimes(0);

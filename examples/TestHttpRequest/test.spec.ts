@@ -40,12 +40,10 @@ describe('TestHttpRequest', () => {
   it('sends a request', () => {
     const fixture = MockRender('');
     // Let's extract the service and http controller for testing.
-    const service: TargetService = fixture.debugElement.injector.get(
-      TargetService,
-    );
-    const httpMock: HttpTestingController = fixture.debugElement.injector.get(
-      HttpTestingController,
-    );
+    const service: TargetService =
+      fixture.debugElement.injector.get(TargetService);
+    const httpMock: HttpTestingController =
+      fixture.debugElement.injector.get(HttpTestingController);
 
     // A simple subscription to check what the service returns.
     let actual: any;

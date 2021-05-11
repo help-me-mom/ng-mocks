@@ -79,9 +79,10 @@ const processMeta = (
 };
 
 // resolveProvider is a special case because of the def structure.
-const createResolveProvider = (resolutions: Map<any, any>, change: () => void): ((def: Provider) => any) => (
-  def: Provider,
-) => helperMockService.resolveProvider(def, resolutions, change);
+const createResolveProvider =
+  (resolutions: Map<any, any>, change: () => void): ((def: Provider) => any) =>
+  (def: Provider) =>
+    helperMockService.resolveProvider(def, resolutions, change);
 
 const createResolveWithProviders = (def: any, mockDef: any): boolean =>
   mockDef && mockDef.ngModule && isNgModuleDefWithProviders(def);
@@ -101,31 +102,31 @@ const createResolveExcluded = (def: any, resolutions: Map<any, any>, change: (fl
   change();
 };
 
-const createResolve = (resolutions: Map<any, any>, change: (flag?: boolean) => void): ((def: any) => any) => (
-  def: any,
-) => {
-  if (resolutions.has(def)) {
-    return createResolveExisting(def, resolutions, change);
-  }
+const createResolve =
+  (resolutions: Map<any, any>, change: (flag?: boolean) => void): ((def: any) => any) =>
+  (def: any) => {
+    if (resolutions.has(def)) {
+      return createResolveExisting(def, resolutions, change);
+    }
 
-  const detectedDef = isNgModuleDefWithProviders(def) ? def.ngModule : def;
-  if (ngMocksUniverse.isExcludedDef(detectedDef)) {
-    return createResolveExcluded(def, resolutions, change);
-  }
-  ngMocksUniverse.touches.add(detectedDef);
+    const detectedDef = isNgModuleDefWithProviders(def) ? def.ngModule : def;
+    if (ngMocksUniverse.isExcludedDef(detectedDef)) {
+      return createResolveExcluded(def, resolutions, change);
+    }
+    ngMocksUniverse.touches.add(detectedDef);
 
-  const mockDef = processDef(def);
-  if (createResolveWithProviders(def, mockDef)) {
-    resolutions.set(def.ngModule, mockDef.ngModule);
-  }
-  if (ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockDef);
-  }
-  resolutions.set(def, mockDef);
-  change(mockDef !== def);
+    const mockDef = processDef(def);
+    if (createResolveWithProviders(def, mockDef)) {
+      resolutions.set(def.ngModule, mockDef.ngModule);
+    }
+    if (ngMocksUniverse.flags.has('skipMock')) {
+      ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockDef);
+    }
+    resolutions.set(def, mockDef);
+    change(mockDef !== def);
 
-  return mockDef;
-};
+    return mockDef;
+  };
 
 const resolveDefForExport = (
   def: any,

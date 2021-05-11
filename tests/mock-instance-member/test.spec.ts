@@ -47,8 +47,8 @@ describe('mock-instance-member', () => {
   );
 
   it('gets right stubs #1', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
       jasmine.objectContaining({
         beforeAll1: 'mock',
@@ -68,8 +68,8 @@ describe('mock-instance-member', () => {
   });
 
   it('gets right stubs #2', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
       jasmine.objectContaining({
         beforeAll1: 'mock',
@@ -99,8 +99,8 @@ describe('mock-instance-member', () => {
     );
 
     it('gets right stubs #1', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
         jasmine.objectContaining({
           beforeAll1: 'mock',
@@ -121,8 +121,8 @@ describe('mock-instance-member', () => {
 
     it('gets right stubs #2', () => {
       MockInstance(TargetComponent, 'it1', () => 'mock', 'get');
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
         jasmine.objectContaining({
           beforeAll1: 'mock',
@@ -145,8 +145,8 @@ describe('mock-instance-member', () => {
   describe('nested w/o overrides', () => {
     it('gets right stubs #1', () => {
       MockInstance(TargetComponent, 'it2', () => 'mock', 'get');
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
         jasmine.objectContaining({
           beforeAll1: 'mock',
@@ -166,8 +166,8 @@ describe('mock-instance-member', () => {
     });
 
     it('gets right stubs #2', () => {
-      const component = MockRender(TargetComponent).point
-        .componentInstance;
+      const component =
+        MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
         jasmine.objectContaining({
           beforeAll1: 'mock',
@@ -188,8 +188,8 @@ describe('mock-instance-member', () => {
   });
 
   it('gets right stubs #3', () => {
-    const component = MockRender(TargetComponent).point
-      .componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
       jasmine.objectContaining({
         beforeAll1: 'mock',

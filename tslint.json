@@ -47,6 +47,7 @@
     "no-unnecessary-class": false,
     "no-unsafe-any": false,
     "no-void-expression": false,
+    "one-line": [true, "check-catch", "check-finally", "check-else", "check-whitespace"],
     "only-arrow-functions": false,
     "prefer-array-literal": [true, { "allow-type-parameters": true }],
     "prefer-function-over-method": false,

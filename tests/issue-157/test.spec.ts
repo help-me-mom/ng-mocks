@@ -30,7 +30,8 @@ export class ActualEmptyComponent {}
   template: '',
 })
 export class ActualInjectionComponent
-  implements ControlValueAccessor {
+  implements ControlValueAccessor
+{
   protected value: any;
 
   public constructor(@Self() @Optional() ngControl: NgControl) {

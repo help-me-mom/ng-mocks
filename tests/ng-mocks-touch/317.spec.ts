@@ -25,8 +25,8 @@ describe('ng-mocks-touch:317', () => {
   );
 
   it('finds by css selector', () => {
-    const control = MockRender(TargetComponent).point
-      .componentInstance.control;
+    const control =
+      MockRender(TargetComponent).point.componentInstance.control;
     expect(control.touched).toEqual(false);
     ngMocks.touch('input');
     expect(control.touched).toEqual(true);

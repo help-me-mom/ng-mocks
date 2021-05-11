@@ -92,12 +92,10 @@ describe('TestHttpInterceptor', () => {
 
   it('triggers interceptor', () => {
     const fixture = MockRender('');
-    const client: HttpClient = fixture.debugElement.injector.get(
-      HttpClient,
-    );
-    const httpMock: HttpTestingController = fixture.debugElement.injector.get(
-      HttpTestingController,
-    );
+    const client: HttpClient =
+      fixture.debugElement.injector.get(HttpClient);
+    const httpMock: HttpTestingController =
+      fixture.debugElement.injector.get(HttpTestingController);
 
     // Let's do a simply request.
     client.get('/target').subscribe();

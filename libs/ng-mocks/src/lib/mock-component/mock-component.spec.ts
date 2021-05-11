@@ -229,18 +229,20 @@ describe('MockComponent', () => {
   describe('ReactiveForms - ControlValueAccessor', () => {
     it('should allow you simulate the component being touched', () => {
       fixture.detectChanges();
-      const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
-        By.css('custom-form-control'),
-      ).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent> =
+        fixture.debugElement.query(
+          By.css('custom-form-control'),
+        ).componentInstance;
       customFormControl.__simulateTouch();
       expect(component.formControl.touched).toBe(true);
     });
 
     it('should allow you simulate a value being set', () => {
       fixture.detectChanges();
-      const customFormControl: MockedComponent<CustomFormControlComponent> = fixture.debugElement.query(
-        By.css('custom-form-control'),
-      ).componentInstance;
+      const customFormControl: MockedComponent<CustomFormControlComponent> =
+        fixture.debugElement.query(
+          By.css('custom-form-control'),
+        ).componentInstance;
       customFormControl.__simulateChange('foo');
       expect(component.formControl.value).toBe('foo');
     });
@@ -271,9 +273,9 @@ describe('MockComponent', () => {
       // looking for 1st templateRef.
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
-        'block1',
-      );
+      (
+        templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>
+      ).__render('block1');
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeTruthy();
       expect(block1.nativeElement.innerText.trim()).toEqual(
@@ -283,9 +285,9 @@ describe('MockComponent', () => {
       // looking for 2nd templateRef.
       block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
-        'block2',
-      );
+      (
+        templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>
+      ).__render('block2');
       block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
       expect(block2.nativeElement.innerText.trim()).toEqual(
@@ -295,16 +297,16 @@ describe('MockComponent', () => {
       // looking for 3rd templateRef.
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeFalsy();
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__render(
-        'block3',
-      );
+      (
+        templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>
+      ).__render('block3');
       fixture.detectChanges();
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
       expect(block3.nativeElement.innerText.trim()).toEqual('');
-      (templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>).__hide(
-        'block3',
-      );
+      (
+        templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>
+      ).__hide('block3');
       fixture.detectChanges();
       expect(
         templateOutlet.query(By.css('[data-key="block3"]')),

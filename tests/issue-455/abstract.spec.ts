@@ -26,9 +26,9 @@ interface InjectedAbstraction {
 @Injectable({
   providedIn: 'root',
   useFactory: () => {
-    const fn: InjectedAbstraction = (jasmine.createSpy(
+    const fn: InjectedAbstraction = jasmine.createSpy(
       'Base',
-    ) as any) as InjectedAbstraction;
+    ) as any as InjectedAbstraction;
     fn.hello = jasmine.createSpy('Inner');
 
     return fn;
@@ -52,9 +52,9 @@ export class TestWithDecoratorComponent {
 }
 
 ngMocks.defaultMock(InjectedAbstraction, () => {
-  return (jasmine
+  return jasmine
     .createSpy('InjectedAbstraction')
-    .and.returnValue('FOO') as any) as InjectedAbstraction;
+    .and.returnValue('FOO') as any as InjectedAbstraction;
 });
 
 describe('issue-455:abstract', () => {
@@ -126,8 +126,10 @@ describe('issue-455:abstract', () => {
 
           // checking the original spy wasn't affected
           expect(
-            (fixture.point.componentInstance
-              .myInjectedAbstraction as any).test,
+            (
+              fixture.point.componentInstance
+                .myInjectedAbstraction as any
+            ).test,
           ).toEqual(true);
           expect((spy as any).test).toEqual(undefined);
         });
@@ -135,9 +137,7 @@ describe('issue-455:abstract', () => {
 
       describe('with `precise` flag', () => {
         beforeEach(() =>
-          MockBuilder(
-            TestWithoutDecoratorComponent,
-          ).mock(
+          MockBuilder(TestWithoutDecoratorComponent).mock(
             InjectedAbstraction,
             jasmine
               .createSpy('InjectedAbstraction')

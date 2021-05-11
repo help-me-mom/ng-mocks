@@ -56,8 +56,8 @@ describe('TestToken', () => {
   });
 
   it('creates TOKEN_CLASS', () => {
-    const token = MockRender<ServiceClass>(TOKEN_CLASS).point
-      .componentInstance;
+    const token =
+      MockRender<ServiceClass>(TOKEN_CLASS).point.componentInstance;
 
     // Verifying that the token is an instance of ServiceClass.
     expect(token).toEqual(jasmine.any(ServiceClass));
@@ -65,8 +65,9 @@ describe('TestToken', () => {
   });
 
   it('creates TOKEN_EXISTING', () => {
-    const token = MockRender<ServiceExisting>(TOKEN_EXISTING).point
-      .componentInstance;
+    const token =
+      MockRender<ServiceExisting>(TOKEN_EXISTING).point
+        .componentInstance;
 
     // Verifying that the token is an instance of ServiceExisting.
     // But because it has been replaced with a mock copy,

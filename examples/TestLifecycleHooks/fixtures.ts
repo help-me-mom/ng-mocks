@@ -57,7 +57,8 @@ export class TargetService {
   template: ``,
 })
 export class TargetComponent
-  implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked {
+  implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked
+{
   @Input() public input: string | null = null;
 
   public constructor(protected readonly service: TargetService) {

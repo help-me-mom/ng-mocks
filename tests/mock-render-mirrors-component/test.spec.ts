@@ -126,9 +126,8 @@ describe('mock-render-mirrors-component', () => {
 
   it('correctly inherits types', () => {
     // keeps the 2nd args as DefaultRenderComponent<TargetComponent>
-    const fixture1: MockedComponentFixture<TargetComponent> = MockRender(
-      TargetComponent,
-    );
+    const fixture1: MockedComponentFixture<TargetComponent> =
+      MockRender(TargetComponent);
     fixture1.componentInstance.input1 = '1';
     fixture1.detectChanges();
     expect(fixture1).toBeDefined();

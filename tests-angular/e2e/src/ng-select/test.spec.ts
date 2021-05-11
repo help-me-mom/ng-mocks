@@ -58,8 +58,8 @@ describe('ng-select:props', () => {
 
   it('binds inputs', () => {
     // Rendering TargetComponent and accessing its instance.
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of the ng-select.
     const ngSelectEl = ngMocks.find('ng-select');
@@ -80,8 +80,8 @@ describe('ng-select:props', () => {
 
   it('binds outputs', () => {
     // Rendering TargetComponent and accessing its instance.
-    const targetComponent = MockRender(TargetComponent).point
-      .componentInstance;
+    const targetComponent =
+      MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of the ng-select.
     const ngSelectEl = ngMocks.find('ng-select');
