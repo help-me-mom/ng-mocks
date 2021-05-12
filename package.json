@@ -150,7 +150,7 @@
     "@types/core-js": "2.5.4",
     "@types/jasmine": "3.7.2",
     "@types/jest": "26.0.23",
-    "@types/node": "14.14.44",
+    "@types/node": "14.14.45",
     "codecov": "3.8.2",
     "core-js": "3.12.1",
     "coveralls": "3.1.0",
