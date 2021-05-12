@@ -171,7 +171,7 @@
     "primeng": "11.4.1",
     "puppeteer": "9.1.1",
     "rxjs": "6.6.7",
-    "semantic-release": "17.4.2",
+    "semantic-release": "17.4.3",
     "ts-node": "9.1.1",
     "tslib": "2.2.0",
     "tslint": "6.1.3",
