@@ -1,8 +1,32 @@
+const sanitizerMethods = [
+  'sanitize',
+  'bypassSecurityTrustHtml',
+  'bypassSecurityTrustStyle',
+  'bypassSecurityTrustScript',
+  'bypassSecurityTrustUrl',
+  'bypassSecurityTrustResourceUrl',
+];
+
+const extraMethods: Record<string, undefined | string[]> = {
+  DomSanitizer: sanitizerMethods,
+  Sanitizer: sanitizerMethods,
+};
+
+const getOwnPropertyNames = (prototype: any): string[] => {
+  const result: string[] = Object.getOwnPropertyNames(prototype);
+  for (const method of extraMethods[prototype.constructor.name] ?? []) {
+    result.push(method);
+  }
+
+  return result;
+};
+
 export default <T>(service: T): string[] => {
   const result: string[] = [];
+
   let prototype = service;
   while (prototype && Object.getPrototypeOf(prototype) !== null) {
-    for (const method of Object.getOwnPropertyNames(prototype)) {
+    for (const method of getOwnPropertyNames(prototype)) {
       if ((method as any) === 'constructor') {
         continue;
       }
