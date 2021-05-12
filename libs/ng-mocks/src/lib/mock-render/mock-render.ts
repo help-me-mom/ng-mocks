@@ -50,7 +50,7 @@ const fixtureFactory = <T>(template: any, meta: Directive, params: any, flags: a
     template: mockTemplate,
   };
   const fixture: any = generateFixture({ ...meta, params, options });
-  if (flags.detectChanges) {
+  if (flags.detectChanges === undefined || flags.detectChanges) {
     fixture.detectChanges();
   }
 
