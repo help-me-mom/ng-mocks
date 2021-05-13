@@ -1,3 +1,15 @@
+# [12.0.0](https://github.com/ike18t/ng-mocks/compare/v11.11.2...v12.0.0) (2021-05-13)
+
+
+### Features
+
+* official support of Angular 12 ([d63c34f](https://github.com/ike18t/ng-mocks/commit/d63c34ffc720573e7c92f81cda557f05e471abb7))
+
+
+### BREAKING CHANGES
+
+* auto spy should be installed via ngMocks.autoSpy
+
 ## [11.11.2](https://github.com/ike18t/ng-mocks/compare/v11.11.1...v11.11.2) (2021-05-13)
 
 
