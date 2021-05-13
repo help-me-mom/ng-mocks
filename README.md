@@ -90,11 +90,11 @@ describe('app-component', () => {
   // mock declarations and providers.
   beforeEach(() => {
     // A spy on a method which returns children.
-    // When an instance of ChildCompnent is being created,
+    // When an instance of ChildComponent is being created,
     // the method will be replaced with the spy.
     // https://ng-mocks.sudo.eu/api/MockInstance
     MockInstance(
-      ChildCompnent,
+      ChildComponent,
       'list',
       jasmine.createSpy(),
     ).and.returnValue([]);

@@ -87,7 +87,13 @@ module.exports = {
     {
       type: 'category',
       label: 'Extra',
-      items: ['extra/customize-mocks', 'extra/mock-observables', 'extra/mock-form-controls', 'extra/with-3rd-party'],
+      items: [
+        'extra/customize-mocks',
+        'extra/mock-observables',
+        'extra/mock-form-controls',
+        'extra/sanitizer',
+        'extra/with-3rd-party',
+      ],
     },
     {
       type: 'category',
