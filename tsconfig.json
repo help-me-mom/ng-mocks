@@ -34,5 +34,5 @@
     "strictPropertyInitialization": true,
     "strictNullChecks": true
   },
-  "include": ["libs/ng-mocks/src/index.ts", "libs/ng-mocks/src/jasmine.ts", "libs/ng-mocks/src/jest.ts"]
+  "include": ["libs/ng-mocks/src/index.ts"]
 }

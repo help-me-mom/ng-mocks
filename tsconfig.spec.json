@@ -5,13 +5,7 @@
     "inlineSources": false,
     "sourceMap": true
   },
-  "files": [
-    "libs/ng-mocks/src/index.ts",
-    "libs/ng-mocks/src/jasmine.ts",
-    "libs/ng-mocks/src/jest.ts",
-    "karma-test-shim.ts",
-    "karma.conf.ts"
-  ],
+  "files": ["libs/ng-mocks/src/index.ts", "karma-test-shim.ts", "karma.conf.ts"],
   "exclude": ["e2e", "node_modules"],
   "include": ["libs/ng-mocks/src/lib/**/*", "examples/**/*.spec.ts", "tests/**/*.spec.ts", "tests-failures/**/*"]
 }

@@ -30,12 +30,12 @@ export type MockedDirective<T> = T &
     __vcr?: ViewContainerRef;
 
     /**
-     * @deprecated use this.__vcr
+     * @deprecated use this.__vcr (removing in A13)
      */
     __viewContainer?: ViewContainerRef;
 
     /**
-     * @deprecated use ngMocks.hide instead
+     * @deprecated use ngMocks.hide instead (removing in A13)
      */
     __render($implicit?: any, variables?: Record<keyof any, any>): void;
   };
