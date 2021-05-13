@@ -768,7 +768,7 @@
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.12\\d\\d\\./",
+      "allowedVersions": "/^(0\\.12\\d\\d\\.|12\\.)/",
       "ignoreUnstable": false
     },
     {
