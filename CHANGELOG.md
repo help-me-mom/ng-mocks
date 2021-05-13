@@ -1,3 +1,11 @@
+## [11.11.2](https://github.com/ike18t/ng-mocks/compare/v11.11.1...v11.11.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* **core:** properly handling Sanitizer and DomSanitizer [#538](https://github.com/ike18t/ng-mocks/issues/538) ([fb51bb4](https://github.com/ike18t/ng-mocks/commit/fb51bb478593c22ed436c896980244d45fd796ed))
+* **mock-render:** detectChanges flag has to be provided to supress render ([8195eeb](https://github.com/ike18t/ng-mocks/commit/8195eeb7e4dbeeac71061a9ac94b1436f7cfdb0c))
+
 ## [11.11.1](https://github.com/ike18t/ng-mocks/compare/v11.11.0...v11.11.1) (2021-05-09)
 
 
