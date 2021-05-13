@@ -10,6 +10,13 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](./need-help.md).
 
+## From 11 to 12
+
+The only breaking change is `auto-spy`.
+
+[`ngMocks.autoSpy('jasmine')`](./extra/auto-spy.md) and [`ngMocks.autoSpy('jest')`](./extra/auto-spy.md)
+should be used instead of `import 'ng-mocks/dist/jasmine';` and `import 'ng-mocks/dist/jest';`. 
+
 ## From 10 to 11
 
 #### MockModule

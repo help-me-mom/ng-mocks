@@ -3,13 +3,13 @@
 import { Mock } from './mock';
 
 /**
- * @deprecated use isMockControlValueAccessor or isMockValidator instead
+ * @deprecated use isMockControlValueAccessor or isMockValidator instead (removing in A13)
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
  */
 export class LegacyControlValueAccessor extends Mock {
   /**
-   * @deprecated use isMockControlValueAccessor instead
+   * @deprecated use isMockControlValueAccessor instead (removing in A13)
    * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
    */
   public __simulateChange(value: any): void;
@@ -20,7 +20,7 @@ export class LegacyControlValueAccessor extends Mock {
 
   // istanbul ignore next
   /**
-   * @deprecated use isMockControlValueAccessor instead
+   * @deprecated use isMockControlValueAccessor instead (removing in A13)
    * @see https://ng-mocks.sudo.eu/api/helpers/isMockControlValueAccessor
    */
   public __simulateTouch() {
@@ -29,7 +29,7 @@ export class LegacyControlValueAccessor extends Mock {
 
   // istanbul ignore next
   /**
-   * @deprecated use isMockValidator instead
+   * @deprecated use isMockValidator instead (removing in A13)
    * @see https://ng-mocks.sudo.eu/api/helpers/isMockValidator
    */
   public __simulateValidatorChange() {
