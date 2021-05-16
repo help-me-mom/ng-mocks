@@ -8,7 +8,7 @@ parameters:
 jobs:
   Core:
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - restore_cache:
@@ -89,7 +89,7 @@ jobs:
               -i test-reports/codeclimate.json
   E2E:
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - restore_cache:
@@ -111,7 +111,7 @@ jobs:
           command: npm run e2e
   'Install':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - restore_cache:
@@ -209,7 +209,7 @@ jobs:
             - ./e2e/am/node_modules
   'Angular 5 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -227,7 +227,7 @@ jobs:
           command: npm run test:a5es5
   'Angular 5 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -245,7 +245,7 @@ jobs:
           command: npm run test:a5es2015
   'Angular 6 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -263,7 +263,7 @@ jobs:
           command: npm run test:a6es5
   'Angular 6 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -281,7 +281,7 @@ jobs:
           command: npm run test:a6es2015
   'Angular 7 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -299,7 +299,7 @@ jobs:
           command: npm run test:a7es5
   'Angular 7 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -317,7 +317,7 @@ jobs:
           command: npm run test:a7es2015
   'Angular 8 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -335,7 +335,7 @@ jobs:
           command: npm run test:a8es5
   'Angular 8 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -353,7 +353,7 @@ jobs:
           command: npm run test:a8es2015
   'Angular 9 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -371,7 +371,7 @@ jobs:
           command: npm run test:a9es5
   'Angular 9 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -389,7 +389,7 @@ jobs:
           command: npm run test:a9es2015
   'Angular 9 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -407,7 +407,7 @@ jobs:
           command: npm run test:a9es5ivy
   'Angular 9 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -425,7 +425,7 @@ jobs:
           command: npm run test:a9es2015ivy
   'Angular 10 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -443,7 +443,7 @@ jobs:
           command: npm run test:a10es5
   'Angular 10 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -461,7 +461,7 @@ jobs:
           command: npm run test:a10es2015
   'Angular 10 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -479,7 +479,7 @@ jobs:
           command: npm run test:a10es5ivy
   'Angular 10 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -497,7 +497,7 @@ jobs:
           command: npm run test:a10es2015ivy
   'Angular 11 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -515,7 +515,7 @@ jobs:
           command: npm run test:a11es5
   'Angular 11 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -533,7 +533,7 @@ jobs:
           command: npm run test:a11es2015
   'Angular 11 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -551,7 +551,7 @@ jobs:
           command: npm run test:a11es5ivy
   'Angular 11 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -569,7 +569,7 @@ jobs:
           command: npm run test:a11es2015ivy
   'Angular 12 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -587,7 +587,7 @@ jobs:
           command: npm run test:a12es5
   'Angular 12 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -605,7 +605,7 @@ jobs:
           command: npm run test:a12es2015
   'Angular 12 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -623,7 +623,7 @@ jobs:
           command: npm run test:a12es5ivy
   'Angular 12 ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -641,7 +641,7 @@ jobs:
           command: npm run test:a12es2015ivy
   'Angular Min ES5':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -659,7 +659,7 @@ jobs:
           command: npm run build:am:es5
   'Angular Min ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -677,7 +677,7 @@ jobs:
           command: npm run build:am:es2015
   'Angular Min ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
@@ -695,7 +695,7 @@ jobs:
           command: npm run build:am:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.16.1-buster
+      - image: satantime/puppeteer-node:14.17.0-buster
     steps:
       - checkout
       - attach_workspace:
