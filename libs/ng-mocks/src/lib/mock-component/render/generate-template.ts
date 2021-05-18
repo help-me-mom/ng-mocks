@@ -32,7 +32,7 @@ export default (queries?: Record<keyof any, any>): string => {
       continue;
     }
     if (typeof query.selector === 'string') {
-      const selector = query.selector.replace(new RegExp('[^a-z0-9-_]+', 'mg'), ' ').trim().replace(' ', '_');
+      const selector = query.selector.replace(new RegExp('[^a-zA-Z0-9_]', 'mg'), '_');
       queries[`__mockView_key_${selector}`] = new ViewChild(`key_${selector}`, viewChildArgs);
       queries[`__mockTpl_key_${selector}`] = query;
       parts.push(viewChildTemplate(selector, 'key'));
