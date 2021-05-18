@@ -111,7 +111,7 @@ describe('app-component', () => {
     const spyCheck = MockInstance(
       AuthService,
       'check',
-      jasmine.createSpyObj('AuthService.check'),
+      jasmine.createSp('AuthService.check'),
     ).and.returnValue(true);
 
     // MockRender creates a wrapper component with
@@ -124,64 +124,80 @@ describe('app-component', () => {
     // Checking that the component has been created.
     expect(fixture.point.componentInstance).toBeDefined();
 
-    // Checking that its ngOnInit method calls 'check' of the service.
+    // Checking that its ngOnInit method
+    // has called 'check' on AuthService.
     expect(spyCheck).toHaveBeenCalled();
   });
 
-  it('verifies the check user button', () => {
-    // A fake user data.
+  it('verifies ctrl+s hot key', () => {
+    // A spy on save calls.
+    const spyCheck = MockInstance(
+      StorageService,
+      'save',
+      jasmine.createSpy('StorageService.save'),
+    );
+
+    // A fake user data we want to save.
     const user = {
       id: 1,
       name: 'Foo Bar',
     };
 
-    // A spy on a getter property which returns user data.
-    // https://ng-mocks.sudo.eu/api/MockInstance
-    MockInstance(
-      AuthService,
-      'user',
-      jasmine.createSpy(),
-      'get',
-    ).and.returnValue(user);
+    // Rendering
+    // <app-root [user]="params.user"></app-root>.
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const fixture = MockRender(AppComponent, { user });
 
-    // Params for input and outputs in AppComponent.
+    // Let's assume, there is host listener
+    // for keyboard combination of ctrl+s
+    // on AppComponent and we want to trigger it.
+    // https://ng-mocks.sudo.eu/api/ngMocks/trigger
+    ngMocks.trigger(fixture.point, 'keyup.control.s');
+
+    // The spy should be called with the user.
+    expect(spyCheck).toHaveBeenCalledWith(user);
+  });
+
+  it('verifies state of save button', () => {
+    // Params for inputs and outputs
+    // of AppComponent.
     const params = {
       allowCheck: false,
-      user: jasmine.createSpy('user'),
+      click: jasmine.createSpy('click'),
     };
 
-    // if AppComponent has [allowCheck] is an input and
-    // (user) is an output, then MockRender creates
-    // a wrapper component with a template like:
+    // If [allowCheck] is an input and
+    // (user) is an output of AppComponent,
+    // then MockRender creates a wrapper component
+    // with a template like:
     //
     // <app-root
     //   [allowCheck]="params.allowCheck"
-    //   (user)="params.user($event)"
+    //   (click)="params.click($event)"
     // ></app-root>
     //
     // And renders it.
-    //
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(AppComponent, params);
 
-    // the button should be disabled with params.allowCheck = false
+    // The button should be disabled
+    // when params.allowCheck = false.
     // https://ng-mocks.sudo.eu/api/ngMocks/find
     expect(ngMocks.find('button.check').disabled).toEqual(true);
 
-    // enabling the button
+    // Enabling the button.
     params.allowCheck = true;
     fixture.detectChanges();
     expect(ngMocks.find('button.check').disabled).toEqual(false);
 
-    // clicking the button in order to trigger the check
+    // Clicking the button
+    // in order to trigger the output.
     // https://ng-mocks.sudo.eu/api/ngMocks/click
     ngMocks.click('button.check');
 
-    // The spy in params.user should be notified about the output.
-    expect(params.user).toHaveBeenCalledWith({
-      id: 1,
-      name: 'Foo Bar',
-    });
+    // The spy in params.click
+    // should be notified about the click.
+    expect(params.click).toHaveBeenCalled();
   });
 });
 ```
