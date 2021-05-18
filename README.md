@@ -111,7 +111,7 @@ describe('app-component', () => {
     const spyCheck = MockInstance(
       AuthService,
       'check',
-      jasmine.createSp('AuthService.check'),
+      jasmine.createSpy('AuthService.check'),
     ).and.returnValue(true);
 
     // MockRender creates a wrapper component with
