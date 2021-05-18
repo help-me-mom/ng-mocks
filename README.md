@@ -131,7 +131,7 @@ describe('app-component', () => {
 
   it('verifies ctrl+s hot key', () => {
     // A spy on save calls.
-    const spyCheck = MockInstance(
+    const spySave = MockInstance(
       StorageService,
       'save',
       jasmine.createSpy('StorageService.save'),
@@ -148,14 +148,14 @@ describe('app-component', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(AppComponent, { user });
 
-    // Let's assume, there is host listener
-    // for keyboard combination of ctrl+s
+    // Let's assume, there is a host listener
+    // for a keyboard combination of ctrl+s
     // on AppComponent and we want to trigger it.
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(fixture.point, 'keyup.control.s');
 
     // The spy should be called with the user.
-    expect(spyCheck).toHaveBeenCalledWith(user);
+    expect(spySave).toHaveBeenCalledWith(user);
   });
 
   it('verifies state of save button', () => {
