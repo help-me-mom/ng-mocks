@@ -281,7 +281,6 @@ expect(params.o1).toEqual(1);
 expect(params.o2).toHaveBeenCalledWith(2);
 ```
 
-
 ## Example with a component
 
 ```ts
@@ -367,6 +366,43 @@ const fixture = MockRender(
     ],
   },
 );
+```
+
+## Factory
+
+Because `MockRender` creates a middleware component, it can add an undesired impact on test performance.
+Especially, in cases, when the same setup should be used in different tests.
+
+For example, we have 5 tests and every test calls `MockRender(MyComponent)`.
+It means that every time a middleware component has been created and injected into `TestBed`,
+whereas `MockRender` could have reused the existing middleware component and simply to create a new fixture out of it.
+
+In such situations, `MockRenderFactory` can be used instead of `MockRender`.
+It has the same interface as `MockRender`, but instead of an instant render,
+it returns a factory function. The factory function simply creates a new fixture out of its middleware component.
+
+Considering the conditions above, we would need to create a factory once with help of `MockRenderFactory` in `beforeAll`,
+and then 5 tests should call the factory in order to create fixtures.
+
+```ts
+describe('Maximum reusage', () => {
+  ngMocks.faster();
+  
+  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  
+  let factory: MockRenderFactory<MyComponent>;
+  beforeAll(() => factory = MockRenderFactory(MyComponent));
+  
+  it('covers one case', () => {
+    const fixture = factory();
+    expect(fixture.point.componentInstance.input1).toEqual(1);
+  });
+  
+  it('covers another case', () => {
+    const fixture = factory();
+    expect(fixture.point.componentInstance.input2).toEqual(2);
+  });
+});
 ```
 
 ## Advanced example
