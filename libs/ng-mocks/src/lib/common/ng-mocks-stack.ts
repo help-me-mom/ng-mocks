@@ -1,4 +1,3 @@
-import { mapValues } from './core.helpers';
 import ngMocksUniverse from './ng-mocks-universe';
 
 export interface NgMocksStack {
@@ -13,11 +12,11 @@ const stack: NgMocksStack[] = ngMocksUniverse.global.get('reporter-stack') ?? []
 ngMocksUniverse.global.set('reporter-stack', stack);
 
 // istanbul ignore next
-const listenersPush: Set<NgMocksStackCallback> = ngMocksUniverse.global.get('reporter-stack-push') ?? new Set();
+const listenersPush: NgMocksStackCallback[] = ngMocksUniverse.global.get('reporter-stack-push') ?? [];
 ngMocksUniverse.global.set('reporter-stack-push', listenersPush);
 
 // istanbul ignore next
-const listenersPop: Set<NgMocksStackCallback> = ngMocksUniverse.global.get('reporter-stack-pop') ?? new Set();
+const listenersPop: NgMocksStackCallback[] = ngMocksUniverse.global.get('reporter-stack-pop') ?? [];
 ngMocksUniverse.global.set('reporter-stack-pop', listenersPop);
 
 const stackPush = () => {
@@ -26,7 +25,7 @@ const stackPush = () => {
   const state = { id };
   stack.push(state);
 
-  for (const callback of mapValues(listenersPush)) {
+  for (const callback of listenersPush) {
     callback(state, stack);
   }
 };
@@ -40,7 +39,7 @@ const stackPop = () => {
 
   // istanbul ignore else
   if (state) {
-    for (const callback of mapValues(listenersPop)) {
+    for (const callback of listenersPop) {
       callback(state, stack);
     }
   }
@@ -69,7 +68,9 @@ const install = () => {
 
 // istanbul ignore next
 const subscribePush = (callback: NgMocksStackCallback) => {
-  listenersPush.add(callback);
+  if (listenersPush.indexOf(callback)) {
+    listenersPush.push(callback);
+  }
   if (stack.length) {
     callback(stack[stack.length - 1], stack);
   }
@@ -77,17 +78,25 @@ const subscribePush = (callback: NgMocksStackCallback) => {
 
 // istanbul ignore next
 const subscribePop = (callback: NgMocksStackCallback) => {
-  listenersPop.add(callback);
+  if (listenersPop.indexOf(callback) === -1) {
+    listenersPop.push(callback);
+  }
 };
 
 // istanbul ignore next
 const unsubscribePush = (callback: NgMocksStackCallback) => {
-  listenersPush.delete(callback);
+  const index = listenersPush.indexOf(callback);
+  if (index !== -1) {
+    listenersPush.splice(index, 1);
+  }
 };
 
 // istanbul ignore next
 const unsubscribePop = (callback: NgMocksStackCallback) => {
-  listenersPop.delete(callback);
+  const index = listenersPop.indexOf(callback);
+  if (index !== -1) {
+    listenersPop.splice(index, 1);
+  }
 };
 
 export default {
