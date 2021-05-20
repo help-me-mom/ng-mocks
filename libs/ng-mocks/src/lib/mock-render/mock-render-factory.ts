@@ -1,4 +1,4 @@
-import { Component, DebugElement, Directive, InjectionToken } from '@angular/core';
+import { DebugElement, Directive, InjectionToken } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -10,7 +10,7 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import { MockService } from '../mock-service/mock-service';
 
-import funcGenerateTemplate from './func.generate-template';
+import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
 import { DefaultRenderComponent, IMockRenderOptions, MockedComponentFixture } from './types';
@@ -20,41 +20,6 @@ interface MockRenderFactory<C = any, F = DefaultRenderComponent<C>> {
   params: F;
   (): MockedComponentFixture<C, F>;
 }
-
-const generateWrapper = ({ params, options, inputs }: any) => {
-  class MockRenderComponent {
-    public constructor() {
-      if (!params) {
-        for (const input of inputs || []) {
-          let value: any = null;
-          helperDefinePropertyDescriptor(this, input, {
-            get: () => value,
-            set: (newValue: any) => (value = newValue),
-          });
-        }
-      }
-      funcInstallPropReader(this, params);
-    }
-  }
-
-  Component(options)(MockRenderComponent);
-  TestBed.configureTestingModule({
-    declarations: [MockRenderComponent],
-  });
-
-  return MockRenderComponent;
-};
-
-const createWrapper = (template: any, meta: Directive, params: any, flags: any): Type<any> => {
-  const mockTemplate = funcGenerateTemplate(template, { ...meta, params });
-  const options: Component = {
-    providers: flags.providers,
-    selector: 'mock-render',
-    template: mockTemplate,
-  };
-
-  return generateWrapper({ ...meta, params, options });
-};
 
 const isExpectedRender = (template: any): boolean =>
   typeof template === 'string' || isNgDef(template, 'c') || isNgDef(template, 'd');
@@ -95,16 +60,31 @@ const tryWhen = (flag: boolean, callback: () => void) => {
   }
 };
 
+const fixtureMessage = [
+  'Forgot to flush TestBed?',
+  'MockRender cannot be used without a reset after TestBed.get / TestBed.inject / TestBed.createComponent and another MockRender in the same test.',
+  'To flush TestBed, add a call of ngMocks.flushTestBed() before the call of MockRender, or pass `reset: true` to MockRender options.',
+  'If you want to mock a service before rendering, consider usage of MockInstance.',
+].join(' ');
+
 const handleFixtureError = (e: any) => {
-  const message = [
-    'Forgot to flush TestBed?',
-    'MockRender cannot be used without a reset after TestBed.get / TestBed.inject / TestBed.createComponent and another MockRender in the same test.',
-    'To flush TestBed, add a call of ngMocks.flushTestBed() before the call of MockRender, or pass `reset: true` to MockRender options.',
-    'If you want to mock a service before rendering, consider usage of MockInstance.',
-  ].join(' ');
-  const error = new Error(message);
+  const error = new Error(fixtureMessage);
   coreDefineProperty(error, 'parent', e, false);
   throw error;
+};
+
+const flushTestBed = (flags: Record<string, any>): void => {
+  const testBed: any = getTestBed();
+  if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
+    ngMocks.flushTestBed();
+  } else if (
+    ngMocksUniverse.global.get('warnOnTestBedFlushNeed') &&
+    (testBed._testModuleRef || testBed._instantiated)
+  ) {
+    // tslint:disable-next-line:no-console
+    console.warn(fixtureMessage);
+    ngMocks.flushTestBed();
+  }
 };
 
 const generateFactory = (componentCtor: Type<any>, flags: any, params: any, template: any) => {
@@ -224,12 +204,9 @@ function MockRenderFactory<MComponent, TComponent extends Record<keyof any, any>
   const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : { ...flags };
   const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : funcReflectTemplate(template);
 
-  const testBed: any = getTestBed();
-  if (flagsObject.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
-    ngMocks.flushTestBed();
-  }
+  flushTestBed(flagsObject);
   try {
-    const componentCtor: any = createWrapper(template, meta, params, flagsObject);
+    const componentCtor: any = funcCreateWrapper(template, meta, params, flagsObject);
 
     return generateFactory(componentCtor, flagsObject, params, template);
   } catch (e) {
