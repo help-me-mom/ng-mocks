@@ -38,6 +38,7 @@ export * from './lib/mock-pipe/types';
 export * from './lib/mock-provider/mock-provider';
 
 export * from './lib/mock-render/mock-render';
+export * from './lib/mock-render/mock-render-factory';
 export * from './lib/mock-render/types';
 
 export { registerMockFunction } from './lib/mock-service/helper.mock-service';
