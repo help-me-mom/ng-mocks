@@ -36,13 +36,21 @@ export default (template: AnyType<any>): Directive => {
 
   const meta = { ...coreReflectDirectiveResolve(template) };
 
-  if (meta.selector && meta.selector.match(/[\[\],]/)) {
+  if (meta.selector && meta.selector.match(/[\[\],\s]/)) {
     meta.selector = '';
   }
 
   if (!meta.selector) {
-    meta.selector = `ng-mocks-${template.name}`;
-    registerTemplateMiddleware(template, meta);
+    // istanbul ignore next
+    meta.selector = (TestBed as any).ngMocksSelectors?.get(template) || '';
+    if (!meta.selector) {
+      meta.selector = `ng-mocks-${template.name}`;
+      registerTemplateMiddleware(template, meta);
+      // istanbul ignore else
+      if ((TestBed as any).ngMocksSelectors) {
+        (TestBed as any).ngMocksSelectors.set(template, meta.selector);
+      }
+    }
   }
 
   return meta;
