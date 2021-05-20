@@ -73,16 +73,21 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
+const globalFlags = ngMocksUniverse.global.get('flags') || /* istanbul ignore next */ {};
+// istanbul ignore else
+if (globalFlags.onTestBedFlushNeed === undefined) {
+  globalFlags.onTestBedFlushNeed = 'throw';
+}
+ngMocksUniverse.global.set('flags', globalFlags);
 const flushTestBed = (flags: Record<string, any>): void => {
   const testBed: any = getTestBed();
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();
-  } else if (
-    ngMocksUniverse.global.get('warnOnTestBedFlushNeed') &&
-    (testBed._testModuleRef || testBed._instantiated)
-  ) {
-    // tslint:disable-next-line:no-console
-    console.warn(fixtureMessage);
+  } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._testModuleRef || testBed._instantiated)) {
+    if (globalFlags.onTestBedFlushNeed === 'warn') {
+      // tslint:disable-next-line:no-console
+      console.warn(fixtureMessage);
+    }
     ngMocks.flushTestBed();
   }
 };

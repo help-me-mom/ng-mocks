@@ -23,7 +23,7 @@ describe('issue-572', () => {
 
   afterAll(() => {
     console.warn = consoleWarn;
-    ngMocks.config({ onTestBedFlushNeed: 'default' });
+    ngMocks.config({ onTestBedFlushNeed: 'throw' });
   });
 
   it('throws on TestBed change', () => {
@@ -60,5 +60,17 @@ describe('issue-572', () => {
     expect(console.warn).not.toHaveBeenCalled();
     MockRender(TargetComponent);
     expect(console.warn).toHaveBeenCalled();
+  });
+
+  it('skips warnings on TestBed change', () => {
+    ngMocks.config({ onTestBedFlushNeed: 'i-know-but-disable' });
+
+    TestBed.get(Injector);
+    expect(console.warn).not.toHaveBeenCalled();
+    const fixture = MockRender(TargetComponent);
+    expect(console.warn).not.toHaveBeenCalled();
+
+    // renders properly
+    expect(ngMocks.formatText(fixture)).toEqual('target');
   });
 });
