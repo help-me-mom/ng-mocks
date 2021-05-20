@@ -21,7 +21,7 @@ export default (ngModule: NgMeta, { mockDef, configDef }: BuilderData): void => 
     }
 
     const mock = ngMocksUniverse.builtProviders.get(def);
-    ngModule.providers.push(mock || { provide: def, useValue: undefined });
+    ngModule.providers.push(mock);
     ngMocksUniverse.touches.add(def);
   }
 };

@@ -128,7 +128,7 @@ describe('MockBuilder:ngMocks', () => {
       expect(serviceMockInstance.getName).toBeDefined();
       expect(serviceMockInstance.getName()).toBeUndefined();
       expect(mocks.has(TOKEN_MOCK)).toBeDefined();
-      expect(mocks.get(TOKEN_MOCK)).toBeUndefined();
+      expect(mocks.get(TOKEN_MOCK)).toBeDefined();
 
       // customize
       const serviceCustomize = mocks.get(ServiceCustomize);
