@@ -1,3 +1,5 @@
+import ngMocksUniverse from '../common/ng-mocks-universe';
+
 import mockHelperCrawl from './crawl/mock-helper.crawl';
 import mockHelperReveal from './crawl/mock-helper.reveal';
 import mockHelperRevealAll from './crawl/mock-helper.reveal-all';
@@ -38,6 +40,13 @@ export default {
   autoSpy: mockHelperAutoSpy,
   change: mockHelperChange,
   click: mockHelperClick,
+  config: (config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'default' }) => {
+    if (config.onTestBedFlushNeed === 'warn') {
+      ngMocksUniverse.global.set('warnOnTestBedFlushNeed', true);
+    } else if (config.onTestBedFlushNeed === 'throw' || config.onTestBedFlushNeed === 'default') {
+      ngMocksUniverse.global.delete('warnOnTestBedFlushNeed');
+    }
+  },
   crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,
   event: mockHelperEvent,
