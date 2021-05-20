@@ -84,9 +84,9 @@ const createMockProvider = (provider: any, provide: any, cacheProviders?: Map<an
 // The main problem is that providing undefined to HTTP_INTERCEPTORS and others breaks their code.
 // If a testing module / component requires omitted tokens then they should be provided manually
 // during creation of TestBed module.
-const handleProvider = (provider: any, provide: any) => {
+const handleProvider = (provider: any, provide: any, useFactory: boolean) => {
   if (provide === provider) {
-    return undefined;
+    return useFactory ? helperUseFactory(provider, () => undefined) : undefined;
   }
   if (provider.multi) {
     ngMocksUniverse.config.get('ngMocksMulti')?.add(provide);
@@ -115,7 +115,7 @@ const isNeverMockFunction = (provide: any): boolean =>
 const isNeverMockToken = (provide: any): boolean =>
   isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1;
 
-export default function (provider: any): Provider | undefined {
+export default function (provider: any, useFactory = false): Provider | undefined {
   const provide = funcGetProvider(provider);
 
   if (isNeverMockFunction(provide)) {
@@ -134,5 +134,5 @@ export default function (provider: any): Provider | undefined {
     return cacheProviders.get(provide);
   }
 
-  return createMockProvider(provider, provide, cacheProviders) || handleProvider(provider, provide);
+  return createMockProvider(provider, provide, cacheProviders) || handleProvider(provider, provide, useFactory);
 }

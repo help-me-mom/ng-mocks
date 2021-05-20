@@ -102,12 +102,6 @@ const createPredefinedMockProvider = (provider: any, provide: any): any => {
     if (mockDef === provide) {
       return provider;
     }
-    if (mockDef === undefined) {
-      return {
-        provide,
-        useValue: undefined,
-      };
-    }
 
     return mockDef;
   }

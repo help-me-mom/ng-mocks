@@ -24,7 +24,7 @@ export default (def: any, defValue: Map<any, any>): void => {
       helperUseFactory(def, undefined, existing => createInstance(existing, instance, config, isPipeFunc)),
     );
   } else if (isNgDef(def, 'i')) {
-    ngMocksUniverse.builtProviders.set(def, mockProvider(def));
+    ngMocksUniverse.builtProviders.set(def, mockProvider(def, true));
   }
 
   if (!isNgDef(def) && defValue.has(def)) {
@@ -34,6 +34,6 @@ export default (def: any, defValue: Map<any, any>): void => {
       helperUseFactory(def, undefined, () => instance),
     );
   } else if (!isNgDef(def)) {
-    ngMocksUniverse.builtProviders.set(def, mockProvider(def));
+    ngMocksUniverse.builtProviders.set(def, mockProvider(def, true));
   }
 };

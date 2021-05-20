@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
-import { Type } from '../common/core.types';
+import { AnyType } from '../common/core.types';
 
 import { MockRenderFactory } from './mock-render-factory';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
@@ -19,7 +19,7 @@ function MockRender<MComponent>(
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: undefined | null,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, MComponent>;
@@ -28,7 +28,7 @@ function MockRender<MComponent>(
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent, TComponent extends object>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: TComponent,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
@@ -37,7 +37,7 @@ function MockRender<MComponent, TComponent extends object>(
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 function MockRender<MComponent, TComponent extends object = Record<keyof any, any>>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: TComponent,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockedComponentFixture<MComponent, TComponent>;
@@ -47,7 +47,7 @@ function MockRender<MComponent, TComponent extends object = Record<keyof any, an
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
-function MockRender<MComponent>(template: Type<MComponent>): MockedComponentFixture<MComponent, MComponent>;
+function MockRender<MComponent>(template: AnyType<MComponent>): MockedComponentFixture<MComponent, MComponent>;
 
 /**
  * An empty string does not have point.
@@ -91,7 +91,7 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any> = Reco
 ): MockedComponentFixture<MComponent, TComponent>;
 
 function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
-  template: string | Type<MComponent> | InjectionToken<MComponent>,
+  template: string | AnyType<MComponent> | InjectionToken<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {

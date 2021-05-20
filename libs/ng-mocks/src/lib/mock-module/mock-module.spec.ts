@@ -258,8 +258,22 @@ describe('mockProvider', () => {
   });
 
   it('should return undefined on any token', () => {
-    expect(mockProvider(CUSTOM_TOKEN)).toBeUndefined();
-    expect(mockProvider(HTTP_INTERCEPTORS)).toBeUndefined();
+    const p1: any = mockProvider(CUSTOM_TOKEN, true);
+    expect(p1).toEqual({
+      deps: [Injector],
+      provide: CUSTOM_TOKEN,
+      useFactory: jasmine.anything(),
+    });
+    expect(p1.useFactory()).toEqual(undefined);
+
+    const p2: any = mockProvider(HTTP_INTERCEPTORS, true);
+    expect(p2).toEqual({
+      deps: [Injector],
+      provide: HTTP_INTERCEPTORS,
+      useFactory: jasmine.anything(),
+    });
+    expect(p2.useFactory()).toEqual(undefined);
+
     expect(mockProvider(APP_INITIALIZER)).toBeUndefined();
   });
 

@@ -71,6 +71,14 @@ export const ngMocks: {
   defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
 
   /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
+   */
+  defaultMock<T = any>(
+    defs: Array<AnyType<any> | InjectionToken<any>>,
+    handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+  ): void;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/event
    */
   event(

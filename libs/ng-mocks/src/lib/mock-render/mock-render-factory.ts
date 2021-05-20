@@ -2,7 +2,7 @@ import { DebugElement, Directive, InjectionToken } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
-import { Type } from '../common/core.types';
+import { AnyType, Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -16,7 +16,7 @@ import funcReflectTemplate from './func.reflect-template';
 import { DefaultRenderComponent, IMockRenderOptions, MockedComponentFixture } from './types';
 
 interface MockRenderFactory<C = any, F = DefaultRenderComponent<C>> {
-  declaration: Type<never>;
+  declaration: AnyType<never>;
   params: F;
   (): MockedComponentFixture<C, F>;
 }
@@ -123,7 +123,7 @@ function MockRenderFactory<MComponent>(
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
 function MockRenderFactory<MComponent>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: undefined | null,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockRenderFactory<MComponent, MComponent>;
@@ -132,7 +132,7 @@ function MockRenderFactory<MComponent>(
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
 function MockRenderFactory<MComponent, TComponent extends object>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: TComponent,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockRenderFactory<MComponent, TComponent>;
@@ -141,7 +141,7 @@ function MockRenderFactory<MComponent, TComponent extends object>(
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
 function MockRenderFactory<MComponent, TComponent extends object = Record<keyof any, any>>(
-  template: Type<MComponent>,
+  template: AnyType<MComponent>,
   params: TComponent,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
 ): MockRenderFactory<MComponent, TComponent>;
@@ -151,7 +151,7 @@ function MockRenderFactory<MComponent, TComponent extends object = Record<keyof 
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent>(template: Type<MComponent>): MockRenderFactory<MComponent, MComponent>;
+function MockRenderFactory<MComponent>(template: AnyType<MComponent>): MockRenderFactory<MComponent, MComponent>;
 
 /**
  * An empty string does not have point.
@@ -195,7 +195,7 @@ function MockRenderFactory<MComponent, TComponent extends Record<keyof any, any>
 ): MockRenderFactory<MComponent, TComponent>;
 
 function MockRenderFactory<MComponent, TComponent extends Record<keyof any, any>>(
-  template: string | Type<MComponent> | InjectionToken<MComponent>,
+  template: string | AnyType<MComponent> | InjectionToken<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {
