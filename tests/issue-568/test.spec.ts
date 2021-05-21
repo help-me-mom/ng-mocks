@@ -19,9 +19,12 @@ abstract class Service2 {
 
 const TOKEN = new InjectionToken<{ name: string }>('TOKEN');
 
-ngMocks.defaultMock([Service1, Service2, TOKEN], () => ({
-  name: 'mock',
-}));
+ngMocks.defaultMock<{ name: string }>(
+  [Service1, Service2, TOKEN],
+  () => ({
+    name: 'mock',
+  }),
+);
 
 describe('issue-568', () => {
   describe('MockBuilder', () => {
