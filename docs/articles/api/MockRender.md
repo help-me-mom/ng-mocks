@@ -370,6 +370,10 @@ const fixture = MockRender(
 
 ## Factory
 
+:::warning
+It is an experimental feature and might be changed at any time.
+:::
+
 Because `MockRender` creates a middleware component, it can add an undesired impact on test performance.
 Especially, in cases, when the same setup should be used in different tests.
 
