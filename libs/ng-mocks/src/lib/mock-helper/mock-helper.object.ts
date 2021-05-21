@@ -40,12 +40,12 @@ export default {
   autoSpy: mockHelperAutoSpy,
   change: mockHelperChange,
   click: mockHelperClick,
-  config: (config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'default' }) => {
-    if (config.onTestBedFlushNeed === 'warn') {
-      ngMocksUniverse.global.set('warnOnTestBedFlushNeed', true);
-    } else if (config.onTestBedFlushNeed === 'throw' || config.onTestBedFlushNeed === 'default') {
-      ngMocksUniverse.global.delete('warnOnTestBedFlushNeed');
+  config: (config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' }) => {
+    const flags = ngMocksUniverse.global.get('flags') || /* istanbul ignore next */ {};
+    if (config.onTestBedFlushNeed !== undefined) {
+      flags.onTestBedFlushNeed = config.onTestBedFlushNeed;
     }
+    ngMocksUniverse.global.set('flags', flags);
   },
   crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,

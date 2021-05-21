@@ -20,9 +20,9 @@ should be used instead of `import 'ng-mocks/dist/jasmine';` and `import 'ng-mock
 ## From 11.10 to 11.11 and higher
 
 If you are facing an issue with `MockRender` and a thrown error about "Forgot to flush TestBed?",
-you may want to suppress it instead of fixing.
+you may want to suppress it instead of fixing, whereas fixing it is the right way.
 
-In order to suppress the error you need to upgrade to `12.0.1` at least, and in `test.ts` to add:
+In order to suppress the error, you need to upgrade to `12.0.1` at least, and to add in `test.ts`:
 
 ```ts
 ngMocks.config({
