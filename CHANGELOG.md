@@ -1,3 +1,21 @@
+## [12.0.1](https://github.com/ike18t/ng-mocks/compare/v12.0.0...v12.0.1) (2021-05-21)
+
+
+### Bug Fixes
+
+* **core:** a config parameter to suppress MockRender errors [#572](https://github.com/ike18t/ng-mocks/issues/572) ([bcfe23a](https://github.com/ike18t/ng-mocks/commit/bcfe23ab53a87a92529ddb30bb07618cbaab590c))
+* **core:** broken query selectors are properly normalized [#567](https://github.com/ike18t/ng-mocks/issues/567) ([9c1ea70](https://github.com/ike18t/ng-mocks/commit/9c1ea70564f11323337646a6d74ebbddc8965a31))
+* **default-mock:** supports an array with declarations [#568](https://github.com/ike18t/ng-mocks/issues/568) ([5d3b43e](https://github.com/ike18t/ng-mocks/commit/5d3b43e91db0a8e8a40dedc024a40cbd76225575))
+* **default-mock:** supports generic type in array signature [#583](https://github.com/ike18t/ng-mocks/issues/583) ([c925818](https://github.com/ike18t/ng-mocks/commit/c925818e13086e402f79fa49c39e012567d7b52a))
+* **faster:** supports directives and components without selectors [#576](https://github.com/ike18t/ng-mocks/issues/576) ([599c7d5](https://github.com/ike18t/ng-mocks/commit/599c7d518cbf280da85a73aa2a1c23ce85d74523))
+* **mock-render:** allowing to disable flush TestBed warning ([6131ecb](https://github.com/ike18t/ng-mocks/commit/6131ecbf3f45205ec059184819a9ce68c81e1502))
+* **mock-render:** providing a MockRenderFactory in order to reuse the same middleware component ([79fa336](https://github.com/ike18t/ng-mocks/commit/79fa3368798eaf9e49c92201a9b6a693e5f63e8b))
+
+
+### Performance Improvements
+
+* **core:** switching internal stack to an array instead of a set ([24c4bfd](https://github.com/ike18t/ng-mocks/commit/24c4bfd7b514b2ed38497039853a5958c721cff8))
+
 # [12.0.0](https://github.com/ike18t/ng-mocks/compare/v11.11.2...v12.0.0) (2021-05-13)
 
 
