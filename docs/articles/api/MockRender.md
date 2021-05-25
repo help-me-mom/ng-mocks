@@ -382,28 +382,30 @@ It means that every time a middleware component has been created and injected in
 whereas `MockRender` could have reused the existing middleware component and simply to create a new fixture out of it.
 
 In such situations, `MockRenderFactory` can be used instead of `MockRender`.
-It has the same interface as `MockRender`, but instead of an instant render,
+It accepts `bindings` and `providers`, but instead of an instant render,
 it returns a factory function. The factory function simply creates a new fixture out of its middleware component.
 
 Considering the conditions above, we would need to create a factory once with help of `MockRenderFactory` in `beforeAll`,
 and then 5 tests should call the factory in order to create fixtures.
 
 ```ts
-describe('Maximum reusage', () => {
+describe('Maximum performance', () => {
   ngMocks.faster();
-  
+
   beforeAll(() => MockBuilder(MyComponent, MyModule));
-  
+
   let factory: MockRenderFactory<MyComponent>;
-  beforeAll(() => factory = MockRenderFactory(MyComponent));
-  
+  beforeAll(() => {
+    factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
+  });
+
   it('covers one case', () => {
-    const fixture = factory();
+    const fixture = factory({input1: 1});
     expect(fixture.point.componentInstance.input1).toEqual(1);
   });
-  
+
   it('covers another case', () => {
-    const fixture = factory();
+    const fixture = factory({input2: 2});
     expect(fixture.point.componentInstance.input2).toEqual(2);
   });
 });

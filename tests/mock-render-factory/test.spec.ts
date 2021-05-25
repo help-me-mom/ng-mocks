@@ -21,7 +21,7 @@ describe('mock-render-factory', () => {
   beforeAll(() =>
     expect(
       () =>
-        (factory1 = MockRenderFactory(TargetComponent, { value: 1 })),
+        (factory1 = MockRenderFactory(TargetComponent, ['value'])),
     ).not.toThrow(),
   );
 
@@ -29,7 +29,7 @@ describe('mock-render-factory', () => {
   beforeAll(() =>
     expect(
       () =>
-        (factory2 = MockRenderFactory(TargetComponent, { value: 2 })),
+        (factory2 = MockRenderFactory(TargetComponent, ['value'])),
     ).not.toThrow(),
   );
 
@@ -40,26 +40,28 @@ describe('mock-render-factory', () => {
 
   it('creates different fixtures without errors in the 2nd test', () => {
     expect(() => {
-      const fixture1 = factory1();
+      const params = { value: 1 };
+      const fixture1 = factory1(params);
       expect(fixture1.point.componentInstance.value).toEqual(1);
-      factory1.params.value = 2;
+      params.value = 2;
       fixture1.detectChanges();
       expect(fixture1.point.componentInstance.value).toEqual(2);
 
       // fixture remembers the parameters
-      const fixture2 = factory1();
+      const fixture2 = factory1({ value: 2 });
       expect(fixture2.point.componentInstance.value).toEqual(2);
     }).not.toThrow();
 
     expect(() => {
-      const fixture1 = factory2();
+      const params = { value: 2 };
+      const fixture1 = factory2(params);
       expect(fixture1.point.componentInstance.value).toEqual(2);
-      factory2.params.value = 3;
+      params.value = 3;
       fixture1.detectChanges();
       expect(fixture1.point.componentInstance.value).toEqual(3);
 
       // fixture remembers the parameters
-      const fixture2 = factory2();
+      const fixture2 = factory2({ value: 3 });
       expect(fixture2.point.componentInstance.value).toEqual(3);
     }).not.toThrow();
   });
