@@ -114,6 +114,10 @@ module.exports = {
       type: 'doc',
       id: 'need-help',
     },
+    {
+      type: 'doc',
+      id: 'credits',
+    },
   ],
   guides: [
     {
