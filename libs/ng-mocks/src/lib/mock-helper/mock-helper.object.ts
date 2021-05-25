@@ -41,11 +41,10 @@ export default {
   change: mockHelperChange,
   click: mockHelperClick,
   config: (config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' }) => {
-    const flags = ngMocksUniverse.global.get('flags') || /* istanbul ignore next */ {};
+    const flags = ngMocksUniverse.global.get('flags');
     if (config.onTestBedFlushNeed !== undefined) {
       flags.onTestBedFlushNeed = config.onTestBedFlushNeed;
     }
-    ngMocksUniverse.global.set('flags', flags);
   },
   crawl: mockHelperCrawl,
   defaultMock: mockHelperDefaultMock,
