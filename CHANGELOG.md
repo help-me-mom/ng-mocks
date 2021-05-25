@@ -1,3 +1,11 @@
+## [12.0.2](https://github.com/ike18t/ng-mocks/compare/v12.0.1...v12.0.2) (2021-05-25)
+
+
+### Bug Fixes
+
+* **mock-render:** default to onTestBedFlushNeed = warn [#593](https://github.com/ike18t/ng-mocks/issues/593) ([a9e535c](https://github.com/ike18t/ng-mocks/commit/a9e535c75a8abd1ed8f6826f7581e03b9a84d759))
+* **mock-render:** dynamic params and cdr for factory [#586](https://github.com/ike18t/ng-mocks/issues/586) ([73f54c5](https://github.com/ike18t/ng-mocks/commit/73f54c52731b60c988a28fa6f7fa6e951388fd9e))
+
 ## [12.0.1](https://github.com/ike18t/ng-mocks/compare/v12.0.0...v12.0.1) (2021-05-21)
 
 
