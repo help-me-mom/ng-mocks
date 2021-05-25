@@ -63,8 +63,8 @@ const tryWhen = (flag: boolean, callback: () => void) => {
 const fixtureMessage = [
   'Forgot to flush TestBed?',
   'MockRender cannot be used without a reset after TestBed.get / TestBed.inject / TestBed.createComponent and another MockRender in the same test.',
+  'If you want to mock a service before rendering, consider usage of MockRenderFactory or MockInstance.',
   'To flush TestBed, add a call of ngMocks.flushTestBed() before the call of MockRender, or pass `reset: true` to MockRender options.',
-  'If you want to mock a service before rendering, consider usage of MockInstance.',
 ].join(' ');
 
 const handleFixtureError = (e: any) => {
@@ -73,12 +73,7 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
-const globalFlags = ngMocksUniverse.global.get('flags') || /* istanbul ignore next */ {};
-// istanbul ignore else
-if (globalFlags.onTestBedFlushNeed === undefined) {
-  globalFlags.onTestBedFlushNeed = 'throw';
-}
-ngMocksUniverse.global.set('flags', globalFlags);
+const globalFlags = ngMocksUniverse.global.get('flags');
 const flushTestBed = (flags: Record<string, any>): void => {
   const testBed: any = getTestBed();
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {

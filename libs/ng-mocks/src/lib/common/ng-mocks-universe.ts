@@ -47,6 +47,11 @@ ngMocksUniverse.flags = new Set(coreConfig.flags);
 ngMocksUniverse.global = new Map();
 ngMocksUniverse.touches = new Set();
 
+ngMocksUniverse.global.set('flags', {
+  // @deprecated and will be changed in A13 to 'throw'
+  onTestBedFlushNeed: 'warn',
+});
+
 ngMocksUniverse.getLocalMocks = () => {
   if (!ngMocksUniverse.global.has('local-mocks')) {
     ngMocksUniverse.global.set('local-mocks', []);

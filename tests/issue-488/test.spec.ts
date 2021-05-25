@@ -1,6 +1,6 @@
 import { Component, Injectable } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
 export class TargetService {
@@ -20,11 +20,13 @@ export class TargetComponent {
 }
 
 describe('issue-488', () => {
-  let service: TargetService;
+  ngMocks.throwOnConsole();
 
   beforeEach(() =>
     MockBuilder(TargetComponent).provide(TargetService),
   );
+
+  let service: TargetService;
 
   describe('classic', () => {
     beforeEach(() => {
