@@ -95,9 +95,11 @@ function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {
-  const factory = (MockRenderFactory as any)(template, params, flags);
+  const bindings = params && typeof params === 'object' ? Object.keys(params) : params;
+  const options = typeof flags === 'boolean' ? { detectChanges: flags } : { ...flags };
+  const factory = (MockRenderFactory as any)(template, bindings, options);
 
-  return factory();
+  return factory(params, options.detectChanges);
 }
 
 export { MockRender };

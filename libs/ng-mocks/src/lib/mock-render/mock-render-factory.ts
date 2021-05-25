@@ -13,12 +13,12 @@ import { MockService } from '../mock-service/mock-service';
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
-import { DefaultRenderComponent, IMockRenderOptions, MockedComponentFixture } from './types';
+import { IMockRenderOptions, MockedComponentFixture } from './types';
 
-interface MockRenderFactory<C = any, F = DefaultRenderComponent<C>> {
+interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
+  bindings: keyof F;
   declaration: AnyType<never>;
-  params: F;
-  (): MockedComponentFixture<C, F>;
+  <T extends Record<F, any>>(params?: Partial<T>, detectChanges?: boolean): MockedComponentFixture<C, T>;
 }
 
 const isExpectedRender = (template: any): boolean =>
@@ -92,12 +92,14 @@ const flushTestBed = (flags: Record<string, any>): void => {
   }
 };
 
-const generateFactory = (componentCtor: Type<any>, flags: any, params: any, template: any) => {
-  const result = () => {
+const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | any[], template: any) => {
+  const result = (params: any, detectChanges?: boolean) => {
     const fixture: any = TestBed.createComponent(componentCtor);
+
+    funcInstallPropReader(fixture.componentInstance, params);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('reporter-stack-id'));
 
-    if (flags.detectChanges === undefined || flags.detectChanges) {
+    if (detectChanges === undefined || detectChanges) {
       fixture.detectChanges();
     }
 
@@ -110,7 +112,7 @@ const generateFactory = (componentCtor: Type<any>, flags: any, params: any, temp
     return fixture;
   };
   result.declaration = componentCtor;
-  result.params = params;
+  result.bindings = bindings;
 
   return result;
 };
@@ -120,50 +122,50 @@ const generateFactory = (componentCtor: Type<any>, flags: any, params: any, temp
  */
 function MockRenderFactory<MComponent>(
   template: InjectionToken<MComponent>,
-  params?: undefined | null,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, void>;
+  bindings?: undefined | null,
+  options?: IMockRenderOptions,
+): MockRenderFactory<MComponent, never>;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
 function MockRenderFactory<MComponent>(
   template: AnyType<MComponent>,
-  params: undefined | null,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, MComponent>;
+  bindings: undefined | null,
+  options?: IMockRenderOptions,
+): MockRenderFactory<MComponent, keyof MComponent>;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent, TComponent extends object>(
+function MockRenderFactory<MComponent, TKeys extends keyof any>(
   template: AnyType<MComponent>,
-  params: TComponent,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, TComponent>;
+  bindings: TKeys[],
+  options?: IMockRenderOptions,
+): MockRenderFactory<MComponent, TKeys>;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent, TComponent extends object = Record<keyof any, any>>(
+function MockRenderFactory<MComponent, TKeys extends keyof any = keyof any>(
   template: AnyType<MComponent>,
-  params: TComponent,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, TComponent>;
+  bindings: TKeys,
+  options?: IMockRenderOptions,
+): MockRenderFactory<MComponent, TKeys>;
 
 /**
  * Without params we should not autocomplete any keys of any types.
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent>(template: AnyType<MComponent>): MockRenderFactory<MComponent, MComponent>;
+function MockRenderFactory<MComponent>(template: AnyType<MComponent>): MockRenderFactory<MComponent, keyof MComponent>;
 
 /**
  * An empty string does not have point.
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory(template: ''): MockRenderFactory<void, undefined>;
+function MockRenderFactory(template: ''): MockRenderFactory<void, never>;
 
 /**
  * Without params we should not autocomplete any keys of any types.
@@ -175,45 +177,26 @@ function MockRenderFactory<MComponent = void>(template: string): MockRenderFacto
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent = void>(
+function MockRenderFactory<MComponent = void, TKeys extends keyof any = keyof any>(
   template: string,
-  params: undefined | null,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, void>;
+  bindings?: undefined | null,
+  options?: IMockRenderOptions,
+): MockRenderFactory<MComponent, TKeys>;
 
-/**
- * @see https://ng-mocks.sudo.eu/api/MockRender#factory
- */
-function MockRenderFactory<MComponent = void, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
-  template: string,
-  params: TComponent,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, TComponent>;
-
-/**
- * @see https://ng-mocks.sudo.eu/api/MockRender#factory
- */
-function MockRenderFactory<MComponent, TComponent extends Record<keyof any, any> = Record<keyof any, any>>(
-  template: string,
-  params: TComponent,
-  detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockRenderFactory<MComponent, TComponent>;
-
-function MockRenderFactory<MComponent, TComponent extends Record<keyof any, any>>(
+function MockRenderFactory<MComponent, TKeys extends keyof any>(
   template: string | AnyType<MComponent> | InjectionToken<MComponent>,
-  params?: TComponent,
-  flags: boolean | IMockRenderOptions = true,
+  bindings?: undefined | null | TKeys[],
+  options: IMockRenderOptions = {},
 ): any {
   funcImportExists(template, 'MockRender');
 
-  const flagsObject: IMockRenderOptions = typeof flags === 'boolean' ? { detectChanges: flags } : { ...flags };
   const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : funcReflectTemplate(template);
 
-  flushTestBed(flagsObject);
+  flushTestBed(options);
   try {
-    const componentCtor: any = funcCreateWrapper(template, meta, params, flagsObject);
+    const componentCtor: any = funcCreateWrapper(template, meta, bindings, options);
 
-    return generateFactory(componentCtor, flagsObject, params, template);
+    return generateFactory(componentCtor, bindings, template);
   } catch (e) {
     handleFixtureError(e);
   }
