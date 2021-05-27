@@ -14,16 +14,16 @@
 
 The current version of the library **has been tested** and **can be used** with:
 
-| Angular | ng-mocks | Jasmine | Jest | Ivy | es5 | es2015 |
-| ------: | :------: | :-----: | :--: | :-: | :-: | :----: |
-|      12 |  latest  |   yes   | yes  | yes | yes |  yes   |
-|      11 |  latest  |   yes   | yes  | yes | yes |  yes   |
-|      10 |  latest  |   yes   | yes  | yes | yes |  yes   |
-|       9 |  latest  |   yes   | yes  | yes | yes |  yes   |
-|       8 |  latest  |   yes   | yes  |     | yes |  yes   |
-|       7 |  latest  |   yes   | yes  |     | yes |  yes   |
-|       6 |  latest  |   yes   | yes  |     | yes |  yes   |
-|       5 |  latest  |   yes   | yes  |     | yes |  yes   |
+| Angular | ng-mocks | Jasmine | Jest | Ivy |
+| ------: | :------: | :-----: | :--: | :-: |
+|      12 |  latest  |   yes   | yes  | yes |
+|      11 |  latest  |   yes   | yes  | yes |
+|      10 |  latest  |   yes   | yes  | yes |
+|       9 |  latest  |   yes   | yes  | yes |
+|       8 |  latest  |   yes   | yes  |     |
+|       7 |  latest  |   yes   | yes  |     |
+|       6 |  latest  |   yes   | yes  |     |
+|       5 |  latest  |   yes   | yes  |     |
 
 ## Important links
 

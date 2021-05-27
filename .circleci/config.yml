@@ -405,7 +405,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a9es5ivy
-  'Angular 9 ES2015 Ivy':
+  'Angular 9 ES2016 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -441,7 +441,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a10es5
-  'Angular 10 ES2015':
+  'Angular 10 ES2017':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -477,7 +477,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a10es5ivy
-  'Angular 10 ES2015 Ivy':
+  'Angular 10 ES2018 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -513,7 +513,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a11es5
-  'Angular 11 ES2015':
+  'Angular 11 ES2019':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -549,7 +549,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a11es5ivy
-  'Angular 11 ES2015 Ivy':
+  'Angular 11 ES2020 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -621,7 +621,7 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a12es5ivy
-  'Angular 12 ES2015 Ivy':
+  'Angular 12 ES2020 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
     steps:
@@ -782,31 +782,31 @@ workflows:
       - 'Angular 9 ES5 Ivy':
           requires:
             - Install
-      - 'Angular 9 ES2015 Ivy':
+      - 'Angular 9 ES2016 Ivy':
           requires:
             - Install
       - 'Angular 10 ES5':
           requires:
             - Install
-      - 'Angular 10 ES2015':
+      - 'Angular 10 ES2017':
           requires:
             - Install
       - 'Angular 10 ES5 Ivy':
           requires:
             - Install
-      - 'Angular 10 ES2015 Ivy':
+      - 'Angular 10 ES2018 Ivy':
           requires:
             - Install
       - 'Angular 11 ES5':
           requires:
             - Install
-      - 'Angular 11 ES2015':
+      - 'Angular 11 ES2019':
           requires:
             - Install
       - 'Angular 11 ES5 Ivy':
           requires:
             - Install
-      - 'Angular 11 ES2015 Ivy':
+      - 'Angular 11 ES2020 Ivy':
           requires:
             - Install
       - 'Angular 12 ES5':
@@ -818,7 +818,7 @@ workflows:
       - 'Angular 12 ES5 Ivy':
           requires:
             - Install
-      - 'Angular 12 ES2015 Ivy':
+      - 'Angular 12 ES2020 Ivy':
           requires:
             - Install
       - 'Angular Min ES5':
