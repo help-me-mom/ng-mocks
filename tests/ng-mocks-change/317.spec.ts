@@ -53,7 +53,7 @@ describe('ng-mocks-change:317', () => {
   it('throws on unknown', () => {
     MockRender(MyComponent);
     expect(() => ngMocks.change('span', 123)).toThrowError(
-      'Cannot find ControlValueAccessor on the element',
+      /Cannot find ControlValueAccessor on the element/,
     );
   });
 });

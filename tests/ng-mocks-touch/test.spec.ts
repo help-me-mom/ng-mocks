@@ -85,7 +85,7 @@ describe('ng-mocks-touch:mock', () => {
   it('throws on bad element', () => {
     const element = MockRender(MyComponent).point;
     expect(() => ngMocks.touch(element)).toThrowError(
-      'Cannot find ControlValueAccessor on the element',
+      /Cannot find ControlValueAccessor on the element/,
     );
   });
 
