@@ -33,7 +33,7 @@
         "Dockerfile",
         "docker-compose.yml",
         "docs/package.json",
-        "e2e/am/package.json",
+        "e2e/a-min/package.json",
         "package.json",
         "tests-angular/e2e/package.json"
       ],

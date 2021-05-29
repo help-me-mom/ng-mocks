@@ -290,16 +290,16 @@ jobs:
         if: steps.a12.outputs.cache-hit != 'true'
         run: npm run i:ci:a12
 
-      - name: e2e/am/node_modules
-        id: am
+      - name: e2e/a-min/node_modules
+        id: a-min
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Install A Min dependencies
-        if: steps.am.outputs.cache-hit != 'true'
-        run: npm run i:ci:am
+        if: steps.a-min.outputs.cache-hit != 'true'
+        run: npm run i:ci:a-min
 
   a5es5:
     needs: Install
@@ -1017,12 +1017,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/am/node_modules
+      - name: e2e/a-min/node_modules
         id: cache
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v2
@@ -1031,11 +1031,11 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:am
+        run: npm run s:a-min
       - name: Unit Tests
-        run: npm run test:am:es5ivy
+        run: npm run test:a-min:es5ivy
       - name: Build
-        run: npm run build:am:es5ivy
+        run: npm run build:a-min:es5ivy
 
   ames2015ivy:
     needs: Install
@@ -1049,12 +1049,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/am/node_modules
+      - name: e2e/a-min/node_modules
         id: cache
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v2
@@ -1063,8 +1063,8 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:am
+        run: npm run s:a-min
       - name: Unit Tests
-        run: npm run test:am:es2015ivy
+        run: npm run test:a-min:es2015ivy
       - name: Build
-        run: npm run build:am:es2015ivy
+        run: npm run build:a-min:es2015ivy

@@ -17,4 +17,4 @@ services:
       - /app/e2e/a10/node_modules
       - /app/e2e/a11/node_modules
       - /app/e2e/a12/node_modules
-      - /app/e2e/am/node_modules
+      - /app/e2e/a-min/node_modules
