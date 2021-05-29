@@ -98,7 +98,7 @@ describe('ng-mocks-change:reactive-forms:mock', () => {
   it('throws on bad element', () => {
     const element = MockRender(MyComponent).point;
     expect(() => ngMocks.change(element, 123)).toThrowError(
-      'Cannot find ControlValueAccessor on the element',
+      /Cannot find ControlValueAccessor on the element/,
     );
   });
 

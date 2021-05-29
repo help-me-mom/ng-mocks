@@ -50,11 +50,9 @@ In case of jest `src/setupJest.ts` should be used.
 // https://ng-mocks.sudo.eu/extra/auto-spy
 ngMocks.autoSpy('jasmine'); // or jest
 
-// ngMocks.defaultMock helps to customize
-// mock declarations and providers globally.
-// Here it stubs observables in AuthService.
-// Therefore, we don't need to stub them every time
-// in a test once we want to supress their logic.
+// ngMocks.defaultMock helps to customize mocks
+// globally. Therefore, we can avoid copy-pasting
+// among tests.
 // https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
 ngMocks.defaultMock(AuthService, () => ({
   isLoggedIn$: EMPTY,
@@ -62,142 +60,122 @@ ngMocks.defaultMock(AuthService, () => ({
 }));
 ```
 
-An example of a spec with tests.
+An example of a spec with for a login form component.
 
-```ts title="src/app.component.spec.ts"
-// We are going to test AppComponent.
-// Therefore, we want to mock its dependencies.
-// Usually, they are declared and imported in the module
-// where AppComponent has been declared too.
-//
-// Apart from that, we want to speed up tests,
-// because TestBed will be the same for all tests
-// in this suite.
-describe('app-component', () => {
-  // Allows to use MockBuilder and MockRender
-  // in beforeAll and helps to avoid recreation
-  // of the same TestBed for every test.
+```ts title="src/form.component.spec.ts"
+// Let's imagine that there is a ProfileComponent
+// and it has 3 text fields: email, firstName,
+// lastName, and a user can edit them.
+// In the following test suite, we would like to
+// cover behavior of the component.
+describe('profile', () => {
+  // First of all, we want to avoid creation of
+  // the same TestBed for every test, because it
+  // is not going to be changed from test to test.
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
-  // The next line says mock everything in AppModule,
-  // but keep AppComponent as it is.
+  // Let's configure TestBed via MockBuilder.
+  // The code below says to mock everything in
+  // ProfileModule except ProfileComponent and
+  // ReactiveFormsModule.
   beforeAll(() => {
     // The result of MockBuilder should be returned.
     // https://ng-mocks.sudo.eu/api/MockBuilder
-    return MockBuilder(AppComponent, AppModule);
+    return MockBuilder(
+      ProfileComponent,
+      ProfileModule,
+    ).keep(ReactiveFormsModule);
   });
 
-  // MockInstance helps to customize
-  // mock declarations and providers.
-  beforeEach(() => {
-    // A spy on a method which returns children.
-    // When an instance of ChildComponent is being created,
-    // the method will be replaced with the spy.
-    // https://ng-mocks.sudo.eu/api/MockInstance
-    MockInstance(
-      ChildComponent,
-      'list',
-      jasmine.createSpy(),
-    ).and.returnValue([]);
-  });
-
-  it('should be created and initialized', () => {
-    // Creating a spy on the 'check' method of the service.
-    // MockInstance allows to spy / stub properties and methods
-    // of declarations and providers before their instances
-    // have been initialized.
-    // https://ng-mocks.sudo.eu/api/MockInstance
-    const spyCheck = MockInstance(
-      AuthService,
-      'check',
-      jasmine.createSpy('AuthService.check'),
-    ).and.returnValue(true);
-
+  // A test to ensure that ProfileModule imports
+  // and declares all dependencies.
+  it('should be created', () => {
     // MockRender creates a wrapper component with
-    // a template like <app-root ...allInputs></app-root>
+    // a template like
+    // <app-root ...allInputs></profile>
     // and renders it.
-    // It helps to assert lifecycle hooks.
+    // It also respects all lifecycle hooks.
     // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(AppComponent);
+    const fixture = MockRender(ProfileComponent);
 
-    // Checking that the component has been created.
-    expect(fixture.point.componentInstance).toBeDefined();
-
-    // Checking that its ngOnInit method
-    // has called 'check' on AuthService.
-    expect(spyCheck).toHaveBeenCalled();
+    expect(
+      fixture.point.componentInstance,
+    ).toEqual(jasmine.any(ProfileComponent));
   });
 
-  it('verifies ctrl+s hot key', () => {
-    // A spy on save calls.
+  // A test to ensure that internal form controls
+  // are populated with provided @Input value.
+  it('prefills profile', () => {
+    // A fake profile.
+    const profile = {
+      email: 'test1@email.com',
+      firstName: 'testFirst1',
+      lastName: 'testLast1',
+    };
+
+    // In such a case, MockRender creates
+    // a template like:
+    // <profile [profile]="params.profile">
+    // </profile>
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const fixture = MockRender(ProfileComponent, {
+      profile,
+    });
+
+    // `point` is the access point to the debug
+    // node with the real component instance.
+    // Let's assert the form value.
+    const inst = fixture.point.componentInstance;
+    expect(inst.form.value).toEqual(profile);
+  });
+
+  // A test to ensure that the component  listens
+  // on ctrl+s hotkey.
+  it('saves on ctrl+s hot key', () => {
+    // A fake profile.
+    const profile = {
+      email: 'test2@email.com',
+      firstName: 'testFirst2',
+      lastName: 'testLast2',
+    };
+
+    // A spy to track save calls.
+    // MockInstance helps to configure mock things
+    // before their initialization and usage.
+    // https://ng-mocks.sudo.eu/api/MockInstance
     const spySave = MockInstance(
       StorageService,
       'save',
       jasmine.createSpy('StorageService.save'),
     );
 
-    // A fake user data we want to save.
-    const user = {
-      id: 1,
-      name: 'Foo Bar',
-    };
-
-    // Rendering
-    // <app-root [user]="params.user"></app-root>.
+    // <profile [profile]="params.profile">
+    // </profile>
     // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(AppComponent, { user });
+    const { point } = MockRender(
+      ProfileComponent,
+      { profile },
+    );
+
+    ngMocks.change(
+      '[name=email]',
+      'test3@em.ail',
+    );
+    expect(spySave).not.toHaveBeenCalled();
 
     // Let's assume, there is a host listener
-    // for a keyboard combination of ctrl+s
-    // on AppComponent and we want to trigger it.
+    // for a keyboard combination of ctrl+s,
+    // and we want to trigger it.
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
-    ngMocks.trigger(fixture.point, 'keyup.control.s');
+    ngMocks.trigger(point, 'keyup.control.s');
 
     // The spy should be called with the user.
-    expect(spySave).toHaveBeenCalledWith(user);
-  });
-
-  it('verifies state of save button', () => {
-    // Params for inputs and outputs
-    // of AppComponent.
-    const params = {
-      allowCheck: false,
-      click: jasmine.createSpy('click'),
-    };
-
-    // If [allowCheck] is an input and
-    // (user) is an output of AppComponent,
-    // then MockRender creates a wrapper component
-    // with a template like:
-    //
-    // <app-root
-    //   [allowCheck]="params.allowCheck"
-    //   (click)="params.click($event)"
-    // ></app-root>
-    //
-    // And renders it.
-    // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(AppComponent, params);
-
-    // The button should be disabled
-    // when params.allowCheck = false.
-    // https://ng-mocks.sudo.eu/api/ngMocks/find
-    expect(ngMocks.find('button.check').disabled).toEqual(true);
-
-    // Enabling the button.
-    params.allowCheck = true;
-    fixture.detectChanges();
-    expect(ngMocks.find('button.check').disabled).toEqual(false);
-
-    // Clicking the button
-    // in order to trigger the output.
-    // https://ng-mocks.sudo.eu/api/ngMocks/click
-    ngMocks.click('button.check');
-
-    // The spy in params.click
-    // should be notified about the click.
-    expect(params.click).toHaveBeenCalled();
+    expect(spySave).toHaveBeenCalledWith({
+      email: 'test3@em.ail',
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+    });
   });
 });
 ```

@@ -13,7 +13,7 @@ useTabs: false
 overrides:
   - files: 'README.md'
     options:
-      printWidth: 70
+      printWidth: 50
   - files: '*.spec.ts'
     options:
       printWidth: 70
