@@ -36,12 +36,18 @@ const extractAllKeys = (instance: object) => [
 
 const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
 
-export default (reader: Record<keyof any, any>, source?: Record<keyof any, any>, force: boolean = false): void => {
+export default (
+  reader: Record<keyof any, any>,
+  source: Record<keyof any, any> | undefined,
+  extra: string[],
+  force: boolean = false,
+): void => {
   if (!source) {
     return;
   }
   const exists = extractOwnKeys(reader);
-  for (const key of extractAllKeys(source)) {
+  const fields = [...extractAllKeys(source), ...extra];
+  for (const key of fields) {
     if (!force && exists.indexOf(key) !== -1) {
       continue;
     }
