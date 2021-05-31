@@ -31,7 +31,7 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
       get: () => ngMocks.get(fixture.point, template),
     });
   }
-  tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point?.componentInstance));
+  tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point?.componentInstance, []));
 };
 
 const renderInjection = (fixture: any, template: any, params: any): void => {
@@ -45,7 +45,7 @@ const renderInjection = (fixture: any, template: any, params: any): void => {
     componentInstance: instance,
     nativeElement: MockService(HTMLElement),
   });
-  funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, true);
+  funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, [], true);
 };
 
 const tryWhen = (flag: boolean, callback: () => void) => {
@@ -87,11 +87,11 @@ const flushTestBed = (flags: Record<string, any>): void => {
   }
 };
 
-const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | any[], template: any) => {
+const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | string[], template: any) => {
   const result = (params: any, detectChanges?: boolean) => {
     const fixture: any = TestBed.createComponent(componentCtor);
 
-    funcInstallPropReader(fixture.componentInstance, params);
+    funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('reporter-stack-id'));
 
     if (detectChanges === undefined || detectChanges) {
@@ -178,7 +178,7 @@ function MockRenderFactory<MComponent = void, TKeys extends keyof any = keyof an
   options?: IMockRenderOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
-function MockRenderFactory<MComponent, TKeys extends keyof any>(
+function MockRenderFactory<MComponent, TKeys extends string>(
   template: string | AnyType<MComponent> | InjectionToken<MComponent>,
   bindings?: undefined | null | TKeys[],
   options: IMockRenderOptions = {},
