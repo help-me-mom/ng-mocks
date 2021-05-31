@@ -120,8 +120,25 @@ ngMocksUniverse.hasBuildDeclaration = (def: any): boolean => {
 const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.hasBuildDeclaration(def);
 const getBuildDeclaration = (def: any): any => ngMocksUniverse.getBuildDeclaration(def);
 
-ngMocksUniverse.isExcludedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) === null;
+ngMocksUniverse.isExcludedDef = (def: any): boolean => {
+  const resolution = ngMocksUniverse.getResolution(def);
+  if (resolution && resolution !== 'exclude') {
+    return false;
+  }
+
+  return hasBuildDeclaration(def) && getBuildDeclaration(def) === null;
+};
 
 ngMocksUniverse.isProvidedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) !== null;
+
+// excluding StoreDevtoolsModule by default
+// istanbul ignore next
+try {
+  // tslint:disable-next-line no-require-imports no-implicit-dependencies no-var-requires
+  const { StoreDevtoolsModule } = require('@ngrx/store-devtools');
+  ngMocksUniverse.getDefaults().set(StoreDevtoolsModule, ['exclude']);
+} catch {
+  // nothing to do
+}
 
 export default ((): NgMocksUniverse => ngMocksUniverse)();

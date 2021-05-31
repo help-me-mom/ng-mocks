@@ -75,3 +75,13 @@ beforeEach(() =>
     .keep(EffectsFeatureModule)
 );
 ```
+
+## StoreDevtoolsModule and modules with meta reducers
+
+:::warning
+A mock meta reducer stops all reducers in the store
+:::
+
+If you have a module which has a meta reducer,
+then **please don't forget to keep it too** if you plan to keep store modules for testing.
+Otherwise, no actions will be reduced and the store will be always empty.
