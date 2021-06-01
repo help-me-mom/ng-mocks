@@ -17,11 +17,13 @@ export default (
       continue;
     }
 
-    if (defProviders.has(def) && mockDef.has(def)) {
+    if (defProviders.has(def)) {
+      if (!mockDef.has(def)) {
+        ngMocksUniverse.flags.add('skipMock');
+      }
       const [, loDef] = mockNgDef({ providers: defProviders.get(def) });
       loProviders.set(def, loDef.providers);
-    } else if (defProviders.has(def)) {
-      loProviders.set(def, defProviders.get(def));
+      ngMocksUniverse.flags.delete('skipMock');
     }
 
     ngMocksUniverse.builtDeclarations.set(def, MockModule(def));
