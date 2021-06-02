@@ -60,7 +60,7 @@ ngMocks.defaultMock(AuthService, () => ({
 }));
 ```
 
-An example of a spec with for a login form component.
+An example of a spec for a profile edit component.
 
 ```ts title="src/form.component.spec.ts"
 // Let's imagine that there is a ProfileComponent
@@ -129,15 +129,15 @@ describe('profile', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const { point } = MockRender(
       ProfileComponent,
-      { profile },
+      { profile }, // bindings
     );
 
     // Let's put a random email in the text field
     // for email addresses.
     // https://ng-mocks.sudo.eu/api/ngMocks/change
     ngMocks.change(
-      '[name=email]',
-      'test3@em.ail',
+      '[name=email]', // css selector
+      'test3@em.ail', // an email
     );
 
     // Let's ensure that nothing has been called.
