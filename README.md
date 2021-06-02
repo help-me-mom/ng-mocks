@@ -104,33 +104,7 @@ describe('profile', () => {
     ).toEqual(jasmine.any(ProfileComponent));
   });
 
-  // A test to ensure that internal form controls
-  // are populated with provided @Input value.
-  it('prefills profile', () => {
-    // A fake profile.
-    const profile = {
-      email: 'test1@email.com',
-      firstName: 'testFirst1',
-      lastName: 'testLast1',
-    };
-
-    // In such a case, MockRender creates
-    // a template like:
-    // <profile [profile]="params.profile">
-    // </profile>
-    // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(ProfileComponent, {
-      profile,
-    });
-
-    // `point` is the access point to the debug
-    // node with the real component instance.
-    // Let's assert the form value.
-    const inst = fixture.point.componentInstance;
-    expect(inst.form.value).toEqual(profile);
-  });
-
-  // A test to ensure that the component  listens
+  // A test to ensure that the component listens
   // on ctrl+s hotkey.
   it('saves on ctrl+s hot key', () => {
     // A fake profile.
@@ -150,27 +124,33 @@ describe('profile', () => {
       jasmine.createSpy('StorageService.save'),
     );
 
-    // <profile [profile]="params.profile">
-    // </profile>
+    // Renders <profile [profile]="params.profile">
+    // </profile>, and supports onPush components.
     // https://ng-mocks.sudo.eu/api/MockRender
     const { point } = MockRender(
       ProfileComponent,
       { profile },
     );
 
+    // Let's put a random email in the text field
+    // for email addresses.
+    // https://ng-mocks.sudo.eu/api/ngMocks/change
     ngMocks.change(
       '[name=email]',
       'test3@em.ail',
     );
+
+    // Let's ensure that nothing has been called.
     expect(spySave).not.toHaveBeenCalled();
 
-    // Let's assume, there is a host listener
+    // Let's assume that there is a host listener
     // for a keyboard combination of ctrl+s,
     // and we want to trigger it.
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
-    // The spy should be called with the user.
+    // The spy should be called with the user
+    // and the random email address.
     expect(spySave).toHaveBeenCalledWith({
       email: 'test3@em.ail',
       firstName: profile.firstName,
