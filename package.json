@@ -118,10 +118,10 @@
     "build:am:es2015ivy": "cd e2e/am && npm run build:es2015:ivy"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "12.0.2",
+    "@angular-devkit/build-angular": "12.0.3",
     "@angular/animations": "12.0.3",
     "@angular/cdk": "12.0.2",
-    "@angular/cli": "12.0.2",
+    "@angular/cli": "12.0.3",
     "@angular/common": "12.0.3",
     "@angular/compiler": "12.0.3",
     "@angular/compiler-cli": "12.0.3",
