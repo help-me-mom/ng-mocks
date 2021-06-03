@@ -76,12 +76,24 @@ beforeEach(() =>
 );
 ```
 
-## StoreDevtoolsModule and modules with meta reducers
+## Meta reducers
 
 :::warning
 A mock meta reducer stops all reducers in the store
 :::
 
-If you have a module which has a meta reducer,
+### StoreDevtoolsModule
+
+If you have a module which has a meta reducer, such as `StoreDevtoolsModule`,
 then **please don't forget to keep it too** if you plan to keep store modules for testing.
-Otherwise, no actions will be reduced and the store will be always empty.
+Otherwise, no actions will be reduced, and the store will be always empty.
+
+As an option, such a **module could be excluded** to avoid any side effects: `.exclude(StoreDevtoolsModule)`.
+
+### USER_PROVIDED_META_REDUCERS
+
+Apart from that, it might be needed to keep `StoreRootModule`, but suppress all manually injected meta reducers.
+In order to do so, simply mock `USER_PROVIDED_META_REDUCERS` token with an empty array:
+`.mock(USER_PROVIDED_META_REDUCERS, [])`. 
+
+Then **zero meta reducers** will be provided in current test suites.
