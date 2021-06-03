@@ -1,5 +1,4 @@
 import { Component, Directive } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import { Type } from '../common/core.types';
@@ -39,11 +38,7 @@ const generateWrapper = ({ bindings, options, inputs }: any) => {
       }
     }
   }
-
   Component(options)(MockRenderComponent);
-  TestBed.configureTestingModule({
-    declarations: [MockRenderComponent],
-  });
 
   return MockRenderComponent;
 };

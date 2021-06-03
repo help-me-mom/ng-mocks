@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine && npm run test:jest",
+    "test:debug": "npm run test:jasmine:es2015 -- --browsers=Chrome --watch",
     "test:jasmine": "npm run test:jasmine:es5 && npm run test:jasmine:es2015",
     "test:jasmine:es5": "ng test --ts-config ./tsconfig.es5.spec.json --progress=false",
     "test:jasmine:es2015": "ng test --ts-config ./tsconfig.es2015.spec.json --progress=false",

@@ -7,6 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine && npm run test:jest",
+    "test:debug": "npm run test:jasmine:es2015:ivy -- --browsers=Chrome --watch",
     "test:jasmine": "npm run test:jasmine:es5:ivy && npm run test:jasmine:es5:no-ivy && npm run test:jasmine:es2015:ivy && npm run test:jasmine:es2015:no-ivy",
     "test:jasmine:es5:ivy": "ng test --ts-config ./tsconfig.es5ivy.spec.json --progress=false",
     "test:jasmine:es5:no-ivy": "ng test --ts-config ./tsconfig.es5noivy.spec.json --progress=false",

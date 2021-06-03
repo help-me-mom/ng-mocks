@@ -2,14 +2,16 @@ import ngMocksUniverse from './ng-mocks-universe';
 
 export interface NgMocksStack {
   id: object;
+  level: 'root' | 'suite' | 'test';
   mockInstance?: any[];
 }
 
 type NgMocksStackCallback = (state: NgMocksStack, stack: NgMocksStack[]) => void;
 
-// istanbul ignore next
-const stack: NgMocksStack[] = ngMocksUniverse.global.get('reporter-stack') ?? [];
+const stackRoot: NgMocksStack = { id: {}, level: 'root' };
+const stack: NgMocksStack[] = ngMocksUniverse.global.get('reporter-stack') || [{ ...stackRoot }];
 ngMocksUniverse.global.set('reporter-stack', stack);
+const current = () => stack[stack.length - 1];
 
 // istanbul ignore next
 const listenersPush: NgMocksStackCallback[] = ngMocksUniverse.global.get('reporter-stack-push') ?? [];
@@ -19,10 +21,10 @@ ngMocksUniverse.global.set('reporter-stack-push', listenersPush);
 const listenersPop: NgMocksStackCallback[] = ngMocksUniverse.global.get('reporter-stack-pop') ?? [];
 ngMocksUniverse.global.set('reporter-stack-pop', listenersPop);
 
-const stackPush = () => {
+const stackPush = (level: NgMocksStack['level']) => {
   const id = {};
   ngMocksUniverse.global.set('reporter-stack-id', id);
-  const state = { id };
+  const state = { id, level };
   stack.push(state);
 
   for (const callback of listenersPush) {
@@ -31,10 +33,11 @@ const stackPush = () => {
 };
 const stackPop = () => {
   const state = stack.pop();
+
+  // this code is actually needed for jest tests.
   // istanbul ignore if
   if (stack.length === 0) {
-    const id = {};
-    stack.push({ id });
+    stack.push({ ...stackRoot });
   }
 
   // istanbul ignore else
@@ -49,18 +52,38 @@ const stackPop = () => {
 
 const reporterStack: jasmine.CustomReporter = {
   jasmineDone: stackPop,
-  jasmineStarted: stackPush,
+  jasmineStarted: () => stackPush('root'),
   specDone: stackPop,
-  specStarted: stackPush,
+  specStarted: () => stackPush('test'),
   suiteDone: stackPop,
-  suiteStarted: stackPush,
+  suiteStarted: () => stackPush('suite'),
+};
+
+const messageCore = [
+  'ng-mocks cannot install own spec reporter.',
+  'This affects its core features for MockInstance and MockRender.',
+  'Please report an issue on github.',
+  'If you use jest v27, please add to its config testRunner=jest-jasmine2 for now',
+  'and upvote the issue on github: https://github.com/facebook/jest/issues/11483.',
+].join(' ');
+
+// istanbul ignore next
+const messageCoreChecker = () => {
+  if (current().level === 'root') {
+    throw new Error(messageCore);
+  }
 };
 
 const install = () => {
   if (!ngMocksUniverse.global.has('reporter-stack-install')) {
-    jasmine.getEnv().addReporter(reporterStack);
-    ngMocksUniverse.global.set('reporter-stack-install', true);
-    stackPush();
+    // istanbul ignore if
+    // tslint:disable-next-line strict-type-predicates
+    if (typeof jasmine === 'undefined') {
+      messageCoreChecker();
+    } else {
+      jasmine.getEnv().addReporter(reporterStack);
+      ngMocksUniverse.global.set('reporter-stack-install', true);
+    }
   }
 
   return ngMocksUniverse.global.has('reporter-stack-install');
@@ -100,6 +123,7 @@ const unsubscribePop = (callback: NgMocksStackCallback) => {
 };
 
 export default {
+  current,
   install,
   subscribePop,
   subscribePush,
