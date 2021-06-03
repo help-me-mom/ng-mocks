@@ -133,13 +133,21 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: any
   }
 };
 
+const initTestBed = () => {
+  if (!(TestBed as any).ngMocksSelectors) {
+    (TestBed as any).ngMocksSelectors = new Map();
+  }
+  // istanbul ignore else
+  if (!(TestBed as any).ngMocksOverrides) {
+    (TestBed as any).ngMocksOverrides = new Set();
+  }
+};
+
 const configureTestingModule =
   (original: TestBedStatic['configureTestingModule']): TestBedStatic['configureTestingModule'] =>
   (moduleDef: TestModuleMetadata) => {
     ngMocksUniverse.global.set('bullet:customized', true);
-    if (!(TestBed as any).ngMocksSelectors) {
-      (TestBed as any).ngMocksSelectors = new Map();
-    }
+    initTestBed();
     const { mocks, overrides } = funcExtractTokens(moduleDef.providers);
 
     if (mocks) {
@@ -151,15 +159,14 @@ const configureTestingModule =
     }
 
     // istanbul ignore else
-    // Now we can apply overrides.
-    if (!(TestBed as any).ngMocksOverrides) {
-      (TestBed as any).ngMocksOverrides = new Set();
-    }
-    // istanbul ignore else
     if (overrides) {
       applyOverrides(testBedStatic, overrides);
     }
-    applyPlatformOverrides(getTestBed().ngModule, mocks, (TestBed as any).ngMocksOverrides, new Set());
+    const testBed = getTestBed();
+    // istanbul ignore else
+    if (testBed && testBed.ngModule) {
+      applyPlatformOverrides(testBed.ngModule, mocks, (TestBed as any).ngMocksOverrides, new Set());
+    }
 
     return testBedStatic;
   };

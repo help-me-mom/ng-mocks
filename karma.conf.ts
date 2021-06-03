@@ -43,6 +43,7 @@ export default (config: KarmaTypescriptConfig) => {
       },
     },
     files: [
+      'empty.ts',
       'karma-test-shim.ts',
       'libs/ng-mocks/src/index.ts',
       { pattern: 'libs/ng-mocks/src/lib/**/*.ts' },
@@ -56,6 +57,13 @@ export default (config: KarmaTypescriptConfig) => {
       useBrowserName: false,
     },
     karmaTypescriptConfig: {
+      bundlerOptions: {
+        resolve: {
+          alias: {
+            'jest-circus/build/state': './empty.ts',
+          },
+        },
+      },
       coverageOptions:
         process.env.WITH_COVERAGE === undefined
           ? {

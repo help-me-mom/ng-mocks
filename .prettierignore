@@ -12,6 +12,7 @@ e2e/a6/src/test
 e2e/a7/src/test
 e2e/a8/src/test
 e2e/a9/src/test
+e2e/a-jest/src/test
 e2e/a-min/src/test
 node_modules/
 test-reports/
