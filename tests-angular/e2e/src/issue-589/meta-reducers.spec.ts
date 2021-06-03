@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit } from '@angular/core';
 import {
+  Action,
   createAction,
   createFeatureSelector,
   createReducer,
@@ -8,11 +9,8 @@ import {
   Store,
   StoreModule,
   StoreRootModule,
+  USER_PROVIDED_META_REDUCERS,
 } from '@ngrx/store';
-import {
-  INITIAL_OPTIONS,
-  StoreDevtoolsModule,
-} from '@ngrx/store-devtools';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const increaseValue = createAction('set-value');
@@ -28,6 +26,27 @@ const myReducer = {
 };
 
 const selectValue = createFeatureSelector(myReducer.featureKey);
+
+const myMetaReducer =
+  (reducer: <T>(state: T | undefined, action: Action) => T) =>
+  <T extends { test?: number }>(
+    state: T | undefined,
+    action: any,
+  ) => {
+    let newState = state;
+    if (
+      state &&
+      typeof state === 'object' &&
+      typeof state.test === 'number'
+    ) {
+      newState = {
+        ...state,
+        test: state.test + 100,
+      };
+    }
+
+    return reducer(newState, action);
+  };
 
 @Component({
   selector: 'target',
@@ -52,22 +71,42 @@ class MyComponent implements OnInit {
   exports: [MyComponent],
   imports: [
     CommonModule,
-    StoreModule.forRoot({
-      [myReducer.featureKey]: myReducer.reducer,
-    }),
-    StoreDevtoolsModule.instrument({
-      maxAge: 6,
-    }),
+    StoreModule.forRoot(
+      {
+        [myReducer.featureKey]: myReducer.reducer,
+      },
+      {
+        metaReducers: [myMetaReducer],
+      },
+    ),
   ],
 })
 class MyModule {}
 
-describe('issue-589:dev-tools', () => {
-  beforeEach(() =>
-    MockBuilder(MyComponent, MyModule).keep(StoreRootModule),
-  );
+describe('issue-589:meta-reducers', () => {
+  describe('.keep(StoreRootModule)', () => {
+    beforeEach(() =>
+      MockBuilder(MyComponent, MyModule).keep(StoreRootModule),
+    );
 
-  it('excludes StoreDevtoolsModule by default', () => {
-    expect(ngMocks.formatText(MockRender(MyComponent))).toEqual('1');
+    it('goes w/ the meta reducer', () => {
+      expect(ngMocks.formatText(MockRender(MyComponent))).toEqual(
+        '101',
+      );
+    });
+  });
+
+  describe('.mock(USER_PROVIDED_META_REDUCERS, [])', () => {
+    beforeEach(() =>
+      MockBuilder(MyComponent, MyModule)
+        .keep(StoreRootModule)
+        .mock(USER_PROVIDED_META_REDUCERS, []),
+    );
+
+    it('goes w/o the meta reducer', () => {
+      expect(ngMocks.formatText(MockRender(MyComponent))).toEqual(
+        '1',
+      );
+    });
   });
 });
