@@ -6,10 +6,11 @@
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "npm run test:jasmine -- --progress=false && npm run test:jest",
+    "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
     "test:jasmine": "ng test",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
-    "test:jest": "jest -w 1",
-    "test:jest:debug": "jest -w 1 --watch"
+    "test:jest": "jest -w 2",
+    "test:jest:debug": "jest -w 2 --watch"
   },
   "private": true,
   "peerDependencies": {

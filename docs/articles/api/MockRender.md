@@ -379,7 +379,7 @@ Especially, in cases, when the same setup should be used in different tests.
 
 For example, we have 5 tests and every test calls `MockRender(MyComponent)`.
 It means that every time a middleware component has been created and injected into `TestBed`,
-whereas `MockRender` could have reused the existing middleware component and simply to create a new fixture out of it.
+whereas `MockRender` could reuse the existing middleware component and simply would create a new fixture out of it.
 
 In such situations, `MockRenderFactory` can be used instead of `MockRender`.
 It accepts `bindings` and `providers`, but instead of an instant render,
@@ -390,14 +390,11 @@ and then 5 tests should call the factory in order to create fixtures.
 
 ```ts
 describe('Maximum performance', () => {
+  const factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
+  
   ngMocks.faster();
-
   beforeAll(() => MockBuilder(MyComponent, MyModule));
-
-  let factory: MockRenderFactory<MyComponent>;
-  beforeAll(() => {
-    factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
-  });
+  beforeAll(() => factory.configureTestBed());
 
   it('covers one case', () => {
     const fixture = factory({input1: 1});

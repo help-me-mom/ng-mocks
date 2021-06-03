@@ -15,6 +15,10 @@ export interface IMockRenderOptions {
   reset?: boolean;
 }
 
+export interface IMockRenderFactoryOptions extends IMockRenderOptions {
+  configureTestBed?: boolean;
+}
+
 export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> extends ComponentFixture<F> {
   point: MockedDebugElement<C>;
 }

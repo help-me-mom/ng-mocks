@@ -7,6 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine && npm run test:jest",
+    "test:debug": "npm run test:jasmine:es2015:ivy -- --browsers=Chrome --watch",
     "test:jasmine": "npm run test:jasmine:es5:ivy && npm run test:jasmine:es5:no-ivy && npm run test:jasmine:es2015:ivy && npm run test:jasmine:es2015:no-ivy",
     "test:jasmine:es5:ivy": "ng test --ts-config ./tsconfig.es5ivy.spec.json --progress=false",
     "test:jasmine:es5:no-ivy": "ng test --ts-config ./tsconfig.es5noivy.spec.json --progress=false",
@@ -14,11 +15,11 @@
     "test:jasmine:es2015:no-ivy": "ng test --ts-config ./tsconfig.es2015noivy.spec.json --progress=false",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
     "test:jest": "npm run test:jest:es5:ivy && npm run test:jest:es5:no-ivy &&npm run test:jest:es2015:ivy &&npm run test:jest:es2015:no-ivy",
-    "test:jest:es5:ivy": "jest -w 1 --config jest.es5ivy.js",
-    "test:jest:es5:no-ivy": "jest -w 1 --config jest.es5noivy.js",
-    "test:jest:es2015:ivy": "jest -w 1 --config jest.es2015ivy.js",
-    "test:jest:es2015:no-ivy": "jest -w 1 --config jest.es2015noivy.js",
-    "test:jest:debug": "jest -w 1 --watch"
+    "test:jest:es5:ivy": "jest -w 2 --config jest.es5ivy.js",
+    "test:jest:es5:no-ivy": "jest -w 2 --config jest.es5noivy.js",
+    "test:jest:es2015:ivy": "jest -w 2 --config jest.es2015ivy.js",
+    "test:jest:es2015:no-ivy": "jest -w 2 --config jest.es2015noivy.js",
+    "test:jest:debug": "jest -w 2 --watch"
   },
   "peerDependencies": {
     "ng-mocks": "*"

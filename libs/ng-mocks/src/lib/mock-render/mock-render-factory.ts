@@ -5,6 +5,7 @@ import coreDefineProperty from '../common/core.define-property';
 import { AnyType, Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
+import ngMocksStack from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
@@ -13,10 +14,11 @@ import { MockService } from '../mock-service/mock-service';
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
-import { IMockRenderOptions, MockedComponentFixture } from './types';
+import { IMockRenderFactoryOptions, MockedComponentFixture } from './types';
 
 interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
   bindings: keyof F;
+  configureTestBed: () => void;
   declaration: AnyType<never>;
   <T extends Record<F, any>>(params?: Partial<T>, detectChanges?: boolean): MockedComponentFixture<C, T>;
 }
@@ -87,8 +89,35 @@ const flushTestBed = (flags: Record<string, any>): void => {
   }
 };
 
-const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | string[], template: any) => {
+const generateFactoryInstall = (ctor: AnyType<any>, options: IMockRenderFactoryOptions) => () => {
+  const testBed: TestBed & {
+    _compiler?: {
+      declarations?: Array<AnyType<any>>;
+    };
+    _declarations?: Array<AnyType<any>>;
+    declarations?: Array<AnyType<any>>;
+  } = getTestBed();
+  const declarations = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
+  if (!declarations || declarations.indexOf(ctor) === -1) {
+    flushTestBed(options);
+    try {
+      TestBed.configureTestingModule({
+        declarations: [ctor],
+      });
+    } catch (e) {
+      handleFixtureError(e);
+    }
+  }
+};
+
+const generateFactory = (
+  componentCtor: Type<any>,
+  bindings: undefined | null | string[],
+  template: any,
+  options: IMockRenderFactoryOptions,
+) => {
   const result = (params: any, detectChanges?: boolean) => {
+    result.configureTestBed();
     const fixture: any = TestBed.createComponent(componentCtor);
 
     funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
@@ -108,6 +137,7 @@ const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | 
   };
   result.declaration = componentCtor;
   result.bindings = bindings;
+  result.configureTestBed = generateFactoryInstall(componentCtor, options);
 
   return result;
 };
@@ -118,7 +148,7 @@ const generateFactory = (componentCtor: Type<any>, bindings: undefined | null | 
 function MockRenderFactory<MComponent>(
   template: InjectionToken<MComponent>,
   bindings?: undefined | null,
-  options?: IMockRenderOptions,
+  options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, never>;
 
 /**
@@ -127,7 +157,7 @@ function MockRenderFactory<MComponent>(
 function MockRenderFactory<MComponent>(
   template: AnyType<MComponent>,
   bindings: undefined | null,
-  options?: IMockRenderOptions,
+  options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, keyof MComponent>;
 
 /**
@@ -136,7 +166,7 @@ function MockRenderFactory<MComponent>(
 function MockRenderFactory<MComponent, TKeys extends keyof any>(
   template: AnyType<MComponent>,
   bindings: TKeys[],
-  options?: IMockRenderOptions,
+  options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
 /**
@@ -144,8 +174,8 @@ function MockRenderFactory<MComponent, TKeys extends keyof any>(
  */
 function MockRenderFactory<MComponent, TKeys extends keyof any = keyof any>(
   template: AnyType<MComponent>,
-  bindings: TKeys,
-  options?: IMockRenderOptions,
+  bindings: TKeys[],
+  options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
 /**
@@ -174,27 +204,25 @@ function MockRenderFactory<MComponent = void>(template: string): MockRenderFacto
  */
 function MockRenderFactory<MComponent = void, TKeys extends keyof any = keyof any>(
   template: string,
-  bindings?: undefined | null,
-  options?: IMockRenderOptions,
+  bindings: TKeys[],
+  options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
 function MockRenderFactory<MComponent, TKeys extends string>(
   template: string | AnyType<MComponent> | InjectionToken<MComponent>,
   bindings?: undefined | null | TKeys[],
-  options: IMockRenderOptions = {},
+  options: IMockRenderFactoryOptions = {},
 ): any {
   funcImportExists(template, 'MockRender');
 
   const meta: Directive = typeof template === 'string' || isNgDef(template, 't') ? {} : funcReflectTemplate(template);
-
-  flushTestBed(options);
-  try {
-    const componentCtor: any = funcCreateWrapper(template, meta, bindings, options);
-
-    return generateFactory(componentCtor, bindings, template);
-  } catch (e) {
-    handleFixtureError(e);
+  const componentCtor: any = funcCreateWrapper(template, meta, bindings, options);
+  const factory = generateFactory(componentCtor, bindings, template, options);
+  if (ngMocksStack.current().level !== 'root' && options.configureTestBed !== false) {
+    factory.configureTestBed();
   }
+
+  return factory;
 }
 
 export { MockRenderFactory };

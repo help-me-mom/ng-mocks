@@ -78,7 +78,7 @@ jobs:
       - run:
           name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
           command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
+            curl -sL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
               > $HOME/codeclimate
             chmod +x $HOME/codeclimate
             $HOME/codeclimate before-build
