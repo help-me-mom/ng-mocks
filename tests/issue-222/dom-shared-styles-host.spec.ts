@@ -56,7 +56,11 @@ class TargetComponent {
 class TargetModule {}
 
 describe('issue-222:DomSharedStylesHost:mock', () => {
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).mock(
+      BrowserAnimationsModule,
+    ),
+  );
 
   it('correctly handles DomSharedStylesHost in a mock module', () => {
     const fixture = MockRender(TargetComponent);
@@ -84,7 +88,10 @@ describe('issue-222:DomSharedStylesHost:keep', () => {
 describe('issue-222:DomSharedStylesHost:guts', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(
-      ngMocks.guts(TargetComponent, TargetModule),
+      ngMocks.guts(TargetComponent, [
+        TargetModule,
+        BrowserAnimationsModule,
+      ]),
     ).compileComponents(),
   );
 

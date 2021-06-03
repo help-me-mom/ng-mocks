@@ -12,6 +12,26 @@ import helperMockService from '../mock-service/helper.mock-service';
 
 import { MockModule } from './mock-module';
 
+// tslint:disable-next-line variable-name
+let BrowserAnimationsModule: any;
+// tslint:disable-next-line variable-name
+let NoopAnimationsModule: any;
+// istanbul ignore next
+let replaceWithNoop: (def: any) => boolean = () => false;
+try {
+  // tslint:disable-next-line no-require-imports no-var-requires
+  const imports = require('@angular/platform-browser/animations');
+  BrowserAnimationsModule = imports.BrowserAnimationsModule;
+  NoopAnimationsModule = imports.NoopAnimationsModule;
+  replaceWithNoop = (def: any) =>
+    def === BrowserAnimationsModule &&
+    !!BrowserAnimationsModule &&
+    !!NoopAnimationsModule &&
+    !ngMocksUniverse.getResolution(def);
+} catch {
+  // nothing to do
+}
+
 const processDefMap: Array<[any, any]> = [
   ['c', MockComponent],
   ['d', MockDirective],
@@ -19,6 +39,12 @@ const processDefMap: Array<[any, any]> = [
 ];
 
 const processDef = (def: any) => {
+  // BrowserAnimationsModule is a very special case.
+  // If it is not resolved manually, we simply replace it with NoopAnimationsModule.
+  if (replaceWithNoop(def)) {
+    return NoopAnimationsModule;
+  }
+
   if (isNgDef(def, 'm') || isNgModuleDefWithProviders(def)) {
     return MockModule(def as any);
   }

@@ -217,8 +217,18 @@ const generateData = (protoKeep: any, protoMock: any, protoExclude: any): Data =
 export default (keep: any, mock: any = null, exclude: any = null): TestModuleMetadata => {
   const data: Data = generateData(keep, mock, exclude);
 
+  const resolutions = new Map();
+  ngMocksUniverse.config.set('ngMocksDepsResolution', resolutions);
+  for (const mockDef of mapValues(data.keep)) {
+    resolutions.set(mockDef, 'keep');
+  }
+  for (const mockDef of mapValues(data.exclude)) {
+    resolutions.set(mockDef, 'exclude');
+  }
+
   ngMocksUniverse.config.set('mockNgDefResolver', new Map());
   for (const def of mapValues(data.mock)) {
+    resolutions.set(def, 'mock');
     if (data.optional.has(def)) {
       continue;
     }
@@ -226,6 +236,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
   }
   const meta = createMeta(data);
   ngMocksUniverse.config.delete('mockNgDefResolver');
+  ngMocksUniverse.config.delete('ngMocksDepsResolution');
 
   return meta;
 };
