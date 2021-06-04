@@ -290,6 +290,17 @@ jobs:
         if: steps.a12.outputs.cache-hit != 'true'
         run: npm run i:ci:a12
 
+      - name: e2e/a-jasmine/node_modules
+        id: a-jasmine
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-jasmine/node_modules
+          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+
+      - name: Install A Jasmine dependencies
+        if: steps.a-jasmine.outputs.cache-hit != 'true'
+        run: npm run i:ci:a-jasmine
+
       - name: e2e/a-jest/node_modules
         id: a-jest
         uses: actions/cache@v2
@@ -1015,6 +1026,66 @@ jobs:
         run: npm run s:test:a12
       - name: Unit Tests
         run: npm run test:a12es2015ivy
+  ajasminees5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Jasmine es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a-jasmine/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-jasmine/node_modules
+          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a-jasmine
+      - name: Unit Tests
+        run: npm run test:a-jasmine:es5ivy
+
+  ajasminees2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Jasmine es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a-jasmine/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-jasmine/node_modules
+          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a-jasmine
+      - name: Unit Tests
+        run: npm run test:a-jasmine:es2015ivy
+
   ajestes5ivy:
     needs: Install
     runs-on: ubuntu-latest
@@ -1042,8 +1113,6 @@ jobs:
 
       - name: Spreading Build
         run: npm run s:a-jest
-      - name: Spreading Tests
-        run: npm run s:test:a-jest
       - name: Unit Tests
         run: npm run test:a-jest:es5ivy
 
@@ -1074,8 +1143,6 @@ jobs:
 
       - name: Spreading Build
         run: npm run s:a-jest
-      - name: Spreading Tests
-        run: npm run s:test:a-jest
       - name: Unit Tests
         run: npm run test:a-jest:es2015ivy
 
