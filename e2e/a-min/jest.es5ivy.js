@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/src/setupJest.ts'],
+  testRunner: 'jest-jasmine2',
+  setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testURL: 'http://localhost',
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
   globals: {
