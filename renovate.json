@@ -40,8 +40,9 @@
     },
 
     {
-      "paths": ["e2e/a-jest/package.json", "e2e/a-min/package.json"],
+      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
       "additionalBranchPrefix": "e2e/latest/",
+      "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
 
