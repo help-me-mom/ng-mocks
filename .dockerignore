@@ -9,7 +9,8 @@
 /e2e/a10/node_modules
 /e2e/a11/node_modules
 /e2e/a12/node_modules
-/e2e/am/node_modules
+/e2e/a-jest/node_modules
+/e2e/a-min/node_modules
 /node_modules
 /test-reports
 /tmp

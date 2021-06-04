@@ -11,7 +11,7 @@ describe('AppComponent', () => {
     expect(fixture.point.componentInstance).toBeTruthy();
   });
 
-  it(`should have as title 'am'`, () => {
+  it(`should have a title`, () => {
     const fixture = MockRender(AppComponent);
     expect(fixture.point.componentInstance.title).toEqual(
       'Hello World',

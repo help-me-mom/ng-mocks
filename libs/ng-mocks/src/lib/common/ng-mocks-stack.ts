@@ -1,5 +1,15 @@
 import ngMocksUniverse from './ng-mocks-universe';
 
+let addJestCircusEventHandler: undefined | ((event: { name: string }) => void);
+// istanbul ignore next
+try {
+  // tslint:disable-next-line no-require-imports no-var-requires no-implicit-dependencies
+  const jestCircus: any = require('jest-circus/build/state');
+  addJestCircusEventHandler = jestCircus.addEventHandler;
+} catch {
+  // nothing to do
+}
+
 export interface NgMocksStack {
   id: object;
   level: 'root' | 'suite' | 'test';
@@ -74,20 +84,66 @@ const messageCoreChecker = () => {
   }
 };
 
+// istanbul ignore next
+const installJasmineReporter = () => {
+  // jasmine
+  try {
+    jasmine.getEnv().addReporter(reporterStack);
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// istanbul ignore next
+const installJestCircus = () => {
+  if (!addJestCircusEventHandler) {
+    return false;
+  }
+
+  afterEach(messageCoreChecker); // TODO remove once Jest has a solution
+
+  addJestCircusEventHandler((event: { name: string }) => {
+    switch (event.name) {
+      case 'run_start':
+        stackPush('root');
+        break;
+      case 'run_describe_start':
+        stackPush('suite');
+        break;
+      case 'test_start':
+        stackPush('test');
+        break;
+      case 'test_done':
+      case 'run_describe_finish':
+      case 'run_finish':
+        stackPop();
+        break;
+      default:
+      // nothing to do
+    }
+  });
+
+  return true;
+};
+
 const install = () => {
   if (!ngMocksUniverse.global.has('reporter-stack-install')) {
+    let installed = false;
+    installed = installJasmineReporter() || /* istanbul ignore next */ installed;
+    installed = installJestCircus() || /* istanbul ignore next */ installed;
     // istanbul ignore if
-    // tslint:disable-next-line strict-type-predicates
-    if (typeof jasmine === 'undefined') {
+    if (!installed) {
       messageCoreChecker();
-    } else {
-      jasmine.getEnv().addReporter(reporterStack);
-      ngMocksUniverse.global.set('reporter-stack-install', true);
     }
+
+    ngMocksUniverse.global.set('reporter-stack-install', true);
   }
 
   return ngMocksUniverse.global.has('reporter-stack-install');
 };
+install();
 
 // istanbul ignore next
 const subscribePush = (callback: NgMocksStackCallback) => {

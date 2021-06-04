@@ -33,11 +33,16 @@
         "Dockerfile",
         "docker-compose.yml",
         "docs/package.json",
-        "e2e/am/package.json",
         "package.json",
         "tests-angular/e2e/package.json"
       ],
       "additionalBranchPrefix": "root/"
+    },
+
+    {
+      "paths": ["e2e/a-jest/package.json", "e2e/a-min/package.json"],
+      "additionalBranchPrefix": "e2e/latest/",
+      "ignoreUnstable": false
     },
 
     {

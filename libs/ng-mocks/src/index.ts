@@ -1,3 +1,6 @@
+// tslint:disable-next-line:no-import-side-effect
+import './lib/common/ng-mocks-stack';
+
 export { getTestBedInjection, getInjection } from './lib/common/core.helpers';
 export * from './lib/common/core.tokens';
 export * from './lib/common/core.types';

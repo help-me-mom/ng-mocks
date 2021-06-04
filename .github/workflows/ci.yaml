@@ -290,16 +290,27 @@ jobs:
         if: steps.a12.outputs.cache-hit != 'true'
         run: npm run i:ci:a12
 
-      - name: e2e/am/node_modules
-        id: am
+      - name: e2e/a-jest/node_modules
+        id: a-jest
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-jest/node_modules
+          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+
+      - name: Install A Jest dependencies
+        if: steps.a-jest.outputs.cache-hit != 'true'
+        run: npm run i:ci:a-jest
+
+      - name: e2e/a-min/node_modules
+        id: a-min
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Install A Min dependencies
-        if: steps.am.outputs.cache-hit != 'true'
-        run: npm run i:ci:am
+        if: steps.a-min.outputs.cache-hit != 'true'
+        run: npm run i:ci:a-min
 
   a5es5:
     needs: Install
@@ -1004,6 +1015,69 @@ jobs:
         run: npm run s:test:a12
       - name: Unit Tests
         run: npm run test:a12es2015ivy
+  ajestes5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Jest es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a-jest/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-jest/node_modules
+          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a-jest
+      - name: Spreading Tests
+        run: npm run s:test:a-jest
+      - name: Unit Tests
+        run: npm run test:a-jest:es5ivy
+
+  ajestes2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A Jest es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a-jest/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a-jest/node_modules
+          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a-jest
+      - name: Spreading Tests
+        run: npm run s:test:a-jest
+      - name: Unit Tests
+        run: npm run test:a-jest:es2015ivy
 
   ames5ivy:
     needs: Install
@@ -1017,12 +1091,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/am/node_modules
+      - name: e2e/a-min/node_modules
         id: cache
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v2
@@ -1031,11 +1105,11 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:am
+        run: npm run s:a-min
       - name: Unit Tests
-        run: npm run test:am:es5ivy
+        run: npm run test:a-min:es5ivy
       - name: Build
-        run: npm run build:am:es5ivy
+        run: npm run build:a-min:es5ivy
 
   ames2015ivy:
     needs: Install
@@ -1049,12 +1123,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/am/node_modules
+      - name: e2e/a-min/node_modules
         id: cache
         uses: actions/cache@v2
         with:
-          path: e2e/am/node_modules
-          key: ${{ runner.os }}-am-v1-${{ hashFiles('./e2e/am/package-lock.json') }}
+          path: e2e/a-min/node_modules
+          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v2
@@ -1063,8 +1137,8 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:am
+        run: npm run s:a-min
       - name: Unit Tests
-        run: npm run test:am:es2015ivy
+        run: npm run test:a-min:es2015ivy
       - name: Build
-        run: npm run build:am:es2015ivy
+        run: npm run build:a-min:es2015ivy

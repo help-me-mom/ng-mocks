@@ -133,7 +133,9 @@ jobs:
       - restore_cache:
           key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
       - restore_cache:
-          key: am-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
+      - restore_cache:
+          key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
       - run:
           name: NPM Install
           command: |
@@ -164,8 +166,11 @@ jobs:
             if [ ! -d "e2e/a12/node_modules/" ]; then
               npm run i:ci:a12
             fi
-            if [ ! -d "e2e/am/node_modules/" ]; then
-              npm run i:ci:am
+            if [ ! -d "e2e/a-jest/node_modules/" ]; then
+              npm run i:ci:a-jest
+            fi
+            if [ ! -d "e2e/a-min/node_modules/" ]; then
+              npm run i:ci:a-min
             fi
       - save_cache:
           key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
@@ -204,9 +209,13 @@ jobs:
           paths:
             - ./e2e/a12/node_modules
       - save_cache:
-          key: am-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
           paths:
-            - ./e2e/am/node_modules
+            - ./e2e/a-jest/node_modules
+      - save_cache:
+          key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
+          paths:
+            - ./e2e/a-min/node_modules
   'Angular 5 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
@@ -603,6 +612,42 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a12es2015ivy
+  'Angular Jest ES5 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14.17.0-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a-jest
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a-jest
+      - run:
+          name: Unit Tests
+          command: npm run test:a-jest:es5ivy
+  'Angular Jest ES2020 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:14.17.0-buster
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a-jest
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a-jest
+      - run:
+          name: Unit Tests
+          command: npm run test:a-jest:es2015ivy
   'Angular Min ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
@@ -611,16 +656,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
       - run:
           name: Spreading Build
-          command: npm run s:am
+          command: npm run s:a-min
       - run:
           name: Unit Tests
-          command: npm run test:am:es5ivy
+          command: npm run test:a-min:es5ivy
       - run:
           name: Build
-          command: npm run build:am:es5ivy
+          command: npm run build:a-min:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
@@ -629,16 +674,16 @@ jobs:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: am-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/am/package-lock.json" }}
+          key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
       - run:
           name: Spreading Build
-          command: npm run s:am
+          command: npm run s:a-min
       - run:
           name: Unit Tests
-          command: npm run test:am:es2015ivy
+          command: npm run test:a-min:es2015ivy
       - run:
           name: Build
-          command: npm run build:am:es2015ivy
+          command: npm run build:a-min:es2015ivy
   Core IE:
     executor:
       name: win/default
@@ -741,6 +786,12 @@ workflows:
           requires:
             - Install
       - 'Angular 12 ES2020 Ivy':
+          requires:
+            - Install
+      - 'Angular Jest ES5 Ivy':
+          requires:
+            - Install
+      - 'Angular Jest ES2020 Ivy':
           requires:
             - Install
       - 'Angular Min ES5 Ivy':
