@@ -16,6 +16,11 @@ module.exports = {
     gtag: {
       trackingID: 'G-EBEPX2CVNW',
     },
+    announcementBar: {
+      id: 'give-a-start',
+      content:
+        'If you like ng-mocks, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ike18t/ng-mocks">GitHub</a>!️',
+    },
     navbar: {
       title: 'ng-mocks',
       items: [
