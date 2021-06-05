@@ -1,11 +1,16 @@
 import ngMocksUniverse from './ng-mocks-universe';
 
+// TODO remove the check once Jest has a solution https://github.com/facebook/jest/issues/11483
+let checkJestCircusEventHandler = true;
 let addJestCircusEventHandler: undefined | ((event: { name: string }) => void);
 // istanbul ignore next
 try {
   // tslint:disable-next-line no-require-imports no-var-requires no-implicit-dependencies
   const jestCircus: any = require('jest-circus/build/state');
   addJestCircusEventHandler = jestCircus.addEventHandler;
+  if (jestCircus.removeEventHandler) {
+    checkJestCircusEventHandler = false;
+  }
 } catch {
   // nothing to do
 }
@@ -97,33 +102,38 @@ const installJasmineReporter = () => {
 };
 
 // istanbul ignore next
+const jestCircusHandler = (event: { name: string }) => {
+  switch (event.name) {
+    case 'run_start':
+      stackPush('root');
+      break;
+    case 'run_describe_start':
+      stackPush('suite');
+      break;
+    case 'test_start':
+      stackPush('test');
+      break;
+    case 'test_done':
+    case 'run_describe_finish':
+    case 'run_finish':
+      stackPop();
+      break;
+    default:
+    // nothing to do
+  }
+};
+
+// istanbul ignore next
 const installJestCircus = () => {
   if (!addJestCircusEventHandler) {
     return false;
   }
 
-  afterEach(messageCoreChecker); // TODO remove once Jest has a solution
+  if (checkJestCircusEventHandler) {
+    afterEach(messageCoreChecker);
+  }
 
-  addJestCircusEventHandler((event: { name: string }) => {
-    switch (event.name) {
-      case 'run_start':
-        stackPush('root');
-        break;
-      case 'run_describe_start':
-        stackPush('suite');
-        break;
-      case 'test_start':
-        stackPush('test');
-        break;
-      case 'test_done':
-      case 'run_describe_finish':
-      case 'run_finish':
-        stackPop();
-        break;
-      default:
-      // nothing to do
-    }
-  });
+  addJestCircusEventHandler(jestCircusHandler);
 
   return true;
 };
