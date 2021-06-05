@@ -60,6 +60,7 @@ export default (config: KarmaTypescriptConfig) => {
       bundlerOptions: {
         resolve: {
           alias: {
+            'jest-circus': './empty.ts',
             'jest-circus/build/state': './empty.ts',
           },
         },
