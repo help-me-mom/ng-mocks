@@ -1,3 +1,25 @@
+# [12.1.0](https://github.com/ike18t/ng-mocks/compare/v12.0.2...v12.1.0) (2021-06-05)
+
+
+### Bug Fixes
+
+* **core:** excluding StoreDevtoolsModule by default [#589](https://github.com/ike18t/ng-mocks/issues/589) ([c376e93](https://github.com/ike18t/ng-mocks/commit/c376e9343b52cef740700a7c1d4383d03e0b24c1))
+* **core:** supporting jest-circus as a test runner [#610](https://github.com/ike18t/ng-mocks/issues/610) ([aaa0380](https://github.com/ike18t/ng-mocks/commit/aaa0380df91e985fe2b28b8eeac29c11f9833ba7))
+* **jest:** a fix in advance to listen to jest hooks [#610](https://github.com/ike18t/ng-mocks/issues/610) ([1290c8a](https://github.com/ike18t/ng-mocks/commit/1290c8a48087e6aa9c9df1280616a6f3ede03c1b))
+* **mock-builder:** keeps and mocks modules with providers properly [#625](https://github.com/ike18t/ng-mocks/issues/625) ([4d4ff49](https://github.com/ike18t/ng-mocks/commit/4d4ff49f6e2b412ad324735ca7952082849f4da2))
+* **mock-render:** factory can be used in describes [#629](https://github.com/ike18t/ng-mocks/issues/629) ([f440760](https://github.com/ike18t/ng-mocks/commit/f4407609ccd68ee46153bf3461c21a7fd50e264e))
+* **mock-render:** skipping proxy for bindings from factory [#621](https://github.com/ike18t/ng-mocks/issues/621) ([f4dae60](https://github.com/ike18t/ng-mocks/commit/f4dae609c625eda02c35056882995cff539f1e19))
+
+
+### Features
+
+* **core:** replacing animations with noop by default [#641](https://github.com/ike18t/ng-mocks/issues/641) ([ca65de3](https://github.com/ike18t/ng-mocks/commit/ca65de3a2747fd1ac69c2dcef47a4896c7aa13a2))
+
+
+### Reverts
+
+* Revert "chore(deps): update dependency jest to v27" ([1f4bd9a](https://github.com/ike18t/ng-mocks/commit/1f4bd9ab53441c0057653d99c4e679a2c77382c5))
+
 ## [12.0.2](https://github.com/ike18t/ng-mocks/compare/v12.0.1...v12.0.2) (2021-05-25)
 
 
