@@ -41,7 +41,137 @@ To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
 Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
 
-### Quick Navigation
+## Very short introduction
+
+Global configuration for mocks in `src/test.ts`.
+In case of jest `src/setupJest.ts` should be used.
+
+```ts title="src/test.ts"
+// All methods in mock declarations and providers
+// will be automatically spied on their creation.
+// https://ng-mocks.sudo.eu/extra/auto-spy
+ngMocks.autoSpy('jasmine'); // or jest
+
+// ngMocks.defaultMock helps to customize mocks
+// globally. Therefore, we can avoid copy-pasting
+// among tests.
+// https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
+ngMocks.defaultMock(AuthService, () => ({
+  isLoggedIn$: EMPTY,
+  currentUser$: EMPTY,
+}));
+```
+
+An example of a spec for a profile edit component.
+
+```ts title="src/form.component.spec.ts"
+// Let's imagine that there is a ProfileComponent
+// and it has 3 text fields: email, firstName,
+// lastName, and a user can edit them.
+// In the following test suite, we would like to
+// cover behavior of the component.
+describe('profile', () => {
+  // First of all, we would like to reuse the same
+  // TestBed in every test.
+  // ngMocks.faster suppresses reset of TestBed
+  // after each test and allows to use TestBed,
+  // MockBuilder and MockRender in beforeAll.
+  // https://ng-mocks.sudo.eu/api/ngMocks/faster
+  ngMocks.faster();
+
+  // Now we would like to configure TestBed that
+  // ProfileComponent would stay as it is, and
+  // all its dependencies would be mocks.
+  // Even more, if a dependency is missing,
+  // we would like to get a failing test.
+  // Also, we would like to rely on reactive forms,
+  // therefore we would like to avoid its mocking.
+  beforeAll(() => {
+    // The result of MockBuilder should be returned.
+    // https://ng-mocks.sudo.eu/api/MockBuilder
+    return MockBuilder(
+      ProfileComponent,
+      ProfileModule,
+    ).keep(ReactiveFormsModule);
+  });
+
+  // A test to ensure that ProfileModule imports
+  // and declares all the dependencies.
+  it('should be created', () => {
+    // MockRender respects all lifecycle hooks,
+    // onPush change detection, and creates a
+    // wrapper component with a template like
+    // <app-root ...allInputs></profile>
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const fixture = MockRender(ProfileComponent);
+
+    expect(
+      fixture.point.componentInstance,
+    ).toEqual(jasmine.any(ProfileComponent));
+  });
+
+  // A test to ensure that the component listens
+  // on ctrl+s hotkey.
+  it('saves on ctrl+s hot key', () => {
+    // A fake profile.
+    const profile = {
+      email: 'test2@email.com',
+      firstName: 'testFirst2',
+      lastName: 'testLast2',
+    };
+
+    // A spy to track save calls.
+    // MockInstance helps to configure mock
+    // providers, declarations and modules
+    // before their initialization and usage.
+    // https://ng-mocks.sudo.eu/api/MockInstance
+    const spySave = MockInstance(
+      StorageService,
+      'save',
+      jasmine.createSpy('StorageService.save'),
+    );
+
+    // Renders <profile [profile]="params.profile">
+    // </profile>.
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const { point } = MockRender(
+      ProfileComponent,
+      { profile }, // bindings
+    );
+
+    // Let's change the value of the form control
+    // for email addresses with a random value.
+    // ngMocks.change finds a related control
+    // value accessor and updates it properly.
+    // https://ng-mocks.sudo.eu/api/ngMocks/change
+    ngMocks.change(
+      '[name=email]', // css selector
+      'test3@em.ail', // an email address
+    );
+
+    // Let's ensure that nothing has been called.
+    expect(spySave).not.toHaveBeenCalled();
+
+    // Let's assume that there is a host listener
+    // for a keyboard combination of ctrl+s,
+    // and we want to trigger it.
+    // ngMocks.trigger helps to emit events via
+    // simple interface.
+    // https://ng-mocks.sudo.eu/api/ngMocks/trigger
+    ngMocks.trigger(point, 'keyup.control.s');
+
+    // The spy should be called with the user
+    // and the random email address.
+    expect(spySave).toHaveBeenCalledWith({
+      email: 'test3@em.ail',
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+    });
+  });
+});
+```
+
+## Quick Navigation
 
 - [How to read this manual](./tl-dr.md)
 - [Making tests faster](./api/ngMocks/faster.md)
