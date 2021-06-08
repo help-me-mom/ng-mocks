@@ -69,16 +69,21 @@ An example of a spec for a profile edit component.
 // In the following test suite, we would like to
 // cover behavior of the component.
 describe('profile', () => {
-  // First of all, we want to avoid creation of
-  // the same TestBed for every test, because it
-  // is not going to be changed from test to test.
+  // First of all, we would like to reuse the same
+  // TestBed in every test.
+  // ngMocks.faster suppresses reset of TestBed
+  // after each test and allows to use TestBed,
+  // MockBuilder and MockRender in beforeAll.
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
-  // Let's configure TestBed via MockBuilder.
-  // The code below says to mock everything in
-  // ProfileModule except ProfileComponent and
-  // ReactiveFormsModule.
+  // Now we would like to configure TestBed that
+  // ProfileComponent would stay as it is, and
+  // all its dependencies would be mocks.
+  // Even more, if a dependency is missing,
+  // we would like to get a failing test.
+  // Also, we would like to rely on reactive forms,
+  // therefore we would like to avoid its mocking.
   beforeAll(() => {
     // The result of MockBuilder should be returned.
     // https://ng-mocks.sudo.eu/api/MockBuilder
@@ -89,13 +94,12 @@ describe('profile', () => {
   });
 
   // A test to ensure that ProfileModule imports
-  // and declares all dependencies.
+  // and declares all the dependencies.
   it('should be created', () => {
-    // MockRender creates a wrapper component with
-    // a template like
+    // MockRender respects all lifecycle hooks,
+    // onPush change detection, and creates a
+    // wrapper component with a template like
     // <app-root ...allInputs></profile>
-    // and renders it.
-    // It also respects all lifecycle hooks.
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
@@ -115,7 +119,8 @@ describe('profile', () => {
     };
 
     // A spy to track save calls.
-    // MockInstance helps to configure mock things
+    // MockInstance helps to configure mock
+    // providers, declarations and modules
     // before their initialization and usage.
     // https://ng-mocks.sudo.eu/api/MockInstance
     const spySave = MockInstance(
@@ -125,19 +130,21 @@ describe('profile', () => {
     );
 
     // Renders <profile [profile]="params.profile">
-    // </profile>, and supports onPush components.
+    // </profile>.
     // https://ng-mocks.sudo.eu/api/MockRender
     const { point } = MockRender(
       ProfileComponent,
       { profile }, // bindings
     );
 
-    // Let's put a random email in the text field
-    // for email addresses.
+    // Let's change the value of the form control
+    // for email addresses with a random value.
+    // ngMocks.change finds a related control
+    // value accessor and updates it properly.
     // https://ng-mocks.sudo.eu/api/ngMocks/change
     ngMocks.change(
       '[name=email]', // css selector
-      'test3@em.ail', // an email
+      'test3@em.ail', // an email address
     );
 
     // Let's ensure that nothing has been called.
@@ -146,6 +153,8 @@ describe('profile', () => {
     // Let's assume that there is a host listener
     // for a keyboard combination of ctrl+s,
     // and we want to trigger it.
+    // ngMocks.trigger helps to emit events via
+    // simple interface.
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
@@ -164,10 +173,10 @@ Profit.
 
 ## Extra
 
-Please support, if you like it:
+If you like ng-mocks, please support it:
 
-- [give a star on GitHub](https://github.com/ike18t/ng-mocks)
-- [share on twitter](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
+- [with a star on GitHub](https://github.com/ike18t/ng-mocks)
+- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
 
 Thank you!
 

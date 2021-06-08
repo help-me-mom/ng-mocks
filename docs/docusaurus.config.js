@@ -19,7 +19,7 @@ module.exports = {
     announcementBar: {
       id: 'give-a-start',
       content:
-        'If you like ng-mocks, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ike18t/ng-mocks">GitHub</a>!️',
+        'If you like ng-mocks, please support it with a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ike18t/ng-mocks">GitHub</a>.',
     },
     navbar: {
       title: 'ng-mocks',
