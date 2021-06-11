@@ -147,7 +147,7 @@
     "@angular/router": "12.0.4",
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-conventional": "12.1.4",
-    "@ng-select/ng-select": "6.1.0",
+    "@ng-select/ng-select": "7.0.0",
     "@ngrx/effects": "12.1.0",
     "@ngrx/store": "12.1.0",
     "@ngrx/store-devtools": "12.1.0",
