@@ -13,8 +13,7 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "ng-mocks": ["../../libs/ng-mocks/src/index"],
-      "ng-mocks/dist/*": ["../../libs/ng-mocks/src/*"]
+      "ng-mocks": ["../../libs/ng-mocks/src/index"]
     }
   }
 }

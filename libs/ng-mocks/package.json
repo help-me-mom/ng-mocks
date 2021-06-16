@@ -61,12 +61,18 @@
   },
   "homepage": "https://ng-mocks.sudo.eu",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./cjs/index.js",
+  "types": "./cjs/index.d.ts",
+  "module": "./mjs/index.js",
+  "exports": {
+    "require": "./cjs/index.js",
+    "import": "./mjs/index.js"
+  },
   "files": [
+    "cjs",
     "examples",
     "migrations.json",
-    "dist"
+    "mjs"
   ],
   "ng-update": {
     "migrations": "./migrations.json"

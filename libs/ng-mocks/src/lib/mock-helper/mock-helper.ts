@@ -275,12 +275,12 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T>(elSelector: DebugNodeSelector, directive: AnyType<T>): T;
+  get<T>(elSelector: DebugNodeSelector, provider: AnyType<T> | InjectionToken<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/get
    */
-  get<T, D>(elSelector: DebugNodeSelector, directive: AnyType<T>, notFoundValue: D): D | T;
+  get<T, D>(elSelector: DebugNodeSelector, provider: AnyType<T> | InjectionToken<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/globalExclude
