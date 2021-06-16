@@ -1,5 +1,4 @@
 import { InjectionToken, PipeTransform } from '@angular/core';
-import * as assert from 'assert';
 import { IMockBuilderResult, MockBuilder } from 'ng-mocks';
 import { EMPTY, Observable } from 'rxjs';
 
@@ -73,13 +72,11 @@ MockBuilder(null, moduleWithProviders);
 // @ts-expect-error: does not support modules with providers.
 MockBuilder(moduleWithProviders);
 
-const promise1: Promise<IMockBuilderResult> = MockBuilder();
-const promise2: Promise<IMockBuilderResult> = MockBuilder().mock(MyModule);
-const promise3: Promise<IMockBuilderResult> = MockBuilder().keep(MyModule);
-const promise4: Promise<IMockBuilderResult> = MockBuilder().exclude(MyModule);
-const promise5: Promise<IMockBuilderResult> = MockBuilder().replace(MyModule, MyComponent);
-assert(promise1);
-assert(promise2);
-assert(promise3);
-assert(promise4);
-assert(promise5);
+const promise: Promise<IMockBuilderResult> =
+  MockBuilder() ??
+  MockBuilder().mock(MyModule) ??
+  MockBuilder().keep(MyModule) ??
+  MockBuilder().exclude(MyModule) ??
+  MockBuilder().replace(MyModule, MyComponent);
+
+Promise.all([promise]);

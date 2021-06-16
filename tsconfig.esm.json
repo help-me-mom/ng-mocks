@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ES2020",
+    "outDir": "dist/libs/ng-mocks/mjs",
+    "declarationDir": "dist/libs/ng-mocks/mjs"
+  }
+}
