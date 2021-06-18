@@ -138,21 +138,6 @@ describe('profile:classic', () => {
 
   // A test to ensure that the component listens
   // on ctrl+s hotkey.
-  it('should be created', () => {
-    // MockRender respects all lifecycle hooks,
-    // onPush change detection, and creates a
-    // wrapper component with a template like
-    // <app-root ...allInputs></profile>
-    // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(ProfileComponent);
-
-    expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(ProfileComponent),
-    );
-  });
-
-  // A test to ensure that the component listens
-  // on ctrl+s hotkey.
   it('saves on ctrl+s hot key', () => {
     // A fake profile.
     const profile = {

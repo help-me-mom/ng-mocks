@@ -41,6 +41,14 @@ To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
 Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md).
 
+## Quick Navigation
+
+- [How to read this manual](./tl-dr.md)
+- [Making tests faster](./api/ngMocks/faster.md)
+- [Autospy everything](./extra/auto-spy.md)
+- [Testing inputs, outputs and lifecycle hooks](./api/MockRender.md)
+- [Mocking methods in components before their initialization](./api/MockInstance.md)
+
 ## Very short introduction
 
 Global configuration for mocks in `src/test.ts`.
@@ -118,21 +126,6 @@ describe('profile', () => {
 
   // A test to ensure that the component listens
   // on ctrl+s hotkey.
-  it('should be created', () => {
-    // MockRender respects all lifecycle hooks,
-    // onPush change detection, and creates a
-    // wrapper component with a template like
-    // <app-root ...allInputs></profile>
-    // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(ProfileComponent);
-
-    expect(
-      fixture.point.componentInstance,
-    ).toEqual(jasmine.any(ProfileComponent));
-  });
-
-  // A test to ensure that the component listens
-  // on ctrl+s hotkey.
   it('saves on ctrl+s hot key', () => {
     // A fake profile.
     const profile = {
@@ -192,10 +185,13 @@ describe('profile', () => {
 });
 ```
 
-## Quick Navigation
+## Extra
 
-- [How to read this manual](./tl-dr.md)
-- [Making tests faster](./api/ngMocks/faster.md)
-- [Autospy everything](./extra/auto-spy.md)
-- [Testing inputs, outputs and lifecycle hooks](./api/MockRender.md)
-- [Mocking methods in components before their initialization](./api/MockInstance.md)
+If you like `ng-mocks`, please support it:
+
+- [with a star on GitHub](https://github.com/ike18t/ng-mocks)
+- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
+
+Thank you!
+
+P.S. Feel free to [contact us](./need-help.md) if you need help.
