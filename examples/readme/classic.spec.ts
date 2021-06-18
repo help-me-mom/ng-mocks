@@ -1,3 +1,5 @@
+// tslint:disable object-literal-sort-keys
+
 import {
   Component,
   HostListener,
@@ -6,6 +8,7 @@ import {
   NgModule,
   OnInit,
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import {
   FormControl,
   FormGroup,
@@ -13,8 +16,9 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  MockBuilder,
   MockInstance,
+  MockModule,
+  MockProvider,
   MockRender,
   ngMocks,
 } from 'ng-mocks';
@@ -77,11 +81,10 @@ class ProfileComponent implements OnInit {
 }
 
 @NgModule({
-  declarations: [ProfileComponent],
-  imports: [ReactiveFormsModule],
+  declarations: [],
   providers: [AuthService, StorageService],
 })
-class ProfileModule {}
+class SharedModule {}
 
 ngMocks.defaultMock(AuthService, () => ({
   isLoggedIn$: EMPTY,
@@ -92,33 +95,39 @@ ngMocks.defaultMock(AuthService, () => ({
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
 // cover behavior of the component.
-describe('profile', () => {
-  // First of all, we want to avoid creation of
-  // the same TestBed for every test, because it
-  // is not going to be changed from test to test.
+describe('profile:classic', () => {
+  // First of all, we would like to reuse the same
+  // TestBed in every test.
+  // ngMocks.faster suppresses reset of TestBed
+  // after each test and allows to use TestBed,
+  // MockBuilder and MockRender in beforeAll.
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
-  // Let's configure TestBed via MockBuilder.
-  // The code below says to mock everything in
-  // ProfileModule except ProfileComponent and
-  // ReactiveFormsModule.
-  beforeAll(() => {
-    // The result of MockBuilder should be returned.
-    // https://ng-mocks.sudo.eu/api/MockBuilder
-    return MockBuilder(ProfileComponent, ProfileModule).keep(
-      ReactiveFormsModule,
-    );
+  // Let's declare TestBed in beforeAll instead of beforeEach.
+  // The code mocks everything in SharedModule and provides a mock AuthService.
+  beforeAll(async () => {
+    return TestBed.configureTestingModule({
+      imports: [
+        MockModule(SharedModule), // mock
+        ReactiveFormsModule, // real
+      ],
+      declarations: [
+        ProfileComponent, // real
+      ],
+      providers: [
+        MockProvider(AuthService), // mock
+      ],
+    }).compileComponents();
   });
 
-  // A test to ensure that ProfileModule imports
-  // and declares all dependencies.
+  // A test to ensure that ProfileComponent can be created.
   it('should be created', () => {
-    // MockRender creates a wrapper component with
-    // a template like
+    // MockRender is an advanced version of TestBed.createComponent.
+    // It respects all lifecycle hooks,
+    // onPush change detection, and creates a
+    // wrapper component with a template like
     // <app-root ...allInputs></profile>
-    // and renders it.
-    // It also respects all lifecycle hooks.
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
@@ -127,31 +136,22 @@ describe('profile', () => {
     );
   });
 
-  // A test to ensure that internal form controls
-  // are populated with provided @Input value.
-  it('prefills profile', () => {
-    // A fake profile.
-    const profile = {
-      email: 'test1@email.com',
-      firstName: 'testFirst1',
-      lastName: 'testLast1',
-    };
-
-    // In such a case, MockRender creates
-    // a template like:
-    // <profile [profile]="params.profile">
-    // </profile>
+  // A test to ensure that the component listens
+  // on ctrl+s hotkey.
+  it('should be created', () => {
+    // MockRender respects all lifecycle hooks,
+    // onPush change detection, and creates a
+    // wrapper component with a template like
+    // <app-root ...allInputs></profile>
     // https://ng-mocks.sudo.eu/api/MockRender
-    const fixture = MockRender(ProfileComponent, { profile });
+    const fixture = MockRender(ProfileComponent);
 
-    // `point` is the access point to the debug
-    // node with the real component instance.
-    // Let's assert the form value.
-    const inst = fixture.point.componentInstance;
-    expect(inst.form.value).toEqual(profile);
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(ProfileComponent),
+    );
   });
 
-  // A test to ensure that the component  listens
+  // A test to ensure that the component listens
   // on ctrl+s hotkey.
   it('saves on ctrl+s hot key', () => {
     // A fake profile.
@@ -162,7 +162,8 @@ describe('profile', () => {
     };
 
     // A spy to track save calls.
-    // MockInstance helps to configure mock things
+    // MockInstance helps to configure mock
+    // providers, declarations and modules
     // before their initialization and usage.
     // https://ng-mocks.sudo.eu/api/MockInstance
     const spySave = MockInstance(
@@ -171,21 +172,37 @@ describe('profile', () => {
       jasmine.createSpy('StorageService.save'),
     );
 
-    // <profile [profile]="params.profile">
-    // </profile>
+    // Renders <profile [profile]="params.profile">
+    // </profile>.
     // https://ng-mocks.sudo.eu/api/MockRender
-    const { point } = MockRender(ProfileComponent, { profile });
+    const { point } = MockRender(
+      ProfileComponent,
+      { profile }, // bindings
+    );
 
-    ngMocks.change('[name=email]', 'test3@em.ail');
+    // Let's change the value of the form control
+    // for email addresses with a random value.
+    // ngMocks.change finds a related control
+    // value accessor and updates it properly.
+    // https://ng-mocks.sudo.eu/api/ngMocks/change
+    ngMocks.change(
+      '[name=email]', // css selector
+      'test3@em.ail', // an email address
+    );
+
+    // Let's ensure that nothing has been called.
     expect(spySave).not.toHaveBeenCalled();
 
-    // Let's assume, there is a host listener
+    // Let's assume that there is a host listener
     // for a keyboard combination of ctrl+s,
     // and we want to trigger it.
+    // ngMocks.trigger helps to emit events via
+    // simple interface.
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
-    // The spy should be called with the user.
+    // The spy should be called with the user
+    // and the random email address.
     expect(spySave).toHaveBeenCalledWith({
       email: 'test3@em.ail',
       firstName: profile.firstName,

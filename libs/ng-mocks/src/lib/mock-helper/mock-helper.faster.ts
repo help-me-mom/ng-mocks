@@ -3,6 +3,7 @@ import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 import ngMocksStack, { NgMocksStack } from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+import mockHelperFasterInstall from './mock-helper.faster-install';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
 
 const resetFixtures = (stack: NgMocksStack) => {
@@ -27,6 +28,8 @@ export default () => {
     ngMocksStack.install();
     needInstall = false;
   }
+
+  mockHelperFasterInstall();
 
   beforeAll(() => {
     if (ngMocksUniverse.global.has('bullet:customized')) {

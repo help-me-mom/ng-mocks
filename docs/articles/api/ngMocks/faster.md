@@ -7,7 +7,8 @@ There is a `ngMocks.faster` feature that optimizes setup of similar test modules
 and reduces required time on their execution.
 
 Imagine a situation when `beforeEach` creates the same setup used by dozens of `it`.
-This is the case where `ngMocks.faster` might be useful, simply call it before `beforeAll` and
+This is the case where `ngMocks.faster` might be useful, simply use `beforeAll` instead of `beforeEach`,
+call `ngMocks.faster` before `beforeAll` and
 **the Angular tests will run faster**.
 
 ```ts
