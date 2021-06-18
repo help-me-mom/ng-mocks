@@ -2,12 +2,14 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import coreConfig from '../common/core.config';
+import coreDefineProperty from '../common/core.define-property';
 import { flatten, mapEntries } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { AnyType, Type } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
+import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
 
 import funcExtractTokens from './func.extract-tokens';
 import { MockBuilderPerformance } from './mock-builder.performance';
@@ -135,18 +137,17 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: any
 
 const initTestBed = () => {
   if (!(TestBed as any).ngMocksSelectors) {
-    (TestBed as any).ngMocksSelectors = new Map();
+    coreDefineProperty(TestBed, 'ngMocksSelectors', new Map());
   }
   // istanbul ignore else
   if (!(TestBed as any).ngMocksOverrides) {
-    (TestBed as any).ngMocksOverrides = new Set();
+    coreDefineProperty(TestBed, 'ngMocksOverrides', new Set());
   }
 };
 
 const configureTestingModule =
   (original: TestBedStatic['configureTestingModule']): TestBedStatic['configureTestingModule'] =>
   (moduleDef: TestModuleMetadata) => {
-    ngMocksUniverse.global.set('bullet:customized', true);
     initTestBed();
     const { mocks, overrides } = funcExtractTokens(moduleDef.providers);
 
@@ -174,22 +175,29 @@ const configureTestingModule =
 const resetTestingModule =
   (original: TestBedStatic['resetTestingModule']): TestBedStatic['resetTestingModule'] =>
   () => {
-    if (ngMocksUniverse.global.has('bullet')) {
-      if (ngMocksUniverse.global.has('bullet:customized')) {
-        ngMocksUniverse.global.set('bullet:reset', true);
-      }
-
-      return TestBed;
-    }
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
-    ngMocksUniverse.global.delete('bullet:customized');
-    ngMocksUniverse.global.delete('bullet:reset');
     (TestBed as any).ngMocksSelectors = undefined;
     applyNgMocksOverrides(TestBed);
 
     return original.call(TestBed);
   };
+
+let needInstall = true;
+const install = () => {
+  const hooks = mockHelperFasterInstall();
+  if (needInstall) {
+    // istanbul ignore else
+    if (hooks.before.indexOf(configureTestingModule) === -1) {
+      hooks.before.push(configureTestingModule);
+    }
+    // istanbul ignore else
+    if (hooks.after.indexOf(resetTestingModule) === -1) {
+      hooks.after.push(resetTestingModule);
+    }
+    needInstall = false;
+  }
+};
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockBuilder
@@ -204,11 +212,7 @@ export function MockBuilder(
     | undefined,
   itsModuleToMock?: AnyType<any> | Array<AnyType<any>> | null | undefined,
 ): IMockBuilder {
-  if (!(TestBed as any).ngMocks) {
-    TestBed.configureTestingModule = configureTestingModule(TestBed.configureTestingModule);
-    TestBed.resetTestingModule = resetTestingModule(TestBed.resetTestingModule);
-    (TestBed as any).ngMocks = true;
-  }
+  install();
 
   const instance = new MockBuilderPerformance();
 

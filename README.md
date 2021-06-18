@@ -62,7 +62,7 @@ ngMocks.defaultMock(AuthService, () => ({
 
 An example of a spec for a profile edit component.
 
-```ts title="src/form.component.spec.ts"
+```ts title="src/profile.component.spec.ts"
 // Let's imagine that there is a ProfileComponent
 // and it has 3 text fields: email, firstName,
 // lastName, and a user can edit them.
@@ -77,24 +77,45 @@ describe('profile', () => {
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
-  // Now we would like to configure TestBed that
-  // ProfileComponent would stay as it is, and
-  // all its dependencies would be mocks.
-  // Even more, if a dependency is missing,
-  // we would like to get a failing test.
-  // Also, we would like to rely on reactive forms,
-  // therefore we would like to avoid its mocking.
+  // Let's declare TestBed in beforeAll
+  // instead of beforeEach.
+  // The code mocks everything in SharedModule
+  // and provides a mock AuthService.
   beforeAll(() => {
-    // The result of MockBuilder should be returned.
-    // https://ng-mocks.sudo.eu/api/MockBuilder
-    return MockBuilder(
-      ProfileComponent,
-      ProfileModule,
-    ).keep(ReactiveFormsModule);
+    return TestBed.configureTestingModule({
+      imports: [
+        MockModule(SharedModule), // mock
+        ReactiveFormsModule, // real
+      ],
+      declarations: [
+        MockComponent(AvatarComponent), // mock
+        ProfileComponent, // real
+      ],
+      providers: [
+        MockProvider(AuthService), // mock
+      ],
+    }).compileComponents();
   });
 
-  // A test to ensure that ProfileModule imports
-  // and declares all the dependencies.
+  // A test to ensure that ProfileComponent
+  // can be created.
+  it('should be created', () => {
+    // MockRender is an advanced version of
+    // TestBed.createComponent.
+    // It respects all lifecycle hooks,
+    // onPush change detection, and creates a
+    // wrapper component with a template like
+    // <app-root ...allInputs></profile>
+    // https://ng-mocks.sudo.eu/api/MockRender
+    const fixture = MockRender(ProfileComponent);
+
+    expect(
+      fixture.point.componentInstance,
+    ).toEqual(jasmine.any(ProfileComponent));
+  });
+
+  // A test to ensure that the component listens
+  // on ctrl+s hotkey.
   it('should be created', () => {
     // MockRender respects all lifecycle hooks,
     // onPush change detection, and creates a
