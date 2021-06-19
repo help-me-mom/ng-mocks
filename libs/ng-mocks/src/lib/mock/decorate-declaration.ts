@@ -36,12 +36,14 @@ export default <T extends Component | Directive>(
     outputs?: string[];
     providers?: Provider[];
     queries?: Record<string, ViewChild>;
+    viewProviders?: Provider[];
   },
   params: T,
 ): T => {
   const data = cloneProviders(source, mock, meta.providers || []);
   const providers = [toExistingProvider(source, mock), ...data.providers];
-  const options: T = { ...params, providers };
+  const { providers: viewProviders } = cloneProviders(source, mock, meta.viewProviders || []);
+  const options: T = { ...params, providers, viewProviders };
 
   if (data.setControlValueAccessor === undefined) {
     data.setControlValueAccessor =
