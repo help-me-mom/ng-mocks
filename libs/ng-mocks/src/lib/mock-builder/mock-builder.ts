@@ -225,7 +225,8 @@ export function MockBuilder(
   }
   if (itsModuleToMock) {
     for (const declaration of flatten(itsModuleToMock)) {
-      instance.mock(declaration, {
+      instance.mock(declaration, declaration, {
+        export: true,
         exportAll: true,
       });
     }

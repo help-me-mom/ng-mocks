@@ -8,8 +8,8 @@ import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderStash } from './mock-builder-stash';
-import addMissedKeepDeclarationsAndModules from './promise/add-missed-keep-declarations-and-modules';
-import addMissedMockDeclarationsAndModules from './promise/add-missed-mock-declarations-and-modules';
+import addMissingKeepDeclarationsAndModules from './promise/add-missing-keep-declarations-and-modules';
+import addMissingMockDeclarationsAndModules from './promise/add-missing-mock-declarations-and-modules';
 import addRequestedProviders from './promise/add-requested-providers';
 import createNgMocksOverridesToken from './promise/create-ng-mocks-overrides-token';
 import createNgMocksToken from './promise/create-ng-mocks-token';
@@ -75,8 +75,8 @@ export class MockBuilderPromise implements IMockBuilder {
     const params = this.combineParams();
 
     const ngModule = initNgModules(params, initUniverse(params));
-    addMissedKeepDeclarationsAndModules(ngModule, params);
-    addMissedMockDeclarationsAndModules(ngModule, params);
+    addMissingKeepDeclarationsAndModules(ngModule, params);
+    addMissingMockDeclarationsAndModules(ngModule, params);
     addRequestedProviders(ngModule, params);
     handleRootProviders(ngModule, params);
     handleEntryComponents(ngModule);
