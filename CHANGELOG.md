@@ -1,3 +1,13 @@
+## [12.1.1](https://github.com/ike18t/ng-mocks/compare/v12.1.0...v12.1.1) (2021-06-19)
+
+
+### Bug Fixes
+
+* **core:** building cjs and mjs [#702](https://github.com/ike18t/ng-mocks/issues/702) ([f11c086](https://github.com/ike18t/ng-mocks/commit/f11c0861b80fec66ad6462c3bbb62a24105854f6))
+* **core:** supports mocks for viewProviders [#726](https://github.com/ike18t/ng-mocks/issues/726) ([68f9946](https://github.com/ike18t/ng-mocks/commit/68f9946c0cd50745407b5eb79db539fe71337727))
+* **faster:** support for pure TestBed [#721](https://github.com/ike18t/ng-mocks/issues/721) ([d4e0c8a](https://github.com/ike18t/ng-mocks/commit/d4e0c8ae39fc165795a8e4ff058cd26fe5c38f2d))
+* **mock-builder:** provides globally exported providers from directives and components [#623](https://github.com/ike18t/ng-mocks/issues/623) ([58ee0d8](https://github.com/ike18t/ng-mocks/commit/58ee0d84304ec9a63eefe598c3cf7429a4f86107))
+
 # [12.1.0](https://github.com/ike18t/ng-mocks/compare/v12.0.2...v12.1.0) (2021-06-05)
 
 
