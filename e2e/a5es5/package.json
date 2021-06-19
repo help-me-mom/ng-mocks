@@ -9,7 +9,7 @@
     "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
     "test:jasmine": "ng test",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
-    "test:jest": "jest -w 2",
+    "test:jest": "jest -w 2 --config ./jest.js",
     "test:jest:debug": "jest -w 2 --watch"
   },
   "private": true,
@@ -49,17 +49,6 @@
     "ts-jest": "22.4.6",
     "ts-node": "4.1.0",
     "typescript": "2.5.3"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts",
-    "transform": {
-      "^.+\\.(ts|js|html)$": "ts-jest"
-    },
-    "testURL": "http://localhost",
-    "testPathIgnorePatterns": [
-      "<rootDir>/src/test.ts"
-    ]
   },
   "engines": {
     "npm": "6.14.13"

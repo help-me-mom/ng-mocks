@@ -228,6 +228,7 @@ jobs:
   'Angular 5 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -246,6 +247,7 @@ jobs:
   'Angular 5 ES2015':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -264,6 +266,7 @@ jobs:
   'Angular 6 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -282,6 +285,7 @@ jobs:
   'Angular 6 ES2015':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -300,6 +304,7 @@ jobs:
   'Angular 7 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -318,6 +323,7 @@ jobs:
   'Angular 7 ES2015':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -336,6 +342,7 @@ jobs:
   'Angular 8 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -354,6 +361,7 @@ jobs:
   'Angular 8 ES2015':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -372,6 +380,7 @@ jobs:
   'Angular 9 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -390,6 +399,7 @@ jobs:
   'Angular 9 ES2015':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -408,6 +418,7 @@ jobs:
   'Angular 9 ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -426,6 +437,7 @@ jobs:
   'Angular 9 ES2016 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -444,6 +456,7 @@ jobs:
   'Angular 10 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -462,6 +475,7 @@ jobs:
   'Angular 10 ES2017':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -480,6 +494,7 @@ jobs:
   'Angular 10 ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -498,6 +513,7 @@ jobs:
   'Angular 10 ES2018 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -516,6 +532,7 @@ jobs:
   'Angular 11 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -534,6 +551,7 @@ jobs:
   'Angular 11 ES2019':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -552,6 +570,7 @@ jobs:
   'Angular 11 ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -570,6 +589,7 @@ jobs:
   'Angular 11 ES2020 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -588,6 +608,7 @@ jobs:
   'Angular 12 ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
@@ -606,6 +627,7 @@ jobs:
   'Angular 12 ES2020 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
