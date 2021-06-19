@@ -11,7 +11,7 @@ export default (
 } => {
   let mock: any = def === a1 ? defaultMockValue : a1;
   let config: any = a2 ? a2 : a1 !== defaultMockValue ? a1 : undefined;
-  if (isNgDef(def, 'p') && typeof a1 === 'function') {
+  if (isNgDef(def, 'p') && typeof a1 === 'function' && a1 !== def) {
     mock = a1;
     config = a2;
   } else if (isNgDef(def, 'i') || !isNgDef(def)) {
