@@ -1,3 +1,4 @@
+import coreConfig from '../common/core.config';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import mockHelperCrawl from './crawl/mock-helper.crawl';
@@ -40,10 +41,20 @@ export default {
   autoSpy: mockHelperAutoSpy,
   change: mockHelperChange,
   click: mockHelperClick,
-  config: (config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' }) => {
+  config: (config: {
+    mockRenderCacheSize?: number | null;
+    onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
+  }) => {
     const flags = ngMocksUniverse.global.get('flags');
-    if (config.onTestBedFlushNeed !== undefined) {
+    if (config.onTestBedFlushNeed === null) {
+      flags.onTestBedFlushNeed = coreConfig.onTestBedFlushNeed;
+    } else if (config.onTestBedFlushNeed !== undefined) {
       flags.onTestBedFlushNeed = config.onTestBedFlushNeed;
+    }
+    if (config.mockRenderCacheSize === null) {
+      ngMocksUniverse.global.delete('mockRenderCacheSize');
+    } else if (config.mockRenderCacheSize !== undefined) {
+      ngMocksUniverse.global.set('mockRenderCacheSize', config.mockRenderCacheSize);
     }
   },
   crawl: mockHelperCrawl,

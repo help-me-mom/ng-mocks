@@ -49,7 +49,7 @@ ngMocksUniverse.touches = new Set();
 
 ngMocksUniverse.global.set('flags', {
   // @deprecated and will be changed in A13 to 'throw'
-  onTestBedFlushNeed: 'warn',
+  onTestBedFlushNeed: coreConfig.onTestBedFlushNeed,
 });
 
 ngMocksUniverse.getLocalMocks = () => {

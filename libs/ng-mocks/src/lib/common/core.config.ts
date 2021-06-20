@@ -3,6 +3,7 @@ import { ApplicationModule } from '@angular/core';
 
 export default {
   flags: ['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports'],
+  mockRenderCacheSize: 25,
   neverMockModule: [ApplicationModule, CommonModule],
   neverMockProvidedFunction: [
     'DomRendererFactory2',
@@ -19,4 +20,5 @@ export default {
     'InjectionToken EventManagerPlugins', // EVENT_MANAGER_PLUGINS
     'InjectionToken HammerGestureConfig', // HAMMER_GESTURE_CONFIG
   ],
+  onTestBedFlushNeed: 'warn',
 };

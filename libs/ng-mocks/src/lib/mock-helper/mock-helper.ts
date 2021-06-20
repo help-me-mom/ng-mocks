@@ -35,7 +35,10 @@ export const ngMocks: {
    */
   click(elSelector: HTMLElement | DebugNodeSelector, payload?: Partial<MouseEvent>): void;
 
-  config(config: { onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' }): void;
+  config(config: {
+    mockRenderCacheSize?: number | null;
+    onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
+  }): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/crawl

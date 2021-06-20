@@ -225,6 +225,25 @@ jobs:
           key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
           paths:
             - ./e2e/a-min/node_modules
+  'Performance':
+    docker:
+      - image: satantime/puppeteer-node:14.17.0-buster
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: Default
+          command: KARMA_SUITE=tests-performance/test.spec.ts npm run test
+      - run:
+          name: TestBed
+          command: KARMA_SUITE=tests-performance/test-bed.spec.ts npm run test
+      - run:
+          name: MockBuilder
+          command: KARMA_SUITE=tests-performance/mock-builder.spec.ts npm run test
+      - run:
+          name: MockRender
+          command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
   'Angular 5 ES5':
     docker:
       - image: satantime/puppeteer-node:14.17.0-buster
@@ -753,6 +772,9 @@ workflows:
           requires:
             - Core
       - 'Install':
+          requires:
+            - Core
+      - 'Performance':
           requires:
             - Core
       - 'Angular 5 ES5':
