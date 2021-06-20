@@ -1,3 +1,10 @@
+## [12.1.2](https://github.com/ike18t/ng-mocks/compare/v12.1.1...v12.1.2) (2021-06-20)
+
+
+### Performance Improvements
+
+* **mock-render:** caching generated component [#731](https://github.com/ike18t/ng-mocks/issues/731) ([66e23c5](https://github.com/ike18t/ng-mocks/commit/66e23c50930028f6b204e87fc58905d861bbb0d5))
+
 ## [12.1.1](https://github.com/ike18t/ng-mocks/compare/v12.1.0...v12.1.1) (2021-06-19)
 
 
