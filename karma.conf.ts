@@ -8,6 +8,32 @@ process.on('infrastructure_error', error => {
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
+const suite: any[] = [];
+if (!process.env.KARMA_SUITE) {
+  suite.push({
+    pattern: './libs/ng-mocks/src/lib/**/*.ts',
+    watched: true,
+  });
+  suite.push({
+    pattern: './examples/**/*.ts',
+    watched: true,
+  });
+  suite.push({
+    pattern: './tests/**/*.ts',
+    watched: true,
+  });
+} else if (process.env.KARMA_SUITE === 'perf') {
+  suite.push({
+    pattern: './tests-performance/**/*.ts',
+    watched: true,
+  });
+} else {
+  suite.push({
+    pattern: process.env.KARMA_SUITE,
+    watched: true,
+  });
+}
+
 export default (config: KarmaTypescriptConfig) => {
   config.set({
     autoWatch: false,
@@ -43,12 +69,17 @@ export default (config: KarmaTypescriptConfig) => {
       },
     },
     files: [
-      'empty.ts',
-      'karma-test-shim.ts',
-      'libs/ng-mocks/src/index.ts',
-      { pattern: 'libs/ng-mocks/src/lib/**/*.ts' },
-      { pattern: 'examples/**/*.ts' },
-      { pattern: 'tests/**/*.ts' },
+      './empty.ts',
+      './karma-test-shim.ts',
+      {
+        pattern: './libs/ng-mocks/src/index.ts',
+        watched: true,
+      },
+      {
+        pattern: './libs/ng-mocks/src/lib/**/!(*.spec|*.fixtures).ts',
+        watched: true,
+      },
+      ...suite,
     ],
     frameworks: ['jasmine', 'karma-typescript'],
     junitReporter: {

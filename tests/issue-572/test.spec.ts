@@ -14,6 +14,7 @@ describe('issue-572', () => {
   ngMocks.faster();
   let consoleWarn: typeof console.warn;
 
+  beforeAll(() => ngMocks.config({ mockRenderCacheSize: 0 }));
   beforeAll(() => MockBuilder(TargetComponent));
   beforeAll(() => (consoleWarn = console.warn));
 
@@ -23,7 +24,10 @@ describe('issue-572', () => {
 
   afterAll(() => {
     console.warn = consoleWarn;
-    ngMocks.config({ onTestBedFlushNeed: 'warn' });
+    ngMocks.config({
+      mockRenderCacheSize: null,
+      onTestBedFlushNeed: null,
+    });
   });
 
   it('warns via console on TestBed change', () => {
