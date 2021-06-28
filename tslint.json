@@ -37,6 +37,7 @@
     "no-magic-numbers": false,
     "no-null-keyword": false,
     "no-null-undefined-union": false,
+    "no-object-literal-type-assertion": false,
     "no-parameter-properties": false,
     "no-redundant-jsdoc": false,
     "no-relative-imports": false,
