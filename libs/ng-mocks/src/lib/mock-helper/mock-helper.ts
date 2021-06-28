@@ -499,7 +499,7 @@ export const ngMocks: {
    *
    * @see https://ng-mocks.sudo.eu/api/ngMocks/throwOnConsole
    */
-  throwOnConsole(): void;
+  throwOnConsole(...args: Array<keyof typeof console>): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/touch

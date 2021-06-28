@@ -11,20 +11,26 @@ const factory =
   };
 
 // Thanks Ivy, it does not throw an error and we have to use injector.
-export default (): void => {
-  let backupWarn: typeof console.warn;
-  let backupError: typeof console.error;
+export default (...methods: Array<keyof typeof console>): void => {
+  const backup: Array<[keyof typeof console, any]> = [];
 
   beforeAll(() => {
-    backupWarn = console.warn;
-    backupError = console.error;
-    // istanbul ignore next
-    console.warn = factory('warn');
-    console.error = factory('error');
+    if (methods.indexOf('warn') === -1) {
+      methods.push('warn');
+    }
+    if (methods.indexOf('error') === -1) {
+      methods.push('error');
+    }
+    for (const method of methods) {
+      backup.push([method, console[method]]);
+      console[method] = factory(method);
+    }
   });
 
   afterAll(() => {
-    console.error = backupError;
-    console.warn = backupWarn;
+    for (const [method, implementation] of backup) {
+      console[method] = implementation;
+    }
+    backup.splice(0, backup.length);
   });
 };
