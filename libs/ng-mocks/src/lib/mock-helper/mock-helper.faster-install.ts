@@ -1,5 +1,6 @@
 import { TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
+import coreDefineProperty from '../common/core.define-property';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 const hooks: {
@@ -44,12 +45,11 @@ const resetTestingModule =
     return final.call(TestBed);
   };
 
-let needInstall = true;
 export default () => {
-  if (needInstall) {
+  if (!(TestBed as any).ngMocksFasterInstalled) {
     TestBed.configureTestingModule = configureTestingModule(TestBed.configureTestingModule);
     TestBed.resetTestingModule = resetTestingModule(TestBed.resetTestingModule);
-    needInstall = false;
+    coreDefineProperty(TestBed, 'ngMocksFasterInstalled', true, false);
   }
 
   return hooks;

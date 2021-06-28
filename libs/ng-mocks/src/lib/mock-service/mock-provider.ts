@@ -118,10 +118,11 @@ const isNeverMockToken = (provide: any): boolean =>
 export default function (provider: any, useFactory = false): Provider | undefined {
   const provide = funcGetProvider(provider);
 
-  if (isNeverMockFunction(provide)) {
+  if (ngMocksUniverse.getResolution(provide) === 'mock') {
+    // nothing to do
+  } else if (isNeverMockFunction(provide)) {
     return provider;
-  }
-  if (isNeverMockToken(provide)) {
+  } /* istanbul ignore if because we mock BrowserModule */ else if (isNeverMockToken(provide)) {
     return undefined;
   }
 

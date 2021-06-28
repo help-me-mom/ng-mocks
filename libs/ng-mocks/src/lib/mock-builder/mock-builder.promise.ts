@@ -11,6 +11,7 @@ import { MockBuilderStash } from './mock-builder-stash';
 import addMissingKeepDeclarationsAndModules from './promise/add-missing-keep-declarations-and-modules';
 import addMissingMockDeclarationsAndModules from './promise/add-missing-mock-declarations-and-modules';
 import addRequestedProviders from './promise/add-requested-providers';
+import applyPlatformModules from './promise/apply-platform-modules';
 import createNgMocksOverridesToken from './promise/create-ng-mocks-overrides-token';
 import createNgMocksToken from './promise/create-ng-mocks-token';
 import createNgMocksTouchesToken from './promise/create-ng-mocks-touches-token';
@@ -80,6 +81,7 @@ export class MockBuilderPromise implements IMockBuilder {
     addRequestedProviders(ngModule, params);
     handleRootProviders(ngModule, params);
     handleEntryComponents(ngModule);
+    applyPlatformModules();
 
     ngModule.providers.push(createNgMocksToken());
     ngModule.providers.push(createNgMocksTouchesToken());

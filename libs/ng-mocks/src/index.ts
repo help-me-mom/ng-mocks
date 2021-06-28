@@ -1,5 +1,7 @@
-// tslint:disable-next-line:no-import-side-effect
+// tslint:disable-next-line no-import-side-effect
 import './lib/common/ng-mocks-stack';
+// tslint:disable-next-line no-import-side-effect ordered-imports
+import './lib/common/ng-mocks-global-overrides';
 
 export { getTestBedInjection, getInjection } from './lib/common/core.helpers';
 export * from './lib/common/core.tokens';
@@ -7,6 +9,7 @@ export * from './lib/common/core.types';
 export * from './lib/common/func.get-mocked-ng-def-of';
 export * from './lib/common/func.get-source-of-mock';
 export * from './lib/common/func.is-mock-control-value-accessor';
+export * from './lib/common/func.is-mock-ng-def';
 export * from './lib/common/func.is-mock-of';
 export * from './lib/common/func.is-mock-validator';
 export * from './lib/common/func.is-mocked-ng-def-of';

@@ -23,7 +23,7 @@ interface NgMocksUniverse {
   configInstance: Map<any, any>;
   flags: Set<string>;
   getBuildDeclaration: (def: any) => any | undefined;
-  getDefaults: () => Map<any, undefined | ['mock' | 'keep' | 'replace' | 'exclude', any?]>;
+  getDefaults: () => Map<any, ['mock' | 'keep' | 'replace' | 'exclude', any?]>;
   getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
   getResolution: (def: any) => undefined | 'mock' | 'keep' | 'replace' | 'exclude';

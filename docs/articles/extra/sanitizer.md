@@ -12,7 +12,9 @@ Therefore, mocking them can cause unpredictable errors such as:
 - TypeError: view.root.sanitizer.sanitize is not a function
 - TypeError: _co.domSanitizer.bypassSecurityTrustHtml is not a function
 
-Another problem is that both of the class is abstract and there is no way to detect their abstract methods in javascript runtime
+Because of that `ng-mocks` avoids its mocking by default.
+
+Another problem is that the class is abstract and there is no way to detect their abstract methods in javascript runtime
 in order to provide mock functions or spies instead.
 
 However, `ng-mocks` contains [`MockRender`](../api/MockRender.md) which supports additional providers for rendered things.
@@ -34,6 +36,34 @@ MockRender(TargetComponent, null, {
 ```
 
 Profit.
+
+## Always mock / spy DomSanitizer
+
+If you want to spy `DomSanitizer` globally,
+you can use [`ngMocks.globalMock`](../api/ngMocks/globalMock.md) and [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md).
+
+In this case, `ng-mocks` understands that `DomSanitizer` should be mocked by default.
+
+The only concern is that Angular uses `DomSanitizer` internally.
+Therefore, its mock methods should the passed value at least. 
+
+```ts
+// Let ng-mocks know that it should be mocked
+ngMocks.globalMock(DomSanitizer);
+
+// Let ng-mocks know how the mock should be defined
+ngMocks.defaultMock(DomSanitizer, sanitizer => {
+	// Jasmine example
+  sanitizer.sanitize = jasmine.createSpy().and.callFake(v => v);
+  // all other methods
+
+	// Jest example
+  sanitizer.bypassSecurityTrustHtml = jest.fn(v => v);
+  // all other methods
+
+	return sanitizer;
+});
+```
 
 ## Full example
 
