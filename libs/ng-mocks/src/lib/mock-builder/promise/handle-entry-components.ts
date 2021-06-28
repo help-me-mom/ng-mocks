@@ -13,6 +13,7 @@ import coreDefineProperty from '../../common/core.define-property';
 import { extendClass } from '../../common/core.helpers';
 import { NG_MOCKS } from '../../common/core.tokens';
 import { isNgDef } from '../../common/func.is-ng-def';
+import helperCreateClone from '../../mock-service/helper.create-clone';
 
 import { NgMeta } from './types';
 
@@ -21,8 +22,12 @@ class EntryComponentsModule {
 
   public constructor(map: Map<any, any>, protected componentFactoryResolver: ComponentFactoryResolver) {
     this.origin = componentFactoryResolver.resolveComponentFactory;
-    componentFactoryResolver.resolveComponentFactory = component =>
-      this.origin.call(componentFactoryResolver, map.get(component) ?? component) as any;
+    componentFactoryResolver.resolveComponentFactory = helperCreateClone(
+      this.origin,
+      undefined,
+      undefined,
+      (component: any) => this.origin.call(componentFactoryResolver, map.get(component) ?? component) as any,
+    );
   }
 }
 coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [ComponentFactoryResolver]]);
