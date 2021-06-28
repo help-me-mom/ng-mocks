@@ -20,6 +20,7 @@ import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
 import funcIsMock from '../common/func.is-mock';
+import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { MockConfig } from '../common/mock';
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -218,6 +219,10 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
   funcImportExists(component, 'MockComponent');
+
+  if (isMockNgDef(component, 'c')) {
+    return component;
+  }
 
   // We are inside of an 'it'. It is fine to to return a mock copy.
   if ((getTestBed() as any)._instantiated) {

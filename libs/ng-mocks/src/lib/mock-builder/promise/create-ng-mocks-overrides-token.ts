@@ -1,17 +1,17 @@
-import { NgModule, ValueProvider } from '@angular/core';
+import { ValueProvider } from '@angular/core';
 import { MetadataOverride } from '@angular/core/testing';
 
 import { mapValues } from '../../common/core.helpers';
+import coreReflectMeta from '../../common/core.reflect.meta';
 import { NG_MOCKS_OVERRIDES } from '../../common/core.tokens';
 import { Type } from '../../common/core.types';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import getOverrideDef from './get-override-def';
-import getOverrideMeta from './get-override-meta';
 import skipOverride from './skip-override';
 
 export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider => {
-  const overrides: Map<Type<any>, MetadataOverride<any>> = new Map();
+  const overrides: Map<Type<any>, [MetadataOverride<any>, MetadataOverride<any>]> = new Map();
   for (const proto of mapValues(ngMocksUniverse.touches)) {
     const source: any = proto;
     const value = ngMocksUniverse.getBuildDeclaration(source) || source;
@@ -19,14 +19,12 @@ export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider =>
       continue;
     }
 
-    const def = getOverrideDef(getOverrideMeta(value));
-    if (!def) {
+    const original = coreReflectMeta(value);
+    const override = getOverrideDef(original);
+    if (!override) {
       continue;
     }
-    const override: MetadataOverride<NgModule> = {
-      set: def,
-    };
-    overrides.set(value, override);
+    overrides.set(value, [{ set: override }, { set: original }]);
   }
 
   return {

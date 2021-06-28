@@ -18,6 +18,7 @@ import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolv
 import { Type } from '../common/core.types';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
+import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import decorateDeclaration from '../mock/decorate-declaration';
@@ -105,6 +106,10 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
  */
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   funcImportExists(directive, 'MockDirective');
+
+  if (isMockNgDef(directive, 'd')) {
+    return directive;
+  }
 
   // We are inside of an 'it'.
   // It is fine to to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.

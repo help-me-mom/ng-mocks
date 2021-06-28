@@ -8,6 +8,7 @@ import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
 import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
+import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { Mock } from '../common/mock';
@@ -74,6 +75,10 @@ const extractModuleAndProviders = (
 };
 
 const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
+  if (isMockNgDef(ngModule, 'm')) {
+    return ngModule;
+  }
+
   // Every module should be replaced with its mock copy only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
   if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {

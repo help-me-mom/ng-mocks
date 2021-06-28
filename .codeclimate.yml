@@ -48,7 +48,7 @@ plugins:
 checks:
   method-complexity:
     config:
-      threshold: 10
+      threshold: 15
   return-statements:
     enabled: false
   similar-code:
