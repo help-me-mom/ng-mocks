@@ -4,12 +4,12 @@
 [![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
 [![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
-# Mock components, services and more out of annoying dependencies in Angular tests
+# Mock components, services and more out of annoying dependencies for simplification of Angular testing
 
-`ng-mocks` helps to:
+`ng-mocks` facilitates **Angular testing** and helps to:
 
-- mock Components, Directives, Pipes, Modules, Services and Tokens
-- facilitate boilerplate in tests
+- **mock Components**, Directives, Pipes, Modules, Services and Tokens
+- reduce boilerplate in tests
 - access declarations via simple interface
 
 The current version of the library **has been tested** and **can be used** with:
@@ -27,7 +27,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 ## Important links
 
-- **[Documentation with examples](https://ng-mocks.sudo.eu)**
+- **[Documentation with examples of Angular testing](https://ng-mocks.sudo.eu)**
 - [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md)
 - [GitHub repo](https://github.com/ike18t/ng-mocks)
 - [NPM package](https://www.npmjs.com/package/ng-mocks)
@@ -42,7 +42,7 @@ The current version of the library **has been tested** and **can be used** with:
 ## Very short introduction
 
 Global configuration for mocks in `src/test.ts`.
-In case of jest `src/setupJest.ts` should be used.
+In case of jest, `src/setupJest.ts` should be used.
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
