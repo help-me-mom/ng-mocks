@@ -59,6 +59,7 @@ module.exports = {
         'api/ngMocks/stubMember',
         'api/ngMocks/guts',
         'api/ngMocks/faster',
+        'api/ngMocks/ignoreOnConsole',
         'api/ngMocks/throwOnConsole',
         'api/ngMocks/formatHtml',
         'api/ngMocks/formatText',

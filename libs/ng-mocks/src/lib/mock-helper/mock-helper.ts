@@ -343,6 +343,13 @@ export const ngMocks: {
   hide(instance: object, directive: object): void;
 
   /**
+   * it suppresses any log calls, other methods can be suppressed too.
+   *
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/ignoreOnConsole
+   */
+  ignoreOnConsole(...args: Array<keyof typeof console>): void;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/input
    */
   input<T = any>(elSelector: DebugNodeSelector, input: string): T;

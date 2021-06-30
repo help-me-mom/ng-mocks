@@ -62,6 +62,7 @@ access desired elements and instances in fixtures.
 
 - [`guts()`](ngMocks/guts.md)
 - [`faster()`](ngMocks/faster.md)
+- [`ignoreOnConsole()`](ngMocks/ignoreOnConsole.md)
 - [`throwOnConsole()`](ngMocks/throwOnConsole.md)
 - [`formatHtml()`](ngMocks/formatHtml.md)
 - [`formatText()`](ngMocks/formatText.md)
