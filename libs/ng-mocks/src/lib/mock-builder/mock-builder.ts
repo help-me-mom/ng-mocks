@@ -2,22 +2,19 @@ import { InjectionToken } from '@angular/core';
 
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
+import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 
 import { MockBuilderPerformance } from './mock-builder.performance';
 import { IMockBuilder } from './types';
+
+export type MockBuilderParam = string | AnyType<any> | InjectionToken<any> | NgModuleWithProviders;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockBuilder
  */
 export function MockBuilder(
-  keepDeclaration?:
-    | string
-    | AnyType<any>
-    | InjectionToken<any>
-    | Array<string | AnyType<any> | InjectionToken<any>>
-    | null
-    | undefined,
-  itsModuleToMock?: AnyType<any> | Array<AnyType<any>> | null | undefined,
+  keepDeclaration?: MockBuilderParam | MockBuilderParam[] | null | undefined,
+  itsModuleToMock?: MockBuilderParam | MockBuilderParam[] | null | undefined,
 ): IMockBuilder {
   const instance = new MockBuilderPerformance();
 

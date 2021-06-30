@@ -12,7 +12,7 @@ export default (ngModule: NgMeta, { keepDef, configDef }: BuilderData): void => 
       continue;
     }
 
-    if (isNgInjectionToken(def)) {
+    if (isNgInjectionToken(def) || typeof def === 'string') {
       ngMocksUniverse.touches.add(def);
       continue;
     }
