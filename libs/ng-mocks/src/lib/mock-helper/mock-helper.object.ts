@@ -26,6 +26,7 @@ import mockHelperGlobalMock from './mock-helper.global-mock';
 import mockHelperGlobalReplace from './mock-helper.global-replace';
 import mockHelperGlobalWipe from './mock-helper.global-wipe';
 import mockHelperGuts from './mock-helper.guts';
+import mockHelperIgnoreOnConsole from './mock-helper.ignore-on-console';
 import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
 import mockHelperReset from './mock-helper.reset';
@@ -78,6 +79,7 @@ export default {
   globalWipe: mockHelperGlobalWipe,
   guts: mockHelperGuts,
   hide: mockHelperHide,
+  ignoreOnConsole: mockHelperIgnoreOnConsole,
   input: mockHelperInput,
   output: mockHelperOutput,
   render: mockHelperRender,
