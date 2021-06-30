@@ -60,16 +60,16 @@ MockBuilder(null, undefined);
 MockBuilder(undefined, null);
 MockBuilder(undefined, undefined);
 
-// @ts-expect-error: does not support not modules.
+// supports tokens.
 MockBuilder(null, TOKEN_UNKNOWN);
 
-// @ts-expect-error: does not support not modules.
+// supports not string tokens.
 MockBuilder(null, 'param');
 
-// @ts-expect-error: does not support modules with providers.
+// supports modules with providers.
 MockBuilder(null, moduleWithProviders);
 
-// @ts-expect-error: does not support modules with providers.
+// supports modules with providers.
 MockBuilder(moduleWithProviders);
 
 const promise: Promise<IMockBuilderResult> =
