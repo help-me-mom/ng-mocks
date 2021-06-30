@@ -1,3 +1,17 @@
+# [12.2.0](https://github.com/ike18t/ng-mocks/compare/v12.1.2...v12.2.0) (2021-06-30)
+
+
+### Bug Fixes
+
+* **core:** allowing spies on ComponentFactoryResolver.resolveComponentFactory [#736](https://github.com/ike18t/ng-mocks/issues/736) ([fda714e](https://github.com/ike18t/ng-mocks/commit/fda714edf85db1c0378dc9ec8136524f798add3c))
+* **core:** mock of mock will return itself ([4358b99](https://github.com/ike18t/ng-mocks/commit/4358b99340c83b9c22f80ce19d86b35ff444e69a))
+
+
+### Features
+
+* **core:** mock for root and platform definitions [#735](https://github.com/ike18t/ng-mocks/issues/735) ([04128b6](https://github.com/ike18t/ng-mocks/commit/04128b686fdb160c01634bd3284a8d17534ab50e))
+* **core:** throw on console can accept custom method names ([fecc878](https://github.com/ike18t/ng-mocks/commit/fecc878813ffa31ccf1c465b45e9c0d68298ff8c))
+
 ## [12.1.2](https://github.com/ike18t/ng-mocks/compare/v12.1.1...v12.1.2) (2021-06-20)
 
 
