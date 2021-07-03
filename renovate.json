@@ -28,6 +28,15 @@
     },
 
     {
+      "paths": [".circleci/config.yml"],
+      "packagePatterns": ["satantime/puppeteer-node"],
+      "major": {
+        "enabled": false
+      },
+      "additionalBranchPrefix": "root/"
+    },
+
+    {
       "paths": [
         ".circleci/config.yml",
         "Dockerfile",
