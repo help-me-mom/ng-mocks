@@ -143,6 +143,12 @@
     {
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^1\\./"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a5/",
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=2.5"
     },
@@ -244,6 +250,12 @@
       "paths": ["e2e/a6/package.json"],
       "packageNames": ["ts-node"],
       "allowedVersions": "<=7"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a6/",
+      "paths": ["e2e/a6/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^2\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a6/",
@@ -353,6 +365,12 @@
     {
       "additionalBranchPrefix": "e2e/a7/",
       "paths": ["e2e/a7/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^2\\./"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a7/",
+      "paths": ["e2e/a7/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.2"
     },
@@ -448,6 +466,12 @@
       "paths": ["e2e/a8/package.json"],
       "packageNames": ["ts-node"],
       "allowedVersions": "<=7"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a8/",
+      "paths": ["e2e/a8/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^5\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a8/",
@@ -551,6 +575,12 @@
     {
       "additionalBranchPrefix": "e2e/a9/",
       "paths": ["e2e/a9/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^10\\./"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a9/",
+      "paths": ["e2e/a9/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.7"
     },
@@ -646,6 +676,12 @@
       "paths": ["e2e/a10/package.json"],
       "packageNames": ["ts-node"],
       "allowedVersions": "<=8"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a10/",
+      "paths": ["e2e/a10/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^10\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a10/",
@@ -750,6 +786,12 @@
     {
       "additionalBranchPrefix": "e2e/a11/",
       "paths": ["e2e/a11/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^10\\./"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a11/",
+      "paths": ["e2e/a11/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=4.0"
     },
@@ -845,6 +887,12 @@
       "paths": ["e2e/a12/package.json"],
       "packageNames": ["ts-node"],
       "allowedVersions": "<=8.3"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a12/",
+      "paths": ["e2e/a12/package.json"],
+      "packageNames": ["puppeteer"],
+      "allowedVersions": "/^10\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a12/",
