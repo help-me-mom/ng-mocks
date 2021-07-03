@@ -4,11 +4,11 @@ orbs:
 parameters:
   lockindex:
     type: string
-    default: '2'
+    default: '3'
 jobs:
   Core:
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - restore_cache:
@@ -89,7 +89,7 @@ jobs:
               -i test-reports/codeclimate.json
   E2E:
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - restore_cache:
@@ -109,29 +109,11 @@ jobs:
       - run:
           name: E2E
           command: npm run e2e
-  'Install':
+  'Angular Install':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
-      - restore_cache:
-          key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-      - restore_cache:
-          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-      - restore_cache:
-          key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-      - restore_cache:
-          key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-      - restore_cache:
-          key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-      - restore_cache:
-          key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-      - restore_cache:
-          key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-      - restore_cache:
-          key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-      - restore_cache:
-          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
       - restore_cache:
           key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
       - restore_cache:
@@ -141,33 +123,6 @@ jobs:
       - run:
           name: NPM Install
           command: |
-            if [ ! -d "e2e/a5es5/node_modules/" ]; then
-              npm run i:ci:a5es5
-            fi
-            if [ ! -d "e2e/a5es2015/node_modules/" ]; then
-              npm run i:ci:a5es2015
-            fi
-            if [ ! -d "e2e/a6/node_modules/" ]; then
-              npm run i:ci:a6
-            fi
-            if [ ! -d "e2e/a7/node_modules/" ]; then
-              npm run i:ci:a7
-            fi
-            if [ ! -d "e2e/a8/node_modules/" ]; then
-              npm run i:ci:a8
-            fi
-            if [ ! -d "e2e/a9/node_modules/" ]; then
-              npm run i:ci:a9
-            fi
-            if [ ! -d "e2e/a10/node_modules/" ]; then
-              npm run i:ci:a10
-            fi
-            if [ ! -d "e2e/a11/node_modules/" ]; then
-              npm run i:ci:a11
-            fi
-            if [ ! -d "e2e/a12/node_modules/" ]; then
-              npm run i:ci:a12
-            fi
             if [ ! -d "e2e/a-jasmine/node_modules/" ]; then
               npm run i:ci:a-jasmine
             fi
@@ -177,42 +132,6 @@ jobs:
             if [ ! -d "e2e/a-min/node_modules/" ]; then
               npm run i:ci:a-min
             fi
-      - save_cache:
-          key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-          paths:
-            - ./e2e/a5es5/node_modules
-      - save_cache:
-          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-          paths:
-            - ./e2e/a5es2015/node_modules
-      - save_cache:
-          key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-          paths:
-            - ./e2e/a6/node_modules
-      - save_cache:
-          key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-          paths:
-            - ./e2e/a7/node_modules
-      - save_cache:
-          key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-          paths:
-            - ./e2e/a8/node_modules
-      - save_cache:
-          key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-          paths:
-            - ./e2e/a9/node_modules
-      - save_cache:
-          key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-          paths:
-            - ./e2e/a10/node_modules
-      - save_cache:
-          key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-          paths:
-            - ./e2e/a11/node_modules
-      - save_cache:
-          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
-          paths:
-            - ./e2e/a12/node_modules
       - save_cache:
           key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
           paths:
@@ -246,13 +165,23 @@ jobs:
           command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
   'Angular 5 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:6.17.1
     steps:
       - checkout
-      - attach_workspace:
-          at: dist
       - restore_cache:
           key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a5es5/node_modules/" ]; then
+              npm run i:a5es5
+            fi
+      - save_cache:
+          key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+          paths:
+            - ./e2e/a5es5/node_modules
+      - attach_workspace:
+          at: dist
       - run:
           name: Spreading Build
           command: npm run s:a5es5
@@ -264,13 +193,23 @@ jobs:
           command: npm run test:a5es5
   'Angular 5 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:6.17.1
     steps:
       - checkout
-      - attach_workspace:
-          at: dist
       - restore_cache:
           key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a5es2015/node_modules/" ]; then
+              npm run i:a5es2015
+            fi
+      - save_cache:
+          key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
+          paths:
+            - ./e2e/a5es2015/node_modules
+      - attach_workspace:
+          at: dist
       - run:
           name: Spreading Build
           command: npm run s:a5es2015
@@ -280,9 +219,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a5es2015
+  'Angular 6 Install':
+    docker:
+      - image: satantime/puppeteer-node:8.17.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a6/node_modules/" ]; then
+              npm run i:ci:a6
+            fi
+      - save_cache:
+          key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
+          paths:
+            - ./e2e/a6/node_modules
   'Angular 6 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:8.17.0
     steps:
       - checkout
       - attach_workspace:
@@ -300,7 +256,7 @@ jobs:
           command: npm run test:a6es5
   'Angular 6 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:8.17.0
     steps:
       - checkout
       - attach_workspace:
@@ -316,9 +272,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a6es2015
+  'Angular 7 Install':
+    docker:
+      - image: satantime/puppeteer-node:8.17.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a7/node_modules/" ]; then
+              npm run i:ci:a7
+            fi
+      - save_cache:
+          key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
+          paths:
+            - ./e2e/a7/node_modules
   'Angular 7 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:8.17.0
     steps:
       - checkout
       - attach_workspace:
@@ -336,7 +309,7 @@ jobs:
           command: npm run test:a7es5
   'Angular 7 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:8.17.0
     steps:
       - checkout
       - attach_workspace:
@@ -352,9 +325,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a7es2015
+  'Angular 8 Install':
+    docker:
+      - image: satantime/puppeteer-node:10.24.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a8/node_modules/" ]; then
+              npm run i:ci:a8
+            fi
+      - save_cache:
+          key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
+          paths:
+            - ./e2e/a8/node_modules
   'Angular 8 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:10.24.1
     steps:
       - checkout
       - attach_workspace:
@@ -372,7 +362,7 @@ jobs:
           command: npm run test:a8es5
   'Angular 8 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:10.24.1
     steps:
       - checkout
       - attach_workspace:
@@ -388,9 +378,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a8es2015
+  'Angular 9 Install':
+    docker:
+      - image: satantime/puppeteer-node:12.22.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a9/node_modules/" ]; then
+              npm run i:ci:a9
+            fi
+      - save_cache:
+          key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
+          paths:
+            - ./e2e/a9/node_modules
   'Angular 9 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -408,7 +415,7 @@ jobs:
           command: npm run test:a9es5
   'Angular 9 ES2015':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -426,7 +433,7 @@ jobs:
           command: npm run test:a9es2015
   'Angular 9 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -444,7 +451,7 @@ jobs:
           command: npm run test:a9es5ivy
   'Angular 9 ES2016 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -460,9 +467,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a9es2015ivy
+  'Angular 10 Install':
+    docker:
+      - image: satantime/puppeteer-node:12.22.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a10/node_modules/" ]; then
+              npm run i:ci:a10
+            fi
+      - save_cache:
+          key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
+          paths:
+            - ./e2e/a10/node_modules
   'Angular 10 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -480,7 +504,7 @@ jobs:
           command: npm run test:a10es5
   'Angular 10 ES2017':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -498,7 +522,7 @@ jobs:
           command: npm run test:a10es2015
   'Angular 10 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -516,7 +540,7 @@ jobs:
           command: npm run test:a10es5ivy
   'Angular 10 ES2018 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -532,9 +556,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a10es2015ivy
+  'Angular 11 Install':
+    docker:
+      - image: satantime/puppeteer-node:12.22.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a11/node_modules/" ]; then
+              npm run i:ci:a11
+            fi
+      - save_cache:
+          key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
+          paths:
+            - ./e2e/a11/node_modules
   'Angular 11 ES5':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -552,7 +593,7 @@ jobs:
           command: npm run test:a11es5
   'Angular 11 ES2019':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -570,7 +611,7 @@ jobs:
           command: npm run test:a11es2015
   'Angular 11 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -588,7 +629,7 @@ jobs:
           command: npm run test:a11es5ivy
   'Angular 11 ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -604,9 +645,26 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a11es2015ivy
+  'Angular 12 Install':
+    docker:
+      - image: satantime/puppeteer-node:12.22.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a12/node_modules/" ]; then
+              npm run i:ci:a12
+            fi
+      - save_cache:
+          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
+          paths:
+            - ./e2e/a12/node_modules
   'Angular 12 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -624,7 +682,7 @@ jobs:
           command: npm run test:a12es5ivy
   'Angular 12 ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:12.22.1
     steps:
       - checkout
       - attach_workspace:
@@ -642,7 +700,7 @@ jobs:
           command: npm run test:a12es2015ivy
   'Angular Jasmine ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -657,7 +715,7 @@ jobs:
           command: npm run test:a-jasmine:es5ivy
   'Angular Jasmine ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -672,7 +730,7 @@ jobs:
           command: npm run test:a-jasmine:es2015ivy
   'Angular Jest ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -687,7 +745,7 @@ jobs:
           command: npm run test:a-jest:es5ivy
   'Angular Jest ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -702,7 +760,7 @@ jobs:
           command: npm run test:a-jest:es2015ivy
   'Angular Min ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -720,7 +778,7 @@ jobs:
           command: npm run build:a-min:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.1-buster
+      - image: satantime/puppeteer-node:14.17.1
     steps:
       - checkout
       - attach_workspace:
@@ -762,7 +820,7 @@ jobs:
       IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
 workflows:
   version: 2
-  build:
+  Testing:
     jobs:
       - Core
       - E2E:
@@ -771,93 +829,114 @@ workflows:
       - 'Core IE':
           requires:
             - Core
-      - 'Install':
+      - 'Performance':
           requires:
             - Core
-      - 'Performance':
+      - 'Angular Install':
+          requires:
+            - Core
+      - 'Angular 6 Install':
+          requires:
+            - Core
+      - 'Angular 7 Install':
+          requires:
+            - Core
+      - 'Angular 8 Install':
+          requires:
+            - Core
+      - 'Angular 9 Install':
+          requires:
+            - Core
+      - 'Angular 10 Install':
+          requires:
+            - Core
+      - 'Angular 11 Install':
+          requires:
+            - Core
+      - 'Angular 12 Install':
           requires:
             - Core
       - 'Angular 5 ES5':
           requires:
-            - Install
+            - Core
       - 'Angular 5 ES2015':
           requires:
-            - Install
+            - Core
       - 'Angular 6 ES5':
           requires:
-            - Install
+            - Angular 6 Install
       - 'Angular 6 ES2015':
           requires:
-            - Install
+            - Angular 6 Install
       - 'Angular 7 ES5':
           requires:
-            - Install
+            - Angular 7 Install
       - 'Angular 7 ES2015':
           requires:
-            - Install
+            - Angular 7 Install
       - 'Angular 8 ES5':
           requires:
-            - Install
+            - Angular 8 Install
       - 'Angular 8 ES2015':
           requires:
-            - Install
+            - Angular 8 Install
       - 'Angular 9 ES5':
           requires:
-            - Install
+            - Angular 9 Install
       - 'Angular 9 ES2015':
           requires:
-            - Install
+            - Angular 9 Install
       - 'Angular 9 ES5 Ivy':
           requires:
-            - Install
+            - Angular 9 Install
       - 'Angular 9 ES2016 Ivy':
           requires:
-            - Install
+            - Angular 9 Install
       - 'Angular 10 ES5':
           requires:
-            - Install
+            - Angular 10 Install
       - 'Angular 10 ES2017':
           requires:
-            - Install
+            - Angular 10 Install
       - 'Angular 10 ES5 Ivy':
           requires:
-            - Install
+            - Angular 10 Install
       - 'Angular 10 ES2018 Ivy':
           requires:
-            - Install
+            - Angular 10 Install
       - 'Angular 11 ES5':
           requires:
-            - Install
+            - Angular 11 Install
       - 'Angular 11 ES2019':
           requires:
-            - Install
+            - Angular 11 Install
       - 'Angular 11 ES5 Ivy':
           requires:
-            - Install
+            - Angular 11 Install
       - 'Angular 11 ES2020 Ivy':
           requires:
-            - Install
+            - Angular 11 Install
       - 'Angular 12 ES5 Ivy':
           requires:
-            - Install
+            - Angular 12 Install
       - 'Angular 12 ES2020 Ivy':
           requires:
-            - Install
+            - Angular 12 Install
       - 'Angular Jasmine ES5 Ivy':
           requires:
-            - Install
+            - Angular Install
       - 'Angular Jasmine ES2020 Ivy':
           requires:
-            - Install
+            - Angular Install
       - 'Angular Jest ES5 Ivy':
           requires:
-            - Install
+            - Angular Install
       - 'Angular Jest ES2020 Ivy':
           requires:
-            - Install
+            - Angular Install
       - 'Angular Min ES5 Ivy':
           requires:
-            - Install
+            - Angular Install
       - 'Angular Min ES2015 Ivy':
           requires:
-            - Install
+            - Angular Install
