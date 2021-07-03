@@ -1,0 +1,15 @@
+// tslint:disable strict-type-predicates
+
+export default (def: any): void => {
+  throw new Error(
+    [
+      `${def.name} declaration has been passed into ng-mocks without Angular decorators.`,
+      'Therefore, it cannot be properly handled.',
+      'Highly likely,',
+      typeof jest === 'undefined' ? '' : /* istanbul ignore next */ 'jest.mock() has been used on its file, or',
+      'ng-mocks is not in JIT mode.',
+      'Otherwise, please create an issue on github: https://github.com/ike18t/ng-mocks/issues/new?title=False%20positive%20ng-mocks%20not%20in%20JIT.',
+      'Thank you in advance for support.',
+    ].join(' '),
+  );
+};

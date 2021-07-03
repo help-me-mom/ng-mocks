@@ -1,4 +1,7 @@
+// tslint:disable strict-type-predicates
+
 import { Type } from '../common/core.types';
+import errorJestMock from '../common/error.jest-mock';
 import { isNgDef } from '../common/func.is-ng-def';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockedComponent } from '../mock-component/types';
@@ -26,5 +29,11 @@ export function MockDeclaration<T>(
     return MockDirective(declaration);
   }
 
-  return declaration;
+  errorJestMock(declaration);
+  throw new Error(
+    [
+      'MockDeclaration does not know how to mock',
+      typeof declaration === 'function' ? (declaration as any).name : declaration,
+    ].join(' '),
+  );
 }
