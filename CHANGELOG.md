@@ -1,3 +1,17 @@
+# [12.3.0](https://github.com/ike18t/ng-mocks/compare/v12.2.0...v12.3.0) (2021-07-03)
+
+
+### Bug Fixes
+
+* **core:** using commonjs only because of optional packages [#761](https://github.com/ike18t/ng-mocks/issues/761) ([adbad49](https://github.com/ike18t/ng-mocks/commit/adbad49de90cecda9133a6cdf33a4bc75446f956))
+* **jest:** better detection and error reporting of jest.mock [#760](https://github.com/ike18t/ng-mocks/issues/760) ([0903a12](https://github.com/ike18t/ng-mocks/commit/0903a12eef11a302756c936ed606ee830331e419))
+* **MockBuilder:** params support tokens and modules with providers [#762](https://github.com/ike18t/ng-mocks/issues/762) ([d58693e](https://github.com/ike18t/ng-mocks/commit/d58693eb679698fddb659af84d42aa1066683ad9))
+
+
+### Features
+
+* **ngMocks:** allows to suppress console logs [#578](https://github.com/ike18t/ng-mocks/issues/578) ([ee1c6bb](https://github.com/ike18t/ng-mocks/commit/ee1c6bbf9eaff52f80d378260c529d3374a5ee59))
+
 # [12.2.0](https://github.com/ike18t/ng-mocks/compare/v12.1.2...v12.2.0) (2021-06-30)
 
 
