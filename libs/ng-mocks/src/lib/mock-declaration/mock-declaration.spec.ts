@@ -78,8 +78,15 @@ describe('MockDeclaration', () => {
     expect(mock.name).toEqual('MockOfTargetPipe');
   });
 
-  it('should skip unknown types', () => {
-    const mock: any = MockDeclaration(Target);
-    expect(mock.nameConstructor).toBeUndefined();
+  it('throws on unknown types', () => {
+    expect(() => MockDeclaration(Target)).toThrowError(
+      /MockDeclaration does not know how to mock Target/,
+    );
+  });
+
+  it('throws on unknown types with their names', () => {
+    expect(() => MockDeclaration({} as never)).toThrowError(
+      'MockDeclaration does not know how to mock [object Object]',
+    );
   });
 });
