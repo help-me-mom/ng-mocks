@@ -1,3 +1,10 @@
+## [12.3.1](https://github.com/ike18t/ng-mocks/compare/v12.3.0...v12.3.1) (2021-07-04)
+
+
+### Bug Fixes
+
+* **core:** right storage of internal stacks ([ba0b64b](https://github.com/ike18t/ng-mocks/commit/ba0b64b04f7d0c742209c4298dd6ab60517a43ef))
+
 # [12.3.0](https://github.com/ike18t/ng-mocks/compare/v12.2.0...v12.3.0) (2021-07-03)
 
 
