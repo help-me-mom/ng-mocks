@@ -23,7 +23,7 @@ import { TOKEN_CUSTOMIZE, TOKEN_KEEP, TOKEN_MOCK } from './spec.tokens.fixtures'
   `,
 })
 export class ComponentContentChild<T> {
-  @ContentChild('block', { static: false } as any) public readonly injectedBlock: TemplateRef<any> | undefined;
+  @ContentChild('block', {} as any) public readonly injectedBlock: TemplateRef<any> | undefined;
   @Input() public items: T[] | undefined;
 }
 

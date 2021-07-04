@@ -33,7 +33,7 @@ class MockDirective {
   template: ``,
 })
 class MockComponent {
-  @ContentChildren(MockDirective, {} as any)
+  @ContentChildren(MockDirective)
   public readonly directives?: QueryList<MockDirective>;
 
   @ContentChildren(TplDirective, {

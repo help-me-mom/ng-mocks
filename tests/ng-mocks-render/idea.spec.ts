@@ -25,7 +25,7 @@ class MockDirective {
   template: ` <ng-content></ng-content> `,
 })
 class MockComponent {
-  @ContentChildren(MockDirective, {} as any)
+  @ContentChildren(MockDirective)
   public readonly directives?: QueryList<MockDirective>;
 
   @ContentChildren(MockDirective, {

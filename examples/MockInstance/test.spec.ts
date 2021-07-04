@@ -28,9 +28,7 @@ class ChildComponent {
   template: '<target></target>',
 })
 class RealComponent implements AfterViewInit {
-  @ViewChild(ChildComponent, {
-    static: false,
-  } as any)
+  @ViewChild(ChildComponent, {} as any)
   protected child?: ChildComponent;
 
   public ngAfterViewInit() {

@@ -106,7 +106,7 @@ class GettersAndSettersDirective {
   `,
 })
 class ExampleComponentContainer {
-  @ViewChild(ExampleDirective, { static: false } as any)
+  @ViewChild(ExampleDirective, {} as any)
   public childDirective?: ExampleDirective;
   public emitted = false;
   public readonly foo = new FormControl('');

@@ -13,7 +13,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `child`,
 })
 class DependencyComponent {
-  @ContentChild('something', { static: false } as any)
+  @ContentChild('something', {} as any)
   public injectedSomething: TemplateRef<{}> | undefined;
 
   @Input()
