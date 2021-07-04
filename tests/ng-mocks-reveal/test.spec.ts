@@ -92,7 +92,7 @@ class BlockDirective {
   @ContentChild(Tpl2Directive, {} as any)
   public readonly template?: QueryList<Tpl2Directive>;
 
-  @ContentChildren(TplDirective, {} as any)
+  @ContentChildren(TplDirective)
   public readonly templates?: QueryList<TplDirective>;
 }
 

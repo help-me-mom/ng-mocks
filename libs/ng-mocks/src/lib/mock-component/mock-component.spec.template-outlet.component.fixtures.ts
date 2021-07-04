@@ -11,14 +11,14 @@ import { Component, ContentChild, ElementRef, TemplateRef, ViewChild } from '@an
 })
 export class TemplateOutletComponent {
   // injected.
-  @ContentChild('block1', { static: false } as any) public injectedBlock1?: TemplateRef<any>;
+  @ContentChild('block1', {} as any) public injectedBlock1?: TemplateRef<any>;
 
   // injected.
-  @ContentChild('block2', { static: false } as any) public injectedBlock2?: TemplateRef<any>;
+  @ContentChild('block2', {} as any) public injectedBlock2?: TemplateRef<any>;
 
   // undefined (not injected).
-  @ContentChild('block3', { static: false } as any) public injectedBlock3?: TemplateRef<any>;
+  @ContentChild('block3', {} as any) public injectedBlock3?: TemplateRef<any>;
 
   // ref to own template.
-  @ViewChild('block4', { static: false } as any) public ownBlock3?: ElementRef;
+  @ViewChild('block4', {} as any) public ownBlock3?: ElementRef;
 }

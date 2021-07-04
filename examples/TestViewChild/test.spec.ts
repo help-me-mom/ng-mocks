@@ -49,19 +49,18 @@ class DependencyDirective {
   `,
 })
 class TargetComponent {
-  @ViewChild(DependencyComponent, { static: true } as any)
+  @ViewChild(DependencyComponent, {} as any)
   public component?: DependencyComponent;
 
   @ViewChild(DependencyComponent, {
     read: DependencyDirective,
-    static: true,
   } as any)
   public directive?: DependencyDirective;
 
-  @ViewChildren(DependencyDirective, { static: true } as any)
+  @ViewChildren(DependencyDirective, {} as any)
   public directives?: QueryList<DependencyDirective>;
 
-  @ViewChild('tpl', { static: true } as any)
+  @ViewChild('tpl', {} as any)
   public tpl?: TemplateRef<HTMLElement>;
 
   public value = '';

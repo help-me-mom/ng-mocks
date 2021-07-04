@@ -27,9 +27,7 @@ class ChildComponent {
   `,
 })
 class ParentComponent {
-  @ViewChild('child', {
-    static: false,
-  } as any)
+  @ViewChild('child', {} as any)
   public readonly child?: ChildComponent;
 }
 

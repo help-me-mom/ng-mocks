@@ -1,7 +1,7 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { getTestBed, TestBed } from '@angular/core/testing';
-import { MockBuilder, MockPipe, MockRender, ngMocks } from 'ng-mocks';
+import { TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
