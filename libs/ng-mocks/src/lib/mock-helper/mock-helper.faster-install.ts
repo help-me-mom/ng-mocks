@@ -10,7 +10,7 @@ const hooks: {
   after: [],
   before: [],
 };
-ngMocksUniverse.global.set('reporter-stack', hooks);
+ngMocksUniverse.global.set('faster-hooks', hooks);
 
 const configureTestingModule =
   (original: TestBedStatic['configureTestingModule']): TestBedStatic['configureTestingModule'] =>
