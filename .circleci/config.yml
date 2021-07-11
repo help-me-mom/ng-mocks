@@ -380,7 +380,7 @@ jobs:
           command: npm run test:a8es2015
   'Angular 9 Install':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - restore_cache:
@@ -397,7 +397,7 @@ jobs:
             - ./e2e/a9/node_modules
   'Angular 9 ES5':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -415,7 +415,7 @@ jobs:
           command: npm run test:a9es5
   'Angular 9 ES2015':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -433,7 +433,7 @@ jobs:
           command: npm run test:a9es2015
   'Angular 9 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -451,7 +451,7 @@ jobs:
           command: npm run test:a9es5ivy
   'Angular 9 ES2016 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -469,7 +469,7 @@ jobs:
           command: npm run test:a9es2015ivy
   'Angular 10 Install':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - restore_cache:
@@ -486,7 +486,7 @@ jobs:
             - ./e2e/a10/node_modules
   'Angular 10 ES5':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -504,7 +504,7 @@ jobs:
           command: npm run test:a10es5
   'Angular 10 ES2017':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -522,7 +522,7 @@ jobs:
           command: npm run test:a10es2015
   'Angular 10 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -540,7 +540,7 @@ jobs:
           command: npm run test:a10es5ivy
   'Angular 10 ES2018 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -558,7 +558,7 @@ jobs:
           command: npm run test:a10es2015ivy
   'Angular 11 Install':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - restore_cache:
@@ -575,7 +575,7 @@ jobs:
             - ./e2e/a11/node_modules
   'Angular 11 ES5':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -593,7 +593,7 @@ jobs:
           command: npm run test:a11es5
   'Angular 11 ES2019':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -611,7 +611,7 @@ jobs:
           command: npm run test:a11es2015
   'Angular 11 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -629,7 +629,7 @@ jobs:
           command: npm run test:a11es5ivy
   'Angular 11 ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -647,7 +647,7 @@ jobs:
           command: npm run test:a11es2015ivy
   'Angular 12 Install':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - restore_cache:
@@ -664,7 +664,7 @@ jobs:
             - ./e2e/a12/node_modules
   'Angular 12 ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
@@ -682,7 +682,7 @@ jobs:
           command: npm run test:a12es5ivy
   'Angular 12 ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:12.22.1
+      - image: satantime/puppeteer-node:12.22.3
     steps:
       - checkout
       - attach_workspace:
