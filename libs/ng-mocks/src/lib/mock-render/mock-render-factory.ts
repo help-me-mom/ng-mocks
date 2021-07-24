@@ -121,7 +121,7 @@ const generateFactory = (
     const fixture: any = TestBed.createComponent(componentCtor);
 
     funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
-    coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('reporter-stack-id'));
+    coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
 
     if (detectChanges === undefined || detectChanges) {
       fixture.detectChanges();

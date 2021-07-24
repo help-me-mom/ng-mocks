@@ -63,18 +63,30 @@ ngMocksUniverse.getLocalMocks = () => {
 ngMocksUniverse.getOverrides = globalMap('overrides');
 ngMocksUniverse.getDefaults = globalMap('defaults');
 
+const getDefaults = (def: any): [] | ['mock' | 'keep' | 'replace' | 'exclude', any?] => {
+  {
+    const defValue = ngMocksUniverse.getDefaults().get(def);
+    if (defValue) {
+      return defValue;
+    }
+  }
+
+  {
+    const defValue = typeof def === 'function' ? ngMocksUniverse.getDefaults().get(`@${def.name}`) : undefined;
+    if (defValue) {
+      return defValue;
+    }
+  }
+
+  return [];
+};
+
 ngMocksUniverse.getResolution = (def: any): undefined | 'mock' | 'keep' | 'replace' | 'exclude' => {
   const set = ngMocksUniverse.config.get('ngMocksDepsResolution');
   if (set?.has(def)) {
     return set.get(def);
   }
-
-  const defValue = ngMocksUniverse.getDefaults().get(def);
-  if (!defValue) {
-    return undefined;
-  }
-
-  const [value] = defValue;
+  const [value] = getDefaults(def);
 
   return value;
 };
@@ -83,13 +95,7 @@ ngMocksUniverse.getBuildDeclaration = (def: any): undefined | null | any => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return ngMocksUniverse.builtDeclarations.get(def);
   }
-
-  const defValue = ngMocksUniverse.getDefaults().get(def);
-  if (!defValue) {
-    return;
-  }
-
-  const [mode, replacement] = defValue;
+  const [mode, replacement] = getDefaults(def);
 
   if (mode === 'exclude') {
     return null;
@@ -106,15 +112,9 @@ ngMocksUniverse.hasBuildDeclaration = (def: any): boolean => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
     return true;
   }
+  const [mode] = getDefaults(def);
 
-  const defValue = ngMocksUniverse.getDefaults().get(def);
-  if (!defValue) {
-    return false;
-  }
-
-  const [mode] = defValue;
-
-  return mode !== 'mock';
+  return !!mode && mode !== 'mock';
 };
 
 const hasBuildDeclaration = (def: any): boolean => ngMocksUniverse.hasBuildDeclaration(def);
@@ -132,13 +132,6 @@ ngMocksUniverse.isExcludedDef = (def: any): boolean => {
 ngMocksUniverse.isProvidedDef = (def: any): boolean => hasBuildDeclaration(def) && getBuildDeclaration(def) !== null;
 
 // excluding StoreDevtoolsModule by default
-// istanbul ignore next
-try {
-  // tslint:disable-next-line no-require-imports no-implicit-dependencies no-var-requires
-  const { StoreDevtoolsModule } = require('@ngrx/store-devtools');
-  ngMocksUniverse.getDefaults().set(StoreDevtoolsModule, ['exclude']);
-} catch {
-  // nothing to do
-}
+ngMocksUniverse.getDefaults().set('@StoreDevtoolsModule', ['exclude']);
 
 export default ((): NgMocksUniverse => ngMocksUniverse)();
