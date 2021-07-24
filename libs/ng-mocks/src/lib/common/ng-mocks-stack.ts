@@ -138,11 +138,30 @@ const installJestCircus = () => {
   return true;
 };
 
+// istanbul ignore next
+const installMochaReporter = () => {
+  try {
+    mocha.setup({
+      rootHooks: {
+        afterAll: stackPop,
+        beforeAll: () => stackPush('root'),
+        afterEach: stackPop,
+        beforeEach: () => stackPush('test'),
+      },
+    });
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const install = () => {
   if (!ngMocksUniverse.global.has('reporter-stack-install')) {
     let installed = false;
     installed = installJasmineReporter() || /* istanbul ignore next */ installed;
     installed = installJestCircus() || /* istanbul ignore next */ installed;
+    installed = installMochaReporter() || /* istanbul ignore next */ installed;
     // istanbul ignore if
     if (!installed) {
       messageCoreChecker();
