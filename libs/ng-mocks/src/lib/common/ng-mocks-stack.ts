@@ -144,8 +144,8 @@ const installMochaReporter = () => {
     mocha.setup({
       rootHooks: {
         afterAll: stackPop,
-        beforeAll: () => stackPush('root'),
         afterEach: stackPop,
+        beforeAll: () => stackPush('root'),
         beforeEach: () => stackPush('test'),
       },
     });
