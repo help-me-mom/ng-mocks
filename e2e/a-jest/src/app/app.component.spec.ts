@@ -14,6 +14,10 @@ ngMocks.defaultMock(AppService, () => ({
 }));
 
 describe('app-component', () => {
+  // A fix until https://github.com/facebook/jest/issues/11483 has been merged.
+  MockInstance.scope('all');
+  MockInstance.scope();
+
   const factory = MockRenderFactory(AppComponent, ['scope']);
   ngMocks.faster();
   beforeAll(() => MockBuilder(AppComponent, AppModule));
