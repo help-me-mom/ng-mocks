@@ -75,8 +75,8 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
-const globalFlags = ngMocksUniverse.global.get('flags');
 const flushTestBed = (flags: Record<string, any>): void => {
+  const globalFlags = ngMocksUniverse.global.get('flags');
   const testBed: any = getTestBed();
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();

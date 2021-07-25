@@ -17,5 +17,6 @@ export default {
     'InjectionToken EventManagerPlugins', // EVENT_MANAGER_PLUGINS
     'InjectionToken HammerGestureConfig', // HAMMER_GESTURE_CONFIG
   ],
+  onMockInstanceRestoreNeed: 'warn',
   onTestBedFlushNeed: 'warn',
 };
