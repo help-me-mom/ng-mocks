@@ -1,3 +1,12 @@
+# [12.4.0](https://github.com/ike18t/ng-mocks/compare/v12.3.1...v12.4.0) (2021-07-25)
+
+
+### Features
+
+* **core:** internal stack integration with mocha runner [#838](https://github.com/ike18t/ng-mocks/issues/838) ([14a97d0](https://github.com/ike18t/ng-mocks/commit/14a97d07022d3766f4e8648130b3f6aefdc017eb))
+* **MockInstance:** console.warn on forgotten resets [#857](https://github.com/ike18t/ng-mocks/issues/857) ([3e35252](https://github.com/ike18t/ng-mocks/commit/3e352520fce57b1ee11a45d87d5c79614a8e9929))
+* **MockInstance:** manual control of mock scopes [#857](https://github.com/ike18t/ng-mocks/issues/857) ([fc8a2ed](https://github.com/ike18t/ng-mocks/commit/fc8a2eda8f03126e2651e1a31425fb47860b821d))
+
 ## [12.3.1](https://github.com/ike18t/ng-mocks/compare/v12.3.0...v12.3.1) (2021-07-04)
 
 
