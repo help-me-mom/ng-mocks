@@ -44,13 +44,16 @@ export default {
   click: mockHelperClick,
   config: (config: {
     mockRenderCacheSize?: number | null;
+    onMockInstanceRestoreNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
   }) => {
     const flags = ngMocksUniverse.global.get('flags');
-    if (config.onTestBedFlushNeed === null) {
-      flags.onTestBedFlushNeed = coreConfig.onTestBedFlushNeed;
-    } else if (config.onTestBedFlushNeed !== undefined) {
-      flags.onTestBedFlushNeed = config.onTestBedFlushNeed;
+    for (const flag of ['onTestBedFlushNeed', 'onMockInstanceRestoreNeed'] as const) {
+      if (config[flag] === null) {
+        flags[flag] = coreConfig[flag];
+      } else if (config[flag] !== undefined) {
+        flags[flag] = config[flag];
+      }
     }
     if (config.mockRenderCacheSize === null) {
       ngMocksUniverse.global.delete('mockRenderCacheSize');

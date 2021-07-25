@@ -142,11 +142,11 @@ There is `MockInstance.scope()` to reduce code to one line:
 ```ts
 describe('suite', () => {
   // Uses beforeAll and afterAll.
-  MockInstance.scope();
+  MockInstance.scope('all');
 
   describe('sub suite', () => {
     // Uses beforeEach and afterEach.
-    MockInstance.scope('each');
+    MockInstance.scope();
   });
 });
 ```

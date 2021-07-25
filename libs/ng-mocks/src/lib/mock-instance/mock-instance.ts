@@ -5,13 +5,21 @@ import funcImportExists from '../common/func.import-exists';
 import ngMocksStack, { NgMocksStack } from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+import mockInstanceForgotReset from './mock-instance-forgot-reset';
+
 let currentStack: NgMocksStack;
 ngMocksStack.subscribePush(state => {
   currentStack = state;
 });
 ngMocksStack.subscribePop((state, stack) => {
   for (const declaration of state.mockInstance || /* istanbul ignore next */ []) {
-    ngMocksUniverse.configInstance.get(declaration)?.overloads?.pop();
+    if (ngMocksUniverse.configInstance.has(declaration)) {
+      const universeConfig = ngMocksUniverse.configInstance.get(declaration);
+      universeConfig.overloads.pop();
+      ngMocksUniverse.configInstance.set(declaration, {
+        ...universeConfig,
+      });
+    }
   }
   currentStack = stack[stack.length - 1];
 });
@@ -61,6 +69,17 @@ const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
   return set;
 };
 
+const checkReset: Array<[any, any]> = [];
+let checkCollect = false;
+
+// istanbul ignore else: maybe a different runner is used
+// tslint:disable-next-line strict-type-predicates
+if (typeof beforeEach !== 'undefined') {
+  beforeEach(() => (checkCollect = true));
+  beforeEach(() => mockInstanceForgotReset(checkReset));
+  afterEach(() => (checkCollect = false));
+}
+
 const mockInstanceConfig = <T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, data?: any): void => {
   const config = typeof data === 'function' ? { init: data } : data;
   const universeConfig = ngMocksUniverse.configInstance.has(declaration)
@@ -77,8 +96,12 @@ const mockInstanceConfig = <T>(declaration: Type<T> | AbstractType<T> | Injectio
     ngMocksUniverse.configInstance.set(declaration, {
       ...universeConfig,
       init: undefined,
-      overloads: undefined,
+      overloads: [],
     });
+  }
+
+  if (checkCollect) {
+    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration)]);
   }
 };
 
@@ -92,10 +115,16 @@ const mockInstanceMember = <T>(
   const overloads = config.overloads || [];
   overloads.push([name, stub, encapsulation]);
   config.overloads = overloads;
-  ngMocksUniverse.configInstance.set(declaration, config);
+  ngMocksUniverse.configInstance.set(declaration, {
+    ...config,
+  });
   const mockInstances = currentStack.mockInstance ?? [];
   mockInstances.push(declaration);
   currentStack.mockInstance = mockInstances;
+
+  if (checkCollect) {
+    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration)]);
+  }
 
   return stub;
 };
@@ -121,7 +150,7 @@ export interface MockInstance {
    *
    * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
    */
-  scope(scope?: 'each'): void;
+  scope(scope?: 'all'): void;
 }
 
 /**
@@ -202,13 +231,13 @@ export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | Injecti
 
 MockInstance.remember = () => ngMocksStack.stackPush();
 MockInstance.restore = () => ngMocksStack.stackPop();
-MockInstance.scope = (scope?: 'each') => {
-  if (scope === 'each') {
-    beforeEach(MockInstance.remember);
-    afterEach(MockInstance.restore);
-  } else {
+MockInstance.scope = (scope?: 'all') => {
+  if (scope === 'all') {
     beforeAll(MockInstance.remember);
     afterAll(MockInstance.restore);
+  } else {
+    beforeEach(MockInstance.remember);
+    afterEach(MockInstance.restore);
   }
 };
 
