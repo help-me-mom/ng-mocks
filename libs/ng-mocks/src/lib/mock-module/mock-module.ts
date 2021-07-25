@@ -24,7 +24,7 @@ const flagReplace = (resolution?: string): boolean =>
   resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock');
 
 const flagNever = (ngModule?: any): boolean =>
-  coreConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock');
+  coreConfig.neverMockModule.indexOf(ngModule.name) !== -1 && !ngMocksUniverse.flags.has('skipMock');
 
 const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
   let toggleSkipMockFlag = false;

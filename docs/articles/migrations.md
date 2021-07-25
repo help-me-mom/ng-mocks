@@ -10,6 +10,15 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](./need-help.md).
 
+## From any old one to 12.4.0
+
+Because of issues with the speed of merging a fix for `jest`, there is a braking change in `12.4.0`.
+
+If you are using [`MockInstance`](./api/MockInstance.md) in `beforeAll`, `beforeEach` or `it`,
+and rely on automatic reset, then you have to perform extra configuration.
+More information in the [How to install ng-mocks](./extra/install.md#default-customizations)
+and in [`MockInstance.scope`](./api/MockInstance.md#scope) sections.
+
 ## From 11 to 12
 
 The only breaking change is `auto-spy`.

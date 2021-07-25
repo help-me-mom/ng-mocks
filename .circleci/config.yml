@@ -38,7 +38,7 @@ jobs:
           command: npm run prettier:check
       - run:
           name: Lint commits
-          command: npx commitlint --from=master
+          command: npx commitlint --from=origin/master
       - run:
           name: Lint tslint
           command: npm run lint

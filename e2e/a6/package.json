@@ -44,7 +44,7 @@
     "@types/node": "8.9.5",
     "jasmine-core": "2.8.0",
     "jasmine-spec-reporter": "4.2.1",
-    "jest": "24.0.0",
+    "jest": "23.6.0",
     "jest-preset-angular": "6.0.2",
     "karma": "5.2.3",
     "karma-chrome-launcher": "2.2.0",

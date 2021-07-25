@@ -1,23 +1,8 @@
 import ngMocksUniverse from './ng-mocks-universe';
 
-// TODO remove the check once Jest has a solution https://github.com/facebook/jest/issues/11483
-let checkJestCircusEventHandler = true;
-let addJestCircusEventHandler: undefined | ((event: { name: string }) => void);
-// istanbul ignore next
-try {
-  // tslint:disable-next-line no-require-imports no-var-requires no-implicit-dependencies
-  const jestCircus: any = require('jest-circus/build/state');
-  addJestCircusEventHandler = jestCircus.addEventHandler;
-  if (jestCircus.removeEventHandler) {
-    checkJestCircusEventHandler = false;
-  }
-} catch {
-  // nothing to do
-}
-
 export interface NgMocksStack {
   id: object;
-  level: 'root' | 'suite' | 'test';
+  level: 'root' | 'runtime';
   mockInstance?: any[];
 }
 
@@ -36,10 +21,10 @@ ngMocksUniverse.global.set('reporter-stack-push', listenersPush);
 const listenersPop: NgMocksStackCallback[] = ngMocksUniverse.global.get('reporter-stack-pop') ?? [];
 ngMocksUniverse.global.set('reporter-stack-pop', listenersPop);
 
-const stackPush = (level: NgMocksStack['level']) => {
+const stackPush = () => {
   const id = {};
   ngMocksUniverse.global.set('reporter-stack-id', id);
-  const state = { id, level };
+  const state: NgMocksStack = { id, level: 'runtime' };
   stack.push(state);
 
   for (const callback of listenersPush) {
@@ -52,11 +37,11 @@ const stackPop = () => {
   // this code is actually needed for jest tests.
   // istanbul ignore if
   if (stack.length === 0) {
-    stack.push({ ...stackRoot });
+    stack.push(state?.level === 'root' ? state : { ...stackRoot });
   }
 
   // istanbul ignore else
-  if (state) {
+  if (state && state.level !== 'root') {
     for (const callback of listenersPop) {
       callback(state, stack);
     }
@@ -64,115 +49,6 @@ const stackPop = () => {
 
   ngMocksUniverse.global.set('reporter-stack-id', stack[stack.length - 1].id);
 };
-
-const reporterStack: jasmine.CustomReporter = {
-  jasmineDone: stackPop,
-  jasmineStarted: () => stackPush('root'),
-  specDone: stackPop,
-  specStarted: () => stackPush('test'),
-  suiteDone: stackPop,
-  suiteStarted: () => stackPush('suite'),
-};
-
-const messageCore = [
-  'ng-mocks cannot install own spec reporter.',
-  'This affects its core features for MockInstance and MockRender.',
-  'Please report an issue on github.',
-  'If you use jest v27, please add to its config testRunner=jest-jasmine2 for now',
-  'and upvote the issue on github: https://github.com/facebook/jest/issues/11483.',
-].join(' ');
-
-// istanbul ignore next
-const messageCoreChecker = () => {
-  if (current().level === 'root') {
-    throw new Error(messageCore);
-  }
-};
-
-// istanbul ignore next
-const installJasmineReporter = () => {
-  // jasmine
-  try {
-    jasmine.getEnv().addReporter(reporterStack);
-
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-// istanbul ignore next
-const jestCircusHandler = (event: { name: string }) => {
-  switch (event.name) {
-    case 'run_start':
-      stackPush('root');
-      break;
-    case 'run_describe_start':
-      stackPush('suite');
-      break;
-    case 'test_start':
-      stackPush('test');
-      break;
-    case 'test_done':
-    case 'run_describe_finish':
-    case 'run_finish':
-      stackPop();
-      break;
-    default:
-    // nothing to do
-  }
-};
-
-// istanbul ignore next
-const installJestCircus = () => {
-  if (!addJestCircusEventHandler) {
-    return false;
-  }
-
-  if (checkJestCircusEventHandler) {
-    afterEach(messageCoreChecker);
-  }
-
-  addJestCircusEventHandler(jestCircusHandler);
-
-  return true;
-};
-
-// istanbul ignore next
-const installMochaReporter = () => {
-  try {
-    mocha.setup({
-      rootHooks: {
-        afterAll: stackPop,
-        afterEach: stackPop,
-        beforeAll: () => stackPush('root'),
-        beforeEach: () => stackPush('test'),
-      },
-    });
-
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const install = () => {
-  if (!ngMocksUniverse.global.has('reporter-stack-install')) {
-    let installed = false;
-    installed = installJasmineReporter() || /* istanbul ignore next */ installed;
-    installed = installJestCircus() || /* istanbul ignore next */ installed;
-    installed = installMochaReporter() || /* istanbul ignore next */ installed;
-    // istanbul ignore if
-    if (!installed) {
-      messageCoreChecker();
-    }
-
-    ngMocksUniverse.global.set('reporter-stack-install', true);
-  }
-
-  return ngMocksUniverse.global.has('reporter-stack-install');
-};
-install();
 
 // istanbul ignore next
 const subscribePush = (callback: NgMocksStackCallback) => {
@@ -209,7 +85,8 @@ const unsubscribePop = (callback: NgMocksStackCallback) => {
 
 export default {
   current,
-  install,
+  stackPop,
+  stackPush,
   subscribePop,
   subscribePush,
   unsubscribePop,

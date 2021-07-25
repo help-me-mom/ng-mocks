@@ -93,11 +93,70 @@ MockInstance(TOKEN);
 MockReset();
 ```
 
+### Customization scopes
+
+Time to time, we need to apply a set of customizations for a suite or a test.
+To discard each customization might require writing boring resets, especially, when we have a lot of them.
+In such a case, [`MockInstance.remember()`](#remember) and [`MockInstance.restore()`](#restore) come for help. 
+
+#### Remember
+
+`MockInstance.remember()` creates a check point. Any mock customizations via `MockInstance` after the checkpoint will be recorded separately.
+
+#### Restore
+
+`MockInstance.restore()` discards mock customizations starting from the last known checkpoint.
+The operation can be repeated unless there is a checkpoint.
+
+#### Example
+
+For example, we can create checkpoints in `beforeAll` or `beforeEach`,
+and discard their mock customizations in `afterAll` or `afterEach`.
+
+```ts
+describe('suite', () => {
+  beforeAll(MockInstance.remember);
+  afterAll(MockInstance.restore);
+
+  // Exists only during this and all child suites.
+  beforeAll(() => MockInstance(SomeService, 'login$', EMPTY));
+  beforeAll(() => MockInstance(SomeService, 'logout$', EMPTY));
+
+  describe('sub suite', () => {
+    beforeEach(MockInstance.remember);
+    afterEach(MockInstance.restore);
+
+    // Existins only during this sub suite.
+    // After the sub suite, the parent
+    // customization will be present.
+    beforeEach(() => MockInstance(SomeService, 'login$', throwError('wrong')));
+    beforeEach(() => MockInstance(SomeService, 'logout$', throwError('wrong')));
+  });
+});
+```
+
+#### Scope
+
+There is `MockInstance.scope()` to reduce code to one line:
+
+```ts
+describe('suite', () => {
+  // Uses beforeAll and afterAll.
+  MockInstance.scope();
+
+  describe('sub suite', () => {
+    // Uses beforeEach and afterEach.
+    MockInstance.scope('each');
+  });
+});
+```
+
 ## Overriding customization
 
 Every call of `MockInstance` overrides the previous callback.
 `MockInstance` can be called anywhere,
-but **suggested usage** is to call `MockInstance` in `beforeEach` or in `it`,
+whereas the **suggested usage** is to use [`MockInstance.scope`](#scope)
+and to call `MockInstance` in `beforeEach` or in `it`,
 then the callback has its effect only during the current spec.
 
 ```ts
@@ -163,6 +222,7 @@ It accepts a class as the first parameter, and a tiny callback describing how to
 // Now we can customize a mock object.
 // The update$ property of the object
 // will be set to EMPTY in its ctor call.
+MockInstance.scope();
 beforeEach(() => MockInstance(ChildComponent, 'update$', EMPTY));
 ```
 
@@ -179,6 +239,8 @@ Please, pay attention to comments in the code.
 
 ```ts
 describe('MockInstance', () => {
+  MockInstance.scope();
+
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.

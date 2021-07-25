@@ -36,13 +36,7 @@ ngMocksStack.subscribePop(() => {
   }
 });
 
-let needInstall = true;
 const restore = (declaration: any, config: any): void => {
-  // istanbul ignore next
-  if (needInstall) {
-    ngMocksStack.install();
-    needInstall = false;
-  }
   ngMocksUniverse.getLocalMocks().push([declaration, config]);
 };
 
@@ -94,11 +88,6 @@ const mockInstanceMember = <T>(
   stub: any,
   encapsulation?: 'get' | 'set',
 ) => {
-  // istanbul ignore next
-  if (needInstall) {
-    ngMocksStack.install();
-    needInstall = false;
-  }
   const config = ngMocksUniverse.configInstance.has(declaration) ? ngMocksUniverse.configInstance.get(declaration) : {};
   const overloads = config.overloads || [];
   overloads.push([name, stub, encapsulation]);
@@ -110,6 +99,30 @@ const mockInstanceMember = <T>(
 
   return stub;
 };
+
+export interface MockInstance {
+  /**
+   * Creates a bucket which remembers all future changes.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#remember
+   */
+  remember(): void;
+
+  /**
+   * Resets all changes for current bucket.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#restore
+   */
+  restore(): void;
+
+  /**
+   * Creates a local scope in `beforeAll` and `afterAll`.
+   * If `each` has been passed, then `beforeEach` and `afterEach` are used.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
+   */
+  scope(scope?: 'each'): void;
+}
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockInstance
@@ -186,6 +199,18 @@ export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | Injecti
 
   mockInstanceConfig(declaration, data);
 }
+
+MockInstance.remember = () => ngMocksStack.stackPush();
+MockInstance.restore = () => ngMocksStack.stackPop();
+MockInstance.scope = (scope?: 'each') => {
+  if (scope === 'each') {
+    beforeEach(MockInstance.remember);
+    afterEach(MockInstance.restore);
+  } else {
+    beforeAll(MockInstance.remember);
+    afterAll(MockInstance.restore);
+  }
+};
 
 export function MockReset() {
   ngMocksUniverse.configInstance.clear();
