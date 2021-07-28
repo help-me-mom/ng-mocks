@@ -37,7 +37,7 @@
     "@ngrx/effects": "12.3.0",
     "@ngrx/store": "12.3.0",
     "@ngrx/store-devtools": "12.3.0",
-    "@types/jasmine": "3.8.1",
+    "@types/jasmine": "3.8.2",
     "@types/node": "14.17.6",
     "jasmine-core": "3.8.0",
     "jasmine-spec-reporter": "7.0.0",
