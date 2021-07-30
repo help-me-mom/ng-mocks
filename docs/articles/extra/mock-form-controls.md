@@ -36,6 +36,47 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 * [`isMockControlValueAccessor()`](../api/helpers/isMockControlValueAccessor.md)
 * [`isMockValidator()`](../api/helpers/isMockValidator.md)
 
+## Caution
+
+:::warning Use methods instead of properties
+It is important to implement ControlValueAccessor via methods
+:::
+
+Otherwise, there is no way to detect such properties via javascript interfaces,
+because the properties don't exist without a constructor call, whereas mocks don't call original constructors.
+
+Usually, if you are using properties in a test, you would get `No value accessor for form control with name ...`. 
+
+```ts title="Wrong definition via properties"
+export class MyControl implements ControlValueAccessor {
+	public writeValue = () => {
+	  // some magic
+  };
+	public registerOnChange = () => {
+    // some magic
+  };
+	public registerOnTouched = () => {
+    // some magic
+  };
+}
+```
+
+```ts title="Correct definition via methods"
+export class MyControl implements ControlValueAccessor {
+  public writeValue() {
+    // some magic
+  }
+
+  public registerOnChange() {
+    // some magic
+  }
+
+  public registerOnTouched() {
+    // some magic
+  }
+}
+```
+
 ## Advanced example
 
 An advanced example of **a mock FormControl with ReactiveForms** in Angular tests.

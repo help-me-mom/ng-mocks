@@ -35,8 +35,8 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts',
           label: 'Try on CodeSandbox',
+          href: 'https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts',
           position: 'left',
         },
         {
@@ -70,12 +70,12 @@ module.exports = {
               to: '/guides',
             },
             {
-              href: 'https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts',
               label: 'Try on StackBlitz',
+              href: 'https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts',
             },
             {
               label: 'Try on CodeSandbox',
-              to: 'https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts',
+              href: 'https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts',
             },
             {
               label: 'Execute tests on CI',
@@ -104,12 +104,12 @@ module.exports = {
           title: 'Links',
           items: [
             {
-              href: 'https://github.com/ike18t/ng-mocks',
               label: 'GitHub repo',
+              href: 'https://github.com/ike18t/ng-mocks',
             },
             {
-              href: 'https://www.npmjs.com/package/ng-mocks',
               label: 'NPM package',
+              href: 'https://www.npmjs.com/package/ng-mocks',
             },
           ],
         },
