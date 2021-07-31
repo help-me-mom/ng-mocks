@@ -24,11 +24,11 @@ TestBed.configureTestingModule({
 
 A mock directive has:
 
-- support of attribute and structural directives
+- support for attribute and structural directives
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
-- support of `@ContentChild` and `@ContentChildren`
-- support of `ControlValueAccessor`, `Validator` and `AsyncValidator`
+- support for `@ContentChild` and `@ContentChildren`
+- support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - supports `exportAs`
 
 :::tip
