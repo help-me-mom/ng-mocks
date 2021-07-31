@@ -202,9 +202,9 @@
     ],
     "rules": {
       "subject-case": [
-        2,
+        0,
         "always",
-        "sentence-case"
+        "lower-case"
       ]
     }
   },
