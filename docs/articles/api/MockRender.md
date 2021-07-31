@@ -7,13 +7,13 @@ sidebar_label: MockRender
 **Shallow rendering in Angular tests** is provided via `MockRender` function.
 `MockRender` helps when we want to assert `Inputs`, `Outputs`, `ChildContent`, or to render custom templates.
 
-`MockRender` relies on Angular `TestBed` and provides:
+`MockRender` uses Angular `TestBed.createComponent` under the hood and provides:
 
 - shallow rendering of Components, Directives, Services, Tokens
 - rendering of custom templates
-- support of context providers
-- support of all lifecycle hooks (`ngOnInit`, `ngOnChanges` etc)
-- support of components without selectors
+- support for all lifecycle hooks (`ngOnInit`, `ngOnChanges` etc)
+- support for testing `ChangeDetectionStrategy.OnPush` components
+- support for context providers
 
 ## Important to know
 
@@ -32,6 +32,72 @@ render the desired thing and its interface differs.
 It returns `MockedComponentFixture<T>` type. The difference is an additional `point` property.
 The best thing about it is that `fixture.point.componentInstance` is typed to the related class,
 and **supports not only components, but also directives, services and tokens**.
+
+### Proxy between params and fixture
+
+When `MockRender(Component, params)` is used then `fixture.componentInstance` is a proxy to existing keys in `params`,
+therefore, changing `fixture.componentInstance` is the same as changing `params` and vise-versa.
+
+The same happens with `fixture.componentInstance` and `fixture.point.componentInstance`.
+If `params` don't have a property which exists in `fixture.point.componentInstance`,
+then changing this property via `fixture.componentInstance`
+will change it in `fixture.point.componentInstance` and vise-versa.
+
+An example:
+
+```ts
+class Comopnent {
+  @Input() public i1: number = 1;
+  @Input() public i2: number = 2;
+}
+
+const params = {
+  i1: 5,
+};
+
+const fixture = MockRender(Component, params);
+
+// fixture.componentInstance.i1 = 5;
+// The value is taken via a proxy from params,
+// because params have i1.
+
+// fixture.componentInstance.i2 = 2;
+// The value is take via a proxy from point,
+// because params don't have i2, and Componet has.
+
+params.i1 = 6;
+// Now fixture.componentInstance.i1 = 6.
+
+fixture.componentInstance.i1 = 7;
+// Now params.i1 = 7.
+
+params.i2 = 8;
+// It does nothing, because the proxy is based on
+// the initial keys of params.
+
+fixture.point.componentInstance.i2 = 3;
+// Now fixture.componentInstance.i2 = 3.
+
+fixture.componentInstance.i2 = 4;
+// Now fixture.point.componentInstance.i2 = 4.
+
+fixture.point.componentInstance.i3 = 5;
+// It does nothing, because the proxy is based on
+// the initial properties in the point.
+```
+
+Looks too complicated, right?
+
+That's why the best way to write tests with `MockRender` is to rely on `params` and `fixture.point` only
+and to avoid usage of `fixture.componentInstance`.
+
+:::tip
+As a possible solution, `params` might be spread:
+
+```ts
+const fixture = MockRender(Component, { ...params });
+```
+:::
 
 ### One MockRender per one test
 
@@ -93,6 +159,42 @@ expect(ngMocks.formatText(fixture)).toContain(':6:');
 ```
 
 More details how inputs and outputs are handled by `MockRender` are described in the sections below.
+
+## Factory
+
+`MockRender` creates a middleware component. This can add an undesired impact on test performance.
+Especially, in cases, when the same setup should be used in different tests.
+
+For example, we have 5 tests and every test calls `MockRender(MyComponent)`.
+It means that every time a middleware component has been created and injected into `TestBed`,
+whereas `MockRender` could reuse the existing middleware component and simply would create a new fixture out of it.
+
+In such situations, `MockRenderFactory` can be used instead of `MockRender`.
+It accepts `bindings` and `providers`, but instead of an instant render,
+it returns a factory function. The factory function simply creates a new fixture out of its middleware component.
+
+Considering the conditions above, we would need to create a factory once with help of `MockRenderFactory` in `beforeAll`,
+and then 5 tests should call the factory in order to create fixtures.
+
+```ts
+describe('Maximum performance', () => {
+  const factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
+  
+  ngMocks.faster();
+  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  beforeAll(() => factory.configureTestBed());
+
+  it('covers one case', () => {
+    const fixture = factory({input1: 1});
+    expect(fixture.point.componentInstance.input1).toEqual(1);
+  });
+
+  it('covers another case', () => {
+    const fixture = factory({input2: 2});
+    expect(fixture.point.componentInstance.input2).toEqual(2);
+  });
+});
+```
 
 ## Params, Inputs and Outputs
 
@@ -366,46 +468,6 @@ const fixture = MockRender(
     ],
   },
 );
-```
-
-## Factory
-
-:::warning
-It is an experimental feature and might be changed at any time.
-:::
-
-Because `MockRender` creates a middleware component, it can add an undesired impact on test performance.
-Especially, in cases, when the same setup should be used in different tests.
-
-For example, we have 5 tests and every test calls `MockRender(MyComponent)`.
-It means that every time a middleware component has been created and injected into `TestBed`,
-whereas `MockRender` could reuse the existing middleware component and simply would create a new fixture out of it.
-
-In such situations, `MockRenderFactory` can be used instead of `MockRender`.
-It accepts `bindings` and `providers`, but instead of an instant render,
-it returns a factory function. The factory function simply creates a new fixture out of its middleware component.
-
-Considering the conditions above, we would need to create a factory once with help of `MockRenderFactory` in `beforeAll`,
-and then 5 tests should call the factory in order to create fixtures.
-
-```ts
-describe('Maximum performance', () => {
-  const factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
-  
-  ngMocks.faster();
-  beforeAll(() => MockBuilder(MyComponent, MyModule));
-  beforeAll(() => factory.configureTestBed());
-
-  it('covers one case', () => {
-    const fixture = factory({input1: 1});
-    expect(fixture.point.componentInstance.input1).toEqual(1);
-  });
-
-  it('covers another case', () => {
-    const fixture = factory({input2: 2});
-    expect(fixture.point.componentInstance.input2).toEqual(2);
-  });
-});
 ```
 
 ## Advanced example

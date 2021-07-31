@@ -27,9 +27,9 @@ The class of a mock component has:
 - the same `selector`
 - the same `@Inputs` and `@Outputs` with alias support
 - templates with pure `<ng-content>` tags to allow transclusion
-- support of `@ContentChild` and `@ContentChildren`
-- support of `ControlValueAccessor`, `Validator` and `AsyncValidator`
-- support of `exportAs`
+- support for `@ContentChild` and `@ContentChildren`
+- support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
+- support for `exportAs`
 
 :::tip
 Information about mocking FormControl, ControlValueAccessor, Validator and AsyncValidator
