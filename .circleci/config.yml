@@ -8,7 +8,7 @@ parameters:
 jobs:
   Core:
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - restore_cache:
@@ -92,7 +92,7 @@ jobs:
               -i test-reports/codeclimate.json
   E2E:
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - restore_cache:
@@ -114,7 +114,7 @@ jobs:
           command: npm run e2e
   'Angular Install':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - restore_cache:
@@ -149,7 +149,7 @@ jobs:
             - ./e2e/a-min/node_modules
   'Performance':
     docker:
-      - image: satantime/puppeteer-node:14.17.3-buster
+      - image: satantime/puppeteer-node:14.17.4-buster
     steps:
       - checkout
       - restore_cache:
@@ -703,7 +703,7 @@ jobs:
           command: npm run test:a12es2015ivy
   'Angular Jasmine ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
@@ -718,7 +718,7 @@ jobs:
           command: npm run test:a-jasmine:es5ivy
   'Angular Jasmine ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
@@ -733,7 +733,7 @@ jobs:
           command: npm run test:a-jasmine:es2015ivy
   'Angular Jest ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
@@ -748,7 +748,7 @@ jobs:
           command: npm run test:a-jest:es5ivy
   'Angular Jest ES2020 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
@@ -763,7 +763,7 @@ jobs:
           command: npm run test:a-jest:es2015ivy
   'Angular Min ES5 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
@@ -781,7 +781,7 @@ jobs:
           command: npm run build:a-min:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
-      - image: satantime/puppeteer-node:14.17.3
+      - image: satantime/puppeteer-node:14.17.4
     steps:
       - checkout
       - attach_workspace:
