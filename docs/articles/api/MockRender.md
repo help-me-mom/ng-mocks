@@ -177,21 +177,31 @@ Considering the conditions above, we would need to create a factory once with he
 and then 5 tests should call the factory in order to create fixtures.
 
 ```ts
+import { Input } from '@angular/core';
+import { ngMocks, MockBuilder, MockRenderFactory } from 'ng-mocks';
+
+class MyComponent {
+  @Input() public input1 = 1;
+  @Input() public input2 = 2;
+}
+
 describe('Maximum performance', () => {
   const factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
   
-  ngMocks.faster();
-  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  ngMocks.faster(); // REQUIRED when using MockRenderFactory
+  beforeAll(() => MockBuilder(MyComponent));
   beforeAll(() => factory.configureTestBed());
 
   it('covers one case', () => {
-    const fixture = factory({input1: 1});
-    expect(fixture.point.componentInstance.input1).toEqual(1);
+    const fixture = factory({input1: 11});
+    expect(fixture.point.componentInstance.input1).toEqual(11);
+    expect(fixture.point.componentInstance.input2).toEqual(2)
   });
 
   it('covers another case', () => {
-    const fixture = factory({input2: 2});
-    expect(fixture.point.componentInstance.input2).toEqual(2);
+    const fixture = factory({input2: 22});
+    expect(fixture.point.componentInstance.input1).toEqual(1)
+    expect(fixture.point.componentInstance.input2).toEqual(22);
   });
 });
 ```
