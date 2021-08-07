@@ -158,7 +158,7 @@
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.2.3",
     "@semantic-release/npm": "7.1.1",
-    "@types/core-js": "2.5.4",
+    "@types/core-js": "2.5.5",
     "@types/jasmine": "3.8.2",
     "@types/jest": "26.0.24",
     "@types/mocha": "9.0.0",
