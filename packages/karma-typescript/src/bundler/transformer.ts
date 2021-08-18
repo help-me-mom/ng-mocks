@@ -41,7 +41,8 @@ export class Transformer {
             };
             async.eachSeries(transforms, (transform: Transform, onTransformApplied: ErrorCallback<Error>) => {
                 process.nextTick(() => {
-                    transform(context, (error: Error, result: TransformResult | boolean, transpile = true) => {
+                    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+                    transform(context, (error: Error, result: TransformResult | boolean, transpile: boolean = true) => {
                         if (typeof result !== "object" || result === null) {
                             result = {
                                 dirty: !!result,
