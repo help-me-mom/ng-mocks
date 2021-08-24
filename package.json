@@ -178,7 +178,7 @@
     "karma-junit-reporter": "2.0.1",
     "karma-typescript": "5.5.2",
     "lint-staged": "11.1.2",
-    "npm": "6.14.14",
+    "npm": "6.14.15",
     "prettier": "2.3.2",
     "primeng": "12.0.2",
     "puppeteer": "10.2.0",
@@ -209,6 +209,6 @@
     }
   },
   "engines": {
-    "npm": "6.14.14"
+    "npm": "6.14.15"
   }
 }
