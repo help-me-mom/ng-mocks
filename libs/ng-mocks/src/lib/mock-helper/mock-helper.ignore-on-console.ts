@@ -14,7 +14,7 @@ export default (...methods: Array<keyof typeof console>): void => {
     }
     for (const method of methods) {
       backup.push([method, console[method]]);
-      console[method] = factory(method);
+      console[method] = factory(method) as never;
     }
   });
 

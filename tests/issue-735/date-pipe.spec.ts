@@ -114,10 +114,14 @@ describe('issue-735:date-pipe', () => {
           await MockBuilder(TargetComponent);
           MockRender(TargetComponent);
           fail('should not be here');
-        } catch (e) {
-          expect(e.message).toMatch(
-            /The pipe 'date' could not be found/,
-          );
+        } catch (error) {
+          if (error instanceof Error) {
+            expect(error.message).toMatch(
+              /The pipe 'date' could not be found/,
+            );
+          } else {
+            fail('should fail');
+          }
         }
       });
     });
@@ -134,10 +138,14 @@ describe('issue-735:date-pipe', () => {
           await TestBed.compileComponents();
           TestBed.createComponent(TargetComponent).detectChanges();
           fail('should not be here');
-        } catch (e) {
-          expect(e.message).toMatch(
-            /The pipe 'date' could not be found/,
-          );
+        } catch (error) {
+          if (error instanceof Error) {
+            expect(error.message).toMatch(
+              /The pipe 'date' could not be found/,
+            );
+          } else {
+            fail('should fail');
+          }
         }
       });
     });
