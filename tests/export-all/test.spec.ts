@@ -79,10 +79,14 @@ describe('export-all', () => {
         await testBed.compileComponents();
         MockRender(TargetComponent);
         fail('an error expected');
-      } catch (e) {
-        expect(e.message).toMatch(
-          /Multiple components match node with tagname target|The pipe 'target' could not be found/,
-        );
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error.message).toMatch(
+            /Multiple components match node with tagname target|The pipe 'target' could not be found/,
+          );
+        } else {
+          fail('should fail');
+        }
       }
     });
   });
