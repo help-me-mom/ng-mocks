@@ -4,7 +4,7 @@ orbs:
 parameters:
   lockindex:
     type: string
-    default: '3'
+    default: '4'
 jobs:
   Core:
     docker:
