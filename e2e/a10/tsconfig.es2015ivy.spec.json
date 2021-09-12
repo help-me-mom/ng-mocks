@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2018"
+    "target": "ES2015"
   },
   "angularCompilerOptions": {
     "enableIvy": true
