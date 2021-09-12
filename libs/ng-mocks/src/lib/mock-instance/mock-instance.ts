@@ -1,3 +1,5 @@
+// tslint:disable max-file-line-count
+
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AbstractType, Type } from '../common/core.types';
@@ -36,7 +38,7 @@ ngMocksStack.subscribePop(() => {
     const [declaration, config] = set.pop() || /* istanbul ignore next */ [];
     const universeConfig = ngMocksUniverse.configInstance.has(declaration)
       ? ngMocksUniverse.configInstance.get(declaration)
-      : {};
+      : /* istanbul ignore next */ {};
     ngMocksUniverse.configInstance.set(declaration, {
       ...universeConfig,
       ...config,
@@ -69,7 +71,7 @@ const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
   return set;
 };
 
-const checkReset: Array<[any, any]> = [];
+const checkReset: Array<[any, any, any?]> = [];
 let checkCollect = false;
 
 // istanbul ignore else: maybe a different runner is used
@@ -100,8 +102,15 @@ const mockInstanceConfig = <T>(declaration: Type<T> | AbstractType<T> | Injectio
     });
   }
 
-  if (checkCollect) {
-    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration)]);
+  if (!config) {
+    // When we are calling MockInstance without a config we need to reset it from the checks too.
+    for (let i = checkReset.length - 1; i >= 0; i -= 1) {
+      if (checkReset[i][0] === declaration && checkReset[i][2] === currentStack) {
+        checkReset.splice(i, 1);
+      }
+    }
+  } else if (checkCollect) {
+    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration), currentStack]);
   }
 };
 
@@ -123,7 +132,7 @@ const mockInstanceMember = <T>(
   currentStack.mockInstance = mockInstances;
 
   if (checkCollect) {
-    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration)]);
+    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration), currentStack]);
   }
 
   return stub;
@@ -229,13 +238,25 @@ export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | Injecti
   mockInstanceConfig(declaration, data);
 }
 
+/**
+ * @see https://ng-mocks.sudo.eu/api/MockInstance#remember
+ */
 MockInstance.remember = () => ngMocksStack.stackPush();
+
+/**
+ * @see https://ng-mocks.sudo.eu/api/MockInstance#restore
+ */
 MockInstance.restore = () => ngMocksStack.stackPop();
-MockInstance.scope = (scope?: 'all') => {
-  if (scope === 'all') {
+
+/**
+ * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
+ */
+MockInstance.scope = (scope: 'all' | 'suite' | 'case' = 'case') => {
+  if (scope === 'all' || scope === 'suite') {
     beforeAll(MockInstance.remember);
     afterAll(MockInstance.restore);
-  } else {
+  }
+  if (scope === 'all' || scope === 'case') {
     beforeEach(MockInstance.remember);
     afterEach(MockInstance.restore);
   }

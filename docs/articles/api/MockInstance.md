@@ -137,16 +137,27 @@ describe('suite', () => {
 
 #### Scope
 
-There is `MockInstance.scope()` to reduce code to one line:
+There is `MockInstance.scope()` to reduce the code to one line:
 
 ```ts
 describe('suite', () => {
   // Uses beforeAll and afterAll.
-  MockInstance.scope('all');
+  MockInstance.scope('suite');
 
-  describe('sub suite', () => {
+  describe('sub suite #1', () => {
     // Uses beforeEach and afterEach.
     MockInstance.scope();
+    // the same
+    // MockInstance.scope('case');
+  });
+  
+  describe('sub suite #2', () => {
+    // Uses beforeAll, afterAll, 
+    // beforeEach and afterEach.
+    MockInstance.scope('all');
+    // the same
+    // MockInstance.scope('suite');
+    // MockInstance.scope('case');
   });
 });
 ```

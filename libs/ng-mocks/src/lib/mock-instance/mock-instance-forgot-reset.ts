@@ -1,6 +1,6 @@
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
-export default (checkReset: Array<[any, any]>) => {
+export default (checkReset: Array<[any, any, any?]>) => {
   const showError: string[] = [];
 
   // istanbul ignore next: because of the installed global scope switcher we cannot test this part
