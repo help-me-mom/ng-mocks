@@ -26,32 +26,35 @@ describe('mock-instance-in-it', () => {
   afterAll(() => {
     // need to call it remove cached TargetService.
     ngMocks.flushTestBed();
-
-    const actual = TestBed.get(TargetService).echo();
-    expect(actual).toEqual('beforeAll');
-
     MockReset();
   });
 
   beforeEach(() => MockBuilder().mock(TargetService));
 
-  beforeEach(() =>
-    MockInstance(TargetService, () => ({
-      echo: () => 'beforeEach',
-    })),
-  );
+  describe('scoped beforeEach', () => {
+    beforeEach(() =>
+      MockInstance(TargetService, () => ({
+        echo: () => 'beforeEach',
+      })),
+    );
 
-  it('overrides in the 1st it', () => {
-    MockInstance(TargetService, () => ({
-      echo: () => 'it',
-    }));
+    it('overrides in the 1st it', () => {
+      MockInstance(TargetService, () => ({
+        echo: () => 'it',
+      }));
 
-    const actual = TestBed.get(TargetService).echo();
-    expect(actual).toEqual('it');
+      const actual = TestBed.get(TargetService).echo();
+      expect(actual).toEqual('it');
+    });
+
+    it('uses beforeEach in the 2nd it', () => {
+      const actual = TestBed.get(TargetService).echo();
+      expect(actual).toEqual('beforeEach');
+    });
   });
 
-  it('uses beforeEach in the 2nd it', () => {
+  it('receives default value', () => {
     const actual = TestBed.get(TargetService).echo();
-    expect(actual).toEqual('beforeEach');
+    expect(actual).toEqual('beforeAll');
   });
 });

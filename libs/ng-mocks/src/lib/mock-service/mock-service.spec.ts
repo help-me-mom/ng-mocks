@@ -93,17 +93,28 @@ describe('MockService', () => {
 
   it('should convert arrow functions to () => undefined', () => {
     const mockService = MockService(() => 0);
-    expect(mockService).toEqual(jasmine.any(Function), 'mockService');
+    expect(mockService).toEqual(jasmine.any(Function));
     expect(mockService()).toBeUndefined();
     expect(mockService.and.identity).toBe('func:arrow-function');
   });
 
-  it('should convert normal functions to an empty object because it is a class signature', () => {
+  it('should convert normal functions to () => undefined', () => {
     // tslint:disable-next-line:no-function-expression
     const mockService = MockService(function test() {
       return 0;
     });
-    expect(mockService).toEqual(jasmine.any(Object), 'mockService');
+    expect(mockService).toEqual(jasmine.any(Function));
+    expect(mockService()).toBeUndefined();
+    expect(mockService.and.identity).toBe('func:test');
+  });
+
+  it('should convert normal class to an empty object', () => {
+    const mockService = MockService(
+      class Test {
+        public constructor(public readonly name: string) {}
+      },
+    );
+    expect(mockService).toEqual(jasmine.any(Object));
   });
 
   it('should mock own methods of a class without a parent', () => {
@@ -111,18 +122,13 @@ describe('MockService', () => {
     expect(mockService).toEqual(jasmine.any(Object));
 
     // all properties should be undefined, maybe defined as getters and setters.
-    expect(mockService.deepParentMethodName).toBeUndefined(
-      'deepParentMethodName',
-    );
+    expect(mockService.deepParentMethodName).toBeUndefined();
 
     // all methods should be defined as functions which return undefined.
     expect(mockService.deepParentMethod).toEqual(
       jasmine.any(Function),
-      'deepParentMethod',
     );
-    expect(mockService.deepParentMethod()).toBeUndefined(
-      'deepParentMethod()',
-    );
+    expect(mockService.deepParentMethod()).toBeUndefined();
     expect(
       ngMocks.stub<any>(mockService, 'deepParentMethod').and.identity,
     ).toBe('DeepParentClass.deepParentMethod');
@@ -133,53 +139,31 @@ describe('MockService', () => {
     expect(mockService).toEqual(jasmine.any(ChildClass));
 
     // all properties should be undefined, maybe defined as getters and setters.
-    expect(mockService.deepParentMethodName).toBeUndefined(
-      'deepParentMethodName',
-    );
-    expect(mockService.parentMethodName).toBeUndefined(
-      'parentMethodName',
-    );
-    expect(mockService.overrideMeName).toBeUndefined(
-      'overrideMeName',
-    );
-    expect(mockService.childMethodName).toBeUndefined(
-      'childMethodName',
-    );
+    expect(mockService.deepParentMethodName).toBeUndefined();
+    expect(mockService.parentMethodName).toBeUndefined();
+    expect(mockService.overrideMeName).toBeUndefined();
+    expect(mockService.childMethodName).toBeUndefined();
 
     // all methods should be defined as functions which return undefined.
     expect(mockService.deepParentMethod).toEqual(
       jasmine.any(Function),
-      'deepParentMethod',
     );
-    expect(mockService.deepParentMethod()).toBeUndefined(
-      'deepParentMethod()',
-    );
+    expect(mockService.deepParentMethod()).toBeUndefined();
     expect(
       ngMocks.stub<any>(mockService, 'deepParentMethod').and.identity,
     ).toBe('ChildClass.deepParentMethod');
-    expect(mockService.parentMethod).toEqual(
-      jasmine.any(Function),
-      'parentMethod',
-    );
-    expect(mockService.parentMethod()).toBeUndefined(
-      'parentMethod()',
-    );
+    expect(mockService.parentMethod).toEqual(jasmine.any(Function));
+    expect(mockService.parentMethod()).toBeUndefined();
     expect(
       ngMocks.stub<any>(mockService, 'parentMethod').and.identity,
     ).toBe('ChildClass.parentMethod');
-    expect(mockService.overrideMe).toEqual(
-      jasmine.any(Function),
-      'overrideMe',
-    );
-    expect(mockService.overrideMe()).toBeUndefined('overrideMe()');
+    expect(mockService.overrideMe).toEqual(jasmine.any(Function));
+    expect(mockService.overrideMe()).toBeUndefined();
     expect(
       ngMocks.stub<any>(mockService, 'overrideMe').and.identity,
     ).toBe('ChildClass.overrideMe');
-    expect(mockService.childMethod).toEqual(
-      jasmine.any(Function),
-      'childMethod',
-    );
-    expect(mockService.childMethod()).toBeUndefined('childMethod()');
+    expect(mockService.childMethod).toEqual(jasmine.any(Function));
+    expect(mockService.childMethod()).toBeUndefined();
     expect(
       ngMocks.stub<any>(mockService, 'childMethod').and.identity,
     ).toBe('ChildClass.childMethod');
@@ -190,53 +174,31 @@ describe('MockService', () => {
     expect(mockService).toEqual(jasmine.any(ChildClass));
 
     // all properties should be undefined, maybe defined as getters and setters.
-    expect(mockService.deepParentMethodName).toBeUndefined(
-      'deepParentMethodName',
-    );
-    expect(mockService.parentMethodName).toBeUndefined(
-      'parentMethodName',
-    );
-    expect(mockService.overrideMeName).toBeUndefined(
-      'overrideMeName',
-    );
-    expect(mockService.childMethodName).toBeUndefined(
-      'childMethodName',
-    );
+    expect(mockService.deepParentMethodName).toBeUndefined();
+    expect(mockService.parentMethodName).toBeUndefined();
+    expect(mockService.overrideMeName).toBeUndefined();
+    expect(mockService.childMethodName).toBeUndefined();
 
     // all methods should be defined as functions which return undefined.
     expect(mockService.deepParentMethod).toEqual(
       jasmine.any(Function),
-      'deepParentMethod',
     );
-    expect(mockService.deepParentMethod()).toBeUndefined(
-      'deepParentMethod()',
-    );
+    expect(mockService.deepParentMethod()).toBeUndefined();
     expect(mockService.deepParentMethod.and.identity).toBe(
       'ChildClass.deepParentMethod',
     );
-    expect(mockService.parentMethod).toEqual(
-      jasmine.any(Function),
-      'parentMethod',
-    );
-    expect(mockService.parentMethod()).toBeUndefined(
-      'parentMethod()',
-    );
+    expect(mockService.parentMethod).toEqual(jasmine.any(Function));
+    expect(mockService.parentMethod()).toBeUndefined();
     expect(mockService.parentMethod.and.identity).toBe(
       'ChildClass.parentMethod',
     );
-    expect(mockService.overrideMe).toEqual(
-      jasmine.any(Function),
-      'overrideMe',
-    );
-    expect(mockService.overrideMe()).toBeUndefined('overrideMe()');
+    expect(mockService.overrideMe).toEqual(jasmine.any(Function));
+    expect(mockService.overrideMe()).toBeUndefined();
     expect(mockService.overrideMe.and.identity).toBe(
       'ChildClass.overrideMe',
     );
-    expect(mockService.childMethod).toEqual(
-      jasmine.any(Function),
-      'childMethod',
-    );
-    expect(mockService.childMethod()).toBeUndefined('childMethod()');
+    expect(mockService.childMethod).toEqual(jasmine.any(Function));
+    expect(mockService.childMethod()).toBeUndefined();
     expect(mockService.childMethod.and.identity).toBe(
       'ChildClass.childMethod',
     );
@@ -273,17 +235,15 @@ describe('MockService', () => {
       func3: jasmine.any(Function),
     });
 
-    expect(mockService.child1.child11.func1()).toBeUndefined(
-      'func1()',
-    );
+    expect(mockService.child1.child11.func1()).toBeUndefined();
     expect(mockService.child1.child11.func1.and.identity).toBe(
       'func:instance.child1.child11.func1',
     );
-    expect(mockService.func2()).toBeUndefined('func2()');
+    expect(mockService.func2()).toBeUndefined();
     expect(mockService.func2.and.identity).toBe(
       'func:instance.func2',
     );
-    expect(mockService.func3()).toBeUndefined('func3()');
+    expect(mockService.func3()).toBeUndefined();
     expect(mockService.func3.and.identity).toBe(
       'func:instance.func3',
     );

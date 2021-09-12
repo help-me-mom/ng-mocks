@@ -2,7 +2,7 @@ import helperMockService from './helper.mock-service';
 import { MockedFunction } from './types';
 
 export default (service: any): { [key in keyof any]: MockedFunction } => {
-  const mockName = `${service && service.constructor ? service.constructor.name : 'unknown'}`;
+  const mockName = service.constructor.name;
   const value: any = {};
 
   const methods = helperMockService.extractMethodsFromPrototype(service);
@@ -15,10 +15,7 @@ export default (service: any): { [key in keyof any]: MockedFunction } => {
     helperMockService.mock(value, property, 'get', mockName);
     helperMockService.mock(value, property, 'set', mockName);
   }
-
-  if (typeof value === 'object' && typeof service === 'object') {
-    Object.setPrototypeOf(value, service);
-  }
+  Object.setPrototypeOf(value, service);
 
   return value;
 };

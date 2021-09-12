@@ -27,14 +27,15 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
-- Angular 12 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 11 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 10 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 9 (Jasmine, Jest, Ivy, es5, es2015)
-- Angular 8 (Jasmine, Jest, es5, es2015)
-- Angular 7 (Jasmine, Jest, es5, es2015)
-- Angular 6 (Jasmine, Jest, es5, es2015)
-- Angular 5 (Jasmine, Jest, es5, es2015)
+- Angular 13 (Jasmine, Jest, Ivy, es5, es2015+)
+- Angular 12 (Jasmine, Jest, Ivy, es5, es2015+)
+- Angular 11 (Jasmine, Jest, Ivy, es5, es2015+)
+- Angular 10 (Jasmine, Jest, Ivy, es5, es2015+)
+- Angular 9 (Jasmine, Jest, Ivy, es5, es2015+)
+- Angular 8 (Jasmine, Jest, es5, es2015+)
+- Angular 7 (Jasmine, Jest, es5, es2015+)
+- Angular 6 (Jasmine, Jest, es5, es2015+)
+- Angular 5 (Jasmine, Jest, es5, es2015+)
 
 In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.

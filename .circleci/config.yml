@@ -701,6 +701,59 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a12es2015ivy
+  'Angular 13 Install':
+    docker:
+      - image: satantime/puppeteer-node:12.22.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/a13/node_modules/" ]; then
+              npm run i:ci:a13
+            fi
+      - save_cache:
+          key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
+          paths:
+            - ./e2e/a13/node_modules
+  'Angular 13 ES5 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:12.22.6
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a13
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a13
+      - run:
+          name: Unit Tests
+          command: npm run test:a13es5ivy
+  'Angular 13 ES2020 Ivy':
+    docker:
+      - image: satantime/puppeteer-node:12.22.6
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a13
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a13
+      - run:
+          name: Unit Tests
+          command: npm run test:a13es2015ivy
   'Angular Jasmine ES5 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.17.6
@@ -859,6 +912,9 @@ workflows:
       - 'Angular 12 Install':
           requires:
             - Core
+      - 'Angular 13 Install':
+          requires:
+            - Core
       - 'Angular 5 ES5':
           requires:
             - Core
@@ -925,6 +981,12 @@ workflows:
       - 'Angular 12 ES2020 Ivy':
           requires:
             - Angular 12 Install
+      - 'Angular 13 ES5 Ivy':
+          requires:
+            - Angular 13 Install
+      - 'Angular 13 ES2020 Ivy':
+          requires:
+            - Angular 13 Install
       - 'Angular Jasmine ES5 Ivy':
           requires:
             - Angular Install

@@ -286,9 +286,20 @@ jobs:
           path: e2e/a12/node_modules
           key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
 
+      - name: e2e/a13/node_modules
+        id: a13
+        uses: actions/cache@v2
+        with:
+          path: e2e/a13/node_modules
+          key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
+
       - name: Install A12 dependencies
         if: steps.a12.outputs.cache-hit != 'true'
         run: npm run i:ci:a12
+
+      - name: Install A13 dependencies
+        if: steps.a13.outputs.cache-hit != 'true'
+        run: npm run i:ci:a13
 
       - name: e2e/a-jasmine/node_modules
         id: a-jasmine
@@ -1026,6 +1037,71 @@ jobs:
         run: npm run s:test:a12
       - name: Unit Tests
         run: npm run test:a12es2015ivy
+
+  a13es5ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A13 es5 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a13/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a13/node_modules
+          key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a13
+      - name: Spreading Tests
+        run: npm run s:test:a13
+      - name: Unit Tests
+        run: npm run test:a13es5ivy
+
+  a13es2015ivy:
+    needs: Install
+    runs-on: ubuntu-latest
+    name: A13 es2015 Ivy
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.16.0
+
+      - name: e2e/a13/node_modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: e2e/a13/node_modules
+          key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
+
+      - name: Workspace
+        uses: actions/download-artifact@v2
+        with:
+          name: workspace
+          path: dist
+
+      - name: Spreading Build
+        run: npm run s:a13
+      - name: Spreading Tests
+        run: npm run s:test:a13
+      - name: Unit Tests
+        run: npm run test:a13es2015ivy
+
   ajasminees5ivy:
     needs: Install
     runs-on: ubuntu-latest
