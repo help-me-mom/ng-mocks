@@ -54,6 +54,10 @@ describe('MockInstance', () => {
       update$: EMPTY,
     }));
   });
+  afterEach(() => {
+    // Resets customizations
+    MockInstance(ChildComponent);
+  });
 
   it('should render', () => {
     // Without the custom initialization rendering would fail here

@@ -16,6 +16,8 @@ class TargetComponent {
 }
 
 describe('mock-instance-member:reset', () => {
+  MockInstance.scope();
+
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [MockComponent(TargetComponent)],

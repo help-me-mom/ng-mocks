@@ -54,3 +54,9 @@ checks:
   similar-code:
     config:
       threshold: 100
+  file-lines:
+    config:
+      threshold: 500
+  method-lines:
+    config:
+      threshold: 50

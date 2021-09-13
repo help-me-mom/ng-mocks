@@ -15,10 +15,10 @@
     "interface-over-type-literal": false,
     "invalid-void": false,
     "max-classes-per-file": false,
-    "max-file-line-count": [true, 250],
+    "max-file-line-count": [true, 500],
     "max-func-body-length": [
       true,
-      30,
+      50,
       {
         "ignore-parameters-to-function-regex": "^(([fx]?(describe|it))|beforeEach|fakeAsync|inject)$"
       }

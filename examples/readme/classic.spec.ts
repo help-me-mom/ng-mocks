@@ -104,6 +104,9 @@ describe('profile:classic', () => {
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
+  // Helps to reset MockInstance customizations after each test.
+  MockInstance.scope();
+
   // Let's declare TestBed in beforeAll instead of beforeEach.
   // The code mocks everything in SharedModule and provides a mock AuthService.
   beforeAll(async () => {

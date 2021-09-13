@@ -52,7 +52,7 @@ describe('examples:performance', () => {
       });
     });
 
-    // Do not forget to reset the spy between runs.
+    // Do not forget to reset the spy after the suite.
     afterAll(MockReset);
 
     it('test:1', () => {

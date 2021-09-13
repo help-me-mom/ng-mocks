@@ -24,6 +24,8 @@ class MyComponent {
 class MyModule {}
 
 describe('issue-305:overrides', () => {
+  MockInstance.scope();
+
   beforeEach(() =>
     MockBuilder(MyComponent)
       .keep(MyModule)

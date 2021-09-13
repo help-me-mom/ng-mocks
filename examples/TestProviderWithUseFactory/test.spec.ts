@@ -1,5 +1,10 @@
 import { Injectable, NgModule } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 // Dependency 1.
 @Injectable()
@@ -41,6 +46,9 @@ describe('TestProviderWithUseFactory', () => {
       },
     });
   });
+
+  // Resets customizations from MockInstance.
+  afterAll(MockReset);
 
   it('creates TargetService', () => {
     const service = MockRender(TargetService).point.componentInstance;

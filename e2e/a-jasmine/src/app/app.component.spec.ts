@@ -14,8 +14,10 @@ ngMocks.defaultMock(AppService, () => ({
 }));
 
 describe('app-component', () => {
-  const factory = MockRenderFactory(AppComponent, ['scope']);
+  MockInstance.scope('all');
   ngMocks.faster();
+
+  const factory = MockRenderFactory(AppComponent, ['scope']);
   beforeAll(() => MockBuilder(AppComponent, AppModule));
   beforeAll(() => MockInstance(AppService, 'echo2', () => 'echo2'));
 

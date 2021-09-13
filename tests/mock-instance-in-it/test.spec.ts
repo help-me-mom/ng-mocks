@@ -17,21 +17,17 @@ class TargetService {
 }
 
 describe('mock-instance-in-it', () => {
+  MockInstance.scope('suite');
   beforeAll(() =>
     MockInstance(TargetService, () => ({
       echo: () => 'beforeAll',
     })),
   );
 
-  afterAll(() => {
-    // need to call it remove cached TargetService.
-    ngMocks.flushTestBed();
-    MockReset();
-  });
-
   beforeEach(() => MockBuilder().mock(TargetService));
 
   describe('scoped beforeEach', () => {
+    MockInstance.scope('case');
     beforeEach(() =>
       MockInstance(TargetService, () => ({
         echo: () => 'beforeEach',

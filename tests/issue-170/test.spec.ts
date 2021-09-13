@@ -85,7 +85,6 @@ describe('issue-170:mock', () => {
       },
     });
   });
-
   afterEach(MockReset);
 
   it('should render', () => {
@@ -115,7 +114,6 @@ describe('issue-170:mock:reset', () => {
     MockInstance(TargetComponent);
     MockInstance(TargetService);
   });
-
   afterEach(MockReset);
 
   it('should render', () => {
