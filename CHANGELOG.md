@@ -1,3 +1,15 @@
+# [12.5.0](https://github.com/ike18t/ng-mocks/compare/v12.4.0...v12.5.0) (2021-09-13)
+
+
+### Bug Fixes
+
+* **MockInstance:** proper reset on empty config [#1046](https://github.com/ike18t/ng-mocks/issues/1046) ([7d1642d](https://github.com/ike18t/ng-mocks/commit/7d1642d37628f4624d0090158c6c0bf0b4c6ed06))
+
+
+### Features
+
+* **core:** Angular 13 support [#918](https://github.com/ike18t/ng-mocks/issues/918) ([3452363](https://github.com/ike18t/ng-mocks/commit/3452363b66c1068dfe50a2255d42d812167f0da7))
+
 # [12.4.0](https://github.com/ike18t/ng-mocks/compare/v12.3.1...v12.4.0) (2021-07-25)
 
 
