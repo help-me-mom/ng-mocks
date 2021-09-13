@@ -67,6 +67,7 @@ describe('TestProviderWithUseClass', () => {
     });
   });
 
+  // Resets customizations from MockInstance.
   afterAll(MockReset);
 
   it('respects all dependencies', () => {

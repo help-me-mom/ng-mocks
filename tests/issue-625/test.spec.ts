@@ -86,6 +86,7 @@ describe('issue-625', () => {
   beforeEach(() => {
     spy = MockInstance(SomeService, 'method', jasmine.createSpy());
   });
+  afterEach(() => MockInstance(SomeService));
 
   it('should call the spy', () => {
     MockRender(MyComponent);

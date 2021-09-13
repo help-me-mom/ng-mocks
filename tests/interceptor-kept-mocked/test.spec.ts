@@ -87,7 +87,6 @@ describe('interceptor-kept-mock', () => {
       },
     });
   });
-
   afterAll(MockReset);
 
   it('triggers interceptor', () => {

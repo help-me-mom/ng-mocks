@@ -23,24 +23,17 @@ import 'zone.js/testing';
 
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { MockInstance, ngMocks } from 'ng-mocks';
+import { ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jasmine');
 ngMocks.throwOnConsole();
 jasmine.getEnv().allowRespy(true);
 
-jasmine.getEnv().addReporter({
-  specDone: MockInstance.restore,
-  specStarted: MockInstance.remember,
-  suiteDone: MockInstance.restore,
-  suiteStarted: MockInstance.remember,
-});
-
 // jasmine.getEnv().addReporter({
 //   specDone: spec => {
 //     console.log(`end: ${spec.fullName}`);
 //   },
-//   specStarted:  spec => {
+//   specStarted: spec => {
 //     console.log(`start: ${spec.fullName}`);
 //   },
 // });

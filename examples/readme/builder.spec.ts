@@ -99,6 +99,9 @@ describe('profile:builder', () => {
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
+  // Helps to reset MockInstance customizations after each test.
+  MockInstance.scope();
+
   // Let's configure TestBed via MockBuilder.
   // The code below says to mock everything in
   // ProfileModule except ProfileComponent and

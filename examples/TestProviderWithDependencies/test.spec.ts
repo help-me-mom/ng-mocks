@@ -66,6 +66,7 @@ describe('TestProviderWithDependencies', () => {
     });
   });
 
+  // Resets customizations from MockInstance.
   afterAll(MockReset);
 
   it('creates TargetService', () => {

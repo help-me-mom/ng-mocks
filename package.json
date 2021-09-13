@@ -11,7 +11,7 @@
     "build:docs": "cd docs && CI=true npm run build",
     "clean": "rm -rf dist test-reports tmp",
     "test": "karma start",
-    "test:debug": "npm run test:watch -- --browsers=Chrome",
+    "test:debug": "npm run test:watch -- --browsers=Chrome --reporters=dots,kjhtml",
     "test:watch": "karma start --auto-watch --single-run=false",
     "e2e": "cd tests-angular/e2e && npm run test",
     "lint": "tslint --project tsconfig.spec.json",

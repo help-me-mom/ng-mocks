@@ -303,22 +303,26 @@ describe('definitions', () => {
 
   it('allows empty instance of MockControlValueAccessorProxy', () => {
     const proxy = new MockControlValueAccessorProxy();
-    proxy.registerOnChange(undefined);
-    proxy.registerOnTouched(undefined);
-    proxy.setDisabledState(true);
-    proxy.setDisabledState(false);
-    proxy.writeValue(undefined);
+    expect(() => proxy.registerOnChange(undefined)).not.toThrow();
+    expect(() => proxy.registerOnTouched(undefined)).not.toThrow();
+    expect(() => proxy.setDisabledState(true)).not.toThrow();
+    expect(() => proxy.setDisabledState(false)).not.toThrow();
+    expect(() => proxy.writeValue(undefined)).not.toThrow();
   });
 
   it('allows empty instance of MockValidatorProxy', () => {
     const proxy = new MockValidatorProxy();
-    proxy.registerOnValidatorChange(undefined);
-    proxy.validate(undefined);
+    expect(() =>
+      proxy.registerOnValidatorChange(undefined),
+    ).not.toThrow();
+    expect(() => proxy.validate(undefined)).not.toThrow();
   });
 
   it('allows empty instance of MockAsyncValidatorProxy', () => {
     const proxy = new MockAsyncValidatorProxy();
-    proxy.registerOnValidatorChange(undefined);
-    proxy.validate(undefined);
+    expect(() =>
+      proxy.registerOnValidatorChange(undefined),
+    ).not.toThrow();
+    expect(() => proxy.validate(undefined)).not.toThrow();
   });
 });

@@ -11,7 +11,7 @@ class TargetService {
 }
 
 describe('mock-instance-scope', () => {
-  MockInstance.scope('all');
+  MockInstance.scope('suite');
   beforeAll(() =>
     MockInstance(TargetService, () => ({
       echo: () => 'beforeAll',
@@ -28,7 +28,6 @@ describe('mock-instance-scope', () => {
 
   describe('nested', () => {
     MockInstance.scope();
-
     beforeEach(() =>
       MockInstance(TargetService, () => ({
         echo: () => 'beforeEach',

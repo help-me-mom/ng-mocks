@@ -32,6 +32,7 @@ class TargetService {
 class TargetModule {}
 
 describe('mock-instance-token', () => {
+  MockInstance.scope();
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   it('provides tokens', () => {

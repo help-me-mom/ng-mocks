@@ -77,7 +77,6 @@ describe('double-decorator:with-selector', () => {
         ngMocks.stub(instance, myProviderMock()),
       ),
     );
-
     afterAll(MockReset);
 
     it('provides correct decoration of the directive', () => {

@@ -44,6 +44,9 @@ class TestedComponent {
 }
 
 describe('MockForms', () => {
+  // Helps to reset customizations after each test.
+  MockInstance.scope();
+
   beforeEach(() => {
     return MockBuilder(TestedComponent)
       .mock(DependencyComponent)

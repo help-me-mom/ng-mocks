@@ -27,6 +27,8 @@ class TargetComponent {
 MockInstance(TargetComponent, 'global', 'mock');
 
 describe('mock-instance-member', () => {
+  MockInstance.scope('all');
+
   MockInstance(TargetComponent, 'describe1', 'mock');
 
   beforeAll(() => {
@@ -89,6 +91,8 @@ describe('mock-instance-member', () => {
   });
 
   describe('nested w/ overrides', () => {
+    MockInstance.scope('all');
+
     MockInstance(TargetComponent, 'describe2', 'mock');
 
     beforeAll(() =>
@@ -143,6 +147,8 @@ describe('mock-instance-member', () => {
   });
 
   describe('nested w/o overrides', () => {
+    MockInstance.scope();
+
     it('gets right stubs #1', () => {
       MockInstance(TargetComponent, 'it2', () => 'mock', 'get');
       const component =

@@ -113,6 +113,7 @@ describe('issue-455:abstract', () => {
         beforeEach(() =>
           MockInstance(InjectedAbstraction, 'test' as any, true),
         );
+        afterEach(() => MockInstance(InjectedAbstraction));
 
         it('should build properly but fails', () => {
           const fixture = MockRender(TestWithoutDecoratorComponent);
