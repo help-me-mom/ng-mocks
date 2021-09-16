@@ -186,7 +186,7 @@
     "karma-junit-reporter": "2.0.1",
     "karma-typescript": "5.5.2",
     "lint-staged": "11.1.2",
-    "prettier": "2.4.0",
+    "prettier": "2.4.1",
     "primeng": "12.1.1",
     "puppeteer": "10.2.0",
     "rxjs": "6.6.7",
