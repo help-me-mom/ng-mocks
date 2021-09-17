@@ -33,7 +33,7 @@
     "@angular/platform-browser": "12.2.6",
     "@angular/platform-browser-dynamic": "12.2.6",
     "@angular/router": "12.2.6",
-    "@ng-select/ng-select": "7.2.0",
+    "@ng-select/ng-select": "7.3.0",
     "@ngrx/effects": "12.4.0",
     "@ngrx/store": "12.4.0",
     "@ngrx/store-devtools": "12.4.0",
