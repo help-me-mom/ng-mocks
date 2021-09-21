@@ -163,7 +163,7 @@
     "@ngrx/store-devtools": "12.4.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/exec": "5.0.0",
-    "@semantic-release/git": "9.0.1",
+    "@semantic-release/git": "10.0.0",
     "@semantic-release/github": "8.0.0",
     "@semantic-release/npm": "7.1.1",
     "@types/core-js": "2.5.5",
