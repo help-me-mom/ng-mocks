@@ -75,7 +75,7 @@ export class MyComponent implements OnInit {
 export class MyModule {}
 
 describe('issue-625', () => {
-  let spy: jasmine.Spy;
+  let spy: any;
 
   beforeEach(() => {
     return MockBuilder(MyComponent, MyModule)
@@ -84,7 +84,11 @@ describe('issue-625', () => {
   });
 
   beforeEach(() => {
-    spy = MockInstance(SomeService, 'method', jasmine.createSpy());
+    spy = MockInstance(
+      SomeService,
+      'method',
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+    );
   });
   afterEach(() => MockInstance(SomeService));
 

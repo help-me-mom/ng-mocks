@@ -66,6 +66,10 @@ class AppComponent {
 })
 class AppModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('mock-component-render:content-child:real', () => {
   beforeEach(() => MockBuilder(AppComponent).keep(AppModule));
 
@@ -74,7 +78,7 @@ describe('mock-component-render:content-child:real', () => {
     const table = ngMocks.findInstance(TableComponent);
 
     // id can find templates and ElementRef
-    expect(table.div).toEqual(jasmine.any(ElementRef));
+    expect(table.div).toEqual(assertion.any(ElementRef));
 
     expect(fixture.nativeElement.innerHTML).toContain(
       '<div class="custom-data-element">Data: 1</div>',
@@ -93,7 +97,7 @@ describe('mock-component-render:content-child:mock', () => {
     const table = ngMocks.findInstance(TableComponent);
 
     // id can find templates and ElementRef
-    expect(table.div).toEqual(jasmine.any(ElementRef));
+    expect(table.div).toEqual(assertion.any(ElementRef));
 
     // checking by id TemplateRef
     if (isMockOf(table, TableComponent, 'c')) {

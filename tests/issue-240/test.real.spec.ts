@@ -21,8 +21,16 @@ describe('issue-240:real', () => {
     const pure = ngMocks.findInstance(PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
 
-    spyOn(pure, 'transform');
-    spyOn(impure, 'transform');
+    ngMocks.stubMember(
+      pure,
+      'transform',
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+    );
+    ngMocks.stubMember(
+      impure,
+      'transform',
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+    );
 
     expect(pure.transform).toHaveBeenCalledTimes(0);
     expect(impure.transform).toHaveBeenCalledTimes(0);

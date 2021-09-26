@@ -41,6 +41,10 @@ const TOKEN_CLASS_KEEP = new InjectionToken('KEEP');
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 // useClass ignores existing services with the same class name, but
 // ng-mocks still detects whether the class should be replaced with a mock copy or not.
 describe('tokens-class', () => {
@@ -52,25 +56,25 @@ describe('tokens-class', () => {
 
   it('resolves Class1Service as a mock instance', () => {
     const actual = TestBed.get(Class1Service);
-    expect(actual).toEqual(jasmine.any(Class1Service));
+    expect(actual).toEqual(assertion.any(Class1Service));
     expect(actual.name).toBeUndefined();
   });
 
   it('resolves Class2Service as a real instance', () => {
     const actual = TestBed.get(Class2Service);
-    expect(actual).toEqual(jasmine.any(Class2Service));
+    expect(actual).toEqual(assertion.any(Class2Service));
     expect(actual.name).toEqual('class2');
   });
 
   it('resolves TOKEN_EXISTING_MOCK as a mock instance', () => {
     const actual = TestBed.get(TOKEN_CLASS_MOCK);
-    expect(actual).toEqual(jasmine.any(Class1Service));
+    expect(actual).toEqual(assertion.any(Class1Service));
     expect(actual.name).toBeUndefined();
   });
 
   it('resolves TOKEN_EXISTING_KEEP as a real instance', () => {
     const actual = TestBed.get(TOKEN_CLASS_KEEP);
-    expect(actual).toEqual(jasmine.any(Class2Service));
+    expect(actual).toEqual(assertion.any(Class2Service));
     expect(actual.name).toEqual('class2');
   });
 });

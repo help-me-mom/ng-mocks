@@ -22,7 +22,7 @@ class MyService {
 describe('issue-166', () => {
   it('accepts spies', () => {
     const spy =
-      typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     // in case of jest
     // const spy = jest.fn();
     const stub = ngMocks.stub(MockService(MyService), {

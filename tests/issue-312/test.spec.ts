@@ -78,13 +78,20 @@ class TargetComponent {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 // the idea is that all of the services have been injected besides StandardService.
 describe('issue-312', () => {
-  beforeEach(() => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-    }
-  });
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
 
   describe('default', () => {
     beforeEach(() =>
@@ -96,14 +103,14 @@ describe('issue-312', () => {
     it('detects injected services', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
-      expect(component.root).toEqual(jasmine.any(RootService));
+      expect(component.root).toEqual(assertion.any(RootService));
       expect(component.root.name).toEqual('RootService');
       expect(component.standard).toEqual(null);
       expect(component.provided).toEqual(
-        jasmine.any(ProvidedService),
+        assertion.any(ProvidedService),
       );
       expect(component.provided.name).toEqual('ProvidedService');
-      expect(component.module).toEqual(jasmine.any(ModuleService));
+      expect(component.module).toEqual(assertion.any(ModuleService));
       expect(component.module.name).toEqual('ModuleService');
     });
   });
@@ -114,14 +121,14 @@ describe('issue-312', () => {
     it('detects injected services', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
-      expect(component.root).toEqual(jasmine.any(RootService));
+      expect(component.root).toEqual(assertion.any(RootService));
       expect(component.root.name).toEqual('RootService');
       expect(component.standard).toEqual(null);
       expect(component.provided).toEqual(
-        jasmine.any(ProvidedService),
+        assertion.any(ProvidedService),
       );
       expect(component.provided.name).toEqual('ProvidedService');
-      expect(component.module).toEqual(jasmine.any(ModuleService));
+      expect(component.module).toEqual(assertion.any(ModuleService));
       expect(component.module.name).toEqual('ModuleService');
     });
   });
@@ -132,14 +139,14 @@ describe('issue-312', () => {
     it('detects injected services', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
-      expect(component.root).toEqual(jasmine.any(RootService));
+      expect(component.root).toEqual(assertion.any(RootService));
       expect(component.root.name).toBeUndefined();
       expect(component.standard).toEqual(null);
       expect(component.provided).toEqual(
-        jasmine.any(ProvidedService),
+        assertion.any(ProvidedService),
       );
       expect(component.provided.name).toBeUndefined();
-      expect(component.module).toEqual(jasmine.any(ModuleService));
+      expect(component.module).toEqual(assertion.any(ModuleService));
       expect(component.module.name).toBeUndefined();
     });
   });

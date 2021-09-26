@@ -40,6 +40,10 @@ class ServiceExisting {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestMultiToken', () => {
   // Because we want to test the token, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its initialization
@@ -51,17 +55,17 @@ describe('TestMultiToken', () => {
     const tokens =
       MockRender<any[]>(TOKEN_MULTI).point.componentInstance;
 
-    expect(tokens).toEqual(jasmine.any(Array));
+    expect(tokens).toEqual(assertion.any(Array));
     expect(tokens.length).toEqual(4);
 
     // Verifying that the token is an instance of ServiceClass.
-    expect(tokens[0]).toEqual(jasmine.any(ServiceClass));
+    expect(tokens[0]).toEqual(assertion.any(ServiceClass));
     expect(tokens[0].name).toEqual('class');
 
     // Verifying that the token is an instance of ServiceExisting.
     // But because it has been replaced with its mock copy
     // we should see an empty name.
-    expect(tokens[1]).toEqual(jasmine.any(ServiceExisting));
+    expect(tokens[1]).toEqual(assertion.any(ServiceExisting));
     expect(tokens[1].name).toBeUndefined();
 
     // Checking that we have here what factory has been created.

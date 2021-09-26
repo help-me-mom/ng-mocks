@@ -50,7 +50,6 @@ describe('ng-mocks-ignore-on-console', () => {
 
     describe('override', () => {
       ngMocks.ignoreOnConsole('log', 'warn');
-      ngMocks.throwOnConsole('log', 'warn');
 
       it('replaces the log with a spy', () => {
         expect(console.log).not.toBe(originalLog);

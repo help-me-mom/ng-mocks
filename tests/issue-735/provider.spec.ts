@@ -10,6 +10,10 @@ class TargetComponent {
   public constructor(public readonly service: Testability) {}
 }
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('issue-735:provider', () => {
   describe('ngMocks.defaultMock', () => {
     beforeAll(() => ngMocks.globalMock(Testability));
@@ -32,7 +36,7 @@ describe('issue-735:provider', () => {
       it('uses default mock correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock1: true,
           }),
         );
@@ -49,7 +53,7 @@ describe('issue-735:provider', () => {
       it('uses default mock correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock1: true,
           }),
         );
@@ -78,7 +82,7 @@ describe('issue-735:provider', () => {
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).not.toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock2: true,
           }),
         );
@@ -95,7 +99,7 @@ describe('issue-735:provider', () => {
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).not.toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock2: true,
           }),
         );

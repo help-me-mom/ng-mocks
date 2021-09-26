@@ -61,12 +61,16 @@ class MockComponent {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-render:use-existing', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('substitutes in mocks correctly', () => {
     MockRender(TargetComponent);
     const component = ngMocks.findInstance(MockComponent);
-    expect(component.directive).toEqual(jasmine.any(MockDirective));
+    expect(component.directive).toEqual(assertion.any(MockDirective));
   });
 });

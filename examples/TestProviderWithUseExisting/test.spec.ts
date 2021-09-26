@@ -38,6 +38,10 @@ class TargetService {}
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestProviderWithUseExisting', () => {
   // Because we want to test the service, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its initialization
@@ -64,7 +68,7 @@ describe('TestProviderWithUseExisting', () => {
 
     // Because Service2 has been replaced with a mock copy,
     // we are getting here a mock copy of Service2 instead of Service1.
-    expect(service).toEqual(jasmine.any(Service2));
+    expect(service).toEqual(assertion.any(Service2));
     // Because we have kept TargetService we are getting here a
     // mock copy of Service2 as it says in useExisting.
     expect(service.name).toEqual('mock2');

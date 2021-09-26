@@ -183,7 +183,7 @@ describe('issue-157:real', () => {
 
   it('throws when NG_VALUE_ACCESSOR is not provided', () => {
     if (VERSION.full === '11.1.0') {
-      pending('11.1.0 has a bug');
+      // pending('11.1.0 has a bug');
 
       return;
     }
@@ -223,7 +223,7 @@ describe('issue-157:real', () => {
 
   it('throws when NG_VALUE_ACCESSOR is not provided on a normal tag', () => {
     if (VERSION.full === '11.1.0') {
-      pending('11.1.0 has a bug');
+      // pending('11.1.0 has a bug');
 
       return;
     }
@@ -309,7 +309,7 @@ describe('issue-157:mock', () => {
 
   it('throws when NG_VALUE_ACCESSOR is not provided', () => {
     if (VERSION.full === '11.1.0') {
-      pending('11.1.0 has a bug');
+      // pending('11.1.0 has a bug');
 
       return;
     }
@@ -349,7 +349,7 @@ describe('issue-157:mock', () => {
 
   it('throws when NG_VALUE_ACCESSOR is not provided on a normal tag', () => {
     if (VERSION.full === '11.1.0') {
-      pending('11.1.0 has a bug');
+      // pending('11.1.0 has a bug');
 
       return;
     }

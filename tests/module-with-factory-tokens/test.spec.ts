@@ -11,6 +11,15 @@ import {
 // Because all tokens have factories the test should render them correctly.
 // There is no way to specify multi in a factory, so we do not get an array.
 describe('module-with-factory-tokens:real', () => {
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   beforeEach(() =>
     MockBuilder()
       .keep(TargetModule)
@@ -19,12 +28,6 @@ describe('module-with-factory-tokens:real', () => {
   );
 
   it('renders all tokens', () => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-
-      return;
-    }
-
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',
@@ -35,6 +38,15 @@ describe('module-with-factory-tokens:real', () => {
 // Because all tokens are kept the test should render them correctly.
 // There is no way to specify multi in a factory, so we do not get an array.
 describe('module-with-factory-tokens:keep', () => {
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
       .keep(MY_TOKEN_SINGLE)
@@ -42,12 +54,6 @@ describe('module-with-factory-tokens:keep', () => {
   );
 
   it('renders all tokens', () => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-
-      return;
-    }
-
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',
@@ -119,6 +125,15 @@ describe('module-with-factory-tokens:mock-2', () => {
 // UPD 2020-10-28: it has been fixed. Now all missed tokens are added to the TestModuleMeta,
 // therefore we have to keep them.
 describe('module-with-factory-tokens:mock-3', () => {
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
       .keep(MY_TOKEN_SINGLE)
@@ -126,12 +141,6 @@ describe('module-with-factory-tokens:mock-3', () => {
   );
 
   it('renders all tokens', () => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-
-      return;
-    }
-
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
       '<internal-component>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-component>',

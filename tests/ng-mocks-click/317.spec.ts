@@ -13,7 +13,8 @@ describe('ng-mocks-click:317', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('finds by css selector', () => {
-    const update = jasmine.createSpy('update');
+    const update =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     MockRender(TargetComponent, { update });
     expect(update).not.toHaveBeenCalled();
     ngMocks.click('a');
@@ -21,7 +22,8 @@ describe('ng-mocks-click:317', () => {
   });
 
   it('finds by attribute selector', () => {
-    const update = jasmine.createSpy('update');
+    const update =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     MockRender(TargetComponent, { update });
     expect(update).not.toHaveBeenCalled();
     ngMocks.click(['data-role', 'link']);

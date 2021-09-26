@@ -10,6 +10,10 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class TargetComponent {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('issue-572', () => {
   ngMocks.faster();
   let consoleWarn: typeof console.warn;
@@ -19,7 +23,8 @@ describe('issue-572', () => {
   beforeAll(() => (consoleWarn = console.warn));
 
   beforeEach(() => {
-    console.warn = jasmine.createSpy('console.warn');
+    console.warn =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
   });
 
   afterAll(() => {
@@ -59,8 +64,8 @@ describe('issue-572', () => {
     } catch (e) {
       expect(console.warn).not.toHaveBeenCalled();
       expect(e).not.toEqual(
-        jasmine.objectContaining({
-          ngMocksConsoleCatch: jasmine.anything(),
+        assertion.objectContaining({
+          ngMocksConsoleCatch: assertion.anything(),
         }),
       );
     }

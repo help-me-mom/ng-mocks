@@ -37,15 +37,15 @@ describe('issue-736', () => {
         provide: ComponentFactoryResolver,
         useValue: {
           resolveComponentFactory:
-            typeof jest !== 'undefined'
-              ? jest
+            typeof jest === 'undefined'
+              ? jasmine.createSpy(
+                  'ComponentFactoryResolver.resolveComponentFactory',
+                )
+              : jest
                   .fn()
                   .mockName(
                     'ComponentFactoryResolver.resolveComponentFactory',
-                  )
-              : jasmine.createSpy(
-                  'ComponentFactoryResolver.resolveComponentFactory',
-                ),
+                  ),
         },
       }),
   );

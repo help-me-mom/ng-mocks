@@ -50,11 +50,14 @@ class TargetUnusedService {
 }
 
 describe('issue-735:provider-for-module', () => {
-  beforeEach(() => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-    }
-  });
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
 
   describe('unprovided', () => {
     beforeAll(() => ngMocks.globalMock(TargetService));

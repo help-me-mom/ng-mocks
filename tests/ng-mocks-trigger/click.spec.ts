@@ -64,6 +64,10 @@ class TargetComponent implements OnDestroy {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-trigger:click', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -83,7 +87,7 @@ describe('ng-mocks-trigger:click', () => {
     });
 
     expect(component.clickListener).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),
@@ -110,7 +114,7 @@ describe('ng-mocks-trigger:click', () => {
     });
 
     expect(component.clickListener).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),
@@ -144,7 +148,7 @@ describe('ng-mocks-trigger:click', () => {
     ngMocks.trigger(div, event);
 
     expect(component.clickListener).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),

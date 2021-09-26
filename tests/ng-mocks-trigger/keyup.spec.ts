@@ -26,6 +26,10 @@ class TargetComponent {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-trigger:keyup', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -61,7 +65,7 @@ describe('ng-mocks-trigger:keyup', () => {
 
     ngMocks.trigger(debugElement, 'keyup.A');
     expect(component.keyupTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         code: 'KeyA',
         key: 'A',
       }),
@@ -69,7 +73,7 @@ describe('ng-mocks-trigger:keyup', () => {
 
     ngMocks.trigger(debugElement, 'keyup.a');
     expect(component.keyupTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         code: 'KeyA',
         key: 'a',
       }),
@@ -77,7 +81,7 @@ describe('ng-mocks-trigger:keyup', () => {
 
     ngMocks.trigger(debugElement, 'keyup.5');
     expect(component.keyupTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         code: 'Digit5',
         key: '5',
       }),
@@ -86,7 +90,7 @@ describe('ng-mocks-trigger:keyup', () => {
     // TODO fix one day
     ngMocks.trigger(debugElement, 'keyup.$');
     expect(component.keyupTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         code: 'Unknown',
         key: '$',
       }),

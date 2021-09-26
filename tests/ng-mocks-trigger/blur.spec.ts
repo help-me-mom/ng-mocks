@@ -74,6 +74,10 @@ class TargetComponent implements OnDestroy {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-trigger:blur', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -91,7 +95,7 @@ describe('ng-mocks-trigger:blur', () => {
       y: 777,
     });
     expect(component.blurTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),
@@ -126,7 +130,7 @@ describe('ng-mocks-trigger:blur', () => {
     );
     ngMocks.trigger(debugElement, event);
     expect(component.blurTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),

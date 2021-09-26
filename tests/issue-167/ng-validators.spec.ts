@@ -87,9 +87,17 @@ describe('issue-167:NG_VALIDATORS:mock', () => {
       fixture.debugElement,
       TargetDirective,
     );
-    spyOn(mock, 'validate').and.returnValue({
-      mock: true,
-    });
+    ngMocks.stubMember(
+      mock,
+      'validate',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.returnValue({
+            mock: true,
+          })
+        : jest.fn().mockReturnValue({
+            mock: true,
+          }),
+    );
 
     fixture.point.componentInstance.control.setValue('updated');
     expect(fixture.point.componentInstance.control.errors).toEqual({

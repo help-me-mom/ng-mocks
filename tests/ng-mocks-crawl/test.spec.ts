@@ -109,7 +109,7 @@ describe('ng-mocks-crawl', () => {
 
   it('skips text nodes', () => {
     const spy =
-      typeof jest !== 'undefined' ? jest.fn() : jasmine.createSpy();
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     // in case of jest
     // const spy = jest.fn();
     const node: any = {
@@ -128,7 +128,8 @@ describe('ng-mocks-crawl', () => {
   });
 
   it('handles missing fixture', () => {
-    const spy = jasmine.createSpy('callback');
+    const spy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     ngMocks.crawl('div', spy);
     ngMocks.crawl(['attr'], spy);
     expect(spy).not.toHaveBeenCalled();

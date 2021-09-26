@@ -88,37 +88,40 @@ describe('issue-333', () => {
       );
     });
 
-    it('fails on unknown', () => {
-      if ((core as any).ɵivyEnabled) {
-        pending('ivy fails differently');
-      } else {
+    if (!(core as any).ɵivyEnabled) {
+      it('fails on unknown', () => {
         const fixture = MockRender(DynamicOverlayComponent);
         fixture.point.componentInstance.attachComponent(DepComponent);
         expect(() => fixture.detectChanges()).toThrowError(
           /DepComponent/,
         );
-      }
-    });
+      });
+    }
   });
 
   describe('3:mock', () => {
+    // Because of junit issue we need to return before beforeEach
+    // https://github.com/karma-runner/karma-junit-reporter/issues/186
+    if ((core as any).ɵivyEnabled) {
+      it('ivy fails differently', () => {
+        // pending('ivy fails differently');
+        expect(true).toBeTruthy();
+      });
+
+      return;
+    }
+
     // this should work with and without ivy
     beforeEach(() =>
       MockBuilder(DynamicOverlayComponent, OverlayModule),
     );
 
     it('fails on unknown', () => {
-      if ((core as any).ɵivyEnabled) {
-        pending('ivy fails differently');
-      } else {
-        const fixture = MockRender(DynamicOverlayComponent);
-        fixture.point.componentInstance.attachComponent(
-          MockComponent,
-        );
-        expect(() => fixture.detectChanges()).toThrowError(
-          /MockComponent/,
-        );
-      }
+      const fixture = MockRender(DynamicOverlayComponent);
+      fixture.point.componentInstance.attachComponent(MockComponent);
+      expect(() => fixture.detectChanges()).toThrowError(
+        /MockComponent/,
+      );
     });
   });
 });
