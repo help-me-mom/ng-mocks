@@ -23,8 +23,20 @@ describe('control-value-accessor-ng-model:real', () => {
       ControlComponent,
     );
     const mock = mockElement.componentInstance;
-    spyOn(mock, 'writeValue').and.callThrough();
-    spyOn(mock, 'setDisabledState').and.callThrough();
+    ngMocks.stubMember(
+      mock,
+      'writeValue',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.writeValue)
+        : jest.fn(mock.writeValue),
+    );
+    ngMocks.stubMember(
+      mock,
+      'setDisabledState',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.setDisabledState)
+        : jest.fn(mock.setDisabledState),
+    );
     const ngModel = ngMocks.get(mockElement, NgModel);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -87,10 +99,34 @@ describe('control-value-accessor-ng-model:mock', () => {
       MockComponent(ControlComponent),
     );
     const mock = mockElement.componentInstance;
-    spyOn(mock, 'writeValue').and.callThrough();
-    spyOn(mock, 'setDisabledState').and.callThrough();
-    spyOn(mock, 'registerOnChange').and.callThrough();
-    spyOn(mock, 'registerOnTouched').and.callThrough();
+    ngMocks.stubMember(
+      mock,
+      'writeValue',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.writeValue)
+        : jest.fn(mock.writeValue),
+    );
+    ngMocks.stubMember(
+      mock,
+      'setDisabledState',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.setDisabledState)
+        : jest.fn(mock.setDisabledState),
+    );
+    ngMocks.stubMember(
+      mock,
+      'registerOnChange',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.registerOnChange)
+        : jest.fn(mock.registerOnChange),
+    );
+    ngMocks.stubMember(
+      mock,
+      'registerOnTouched',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.callFake(mock.registerOnTouched)
+        : jest.fn(mock.registerOnTouched),
+    );
     const ngModel = ngMocks.get(mockElement, NgModel);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -118,10 +154,14 @@ describe('control-value-accessor-ng-model:mock', () => {
     ngModel.control.markAsUntouched();
     expect(ngModel.touched).toBeFalsy();
     // a way through a spy
-    ngMocks
-      .stub<any>(mock, 'registerOnTouched')
-      .calls.first()
-      .args[0]();
+    if (typeof jest === 'undefined') {
+      ngMocks
+        .stub<any>(mock, 'registerOnTouched')
+        .calls.first()
+        .args[0]();
+    } else {
+      ngMocks.stub<any>(mock, 'registerOnTouched').mock.calls[0][0]();
+    }
     expect(ngModel.touched).toBeTruthy();
     ngModel.control.markAsUntouched();
 
@@ -143,10 +183,16 @@ describe('control-value-accessor-ng-model:mock', () => {
     expect(ngModel.touched).toBeFalsy();
     expect(fixture.point.componentInstance.value).toBe('test3');
     // a way through a spy
-    ngMocks
-      .stub<any>(mock, 'registerOnChange')
-      .calls.first()
-      .args[0]('test4');
+    if (typeof jest === 'undefined') {
+      ngMocks
+        .stub<any>(mock, 'registerOnChange')
+        .calls.first()
+        .args[0]('test4');
+    } else {
+      ngMocks
+        .stub<any>(mock, 'registerOnChange')
+        .mock.calls[0][0]('test4');
+    }
     expect(mock.writeValue).not.toHaveBeenCalledWith('test4');
     expect(ngModel.touched).toBeFalsy();
     expect(ngModel.value).toBe('test4');

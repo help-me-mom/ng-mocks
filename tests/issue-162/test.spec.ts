@@ -32,6 +32,10 @@ export class MockComponent {
 })
 export class AppModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('issue-162', () => {
   beforeEach(() => MockBuilder(AppComponent, AppModule));
 
@@ -39,7 +43,7 @@ describe('issue-162', () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: EventManager = TestBed.get(EventManager);
-    expect(target.addEventListener).toEqual(jasmine.any(Function));
+    expect(target.addEventListener).toEqual(assertion.any(Function));
     expect(
       (target.addEventListener as any).__ngMocks,
     ).toBeUndefined();
@@ -50,7 +54,7 @@ describe('issue-162', () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: RendererFactory2 = TestBed.get(RendererFactory2);
-    expect(target.createRenderer).toEqual(jasmine.any(Function));
+    expect(target.createRenderer).toEqual(assertion.any(Function));
     expect((target.createRenderer as any).__ngMocks).toBeUndefined();
   });
 

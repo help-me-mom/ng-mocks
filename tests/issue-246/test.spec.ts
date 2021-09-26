@@ -140,10 +140,13 @@ describe('issue-246:real', () => {
     });
 
     // async fails independently only.
-    spyOn(
+    ngMocks.stubMember(
       ngMocks.findInstance(TargetDirective),
       'validate',
-    ).and.returnValue(null);
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.returnValue(null)
+        : jest.fn().mockReturnValue(null),
+    );
     control.updateValueAndValidity();
     await fixture.whenStable();
     expect(control.errors).toEqual({
@@ -207,10 +210,20 @@ describe('issue-246:mock', () => {
 
     // checking async errors.
     if (isMockValidator(directiveAsync)) {
-      spyOn(directiveAsync, 'validate').and.returnValue(
-        Promise.resolve({
-          targetAsync: true,
-        }),
+      ngMocks.stubMember(
+        directiveAsync,
+        'validate',
+        typeof jest === 'undefined'
+          ? jasmine.createSpy().and.returnValue(
+              Promise.resolve({
+                targetAsync: true,
+              }),
+            )
+          : jest.fn().mockReturnValue(
+              Promise.resolve({
+                targetAsync: true,
+              }),
+            ),
       );
       directiveAsync.__simulateValidatorChange();
     }
@@ -221,9 +234,17 @@ describe('issue-246:mock', () => {
 
     // checking sync errors, they block async validators.
     if (isMockValidator(directive)) {
-      spyOn(directive, 'validate').and.returnValue({
-        test: true,
-      });
+      ngMocks.stubMember(
+        directive,
+        'validate',
+        typeof jest === 'undefined'
+          ? jasmine.createSpy().and.returnValue({
+              test: true,
+            })
+          : jest.fn().mockReturnValue({
+              test: true,
+            }),
+      );
       directive.__simulateValidatorChange();
     }
     expect(control.errors).toEqual({

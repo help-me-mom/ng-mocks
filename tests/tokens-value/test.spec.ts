@@ -44,6 +44,10 @@ class DummyClass {}
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('tokens-value', () => {
   ngMocks.faster();
 
@@ -52,7 +56,7 @@ describe('tokens-value', () => {
   it('mocks TOKEN_OBJECT via MockService', () => {
     const actual = TestBed.get(TOKEN_OBJECT);
     expect(actual).toEqual({
-      func: jasmine.anything(),
+      func: assertion.anything(),
     });
     expect(actual.func()).toBeUndefined();
   });

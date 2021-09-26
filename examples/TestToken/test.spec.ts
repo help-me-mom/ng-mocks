@@ -39,6 +39,10 @@ class ServiceExisting {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestToken', () => {
   ngMocks.faster();
 
@@ -60,7 +64,7 @@ describe('TestToken', () => {
       MockRender<ServiceClass>(TOKEN_CLASS).point.componentInstance;
 
     // Verifying that the token is an instance of ServiceClass.
-    expect(token).toEqual(jasmine.any(ServiceClass));
+    expect(token).toEqual(assertion.any(ServiceClass));
     expect(token.name).toEqual('class');
   });
 
@@ -72,7 +76,7 @@ describe('TestToken', () => {
     // Verifying that the token is an instance of ServiceExisting.
     // But because it has been replaced with a mock copy,
     // we should see an empty name.
-    expect(token).toEqual(jasmine.any(ServiceExisting));
+    expect(token).toEqual(assertion.any(ServiceExisting));
     expect(token.name).toBeUndefined();
   });
 

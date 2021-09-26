@@ -80,11 +80,14 @@ class TargetComponent {
 class TargetModule {}
 
 describe('provider-with-custom-dependencies', () => {
-  beforeEach(() => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-    }
-  });
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
 
   describe('real', () => {
     beforeEach(() =>

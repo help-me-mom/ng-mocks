@@ -31,6 +31,10 @@ const TOKEN_EXISTING_KEEP = new InjectionToken('KEEP');
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 // We should do nothing about a useExisting provider, because
 // the question comes whether its pointer has been replaced with a mock copy or not.
 describe('tokens-existing', () => {
@@ -42,13 +46,13 @@ describe('tokens-existing', () => {
 
   it('resolves TOKEN_EXISTING_MOCK as a mock service', () => {
     const actual = TestBed.get(TOKEN_EXISTING_MOCK);
-    expect(actual).toEqual(jasmine.any(Exist1Service));
+    expect(actual).toEqual(assertion.any(Exist1Service));
     expect(actual.name).toBeUndefined();
   });
 
   it('resolves TOKEN_EXISTING_KEEP as a real service', () => {
     const actual = TestBed.get(TOKEN_EXISTING_KEEP);
-    expect(actual).toEqual(jasmine.any(Exist2Service));
+    expect(actual).toEqual(assertion.any(Exist2Service));
     expect(actual.name).toEqual('exist2');
   });
 });

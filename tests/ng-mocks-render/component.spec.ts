@@ -137,6 +137,10 @@ class TargetComponent {}
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-render:component:real', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -208,12 +212,12 @@ describe('ng-mocks-render:component:mock', () => {
     const tpl2tpl1 = ngMocks.findTemplateRef(['tpl2', 'tpl1']);
     const tpl2tpl2 = ngMocks.findTemplateRef(['tpl2', 'tpl2']);
     const tpl3 = ngMocks.findTemplateRef('info');
-    expect(tplHeader).toEqual(jasmine.any(TemplateRef));
-    expect(tpl1tpl1).toEqual(jasmine.any(TemplateRef));
-    expect(tpl1tpl2).toEqual(jasmine.any(TemplateRef));
-    expect(tpl2tpl1).toEqual(jasmine.any(TemplateRef));
-    expect(tpl2tpl2).toEqual(jasmine.any(TemplateRef));
-    expect(tpl3).toEqual(jasmine.any(TemplateRef));
+    expect(tplHeader).toEqual(assertion.any(TemplateRef));
+    expect(tpl1tpl1).toEqual(assertion.any(TemplateRef));
+    expect(tpl1tpl2).toEqual(assertion.any(TemplateRef));
+    expect(tpl2tpl1).toEqual(assertion.any(TemplateRef));
+    expect(tpl2tpl2).toEqual(assertion.any(TemplateRef));
+    expect(tpl3).toEqual(assertion.any(TemplateRef));
 
     // our render entrypoint component
     const component = ngMocks.findInstance(MockComponent);

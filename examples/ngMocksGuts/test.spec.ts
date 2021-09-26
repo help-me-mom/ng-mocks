@@ -110,6 +110,10 @@ class Target2Module {}
 })
 class Target1Module {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ngMocks.guts:NO_ERRORS_SCHEMA', () => {
   let fixture: ComponentFixture<Target1Component>;
   let component: Target1Component;
@@ -131,7 +135,7 @@ describe('ngMocks.guts:NO_ERRORS_SCHEMA', () => {
   });
 
   it('creates component', () => {
-    expect(component).toEqual(jasmine.any(Target1Component));
+    expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
       '<target2></target2>',
     );
@@ -170,7 +174,7 @@ describe('ngMocks.guts:legacy', () => {
   });
 
   it('creates component', () => {
-    expect(component).toEqual(jasmine.any(Target1Component));
+    expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
       '<target2></target2>',
     );
@@ -194,7 +198,7 @@ describe('ngMocks.guts:normal', () => {
   });
 
   it('creates component', () => {
-    expect(component).toEqual(jasmine.any(Target1Component));
+    expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
       '<target2></target2>',
     );

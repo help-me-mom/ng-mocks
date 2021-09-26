@@ -13,7 +13,8 @@ describe('ng-mocks-trigger:317', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('finds by css selector', () => {
-    const spy = jasmine.createSpy('focus');
+    const spy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     MockRender(TargetComponent, { focus: spy });
     expect(spy).not.toHaveBeenCalled();
     ngMocks.trigger('input', 'focus');

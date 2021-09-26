@@ -26,6 +26,10 @@ class TargetComponent {
 
 MockInstance(TargetComponent, 'global', 'mock');
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('mock-instance-member', () => {
   MockInstance.scope('all');
 
@@ -52,7 +56,7 @@ describe('mock-instance-member', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         beforeAll1: 'mock',
         beforeEach1: 'mock',
         beforeEach2: 'mock',
@@ -73,7 +77,7 @@ describe('mock-instance-member', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         beforeAll1: 'mock',
         beforeEach1: 'mock',
         beforeEach2: 'mock',
@@ -106,7 +110,7 @@ describe('mock-instance-member', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           beforeAll1: 'mock',
           beforeAll2: 'mock',
           beforeEach1: 'mock',
@@ -128,7 +132,7 @@ describe('mock-instance-member', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           beforeAll1: 'mock',
           beforeAll2: 'mock',
           beforeEach1: 'mock',
@@ -154,7 +158,7 @@ describe('mock-instance-member', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           beforeAll1: 'mock',
           beforeEach1: 'mock',
           beforeEach2: 'mock',
@@ -175,7 +179,7 @@ describe('mock-instance-member', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
       expect(component).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           beforeAll1: 'mock',
           beforeEach1: 'mock',
           beforeEach2: 'mock',
@@ -197,7 +201,7 @@ describe('mock-instance-member', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         beforeAll1: 'mock',
         beforeEach1: 'mock',
         beforeEach2: 'mock',

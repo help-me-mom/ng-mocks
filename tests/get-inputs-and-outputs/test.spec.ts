@@ -17,21 +17,21 @@ describe('get-inputs-and-outputs', () => {
       input1: '1',
       input2: '2',
       output1:
-        typeof jest !== 'undefined'
-          ? jest.fn().mockName('output1')
-          : jasmine.createSpy('output1'),
+        typeof jest === 'undefined'
+          ? jasmine.createSpy('output1')
+          : jest.fn().mockName('output1'),
       // in case of jest
       // output1: jest.fn().mockName('output1'),
       output2:
-        typeof jest !== 'undefined'
-          ? jest.fn().mockName('output2')
-          : jasmine.createSpy('output2'),
+        typeof jest === 'undefined'
+          ? jasmine.createSpy('output2')
+          : jest.fn().mockName('output2'),
       // in case of jest
       // output2: jest.fn().mockName('output2'),
       output3:
-        typeof jest !== 'undefined'
-          ? jest.fn().mockName('output3')
-          : jasmine.createSpy('output3'),
+        typeof jest === 'undefined'
+          ? jasmine.createSpy('output3')
+          : jest.fn().mockName('output3'),
       // in case of jest
       // output3: jest.fn().mockName('output3'),
     };

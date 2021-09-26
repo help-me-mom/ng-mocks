@@ -937,7 +937,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packageNames": ["jest-preset-angular"],
-      "allowedVersions": "<=9.0"
+      "allowedVersions": "<=10.0"
     },
     {
       "additionalBranchPrefix": "e2e/a13/",

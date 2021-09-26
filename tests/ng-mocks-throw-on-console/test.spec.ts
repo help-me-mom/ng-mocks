@@ -2,6 +2,10 @@
 
 import { ngMocks } from 'ng-mocks';
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-throw-on-console', () => {
   ngMocks.throwOnConsole();
 
@@ -11,7 +15,7 @@ describe('ng-mocks-throw-on-console', () => {
       fail('should have failed');
     } catch (e) {
       expect(e).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           message: 'warn message',
           ngMocksConsoleCatch: 'warn',
         }),
@@ -25,7 +29,7 @@ describe('ng-mocks-throw-on-console', () => {
       fail('should have failed');
     } catch (e) {
       expect(e).toEqual(
-        jasmine.objectContaining({
+        assertion.objectContaining({
           message: 'error message',
           ngMocksConsoleCatch: 'error',
         }),

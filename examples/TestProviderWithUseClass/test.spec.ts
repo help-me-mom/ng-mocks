@@ -51,6 +51,10 @@ class Target2Service extends Target1Service {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestProviderWithUseClass', () => {
   // Because we want to test the service, we pass it as the first
   // parameter of MockBuilder. To correctly satisfy its dependencies
@@ -77,16 +81,16 @@ describe('TestProviderWithUseClass', () => {
 
     // Let's assert that service has a flag from Target2Service.
     expect(service.flag).toBeTruthy();
-    expect(service).toEqual(jasmine.any(Target2Service));
+    expect(service).toEqual(assertion.any(Target2Service));
 
     // And let's assert that Service1 has been replaced with its mock copy
     // and its name is undefined.
     expect(service.service.name).toEqual('mock1');
-    expect(service.service).toEqual(jasmine.any(Service1));
+    expect(service.service).toEqual(assertion.any(Service1));
 
     // Because we use a mock module, Service1 has been replaced with
     // a mock copy based on its `provide` class, deps and other
     // values are ignored by building mocks logic.
-    expect(service.service).not.toEqual(jasmine.any(Service2));
+    expect(service.service).not.toEqual(assertion.any(Service2));
   });
 });

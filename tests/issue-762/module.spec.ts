@@ -20,6 +20,10 @@ class TargetModule {
   }
 }
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('issue-762:module', () => {
   describe('as keep single', () => {
     beforeEach(() => MockBuilder(TargetModule.forRoot()));
@@ -27,7 +31,7 @@ describe('issue-762:module', () => {
     it('works correctly', () => {
       const fixture = MockRender(TargetService);
       expect(fixture.point.componentInstance).toEqual(
-        jasmine.any(TargetService),
+        assertion.any(TargetService),
       );
       expect(fixture.point.componentInstance.name).toEqual('target');
     });
@@ -39,7 +43,7 @@ describe('issue-762:module', () => {
     it('works correctly', () => {
       const fixture = MockRender(TargetService);
       expect(fixture.point.componentInstance).toEqual(
-        jasmine.any(TargetService),
+        assertion.any(TargetService),
       );
       expect(fixture.point.componentInstance.name).toEqual('target');
     });
@@ -51,7 +55,7 @@ describe('issue-762:module', () => {
     it('works correctly', () => {
       const fixture = MockRender(TargetService);
       expect(fixture.point.componentInstance).toEqual(
-        jasmine.any(TargetService),
+        assertion.any(TargetService),
       );
       expect(fixture.point.componentInstance.name).toEqual(undefined);
     });
@@ -63,7 +67,7 @@ describe('issue-762:module', () => {
     it('works correctly', () => {
       const fixture = MockRender(TargetService);
       expect(fixture.point.componentInstance).toEqual(
-        jasmine.any(TargetService),
+        assertion.any(TargetService),
       );
       expect(fixture.point.componentInstance.name).toEqual(undefined);
     });

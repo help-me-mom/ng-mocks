@@ -18,9 +18,10 @@ describe('MockPipe', () => {
 
   // A spy, just in case if we want to verify
   // how the pipe has been called.
-  const spy = jasmine
-    .createSpy('transform')
-    .and.callFake(fakeTransform);
+  const spy =
+    typeof jest === 'undefined'
+      ? jasmine.createSpy().and.callFake(fakeTransform)
+      : jest.fn(fakeTransform);
   // in case of jest
   // const spy = jest.fn().mockImplementation(fakeTransform);
 

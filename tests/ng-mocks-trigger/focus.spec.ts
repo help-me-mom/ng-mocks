@@ -71,6 +71,10 @@ class TargetComponent implements OnDestroy {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-trigger:focus', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -88,7 +92,7 @@ describe('ng-mocks-trigger:focus', () => {
       y: 777,
     });
     expect(component.focusTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),
@@ -123,7 +127,7 @@ describe('ng-mocks-trigger:focus', () => {
     );
     ngMocks.trigger(debugElement, event);
     expect(component.focusTag).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         x: 666,
         y: 777,
       }),

@@ -90,6 +90,10 @@ ngMocks.defaultMock(AuthService, () => ({
   isLoggedIn$: EMPTY,
 }));
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 // Let's imagine that there is a ProfileComponent
 // and it has 3 text fields: email, firstName,
 // lastName, and a user can edit them.
@@ -135,7 +139,7 @@ describe('profile:classic', () => {
     const fixture = MockRender(ProfileComponent);
 
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(ProfileComponent),
+      assertion.any(ProfileComponent),
     );
   });
 
@@ -157,7 +161,7 @@ describe('profile:classic', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy('StorageService.save'),
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
     );
 
     // Renders <profile [profile]="params.profile">

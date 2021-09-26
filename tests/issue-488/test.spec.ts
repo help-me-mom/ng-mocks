@@ -31,7 +31,11 @@ describe('issue-488', () => {
   describe('classic', () => {
     beforeEach(() => {
       service = TestBed.get(TargetService);
-      spyOn(service, 'method');
+      ngMocks.stubMember(
+        service,
+        'method',
+        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      );
 
       TestBed.createComponent(TargetComponent);
     });
@@ -46,7 +50,11 @@ describe('issue-488', () => {
       const testBed: any = getTestBed();
 
       service = TestBed.get(TargetService);
-      spyOn(service, 'method');
+      ngMocks.stubMember(
+        service,
+        'method',
+        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      );
 
       if (testBed._instantiated || testBed._testModuleRef) {
         expect(() => MockRender(TargetComponent)).toThrowError(

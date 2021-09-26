@@ -26,10 +26,11 @@ interface InjectedAbstraction {
 @Injectable({
   providedIn: 'root',
   useFactory: () => {
-    const fn: InjectedAbstraction = jasmine.createSpy(
-      'Base',
-    ) as any as InjectedAbstraction;
-    fn.hello = jasmine.createSpy('Inner');
+    const fn: InjectedAbstraction = (typeof jest === 'undefined'
+      ? jasmine.createSpy()
+      : jest.fn()) as any as InjectedAbstraction;
+    fn.hello =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
     return fn;
   },
@@ -52,17 +53,20 @@ export class TestWithDecoratorComponent {
 }
 
 ngMocks.defaultMock(InjectedAbstraction, () => {
-  return jasmine
-    .createSpy('InjectedAbstraction')
-    .and.returnValue('FOO') as any as InjectedAbstraction;
+  return (typeof jest === 'undefined'
+    ? jasmine.createSpy().and.returnValue('FOO')
+    : jest.fn().mockReturnValue('FOO')) as any as InjectedAbstraction;
 });
 
 describe('issue-455:abstract', () => {
-  beforeEach(() => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-    }
-  });
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
 
   describe('without inject decorator', () => {
     describe('using TestBed', () => {
@@ -99,9 +103,12 @@ describe('issue-455:abstract', () => {
 
     describe('using explicit mock', () => {
       describe('without `precise` flag', () => {
-        const spy = jasmine
-          .createSpy('InjectedAbstraction')
-          .and.returnValue('BAR');
+        const spy =
+          typeof jest === 'undefined'
+            ? jasmine
+                .createSpy('InjectedAbstraction')
+                .and.returnValue('BAR')
+            : jest.fn().mockReturnValue('BAR');
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent).mock(
             InjectedAbstraction,
@@ -140,9 +147,11 @@ describe('issue-455:abstract', () => {
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent).mock(
             InjectedAbstraction,
-            jasmine
-              .createSpy('InjectedAbstraction')
-              .and.returnValue('BAR'),
+            typeof jest === 'undefined'
+              ? jasmine
+                  .createSpy('InjectedAbstraction')
+                  .and.returnValue('BAR')
+              : jest.fn().mockReturnValue('BAR'),
             { precise: true },
           ),
         );
@@ -166,9 +175,11 @@ describe('issue-455:abstract', () => {
         MockBuilder(TestWithDecoratorComponent).provide({
           provide: InjectedAbstraction,
           useFactory: () =>
-            jasmine
-              .createSpy('InjectedAbstraction')
-              .and.returnValue('QUX'),
+            typeof jest === 'undefined'
+              ? jasmine
+                  .createSpy('InjectedAbstraction')
+                  .and.returnValue('QUX')
+              : jest.fn().mockReturnValue('QUX'),
         }),
       );
 

@@ -76,6 +76,10 @@ class TargetComponent {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestViewChild', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
@@ -85,7 +89,7 @@ describe('TestViewChild', () => {
 
     // checking @ViewChild(DependencyComponent)
     expect(component.component).toEqual(
-      jasmine.any(DependencyComponent),
+      assertion.any(DependencyComponent),
     );
     expect(
       component.component && component.component.dependency,
@@ -93,14 +97,14 @@ describe('TestViewChild', () => {
 
     // checking its read: DependencyDirective
     expect(component.directive).toEqual(
-      jasmine.any(DependencyDirective),
+      assertion.any(DependencyDirective),
     );
     expect(
       component.directive && component.directive.dependency,
     ).toEqual(0);
 
     // checking TemplateRef
-    expect(component.tpl).toEqual(jasmine.any(TemplateRef));
+    expect(component.tpl).toEqual(assertion.any(TemplateRef));
 
     // @ViewChildren(DependencyDirective)
     if (!component.directives) {

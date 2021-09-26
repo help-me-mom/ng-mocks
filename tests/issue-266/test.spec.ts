@@ -48,6 +48,10 @@ class TargetService {
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('issue-248', () => {
   beforeEach(() => MockBuilder(TargetModule));
 
@@ -56,7 +60,7 @@ describe('issue-248', () => {
 
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(TargetComponent),
+      assertion.any(TargetComponent),
     );
     expect(fixture.point.componentInstance.name).toEqual('component');
     expect(fixture.point.nativeElement.innerHTML).toEqual('target');
@@ -75,7 +79,7 @@ describe('issue-248', () => {
 
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(TargetDirective),
+      assertion.any(TargetDirective),
     );
     expect(fixture.point.componentInstance.name).toEqual('directive');
     expect(fixture.point.componentInstance.value).toEqual('123');
@@ -84,7 +88,7 @@ describe('issue-248', () => {
     params.value = '321';
     fixture.detectChanges();
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(TargetDirective),
+      assertion.any(TargetDirective),
     );
     expect(fixture.point.componentInstance.value).toEqual('321');
 
@@ -103,7 +107,7 @@ describe('issue-248', () => {
 
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(TargetService),
+      assertion.any(TargetService),
     );
     expect(fixture.point.componentInstance.name).toEqual('target');
     expect(fixture.point.componentInstance.value).toEqual('');
@@ -117,7 +121,7 @@ describe('issue-248', () => {
 
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(TargetService),
+      assertion.any(TargetService),
     );
     expect(fixture.point.componentInstance.value).toEqual('123');
 

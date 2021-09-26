@@ -98,10 +98,22 @@ describe('issue-167:component:real', () => {
       fixture.debugElement,
       TargetComponent,
     ).componentInstance;
-    spyOn(mock, 'validate').and.returnValue({
-      updated: true,
-    });
-    spyOn(mock, 'writeValue');
+    ngMocks.stubMember(
+      mock,
+      'validate',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.returnValue({
+            updated: true,
+          })
+        : jest.fn().mockReturnValue({
+            updated: true,
+          }),
+    );
+    ngMocks.stubMember(
+      mock,
+      'writeValue',
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+    );
 
     fixture.point.componentInstance.control.setValue('updated');
     expect(mock.validate).toHaveBeenCalled();
@@ -126,10 +138,22 @@ describe('issue-167:component:mock', () => {
       fixture.debugElement,
       TargetComponent,
     ).componentInstance;
-    spyOn(mock, 'validate').and.returnValue({
-      updated: true,
-    });
-    spyOn(mock, 'writeValue');
+    ngMocks.stubMember(
+      mock,
+      'validate',
+      typeof jest === 'undefined'
+        ? jasmine.createSpy().and.returnValue({
+            updated: true,
+          })
+        : jest.fn().mockReturnValue({
+            updated: true,
+          }),
+    );
+    ngMocks.stubMember(
+      mock,
+      'writeValue',
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+    );
 
     fixture.point.componentInstance.control.setValue('updated');
     expect(mock.validate).toHaveBeenCalled();

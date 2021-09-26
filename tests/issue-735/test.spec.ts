@@ -1,3 +1,5 @@
+// tslint:disable no-console
+
 import { Component, NgModule, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -15,6 +17,10 @@ class TargetComponent {
   declarations: [TargetComponent],
 })
 class TargetModule {}
+
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
 
 describe('issue-735', () => {
   // A5: log because of old angular
@@ -41,7 +47,7 @@ describe('issue-735', () => {
       it('uses default mock correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock1: true,
           }),
         );
@@ -58,7 +64,7 @@ describe('issue-735', () => {
       it('uses default mock correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(point.componentInstance.service).toEqual(
-          jasmine.objectContaining({
+          assertion.objectContaining({
             mock1: true,
           }),
         );
@@ -82,14 +88,33 @@ describe('issue-735', () => {
     afterAll(() => ngMocks.globalWipe(DomSanitizer));
 
     describe('MockBuilder', () => {
+      let consoleLog: typeof console.log;
+
+      beforeAll(() => (consoleLog = console.log));
+
+      beforeEach(() => {
+        console.log =
+          typeof jest === 'undefined'
+            ? jasmine.createSpy()
+            : jest.fn();
+      });
+
       beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(() => {
-          spyOn(console, 'log').and.callFake(message => {
-            throw new Error(message);
-          });
+          ngMocks.stubMember(
+            console,
+            'log',
+            typeof jest === 'undefined'
+              ? jasmine.createSpy().and.callFake(message => {
+                  throw new Error(message);
+                })
+              : jest.fn(message => {
+                  throw new Error(message);
+                }),
+          );
           point.componentInstance.service.sanitize(
             SecurityContext.HTML,
             '<script></script><div>test</div>',
@@ -108,9 +133,17 @@ describe('issue-735', () => {
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
         expect(() => {
-          spyOn(console, 'log').and.callFake(message => {
-            throw new Error(message);
-          });
+          ngMocks.stubMember(
+            console,
+            'log',
+            typeof jest === 'undefined'
+              ? jasmine.createSpy().and.callFake(message => {
+                  throw new Error(message);
+                })
+              : jest.fn(message => {
+                  throw new Error(message);
+                }),
+          );
           point.componentInstance.service.sanitize(
             SecurityContext.HTML,
             '<script></script><div>test</div>',

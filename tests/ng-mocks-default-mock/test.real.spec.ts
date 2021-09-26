@@ -8,6 +8,10 @@ import {
   TargetModule,
 } from './fixtures';
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('ng-mocks-default-mock:real', () => {
   beforeEach(async () => {
     return TestBed.configureTestingModule({
@@ -26,7 +30,7 @@ describe('ng-mocks-default-mock:real', () => {
     // Component has a subject.
     const component = fixture.point.componentInstance;
     const o2 = component.o2$;
-    expect(o2).toEqual(jasmine.any(Subject));
+    expect(o2).toEqual(assertion.any(Subject));
     expect(component.getO2()).toEqual(o2);
 
     // Directive has a subject.
@@ -35,14 +39,14 @@ describe('ng-mocks-default-mock:real', () => {
       TargetDirective,
     );
     const o3 = directive.o3$;
-    expect(o3).toEqual(jasmine.any(Subject));
+    expect(o3).toEqual(assertion.any(Subject));
     expect(directive.getO3()).toEqual(o3);
 
     // Pipe as a service is shared.
     const pipe = component.pipe;
     expect(pipe).toBe(directive.pipe);
     const o1 = pipe.o1$;
-    expect(o1).toEqual(jasmine.any(Subject));
+    expect(o1).toEqual(assertion.any(Subject));
     expect(pipe.getO1()).toEqual(o1);
     expect(pipe.transform('test', true)).toEqual('pipe:test');
     expect(pipe.transform('test', false)).toEqual('');

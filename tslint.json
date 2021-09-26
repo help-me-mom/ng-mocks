@@ -69,6 +69,7 @@
     ],
     "strict-boolean-expressions": false,
     "strict-comparisons": [true, { "allow-object-equal-comparison": true }],
+    "strict-type-predicates": false,
     "typedef": false,
     "unified-signatures": false
   }

@@ -73,6 +73,10 @@ class TargetComponent {}
 })
 class TargetModule {}
 
+// fix for jest without jasmine assertions
+const assertion: any =
+  typeof jasmine === 'undefined' ? expect : jasmine;
+
 describe('TestRoutingResolver', () => {
   // Because we want to test the resolver, it means that we want to
   // test its integration with RouterModule. Therefore, we pass
@@ -118,7 +122,7 @@ describe('TestRoutingResolver', () => {
 
     // Now we can assert that it has expected data.
     expect(route.snapshot.data).toEqual(
-      jasmine.objectContaining({
+      assertion.objectContaining({
         data: {
           flag: false,
         },

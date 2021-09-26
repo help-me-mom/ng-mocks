@@ -65,11 +65,14 @@ class Target2Module {}
 class CombinedModule {}
 
 describe('NG_MOCKS_ROOT_PROVIDERS', () => {
-  beforeEach(() => {
-    if (parseInt(VERSION.major, 10) <= 5) {
-      pending('Need Angular > 5');
-    }
-  });
+  if (parseInt(VERSION.major, 10) <= 5) {
+    it('a5', () => {
+      // pending('Need Angular > 5');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
 
   describe('default for a kept module', () => {
     beforeEach(() =>

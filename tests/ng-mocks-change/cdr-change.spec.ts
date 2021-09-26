@@ -82,7 +82,10 @@ describe('ng-mocks-change:cdr-change', () => {
       it('correctly changes CVA', () => {
         const fixture = MockRender(TargetComponent);
         const component = fixture.point.componentInstance;
-        const spy = jasmine.createSpy('valueChange');
+        const spy =
+          typeof jest === 'undefined'
+            ? jasmine.createSpy()
+            : jest.fn();
         component.control.valueChanges
           .pipe(takeUntil(destroy$))
           .subscribe(spy);
@@ -148,7 +151,8 @@ describe('ng-mocks-change:cdr-change:full-mock', () => {
   it('correctly changes CVA', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const spy = jasmine.createSpy('valueChange');
+    const spy =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     component.control.valueChanges
       .pipe(takeUntil(destroy$))
       .subscribe(spy);
