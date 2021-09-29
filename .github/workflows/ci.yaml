@@ -104,7 +104,7 @@ jobs:
 
       - name: https://codeclimate.com/github/ike18t/ng-mocks
         if: always()
-        uses: paambaati/codeclimate-action@v2.7.5
+        uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: 8d19fbe26762a46ed2e12de542b38738418a96d961cfaca0d757e0a7390ced69
         with:
