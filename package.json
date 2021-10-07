@@ -189,7 +189,7 @@
     "prettier": "2.4.1",
     "primeng": "12.2.0",
     "puppeteer": "10.4.0",
-    "rxjs": "6.6.7",
+    "rxjs": "7.4.0",
     "semantic-release": "18.0.0",
     "ts-node": "10.2.1",
     "tslib": "2.3.1",
