@@ -37,8 +37,5 @@
     "jest": "27.3.1",
     "jest-preset-angular": "10.1.0",
     "typescript": "4.3.5"
-  },
-  "engines": {
-    "npm": "6.14.15"
   }
 }

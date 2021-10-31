@@ -22,10 +22,6 @@
       "allowedVersions": "/^\\d+\\.\\d+\\.\\d+(-[^\\.]+\\.\\d+)?$/",
       "ignoreUnstable": false
     },
-    {
-      "packagePatterns": ["npm"],
-      "allowedVersions": "/^6\\./"
-    },
 
     {
       "paths": [".circleci/config.yml"],
@@ -152,6 +148,12 @@
       "packageNames": ["typescript"],
       "allowedVersions": "<=2.5"
     },
+    {
+      "additionalBranchPrefix": "e2e/a5/",
+      "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^3\\.10\\./"
+    },
 
     {
       "additionalBranchPrefix": "e2e/a6/",
@@ -262,6 +264,12 @@
       "paths": ["e2e/a6/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=2.9"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a6/",
+      "paths": ["e2e/a6/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.13\\./"
     },
 
     {
@@ -374,6 +382,12 @@
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.2"
     },
+    {
+      "additionalBranchPrefix": "e2e/a7/",
+      "paths": ["e2e/a7/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.13\\./"
+    },
 
     {
       "additionalBranchPrefix": "e2e/a8/",
@@ -478,6 +492,12 @@
       "paths": ["e2e/a8/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.5"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a8/",
+      "paths": ["e2e/a8/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
     },
 
     {
@@ -584,6 +604,12 @@
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.7"
     },
+    {
+      "additionalBranchPrefix": "e2e/a9/",
+      "paths": ["e2e/a9/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
+    },
 
     {
       "additionalBranchPrefix": "e2e/a10/",
@@ -688,6 +714,12 @@
       "paths": ["e2e/a10/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=3.9"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a10/",
+      "paths": ["e2e/a10/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
     },
 
     {
@@ -795,6 +827,12 @@
       "packageNames": ["typescript"],
       "allowedVersions": "<=4.0"
     },
+    {
+      "additionalBranchPrefix": "e2e/a11/",
+      "paths": ["e2e/a11/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
+    },
 
     {
       "additionalBranchPrefix": "e2e/a12/",
@@ -894,6 +932,12 @@
       "packageNames": ["typescript"],
       "allowedVersions": "<=4.3"
     },
+    {
+      "additionalBranchPrefix": "e2e/a12/",
+      "paths": ["e2e/a12/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
+    },
 
     {
       "additionalBranchPrefix": "e2e/a13/",
@@ -986,6 +1030,12 @@
       "paths": ["e2e/a13/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "<=4.3"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a13/",
+      "paths": ["e2e/a13/package.json"],
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\.14\\./"
     }
   ]
 }
