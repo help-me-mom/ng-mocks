@@ -15,9 +15,7 @@ class AppComponent {}
   imports: [
     RouterModule.forRoot([
       {
-        // loadChildren: () => import('./lazy-module').then(module => module.LazyModule),
-        // TODO remove when we don't support A5-A8
-        loadChildren: './lazy-module#LazyModule',
+        loadChildren: () => LazyModule,
         path: '',
       },
     ]),
