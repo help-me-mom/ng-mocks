@@ -46,7 +46,7 @@
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
     "ng-mocks": "*",
-    "primeng": "12.2.1",
+    "primeng": "12.2.2",
     "puppeteer": "10.4.0",
     "rxjs": "7.4.0",
     "ts-node": "10.4.0",
