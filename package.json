@@ -188,7 +188,7 @@
     "lint-staged": "11.2.6",
     "prettier": "2.4.1",
     "primeng": "12.2.2",
-    "puppeteer": "10.4.0",
+    "puppeteer": "11.0.0",
     "rxjs": "7.4.0",
     "semantic-release": "18.0.0",
     "ts-node": "10.4.0",
