@@ -162,7 +162,7 @@
     "@ngrx/store": "12.5.1",
     "@ngrx/store-devtools": "12.5.1",
     "@semantic-release/changelog": "6.0.1",
-    "@semantic-release/exec": "6.0.2",
+    "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.2",
     "@semantic-release/npm": "8.0.3",
