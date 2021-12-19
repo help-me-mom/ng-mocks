@@ -80,6 +80,13 @@
       "allowedVersions": "<=13.0.2",
       "ignoreUnstable": false
     },
+    {
+      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
+      "additionalBranchPrefix": "e2e/latest/",
+      "packageNames": ["typescript"],
+      "allowedVersions": "<4.5.0",
+      "ignoreUnstable": false
+    },
 
     {
       "additionalBranchPrefix": "e2e/a5/",
