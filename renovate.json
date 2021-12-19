@@ -33,6 +33,21 @@
     },
 
     {
+      "additionalBranchPrefix": "root/",
+      "paths": ["package.json"],
+      "packagePatterns": ["^@angular/"],
+      "allowedVersions": "<=13.0.2",
+      "ignoreUnstable": false
+    },
+    {
+      "additionalBranchPrefix": "root/",
+      "paths": ["package.json"],
+      "packageNames": ["@angular-devkit/build-angular"],
+      "allowedVersions": "<=13.0.2",
+      "ignoreUnstable": false
+    },
+
+    {
       "paths": [
         ".circleci/config.yml",
         "Dockerfile",
@@ -943,7 +958,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "/^13\\./",
+      "allowedVersions": "<=13.0.2",
       "ignoreUnstable": false
     },
     {
@@ -968,7 +983,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/^13\\./",
+      "allowedVersions": "<=13.0.2",
       "ignoreUnstable": false
     },
     {
@@ -981,7 +996,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packageNames": ["jest-preset-angular"],
-      "allowedVersions": "<=10.0"
+      "allowedVersions": "<=11.0"
     },
     {
       "additionalBranchPrefix": "e2e/a13/",
