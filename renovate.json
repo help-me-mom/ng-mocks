@@ -62,6 +62,13 @@
     {
       "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
       "additionalBranchPrefix": "e2e/latest/",
+      "allowedVersions": "/.+/",
+      "ignoreUnstable": false
+    },
+
+    {
+      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
+      "additionalBranchPrefix": "e2e/latest/",
       "packagePatterns": ["^@angular/"],
       "allowedVersions": "<=13.0.2",
       "ignoreUnstable": false
@@ -71,13 +78,6 @@
       "additionalBranchPrefix": "e2e/latest/",
       "packageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "<=13.0.2",
-      "ignoreUnstable": false
-    },
-
-    {
-      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
-      "additionalBranchPrefix": "e2e/latest/",
-      "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
 
