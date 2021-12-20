@@ -2,7 +2,11 @@ release:
   branches:
     - master
 plugins:
-  - '@semantic-release/commit-analyzer'
+  - - '@semantic-release/commit-analyzer'
+    - releaseRules:
+        - type: docs
+          scope: README
+          release: patch
   - - '@semantic-release/exec'
     - prepareCmd: npm install && npm run lint && npm run ts:check && npm run test && npm run build
   - '@semantic-release/release-notes-generator'
