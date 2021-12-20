@@ -1,3 +1,5 @@
+## [12.5.1](https://github.com/ike18t/ng-mocks/compare/v12.5.0...v12.5.1) (2021-12-20)
+
 # [12.5.0](https://github.com/ike18t/ng-mocks/compare/v12.4.0...v12.5.0) (2021-09-13)
 
 
