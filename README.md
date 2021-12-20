@@ -14,17 +14,25 @@
 
 The current version of the library **has been tested** and **can be used** with:
 
-| Angular | ng-mocks | Jasmine | Jest | Ivy |
-| ------: | :------: | :-----: | :--: | :-: |
-|      13 |  latest  |   yes   | yes  | yes |
-|      12 |  latest  |   yes   | yes  | yes |
-|      11 |  latest  |   yes   | yes  | yes |
-|      10 |  latest  |   yes   | yes  | yes |
-|       9 |  latest  |   yes   | yes  | yes |
-|       8 |  latest  |   yes   | yes  |     |
-|       7 |  latest  |   yes   | yes  |     |
-|       6 |  latest  |   yes   | yes  |     |
-|       5 |  latest  |   yes   | yes  |     |
+|  Angular |                           ng-mocks                            | Jasmine | Jest | Ivy |
+| -------: | :-----------------------------------------------------------: | :-----: | :--: | :-: |
+|  >13.0.2 | [in progress](https://github.com/ike18t/ng-mocks/issues/1427) |         |      |     |
+| <=13.0.2 |                            latest                             |   yes   | yes  | yes |
+|       12 |                            latest                             |   yes   | yes  | yes |
+|       11 |                            latest                             |   yes   | yes  | yes |
+|       10 |                            latest                             |   yes   | yes  | yes |
+|        9 |                            latest                             |   yes   | yes  | yes |
+|        8 |                            latest                             |   yes   | yes  |     |
+|        7 |                            latest                             |   yes   | yes  |     |
+|        6 |                            latest                             |   yes   | yes  |     |
+|        5 |                            latest                             |   yes   | yes  |     |
+
+**PLEASE NOTE: If you are using Angular 13 or planning to use it,
+please note that currently only Angular `<=13.0.2` is supported,
+[work is in progress](https://github.com/ike18t/ng-mocks/issues/1427) to implement support of Angular `>13.0.2`.
+Thank you for patience, understanding and support.**
+
+To stay with the latest supported version, you can set the versions to `<=13.0.2` in your `package.json` for `@angular/*` and `@angular-devkit/*`.
 
 ## Important links
 
