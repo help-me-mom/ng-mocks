@@ -13,9 +13,6 @@ module.exports = {
   projectName: 'ng-mocks',
   themeConfig: {
     hideableSidebar: true,
-    gtag: {
-      trackingID: 'G-EBEPX2CVNW',
-    },
     announcementBar: {
       id: 'give-a-start',
       content:
@@ -139,6 +136,11 @@ module.exports = {
       },
     ],
     '@docusaurus/plugin-sitemap',
-    '@docusaurus/plugin-google-gtag',
+    [
+      '@docusaurus/plugin-google-gtag',
+      {
+        trackingID: 'G-EBEPX2CVNW',
+      },
+    ],
   ],
 };
