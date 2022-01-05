@@ -43,7 +43,7 @@
     "@types/node": "14.18.5",
     "jasmine-core": "4.0.0",
     "jasmine-spec-reporter": "7.0.0",
-    "jest": "27.4.5",
+    "jest": "27.4.6",
     "jest-preset-angular": "11.0.1",
     "karma": "6.3.9",
     "karma-chrome-launcher": "3.1.0",
