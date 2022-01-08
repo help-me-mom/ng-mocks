@@ -55,6 +55,15 @@ export default function (cls: AnyType<any>, queries?: { [key: string]: Query }):
     if (query.ngMetadataName) {
       const decorator = map[query.ngMetadataName];
       decorator(query.selector, query)(cls.prototype, key);
+      const props = (cls as any).propDecorators;
+      if (!props[key]) {
+        props[key] = [
+          {
+            args: [query.selector, query],
+            type: decorator,
+          },
+        ];
+      }
     }
   }
 

@@ -111,8 +111,8 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return directive;
   }
 
-  // We are inside of an 'it'.
-  // It is fine to to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.
+  // We are inside an 'it'.
+  // It is fine to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.
   if ((getTestBed() as any)._instantiated) {
     try {
       return getMockedNgDefOf(directive, 'd');

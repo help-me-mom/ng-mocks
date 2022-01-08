@@ -1,9 +1,8 @@
-import { ComponentFactoryResolver, NgModule } from '@angular/core';
+import * as module from '@angular/core';
 
 let isIvy = false;
 try {
   // tslint:disable-next-line no-require-imports no-var-requires
-  const module = require('@angular/core');
   isIvy = module.ɵivyEnabled;
 } catch (e) {
   // nothing to do
@@ -18,9 +17,9 @@ import helperCreateClone from '../../mock-service/helper.create-clone';
 import { NgMeta } from './types';
 
 class EntryComponentsModule {
-  protected origin: ComponentFactoryResolver['resolveComponentFactory'];
+  protected origin: module.ComponentFactoryResolver['resolveComponentFactory'];
 
-  public constructor(map: Map<any, any>, protected componentFactoryResolver: ComponentFactoryResolver) {
+  public constructor(map: Map<any, any>, protected componentFactoryResolver: module.ComponentFactoryResolver) {
     this.origin = componentFactoryResolver.resolveComponentFactory;
     componentFactoryResolver.resolveComponentFactory = helperCreateClone(
       this.origin,
@@ -30,7 +29,7 @@ class EntryComponentsModule {
     );
   }
 }
-coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [ComponentFactoryResolver]]);
+coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [module.ComponentFactoryResolver]]);
 
 export default (ngModule: NgMeta): void => {
   const entryComponents: any[] = [];
@@ -41,7 +40,7 @@ export default (ngModule: NgMeta): void => {
   }
   // the way to cause entryComponents to do its work
   const entryComponent = extendClass(EntryComponentsModule);
-  NgModule({
+  module.NgModule({
     // Ivy knows how to make any component an entry point,
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
     entryComponents: isIvy ? /* istanbul ignore next */ [] : entryComponents,
