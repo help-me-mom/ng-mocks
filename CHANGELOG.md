@@ -1,3 +1,15 @@
+# [13.0.0-alpha.1](https://github.com/ike18t/ng-mocks/compare/v12.5.1...v13.0.0-alpha.1) (2022-01-08)
+
+
+### Features
+
+* **a13:** support ([88c9752](https://github.com/ike18t/ng-mocks/commit/88c9752a6c2ef23264910794eaebb3a5408f8e65))
+
+
+### BREAKING CHANGES
+
+* **a13:** Angular 13 only support
+
 ## [12.5.1](https://github.com/ike18t/ng-mocks/compare/v12.5.0...v12.5.1) (2021-12-20)
 
 # [12.5.0](https://github.com/ike18t/ng-mocks/compare/v12.4.0...v12.5.0) (2021-09-13)
