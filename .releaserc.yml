@@ -1,6 +1,8 @@
 release:
   branches:
     - master
+    - name: issues/a13
+      prerelease: true
 plugins:
   - - '@semantic-release/commit-analyzer'
     - releaseRules:
@@ -8,7 +10,7 @@ plugins:
           scope: README
           release: patch
   - - '@semantic-release/exec'
-    - prepareCmd: npm install && npm run lint && npm run ts:check && npm run test && npm run build
+    - prepareCmd: npm install && npm run lint && npm run ts:check && npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md

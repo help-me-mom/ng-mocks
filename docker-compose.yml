@@ -3,6 +3,9 @@ version: '3'
 services:
   ng-mocks:
     build: ./
+    command:
+      - sleep
+      - infinity
     volumes:
       - .:/app
       - /npm

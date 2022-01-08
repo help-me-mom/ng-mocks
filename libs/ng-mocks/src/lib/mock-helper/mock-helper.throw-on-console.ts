@@ -14,7 +14,7 @@ const factory =
 export default (...methods: Array<keyof typeof console>): void => {
   const backup: Array<[keyof typeof console, any]> = [];
 
-  beforeAll(() => {
+  beforeEach(() => {
     if (methods.indexOf('warn') === -1) {
       methods.push('warn');
     }
@@ -27,7 +27,7 @@ export default (...methods: Array<keyof typeof console>): void => {
     }
   });
 
-  afterAll(() => {
+  afterEach(() => {
     for (const [method, implementation] of backup) {
       console[method] = implementation;
     }
