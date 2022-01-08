@@ -41,7 +41,7 @@
     "@types/node": "14.18.5",
     "jasmine-core": "4.0.0",
     "jasmine-spec-reporter": "7.0.0",
-    "karma": "6.3.9",
+    "karma": "6.3.10",
     "karma-chrome-launcher": "3.1.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
