@@ -39,7 +39,7 @@ const generateFinalQueries = (queries: {
 };
 
 // Looks like an A9 bug, that queries from @Component are not processed.
-// Also we have to pass prototype, not the class.
+// Also, we have to pass prototype, not the class.
 // The same issue happens with outputs, but time to time
 // (when I restart tests with refreshing browser manually).
 // https://github.com/ike18t/ng-mocks/issues/109
@@ -55,15 +55,6 @@ export default function (cls: AnyType<any>, queries?: { [key: string]: Query }):
     if (query.ngMetadataName) {
       const decorator = map[query.ngMetadataName];
       decorator(query.selector, query)(cls.prototype, key);
-      const props = (cls as any).propDecorators;
-      if (!props[key]) {
-        props[key] = [
-          {
-            args: [query.selector, query],
-            type: decorator,
-          },
-        ];
-      }
     }
   }
 

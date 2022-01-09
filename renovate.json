@@ -33,29 +33,7 @@
     },
 
     {
-      "additionalBranchPrefix": "root/",
-      "paths": ["package.json", "tests-angular/e2e/package.json"],
-      "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=13.0.2",
-      "ignoreUnstable": false
-    },
-    {
-      "additionalBranchPrefix": "root/",
-      "paths": ["package.json", "tests-angular/e2e/package.json"],
-      "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<=13.0.2",
-      "ignoreUnstable": false
-    },
-
-    {
-      "paths": [
-        ".circleci/config.yml",
-        "Dockerfile",
-        "docker-compose.yml",
-        "docs/package.json",
-        "package.json",
-        "tests-angular/e2e/package.json"
-      ],
+      "paths": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "docs/package.json", "package.json"],
       "additionalBranchPrefix": "root/"
     },
 
@@ -66,20 +44,6 @@
       "ignoreUnstable": false
     },
 
-    {
-      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
-      "additionalBranchPrefix": "e2e/latest/",
-      "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=13.0.2",
-      "ignoreUnstable": false
-    },
-    {
-      "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
-      "additionalBranchPrefix": "e2e/latest/",
-      "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<=13.0.2",
-      "ignoreUnstable": false
-    },
     {
       "paths": ["e2e/a-jasmine/package.json", "e2e/a-jest/package.json", "e2e/a-min/package.json"],
       "additionalBranchPrefix": "e2e/latest/",
@@ -980,7 +944,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packagePatterns": ["^@angular/"],
-      "allowedVersions": "<=13.0.2",
+      "allowedVersions": "/^13\\./",
       "ignoreUnstable": false
     },
     {
@@ -1004,8 +968,8 @@
     {
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
-      "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "<=13.0.2",
+      "packageNames": ["^@angular-devkit/"],
+      "allowedVersions": "/^13\\./",
       "ignoreUnstable": false
     },
     {
@@ -1066,7 +1030,7 @@
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
       "packageNames": ["typescript"],
-      "allowedVersions": "<=4.3"
+      "allowedVersions": "<=4.5"
     },
     {
       "additionalBranchPrefix": "e2e/a13/",

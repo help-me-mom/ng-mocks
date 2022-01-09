@@ -1,4 +1,4 @@
-import { Component, Directive, Provider, ViewChild } from '@angular/core';
+import { Component, Directive, HostBinding, HostListener, Provider, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
@@ -32,6 +32,8 @@ export default <T extends Component | Directive>(
   source: AnyType<any>,
   mock: AnyType<any>,
   meta: {
+    hostBindings?: Array<[string, any]>;
+    hostListeners?: Array<[string, any, any]>;
     inputs?: string[];
     outputs?: string[];
     providers?: Provider[];
@@ -59,6 +61,13 @@ export default <T extends Component | Directive>(
   }
   decorateOutputs(mock, meta.outputs);
   config.queryScanKeys = decorateQueries(mock, meta.queries);
+
+  for (const [key, ...args] of meta.hostBindings || []) {
+    HostBinding(...args)(mock.prototype, key);
+  }
+  for (const [key, ...args] of meta.hostListeners || []) {
+    HostListener(...args)(mock.prototype, key);
+  }
 
   return options;
 };

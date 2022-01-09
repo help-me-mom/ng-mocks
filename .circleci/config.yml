@@ -879,9 +879,9 @@ workflows:
   Testing:
     jobs:
       - Core
-      - E2E:
-          requires:
-            - Core
+      #      - E2E:
+      #          requires:
+      #            - Core
       #      - 'Core IE':
       #          requires:
       #            - Core
@@ -999,9 +999,9 @@ workflows:
       - 'Angular Jest ES2020 Ivy':
           requires:
             - Angular Install
-#      - 'Angular Min ES5 Ivy':
-#          requires:
-#            - Angular Install
-#      - 'Angular Min ES2015 Ivy':
-#          requires:
-#            - Angular Install
+      #      - 'Angular Min ES5 Ivy':
+      #          requires:
+      #            - Angular Install
+      #      - 'Angular Min ES2015 Ivy':
+      #          requires:
+      #            - Angular Install
