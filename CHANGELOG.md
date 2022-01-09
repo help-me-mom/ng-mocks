@@ -1,3 +1,10 @@
+# [13.0.0-alpha.2](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.1...v13.0.0-alpha.2) (2022-01-09)
+
+
+### Features
+
+* **a13:** recursive declarations ([396573f](https://github.com/ike18t/ng-mocks/commit/396573fa7c46d005959994457398bf7490c320af))
+
 # [13.0.0-alpha.1](https://github.com/ike18t/ng-mocks/compare/v12.5.1...v13.0.0-alpha.1) (2022-01-08)
 
 
