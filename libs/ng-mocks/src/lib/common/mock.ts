@@ -110,6 +110,8 @@ const applyProps = (instance: Mock & Record<keyof any, any>, prototype: AnyType<
 
 export type ngMocksMockConfig = {
   config?: IMockBuilderConfig;
+  hostBindings?: string[];
+  hostListeners?: string[];
   init?: (instance: any) => void;
   isControlValueAccessor?: boolean;
   isValidator?: boolean;
@@ -151,6 +153,13 @@ export class Mock {
     coreDefineProperty(this, '__ngMocksCtor', this.constructor);
     for (const key of this.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {
       coreDefineProperty(this, `__ngMocksVcr_${key}`, undefined);
+    }
+    for (const key of this.__ngMocksConfig.hostBindings || /* istanbul ignore next */ []) {
+      helperMockService.mock(this, key, 'get');
+      helperMockService.mock(this, key, 'set');
+    }
+    for (const key of this.__ngMocksConfig.hostListeners || /* istanbul ignore next */ []) {
+      helperMockService.mock(this, key);
     }
 
     // istanbul ignore else

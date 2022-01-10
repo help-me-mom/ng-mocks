@@ -8,7 +8,7 @@ const factory = (propName: string) => helperMockService.mockFunction(`console.${
 export default (...methods: Array<keyof typeof console>): void => {
   const backup: Array<[keyof typeof console, any]> = [];
 
-  beforeAll(() => {
+  beforeEach(() => {
     if (methods.indexOf('log') === -1) {
       methods.push('log');
     }
@@ -18,7 +18,7 @@ export default (...methods: Array<keyof typeof console>): void => {
     }
   });
 
-  afterAll(() => {
+  afterEach(() => {
     for (const [method, implementation] of backup) {
       console[method] = implementation;
     }

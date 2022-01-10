@@ -103,17 +103,17 @@ const parse = (def: any): any => {
           };
         }
       } else if (ngMetadataName === 'HostBinding') {
-        const key = `[${decorator.args[0]}]`;
+        const key = `[${decorator.args?.[0] || prop}]`;
         if (!declarations.host[key]) {
           declarations.host[key] = prop;
         }
-        declarations.hostBindings.push([prop, ...decorator.args]);
+        declarations.hostBindings.push([prop, ...(decorator.args || [])]);
       } else if (ngMetadataName === 'HostListener') {
-        const key = `(${decorator.args[0]})`;
+        const key = `(${decorator.args?.[0] || prop})`;
         if (!declarations.host[key]) {
           declarations.host[key] = `${prop}($event)`;
         }
-        declarations.hostListeners.push([prop, ...decorator.args]);
+        declarations.hostListeners.push([prop, ...(decorator.args || [])]);
       }
     }
   }

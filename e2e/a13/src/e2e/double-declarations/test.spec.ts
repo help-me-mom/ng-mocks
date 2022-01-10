@@ -1,12 +1,72 @@
 import { EventEmitter, HostBinding } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { BaseCls, DivCls, OverrideCls } from './fixtures';
+import {
+  BaseCls,
+  BaseCls1,
+  BaseCls2,
+  BaseCls3,
+  DivCls,
+  OverrideCls,
+  OverrideCls1,
+  OverrideCls2,
+  OverrideCls3,
+} from './fixtures';
 
 describe('double-declarations', () => {
   const cases: Array<[string, any[], any[]]> = [
-    ['real', [BaseCls], [OverrideCls, DivCls]],
-    ['mock', [null, BaseCls], [null, [OverrideCls, DivCls]]],
+    [
+      'real',
+      [
+        [
+          BaseCls,
+          BaseCls1,
+          BaseCls2,
+          BaseCls3,
+          OverrideCls1,
+          OverrideCls2,
+          OverrideCls3,
+        ],
+      ],
+      [
+        [
+          OverrideCls,
+          DivCls,
+          BaseCls1,
+          BaseCls2,
+          BaseCls3,
+          OverrideCls1,
+          OverrideCls2,
+          OverrideCls3,
+        ],
+      ],
+    ],
+    [
+      'mock',
+      [
+        [
+          BaseCls1,
+          BaseCls2,
+          BaseCls3,
+          OverrideCls1,
+          OverrideCls2,
+          OverrideCls3,
+        ],
+        BaseCls,
+      ],
+      [
+        [
+          DivCls,
+          BaseCls1,
+          BaseCls2,
+          BaseCls3,
+          OverrideCls1,
+          OverrideCls2,
+          OverrideCls3,
+        ],
+        OverrideCls,
+      ],
+    ],
   ];
 
   for (const [contextName, case1, case2] of cases) {
@@ -127,24 +187,28 @@ describe('double-declarations', () => {
           expect(instance).not.toBeDefined();
         });
 
-        it('respects inputs', () => {
-          MockRender(
-            `<override1
-          [prop1]="'prop1'"
-          [prop2alias]="'prop2alias'"
-          [override2alias]="'override2alias'"
-          [prop3alias]="'prop3alias'"
-          [override3alias]="'override3alias'"
-          [propBase1]="'propBase1'"
-          [propOverride1]="'propOverride1'"
-        ></override1>`,
-          );
-          const instance = ngMocks.findInstance(OverrideCls);
-          expect(instance.prop1).toEqual('prop1');
-          expect(instance.prop2).toEqual('override2alias');
-          expect(instance.prop3).toEqual('override3alias');
-          expect(instance.propBase1).toEqual('propBase1');
-          expect(instance.propOverride1).toEqual('propOverride1');
+        describe('props', () => {
+          ngMocks.ignoreOnConsole('error');
+
+          it('respects inputs', () => {
+            MockRender(
+              `<override1
+                [prop1]="'prop1'"
+                [prop2alias]="'prop2alias'"
+                [override2alias]="'override2alias'"
+                [prop3alias]="'prop3alias'"
+                [override3alias]="'override3alias'"
+                [propBase1]="'propBase1'"
+                [propOverride1]="'propOverride1'"
+              ></override1>`,
+            );
+            const instance = ngMocks.findInstance(OverrideCls);
+            expect(instance.prop1).toEqual('prop1');
+            expect(instance.prop2).toEqual('override2alias');
+            expect(instance.prop3).toEqual('override3alias');
+            expect(instance.propBase1).toEqual('propBase1');
+            expect(instance.propOverride1).toEqual('propOverride1');
+          });
         });
 
         it('respects outputs', () => {

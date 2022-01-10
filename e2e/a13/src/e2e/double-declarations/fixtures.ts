@@ -14,6 +14,36 @@ import {
 } from '@angular/core';
 
 @Directive({
+  selector: 'base1',
+})
+export class BaseCls1 {}
+
+@Directive({
+  selector: 'base2',
+})
+export class BaseCls2 {}
+
+@Directive({
+  selector: 'base3',
+})
+export class BaseCls3 {}
+
+@Directive({
+  selector: 'override1',
+})
+export class OverrideCls1 {}
+
+@Directive({
+  selector: 'override2',
+})
+export class OverrideCls2 {}
+
+@Directive({
+  selector: 'override3',
+})
+export class OverrideCls3 {}
+
+@Directive({
   selector: 'div',
 })
 export class DivCls {
