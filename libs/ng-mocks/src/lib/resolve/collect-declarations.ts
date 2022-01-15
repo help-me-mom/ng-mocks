@@ -41,79 +41,176 @@ const parse = (def: any): any => {
     declarations[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
   }
 
-  const props: string[] = [];
-  for (const key of def.propDecorators ? Object.getOwnPropertyNames(def.propDecorators) : []) {
-    if (props.indexOf(key) === -1) {
-      props.push(key);
-    }
-  }
-  for (const key of def.propDecorators ? Object.keys(def.propDecorators) : []) {
-    if (props.indexOf(key) === -1) {
-      props.push(key);
-    }
-  }
-  for (const prop of props) {
-    declarations.propDecorators[prop] = [...(declarations.propDecorators[prop] || []), ...def.propDecorators[prop]];
-    for (const decorator of def.propDecorators[prop]) {
-      const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
-      if (!ngMetadataName) {
-        continue;
+  {
+    const props: string[] = [];
+    for (const key of def.propDecorators ? Object.getOwnPropertyNames(def.propDecorators) : []) {
+      if (props.indexOf(key) === -1) {
+        props.push(key);
       }
+    }
+    for (const key of def.propDecorators ? Object.keys(def.propDecorators) : []) {
+      if (props.indexOf(key) === -1) {
+        props.push(key);
+      }
+    }
+    for (const prop of props) {
+      declarations.propDecorators[prop] = [...(declarations.propDecorators[prop] || []), ...def.propDecorators[prop]];
+      for (const decorator of def.propDecorators[prop]) {
+        const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
+        if (!ngMetadataName) {
+          continue;
+        }
 
-      if (ngMetadataName === 'Input') {
-        const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
-        if (declarations.inputs.indexOf(value) === -1) {
-          declarations.inputs.unshift(value);
+        if (ngMetadataName === 'Input') {
+          const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
+          if (declarations.inputs.indexOf(value) === -1) {
+            declarations.inputs.unshift(value);
+          }
+        } else if (ngMetadataName === 'Output') {
+          const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
+          if (declarations.outputs.indexOf(value) === -1) {
+            declarations.outputs.unshift(value);
+          }
+        } else if (ngMetadataName === 'ContentChild') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.args[0],
+              ...(decorator.args[1] || {}),
+            };
+          }
+        } else if (ngMetadataName === 'ContentChildren') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.args[0],
+              ...(decorator.args[1] || {}),
+            };
+          }
+        } else if (ngMetadataName === 'ViewChild') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.args[0],
+              ...(decorator.args[1] || {}),
+            };
+          }
+        } else if (ngMetadataName === 'ViewChildren') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.args[0],
+              ...(decorator.args[1] || {}),
+            };
+          }
+        } else if (ngMetadataName === 'HostBinding') {
+          const key = `[${decorator.args?.[0] || prop}]`;
+          if (!declarations.host[key]) {
+            declarations.host[key] = prop;
+          }
+          declarations.hostBindings.push([prop, ...(decorator.args || [])]);
+        } else if (ngMetadataName === 'HostListener') {
+          const key = `(${decorator.args?.[0] || prop})`;
+          if (!declarations.host[key]) {
+            declarations.host[key] = `${prop}($event)`;
+          }
+          declarations.hostListeners.push([prop, ...(decorator.args || [])]);
         }
-      } else if (ngMetadataName === 'Output') {
-        const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
-        if (declarations.outputs.indexOf(value) === -1) {
-          declarations.outputs.unshift(value);
+      }
+    }
+  }
+  {
+    const props: string[] = [];
+    for (const key of def.__prop__metadata__ ? Object.getOwnPropertyNames(def.__prop__metadata__) : []) {
+      if (props.indexOf(key) === -1) {
+        props.push(key);
+      }
+    }
+    for (const key of def.__prop__metadata__ ? Object.keys(def.__prop__metadata__) : []) {
+      if (props.indexOf(key) === -1) {
+        props.push(key);
+      }
+    }
+    for (const prop of props) {
+      for (const decorator of def.__prop__metadata__[prop]) {
+        const ngMetadataName = decorator?.ngMetadataName;
+        if (!ngMetadataName) {
+          continue;
         }
-      } else if (ngMetadataName === 'ContentChild') {
-        if (!declarations.queries[prop]) {
-          declarations.queries[prop] = {
-            ngMetadataName,
-            selector: decorator.args[0],
-            ...(decorator.args[1] || {}),
-          };
+
+        if (ngMetadataName === 'Input') {
+          const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
+          if (declarations.inputs.indexOf(value) === -1) {
+            declarations.inputs.unshift(value);
+          }
+        } else if (ngMetadataName === 'Output') {
+          const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
+          if (declarations.outputs.indexOf(value) === -1) {
+            declarations.outputs.unshift(value);
+          }
+        } else if (ngMetadataName === 'ContentChild') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.selector,
+              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+              ...(decorator.static !== undefined ? { static: decorator.static } : {}),
+            };
+          }
+        } else if (ngMetadataName === 'ContentChildren') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.selector,
+              ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
+              ...(decorator.emitDistinctChangesOnly !== undefined
+                ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
+                : {}),
+              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+            };
+          }
+        } else if (ngMetadataName === 'ViewChild') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.selector,
+              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+              ...(decorator.static !== undefined ? { static: decorator.static } : {}),
+            };
+          }
+        } else if (ngMetadataName === 'ViewChildren') {
+          if (!declarations.queries[prop]) {
+            declarations.queries[prop] = {
+              ngMetadataName,
+              selector: decorator.selector,
+              ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
+              ...(decorator.emitDistinctChangesOnly !== undefined
+                ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
+                : {}),
+              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+            };
+          }
+        } else if (ngMetadataName === 'HostBinding') {
+          const key = `[${decorator.hostPropertyName || prop}]`;
+          if (!declarations.host[key]) {
+            declarations.host[key] = prop;
+          }
+          declarations.hostBindings.push([
+            prop,
+            decorator.hostPropertyName || prop,
+            ...(decorator.args ? [decorator.args] : []),
+          ]);
+        } else if (ngMetadataName === 'HostListener') {
+          const key = `(${decorator.eventName || prop})`;
+          if (!declarations.host[key]) {
+            declarations.host[key] = `${prop}($event)`;
+          }
+          declarations.hostListeners.push([
+            prop,
+            decorator.eventName || prop,
+            ...(decorator.args ? [decorator.args] : []),
+          ]);
         }
-      } else if (ngMetadataName === 'ContentChildren') {
-        if (!declarations.queries[prop]) {
-          declarations.queries[prop] = {
-            ngMetadataName,
-            selector: decorator.args[0],
-            ...(decorator.args[1] || {}),
-          };
-        }
-      } else if (ngMetadataName === 'ViewChild') {
-        if (!declarations.queries[prop]) {
-          declarations.queries[prop] = {
-            ngMetadataName,
-            selector: decorator.args[0],
-            ...(decorator.args[1] || {}),
-          };
-        }
-      } else if (ngMetadataName === 'ViewChildren') {
-        if (!declarations.queries[prop]) {
-          declarations.queries[prop] = {
-            ngMetadataName,
-            selector: decorator.args[0],
-            ...(decorator.args[1] || {}),
-          };
-        }
-      } else if (ngMetadataName === 'HostBinding') {
-        const key = `[${decorator.args?.[0] || prop}]`;
-        if (!declarations.host[key]) {
-          declarations.host[key] = prop;
-        }
-        declarations.hostBindings.push([prop, ...(decorator.args || [])]);
-      } else if (ngMetadataName === 'HostListener') {
-        const key = `(${decorator.args?.[0] || prop})`;
-        if (!declarations.host[key]) {
-          declarations.host[key] = `${prop}($event)`;
-        }
-        declarations.hostListeners.push([prop, ...(decorator.args || [])]);
       }
     }
   }
