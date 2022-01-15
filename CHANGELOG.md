@@ -1,3 +1,11 @@
+# [13.0.0-alpha.3](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.2...v13.0.0-alpha.3) (2022-01-15)
+
+
+### Bug Fixes
+
+* **a13:** creating known props and methods ([5386f77](https://github.com/ike18t/ng-mocks/commit/5386f77c51905d12868f55a873fb03ee80fa6d47))
+* **a13:** parsing a9 declarations ([b12e00a](https://github.com/ike18t/ng-mocks/commit/b12e00af1b4b39bd74e6d8458909f6d4290b8e6f))
+
 # [13.0.0-alpha.2](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.1...v13.0.0-alpha.2) (2022-01-09)
 
 
