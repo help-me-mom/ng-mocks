@@ -1,6 +1,8 @@
 {
   "name": "a8",
+  "description": "Angular 8",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -16,7 +18,6 @@
     "test:jest:es2015": "jest -i --config ./jest.es2015.js",
     "test:jest:debug": "jest -i --watch"
   },
-  "private": true,
   "peerDependencies": {
     "ng-mocks": "*"
   },

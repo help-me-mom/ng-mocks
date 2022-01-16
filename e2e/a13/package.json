@@ -1,6 +1,7 @@
 {
   "name": "a13",
   "description": "Angular 13",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "ng": "ng",

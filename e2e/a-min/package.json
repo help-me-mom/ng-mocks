@@ -1,6 +1,7 @@
 {
   "name": "a-min",
   "description": "Angular minimal dependencies",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "ng": "ng",
