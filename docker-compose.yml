@@ -6,6 +6,9 @@ services:
     command:
       - sleep
       - infinity
+    ports:
+      - 127.0.0.1:9876:9876
+      - 127.0.0.1:9222:9222
     volumes:
       - .:/app
       - /npm

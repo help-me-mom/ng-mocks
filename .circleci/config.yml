@@ -57,39 +57,39 @@ jobs:
             tar -xf ./ng-mocks-0.0.0.tgz package
             rm ./ng-mocks-0.0.0.tgz
             mv ./package ./ng-mocks
-      #      - run:
-      #          name: Unit Tests
-      #          command: WITH_COVERAGE=1 npm run test
+      - run:
+          name: Unit Tests
+          command: WITH_COVERAGE=1 npm run test
       - run:
           name: Docs
           command: npm run build:docs
-      #      - store_test_results:
-      #          path: ./test-reports
-      #      - store_artifacts:
-      #          path: ./test-reports/coverage
-      #          prefix: coverage
+      - store_test_results:
+          path: ./test-reports
+      - store_artifacts:
+          path: ./test-reports/coverage
+          prefix: coverage
       - persist_to_workspace:
           root: dist
           paths:
             - .
-  #      - run:
-  #          name: Collecting https://coveralls.io/github/ike18t/ng-mocks
-  #          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
-  #      - run:
-  #          name: Collecting https://codecov.io/gh/ike18t/ng-mocks
-  #          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info --disable=gcov
-  #      - run:
-  #          name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
-  #          command: |
-  #            curl -sL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
-  #              > $HOME/codeclimate
-  #            chmod +x $HOME/codeclimate
-  #            $HOME/codeclimate before-build
-  #            $HOME/codeclimate format-coverage \
-  #              -t lcov test-reports/coverage/lcov/lcov.info \
-  #              -o test-reports/codeclimate.json
-  #            $HOME/codeclimate upload-coverage \
-  #              -i test-reports/codeclimate.json
+      - run:
+          name: Collecting https://coveralls.io/github/ike18t/ng-mocks
+          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
+      - run:
+          name: Collecting https://codecov.io/gh/ike18t/ng-mocks
+          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
+      - run:
+          name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
+          command: |
+            curl -sL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
+              > $HOME/codeclimate
+            chmod +x $HOME/codeclimate
+            $HOME/codeclimate before-build
+            $HOME/codeclimate format-coverage \
+              -t lcov test-reports/coverage/lcov.info \
+              -o test-reports/codeclimate.json
+            $HOME/codeclimate upload-coverage \
+              -i test-reports/codeclimate.json
   E2E:
     docker:
       - image: satantime/puppeteer-node:14.18.2
@@ -999,9 +999,9 @@ workflows:
       - 'Angular Jest ES2020 Ivy':
           requires:
             - Angular Install
-      #      - 'Angular Min ES5 Ivy':
-      #          requires:
-      #            - Angular Install
-      #      - 'Angular Min ES2015 Ivy':
-      #          requires:
-      #            - Angular Install
+      - 'Angular Min ES5 Ivy':
+          requires:
+            - Angular Install
+      - 'Angular Min ES2015 Ivy':
+          requires:
+            - Angular Install

@@ -19,7 +19,7 @@
     "types": ["node", "jasmine", "jest", "mocha"],
     "baseUrl": ".",
     "paths": {
-      "ng-mocks": ["libs/ng-mocks/src/index"]
+      "ng-mocks": ["./libs/ng-mocks/src/index.ts"]
     },
     "skipLibCheck": true,
 

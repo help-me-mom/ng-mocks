@@ -1037,6 +1037,11 @@
       "paths": ["e2e/a13/package.json"],
       "packagePatterns": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
+    },
+
+    {
+      "packagePatterns": ["npm"],
+      "allowedVersions": "/^6\\./"
     }
   ]
 }
