@@ -28,9 +28,9 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       global.delete(global.get('builder:module'));
     }
 
-    global.set('builder:config', this.cloneConfig());
-
+    const clone = this.cloneConfig();
     const ngModule = super.build();
+    global.set('builder:config', clone);
     global.set('builder:module', ngModule);
 
     // avoiding influences on cache when users extend the testing module.

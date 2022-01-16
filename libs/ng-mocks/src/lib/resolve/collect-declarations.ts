@@ -74,6 +74,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ContentChild') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: false,
               ngMetadataName,
               selector: decorator.args[0],
               ...(decorator.args[1] || {}),
@@ -82,6 +83,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ContentChildren') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: false,
               ngMetadataName,
               selector: decorator.args[0],
               ...(decorator.args[1] || {}),
@@ -90,6 +92,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ViewChild') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: true,
               ngMetadataName,
               selector: decorator.args[0],
               ...(decorator.args[1] || {}),
@@ -98,6 +101,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ViewChildren') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: true,
               ngMetadataName,
               selector: decorator.args[0],
               ...(decorator.args[1] || {}),
@@ -151,6 +155,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ContentChild') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: false,
               ngMetadataName,
               selector: decorator.selector,
               ...(decorator.read !== undefined ? { read: decorator.read } : {}),
@@ -160,6 +165,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ContentChildren') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: false,
               ngMetadataName,
               selector: decorator.selector,
               ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
@@ -172,6 +178,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ViewChild') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: true,
               ngMetadataName,
               selector: decorator.selector,
               ...(decorator.read !== undefined ? { read: decorator.read } : {}),
@@ -181,6 +188,7 @@ const parse = (def: any): any => {
         } else if (ngMetadataName === 'ViewChildren') {
           if (!declarations.queries[prop]) {
             declarations.queries[prop] = {
+              isViewQuery: true,
               ngMetadataName,
               selector: decorator.selector,
               ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),

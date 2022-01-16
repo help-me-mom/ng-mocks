@@ -8,7 +8,7 @@ const factory = (propName: string) => helperMockService.mockFunction(`console.${
 export default (...methods: Array<keyof typeof console>): void => {
   const backup: Array<[keyof typeof console, any]> = [];
 
-  beforeEach(() => {
+  beforeAll(() => {
     if (methods.indexOf('log') === -1) {
       methods.push('log');
     }
@@ -18,9 +18,11 @@ export default (...methods: Array<keyof typeof console>): void => {
     }
   });
 
-  afterEach(() => {
+  afterAll(() => {
     for (const [method, implementation] of backup) {
-      console[method] = implementation;
+      if ((console[method] as any).__ngMocks) {
+        console[method] = implementation;
+      }
     }
     backup.splice(0, backup.length);
   });
