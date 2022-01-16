@@ -1,3 +1,10 @@
+# [13.0.0-alpha.4](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.3...v13.0.0-alpha.4) (2022-01-16)
+
+
+### Bug Fixes
+
+* **core:** correct resets on errors ([e3b1809](https://github.com/ike18t/ng-mocks/commit/e3b18090c543c397cb95d99db4e553fabacb12f7))
+
 # [13.0.0-alpha.3](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.2...v13.0.0-alpha.3) (2022-01-15)
 
 
