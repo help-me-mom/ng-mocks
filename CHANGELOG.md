@@ -1,3 +1,10 @@
+# [13.0.0-alpha.5](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.4...v13.0.0-alpha.5) (2022-01-17)
+
+
+### Bug Fixes
+
+* **core:** parsing only own declarations [#1587](https://github.com/ike18t/ng-mocks/issues/1587) ([978bdbc](https://github.com/ike18t/ng-mocks/commit/978bdbcb064c767acd6710099349f05ed09207a9))
+
 # [13.0.0-alpha.4](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.3...v13.0.0-alpha.4) (2022-01-16)
 
 
