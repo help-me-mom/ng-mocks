@@ -22,26 +22,30 @@ const parse = (def: any): any => {
   coreDefineProperty(def, '__ngMocksParsed', true);
 
   // <=13.0.2
-  for (const annotation of def.__annotations__ || []) {
-    const ngMetadataName = annotation?.ngMetadataName;
-    if (!ngMetadataName) {
-      continue;
-    }
+  if (def.hasOwnProperty('__annotations__')) {
+    for (const annotation of def.__annotations__) {
+      const ngMetadataName = annotation?.ngMetadataName;
+      if (!ngMetadataName) {
+        continue;
+      }
 
-    declarations[ngMetadataName] = { ...annotation };
+      declarations[ngMetadataName] = { ...annotation };
+    }
   }
 
   // >13.0.2
-  for (const decorator of def.decorators || []) {
-    const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
-    if (!ngMetadataName) {
-      continue;
-    }
+  if (def.hasOwnProperty('decorators')) {
+    for (const decorator of def.decorators) {
+      const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
+      if (!ngMetadataName) {
+        continue;
+      }
 
-    declarations[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
+      declarations[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
+    }
   }
 
-  {
+  if (def.hasOwnProperty('propDecorators')) {
     const props: string[] = [];
     for (const key of def.propDecorators ? Object.getOwnPropertyNames(def.propDecorators) : []) {
       if (props.indexOf(key) === -1) {
@@ -123,7 +127,7 @@ const parse = (def: any): any => {
       }
     }
   }
-  {
+  if (def.hasOwnProperty('__prop__metadata__')) {
     const props: string[] = [];
     for (const key of def.__prop__metadata__ ? Object.getOwnPropertyNames(def.__prop__metadata__) : []) {
       if (props.indexOf(key) === -1) {
