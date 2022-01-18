@@ -57,8 +57,8 @@ export class DivCls {
   selector: 'base2',
 })
 export class BaseCls {
-  @ContentChild(DivCls) public contentChildBase?: DivCls;
-  @ContentChildren(DivCls) public contentChildrenBase?: QueryList<DivCls>;
+  @ContentChild(DivCls, {} as any) public contentChildBase?: DivCls;
+  @ContentChildren(DivCls, {} as any) public contentChildrenBase?: QueryList<DivCls>;
 
   @HostBinding('attr.base1') public hostBase1: any;
   @HostBinding('attr.base2') public hostBase2: any;
@@ -75,9 +75,6 @@ export class BaseCls {
   @Input() public propBase1: EventEmitter<void> | string = '';
   @Output() public propBase2 = new EventEmitter<void>();
 
-  @ViewChild(DivCls) public viewChildBase?: DivCls;
-  @ViewChildren(DivCls) public viewChildrenBase?: QueryList<DivCls>;
-
   @HostListener('focus') public hostBaseHandler3() {
     this.hostBase3 = 'base3';
   }
@@ -92,8 +89,8 @@ export class BaseCls {
   template: `override2<ng-content></ng-content>`,
 })
 export class OverrideCls extends BaseCls {
-  @ContentChild(DivCls) public contentChildOverride?: DivCls;
-  @ContentChildren(DivCls) public contentChildrenOverride?: QueryList<DivCls>;
+  @ContentChild(DivCls, {} as any) public contentChildOverride?: DivCls;
+  @ContentChildren(DivCls, {} as any) public contentChildrenOverride?: QueryList<DivCls>;
 
   @HostBinding('attr.override2') public hostBase2: any;
   @HostBinding('attr.override1') public hostOverride1: any;
@@ -106,9 +103,6 @@ export class OverrideCls extends BaseCls {
   @Input() public propOverride1: EventEmitter<void> | string = '';
 
   @Output() public propOverride2 = new EventEmitter<void>();
-
-  @ContentChild(DivCls) public viewChildBase?: DivCls;
-  @ContentChildren(DivCls) public viewChildrenBase?: QueryList<DivCls>;
 
   @HostListener('click') public hostBaseHandler3() {
     this.hostOverride3 = 'override3';

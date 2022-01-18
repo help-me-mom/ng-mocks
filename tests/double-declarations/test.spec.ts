@@ -1,4 +1,6 @@
-import { EventEmitter, HostBinding } from '@angular/core';
+// tslint:disable cyclomatic-complexity
+
+import { EventEmitter } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
@@ -141,10 +143,18 @@ describe('double-declarations', () => {
 
           // renders component
           const html = ngMocks.formatHtml(fixture);
-          expect(html).toContain('base1="base1"');
-          expect(html).toContain('base2="override2"');
-          expect(html).toContain('override2="override2"');
-          expect(html).toContain('override1="override1"');
+          if (contextName === 'real') {
+            expect(html).toContain('base1="base1"');
+            expect(html).toContain('base2="override2"');
+            expect(html).toContain('override2="override2"');
+            expect(html).toContain('override1="override1"');
+          } else {
+            // but doesn't not render host bindings in mock declarations.
+            expect(html).not.toContain('base1="base1"');
+            expect(html).not.toContain('base2="override2"');
+            expect(html).not.toContain('override2="override2"');
+            expect(html).not.toContain('override1="override1"');
+          }
         });
 
         it('fails on override2', () => {
@@ -194,9 +204,7 @@ describe('double-declarations', () => {
             MockRender(
               `<override1
                 [prop1]="'prop1'"
-                [prop2alias]="'prop2alias'"
                 [override2alias]="'override2alias'"
-                [prop3alias]="'prop3alias'"
                 [override3alias]="'override3alias'"
                 [propBase1]="'propBase1'"
                 [propOverride1]="'propOverride1'"
@@ -224,9 +232,9 @@ describe('double-declarations', () => {
           const instance = ngMocks.findInstance(OverrideCls);
           (instance.prop1 as EventEmitter<void>).emit();
           expect(data.value).toEqual('prop1');
-          (instance.propBase2 as EventEmitter<void>).emit();
+          instance.propBase2.emit();
           expect(data.value).toEqual('propBase2');
-          (instance.propOverride2 as EventEmitter<void>).emit();
+          instance.propOverride2.emit();
           expect(data.value).toEqual('propOverride2');
         });
 
@@ -241,9 +249,10 @@ describe('double-declarations', () => {
           });
           expect(triggers).toEqual(0);
           ngMocks.trigger(instanceEl, 'focus');
-          expect(triggers).toEqual(1);
+          // host listeners are not triggered in mock declarations
+          expect(triggers).toEqual(contextName === 'real' ? 1 : 0);
           ngMocks.trigger(instanceEl, 'click');
-          expect(triggers).toEqual(2);
+          expect(triggers).toEqual(contextName === 'real' ? 2 : 0);
         });
 
         it('respects content injections', () => {
@@ -253,36 +262,60 @@ describe('double-declarations', () => {
           );
           const instance = ngMocks.findInstance(OverrideCls);
 
-          expect(instance.contentChildBase?.prop).toEqual(1);
-          expect(instance.contentChildrenBase?.first.prop).toEqual(1);
-          expect(instance.contentChildrenBase?.length).toEqual(1);
-
-          expect(instance.contentChildOverride?.prop).toEqual(1);
           expect(
-            instance.contentChildrenOverride?.first.prop,
+            instance.contentChildBase &&
+              instance.contentChildBase.prop,
           ).toEqual(1);
-          expect(instance.contentChildrenOverride?.length).toEqual(1);
+          expect(
+            instance.contentChildrenBase &&
+              instance.contentChildrenBase.first.prop,
+          ).toEqual(1);
+          expect(
+            instance.contentChildrenBase &&
+              instance.contentChildrenBase.length,
+          ).toEqual(1);
 
-          // looks like parent views wins
-          expect(instance.viewChildBase).toBeUndefined();
-          expect(instance.viewChildrenBase?.length).toEqual(0);
+          expect(
+            instance.contentChildOverride &&
+              instance.contentChildOverride.prop,
+          ).toEqual(1);
+          expect(
+            instance.contentChildrenOverride &&
+              instance.contentChildrenOverride.first.prop,
+          ).toEqual(1);
+          expect(
+            instance.contentChildrenOverride &&
+              instance.contentChildrenOverride.length,
+          ).toEqual(1);
 
           fixture.componentInstance.value = 2;
           fixture.detectChanges();
 
-          expect(instance.contentChildBase?.prop).toEqual(2);
-          expect(instance.contentChildrenBase?.first.prop).toEqual(2);
-          expect(instance.contentChildrenBase?.length).toEqual(1);
-
-          expect(instance.contentChildOverride?.prop).toEqual(2);
           expect(
-            instance.contentChildrenOverride?.first.prop,
+            instance.contentChildBase &&
+              instance.contentChildBase.prop,
           ).toEqual(2);
-          expect(instance.contentChildrenOverride?.length).toEqual(1);
+          expect(
+            instance.contentChildrenBase &&
+              instance.contentChildrenBase.first.prop,
+          ).toEqual(2);
+          expect(
+            instance.contentChildrenBase &&
+              instance.contentChildrenBase.length,
+          ).toEqual(1);
 
-          // looks like parent views wins
-          expect(instance.viewChildBase).toBeUndefined();
-          expect(instance.viewChildrenBase?.length).toEqual(0);
+          expect(
+            instance.contentChildOverride &&
+              instance.contentChildOverride.prop,
+          ).toEqual(2);
+          expect(
+            instance.contentChildrenOverride &&
+              instance.contentChildrenOverride.first.prop,
+          ).toEqual(2);
+          expect(
+            instance.contentChildrenOverride &&
+              instance.contentChildrenOverride.length,
+          ).toEqual(1);
         });
       });
     });
