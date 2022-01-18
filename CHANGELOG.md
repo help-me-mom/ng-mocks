@@ -1,3 +1,10 @@
+# [13.0.0-alpha.6](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.5...v13.0.0-alpha.6) (2022-01-18)
+
+
+### Bug Fixes
+
+* **core:** ignoring host bindings in mocks [#1427](https://github.com/ike18t/ng-mocks/issues/1427) ([411842c](https://github.com/ike18t/ng-mocks/commit/411842c6350dfec6df5e25debca2ac36a0ed1d56))
+
 # [13.0.0-alpha.5](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.4...v13.0.0-alpha.5) (2022-01-17)
 
 
