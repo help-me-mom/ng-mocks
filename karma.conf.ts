@@ -102,7 +102,7 @@ export default (config: Config) => {
     reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage-istanbul'])],
     singleRun: true,
     webpack: {
-      devtool: 'inline-source-map',
+      devtool: 'eval-source-map',
       module: {
         rules: [
           ...(process.env.WITH_COVERAGE === undefined
