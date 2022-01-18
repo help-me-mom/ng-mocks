@@ -165,7 +165,7 @@
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "8.0.2",
-    "@semantic-release/npm": "8.0.3",
+    "@semantic-release/npm": "9.0.0",
     "@types/core-js": "2.5.5",
     "@types/jasmine": "3.10.3",
     "@types/jest": "27.4.0",
