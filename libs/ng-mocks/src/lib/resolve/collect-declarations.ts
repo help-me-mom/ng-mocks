@@ -2,6 +2,365 @@
 
 import coreDefineProperty from '../common/core.define-property';
 
+interface Declaration {
+  host: Record<string, string | undefined>;
+  hostBindings: Array<[string, string?, ...any[]]>;
+  hostListeners: Array<[string, string?, ...any[]]>;
+  inputs: string[];
+  outputs: string[];
+  propDecorators: Record<string, any[]>;
+  queries: Record<string, {}>;
+  [key: string]: any;
+}
+
+const getAllKeys = <T>(instance: T): Array<keyof T> => {
+  const props: string[] = [];
+  for (const key of instance ? Object.getOwnPropertyNames(instance) : []) {
+    if (props.indexOf(key) === -1) {
+      props.push(key);
+    }
+  }
+  for (const key of instance ? Object.keys(instance) : []) {
+    if (props.indexOf(key) === -1) {
+      props.push(key);
+    }
+  }
+
+  return props as never;
+};
+
+const createDeclarations = (parent: Partial<Declaration>): Declaration => {
+  return {
+    host: parent.host ? { ...parent.host } : {},
+    hostBindings: parent.hostBindings ? [...parent.hostBindings] : [],
+    hostListeners: parent.hostListeners ? [...parent.hostListeners] : [],
+    inputs: parent.inputs ? [...parent.inputs] : [],
+    outputs: parent.outputs ? [...parent.outputs] : [],
+    propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
+    queries: parent.queries ? { ...parent.queries } : {},
+  };
+};
+
+const parseAnnotations = (
+  def: {
+    __annotations__?: Array<{
+      ngMetadataName?: string;
+    }>;
+  },
+  declaration: Declaration,
+): void => {
+  if (def.hasOwnProperty('__annotations__') && def.__annotations__) {
+    for (const annotation of def.__annotations__) {
+      const ngMetadataName = annotation?.ngMetadataName;
+      if (!ngMetadataName) {
+        continue;
+      }
+
+      declaration[ngMetadataName] = { ...annotation };
+    }
+  }
+};
+
+const parseDecorators = (
+  def: {
+    decorators?: Array<{
+      args?: [{}];
+      type?: {
+        prototype?: {
+          ngMetadataName?: string;
+        };
+      };
+    }>;
+  },
+  declaration: Declaration,
+): void => {
+  if (def.hasOwnProperty('decorators') && def.decorators) {
+    for (const decorator of def.decorators) {
+      const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
+      if (!ngMetadataName) {
+        continue;
+      }
+
+      declaration[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
+    }
+  }
+};
+
+const parsePropDecoratorsParserFactoryProp =
+  (key: 'inputs' | 'outputs') =>
+  (
+    _: string,
+    prop: string,
+    decorator: {
+      args?: [string];
+    },
+    declaration: Declaration,
+  ): void => {
+    const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
+    if (declaration[key].indexOf(value) === -1) {
+      declaration[key].unshift(value);
+    }
+  };
+const parsePropDecoratorsParserInput = parsePropDecoratorsParserFactoryProp('inputs');
+const parsePropDecoratorsParserOutput = parsePropDecoratorsParserFactoryProp('outputs');
+
+const parsePropDecoratorsParserFactoryQuery =
+  (isViewQuery: boolean) =>
+  (
+    ngMetadataName: string,
+    prop: string,
+    decorator: {
+      args: [string] | [string, {}];
+    },
+    declaration: Declaration,
+  ): void => {
+    if (!declaration.queries[prop]) {
+      declaration.queries[prop] = {
+        isViewQuery,
+        ngMetadataName,
+        selector: decorator.args[0],
+        ...(decorator.args[1] || {}),
+      };
+    }
+  };
+const parsePropDecoratorsParserContent = parsePropDecoratorsParserFactoryQuery(false);
+const parsePropDecoratorsParserView = parsePropDecoratorsParserFactoryQuery(true);
+
+const parsePropDecoratorsParserHostBinding = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: [string] | [string, any[]];
+  },
+  declaration: Declaration,
+): void => {
+  const key = `[${decorator.args?.[0] || prop}]`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = prop;
+  }
+  declaration.hostBindings.push([prop, ...(decorator.args || [])]);
+};
+
+const parsePropDecoratorsParserHostListener = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: any[];
+  },
+  declaration: Declaration,
+): void => {
+  const key = `(${decorator.args?.[0] || prop})`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = `${prop}($event)`;
+  }
+  declaration.hostListeners.push([prop, ...(decorator.args || [])]);
+};
+
+const parsePropDecoratorsMap: any = {
+  ContentChild: parsePropDecoratorsParserContent,
+  ContentChildren: parsePropDecoratorsParserContent,
+  HostBinding: parsePropDecoratorsParserHostBinding,
+  HostListener: parsePropDecoratorsParserHostListener,
+  Input: parsePropDecoratorsParserInput,
+  Output: parsePropDecoratorsParserOutput,
+  ViewChild: parsePropDecoratorsParserView,
+  ViewChildren: parsePropDecoratorsParserView,
+};
+
+const parsePropDecorators = (
+  def: {
+    propDecorators?: Record<
+      string,
+      Array<{
+        args: any;
+        type?: {
+          prototype?: {
+            ngMetadataName?: string;
+          };
+        };
+      }>
+    >;
+  },
+  declaration: Declaration,
+): void => {
+  if (def.hasOwnProperty('propDecorators') && def.propDecorators) {
+    for (const prop of getAllKeys(def.propDecorators)) {
+      declaration.propDecorators[prop] = [...(declaration.propDecorators[prop] || []), ...def.propDecorators[prop]];
+      for (const decorator of def.propDecorators[prop]) {
+        const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
+        if (!ngMetadataName) {
+          continue;
+        }
+        parsePropDecoratorsMap[ngMetadataName]?.(ngMetadataName, prop, decorator, declaration);
+      }
+    }
+  }
+};
+
+const parsePropMetadataParserFactoryProp =
+  (key: 'inputs' | 'outputs') =>
+  (
+    _: string,
+    prop: string,
+    decorator: {
+      bindingPropertyName?: string;
+    },
+    declaration: Declaration,
+  ): void => {
+    const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
+    if (declaration[key].indexOf(value) === -1) {
+      declaration[key].unshift(value);
+    }
+  };
+const parsePropMetadataParserInput = parsePropMetadataParserFactoryProp('inputs');
+const parsePropMetadataParserOutput = parsePropMetadataParserFactoryProp('outputs');
+
+const parsePropMetadataParserFactoryQueryChild =
+  (isViewQuery: boolean) =>
+  (
+    ngMetadataName: string,
+    prop: string,
+    decorator: {
+      read?: any;
+      selector: string;
+      static?: boolean;
+    },
+    declaration: Declaration,
+  ): void => {
+    if (!declaration.queries[prop]) {
+      declaration.queries[prop] = {
+        isViewQuery,
+        ngMetadataName,
+        selector: decorator.selector,
+        ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+        ...(decorator.static !== undefined ? { static: decorator.static } : {}),
+      };
+    }
+  };
+const parsePropMetadataParserContentChild = parsePropMetadataParserFactoryQueryChild(false);
+const parsePropMetadataParserViewChild = parsePropMetadataParserFactoryQueryChild(true);
+
+const parsePropMetadataParserFactoryQueryChildren =
+  (isViewQuery: boolean) =>
+  (
+    ngMetadataName: string,
+    prop: string,
+    decorator: {
+      descendants?: any;
+      emitDistinctChangesOnly?: boolean;
+      read?: any;
+      selector: string;
+    },
+    declaration: Declaration,
+  ): void => {
+    if (!declaration.queries[prop]) {
+      declaration.queries[prop] = {
+        isViewQuery,
+        ngMetadataName,
+        selector: decorator.selector,
+        ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
+        ...(decorator.emitDistinctChangesOnly !== undefined
+          ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
+          : {}),
+        ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+      };
+    }
+  };
+const parsePropMetadataParserContentChildren = parsePropMetadataParserFactoryQueryChildren(false);
+const parsePropMetadataParserViewChildren = parsePropMetadataParserFactoryQueryChildren(true);
+
+const parsePropMetadataParserHostBinding = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: any;
+    hostPropertyName?: string;
+  },
+  declaration: Declaration,
+): void => {
+  const key = `[${decorator.hostPropertyName || prop}]`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = prop;
+  }
+  declaration.hostBindings.push([
+    prop,
+    decorator.hostPropertyName || prop,
+    ...(decorator.args ? [decorator.args] : []),
+  ]);
+};
+
+const parsePropMetadataParserHostListener = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: any;
+    eventName?: string;
+  },
+  declaration: Declaration,
+): void => {
+  const key = `(${decorator.eventName || prop})`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = `${prop}($event)`;
+  }
+  declaration.hostListeners.push([prop, decorator.eventName || prop, ...(decorator.args ? [decorator.args] : [])]);
+};
+
+const parsePropMetadataMap: any = {
+  ContentChild: parsePropMetadataParserContentChild,
+  ContentChildren: parsePropMetadataParserContentChildren,
+  HostBinding: parsePropMetadataParserHostBinding,
+  HostListener: parsePropMetadataParserHostListener,
+  Input: parsePropMetadataParserInput,
+  Output: parsePropMetadataParserOutput,
+  ViewChild: parsePropMetadataParserViewChild,
+  ViewChildren: parsePropMetadataParserViewChildren,
+};
+
+const parsePropMetadata = (
+  def: {
+    __prop__metadata__?: Record<string, any[]>;
+  },
+  declaration: Declaration,
+): void => {
+  if (def.hasOwnProperty('__prop__metadata__') && def.__prop__metadata__) {
+    for (const prop of getAllKeys(def.__prop__metadata__)) {
+      for (const decorator of def.__prop__metadata__[prop]) {
+        const ngMetadataName = decorator?.ngMetadataName;
+        if (!ngMetadataName) {
+          continue;
+        }
+        parsePropMetadataMap[ngMetadataName]?.(ngMetadataName, prop, decorator, declaration);
+      }
+    }
+  }
+};
+
+const buildDeclaration = (def: any | undefined, declaration: Declaration): void => {
+  if (def) {
+    def.inputs = def.inputs || [];
+    for (const input of declaration.inputs) {
+      if (def.inputs.indexOf(input) === -1) {
+        def.inputs.push(input);
+      }
+    }
+
+    def.outputs = def.outputs || [];
+    for (const output of declaration.outputs) {
+      if (def.outputs.indexOf(output) === -1) {
+        def.outputs.push(output);
+      }
+    }
+
+    def.queries = {
+      ...(def.queries || []),
+      ...declaration.queries,
+    };
+
+    def.hostBindings = declaration.hostBindings;
+    def.hostListeners = declaration.hostListeners;
+  }
+};
+
 const parse = (def: any): any => {
   if (def.hasOwnProperty('__ngMocksParsed')) {
     return def.__ngMocksDeclarations;
@@ -9,275 +368,18 @@ const parse = (def: any): any => {
 
   const parent = Object.getPrototypeOf(def);
   const parentDeclarations = parent ? parse(parent) : {};
-  const declarations: Record<string, any> = {
-    host: (parentDeclarations.host ? { ...parentDeclarations.host } : {}) as Record<string, string>,
-    hostBindings: (parentDeclarations.hostBindings ? [...parentDeclarations.hostBindings] : []) as any[],
-    hostListeners: (parentDeclarations.hostListeners ? [...parentDeclarations.hostListeners] : []) as any[],
-    inputs: (parentDeclarations.inputs ? [...parentDeclarations.inputs] : []) as string[],
-    outputs: (parentDeclarations.outputs ? [...parentDeclarations.outputs] : []) as string[],
-    propDecorators: parentDeclarations.propDecorators ? { ...parentDeclarations.propDecorators } : {},
-    queries: (parentDeclarations.queries ? { ...parentDeclarations.queries } : {}) as Record<string, any>,
-  };
-
+  const declaration = createDeclarations(parentDeclarations);
   coreDefineProperty(def, '__ngMocksParsed', true);
-
-  // <=13.0.2
-  if (def.hasOwnProperty('__annotations__')) {
-    for (const annotation of def.__annotations__) {
-      const ngMetadataName = annotation?.ngMetadataName;
-      if (!ngMetadataName) {
-        continue;
-      }
-
-      declarations[ngMetadataName] = { ...annotation };
-    }
-  }
-
-  // >13.0.2
-  if (def.hasOwnProperty('decorators')) {
-    for (const decorator of def.decorators) {
-      const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
-      if (!ngMetadataName) {
-        continue;
-      }
-
-      declarations[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
-    }
-  }
-
-  if (def.hasOwnProperty('propDecorators')) {
-    const props: string[] = [];
-    for (const key of def.propDecorators ? Object.getOwnPropertyNames(def.propDecorators) : []) {
-      if (props.indexOf(key) === -1) {
-        props.push(key);
-      }
-    }
-    for (const key of def.propDecorators ? Object.keys(def.propDecorators) : []) {
-      if (props.indexOf(key) === -1) {
-        props.push(key);
-      }
-    }
-    for (const prop of props) {
-      declarations.propDecorators[prop] = [...(declarations.propDecorators[prop] || []), ...def.propDecorators[prop]];
-      for (const decorator of def.propDecorators[prop]) {
-        const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
-        if (!ngMetadataName) {
-          continue;
-        }
-
-        if (ngMetadataName === 'Input') {
-          const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
-          if (declarations.inputs.indexOf(value) === -1) {
-            declarations.inputs.unshift(value);
-          }
-        } else if (ngMetadataName === 'Output') {
-          const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
-          if (declarations.outputs.indexOf(value) === -1) {
-            declarations.outputs.unshift(value);
-          }
-        } else if (ngMetadataName === 'ContentChild') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: false,
-              ngMetadataName,
-              selector: decorator.args[0],
-              ...(decorator.args[1] || {}),
-            };
-          }
-        } else if (ngMetadataName === 'ContentChildren') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: false,
-              ngMetadataName,
-              selector: decorator.args[0],
-              ...(decorator.args[1] || {}),
-            };
-          }
-        } else if (ngMetadataName === 'ViewChild') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: true,
-              ngMetadataName,
-              selector: decorator.args[0],
-              ...(decorator.args[1] || {}),
-            };
-          }
-        } else if (ngMetadataName === 'ViewChildren') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: true,
-              ngMetadataName,
-              selector: decorator.args[0],
-              ...(decorator.args[1] || {}),
-            };
-          }
-        } else if (ngMetadataName === 'HostBinding') {
-          const key = `[${decorator.args?.[0] || prop}]`;
-          if (!declarations.host[key]) {
-            declarations.host[key] = prop;
-          }
-          declarations.hostBindings.push([prop, ...(decorator.args || [])]);
-        } else if (ngMetadataName === 'HostListener') {
-          const key = `(${decorator.args?.[0] || prop})`;
-          if (!declarations.host[key]) {
-            declarations.host[key] = `${prop}($event)`;
-          }
-          declarations.hostListeners.push([prop, ...(decorator.args || [])]);
-        }
-      }
-    }
-  }
-  if (def.hasOwnProperty('__prop__metadata__')) {
-    const props: string[] = [];
-    for (const key of def.__prop__metadata__ ? Object.getOwnPropertyNames(def.__prop__metadata__) : []) {
-      if (props.indexOf(key) === -1) {
-        props.push(key);
-      }
-    }
-    for (const key of def.__prop__metadata__ ? Object.keys(def.__prop__metadata__) : []) {
-      if (props.indexOf(key) === -1) {
-        props.push(key);
-      }
-    }
-    for (const prop of props) {
-      for (const decorator of def.__prop__metadata__[prop]) {
-        const ngMetadataName = decorator?.ngMetadataName;
-        if (!ngMetadataName) {
-          continue;
-        }
-
-        if (ngMetadataName === 'Input') {
-          const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
-          if (declarations.inputs.indexOf(value) === -1) {
-            declarations.inputs.unshift(value);
-          }
-        } else if (ngMetadataName === 'Output') {
-          const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
-          if (declarations.outputs.indexOf(value) === -1) {
-            declarations.outputs.unshift(value);
-          }
-        } else if (ngMetadataName === 'ContentChild') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: false,
-              ngMetadataName,
-              selector: decorator.selector,
-              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
-              ...(decorator.static !== undefined ? { static: decorator.static } : {}),
-            };
-          }
-        } else if (ngMetadataName === 'ContentChildren') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: false,
-              ngMetadataName,
-              selector: decorator.selector,
-              ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
-              ...(decorator.emitDistinctChangesOnly !== undefined
-                ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
-                : {}),
-              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
-            };
-          }
-        } else if (ngMetadataName === 'ViewChild') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: true,
-              ngMetadataName,
-              selector: decorator.selector,
-              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
-              ...(decorator.static !== undefined ? { static: decorator.static } : {}),
-            };
-          }
-        } else if (ngMetadataName === 'ViewChildren') {
-          if (!declarations.queries[prop]) {
-            declarations.queries[prop] = {
-              isViewQuery: true,
-              ngMetadataName,
-              selector: decorator.selector,
-              ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
-              ...(decorator.emitDistinctChangesOnly !== undefined
-                ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
-                : {}),
-              ...(decorator.read !== undefined ? { read: decorator.read } : {}),
-            };
-          }
-        } else if (ngMetadataName === 'HostBinding') {
-          const key = `[${decorator.hostPropertyName || prop}]`;
-          if (!declarations.host[key]) {
-            declarations.host[key] = prop;
-          }
-          declarations.hostBindings.push([
-            prop,
-            decorator.hostPropertyName || prop,
-            ...(decorator.args ? [decorator.args] : []),
-          ]);
-        } else if (ngMetadataName === 'HostListener') {
-          const key = `(${decorator.eventName || prop})`;
-          if (!declarations.host[key]) {
-            declarations.host[key] = `${prop}($event)`;
-          }
-          declarations.hostListeners.push([
-            prop,
-            decorator.eventName || prop,
-            ...(decorator.args ? [decorator.args] : []),
-          ]);
-        }
-      }
-    }
-  }
-
-  if (declarations.Directive) {
-    declarations.Directive.inputs = declarations.Directive.inputs || [];
-    for (const input of declarations.inputs) {
-      if (declarations.Directive.inputs.indexOf(input) === -1) {
-        declarations.Directive.inputs.push(input);
-      }
-    }
-
-    declarations.Directive.outputs = declarations.Directive.outputs || [];
-    for (const output of declarations.outputs) {
-      if (declarations.Directive.outputs.indexOf(output) === -1) {
-        declarations.Directive.outputs.push(output);
-      }
-    }
-
-    declarations.Directive.queries = {
-      ...(declarations.Directive.queries || []),
-      ...declarations.queries,
-    };
-
-    declarations.Directive.hostBindings = declarations.hostBindings;
-    declarations.Directive.hostListeners = declarations.hostListeners;
-  }
-
-  if (declarations.Component) {
-    declarations.Component.inputs = declarations.Component.inputs || [];
-    for (const input of declarations.inputs) {
-      if (declarations.Component.inputs.indexOf(input) === -1) {
-        declarations.Component.inputs.push(input);
-      }
-    }
-
-    declarations.Component.outputs = declarations.Component.outputs || [];
-    for (const output of declarations.outputs) {
-      if (declarations.Component.outputs.indexOf(output) === -1) {
-        declarations.Component.outputs.push(output);
-      }
-    }
-
-    declarations.Component.queries = {
-      ...(declarations.Component.queries || []),
-      ...declarations.queries,
-    };
-
-    declarations.Component.hostBindings = declarations.hostBindings;
-    declarations.Component.hostListeners = declarations.hostListeners;
-  }
+  parseAnnotations(def, declaration);
+  parseDecorators(def, declaration);
+  parsePropDecorators(def, declaration);
+  parsePropMetadata(def, declaration);
+  buildDeclaration(declaration.Directive, declaration);
+  buildDeclaration(declaration.Component, declaration);
 
   coreDefineProperty(def, '__ngMocksDeclarations', {
     ...parentDeclarations,
-    ...declarations,
+    ...declaration,
   });
 
   return def.__ngMocksDeclarations;
