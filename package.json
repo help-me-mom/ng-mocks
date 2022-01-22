@@ -170,7 +170,7 @@
     "@types/mocha": "9.0.0",
     "@types/node": "14.18.5",
     "codecov": "3.8.3",
-    "core-js": "3.18.3",
+    "core-js": "3.20.3",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
     "husky": "7.0.4",
