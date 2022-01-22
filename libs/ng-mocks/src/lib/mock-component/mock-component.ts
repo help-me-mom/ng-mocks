@@ -13,16 +13,13 @@ import {
 
 import coreDefineProperty from '../common/core.define-property';
 import coreForm from '../common/core.form';
-import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
-import funcImportExists from '../common/func.import-exists';
 import funcIsMock from '../common/func.is-mock';
-import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { MockConfig } from '../common/mock';
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
-import ngMocksUniverse from '../common/ng-mocks-universe';
 import decorateDeclaration from '../mock/decorate-declaration';
+import getMock from '../mock/get-mock';
 
 import generateTemplate from './render/generate-template';
 import getKey from './render/get-key';
@@ -214,23 +211,5 @@ export function MockComponents(...components: Array<Type<any>>): Array<Type<Mock
  * @see https://ng-mocks.sudo.eu/api/MockComponent
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
-  funcImportExists(component, 'MockComponent');
-
-  if (isMockNgDef(component, 'c')) {
-    return component;
-  }
-
-  if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cacheDeclarations.has(component)) {
-    return ngMocksUniverse.cacheDeclarations.get(component);
-  }
-
-  const mock = extendClass(ComponentMockBase);
-  decorateClass(component, mock);
-
-  // istanbul ignore else
-  if (ngMocksUniverse.flags.has('cacheComponent')) {
-    ngMocksUniverse.cacheDeclarations.set(component, mock);
-  }
-
-  return mock as any;
+  return getMock(component, 'c', 'MockComponent', 'cacheComponent', ComponentMockBase, decorateClass);
 }

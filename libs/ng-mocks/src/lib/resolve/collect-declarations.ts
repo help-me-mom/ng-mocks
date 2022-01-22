@@ -378,6 +378,4 @@ const parse = (def: any): any => {
   return def.__ngMocksDeclarations;
 };
 
-export default (def: any): any => {
-  return parse(def);
-};
+export default ((): ((def: any) => any) => parse)();
