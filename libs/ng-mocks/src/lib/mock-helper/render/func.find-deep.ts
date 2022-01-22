@@ -9,9 +9,6 @@ const getValVcr = (entryPoint: MockConfig): Array<[any, ViewContainerRef]> => {
   for (const key of entryPoint.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {
     const value = (entryPoint as any)[key];
     const vcr = (entryPoint as any)[`__ngMocksVcr_${key}`];
-    if (!value || !vcr) {
-      continue;
-    }
 
     const scanValue = value instanceof QueryList ? value.toArray() : [value];
     const scanVcr = vcr instanceof QueryList ? vcr.toArray() : [vcr];

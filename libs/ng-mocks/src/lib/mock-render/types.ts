@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { DebugElement, DebugNode, Provider } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
