@@ -152,7 +152,7 @@
     "@angular/platform-browser": "13.0.3",
     "@angular/platform-browser-dynamic": "13.0.3",
     "@angular/router": "13.0.3",
-    "@commitlint/cli": "16.0.1",
+    "@commitlint/cli": "16.0.3",
     "@commitlint/config-conventional": "16.0.0",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.3",
