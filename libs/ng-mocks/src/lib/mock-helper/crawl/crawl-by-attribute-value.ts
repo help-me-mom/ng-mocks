@@ -45,9 +45,9 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
 
 export default (attribute: string, value: any): ((node: MockedDebugNode) => boolean) =>
   node => {
-    if (detectInClassic(node, attribute, value)) {
+    if (detectInIvy(node, attribute, value)) {
       return true;
     }
 
-    return detectInIvy(node, attribute, value);
+    return detectInClassic(node, attribute, value);
   };

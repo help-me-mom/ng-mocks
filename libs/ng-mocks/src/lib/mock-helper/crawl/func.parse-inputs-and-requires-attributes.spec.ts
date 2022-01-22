@@ -37,4 +37,64 @@ describe('func.parse-inputs-and-requires-attributes', () => {
       funcParseInputsAndRequiresAttributes(node, 'test'),
     ).toEqual([[], ['name'], 5]);
   });
+
+  it('handles empty token', () => {
+    const value = undefined;
+    const node: any = {
+      injector: {
+        elDef: {
+          element: {
+            publicProviders: {
+              test: {
+                bindings: [
+                  {
+                    name: 'name',
+                  },
+                ],
+                nodeIndex: 5,
+                provider: {
+                  value,
+                },
+              },
+            },
+          },
+        },
+        get: () => new TargetDirective(),
+      },
+    };
+
+    expect(
+      funcParseInputsAndRequiresAttributes(node, 'test'),
+    ).toEqual([[], [], 0]);
+  });
+
+  it('handles wrong injections', () => {
+    const value = {};
+    const node: any = {
+      injector: {
+        elDef: {
+          element: {
+            publicProviders: {
+              test: {
+                bindings: [
+                  {
+                    name: 'name',
+                  },
+                ],
+                nodeIndex: 5,
+                provider: {
+                  value,
+                },
+              },
+            },
+          },
+        },
+        get: () => undefined,
+      },
+    };
+
+    expect(
+      funcParseInputsAndRequiresAttributes(node, 'test'),
+    ).toEqual([[], ['name'], 5]);
+  });
 });
