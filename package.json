@@ -143,7 +143,7 @@
   },
   "devDependencies": {
     "@angular/animations": "13.0.3",
-    "@angular/cli": "13.0.4",
+    "@angular/cli": "13.1.4",
     "@angular/common": "13.0.3",
     "@angular/compiler": "13.0.3",
     "@angular/compiler-cli": "13.0.3",
