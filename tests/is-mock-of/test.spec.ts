@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {
   isMockOf,
+  Mock,
   MockComponent,
   MockDirective,
   MockModule,
@@ -40,6 +41,17 @@ class TargetDirective {}
 })
 class TargetModule {}
 
+const getPrototypes = (cls: any): any[] => {
+  const prototypes: any[] = [];
+  let prototype = Object.getPrototypeOf(cls);
+  do {
+    prototypes.push(prototype);
+    prototype = Object.getPrototypeOf(prototype);
+  } while (prototype);
+
+  return prototypes;
+};
+
 describe('isMockOf', () => {
   it('detects module', () => {
     const mock = MockModule(TargetModule);
@@ -47,12 +59,18 @@ describe('isMockOf', () => {
     expect(
       isMockOf(new TargetModule(), TargetModule, 'm'),
     ).toBeFalsy();
+
+    const prototypes = getPrototypes(mock);
+    expect(prototypes).toContain(Mock);
   });
 
   it('detects pipe', () => {
     const mock = MockPipe(TargetPipe);
     expect(isMockOf(new mock(), TargetPipe, 'p')).toBeTruthy();
     expect(isMockOf(new TargetPipe(), TargetPipe, 'p')).toBeFalsy();
+
+    const prototypes = getPrototypes(mock);
+    expect(prototypes).toContain(Mock);
   });
 
   it('detects directive', () => {
@@ -61,6 +79,9 @@ describe('isMockOf', () => {
     expect(
       isMockOf(new TargetDirective(), TargetDirective, 'd'),
     ).toBeFalsy();
+
+    const prototypes = getPrototypes(mock);
+    expect(prototypes).toContain(Mock);
   });
 
   it('detects components', () => {
@@ -69,6 +90,9 @@ describe('isMockOf', () => {
     expect(
       isMockOf(new TargetComponent(), TargetComponent, 'c'),
     ).toBeFalsy();
+
+    const prototypes = getPrototypes(mock);
+    expect(prototypes).toContain(Mock);
   });
 
   it('detects mocks', () => {
@@ -77,5 +101,8 @@ describe('isMockOf', () => {
     expect(
       isMockOf(new TargetComponent(), TargetComponent),
     ).toBeFalsy();
+
+    const prototypes = getPrototypes(mock);
+    expect(prototypes).toContain(Mock);
   });
 });

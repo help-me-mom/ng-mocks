@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 
 export type MockedComponentSelector<T> =

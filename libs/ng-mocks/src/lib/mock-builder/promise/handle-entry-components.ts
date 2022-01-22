@@ -43,7 +43,7 @@ export default (ngModule: NgMeta): void => {
   module.NgModule({
     // Ivy knows how to make any component an entry point,
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
-    entryComponents: isIvy ? /* istanbul ignore next */ [] : entryComponents,
+    entryComponents: isIvy ? [] : /* istanbul ignore next */ entryComponents,
   })(entryComponent);
   ngModule.imports.push(entryComponent);
 };

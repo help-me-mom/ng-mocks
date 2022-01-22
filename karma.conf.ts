@@ -1,11 +1,6 @@
 // tslint:disable no-console no-var-requires no-require-imports max-func-body-length no-import-side-effect
 // tslint:disable ordered-imports
 
-import 'karma-coverage-istanbul-reporter';
-import 'karma-jasmine';
-import 'karma-junit-reporter';
-import 'karma-webpack';
-
 import { Config } from 'karma';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
@@ -123,7 +118,7 @@ export default (config: Config) => {
               {
                 loader: 'ts-loader',
                 options: {
-                  configFile: './tsconfig.spec.json',
+                  configFile: './tsconfig.json',
                   transpileOnly: true,
                 },
               },
@@ -135,7 +130,7 @@ export default (config: Config) => {
         extensions: ['.js', '.cjs', '.mjs', '.ts', '.json'],
         plugins: [
           new TsconfigPathsPlugin({
-            configFile: './tsconfig.spec.json',
+            configFile: './tsconfig.json',
           }),
         ],
       },

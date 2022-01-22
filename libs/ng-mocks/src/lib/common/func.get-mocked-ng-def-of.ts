@@ -14,6 +14,9 @@ const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
     throw new Error(`There is no mock for ${source.name}`);
   }
   let mock = mocks ? mocks.get(source) : undefined;
+  if (mock === source) {
+    mock = undefined;
+  }
 
   // If we are not in the MockBuilder env we can rely on the current cache.
   if (!mock && source !== declaration) {

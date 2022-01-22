@@ -65,7 +65,7 @@ export default <T extends Component | Directive>(
   config.queryScanKeys = decorateQueries(mock, meta.queries);
 
   config.hostBindings = [];
-  for (const [key] of meta.hostBindings || []) {
+  for (const [key] of meta.hostBindings || /* istanbul ignore next */ []) {
     // mock declarations should not have side effects based on host bindings.
     // HostBinding(...args)(mock.prototype, key);
     if (config.hostBindings.indexOf(key) === -1) {
@@ -74,7 +74,7 @@ export default <T extends Component | Directive>(
   }
 
   config.hostListeners = [];
-  for (const [key] of meta.hostListeners || []) {
+  for (const [key] of meta.hostListeners || /* istanbul ignore next */ []) {
     // mock declarations should not have side effects based on host bindings.
     // HostListener(...args)(mock.prototype, key);
     if (config.hostListeners.indexOf(key) === -1) {
