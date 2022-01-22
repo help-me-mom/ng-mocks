@@ -2,15 +2,18 @@
 
 import coreDefineProperty from '../common/core.define-property';
 
-const factory =
-  (propName: string) =>
-  (...args: any[]) => {
+const factory = (propName: string) => {
+  const func = (...args: any[]) => {
     const error = new Error(args.join(' '));
     coreDefineProperty(error, 'ngMocksConsoleCatch', propName, false);
     throw error;
   };
+  coreDefineProperty(func, '__ngMocks', true);
 
-// Thanks Ivy, it does not throw an error and we have to use injector.
+  return func;
+};
+
+// Thanks Ivy, it does not throw an error, and we have to use injector.
 export default (...methods: Array<keyof typeof console>): void => {
   const backup: Array<[keyof typeof console, any]> = [];
 
@@ -29,7 +32,9 @@ export default (...methods: Array<keyof typeof console>): void => {
 
   afterAll(() => {
     for (const [method, implementation] of backup) {
-      console[method] = implementation;
+      if ((console[method] as any).__ngMocks) {
+        console[method] = implementation;
+      }
     }
     backup.splice(0, backup.length);
   });

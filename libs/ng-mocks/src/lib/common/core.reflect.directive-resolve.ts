@@ -1,10 +1,18 @@
-import { MockDirectiveResolver } from '@angular/compiler/testing';
 import { Component, Directive } from '@angular/core';
 
-import coreReflectBodyCatch from './core.reflect.body-catch';
-import coreReflectBodyGlobal from './core.reflect.body-global';
+import collectDeclarations from '../resolve/collect-declarations';
 
-const coreReflectDirective = coreReflectBodyGlobal(MockDirectiveResolver);
+import coreReflectBodyCatch from './core.reflect.body-catch';
 
 export default (def: any): Directive & Partial<Component> =>
-  coreReflectBodyCatch((arg: any) => coreReflectDirective().resolve(arg))(def);
+  coreReflectBodyCatch((arg: any) => {
+    const declaration = collectDeclarations(arg);
+    if (declaration.Component) {
+      return declaration.Component;
+    }
+    if (declaration.Directive) {
+      return declaration.Directive;
+    }
+
+    throw new Error('Cannot resolve declarations');
+  })(def);

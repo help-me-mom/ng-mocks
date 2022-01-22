@@ -20,7 +20,9 @@ export default (...methods: Array<keyof typeof console>): void => {
 
   afterAll(() => {
     for (const [method, implementation] of backup) {
-      console[method] = implementation;
+      if ((console[method] as any).__ngMocks) {
+        console[method] = implementation;
+      }
     }
     backup.splice(0, backup.length);
   });

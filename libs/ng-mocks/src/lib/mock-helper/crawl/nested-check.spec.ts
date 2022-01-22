@@ -25,4 +25,25 @@ describe('nested-check', () => {
 
     expect(() => nestedCheck(node, undefined, check)).not.toThrow();
   });
+
+  it('handles elDef.parent', () => {
+    const parent = {
+      injector: {
+        elDef: {},
+      },
+      nativeNode: {},
+    };
+    const node: any = {
+      injector: {
+        elDef: {
+          parent,
+        },
+      },
+      nativeNode: {},
+      parent,
+    };
+    const check = jasmine.createSpy();
+
+    expect(() => nestedCheck(node, undefined, check)).not.toThrow();
+  });
 });

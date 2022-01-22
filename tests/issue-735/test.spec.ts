@@ -89,8 +89,8 @@ describe('issue-735', () => {
 
     describe('MockBuilder', () => {
       let consoleLog: typeof console.log;
-
       beforeAll(() => (consoleLog = console.log));
+      afterAll(() => (console.log = consoleLog));
 
       beforeEach(() => {
         console.log =

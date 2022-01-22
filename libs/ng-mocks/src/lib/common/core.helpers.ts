@@ -5,7 +5,7 @@ import coreDefineProperty from './core.define-property';
 import coreReflectJit from './core.reflect.jit';
 import { AnyType, Type } from './core.types';
 
-export const getTestBedInjection = <I>(token: Type<I> | InjectionToken<I>): I | undefined => {
+export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
     // istanbul ignore next

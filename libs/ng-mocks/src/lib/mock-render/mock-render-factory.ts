@@ -80,7 +80,7 @@ const flushTestBed = (flags: Record<string, any>): void => {
   const testBed: any = getTestBed();
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();
-  } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._testModuleRef || testBed._instantiated)) {
+  } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._instantiated || testBed._testModuleRef)) {
     if (globalFlags.onTestBedFlushNeed === 'warn') {
       // tslint:disable-next-line:no-console
       console.warn(fixtureMessage);
@@ -97,6 +97,7 @@ const generateFactoryInstall = (ctor: AnyType<any>, options: IMockRenderFactoryO
     _declarations?: Array<AnyType<any>>;
     declarations?: Array<AnyType<any>>;
   } = getTestBed();
+  // istanbul ignore next
   const declarations = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
   if (!declarations || declarations.indexOf(ctor) === -1) {
     flushTestBed(options);

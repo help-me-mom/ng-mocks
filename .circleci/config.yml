@@ -74,10 +74,10 @@ jobs:
             - .
       - run:
           name: Collecting https://coveralls.io/github/ike18t/ng-mocks
-          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov/lcov.info
+          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
       - run:
           name: Collecting https://codecov.io/gh/ike18t/ng-mocks
-          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov/lcov.info --disable=gcov
+          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
       - run:
           name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
           command: |
@@ -86,7 +86,7 @@ jobs:
             chmod +x $HOME/codeclimate
             $HOME/codeclimate before-build
             $HOME/codeclimate format-coverage \
-              -t lcov test-reports/coverage/lcov/lcov.info \
+              -t lcov test-reports/coverage/lcov.info \
               -o test-reports/codeclimate.json
             $HOME/codeclimate upload-coverage \
               -i test-reports/codeclimate.json
@@ -879,15 +879,15 @@ workflows:
   Testing:
     jobs:
       - Core
-      - E2E:
-          requires:
-            - Core
-      - 'Core IE':
-          requires:
-            - Core
-      - 'Performance':
-          requires:
-            - Core
+      #      - E2E:
+      #          requires:
+      #            - Core
+      #      - 'Core IE':
+      #          requires:
+      #            - Core
+      #      - 'Performance':
+      #          requires:
+      #            - Core
       - 'Angular Install':
           requires:
             - Core

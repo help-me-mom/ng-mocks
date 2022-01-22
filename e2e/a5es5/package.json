@@ -1,6 +1,8 @@
 {
   "name": "a5es5",
+  "description": "Angular 5 es5",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -12,7 +14,6 @@
     "test:jest": "jest -i",
     "test:jest:debug": "jest -i --watch"
   },
-  "private": true,
   "peerDependencies": {
     "ng-mocks": "*"
   },

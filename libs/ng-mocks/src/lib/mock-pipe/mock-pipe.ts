@@ -1,11 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
 
 import { extendClass } from '../common/core.helpers';
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
 import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
-import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { Mock } from '../common/mock';
@@ -56,14 +54,6 @@ export function MockPipe<TPipe extends PipeTransform>(
     return pipe;
   }
 
-  // We are inside of an 'it'. It is fine to return a mock copy.
-  if ((getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(pipe, 'p');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
   // istanbul ignore next
   if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheDeclarations.has(pipe)) {
     return ngMocksUniverse.cacheDeclarations.get(pipe);

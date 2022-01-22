@@ -9,19 +9,14 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import coreForm from '../common/core.form';
-import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
-import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
-import funcImportExists from '../common/func.import-exists';
-import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
-import ngMocksUniverse from '../common/ng-mocks-universe';
 import decorateDeclaration from '../mock/decorate-declaration';
+import getMock from '../mock/get-mock';
 
 import { MockedDirective } from './types';
 
@@ -90,10 +85,8 @@ coreDefineProperty(DirectiveMockBase, 'parameters', [
 
 const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(directive);
-  const { selector, exportAs, inputs, outputs, queries, providers } = meta;
-  const mockMeta = { inputs, outputs, providers, queries };
-  const mockParams = { exportAs, selector };
-  const options = decorateDeclaration(directive, mock, mockMeta, mockParams);
+  const mockParams = { exportAs: meta.exportAs, selector: meta.selector };
+  const options = decorateDeclaration(directive, mock, meta, mockParams);
   Directive(options)(mock);
 };
 
@@ -105,32 +98,5 @@ export function MockDirectives(...directives: Array<Type<any>>): Array<Type<Mock
  * @see https://ng-mocks.sudo.eu/api/MockDirective
  */
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
-  funcImportExists(directive, 'MockDirective');
-
-  if (isMockNgDef(directive, 'd')) {
-    return directive;
-  }
-
-  // We are inside of an 'it'.
-  // It is fine to to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.
-  if ((getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(directive, 'd');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
-  if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cacheDeclarations.has(directive)) {
-    return ngMocksUniverse.cacheDeclarations.get(directive);
-  }
-
-  const mock = extendClass(DirectiveMockBase);
-  decorateClass(directive, mock);
-
-  // istanbul ignore else
-  if (ngMocksUniverse.flags.has('cacheDirective')) {
-    ngMocksUniverse.cacheDeclarations.set(directive, mock);
-  }
-
-  return mock as any;
+  return getMock(directive, 'd', 'MockDirective', 'cacheDirective', DirectiveMockBase, decorateClass);
 }

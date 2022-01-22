@@ -5,7 +5,7 @@
     "arrow-return-shorthand": false,
     "comment-format": false,
     "completed-docs": false,
-    "cyclomatic-complexity": [true, 10],
+    "cyclomatic-complexity": [true, 25],
     "deprecation": false,
     "export-name": false,
     "file-name-casing": [true, "kebab-case"],
@@ -18,7 +18,7 @@
     "max-file-line-count": [true, 500],
     "max-func-body-length": [
       true,
-      50,
+      100,
       {
         "ignore-parameters-to-function-regex": "^(([fx]?(describe|it))|beforeEach|fakeAsync|inject)$"
       }

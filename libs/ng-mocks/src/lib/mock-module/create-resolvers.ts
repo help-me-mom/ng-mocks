@@ -1,4 +1,5 @@
 import { Provider } from '@angular/core';
+import * as imports from '@angular/platform-browser/animations';
 
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
@@ -16,19 +17,14 @@ let BrowserAnimationsModule: any;
 let NoopAnimationsModule: any;
 // istanbul ignore next
 let replaceWithNoop: (def: any) => boolean = () => false;
-try {
-  // tslint:disable-next-line no-require-imports no-var-requires
-  const imports = require('@angular/platform-browser/animations');
-  BrowserAnimationsModule = imports.BrowserAnimationsModule;
-  NoopAnimationsModule = imports.NoopAnimationsModule;
-  replaceWithNoop = (def: any) =>
-    def === BrowserAnimationsModule &&
-    !!BrowserAnimationsModule &&
-    !!NoopAnimationsModule &&
-    !ngMocksUniverse.getResolution(def);
-} catch {
-  // nothing to do
-}
+
+BrowserAnimationsModule = imports.BrowserAnimationsModule;
+NoopAnimationsModule = imports.NoopAnimationsModule;
+replaceWithNoop = (def: any) =>
+  def === BrowserAnimationsModule &&
+  !!BrowserAnimationsModule &&
+  !!NoopAnimationsModule &&
+  !ngMocksUniverse.getResolution(def);
 
 const processDefMap: Array<[any, any]> = [
   ['c', MockComponent],

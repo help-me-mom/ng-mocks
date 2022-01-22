@@ -1,10 +1,8 @@
-// tslint:disable no-console no-var-requires no-require-imports max-func-body-length
+// tslint:disable no-console no-var-requires no-require-imports max-func-body-length no-import-side-effect
+// tslint:disable ordered-imports
 
-import { KarmaTypescriptConfig } from 'karma-typescript';
-
-process.on('infrastructure_error', error => {
-  console.error('infrastructure_error', error);
-});
+import { Config } from 'karma';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
@@ -12,29 +10,29 @@ const suite: any[] = [];
 if (!process.env.KARMA_SUITE) {
   suite.push({
     pattern: './libs/ng-mocks/src/lib/**/*.ts',
-    watched: true,
+    watched: false,
   });
   suite.push({
     pattern: './examples/**/*.ts',
-    watched: true,
+    watched: false,
   });
   suite.push({
     pattern: './tests/**/*.ts',
-    watched: true,
+    watched: false,
   });
 } else if (process.env.KARMA_SUITE === 'perf') {
   suite.push({
     pattern: './tests-performance/**/*.ts',
-    watched: true,
+    watched: false,
   });
 } else {
   suite.push({
     pattern: process.env.KARMA_SUITE,
-    watched: true,
+    watched: false,
   });
 }
 
-export default (config: KarmaTypescriptConfig) => {
+export default (config: Config) => {
   config.set({
     autoWatch: false,
     browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
@@ -45,23 +43,27 @@ export default (config: KarmaTypescriptConfig) => {
       },
     },
     colors: true,
-    coverageReporter: {
+    coverageIstanbulReporter: {
       dir: './test-reports/coverage',
-      reporters: [
-        {
-          subdir: 'lcov',
-          type: 'lcov',
-        },
-        {
-          subdir: 'html',
-          type: 'html',
-        },
-      ],
+      fixWebpackSourcePaths: true,
+      reports: ['lcovonly', 'html'],
     },
     customLaunchers: {
       ChromeCi: {
         base: 'ChromeHeadless',
-        flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
+        flags: [
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--disable-infobars',
+          '--disable-notifications',
+          '--disable-translate',
+          '--enable-logging=stderr',
+          '--headless',
+          '--mute-audio',
+          '--no-sandbox',
+          '--remote-debugging-address=0.0.0.0',
+          '--remote-debugging-port=9222',
+        ],
       },
       IECi: {
         base: 'IE',
@@ -69,49 +71,70 @@ export default (config: KarmaTypescriptConfig) => {
       },
     },
     files: [
-      './empty.ts',
-      './karma-test-shim.ts',
+      { pattern: './empty.ts', watched: false },
+      { pattern: './karma-test-shim.ts', watched: false },
       {
         pattern: './libs/ng-mocks/src/index.ts',
-        watched: true,
+        watched: false,
       },
       {
         pattern: './libs/ng-mocks/src/lib/**/!(*.spec|*.fixtures).ts',
-        watched: true,
+        watched: false,
       },
       ...suite,
     ],
-    frameworks: ['jasmine', 'karma-typescript'],
+    frameworks: ['jasmine', 'webpack'],
     junitReporter: {
       outputDir: require('path').join(__dirname, './test-reports'),
       outputFile: 'specs-junit.xml',
       useBrowserName: false,
     },
-    karmaTypescriptConfig: {
-      bundlerOptions: {
-        resolve: {
-          alias: {
-            'jest-circus/build/state': './empty.ts',
-          },
-        },
-      },
-      coverageOptions:
-        process.env.WITH_COVERAGE === undefined
-          ? {
-              instrumentation: false,
-            }
-          : {},
-      tsconfig: 'tsconfig.spec.json',
-    },
     logLevel: config.LOG_INFO,
     port: 9876,
     preprocessors: {
-      '**/*.ts': 'karma-typescript',
-      ...(process.env.WITH_COVERAGE === undefined
-        ? {}
-        : { 'libs/ng-mocks/src/lib/**/!(*.spec|*.fixtures).ts': 'coverage' }),
+      '**/*.ts': ['webpack', 'sourcemap'],
     },
-    reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage'])],
+    reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage-istanbul'])],
     singleRun: true,
+    webpack: {
+      devtool: 'eval-source-map',
+      module: {
+        rules: [
+          ...(process.env.WITH_COVERAGE === undefined
+            ? []
+            : [
+                {
+                  exclude: [/\.spec\.ts$/, /\.fixtures\.ts$/],
+                  include: /\/libs\/ng-mocks\/src\//,
+                  test: /\.tsx?$/,
+                  use: {
+                    loader: 'coverage-istanbul-loader',
+                  },
+                },
+              ]),
+          {
+            test: /\.tsx?$/,
+            use: [
+              {
+                loader: 'ts-loader',
+                options: {
+                  configFile: './tsconfig.json',
+                  transpileOnly: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      resolve: {
+        extensions: ['.js', '.cjs', '.mjs', '.ts', '.json'],
+        plugins: [
+          new TsconfigPathsPlugin({
+            configFile: './tsconfig.json',
+          }),
+        ],
+      },
+    },
+    webpackMiddleware: {},
   });
 };

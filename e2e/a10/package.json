@@ -1,6 +1,8 @@
 {
   "name": "a10",
+  "description": "Angular 10",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -20,7 +22,6 @@
     "test:jest:es2015:no-ivy": "jest -i --config jest.es2015noivy.js",
     "test:jest:debug": "jest -i --watch"
   },
-  "private": true,
   "peerDependencies": {
     "ng-mocks": "*"
   },

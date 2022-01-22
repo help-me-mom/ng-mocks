@@ -1,12 +1,10 @@
 import { NgModule, Provider } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
 
 import coreConfig from '../common/core.config';
 import { extendClass } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
-import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { isNgDef } from '../common/func.is-ng-def';
@@ -162,15 +160,6 @@ export function MockModule(module: any): any {
   funcImportExists(module, 'MockModule');
 
   const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
-
-  // We are inside of an 'it'. It is fine to to return a mock copy.
-  if (!ngModuleProviders && (getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(ngModule, 'm');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
   const toggleSkipMockFlag = preprocessToggleFlag(ngModule);
   const mockModule = detectMockModule(ngModule, getExistingMockModule(ngModule));
   // istanbul ignore else

@@ -1,9 +1,15 @@
-import { MockNgModuleResolver } from '@angular/compiler/testing';
 import { NgModule } from '@angular/core';
 
+import collectDeclarations from '../resolve/collect-declarations';
+
 import coreReflectBodyCatch from './core.reflect.body-catch';
-import coreReflectBodyGlobal from './core.reflect.body-global';
 
-const coreReflectModule = coreReflectBodyGlobal(MockNgModuleResolver);
+export default (def: any): NgModule =>
+  coreReflectBodyCatch((arg: any) => {
+    const declaration = collectDeclarations(arg);
+    if (declaration.NgModule) {
+      return declaration.NgModule;
+    }
 
-export default (def: any): NgModule => coreReflectBodyCatch((arg: any) => coreReflectModule().resolve(arg))(def);
+    throw new Error('Cannot resolve declarations');
+  })(def);

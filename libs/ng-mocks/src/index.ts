@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 // tslint:disable-next-line no-import-side-effect
 import './lib/common/ng-mocks-stack';
 // tslint:disable-next-line no-import-side-effect ordered-imports

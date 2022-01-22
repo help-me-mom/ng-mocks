@@ -1,3 +1,5 @@
+// tslint:disable cyclomatic-complexity
+
 import { Component, Directive, Provider, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
@@ -32,6 +34,8 @@ export default <T extends Component | Directive>(
   source: AnyType<any>,
   mock: AnyType<any>,
   meta: {
+    hostBindings?: Array<[string, any]>;
+    hostListeners?: Array<[string, any, any]>;
     inputs?: string[];
     outputs?: string[];
     providers?: Provider[];
@@ -59,6 +63,24 @@ export default <T extends Component | Directive>(
   }
   decorateOutputs(mock, meta.outputs);
   config.queryScanKeys = decorateQueries(mock, meta.queries);
+
+  config.hostBindings = [];
+  for (const [key] of meta.hostBindings || /* istanbul ignore next */ []) {
+    // mock declarations should not have side effects based on host bindings.
+    // HostBinding(...args)(mock.prototype, key);
+    if (config.hostBindings.indexOf(key) === -1) {
+      config.hostBindings.push(key);
+    }
+  }
+
+  config.hostListeners = [];
+  for (const [key] of meta.hostListeners || /* istanbul ignore next */ []) {
+    // mock declarations should not have side effects based on host bindings.
+    // HostListener(...args)(mock.prototype, key);
+    if (config.hostListeners.indexOf(key) === -1) {
+      config.hostListeners.push(key);
+    }
+  }
 
   return options;
 };

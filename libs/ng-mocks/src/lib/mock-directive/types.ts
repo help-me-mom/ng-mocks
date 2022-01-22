@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { ChangeDetectorRef, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';

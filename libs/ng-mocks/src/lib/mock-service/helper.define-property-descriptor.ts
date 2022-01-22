@@ -1,8 +1,7 @@
 import helperExtractPropertyDescriptor from './helper.extract-property-descriptor';
 
 export default (instance: any, prop: keyof any, desc?: PropertyDescriptor): boolean => {
-  // istanbul ignore next
-  if (!desc) {
+  if (!desc || !instance) {
     return false;
   }
 

@@ -62,4 +62,37 @@ describe('ng-mocks-ignore-on-console', () => {
       expect(console.warn).toBe(originalWarn);
     });
   });
+
+  describe('override', () => {
+    // own backup
+    let originalLog: any;
+
+    describe('context:1', () => {
+      beforeAll(() => (originalLog = console.log));
+      ngMocks.ignoreOnConsole();
+      afterAll(() => (console.log = originalLog));
+
+      it('mocks console', () => {
+        expect((console.log as any).__ngMocks).toEqual(true);
+      });
+    });
+
+    it('restores after context:1', () => {
+      expect(console.log).toBe(originalLog);
+    });
+
+    describe('context:2', () => {
+      beforeAll(() => (originalLog = console.log));
+      afterAll(() => (console.log = originalLog));
+      ngMocks.ignoreOnConsole();
+
+      it('mocks console', () => {
+        expect((console.log as any).__ngMocks).toEqual(true);
+      });
+    });
+
+    it('restores after context:2', () => {
+      expect(console.log).toBe(originalLog);
+    });
+  });
 });

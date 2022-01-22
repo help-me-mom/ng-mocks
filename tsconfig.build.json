@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "lib": ["dom"],
+    "module": "CommonJS",
+    "target": "ES5",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+    "outDir": "dist/libs/ng-mocks/cjs",
+    "declarationDir": "dist/libs/ng-mocks/cjs",
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false,
+    "experimentalDecorators": true,
+    "types": [
+      "jasmine",
+      "jest",
+      "karma-coverage-istanbul-reporter",
+      "karma-jasmine",
+      "karma-junit-reporter",
+      "karma-webpack",
+      "mocha",
+      "node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "ng-mocks": ["./libs/ng-mocks/src/index.ts"]
+    },
+    "skipLibCheck": true,
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictNullChecks": true
+  },
+  "include": ["libs/ng-mocks/src/index.ts"]
+}

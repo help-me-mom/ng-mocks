@@ -1,39 +1,19 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "lib": ["dom"],
-    "module": "commonjs",
-    "target": "es5",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "emitDecoratorMetadata": true,
-    "downlevelIteration": true,
-    "inlineSourceMap": true,
+    "inlineSourceMap": false,
     "inlineSources": true,
-    "declaration": true,
-    "outDir": "dist/libs/ng-mocks/cjs",
-    "declarationDir": "dist/libs/ng-mocks/cjs",
-    "allowSyntheticDefaultImports": true,
-    "removeComments": false,
-    "experimentalDecorators": true,
-    "types": ["node", "jasmine", "jest", "mocha"],
-    "baseUrl": ".",
-    "paths": {
-      "ng-mocks": ["libs/ng-mocks/src/index"]
-    },
-    "skipLibCheck": true,
-
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "strictNullChecks": true
+    "sourceMap": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
-  "include": ["libs/ng-mocks/src/index.ts"]
+  "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "karma-test-shim.ts", "karma.conf.ts"],
+  "exclude": ["e2e", "node_modules"],
+  "include": [
+    "libs/ng-mocks/src/lib/**/*.ts",
+    "examples/**/*.ts",
+    "tests/**/*.ts",
+    "tests-failures/**/*.ts",
+    "tests-performance/**/*.ts"
+  ]
 }

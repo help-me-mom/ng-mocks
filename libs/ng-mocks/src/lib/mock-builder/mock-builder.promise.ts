@@ -74,25 +74,27 @@ export class MockBuilderPromise implements IMockBuilder {
     this.stash.backup();
     ngMocksUniverse.config.set('mockNgDefResolver', new Map());
 
-    const params = this.combineParams();
+    try {
+      const params = this.combineParams();
 
-    const ngModule = initNgModules(params, initUniverse(params));
-    detectWrongDeclarations(params);
-    addMissingKeepDeclarationsAndModules(ngModule, params);
-    addMissingMockDeclarationsAndModules(ngModule, params);
-    addRequestedProviders(ngModule, params);
-    handleRootProviders(ngModule, params);
-    handleEntryComponents(ngModule);
-    applyPlatformModules();
+      const ngModule = initNgModules(params, initUniverse(params));
+      detectWrongDeclarations(params);
+      addMissingKeepDeclarationsAndModules(ngModule, params);
+      addMissingMockDeclarationsAndModules(ngModule, params);
+      addRequestedProviders(ngModule, params);
+      handleRootProviders(ngModule, params);
+      handleEntryComponents(ngModule);
+      applyPlatformModules();
 
-    ngModule.providers.push(createNgMocksToken());
-    ngModule.providers.push(createNgMocksTouchesToken());
-    ngModule.providers.push(createNgMocksOverridesToken(this.replaceDef, this.defValue));
+      ngModule.providers.push(createNgMocksToken());
+      ngModule.providers.push(createNgMocksTouchesToken());
+      ngModule.providers.push(createNgMocksOverridesToken(this.replaceDef, this.defValue));
 
-    ngMocksUniverse.config.delete('mockNgDefResolver');
-    this.stash.restore();
-
-    return ngModule;
+      return ngModule;
+    } finally {
+      ngMocksUniverse.config.delete('mockNgDefResolver');
+      this.stash.restore();
+    }
   }
 
   // istanbul ignore next
