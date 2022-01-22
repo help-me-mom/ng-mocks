@@ -15,15 +15,8 @@ interface Declaration {
 
 const getAllKeys = <T>(instance: T): Array<keyof T> => {
   const props: string[] = [];
-  for (const key of instance ? Object.getOwnPropertyNames(instance) : []) {
-    if (props.indexOf(key) === -1) {
-      props.push(key);
-    }
-  }
-  for (const key of instance ? Object.keys(instance) : []) {
-    if (props.indexOf(key) === -1) {
-      props.push(key);
-    }
+  for (const key of Object.keys(instance)) {
+    props.push(key);
   }
 
   return props as never;
