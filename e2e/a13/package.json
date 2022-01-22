@@ -56,7 +56,7 @@
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
     "puppeteer": "10.4.0",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   },
   "engines": {
     "npm": "6.14.16"
