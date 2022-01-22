@@ -10,14 +10,12 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import coreForm from '../common/core.form';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
-import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
 import funcIsMock from '../common/func.is-mock';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
@@ -222,14 +220,6 @@ export function MockComponent<TComponent>(component: Type<TComponent>): Type<Moc
     return component;
   }
 
-  // We are inside of an 'it'. It is fine to to return a mock copy.
-  if ((getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(component, 'c');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
   if (ngMocksUniverse.flags.has('cacheComponent') && ngMocksUniverse.cacheDeclarations.has(component)) {
     return ngMocksUniverse.cacheDeclarations.get(component);
   }

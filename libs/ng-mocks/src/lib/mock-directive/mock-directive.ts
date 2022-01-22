@@ -9,14 +9,12 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import coreForm from '../common/core.form';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { Type } from '../common/core.types';
-import { getMockedNgDefOf } from '../common/func.get-mocked-ng-def-of';
 import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
@@ -109,15 +107,6 @@ export function MockDirective<TDirective>(directive: Type<TDirective>): Type<Moc
     return directive;
   }
 
-  // We are inside an 'it'.
-  // It is fine to return a mock copy or to throw an exception if it was not replaced with its mock copy in TestBed.
-  if ((getTestBed() as any)._instantiated) {
-    try {
-      return getMockedNgDefOf(directive, 'd');
-    } catch (error) {
-      // looks like an in-test mock.
-    }
-  }
   if (ngMocksUniverse.flags.has('cacheDirective') && ngMocksUniverse.cacheDeclarations.has(directive)) {
     return ngMocksUniverse.cacheDeclarations.get(directive);
   }
