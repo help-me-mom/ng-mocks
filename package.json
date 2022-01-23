@@ -197,7 +197,7 @@
     "tslint": "6.1.3",
     "tslint-jasmine-rules": "1.6.1",
     "tslint-microsoft-contrib": "6.2.0",
-    "typescript": "4.4.4",
+    "typescript": "4.5.5",
     "webpack": "5.67.0",
     "zone.js": "0.11.4"
   },
