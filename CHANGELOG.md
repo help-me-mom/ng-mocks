@@ -1,3 +1,25 @@
+# [13.0.0](https://github.com/ike18t/ng-mocks/compare/v12.5.1...v13.0.0) (2022-01-23)
+
+
+### Bug Fixes
+
+* **a13:** creating known props and methods ([5386f77](https://github.com/ike18t/ng-mocks/commit/5386f77c51905d12868f55a873fb03ee80fa6d47))
+* **a13:** parsing a9 declarations ([b12e00a](https://github.com/ike18t/ng-mocks/commit/b12e00af1b4b39bd74e6d8458909f6d4290b8e6f))
+* **core:** correct resets on errors ([e3b1809](https://github.com/ike18t/ng-mocks/commit/e3b18090c543c397cb95d99db4e553fabacb12f7))
+* **core:** ignoring host bindings in mocks [#1427](https://github.com/ike18t/ng-mocks/issues/1427) ([411842c](https://github.com/ike18t/ng-mocks/commit/411842c6350dfec6df5e25debca2ac36a0ed1d56))
+* **core:** parsing only own declarations [#1587](https://github.com/ike18t/ng-mocks/issues/1587) ([978bdbc](https://github.com/ike18t/ng-mocks/commit/978bdbcb064c767acd6710099349f05ed09207a9))
+
+
+### Features
+
+* **a13:** recursive declarations ([396573f](https://github.com/ike18t/ng-mocks/commit/396573fa7c46d005959994457398bf7490c320af))
+* **a13:** support ([88c9752](https://github.com/ike18t/ng-mocks/commit/88c9752a6c2ef23264910794eaebb3a5408f8e65))
+
+
+### BREAKING CHANGES
+
+* **a13:** Angular 13 only support
+
 # [13.0.0-alpha.6](https://github.com/ike18t/ng-mocks/compare/v13.0.0-alpha.5...v13.0.0-alpha.6) (2022-01-18)
 
 
