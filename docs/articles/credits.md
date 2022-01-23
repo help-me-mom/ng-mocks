@@ -11,7 +11,19 @@ sidebar_label: Credits
 - [Isaac Datlof](https://www.linkedin.com/in/isaac-datlof/)
 - [Michael Gusev](https://www.linkedin.com/in/michael-gusev/)
 
-## Contributors  
+## Supporters  
 
+- [santoshyadavdev](https://github.com/santoshyadavdev)
+  donated to support the development
+- [SerkanSipahi](https://github.com/SerkanSipahi)
+  donated to support the development
+- [mattlewis92](https://github.com/mattlewis92)
+  donated to support the development
+- anonymous x3
+  donated to support the development
+- [LPCmedia](https://github.com/LPCmedia)
+  donated to support the development
+- [GerkinDev](https://github.com/GerkinDev)
+  donated to support the development
 - [Vinay Kaparthi](https://www.linkedin.com/in/vinay-kaparthi/)
   provided valuable feedback about performance of the library and shed light on some bottlenecks.
