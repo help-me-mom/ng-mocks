@@ -14,25 +14,17 @@
 
 The current version of the library **has been tested** and **can be used** with:
 
-|  Angular |                           ng-mocks                            | Jasmine | Jest | Ivy |
-| -------: | :-----------------------------------------------------------: | :-----: | :--: | :-: |
-|  >13.0.2 | [in progress](https://github.com/ike18t/ng-mocks/issues/1427) |         |      |     |
-| <=13.0.2 |                            latest                             |   yes   | yes  | yes |
-|       12 |                            latest                             |   yes   | yes  | yes |
-|       11 |                            latest                             |   yes   | yes  | yes |
-|       10 |                            latest                             |   yes   | yes  | yes |
-|        9 |                            latest                             |   yes   | yes  | yes |
-|        8 |                            latest                             |   yes   | yes  |     |
-|        7 |                            latest                             |   yes   | yes  |     |
-|        6 |                            latest                             |   yes   | yes  |     |
-|        5 |                            latest                             |   yes   | yes  |     |
-
-**PLEASE NOTE: If you are using Angular 13 or planning to use it,
-please note that currently only Angular `<=13.0.2` is supported,
-[work is in progress](https://github.com/ike18t/ng-mocks/issues/1427) to implement support of Angular `>13.0.2`.
-Thank you for patience, understanding and support.**
-
-To stay with the latest supported version, you can set the versions to `<=13.0.2` in your `package.json` for `@angular/*` and `@angular-devkit/*`.
+| Angular | ng-mocks | Jasmine | Jest | Ivy |
+| ------: | :------: | :-----: | :--: | :-: |
+|      13 |  latest  |   yes   | yes  | yes |
+|      12 |  latest  |   yes   | yes  | yes |
+|      11 |  latest  |   yes   | yes  | yes |
+|      10 |  latest  |   yes   | yes  | yes |
+|       9 |  latest  |   yes   | yes  | yes |
+|       8 |  latest  |   yes   | yes  |     |
+|       7 |  latest  |   yes   | yes  |     |
+|       6 |  latest  |   yes   | yes  |     |
+|       5 |  latest  |   yes   | yes  |     |
 
 ## Important links
 
@@ -77,7 +69,7 @@ An example of a spec for a profile edit component.
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
 // cover behavior of the component.
-describe('profile', () => {
+describe('profile:classic', () => {
   // First of all, we would like to reuse the same
   // TestBed in every test.
   // ngMocks.faster suppresses reset of TestBed
@@ -86,11 +78,14 @@ describe('profile', () => {
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
+  // Helps to reset customizations after each test.
+  MockInstance.scope();
+
   // Let's declare TestBed in beforeAll
   // instead of beforeEach.
   // The code mocks everything in SharedModule
   // and provides a mock AuthService.
-  beforeAll(() => {
+  beforeAll(async () => {
     return TestBed.configureTestingModule({
       imports: [
         MockModule(SharedModule), // mock
@@ -141,7 +136,7 @@ describe('profile', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy('StorageService.save'),
+      jasmine.createSpy(), // or jest.fn()
     );
 
     // Renders <profile [profile]="params.profile">

@@ -10,8 +10,7 @@ The best place to do that is in `src/test.ts` for `jasmine` or in `src/setup-jes
 If we wanted to replace `BrowserAnimationsModule` with `NoopAnimationsModule` globally,
 we could do it like that:
 
-```ts
-// test.ts
+```ts title="src/test.ts"
 ngMocks.globalReplace(BrowserAnimationsModule, NoopAnimationsModule);
 ```
 

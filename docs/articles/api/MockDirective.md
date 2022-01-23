@@ -102,7 +102,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts"
 describe('MockDirective:Attribute', () => {
   beforeEach(() => {
     return MockBuilder(TestedComponent).mock(DependencyDirective);
@@ -151,7 +151,11 @@ describe('MockDirective:Attribute', () => {
     // 'someOutput'. TestedComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
-    spyOn(component, 'trigger');
+    ngMocks.stubMember(
+      component,
+      'trigger',
+      jasmine.createSpy(), // or jest.fn()
+    );
     mockDirective.someOutput.emit();
 
     // Assert on the effect.
@@ -173,7 +177,7 @@ if we want to assert on its nested elements.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts"
 describe('MockDirective:Structural', () => {
   // IMPORTANT: by default structural directives are not rendered.
   // Because they might require a context which should be provided.

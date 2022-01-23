@@ -103,15 +103,14 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts"
 describe('MockPipe', () => {
   // A fake transform function.
   const fakeTransform = (...args: string[]) => JSON.stringify(args);
 
   // A spy, just in case if we want to verify
   // how the pipe has been called.
-  const spy = jasmine.createSpy('transform')
-    .and.callFake(fakeTransform);
+  const spy = jasmine.createSpy().and.callFake(fakeTransform);
   // in case of jest
   // const spy = jest.fn().mockImplementation(fakeTransform);
 
@@ -122,8 +121,9 @@ describe('MockPipe', () => {
   it('transforms values to json', () => {
     const fixture = MockRender(TestedComponent);
 
-    expect(fixture.nativeElement.innerHTML)
-      .toEqual('<component>["foo"]</component>');
+    expect(fixture.nativeElement.innerHTML).toEqual(
+      '<component>["foo"]</component>',
+    );
 
     // Also we can find an instance of the pipe in
     // the fixture if it is needed.

@@ -147,7 +147,7 @@ describe('TestLifecycleHooks', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('triggers lifecycle hooks correctly via MockRender', () => {
+  it('triggers lifecycle hooks correctly via mock-render w/ params', () => {
     // First let's suppress detectChanges.
     const fixture = MockRender(
       TargetComponent,
@@ -157,7 +157,8 @@ describe('TestLifecycleHooks', () => {
       { detectChanges: false },
     );
 
-    const service: TargetService = TestBed.get(TargetService);
+    const service: TargetService =
+      fixture.point.injector.get(TargetService);
 
     // By default nothing should be initialized, but ctor.
     expect(service.ctor).toHaveBeenCalledTimes(1); // changed

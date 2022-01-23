@@ -62,8 +62,8 @@ The tools from `ng-mocks` we need:
 ```ts
 it('binds inputs', () => {
   // Rendering TargetComponent and accessing its instance.
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
   // Looking for a debug element of `MatTable`.
   const tableEl = ngMocks.reveal(['mat-table']);
@@ -131,8 +131,8 @@ The tools from `ng-mocks` we need:
 
 ```ts
 it('provides correct template for mat-header-row', () => {
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
   const tableEl = ngMocks.reveal(['mat-table']);
 
   // checking that there are no artifacts around
@@ -156,8 +156,8 @@ it is `MatRowDef`.
 
 ```ts
 it('provides correct template for mat-row', () => {
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
   const tableEl = ngMocks.reveal(['mat-table']);
 
   // checking that there are no artifacts around

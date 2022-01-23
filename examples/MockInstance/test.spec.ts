@@ -54,6 +54,7 @@ describe('MockInstance', () => {
       update$: EMPTY,
     }));
   });
+
   afterEach(() => {
     // Resets customizations
     MockInstance(ChildComponent);

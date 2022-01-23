@@ -109,7 +109,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockProvider/test.spec.ts&initialpath=%3Fspec%3DMockProvider)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockProvider/test.spec.ts&initialpath=%3Fspec%3DMockProvider)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockProvider/test.spec.ts"
 describe('MockProvider', () => {
   const mockObj = { value: 123 };
 
@@ -132,26 +132,21 @@ describe('MockProvider', () => {
     // overriding the token's data that does affect the provided token.
     mockObj.value = 321;
     const fixture = MockRender(TargetComponent);
-    const injector = fixture.point.injector;
-
-    expect(injector.get(Dependency1Service).echo())
-      .toBeUndefined();
-    expect(injector.get(Dependency2Service).echo())
-      .toBeUndefined();
-    expect(injector.get(OBJ_TOKEN))
-      .toBe(mockObj);
-    expect(fixture.nativeElement.innerHTML)
-      .not.toContain('"target"');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('"d2:mock"');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('"mock token"');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('"mock"');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('"value": 321');
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('"pri"');
+    expect(
+      fixture.point.injector.get(Dependency1Service).echo(),
+    ).toBeUndefined();
+    expect(
+      fixture.point.injector.get(Dependency2Service).echo(),
+    ).toBeUndefined();
+    expect(fixture.point.injector.get(OBJ_TOKEN)).toBe(
+      mockObj as any,
+    );
+    expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
+    expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');
+    expect(fixture.nativeElement.innerHTML).toContain('"mock token"');
+    expect(fixture.nativeElement.innerHTML).toContain('"mock"');
+    expect(fixture.nativeElement.innerHTML).toContain('"value": 321');
+    expect(fixture.nativeElement.innerHTML).toContain('"pri"');
   });
 });
 ```

@@ -71,8 +71,11 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder, NG_MOCKS_INTERCEPTORS } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_INTERCEPTORS,
+} from 'ng-mocks';
 import { Observable } from 'rxjs';
 
 // An interceptor we want to test.
@@ -147,10 +150,11 @@ describe('TestHttpInterceptor', () => {
   });
 
   it('triggers interceptor', () => {
-    const client: HttpClient = TestBed.get(HttpClient);
-    const httpMock: HttpTestingController = TestBed.get(
-      HttpTestingController,
-    );
+    const fixture = MockRender('');
+    const client: HttpClient =
+      fixture.debugElement.injector.get(HttpClient);
+    const httpMock: HttpTestingController =
+      fixture.debugElement.injector.get(HttpTestingController);
 
     // Let's do a simply request.
     client.get('/target').subscribe();

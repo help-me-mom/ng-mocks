@@ -27,15 +27,17 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
-- Angular 13 (Jasmine, Jest, Ivy, es5, es2015+)
-- Angular 12 (Jasmine, Jest, Ivy, es5, es2015+)
-- Angular 11 (Jasmine, Jest, Ivy, es5, es2015+)
-- Angular 10 (Jasmine, Jest, Ivy, es5, es2015+)
-- Angular 9 (Jasmine, Jest, Ivy, es5, es2015+)
-- Angular 8 (Jasmine, Jest, es5, es2015+)
-- Angular 7 (Jasmine, Jest, es5, es2015+)
-- Angular 6 (Jasmine, Jest, es5, es2015+)
-- Angular 5 (Jasmine, Jest, es5, es2015+)
+|  Angular |                           ng-mocks                            | Jasmine | Jest | Ivy |
+| -------: | :-----------------------------------------------------------: | :-----: | :--: | :-: |
+|       13 |                            latest                             |   yes   | yes  | yes |
+|       12 |                            latest                             |   yes   | yes  | yes |
+|       11 |                            latest                             |   yes   | yes  | yes |
+|       10 |                            latest                             |   yes   | yes  | yes |
+|        9 |                            latest                             |   yes   | yes  | yes |
+|        8 |                            latest                             |   yes   | yes  |     |
+|        7 |                            latest                             |   yes   | yes  |     |
+|        6 |                            latest                             |   yes   | yes  |     |
+|        5 |                            latest                             |   yes   | yes  |     |
 
 In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
@@ -79,7 +81,7 @@ An example of a spec for a profile edit component.
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
 // cover behavior of the component.
-describe('profile', () => {
+describe('profile:classic', () => {
   // First of all, we would like to reuse the same
   // TestBed in every test.
   // ngMocks.faster suppresses reset of TestBed
@@ -88,11 +90,14 @@ describe('profile', () => {
   // https://ng-mocks.sudo.eu/api/ngMocks/faster
   ngMocks.faster();
 
+  // Helps to reset customizations after each test.
+  MockInstance.scope();
+
   // Let's declare TestBed in beforeAll
   // instead of beforeEach.
   // The code mocks everything in SharedModule
   // and provides a mock AuthService.
-  beforeAll(() => {
+  beforeAll(async () => {
     return TestBed.configureTestingModule({
       imports: [
         MockModule(SharedModule), // mock
@@ -120,9 +125,9 @@ describe('profile', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
-    expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(ProfileComponent),
-    );
+    expect(
+      fixture.point.componentInstance,
+    ).toEqual(jasmine.any(ProfileComponent));
   });
 
   // A test to ensure that the component listens
@@ -143,7 +148,7 @@ describe('profile', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy('StorageService.save'),
+      jasmine.createSpy(), // or jest.fn()
     );
 
     // Renders <profile [profile]="params.profile">

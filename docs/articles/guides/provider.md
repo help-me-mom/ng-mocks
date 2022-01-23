@@ -59,8 +59,7 @@ Their tests are quite similar.
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProvider/test.spec.ts"
 import { Injectable } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -73,12 +72,12 @@ class TargetService {
   }
 }
 
-describe('TestProvider', () => {
+describe('TestProviderCommon', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TargetService));
 
   it('returns value on echo', () => {
-    const service = TestBed.get(TargetService);
+    const service = MockRender(TargetService).point.componentInstance;
 
     expect(service.echo()).toEqual(service.value);
   });
@@ -159,6 +158,7 @@ describe('TestProviderWithDependencies', () => {
     });
   });
 
+  // Resets customizations from MockInstance.
   afterAll(MockReset);
 
   it('creates TargetService', () => {
@@ -247,6 +247,7 @@ describe('TestProviderWithUseClass', () => {
     });
   });
 
+  // Resets customizations from MockInstance.
   afterAll(MockReset);
 
   it('respects all dependencies', () => {
@@ -309,8 +310,9 @@ describe('TestProviderWithUseValue', () => {
   beforeEach(() => MockBuilder(TargetService, TargetModule));
 
   it('creates TargetService', () => {
-    const service = MockRender<TargetService>(TargetService).point
-      .componentInstance;
+    const service =
+      MockRender<TargetService>(TargetService).point
+        .componentInstance;
 
     // Let's assert received data.
     expect(service as any).toEqual({
@@ -382,6 +384,7 @@ describe('TestProviderWithUseExisting', () => {
     });
   });
 
+  // Resets customizations from MockInstance.
   afterAll(MockReset);
 
   it('creates TargetService', () => {
@@ -406,7 +409,12 @@ describe('TestProviderWithUseExisting', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseFactory/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  MockReset,
+} from 'ng-mocks';
 
 // Dependency 1.
 @Injectable()
@@ -448,6 +456,9 @@ describe('TestProviderWithUseFactory', () => {
       },
     });
   });
+
+  // Resets customizations from MockInstance.
+  afterAll(MockReset);
 
   it('creates TargetService', () => {
     const service = MockRender(TargetService).point.componentInstance;

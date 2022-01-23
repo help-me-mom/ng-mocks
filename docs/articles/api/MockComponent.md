@@ -102,7 +102,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockComponent/test.spec.ts"
 describe('MockComponent', () => {
   beforeEach(() => {
     return MockBuilder(TestedComponent).mock(DependencyComponent);
@@ -147,7 +147,11 @@ describe('MockComponent', () => {
     // called 'someOutput'. TestedComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
-    spyOn(component, 'trigger');
+    ngMocks.stubMember(
+      component,
+      'trigger',
+      jasmine.createSpy(), // or jest.fn()
+    );
     mockComponent.someOutput.emit({
       payload: 'foo',
     });
@@ -189,7 +193,10 @@ describe('MockComponent', () => {
     // componentInstance is a MockedComponent<T> to access
     // its `__render` method. `isMockOf` function helps here.
     const mockComponent = fixture.point.componentInstance;
-    ngMocks.render(mockComponent, ngMocks.findTemplateRef('something'));
+    ngMocks.render(
+      mockComponent,
+      ngMocks.findTemplateRef('something'),
+    );
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.

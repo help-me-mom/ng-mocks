@@ -49,7 +49,7 @@ import {
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import {
   CanActivate,
   Router,
@@ -167,8 +167,8 @@ describe('TestRoutingGuard', () => {
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
@@ -184,9 +184,10 @@ describe('TestRoutingGuard', () => {
 
   it('loads dashboard', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
-    const loginService: LoginService = TestBed.get(LoginService);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
+    const loginService: LoginService =
+      fixture.point.injector.get(LoginService);
 
     // Letting the guard know we have been logged in.
     loginService.isLoggedIn = true;

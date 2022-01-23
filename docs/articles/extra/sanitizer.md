@@ -72,7 +72,7 @@ A full example of **mocking DomSanitizer** in Angular tests.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockSanitizer/test.spec.ts&initialpath=%3Fspec%3DMockSanitizer)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockSanitizer/test.spec.ts&initialpath=%3Fspec%3DMockSanitizer)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockSanitizer/test.spec.ts"
 describe('MockSanitizer', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
@@ -86,8 +86,9 @@ describe('MockSanitizer', () => {
       ],
     });
 
-    expect(ngMocks.formatHtml(ngMocks.find('div')))
-      .toEqual('sanitized:1:23');
+    expect(ngMocks.formatHtml(ngMocks.find('div'))).toEqual(
+      'sanitized:1:23',
+    );
   });
 });
 ```

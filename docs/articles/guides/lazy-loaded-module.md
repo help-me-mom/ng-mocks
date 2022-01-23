@@ -64,7 +64,9 @@ class AppModuleRouting {}
 class AppModule {}
 
 describe('TestLazyModule', () => {
-  beforeEach(() => MockBuilder(LazyComponent, [AppModule, LazyModule]));
+  beforeEach(() =>
+    MockBuilder(LazyComponent, [AppModule, LazyModule]),
+  );
 
   it('renders lazy component', () => {
     const fixture = MockRender(LazyComponent);

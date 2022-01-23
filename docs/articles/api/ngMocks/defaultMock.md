@@ -23,9 +23,7 @@ declare class MyComponent {
 }
 ```
 
-```ts
-// src/test.ts
-
+```ts title="src/test.ts"
 // the returned object will be applied to the component instance.
 ngMocks.defaultMock(MyComponent, () => ({
   stream$: EMPTY,

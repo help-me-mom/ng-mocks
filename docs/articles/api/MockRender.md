@@ -483,7 +483,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts"
 describe('MockRender', () => {
   // Do not forget to return the promise of MockBuilder.
   beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
@@ -514,10 +514,10 @@ describe('MockRender', () => {
 
     // ngMocks.input helps to get the current value of an input on
     // a related debugElement without knowing its owner.
-    expect(ngMocks.input(fixture.point, 'value1'))
-      .toEqual('something1');
-    expect(ngMocks.input(fixture.point, 'value2'))
-      .toEqual('check');
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual(
+      'something1',
+    );
+    expect(ngMocks.input(fixture.point, 'value2')).toEqual('check');
 
     // ngMocks.output does the same with outputs.
     ngMocks.output(fixture.point, 'trigger').emit('foo1');
@@ -538,10 +538,12 @@ describe('MockRender', () => {
     });
 
     // Checking the inputs.
-    expect(ngMocks.input(fixture.point, 'value1'))
-      .toEqual('something2');
-    expect(ngMocks.input(fixture.point, 'value2'))
-      .toBeUndefined();
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual(
+      'something2',
+    );
+    expect(ngMocks.input(fixture.point, 'value2')).toEqual(
+      'default2',
+    );
 
     // Checking the outputs.
     ngMocks.output(fixture.point, 'trigger').emit('foo2');
@@ -551,8 +553,7 @@ describe('MockRender', () => {
     // the testing component.
     fixture.componentInstance.value1 = 'updated';
     fixture.detectChanges();
-    expect(ngMocks.input(fixture.point, 'value1'))
-      .toEqual('updated');
+    expect(ngMocks.input(fixture.point, 'value1')).toEqual('updated');
   });
 });
 ```

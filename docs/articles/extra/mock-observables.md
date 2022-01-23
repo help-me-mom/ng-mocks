@@ -137,7 +137,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts"
 describe('MockObservable', () => {
   // Because we want to test the component, we pass it as the first
   // parameter of MockBuilder. To create its mock dependencies
@@ -192,10 +192,12 @@ describe('MockObservable', () => {
 
     // Checking that a sibling method has been replaced
     // with a mock object too.
-    expect(fixture.point.injector.get(TargetService).getValue$)
-      .toBeDefined();
-    expect(fixture.point.injector.get(TargetService).getValue$())
-      .toBeUndefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$,
+    ).toBeDefined();
+    expect(
+      fixture.point.injector.get(TargetService).getValue$(),
+    ).toBeUndefined();
   });
 });
 ```
