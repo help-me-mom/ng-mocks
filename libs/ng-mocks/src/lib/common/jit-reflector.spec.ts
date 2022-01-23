@@ -79,15 +79,6 @@ describe('JitReflector', () => {
     expect(actual).toEqual({ tst: [1, 2, 3] });
   });
 
-  it('resolveExternalReference', () => {
-    const expected: any = {
-      runtime: 123,
-    };
-
-    const actual = instance.resolveExternalReference(expected);
-    expect(actual).toEqual(123);
-  });
-
   it('shallowAnnotations', () => {
     expect(() => instance.shallowAnnotations()).toThrowError(
       /Not supported in JIT mode/,
