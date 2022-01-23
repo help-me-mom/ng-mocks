@@ -36,7 +36,7 @@
     "@ngrx/effects": "13.0.2",
     "@ngrx/store": "13.0.2",
     "@ngrx/store-devtools": "13.0.2",
-    "primeng": "13.0.4",
+    "primeng": "13.1.0",
     "rxjs": "6.6.7",
     "tslib": "2.3.1",
     "zone.js": "0.11.4"
