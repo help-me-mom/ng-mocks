@@ -1,7 +1,6 @@
-import { CompileReflector, ExternalReference } from '@angular/compiler';
 import { ɵReflectionCapabilities as ReflectionCapabilities, ɵstringify as stringify } from '@angular/core';
 
-export class JitReflector implements CompileReflector {
+export class JitReflector {
   protected reflectionCapabilities: ReflectionCapabilities;
 
   public constructor() {
@@ -32,8 +31,6 @@ export class JitReflector implements CompileReflector {
   public propMetadata(typeOrFunc: any): { [key: string]: any[] } {
     return this.reflectionCapabilities.propMetadata(typeOrFunc);
   }
-
-  public resolveExternalReference = (ref: ExternalReference): any => ref.runtime;
 
   public shallowAnnotations(): any[] {
     throw new Error('Not supported in JIT mode');
