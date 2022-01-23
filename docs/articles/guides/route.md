@@ -103,7 +103,7 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestRoute/test.spec.ts"
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
@@ -169,8 +169,8 @@ describe('TestRoute:Route', () => {
 
   it('renders /1 with Target1Component', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
 
     // First we need to initialize navigation.
     location.go('/1');
@@ -186,8 +186,8 @@ describe('TestRoute:Route', () => {
 
   it('renders /2 with Target2Component', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
 
     // First we need to initialize navigation.
     location.go('/2');
@@ -220,8 +220,8 @@ describe('TestRoute:Component', () => {
 
   it('navigates between pages', fakeAsync(() => {
     const fixture = MockRender(TargetComponent);
-    const router: Router = TestBed.get(Router);
-    const location: Location = TestBed.get(Location);
+    const router: Router = fixture.point.injector.get(Router);
+    const location: Location = fixture.point.injector.get(Location);
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {

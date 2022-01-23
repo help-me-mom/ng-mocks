@@ -39,7 +39,7 @@ ngMocks.click('[data-role="link"]');
 ngMocks.click(['data-role']);
 ```
 ```ts
-ngMocks.click(['data-role', 'linke']);
+ngMocks.click(['data-role', 'link']);
 ```
 
 Under the hood `ngMocks.click` uses [`ngMocks.trigger`](./trigger.md),

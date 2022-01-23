@@ -52,8 +52,8 @@ The tools from `ng-mocks` we need:
 ```ts
 it('binds inputs', () => {
   // Rendering TargetComponent and accessing its instance.
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
   // Looking for a debug element of `p-calendar`.
   const calendarEl = ngMocks.find('p-calendar');
@@ -75,8 +75,8 @@ The tools from `ng-mocks` we need:
 ```ts
 it('binds outputs', () => {
   // Rendering TargetComponent and accessing its instance.
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
   // Looking for a debug element of `p-calendar`.
   const calendarEl = ngMocks.find('p-calendar');
@@ -112,11 +112,10 @@ it('provides correct template for pTemplate="header"', () => {
   const calendarEl = ngMocks.find('p-calendar');
 
   // Looking for the template of 'header'.
-  const header = ngMocks.findTemplateRef(
-    calendarEl,
-    // attr name and its value
-    ['pTemplate', 'header'],
-  );
+  const header = ngMocks.findTemplateRef(calendarEl, [
+    'pTemplate',
+    'header',
+  ]);
 
   // Verifies that the directive has been mocked.
   // And renders it.
@@ -140,11 +139,10 @@ it('provides correct template for pTemplate="footer"', () => {
   const calendarEl = ngMocks.find('p-calendar');
 
   // Looking for the template of 'footer'.
-  const footer = ngMocks.findTemplateRef(
-    calendarEl,
-    // attr name and its value
-    ['pTemplate', 'footer'],
-  );
+  const footer = ngMocks.findTemplateRef(calendarEl, [
+    'pTemplate',
+    'footer',
+  ]);
 
   // Verifies that the directive has been mocked.
   // And renders it.

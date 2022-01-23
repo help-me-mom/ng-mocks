@@ -9,13 +9,11 @@ The best place to do that is in `src/test.ts` for `jasmine` or in `src/setup-jes
 
 Let's mark the `APP_URL` token in order to be kept in mock modules.
 
-```ts
-// test.ts
+```ts title="src/test.ts"
 ngMocks.globalKeep(APP_URL);
 ```
 
-```ts
-// test.spec.ts
+```ts title="src/test.spec.ts"
 // ...
 MockModule(ModuleWithService);
 // ...

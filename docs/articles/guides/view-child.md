@@ -95,7 +95,7 @@ ngMocks
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/TestViewChild/test.spec.ts&initialpath=%3Fspec%3DTestViewChild)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/TestViewChild/test.spec.ts&initialpath=%3Fspec%3DTestViewChild)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestViewChild/test.spec.ts"
 import {
   Component,
   Directive,
@@ -152,7 +152,7 @@ class TargetComponent {
 
   @ViewChild(DependencyComponent, {
     read: DependencyDirective,
-  } as any)
+  })
   public directive?: DependencyDirective;
 
   @ViewChildren(DependencyDirective)
@@ -174,7 +174,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-describe('ViewChild', () => {
+describe('TestViewChild', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('provides mock dependencies', () => {

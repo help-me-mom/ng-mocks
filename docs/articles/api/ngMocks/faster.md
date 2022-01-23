@@ -105,14 +105,14 @@ With its help, `MockRender` can be called in either `beforeEach` or `beforeAll`.
 `beforeAll` won't reset its fixture after a test, and the fixture can be used in the next test.
 Please pay attention that state of components also stays the same.
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/tests/issue-488/faster.spec.ts"
 describe('issue-488:faster', () => {
   let fixture: MockedComponentFixture<MyComponent>;
 
   ngMocks.faster();
 
   beforeAll(() => MockBuilder(MyComponent, MyModule));
-  beforeAll(() => fixture = MockRender(MyComponent));
+  beforeAll(() => (fixture = MockRender(MyComponent)));
 
   it('first test has initial render', () => {
     expect(ngMocks.formatText(fixture)).toEqual('1');

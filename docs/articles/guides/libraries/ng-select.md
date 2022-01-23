@@ -88,8 +88,8 @@ Therefore, to write a test, we need to use:
 ```ts
 it('binds inputs', () => {
   // Rendering TargetComponent and accessing its instance.
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
   // Looking for a debug element of the ng-select.
   const ngSelectEl = ngMocks.find('ng-select');
@@ -103,12 +103,9 @@ it('binds inputs', () => {
   );
 
   // Asserting static properties.
-  expect(ngMocks.input(ngSelectEl, 'groupBy'))
-    .toEqual('avatar');
-  expect(ngMocks.input(ngSelectEl, 'bindLabel'))
-    .toEqual('name');
-  expect(ngMocks.input(ngSelectEl, 'bindValue'))
-    .toEqual('name');
+  expect(ngMocks.input(ngSelectEl, 'groupBy')).toEqual('avatar');
+  expect(ngMocks.input(ngSelectEl, 'bindLabel')).toEqual('name');
+  expect(ngMocks.input(ngSelectEl, 'bindValue')).toEqual('name');
 });
 ```
 
@@ -126,8 +123,8 @@ Therefore, to convert it with a test, we need to use:
 ```ts
 it('binds outputs', () => {
   // Rendering TargetComponent and accessing its instance.
-  const targetComponent = MockRender(TargetComponent).point
-    .componentInstance;
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
   // Looking for a debug element of the ng-select.
   const ngSelectEl = ngMocks.find('ng-select');
@@ -176,7 +173,7 @@ it('provides correct template for ng-label-tmp', () => {
     ngLabelTmp,
     {},
     // Providing context variables.
-    { item: { name: 'test' }},
+    { item: { name: 'test' } },
   );
 
   // Asserting the rendered html.

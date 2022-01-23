@@ -22,8 +22,7 @@ expect(values.length).toEqual(4);
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts"
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 const TOKEN_MULTI = new InjectionToken('MULTI');
 
@@ -72,7 +71,8 @@ describe('TestMultiToken', () => {
   beforeEach(() => MockBuilder(TOKEN_MULTI, TargetModule));
 
   it('creates TOKEN_MULTI', () => {
-    const tokens = TestBed.get(TOKEN_MULTI);
+    const tokens =
+      MockRender<any[]>(TOKEN_MULTI).point.componentInstance;
 
     expect(tokens).toEqual(jasmine.any(Array));
     expect(tokens.length).toEqual(4);

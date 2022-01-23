@@ -12,7 +12,7 @@ Also, you can play with the test in sandboxes:
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/main/test.spec.ts"
 @Pipe({
   name: 'translate',
 })
@@ -170,7 +170,9 @@ describe('main', () => {
     // Checking that AppComponents updates AppHeaderComponent.
     fixture.componentInstance.title = 'Updated Application';
     fixture.detectChanges();
-    expect(header.componentInstance.title).toBe('Updated Application');
+    expect(header.componentInstance.title).toBe(
+      'Updated Application',
+    );
 
     // Checking that AppComponent listens on outputs of
     // AppHeaderComponent.

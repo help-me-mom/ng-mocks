@@ -248,10 +248,8 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 
-```ts
+```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
 describe('MockInstance', () => {
-  MockInstance.scope();
-
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
@@ -266,6 +264,11 @@ describe('MockInstance', () => {
       // comment the next line to check the failure.
       update$: EMPTY,
     }));
+  });
+
+  afterEach(() => {
+    // Resets customizations
+    MockInstance(ChildComponent);
   });
 
   it('should render', () => {

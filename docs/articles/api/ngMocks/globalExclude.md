@@ -20,8 +20,7 @@ then this effect of `initTestEnvironment` will be overloaded.
 To keep the effect, we need to exclude `TranslationModule` during the mocking process.
 That is where `ngMocks.globalExclude` comes for help.
 
-```ts
-// test.ts
+```ts title="src/test.ts"
 @NgModule({
   imports: [TranslationModule.forRoot(mockBackend)],
   exports: [BrowserDynamicTestingModule, TranslationModule],

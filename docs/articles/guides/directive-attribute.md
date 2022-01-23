@@ -62,7 +62,7 @@ class TargetDirective {
   }
 
   @HostListener('mouseleave') public onMouseLeave() {
-    this.ref.nativeElement.style.backgroundColor = null;
+    this.ref.nativeElement.style.backgroundColor = '';
   }
 }
 
