@@ -16,6 +16,8 @@ import mockHelperFindAll from './find/mock-helper.find-all';
 import mockHelperFormatHtml from './format/mock-helper.format-html';
 import mockHelperFormatText from './format/mock-helper.format-text';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
+import mockHelperConsoleIgnore from './mock-helper.console-ignore';
+import mockHelperConsoleThrow from './mock-helper.console-throw';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
@@ -26,13 +28,11 @@ import mockHelperGlobalMock from './mock-helper.global-mock';
 import mockHelperGlobalReplace from './mock-helper.global-replace';
 import mockHelperGlobalWipe from './mock-helper.global-wipe';
 import mockHelperGuts from './mock-helper.guts';
-import mockHelperIgnoreOnConsole from './mock-helper.ignore-on-console';
 import mockHelperInput from './mock-helper.input';
 import mockHelperOutput from './mock-helper.output';
 import mockHelperReset from './mock-helper.reset';
 import mockHelperStub from './mock-helper.stub';
 import mockHelperStubMember from './mock-helper.stub-member';
-import mockHelperThrowOnConsole from './mock-helper.throw-on-console';
 import mockHelperHide from './render/mock-helper.hide';
 import mockHelperRender from './render/mock-helper.render';
 import mockHelperFindTemplateRef from './template-ref/mock-helper.find-template-ref';
@@ -82,7 +82,7 @@ export default {
   globalWipe: mockHelperGlobalWipe,
   guts: mockHelperGuts,
   hide: mockHelperHide,
-  ignoreOnConsole: mockHelperIgnoreOnConsole,
+  ignoreOnConsole: mockHelperConsoleIgnore,
   input: mockHelperInput,
   output: mockHelperOutput,
   render: mockHelperRender,
@@ -91,7 +91,7 @@ export default {
   revealAll: mockHelperRevealAll,
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,
-  throwOnConsole: mockHelperThrowOnConsole,
+  throwOnConsole: mockHelperConsoleThrow,
   touch: mockHelperTouch,
   trigger: mockHelperTrigger,
 };

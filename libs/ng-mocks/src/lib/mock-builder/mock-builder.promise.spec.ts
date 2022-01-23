@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { getTestBedInjection } from '../common/core.helpers';
-import mockHelperThrowOnConsole from '../mock-helper/mock-helper.throw-on-console';
+import mockHelperConsoleThrow from '../mock-helper/mock-helper.console-throw';
 
 import { MockBuilder } from './mock-builder';
 
@@ -48,7 +48,7 @@ class TargetDirective {}
 class TargetModule {}
 
 describe('MockBuilderPromise', () => {
-  mockHelperThrowOnConsole();
+  mockHelperConsoleThrow();
 
   it('skips dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService, { dependency: true });
