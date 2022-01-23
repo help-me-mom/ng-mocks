@@ -167,7 +167,7 @@
     "@types/karma-jasmine": "4.0.2",
     "@types/karma-junit-reporter": "2.0.1",
     "@types/karma-webpack": "2.0.11",
-    "@types/mocha": "9.0.0",
+    "@types/mocha": "9.1.0",
     "@types/node": "14.18.9",
     "codecov": "3.8.3",
     "core-js": "3.20.3",
