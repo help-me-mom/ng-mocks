@@ -26,7 +26,6 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import { ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jasmine');
-ngMocks.throwOnConsole();
 jasmine.getEnv().allowRespy(true);
 
 // jasmine.getEnv().addReporter({

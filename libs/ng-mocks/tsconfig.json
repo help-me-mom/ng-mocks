@@ -8,11 +8,10 @@
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "downlevelIteration": true,
-    "inlineSourceMap": true,
-    "inlineSources": true,
     "declaration": true,
-    "outDir": "dist/libs/ng-mocks/cjs",
-    "declarationDir": "dist/libs/ng-mocks/cjs",
+    "importHelpers": false,
+    "outDir": "../../dist/libs/ng-mocks",
+    "declarationDir": "../../dist/libs/ng-mocks",
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
     "experimentalDecorators": true,
@@ -28,7 +27,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "ng-mocks": ["./libs/ng-mocks/src/index.ts"]
+      "ng-mocks": ["./src/index.ts"]
     },
     "skipLibCheck": true,
 
@@ -44,5 +43,5 @@
     "strictPropertyInitialization": true,
     "strictNullChecks": true
   },
-  "include": ["libs/ng-mocks/src/index.ts"]
+  "include": ["./src/index.ts"]
 }

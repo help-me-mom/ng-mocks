@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "./libs/ng-mocks/tsconfig.json",
   "compilerOptions": {
     "inlineSourceMap": false,
     "inlineSources": true,

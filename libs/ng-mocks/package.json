@@ -61,11 +61,15 @@
   },
   "homepage": "https://ng-mocks.sudo.eu",
   "license": "MIT",
-  "types": "./cjs/index.d.ts",
-  "main": "./cjs/index.js",
+  "types": "./index.d.ts",
+  "main": "./index.js",
   "type": "commonjs",
   "files": [
-    "cjs",
+    "index.js",
+    "index.js.map",
+    "index.d.ts",
+    "lib",
+    "src",
     "examples",
     "migrations.json"
   ],
