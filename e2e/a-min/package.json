@@ -47,7 +47,7 @@
     "jasmine-spec-reporter": "7.0.0",
     "jest": "27.4.7",
     "jest-preset-angular": "11.1.0",
-    "karma": "6.3.11",
+    "karma": "6.3.12",
     "karma-chrome-launcher": "3.1.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
