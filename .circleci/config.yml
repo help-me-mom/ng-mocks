@@ -853,25 +853,37 @@ jobs:
   Core IE:
     executor:
       name: win/default
+      shell: bash.exe
     steps:
       - checkout
+      - run: nvm install $(cat .nvmrc)
+      - run: nvm use $(cat .nvmrc)
+      - attach_workspace:
+          at: dist
+      - run:
+          name: NPM Shell
+          command: npm config set script-shell bash.exe
       - restore_cache:
-          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
       - run:
           name: NPM Install
           command: |
-            if ((Test-Path "node_modules") -ne "True") {
-              npm ci --no-optional --ignore-scripts
-            }
+            if [ ! -d "e2e/a12/node_modules/" ]; then
+              cd e2e/a12 && npm ci --no-optional --ignore-scripts && ./node_modules/.bin/ngcc
+            fi
       - save_cache:
-          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+          key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
           paths:
-            - ./node_modules
+            - ./e2e/a12/node_modules
+      - run:
+          name: Spreading Build
+          command: npm run s:a12
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a12
       - run:
           name: Unit Tests
-          command: npm run test -- --reporters dots,junit
-      - store_test_results:
-          path: ./test-reports
+          command: cd e2e/a12 && npm run test:jasmine:es5:ivy
     environment:
       IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
 workflows:
@@ -882,12 +894,12 @@ workflows:
       #      - E2E:
       #          requires:
       #            - Core
-      #      - 'Core IE':
-      #          requires:
-      #            - Core
-      #      - 'Performance':
-      #          requires:
-      #            - Core
+      - 'Core IE':
+          requires:
+            - Core
+      - 'Performance':
+          requires:
+            - Core
       - 'Angular Install':
           requires:
             - Core
