@@ -11,6 +11,9 @@
   "ignoreDeprecated": false,
   "semanticCommitScope": "{{#if baseDir}}{{baseDir}}{{else}}deps{{/if}}",
   "additionalBranchPrefix": "{{#if baseDir}}{{baseDir}}/{{else}}root/{{/if}}",
+  "vulnerabilityAlerts": {
+    "enabled": false
+  },
   "packageRules": [
     {
       "paths": ["libs/ng-mocks/package.json"],
