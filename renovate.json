@@ -36,7 +36,14 @@
     },
 
     {
-      "paths": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "docs/package.json", "package.json"],
+      "paths": [
+        ".circleci/config.yml",
+        "Dockerfile",
+        "docker-compose.yml",
+        "docs/package.json",
+        "tests-e2e/package.json",
+        "package.json"
+      ],
       "additionalBranchPrefix": "root/"
     },
 
