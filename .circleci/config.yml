@@ -4,7 +4,7 @@ orbs:
 parameters:
   lockindex:
     type: string
-    default: '4'
+    default: '5'
 jobs:
   Core:
     docker:
@@ -891,9 +891,9 @@ workflows:
   Testing:
     jobs:
       - Core
-      #      - E2E:
-      #          requires:
-      #            - Core
+      - E2E:
+          requires:
+            - Core
       - 'Core IE':
           requires:
             - Core

@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "compilerOptions": {
+    "target": "es5"
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true
+  }
+}
