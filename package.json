@@ -179,7 +179,7 @@
     "@types/node": "14.18.10",
     "@vercel/ncc": "0.33.1",
     "codecov": "3.8.3",
-    "core-js": "3.20.3",
+    "core-js": "3.21.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
     "husky": "7.0.4",
