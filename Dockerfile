@@ -17,6 +17,7 @@ VOLUME /app/e2e/a10/node_modules
 VOLUME /app/e2e/a11/node_modules
 VOLUME /app/e2e/a12/node_modules
 VOLUME /app/e2e/a13/node_modules
+VOLUME /app/e2e/a14/node_modules
 VOLUME /app/e2e/a-jasmine/node_modules
 VOLUME /app/e2e/a-jest/node_modules
 VOLUME /app/e2e/a-min/node_modules
