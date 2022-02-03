@@ -29,6 +29,7 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 
 |  Angular |                           ng-mocks                            | Jasmine | Jest | Ivy |
 | -------: | :-----------------------------------------------------------: | :-----: | :--: | :-: |
+|       14 |                            latest                             |   yes   | yes  | yes |
 |       13 |                            latest                             |   yes   | yes  | yes |
 |       12 |                            latest                             |   yes   | yes  | yes |
 |       11 |                            latest                             |   yes   | yes  | yes |

@@ -24,6 +24,7 @@ services:
       - /app/e2e/a11/node_modules
       - /app/e2e/a12/node_modules
       - /app/e2e/a13/node_modules
+      - /app/e2e/a14/node_modules
       - /app/e2e/a-jasmine/node_modules
       - /app/e2e/a-jest/node_modules
       - /app/e2e/a-min/node_modules

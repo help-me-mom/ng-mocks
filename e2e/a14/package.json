@@ -1,0 +1,57 @@
+{
+  "name": "a14",
+  "description": "Angular 14",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "npm run test:jasmine && npm run test:jest",
+    "test:debug": "npm run test:jasmine:es2015 -- --browsers=Chrome --watch",
+    "test:jasmine": "npm run test:jasmine:es5 && npm run test:jasmine:es2015",
+    "test:jasmine:es5": "ng test --ts-config ./tsconfig.es5ivy.spec.json --progress=false",
+    "test:jasmine:es2015": "ng test --ts-config ./tsconfig.es2015ivy.spec.json --progress=false",
+    "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
+    "test:jest": "npm run test:jest:es5 && npm run test:jest:es2015",
+    "test:jest:es5": "jest -i --config jest.es5ivy.js",
+    "test:jest:es2015": "jest -i --config jest.es2015ivy.js",
+    "test:jest:debug": "jest -i --watch"
+  },
+  "peerDependencies": {
+    "ng-mocks": "*"
+  },
+  "dependencies": {
+    "@angular/animations": "^14.0.0-next.0",
+    "@angular/common": "^14.0.0-next.0",
+    "@angular/compiler": "^14.0.0-next.0",
+    "@angular/core": "^14.0.0-next.0",
+    "@angular/forms": "^14.0.0-next.0",
+    "@angular/platform-browser": "^14.0.0-next.0",
+    "@angular/platform-browser-dynamic": "^14.0.0-next.0",
+    "@angular/router": "^14.0.0-next.0",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^14.0.0-next.0",
+    "@angular/cli": "~14.0.0-next.0",
+    "@angular/compiler-cli": "^14.0.0-next.0",
+    "@types/jasmine": "~3.10.0",
+    "@types/jest": "27.4.0",
+    "@types/node": "^12.11.1",
+    "jasmine-core": "~4.0.0",
+    "jest": "27.4.7",
+    "jest-preset-angular": "11.1.0",
+    "karma": "~6.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "~1.7.0",
+    "puppeteer": "13.1.3",
+    "typescript": "~4.5.2"
+  },
+  "engines": {
+    "npm": "6.14.16"
+  }
+}
