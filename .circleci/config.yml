@@ -149,7 +149,7 @@ jobs:
             - ./e2e/a-min/node_modules
   'Performance':
     docker:
-      - image: satantime/puppeteer-node:14.18.3-buster
+      - image: satantime/puppeteer-node:14.19.0-buster
     steps:
       - checkout
       - restore_cache:
