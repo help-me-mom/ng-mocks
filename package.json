@@ -8,6 +8,7 @@
     "build": "npm run clean && npm run build:ncc && npm run build:fix && cp CHANGELOG.md dist/libs/ng-mocks && cp README.md dist/libs/ng-mocks && cp LICENSE dist/libs/ng-mocks && cp libs/ng-mocks/package.json dist/libs/ng-mocks/package.json && cp libs/ng-mocks/migrations.json dist/libs/ng-mocks/migrations.json && cp -R examples dist/libs/ng-mocks",
     "build:ncc": "cd ./libs/ng-mocks && npx ncc build --no-source-map-register -m -e '@angular/animations' -e '@angular/cli' -e '@angular/common' -e '@angular/common/http' -e '@angular/core' -e '@angular/core/testing' -e '@angular/forms' -e '@angular/platform-browser' -e '@angular/platform-browser/animations' -e '@angular/platform-browser-dynamic' -e '@angular/router' ./src/index.ts -o ../../dist/libs/ng-mocks/",
     "build:fix": "sed -e 's/__dirname/(typeof __dirname===\"undefined\"?\"\":__dirname)/g' dist/libs/ng-mocks/index.js > dist/libs/ng-mocks/index.fix.js && mv dist/libs/ng-mocks/index.fix.js dist/libs/ng-mocks/index.js",
+    "build:sources": "cp -R libs/ng-mocks/src dist/libs/ng-mocks && sed -e 's/\\.\\.\\/webpack:\\/\\/ng-mocks\\///g' dist/libs/ng-mocks/index.js.map > dist/libs/ng-mocks/index.fix.js.map && mv dist/libs/ng-mocks/index.fix.js.map dist/libs/ng-mocks/index.js.map",
     "build:all": "npm run lint && npm run build && npm run test",
     "build:docs": "cd docs && CI=true npm run build",
     "clean": "rm -rf dist test-reports tmp",
