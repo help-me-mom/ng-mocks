@@ -25,6 +25,20 @@ export default (node: MockedDebugNode): MockedDebugNode[] => {
 
     children.push(childNode);
   }
+  if ((node as any).name === '#host' && (node as any).parent) {
+    let add = false;
+    for (const childNode of (node as any).parent.childNodes) {
+      if (childNode.nativeNode === node.nativeNode) {
+        add = true;
+        continue;
+      }
+      if (add && childNode.name === '#host') {
+        children.push(childNode);
+      } else if (add && !childNode.name) {
+        break;
+      }
+    }
+  }
 
   return children;
 };
