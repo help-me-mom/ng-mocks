@@ -26,5 +26,20 @@ export default (node: MockedDebugNode): MockedDebugNode[] => {
     children.push(childNode);
   }
 
+  if ((node as any).parent?.name === 'BODY') {
+    let add = false;
+    for (const childNode of (node as any).parent.childNodes) {
+      if (childNode.nativeNode === node.nativeNode) {
+        add = true;
+        continue;
+      }
+      if (add && childNode.nativeNode.nodeName !== '#comment') {
+        children.push(childNode);
+      } else if (add) {
+        break;
+      }
+    }
+  }
+
   return children;
 };
