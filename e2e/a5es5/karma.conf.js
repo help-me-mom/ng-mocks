@@ -10,6 +10,7 @@ module.exports = function (config) {
     plugins: [
       require('@angular/cli/plugins/karma'),
       require('karma-chrome-launcher'),
+      require('karma-ie-launcher'),
       require('karma-jasmine'),
       require('karma-jasmine-html-reporter'),
     ],
@@ -24,6 +25,10 @@ module.exports = function (config) {
         base: 'ChromeHeadless',
         flags: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
       },
+      IECi: {
+        base: 'IE',
+        flags: ['-extoff'],
+      },
     },
     angularCli: {
       environment: 'dev',
@@ -33,7 +38,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
-    browsers: ['ChromeCi'],
+    browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
     singleRun: true,
   });
 };
