@@ -35,7 +35,7 @@ if (!process.env.KARMA_SUITE) {
 export default (config: Config) => {
   config.set({
     autoWatch: false,
-    browsers: [process.env.IE_BIN ? 'IECi' : 'ChromeCi'],
+    browsers: ['ChromeCi'],
     client: {
       clearContext: false,
       jasmine: {
@@ -64,10 +64,6 @@ export default (config: Config) => {
           '--remote-debugging-address=0.0.0.0',
           '--remote-debugging-port=9222',
         ],
-      },
-      IECi: {
-        base: 'IE',
-        flags: ['-extoff'],
       },
     },
     files: [

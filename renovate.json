@@ -113,6 +113,12 @@
     },
     {
       "additionalBranchPrefix": "e2e/a5/",
+      "paths": ["e2e/a5es5/.nvmrc", "e2e/a5es2015/.nvmrc"],
+      "packageNames": ["node"],
+      "allowedVersions": "<=6"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["jasmine-spec-reporter"],
       "allowedVersions": "<=4.2"
