@@ -1,3 +1,11 @@
+## [13.0.1](https://github.com/ike18t/ng-mocks/compare/v13.0.0...v13.0.1) (2022-02-06)
+
+
+### Bug Fixes
+
+* **e2e:** support for A14 ([c0bdcbf](https://github.com/ike18t/ng-mocks/commit/c0bdcbfe1416ed18be46b2c2cd1feec274bfa0c5))
+* looking in vcr.createComponent on root node [#1596](https://github.com/ike18t/ng-mocks/issues/1596) ([5aa0d9a](https://github.com/ike18t/ng-mocks/commit/5aa0d9abf76bca49b45c3cd57db49964b5c532a4))
+
 # [13.0.0](https://github.com/ike18t/ng-mocks/compare/v12.5.1...v13.0.0) (2022-01-23)
 
 
