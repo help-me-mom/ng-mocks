@@ -1,11 +1,23 @@
 {
   "extends": "./libs/ng-mocks/tsconfig.json",
   "compilerOptions": {
-    "inlineSourceMap": false,
-    "inlineSources": true,
-    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "paths": {
+      "ng-mocks": ["./src/index.ts"]
+    },
+    "types": [
+      "jasmine",
+      "jest",
+      "karma-coverage-istanbul-reporter",
+      "karma-jasmine",
+      "karma-junit-reporter",
+      "karma-webpack",
+      "mocha",
+      "node"
+    ]
   },
   "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "karma-test-shim.ts", "karma.conf.ts"],
   "exclude": ["e2e", "node_modules"],
