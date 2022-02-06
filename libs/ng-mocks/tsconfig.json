@@ -6,7 +6,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "emitDecoratorMetadata": true,
     "downlevelIteration": true,
     "declaration": true,
     "importHelpers": false,
@@ -14,21 +13,8 @@
     "declarationDir": "../../dist/libs/ng-mocks",
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
-    "experimentalDecorators": true,
-    "types": [
-      "jasmine",
-      "jest",
-      "karma-coverage-istanbul-reporter",
-      "karma-jasmine",
-      "karma-junit-reporter",
-      "karma-webpack",
-      "mocha",
-      "node"
-    ],
     "baseUrl": ".",
-    "paths": {
-      "ng-mocks": ["./src/index.ts"]
-    },
+    "sourceMap": true,
     "skipLibCheck": true,
 
     "noFallthroughCasesInSwitch": true,
