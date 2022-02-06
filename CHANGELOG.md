@@ -1,3 +1,10 @@
+## [13.0.2](https://github.com/ike18t/ng-mocks/compare/v13.0.1...v13.0.2) (2022-02-06)
+
+
+### Bug Fixes
+
+* **ie:** running IE on A5 and old nodejs ([087d58d](https://github.com/ike18t/ng-mocks/commit/087d58d873536921bc3b1745e38ac5213457eef3))
+
 ## [13.0.1](https://github.com/ike18t/ng-mocks/compare/v13.0.0...v13.0.1) (2022-02-06)
 
 
