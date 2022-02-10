@@ -45,7 +45,7 @@
     "@angular/language-service": "9.1.13",
     "@types/jasmine": "3.5.14",
     "@types/jest": "25.2.3",
-    "@types/node": "12.20.43",
+    "@types/node": "12.20.45",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "4.2.1",
     "jest": "25.5.4",
