@@ -222,17 +222,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ike18t/ng-mocks"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "subject-case": [
-        0,
-        "always",
-        "lower-case"
-      ]
-    }
   }
 }
