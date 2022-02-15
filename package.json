@@ -203,7 +203,7 @@
     "lint-staged": "12.3.4",
     "npm": "6.14.16",
     "prettier": "2.5.1",
-    "primeng": "13.1.1",
+    "primeng": "13.2.0",
     "puppeteer": "13.3.2",
     "rxjs": "7.5.4",
     "semantic-release": "19.0.2",
