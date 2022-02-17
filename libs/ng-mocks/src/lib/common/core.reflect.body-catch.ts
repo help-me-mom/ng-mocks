@@ -7,7 +7,7 @@ export default (callback: any) => (def: any) => {
 
   try {
     return callback(def);
-  } catch (e) {
+  } catch {
     errorJestMock(def);
     errorMissingDecorators(def);
   }

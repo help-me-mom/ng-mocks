@@ -15,7 +15,7 @@ export default (
       if (instance) {
         result.push(instance);
       }
-    } catch (e) {
+    } catch {
       // nothing to do
     }
 

@@ -46,7 +46,7 @@ export default (label: string, attr: 'inputs' | 'outputs', ...args: any[]) => {
 
   try {
     return detectAttribute(mockHelperFind(funcGetLastFixture(), el, undefined), attr, sel);
-  } catch (e) {
+  } catch {
     // nothing to do
   }
   if (notFoundValue !== defaultNotFoundValue) {

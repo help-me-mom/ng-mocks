@@ -19,7 +19,7 @@ const setValueAccessor = (instance: any, ngControl?: any) => {
   if (ngControl && !ngControl.valueAccessor && instance.__ngMocksConfig.setControlValueAccessor) {
     try {
       ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.__ngMocksCtor);
-    } catch (e) {
+    } catch {
       // nothing to do.
     }
   }
@@ -60,7 +60,7 @@ const applyNgValueAccessor = (instance: any, ngControl: any) => {
       installValidator(ngControl._rawValidators, instance);
       installValidator(ngControl._rawAsyncValidators, instance);
     }
-  } catch (e) {
+  } catch {
     // nothing to do.
   }
 };

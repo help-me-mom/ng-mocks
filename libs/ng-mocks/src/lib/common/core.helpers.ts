@@ -10,7 +10,7 @@ export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I
   try {
     // istanbul ignore next
     return testBed.inject ? testBed.inject(token) : testBed.get(token);
-  } catch (e) {
+  } catch {
     return undefined;
   }
 };
@@ -94,7 +94,7 @@ const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
       window.ngMocksResult = MockMiddleware
     `);
     child = (window as any).ngMocksResult;
-  } catch (e) {
+  } catch {
     class MockMiddleware extends (window as any).ngMocksParent {}
     child = MockMiddleware;
   }
