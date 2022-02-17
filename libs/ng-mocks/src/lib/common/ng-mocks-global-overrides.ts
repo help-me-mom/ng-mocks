@@ -36,7 +36,10 @@ const applyOverride = (def: any, override: any) => {
 
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
   for (const [def, [override, original]] of mapEntries(overrides)) {
-    (TestBed as any).ngMocksOverrides.set(def, original);
+    (TestBed as any).ngMocksOverrides.set(def, {
+      ...original,
+      override,
+    });
     applyOverride(def, override);
   }
 };
