@@ -57,7 +57,7 @@ const tryWhen = (flag: boolean, callback: () => void) => {
   try {
     // ivy throws Error: Expecting instance of DOM Element
     callback();
-  } catch (e) {
+  } catch {
     // nothing to do
   }
 };

@@ -7,11 +7,9 @@ import funcGetProvider from '../common/func.get-provider';
 const getMeta = (token: any): Directive | undefined => {
   try {
     return coreReflectDirectiveResolve(token);
-  } catch (e) {
-    // Looks like it is a token.
+  } catch {
+    return undefined;
   }
-
-  return undefined;
 };
 
 export default (el: DebugNode | null | undefined, token: any): Directive | undefined => {
@@ -25,7 +23,7 @@ export default (el: DebugNode | null | undefined, token: any): Directive | undef
     const instance = coreInjector(provider, el.injector);
 
     return getMeta(instance.constructor);
-  } catch (e) {
+  } catch {
     return undefined;
   }
 };

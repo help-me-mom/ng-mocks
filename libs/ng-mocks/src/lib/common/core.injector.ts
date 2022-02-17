@@ -10,9 +10,7 @@ export default (declaration: any, injector: Injector = defaultInjector): any => 
   }
   try {
     return injector.get(declaration);
-  } catch (e) {
-    // nothing to do
+  } catch {
+    return undefined;
   }
-
-  return undefined;
 };

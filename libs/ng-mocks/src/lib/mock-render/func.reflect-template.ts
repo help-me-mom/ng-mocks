@@ -9,14 +9,11 @@ import { isNgDef } from '../common/func.is-ng-def';
 const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
   const child = extendClass(template);
 
-  let providers = meta.providers || [];
-  providers = [
-    ...providers,
-    {
-      provide: template,
-      useExisting: child,
-    },
-  ];
+  const alias = {
+    provide: template,
+    useExisting: child,
+  };
+  const providers = [...(meta.providers || []), alias];
   meta.providers = providers;
 
   if (isNgDef(template, 'c')) {
@@ -27,6 +24,23 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
   TestBed.configureTestingModule({
     declarations: [child],
   });
+
+  // https://github.com/ike18t/ng-mocks/issues/1876
+  // We need to apply overrides to our cloned declaration.
+  try {
+    const ngMocksOverrides: Map<any, any> = (TestBed as any).ngMocksOverrides;
+    const { override } = ngMocksOverrides.get(template);
+    const { set } = override;
+    ngMocksOverrides.set(child, { set: meta });
+    TestBed.overrideComponent(child, {
+      set: {
+        ...set,
+        providers: [...set.providers, alias],
+      },
+    });
+  } catch {
+    // nothing to do
+  }
 };
 
 export default (template: AnyType<any>): Directive => {
