@@ -1,3 +1,10 @@
+## [13.0.3](https://github.com/ike18t/ng-mocks/compare/v13.0.2...v13.0.3) (2022-02-20)
+
+
+### Bug Fixes
+
+* **mock-render:** apply overrides to components with no selectors [#1876](https://github.com/ike18t/ng-mocks/issues/1876) ([b032746](https://github.com/ike18t/ng-mocks/commit/b032746161e307000afb8bafc368ae0d655c9c81))
+
 ## [13.0.2](https://github.com/ike18t/ng-mocks/compare/v13.0.1...v13.0.2) (2022-02-06)
 
 
