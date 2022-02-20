@@ -136,11 +136,5 @@ module.exports = {
       },
     ],
     '@docusaurus/plugin-sitemap',
-    [
-      '@docusaurus/plugin-google-gtag',
-      {
-        trackingID: 'G-EBEPX2CVNW',
-      },
-    ],
   ],
 };

@@ -383,6 +383,28 @@ expect(params.o1).toEqual(1);
 expect(params.o2).toHaveBeenCalledWith(2);
 ```
 
+## fixture.detectChanges
+
+By default `MockRender` triggers `fixture.detectChanges`, so you don't need to trigger it yourself.
+However, it might be needed to postpone the trigger of `fixture.detectChanges`.
+
+In order to do so, you need to set `detectChanges` to `false` in `MockRender` options:
+
+```ts
+const fixture = MockRender(MyComponent, null /* or undefined or params */, {
+  detectChanges: false,
+});
+
+// ... some magic
+fixture.detectChanges();
+```
+```ts
+// or simply
+const fixture = MockRender(MyComponent, null /* or undefined or params */, false);
+// ... some magic
+fixture.detectChanges();
+```
+
 ## Example with a component
 
 ```ts
