@@ -151,10 +151,10 @@
     "build:a-min:es2015ivy": "cd e2e/a-min && npm run build:es2015:ivy"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "13.2.4",
+    "@angular-devkit/build-angular": "13.2.5",
     "@angular/animations": "13.2.3",
     "@angular/cdk": "13.2.3",
-    "@angular/cli": "13.2.4",
+    "@angular/cli": "13.2.5",
     "@angular/common": "13.2.3",
     "@angular/compiler": "13.2.3",
     "@angular/compiler-cli": "13.2.3",
