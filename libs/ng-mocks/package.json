@@ -63,10 +63,20 @@
   "license": "MIT",
   "types": "./index.d.ts",
   "main": "./index.js",
+  "module": "./index.mjs",
   "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "node": "./index.mjs",
+      "default": "./index.mjs"
+    }
+  },
   "files": [
     "index.js",
     "index.js.map",
+    "index.mjs",
+    "index.mjs.map",
     "index.d.ts",
     "lib",
     "src",
