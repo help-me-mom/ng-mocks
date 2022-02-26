@@ -153,6 +153,12 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'How to mock',
+      collapsed: false,
+      items: ['guides/mock/directive-structural-let-of'],
+    },
+    {
+      type: 'category',
       label: 'Testing libraries',
       collapsed: false,
       items: [
