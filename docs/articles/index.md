@@ -56,7 +56,7 @@ Also, there is a brief summary with **the latest changes** in [CHANGELOG](https:
 ## Very short introduction
 
 Global configuration for mocks in `src/test.ts`.
-In case of jest `src/setup-jest.ts` should be used.
+In case of jest `src/setup-jest.ts` / `src/test-setup.ts` should be used.
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers

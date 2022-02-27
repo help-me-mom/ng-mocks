@@ -882,9 +882,6 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a-min:es5ivy
-      - run:
-          name: Build
-          command: npm run build:a-min:es5ivy
   'Angular Min ES2015 Ivy':
     docker:
       - image: satantime/puppeteer-node:14.19.0
@@ -900,9 +897,41 @@ jobs:
       - run:
           name: Unit Tests
           command: npm run test:a-min:es2015ivy
+  'Angular NX Install':
+    docker:
+      - image: satantime/puppeteer-node:16.14.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
       - run:
-          name: Build
-          command: npm run build:a-min:es2015ivy
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/nx/node_modules/" ]; then
+              npm run i:ci:a-nx
+            fi
+      - save_cache:
+          key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
+          paths:
+            - ./e2e/nx/node_modules
+  'Angular NX':
+    docker:
+      - image: satantime/puppeteer-node:16.14.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:a-nx
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:a-nx
+      - run:
+          name: Unit Tests
+          command: npm run test:a-nx
   Core IE:
     executor:
       name: win/default
@@ -994,6 +1023,9 @@ workflows:
           requires:
             - Core
       - 'Angular 14 Install':
+          requires:
+            - Core
+      - 'Angular NX Install':
           requires:
             - Core
       - 'Angular 5 ES5':
@@ -1092,3 +1124,6 @@ workflows:
       - 'Angular Min ES2015 Ivy':
           requires:
             - Angular Install
+      - 'Angular NX':
+          requires:
+            - Angular NX Install

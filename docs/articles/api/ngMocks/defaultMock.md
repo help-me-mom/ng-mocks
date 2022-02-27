@@ -10,7 +10,7 @@ Sets default values for mocks in the whole testing environment.
 - `ngMocks.defaultMock( Component )` - removes overrides
 - `ngMocks.defaultMock( TOKEN )` - removes overrides
 
-The best place to do that is in `src/test.ts` for jasmine or in `src/setup-jest.ts` for `jest`.
+The best place to do that is in `src/test.ts` for jasmine or in `src/setup-jest.ts` / `src/test-setup.ts` for `jest`.
 
 For example, if a service or component has a property that should be an `Observable`.
 Then, we can configure it to be an `EMPTY` stream in the whole test suite.

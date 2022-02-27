@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "projects": {
+    "a-nx": "apps/a-nx"
+  }
+}

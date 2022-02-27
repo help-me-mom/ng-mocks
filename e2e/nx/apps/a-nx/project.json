@@ -1,0 +1,60 @@
+{
+  "projectType": "application",
+  "root": "apps/a-nx",
+  "sourceRoot": "apps/a-nx/src",
+  "prefix": "nx",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/a-nx",
+        "index": "apps/a-nx/src/index.html",
+        "main": "apps/a-nx/src/main.ts",
+        "polyfills": "apps/a-nx/src/polyfills.ts",
+        "tsConfig": "apps/a-nx/tsconfig.json"
+      },
+      "configurations": {
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "a-nx:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "a-nx:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/a-nx/src/**/*.ts", "apps/a-nx/src/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/a-nx"],
+      "options": {
+        "jestConfig": "apps/a-nx/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

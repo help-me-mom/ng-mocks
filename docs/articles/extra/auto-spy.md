@@ -15,9 +15,9 @@ ngMocks.autoSpy('jasmine');
 // jasmine.getEnv().allowRespy(true);
 ```
 
-In case of jest add it to `src/setup-jest.ts`.
+In case of jest add it to `src/setup-jest.ts` / `src/test-setup.ts`.
 
-```ts title="src/setup-jest.ts"
+```ts title="src/setup-jest.ts / src/test-setup.ts"
 import { ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jest');

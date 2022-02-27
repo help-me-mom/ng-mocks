@@ -1,0 +1,49 @@
+{
+  "name": "nx",
+  "description": "NX",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "nx",
+    "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test -i"
+  },
+  "peerDependencies": {
+    "ng-mocks": "*"
+  },
+  "dependencies": {
+    "@angular/animations": "~13.2.0",
+    "@angular/common": "~13.2.0",
+    "@angular/compiler": "~13.2.0",
+    "@angular/core": "~13.2.0",
+    "@angular/forms": "~13.2.0",
+    "@angular/platform-browser": "~13.2.0",
+    "@angular/platform-browser-dynamic": "~13.2.0",
+    "@angular/router": "~13.2.0",
+    "@nrwl/angular": "13.8.3",
+    "rxjs": "~7.4.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~13.2.0",
+    "@angular/cli": "~13.2.0",
+    "@angular/compiler-cli": "~13.2.0",
+    "@angular/language-service": "~13.2.0",
+    "@nrwl/cli": "13.8.3",
+    "@nrwl/jest": "13.8.3",
+    "@nrwl/linter": "13.8.3",
+    "@nrwl/tao": "13.8.3",
+    "@nrwl/workspace": "13.8.3",
+    "@types/jasmine": "3.10.3",
+    "@types/jest": "27.0.2",
+    "@types/node": "16.11.7",
+    "jest": "27.2.3",
+    "jest-preset-angular": "11.1.1",
+    "prettier": "^2.5.1",
+    "ts-jest": "27.0.5",
+    "typescript": "~4.5.2"
+  }
+}
