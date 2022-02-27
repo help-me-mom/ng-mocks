@@ -28,3 +28,4 @@ services:
       - /app/e2e/a-jasmine/node_modules
       - /app/e2e/a-jest/node_modules
       - /app/e2e/a-min/node_modules
+      - /app/e2e/nx/node_modules

@@ -44,7 +44,7 @@ The current version of the library **has been tested** and **can be used** with:
 ## Very short introduction
 
 Global configuration for mocks in `src/test.ts`.
-In case of jest, `src/setupJest.ts` should be used.
+In case of jest, `src/setup-jest.ts` / `src/test-setup.ts` should be used.
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers

@@ -3,6 +3,7 @@ CHANGELOG.md
 dist/
 docs/**/*.md
 docs/.docusaurus
+e2e/**/.angular
 e2e/a10/src/test
 e2e/a11/src/test
 e2e/a12/src/test
@@ -15,6 +16,8 @@ e2e/a7/src/test
 e2e/a8/src/test
 e2e/a9/src/test
 e2e/a-min/src/test
+e2e/nx/apps/a-nx/src/test
 node_modules/
+tests-e2e/.angular
 test-reports/
 tmp/

@@ -18,7 +18,7 @@ It may be useful to configure [auto spy](./auto-spy.md) for all methods, getters
 Apart from [auto spy](./auto-spy.md), we may want to customize mock behavior via [MockInstance](../api/MockInstance.md).
 There is a way to reset all customizations automatically on `afterEach` and `afterAll` levels.
 
-Simply add the next code to `src/test.ts` or `src/setup-jest.ts` in case of jest:
+Simply add the next code to `src/test.ts` or `src/setup-jest.ts` / `src/test-setup.ts` in case of jest:
 
 ```ts title="src/test.ts"
 import { ngMocks } from 'ng-mocks';

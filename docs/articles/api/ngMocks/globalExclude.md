@@ -5,7 +5,7 @@ description: Documentation about ngMocks.globalExclude from ng-mocks library
 
 `ngMocks.globalExclude` marks declarations, services and tokens to be excluded during creating mock modules.
 
-The best place to do that is in `src/test.ts` for `jasmine` or in `src/setup-jest.ts` for `jest`.
+The best place to do that is in `src/test.ts` for `jasmine` or in `src/setup-jest.ts` / `src/test-setup.ts` for `jest`.
 
 It is useful when some of them have been provided in `TestBed.initTestEnvironment`,
 and we would like to get these versions in tests, although something declares or imports original ones.

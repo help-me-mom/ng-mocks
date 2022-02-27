@@ -21,6 +21,7 @@ VOLUME /app/e2e/a14/node_modules
 VOLUME /app/e2e/a-jasmine/node_modules
 VOLUME /app/e2e/a-jest/node_modules
 VOLUME /app/e2e/a-min/node_modules
+VOLUME /app/e2e/nx/node_modules
 
 RUN npm config set cache /npm --global
 
