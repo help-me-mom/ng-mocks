@@ -1,3 +1,10 @@
+## [13.0.4](https://github.com/ike18t/ng-mocks/compare/v13.0.3...v13.0.4) (2022-02-27)
+
+
+### Bug Fixes
+
+* **a14:** root providers for ApplicationModule [#1932](https://github.com/ike18t/ng-mocks/issues/1932) ([fef7692](https://github.com/ike18t/ng-mocks/commit/fef769201b37b260c4a4029cba85c8efb079b90e))
+
 ## [13.0.3](https://github.com/ike18t/ng-mocks/compare/v13.0.2...v13.0.3) (2022-02-20)
 
 
