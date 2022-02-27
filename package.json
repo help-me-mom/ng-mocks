@@ -55,6 +55,7 @@
     "i:ci:a14": "cd e2e/a14 && npm ci --no-optional && ./node_modules/.bin/ngcc",
     "i:ci:a-jasmine": "cd e2e/a-jasmine && npm ci --no-optional && ./node_modules/.bin/ngcc",
     "i:ci:a-jest": "cd e2e/a-jest && npm ci --no-optional && ./node_modules/.bin/ngcc",
+    "i:ci:a-min": "cd e2e/a-min && npm ci --no-optional && ./node_modules/.bin/ngcc",
     "i:ci:a-nx": "cd e2e/nx && npm ci --no-optional && ./node_modules/.bin/ngcc",
     "s:a": "npm run s:a5 && npm run s:a6 && npm run s:a7 && npm run s:a8 && npm run s:a9 && npm run s:a10 && npm run s:a11 && npm run s:a12 && npm run s:a13 && npm run s:a14 && npm run s:a-jasmine && npm run s:a-jest && npm run s:a-min && npm run s:a-nx",
     "s:a5": "npm run s:a5es5 && npm run s:a5es2015",
