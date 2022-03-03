@@ -28,7 +28,7 @@ describe('Maximum performance', () => {
 
   beforeAll(() => MockBuilder(MyComponent, MyModule));
 
-  let factory: MockRenderFactory<MyComponent>;
+  let factory: MockRenderFactory<MyComponent, 'input1' | 'input2'>;
   beforeAll(() => {
     factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
   });
