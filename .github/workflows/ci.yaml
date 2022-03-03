@@ -76,13 +76,13 @@ jobs:
         run: npm run build:docs
 
       - name: Workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: workspace
           path: dist
 
       - name: Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Core Test Reports
@@ -174,7 +174,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: IE11 Test Reports
