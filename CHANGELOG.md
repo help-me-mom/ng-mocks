@@ -1,3 +1,15 @@
+# [13.1.0](https://github.com/ike18t/ng-mocks/compare/v13.0.4...v13.1.0) (2022-03-06)
+
+
+### Bug Fixes
+
+* **core:** mocking viewProviders [#1507](https://github.com/ike18t/ng-mocks/issues/1507) ([421c473](https://github.com/ike18t/ng-mocks/commit/421c473c3206ff8c01c4ea59ed3f5720d0826f18))
+
+
+### Features
+
+* **MockInstance:** resets root overrides likewise properties [#1256](https://github.com/ike18t/ng-mocks/issues/1256) ([a903556](https://github.com/ike18t/ng-mocks/commit/a903556c7aa5c101cf44a3c1f6d20a92e5c74698))
+
 ## [13.0.4](https://github.com/ike18t/ng-mocks/compare/v13.0.3...v13.0.4) (2022-02-27)
 
 
