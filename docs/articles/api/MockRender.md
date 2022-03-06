@@ -473,7 +473,7 @@ fixture.point.componentInstance;
 
 ## Example with providers
 
-If we want, we can specify providers for the render passing them via the 3rd parameter.
+If we want, we can specify `providers` or `viewProviders` for the render passing them via the 3rd parameter.
 It is useful, when we want to **provide mock system tokens / services** such as `APP_INITIALIZER`, `DOCUMENT` etc.
 
 ```ts
@@ -488,6 +488,9 @@ const fixture = MockRender(
         useValue: MockService(Document),
       },
     ],
+    providers: [MockProvider(OtherService, {
+      serviceFlag: true,
+    })],
   },
 );
 ```
