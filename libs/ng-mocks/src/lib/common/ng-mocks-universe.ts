@@ -54,14 +54,6 @@ ngMocksUniverse.global.set('flags', {
   onTestBedFlushNeed: coreConfig.onTestBedFlushNeed,
 });
 
-ngMocksUniverse.getLocalMocks = () => {
-  if (!ngMocksUniverse.global.has('local-mocks')) {
-    ngMocksUniverse.global.set('local-mocks', []);
-  }
-
-  return ngMocksUniverse.global.get('local-mocks');
-};
-
 ngMocksUniverse.getOverrides = globalMap('overrides');
 ngMocksUniverse.getDefaults = globalMap('defaults');
 

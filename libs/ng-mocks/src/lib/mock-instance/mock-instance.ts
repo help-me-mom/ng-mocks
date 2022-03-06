@@ -26,30 +26,6 @@ ngMocksStack.subscribePop((state, stack) => {
   currentStack = stack[stack.length - 1];
 });
 
-ngMocksStack.subscribePush(() => {
-  // On start we have to flush any caches,
-  // they are not from this spec.
-  const set = ngMocksUniverse.getLocalMocks();
-  set.splice(0, set.length);
-});
-ngMocksStack.subscribePop(() => {
-  const set = ngMocksUniverse.getLocalMocks();
-  while (set.length) {
-    const [declaration, config] = set.pop() || /* istanbul ignore next */ [];
-    const universeConfig = ngMocksUniverse.configInstance.has(declaration)
-      ? ngMocksUniverse.configInstance.get(declaration)
-      : /* istanbul ignore next */ {};
-    ngMocksUniverse.configInstance.set(declaration, {
-      ...universeConfig,
-      ...config,
-    });
-  }
-});
-
-const restore = (declaration: any, config: any): void => {
-  ngMocksUniverse.getLocalMocks().push([declaration, config]);
-};
-
 interface MockInstanceArgs {
   accessor?: 'get' | 'set';
   data?: any;
@@ -65,7 +41,10 @@ const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
     set.value = args[1];
     set.accessor = args[2];
   } else {
-    set.data = args[0];
+    set.value = args[0];
+    if (typeof set.value !== 'function') {
+      set.value = set.value?.init;
+    }
   }
 
   return set;
@@ -82,41 +61,9 @@ if (typeof beforeEach !== 'undefined') {
   afterEach(() => (checkCollect = false));
 }
 
-const mockInstanceConfig = <T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, data?: any): void => {
-  const config = typeof data === 'function' ? { init: data } : data;
-  const universeConfig = ngMocksUniverse.configInstance.has(declaration)
-    ? ngMocksUniverse.configInstance.get(declaration)
-    : {};
-  restore(declaration, universeConfig);
-
-  if (config) {
-    ngMocksUniverse.configInstance.set(declaration, {
-      ...universeConfig,
-      ...config,
-    });
-  } else {
-    ngMocksUniverse.configInstance.set(declaration, {
-      ...universeConfig,
-      init: undefined,
-      overloads: [],
-    });
-  }
-
-  if (!config) {
-    // When we are calling MockInstance without a config we need to reset it from the checks too.
-    for (let i = checkReset.length - 1; i >= 0; i -= 1) {
-      if (checkReset[i][0] === declaration && checkReset[i][2] === currentStack) {
-        checkReset.splice(i, 1);
-      }
-    }
-  } else if (checkCollect) {
-    checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration), currentStack]);
-  }
-};
-
-const mockInstanceMember = <T>(
+const mockInstanceConfig = <T>(
   declaration: Type<T> | AbstractType<T> | InjectionToken<T>,
-  name: string,
+  name: string | undefined,
   stub: any,
   encapsulation?: 'get' | 'set',
 ) => {
@@ -230,12 +177,25 @@ export function MockInstance<T>(
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, ...args: any[]) {
   funcImportExists(declaration, 'MockInstance');
 
-  const { key, value, accessor, data } = parseMockInstanceArgs(args);
-  if (key) {
-    return mockInstanceMember(declaration, key, value, accessor);
+  const { key, value, accessor } = parseMockInstanceArgs(args);
+
+  if (value) {
+    return mockInstanceConfig(declaration, key, value, accessor);
   }
 
-  mockInstanceConfig(declaration, data);
+  const config = ngMocksUniverse.configInstance.get(declaration) || /* istanbul ignore next */ {};
+
+  ngMocksUniverse.configInstance.set(declaration, {
+    ...config,
+    overloads: [],
+  });
+
+  // When we are calling MockInstance without a config we need to reset it from the checks too.
+  for (let i = checkReset.length - 1; i >= 0; i -= 1) {
+    if (checkReset[i][0] === declaration && checkReset[i][2] === currentStack) {
+      checkReset.splice(i, 1);
+    }
+  }
 }
 
 /**
