@@ -1,4 +1,4 @@
-import { NgModule, Provider } from '@angular/core';
+import { Component, Directive, NgModule, Pipe, Provider } from '@angular/core';
 
 import { flatten } from '../common/core.helpers';
 import { Type } from '../common/core.types';
@@ -13,7 +13,14 @@ const flatToExisting = <T, R>(data: T | T[], callback: (arg: T) => R | undefined
     .map(callback)
     .filter((item): item is R => !!item);
 
-type processMeta = 'declarations' | 'entryComponents' | 'bootstrap' | 'providers' | 'imports' | 'exports';
+type processMeta =
+  | 'declarations'
+  | 'entryComponents'
+  | 'bootstrap'
+  | 'providers'
+  | 'viewProviders'
+  | 'imports'
+  | 'exports';
 
 const configureProcessMetaKeys = (
   resolve: (def: any) => any,
@@ -23,16 +30,17 @@ const configureProcessMetaKeys = (
   ['entryComponents', resolve],
   ['bootstrap', resolve],
   ['providers', resolveProvider],
+  ['viewProviders', resolveProvider],
   ['imports', resolve],
   ['exports', resolve],
 ];
 
 const processMeta = (
-  ngModule: NgModule,
+  ngModule: Partial<NgModule & Component & Directive & Pipe>,
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
 ): NgModule => {
-  const mockModuleDef: NgModule = {};
+  const mockModuleDef: Partial<NgModule & Component & Directive & Pipe> = {};
   const keys = configureProcessMetaKeys(resolve, resolveProvider);
 
   const cachePipe = ngMocksUniverse.flags.has('cachePipe');
@@ -45,6 +53,7 @@ const processMeta = (
     }
   }
   markProviders(mockModuleDef.providers);
+  markProviders(mockModuleDef.viewProviders);
 
   if (!cachePipe) {
     ngMocksUniverse.flags.delete('cachePipe');

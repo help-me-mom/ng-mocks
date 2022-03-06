@@ -83,7 +83,12 @@ export default (
   const caches = getCache();
 
   // nulls help to detect defaults
-  const cacheKey = [template, ...(bindings ?? [null]), ...(flags.providers ?? [null])];
+  const cacheKey = [
+    template,
+    ...(bindings ?? [null]),
+    ...(flags.providers ?? [null]),
+    ...(flags.viewProviders ?? [null]),
+  ];
   let ctor = checkCache(caches, cacheKey);
   if (ctor) {
     return ctor;
@@ -94,6 +99,7 @@ export default (
     providers: flags.providers,
     selector: 'mock-render',
     template: mockTemplate,
+    viewProviders: flags.viewProviders,
   };
 
   ctor = generateWrapper({ ...meta, bindings, options });

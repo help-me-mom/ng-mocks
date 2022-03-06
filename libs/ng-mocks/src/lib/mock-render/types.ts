@@ -15,6 +15,7 @@ export interface IMockRenderOptions {
   detectChanges?: boolean;
   providers?: Provider[];
   reset?: boolean;
+  viewProviders?: Provider[];
 }
 
 export interface IMockRenderFactoryOptions extends IMockRenderOptions {
