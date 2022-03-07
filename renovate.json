@@ -1,5 +1,6 @@
 {
   "extends": ["config:base", ":semanticCommitTypeAll(chore)"],
+  "dependencyDashboard": false,
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
   "rangeStrategy": "pin",
