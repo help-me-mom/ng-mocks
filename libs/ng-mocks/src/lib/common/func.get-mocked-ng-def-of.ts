@@ -61,7 +61,7 @@ export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'p'): Type<Mo
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
  */
-export function getMockedNgDefOf(declaration: AnyType<any>): Type<any>;
+export function getMockedNgDefOf<T>(declaration: AnyType<T>): Type<T>;
 
 export function getMockedNgDefOf(declaration: any, type?: any): any {
   const source = declaration.mockOf ? declaration.mockOf : declaration;
