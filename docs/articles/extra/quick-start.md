@@ -4,7 +4,7 @@ description: Quick explanation how to simplify mocking in Angular tests with hel
 sidebar_label: Quick start
 ---
 
-Angular testing is fun and easy until we have met complex dependencies,
+Angular testing is fun and easy until you have met complex dependencies,
 and setting up the `TestBed` becomes really annoying and time-consuming.
 
 `ng-mocks` helps to bring fun and ease back allowing developers
@@ -20,7 +20,7 @@ or with pro tools such as
 [`MockBuilder`](../api/MockBuilder.md) with
 [`MockRender`](../api/MockRender.md).
 
-Let's suppose that in our Angular application we have a base component,
+Let's suppose that in our Angular application you have a component, called `AppBaseComponent`,
 and its template looks like that:
 
 ```html
@@ -38,7 +38,7 @@ and its template looks like that:
 <app-footer></app-footer>
 ```
 
-This means that our base component depends on the next child components, services and declarations:
+This means that the component depends on the next child components, services and declarations:
 
 - `AppHeaderComponent`
 - `AppSearchComponent`
@@ -47,12 +47,12 @@ This means that our base component depends on the next child components, service
 - `SearchService`
 - `TranslatePipe`
 
-We could easily test it with `schemas: [NO_ERRORS_SCHEMA]`
+You could easily test it with `schemas: [NO_ERRORS_SCHEMA]`
 to avoid
 [`Template parse errors: <component> is not a known element`](../troubleshooting/not-a-known-element.md),
-and it would work, but in this case we have zero guarantee, that our tests will fail
+and it would work, but in this case you have zero guarantee, that our tests will fail
 if an interface of a dependency has been changed and requires
-code updates. Therefore, we have to avoid `NO_ERRORS_SCHEMA`.
+code updates. Therefore, you have to avoid `NO_ERRORS_SCHEMA`.
 
 However, it forces us putting all dependencies in the `TestBed` like that:
 
@@ -81,7 +81,7 @@ TestBed.configureTestingModule({
 ```
 
 And yes, nobody knows which dependencies the dependencies have,
-although we definitely know that we do not want to worry about them.
+although we definitely know that you do not want to worry about them.
 
 That is where `ng-mocks` comes for help. Simply pass all the dependencies
 into **helper functions to get their mock versions**
@@ -96,6 +96,7 @@ TestBed.configureTestingModule({
     // Mocking dependencies.
     MockComponent(AppHeaderComponent),
     MockDirective(AppDarkDirective),
+    
     MockPipe(TranslatePipe),
     // ...
   ],
@@ -112,11 +113,11 @@ TestBed.configureTestingModule({
 ```
 
 If you have noticed `search$ | async` in the template, you made the right assumption:
-we need to provide a fake observable stream within the mock `SearchService` to avoid failures
+you need to provide a fake observable stream to avoid failures
 like [`Cannot read property 'pipe' of undefined`](../troubleshooting/read-property-of-undefined.md),
 when the component tries to execute `this.search$ = this.searchService.result$.pipe(...)` in `ngOnInit`.
 
-For example, we can implement it via [`MockInstance`](../api/MockInstance.md):
+For example, you can implement it via [`MockInstance`](../api/MockInstance.md):
 
 ```ts
 beforeEach(() =>
@@ -126,8 +127,8 @@ beforeEach(() =>
 );
 ```
 
-or if we want to set it as default mock behavior for all tests,
-we can use [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md) in `src/test.ts`:
+or if you want to set that as default mock behavior for all tests,
+you can use [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md) in `src/test.ts`:
 
 ```ts title="src/test.ts"
 ngMocks.defaultMock(SearchService, () => ({
@@ -135,11 +136,12 @@ ngMocks.defaultMock(SearchService, () => ({
 }));
 ```
 
-Profit. Now, we can forget about noise of child dependencies.
+Profit. Now, you can forget about noise of child dependencies.
 
 Nevertheless, if we count lines of mock declarations,
-we see that there are a lot of them, and looks like here might be dozens more for big
-components. Also, what happens if someone deletes `AppSearchModule`
+we see that there are a lot of them,
+and looks like here might be dozens more for components with many dependencies from many modules.
+Also, what happens if someone has deleted `AppSearchModule`
 from `AppBaseModule`? Does not look like the test will fail due to
 a missed dependency.
 
@@ -147,51 +149,123 @@ Right, we need a tool that would extract declarations of the module
 `AppBaseComponent` belongs to, and create mocks out of them like the code above.
 Then, if someone deletes `AppSearchModule` the test fails too.
 
-[`ngMocks.guts`](../api/ngMocks/guts.md) and [`MockBuilder`](../api/MockBuilder.md) are the tool for that.
+[`ngMocks.guts`](#ngmocksguts) and [`MockBuilder`](#mockbuilder) are the tool for that.
 
-[`ngMocks.guts`](../api/ngMocks/guts.md) works like that:
-its first parameter accepts things we want to test (avoid mocks),
-the second parameter accepts things out of which we want to create mocks, if it is a module,
-its declarations (guts) will be turned into mocks, except the things
-from the first parameter, and the third parameter accepts things we want
-to exclude at all from the final meta. Any parameter can be `null` if
-we need to skip it, or an array if we want to pass more than one.
+## ngMocks.guts 
+
+[`ngMocks.guts`](../api/ngMocks/guts.md) works like that: it accepts 3 parameters, each one is optional.
+
+- 1st parameter accepts things we want to test as they are, these won't be mocked.
+- 2nd parameter accepts dependencies of the things. These dependencies will be mocked. In the case of modules,
+  their imports, declarations and providers (guts) will be mocked. 
+- 3rd parameter accepts things which should be excluded from the dependencies to provide sophisticated mocks later.
+
+Any parameter can be `null` to neglect it, or an array if we want to pass more than one thing.
+
+Now, let's apply [`ngMocks.guts`](../api/ngMocks/guts.md) to `AppBaseComponent` and its `AppBaseModule`
+from the beginning of this article.
+
+The goal is to mock guts of `AppBaseModule`, but to keep `AppBaseComponent` as it is for testing,
+and to replace `SearchService` with a sophisticated mock.
+
+Therefore,
+`AppBaseComponent` should be passed as the first parameter,
+`AppBaseModule` as the second one,
+and `SearchService` as the third one.
 
 ```ts
-const testModuleMeta = ngMocks.guts(AppBaseComponent, AppBaseModule);
-// feel free to add extra stuff
-// testModuleMeta.providers.push({
-//   provide: SearchService,
-//   useValue: SpiedSearchService,
-// });
-TestBed.configureTestingModule(testModuleMeta);
+const testModuleDeclaration = ngMocks.guts(
+  AppBaseComponent, // keep
+  AppBaseModule, // mock
+  [SearchService], // exclude
+);
 ```
 
-Profit, but what about lazy loaded modules?
+[`ngMocks.guts`](../api/ngMocks/guts.md) detects that `AppBaseModule` is a module and extracts its guts
+respecting the 1st and the 3rd parameters, what should be mocked and excluded.
 
-If we have a lazy module, then it alone might be not sufficient, and
-we need to add its parent module, for example `AppModule`.
+The result of [`ngMocks.guts`](../api/ngMocks/guts.md) is the same as: 
+
+```ts
+const testModuleDeclaration = {
+  declarations: [
+    AppBaseComponent, // keep
+    MockComponent(AppHeaderComponent),
+    MockDirective(AppDarkDirective),
+    MockPipe(TranslatePipe),
+  ],
+  imports: [
+    MockModule(CommonModule),
+    MockModule(AppSearchModule),
+  ],
+  providers: [
+    // SearchService, // exclude
+  ],
+};
+```
+
+Now, let's add a sophisticated mock for `SearchService`.
+
+```ts
+testModuleDeclaration.providers.push({
+  provide: SearchService,
+  useValue: SophisticatedMockSearchService,
+});
+```
+
+Profit. `TestBed` can be configured now.
+
+```
+TestBed.configureTestingModule(testModuleDeclaration);
+```
+
+And all together:
+
+```ts
+beforeEach(() => {
+  const testModuleDeclaration = ngMocks.guts(
+    AppBaseComponent, // keep
+    AppBaseModule, // mock
+    [SearchService], // exclude
+  );
+  testModuleDeclaration.providers.push({
+    provide: SearchService,
+    useValue: SophisticatedMockSearchService,
+  });
+  
+  return TestBed.configureTestingModule(testModuleDeclaration);
+});
+```
+
+### Lazy loaded modules
+
+What about lazy loaded modules?
+
+If you have a lazy module, then it alone might be not sufficient, and
+you need to add its parent module, for example `AppModule`.
 In such a case, simply pass an array of modules as the second
 parameter.
 
 ```ts
 TestBed.configureTestingModule(
   ngMocks.guts(
-    AppBaseComponent, // <- kept as it is.
-    [AppBaseModule, AppModule],
+    AppBaseComponent, // keep
+    [AppBaseModule, AppModule], // mock
   ),
 );
 ```
 
 Profit. That should be enough for the start.
 
+## MockBuilder
+
 The functions above help with an easy start, but they do not cover all
 possible cases and do not provide tools for customizing behavior.
 Consider reading [`MockBuilder`](../api/MockBuilder.md) and [`MockRender`](../api/MockRender.md)
-if we want **to create mocks for child dependencies like a pro**
+if you want **to create mocks for child dependencies like a pro**
 in Angular tests.
 
-For example, if we needed `TranslatePipe` to prefix its strings instead of
+For example, if you needed `TranslatePipe` to prefix its strings instead of
 translating them, and to create a stub `SearchService` with an empty result which would not cause
 an error during execution because of a missed observable in its mock object,
 the code would look like:
