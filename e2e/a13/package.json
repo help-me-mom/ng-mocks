@@ -45,7 +45,7 @@
     "jest": "27.5.1",
     "jest-preset-angular": "11.0.1",
     "karma": "6.3.17",
-    "karma-chrome-launcher": "3.1.0",
+    "karma-chrome-launcher": "3.1.1",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
     "puppeteer": "10.4.0",
