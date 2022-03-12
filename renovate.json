@@ -35,6 +35,13 @@
       },
       "additionalBranchPrefix": "root/"
     },
+    {
+      "packagePatterns": ["npm"],
+      "major": {
+        "enabled": false
+      },
+      "additionalBranchPrefix": "npm/"
+    },
 
     {
       "paths": [
@@ -1156,14 +1163,6 @@
       "paths": ["e2e/a14/package.json"],
       "packagePatterns": ["npm"],
       "allowedVersions": "/^8\\./"
-    },
-
-    {
-      "packagePatterns": ["npm"],
-      "major": {
-        "enabled": false
-      },
-      "additionalBranchPrefix": "npm/"
     }
   ]
 }
