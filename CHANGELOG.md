@@ -1,3 +1,11 @@
+## [13.1.1](https://github.com/ike18t/ng-mocks/compare/v13.1.0...v13.1.1) (2022-03-12)
+
+
+### Bug Fixes
+
+* **a14:** adding a14 to peerDependencies ([e76b644](https://github.com/ike18t/ng-mocks/commit/e76b64413be8a58992ec546495a6f7c96ae26b18))
+* **core:** generic in getMockedNgDefOf [#985](https://github.com/ike18t/ng-mocks/issues/985) ([567908d](https://github.com/ike18t/ng-mocks/commit/567908df9611781e6a7adfa3dfb84ed9f7e9e996))
+
 # [13.1.0](https://github.com/ike18t/ng-mocks/compare/v13.0.4...v13.1.0) (2022-03-06)
 
 
