@@ -1160,7 +1160,10 @@
 
     {
       "packagePatterns": ["npm"],
-      "allowedVersions": "/^8\\./"
+      "major": {
+        "enabled": false
+      },
+      "additionalBranchPrefix": "npm/"
     }
   ]
 }
