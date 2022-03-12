@@ -16,7 +16,7 @@
     "@docusaurus/core": "2.0.0-beta.17",
     "@docusaurus/plugin-content-docs": "2.0.0-beta.17",
     "@docusaurus/plugin-sitemap": "2.0.0-beta.17",
-    "@docusaurus/remark-plugin-npm2yarn": "2.0.0-beta.14",
+    "@docusaurus/remark-plugin-npm2yarn": "2.0.0-beta.17",
     "@docusaurus/theme-classic": "2.0.0-beta.17",
     "@mdx-js/react": "1.6.22",
     "clsx": "1.1.1",
