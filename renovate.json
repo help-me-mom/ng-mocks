@@ -1113,7 +1113,7 @@
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
       "packageNames": ["@types/node"],
-      "allowedVersions": "<=12"
+      "allowedVersions": "<=16"
     },
     {
       "additionalBranchPrefix": "e2e/a14/",
@@ -1155,7 +1155,7 @@
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
       "packagePatterns": ["npm"],
-      "allowedVersions": "/^6\\.14\\./"
+      "allowedVersions": "/^8\\./"
     },
 
     {
