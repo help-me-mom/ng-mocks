@@ -1160,7 +1160,7 @@
 
     {
       "packagePatterns": ["npm"],
-      "allowedVersions": "/^6\\./"
+      "allowedVersions": "/^8\\./"
     }
   ]
 }

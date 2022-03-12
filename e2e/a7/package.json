@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "npm": "npm",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -51,6 +52,7 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "1.1.2",
     "karma-jasmine-html-reporter": "0.2.2",
+    "npm": "6.14.16",
     "puppeteer": "2.1.1",
     "ts-jest": "24.3.0",
     "ts-node": "7.0.1",
