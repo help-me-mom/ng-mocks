@@ -756,7 +756,7 @@ jobs:
           command: npm run test:a13es2015ivy
   'Angular 14 Install':
     docker:
-      - image: satantime/puppeteer-node:12.22.10
+      - image: satantime/puppeteer-node:16.14.0
     steps:
       - checkout
       - restore_cache:
@@ -773,7 +773,7 @@ jobs:
             - ./e2e/a14/node_modules
   'Angular 14 ES5':
     docker:
-      - image: satantime/puppeteer-node:12.22.10
+      - image: satantime/puppeteer-node:16.14.0
     steps:
       - checkout
       - attach_workspace:
@@ -791,7 +791,7 @@ jobs:
           command: npm run test:a14es5
   'Angular 14 ES2020':
     docker:
-      - image: satantime/puppeteer-node:12.22.10
+      - image: satantime/puppeteer-node:16.14.0
     steps:
       - checkout
       - attach_workspace:
