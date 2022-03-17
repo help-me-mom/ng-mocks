@@ -1156,7 +1156,7 @@
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
       "packageNames": ["typescript"],
-      "allowedVersions": "<=4.5"
+      "allowedVersions": "<=4.6"
     },
     {
       "additionalBranchPrefix": "e2e/a14/",
