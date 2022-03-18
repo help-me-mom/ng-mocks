@@ -65,7 +65,7 @@ jobs:
           WITH_COVERAGE: '1'
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
+        uses: mikepenz/action-junit-report@v3
         if: always()
         with:
           check_name: Core Unit Tests
@@ -166,7 +166,7 @@ jobs:
           IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
+        uses: mikepenz/action-junit-report@v3
         if: always()
         with:
           check_name: IE11 Unit Tests
