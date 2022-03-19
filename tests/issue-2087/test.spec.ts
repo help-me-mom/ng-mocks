@@ -1,0 +1,60 @@
+import { CommonModule } from '@angular/common';
+import { Component, Directive, NgModule } from '@angular/core';
+import {
+  MockBuilder,
+  MockInstance,
+  MockProvider,
+  MockRender,
+} from 'ng-mocks';
+
+@Directive({
+  selector: 'target',
+})
+class MockDirective {
+  public readonly boolean = false;
+  public readonly number = 0;
+  public readonly string = '';
+}
+
+@Component({
+  selector: 'target',
+  template: ``,
+})
+class TargetComponent {
+  public constructor(public readonly mock: MockDirective) {}
+}
+
+@NgModule({
+  declarations: [TargetComponent, MockDirective],
+  imports: [CommonModule],
+})
+class TargetModule {}
+
+// MockInstance doesn't provide falsy values.
+// @see https://github.com/ike18t/ng-mocks/issues/2087
+describe('issue-2087', () => {
+  MockInstance.scope();
+  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+
+  const tests: Array<[keyof MockDirective, any, any]> = [
+    ['string', '', 'test'],
+    ['number', 0, 1],
+    ['boolean', false, true],
+  ];
+
+  tests.forEach(([kind, falsy, truthy]) =>
+    describe(kind, () => {
+      it(`works for falsy`, () => {
+        MockInstance(MockDirective, kind, falsy);
+        const fixture = MockRender(TargetComponent);
+        expect(fixture.componentInstance.mock[kind]).toEqual(falsy);
+      });
+
+      it(`works for truthy`, () => {
+        MockInstance(MockDirective, kind, truthy);
+        const fixture = MockRender(TargetComponent);
+        expect(fixture.componentInstance.mock[kind]).toEqual(truthy);
+      });
+    }),
+  );
+});
