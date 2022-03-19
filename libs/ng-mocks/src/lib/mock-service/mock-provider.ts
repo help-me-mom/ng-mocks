@@ -122,7 +122,7 @@ export default function (provider: any, useFactory = false): Provider | undefine
     // nothing to do
   } else if (isNeverMockFunction(provide)) {
     return provider;
-  } /* istanbul ignore if because we mock BrowserModule */ else if (isNeverMockToken(provide)) {
+  } else if (isNeverMockToken(provide)) {
     return undefined;
   }
 
