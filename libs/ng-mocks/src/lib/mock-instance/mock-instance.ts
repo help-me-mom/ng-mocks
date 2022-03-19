@@ -42,8 +42,8 @@ const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
     set.accessor = args[2];
   } else {
     set.value = args[0];
-    if (typeof set.value !== 'function') {
-      set.value = set.value?.init;
+    if (set.value && typeof set.value === 'object') {
+      set.value = set.value.init;
     }
   }
 
@@ -177,9 +177,9 @@ export function MockInstance<T>(
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, ...args: any[]) {
   funcImportExists(declaration, 'MockInstance');
 
-  const { key, value, accessor } = parseMockInstanceArgs(args);
+  if (args.length) {
+    const { key, value, accessor } = parseMockInstanceArgs(args);
 
-  if (value) {
     return mockInstanceConfig(declaration, key, value, accessor);
   }
 
