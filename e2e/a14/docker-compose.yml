@@ -9,3 +9,4 @@ services:
     command:
       - npm
       - install
+      - --force
