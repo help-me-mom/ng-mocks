@@ -5,6 +5,7 @@ import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType, DebugNodeSelector, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import { IMockBuilderConfig } from '../mock-builder/types';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
@@ -54,11 +55,17 @@ export const ngMocks: {
   ): void;
 
   /**
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultConfig
+   */
+  defaultConfig<T>(token: string | InjectionToken<T> | AnyType<T>, config?: IMockBuilderConfig): void;
+
+  /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T>(
     token: InjectionToken<T>,
     handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+    config?: IMockBuilderConfig,
   ): void;
 
   /**
@@ -67,12 +74,17 @@ export const ngMocks: {
   defaultMock<T = any>(
     token: string,
     handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+    config?: IMockBuilderConfig,
   ): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
-  defaultMock<T>(def: AnyType<T>, handler?: (value: T, injector: Injector) => void | Partial<T>): void;
+  defaultMock<T>(
+    def: AnyType<T>,
+    handler?: (value: T, injector: Injector) => void | Partial<T>,
+    config?: IMockBuilderConfig,
+  ): void;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
@@ -80,6 +92,7 @@ export const ngMocks: {
   defaultMock<T = any>(
     defs: Array<AnyType<T> | InjectionToken<T>>,
     handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
+    config?: IMockBuilderConfig,
   ): void;
 
   /**

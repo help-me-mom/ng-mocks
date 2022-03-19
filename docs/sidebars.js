@@ -30,6 +30,7 @@ module.exports = {
       label: 'ngMocks',
       items: [
         'api/ngMocks',
+        'api/ngMocks/defaultConfig',
         'api/ngMocks/defaultMock',
         'api/ngMocks/globalExclude',
         'api/ngMocks/globalKeep',

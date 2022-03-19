@@ -18,6 +18,7 @@ import mockHelperFormatText from './format/mock-helper.format-text';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperConsoleIgnore from './mock-helper.console-ignore';
 import mockHelperConsoleThrow from './mock-helper.console-throw';
+import mockHelperDefaultConfig from './mock-helper.default-config';
 import mockHelperDefaultMock from './mock-helper.default-mock';
 import mockHelperFaster from './mock-helper.faster';
 import mockHelperFlushTestBed from './mock-helper.flush-test-bed';
@@ -62,6 +63,7 @@ export default {
     }
   },
   crawl: mockHelperCrawl,
+  defaultConfig: mockHelperDefaultConfig,
   defaultMock: mockHelperDefaultMock,
   event: mockHelperEvent,
   faster: mockHelperFaster,

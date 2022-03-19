@@ -101,7 +101,9 @@ beforeEach(() => {
 });
 ```
 
-## .keep()
+## Chain functions
+
+### .keep()
 
 If we want to keep a module, component, directive, pipe or provider as it is. We should use `.keep`.
 
@@ -119,7 +121,7 @@ beforeEach(() => {
 });
 ```
 
-## .mock()
+### .mock()
 
 If we want to turn anything into a mock object, even a part of a kept module we should use `.mock`.
 
@@ -157,7 +159,7 @@ beforeEach(() => {
 });
 ```
 
-## .exclude()
+### .exclude()
 
 If we want to exclude something, even a part of a kept module we should use `.exclude`.
 
@@ -173,7 +175,7 @@ beforeEach(() => {
 });
 ```
 
-## .replace()
+### .replace()
 
 If we want to replace something with something, we should use `.replace`.
 The replacement has to be decorated with the same decorator as the source.
@@ -208,7 +210,7 @@ beforeEach(() => {
 });
 ```
 
-## .provide()
+### .provide()
 
 If we want to add or replace providers / services, we should use `.provide`. It has the same interface as a regular provider.
 
@@ -222,7 +224,12 @@ beforeEach(() => {
 });
 ```
 
-## `precise` flag
+## Config
+
+You can customize default behavior of mock things.
+Also, it can be done globally via [`ngMocks.defaultConfig()`](./ngMocks/defaultConfig.md) to avoid repetitions.
+
+### `precise` flag
 
 By default, when [`.mock(Service, mock)`](#mock) is used it creates a mock object via
 [`MockService(Service, mock)`](MockService.md).
@@ -253,7 +260,7 @@ beforeEach(() => {
 });
 ```
 
-## `export` flag
+### `export` flag
 
 If we want to test a component, directive or pipe which, unfortunately, has not been exported,
 then we need to mark it with the `export` flag.
@@ -271,7 +278,7 @@ beforeEach(() => {
 });
 ```
 
-## `exportAll` flag
+### `exportAll` flag
 
 If we want to use all the declarations of a module which have not been exported,
 we need to mark the module with the `exportAll` flag. Then all its imports and declarations will be exported.
@@ -290,7 +297,7 @@ beforeEach(() => {
 });
 ```
 
-## `dependency` flag
+### `dependency` flag
 
 By default, all definitions are added to the `TestingModule` if they are not a dependency of another definition.
 Modules are added as imports to the `TestingModule`.
@@ -324,7 +331,7 @@ beforeEach(() => {
 });
 ```
 
-## `render` flag
+### `render` flag
 
 When we want to render a structural directive by default, we can do that via adding the `render` flag in its config.
 
@@ -365,7 +372,9 @@ beforeEach(() => {
 });
 ```
 
-## `NG_MOCKS_GUARDS` token
+## Tokens
+
+### `NG_MOCKS_GUARDS` token
 
 If we want to test guards, we need to [`.keep`](#keep) them, but what should we do with other guards we do not want to care about at all?
 The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guards** from routes except the explicitly configured ones.
@@ -377,7 +386,7 @@ beforeEach(() => {
 });
 ```
 
-## `NG_MOCKS_INTERCEPTORS` token
+### `NG_MOCKS_INTERCEPTORS` token
 
 Usually, when we want to test an interceptor, we want to avoid influences of other interceptors.
 To **remove all interceptors in an angular test** we need to exclude `NG_MOCKS_INTERCEPTORS` token,
@@ -390,7 +399,7 @@ beforeEach(() => {
 });
 ```
 
-## `NG_MOCKS_ROOT_PROVIDERS` token
+### `NG_MOCKS_ROOT_PROVIDERS` token
 
 There are root services and tokens apart from provided ones in Angular applications.
 It might happen that in a test we want these providers to be replaced with their mocks or to be kept.
