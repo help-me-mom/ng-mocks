@@ -1,5 +1,5 @@
-import { InjectionToken, NgModule, PipeTransform, Provider } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { InjectionToken, PipeTransform, Provider } from '@angular/core';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType } from '../common/core.types';
 
@@ -70,7 +70,7 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
   /**
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#factory-function
    */
-  build(): NgModule;
+  build(): TestModuleMetadata;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#exclude

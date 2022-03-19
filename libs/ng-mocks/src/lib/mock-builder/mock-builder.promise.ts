@@ -1,5 +1,5 @@
-import { NgModule, Provider } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { Provider } from '@angular/core';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
@@ -70,7 +70,7 @@ export class MockBuilderPromise implements IMockBuilder {
     return this;
   }
 
-  public build(): NgModule {
+  public build(): TestModuleMetadata {
     this.stash.backup();
     ngMocksUniverse.config.set('mockNgDefResolver', new Map());
 

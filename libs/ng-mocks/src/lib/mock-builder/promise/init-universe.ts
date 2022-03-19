@@ -28,7 +28,10 @@ export default ({
   // flags to understand how to mock nested declarations.
   ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
   for (const [k, v] of mapEntries(configDef)) {
-    ngMocksUniverse.config.set(k, v);
+    ngMocksUniverse.config.set(k, {
+      ...ngMocksUniverse.getConfigMock().get(k),
+      ...v,
+    });
   }
   initKeepDef(keepDef);
   initReplaceDef(replaceDef, defValue);

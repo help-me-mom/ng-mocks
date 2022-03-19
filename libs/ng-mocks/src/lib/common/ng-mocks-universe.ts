@@ -1,5 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
+import { IMockBuilderConfig } from '../mock-builder/types';
+
 import coreConfig from './core.config';
 import { AnyType } from './core.types';
 
@@ -23,6 +25,7 @@ interface NgMocksUniverse {
   configInstance: Map<any, any>;
   flags: Set<string>;
   getBuildDeclaration: (def: any) => any | undefined;
+  getConfigMock: () => Map<any, IMockBuilderConfig>;
   getDefaults: () => Map<any, ['mock' | 'keep' | 'replace' | 'exclude', any?]>;
   getLocalMocks: () => Array<[any, any]>;
   getOverrides: () => Map<any, any>;
@@ -56,6 +59,7 @@ ngMocksUniverse.global.set('flags', {
 
 ngMocksUniverse.getOverrides = globalMap('overrides');
 ngMocksUniverse.getDefaults = globalMap('defaults');
+ngMocksUniverse.getConfigMock = globalMap('configMock');
 
 const getDefaults = (def: any): [] | ['mock' | 'keep' | 'replace' | 'exclude', any?] => {
   {

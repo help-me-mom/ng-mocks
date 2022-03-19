@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -15,7 +14,7 @@ import requiredMetadata from './performance/required-metadata';
 import { IMockBuilderResult } from './types';
 
 export class MockBuilderPerformance extends MockBuilderPromise {
-  public build(): NgModule {
+  public build(): TestModuleMetadata {
     const global = ngMocksUniverse.global;
 
     // avoiding influences on cache when users extend the testing module.
