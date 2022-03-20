@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Directive, NgModule } from '@angular/core';
-import {
-  MockBuilder,
-  MockInstance,
-  MockProvider,
-  MockRender,
-} from 'ng-mocks';
+import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Directive({
   selector: 'target',

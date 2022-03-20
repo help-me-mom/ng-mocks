@@ -1,5 +1,5 @@
 import { APP_ID, InjectionToken, NgModule } from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 const MY_APP_ID = new InjectionToken('MY_APP_ID');
 

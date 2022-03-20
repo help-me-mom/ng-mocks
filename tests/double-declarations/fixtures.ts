@@ -9,8 +9,6 @@ import {
   Input,
   Output,
   QueryList,
-  ViewChild,
-  ViewChildren,
 } from '@angular/core';
 
 @Directive({
