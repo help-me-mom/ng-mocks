@@ -1,3 +1,15 @@
+# [13.2.0](https://github.com/ike18t/ng-mocks/compare/v13.1.1...v13.2.0) (2022-03-20)
+
+
+### Bug Fixes
+
+* **MockInstance:** correctly accepts falsy values [#2087](https://github.com/ike18t/ng-mocks/issues/2087) ([8900fc3](https://github.com/ike18t/ng-mocks/commit/8900fc37c6e6898a12908a8b00d73e01678f77fd))
+
+
+### Features
+
+* **ngMocks.defaultConfig:** config for MockBuilder [#971](https://github.com/ike18t/ng-mocks/issues/971) ([9415f57](https://github.com/ike18t/ng-mocks/commit/9415f571e0afd400495b9a6cb2f23c0c6ba281ce))
+
 ## [13.1.1](https://github.com/ike18t/ng-mocks/compare/v13.1.0...v13.1.1) (2022-03-12)
 
 
