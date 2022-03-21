@@ -17,7 +17,7 @@ jobs:
 
       - name: node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-root-v1-${{ hashFiles('./package-lock.json') }}
@@ -30,7 +30,7 @@ jobs:
 
       - name: docs/node_modules
         id: docscache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: docs/node_modules
           key: ${{ runner.os }}-root-v1-${{ hashFiles('./docs/package-lock.json') }}
@@ -123,7 +123,7 @@ jobs:
 
       - name: node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-e2e-v1-${{ hashFiles('./package-lock.json') }}
@@ -151,7 +151,7 @@ jobs:
 
       - name: node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-root-v1-${{ hashFiles('./package-lock.json') }}
@@ -193,7 +193,7 @@ jobs:
 
       - name: e2e/a5es5/node_modules
         id: a5es5
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a5es5/node_modules
           key: ${{ runner.os }}-a5es5-v1-${{ hashFiles('./e2e/a5es5/package-lock.json') }}
@@ -204,7 +204,7 @@ jobs:
 
       - name: e2e/a5es2015/node_modules
         id: a5es2015
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a5es2015/node_modules
           key: ${{ runner.os }}-a5es2015-v1-${{ hashFiles('./e2e/a5es2015/package-lock.json') }}
@@ -215,7 +215,7 @@ jobs:
 
       - name: e2e/a6/node_modules
         id: a6
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a6/node_modules
           key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
@@ -226,7 +226,7 @@ jobs:
 
       - name: e2e/a7/node_modules
         id: a7
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a7/node_modules
           key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
@@ -237,7 +237,7 @@ jobs:
 
       - name: e2e/a8/node_modules
         id: a8
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a8/node_modules
           key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
@@ -248,7 +248,7 @@ jobs:
 
       - name: e2e/a9/node_modules
         id: a9
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a9/node_modules
           key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
@@ -259,7 +259,7 @@ jobs:
 
       - name: e2e/a10/node_modules
         id: a10
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a10/node_modules
           key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
@@ -270,7 +270,7 @@ jobs:
 
       - name: e2e/a11/node_modules
         id: a11
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a11/node_modules
           key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
@@ -281,14 +281,14 @@ jobs:
 
       - name: e2e/a12/node_modules
         id: a12
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a12/node_modules
           key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
 
       - name: e2e/a13/node_modules
         id: a13
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a13/node_modules
           key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
@@ -303,7 +303,7 @@ jobs:
 
       - name: e2e/a14/node_modules
         id: a14
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a14/node_modules
           key: ${{ runner.os }}-a14-v1-${{ hashFiles('./e2e/a14/package-lock.json') }}
@@ -318,7 +318,7 @@ jobs:
 
       - name: e2e/a-jasmine/node_modules
         id: a-jasmine
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jasmine/node_modules
           key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
@@ -329,7 +329,7 @@ jobs:
 
       - name: e2e/a-jest/node_modules
         id: a-jest
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jest/node_modules
           key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
@@ -340,7 +340,7 @@ jobs:
 
       - name: e2e/a-min/node_modules
         id: a-min
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-min/node_modules
           key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
@@ -363,7 +363,7 @@ jobs:
 
       - name: e2e/a5es5/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a5es5/node_modules
           key: ${{ runner.os }}-a5es5-v1-${{ hashFiles('./e2e/a5es5/package-lock.json') }}
@@ -395,7 +395,7 @@ jobs:
 
       - name: e2e/a5es2015/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a5es2015/node_modules
           key: ${{ runner.os }}-a5es2015-v1-${{ hashFiles('./e2e/a5es2015/package-lock.json') }}
@@ -427,7 +427,7 @@ jobs:
 
       - name: e2e/a6/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a6/node_modules
           key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
@@ -459,7 +459,7 @@ jobs:
 
       - name: e2e/a6/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a6/node_modules
           key: ${{ runner.os }}-a6-v1-${{ hashFiles('./e2e/a6/package-lock.json') }}
@@ -491,7 +491,7 @@ jobs:
 
       - name: e2e/a7/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a7/node_modules
           key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
@@ -523,7 +523,7 @@ jobs:
 
       - name: e2e/a7/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a7/node_modules
           key: ${{ runner.os }}-a7-v1-${{ hashFiles('./e2e/a7/package-lock.json') }}
@@ -555,7 +555,7 @@ jobs:
 
       - name: e2e/a8/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a8/node_modules
           key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
@@ -587,7 +587,7 @@ jobs:
 
       - name: e2e/a8/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a8/node_modules
           key: ${{ runner.os }}-a8-v1-${{ hashFiles('./e2e/a8/package-lock.json') }}
@@ -619,7 +619,7 @@ jobs:
 
       - name: e2e/a9/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a9/node_modules
           key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
@@ -651,7 +651,7 @@ jobs:
 
       - name: e2e/a9/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a9/node_modules
           key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
@@ -683,7 +683,7 @@ jobs:
 
       - name: e2e/a9/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a9/node_modules
           key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
@@ -715,7 +715,7 @@ jobs:
 
       - name: e2e/a9/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a9/node_modules
           key: ${{ runner.os }}-a9-v1-${{ hashFiles('./e2e/a9/package-lock.json') }}
@@ -747,7 +747,7 @@ jobs:
 
       - name: e2e/a10/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a10/node_modules
           key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
@@ -779,7 +779,7 @@ jobs:
 
       - name: e2e/a10/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a10/node_modules
           key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
@@ -811,7 +811,7 @@ jobs:
 
       - name: e2e/a10/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a10/node_modules
           key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
@@ -843,7 +843,7 @@ jobs:
 
       - name: e2e/a10/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a10/node_modules
           key: ${{ runner.os }}-a10-v1-${{ hashFiles('./e2e/a10/package-lock.json') }}
@@ -875,7 +875,7 @@ jobs:
 
       - name: e2e/a11/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a11/node_modules
           key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
@@ -907,7 +907,7 @@ jobs:
 
       - name: e2e/a11/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a11/node_modules
           key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
@@ -939,7 +939,7 @@ jobs:
 
       - name: e2e/a11/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a11/node_modules
           key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
@@ -971,7 +971,7 @@ jobs:
 
       - name: e2e/a11/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a11/node_modules
           key: ${{ runner.os }}-a11-v1-${{ hashFiles('./e2e/a11/package-lock.json') }}
@@ -1003,7 +1003,7 @@ jobs:
 
       - name: e2e/a12/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a12/node_modules
           key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
@@ -1035,7 +1035,7 @@ jobs:
 
       - name: e2e/a12/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a12/node_modules
           key: ${{ runner.os }}-a12-v1-${{ hashFiles('./e2e/a12/package-lock.json') }}
@@ -1067,7 +1067,7 @@ jobs:
 
       - name: e2e/a13/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a13/node_modules
           key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
@@ -1099,7 +1099,7 @@ jobs:
 
       - name: e2e/a13/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a13/node_modules
           key: ${{ runner.os }}-a13-v1-${{ hashFiles('./e2e/a13/package-lock.json') }}
@@ -1130,7 +1130,7 @@ jobs:
 
       - name: e2e/a14/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a14/node_modules
           key: ${{ runner.os }}-a14-v1-${{ hashFiles('./e2e/a14/package-lock.json') }}
@@ -1162,7 +1162,7 @@ jobs:
 
       - name: e2e/a14/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a14/node_modules
           key: ${{ runner.os }}-a14-v1-${{ hashFiles('./e2e/a14/package-lock.json') }}
@@ -1194,7 +1194,7 @@ jobs:
 
       - name: e2e/a-jasmine/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jasmine/node_modules
           key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
@@ -1224,7 +1224,7 @@ jobs:
 
       - name: e2e/a-jasmine/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jasmine/node_modules
           key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
@@ -1254,7 +1254,7 @@ jobs:
 
       - name: e2e/a-jest/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jest/node_modules
           key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
@@ -1284,7 +1284,7 @@ jobs:
 
       - name: e2e/a-jest/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-jest/node_modules
           key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
@@ -1314,7 +1314,7 @@ jobs:
 
       - name: e2e/a-min/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-min/node_modules
           key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
@@ -1346,7 +1346,7 @@ jobs:
 
       - name: e2e/a-min/node_modules
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: e2e/a-min/node_modules
           key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
