@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  win: circleci/windows@3.0.0
+  win: circleci/windows@4.0.0
 parameters:
   lockindex:
     type: string
