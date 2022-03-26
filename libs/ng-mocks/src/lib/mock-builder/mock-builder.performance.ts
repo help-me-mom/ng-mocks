@@ -1,10 +1,9 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
+import { mapEntries, mapValues } from '../common/core.helpers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderPromise } from './mock-builder.promise';
-import addEntitiesToMap from './performance/add-entities-to-map';
-import addValuesToSet from './performance/add-values-to-set';
 import areEqualConfigParams from './performance/are-equal-config-params';
 import areEqualMaps from './performance/are-equal-maps';
 import areEqualProviders from './performance/are-equal-providers';
@@ -65,16 +64,16 @@ export class MockBuilderPerformance extends MockBuilderPromise {
   private cloneConfig() {
     const config = getEmptyConfig();
 
-    addValuesToSet(this.beforeCC, config.beforeCC);
-    addValuesToSet(this.excludeDef, config.excludeDef);
-    addValuesToSet(this.keepDef, config.keepDef);
-    addValuesToSet(this.mockDef, config.mockDef);
-    addValuesToSet(this.replaceDef, config.replaceDef);
+    mapValues(this.beforeCC, config.beforeCC);
+    mapValues(this.excludeDef, config.excludeDef);
+    mapValues(this.keepDef, config.keepDef);
+    mapValues(this.mockDef, config.mockDef);
+    mapValues(this.replaceDef, config.replaceDef);
 
-    addEntitiesToMap(this.configDef, config.configDef);
-    addEntitiesToMap(this.defProviders, config.defProviders);
-    addEntitiesToMap(this.defValue, config.defValue);
-    addEntitiesToMap(this.providerDef, config.providerDef);
+    mapEntries(this.configDef, config.configDef);
+    mapEntries(this.defProviders, config.defProviders);
+    mapEntries(this.defValue, config.defValue);
+    mapEntries(this.providerDef, config.providerDef);
 
     return config;
   }

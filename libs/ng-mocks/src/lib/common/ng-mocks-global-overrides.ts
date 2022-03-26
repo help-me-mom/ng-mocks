@@ -8,7 +8,7 @@ import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
 import { MockProvider } from '../mock-provider/mock-provider';
 
 import coreDefineProperty from './core.define-property';
-import { flatten, mapEntries } from './core.helpers';
+import { flatten, mapEntries, mapValues } from './core.helpers';
 import coreReflectMeta from './core.reflect.meta';
 import coreReflectModuleResolve from './core.reflect.module-resolve';
 import coreReflectProvidedIn from './core.reflect.provided-in';
@@ -46,13 +46,13 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
 
 // Thanks Ivy and its TestBed.override - it does not clean up leftovers.
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map<any, any> }): void => {
-  if (testBed.ngMocksOverrides) {
+  if (testBed.ngMocksOverrides?.size) {
     ngMocks.flushTestBed();
     for (const [def, original] of mapEntries(testBed.ngMocksOverrides)) {
       applyOverride(def, original);
     }
-    testBed.ngMocksOverrides = undefined;
   }
+  testBed.ngMocksOverrides = undefined;
 };
 
 const initTestBed = () => {
@@ -86,11 +86,24 @@ const generateTouches = (
         generateTouches(def, touches);
         def = def.ngModule;
       }
-      touches.add(def);
-      const meta = coreReflectMeta(def);
-      if (meta) {
-        generateTouches(meta, touches);
+      if (touches.has(def)) {
+        continue;
       }
+      touches.add(def);
+      if (typeof def !== 'function') {
+        continue;
+      }
+
+      if (!def.hasOwnProperty('__ngMocksTouches')) {
+        const local = new Set<any>();
+        const meta = coreReflectMeta(def);
+        if (meta) {
+          generateTouches(meta, local);
+        }
+        coreDefineProperty(def, '__ngMocksTouches', local, false);
+      }
+
+      mapValues(def.__ngMocksTouches, touches);
     }
   }
 };

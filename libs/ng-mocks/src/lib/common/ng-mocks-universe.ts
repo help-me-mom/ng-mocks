@@ -4,10 +4,8 @@ import { IMockBuilderConfig } from '../mock-builder/types';
 
 import coreConfig from './core.config';
 import { AnyType } from './core.types';
+import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
-
-// istanbul ignore next
-const getGlobal = (): any => window || global;
 
 const globalMap = (key: string) => () => {
   if (!ngMocksUniverse.global.has(key)) {
@@ -38,8 +36,8 @@ interface NgMocksUniverse {
   touches: Set<AnyType<any> | InjectionToken<any> | string>;
 }
 
-getGlobal().ngMocksUniverse = getGlobal().ngMocksUniverse || {};
-const ngMocksUniverse: NgMocksUniverse = getGlobal().ngMocksUniverse;
+funcGetGlobal().ngMocksUniverse = funcGetGlobal().ngMocksUniverse || {};
+const ngMocksUniverse: NgMocksUniverse = funcGetGlobal().ngMocksUniverse;
 
 ngMocksUniverse.builtDeclarations = new Map();
 ngMocksUniverse.builtProviders = new Map();
