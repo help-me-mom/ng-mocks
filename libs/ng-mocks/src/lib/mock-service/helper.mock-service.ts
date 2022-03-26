@@ -1,3 +1,5 @@
+import funcGetGlobal from '../common/func.get-global';
+
 import helperCreateClone from './helper.create-clone';
 import helperCreateMockFromPrototype from './helper.create-mock-from-prototype';
 import helperDefinePropertyDescriptor from './helper.define-property-descriptor';
@@ -11,15 +13,12 @@ import helperResolveProvider from './helper.resolve-provider';
 import helperUseFactory from './helper.use-factory';
 import { CustomMockFunction } from './types';
 
-// istanbul ignore next
-const getGlobal = (): any => window || global;
-
 // We need a single pointer to the object among all environments.
-getGlobal().ngMockshelperMockService = getGlobal().ngMockshelperMockService || {
+funcGetGlobal().ngMockshelperMockService = funcGetGlobal().ngMockshelperMockService || {
   mockFunction: helperMockFunction,
 
   registerMockFunction: (func: CustomMockFunction | undefined) => {
-    getGlobal().ngMockshelperMockService.mockFunction.customMockFunction = func;
+    funcGetGlobal().ngMockshelperMockService.mockFunction.customMockFunction = func;
   },
 
   createClone: helperCreateClone,
@@ -47,7 +46,7 @@ export default ((): {
   replaceWithMocks: typeof helperReplaceWithMocks;
   resolveProvider: typeof helperResolveProvider;
   useFactory: typeof helperUseFactory;
-} => getGlobal().ngMockshelperMockService)();
+} => funcGetGlobal().ngMockshelperMockService)();
 
 export const registerMockFunction: (func?: CustomMockFunction | undefined) => void =
-  getGlobal().ngMockshelperMockService.registerMockFunction;
+  funcGetGlobal().ngMockshelperMockService.registerMockFunction;

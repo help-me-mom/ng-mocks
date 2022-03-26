@@ -4,6 +4,7 @@ import { getTestBed } from '@angular/core/testing';
 import coreDefineProperty from './core.define-property';
 import coreReflectJit from './core.reflect.jit';
 import { AnyType, Type } from './core.types';
+import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
 
 export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
@@ -42,16 +43,29 @@ export const mapKeys = <T>(set: Map<T, any>): T[] => {
   return result;
 };
 
-export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }): T[] => {
+export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }, destination?: Set<T>): T[] => {
   const result: T[] = [];
-  set.forEach((value: T) => result.push(value));
+  if (destination) {
+    set.forEach((value: T) => {
+      destination.add(value);
+    });
+  } else {
+    set.forEach((value: T) => {
+      result.push(value);
+    });
+  }
 
   return result;
 };
 
-export const mapEntries = <K, T>(set: Map<K, T>): Array<[K, T]> => {
+export const mapEntries = <K, T>(set: Map<K, T>, destination?: Map<K, T>): Array<[K, T]> => {
   const result: Array<[K, T]> = [];
-  set.forEach((value: T, key: K) => result.push([key, value]));
+
+  if (destination) {
+    set.forEach((value: T, key: K) => destination.set(key, value));
+  } else {
+    set.forEach((value: T, key: K) => result.push([key, value]));
+  }
 
   return result;
 };
@@ -83,23 +97,25 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
 
 const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
   let child: any;
+  const glb = funcGetGlobal();
 
   // First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
   // The next step is to respect constructor parameters as the parent class via jitReflector.
-  (window as any).ngMocksParent = base;
+  glb.ngMocksParent = base;
   // istanbul ignore next
   try {
     // tslint:disable-next-line no-eval
     eval(`
-      class MockMiddleware extends window.ngMocksParent {}
-      window.ngMocksResult = MockMiddleware
+      var glb = typeof window === 'undefined' ? global : window;
+      class MockMiddleware extends glb.ngMocksParent {}
+      glb.ngMocksResult = MockMiddleware
     `);
-    child = (window as any).ngMocksResult;
+    child = glb.ngMocksResult;
   } catch {
-    class MockMiddleware extends (window as any).ngMocksParent {}
+    class MockMiddleware extends glb.ngMocksParent {}
     child = MockMiddleware;
   }
-  (window as any).ngMocksParent = undefined;
+  glb.ngMocksParent = undefined;
 
   return child;
 };

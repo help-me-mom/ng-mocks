@@ -166,6 +166,9 @@ jobs:
       - run:
           name: MockRender
           command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
+      - run:
+          name: Large Modules
+          command: KARMA_SUITE=tests-performance/ng-mocks.spec.ts npm run test
   'Angular 5 ES5':
     docker:
       - image: satantime/puppeteer-node:6.17.1
