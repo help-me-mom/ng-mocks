@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  win: circleci/windows@3.0.0
+  win: circleci/windows@4.0.0
 parameters:
   lockindex:
     type: string
@@ -934,7 +934,7 @@ jobs:
           command: npm run test:a-nx
   Core IE:
     executor:
-      name: win/windows
+      name: win/default
       shell: bash.exe
     steps:
       - checkout
