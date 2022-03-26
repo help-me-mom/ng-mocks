@@ -6,12 +6,13 @@ import { MockedPipe } from '../mock-pipe/types';
 import coreInjector from './core.injector';
 import { NG_MOCKS } from './core.tokens';
 import { AnyType, Type } from './core.types';
+import funcGetName from './func.get-name';
 import { isMockedNgDefOf } from './func.is-mocked-ng-def-of';
 import ngMocksUniverse from './ng-mocks-universe';
 
 const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
   if (mocks && !mocks.has(source)) {
-    throw new Error(`There is no mock for ${source.name}`);
+    throw new Error(`There is no mock for ${funcGetName(source)}`);
   }
   let mock = mocks ? mocks.get(source) : undefined;
   if (mock === source) {
@@ -75,5 +76,5 @@ export function getMockedNgDefOf(declaration: any, type?: any): any {
     return mock;
   }
 
-  throw new Error(`There is no mock for ${source.name}`);
+  throw new Error(`There is no mock for ${funcGetName(source)}`);
 }

@@ -1,8 +1,10 @@
+import funcGetName from '../common/func.get-name';
+
 import helperMockService from './helper.mock-service';
 import { MockedFunction } from './types';
 
 export default (service: any): { [key in keyof any]: MockedFunction } => {
-  const mockName = service.constructor.name;
+  const mockName = funcGetName(service);
   const value: any = {};
 
   const methods = helperMockService.extractMethodsFromPrototype(service);

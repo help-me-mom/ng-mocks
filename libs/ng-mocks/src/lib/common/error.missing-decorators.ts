@@ -1,9 +1,11 @@
 // tslint:disable strict-type-predicates
 
+import funcGetName from './func.get-name';
+
 export default (def: any): void => {
   throw new Error(
     [
-      `${def.name} declaration has been passed into ng-mocks without Angular decorators.`,
+      `${funcGetName(def)} declaration has been passed into ng-mocks without Angular decorators.`,
       'Therefore, it cannot be properly handled.',
       'Highly likely,',
       typeof jest === 'undefined' ? '' : /* istanbul ignore next */ 'jest.mock() has been used on its file, or',

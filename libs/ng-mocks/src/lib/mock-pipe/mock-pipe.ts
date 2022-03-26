@@ -4,6 +4,7 @@ import { extendClass } from '../common/core.helpers';
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
 import { Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
+import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { Mock } from '../common/mock';
@@ -28,7 +29,7 @@ const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): 
         instance.transform = transform;
       }
       if (!instance.transform) {
-        helperMockService.mock(instance, 'transform', `${instance.constructor.name}.transform`);
+        helperMockService.mock(instance, 'transform', `${funcGetName(instance)}.transform`);
       }
     },
   });

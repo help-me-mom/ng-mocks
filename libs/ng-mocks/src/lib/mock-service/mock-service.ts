@@ -1,4 +1,5 @@
 import { AnyType } from '../common/core.types';
+import funcGetName from '../common/func.get-name';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 
 import checkIsClass from './check.is-class';
@@ -12,8 +13,7 @@ const mockVariableMap: Array<
   [checkIsClass, (service: any) => helperMockService.createMockFromPrototype(service.prototype)],
   [
     checkIsFunc,
-    (service: any, prefix: string) =>
-      helperMockService.mockFunction(`func:${prefix || service.name || 'arrow-function'}`),
+    (service: any, prefix: string) => helperMockService.mockFunction(`func:${prefix || funcGetName(service)}`),
   ],
   [def => Array.isArray(def), () => []],
   [

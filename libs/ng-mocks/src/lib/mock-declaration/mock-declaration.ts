@@ -2,6 +2,7 @@
 
 import { Type } from '../common/core.types';
 import errorJestMock from '../common/error.jest-mock';
+import funcGetName from '../common/func.get-name';
 import { isNgDef } from '../common/func.is-ng-def';
 import { MockComponent } from '../mock-component/mock-component';
 import { MockedComponent } from '../mock-component/types';
@@ -33,7 +34,7 @@ export function MockDeclaration<T>(
   throw new Error(
     [
       'MockDeclaration does not know how to mock',
-      typeof declaration === 'function' ? (declaration as any).name : declaration,
+      typeof declaration === 'function' ? funcGetName(declaration) : declaration,
     ].join(' '),
   );
 }
