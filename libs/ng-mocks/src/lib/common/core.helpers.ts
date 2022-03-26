@@ -4,6 +4,7 @@ import { getTestBed } from '@angular/core/testing';
 import coreDefineProperty from './core.define-property';
 import coreReflectJit from './core.reflect.jit';
 import { AnyType, Type } from './core.types';
+import funcGetName from './func.get-name';
 
 export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
@@ -105,7 +106,7 @@ const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
 
 export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
-  coreDefineProperty(child, 'name', `MockMiddleware${base.name}`, true);
+  coreDefineProperty(child, 'name', `MockMiddleware${funcGetName(base)}`, true);
 
   const parameters = coreReflectJit().parameters(base);
   if (parameters.length) {

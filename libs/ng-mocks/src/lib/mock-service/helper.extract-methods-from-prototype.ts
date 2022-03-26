@@ -1,3 +1,5 @@
+import funcGetName from '../common/func.get-name';
+
 const sanitizerMethods = [
   'sanitize',
   'bypassSecurityTrustHtml',
@@ -14,7 +16,7 @@ const extraMethods: Record<string, undefined | string[]> = {
 
 const getOwnPropertyNames = (prototype: any): string[] => {
   const result: string[] = Object.getOwnPropertyNames(prototype);
-  for (const method of extraMethods[prototype.constructor.name] ?? []) {
+  for (const method of extraMethods[funcGetName(prototype)] ?? []) {
     result.push(method);
   }
 

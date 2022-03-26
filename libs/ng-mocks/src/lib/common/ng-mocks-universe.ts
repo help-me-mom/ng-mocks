@@ -4,6 +4,7 @@ import { IMockBuilderConfig } from '../mock-builder/types';
 
 import coreConfig from './core.config';
 import { AnyType } from './core.types';
+import funcGetName from './func.get-name';
 
 // istanbul ignore next
 const getGlobal = (): any => window || global;
@@ -70,7 +71,7 @@ const getDefaults = (def: any): [] | ['mock' | 'keep' | 'replace' | 'exclude', a
   }
 
   {
-    const defValue = typeof def === 'function' ? ngMocksUniverse.getDefaults().get(`@${def.name}`) : undefined;
+    const defValue = typeof def === 'function' ? ngMocksUniverse.getDefaults().get(`@${funcGetName(def)}`) : undefined;
     if (defValue) {
       return defValue;
     }

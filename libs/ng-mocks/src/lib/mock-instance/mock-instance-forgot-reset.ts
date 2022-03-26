@@ -1,3 +1,4 @@
+import funcGetName from '../common/func.get-name';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 export default (checkReset: Array<[any, any, any?]>) => {
@@ -7,7 +8,7 @@ export default (checkReset: Array<[any, any, any?]>) => {
   while (checkReset.length) {
     const [declaration, config] = checkReset.pop() || /* istanbul ignore next */ [];
     if (config === ngMocksUniverse.configInstance.get(declaration)) {
-      showError.push(typeof declaration === 'function' ? declaration.name : declaration);
+      showError.push(typeof declaration === 'function' ? funcGetName(declaration) : declaration);
     }
   }
 
