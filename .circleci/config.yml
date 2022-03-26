@@ -934,7 +934,7 @@ jobs:
           command: npm run test:a-nx
   Core IE:
     executor:
-      name: win/windows
+      name: win/default
       shell: bash.exe
     steps:
       - checkout
