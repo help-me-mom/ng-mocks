@@ -1,6 +1,7 @@
-import { DebugNode } from '@angular/core';
+import { DebugNode, InjectionToken } from '@angular/core';
 
 import { Type } from '../common/core.types';
+import { isNgDef } from '../common/func.is-ng-def';
 
 import funcGetFromNodeInjector from './func.get-from-node-injector';
 import funcGetFromNodeIvy from './func.get-from-node-ivy';
@@ -27,10 +28,16 @@ export interface Node {
   parent?: (DebugNode & Node) | null;
 }
 
-export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: Type<T>): T[] => {
+export default <T>(
+  result: T[],
+  node: (DebugNode & Node) | null | undefined,
+  proto: Type<T> | InjectionToken<T>,
+): T[] => {
   funcGetFromNodeInjector(result, node, proto);
-  funcGetFromNodeStandard(result, node, proto);
-  funcGetFromNodeIvy(result, node, proto);
+  if (!isNgDef(proto, 't')) {
+    funcGetFromNodeStandard(result, node, proto);
+    funcGetFromNodeIvy(result, node, proto);
+  }
 
   return result;
 };

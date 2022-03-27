@@ -1,4 +1,5 @@
 import { getSourceOfMock } from '../../common/func.get-source-of-mock';
+import { isNgDef } from '../../common/func.is-ng-def';
 import mockHelperCrawl from '../crawl/mock-helper.crawl';
 import mockHelperFind from '../find/mock-helper.find';
 import funcGetFromNode from '../func.get-from-node';
@@ -12,8 +13,8 @@ const defaultNotFoundValue = {}; // simulating Symbol
 
 export default (...args: any[]) => {
   const [el, sel, notFoundValue] = funcParseFindArgs(args, funcIsValidFindInstanceSelector, defaultNotFoundValue);
-  if (typeof sel !== 'function') {
-    throw new Error('Only classes are accepted');
+  if (typeof sel !== 'function' && !isNgDef(sel, 't')) {
+    throw new Error('Only classes or tokens are accepted');
   }
 
   const declaration = getSourceOfMock(sel);

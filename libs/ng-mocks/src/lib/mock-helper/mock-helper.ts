@@ -195,32 +195,36 @@ export const ngMocks: {
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T>(instanceClass: AnyType<T>): T;
+  findInstance<T>(instanceClass: AnyType<T> | InjectionToken<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>): T;
+  findInstance<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T> | InjectionToken<T>): T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T, D>(instanceClass: AnyType<T>, notFoundValue: D): D | T;
+  findInstance<T, D>(instanceClass: AnyType<T> | InjectionToken<T>, notFoundValue: D): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstance
    */
-  findInstance<T, D>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>, notFoundValue: D): D | T;
+  findInstance<T, D>(
+    elSelector: DebugNodeSelector,
+    instanceClass: AnyType<T> | InjectionToken<T>,
+    notFoundValue: D,
+  ): D | T;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
-  findInstances<T>(instanceClass: AnyType<T>): T[];
+  findInstances<T>(instanceClass: AnyType<T> | InjectionToken<T>): T[];
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findInstances
    */
-  findInstances<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T>): T[];
+  findInstances<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T> | InjectionToken<T>): T[];
 
   /**
    * @see https://ng-mocks.sudo.eu/api/ngMocks/findTemplateRef
