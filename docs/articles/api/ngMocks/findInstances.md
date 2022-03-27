@@ -3,7 +3,7 @@ title: ngMocks.findInstances
 description: Documentation about ngMocks.findInstances from ng-mocks library
 ---
 
-Returns an array of all found components, directives, pipes or services which belong to the current element and all its children.
+Returns an array of all found components, directives, pipes or services which belong to matched elements and all its children.
 If the element is not specified, then the current fixture is used.
 
 - `ngMocks.findInstances( fixture?, directive )`
@@ -29,6 +29,7 @@ const pipes = ngMocks.findInstances('div span.text', MyPipe);
 ```
 
 :::important
-A css selector helps to find the first matched element.
-It will be used to look up the desired declaration.
+A css selector helps to find instances in all matched `DebugElements`.
+Therefore, the same instance can be found several times via nested `DebugElements` with the same selector.
+In this case, the instance will be added to the returning array only once.  
 :::

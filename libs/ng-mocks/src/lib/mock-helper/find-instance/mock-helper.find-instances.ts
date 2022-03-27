@@ -1,6 +1,6 @@
 import { getSourceOfMock } from '../../common/func.get-source-of-mock';
 import mockHelperCrawl from '../crawl/mock-helper.crawl';
-import mockHelperFind from '../find/mock-helper.find';
+import mockHelperFindAll from '../find/mock-helper.find-all';
 import funcGetFromNode from '../func.get-from-node';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgs from '../func.parse-find-args';
@@ -15,13 +15,16 @@ export default <T>(...args: any[]): T[] => {
 
   const declaration = getSourceOfMock(sel);
   const result: T[] = [];
-  mockHelperCrawl(
-    mockHelperFind(funcGetLastFixture(), el, undefined),
-    node => {
-      funcGetFromNode(result, node, declaration);
-    },
-    true,
-  );
+  const elements = mockHelperFindAll(funcGetLastFixture(), el, undefined);
+  for (const element of elements) {
+    mockHelperCrawl(
+      element,
+      node => {
+        funcGetFromNode(result, node, declaration);
+      },
+      true,
+    );
+  }
 
   return result;
 };
