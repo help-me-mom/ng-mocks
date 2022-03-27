@@ -2,6 +2,7 @@ import {
   Component,
   ComponentFactoryResolver,
   NgModule,
+  OnDestroy,
   Optional,
   ViewContainerRef,
 } from '@angular/core';
@@ -13,22 +14,28 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
   selector: 'parent',
   template: '<div #parent>parent</div>',
 })
-class ParentComponent {
+class ParentComponent implements OnDestroy {
+  private readonly vcr: ViewContainerRef;
+
   public constructor(
     viewContainerRef: ViewContainerRef,
     @Optional() componentFactoryResolver: ComponentFactoryResolver,
   ) {
-    const vcr: any = viewContainerRef;
+    this.vcr = viewContainerRef;
 
     try {
-      vcr.createComponent(ChildComponent);
-    } catch (e) {
+      (this.vcr as any).createComponent(ChildComponent);
+    } catch {
       const factory =
         componentFactoryResolver.resolveComponentFactory(
           ChildComponent,
         );
-      vcr.createComponent(factory);
+      (this.vcr as any).createComponent(factory);
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.vcr.clear();
   }
 }
 
