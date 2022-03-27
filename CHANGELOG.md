@@ -1,3 +1,22 @@
+# [13.3.0](https://github.com/ike18t/ng-mocks/compare/v13.2.0...v13.3.0) (2022-03-27)
+
+
+### Bug Fixes
+
+* **core:** better error messages [#1168](https://github.com/ike18t/ng-mocks/issues/1168) ([cad1efb](https://github.com/ike18t/ng-mocks/commit/cad1efb215c888b6e639181bd67c0a8dcf495381))
+* **ngMocks.stubMember:** forwarding stub values to point.componentInstance [#1165](https://github.com/ike18t/ng-mocks/issues/1165) ([3450e1d](https://github.com/ike18t/ng-mocks/commit/3450e1d8607f5233e51f99c471de8daaca86a6f3))
+
+
+### Features
+
+* **ngMocks.findInstance:** looks for instances in all matched DebugElements [#2105](https://github.com/ike18t/ng-mocks/issues/2105) ([bb39517](https://github.com/ike18t/ng-mocks/commit/bb39517dc7a69b709e3933e56c4b89aa6da26524))
+* **ngMocks.findInstance:** supports tokens [#2097](https://github.com/ike18t/ng-mocks/issues/2097) ([9387209](https://github.com/ike18t/ng-mocks/commit/9387209d3f86ec474c449138a98d143a2b637482))
+
+
+### Performance Improvements
+
+* optimizing detection of global overrides [#1452](https://github.com/ike18t/ng-mocks/issues/1452) ([691a5c0](https://github.com/ike18t/ng-mocks/commit/691a5c0a297d058b6f660df31e76ab9c83038e5b))
+
 # [13.2.0](https://github.com/ike18t/ng-mocks/compare/v13.1.1...v13.2.0) (2022-03-20)
 
 
