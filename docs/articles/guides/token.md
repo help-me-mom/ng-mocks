@@ -35,8 +35,8 @@ expect(token).toEqual(jasmine.any(ServiceExisting));
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/TestToken/test.spec.ts&initialpath=%3Fspec%3DTestToken)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/TestToken/test.spec.ts&initialpath=%3Fspec%3DTestToken)
+- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/TestToken/test.spec.ts&initialpath=%3Fspec%3DTestToken)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/TestToken/test.spec.ts&initialpath=%3Fspec%3DTestToken)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestToken/test.spec.ts"
 import { Injectable, InjectionToken, NgModule } from '@angular/core';

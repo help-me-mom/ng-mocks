@@ -37,8 +37,8 @@ expect(fixture.nativeElement.innerHTML).not.toContain('1: world');
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/TestStructuralDirectiveWithContext/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithContext)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/TestStructuralDirectiveWithContext/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithContext)
+- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/TestStructuralDirectiveWithContext/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithContext)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/TestStructuralDirectiveWithContext/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithContext)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestStructuralDirectiveWithContext/test.spec.ts"
 import {

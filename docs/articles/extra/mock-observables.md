@@ -134,8 +134,8 @@ but it goes beyond the topic.
 An advanced example of **mocking observables** in Angular tests.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
+- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts"
 describe('MockObservable', () => {
