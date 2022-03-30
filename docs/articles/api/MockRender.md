@@ -505,8 +505,8 @@ if we have changed values of parameters.
 There is **an advanced example how to render a custom template in an Angular test** below.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
+- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/MockRender/test.spec.ts&initialpath=%3Fspec%3DMockRender)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts"
 describe('MockRender', () => {

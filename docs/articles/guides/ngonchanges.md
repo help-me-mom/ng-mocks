@@ -26,8 +26,8 @@ fixture.detectChanges(); // <- triggers the hook again.
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples?file=src/examples/TestLifecycleHooks/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples?file=/src/examples/TestLifecycleHooks/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
+- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/TestLifecycleHooks/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/TestLifecycleHooks/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestLifecycleHooks/test.spec.ts"
 import {
