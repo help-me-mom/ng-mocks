@@ -1,9 +1,4 @@
-import {
-  Component,
-  Injectable,
-  InjectionToken,
-  NgModule,
-} from '@angular/core';
+import { Component, InjectionToken, NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken<string>('TOKEN');
@@ -46,11 +41,11 @@ describe('issue-2097:nested', () => {
   );
 
   it('finds tokens correctly', () => {
-    const fixture = MockRender(`
-        <parent>
-            <child></child>
-            <child></child>
-        </parent>
+    MockRender(`
+      <parent>
+        <child></child>
+        <child></child>
+      </parent>
     `);
 
     // it should be found on the parent node only.
