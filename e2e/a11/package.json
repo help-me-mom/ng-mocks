@@ -52,7 +52,7 @@
     "jest-preset-angular": "8.3.2",
     "karma": "5.2.3",
     "karma-chrome-launcher": "3.1.1",
-    "karma-jasmine": "4.0.1",
+    "karma-jasmine": "4.0.2",
     "karma-jasmine-html-reporter": "1.5.4",
     "npm": "6.14.16",
     "puppeteer": "10.4.0",
