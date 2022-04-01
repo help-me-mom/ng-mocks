@@ -211,6 +211,7 @@
     "puppeteer": "13.5.2",
     "rxjs": "7.5.5",
     "semantic-release": "19.0.2",
+    "snyk": "1.893.0",
     "ts-loader": "9.2.8",
     "ts-node": "10.7.0",
     "tsconfig-paths-webpack-plugin": "3.5.2",

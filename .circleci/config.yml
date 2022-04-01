@@ -63,6 +63,9 @@ jobs:
       - run:
           name: Docs
           command: npm run build:docs
+      - run:
+          name: Snyk
+          command: npx snyk test
       - store_test_results:
           path: ./test-reports
       - store_artifacts:
