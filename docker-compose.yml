@@ -2,30 +2,11 @@ version: '3'
 
 services:
   ng-mocks:
-    build: ./
-    command:
-      - sleep
-      - infinity
-    ports:
-      - 127.0.0.1:9876:9876
-      - 127.0.0.1:9222:9222
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
     volumes:
       - .:/app
-      - /npm
-      - /app/node_modules
-      - /app/docs/node_modules
-      - /app/e2e/a5es5/node_modules
-      - /app/e2e/a5es2015/node_modules
-      - /app/e2e/a6/node_modules
-      - /app/e2e/a7/node_modules
-      - /app/e2e/a8/node_modules
-      - /app/e2e/a9/node_modules
-      - /app/e2e/a10/node_modules
-      - /app/e2e/a11/node_modules
-      - /app/e2e/a12/node_modules
-      - /app/e2e/a13/node_modules
-      - /app/e2e/a14/node_modules
-      - /app/e2e/a-jasmine/node_modules
-      - /app/e2e/a-jest/node_modules
-      - /app/e2e/a-min/node_modules
-      - /app/e2e/nx/node_modules
+    command:
+      - npm
+      - install
+      - --force
