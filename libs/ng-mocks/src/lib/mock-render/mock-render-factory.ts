@@ -71,7 +71,7 @@ const fixtureMessage = [
 
 const handleFixtureError = (e: any) => {
   const error = new Error(fixtureMessage);
-  coreDefineProperty(error, 'parent', e, false);
+  coreDefineProperty(error, 'parent', e);
   throw error;
 };
 

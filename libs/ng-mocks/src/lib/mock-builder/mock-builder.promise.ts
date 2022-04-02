@@ -73,6 +73,7 @@ export class MockBuilderPromise implements IMockBuilder {
   public build(): TestModuleMetadata {
     this.stash.backup();
     ngMocksUniverse.config.set('mockNgDefResolver', new Map());
+    ngMocksUniverse.flags.add('hasRootModule');
 
     try {
       const params = this.combineParams();
@@ -92,6 +93,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
       return ngModule;
     } finally {
+      ngMocksUniverse.flags.delete('hasRootModule');
       ngMocksUniverse.config.delete('mockNgDefResolver');
       this.stash.restore();
     }

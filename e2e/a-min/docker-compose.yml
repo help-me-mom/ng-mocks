@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  install:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - .:/app
+    command:
+      - npm
+      - install
+      - --force
+
+  test:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - .:/app
+    command:
+      - npm
+      - run
+      - test:debug

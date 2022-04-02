@@ -48,6 +48,14 @@ class TargetComponent {
 class TargetModule {}
 
 describe('issue-641', () => {
+  beforeAll(() =>
+    ngMocks.globalReplace(
+      BrowserAnimationsModule,
+      NoopAnimationsModule,
+    ),
+  );
+  afterAll(() => ngMocks.globalWipe(BrowserAnimationsModule));
+
   describe('BrowserAnimationsModule:default', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 

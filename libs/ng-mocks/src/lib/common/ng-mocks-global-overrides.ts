@@ -238,7 +238,7 @@ const install = () => {
     if (hooks.after.indexOf(resetTestingModule) === -1) {
       hooks.after.push(resetTestingModule);
     }
-    coreDefineProperty(TestBed, 'ngMocksOverridesInstalled', true, false);
+    coreDefineProperty(TestBed, 'ngMocksOverridesInstalled', true);
   }
 };
 

@@ -4,38 +4,54 @@ description: Information and solutions how to test modules with BrowserAnimation
 sidebar_label: BrowserAnimationsModule
 ---
 
-By default, `ng-mocks` replaces `BrowserAnimationsModule` with `NoopAnimationsModule`.
+By default, Angular recommends replacing `BrowserAnimationsModule` with `NoopAnimationsModule` in unit tests.
 
-However, it can be changed via [`MockBuilder`](../api/MockBuilder.md) or [`ngMocks.guts`](../api/ngMocks/guts.md)
-when `NoopAnimationsModule` isn't a solution.
+In order to do so globally, you can use [`ngMocks.globalReplace`](../api/ngMocks/globalReplace.md):
+
+```ts title="src/test.ts"
+ngMocks.globalReplace(BrowserAnimationsModule, NoopAnimationsModule);
+```
+
+Now, every time `ng-mocks` sees `BrowserAnimationsModule`, it will substitute it with `NoopAnimationsModule`.
 
 ## MockBuilder
 
-```ts
-// No animations at all
-MockBuilder(MyComponent, MyModule).exclude(BrowserAnimationsModule);
+Please check how [`MockBuilder`](../api/MockBuilder.md) behaves in this case: 
 
-// Mock BrowserAnimationsModule
+```ts
+// BrowserAnimationsModule is replaced by NoopAnimationsModule.
+MockBuilder(MyComponent, MyModule);
+
+// BrowserAnimationsModule will be kept as it is.
+MockBuilder(MyComponent, MyModule).keep(BrowserAnimationsModule);
+
+// BrowserAnimationsModule will be mocked, not replaced.
 MockBuilder(MyComponent, MyModule).mock(BrowserAnimationsModule);
 
-// Keep BrowserAnimationsModule to test animations.
-MockBuilder(MyComponent, MyModule).keep(BrowserAnimationsModule);
+// BrowserAnimationsModule will be excluded from declarations.
+MockBuilder(MyComponent, MyModule).exclude(BrowserAnimationsModule);
 ```
 
 ## ngMocks.guts
 
+Please check how [`ngMocks.guts`](../api/ngMocks/guts.md) behaves in this case:
+
 ```ts
-// No animations at all
-ngMocks.guts(MyComponent, MyModule, BrowserAnimationsModule);
+// BrowserAnimationsModule is replaced by NoopAnimationsModule.
+ngMocks.guts(MyComponent, MyModule);
 
-// Mock BrowserAnimationsModule
-ngMocks.guts(MyComponent, [MyModule, BrowserAnimationsModule]);
-
-// Keep BrowserAnimationsModule to test animations.
+// BrowserAnimationsModule will be kept as it is.
 ngMocks.guts([MyComponent, BrowserAnimationsModule], MyModule);
+
+// BrowserAnimationsModule will be mocked, not replaced.
+ngMocks.guts([MyComponent, MyModule], BrowserAnimationsModule);
+
+// BrowserAnimationsModule will be excluded from declarations.
+ngMocks.guts(MyComponent, MyModule, BrowserAnimationsModule);
 ```
 
 ## fakeAsync
 
 A kept / mock `BrowserAnimationsModule` causes issues with `fakeAsync`.
-Please open an issue on github, if you have a case where `NoopAnimationsModule` isn't a solution.
+Please open an issue on [github](https://github.com/ike18t/ng-mocks/issues/new),
+if you have a case where `NoopAnimationsModule` isn't a solution.

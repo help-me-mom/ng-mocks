@@ -8,7 +8,10 @@ import {
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -55,7 +58,34 @@ class TargetComponent {
 })
 class TargetModule {}
 
+// Mocks BrowserAnimationsModule
+describe('issue-222:DomSharedStylesHost:classic', () => {
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).keep(
+      BrowserAnimationsModule,
+    ),
+  );
+
+  it('correctly handles DomSharedStylesHost in a mock module', () => {
+    const fixture = MockRender(TargetComponent);
+    expect(fixture.nativeElement.innerHTML).toContain(
+      'The box is now Open!',
+    );
+    // Animations are replaced with a mock copy, therefore no styles.
+    expect(fixture.nativeElement.innerHTML).toContain('yellow');
+  });
+});
+
+// Mocks BrowserAnimationsModule
 describe('issue-222:DomSharedStylesHost:mock', () => {
+  beforeAll(() =>
+    ngMocks.globalReplace(
+      BrowserAnimationsModule,
+      NoopAnimationsModule,
+    ),
+  );
+  afterAll(() => ngMocks.globalWipe(BrowserAnimationsModule));
+
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).mock(
       BrowserAnimationsModule,
@@ -72,7 +102,16 @@ describe('issue-222:DomSharedStylesHost:mock', () => {
   });
 });
 
+// Replaces BrowserAnimationsModule with Noop.
 describe('issue-222:DomSharedStylesHost:keep', () => {
+  beforeAll(() =>
+    ngMocks.globalReplace(
+      BrowserAnimationsModule,
+      NoopAnimationsModule,
+    ),
+  );
+  afterAll(() => ngMocks.globalWipe(BrowserAnimationsModule));
+
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('correctly handles DomSharedStylesHost in a kept module', () => {
@@ -85,6 +124,7 @@ describe('issue-222:DomSharedStylesHost:keep', () => {
   });
 });
 
+// Mocks BrowserAnimationsModule as any other module
 describe('issue-222:DomSharedStylesHost:guts', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(
