@@ -25,27 +25,50 @@ const flagReplace = (resolution?: string): boolean =>
 const flagNever = (ngModule?: any): boolean =>
   coreConfig.neverMockModule.indexOf(funcGetName(ngModule)) !== -1 && !ngMocksUniverse.flags.has('skipMock');
 
-const preprocessToggleFlag = (ngModule: Type<any>): boolean => {
+const preProcessFlags = (ngModule: Type<any>): { isRootModule: boolean; toggleSkipMockFlag: boolean } => {
   let toggleSkipMockFlag = false;
+  let isRootModule = true;
+
+  if (ngMocksUniverse.flags.has('hasRootModule')) {
+    isRootModule = false;
+  } else {
+    ngMocksUniverse.flags.add('hasRootModule');
+  }
 
   const resolution = ngMocksUniverse.getResolution(ngModule);
   if (flagMock(resolution)) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.delete('skipMock');
   }
-  if (flagKeep(resolution) || flagReplace(resolution) || flagNever(ngModule)) {
+  if (flagNever(ngModule)) {
+    toggleSkipMockFlag = true;
+    ngMocksUniverse.flags.add('skipMock');
+  }
+  if (!isRootModule && (flagKeep(resolution) || flagReplace(resolution))) {
     toggleSkipMockFlag = true;
     ngMocksUniverse.flags.add('skipMock');
   }
 
-  return toggleSkipMockFlag;
+  return {
+    isRootModule,
+    toggleSkipMockFlag,
+  };
 };
 
-const postprocessToggleFlag = (toggleSkipMockFlag: boolean): void => {
+const postProcessFlags = ({
+  isRootModule,
+  toggleSkipMockFlag,
+}: {
+  isRootModule: boolean;
+  toggleSkipMockFlag: boolean;
+}): void => {
   if (toggleSkipMockFlag && ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.delete('skipMock');
   } else if (toggleSkipMockFlag && !ngMocksUniverse.flags.has('skipMock')) {
     ngMocksUniverse.flags.add('skipMock');
+  }
+  if (isRootModule) {
+    ngMocksUniverse.flags.delete('hasRootModule');
   }
 };
 
@@ -73,7 +96,7 @@ const extractModuleAndProviders = (
   };
 };
 
-const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
+const getExistingMockModule = (ngModule: Type<any>, isRootModule: boolean): Type<any> | undefined => {
   if (isMockNgDef(ngModule, 'm')) {
     return ngModule;
   }
@@ -85,6 +108,10 @@ const getExistingMockModule = (ngModule: Type<any>): Type<any> | undefined => {
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
+  // and there is no override in its resolution.
+  if (isRootModule || ngMocksUniverse.config.get('ngMocksDepsResolution')?.get(ngModule) === 'mock') {
+    return undefined;
+  }
   if (ngMocksUniverse.hasBuildDeclaration(ngModule)) {
     const instance = ngMocksUniverse.getBuildDeclaration(ngModule);
     if (isNgDef(instance, 'm') && instance !== ngModule) {
@@ -161,17 +188,20 @@ export function MockModule(module: any): any {
   funcImportExists(module, 'MockModule');
 
   const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
-  const toggleSkipMockFlag = preprocessToggleFlag(ngModule);
-  const mockModule = detectMockModule(ngModule, getExistingMockModule(ngModule));
-  // istanbul ignore else
-  if (ngMocksUniverse.flags.has('cacheModule')) {
-    ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
-  }
-  if (ngMocksUniverse.flags.has('skipMock')) {
-    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockModule);
-  }
-  const mockModuleProviders = getMockProviders(ngModuleProviders);
-  postprocessToggleFlag(toggleSkipMockFlag);
+  const flags = preProcessFlags(ngModule);
+  try {
+    const mockModule = detectMockModule(ngModule, getExistingMockModule(ngModule, flags.isRootModule));
+    // istanbul ignore else
+    if (ngMocksUniverse.flags.has('cacheModule')) {
+      ngMocksUniverse.cacheDeclarations.set(ngModule, mockModule);
+    }
+    if (ngMocksUniverse.flags.has('skipMock')) {
+      ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(mockModule);
+    }
+    const mockModuleProviders = getMockProviders(ngModuleProviders);
 
-  return generateReturn(module, ngModule, ngModuleProviders, mockModule, mockModuleProviders);
+    return generateReturn(module, ngModule, ngModuleProviders, mockModule, mockModuleProviders);
+  } finally {
+    postProcessFlags(flags);
+  }
 }

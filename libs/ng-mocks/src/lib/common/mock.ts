@@ -149,6 +149,7 @@ export class Mock {
     ngControl: any | null = null, // NgControl
   ) {
     const mockOf = (this.constructor as any).mockOf;
+    coreDefineProperty(this, '__ngMocks', true);
     coreDefineProperty(this, '__ngMocksInjector', injector);
     coreDefineProperty(this, '__ngMocksCtor', this.constructor);
     for (const key of this.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {

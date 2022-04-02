@@ -8,7 +8,7 @@ const factory =
   (propName: string) =>
   (...args: any[]) => {
     const error = new Error(args.join(' '));
-    coreDefineProperty(error, 'ngMocksConsoleCatch', propName, false);
+    coreDefineProperty(error, 'ngMocksConsoleCatch', propName);
     throw error;
   };
 

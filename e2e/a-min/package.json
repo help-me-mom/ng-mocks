@@ -25,7 +25,6 @@
     "ng-mocks": "*"
   },
   "dependencies": {
-    "@angular/animations": "13.3.1",
     "@angular/common": "13.3.1",
     "@angular/compiler": "13.3.1",
     "@angular/core": "13.3.1",

@@ -7,8 +7,8 @@ const createPropertyGet = (key: keyof any & string, reader: Record<keyof any, an
     if (typeof source[key] === 'function') {
       if (reader[`__ngMocks_${key}__origin`] !== source[key]) {
         const clone = helperMockService.createClone(source[key], reader, source);
-        coreDefineProperty(reader, `__ngMocks_${key}`, clone, false);
-        coreDefineProperty(reader, `__ngMocks_${key}__origin`, source[key], false);
+        coreDefineProperty(reader, `__ngMocks_${key}`, clone);
+        coreDefineProperty(reader, `__ngMocks_${key}__origin`, source[key]);
       }
 
       return reader[`__ngMocks_${key}`];
@@ -16,7 +16,7 @@ const createPropertyGet = (key: keyof any & string, reader: Record<keyof any, an
 
     return source[key];
   };
-  coreDefineProperty(handler, '__ngMocksProxy', true, false);
+  coreDefineProperty(handler, '__ngMocksProxy', true);
 
   return handler;
 };
@@ -31,7 +31,7 @@ const createPropertySet = (key: keyof any & string, reader: Record<keyof any, an
     }
     source[key] = newValue;
   };
-  coreDefineProperty(handler, '__ngMocksProxy', true, false);
+  coreDefineProperty(handler, '__ngMocksProxy', true);
 
   return handler;
 };
@@ -53,7 +53,7 @@ export default (
   if (!source) {
     return;
   }
-  coreDefineProperty(reader, '__ngMocks__source', source, false);
+  coreDefineProperty(reader, '__ngMocks__source', source);
   const exists = extractOwnKeys(reader);
   const fields = [...extractAllKeys(source), ...extra];
   for (const key of fields) {

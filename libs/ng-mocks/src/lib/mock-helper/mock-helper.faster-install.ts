@@ -49,7 +49,7 @@ export default () => {
   if (!(TestBed as any).ngMocksFasterInstalled) {
     TestBed.configureTestingModule = configureTestingModule(TestBed.configureTestingModule);
     TestBed.resetTestingModule = resetTestingModule(TestBed.resetTestingModule);
-    coreDefineProperty(TestBed, 'ngMocksFasterInstalled', true, false);
+    coreDefineProperty(TestBed, 'ngMocksFasterInstalled', true);
   }
 
   return hooks;

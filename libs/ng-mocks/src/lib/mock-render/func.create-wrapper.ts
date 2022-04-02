@@ -103,7 +103,7 @@ export default (
   };
 
   ctor = generateWrapper({ ...meta, bindings, options });
-  coreDefineProperty(ctor, 'cacheKey', cacheKey, false);
+  coreDefineProperty(ctor, 'cacheKey', cacheKey);
   caches.unshift(ctor as any);
   caches.splice(ngMocksUniverse.global.get('mockRenderCacheSize') ?? coreConfig.mockRenderCacheSize);
 
