@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, Pipe } from '@angular/core';
+import { Component, Directive, NgModule, Pipe, ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
@@ -6,13 +6,15 @@ import getOverrideDef from '../mock-builder/promise/get-override-def';
 import { ngMocks } from '../mock-helper/mock-helper';
 import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
 import { MockProvider } from '../mock-provider/mock-provider';
+import helperCreateClone from '../mock-service/helper.create-clone';
 
 import coreDefineProperty from './core.define-property';
 import { flatten, mapEntries, mapValues } from './core.helpers';
+import coreInjector from './core.injector';
 import coreReflectMeta from './core.reflect.meta';
 import coreReflectModuleResolve from './core.reflect.module-resolve';
 import coreReflectProvidedIn from './core.reflect.provided-in';
-import { NG_MOCKS_TOUCHES } from './core.tokens';
+import { NG_MOCKS, NG_MOCKS_TOUCHES } from './core.tokens';
 import { AnyType } from './core.types';
 import funcGetProvider from './func.get-provider';
 import { isNgDef } from './func.is-ng-def';
@@ -226,10 +228,57 @@ const resetTestingModule =
     return original.call(TestBed);
   };
 
+const viewContainerInstall = () => {
+  const vcr: any = ViewContainerRef;
+
+  // istanbul ignore else
+  if (!vcr.ngMocksOverridesInstalled) {
+    const ngElementId = vcr.__NG_ELEMENT_ID__;
+
+    // istanbul ignore else
+    if (ngElementId) {
+      coreDefineProperty(
+        vcr,
+        '__NG_ELEMENT_ID__',
+        helperCreateClone(ngElementId, undefined, undefined, (...ngElementIdArgs: any[]) => {
+          const vcrInstance = ngElementId.apply(ngElementId, ngElementIdArgs);
+
+          const createComponent = vcrInstance.createComponent;
+          coreDefineProperty(
+            vcrInstance,
+            'createComponent',
+            helperCreateClone(
+              createComponent,
+              undefined,
+              undefined,
+              (component: any, ...createComponentArgs: any[]) => {
+                const map = coreInjector(NG_MOCKS, vcrInstance.injector);
+
+                return createComponent.apply(vcrInstance, [
+                  map?.get(component) ?? component,
+                  ...createComponentArgs,
+                ] as any);
+              },
+            ),
+            true,
+          );
+
+          return vcrInstance;
+        }),
+        true,
+      );
+    }
+
+    coreDefineProperty(ViewContainerRef, 'ngMocksOverridesInstalled', true);
+  }
+};
+
 const install = () => {
-  const hooks = mockHelperFasterInstall();
   // istanbul ignore else
   if (!(TestBed as any).ngMocksOverridesInstalled) {
+    const hooks = mockHelperFasterInstall();
+    viewContainerInstall();
+
     // istanbul ignore else
     if (hooks.before.indexOf(configureTestingModule) === -1) {
       hooks.before.push(configureTestingModule);
@@ -238,6 +287,7 @@ const install = () => {
     if (hooks.after.indexOf(resetTestingModule) === -1) {
       hooks.after.push(resetTestingModule);
     }
+
     coreDefineProperty(TestBed, 'ngMocksOverridesInstalled', true);
   }
 };

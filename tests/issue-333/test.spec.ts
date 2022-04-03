@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import * as core from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @core.Component({
@@ -35,6 +36,14 @@ class DepComponent {}
 class MockComponent {
   public flag = true;
 }
+
+@core.NgModule({
+  declarations: [MockComponent, DepComponent],
+  entryComponents: [MockComponent],
+  exports: [MockComponent],
+  imports: [CommonModule],
+})
+class MockModule {}
 
 // @see https://github.com/ike18t/ng-mocks/issues/333
 describe('issue-333', () => {
@@ -125,6 +134,24 @@ describe('issue-333', () => {
       expect(() => fixture.detectChanges()).toThrowError(
         /MockComponent/,
       );
+    });
+  });
+
+  // Ensuring that everything has been reset properly
+  describe('real', () => {
+    beforeEach(async () =>
+      TestBed.configureTestingModule({
+        imports: [MockModule, OverlayModule],
+      }).compileComponents(),
+    );
+
+    it('renders all components', () => {
+      const fixture = MockRender(DynamicOverlayComponent);
+      expect(ngMocks.formatText(fixture)).toEqual(``);
+
+      fixture.point.componentInstance.attachComponent(MockComponent);
+      fixture.detectChanges();
+      expect(ngMocks.formatText(fixture)).toEqual(`Dependency`);
     });
   });
 });
