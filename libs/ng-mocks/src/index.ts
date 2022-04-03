@@ -17,7 +17,6 @@ export * from './lib/common/func.is-mock-validator';
 export * from './lib/common/func.is-mocked-ng-def-of';
 export * from './lib/common/func.is-ng-def';
 export * from './lib/common/func.is-ng-injection-token';
-export * from './lib/common/func.is-ng-module-def-with-providers';
 export * from './lib/common/func.is-ng-type';
 export { Mock } from './lib/common/mock';
 export { MockControlValueAccessor, MockValidator } from './lib/common/mock-control-value-accessor';

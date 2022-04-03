@@ -1,9 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import {
-  MockBuilder,
-  MockRender,
-  NgModuleWithProviders,
-} from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -12,7 +8,7 @@ class TargetService {
 
 @NgModule()
 class TargetModule {
-  public static forRoot(): NgModuleWithProviders<TargetModule> {
+  public static forRoot() {
     return {
       ngModule: TargetModule,
       providers: [TargetService],
