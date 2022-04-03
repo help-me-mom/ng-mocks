@@ -54,6 +54,7 @@ export class TargetModule {}
 // Both of them use a root provider TargetService.
 // Because we keep KeepModule the TargetService has to be kept too.
 // If we want to mock it, then we need to mock NG_MOCKS_ROOT_PROVIDERS token.
+// @see https://github.com/ike18t/ng-mocks/issues/222
 describe('issue-222:kept-root-injection', () => {
   if (parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {

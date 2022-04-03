@@ -13,6 +13,7 @@ const TOKEN = new InjectionToken('TOKEN');
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/762
 describe('issue-762:token', () => {
   describe('as keep single lonely', () => {
     beforeEach(() => MockBuilder(TOKEN));

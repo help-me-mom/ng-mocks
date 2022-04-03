@@ -49,6 +49,7 @@ class TargetComponent implements OnInit {
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/172
 describe('issue-172:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -64,6 +65,7 @@ describe('issue-172:real', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/172
 describe('issue-172:test', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -94,6 +96,7 @@ describe('issue-172:test', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/172
 describe('issue-172:mock', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).mock(Target1Service, {
@@ -109,6 +112,7 @@ describe('issue-172:mock', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/172
 describe('issue-172:restore', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({

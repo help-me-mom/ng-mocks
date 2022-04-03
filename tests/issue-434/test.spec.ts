@@ -27,6 +27,7 @@ class TargetComponent {
   };
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/434
 describe('issue-434', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 

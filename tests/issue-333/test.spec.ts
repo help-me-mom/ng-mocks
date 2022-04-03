@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import * as core from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @core.Component({
   selector: 'dynamic-overlay',
@@ -36,6 +36,7 @@ class MockComponent {
   public flag = true;
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/333
 describe('issue-333', () => {
   describe('1:keep', () => {
     // this should work with and without ivy
@@ -86,6 +87,8 @@ describe('issue-333', () => {
       expect(ngMocks.formatHtml(fixture)).toEqual(
         `<dynamic-overlay><mock-component></mock-component></dynamic-overlay>`,
       );
+      const instance = ngMocks.findInstance(MockComponent);
+      expect(isMockOf(instance, MockComponent)).toEqual(true);
     });
 
     if (!(core as any).ɵivyEnabled) {

@@ -49,6 +49,7 @@ class TargetComponent {}
 })
 export class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/222
 describe('issue-222:mock-keep-priorities', () => {
   describe('keep', () => {
     beforeEach(() =>

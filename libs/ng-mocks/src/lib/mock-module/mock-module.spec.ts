@@ -11,11 +11,7 @@ import {
   Injector,
   NgModule,
 } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -61,8 +57,8 @@ class SameImportsComponent {}
 describe('MockModule', () => {
   let fixture: ComponentFixture<ComponentSubject>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [ComponentSubject],
       imports: [
         MockModule(ParentModule),
@@ -74,7 +70,7 @@ describe('MockModule', () => {
         fixture = TestBed.createComponent(ComponentSubject);
         fixture.detectChanges();
       });
-  }));
+  });
 
   it('should do stuff', () => {
     const mockComponent = fixture.debugElement.query(
@@ -87,8 +83,8 @@ describe('MockModule', () => {
 describe('SameImportsModules', () => {
   let fixture: ComponentFixture<SameImportsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
       imports: [
         MockModule(SameImports1Module),
@@ -100,7 +96,7 @@ describe('SameImportsModules', () => {
         fixture = TestBed.createComponent(SameImportsComponent);
         fixture.detectChanges();
       });
-  }));
+  });
 
   it('should be imported correctly', () => {
     expect(fixture.componentInstance).toEqual(
@@ -113,8 +109,8 @@ describe('SameImportsModules', () => {
 describe('NeverMockModules', () => {
   let fixture: ComponentFixture<SameImportsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [SameImportsComponent],
       imports: [
         MockModule(ApplicationModule),
@@ -128,7 +124,7 @@ describe('NeverMockModules', () => {
         fixture = TestBed.createComponent(SameImportsComponent);
         fixture.detectChanges();
       });
-  }));
+  });
 
   it('should not fail when we pass them to MockModule', () => {
     expect(fixture.componentInstance).toEqual(
@@ -141,8 +137,8 @@ describe('NeverMockModules', () => {
 describe('RouterModule', () => {
   let fixture: ComponentFixture<ExampleComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [ExampleComponent],
       imports: [MockModule(AppRoutingModule)],
     })
@@ -151,7 +147,7 @@ describe('RouterModule', () => {
         fixture = TestBed.createComponent(ExampleComponent);
         fixture.detectChanges();
       });
-  }));
+  });
 
   it('should not fail when we pass RouterModule to MockModule', () => {
     expect(fixture.componentInstance).toEqual(
@@ -168,8 +164,8 @@ describe('Usage of cached nested module', () => {
   let fixture: ComponentFixture<ExampleConsumerComponent>;
 
   describe('1st test for root', () => {
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      return TestBed.configureTestingModule({
         declarations: [ExampleConsumerComponent],
         imports: [MockModule(LogicRootModule)],
       })
@@ -178,7 +174,7 @@ describe('Usage of cached nested module', () => {
           fixture = TestBed.createComponent(ExampleConsumerComponent);
           fixture.detectChanges();
         });
-    }));
+    });
 
     it('should be able to find component', () => {
       expect(fixture.componentInstance).toEqual(
@@ -188,8 +184,8 @@ describe('Usage of cached nested module', () => {
   });
 
   describe('2nd test for nested', () => {
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      return TestBed.configureTestingModule({
         declarations: [ExampleConsumerComponent],
         imports: [MockModule(LogicNestedModule)],
       })
@@ -198,7 +194,7 @@ describe('Usage of cached nested module', () => {
           fixture = TestBed.createComponent(ExampleConsumerComponent);
           fixture.detectChanges();
         });
-    }));
+    });
 
     it('should be able to find component', () => {
       expect(fixture.componentInstance).toEqual(
@@ -209,12 +205,12 @@ describe('Usage of cached nested module', () => {
 });
 
 describe('WithServiceModule', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [CustomWithServiceComponent],
       imports: [MockModule(WithServiceModule)],
-    });
-  }));
+    }).compileComponents();
+  });
 
   it('should not throw an error of service method', () => {
     const fixture = MockRender('<custom-service></custom-service>');

@@ -42,6 +42,7 @@ class TargetPipe implements PipeTransform {
   }
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/760
 describe('issue-760:jest', () => {
   describe('unknown module', () => {
     it('throws on MockModule', () => {

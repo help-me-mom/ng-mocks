@@ -14,6 +14,7 @@ import {
   TargetModule,
 } from './fixtures';
 
+// @see https://github.com/ike18t/ng-mocks/issues/175
 describe('issue-175', () => {
   ngMocks.throwOnConsole();
 

@@ -32,6 +32,7 @@ ngMocks.globalExclude(TargetModule);
 
 // Looks like a module with providers has some issues with excluding it globally
 // and then mocking in a mock builder setup.
+// @see https://github.com/ike18t/ng-mocks/issues/589
 describe('issue-589', () => {
   describe('default exclude', () => {
     beforeEach(() => MockBuilder(null, MyModule));

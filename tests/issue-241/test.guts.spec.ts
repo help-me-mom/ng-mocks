@@ -3,6 +3,7 @@ import { MockRender, ngMocks } from 'ng-mocks';
 
 import { AppModule, TargetComponent } from './fixtures';
 
+// @see https://github.com/ike18t/ng-mocks/issues/241
 describe('issue-241:guts', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(

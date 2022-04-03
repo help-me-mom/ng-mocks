@@ -24,6 +24,7 @@ class TargetComponent {
 }
 
 // TypeError: view.root.sanitizer.sanitize is not a function
+// @see https://github.com/ike18t/ng-mocks/issues/538
 describe('issue-538', () => {
   describe('keep', () => {
     beforeEach(() => MockBuilder(TargetComponent));

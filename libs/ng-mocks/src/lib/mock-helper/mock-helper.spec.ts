@@ -7,7 +7,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { isMockOf } from '../common/func.is-mock-of';
@@ -54,16 +54,16 @@ export class AComponent {}
 export class BComponent {}
 
 describe('MockHelper:getDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
         AComponent,
         BComponent,
       ],
-    });
-  }));
+    }).compileComponents();
+  });
 
   it('should return right attribute directive', () => {
     const fixture = MockRender(`

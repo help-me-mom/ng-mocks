@@ -14,6 +14,7 @@ class TargetComponent {}
 const assertion: any =
   typeof jasmine === 'undefined' ? expect : jasmine;
 
+// @see https://github.com/ike18t/ng-mocks/issues/572
 describe('issue-572', () => {
   ngMocks.faster();
   let consoleWarn: typeof console.warn;

@@ -55,6 +55,7 @@ class TargetModule {}
 
 // We should try to detect a wrong declaration.
 // @see https://github.com/ike18t/ng-mocks/issues/354#issuecomment-927694500
+// @see https://github.com/ike18t/ng-mocks/issues/1168
 describe('issue-1168', () => {
   describe('MockPipe', () => {
     it('fails on TargetClass', () => {

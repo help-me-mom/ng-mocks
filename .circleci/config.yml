@@ -4,7 +4,7 @@ orbs:
 parameters:
   lockindex:
     type: string
-    default: '1'
+    default: '3'
 jobs:
   Core:
     docker:
@@ -19,11 +19,10 @@ jobs:
           name: NPM Install
           command: |
             if [ ! -d "./node_modules/" ]; then
-              npm ci --no-optional --ignore-scripts && \
-              node ./node_modules/puppeteer/install.js
+              npm ci --no-optional
             fi
             if [ ! -d "./docs/node_modules/" ]; then
-              cd docs && npm ci --no-optional --ignore-scripts && cd ..
+              cd docs && npm ci --no-optional && cd ..
             fi
       - save_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
@@ -101,9 +100,7 @@ jobs:
           name: NPM Install
           command: |
             if [ ! -d "./node_modules/" ]; then
-              npm ci --no-optional --ignore-scripts && \
-              node ./node_modules/puppeteer/install.js && \
-              ./node_modules/.bin/ngcc
+              npm ci --no-optional
             fi
       - save_cache:
           key: e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
@@ -954,7 +951,7 @@ jobs:
           name: NPM Install
           command: |
             if [ ! -d "e2e/a5es5/node_modules/" ]; then
-              npm run i:a5es5 -- --ignore-scripts
+              npm run i:a5es5
             fi
       - save_cache:
           key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}

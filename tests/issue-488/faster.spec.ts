@@ -27,6 +27,7 @@ class MyComponent implements OnInit {
 })
 class MyModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/488
 describe('issue-488:faster', () => {
   let fixture: MockedComponentFixture<MyComponent>;
 

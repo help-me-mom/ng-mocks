@@ -11,6 +11,7 @@ class ExampleProvider {
 })
 class ExampleModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/186
 describe('issue-186:real', () => {
   let exampleProvider: ExampleProvider;
   let exampleProviderFromSetupPhase: ExampleProvider;
@@ -35,6 +36,7 @@ describe('issue-186:real', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/186
 describe('issue-186:mock', () => {
   let exampleProvider: ExampleProvider;
   let exampleProviderFromSetupPhase: ExampleProvider;
