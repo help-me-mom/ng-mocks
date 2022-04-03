@@ -1,10 +1,6 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  MockBuilder,
-  MockRender,
-  NgModuleWithProviders,
-} from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
 class DependencyService {
@@ -17,7 +13,7 @@ class DependencyService {
 
 @NgModule({})
 class DependencyModule {
-  public static withProviders(): NgModuleWithProviders<DependencyModule> {
+  public static withProviders() {
     return {
       ngModule: DependencyModule,
       providers: [

@@ -1,16 +1,11 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import {
-  MockBuilder,
-  MockRender,
-  ngMocks,
-  NgModuleWithProviders,
-} from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
 
 @NgModule()
 class TargetModule {
-  public static forRoot(): NgModuleWithProviders<TargetModule> {
+  public static forRoot() {
     return {
       ngModule: TargetModule,
       providers: [
