@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Chat on gitter
+    about: A good place for quick questions
+    url: https://gitter.im/ng-mocks/community
+  - name: Ask help on Stackoverflow
+    about: In case if you have a well defined question or clear expectations with prepared code examples
+    url: https://stackoverflow.com/questions/ask?tags=ng-mocks%20angular%20testing%20mocking
+  - name: Ask a question
+    about: In case if you DO NOT have a well defined question
+    url: https://github.com/ike18t/ng-mocks/discussions/new
