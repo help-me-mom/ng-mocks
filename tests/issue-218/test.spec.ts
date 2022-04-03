@@ -64,6 +64,7 @@ class TargetComponent implements OnInit {
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/218
 describe('issue-218:real', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
@@ -78,6 +79,7 @@ describe('issue-218:real', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/218
 describe('issue-218:builder:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
@@ -90,6 +92,7 @@ describe('issue-218:builder:mock', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/218
 describe('issue-218:builder:keep', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(TargetPipe),
@@ -106,6 +109,7 @@ describe('issue-218:builder:keep', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/218
 describe('issue-218:guts:mock', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(
@@ -122,6 +126,7 @@ describe('issue-218:guts:mock', () => {
   });
 });
 
+// @see https://github.com/ike18t/ng-mocks/issues/218
 describe('issue-218:guts:keep', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(

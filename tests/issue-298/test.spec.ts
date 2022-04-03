@@ -17,6 +17,7 @@ class MyDirective {
   @Output() public readonly valueChange = new EventEmitter<void>();
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/298
 describe('issue-298', () => {
   beforeEach(() => MockBuilder(MyDirective));
 

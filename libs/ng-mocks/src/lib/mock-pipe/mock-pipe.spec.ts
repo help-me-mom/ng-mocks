@@ -1,9 +1,5 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
@@ -52,15 +48,15 @@ describe('MockPipe', () => {
   });
 
   describe('Base tests-jasmine', () => {
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      return TestBed.configureTestingModule({
         declarations: [
           ExampleComponent,
           MockPipe(ExamplePipe, () => 'foo'),
           MockPipe(AnotherExamplePipe),
         ],
       }).compileComponents();
-    }));
+    });
 
     beforeEach(() => {
       fixture = TestBed.createComponent(ExampleComponent);
@@ -85,15 +81,15 @@ describe('MockPipe', () => {
   });
 
   describe('Cache check', () => {
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      return TestBed.configureTestingModule({
         declarations: [
           ExampleComponent,
           MockPipe(ExamplePipe, () => 'bar'),
           MockPipe(AnotherExamplePipe),
         ],
       }).compileComponents();
-    }));
+    });
 
     beforeEach(() => {
       fixture = TestBed.createComponent(ExampleComponent);

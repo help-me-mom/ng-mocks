@@ -45,6 +45,7 @@ class TargetComponent {}
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/222
 describe('issue-222:INJECTOR_SCOPE', () => {
   if (parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {

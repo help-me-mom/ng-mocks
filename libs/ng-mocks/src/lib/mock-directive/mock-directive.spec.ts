@@ -16,11 +16,7 @@ import {
   ViewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
@@ -122,8 +118,8 @@ describe('MockDirective', () => {
   let component: ExampleComponentContainer;
   let fixture: ComponentFixture<ExampleComponentContainer>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    return TestBed.configureTestingModule({
       declarations: [
         ExampleComponentContainer,
         MockDirective(FormControlDirective),
@@ -132,7 +128,7 @@ describe('MockDirective', () => {
         MockDirective(GettersAndSettersDirective),
       ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExampleComponentContainer);

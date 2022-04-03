@@ -42,6 +42,7 @@ class Target4Module {}
 })
 class Target5Module {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/248
 describe('issue-248', () => {
   it('does not fail', () => {
     expect(() => MockModule(Target1Module)).not.toThrow();

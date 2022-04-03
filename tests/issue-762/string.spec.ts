@@ -12,6 +12,7 @@ import { MockBuilder } from 'ng-mocks';
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/762
 describe('issue-762:string', () => {
   describe('as keep single lonely', () => {
     beforeEach(() => MockBuilder('STRING'));

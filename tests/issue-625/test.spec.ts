@@ -74,6 +74,7 @@ export class MyComponent implements OnInit {
 })
 export class MyModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/625
 describe('issue-625', () => {
   let spy: any;
 

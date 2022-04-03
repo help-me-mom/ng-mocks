@@ -20,6 +20,7 @@ export class MyDirective {
 })
 export class AppComponent {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/298
 describe('issue-298:stack-blitz', () => {
   let fixture: ComponentFixture<AppComponent>;
   beforeEach(() => {

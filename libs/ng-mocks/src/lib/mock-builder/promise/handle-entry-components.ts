@@ -17,15 +17,16 @@ import helperCreateClone from '../../mock-service/helper.create-clone';
 import { NgMeta } from './types';
 
 class EntryComponentsModule {
-  protected origin: module.ComponentFactoryResolver['resolveComponentFactory'];
+  protected originCFR: module.ComponentFactoryResolver['resolveComponentFactory'];
 
   public constructor(map: Map<any, any>, protected componentFactoryResolver: module.ComponentFactoryResolver) {
-    this.origin = componentFactoryResolver.resolveComponentFactory;
+    this.originCFR = componentFactoryResolver.resolveComponentFactory;
     componentFactoryResolver.resolveComponentFactory = helperCreateClone(
-      this.origin,
+      this.originCFR,
       undefined,
       undefined,
-      (component: any) => this.origin.call(componentFactoryResolver, map.get(component) ?? component) as any,
+      (component: any, ...args: any[]) =>
+        this.originCFR.apply(componentFactoryResolver, [map.get(component) ?? component, ...args] as any),
     );
   }
 }
@@ -39,11 +40,11 @@ export default (ngModule: NgMeta): void => {
     }
   }
   // the way to cause entryComponents to do its work
-  const entryComponent = extendClass(EntryComponentsModule);
+  const entryModule = extendClass(EntryComponentsModule);
   module.NgModule({
     // Ivy knows how to make any component an entry point,
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
     entryComponents: isIvy ? [] : /* istanbul ignore next */ entryComponents,
-  })(entryComponent);
-  ngModule.imports.push(entryComponent);
+  })(entryModule);
+  ngModule.imports.push(entryModule);
 };

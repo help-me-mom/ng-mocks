@@ -29,6 +29,7 @@ class TargetComponent implements OnInit {
   }
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/736
 describe('issue-736', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)

@@ -16,6 +16,7 @@ class ErrorCountDisplayComponent {
   @Input() public max: number | null = null;
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/522
 describe('issue-522', () => {
   let component: ErrorCountDisplayComponent;
   let fixture: ComponentFixture<ErrorCountDisplayComponent>;

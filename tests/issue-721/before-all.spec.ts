@@ -12,6 +12,7 @@ class TargetComponent {
   public constructor(@Inject(TOKEN) public readonly value: number) {}
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/721
 describe('issue-721:before-all', () => {
   ngMocks.faster();
 

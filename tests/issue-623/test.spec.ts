@@ -40,6 +40,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/623
 describe('issue-623', () => {
   const withoutDirective = MockRenderFactory(TargetComponent);
   const withDirective = MockRenderFactory(

@@ -27,6 +27,7 @@ class TargetModule {}
 // Declarations and providers should be cached in different buckets.
 // Because when we mock a declaration we get a mock class, but
 // when we mock a provider we get a mock instance.
+// @see https://github.com/ike18t/ng-mocks/issues/173
 describe('issue-173', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 

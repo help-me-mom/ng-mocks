@@ -8,6 +8,7 @@ import { MockBuilder } from 'ng-mocks';
 })
 class TargetModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/222
 describe('issue-222:application-module', () => {
   beforeEach(() => MockBuilder(null, TargetModule));
 

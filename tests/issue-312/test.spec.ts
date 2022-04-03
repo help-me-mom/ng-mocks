@@ -82,7 +82,8 @@ class TargetModule {}
 const assertion: any =
   typeof jasmine === 'undefined' ? expect : jasmine;
 
-// the idea is that all of the services have been injected besides StandardService.
+// the idea is that all the services have been injected besides StandardService.
+// @see https://github.com/ike18t/ng-mocks/issues/312
 describe('issue-312', () => {
   if (parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {

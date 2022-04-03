@@ -39,6 +39,7 @@ class HelloRoutingModule {}
 })
 class HelloModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/178
 describe('issue-178', () => {
   beforeEach(
     () =>

@@ -8,6 +8,7 @@ import {
   MockRender,
 } from 'ng-mocks';
 
+// @see https://github.com/ike18t/ng-mocks/issues/354
 describe('issue-354', () => {
   it('does not accept an empty module', () => {
     expect(() => MockModule(undefined as any)).toThrowError(

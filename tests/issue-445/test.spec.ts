@@ -10,6 +10,7 @@ export class ByAttributeComponent {
   public readonly contentChild?: any;
 }
 
+// @see https://github.com/ike18t/ng-mocks/issues/445
 describe('issue-445', () => {
   describe('real', () => {
     beforeEach(() => MockBuilder(ByAttributeComponent));

@@ -25,6 +25,7 @@ class TargetModule {
 })
 class AppModule {}
 
+// @see https://github.com/ike18t/ng-mocks/issues/271
 describe('issue-271', () => {
   beforeEach(() =>
     MockBuilder(null, AppModule).exclude(TargetModule),
