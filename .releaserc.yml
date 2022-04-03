@@ -5,7 +5,7 @@ plugins:
           scope: README
           release: patch
   - - '@semantic-release/exec'
-    - prepareCmd: npx npm install && npx npm run lint && npx npm run ts:check && npx npm run build
+    - prepareCmd: npx npm install --force && npx npm run lint && npx npm run ts:check && npx npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md
