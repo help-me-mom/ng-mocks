@@ -1,3 +1,17 @@
+# [13.4.0](https://github.com/ike18t/ng-mocks/compare/v13.3.0...v13.4.0) (2022-04-03)
+
+
+### Bug Fixes
+
+* **a14:** injecting mock components in vcr.createComponent [#333](https://github.com/ike18t/ng-mocks/issues/333) ([f3e5fd9](https://github.com/ike18t/ng-mocks/commit/f3e5fd97faa51fbcea070717085eb7ed8ae3abd0))
+* **core:** BrowserAnimationsModule is optional dependency now [#1377](https://github.com/ike18t/ng-mocks/issues/1377) ([6f4e8da](https://github.com/ike18t/ng-mocks/commit/6f4e8da2b526d1095307ac84200143a9df379cce))
+* **core:** removing isNgModuleDefWithProviders from exports [#2173](https://github.com/ike18t/ng-mocks/issues/2173) ([7501dc9](https://github.com/ike18t/ng-mocks/commit/7501dc9912bc88c89688ab48ff4c0987b26172a6))
+
+
+### Features
+
+* **core:** BrowserAnimationsModule better coverage [#1377](https://github.com/ike18t/ng-mocks/issues/1377) ([a2eaf88](https://github.com/ike18t/ng-mocks/commit/a2eaf8897b9dc6ad0a4108c24dd995f589d5fd63))
+
 # [13.3.0](https://github.com/ike18t/ng-mocks/compare/v13.2.0...v13.3.0) (2022-03-27)
 
 
