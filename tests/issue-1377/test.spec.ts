@@ -1,4 +1,4 @@
-// tslint:disable no-string-literal
+// tslint:disable no-string-literal max-file-line-count
 
 import {
   state,
@@ -15,7 +15,9 @@ import {
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
 import {
+  isMockOf,
   MockBuilder,
+  MockComponent,
   MockModule,
   MockRender,
   ngMocks,
@@ -145,6 +147,15 @@ const expectThrow = () => {
   expect(() => MockRender(TargetComponent)).toThrowError(
     /BrowserAnimationsModule/,
   );
+};
+
+const expectEmpty = () => {
+  const fixture = MockRender(TargetComponent);
+
+  expect(ngMocks.formatHtml(fixture)).toEqual('<target></target>');
+  expect(
+    isMockOf(fixture.point.componentInstance, TargetComponent, 'c'),
+  ).toEqual(true);
 };
 
 // @see https://github.com/ike18t/ng-mocks/issues/1377
@@ -420,6 +431,44 @@ describe('issue-1377', () => {
       );
 
       it('throws an error', expectThrow);
+    });
+  });
+
+  describe('mock animations', () => {
+    describe('MockComponent', () => {
+      beforeEach(() =>
+        TestBed.configureTestingModule({
+          declarations: [MockComponent(TargetComponent)],
+        }).compileComponents(),
+      );
+
+      it('renders empty element', expectEmpty);
+    });
+
+    describe('MockModule', () => {
+      beforeEach(() =>
+        TestBed.configureTestingModule({
+          imports: [MockModule(TargetModule)],
+        }).compileComponents(),
+      );
+
+      it('renders empty element', expectEmpty);
+    });
+
+    describe('MockBuilder', () => {
+      beforeEach(() => MockBuilder(null, TargetComponent));
+
+      it('renders empty element', expectEmpty);
+    });
+
+    describe('ngMocks.guts', () => {
+      beforeEach(() =>
+        TestBed.configureTestingModule(
+          ngMocks.guts(null, TargetModule),
+        ).compileComponents(),
+      );
+
+      it('renders empty element', expectEmpty);
     });
   });
 });
