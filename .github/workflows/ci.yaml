@@ -97,7 +97,7 @@ jobs:
 
       - name: https://codecov.io/gh/ike18t/ng-mocks
         if: always()
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./test-reports/coverage/lcov/lcov.info
