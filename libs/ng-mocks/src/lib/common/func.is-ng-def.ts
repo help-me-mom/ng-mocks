@@ -66,6 +66,9 @@ export function isNgDef(declaration: any, ngType?: string): declaration is Type<
   if (ngType === 't') {
     return isNgInjectionToken(declaration);
   }
+  if (typeof declaration !== 'function') {
+    return false;
+  }
 
   const isModule = isModuleCheck(declaration, ngType);
   const isComponent = isComponentCheck(declaration, ngType);
