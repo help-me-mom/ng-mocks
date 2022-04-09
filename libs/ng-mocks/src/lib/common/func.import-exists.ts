@@ -1,9 +1,24 @@
 import funcGetName from './func.get-name';
 import { isNgDef } from './func.is-ng-def';
 
+const getType = (value: any): string =>
+  isNgDef(value, 'p')
+    ? 'pipe'
+    : isNgDef(value, 'd')
+    ? 'directive'
+    : isNgDef(value, 'c')
+    ? 'component'
+    : isNgDef(value, 'm')
+    ? 'module'
+    : isNgDef(value, 'i')
+    ? 'service'
+    : isNgDef(value, 't')
+    ? 'token'
+    : '';
+
 export default (value: any, funcName: string) => {
   if (value === undefined || value === null) {
-    throw new Error(`An empty parameter has been passed into ${funcName}. Please check that its import is correct.`);
+    throw new Error(`null / undefined has been passed into ${funcName}. Please check that its import is correct.`);
   }
 
   if (funcName === 'MockPipe' && isNgDef(value, 'p')) {
@@ -19,19 +34,7 @@ export default (value: any, funcName: string) => {
     return;
   }
 
-  const type = isNgDef(value, 'p')
-    ? 'pipe'
-    : isNgDef(value, 'd')
-    ? 'directive'
-    : isNgDef(value, 'c')
-    ? 'component'
-    : isNgDef(value, 'm')
-    ? 'module'
-    : isNgDef(value, 'i')
-    ? 'service'
-    : isNgDef(value, 't')
-    ? 'token'
-    : '';
+  const type = getType(value);
 
   if (type && funcName === 'MockPipe') {
     throw new Error(`${funcName} accepts pipes, whereas ${funcGetName(value)} is a ${type}.`);

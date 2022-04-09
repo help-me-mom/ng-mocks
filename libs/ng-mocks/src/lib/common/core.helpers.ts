@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from './core.define-property';
-import coreReflectJit from './core.reflect.jit';
+import coreReflectParametersResolve from './core.reflect.parameters-resolve';
 import { AnyType, Type } from './core.types';
 import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
@@ -124,7 +124,7 @@ export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
   coreDefineProperty(child, 'name', `MockMiddleware${funcGetName(base)}`, true);
 
-  const parameters = coreReflectJit().parameters(base);
+  const parameters = coreReflectParametersResolve(base);
   if (parameters.length) {
     coreDefineProperty(child, 'parameters', [...parameters]);
   }

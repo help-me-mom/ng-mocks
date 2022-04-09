@@ -1,5 +1,7 @@
 // tslint:disable max-func-body-length cyclomatic-complexity
 
+import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
+
 import coreDefineProperty from '../common/core.define-property';
 
 interface Declaration {
@@ -354,7 +356,13 @@ const buildDeclaration = (def: any | undefined, declaration: Declaration): void 
   }
 };
 
+const reflectionCapabilities = new ReflectionCapabilities();
+
 const parse = (def: any): any => {
+  if (typeof def !== 'function' && typeof def !== 'object') {
+    return {};
+  }
+
   if (def.hasOwnProperty('__ngMocksParsed')) {
     return def.__ngMocksDeclarations;
   }
@@ -373,6 +381,7 @@ const parse = (def: any): any => {
   coreDefineProperty(def, '__ngMocksDeclarations', {
     ...parentDeclarations,
     ...declaration,
+    parameters: reflectionCapabilities.parameters(def),
   });
 
   return def.__ngMocksDeclarations;
