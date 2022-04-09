@@ -12,7 +12,7 @@ export default (): {
     mapValues(ngMocksUniverse.touches),
   ];
 
-  // Also we need to track what has been touched to check params recursively, but avoiding duplicates.
+  // Also, we need to track what has been touched to check params recursively, but avoiding duplicates.
   const touched: any[] = [].concat(...buckets);
 
   return {

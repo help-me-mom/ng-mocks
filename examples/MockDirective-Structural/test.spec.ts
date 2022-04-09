@@ -1,10 +1,12 @@
 import {
   Component,
   Directive,
-  EventEmitter,
   Input,
-  Output,
+  NgModule,
+  TemplateRef,
+  ViewContainerRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -14,22 +16,24 @@ class DependencyDirective {
   @Input('dependency')
   public someInput = '';
 
-  @Output('dependency-output')
-  public someOutput = new EventEmitter();
+  public constructor(
+    protected templateRef: TemplateRef<any>,
+    protected viewContainerRef: ViewContainerRef,
+  ) {}
 }
 
 @Component({
   selector: 'tested',
-  template: ` <span
-    *dependency="value"
-    (dependency-output)="trigger($event)"
-    >content</span
-  >`,
+  template: '<span *dependency="value">content</span>',
 })
-class TestedComponent {
+class TargetComponent {
   public value = '';
-  public trigger = () => {};
 }
+
+@NgModule({
+  declarations: [TargetComponent, DependencyDirective],
+})
+class TargetModule {}
 
 describe('MockDirective:Structural', () => {
   // IMPORTANT: by default structural directives are not rendered.
@@ -37,15 +41,18 @@ describe('MockDirective:Structural', () => {
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyDirective, {
-      // render: true, // <-- a flag to render the directive by default
-    });
+    return MockBuilder(TargetComponent, TargetModule).mock(
+      DependencyDirective,
+      {
+        // render: true, // <-- a flag to render the directive by default
+      },
+    );
   });
 
   it('renders content of the child structural directive', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(TargetComponent);
 
-    // Let's assert that nothing has been rendered inside of
+    // Let's assert that nothing has been rendered inside
     // the structural directive by default.
     expect(fixture.nativeElement.innerHTML).not.toContain(
       '>content<',

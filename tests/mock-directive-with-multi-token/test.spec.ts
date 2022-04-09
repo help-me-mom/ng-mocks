@@ -1,4 +1,5 @@
 import { Directive, InjectionToken } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
@@ -19,6 +20,6 @@ describe('mock-directive-with-multi-token', () => {
   beforeEach(() => MockBuilder(null, TargetDirective));
 
   it('does not have the token', () => {
-    expect(() => MockRender(`<target></target>`)).not.toThrow();
+    expect(() => MockRender('<target></target>')).not.toThrow();
   });
 });

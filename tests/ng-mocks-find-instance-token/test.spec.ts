@@ -1,4 +1,5 @@
 import { Component, InjectionToken } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
@@ -11,7 +12,7 @@ const TOKEN = new InjectionToken('TOKEN');
     },
   ],
   selector: 'target',
-  template: `target`,
+  template: 'target',
 })
 class TargetComponent {}
 

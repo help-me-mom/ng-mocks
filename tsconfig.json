@@ -2,7 +2,6 @@
   "extends": "./libs/ng-mocks/tsconfig.json",
   "compilerOptions": {
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {

@@ -25,7 +25,7 @@ export default <T>(...args: any[]) => {
   const root = mockHelperFind(funcGetLastFixture(), el, undefined);
 
   const res1 = funcGetFromNode([], root, getSourceOfMock(sel));
-  if (res1.length) {
+  if (res1.length > 0) {
     return res1[0];
   }
 
@@ -37,7 +37,7 @@ export default <T>(...args: any[]) => {
       : root.parent.queryAllNodes(node => node.nativeNode === prevNode);
   const matchedNode = matches[0];
   const res2 = funcGetFromNode([], matchedNode, getSourceOfMock(sel));
-  if (res2.length) {
+  if (res2.length > 0) {
     return res2[0];
   }
   if (notFoundValue !== defaultNotFoundValue) {

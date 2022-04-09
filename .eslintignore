@@ -1,0 +1,14 @@
+CHANGELOG.md
+
+dist/
+docs/**/*.md
+docs/.docusaurus
+e2e/*/.angular
+e2e/*/src/test
+e2e/nx/apps/*/src/test
+e2e/nx/decorate-angular-cli.js
+node_modules/
+test-reports/
+tests-e2e/.angular
+tests-failures/
+tmp/

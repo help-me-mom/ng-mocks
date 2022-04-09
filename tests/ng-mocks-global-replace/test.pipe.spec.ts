@@ -1,5 +1,6 @@
 import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockModule,
@@ -45,7 +46,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('works as usual', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('');
     });
   });
@@ -58,7 +59,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('fake');
     });
   });
@@ -71,7 +72,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('fake');
     });
   });
@@ -84,7 +85,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender(`{{ 'test' | target }}`)).toThrow();
+      expect(() => MockRender("{{ 'test' | target }}")).toThrow();
     });
   });
 
@@ -96,7 +97,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('');
     });
   });
@@ -109,7 +110,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('target');
     });
   });
@@ -118,7 +119,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 
     it('replaces out of the box', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('fake');
     });
   });
@@ -129,7 +130,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender(`{{ 'test' | target }}`)).toThrow();
+      expect(() => MockRender("{{ 'test' | target }}")).toThrow();
     });
   });
 
@@ -139,7 +140,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('');
     });
   });
@@ -150,7 +151,7 @@ describe('ng-mocks-global-replace:pipe', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender(`{{ 'test' | target }}`);
+      const fixture = MockRender("{{ 'test' | target }}");
       expect(fixture.nativeElement.innerHTML).toEqual('target');
     });
   });

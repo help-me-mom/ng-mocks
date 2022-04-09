@@ -5,6 +5,7 @@ import {
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockModule } from 'ng-mocks';
 
 export const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');

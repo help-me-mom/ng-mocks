@@ -7,6 +7,7 @@ import {
   NgModule,
   TemplateRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
@@ -69,7 +70,7 @@ class UnusedDirective {
 
 @Component({
   selector: 'target',
-  template: ``,
+  template: '',
 })
 class TargetComponent {}
 

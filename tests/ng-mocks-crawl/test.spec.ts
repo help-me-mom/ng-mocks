@@ -1,5 +1,3 @@
-// tslint:disable strict-type-predicates
-
 import { MockRender, ngMocks } from 'ng-mocks';
 
 describe('ng-mocks-crawl', () => {
@@ -29,7 +27,7 @@ describe('ng-mocks-crawl', () => {
     `.replace(new RegExp('s+', 'gm'), ''),
     );
 
-    // in total we have 30 nodes
+    // in total, we have 30 nodes
     {
       const elements: any[] = [];
       ngMocks.crawl(fixture.debugElement, node => {

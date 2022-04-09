@@ -4,8 +4,9 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
-import { MockBuilder, MockRender } from 'ng-mocks';
 import { Observable } from 'rxjs';
+
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A service that does http requests.
 @Injectable()

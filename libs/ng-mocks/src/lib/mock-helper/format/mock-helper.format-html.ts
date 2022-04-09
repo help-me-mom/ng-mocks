@@ -19,7 +19,6 @@ const normalizeText = (text: string): string =>
     .replace(new RegExp('"', 'mg'), '&quot;')
     .replace(new RegExp('<', 'mg'), '&lt;')
     .replace(new RegExp('>', 'mg'), '&gt;')
-    // tslint:disable-next-line quotemark
     .replace(new RegExp("'", 'mg'), '&#39;');
 
 const getElementValue = (element: HTMLElement, outer: boolean): string =>

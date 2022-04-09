@@ -43,7 +43,7 @@ const generateFinalQueries = (queries: {
 // The same issue happens with outputs, but time to time
 // (when I restart tests with refreshing browser manually).
 // https://github.com/ike18t/ng-mocks/issues/109
-export default function (cls: AnyType<any>, queries?: { [key: string]: Query }): string[] {
+export default (cls: AnyType<any>, queries?: { [key: string]: Query }): string[] => {
   // istanbul ignore if
   if (!queries) {
     return [];
@@ -59,4 +59,4 @@ export default function (cls: AnyType<any>, queries?: { [key: string]: Query }):
   }
 
   return keys;
-}
+};

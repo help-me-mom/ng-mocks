@@ -53,7 +53,7 @@ class TargetDirective implements AsyncValidator {
   public async validate(
     control: AbstractControl,
   ): Promise<ValidationErrors | null> {
-    return Promise.resolve(control ? null : {});
+    return control ? null : {};
   }
 }
 

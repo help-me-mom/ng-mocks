@@ -1,5 +1,3 @@
-// tslint:disable variable-name ban-ts-ignore
-
 import { Mock } from './mock';
 
 /**

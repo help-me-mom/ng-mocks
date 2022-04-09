@@ -1,4 +1,4 @@
-// tslint:disable max-file-line-count
+/* eslint-disable max-lines */
 
 import { CommonModule } from '@angular/common';
 import {
@@ -47,7 +47,7 @@ class Target1Pipe implements PipeTransform {
 
 @Component({
   selector: 'target2',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
 })
 class Target2Component {}
 

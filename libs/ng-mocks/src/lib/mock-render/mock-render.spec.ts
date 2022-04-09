@@ -1,5 +1,3 @@
-// tslint:disable no-implicit-dependencies
-
 import { DOCUMENT } from '@angular/common';
 import { DebugElement, DebugNode, EventEmitter } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -41,12 +39,12 @@ describe('MockRender', () => {
   });
 
   it('respects observables', () => {
-    const click = new Subject();
-    const fixture = MockRender(RenderRealComponent, { click });
+    const trigger = new Subject();
+    const fixture = MockRender(RenderRealComponent, { trigger });
     let actual: any;
-    click.subscribe(value => (actual = value));
-    ngMocks.output(fixture.point, 'click').emit(true);
-    click.complete();
+    trigger.subscribe(value => (actual = value));
+    ngMocks.output(fixture.point, 'trigger').emit(true);
+    trigger.complete();
     expect(actual).toEqual(true);
   });
 
@@ -61,7 +59,7 @@ describe('MockRender', () => {
   });
 
   it('renders any template and respects dynamic params', () => {
-    const spy = jasmine.createSpy('mockClick');
+    const trigger = jasmine.createSpy('mockClick');
     const assertPayload = {
       magic: Math.random(),
     };
@@ -70,11 +68,11 @@ describe('MockRender', () => {
     const fixture = MockRender(
       `
         before
-        <render-real-component (click)="mockClick($event)" [content]="mockContent"></render-real-component>
+        <render-real-component (trigger)="trigger($event)" [content]="mockContent"></render-real-component>
         after
       `,
       {
-        mockClick: spy,
+        trigger,
         mockContent: 'injected content',
       },
     );
@@ -82,15 +80,15 @@ describe('MockRender', () => {
 
     // Asserting inputs.
     expect(
-      fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim(),
-    ).toEqual(`before injected content after`);
+      fixture.nativeElement.textContent.replace(/\s+/gim, ' ').trim(),
+    ).toEqual('before injected content after');
 
     // Asserting dynamic changes on inputs.
     fixture.componentInstance.mockContent = 'dynamic content';
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.innerText.replace(/\s+/gim, ' ').trim(),
-    ).toEqual(`before dynamic content after`);
+      fixture.nativeElement.textContent.replace(/\s+/gim, ' ').trim(),
+    ).toEqual('before dynamic content after');
 
     // Asserting outputs.
     const spanElement = fixture.debugElement.query(
@@ -98,7 +96,7 @@ describe('MockRender', () => {
     );
     expect(spanElement).toBeTruthy();
     spanElement.triggerEventHandler('click', assertPayload);
-    expect(spy).toHaveBeenCalledWith(assertPayload);
+    expect(trigger).toHaveBeenCalledWith(assertPayload);
   });
 
   it('does not detect changes on fixture if detectChanges arg is false', () => {
@@ -113,32 +111,32 @@ describe('MockRender', () => {
       },
       false,
     );
-    expect(fixture.nativeElement.innerText).not.toContain(
+    expect(fixture.nativeElement.textContent).not.toContain(
       'injected content',
     );
     fixture.detectChanges();
-    expect(fixture.nativeElement.innerText).toContain(
+    expect(fixture.nativeElement.textContent).toContain(
       'injected content',
     );
   });
 
   it('binds inputs and outputs with a provided component', () => {
-    const spy = jasmine.createSpy('click');
+    const trigger = jasmine.createSpy('trigger');
     const fixture = MockRender(RenderRealComponent, {
-      click: spy,
+      trigger,
       content: 'content',
     });
-    expect(spy).not.toHaveBeenCalled();
+    expect(trigger).not.toHaveBeenCalled();
     const payload = {
       value: 'my very random string',
     };
-    fixture.point.componentInstance.click.emit(payload);
-    expect(spy).toHaveBeenCalledWith(payload);
+    fixture.point.componentInstance.trigger.emit(payload);
+    expect(trigger).toHaveBeenCalledWith(payload);
   });
 
   it('returns a pointer with a provided template', () => {
     const fixture: MockedComponentFixture<RenderRealComponent> =
-      MockRender(`<render-real-component></render-real-component>`);
+      MockRender('<render-real-component></render-real-component>');
     // because template can include more than 1 component, be wrapped by any html element etc.
     expect(fixture.point).toBeDefined();
     expect(fixture.point.componentInstance).toEqual(
@@ -155,7 +153,7 @@ describe('MockRender', () => {
 
   it('returns pointer with a provided component', () => {
     const mock = MockService(document);
-    spyOn(mock, 'getElementById');
+    spyOn(mock, 'querySelector');
     MockRender(
       RenderRealComponent,
       {},
@@ -168,7 +166,7 @@ describe('MockRender', () => {
         ],
       },
     );
-    expect(mock.getElementById).toHaveBeenCalledWith('test');
+    expect(mock.querySelector).toHaveBeenCalledWith('#test');
   });
 
   it('does render a component without selector', () => {
@@ -185,7 +183,7 @@ describe('MockRender', () => {
 
   it('assigns outputs to a literals', () => {
     const fixture = MockRender(RenderRealComponent, {
-      click: undefined,
+      trigger: undefined,
     });
 
     const expected = {
@@ -194,19 +192,21 @@ describe('MockRender', () => {
     ngMocks
       .find(fixture.debugElement, 'span')
       .triggerEventHandler('click', expected);
-    expect(fixture.componentInstance.click as any).toEqual(expected);
+    expect(fixture.componentInstance.trigger as any).toEqual(
+      expected,
+    );
   });
 
   it('assigns outputs to an EventEmitter', () => {
     const fixture = MockRender(RenderRealComponent, {
-      click: new EventEmitter(),
+      trigger: new EventEmitter(),
     });
 
     const expected = {
       value: Math.random(),
     };
     let actual: any;
-    fixture.componentInstance.click
+    fixture.componentInstance.trigger
       .pipe(first())
       .subscribe(value => (actual = value));
     ngMocks

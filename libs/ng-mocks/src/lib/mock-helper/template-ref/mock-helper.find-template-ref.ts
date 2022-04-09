@@ -18,7 +18,7 @@ export default (...args: any[]) => {
   const result: Array<TemplateRef<any>> = [];
   const detector = detectCrawler(sel);
   nestedCheck(mockHelperFind(funcGetLastFixture(), el, undefined), undefined, detectTemplateRef(result, detector, 1));
-  if (result.length) {
+  if (result.length > 0) {
     return result[0];
   }
   if (notFoundValue !== defaultNotFoundValue) {

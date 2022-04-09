@@ -1,28 +1,27 @@
 import {
   Component,
   Inject,
-  Injectable as InjectableSource,
+  Injectable,
   InjectionToken,
   NgModule,
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockRender } from 'ng-mocks';
 
-// Because of A5 we need to cast Injectable to any type.
-// But because of A10+ we need to do it via a middle function.
-function Injectable(...args: any[]): any {
-  return InjectableSource(...args);
-}
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 // Thanks A5.
 const TOKEN = new (InjectionToken as any)('TOKEN', {
   factory: () => 'token',
 });
 
-@Injectable({
-  providedIn: 'root',
-})
+const injectableTargetServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableTargetServiceArgs)
 class TargetService {
   public constructor(
     @Inject(TOKEN) public readonly name: string,
@@ -33,7 +32,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: ` "name:{{ service ? service.name : '' }}" `,
+  template: ' "name:{{ service ? service.name : \'\' }}" ',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
@@ -46,7 +45,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('root-provider-with-root-dep', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

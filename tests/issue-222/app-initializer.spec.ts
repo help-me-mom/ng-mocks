@@ -3,11 +3,12 @@ import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `<router-outlet></router-outlet>`,
+  template: '<router-outlet></router-outlet>',
 })
 class TargetComponent {}
 

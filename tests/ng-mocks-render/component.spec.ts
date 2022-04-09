@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -11,6 +9,7 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
+
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({

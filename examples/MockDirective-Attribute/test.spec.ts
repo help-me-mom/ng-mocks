@@ -5,6 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -24,13 +25,13 @@ class DependencyDirective {
     <span
       dependency
       [dependency-input]="value"
-      (dependency-output)="trigger($event)"
+      (dependency-output)="trigger()"
     ></span>
   `,
 })
 class TestedComponent {
   public value = '';
-  public trigger = () => {};
+  public trigger = () => undefined;
 }
 
 describe('MockDirective:Attribute', () => {
@@ -79,7 +80,7 @@ describe('MockDirective:Attribute', () => {
 
     // Again, let's pretend DependencyDirective has an output called
     // 'someOutput'. TestedComponent listens on the output via
-    // `(someOutput)="trigger($event)"`.
+    // `(someOutput)="trigger()"`.
     // Let's install a spy and trigger the output.
     ngMocks.stubMember(
       component,

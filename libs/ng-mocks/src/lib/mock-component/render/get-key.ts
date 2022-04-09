@@ -7,5 +7,5 @@ export default (
 
   const [key, ...indices] = contentChildSelector;
 
-  return ['prop', key, key, indices.length ? indices : undefined];
+  return ['prop', key, key, indices.length > 0 ? indices : undefined];
 };

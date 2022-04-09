@@ -1,5 +1,3 @@
-// tslint:disable object-literal-sort-keys
-
 import {
   Component,
   HostListener,
@@ -15,6 +13,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subject } from 'rxjs';
+
 import {
   MockInstance,
   MockModule,
@@ -22,7 +22,6 @@ import {
   MockRender,
   ngMocks,
 } from 'ng-mocks';
-import { Subject } from 'rxjs';
 
 // remove with A5
 export const EMPTY = new Subject<any>();

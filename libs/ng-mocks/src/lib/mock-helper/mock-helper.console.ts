@@ -1,4 +1,4 @@
-// tslint:disable no-console
+/* eslint-disable no-console */
 
 import coreDefineProperty from '../common/core.define-property';
 

@@ -1,10 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { ContentChild, Directive, NgModule } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Directive,
+  NgModule,
+} from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Directive({
+@Component({
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['header'],
   selector: 'app-target',
+  template: '<ng-content></ng-content>',
 })
 class TargetComponent {
   @ContentChild('header', {} as any)
@@ -12,6 +20,7 @@ class TargetComponent {
 }
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['header'],
   selector: '[appTarget]',
 })

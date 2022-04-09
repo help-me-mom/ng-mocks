@@ -7,7 +7,7 @@ import { AnyType } from './core.types';
 // The same issue happens with outputs, but time to time
 // (when I restart tests with refreshing browser manually).
 // https://github.com/ike18t/ng-mocks/issues/109
-export default function (cls: AnyType<any>, outputs?: string[]) {
+export default (cls: AnyType<any>, outputs?: string[]) => {
   // istanbul ignore else
   if (outputs) {
     for (const output of outputs) {
@@ -15,4 +15,4 @@ export default function (cls: AnyType<any>, outputs?: string[]) {
       Output(alias)(cls.prototype, key);
     }
   }
-}
+};

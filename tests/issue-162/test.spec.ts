@@ -1,11 +1,10 @@
-// tslint:disable strict-type-predicates
-
 import { Component, NgModule, RendererFactory2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   BrowserModule,
   EventManager,
 } from '@angular/platform-browser';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -40,7 +39,7 @@ const assertion: any =
 describe('issue-162', () => {
   beforeEach(() => MockBuilder(AppComponent, AppModule));
 
-  it(`verifies that EventManager was not replaced with a mock copy`, () => {
+  it('verifies that EventManager was not replaced with a mock copy', () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: EventManager = TestBed.get(EventManager);
@@ -51,7 +50,7 @@ describe('issue-162', () => {
     TestBed.resetTestingModule();
   });
 
-  it(`verifies that RendererFactory2 was not replaced with a mock copy`, () => {
+  it('verifies that RendererFactory2 was not replaced with a mock copy', () => {
     MockRender(AppComponent);
     TestBed.resetTestingModule();
     const target: RendererFactory2 = TestBed.get(RendererFactory2);
@@ -59,7 +58,7 @@ describe('issue-162', () => {
     expect((target.createRenderer as any).__ngMocks).toBeUndefined();
   });
 
-  it(`verifies that spyOnProperty works`, () => {
+  it('verifies that spyOnProperty works', () => {
     const fixture = MockRender(MockComponent);
 
     // mocking the property via auto spy.

@@ -16,6 +16,7 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -27,7 +28,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
           color: '#fff',
           height: 0,
         }),
-        animate(10000, style({ height: 100 })),
+        animate(10 * 1000, style({ height: 100 })),
       ]),
     ]),
   ],
@@ -78,7 +79,7 @@ describe('issue-641', () => {
   });
 
   // unfortunately with real animations it is not so easy.
-  // tslint:disable-next-line no-disabled-tests
+  // eslint-disable-next-line no-restricted-globals
   xdescribe('BrowserAnimationsModule:mock', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule)
@@ -91,7 +92,7 @@ describe('issue-641', () => {
       fixture.whenStable().then(() => {
         fixture.detectChanges();
 
-        tick(10000);
+        tick(10 * 1000);
         flush();
 
         // In a mock BrowserAnimationsModule nothing happens,
@@ -135,7 +136,7 @@ describe('issue-641', () => {
   });
 
   // unfortunately with real animations it is not so easy.
-  // tslint:disable-next-line no-disabled-tests
+  // eslint-disable-next-line no-restricted-globals
   xdescribe('BrowserAnimationsModule:keep', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).keep(

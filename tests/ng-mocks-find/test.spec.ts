@@ -3,7 +3,7 @@ import { MockRender, ngMocks } from 'ng-mocks';
 describe('ng-mocks-find', () => {
   it('find attributes', () => {
     const fixture = MockRender(
-      `<div data-1="1" data-2="test" data-3></div>`,
+      '<div data-1="1" data-2="test" data-3></div>',
     );
 
     const el1 = ngMocks.find(['data-1', 1]);
@@ -17,7 +17,7 @@ describe('ng-mocks-find', () => {
 
   it('returns debugElement', () => {
     const fixture = MockRender(
-      `<div data-1="1" data-2="test" data-3></div>`,
+      '<div data-1="1" data-2="test" data-3></div>',
     );
     const el = ngMocks.find(fixture, 'div');
     expect(ngMocks.find(el as any)).toEqual(el);
@@ -25,7 +25,7 @@ describe('ng-mocks-find', () => {
 
   it('throws on unknown selectors', () => {
     const fixture = MockRender(
-      `<div data-1="1" data-2="test" data-3></div>`,
+      '<div data-1="1" data-2="test" data-3></div>',
     );
 
     expect(() => ngMocks.find(fixture, {} as any)).toThrowError(

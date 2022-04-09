@@ -6,11 +6,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ counter }}`,
+  template: '{{ counter }}',
 })
 class TargetComponent implements OnInit, OnDestroy {
   public counter = 0;

@@ -1,5 +1,3 @@
-// tslint:disable strict-type-predicates
-
 import funcGetName from './func.get-name';
 
 export default (def: any): void => {

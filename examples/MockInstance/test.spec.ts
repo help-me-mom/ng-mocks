@@ -4,8 +4,9 @@ import {
   Injector,
   ViewChild,
 } from '@angular/core';
-import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
+
+import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 // A copy of EMPTY, which does not exist in A5.
 const EMPTY = new Subject<any>();

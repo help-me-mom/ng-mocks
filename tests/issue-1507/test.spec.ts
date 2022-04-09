@@ -1,4 +1,5 @@
 import { Component, Injectable, Input } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,
@@ -62,7 +63,7 @@ describe('issue-1507', () => {
     });
   });
 
-  describe(`.keep`, () => {
+  describe('.keep', () => {
     beforeEach(() =>
       MockBuilder(HelloComponent)
         .keep(ProviderService)
@@ -85,7 +86,7 @@ describe('issue-1507', () => {
     });
   });
 
-  describe(`.provide`, () => {
+  describe('.provide', () => {
     beforeEach(() =>
       MockBuilder(HelloComponent)
         .provide(
@@ -122,7 +123,7 @@ describe('issue-1507', () => {
     });
   });
 
-  describe(`.mock`, () => {
+  describe('.mock', () => {
     beforeEach(() =>
       MockBuilder(HelloComponent)
         .mock(ProviderService, {

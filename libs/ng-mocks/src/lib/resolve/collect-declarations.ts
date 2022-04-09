@@ -1,5 +1,3 @@
-// tslint:disable max-func-body-length cyclomatic-complexity
-
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -11,7 +9,7 @@ interface Declaration {
   inputs: string[];
   outputs: string[];
   propDecorators: Record<string, any[]>;
-  queries: Record<string, {}>;
+  queries: Record<string, any>;
   [key: string]: any;
 }
 
@@ -44,7 +42,7 @@ const parseAnnotations = (
   },
   declaration: Declaration,
 ): void => {
-  if (def.hasOwnProperty('__annotations__') && def.__annotations__) {
+  if (Object.prototype.hasOwnProperty.call(def, '__annotations__') && def.__annotations__) {
     for (const annotation of def.__annotations__) {
       const ngMetadataName = annotation?.ngMetadataName;
       if (!ngMetadataName) {
@@ -59,7 +57,7 @@ const parseAnnotations = (
 const parseDecorators = (
   def: {
     decorators?: Array<{
-      args?: [{}];
+      args?: [any];
       type?: {
         prototype?: {
           ngMetadataName?: string;
@@ -69,7 +67,7 @@ const parseDecorators = (
   },
   declaration: Declaration,
 ): void => {
-  if (def.hasOwnProperty('decorators') && def.decorators) {
+  if (Object.prototype.hasOwnProperty.call(def, 'decorators') && def.decorators) {
     for (const decorator of def.decorators) {
       const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
       if (!ngMetadataName) {
@@ -105,7 +103,7 @@ const parsePropDecoratorsParserFactoryQuery =
     ngMetadataName: string,
     prop: string,
     decorator: {
-      args: [string] | [string, {}];
+      args: [string] | [string, any];
     },
     declaration: Declaration,
   ): void => {
@@ -114,7 +112,7 @@ const parsePropDecoratorsParserFactoryQuery =
         isViewQuery,
         ngMetadataName,
         selector: decorator.args[0],
-        ...(decorator.args[1] || {}),
+        ...decorator.args[1],
       };
     }
   };
@@ -178,7 +176,7 @@ const parsePropDecorators = (
   },
   declaration: Declaration,
 ): void => {
-  if (def.hasOwnProperty('propDecorators') && def.propDecorators) {
+  if (Object.prototype.hasOwnProperty.call(def, 'propDecorators') && def.propDecorators) {
     for (const prop of getAllKeys(def.propDecorators)) {
       declaration.propDecorators[prop] = [...(declaration.propDecorators[prop] || []), ...def.propDecorators[prop]];
       for (const decorator of def.propDecorators[prop]) {
@@ -317,7 +315,7 @@ const parsePropMetadata = (
   },
   declaration: Declaration,
 ): void => {
-  if (def.hasOwnProperty('__prop__metadata__') && def.__prop__metadata__) {
+  if (Object.prototype.hasOwnProperty.call(def, '__prop__metadata__') && def.__prop__metadata__) {
     for (const prop of getAllKeys(def.__prop__metadata__)) {
       for (const decorator of def.__prop__metadata__[prop]) {
         const ngMetadataName = decorator?.ngMetadataName;
@@ -363,7 +361,7 @@ const parse = (def: any): any => {
     return {};
   }
 
-  if (def.hasOwnProperty('__ngMocksParsed')) {
+  if (Object.prototype.hasOwnProperty.call(def, '__ngMocksParsed')) {
     return def.__ngMocksDeclarations;
   }
 

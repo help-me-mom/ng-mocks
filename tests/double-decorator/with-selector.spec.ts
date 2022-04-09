@@ -1,10 +1,11 @@
 import {
   Component,
-  Directive as DirectiveSource,
+  Directive,
   Injectable,
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockInstance,
@@ -13,21 +14,15 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-// Because of A5 we need to cast Directive to any type
-// To let it accept 0 parameters.
-function Directive(...args: any[]): any {
-  return (DirectiveSource as any)(...args);
-}
-
 @Directive({
   selector: 'target',
 })
-class BaseClass {
+class BaseDirective {
   public name = 'directive';
 }
 
 @Injectable()
-class MyProvider extends BaseClass {}
+class MyProvider extends BaseDirective {}
 
 @Component({
   providers: [MyProvider],
@@ -39,10 +34,14 @@ class MyComponent {
 }
 
 @NgModule({
-  declarations: [BaseClass, MyComponent],
-  exports: [BaseClass, MyComponent],
+  declarations: [BaseDirective, MyComponent],
+  exports: [BaseDirective, MyComponent],
 })
 class ModuleWithComponent {}
+
+const myProviderMock = () => ({
+  name: 'mock',
+});
 
 describe('double-decorator:with-selector', () => {
   describe('default', () => {
@@ -62,13 +61,9 @@ describe('double-decorator:with-selector', () => {
   });
 
   describe('hot-fix', () => {
-    const myProviderMock = () => ({
-      name: 'mock',
-    });
-
     beforeEach(() =>
       MockBuilder(MyComponent, ModuleWithComponent)
-        .exclude(BaseClass)
+        .exclude(BaseDirective)
         .mock(MyProvider),
     );
 
@@ -89,10 +84,6 @@ describe('double-decorator:with-selector', () => {
   });
 
   describe('the-issue', () => {
-    const myProviderMock = () => ({
-      name: 'mock',
-    });
-
     beforeEach(() =>
       MockBuilder(MyComponent, ModuleWithComponent).mock(
         MyProvider,

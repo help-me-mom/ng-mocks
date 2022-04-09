@@ -25,7 +25,7 @@ export class CustomFormControlComponent implements ControlValueAccessor {
     this.change = value;
   };
 
-  public onTouched = () => {};
+  public onTouched = (): void => undefined;
 
   public registerOnChange(fn: (rating: string) => void): void {
     this.onChange = fn;

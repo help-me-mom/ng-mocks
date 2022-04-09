@@ -58,9 +58,9 @@ An example of it is:
 ```dotenv
 GH_TOKEN=123123123
 NPM_TOKEN=123123123
-GIT_AUTHOR_NAME=Best Coder
+GIT_AUTHOR_NAME="Best Coder"
 GIT_AUTHOR_EMAIL=best@coder.com
-GIT_COMMITTER_NAME=Best Coder
+GIT_COMMITTER_NAME="Best Coder"
 GIT_COMMITTER_EMAIL=best@coder.com
 ```
 

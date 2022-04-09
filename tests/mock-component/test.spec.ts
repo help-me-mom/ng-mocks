@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { MockComponent } from 'ng-mocks';
 
 @Component({

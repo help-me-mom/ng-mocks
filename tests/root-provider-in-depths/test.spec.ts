@@ -1,5 +1,6 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
@@ -29,7 +30,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: `{{ service.name }}`,
+  template: '{{ service.name }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}

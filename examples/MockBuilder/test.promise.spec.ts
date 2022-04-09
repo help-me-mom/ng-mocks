@@ -1,26 +1,26 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 import {
-  MyComponent1,
-  MyComponent2,
+  My1Component,
+  My2Component,
 } from './spec.components.fixtures';
 
 describe('MockBuilder:promise', () => {
   beforeEach(() => {
     return (
       MockBuilder()
-        .keep(MyComponent1)
-        .keep(MyComponent2)
+        .keep(My1Component)
+        .keep(My2Component)
 
         // In case if you need extra customization of TestBed in promise way.
         .beforeCompileComponents(testBed => {
           testBed.overrideTemplate(
-            MyComponent1,
+            My1Component,
             'If we need to tune testBed',
           );
         })
         .beforeCompileComponents(testBed => {
-          testBed.overrideTemplate(MyComponent2, 'More callbacks');
+          testBed.overrideTemplate(My2Component, 'More callbacks');
         })
     );
   });

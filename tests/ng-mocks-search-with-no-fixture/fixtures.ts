@@ -2,7 +2,7 @@ import { Component, Input, NgModule } from '@angular/core';
 
 @Component({
   selector: 'target',
-  template: `{{ target }}`,
+  template: '{{ target }}',
 })
 export class TargetComponent {
   @Input() public readonly target = '';
@@ -10,13 +10,13 @@ export class TargetComponent {
 
 @Component({
   selector: 'missed',
-  template: `missed`,
+  template: 'missed',
 })
 export class MissedComponent {}
 
 @Component({
   selector: 'test',
-  template: `<target target="1"></target><target target="2"></target>`,
+  template: '<target target="1"></target><target target="2"></target>',
 })
 export class TestComponent {}
 

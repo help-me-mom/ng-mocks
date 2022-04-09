@@ -1,5 +1,3 @@
-// tslint:disable no-console
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -9,6 +7,7 @@ import {
   PipeTransform,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({

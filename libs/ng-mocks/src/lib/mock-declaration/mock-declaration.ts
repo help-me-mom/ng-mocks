@@ -1,5 +1,3 @@
-// tslint:disable strict-type-predicates
-
 import { Type } from '../common/core.types';
 import errorJestMock from '../common/error.jest-mock';
 import funcGetName from '../common/func.get-name';

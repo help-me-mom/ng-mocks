@@ -115,7 +115,7 @@ const isNeverMockFunction = (provide: any): boolean =>
 const isNeverMockToken = (provide: any): boolean =>
   isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1;
 
-export default function (provider: any, useFactory = false): Provider | undefined {
+export default (provider: any, useFactory = false): Provider | undefined => {
   const provide = funcGetProvider(provider);
 
   if (ngMocksUniverse.getResolution(provide) === 'mock') {
@@ -136,4 +136,4 @@ export default function (provider: any, useFactory = false): Provider | undefine
   }
 
   return createMockProvider(provider, provide, cacheProviders) || handleProvider(provider, provide, useFactory);
-}
+};

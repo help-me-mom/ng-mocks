@@ -1,11 +1,10 @@
-// tslint:disable no-duplicate-imports
-
 import {
   Component,
   ComponentFactoryResolver,
   Injectable,
   NgModule,
 } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
@@ -51,8 +50,7 @@ describe('issue-296:without-entry', () => {
   );
 
   it('behaves correctly with and without ivy', () => {
-    const render = () => MockRender(TargetComponent);
-    expect(render).not.toThrow();
+    expect(() => MockRender(TargetComponent)).not.toThrow();
   });
 });
 
@@ -61,8 +59,7 @@ describe('issue-296:with-entry', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('behaves correctly with and without ivy', () => {
-    const render = () => MockRender(TargetComponent);
     // it should never throw
-    expect(render).not.toThrow();
+    expect(() => MockRender(TargetComponent)).not.toThrow();
   });
 });

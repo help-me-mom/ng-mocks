@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import { MockPipe, MockRender, ngMocks } from 'ng-mocks';
 
 import { ImpurePipe, PurePipe } from './fixtures';

@@ -1,6 +1,7 @@
 import { ApplicationRef, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { MockBuilder } from 'ng-mocks';
 
 @NgModule({

@@ -4,6 +4,7 @@ import {
   Injectable,
   Input,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -13,7 +14,7 @@ export class HelloService {
 
 @Component({
   providers: [HelloService],
-  template: ``,
+  template: '',
 })
 export class HelloComponent {
   public serviceDescription = '';

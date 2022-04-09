@@ -1,35 +1,36 @@
 import { Directive } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'directive1',
 })
-export class DirectiveDefault {}
+export class DefaultDirective {}
 
 @Directive({
   providers: [
     {
       multi: true,
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DirectiveValueAccessor,
+      useExisting: ValueAccessorDirective,
     },
   ],
   selector: 'directive2',
 })
-export class DirectiveValueAccessor {}
+export class ValueAccessorDirective {}
 
 @Directive({
   providers: [
     {
       multi: true,
       provide: NG_VALIDATORS,
-      useExisting: DirectiveValidator,
+      useExisting: ValidatorDirective,
     },
   ],
   selector: 'directive3',
 })
-export class DirectiveValidator {}
+export class ValidatorDirective {}
 
 // providers should be added to directives only in case if they were specified in the original directive.
 // @see https://github.com/ike18t/ng-mocks/issues/145
@@ -38,22 +39,22 @@ describe('issue-145:directives', () => {
 
   beforeAll(() =>
     MockBuilder()
-      .mock(DirectiveDefault)
-      .mock(DirectiveValueAccessor)
-      .mock(DirectiveValidator),
+      .mock(DefaultDirective)
+      .mock(ValueAccessorDirective)
+      .mock(ValidatorDirective),
   );
 
   it('does not add NG_VALUE_ACCESSOR to directives', () => {
-    const mock = MockRender(DirectiveDefault);
+    const mock = MockRender(DefaultDirective);
     expect(() =>
-      ngMocks.get(mock.point, DirectiveDefault),
+      ngMocks.get(mock.point, DefaultDirective),
     ).not.toThrow();
   });
 
   it('adds NG_VALUE_ACCESSOR to directives that provide it', () => {
-    const mock = MockRender(DirectiveValueAccessor);
+    const mock = MockRender(ValueAccessorDirective);
     expect(() =>
-      ngMocks.get(mock.point, DirectiveValueAccessor),
+      ngMocks.get(mock.point, ValueAccessorDirective),
     ).not.toThrow();
     expect(() =>
       ngMocks.get(mock.point, NG_VALUE_ACCESSOR),
@@ -61,9 +62,9 @@ describe('issue-145:directives', () => {
   });
 
   it('respects NG_VALIDATORS too', () => {
-    const mock = MockRender(DirectiveValidator);
+    const mock = MockRender(ValidatorDirective);
     expect(() =>
-      ngMocks.get(mock.point, DirectiveValidator),
+      ngMocks.get(mock.point, ValidatorDirective),
     ).not.toThrow();
     expect(() =>
       ngMocks.get(mock.point, NG_VALIDATORS),

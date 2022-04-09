@@ -1,5 +1,6 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
@@ -7,7 +8,7 @@ class MockService {}
 
 @Component({
   selector: 'target',
-  template: `target`,
+  template: 'target',
 })
 class TargetComponent {
   public constructor(public readonly service: MockService) {}

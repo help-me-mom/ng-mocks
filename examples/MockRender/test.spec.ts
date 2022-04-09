@@ -1,5 +1,3 @@
-// tslint:disable strict-type-predicates
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -10,15 +8,16 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'app-child',
-  template: `dependency`,
+  template: 'dependency',
 })
 class DependencyComponent {
   @ContentChild('something', {} as any)
-  public injectedSomething?: TemplateRef<{}>;
+  public injectedSomething?: TemplateRef<any>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();
 }
@@ -33,8 +32,8 @@ class DependencyModule {}
   selector: 'tested',
   template: `
     <app-child
-      [someInput]="value"
-      (someOutput)="trigger($event)"
+      [someInput]="value1"
+      (someOutput)="trigger.emit($event)"
     ></app-child>
   `,
 })

@@ -6,15 +6,16 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'app-child',
-  template: `child`,
+  template: 'child',
 })
 class DependencyComponent {
   @ContentChild('something', {} as any)
-  public injectedSomething: TemplateRef<{}> | undefined;
+  public injectedSomething: TemplateRef<void> | undefined;
 
   @Input()
   public someInput = '';

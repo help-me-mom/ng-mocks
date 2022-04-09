@@ -1,5 +1,3 @@
-// tslint:disable member-ordering
-
 import { Component, NgModule } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -8,6 +6,7 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -19,7 +18,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     },
   ],
   selector: 'cva',
-  template: ` {{ show }} `,
+  template: ' {{ show }} ',
 })
 class CvaComponent implements ControlValueAccessor {
   public onChange: any = () => undefined;

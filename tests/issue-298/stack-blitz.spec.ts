@@ -1,6 +1,7 @@
 import { Component, Directive, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { MockDirective, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -33,19 +34,19 @@ describe('issue-298:stack-blitz', () => {
     fixture.detectChanges();
   });
 
-  it(`should be 'd1'`, () => {
+  it("should be 'd1'", () => {
     const debugElement = fixture.debugElement.query(By.css('.p1'));
     const directive = ngMocks.findInstance(debugElement, MyDirective);
     expect(directive.value).toBe('d1');
   });
 
-  it(`should be 'd2'`, () => {
+  it("should be 'd2'", () => {
     const debugElement = fixture.debugElement.query(By.css('.p2'));
     const directive = ngMocks.findInstance(debugElement, MyDirective);
     expect(directive.value).toBe('d2');
   });
 
-  it(`should be 'd3'`, () => {
+  it("should be 'd3'", () => {
     const debugElement = fixture.debugElement.query(By.css('.p3'));
     const directive = ngMocks.findInstance(debugElement, MyDirective);
     expect(directive.value).toBe('d3');

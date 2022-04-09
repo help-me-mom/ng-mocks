@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -16,7 +17,7 @@ describe('ng-mocks-output:317', () => {
     const spy =
       typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     MockRender(
-      `<div data-label="div">1</div><target data-target="target" (update)="spy($event)"></target>`,
+      '<div data-label="div">1</div><target data-target="target" (update)="spy($event)"></target>',
       { spy },
     );
 

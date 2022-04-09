@@ -38,6 +38,7 @@ export const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
 
 export const mapKeys = <T>(set: Map<T, any>): T[] => {
   const result: T[] = [];
+  // eslint-disable-next-line unicorn/no-array-for-each
   set.forEach((_, value: T) => result.push(value));
 
   return result;
@@ -46,10 +47,12 @@ export const mapKeys = <T>(set: Map<T, any>): T[] => {
 export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }, destination?: Set<T>): T[] => {
   const result: T[] = [];
   if (destination) {
+    // eslint-disable-next-line unicorn/no-array-for-each
     set.forEach((value: T) => {
       destination.add(value);
     });
   } else {
+    // eslint-disable-next-line unicorn/no-array-for-each
     set.forEach((value: T) => {
       result.push(value);
     });
@@ -62,8 +65,10 @@ export const mapEntries = <K, T>(set: Map<K, T>, destination?: Map<K, T>): Array
   const result: Array<[K, T]> = [];
 
   if (destination) {
+    // eslint-disable-next-line unicorn/no-array-for-each
     set.forEach((value: T, key: K) => destination.set(key, value));
   } else {
+    // eslint-disable-next-line unicorn/no-array-for-each
     set.forEach((value: T, key: K) => result.push([key, value]));
   }
 
@@ -104,7 +109,6 @@ const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
   glb.ngMocksParent = base;
   // istanbul ignore next
   try {
-    // tslint:disable-next-line no-eval
     eval(`
       var glb = typeof window === 'undefined' ? global : window;
       class MockMiddleware extends glb.ngMocksParent {}
@@ -125,7 +129,7 @@ export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
   coreDefineProperty(child, 'name', `MockMiddleware${funcGetName(base)}`, true);
 
   const parameters = coreReflectParametersResolve(base);
-  if (parameters.length) {
+  if (parameters.length > 0) {
     coreDefineProperty(child, 'parameters', [...parameters]);
   }
 

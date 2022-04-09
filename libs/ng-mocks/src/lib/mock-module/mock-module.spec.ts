@@ -1,10 +1,8 @@
-// tslint:disable max-file-line-count
-
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
-  ApplicationModule,
   APP_INITIALIZER,
+  ApplicationModule,
   Component,
   FactoryProvider,
   InjectionToken,
@@ -44,22 +42,22 @@ import {
     {{ test | examplePipe }}
   `,
 })
-class ComponentSubject {
+class SubjectComponent {
   public test = 'test';
 }
 
 @Component({
   selector: 'same-imports',
-  template: `same imports`,
+  template: 'same imports',
 })
 class SameImportsComponent {}
 
 describe('MockModule', () => {
-  let fixture: ComponentFixture<ComponentSubject>;
+  let fixture: ComponentFixture<SubjectComponent>;
 
   beforeEach(async () => {
     return TestBed.configureTestingModule({
-      declarations: [ComponentSubject],
+      declarations: [SubjectComponent],
       imports: [
         MockModule(ParentModule),
         MockModule(ModuleWithProvidersModule),
@@ -67,7 +65,7 @@ describe('MockModule', () => {
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(ComponentSubject);
+        fixture = TestBed.createComponent(SubjectComponent);
         fixture.detectChanges();
       });
   });
@@ -102,7 +100,7 @@ describe('SameImportsModules', () => {
     expect(fixture.componentInstance).toEqual(
       jasmine.any(SameImportsComponent),
     );
-    expect(fixture.nativeElement.innerText).toEqual('same imports');
+    expect(fixture.nativeElement.textContent).toEqual('same imports');
   });
 });
 
@@ -130,7 +128,7 @@ describe('NeverMockModules', () => {
     expect(fixture.componentInstance).toEqual(
       jasmine.any(SameImportsComponent),
     );
-    expect(fixture.nativeElement.innerText).toEqual('same imports');
+    expect(fixture.nativeElement.textContent).toEqual('same imports');
   });
 });
 
@@ -153,7 +151,7 @@ describe('RouterModule', () => {
     expect(fixture.componentInstance).toEqual(
       jasmine.any(ExampleComponent),
     );
-    expect(fixture.nativeElement.innerText).toEqual('My Example');
+    expect(fixture.nativeElement.textContent).toEqual('My Example');
   });
 });
 

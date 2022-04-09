@@ -7,6 +7,7 @@ import {
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new (InjectionToken as any)('TOKEN-FOR-ROOT', {
@@ -32,7 +33,7 @@ class TargetModule {}
 
 // @see https://github.com/ike18t/ng-mocks/issues/735
 describe('issue-735:token-for-root', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

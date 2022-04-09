@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ value }}`,
+  template: '{{ value }}',
 })
 class TargetComponent {
   private valueOrigin = 0;

@@ -1,4 +1,5 @@
 import { Component, Injectable } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
@@ -11,7 +12,7 @@ class TargetService {
 @Component({
   providers: [TargetService],
   selector: 'target',
-  template: `{{ service.value }}`,
+  template: '{{ service.value }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}

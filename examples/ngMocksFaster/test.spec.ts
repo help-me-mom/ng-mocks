@@ -1,6 +1,5 @@
-// tslint:disable strict-type-predicates
-
 import { Component, Injectable } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,

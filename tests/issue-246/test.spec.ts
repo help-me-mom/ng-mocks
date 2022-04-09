@@ -11,6 +11,7 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
+
 import {
   isMockControlValueAccessor,
   isMockValidator,
@@ -127,7 +128,7 @@ describe('issue-246:real', () => {
 
     // default render.
     const fixture = MockRender(
-      `<target [formControl]="control" target targetAsync></target>`,
+      '<target [formControl]="control" target targetAsync></target>',
       {
         control,
       },
@@ -170,7 +171,7 @@ describe('issue-246:mock', () => {
 
     // default render.
     const fixture = MockRender(
-      `<target [formControl]="control" target targetAsync></target>`,
+      '<target [formControl]="control" target targetAsync></target>',
       {
         control,
       },

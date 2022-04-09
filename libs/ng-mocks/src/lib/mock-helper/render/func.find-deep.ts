@@ -60,7 +60,7 @@ const findDeep = (
   }
 
   for (const [localValue, localVcr] of getValVcr(entryPoint)) {
-    if (funcIsMock<{}>(localValue) && findDeep(localValue, isExpectedTemplate, callback)) {
+    if (funcIsMock(localValue) && findDeep(localValue, isExpectedTemplate, callback)) {
       return true;
     }
     if (isRightTemplate(localVcr, localValue, isExpectedTemplate)) {

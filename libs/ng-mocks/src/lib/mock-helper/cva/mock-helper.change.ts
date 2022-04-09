@@ -51,7 +51,7 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
 };
 
 const hasListener = (el: DebugElement): boolean =>
-  el.listeners.filter(listener => listener.name === 'input' || listener.name === 'change').length > 0;
+  el.listeners.some(listener => listener.name === 'input' || listener.name === 'change');
 
 const keys = ['onChange', '_onChange', 'changeFn', '_onChangeCallback', 'onModelChange'];
 

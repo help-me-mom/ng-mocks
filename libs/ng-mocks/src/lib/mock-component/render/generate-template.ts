@@ -20,7 +20,7 @@ const isTemplateRefQuery = (query: Query): boolean => {
 };
 
 export default (queries?: Record<keyof any, any>): string => {
-  const parts = [`<ng-content></ng-content>`];
+  const parts = ['<ng-content></ng-content>'];
   // istanbul ignore if
   if (!queries) {
     return parts.join('');
@@ -32,7 +32,7 @@ export default (queries?: Record<keyof any, any>): string => {
       continue;
     }
     if (typeof query.selector === 'string') {
-      const selector = query.selector.replace(new RegExp('[^a-zA-Z0-9_]', 'mg'), '_');
+      const selector = query.selector.replace(new RegExp('\\W', 'mg'), '_');
       queries[`__mockView_key_${selector}`] = new ViewChild(`key_${selector}`, viewChildArgs);
       queries[`__mockTpl_key_${selector}`] = query;
       parts.push(viewChildTemplate(selector, 'key'));

@@ -3,13 +3,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import {
-  ComponentContentChild,
+  ContentChildComponent,
   KeepComponent,
   MockComponent,
+  My1Component,
+  My2Component,
+  My3Component,
   MyComponent,
-  MyComponent1,
-  MyComponent2,
-  MyComponent3,
 } from './spec.components.fixtures';
 import { KeepDirective, MockDirective, MyDirective } from './spec.directives.fixtures';
 import { CustomizePipe, KeepPipe, MockPipe, MyPipe, RestorePipe } from './spec.pipes.fixtures';
@@ -48,8 +48,8 @@ import { TOKEN_CUSTOMIZE, TOKEN_KEEP, TOKEN_MOCK } from './spec.tokens.fixtures'
 export class ModuleMock {}
 
 @NgModule({
-  declarations: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
-  exports: [MyComponent1, MyComponent2, MyComponent3, ComponentContentChild],
+  declarations: [My1Component, My2Component, My3Component, ContentChildComponent],
+  exports: [My1Component, My2Component, My3Component, ContentChildComponent],
   imports: [CommonModule],
 })
 export class ModuleKeep {}

@@ -1,15 +1,16 @@
 import { Component, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target1',
-  template: `target1`,
+  template: 'target1',
 })
 class Target1Component {}
 
 @Component({
   selector: 'target2',
-  template: `target2`,
+  template: 'target2',
 })
 class Target2Component {}
 

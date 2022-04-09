@@ -1,4 +1,5 @@
 import { PipeTransform } from '@angular/core';
+
 import { MockPipe, MockPipes } from 'ng-mocks';
 
 class MyPipe implements PipeTransform {

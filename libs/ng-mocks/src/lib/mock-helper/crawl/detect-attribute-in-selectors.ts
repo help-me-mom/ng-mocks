@@ -1,6 +1,6 @@
 export default (selectors: string[], query: string): boolean => {
   for (const selector of selectors) {
-    const attributes = selector.match(/\[([^\]=]+)/g);
+    const attributes = selector.match(/\[([^=\]]+)/g);
     if (!attributes) {
       continue;
     }

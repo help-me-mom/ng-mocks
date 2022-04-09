@@ -58,7 +58,6 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public constructor() {
     // istanbul ignore else
-    // tslint:disable-next-line strict-type-predicates
     if (typeof Symbol !== 'undefined') {
       (this as any)[Symbol.toStringTag] = 'Promise';
     }
@@ -87,9 +86,11 @@ export class MockBuilderPromise implements IMockBuilder {
       handleEntryComponents(ngModule);
       applyPlatformModules();
 
-      ngModule.providers.push(createNgMocksToken());
-      ngModule.providers.push(createNgMocksTouchesToken());
-      ngModule.providers.push(createNgMocksOverridesToken(this.replaceDef, this.defValue));
+      ngModule.providers.push(
+        createNgMocksToken(),
+        createNgMocksTouchesToken(),
+        createNgMocksOverridesToken(this.replaceDef, this.defValue),
+      );
 
       return ngModule;
     } finally {
@@ -188,6 +189,7 @@ export class MockBuilderPromise implements IMockBuilder {
     return this;
   }
 
+  // eslint-disable-next-line unicorn/no-thenable
   public async then<TResult1 = IMockBuilderResult>(
     fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
     reject?: ((reason: any) => PromiseLike<any>) | undefined | null,

@@ -1,5 +1,3 @@
-// tslint:disable cyclomatic-complexity
-
 import { Component, Directive, Provider, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
@@ -23,12 +21,14 @@ const buildConfig = (
     queries?: Record<string, ViewChild>;
   },
   setControlValueAccessor: boolean,
-): ngMocksMockConfig => ({
-  config: ngMocksUniverse.config.get(source),
-  outputs: meta.outputs,
-  queryScanKeys: [],
-  setControlValueAccessor,
-});
+) => {
+  return {
+    config: ngMocksUniverse.config.get(source),
+    outputs: meta.outputs,
+    queryScanKeys: [],
+    setControlValueAccessor: setControlValueAccessor,
+  };
+};
 
 export default <T extends Component | Directive>(
   source: AnyType<any>,
@@ -43,11 +43,11 @@ export default <T extends Component | Directive>(
     viewProviders?: Provider[];
   },
   params: T,
-): T => {
+) => {
   const data = cloneProviders(source, mock, meta.providers || []);
   const providers = [toExistingProvider(source, mock), ...data.providers];
   const { providers: viewProviders } = cloneProviders(source, mock, meta.viewProviders || []);
-  const options: T = { ...params, providers, viewProviders };
+  const options: T = { ...params, providers: providers, viewProviders: viewProviders };
 
   if (data.setControlValueAccessor === undefined) {
     data.setControlValueAccessor =

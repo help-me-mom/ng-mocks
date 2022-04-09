@@ -1,10 +1,11 @@
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: ` <input [ngModel]="dateValue" /> `,
+  template: ' <input [ngModel]="dateValue" /> ',
 })
 class TargetComponent {
   public dateValue = new Date();
@@ -24,7 +25,7 @@ describe('issue-288:ng-model', () => {
 
   it('does not fail when mocked', () => {
     expect(() => MockRender(TargetComponent)).not.toThrowError(
-      `Cannot set property 'model' of undefined`,
+      "Cannot set property 'model' of undefined",
     );
   });
 });

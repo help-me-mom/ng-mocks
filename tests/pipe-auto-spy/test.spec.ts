@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
@@ -14,7 +15,7 @@ describe('pipe-auto-spy', () => {
   beforeEach(() => MockBuilder(null, TargetPipe));
 
   it('has spy out of the box', () => {
-    MockRender(`{{ 'test' | target }}`);
+    MockRender("{{ 'test' | target }}");
     const pipe = ngMocks.findInstance(TargetPipe);
     expect(pipe.transform).toHaveBeenCalledWith('test');
     expect(pipe.transform).toHaveBeenCalledTimes(1);

@@ -1,10 +1,11 @@
 import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockRender,
-  ngMocks,
   NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
 } from 'ng-mocks';
 
 import {
@@ -16,7 +17,7 @@ import {
 } from './fixtures';
 
 describe('root-providers', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

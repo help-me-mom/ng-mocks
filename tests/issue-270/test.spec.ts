@@ -1,7 +1,8 @@
 import { Component, Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockProvider, MockRender } from 'ng-mocks';
 import { Subject } from 'rxjs';
+
+import { MockProvider, MockRender } from 'ng-mocks';
 
 export const EMPTY = new Subject<any>();
 EMPTY.complete();
@@ -13,7 +14,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: `{{ service.stream$ | async }}`,
+  template: '{{ service.stream$ | async }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}

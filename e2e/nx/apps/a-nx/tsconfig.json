@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": ["src/test-setup.ts"],
+  "files": ["src/main.ts", "src/polyfills.ts", "src/test-setup.ts"],
   "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"],
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",

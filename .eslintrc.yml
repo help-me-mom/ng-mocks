@@ -1,0 +1,224 @@
+root: true
+
+plugins:
+  - '@typescript-eslint'
+  - 'json'
+  - 'unused-imports'
+  - 'prefer-arrow'
+  - 'unicorn'
+  - 'es-roikoren'
+
+settings:
+  import/resolver:
+    typescript:
+      project:
+        - ./tsconfig.json
+        - ./tests-e2e/tsconfig.json
+        - ./e2e/a5es5/tsconfig.json
+        - ./e2e/a5es2015/tsconfig.json
+        - ./e2e/a6/tsconfig.json
+        - ./e2e/a7/tsconfig.json
+        - ./e2e/a8/tsconfig.json
+        - ./e2e/a9/tsconfig.json
+        - ./e2e/a10/tsconfig.json
+        - ./e2e/a11/tsconfig.json
+        - ./e2e/a12/tsconfig.json
+        - ./e2e/a13/tsconfig.json
+        - ./e2e/a14/tsconfig.json
+        - ./e2e/a-jasmine/tsconfig.json
+        - ./e2e/a-jest/tsconfig.json
+        - ./e2e/a-min/tsconfig.json
+        - ./e2e/nx/apps/a-nx/tsconfig.json
+  es-roikoren:
+    aggressive: true
+
+overrides:
+  - files:
+      - '*.ts'
+      - '*.js'
+    parser: '@typescript-eslint/parser'
+    parserOptions:
+      project:
+        - ./tsconfig.json
+        - ./tests-e2e/tsconfig.json
+        - ./e2e/a5es5/tsconfig.json
+        - ./e2e/a5es2015/tsconfig.json
+        - ./e2e/a6/tsconfig.json
+        - ./e2e/a7/tsconfig.json
+        - ./e2e/a8/tsconfig.json
+        - ./e2e/a9/tsconfig.json
+        - ./e2e/a10/tsconfig.json
+        - ./e2e/a11/tsconfig.json
+        - ./e2e/a12/tsconfig.json
+        - ./e2e/a13/tsconfig.json
+        - ./e2e/a14/tsconfig.json
+        - ./e2e/a-jasmine/tsconfig.json
+        - ./e2e/a-jest/tsconfig.json
+        - ./e2e/a-min/tsconfig.json
+        - ./e2e/nx/apps/a-nx/tsconfig.json
+    extends:
+      - 'eslint:recommended'
+      - 'plugin:@typescript-eslint/recommended'
+      - 'plugin:@angular-eslint/recommended'
+      - 'plugin:@angular-eslint/template/process-inline-templates'
+      - 'plugin:unicorn/recommended'
+      - 'plugin:import/recommended'
+      - 'plugin:import/typescript'
+      - 'plugin:prettier/recommended'
+    rules:
+      arrow-parens: off
+      arrow-body-style: off
+      spaced-comment:
+        - error
+        - always
+      complexity:
+        - error
+        - 25
+      unicorn/filename-case:
+        - error
+        - case: kebabCase
+      max-lines:
+        - error
+        - 500
+      max-lines-per-function:
+        - error
+        - 100
+
+      unicorn/no-array-callback-reference: off
+      unicorn/no-array-method-this-argument: off
+      unicorn/no-for-loop: off
+      unicorn/no-null: off
+      unicorn/no-useless-undefined: off
+      unicorn/prefer-module: off
+      unicorn/prefer-set-has: off
+      unicorn/prefer-switch: off
+      unicorn/prefer-type-error: off
+      unicorn/prevent-abbreviations: off
+      unicorn/prefer-includes: off
+      unicorn/prefer-array-flat: off
+      unicorn/prefer-spread: off
+      es-roikoren/no-array-from: error
+      es-roikoren/no-array-isarray: off
+      es-roikoren/no-array-of: error
+      es-roikoren/no-array-prototype-copywithin: error
+      es-roikoren/no-array-prototype-entries: error
+      es-roikoren/no-array-prototype-every: error
+      es-roikoren/no-array-prototype-fill: off
+      es-roikoren/no-array-prototype-filter: off
+      es-roikoren/no-array-prototype-find: error
+      es-roikoren/no-array-prototype-findindex: error
+      es-roikoren/no-array-prototype-flat: error
+      es-roikoren/no-array-prototype-foreach: error
+      es-roikoren/no-array-prototype-includes: error
+      es-roikoren/no-array-prototype-indexof: off
+      es-roikoren/no-array-prototype-keys: error
+      es-roikoren/no-array-prototype-lastindexof: error
+      es-roikoren/no-array-prototype-map: off
+      es-roikoren/no-array-prototype-reduce: error
+      es-roikoren/no-array-prototype-reduceright: error
+      es-roikoren/no-array-prototype-some: off
+      es-roikoren/no-array-prototype-values: error
+      es-roikoren/no-array-string-prototype-at: error
+
+      no-alert: error
+      no-console:
+        - error
+        - allow:
+            - error
+            - warn
+      no-debugger: error
+      no-restricted-globals:
+        - error
+        - fit
+        - fdescribe
+        - xit
+        - xdescribe
+      semi:
+        - error
+        - always
+      quotes:
+        - error
+        - single
+        - avoidEscape: true
+          allowTemplateLiterals: true
+      sort-imports:
+        - error
+        - ignoreCase: true
+          ignoreDeclarationSort: true
+          allowSeparatedGroups: true
+      import/order:
+        - error
+        - newlines-between: always
+          groups:
+            - builtin
+            - external
+            - internal
+            - index
+            - parent
+            - sibling
+      '@angular-eslint/no-input-rename': off
+      '@angular-eslint/no-output-rename': off
+      '@typescript-eslint/no-explicit-any': off
+      '@typescript-eslint/no-unused-vars': error
+      unused-imports/no-unused-imports: error
+      prefer-arrow/prefer-arrow-functions:
+        - error
+        - allowStandaloneDeclarations: true
+
+  - files:
+      - '*.spec.ts'
+    rules:
+      max-lines: off
+      max-lines-per-function: off
+      unicorn/consistent-function-scoping: off
+
+  - files:
+      - '*.js'
+    parser: 'espree'
+    env:
+      node: true
+    rules:
+      unicorn/prefer-module: off
+
+  - files:
+      - 'decorate-angular-cli.js'
+      - 'jest.config.js'
+      - 'jest.preset.js'
+      - 'karma.conf.js'
+      - 'webpack.config.js'
+    rules:
+      '@typescript-eslint/no-var-requires': off
+      'prefer-arrow/prefer-arrow-functions': off
+
+  - files:
+      - '*.html'
+    parser: '@angular-eslint/template-parser'
+    extends:
+      - 'plugin:@angular-eslint/template/recommended'
+
+  - files:
+      - '*.json'
+    extends:
+      - 'plugin:json/recommended'
+      - 'plugin:prettier/recommended'
+
+  - files:
+      - '*.md'
+    extends:
+      - 'plugin:mdx/recommended'
+      - 'plugin:prettier/recommended'
+
+  - files:
+      - 'tsconfig.json'
+      - 'tsconfig.*.json'
+    extends:
+      - 'plugin:json/recommended-with-comments'
+      - 'plugin:prettier/recommended'
+
+  - files:
+      - '*.yaml'
+      - '*.yml'
+    parser: 'yaml-eslint-parser'
+    extends:
+      - 'plugin:yml/prettier'
+      - 'plugin:prettier/recommended'

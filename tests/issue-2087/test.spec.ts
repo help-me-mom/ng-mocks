@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Directive, NgModule } from '@angular/core';
+
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Directive({
@@ -13,7 +14,7 @@ class MockDirective {
 
 @Component({
   selector: 'target',
-  template: ``,
+  template: '',
 })
 class TargetComponent {
   public constructor(public readonly mock: MockDirective) {}
@@ -37,19 +38,19 @@ describe('issue-2087', () => {
     ['boolean', false, true],
   ];
 
-  tests.forEach(([kind, falsy, truthy]) =>
+  for (const [kind, falsy, truthy] of tests) {
     describe(kind, () => {
-      it(`works for falsy`, () => {
+      it('works for falsy', () => {
         MockInstance(MockDirective, kind, falsy);
         const fixture = MockRender(TargetComponent);
         expect(fixture.componentInstance.mock[kind]).toEqual(falsy);
       });
 
-      it(`works for truthy`, () => {
+      it('works for truthy', () => {
         MockInstance(MockDirective, kind, truthy);
         const fixture = MockRender(TargetComponent);
         expect(fixture.componentInstance.mock[kind]).toEqual(truthy);
       });
-    }),
-  );
+    });
+  }
 });

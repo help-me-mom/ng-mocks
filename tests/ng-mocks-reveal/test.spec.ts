@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -15,6 +13,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');

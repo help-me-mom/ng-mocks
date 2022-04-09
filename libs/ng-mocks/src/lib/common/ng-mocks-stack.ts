@@ -55,7 +55,7 @@ const subscribePush = (callback: NgMocksStackCallback) => {
   if (listenersPush.indexOf(callback)) {
     listenersPush.push(callback);
   }
-  if (stack.length) {
+  if (stack.length > 0) {
     callback(stack[stack.length - 1], stack);
   }
 };

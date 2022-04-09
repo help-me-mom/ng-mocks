@@ -3,7 +3,7 @@ import { MockRender, ngMocks } from 'ng-mocks';
 describe('ng-mocks-find-all', () => {
   it('find attributes', () => {
     const fixture = MockRender(
-      `<div data-1="1" data-2="test" data-3></div>`,
+      '<div data-1="1" data-2="test" data-3></div>',
     );
 
     const [el1] = ngMocks.findAll(['data-1', 1]);

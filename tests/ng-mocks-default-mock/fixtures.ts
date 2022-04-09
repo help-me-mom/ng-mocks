@@ -9,8 +9,9 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { ngMocks } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
+
+import { ngMocks } from 'ng-mocks';
 
 export const EMPTY = new Subject<any>();
 EMPTY.complete();
@@ -49,7 +50,7 @@ export class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target',
-  template: `{{ 'target' | target: true }}`,
+  template: "{{ 'target' | target: true }}",
 })
 export class TargetComponent implements OnDestroy {
   public readonly destroy$ = new Subject<void>();

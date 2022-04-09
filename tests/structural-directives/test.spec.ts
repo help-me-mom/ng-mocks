@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import {
   isMockOf,
   MockBuilder,
@@ -127,7 +125,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     }
     fixture.detectChanges();
 
-    // By default mock structural directives are rendered with undefined variables.
+    // By default, mock structural directives are rendered with undefined variables.
     expect(ngMocks.formatHtml(fixture)).toContain(
       ' $implicit: fromDirective: ',
     );
@@ -266,7 +264,7 @@ describe('structural-directive-as-ng-for:mock', () => {
     }
     fixture.detectChanges();
 
-    // By default mock structural directives are rendered with undefined variables.
+    // By default, mock structural directives are rendered with undefined variables.
     expect(
       ngMocks.formatHtml(fixture.debugElement.nativeElement),
     ).toContain(' w/o 00 ');

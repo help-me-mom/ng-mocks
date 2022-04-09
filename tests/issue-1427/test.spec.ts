@@ -1,4 +1,5 @@
 import { Component, HostBinding, HostListener } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -6,7 +7,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: '{{ id }}',
 })
 export class TargetComponent {
-  @HostBinding() public id = `custom-form`;
+  @HostBinding() public id = 'custom-form';
   @HostListener('click') public click = () => undefined;
 }
 

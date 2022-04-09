@@ -6,7 +6,7 @@ import mockHelperStub from '../mock-helper.stub';
 const preventBubble = ['focus', 'blur', 'load', 'unload', 'change', 'reset', 'scroll'];
 
 // istanbul ignore next
-function customEvent(event: string, params?: EventInit) {
+const customEvent = (event: string, params?: EventInit) => {
   const initParams = {
     bubbles: false,
     cancelable: false,
@@ -16,7 +16,7 @@ function customEvent(event: string, params?: EventInit) {
   eventObj.initCustomEvent(event, initParams.bubbles, initParams.cancelable, null);
 
   return eventObj;
-}
+};
 
 const eventCtor =
   typeof (Event as any) === 'function'
@@ -163,7 +163,7 @@ export default (
   overrides?: Partial<UIEvent | KeyboardEvent | MouseEvent | TouchEvent | Event>,
 ): CustomEvent => {
   const dot = event.indexOf('.');
-  const [eventName, eventPayload] = dot === -1 ? [event] : [event.substr(0, dot), event.substr(dot + 1)];
+  const [eventName, eventPayload] = dot === -1 ? [event] : [event.slice(0, Math.max(0, dot)), event.slice(dot + 1)];
   const eventObj = eventCtor(eventName, {
     bubbles: preventBubble.indexOf(event) === -1,
     cancelable: true,

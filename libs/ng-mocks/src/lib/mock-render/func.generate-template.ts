@@ -2,12 +2,8 @@ const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i
 
 const generateTemplateAttrWithParams = (prop: string, type: 'i' | 'o'): string => {
   let tpl = ` ${generateTemplateAttrWrap(prop, type)}="`;
-  if (type === 'i') {
-    tpl += prop;
-  } else {
-    tpl += `__ngMocksOutput('${prop}', $event)`;
-  }
-  tpl += `"`;
+  tpl += type === 'i' ? prop : `__ngMocksOutput('${prop}', $event)`;
+  tpl += '"';
 
   return tpl;
 };

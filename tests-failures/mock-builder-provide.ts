@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+
 import { MockBuilder } from 'ng-mocks';
 
 class MyService {

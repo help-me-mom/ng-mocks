@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count object-literal-sort-keys
-
 import {
   Component,
   ContentChild,
@@ -76,10 +74,11 @@ import { MockedComponent } from './types';
     >
   `,
 })
-export class ExampleComponentContainer {
+export class ExampleContainerComponent {
   @ViewChild(ChildComponent, { static: true } as any)
   public childComponent?: ChildComponent;
   public emitted = '';
+  public someOutputHasEmitted = '';
   public readonly formControl = new FormControl('');
 
   public performActionOnChild(s: string): void {
@@ -90,13 +89,13 @@ export class ExampleComponentContainer {
 }
 
 describe('MockComponent', () => {
-  let component: ExampleComponentContainer;
-  let fixture: ComponentFixture<ExampleComponentContainer>;
+  let component: ExampleContainerComponent;
+  let fixture: ComponentFixture<ExampleContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
-        ExampleComponentContainer,
+        ExampleContainerComponent,
         MockComponents(
           EmptyComponent,
           GetterSetterComponent,
@@ -109,7 +108,7 @@ describe('MockComponent', () => {
       imports: [FormsModule, ReactiveFormsModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ExampleComponentContainer);
+    fixture = TestBed.createComponent(ExampleContainerComponent);
     component = fixture.componentInstance;
   });
 
@@ -161,7 +160,7 @@ describe('MockComponent', () => {
     const mockComponent = fixture.debugElement.query(
       By.css('#ng-content-component'),
     );
-    expect(mockComponent.nativeElement.innerText).toContain('doh');
+    expect(mockComponent.nativeElement.textContent).toContain('doh');
   });
 
   it('should give each instance of a mock component its own event emitter', () => {
@@ -265,7 +264,7 @@ describe('MockComponent', () => {
       const ngContent = templateOutlet;
       expect(ngContent).toBeTruthy();
       expect(
-        ngContent.nativeElement.innerText
+        ngContent.nativeElement.textContent
           .replace(/\s+/gim, ' ')
           .trim(),
       ).toEqual('ng-content body header ng-content body footer');
@@ -278,7 +277,7 @@ describe('MockComponent', () => {
       ).__render('block1');
       block1 = templateOutlet.query(By.css('[data-key="block1"]'));
       expect(block1).toBeTruthy();
-      expect(block1.nativeElement.innerText.trim()).toEqual(
+      expect(block1.nativeElement.textContent.trim()).toEqual(
         'block 1 body',
       );
 
@@ -290,7 +289,7 @@ describe('MockComponent', () => {
       ).__render('block2');
       block2 = templateOutlet.query(By.css('[data-key="block2"]'));
       expect(block2).toBeTruthy();
-      expect(block2.nativeElement.innerText.trim()).toEqual(
+      expect(block2.nativeElement.textContent.trim()).toEqual(
         'block 2 body',
       );
 
@@ -303,7 +302,7 @@ describe('MockComponent', () => {
       fixture.detectChanges();
       block3 = templateOutlet.query(By.css('[data-key="block3"]'));
       expect(block3).toBeTruthy();
-      expect(block3.nativeElement.innerText.trim()).toEqual('');
+      expect(block3.nativeElement.textContent.trim()).toEqual('');
       (
         templateOutlet.componentInstance as MockedComponent<TemplateOutletComponent>
       ).__hide('block3');
@@ -356,7 +355,7 @@ describe('MockComponent', () => {
     @Component({
       template: '',
     })
-    class MyClass {
+    class MyComponent {
       @ContentChild('i1', { read: TemplateRef } as any)
       public o1?: TemplateRef<any>;
       @ContentChildren('i2', { read: TemplateRef } as any)
@@ -376,7 +375,7 @@ describe('MockComponent', () => {
       public o8?: QueryList<ElementRef>;
     }
 
-    const actual = MockComponent(MyClass) as any;
+    const actual = MockComponent(MyComponent) as any;
     expect(actual.__prop__metadata__).toEqual({
       o1: [
         jasmine.objectContaining({

@@ -4,6 +4,7 @@ import {
   Component,
   NgZone,
 } from '@angular/core';
+
 import {
   MockBuilder,
   MockProvider,
@@ -15,7 +16,7 @@ import {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target',
-  template: `{{ v }}`,
+  template: '{{ v }}',
 })
 class TargetComponent {
   public v = 0;

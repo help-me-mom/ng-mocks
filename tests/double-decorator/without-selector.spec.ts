@@ -1,22 +1,15 @@
-// tslint:disable no-duplicate-imports
-
 import {
   Component,
-  Directive as DirectiveSource,
+  Directive,
   Injectable,
   NgModule,
 } from '@angular/core';
 import * as core from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-// Because of A5 we need to cast Directive to any type
-// To let it accept 0 parameters.
-function Directive(...args: any[]): any {
-  return (DirectiveSource as any)(...args);
-}
-
-@Directive()
+@Directive(undefined as any)
 class BaseClass {
   public name = 'directive';
 }

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockModule, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `target`,
+  template: 'target',
 })
 class TargetComponent {}
 

@@ -1,5 +1,3 @@
-// tslint:disable no-console
-
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {

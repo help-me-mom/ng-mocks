@@ -1,6 +1,5 @@
-// tslint:disable variable-name
-
 import { PipeTransform } from '@angular/core';
+
 import {
   MockBuilder,
   MockComponent,

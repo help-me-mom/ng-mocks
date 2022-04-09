@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import {
   Directive,
   EventEmitter,
@@ -7,6 +5,7 @@ import {
   Output,
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import {
   Component,
   Directive,
@@ -5,6 +7,7 @@ import {
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -40,29 +43,21 @@ describe('performance:MockBuilder', () => {
 
   jasmine.getEnv().addReporter({
     jasmineDone: () => {
-      // tslint:disable-next-line no-console
-      console.log(`performance:MockBuilder`);
-      // tslint:disable-next-line no-console
+      console.log('performance:MockBuilder');
       console.log(`Time standard: ${timeStandard}`);
-      // tslint:disable-next-line no-console
       console.log(`Time MockBuilder: ${timeMockBuilder}`);
-      // tslint:disable-next-line no-console
       console.log(
         `Ration standard / MockBuilder: ${
           timeStandard / timeMockBuilder
         }`,
       );
-      // tslint:disable-next-line no-console
       console.log(`Time beforeEach: ${timeFasterBeforeEach}`);
-      // tslint:disable-next-line no-console
       console.log(
         `Ratio standard / beforeEach: ${
           timeStandard / timeFasterBeforeEach
         }`,
       );
-      // tslint:disable-next-line no-console
       console.log(`Time beforeAll: ${timeFasterBeforeAll}`);
-      // tslint:disable-next-line no-console
       console.log(
         `Ratio beforeEach / beforeAll: ${
           timeFasterBeforeEach / timeFasterBeforeAll

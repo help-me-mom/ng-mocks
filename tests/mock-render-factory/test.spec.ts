@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({

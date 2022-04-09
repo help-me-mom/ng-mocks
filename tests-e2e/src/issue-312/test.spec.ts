@@ -48,12 +48,13 @@ const selectValue = createFeatureSelector(myReducer.featureKey);
 
 @Injectable()
 class MyEffects {
-  public readonly reset$ = createEffect(() =>
+  private effect = () =>
     this.actions$.pipe(
       ofType(resetValue),
       mapTo(setValue({ value: '' })),
-    ),
-  );
+    );
+
+  public readonly reset$ = createEffect(this.effect);
 
   public constructor(private readonly actions$: Actions) {}
 }

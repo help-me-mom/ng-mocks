@@ -1,5 +1,3 @@
-// tslint:disable strict-type-predicates
-
 import { Component, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -7,6 +5,7 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
+
 import {
   MockBuilder,
   MockInstance,
@@ -23,7 +22,7 @@ import {
     },
   ],
   selector: 'app-child',
-  template: `dependency`,
+  template: 'dependency',
 })
 class DependencyComponent implements ControlValueAccessor {
   public registerOnChange = (fn: any): void => fn;
@@ -33,7 +32,7 @@ class DependencyComponent implements ControlValueAccessor {
 
 @Component({
   selector: 'tested',
-  template: ` <app-child [formControl]="formControl"></app-child> `,
+  template: ' <app-child [formControl]="formControl"></app-child> ',
 })
 class TestedComponent {
   public readonly formControl = new FormControl();

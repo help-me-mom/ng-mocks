@@ -96,7 +96,7 @@ const generateTouches = (
         continue;
       }
 
-      if (!def.hasOwnProperty('__ngMocksTouches')) {
+      if (!Object.prototype.hasOwnProperty.call(def, '__ngMocksTouches')) {
         const local = new Set<any>();
         const meta = coreReflectMeta(def);
         if (meta) {
@@ -113,7 +113,7 @@ const generateTouches = (
 const defineTouches = (testBed: TestBed, moduleDef: TestModuleMetadata, knownTouches?: Set<any>) => {
   let touches = knownTouches;
 
-  if (!touches && ngMocksUniverse.getDefaults().size) {
+  if (!touches && ngMocksUniverse.getDefaults().size > 0) {
     touches = funcExtractTokens(
       (testBed as any)._providers || /* istanbul ignore next Ivy part */ (testBed as any)._compiler?.providers,
     ).touches;

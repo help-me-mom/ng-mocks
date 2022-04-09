@@ -28,7 +28,7 @@ export default (...args: any[]) => {
     },
     true,
   );
-  if (result.length) {
+  if (result.length > 0) {
     return result[0];
   }
   if (notFoundValue !== defaultNotFoundValue) {

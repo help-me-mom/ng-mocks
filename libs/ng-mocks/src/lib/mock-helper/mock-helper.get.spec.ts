@@ -12,7 +12,6 @@ describe('mock-helper.get', () => {
     const div = ngMocks.find('div');
 
     // creating a comment like in the old View Engine
-    // tslint:disable-next-line no-inner-html
     span.nativeElement.innerHTML = '<!-- comment -->';
     const comment = span.childNodes[0];
     div.nativeNode.parentNode.insertBefore(

@@ -1,31 +1,30 @@
 import {
   Component,
-  Injectable as InjectableSource,
+  Injectable,
   NgModule,
   VERSION,
 } from '@angular/core';
+
 import {
   MockBuilder,
   MockRender,
   NG_MOCKS_ROOT_PROVIDERS,
 } from 'ng-mocks';
 
-// Because of A5 we need to cast Injectable to any type.
-// But because of A10+ we need to do it via a middle function.
-function Injectable(...args: any[]): any {
-  return InjectableSource(...args);
-}
+const injectableTarget1ServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable(...injectableTarget1ServiceArgs)
 class Target1Service {
   public readonly name = 'target-1';
 }
 
 @Component({
   selector: 'target-1',
-  template: `{{ service.name }}`,
+  template: '{{ service.name }}',
 })
 class Target1Component {
   public constructor(public readonly service: Target1Service) {}
@@ -37,16 +36,20 @@ class Target1Component {
 })
 class Target1Module {}
 
-@Injectable({
-  providedIn: 'root',
-})
+const injectableTarget2ServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableTarget2ServiceArgs)
 class Target2Service {
   public readonly name = 'target-2';
 }
 
 @Component({
   selector: 'target-2',
-  template: `{{ service.name }}`,
+  template: '{{ service.name }}',
 })
 class Target2Component {
   public constructor(public readonly service: Target2Service) {}
@@ -65,7 +68,7 @@ class Target2Module {}
 class CombinedModule {}
 
 describe('NG_MOCKS_ROOT_PROVIDERS', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

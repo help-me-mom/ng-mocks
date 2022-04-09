@@ -1,10 +1,11 @@
 import {
   Component,
   Inject,
-  Injectable as InjectableSource,
+  Injectable,
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockInstance,
@@ -12,29 +13,28 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-// Because of A5 we need to cast Injectable to any type.
-// But because of A10+ we need to do it via a middle function.
-function Injectable(...args: any[]): any {
-  return InjectableSource(...args);
-}
-
 interface InjectedAbstraction {
   (): string;
   hello: () => number;
 }
 
-@Injectable({
-  providedIn: 'root',
-  useFactory: () => {
-    const fn: InjectedAbstraction = (typeof jest === 'undefined'
-      ? jasmine.createSpy()
-      : jest.fn()) as any as InjectedAbstraction;
-    fn.hello =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+const injectableArgs = [
+  {
+    providedIn: 'root',
+    useFactory: () => {
+      const function_: InjectedAbstraction = (typeof jest ===
+      'undefined'
+        ? jasmine.createSpy()
+        : jest.fn()) as any as InjectedAbstraction;
+      function_.hello =
+        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
-    return fn;
-  },
-})
+      return function_;
+    },
+  } as never,
+];
+
+@Injectable(...injectableArgs)
 abstract class InjectedAbstraction {}
 
 @Component({ template: '' })
@@ -60,7 +60,7 @@ ngMocks.defaultMock(InjectedAbstraction, () => {
 
 // @see https://github.com/ike18t/ng-mocks/issues/455
 describe('issue-455:abstract', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

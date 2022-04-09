@@ -33,7 +33,7 @@ const handleKnown = (valueAccessor: any): boolean => {
 };
 
 const hasListener = (el: DebugElement): boolean =>
-  el.listeners.filter(listener => listener.name === 'focus' || listener.name === 'blur').length > 0;
+  el.listeners.some(listener => listener.name === 'focus' || listener.name === 'blur');
 
 const keys = ['onTouched', '_onTouched', '_cvaOnTouch', '_markAsTouched', '_onTouchedCallback', 'onModelTouched'];
 

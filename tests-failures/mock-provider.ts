@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+
 import { MockProvider } from 'ng-mocks';
 
 const TOKEN_OBJECT = new InjectionToken<{ prop: boolean }>('TOKEN_OBJECT');

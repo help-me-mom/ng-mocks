@@ -1,5 +1,3 @@
-// tslint:disable no-string-literal max-file-line-count
-
 import {
   state,
   style,
@@ -14,6 +12,7 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
+
 import {
   isMockOf,
   MockBuilder,

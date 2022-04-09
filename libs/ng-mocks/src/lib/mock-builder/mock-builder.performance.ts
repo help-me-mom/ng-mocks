@@ -35,6 +35,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return requiredMetadata(ngModule);
   }
 
+  // eslint-disable-next-line unicorn/no-thenable
   public async then<TResult1 = IMockBuilderResult>(
     fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
     reject?: ((reason: any) => PromiseLike<never>) | undefined | null,
@@ -48,7 +49,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     // we need to reset testing module in case if we are in bullet mode but current module does not match.
     if (global.has('bullet') && global.has('bullet:reset')) {
-      // tslint:disable-next-line no-console
       console.warn('ngMocks.faster has zero effect due to changes in testing module between runs');
       global.delete('bullet');
       TestBed.resetTestingModule();

@@ -37,7 +37,7 @@ export default (selector: SELECTOR): ((node: MockedDebugNode) => boolean) => {
     return crawlByAttributeValue(selector[0], selector[1]);
   }
   if (isCrawlById(selector)) {
-    return crawlById(selector.substr(1));
+    return crawlById(selector.slice(1));
   }
   if (isCrawlByTagName(selector)) {
     return crawlByTagName(selector);
@@ -46,5 +46,5 @@ export default (selector: SELECTOR): ((node: MockedDebugNode) => boolean) => {
     return crawlByDeclaration(selector);
   }
 
-  throw new Error(`Unknown selector`);
+  throw new Error('Unknown selector');
 };
