@@ -1,9 +1,10 @@
 import { Component, Input, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ value }}`,
+  template: '{{ value }}',
 })
 class TargetComponent {
   @Input() public readonly value: number | null = null;

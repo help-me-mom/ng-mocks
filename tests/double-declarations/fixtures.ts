@@ -14,37 +14,37 @@ import {
 @Directive({
   selector: 'base1',
 })
-export class BaseCls1 {}
+export class Base1Directive {}
 
 @Directive({
   selector: 'base2',
 })
-export class BaseCls2 {}
+export class Base2Directive {}
 
 @Directive({
   selector: 'base3',
 })
-export class BaseCls3 {}
+export class Base3Directive {}
 
 @Directive({
   selector: 'override1',
 })
-export class OverrideCls1 {}
+export class Override1Directive {}
 
 @Directive({
   selector: 'override2',
 })
-export class OverrideCls2 {}
+export class Override2Directive {}
 
 @Directive({
   selector: 'override3',
 })
-export class OverrideCls3 {}
+export class Override3Directive {}
 
 @Directive({
   selector: 'div',
 })
-export class DivCls {
+export class DivDirective {
   @Input() public prop: number | null = null;
 }
 
@@ -54,9 +54,9 @@ export class DivCls {
 @Directive({
   selector: 'base2',
 })
-export class BaseCls {
-  @ContentChild(DivCls, {} as any) public contentChildBase?: DivCls;
-  @ContentChildren(DivCls, {} as any) public contentChildrenBase?: QueryList<DivCls>;
+export class BaseDirective {
+  @ContentChild(DivDirective, {} as any) public contentChildBase?: DivDirective;
+  @ContentChildren(DivDirective, {} as any) public contentChildrenBase?: QueryList<DivDirective>;
 
   @HostBinding('attr.base1') public hostBase1: any;
   @HostBinding('attr.base2') public hostBase2: any;
@@ -80,15 +80,15 @@ export class BaseCls {
 
 @Component({
   selector: 'override1',
-  template: `override1<ng-content></ng-content>`,
+  template: 'override1<ng-content></ng-content>',
 })
 @Component({
   selector: 'override2',
-  template: `override2<ng-content></ng-content>`,
+  template: 'override2<ng-content></ng-content>',
 })
-export class OverrideCls extends BaseCls {
-  @ContentChild(DivCls, {} as any) public contentChildOverride?: DivCls;
-  @ContentChildren(DivCls, {} as any) public contentChildrenOverride?: QueryList<DivCls>;
+export class OverrideComponent extends BaseDirective {
+  @ContentChild(DivDirective, {} as any) public contentChildOverride?: DivDirective;
+  @ContentChildren(DivDirective, {} as any) public contentChildrenOverride?: QueryList<DivDirective>;
 
   @HostBinding('attr.override2') public hostBase2: any;
   @HostBinding('attr.override1') public hostOverride1: any;

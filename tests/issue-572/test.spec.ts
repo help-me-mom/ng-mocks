@@ -1,7 +1,6 @@
-// tslint:disable no-console
-
 import { Component, Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
@@ -62,9 +61,9 @@ describe('issue-572', () => {
       TestBed.get(Injector);
       MockRender(TargetComponent);
       fail('should throw');
-    } catch (e) {
+    } catch (error) {
       expect(console.warn).not.toHaveBeenCalled();
-      expect(e).not.toEqual(
+      expect(error).not.toEqual(
         assertion.objectContaining({
           ngMocksConsoleCatch: assertion.anything(),
         }),

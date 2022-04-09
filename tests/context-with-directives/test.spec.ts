@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { CustomRootComponent, CustomTypeDirective } from './fixtures';

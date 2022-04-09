@@ -12,6 +12,7 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { MockBuilder } from 'ng-mocks';
 
 // @see https://github.com/ike18t/ng-mocks/issues/197

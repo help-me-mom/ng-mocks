@@ -14,6 +14,6 @@
     "skipLibCheck": true,
     "types": ["jasmine", "jest", "node"]
   },
-  "files": ["src/test.ts", "src/polyfills.ts"],
+  "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts", "src/setup-jest.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -7,6 +7,7 @@ import {
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN = new (InjectionToken as any)('TOKEN', {
@@ -14,9 +15,13 @@ const TOKEN = new (InjectionToken as any)('TOKEN', {
   providedIn: 'root',
 });
 
-@((Injectable as any)({
-  providedIn: 'root',
-}))
+const injectableServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableServiceArgs)
 class Service {
   public readonly value: string = 'ROOT_SERVICE';
 }
@@ -36,7 +41,7 @@ class TargetComponent {
 // tokens provided on the root level, shouldn't be mocked unless it's explicitly specified.
 // @see https://github.com/ike18t/ng-mocks/issues/1932
 describe('providedIn:root', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

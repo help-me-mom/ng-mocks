@@ -1,4 +1,4 @@
-// tslint:disable max-file-line-count
+/* eslint-disable max-lines */
 
 import { DebugNode, EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';

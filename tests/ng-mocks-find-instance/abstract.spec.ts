@@ -1,4 +1,5 @@
 import { Component, Injectable } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -21,7 +22,7 @@ class TargetService implements AbstractService {
     },
   ],
   selector: 'target',
-  template: `{{ service.echo() }}`,
+  template: '{{ service.echo() }}',
 })
 class TargetComponent {
   public constructor(public readonly service: AbstractService) {}

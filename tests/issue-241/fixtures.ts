@@ -23,7 +23,7 @@ export class TargetModule {}
 
 @Component({
   selector: 'target',
-  template: `{{ 'target' | target }}`,
+  template: "{{ 'target' | target }}",
 })
 export class TargetComponent {}
 

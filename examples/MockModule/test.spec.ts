@@ -8,15 +8,16 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'app-child',
-  template: `dependency`,
+  template: 'dependency',
 })
 class DependencyComponent {
   @ContentChild('something', {} as any)
-  public injectedSomething?: TemplateRef<{}>;
+  public injectedSomething?: TemplateRef<any>;
 
   @Input()
   public someInput = '';
@@ -37,13 +38,13 @@ class DependencyModule {}
   template: `
     <app-child
       [someInput]="value"
-      (someOutput)="trigger($event)"
+      (someOutput)="trigger()"
     ></app-child>
   `,
 })
 class TestedComponent {
   public value = '';
-  public trigger = () => {};
+  public trigger = () => undefined;
 }
 
 describe('MockModule', () => {

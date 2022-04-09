@@ -1,15 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+
 import { isMockedNgDefOf, MockBuilder, NG_MOCKS } from 'ng-mocks';
 
 import {
   KeepComponent,
   MockComponent,
+  My1Component,
+  My2Component,
+  My3Component,
   MyComponent,
-  MyComponent1,
-  MyComponent2,
-  MyComponent3,
 } from './spec.components.fixtures';
 import {
   KeepDirective,
@@ -65,7 +66,7 @@ describe('MockBuilder:ngMocks', () => {
 
       // Even it belongs to the module we want to keep,
       // it will be still replaced with a mock copy.
-      .mock(MyComponent3)
+      .mock(My3Component)
 
       // and now we want to build our NgModule.
       .build();
@@ -73,10 +74,10 @@ describe('MockBuilder:ngMocks', () => {
 
     // Extra configuration
     TestBed.overrideTemplate(
-      MyComponent1,
+      My1Component,
       'If we need to tune testBed',
     );
-    TestBed.overrideTemplate(MyComponent2, 'More callbacks');
+    TestBed.overrideTemplate(My2Component, 'More callbacks');
 
     return TestBed.compileComponents();
   });
@@ -150,9 +151,9 @@ describe('MockBuilder:ngMocks', () => {
       expect(restorePipe).toBe(restorePipe);
 
       // mock nested
-      const myComponent3 = mocks.get(MyComponent3);
+      const myComponent3 = mocks.get(My3Component);
       expect(
-        isMockedNgDefOf(myComponent3, MyComponent3, 'c'),
+        isMockedNgDefOf(myComponent3, My3Component, 'c'),
       ).toBeTruthy();
     },
   ));

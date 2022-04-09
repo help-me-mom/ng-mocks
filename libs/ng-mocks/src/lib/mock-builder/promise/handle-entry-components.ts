@@ -2,7 +2,6 @@ import * as module from '@angular/core';
 
 let isIvy = false;
 try {
-  // tslint:disable-next-line no-require-imports no-var-requires
   isIvy = module.ɵivyEnabled;
 } catch {
   // nothing to do

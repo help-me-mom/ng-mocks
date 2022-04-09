@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AbstractType, Type } from '../common/core.types';
@@ -54,7 +52,6 @@ const checkReset: Array<[any, any, any?]> = [];
 let checkCollect = false;
 
 // istanbul ignore else: maybe a different runner is used
-// tslint:disable-next-line strict-type-predicates
 if (typeof beforeEach !== 'undefined') {
   beforeEach(() => (checkCollect = true));
   beforeEach(() => mockInstanceForgotReset(checkReset));
@@ -177,7 +174,7 @@ export function MockInstance<T>(
 export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, ...args: any[]) {
   funcImportExists(declaration, 'MockInstance');
 
-  if (args.length) {
+  if (args.length > 0) {
     const { key, value, accessor } = parseMockInstanceArgs(args);
 
     return mockInstanceConfig(declaration, key, value, accessor);

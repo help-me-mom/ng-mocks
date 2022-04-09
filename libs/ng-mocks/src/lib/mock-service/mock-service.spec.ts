@@ -1,8 +1,6 @@
-// tslint:disable max-file-line-count
-
 import {
-  HttpClientModule,
   HTTP_INTERCEPTORS,
+  HttpClientModule,
 } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
@@ -80,7 +78,7 @@ describe('MockService', () => {
     expect(MockService(0)).toBeUndefined();
     expect(MockService(1)).toBeUndefined();
     expect(MockService(-1)).toBeUndefined();
-    expect(MockService(NaN)).toBeUndefined();
+    expect(MockService(Number.NaN)).toBeUndefined();
     expect(MockService('')).toBeUndefined();
     expect(MockService(null)).toBeUndefined();
     expect(MockService(undefined)).toBeUndefined();
@@ -99,7 +97,7 @@ describe('MockService', () => {
   });
 
   it('should convert normal functions to () => undefined', () => {
-    // tslint:disable-next-line:no-function-expression
+    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
     const mockService = MockService(function test() {
       return 0;
     });

@@ -1,25 +1,29 @@
-// tslint:disable no-console no-var-requires no-require-imports max-func-body-length no-import-side-effect
-// tslint:disable ordered-imports
+/* eslint-disable max-lines-per-function */
+
+import { join } from 'node:path';
 
 import { Config } from 'karma';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
+import puppeteer from 'puppeteer';
 
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+process.env.CHROME_BIN = (puppeteer as any as puppeteer.PuppeteerNode).executablePath();
 
 const suite: any[] = [];
 if (!process.env.KARMA_SUITE) {
-  suite.push({
-    pattern: './libs/ng-mocks/src/lib/**/*.ts',
-    watched: false,
-  });
-  suite.push({
-    pattern: './examples/**/*.ts',
-    watched: false,
-  });
-  suite.push({
-    pattern: './tests/**/*.ts',
-    watched: false,
-  });
+  suite.push(
+    {
+      pattern: './libs/ng-mocks/src/lib/**/*.ts',
+      watched: false,
+    },
+    {
+      pattern: './examples/**/*.ts',
+      watched: false,
+    },
+    {
+      pattern: './tests/**/*.ts',
+      watched: false,
+    },
+  );
 } else if (process.env.KARMA_SUITE === 'perf') {
   suite.push({
     pattern: './tests-performance/**/*.ts',
@@ -81,7 +85,7 @@ export default (config: Config) => {
     ],
     frameworks: ['jasmine', 'webpack'],
     junitReporter: {
-      outputDir: require('path').join(__dirname, './test-reports'),
+      outputDir: join(__dirname, './test-reports'),
       outputFile: 'specs-junit.xml',
       useBrowserName: false,
     },

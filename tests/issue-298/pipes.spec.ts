@@ -1,5 +1,6 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { By } from '@angular/platform-browser';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({

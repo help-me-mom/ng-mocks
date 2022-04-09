@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import {
   isMockOf,
   MockBuilder,

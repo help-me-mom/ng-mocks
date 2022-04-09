@@ -1,6 +1,7 @@
 import { InjectionToken } from '@angular/core';
-import { MockBuilder } from 'ng-mocks';
 import { EMPTY, Observable } from 'rxjs';
+
+import { MockBuilder } from 'ng-mocks';
 
 class MyModule {}
 

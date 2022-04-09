@@ -3,6 +3,7 @@ import {
   Component,
   Input,
 } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
@@ -25,10 +26,10 @@ describe('ChangeDetectionStrategy.OnPush:real', () => {
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
-    const params: { items: string[] } = {
+    const parameters: { items: string[] } = {
       items: [],
     };
-    const fixture = MockRender(ItemListComponent, params);
+    const fixture = MockRender(ItemListComponent, parameters);
     fixture.componentInstance.items.push('demo');
     fixture.detectChanges();
 
@@ -36,10 +37,10 @@ describe('ChangeDetectionStrategy.OnPush:real', () => {
   });
 
   it('should show 1 if items array changed reference', () => {
-    const params: { items: string[] } = {
+    const parameters: { items: string[] } = {
       items: [],
     };
-    const fixture = MockRender(ItemListComponent, params);
+    const fixture = MockRender(ItemListComponent, parameters);
     fixture.componentInstance.items = ['demo'];
     fixture.detectChanges();
 
@@ -58,10 +59,10 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   });
 
   it('should show 0 if items pushed to array but not changed reference', () => {
-    const params: { items: string[] } = {
+    const parameters: { items: string[] } = {
       items: [],
     };
-    const fixture = MockRender(ItemListComponent, params);
+    const fixture = MockRender(ItemListComponent, parameters);
     fixture.componentInstance.items.push('demo');
     fixture.detectChanges();
 
@@ -69,10 +70,10 @@ describe('ChangeDetectionStrategy.OnPush:mock', () => {
   });
 
   it('should show 1 if items array changed reference', () => {
-    const params: { items: string[] } = {
+    const parameters: { items: string[] } = {
       items: [],
     };
-    const fixture = MockRender(ItemListComponent, params);
+    const fixture = MockRender(ItemListComponent, parameters);
     fixture.componentInstance.items = ['demo'];
     fixture.detectChanges();
 

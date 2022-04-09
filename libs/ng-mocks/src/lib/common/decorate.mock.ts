@@ -4,7 +4,7 @@ import funcGetName from './func.get-name';
 import { ngMocksMockConfig } from './mock';
 import ngMocksUniverse from './ng-mocks-universe';
 
-export default function (mock: AnyType<any>, source: AnyType<any>, configInput: ngMocksMockConfig = {}): void {
+export default (mock: AnyType<any>, source: AnyType<any>, configInput: ngMocksMockConfig = {}): void => {
   coreDefineProperty(mock, 'mockOf', source);
   coreDefineProperty(mock, 'nameConstructor', funcGetName(mock));
   coreDefineProperty(mock, 'name', `MockOf${funcGetName(source)}`, true);
@@ -18,4 +18,4 @@ export default function (mock: AnyType<any>, source: AnyType<any>, configInput: 
       }
     : configInput;
   coreDefineProperty(mock.prototype, '__ngMocksConfig', config);
-}
+};

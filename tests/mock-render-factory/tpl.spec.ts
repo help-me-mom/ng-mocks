@@ -1,9 +1,10 @@
 import { Component, Input, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ i1 }}:{{ i2 }}:{{ i3 }}`,
+  template: '{{ i1 }}:{{ i2 }}:{{ i3 }}',
 })
 class TargetComponent {
   public readonly i0 = 0;

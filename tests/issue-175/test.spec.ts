@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
@@ -60,7 +61,7 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(`<dir-2></dir-2>`)).toThrowError(
+      expect(() => MockRender('<dir-2></dir-2>')).toThrowError(
         /'dir-2' is not a known element/,
       );
     });
@@ -72,7 +73,7 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(`<dir-1></dir-1>`)).toThrowError(
+      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
         /No provider for Target1Service/,
       );
     });
@@ -82,7 +83,7 @@ describe('issue-175', () => {
     beforeEach(() => MockBuilder(TargetModule).exclude(Target1Pipe));
 
     it('fails', () => {
-      expect(() => MockRender(`{{ 'test' | pip1 }}`)).toThrowError(
+      expect(() => MockRender("{{ 'test' | pip1 }}")).toThrowError(
         /The pipe 'pip1' could not be found/,
       );
     });
@@ -118,7 +119,7 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(`<dir-1></dir-1>`)).toThrowError(
+      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
         /No provider for Target1Service/,
       );
     });
@@ -204,13 +205,13 @@ describe('issue-175', () => {
     );
 
     it('fails first time via MockRender', () => {
-      expect(() => MockRender(`<dir-1></dir-1>`)).toThrowError(
+      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
         /No provider for Target1Service/,
       );
     });
 
     it('fails second time via MockRender', () => {
-      expect(() => MockRender(`<dir-1></dir-1>`)).toThrowError(
+      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
         /No provider for Target1Service/,
       );
     });

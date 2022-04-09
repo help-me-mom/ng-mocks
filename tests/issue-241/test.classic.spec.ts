@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import { MockModule, MockRender } from 'ng-mocks';
 
 import { AppModule, TargetComponent } from './fixtures';

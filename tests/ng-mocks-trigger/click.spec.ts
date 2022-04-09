@@ -7,21 +7,22 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import * as rxjs from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // TODO remove with A5
 let fromEvent: any;
 try {
   fromEvent = (rxjs as any).fromEvent;
-} catch (e) {
+} catch {
   // nothing to do
 }
 
 @Component({
   selector: 'target',
-  template: ` <div (click)="clickTag = $event" #element></div> `,
+  template: ' <div (click)="clickTag = $event" #element></div> ',
 })
 class TargetComponent implements OnDestroy {
   public clickFromEvent: any;

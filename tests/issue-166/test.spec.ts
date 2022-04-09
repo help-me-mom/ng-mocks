@@ -1,7 +1,6 @@
-// tslint:disable strict-type-predicates
+import { Observable, Subject } from 'rxjs';
 
 import { MockService, ngMocks } from 'ng-mocks';
-import { Observable, Subject } from 'rxjs';
 
 class MyService {
   public readonly onErrorSet$?: Observable<string>;

@@ -4,7 +4,7 @@ import { AfterContentInit, Component, ContentChildren, Directive, Input, QueryLi
   selector: '[type]',
 })
 export class CustomTypeDirective {
-  @Input('type') public type = '';
+  @Input() public type = '';
 
   public constructor(public template: TemplateRef<any>) {}
 }
@@ -29,10 +29,10 @@ export class CustomRootComponent implements AfterContentInit {
   public template?: TemplateRef<any>;
   public template1?: TemplateRef<any>;
   public template2?: TemplateRef<any>;
-  @ContentChildren(CustomTypeDirective) public templates?: QueryList<any>;
+  @ContentChildren(CustomTypeDirective) public templates?: QueryList<CustomTypeDirective>;
 
   public ngAfterContentInit(): void {
-    (this.templates || []).forEach((template: CustomTypeDirective) => {
+    for (const template of this.templates ? this.templates.toArray() : []) {
       switch (template.type) {
         case 'template1':
           this.template1 = template.template;
@@ -43,6 +43,6 @@ export class CustomRootComponent implements AfterContentInit {
         default:
           this.template = template.template;
       }
-    });
+    }
   }
 }

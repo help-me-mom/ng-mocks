@@ -5,7 +5,7 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function (config) {
   config.set({
-    captureTimeout: 30000,
+    captureTimeout: 30 * 1000,
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [

@@ -54,7 +54,7 @@ export class TargetService {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target',
-  template: ``,
+  template: '',
 })
 export class TargetComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterViewChecked, AfterContentInit, AfterContentChecked

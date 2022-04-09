@@ -12,13 +12,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subject } from 'rxjs';
+
 import {
   MockBuilder,
   MockInstance,
   MockRender,
   ngMocks,
 } from 'ng-mocks';
-import { Subject } from 'rxjs';
 
 // remove with A5
 export const EMPTY = new Subject<any>();

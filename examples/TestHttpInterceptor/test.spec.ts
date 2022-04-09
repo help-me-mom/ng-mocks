@@ -1,23 +1,24 @@
 import {
+  HTTP_INTERCEPTORS,
   HttpClient,
   HttpClientModule,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import {
   MockBuilder,
   MockRender,
   NG_MOCKS_INTERCEPTORS,
 } from 'ng-mocks';
-import { Observable } from 'rxjs';
 
 // An interceptor we want to test.
 @Injectable()

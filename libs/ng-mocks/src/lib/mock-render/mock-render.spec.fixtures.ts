@@ -3,16 +3,16 @@ import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'render-real-component',
-  template: '<span (click)="click.emit($event)">{{ content }}</span>',
+  template: '<span (click)="trigger.emit($event)">{{ content }}</span>',
 })
 export class RenderRealComponent {
-  @Output() public click = new EventEmitter<{}>();
+  @Output() public trigger = new EventEmitter();
   @Input() public content = '';
 
   public realName = '';
 
   public constructor(@Inject(DOCUMENT) public readonly document: Document) {
-    this.document.getElementById('test');
+    this.document.querySelector('#test');
   }
 
   public get nameProp(): string {

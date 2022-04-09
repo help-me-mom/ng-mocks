@@ -10,6 +10,7 @@ import {
   PipeTransform,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN_PREFIX = new InjectionToken('PREFIX');
@@ -38,7 +39,7 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target',
-  template: `{{ value | target }} - {{ piped }}`,
+  template: '{{ value | target }} - {{ piped }}',
 })
 class TargetComponent implements OnInit {
   public piped = '';

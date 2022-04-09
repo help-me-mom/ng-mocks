@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count
-
 import {
   Component,
   Directive,
@@ -41,7 +39,7 @@ class ParentClass {
     },
   ],
 })
-class ChildModuleClass extends ParentClass implements PipeTransform {
+class ChildModule extends ParentClass implements PipeTransform {
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -56,7 +54,7 @@ class ChildModuleClass extends ParentClass implements PipeTransform {
 @Component({
   template: '',
 })
-class ChildComponentClass
+class ChildComponent
   extends ParentClass
   implements PipeTransform, ControlValueAccessor
 {
@@ -84,7 +82,7 @@ class ChildComponentClass
 @Directive({
   selector: 'mock',
 })
-class ChildDirectiveClass
+class ChildDirective
   extends ParentClass
   implements PipeTransform, ControlValueAccessor
 {
@@ -112,7 +110,7 @@ class ChildDirectiveClass
 @Pipe({
   name: 'mock',
 })
-class ChildPipeClass extends ParentClass implements PipeTransform {
+class ChildPipe extends ParentClass implements PipeTransform {
   protected childValue = true;
 
   public childMethod(): boolean {
@@ -126,9 +124,9 @@ class ChildPipeClass extends ParentClass implements PipeTransform {
 
 describe('Mock', () => {
   it('should affect as MockModule', () => {
-    const instance = new (MockModule(ChildModuleClass))();
-    expect(instance).toEqual(jasmine.any(ChildModuleClass));
-    expect(isMockOf(instance, ChildModuleClass, 'm')).toEqual(true);
+    const instance = new (MockModule(ChildModule))();
+    expect(instance).toEqual(jasmine.any(ChildModule));
+    expect(isMockOf(instance, ChildModule, 'm')).toEqual(true);
     expect(instance.parentMethod()).toBeUndefined(
       'mock to an empty function',
     );
@@ -138,14 +136,10 @@ describe('Mock', () => {
   });
 
   it('should affect as MockComponent', () => {
-    const proxy = new MockControlValueAccessorProxy(
-      ChildComponentClass,
-    );
-    const instance = new (MockComponent(ChildComponentClass))();
-    expect(instance).toEqual(jasmine.any(ChildComponentClass));
-    expect(isMockOf(instance, ChildComponentClass, 'c')).toEqual(
-      true,
-    );
+    const proxy = new MockControlValueAccessorProxy(ChildComponent);
+    const instance = new (MockComponent(ChildComponent))();
+    expect(instance).toEqual(jasmine.any(ChildComponent));
+    expect(isMockOf(instance, ChildComponent, 'c')).toEqual(true);
 
     proxy.instance = instance;
     const spy = jasmine.createSpy('spy');
@@ -158,14 +152,10 @@ describe('Mock', () => {
   });
 
   it('should affect as MockDirective', () => {
-    const proxy = new MockControlValueAccessorProxy(
-      ChildComponentClass,
-    );
-    const instance = new (MockDirective(ChildDirectiveClass))();
-    expect(instance).toEqual(jasmine.any(ChildDirectiveClass));
-    expect(isMockOf(instance, ChildDirectiveClass, 'd')).toEqual(
-      true,
-    );
+    const proxy = new MockControlValueAccessorProxy(ChildComponent);
+    const instance = new (MockDirective(ChildDirective))();
+    expect(instance).toEqual(jasmine.any(ChildDirective));
+    expect(isMockOf(instance, ChildDirective, 'd')).toEqual(true);
 
     proxy.instance = instance;
     const spy = jasmine.createSpy('spy');
@@ -178,9 +168,9 @@ describe('Mock', () => {
   });
 
   it('should affect as MockPipe', () => {
-    const instance = new (MockPipe(ChildPipeClass))();
-    expect(instance).toEqual(jasmine.any(ChildPipeClass));
-    expect(isMockOf(instance, ChildPipeClass, 'p')).toEqual(true);
+    const instance = new (MockPipe(ChildPipe))();
+    expect(instance).toEqual(jasmine.any(ChildPipe));
+    expect(isMockOf(instance, ChildPipe, 'p')).toEqual(true);
     expect(instance.parentMethod()).toBeUndefined();
     expect(instance.childMethod()).toBeUndefined();
   });

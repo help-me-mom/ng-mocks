@@ -1,27 +1,28 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: '<input (focus)="focus.emit()" data-label="input">',
+  template: '<input (focus)="trigger.emit()" data-label="input">',
 })
 class TargetComponent {
-  @Output() public readonly focus = new EventEmitter<void>();
+  @Output() public readonly trigger = new EventEmitter<void>();
 }
 
 describe('ng-mocks-trigger:317', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('finds by css selector', () => {
-    const spy =
+    const trigger =
       typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-    MockRender(TargetComponent, { focus: spy });
-    expect(spy).not.toHaveBeenCalled();
+    MockRender(TargetComponent, { trigger });
+    expect(trigger).not.toHaveBeenCalled();
     ngMocks.trigger('input', 'focus');
-    expect(spy).toHaveBeenCalledTimes(1);
+    expect(trigger).toHaveBeenCalledTimes(1);
     ngMocks.trigger(['data-label'], 'focus');
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(trigger).toHaveBeenCalledTimes(2);
     ngMocks.trigger(['data-label', 'input'], 'focus');
-    expect(spy).toHaveBeenCalledTimes(3);
+    expect(trigger).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,5 +1,3 @@
-// tslint:disable variable-name ban-ts-ignore
-
 import { AsyncValidator, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
 import { AnyType } from './core.types';

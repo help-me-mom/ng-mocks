@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 class ParentClass {

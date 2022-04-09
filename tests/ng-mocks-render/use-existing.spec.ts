@@ -7,6 +7,7 @@ import {
   NgModule,
   TemplateRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -43,7 +44,7 @@ class TargetComponent {}
 
 @Component({
   selector: 'component',
-  template: ``,
+  template: '',
 })
 class MockComponent {
   @ContentChild(TplDirective, {} as any)

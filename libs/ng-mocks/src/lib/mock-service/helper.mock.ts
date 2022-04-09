@@ -42,9 +42,9 @@ const parseArgs = (
   let accessType: 'get' | 'set' | undefined;
   let mockName: string | undefined;
 
-  if (args.length && args[0] !== 'get' && args[0] !== 'set') {
+  if (args.length > 0 && args[0] !== 'get' && args[0] !== 'set') {
     mockName = args[0];
-  } else if (args.length && (args[0] === 'get' || args[0] === 'set')) {
+  } else if (args.length > 0 && (args[0] === 'get' || args[0] === 'set')) {
     accessType = args[0];
     mockName = args[1];
   }

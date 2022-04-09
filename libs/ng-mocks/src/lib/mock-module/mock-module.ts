@@ -177,17 +177,17 @@ const generateReturn = (
 /**
  * @see https://ng-mocks.sudo.eu/api/MockModule
  */
-export function MockModule<T>(module: Type<T>): Type<T>;
+export function MockModule<T>(ngModule: Type<T>): Type<T>;
 
 /**
  * @see https://ng-mocks.sudo.eu/api/MockModule
  */
-export function MockModule<T>(module: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
+export function MockModule<T>(ngModule: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 
-export function MockModule(module: any): any {
-  funcImportExists(module, 'MockModule');
+export function MockModule(def: any): any {
+  funcImportExists(def, 'MockModule');
 
-  const { ngModule, ngModuleProviders } = extractModuleAndProviders(module);
+  const { ngModule, ngModuleProviders } = extractModuleAndProviders(def);
   const flags = preProcessFlags(ngModule);
   try {
     const mockModule = detectMockModule(ngModule, getExistingMockModule(ngModule, flags.isRootModule));
@@ -200,7 +200,7 @@ export function MockModule(module: any): any {
     }
     const mockModuleProviders = getMockProviders(ngModuleProviders);
 
-    return generateReturn(module, ngModule, ngModuleProviders, mockModule, mockModuleProviders);
+    return generateReturn(def, ngModule, ngModuleProviders, mockModule, mockModuleProviders);
   } finally {
     postProcessFlags(flags);
   }

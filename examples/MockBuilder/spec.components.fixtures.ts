@@ -22,7 +22,7 @@ import { TOKEN_CUSTOMIZE, TOKEN_KEEP, TOKEN_MOCK } from './spec.tokens.fixtures'
     </div>
   `,
 })
-export class ComponentContentChild<T> {
+export class ContentChildComponent<T> {
   @ContentChild('block', {} as any) public readonly injectedBlock: TemplateRef<any> | undefined;
   @Input() public items: T[] | undefined;
 }
@@ -98,19 +98,19 @@ export class MyComponent {
   selector: 'c-1',
   template: 'MyComponent1',
 })
-export class MyComponent1 {}
+export class My1Component {}
 
 @Component({
   selector: 'c-2',
   template: 'MyComponent2',
 })
-export class MyComponent2 {}
+export class My2Component {}
 
 @Component({
   selector: 'c-3',
   template: 'MyComponent3',
 })
-export class MyComponent3 {}
+export class My3Component {}
 
 @Component({
   selector: 'c-keep',

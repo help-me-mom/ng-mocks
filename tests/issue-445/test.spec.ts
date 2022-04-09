@@ -1,9 +1,10 @@
 import { Component, ContentChild } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
 })
 export class ByAttributeComponent {
   @ContentChild('[someAttribute]', {} as any)

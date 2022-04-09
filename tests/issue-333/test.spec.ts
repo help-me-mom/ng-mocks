@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import * as core from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @core.Component({
@@ -59,7 +60,7 @@ describe('issue-333', () => {
       const fixture = MockRender(DynamicOverlayComponent);
 
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        `<dynamic-overlay></dynamic-overlay>`,
+        '<dynamic-overlay></dynamic-overlay>',
       );
     });
 
@@ -68,7 +69,7 @@ describe('issue-333', () => {
       fixture.point.componentInstance.attachComponent(MockComponent);
       fixture.detectChanges();
 
-      expect(ngMocks.formatText(fixture)).toEqual(`Dependency`);
+      expect(ngMocks.formatText(fixture)).toEqual('Dependency');
     });
   });
 
@@ -84,7 +85,7 @@ describe('issue-333', () => {
       const fixture = MockRender(DynamicOverlayComponent);
 
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        `<dynamic-overlay></dynamic-overlay>`,
+        '<dynamic-overlay></dynamic-overlay>',
       );
     });
 
@@ -94,7 +95,7 @@ describe('issue-333', () => {
       fixture.detectChanges();
 
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        `<dynamic-overlay><mock-component></mock-component></dynamic-overlay>`,
+        '<dynamic-overlay><mock-component></mock-component></dynamic-overlay>',
       );
       const instance = ngMocks.findInstance(MockComponent);
       expect(isMockOf(instance, MockComponent)).toEqual(true);
@@ -147,11 +148,11 @@ describe('issue-333', () => {
 
     it('renders all components', () => {
       const fixture = MockRender(DynamicOverlayComponent);
-      expect(ngMocks.formatText(fixture)).toEqual(``);
+      expect(ngMocks.formatText(fixture)).toEqual('');
 
       fixture.point.componentInstance.attachComponent(MockComponent);
       fixture.detectChanges();
-      expect(ngMocks.formatText(fixture)).toEqual(`Dependency`);
+      expect(ngMocks.formatText(fixture)).toEqual('Dependency');
     });
   });
 });

@@ -9,5 +9,7 @@
     "experimentalDecorators": true,
     "target": "es5",
     "lib": ["es2017", "dom"]
-  }
+  },
+  "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts", "src/setup-jest.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

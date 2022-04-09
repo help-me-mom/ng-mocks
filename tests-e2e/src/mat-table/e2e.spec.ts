@@ -1,9 +1,5 @@
 import { Component, NgModule, TemplateRef } from '@angular/core';
-import {
-  MatHeaderRowDef,
-  MatRowDef,
-  MatTableModule,
-} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 export interface PeriodicElement {

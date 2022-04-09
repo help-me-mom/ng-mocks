@@ -18,5 +18,5 @@ export default (selector: string | Type<any> | [string] | [string, any] | any) =
     return crawlByDeclaration(selector);
   }
 
-  throw new Error(`Unknown selector`);
+  throw new Error('Unknown selector');
 };

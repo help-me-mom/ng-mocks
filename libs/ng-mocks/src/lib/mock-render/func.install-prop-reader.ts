@@ -48,7 +48,7 @@ export default (
   reader: Record<keyof any, any>,
   source: Record<keyof any, any> | undefined,
   extra: string[],
-  force: boolean = false,
+  force = false,
 ): void => {
   if (!source) {
     return;

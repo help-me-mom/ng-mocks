@@ -5,6 +5,7 @@ import {
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 let target = 0;
@@ -28,7 +29,7 @@ class TargetDirective {}
 
 @Component({
   selector: 'target',
-  template: `{{ service.name }}`,
+  template: '{{ service.name }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
@@ -44,7 +45,7 @@ class TargetModule {}
 describe('issue-623', () => {
   const withoutDirective = MockRenderFactory(TargetComponent);
   const withDirective = MockRenderFactory(
-    `<target directive></target>`,
+    '<target directive></target>',
   );
 
   describe('TestBed', () => {

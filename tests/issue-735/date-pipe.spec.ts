@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ stamp | date }}`,
+  template: '{{ stamp | date }}',
 })
 class TargetComponent {
   public readonly stamp = '2021-05-01';

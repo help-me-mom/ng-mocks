@@ -34,7 +34,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
-import { MockComponent } from 'ng-mocks';
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
@@ -127,6 +126,8 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
 import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
+
+import { MockComponent } from 'ng-mocks';
 
 @NgModule({
   imports: [
@@ -276,11 +277,6 @@ class AppComponent {}
 })
 class DependencyComponent {}
 
-@NgModule({
-  declarations: [AppComponent, DependencyComponent],
-})
-class TargetModule {}
-
 describe('performance:ng-mocks', () => {
   const time = performance.now();
   beforeEach(async () => {
@@ -309,6 +305,6 @@ describe('performance:ng-mocks', () => {
   }
 
   it('took acceptable time', () => {
-    expect(performance.now() - time).toBeLessThan(60000);
+    expect(performance.now() - time).toBeLessThan(60 * 1000);
   });
 });

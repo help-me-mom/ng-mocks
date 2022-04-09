@@ -1,4 +1,5 @@
 import { Component, ContentChild, TemplateRef } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({

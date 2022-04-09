@@ -4,11 +4,12 @@ import {
   Input,
   Output,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: `{{ prop1 }}:{{ prop2 }}`,
+  template: '{{ prop1 }}:{{ prop2 }}',
 })
 class TargetComponent {
   public echo1Called = false;

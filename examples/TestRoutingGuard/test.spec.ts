@@ -13,14 +13,15 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { from, Observable } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
+
 import {
   MockBuilder,
   MockRender,
-  ngMocks,
   NG_MOCKS_GUARDS,
+  ngMocks,
 } from 'ng-mocks';
-import { from, Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
 
 // A simple service simulating login check.
 // It will be replaced with its mock copy.
@@ -122,7 +123,7 @@ describe('TestRoutingGuard', () => {
 
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
-    if (parseInt(VERSION.major, 10) <= 6) {
+    if (Number.parseInt(VERSION.major, 10) <= 6) {
       pending('Need Angular > 6');
 
       return;

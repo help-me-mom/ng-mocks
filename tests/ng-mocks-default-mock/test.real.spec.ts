@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { MockRender, ngMocks } from 'ng-mocks';
 import { Subject } from 'rxjs';
+
+import { MockRender, ngMocks } from 'ng-mocks';
 
 import {
   TargetComponent,

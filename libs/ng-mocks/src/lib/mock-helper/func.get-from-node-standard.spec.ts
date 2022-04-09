@@ -101,7 +101,6 @@ describe('func.get-from-node-standard', () => {
 
   it('does not find proto in literals', () => {
     const result: any[] = [];
-    const proto = new Proto();
     const node: any = {
       _debugContext: {
         view: {

@@ -15,6 +15,7 @@ import {
   PipeTransform,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import {
   MockDirective,
   MockModule,
@@ -46,7 +47,7 @@ class Target1Pipe implements PipeTransform {
 
 @Component({
   selector: 'target2',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
 })
 class Target2Component {}
 

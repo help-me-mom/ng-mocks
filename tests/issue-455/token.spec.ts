@@ -5,27 +5,28 @@ import {
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockRender,
-  ngMocks,
   NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
 } from 'ng-mocks';
 
-interface InjectedFn {
+interface myInjectedFn {
   (): string;
   hello: () => number;
 }
 
-const injectedFn: InjectionToken<InjectedFn> =
+const myInjectedFn: InjectionToken<myInjectedFn> =
   new (InjectionToken as any)('InjectedFn', {
     factory: () => {
-      const fn: any =
+      const function_: any =
         typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-      fn.hello =
+      function_.hello =
         typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
-      return fn;
+      return function_;
     },
     providedIn: 'root',
   });
@@ -33,19 +34,21 @@ const injectedFn: InjectionToken<InjectedFn> =
 @Component({ template: '' })
 export class TestWithoutDecoratorComponent {
   public constructor(
-    @Inject(injectedFn) public myInjectedFn: InjectedFn,
+    @Inject(myInjectedFn)
+    public myInjectedFn: myInjectedFn,
   ) {}
 }
 
 @Component({ template: '' })
 export class TestWithDecoratorComponent {
   public constructor(
-    @Inject(injectedFn) public myInjectedFn: InjectedFn,
+    @Inject(myInjectedFn)
+    public myInjectedFn: myInjectedFn,
   ) {}
 }
 
 ngMocks.defaultMock(
-  injectedFn,
+  myInjectedFn,
   () =>
     (typeof jest === 'undefined'
       ? jasmine.createSpy().and.returnValue('FOO')
@@ -54,7 +57,7 @@ ngMocks.defaultMock(
 
 // @see https://github.com/ike18t/ng-mocks/issues/455
 describe('issue-455:token', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();
@@ -99,7 +102,7 @@ describe('issue-455:token', () => {
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent)
             .mock(
-              injectedFn,
+              myInjectedFn,
               (typeof jest === 'undefined'
                 ? jasmine.createSpy().and.returnValue('BAR')
                 : jest.fn().mockReturnValue('BAR')) as any,
@@ -122,7 +125,7 @@ describe('issue-455:token', () => {
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent)
             .mock(
-              injectedFn as any,
+              myInjectedFn as any,
               (typeof jest === 'undefined'
                 ? jasmine.createSpy().and.returnValue('BAR')
                 : jest.fn().mockReturnValue('BAR')) as any,
@@ -148,7 +151,7 @@ describe('issue-455:token', () => {
     describe('with provide', () => {
       beforeEach(() =>
         MockBuilder(TestWithDecoratorComponent).provide({
-          provide: injectedFn,
+          provide: myInjectedFn,
           useFactory: () =>
             typeof jest === 'undefined'
               ? jasmine.createSpy().and.returnValue('QUX')

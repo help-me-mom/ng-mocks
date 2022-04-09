@@ -31,7 +31,7 @@ const idAdd = (id: any) => {
 const idRemove = (id: any) => {
   const bulletStack: any[] = ngMocksUniverse.global.get('bullet:stack');
   bulletStack.splice(bulletStack.indexOf(id), 1);
-  if (bulletStack.length) {
+  if (bulletStack.length > 0) {
     ngMocksUniverse.global.set('bullet:stack:id', bulletStack[bulletStack.length - 1]);
   } else {
     ngMocksUniverse.global.delete('bullet:stack:id');

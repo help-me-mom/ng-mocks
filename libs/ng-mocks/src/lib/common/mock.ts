@@ -1,5 +1,3 @@
-// tslint:disable variable-name
-
 import { EventEmitter, Injector, Optional, Self } from '@angular/core';
 
 import { IMockBuilderConfig } from '../mock-builder/types';

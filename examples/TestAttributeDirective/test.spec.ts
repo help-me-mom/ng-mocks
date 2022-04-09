@@ -4,6 +4,7 @@ import {
   HostListener,
   Input,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // The purpose of the directive is to add a background color
@@ -36,7 +37,7 @@ describe('TestAttributeDirective', () => {
   beforeEach(() => MockBuilder(TargetDirective));
 
   it('uses default background color', () => {
-    const fixture = MockRender(`<div target></div>`);
+    const fixture = MockRender('<div target></div>');
 
     // By default, without the mouse enter, there is no background
     // color on the div.
@@ -69,7 +70,7 @@ describe('TestAttributeDirective', () => {
     // parameter of MockRender, simply pass there variables for the
     // template, they'll become properties of
     // fixture.componentInstance.
-    const fixture = MockRender(`<div [color]="color" target></div>`, {
+    const fixture = MockRender('<div [color]="color" target></div>', {
       color: 'red',
     });
 

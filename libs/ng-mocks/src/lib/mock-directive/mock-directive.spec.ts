@@ -1,5 +1,3 @@
-// tslint:disable max-file-line-count object-literal-sort-keys
-
 import {
   Component,
   ContentChild,
@@ -101,7 +99,7 @@ class GettersAndSettersDirective {
     <div getters-and-setters></div>
   `,
 })
-class ExampleComponentContainer {
+class ExampleContainerComponent {
   @ViewChild(ExampleDirective, {} as any)
   public childDirective?: ExampleDirective;
   public emitted = false;
@@ -115,13 +113,13 @@ class ExampleComponentContainer {
 }
 
 describe('MockDirective', () => {
-  let component: ExampleComponentContainer;
-  let fixture: ComponentFixture<ExampleComponentContainer>;
+  let component: ExampleContainerComponent;
+  let fixture: ComponentFixture<ExampleContainerComponent>;
 
   beforeEach(async () => {
     return TestBed.configureTestingModule({
       declarations: [
-        ExampleComponentContainer,
+        ExampleContainerComponent,
         MockDirective(FormControlDirective),
         MockDirective(ExampleDirective),
         MockDirective(ExampleStructuralDirective),
@@ -131,7 +129,7 @@ describe('MockDirective', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExampleComponentContainer);
+    fixture = TestBed.createComponent(ExampleContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -200,17 +198,17 @@ describe('MockDirective', () => {
   });
 
   it('renders with true', async () => {
-    await MockBuilder(ExampleComponentContainer).mock(
+    await MockBuilder(ExampleContainerComponent).mock(
       ExampleStructuralDirective,
       {
         render: true,
       },
     );
-    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+    expect(() => MockRender(ExampleContainerComponent)).not.toThrow();
   });
 
   it('renders with $implicit', async () => {
-    await MockBuilder(ExampleComponentContainer).mock(
+    await MockBuilder(ExampleContainerComponent).mock(
       ExampleStructuralDirective,
       {
         render: {
@@ -218,7 +216,7 @@ describe('MockDirective', () => {
         },
       },
     );
-    expect(() => MockRender(ExampleComponentContainer)).not.toThrow();
+    expect(() => MockRender(ExampleContainerComponent)).not.toThrow();
   });
 
   it('should set ViewChild directives correctly', () => {
@@ -264,7 +262,7 @@ describe('MockDirective', () => {
     @Directive({
       selector: 'never',
     })
-    class MyClass {
+    class MyDirective {
       @ContentChild('i1', { read: TemplateRef } as any)
       public o1?: TemplateRef<any>;
       @ContentChildren('i2', { read: TemplateRef } as any)
@@ -284,7 +282,7 @@ describe('MockDirective', () => {
       public o8?: QueryList<ElementRef>;
     }
 
-    const actual = MockDirective(MyClass) as any;
+    const actual = MockDirective(MyDirective) as any;
     expect(actual.__prop__metadata__).toEqual({
       o1: [
         jasmine.objectContaining({

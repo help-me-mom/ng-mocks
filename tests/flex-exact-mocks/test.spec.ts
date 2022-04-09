@@ -1,7 +1,8 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder } from 'ng-mocks';
 import { Observable, Subject } from 'rxjs';
+
+import { MockBuilder } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
 

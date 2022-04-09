@@ -1,21 +1,6 @@
-import {
-  Component,
-  Inject,
-  Injectable as InjectableSource,
-  InjectionToken,
-  Injector,
-  NgModule,
-  Optional,
-  SkipSelf,
-} from '@angular/core';
+import { Component, Inject, Injectable, InjectionToken, Injector, NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-// Because of A5 we need to cast Injectable to any type.
-// But because of A10+ we need to do it via a middle function.
-function Injectable(...args: any[]): any {
-  return InjectableSource(...args);
-}
 
 // Thanks A5.
 export const TOKEN = new (InjectionToken as any)('TOKEN', {
@@ -27,23 +12,35 @@ export class ModuleService {
   public readonly name = 'module';
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+const injectableTargetServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableTargetServiceArgs)
 export class TargetService {
   public readonly name = 'service';
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+const injectableFakeServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableFakeServiceArgs)
 export class FakeService {
   public readonly name = 'fake';
 }
 
-@Injectable({
-  providedIn: 'any',
-})
+const injectableProvidedServiceArgs = [
+  {
+    providedIn: 'any',
+  } as never,
+];
+
+@Injectable(...injectableProvidedServiceArgs)
 export class ProvidedService {
   public readonly name = 'provided';
 }
@@ -78,10 +75,10 @@ export class TargetComponent {
 
 @Component({
   selector: 'module',
-  template: `{{ module.name }}`,
+  template: '{{ moduleService.name }}',
 })
 export class ModuleComponent {
-  public constructor(public readonly module: ModuleService) {}
+  public constructor(public readonly moduleService: ModuleService) {}
 }
 
 @NgModule({

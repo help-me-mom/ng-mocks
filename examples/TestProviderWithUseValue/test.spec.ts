@@ -1,4 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, it might have contained more logic,

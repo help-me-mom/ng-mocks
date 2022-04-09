@@ -6,6 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
@@ -50,7 +51,7 @@ describe('TestProviderInDirective', () => {
   it('has access to the service via a directive', () => {
     // Let's render a div with the directive. It provides a point
     // to access the service.
-    const fixture = MockRender(`<div target></div>`);
+    const fixture = MockRender('<div target></div>');
 
     // The root element is fixture.point and it has access to the
     // context of the directive. Its injector can extract the service.
@@ -63,7 +64,7 @@ describe('TestProviderInDirective', () => {
   it('has access to the service via a structural directive', () => {
     // Let's render a div with the directive. It provides a point to
     // access the service.
-    const fixture = MockRender(`<div *target></div>`);
+    const fixture = MockRender('<div *target></div>');
 
     // The root element is fixture.point and it has access to the
     // context of the directive. Its injector can extract the service.

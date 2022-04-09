@@ -1,10 +1,11 @@
 import { Component, Inject, NgModule, VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target',
-  template: ` "name:{{ name }}" `,
+  template: ' "name:{{ name }}" ',
 })
 class TargetComponent {
   public constructor(@Inject('name') public readonly name: string) {}
@@ -17,7 +18,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('root-provider-with-string-dep', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();

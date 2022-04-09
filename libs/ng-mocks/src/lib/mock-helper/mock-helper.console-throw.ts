@@ -1,5 +1,3 @@
-// tslint:disable no-console
-
 import coreDefineProperty from '../common/core.define-property';
 
 import mockHelperConsole from './mock-helper.console';

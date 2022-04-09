@@ -1,4 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -101,7 +102,6 @@ describe('ng-mocks-stub-member', () => {
       typeof jest === 'undefined'
         ? jasmine.createSpy().and.throwError('spy')
         : jest.fn(() => {
-            // tslint:disable-next-line no-string-throw
             throw 'spy';
           }),
       'set',

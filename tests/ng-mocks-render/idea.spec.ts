@@ -9,6 +9,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -22,7 +23,7 @@ class MockDirective {
 
 @Component({
   selector: 'component',
-  template: ` <ng-content></ng-content> `,
+  template: ' <ng-content></ng-content> ',
 })
 class MockComponent {
   @ContentChildren(MockDirective)

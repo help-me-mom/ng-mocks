@@ -12,7 +12,7 @@ import { BuilderData, NgMeta } from './types';
 export default (ngModule: NgMeta, { keepDef, mockDef }: BuilderData): void => {
   // Adding missed providers.
   const parameters = keepDef.has(NG_MOCKS_ROOT_PROVIDERS) ? new Set() : getRootProviderParameters(mockDef);
-  if (parameters.size) {
+  if (parameters.size > 0) {
     const parametersMap = new Map();
     for (const parameter of mapValues(parameters)) {
       const mock = helperResolveProvider(parameter, parametersMap);

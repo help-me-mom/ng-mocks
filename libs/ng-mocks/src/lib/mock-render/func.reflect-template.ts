@@ -50,7 +50,7 @@ export default (template: AnyType<any>): Directive => {
 
   const meta = { ...coreReflectDirectiveResolve(template) };
 
-  if (meta.selector && meta.selector.match(/[\[\],\s]/)) {
+  if (meta.selector && /[\s,[\]]/.test(meta.selector)) {
     meta.selector = '';
   }
 

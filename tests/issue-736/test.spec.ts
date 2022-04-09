@@ -1,10 +1,9 @@
-// tslint:disable strict-type-predicates
-
 import {
   Component,
   ComponentFactoryResolver,
   OnInit,
 } from '@angular/core';
+
 import { getMockedNgDefOf, MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({

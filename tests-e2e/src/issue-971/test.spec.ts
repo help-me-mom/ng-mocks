@@ -9,7 +9,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: `:{{ service.name }}:`,
+  template: ':{{ service.name }}:',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}

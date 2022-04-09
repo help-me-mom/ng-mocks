@@ -1,6 +1,7 @@
 import { InjectionToken, PipeTransform } from '@angular/core';
-import { IMockBuilderResult, MockBuilder } from 'ng-mocks';
 import { EMPTY, Observable } from 'rxjs';
+
+import { IMockBuilderResult, MockBuilder } from 'ng-mocks';
 
 class MyModule {
   public readonly name = 'MyModule';

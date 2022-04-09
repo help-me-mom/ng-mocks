@@ -1,8 +1,9 @@
-// tslint:disable no-console
+/* eslint-disable no-console */
 
 import { Component, NgModule, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({

@@ -1,11 +1,11 @@
 import {
+  HTTP_INTERCEPTORS,
   HttpClient,
   HttpClientModule,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import {
   HttpClientTestingModule,
@@ -13,8 +13,9 @@ import {
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 import { Observable } from 'rxjs';
+
+import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
 
 @Injectable()
 class Target1Interceptor implements HttpInterceptor {

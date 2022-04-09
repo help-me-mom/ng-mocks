@@ -5,11 +5,12 @@ import {
   NgModule,
   Output,
 } from '@angular/core';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'my',
-  template: ``,
+  template: '',
 })
 class MyComponent {
   @Input() public input1 = 0;

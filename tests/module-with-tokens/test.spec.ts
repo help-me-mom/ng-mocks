@@ -90,7 +90,7 @@ describe('module-with-tokens:mock-3', () => {
   });
 });
 
-//There is a sequential failure, real and keep should be after mock versions.
+// There is a sequential failure, real and keep should be after mock versions.
 
 // Because all tokens are provided in the module the test should render them correctly.
 describe('module-with-tokens:real', () => {

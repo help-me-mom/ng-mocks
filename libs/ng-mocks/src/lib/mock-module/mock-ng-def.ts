@@ -77,13 +77,11 @@ const resolveDefForExport = (
 
   // If we export a declaration, then we have to export its module too.
   const config = ngMocksUniverse.config.get(instance);
-  if (config?.export && ngModule) {
-    if (!moduleConfig.export) {
-      ngMocksUniverse.config.set(ngModule, {
-        ...moduleConfig,
-        export: true,
-      });
-    }
+  if (config?.export && ngModule && !moduleConfig.export) {
+    ngMocksUniverse.config.set(ngModule, {
+      ...moduleConfig,
+      export: true,
+    });
   }
 
   if (correctExports && !moduleConfig.exportAll && !config?.export) {

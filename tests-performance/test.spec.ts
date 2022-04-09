@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import {
   Component,
   Directive,
@@ -5,6 +7,7 @@ import {
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -38,13 +41,9 @@ describe('performance', () => {
 
   jasmine.getEnv().addReporter({
     jasmineDone: () => {
-      // tslint:disable-next-line no-console
-      console.log(`performance`);
-      // tslint:disable-next-line no-console
+      console.log('performance');
       console.log(`Time standard: ${timeStandard}`);
-      // tslint:disable-next-line no-console
       console.log(`Time faster: ${timeFaster}`);
-      // tslint:disable-next-line no-console
       console.log(
         `Ratio standard / faster: ${timeStandard / timeFaster}`,
       );

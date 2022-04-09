@@ -39,8 +39,8 @@ jobs:
           name: Lint commits
           command: npx commitlint --from=origin/master
       - run:
-          name: Lint tslint
-          command: npm run lint
+          name: Lint code style
+          command: npm run lint -- --ignore-pattern e2e/
       - run:
           name: Lint typescript
           command: npm run ts:check

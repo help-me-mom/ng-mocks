@@ -1,7 +1,6 @@
-// tslint:disable no-console
-
 import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockModule,

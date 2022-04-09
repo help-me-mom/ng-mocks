@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+
 import {
   MockBuilder,
   MockInstance,
   MockRender,
   ngMocks,
 } from 'ng-mocks';
-import { Observable, Subject } from 'rxjs';
 
 // A simple service, might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -21,7 +22,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: `{{ list | json }}`,
+  template: '{{ list | json }}',
 })
 class TargetComponent {
   public list: number[] = [];

@@ -1,38 +1,39 @@
 import { Component } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'component1',
   template: '',
 })
-export class ComponentDefault {}
+export class DefaultComponent {}
 
 @Component({
   providers: [
     {
       multi: true,
       provide: NG_VALUE_ACCESSOR,
-      useExisting: ComponentValueAccessor,
+      useExisting: ValueAccessorComponent,
     },
   ],
   selector: 'component2',
   template: '',
 })
-export class ComponentValueAccessor {}
+export class ValueAccessorComponent {}
 
 @Component({
   providers: [
     {
       multi: true,
       provide: NG_VALIDATORS,
-      useExisting: ComponentValidator,
+      useExisting: ValidatorComponent,
     },
   ],
   selector: 'component3',
   template: '',
 })
-export class ComponentValidator {}
+export class ValidatorComponent {}
 
 // @see https://github.com/ike18t/ng-mocks/issues/145
 describe('issue-145:components', () => {
@@ -40,22 +41,22 @@ describe('issue-145:components', () => {
 
   beforeAll(() =>
     MockBuilder()
-      .mock(ComponentDefault)
-      .mock(ComponentValueAccessor)
-      .mock(ComponentValidator),
+      .mock(DefaultComponent)
+      .mock(ValueAccessorComponent)
+      .mock(ValidatorComponent),
   );
 
   it('does not add NG_VALUE_ACCESSOR to components', () => {
-    const mock = MockRender(ComponentDefault);
+    const mock = MockRender(DefaultComponent);
     expect(() =>
-      ngMocks.get(mock.point, ComponentDefault),
+      ngMocks.get(mock.point, DefaultComponent),
     ).not.toThrow();
   });
 
   it('adds NG_VALUE_ACCESSOR to components that provide it', () => {
-    const mock = MockRender(ComponentValueAccessor);
+    const mock = MockRender(ValueAccessorComponent);
     expect(() =>
-      ngMocks.get(mock.point, ComponentValueAccessor),
+      ngMocks.get(mock.point, ValueAccessorComponent),
     ).not.toThrow();
     expect(() =>
       ngMocks.get(mock.point, NG_VALUE_ACCESSOR),
@@ -63,9 +64,9 @@ describe('issue-145:components', () => {
   });
 
   it('respects NG_VALIDATORS too', () => {
-    const mock = MockRender(ComponentValidator);
+    const mock = MockRender(ValidatorComponent);
     expect(() =>
-      ngMocks.get(mock.point, ComponentValidator),
+      ngMocks.get(mock.point, ValidatorComponent),
     ).not.toThrow();
     expect(() =>
       ngMocks.get(mock.point, NG_VALIDATORS),

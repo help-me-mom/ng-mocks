@@ -27,8 +27,8 @@ const guessClass = (name: string, proto: string, value: any): boolean => {
   }
 
   // let's consider a capital name and 'this' usage as a class
-  const clsCode = name.charCodeAt(0);
-  if (clsCode >= 65 && clsCode <= 90 && proto.match(/\bthis\./gm) !== null) {
+  const clsCode = name.codePointAt(0);
+  if (clsCode && clsCode >= 65 && clsCode <= 90 && proto.match(/\bthis\./gm) !== null) {
     return true;
   }
 
@@ -61,7 +61,7 @@ export default (value: any): boolean => {
     return false;
   }
 
-  const cls = proto.match(/^function\s+([^\(\s]+)\(/);
+  const cls = proto.match(/^function\s+([^\s(]+)\(/);
   if (cls === null) {
     return true;
   }

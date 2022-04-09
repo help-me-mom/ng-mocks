@@ -9,7 +9,7 @@ module.exports = {
       return [];
     }
 
-    commands.push(`prettier -u -w ${files.join(' ')}`);
+    commands.push(`eslint --fix ${files.join(' ')}`);
 
     return commands;
   },

@@ -1,16 +1,17 @@
 import { HttpBackend, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 import {
-  ComponentContentChild,
+  ContentChildComponent,
   KeepComponent,
   MockComponent,
+  My1Component,
+  My2Component,
+  My3Component,
   MyComponent,
-  MyComponent1,
-  MyComponent2,
-  MyComponent3,
 } from './spec.components.fixtures';
 import {
   KeepDirective,
@@ -51,7 +52,7 @@ import {
 describe('MockBuilder:deep', () => {
   beforeEach(async () => {
     const ngModule = MockBuilder(MyComponent, MyModule)
-      .mock(ComponentContentChild, {
+      .mock(ContentChildComponent, {
         render: {
           block: {
             $implicit: '-$implicit-',
@@ -130,7 +131,7 @@ describe('MockBuilder:deep', () => {
 
       // Even it belongs to the module that is marked as kept,
       // the component will be replaced with its mock copy.
-      .mock(MyComponent3)
+      .mock(My3Component)
 
       // and now we want to build our NgModule.
       .build();
@@ -138,10 +139,10 @@ describe('MockBuilder:deep', () => {
 
     // Extra configuration
     TestBed.overrideTemplate(
-      MyComponent1,
+      My1Component,
       'If we need to tune testBed',
     );
-    TestBed.overrideTemplate(MyComponent2, 'More callbacks');
+    TestBed.overrideTemplate(My2Component, 'More callbacks');
 
     return TestBed.compileComponents();
   });

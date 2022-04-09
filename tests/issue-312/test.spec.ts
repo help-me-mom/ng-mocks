@@ -2,23 +2,22 @@ import {
   Component,
   forwardRef,
   Inject,
-  Injectable as InjectableSource,
+  Injectable,
   NgModule,
   Optional,
   VERSION,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-// Because of A5 we need to cast Injectable to any type.
-// But because of A10+ we need to do it via a middle function.
-function Injectable(...args: any[]): any {
-  return InjectableSource(...args);
-}
+const injectableRootServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable(...injectableRootServiceArgs)
 class RootService {
   public readonly name = 'RootService';
 }
@@ -43,16 +42,20 @@ class ServiceModule {
   }
 }
 
-@Injectable({
-  providedIn: ServiceModule,
-})
+const injectableModuleServiceArgs = [
+  {
+    providedIn: ServiceModule,
+  } as never,
+];
+
+@Injectable(...injectableModuleServiceArgs)
 class ModuleService {
   public readonly name = 'ModuleService';
 }
 
 @Component({
   selector: 'target',
-  template: `target`,
+  template: 'target',
 })
 class TargetComponent {
   public constructor(
@@ -63,7 +66,7 @@ class TargetComponent {
     @Optional() public readonly provided: ProvidedService,
     @Optional()
     @Inject(forwardRef(() => ModuleService))
-    public readonly module: ModuleService,
+    public readonly moduleService: ModuleService,
   ) {}
 }
 
@@ -81,7 +84,7 @@ const assertion: any =
 // the idea is that all the services have been injected besides StandardService.
 // @see https://github.com/ike18t/ng-mocks/issues/312
 describe('issue-312', () => {
-  if (parseInt(VERSION.major, 10) <= 5) {
+  if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
       // pending('Need Angular > 5');
       expect(true).toBeTruthy();
@@ -107,8 +110,10 @@ describe('issue-312', () => {
         assertion.any(ProvidedService),
       );
       expect(component.provided.name).toEqual('ProvidedService');
-      expect(component.module).toEqual(assertion.any(ModuleService));
-      expect(component.module.name).toEqual('ModuleService');
+      expect(component.moduleService).toEqual(
+        assertion.any(ModuleService),
+      );
+      expect(component.moduleService.name).toEqual('ModuleService');
     });
   });
 
@@ -125,8 +130,10 @@ describe('issue-312', () => {
         assertion.any(ProvidedService),
       );
       expect(component.provided.name).toEqual('ProvidedService');
-      expect(component.module).toEqual(assertion.any(ModuleService));
-      expect(component.module.name).toEqual('ModuleService');
+      expect(component.moduleService).toEqual(
+        assertion.any(ModuleService),
+      );
+      expect(component.moduleService.name).toEqual('ModuleService');
     });
   });
 
@@ -143,8 +150,10 @@ describe('issue-312', () => {
         assertion.any(ProvidedService),
       );
       expect(component.provided.name).toBeUndefined();
-      expect(component.module).toEqual(assertion.any(ModuleService));
-      expect(component.module.name).toBeUndefined();
+      expect(component.moduleService).toEqual(
+        assertion.any(ModuleService),
+      );
+      expect(component.moduleService.name).toBeUndefined();
     });
   });
 });

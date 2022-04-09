@@ -1,12 +1,19 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, Injectable, NgModule, Pipe } from '@angular/core';
+import {
+  Component,
+  Injectable,
+  NgModule,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
 @Pipe({
   name: 'target',
 })
-class TargetPipe extends DatePipe {}
+class TargetPipe extends DatePipe implements PipeTransform {}
 
 @NgModule({
   declarations: [TargetPipe],
@@ -17,7 +24,7 @@ class TargetModule {}
 
 @Component({
   selector: 'target',
-  template: `{{ '2022-01-17' | target }}`,
+  template: "{{ '2022-01-17' | target }}",
 })
 class TargetComponent {}
 

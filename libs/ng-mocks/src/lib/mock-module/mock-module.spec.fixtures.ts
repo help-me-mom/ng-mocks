@@ -1,5 +1,3 @@
-// tslint:disable no-implicit-dependencies
-
 import { CommonModule } from '@angular/common';
 import { Component, Directive, ElementRef, Injectable, NgModule, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -11,7 +9,7 @@ export class ExampleDirective implements OnInit {
   public constructor(protected node: ElementRef) {}
 
   public ngOnInit(): void {
-    this.node.nativeElement.innerText = 'ExampleDirective';
+    this.node.nativeElement.textContent = 'ExampleDirective';
   }
 }
 
@@ -131,7 +129,7 @@ export class CustomService {
 }
 @Component({
   selector: 'custom-service',
-  template: `same imports`,
+  template: 'same imports',
 })
 export class CustomWithServiceComponent {
   public name: string;

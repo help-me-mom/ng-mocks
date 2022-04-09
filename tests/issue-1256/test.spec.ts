@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockInstance, MockProvider } from 'ng-mocks';
 
 const myToken = new InjectionToken('MY_TOKEN');

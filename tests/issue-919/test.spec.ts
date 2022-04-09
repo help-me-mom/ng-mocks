@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',

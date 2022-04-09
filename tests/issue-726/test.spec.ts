@@ -1,5 +1,6 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Injectable()
@@ -9,7 +10,7 @@ class TargetService {
 
 @Component({
   selector: 'target',
-  template: `{{ service.name }}`,
+  template: '{{ service.name }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
@@ -17,7 +18,7 @@ class TargetComponent {
 
 @Component({
   selector: 'view',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
   viewProviders: [TargetService],
 })
 class ViewComponent {}
@@ -25,7 +26,7 @@ class ViewComponent {}
 @Component({
   providers: [TargetService],
   selector: 'provider',
-  template: `<ng-content></ng-content>`,
+  template: '<ng-content></ng-content>',
 })
 class ProviderComponent {}
 
@@ -37,9 +38,9 @@ class TargetModule {}
 
 // @see https://github.com/ike18t/ng-mocks/issues/726
 describe('issue-726', () => {
-  const view = MockRenderFactory(`<view><target></target></view>`);
+  const view = MockRenderFactory('<view><target></target></view>');
   const provider = MockRenderFactory(
-    `<provider><target></target></provider>`,
+    '<provider><target></target></provider>',
   );
   const viewComponent = MockRenderFactory(ViewComponent);
 

@@ -6,6 +6,7 @@ import {
   QueryList,
   TemplateRef,
 } from '@angular/core';
+
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({

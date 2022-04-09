@@ -1,5 +1,6 @@
 import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
@@ -28,7 +29,7 @@ class ReplacementService {
 
 @Component({
   selector: 'target',
-  template: `{{ service.name }} {{ service.called ? 'called' : '' }}`,
+  template: "{{ service.name }} {{ service.called ? 'called' : '' }}",
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}

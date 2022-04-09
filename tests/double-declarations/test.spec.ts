@@ -1,18 +1,17 @@
-// tslint:disable cyclomatic-complexity
-
 import { EventEmitter } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import {
-  BaseCls,
-  BaseCls1,
-  BaseCls2,
-  BaseCls3,
-  DivCls,
-  OverrideCls,
-  OverrideCls1,
-  OverrideCls2,
-  OverrideCls3,
+  Base1Directive,
+  Base2Directive,
+  Base3Directive,
+  BaseDirective,
+  DivDirective,
+  Override1Directive,
+  Override2Directive,
+  Override3Directive,
+  OverrideComponent,
 } from './fixtures';
 
 describe('double-declarations', () => {
@@ -21,25 +20,25 @@ describe('double-declarations', () => {
       'real',
       [
         [
-          BaseCls,
-          BaseCls1,
-          BaseCls2,
-          BaseCls3,
-          OverrideCls1,
-          OverrideCls2,
-          OverrideCls3,
+          BaseDirective,
+          Base1Directive,
+          Base2Directive,
+          Base3Directive,
+          Override1Directive,
+          Override2Directive,
+          Override3Directive,
         ],
       ],
       [
         [
-          OverrideCls,
-          DivCls,
-          BaseCls1,
-          BaseCls2,
-          BaseCls3,
-          OverrideCls1,
-          OverrideCls2,
-          OverrideCls3,
+          OverrideComponent,
+          DivDirective,
+          Base1Directive,
+          Base2Directive,
+          Base3Directive,
+          Override1Directive,
+          Override2Directive,
+          Override3Directive,
         ],
       ],
     ],
@@ -47,26 +46,26 @@ describe('double-declarations', () => {
       'mock',
       [
         [
-          BaseCls1,
-          BaseCls2,
-          BaseCls3,
-          OverrideCls1,
-          OverrideCls2,
-          OverrideCls3,
+          Base1Directive,
+          Base2Directive,
+          Base3Directive,
+          Override1Directive,
+          Override2Directive,
+          Override3Directive,
         ],
-        BaseCls,
+        BaseDirective,
       ],
       [
         [
-          DivCls,
-          BaseCls1,
-          BaseCls2,
-          BaseCls3,
-          OverrideCls1,
-          OverrideCls2,
-          OverrideCls3,
+          DivDirective,
+          Base1Directive,
+          Base2Directive,
+          Base3Directive,
+          Override1Directive,
+          Override2Directive,
+          Override3Directive,
         ],
-        OverrideCls,
+        OverrideComponent,
       ],
     ],
   ];
@@ -79,47 +78,62 @@ describe('double-declarations', () => {
         );
 
         it('renders base1', () => {
-          MockRender(`<base1>test</base1>`);
-          const instance = ngMocks.findInstance(BaseCls, undefined);
+          MockRender('<base1>test</base1>');
+          const instance = ngMocks.findInstance(
+            BaseDirective,
+            undefined,
+          );
           expect(instance).toBeDefined();
         });
 
         it('fails on base2', () => {
-          MockRender(`<base2>test</base2>`);
-          const instance = ngMocks.findInstance(BaseCls, undefined);
+          MockRender('<base2>test</base2>');
+          const instance = ngMocks.findInstance(
+            BaseDirective,
+            undefined,
+          );
           expect(instance).not.toBeDefined();
         });
 
         it('fails on base3', () => {
-          MockRender(`<base3>test</base3>`);
-          const instance = ngMocks.findInstance(BaseCls, undefined);
+          MockRender('<base3>test</base3>');
+          const instance = ngMocks.findInstance(
+            BaseDirective,
+            undefined,
+          );
           expect(instance).not.toBeDefined();
         });
 
         it('uses mix1 as an input', () => {
-          MockRender(`<base1 [mix1]="'mix1'"></base1>`);
-          const instance = ngMocks.findInstance(BaseCls);
+          MockRender('<base1 [mix1]="\'mix1\'"></base1>');
+          const instance = ngMocks.findInstance(BaseDirective);
           expect(instance.mix1).toEqual('mix1');
         });
 
         it('uses mix1 as an output', () => {
           const data = { value: '' };
-          MockRender(`<base1 (mix1)="value = 'mix1'"></base1>`, data);
-          const instance = ngMocks.findInstance(BaseCls);
+          MockRender(
+            '<base1 (mix1)="value = \'mix1\'"></base1>',
+            data,
+          );
+          const instance = ngMocks.findInstance(BaseDirective);
           (instance.mix1 as EventEmitter<void>).emit();
           expect(data.value).toEqual('mix1');
         });
 
         it('uses mix2 as an input', () => {
-          MockRender(`<base1 [mix2]="'mix2'"></base1>`);
-          const instance = ngMocks.findInstance(BaseCls);
+          MockRender('<base1 [mix2]="\'mix2\'"></base1>');
+          const instance = ngMocks.findInstance(BaseDirective);
           expect(instance.mix2).toEqual('mix2');
         });
 
         it('uses mix2 as an output', () => {
           const data = { value: '' };
-          MockRender(`<base1 (mix2)="value = 'mix2'"></base1>`, data);
-          const instance = ngMocks.findInstance(BaseCls);
+          MockRender(
+            '<base1 (mix2)="value = \'mix2\'"></base1>',
+            data,
+          );
+          const instance = ngMocks.findInstance(BaseDirective);
           (instance.mix2 as EventEmitter<void>).emit();
           expect(data.value).toEqual('mix2');
         });
@@ -131,8 +145,8 @@ describe('double-declarations', () => {
         );
 
         it('renders override1', () => {
-          const fixture = MockRender(`<override1>test</override1>`);
-          const instance = ngMocks.findInstance(OverrideCls);
+          const fixture = MockRender('<override1>test</override1>');
+          const instance = ngMocks.findInstance(OverrideComponent);
           expect(instance).toBeDefined();
           ngMocks.stub(instance, {
             hostBase1: 'base1',
@@ -158,9 +172,9 @@ describe('double-declarations', () => {
         });
 
         it('fails on override2', () => {
-          const fixture = MockRender(`<override2>test</override2>`);
+          const fixture = MockRender('<override2>test</override2>');
           const instance = ngMocks.findInstance(
-            OverrideCls,
+            OverrideComponent,
             undefined,
           );
           expect(instance).not.toBeDefined();
@@ -172,9 +186,9 @@ describe('double-declarations', () => {
         });
 
         it('fails on override3', () => {
-          const fixture = MockRender(`<override3>test</override3>`);
+          const fixture = MockRender('<override3>test</override3>');
           const instance = ngMocks.findInstance(
-            OverrideCls,
+            OverrideComponent,
             undefined,
           );
           expect(instance).not.toBeDefined();
@@ -186,14 +200,20 @@ describe('double-declarations', () => {
         });
 
         it('fails on base1', () => {
-          MockRender(`<base1>test</base1>`);
-          const instance = ngMocks.findInstance(BaseCls, undefined);
+          MockRender('<base1>test</base1>');
+          const instance = ngMocks.findInstance(
+            BaseDirective,
+            undefined,
+          );
           expect(instance).not.toBeDefined();
         });
 
         it('fails on base2', () => {
-          MockRender(`<base2>test</base2>`);
-          const instance = ngMocks.findInstance(BaseCls, undefined);
+          MockRender('<base2>test</base2>');
+          const instance = ngMocks.findInstance(
+            BaseDirective,
+            undefined,
+          );
           expect(instance).not.toBeDefined();
         });
 
@@ -210,7 +230,7 @@ describe('double-declarations', () => {
                 [propOverride1]="'propOverride1'"
               ></override1>`,
             );
-            const instance = ngMocks.findInstance(OverrideCls);
+            const instance = ngMocks.findInstance(OverrideComponent);
             expect(instance.prop1).toEqual('prop1');
             expect(instance.prop2).toEqual('override2alias');
             expect(instance.prop3).toEqual('override3alias');
@@ -229,7 +249,7 @@ describe('double-declarations', () => {
         ></override1>`,
             data,
           );
-          const instance = ngMocks.findInstance(OverrideCls);
+          const instance = ngMocks.findInstance(OverrideComponent);
           (instance.prop1 as EventEmitter<void>).emit();
           expect(data.value).toEqual('prop1');
           instance.propBase2.emit();
@@ -239,9 +259,9 @@ describe('double-declarations', () => {
         });
 
         it('respects host listeners', () => {
-          MockRender(`<override1></override1>`);
-          const instanceEl = ngMocks.find(OverrideCls);
-          const instance = ngMocks.get(instanceEl, OverrideCls);
+          MockRender('<override1></override1>');
+          const instanceEl = ngMocks.find(OverrideComponent);
+          const instance = ngMocks.get(instanceEl, OverrideComponent);
 
           let triggers = 0;
           ngMocks.stubMember(instance, 'hostBaseHandler3', () => {
@@ -257,10 +277,10 @@ describe('double-declarations', () => {
 
         it('respects content injections', () => {
           const fixture = MockRender(
-            `<override1><div [prop]="value"></div></override1>`,
+            '<override1><div [prop]="value"></div></override1>',
             { value: 1 },
           );
-          const instance = ngMocks.findInstance(OverrideCls);
+          const instance = ngMocks.findInstance(OverrideComponent);
 
           expect(
             instance.contentChildBase &&
@@ -271,8 +291,9 @@ describe('double-declarations', () => {
               instance.contentChildrenBase.first.prop,
           ).toEqual(1);
           expect(
-            instance.contentChildrenBase &&
-              instance.contentChildrenBase.length,
+            instance.contentChildrenBase
+              ? instance.contentChildrenBase.length
+              : 0,
           ).toEqual(1);
 
           expect(
@@ -284,8 +305,9 @@ describe('double-declarations', () => {
               instance.contentChildrenOverride.first.prop,
           ).toEqual(1);
           expect(
-            instance.contentChildrenOverride &&
-              instance.contentChildrenOverride.length,
+            instance.contentChildrenOverride
+              ? instance.contentChildrenOverride.length
+              : 0,
           ).toEqual(1);
 
           fixture.componentInstance.value = 2;
@@ -300,8 +322,9 @@ describe('double-declarations', () => {
               instance.contentChildrenBase.first.prop,
           ).toEqual(2);
           expect(
-            instance.contentChildrenBase &&
-              instance.contentChildrenBase.length,
+            instance.contentChildrenBase
+              ? instance.contentChildrenBase.length
+              : 0,
           ).toEqual(1);
 
           expect(
@@ -313,8 +336,9 @@ describe('double-declarations', () => {
               instance.contentChildrenOverride.first.prop,
           ).toEqual(2);
           expect(
-            instance.contentChildrenOverride &&
-              instance.contentChildrenOverride.length,
+            instance.contentChildrenOverride
+              ? instance.contentChildrenOverride.length
+              : 0,
           ).toEqual(1);
         });
       });

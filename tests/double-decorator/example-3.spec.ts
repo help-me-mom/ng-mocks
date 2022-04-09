@@ -1,10 +1,11 @@
 import {
   Component,
-  Directive as DirectiveSource,
+  Directive,
   Injectable,
   NgModule,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockInstance,
@@ -13,13 +14,7 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-// Because of A5 we need to cast Directive to any type
-// To let it accept 0 parameters.
-function Directive(...args: any[]): any {
-  return (DirectiveSource as any)(...args);
-}
-
-@Directive()
+@Directive(undefined as any)
 @Injectable()
 class BaseClass {
   public name = 'directive';
@@ -39,6 +34,10 @@ class MyComponent {
 })
 class ModuleWithComponent {}
 
+const myProviderMock = () => ({
+  name: 'mock',
+});
+
 describe('double-decorator:example-3', () => {
   describe('default', () => {
     beforeEach(() =>
@@ -56,10 +55,6 @@ describe('double-decorator:example-3', () => {
 
   // MockInstance should customize BaseClass with double decoration.
   describe('hot-fix', () => {
-    const myProviderMock = () => ({
-      name: 'mock',
-    });
-
     beforeAll(() =>
       MockInstance(BaseClass, instance =>
         ngMocks.stub(instance, myProviderMock()),
@@ -82,10 +77,6 @@ describe('double-decorator:example-3', () => {
 
   // .mock should customize BaseClass with double decoration.
   describe('the-issue', () => {
-    const myProviderMock = () => ({
-      name: 'mock',
-    });
-
     beforeEach(() =>
       MockBuilder(MyComponent, ModuleWithComponent).mock(
         BaseClass,

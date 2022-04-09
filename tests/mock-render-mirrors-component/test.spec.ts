@@ -7,6 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
+import { first } from 'rxjs/operators';
+
 import {
   DefaultRenderComponent,
   MockBuilder,
@@ -14,7 +16,6 @@ import {
   MockRender,
   ngMocks,
 } from 'ng-mocks';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'target',

@@ -287,6 +287,7 @@ describe('collect-declarations', () => {
 
   it('skips declaration duplicates', () => {
     @Component({
+      // eslint-disable-next-line @angular-eslint/no-outputs-metadata-property
       outputs: ['output'],
       selector: 'target',
       template: 'target',

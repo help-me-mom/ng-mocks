@@ -1,5 +1,3 @@
-// tslint:disable arrow-return-shorthand  strict-type-predicates
-
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -14,6 +12,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({

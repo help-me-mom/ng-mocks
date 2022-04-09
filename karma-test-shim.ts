@@ -1,5 +1,4 @@
-// tslint:disable no-import-side-effect ordered-imports
-Error.stackTraceLimit = Infinity;
+Error.stackTraceLimit = Number.POSITIVE_INFINITY;
 
 import 'core-js/proposals/reflect-metadata';
 
@@ -23,6 +22,7 @@ import 'zone.js/testing';
 
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+
 import { ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jasmine');
