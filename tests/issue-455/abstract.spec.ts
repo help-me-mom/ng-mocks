@@ -22,14 +22,13 @@ const injectableArgs = [
   {
     providedIn: 'root',
     useFactory: () => {
-      const function_: InjectedAbstraction = (typeof jest ===
-      'undefined'
+      const fn: InjectedAbstraction = (typeof jest === 'undefined'
         ? jasmine.createSpy()
         : jest.fn()) as any as InjectedAbstraction;
-      function_.hello =
+      fn.hello =
         typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
-      return function_;
+      return fn;
     },
   } as never,
 ];
