@@ -1,3 +1,10 @@
+## [13.4.1](https://github.com/ike18t/ng-mocks/compare/v13.4.0...v13.4.1) (2022-04-10)
+
+
+### Bug Fixes
+
+* **core:** exporting types in package.json [#2198](https://github.com/ike18t/ng-mocks/issues/2198) ([63d0516](https://github.com/ike18t/ng-mocks/commit/63d05164a817b497fc00e000b8ac80924f3c8d61))
+
 # [13.4.0](https://github.com/ike18t/ng-mocks/compare/v13.3.0...v13.4.0) (2022-04-03)
 
 
