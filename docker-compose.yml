@@ -26,7 +26,7 @@ services:
       - --force
 
   a5es5:
-    image: satantime/puppeteer-node:6.17.1
+    image: satantime/puppeteer-node:9.11.2
     working_dir: /app
     volumes:
       - ./e2e/a5es5:/app
@@ -38,7 +38,7 @@ services:
       - --force
 
   a5es2015:
-    image: satantime/puppeteer-node:6.17.1
+    image: satantime/puppeteer-node:9.11.2
     working_dir: /app
     volumes:
       - ./e2e/a5es2015:/app
@@ -50,7 +50,7 @@ services:
       - --force
 
   a6:
-    image: satantime/puppeteer-node:8.17.0
+    image: satantime/puppeteer-node:9.11.2
     working_dir: /app
     volumes:
       - ./e2e/a6:/app
@@ -62,7 +62,7 @@ services:
       - --force
 
   a7:
-    image: satantime/puppeteer-node:8.17.0
+    image: satantime/puppeteer-node:9.11.2
     working_dir: /app
     volumes:
       - ./e2e/a7:/app
