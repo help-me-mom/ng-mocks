@@ -139,6 +139,10 @@ export interface MockConfig {
   __ngMocksConfig: ngMocksMockConfig;
 }
 
+/**
+ * Mock class is the base class for each mock.
+ * Usually, it should not be used directly.
+ */
 export class Mock {
   protected __ngMocksConfig!: ngMocksMockConfig;
 

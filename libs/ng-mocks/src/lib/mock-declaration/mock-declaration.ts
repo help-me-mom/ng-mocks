@@ -9,10 +9,44 @@ import { MockedDirective } from '../mock-directive/types';
 import { MockPipe } from '../mock-pipe/mock-pipe';
 import { MockedPipe } from '../mock-pipe/types';
 
+/**
+ * MockDeclarations creates an array of mock declaration classes out of declarations passed as parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockComponent
+ * @see https://ng-mocks.sudo.eu/api/MockDirective
+ * @see https://ng-mocks.sudo.eu/api/MockPipe
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: MockDeclarations(
+ *     Dep1Component,
+ *     Dep2Directive,
+ *     Dep3Pipe,
+ *   ),
+ * });
+ * ```
+ */
 export function MockDeclarations(...declarations: Array<Type<any>>): Array<Type<any>> {
   return declarations.map(MockDeclaration);
 }
 
+/**
+ * MockDeclaration creates a mock declaration class out of an arbitrary declaration.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockComponent
+ * @see https://ng-mocks.sudo.eu/api/MockDirective
+ * @see https://ng-mocks.sudo.eu/api/MockPipe
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: [
+ *     MockDeclaration(Dep1Component),
+ *     MockDeclaration(Dep2Directive),
+ *     MockDeclaration(Dep3Pipe),
+ *   ],
+ * });
+ * ```
+ */
 export function MockDeclaration<T>(declaration: Type<T>): Type<MockedPipe<T> | MockedDirective<T> | MockedComponent<T>>;
 
 export function MockDeclaration<T>(

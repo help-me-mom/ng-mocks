@@ -175,12 +175,34 @@ const generateReturn = (
     : mockModule;
 
 /**
+ * MockModule creates a mock module class out of an arbitrary module.
+ * All declarations, imports, exports and providers will be mocked too.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockModule
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   imports: [
+ *     MockModule(SharedModule),
+ *   ],
+ * });
+ * ```
  */
 export function MockModule<T>(ngModule: Type<T>): Type<T>;
 
 /**
+ * MockModule creates a mock module class with mock provides out of an arbitrary module with providers.
+ * All declarations, imports, exports and providers will be mocked too.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockModule
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   imports: [
+ *     MockModule(StoreModule.forRoot()),
+ *   ],
+ * });
+ * ```
  */
 export function MockModule<T>(ngModule: NgModuleWithProviders<T>): NgModuleWithProviders<T>;
 

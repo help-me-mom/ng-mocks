@@ -81,9 +81,10 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple service simulating a data request.
 @Injectable()

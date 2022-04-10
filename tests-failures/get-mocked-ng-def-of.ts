@@ -1,4 +1,5 @@
-import { getMockedNgDefOf, Type } from 'ng-mocks';
+import { getMockedNgDefOf } from 'ng-mocks';
+import { Type } from '@angular/core';
 
 declare class Expected {
   public name: string;
@@ -9,4 +10,7 @@ declare class Actual {
 }
 
 // @ts-expect-error: string is not boolean
-const result: Type<Actual> = getMockedNgDefOf(Expected);
+const result1: Type<Actual> = getMockedNgDefOf(Expected);
+
+// boolean is boolean
+const result2: Type<Expected> = getMockedNgDefOf(Expected);

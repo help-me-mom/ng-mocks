@@ -9,16 +9,28 @@ import { Type } from './core.types';
 import { isNgDef } from './func.is-ng-def';
 
 /**
- * Checks whether the declaration is a mock one and derives from the specified module.
+ * Checks whether a declaration is the mock class of a module.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
+ *
+ * ```ts
+ * isMockedNgDefOf(MockModule, RealModule, 'm'); // returns true
+ * isMockedNgDefOf(MockModule, ArbitraryModule, 'm'); // returns false
+ * isMockedNgDefOf(MockModule, ArbitraryClass, 'm'); // returns false
+ * ```
  */
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType: 'm'): declaration is Type<MockedModule<T>>;
 
 /**
- * Checks whether the declaration is a mock one and derives from the specified component.
+ * Checks whether a declaration is the mock class of a component.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
+ *
+ * ```ts
+ * isMockedNgDefOf(MockComponent, RealComponent, 'c'); // returns true
+ * isMockedNgDefOf(MockComponent, ArbitraryComponent, 'c'); // returns false
+ * isMockedNgDefOf(MockComponent, ArbitraryClass, 'c'); // returns false
+ * ```
  */
 export function isMockedNgDefOf<T>(
   declaration: any,
@@ -27,9 +39,15 @@ export function isMockedNgDefOf<T>(
 ): declaration is Type<MockedComponent<T>>;
 
 /**
- * Checks whether the declaration is a mock one and derives from the specified directive.
+ * Checks whether a declaration is the mock class of a directive.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
+ *
+ * ```ts
+ * isMockedNgDefOf(MockDirective, RealDirective, 'd'); // returns true
+ * isMockedNgDefOf(MockDirective, ArbitraryDirective, 'd'); // returns false
+ * isMockedNgDefOf(MockDirective, ArbitraryClass, 'd'); // returns false
+ * ```
  */
 export function isMockedNgDefOf<T>(
   declaration: any,
@@ -38,9 +56,15 @@ export function isMockedNgDefOf<T>(
 ): declaration is Type<MockedDirective<T>>;
 
 /**
- * Checks whether the declaration is a mock one and derives from the specified pipe.
+ * Checks whether a declaration is the mock class of a pipe.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
+ *
+ * ```ts
+ * isMockedNgDefOf(MockPipe, RealPipe, 'p'); // returns true
+ * isMockedNgDefOf(MockPipe, ArbitraryPipe, 'p'); // returns false
+ * isMockedNgDefOf(MockPipe, ArbitraryClass, 'p'); // returns false
+ * ```
  */
 export function isMockedNgDefOf<T extends PipeTransform>(
   declaration: any,
@@ -49,9 +73,15 @@ export function isMockedNgDefOf<T extends PipeTransform>(
 ): declaration is Type<MockedPipe<T>>;
 
 /**
- * Checks whether the declaration is a mock one and derives from the specified type.
+ * Checks whether a declaration is the mock class of a thing.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockedNgDefOf
+ *
+ * ```ts
+ * isMockedNgDefOf(MockPipe, RealPipe); // returns true
+ * isMockedNgDefOf(MockComponent, ArbitraryComponent); // returns false
+ * isMockedNgDefOf(MockPipe, ArbitraryClass); // returns false
+ * ```
  */
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>): declaration is Type<T>;
 

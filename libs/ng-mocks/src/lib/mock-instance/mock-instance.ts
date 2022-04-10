@@ -82,32 +82,15 @@ const mockInstanceConfig = <T>(
   return stub;
 };
 
-export interface MockInstance {
-  /**
-   * Creates a bucket which remembers all future changes.
-   *
-   * @see https://ng-mocks.sudo.eu/api/MockInstance#remember
-   */
-  remember(): void;
-
-  /**
-   * Resets all changes for current bucket.
-   *
-   * @see https://ng-mocks.sudo.eu/api/MockInstance#restore
-   */
-  restore(): void;
-
-  /**
-   * Creates a local scope in `beforeAll` and `afterAll`.
-   * If `each` has been passed, then `beforeEach` and `afterEach` are used.
-   *
-   * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
-   */
-  scope(scope?: 'all'): void;
-}
-
 /**
+ * This signature of MockInstance lets customize the getter of a property.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(ArbitraryComponent, 'currentUser$', () => mockUser$, 'get');
+ * MockInstance(ArbitraryService, 'enabled', () => false, 'get');
+ * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends () => T[K]>(
   instance: Type<T> | AbstractType<T>,
@@ -117,7 +100,17 @@ export function MockInstance<T extends object, K extends keyof T, S extends () =
 ): S;
 
 /**
+ * This signature of MockInstance lets customize the setters of a property.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * const currentUserSetterSpy = jasmine.createSpy();
+ * MockInstance(ArbitraryComponent, 'currentUser', currentUserSetterSpy, 'set');
+ *
+ * let relServiceEnabled: boolean;
+ * MockInstance(ArbitraryService, 'enabled', value => relServiceEnabled = value, 'set');
+ * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
   instance: Type<T> | AbstractType<T>,
@@ -127,7 +120,16 @@ export function MockInstance<T extends object, K extends keyof T, S extends (val
 ): S;
 
 /**
+ * This signature of MockInstance lets customize the properties and methods.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(ArbitraryComponent, 'onInit', onInitSpy);
+ * MockInstance(ArbitraryDirective, 'onDestroy', () => {});
+ * MockInstance(ArbitraryService, 'currentDate', new Date());
+ * MockInstance(ArbitraryModule, 'currentUser', mockUser);
+ * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends T[K]>(
   instance: Type<T> | AbstractType<T>,
@@ -136,7 +138,13 @@ export function MockInstance<T extends object, K extends keyof T, S extends T[K]
 ): S;
 
 /**
+ * This signature of MockInstance lets customize tokens with a callback.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(webSocketToken, () => mockWebSocket);
+ * ```
  */
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
@@ -144,7 +152,16 @@ export function MockInstance<T>(
 ): void;
 
 /**
+ * This signature of MockInstance lets customize tokens with a callback.
+ *
+ * @deprecated please pass the callback directly instead of config.
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(webSocketToken, {
+ *   init: () => mockWebSocket,
+ * });
+ * ```
  */
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
@@ -154,7 +171,22 @@ export function MockInstance<T>(
 ): void;
 
 /**
+ * This signature of MockInstance lets customize the instances of mock classes with a callback.
+ * You can return a shape or change the instance.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(ArbitraryComponent, (instance, injector) => {
+ *   instance.enabled = true;
+ *   instance.db = injector.get(DatabaseService);
+ * });
+ * MockInstance(ArbitraryDirective, () => {
+ *   return {
+ *     someProperty: true,
+ *   };
+ * });
+ * ```
  */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
@@ -162,7 +194,27 @@ export function MockInstance<T>(
 ): void;
 
 /**
+ * This signature of MockInstance lets customize the instances of mock classes with a callback.
+ * You can return a shape or change the instance.
+ *
+ * @deprecated please pass the callback directly instead of config.
  * @see https://ng-mocks.sudo.eu/api/MockInstance
+ *
+ * ```ts
+ * MockInstance(ArbitraryComponent, {
+ *   init: (instance, injector) => {
+ *     instance.enabled = true;
+ *     instance.db = injector.get(DatabaseService);
+ *   },
+ * });
+ * MockInstance(ArbitraryDirective, {
+ *   init: () => {
+ *     return {
+ *       someProperty: true,
+ *     };
+ *   },
+ * });
+ * ```
  */
 export function MockInstance<T>(
   declaration: Type<T> | AbstractType<T>,
@@ -196,29 +248,57 @@ export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | Injecti
 }
 
 /**
- * @see https://ng-mocks.sudo.eu/api/MockInstance#remember
+ * Interface describes how to configure scopes for MockInstance.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockInstance#customization-scopes
  */
-MockInstance.remember = () => ngMocksStack.stackPush();
+// istanbul ignore next: issue in istanbul https://github.com/istanbuljs/nyc/issues/1209
+export namespace MockInstance {
+  /**
+   * Creates a scope which remembers all future customizations of MockInstance.
+   * It allows to reset them afterwards.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#remember
+   */
+  export function remember() {
+    ngMocksStack.stackPush();
+  }
+
+  /**
+   * Resets all changes in the current scope.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#restore
+   */
+  export function restore() {
+    ngMocksStack.stackPop();
+  }
+
+  /**
+   * Creates a local scope in `beforeEach` and `afterEach`.
+   * If `suite` has been passed, then `beforeAll` and `afterAll` are used.
+   *
+   * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
+   */
+  export function scope(scope: 'all' | 'suite' | 'case' = 'case') {
+    if (scope === 'all' || scope === 'suite') {
+      beforeAll(MockInstance.remember);
+      afterAll(MockInstance.restore);
+    }
+    if (scope === 'all' || scope === 'case') {
+      beforeEach(MockInstance.remember);
+      afterEach(MockInstance.restore);
+    }
+  }
+}
 
 /**
- * @see https://ng-mocks.sudo.eu/api/MockInstance#restore
+ * MockReset resets everything what has been configured in MockInstance.
+ * Please consider using MockInstance.scope() instead,
+ * which respects customizations between tests.
+ *
+ * https://ng-mocks.sudo.eu/api/MockInstance#resetting-customization
+ * https://ng-mocks.sudo.eu/api/MockInstance#scope
  */
-MockInstance.restore = () => ngMocksStack.stackPop();
-
-/**
- * @see https://ng-mocks.sudo.eu/api/MockInstance#scope
- */
-MockInstance.scope = (scope: 'all' | 'suite' | 'case' = 'case') => {
-  if (scope === 'all' || scope === 'suite') {
-    beforeAll(MockInstance.remember);
-    afterAll(MockInstance.restore);
-  }
-  if (scope === 'all' || scope === 'case') {
-    beforeEach(MockInstance.remember);
-    afterEach(MockInstance.restore);
-  }
-};
-
 export function MockReset() {
   ngMocksUniverse.configInstance.clear();
 }

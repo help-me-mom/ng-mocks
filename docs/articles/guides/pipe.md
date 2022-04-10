@@ -32,6 +32,7 @@ expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestPipe/test.spec.ts"
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple pipe that accepts an array of strings, sorts them,
@@ -60,7 +61,7 @@ describe('TestPipe', () => {
   beforeEach(() => MockBuilder(TargetPipe));
 
   it('sorts strings', () => {
-    const fixture = MockRender(`{{ values | target}}`, {
+    const fixture = MockRender('{{ values | target}}', {
       values: ['1', '3', '2'],
     });
 
@@ -68,7 +69,7 @@ describe('TestPipe', () => {
   });
 
   it('reverses strings on param', () => {
-    const fixture = MockRender(`{{ values | target:flag}}`, {
+    const fixture = MockRender('{{ values | target:flag}}', {
       flag: false,
       values: ['1', '3', '2'],
     });

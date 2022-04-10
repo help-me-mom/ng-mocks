@@ -59,6 +59,7 @@ Their tests are quite similar.
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProvider/test.spec.ts"
 import { Injectable } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
@@ -91,6 +92,7 @@ describe('TestProviderCommon', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithDependencies/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,
@@ -179,6 +181,7 @@ describe('TestProviderWithDependencies', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseClass/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,
@@ -253,7 +256,7 @@ describe('TestProviderWithUseClass', () => {
   it('respects all dependencies', () => {
     const service = MockRender<
       Target1Service & Partial<Target2Service>
-    >(Target1Service).point.componentInstance;
+      >(Target1Service).point.componentInstance;
 
     // Let's assert that service has a flag from Target2Service.
     expect(service.flag).toBeTruthy();
@@ -279,6 +282,7 @@ describe('TestProviderWithUseClass', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseValue/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 // A simple service, it might have contained more logic,
@@ -329,6 +333,7 @@ describe('TestProviderWithUseValue', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseExisting/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,
@@ -390,7 +395,7 @@ describe('TestProviderWithUseExisting', () => {
   it('creates TargetService', () => {
     const service = MockRender<
       TargetService & Partial<{ name: string }>
-    >(TargetService).point.componentInstance;
+      >(TargetService).point.componentInstance;
 
     // Because Service2 has been replaced with a mock copy,
     // we are getting here a mock copy of Service2 instead of Service1.
@@ -409,6 +414,7 @@ describe('TestProviderWithUseExisting', () => {
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderWithUseFactory/test.spec.ts"
 import { Injectable, NgModule } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,

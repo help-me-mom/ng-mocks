@@ -149,7 +149,7 @@ describe('MockDirective:Attribute', () => {
 
     // Again, let's pretend DependencyDirective has an output called
     // 'someOutput'. TestedComponent listens on the output via
-    // `(someOutput)="trigger($event)"`.
+    // `(someOutput)="trigger()"`.
     // Let's install a spy and trigger the output.
     ngMocks.stubMember(
       component,
@@ -184,15 +184,18 @@ describe('MockDirective:Structural', () => {
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyDirective, {
-      // render: true, // <-- a flag to render the directive by default
-    });
+    return MockBuilder(TargetComponent, TargetModule).mock(
+      DependencyDirective,
+      {
+        // render: true, // <-- a flag to render the directive by default
+      },
+    );
   });
 
   it('renders content of the child structural directive', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(TargetComponent);
 
-    // Let's assert that nothing has been rendered inside of
+    // Let's assert that nothing has been rendered inside
     // the structural directive by default.
     expect(fixture.nativeElement.innerHTML).not.toContain('>content<');
 

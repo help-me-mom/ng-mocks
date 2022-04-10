@@ -13,6 +13,11 @@ import { isNgDef } from './func.is-ng-def';
  * Checks whether the instance derives from a mock module.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(moduleInstance, RealModule, 'm'); // returns true
+ * isMockOf(moduleInstance, ArbitraryClass, 'm'); // returns false
+ * ```
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'm'): instance is MockedModule<T>;
 
@@ -20,6 +25,11 @@ export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'm'): i
  * Checks whether the instance derives from a mock component.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(componentInstance, RealComponent, 'c'); // returns true
+ * isMockOf(componentInstance, ArbitraryClass, 'c'); // returns false
+ * ```
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'c'): instance is MockedComponent<T>;
 
@@ -27,6 +37,11 @@ export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'c'): i
  * Checks whether the instance derives from a mock directive.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(directiveInstance, RealDirective, 'd'); // returns true
+ * isMockOf(directiveInstance, ArbitraryClass, 'd'); // returns false
+ * ```
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'd'): instance is MockedDirective<T>;
 
@@ -34,6 +49,11 @@ export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'd'): i
  * Checks whether the instance derives from a mock pipe.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(pipeInstance, RealPipe, 'p'); // returns true
+ * isMockOf(pipeInstance, ArbitraryClass, 'p'); // returns false
+ * ```
  */
 export function isMockOf<T extends PipeTransform>(
   instance: any,
@@ -45,6 +65,12 @@ export function isMockOf<T extends PipeTransform>(
  * Checks whether the instance derives from a mock type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(componentInstance, RealComponent); // returns true
+ * isMockOf(pipeInstance, RealPipe); // returns true
+ * isMockOf(pipeInstance, ArbitraryClass); // returns false
+ * ```
  */
 export function isMockOf<T>(instance: any, declaration: Type<T>): instance is T;
 

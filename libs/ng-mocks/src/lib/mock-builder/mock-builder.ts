@@ -10,6 +10,9 @@ import { IMockBuilder } from './types';
 export type MockBuilderParam = string | AnyType<any> | InjectionToken<any> | NgModuleWithProviders;
 
 /**
+ * MockBuilder provides reach and simple interfaces of chain functions
+ * to build desired mock environment for tests.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockBuilder
  */
 export function MockBuilder(

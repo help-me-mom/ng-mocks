@@ -30,37 +30,72 @@ const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
 };
 
 /**
- * Returns a def of a mock module based on a mock module or a source module.
+ * Returns the mock class of a mock module based on a mock module or a source module.
+ * It works in runtime if the module has been mocked.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
+ *
+ * ```ts
+ * getMockedNgDefOf(RealModule, 'm'); // returns MockModule
+ * getMockedNgDefOf(MockModule, 'm'); // returns MockModule
+ * getMockedNgDefOf(ArbitraryClass, 'm'); // throws
+ * ```
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'm'): Type<MockedModule<T>>;
 
 /**
- * Returns a def of a mock component based on a mock component or a source component.
+ * Returns the mock class of a mock component based on a mock component or a source component.
+ * It works in runtime if the component has been mocked.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
+ *
+ * ```ts
+ * getMockedNgDefOf(RealComponent, 'c'); // returns MockComponent
+ * getMockedNgDefOf(MockComponent, 'c'); // returns MockComponent
+ * getMockedNgDefOf(ArbitraryClass, 'c'); // throws
+ * ```
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'c'): Type<MockedComponent<T>>;
 
 /**
- * Returns a def of a mock directive based on a mock directive or a source directive.
+ * Returns the mock class of a mock directive based on a mock directive or a source directive.
+ * It works in runtime if the directive has been mocked.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
+ *
+ * ```ts
+ * getMockedNgDefOf(RealDirective, 'd'); // returns MockDirective
+ * getMockedNgDefOf(MockDirective, 'd'); // returns MockDirective
+ * getMockedNgDefOf(ArbitraryClass, 'd'); // throws
+ * ```
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'd'): Type<MockedDirective<T>>;
 
 /**
- * Returns a def of a mock pipe based on a mock pipe or a source pipe.
+ * Returns the mock class of a mock pipe based on a mock pipe or a source pipe.
+ * It works in runtime if the pipe has been mocked.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
+ *
+ * ```ts
+ * getMockedNgDefOf(RealPipe, 'p'); // returns MockPipe
+ * getMockedNgDefOf(MockPipe, 'p'); // returns MockPipe
+ * getMockedNgDefOf(ArbitraryClass, 'p'); // throws
+ * ```
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'p'): Type<MockedPipe<T>>;
 
 /**
- * Returns a def of a mock class based on a mock class or a source class decorated by a ng type.
+ * Returns the mock class of a thing based on a mock class or a source class.
+ * It works in runtime if the thing has been mocked.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/getMockedNgDefOf
+ *
+ * ```ts
+ * getMockedNgDefOf(RealComponent); // returns MockComponent
+ * getMockedNgDefOf(MockPipe); // returns MockPipe
+ * getMockedNgDefOf(ArbitraryClass); // throws
+ * ```
  */
 export function getMockedNgDefOf<T>(declaration: AnyType<T>): Type<T>;
 
