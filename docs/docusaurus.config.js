@@ -93,7 +93,7 @@ module.exports = {
             },
             {
               label: 'Report an issue on GitHub',
-              href: 'https://github.com/ike18t/ng-mocks/issues/new',
+              href: 'https://github.com/ike18t/ng-mocks/issues',
             },
           ],
         },

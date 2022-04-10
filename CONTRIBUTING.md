@@ -3,7 +3,7 @@
 The best way would be to discuss an issue or an improvement first:
 
 - [ask a question on gitter](https://gitter.im/ng-mocks/community)
-- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues/new)
+- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues)
 
 ## How tu run unit tests locally
 
