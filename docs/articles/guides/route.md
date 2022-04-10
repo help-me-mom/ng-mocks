@@ -106,6 +106,7 @@ import { Component, NgModule } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A layout component that renders the current route.

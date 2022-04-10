@@ -79,6 +79,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
@@ -93,7 +94,7 @@ class DxTemplateDirective {
   ) {}
 }
 
-describe('TestDirectiveLetOf', () => {
+describe('TestDirectiveLetOf:static', () => {
   beforeEach(() =>
     MockBuilder().mock(DxTemplateDirective, {
       // We should not only render the structural directive,
@@ -138,6 +139,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({

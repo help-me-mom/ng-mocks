@@ -44,22 +44,47 @@ const mockVariable = (service: any, prefix: string, callback: typeof MockService
 };
 
 /**
+ * MockService creates a mock instance out of an object or a class.
+ * Primitives are converted to undefined.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockService
  */
 export function MockService(service: boolean | number | string | null | undefined): undefined;
 
 /**
+ * MockService creates a mock instance out of an object or a class.
+ * The second parameter can be used as overrides.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockService
+ *
+ * ```ts
+ * const service = MockService(AuthService, {
+ *   loggedIn: true,
+ * });
+ * service.login(); // does nothing, it's dummy.
+ * ```
  */
 export function MockService<T>(service: AnyType<T>, overrides?: Partial<T>, mockNamePrefix?: string): T;
 
 /**
+ * MockService creates a mock instance out of an object or a class.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockService
+ *
+ * ```ts
+ * const service = MockService(AuthService);
+ * service.login(); // does nothing, it's dummy.
  */
 export function MockService<T>(service: AnyType<T>, mockNamePrefix?: string): T;
 
 /**
+ * MockService creates a mock instance out of an object or a class.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockService
+ *
+ * ```ts
+ * const mockUser = MockService(currentUser);
+ * mockUser.save(); // does nothing, it's dummy.
  */
 export function MockService<T = any>(service: object, mockNamePrefix?: string): T;
 

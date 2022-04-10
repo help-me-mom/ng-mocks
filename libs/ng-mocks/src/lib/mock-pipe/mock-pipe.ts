@@ -14,7 +14,18 @@ import helperMockService from '../mock-service/helper.mock-service';
 import { MockedPipe } from './types';
 
 /**
+ * MockPipes creates an array of mock pipe classes out of pipes passed as parameters.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockPipe
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: MockPipes(
+ *     Dep1Pipe,
+ *     Dep2Pipe,
+ *   ),
+ * });
+ * ```
  */
 export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<PipeTransform>> {
   return pipes.map(pipe => MockPipe(pipe, undefined));
@@ -38,7 +49,18 @@ const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): 
 };
 
 /**
+ * MockPipe creates a mock pipe class out of an arbitrary pipe.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockPipe
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: [
+ *     MockPipe(Dep1Pipe),
+ *     MockPipe(Dep2Pipe),
+ *   ],
+ * });
+ * ```
  */
 export function MockPipe<TPipe extends PipeTransform>(
   pipe: Type<TPipe>,

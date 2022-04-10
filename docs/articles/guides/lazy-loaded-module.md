@@ -35,6 +35,7 @@ Profit.
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestLazyModule/test.spec.ts"
 import { Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { LazyComponent, LazyModule } from './lazy-module';

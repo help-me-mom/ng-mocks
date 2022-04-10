@@ -3,49 +3,61 @@
 import './lib/common/ng-mocks-stack';
 import './lib/common/ng-mocks-global-overrides';
 
-export { getTestBedInjection, getInjection } from './lib/common/core.helpers';
 export * from './lib/common/core.tokens';
-export * from './lib/common/core.types';
-export * from './lib/common/func.get-mocked-ng-def-of';
-export * from './lib/common/func.get-source-of-mock';
-export * from './lib/common/func.is-mock-control-value-accessor';
-export * from './lib/common/func.is-mock-ng-def';
-export * from './lib/common/func.is-mock-of';
-export * from './lib/common/func.is-mock-validator';
-export * from './lib/common/func.is-mocked-ng-def-of';
-export * from './lib/common/func.is-ng-def';
-export * from './lib/common/func.is-ng-injection-token';
-export * from './lib/common/func.is-ng-type';
+
+export { getTestBedInjection, getInjection } from './lib/common/core.helpers';
+
+export { getMockedNgDefOf } from './lib/common/func.get-mocked-ng-def-of';
+export { getSourceOfMock } from './lib/common/func.get-source-of-mock';
+export { isMockControlValueAccessor } from './lib/common/func.is-mock-control-value-accessor';
+export { isMockNgDef } from './lib/common/func.is-mock-ng-def';
+export { isMockOf } from './lib/common/func.is-mock-of';
+export { isMockValidator } from './lib/common/func.is-mock-validator';
+export { isMockedNgDefOf } from './lib/common/func.is-mocked-ng-def-of';
+export { isNgDef } from './lib/common/func.is-ng-def';
+export { isNgInjectionToken } from './lib/common/func.is-ng-injection-token';
+
 export { Mock } from './lib/common/mock';
-export { MockControlValueAccessor, MockValidator } from './lib/common/mock-control-value-accessor';
+export {
+  MockControlValueAccessor,
+  MockValidator,
+  LegacyControlValueAccessor,
+} from './lib/common/mock-control-value-accessor';
+export { MockInstance, MockReset } from './lib/mock-instance/mock-instance';
 
-export * from './lib/mock-builder/mock-builder';
-export * from './lib/mock-builder/types';
+export { MockBuilder } from './lib/mock-builder/mock-builder';
+export {
+  IMockBuilder,
+  IMockBuilderConfig,
+  IMockBuilderConfigAll,
+  IMockBuilderConfigComponent,
+  IMockBuilderConfigDirective,
+  IMockBuilderConfigModule,
+  IMockBuilderResult,
+} from './lib/mock-builder/types';
 
-export * from './lib/mock-component/mock-component';
-export * from './lib/mock-component/types';
+export { MockModule } from './lib/mock-module/mock-module';
+export { MockedModule } from './lib/mock-module/types';
 
-export * from './lib/mock-declaration/mock-declaration';
+export { MockComponent, MockComponents } from './lib/mock-component/mock-component';
+export { MockedComponent } from './lib/mock-component/types';
 
-export * from './lib/mock-directive/mock-directive';
-export * from './lib/mock-directive/types';
+export { MockDirective, MockDirectives } from './lib/mock-directive/mock-directive';
+export { MockedDirective } from './lib/mock-directive/types';
 
-export * from './lib/mock-helper/mock-helper';
+export { MockPipe, MockPipes } from './lib/mock-pipe/mock-pipe';
+export { MockedPipe } from './lib/mock-pipe/types';
 
-export * from './lib/mock-instance/mock-instance';
+export { MockDeclaration, MockDeclarations } from './lib/mock-declaration/mock-declaration';
 
-export * from './lib/mock-module/mock-module';
-export * from './lib/mock-module/types';
+export { MockProvider, MockProviders } from './lib/mock-provider/mock-provider';
 
-export * from './lib/mock-pipe/mock-pipe';
-export * from './lib/mock-pipe/types';
+export { MockService } from './lib/mock-service/mock-service';
 
-export * from './lib/mock-provider/mock-provider';
+export { ngMocks } from './lib/mock-helper/mock-helper';
 
-export * from './lib/mock-render/mock-render';
-export * from './lib/mock-render/mock-render-factory';
+export { MockRender } from './lib/mock-render/mock-render';
+export { MockRenderFactory } from './lib/mock-render/mock-render-factory';
 export * from './lib/mock-render/types';
 
-export { registerMockFunction } from './lib/mock-service/helper.mock-service';
-export * from './lib/mock-service/mock-service';
 export * from './lib/mock-service/types';

@@ -84,6 +84,13 @@ overrides:
         - error
         - 100
 
+      '@angular-eslint/no-input-rename': off
+      '@angular-eslint/no-output-rename': off
+
+      '@typescript-eslint/no-explicit-any': off
+      '@typescript-eslint/no-namespace': off
+      '@typescript-eslint/no-unused-vars': error
+
       unicorn/no-array-callback-reference: off
       unicorn/no-array-method-this-argument: off
       unicorn/no-for-loop: off
@@ -97,6 +104,7 @@ overrides:
       unicorn/prefer-includes: off
       unicorn/prefer-array-flat: off
       unicorn/prefer-spread: off
+
       es-roikoren/no-array-from: error
       es-roikoren/no-array-isarray: off
       es-roikoren/no-array-of: error
@@ -156,10 +164,6 @@ overrides:
             - index
             - parent
             - sibling
-      '@angular-eslint/no-input-rename': off
-      '@angular-eslint/no-output-rename': off
-      '@typescript-eslint/no-explicit-any': off
-      '@typescript-eslint/no-unused-vars': error
       unused-imports/no-unused-imports: error
       prefer-arrow/prefer-arrow-functions:
         - error

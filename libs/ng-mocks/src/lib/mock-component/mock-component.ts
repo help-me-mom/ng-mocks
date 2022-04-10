@@ -203,12 +203,37 @@ const decorateClass = (component: Type<any>, mock: Type<any>): void => {
   Component(decorateDeclaration(component, mock, meta, mockParams))(mock);
 };
 
+/**
+ * MockComponents creates an array of mock component classes out of components passed as parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockComponent
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: MockComponents(
+ *     Dep1Component,
+ *     Dep2Component,
+ *   ),
+ * });
+ * ```
+ */
 export function MockComponents(...components: Array<Type<any>>): Array<Type<MockedComponent<any>>> {
   return components.map(MockComponent);
 }
 
 /**
+ * MockComponent creates a mock component class out of an arbitrary component.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockComponent
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: [
+ *     MockComponent(Dep1Component),
+ *     MockComponent(Dep2Component),
+ *   ],
+ * });
+ * ```
  */
 export function MockComponent<TComponent>(component: Type<TComponent>): Type<MockedComponent<TComponent>> {
   return getMock(component, 'c', 'MockComponent', 'cacheComponent', ComponentMockBase, decorateClass);

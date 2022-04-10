@@ -43,61 +43,10 @@ describe('MockBuilder:simple', () => {
   it('should render content ignoring all dependencies', () => {
     const fixture = MockRender(MyComponent);
     expect(fixture).toBeDefined();
-    expect(fixture.nativeElement.innerHTML)
-      .toContain('<div>My Content</div>');
+    expect(fixture.nativeElement.innerHTML).toContain(
+      '<div>My Content</div>',
+    );
   });
-});
-```
-
-## Factory function
-
-```ts
-const ngModule = MockBuilder(MyComponent, MyModule)
-  .build();
-```
-
-The code above creates mocks for everything in `MyModule` (imports, declarations, providers and exports), but keeps `MyComponent` as it is for testing purposes.
-Actually, it does the next:
-
-```ts
-const ngModule = MockBuilder()
-  .keep(MyComponent, { export: true })
-  .mock(MyModule, { exportAll: true })
-  .build();
-```
-
-Also, we can suppress the first parameter with `null` if we want to create mocks for all declarations.
-
-```ts
-const ngModule = MockBuilder(null, MyModule)
-  .build();
-```
-
-It does the next:
-
-```ts
-const ngModule = MockBuilder()
-  .mock(MyModule, { exportAll: true })
-  .build();
-```
-
-If we do not plan further customization of `ngModule` then we do not need to call `.build()`. Simply return result of `MockBuilder` in `beforeEach`.
-
-```ts
-// Do not forget to return the promise of MockBuilder.
-beforeEach(() => MockBuilder(MyComponent, MyModule));
-```
-
-It does the next:
-
-```ts
-beforeEach(() => {
-  const ngModule = MockBuilder()
-    .keep(MyComponent, { export: true })
-    .mock(MyModule, { exportAll: true })
-    .build();
-  TestBed.configureTestingModule(ngModule);
-  return TestBed.compileComponents();
 });
 ```
 
@@ -427,6 +376,77 @@ beforeEach(() => {
 If we do not pass `NG_MOCKS_ROOT_PROVIDERS` anywhere,
 then only root providers for kept modules will stay as they are.
 All other root providers will be replaced with their mocks, even for kept declarations of mock modules.
+
+## Factory function
+
+```ts
+const ngModule = MockBuilder(MyComponent, MyModule)
+  .build();
+```
+
+The code above creates mocks for everything in `MyModule` (imports, declarations, providers and exports), but keeps `MyComponent` as it is for testing purposes.
+Actually, it does the next:
+
+```ts
+const ngModule = MockBuilder()
+  .keep(MyComponent, { export: true })
+  .mock(MyModule, { exportAll: true })
+  .build();
+```
+
+Also, we can suppress the first parameter with `null` if we want to create mocks for all declarations.
+
+```ts
+const ngModule = MockBuilder(null, MyModule)
+  .build();
+```
+
+It does the next:
+
+```ts
+const ngModule = MockBuilder()
+  .mock(MyModule, { exportAll: true })
+  .build();
+```
+
+If we do not plan further customization of `ngModule` then we do not need to call `.build()`. Simply return result of `MockBuilder` in `beforeEach`.
+
+```ts
+// Do not forget to return the promise of MockBuilder.
+beforeEach(() => MockBuilder(MyComponent, MyModule));
+```
+
+It does the next:
+
+```ts
+beforeEach(() => {
+  const ngModule = MockBuilder()
+    .keep(MyComponent, { export: true })
+    .mock(MyModule, { exportAll: true })
+    .build();
+  TestBed.configureTestingModule(ngModule);
+  return TestBed.compileComponents();
+});
+```
+
+## Adding schemas
+
+`MockBuilder` provides a method called `beforeCompileComponents`,
+it allows to customize the generated `testBed`.
+For example, to add `schemas`:  `CUSTOM_ELEMENTS_SCHEMA`, `NO_ERRORS_SCHEMA`.
+
+```ts
+beforeEach(() => {
+  return MockBuilder(MyComponent, MyModule)
+    .beforeCompileComponents(testBed => {
+      testBed.configureTestingModule({
+        schemas: [
+          NO_ERRORS_SCHEMA,
+        ],
+      });
+    });
+});
+```
 
 ## Good to know
 

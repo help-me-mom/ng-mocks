@@ -90,12 +90,37 @@ const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
   Directive(options)(mock);
 };
 
+/**
+ * MockDirectives creates an array of mock directive classes out of directives passed as parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockDirective
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: MockDirectives(
+ *     Dep1Directive,
+ *     Dep2Directive,
+ *   ),
+ * });
+ * ```
+ */
 export function MockDirectives(...directives: Array<Type<any>>): Array<Type<MockedDirective<any>>> {
   return directives.map(MockDirective);
 }
 
 /**
+ * MockDirective creates a mock directive class out of an arbitrary directive.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockDirective
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   declarations: [
+ *     MockDirective(Dep1Directive),
+ *     MockDirective(Dep2Directive),
+ *   ],
+ * });
+ * ```
  */
 export function MockDirective<TDirective>(directive: Type<TDirective>): Type<MockedDirective<TDirective>> {
   return getMock(directive, 'd', 'MockDirective', 'cacheDirective', DirectiveMockBase, decorateClass);

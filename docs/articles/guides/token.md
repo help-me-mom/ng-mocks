@@ -40,6 +40,7 @@ expect(token).toEqual(jasmine.any(ServiceExisting));
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestToken/test.spec.ts"
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const TOKEN_CLASS = new InjectionToken('CLASS');

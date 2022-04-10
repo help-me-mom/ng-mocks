@@ -22,6 +22,7 @@ expect(values.length).toEqual(4);
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts"
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 const TOKEN_MULTI = new InjectionToken('MULTI');

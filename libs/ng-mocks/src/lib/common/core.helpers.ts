@@ -7,6 +7,12 @@ import { AnyType, Type } from './core.types';
 import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
 
+/**
+ * It will be removed from public interface with the next release: A14
+ *
+ * @deprecated
+ * @internal
+ */
 export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
   const testBed: any = getTestBed();
   try {
@@ -17,6 +23,12 @@ export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I
   }
 };
 
+/**
+ * It will be removed from public interface with the next release: A14
+ *
+ * @deprecated
+ * @internal
+ */
 export const getInjection = <I>(token: Type<I> | InjectionToken<I>): I => {
   const testBed: any = getTestBed();
 

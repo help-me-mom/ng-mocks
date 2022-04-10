@@ -6,6 +6,198 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  docs:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./docs:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a5es5:
+    image: satantime/puppeteer-node:6.17.1
+    working_dir: /app
+    volumes:
+      - ./e2e/a5es5:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a5es2015:
+    image: satantime/puppeteer-node:6.17.1
+    working_dir: /app
+    volumes:
+      - ./e2e/a5es2015:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a6:
+    image: satantime/puppeteer-node:8.17.0
+    working_dir: /app
+    volumes:
+      - ./e2e/a6:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a7:
+    image: satantime/puppeteer-node:8.17.0
+    working_dir: /app
+    volumes:
+      - ./e2e/a7:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a8:
+    image: satantime/puppeteer-node:10.24.1
+    working_dir: /app
+    volumes:
+      - ./e2e/a8:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a9:
+    image: satantime/puppeteer-node:12.22.11
+    working_dir: /app
+    volumes:
+      - ./e2e/a9:/app
+    command:
+      - npm
+      - install
+      - --force
+
+  a10:
+    image: satantime/puppeteer-node:12.22.11
+    working_dir: /app
+    volumes:
+      - ./e2e/a10:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a11:
+    image: satantime/puppeteer-node:12.22.11
+    working_dir: /app
+    volumes:
+      - ./e2e/a11:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a12:
+    image: satantime/puppeteer-node:12.22.11
+    working_dir: /app
+    volumes:
+      - ./e2e/a12:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a13:
+    image: satantime/puppeteer-node:12.22.11
+    working_dir: /app
+    volumes:
+      - ./e2e/a13:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a14:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./e2e/a14:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a-jasmine:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./e2e/a-jasmine:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a-jest:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./e2e/a-jest:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  a-min:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./e2e/a-min:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --force
+
+  nx:
+    image: satantime/puppeteer-node:16.14.2
+    working_dir: /app
+    volumes:
+      - ./e2e/nx:/app
+      - /root/.node-gyp
+      - /root/.npm
     command:
       - npm
       - install

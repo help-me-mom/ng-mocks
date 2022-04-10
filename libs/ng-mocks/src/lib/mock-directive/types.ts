@@ -4,6 +4,13 @@ import { ChangeDetectorRef, ElementRef, TemplateRef, ViewContainerRef } from '@a
 
 import { LegacyControlValueAccessor } from '../common/mock-control-value-accessor';
 
+/**
+ * MockedDirective is a legacy representation of an interface of a mock directive instance.
+ * Please avoid its usage and try to rely on ngMocks.render() and ngMocks.hide().
+ *
+ * @see https://ng-mocks.sudo.eu/api/ngMocks/render#render-structural-directives
+ * @see https://ng-mocks.sudo.eu/api/ngMocks/hide
+ */
 export type MockedDirective<T> = T &
   LegacyControlValueAccessor & {
     /**
@@ -37,7 +44,8 @@ export type MockedDirective<T> = T &
     __viewContainer?: ViewContainerRef;
 
     /**
-     * @deprecated use ngMocks.hide instead (removing in A13)
+     * @deprecated use ngMocks.render instead (removing in A13)
+     * @see https://ng-mocks.sudo.eu/api/ngMocks/render#render-structural-directives
      */
     __render($implicit?: any, variables?: Record<keyof any, any>): void;
   };

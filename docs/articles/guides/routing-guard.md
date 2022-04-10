@@ -57,14 +57,15 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { from, Observable } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
+
 import {
   MockBuilder,
   MockRender,
-  ngMocks,
   NG_MOCKS_GUARDS,
+  ngMocks,
 } from 'ng-mocks';
-import { from, Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
 
 // A simple service simulating login check.
 // It will be replaced with its mock copy.

@@ -16,7 +16,7 @@ import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
 import { IMockRenderFactoryOptions, MockedComponentFixture } from './types';
 
-interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
+export interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
   bindings: keyof F;
   configureTestBed: () => void;
   declaration: AnyType<never>;
@@ -145,34 +145,40 @@ const generateFactory = (
 /**
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent>(
+export function MockRenderFactory<MComponent>(
   template: InjectionToken<MComponent>,
   bindings?: undefined | null,
   options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, never>;
 
 /**
+ * MockRenderFactory is a delayed version of MockRender.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent>(
+export function MockRenderFactory<MComponent>(
   template: AnyType<MComponent>,
   bindings: undefined | null,
   options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, keyof MComponent>;
 
 /**
+ * MockRenderFactory is a delayed version of MockRender.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent, TKeys extends keyof any>(
+export function MockRenderFactory<MComponent, TKeys extends keyof any>(
   template: AnyType<MComponent>,
   bindings: TKeys[],
   options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
 /**
+ * MockRenderFactory is a delayed version of MockRender.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent, TKeys extends keyof any = keyof any>(
+export function MockRenderFactory<MComponent, TKeys extends keyof any = keyof any>(
   template: AnyType<MComponent>,
   bindings: TKeys[],
   options?: IMockRenderFactoryOptions,
@@ -183,32 +189,36 @@ function MockRenderFactory<MComponent, TKeys extends keyof any = keyof any>(
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent>(template: AnyType<MComponent>): MockRenderFactory<MComponent, keyof MComponent>;
+export function MockRenderFactory<MComponent>(
+  template: AnyType<MComponent>,
+): MockRenderFactory<MComponent, keyof MComponent>;
 
 /**
  * An empty string does not have point.
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory(template: ''): MockRenderFactory<void, never>;
+export function MockRenderFactory(template: ''): MockRenderFactory<void, never>;
 
 /**
  * Without params we should not autocomplete any keys of any types.
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent = void>(template: string): MockRenderFactory<MComponent>;
+export function MockRenderFactory<MComponent = void>(template: string): MockRenderFactory<MComponent>;
 
 /**
+ * MockRenderFactory is a delayed version of MockRender.
+ *
  * @see https://ng-mocks.sudo.eu/api/MockRender#factory
  */
-function MockRenderFactory<MComponent = void, TKeys extends keyof any = keyof any>(
+export function MockRenderFactory<MComponent = void, TKeys extends keyof any = keyof any>(
   template: string,
   bindings: TKeys[],
   options?: IMockRenderFactoryOptions,
 ): MockRenderFactory<MComponent, TKeys>;
 
-function MockRenderFactory<MComponent, TKeys extends string>(
+export function MockRenderFactory<MComponent, TKeys extends string>(
   template: string | AnyType<MComponent> | InjectionToken<MComponent>,
   bindings?: undefined | null | TKeys[],
   options: IMockRenderFactoryOptions = {},
@@ -224,5 +234,3 @@ function MockRenderFactory<MComponent, TKeys extends string>(
 
   return factory;
 }
-
-export { MockRenderFactory };

@@ -104,10 +104,10 @@ Please, pay attention to comments in the code.
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockPipe/test.spec.ts"
-describe('MockPipe', () => {
-  // A fake transform function.
-  const fakeTransform = (...args: string[]) => JSON.stringify(args);
+// A fake transform function.
+const fakeTransform = (...args: string[]) => JSON.stringify(args);
 
+describe('MockPipe', () => {
   // A spy, just in case if we want to verify
   // how the pipe has been called.
   const spy = jasmine.createSpy().and.callFake(fakeTransform);
@@ -115,11 +115,14 @@ describe('MockPipe', () => {
   // const spy = jest.fn().mockImplementation(fakeTransform);
 
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyPipe, spy);
+    return MockBuilder(TargetComponent, TargetModule).mock(
+      DependencyPipe,
+      spy,
+    );
   });
 
   it('transforms values to json', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(TargetComponent);
 
     expect(fixture.nativeElement.innerHTML).toEqual(
       '<component>["foo"]</component>',
