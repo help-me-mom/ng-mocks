@@ -193,7 +193,7 @@
     "@types/mocha": "9.1.0",
     "@types/node": "16.11.26",
     "@typescript-eslint/eslint-plugin": "5.18.0",
-    "@typescript-eslint/parser": "5.18.0",
+    "@typescript-eslint/parser": "5.19.0",
     "codecov": "3.8.3",
     "core-js": "3.21.1",
     "coverage-istanbul-loader": "3.0.5",
