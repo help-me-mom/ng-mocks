@@ -76,7 +76,8 @@
     ".": {
       "types": "./ng-mocks.d.ts",
       "default": "./index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "ng-update": {
     "migrations": "./migrations.json"
