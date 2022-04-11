@@ -1,3 +1,10 @@
+## [13.4.2-alpha.1](https://github.com/ike18t/ng-mocks/compare/v13.4.1...v13.4.2-alpha.1) (2022-04-11)
+
+
+### Bug Fixes
+
+* exporting package.json ([4441f59](https://github.com/ike18t/ng-mocks/commit/4441f595cc407052f5b843fbb1127f43c122550f))
+
 ## [13.4.1](https://github.com/ike18t/ng-mocks/compare/v13.4.0...v13.4.1) (2022-04-10)
 
 
