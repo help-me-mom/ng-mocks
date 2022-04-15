@@ -35,7 +35,7 @@ class TargetComponent implements OnDestroy {
   public blurListener: any;
   public blurTag: any;
 
-  public readonly control = new FormControl(null, {
+  public readonly control = new FormControl('', {
     updateOn: 'blur',
   });
 
@@ -148,13 +148,13 @@ describe('ng-mocks-trigger:blur', () => {
   it('behaves right with input and blur', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    expect(component.control.value).toEqual(null);
+    expect(component.control.value).toEqual('');
 
     const debugElement = ngMocks.find('input');
     debugElement.nativeElement.value = '666';
     ngMocks.trigger(debugElement, 'input');
     ngMocks.trigger(debugElement, 'change');
-    expect(component.control.value).toEqual(null);
+    expect(component.control.value).toEqual('');
 
     ngMocks.trigger(debugElement.nativeElement, 'blur');
     expect(component.control.value).toEqual('666');
