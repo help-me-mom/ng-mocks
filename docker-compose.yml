@@ -86,7 +86,7 @@ services:
       - --force
 
   a9:
-    image: satantime/puppeteer-node:12.22.11
+    image: satantime/puppeteer-node:12.22.12
     working_dir: /app
     volumes:
       - ./e2e/a9:/app
@@ -96,7 +96,7 @@ services:
       - --force
 
   a10:
-    image: satantime/puppeteer-node:12.22.11
+    image: satantime/puppeteer-node:12.22.12
     working_dir: /app
     volumes:
       - ./e2e/a10:/app
@@ -108,7 +108,7 @@ services:
       - --force
 
   a11:
-    image: satantime/puppeteer-node:12.22.11
+    image: satantime/puppeteer-node:12.22.12
     working_dir: /app
     volumes:
       - ./e2e/a11:/app
@@ -120,7 +120,7 @@ services:
       - --force
 
   a12:
-    image: satantime/puppeteer-node:12.22.11
+    image: satantime/puppeteer-node:12.22.12
     working_dir: /app
     volumes:
       - ./e2e/a12:/app
@@ -132,7 +132,7 @@ services:
       - --force
 
   a13:
-    image: satantime/puppeteer-node:12.22.11
+    image: satantime/puppeteer-node:12.22.12
     working_dir: /app
     volumes:
       - ./e2e/a13:/app
