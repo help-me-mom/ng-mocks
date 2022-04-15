@@ -28,9 +28,9 @@ export const EMPTY = new Subject<any>();
 EMPTY.complete();
 
 interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
+  email?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 @Injectable()
@@ -58,9 +58,9 @@ class StorageService {
 })
 class ProfileComponent implements OnInit {
   public readonly form = new FormGroup({
-    email: new FormControl(null, Validators.required),
-    firstName: new FormControl(null, Validators.required),
-    lastName: new FormControl(null, Validators.required),
+    email: new FormControl('', Validators.required),
+    firstName: new FormControl('', Validators.required),
+    lastName: new FormControl('', Validators.required),
   });
 
   @Input() public readonly profile: User | null = null;
@@ -69,7 +69,7 @@ class ProfileComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.profile) {
-      this.form.setValue(this.profile);
+      this.form.patchValue(this.profile);
     }
   }
 
