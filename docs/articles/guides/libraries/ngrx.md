@@ -5,75 +5,97 @@ sidebar_label: NGRX
 
 `ng-mocks` perfectly mocks `NGRX` modules. However, there are might be issues if some of them should be kept.
 
-Besides `StoreModule`, which is an entry point to configure effects and reducers,
-under the hood `NGRX` uses four other modules, and these modules should be configured in `MockBuilder`:
+`StoreModule` and `EffectsModule` are entry point factory modules to configure reducers and effects.
+Under the hood, `NGRX` uses four modules, and these modules should be configured in `MockBuilder`:
 
-- `StoreRootModule`
-- `StoreFeatureModule`
-* `EffectsRootModule`
-* `EffectsFeatureModule`
+- `StoreRootModule` for `StoreModule.forRoot`
+- `StoreFeatureModule` for `StoreModule.forFeature`
+* `EffectsRootModule` for `EffectsModule.forRoot`
+* `EffectsFeatureModule` for `EffectsModule.forFeature`
 
-Or a simple value is to rely on `.ngModule` property: 
-
-- `StoreModule.forRoot().ngModule`
-- `StoreModule.forFeature().ngModule`
-* `EffectsModule.forRoot().ngModule`
-* `EffectsModule.forFeature().ngModule`
-
-Let's imagine that we want to keep `StoreModule` in a test,
-then we should pass the modules into [`.keep`](../../api/MockBuilder.md#keep):
+Let's imagine that we want to keep `ngrx` in a test.
+In this case, we should pass the modules into [`.keep`](../../api/MockBuilder.md#keep):
 
 ```ts
 beforeEach(() =>
-   MockBuilder(MyComponent, MyModule)
-     .keep(StoreRootModule)
-     .keep(StoreFeatureModule)
-     .keep(EffectsRootModule)
-     .keep(EffectsFeatureModule)
+   MockBuilder(TargetComponent, TargetModule)
+     .keep(StoreRootModule) // keeps all StoreModule.forRoot
+     .keep(StoreFeatureModule) // keeps all StoreModule.forFeature
+     .keep(EffectsRootModule) // keeps all EffectsModule.forRoot
+     .keep(EffectsFeatureModule) // keeps all EffectsModule.forFeature
  );
-```
-
-or
-
-```ts
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
-    .keep(StoreModule.forRoot().ngModule)
-    .keep(StoreModule.forFeature().ngModule)
-    .keep(EffectsModule.forRoot().ngModule)
-    .keep(EffectsModule.forFeature().ngModule)
-);
-```
-
-Please pay attention that `MyModule` or its imports should import `.forRoot` and `.forFeature`,
-otherwise we need to call [`.keep`](../../api/MockBuilder.md#keep) as usually:
-
-```ts
-beforeEach(() =>
-  MockBuilder(MyComponent, MyModule)
-    .keep(StoreModule.forRoot())
-    .keep(StoreModule.forFeature())
-    .keep(EffectsModule.forRoot())
-    .keep(EffectsModule.forFeature())
-);
 ```
 
 ## Lazy loaded modules with `.forFeature()`
 
-When we want to test a lazy loaded module, it means there is no import of `.forRoot()` calls,
-because they are in a parent module.
-Therefore, the `.forRoot()` calls should be added manually without any special configuration:
+When you want to test a lazy loaded module which does not import `StoreModule.forRoot()`, or `EffectsModule.forRoot()`,
+and only has `StoreModule.forFeature` or `EffectsModule.forFeature`,
+you need to add `.forRoot()` manually:
 
 ```ts
 beforeEach(() =>
   MockBuilder(SomeComponent, LazyLoadedModule)
+    
     // providing root tools
-    .keep(StoreModule.forRoot())
+    .keep(StoreModule.forRoot({}))
     .keep(EffectsModule.forRoot())
-    // keeping lazy loaded module definitions
-    .keep(StoreFeatureModule)
-    .keep(EffectsFeatureModule)
+    
+    // keeping lazy loaded module imports
+    .keep(StoreFeatureModule) // keeps all StoreModule.forFeature
+    .keep(EffectsFeatureModule) // keeps all EffectsModule.forFeature
 );
+```
+
+## provideMockStore
+
+When you want to test integration with `ngrx` modules, you can use `provideMockStore` with `MockBuilder`:
+
+```ts
+beforeEach(() =>
+  MockBuilder(TargetComponent, TargetModule).provide(
+    provideMockStore({
+      initialState: {
+        // ...
+      },
+    }),
+  ),
+);
+```
+
+It might be needed to use [`MockRenderFactory`](../../api/MockRender.md#factory),
+if you need to get a `Store` instance before rendering:
+
+```ts
+describe('provideMockStore:MockBuilder', () => {
+  beforeEach(() =>
+    MockBuilder(TargetComponent, TargetModule).provide(
+      provideMockStore({
+        initialState: {
+          [myReducer.featureKey]: 'mock',
+        },
+      }),
+    ),
+  );
+
+  // creating a factory for render
+  const factory = MockRenderFactory(TargetComponent);
+  beforeEach(() => factory.configureTestBed());
+
+  it('selects the value', () => {
+    // injecting Store
+    const store = TestBed.inject(Store);
+    const dispatchSpy = spyOn(store, 'dispatch');
+
+    // rendering
+    const fixture = factory();
+
+    // asserting
+    expect(ngMocks.formatText(fixture)).toEqual('mock');
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      setValue({ value: 'target' }),
+    );
+  });
+});
 ```
 
 ## Meta reducers

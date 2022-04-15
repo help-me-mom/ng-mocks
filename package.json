@@ -177,6 +177,7 @@
     "@ngrx/effects": "13.1.0",
     "@ngrx/store": "13.1.0",
     "@ngrx/store-devtools": "13.1.0",
+    "@ngxs/store": "3.7.3",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
