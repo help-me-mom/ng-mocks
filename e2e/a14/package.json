@@ -39,7 +39,7 @@
     "@angular-devkit/build-angular": "14.0.0-next.8",
     "@angular/cli": "14.0.0-next.8",
     "@angular/compiler-cli": "14.0.0-next.11",
-    "@types/jasmine": "3.10.5",
+    "@types/jasmine": "3.10.6",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.27",
     "jasmine-core": "4.0.1",
