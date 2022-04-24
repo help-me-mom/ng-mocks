@@ -4,7 +4,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 
 @Component({
   selector: 'target',
-  template: '<control [ngModel]="value" (ngModelChange)="value = $event" [disabled]="disabled"></control>',
+  template: '<control [(ngModel)]="value" [disabled]="disabled"></control>',
 })
 export class TargetComponent {
   public disabled = false;
