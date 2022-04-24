@@ -15,11 +15,7 @@ export default (def: any, defValue: Map<any, any>): void => {
     const instance = defValue.get(def);
     ngMocksUniverse.builtDeclarations.set(
       def,
-      typeof instance === 'function'
-        ? MockPipe(def, instance)
-        : instance && typeof instance === 'object' && typeof instance.transform === 'function'
-        ? MockPipe(def, instance.transform)
-        : MockPipe(def),
+      typeof instance?.transform === 'function' ? MockPipe(def, instance.transform) : MockPipe(def),
     );
   }
 };

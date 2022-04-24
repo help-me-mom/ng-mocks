@@ -53,7 +53,7 @@ checks:
     enabled: false
   similar-code:
     config:
-      threshold: 100
+      threshold: 150
   file-lines:
     config:
       threshold: 500

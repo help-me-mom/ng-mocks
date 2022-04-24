@@ -1,4 +1,12 @@
-import { FactoryProvider, InjectionToken, Provider } from '@angular/core';
+import {
+  ClassProvider,
+  ExistingProvider,
+  FactoryProvider,
+  InjectionToken,
+  Provider,
+  StaticClassProvider,
+  ValueProvider,
+} from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
@@ -82,8 +90,144 @@ export function MockProvider<I>(provider: InjectionToken<I>, useValue?: Partial<
  */
 export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): FactoryProvider;
 
-export function MockProvider(provide: any, overrides: any = defaultValue): Provider {
+/**
+ * MockProvider generates useValue based on passed parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockProvider#useValue
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   providers: [
+ *     MockProvider(AuthService, {isLoggedIn: true}, 'useValue'),
+ *     MockProvider(APP_ROUTES, 5, 'useValue', true), // multi flag
+ *   ],
+ * });
+ * ```
+ */
+export function MockProvider<I>(
+  provider: AnyType<I> | InjectionToken<I>,
+  value: ValueProvider['useValue'],
+  style: 'useValue',
+  multi?: ValueProvider['multi'],
+): ValueProvider;
+
+/**
+ * MockProvider generates useExisting based on passed parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockProvider#useExisting
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   providers: [
+ *     MockProvider(AuthService, MockAuthService, 'useExisting', true),
+ *     MockProvider(APP_ROUTES, MOCK_ROUTES, 'useExisting', true), // multi flag
+ *   ],
+ * });
+ * ```
+ */
+export function MockProvider<I>(
+  provider: AnyType<I> | InjectionToken<I>,
+  value: ExistingProvider['useExisting'],
+  style: 'useExisting',
+  multi?: ExistingProvider['multi'],
+): ExistingProvider;
+
+/**
+ * MockProvider generates useClass based on passed parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockProvider#useClass
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   providers: [
+ *     MockProvider(AuthService, MockAuthService, 'useClass', [ctorDep1, ctorDep2]),
+ *     MockProvider(UserService, MockUserService, 'useClass', {
+ *       multi: true, // multi flag
+ *       deps: [ctorDep1, ctorDep2],
+ *     }),
+ *   ],
+ * });
+ * ```
+ */
+export function MockProvider<I>(
+  provider: AnyType<I> | InjectionToken<I>,
+  value: StaticClassProvider['useClass'],
+  style: 'useClass',
+  multiDeps?:
+    | StaticClassProvider['multi']
+    | StaticClassProvider['deps']
+    | {
+        multi?: StaticClassProvider['multi'];
+        deps?: StaticClassProvider['deps'];
+      },
+): ClassProvider;
+
+/**
+ * MockProvider generates useFactory based on passed parameters.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockProvider#useFactory
+ *
+ * ```ts
+ * TestBed.configureTestingModule({
+ *   providers: [
+ *     MockProvider(AuthService, (dep1, dep2) => {
+ *       // ...
+ *     }, 'useFactory', [ctorDep1, ctorDep2]),
+ *     MockProvider(UserService, (dep1, dep2) => {
+ *       // ...
+ *     }, 'useFactory', {
+ *       multi: true, // multi flag
+ *       deps: [ctorDep1, ctorDep2],
+ *     }),
+ *   ],
+ * });
+ * ```
+ */
+export function MockProvider<I>(
+  provider: AnyType<I> | InjectionToken<I>,
+  value: FactoryProvider['useFactory'],
+  style: 'useFactory',
+  multiDeps?:
+    | FactoryProvider['multi']
+    | FactoryProvider['deps']
+    | {
+        multi?: FactoryProvider['multi'];
+        deps?: FactoryProvider['deps'];
+      },
+): FactoryProvider;
+
+export function MockProvider(
+  provide: any,
+  overrides: any = defaultValue,
+  style?: 'useValue' | 'useExisting' | 'useClass' | 'useFactory',
+  flags:
+    | boolean
+    | any[]
+    | {
+        deps?: any[];
+        multi?: boolean;
+      } = {},
+): Provider {
   funcImportExists(provide, 'MockProvider');
+
+  const { deps, multi } =
+    typeof flags === 'boolean'
+      ? { deps: undefined, multi: flags }
+      : Array.isArray(flags)
+      ? {
+          deps: flags,
+          multi: undefined,
+        }
+      : flags;
+
+  if (style) {
+    return {
+      provide,
+      [style]: overrides,
+      deps,
+      multi,
+    };
+  }
 
   return helperUseFactory(
     provide,
