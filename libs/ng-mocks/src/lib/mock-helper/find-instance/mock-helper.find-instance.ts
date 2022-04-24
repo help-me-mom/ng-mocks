@@ -6,28 +6,40 @@ import funcGetFromNode from '../func.get-from-node';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgs from '../func.parse-find-args';
 import funcParseFindArgsName from '../func.parse-find-args-name';
+import { getInjection } from '../../common/core.helpers';
+import { Type } from '../../common/core.types';
 
 import funcIsValidFindInstanceSelector from './func.is-valid-find-instance-selector';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
-export default (...args: any[]) => {
+export default <T>(...args: any[]): T => {
   const [el, sel, notFoundValue] = funcParseFindArgs(args, funcIsValidFindInstanceSelector, defaultNotFoundValue);
   if (typeof sel !== 'function' && !isNgDef(sel, 't')) {
     throw new Error('Only classes or tokens are accepted');
   }
 
-  const declaration = getSourceOfMock(sel);
-  const result: any[] = [];
-  mockHelperCrawl(
-    mockHelperFind(funcGetLastFixture(), el, undefined),
-    node => {
-      funcGetFromNode(result, node, declaration);
+  const declaration: Type<T> = getSourceOfMock(sel);
+  const result: T[] = [];
+  const fixture = funcGetLastFixture();
+  if (fixture) {
+    mockHelperCrawl(
+      mockHelperFind(fixture, el, undefined),
+      node => {
+        funcGetFromNode(result, node, declaration);
 
-      return result.length > 0;
-    },
-    true,
-  );
+        return result.length > 0;
+      },
+      true,
+    );
+  } else {
+    try {
+      result.push(getInjection(declaration));
+    } catch {
+      // nothing to do
+    }
+  }
+
   if (result.length > 0) {
     return result[0];
   }

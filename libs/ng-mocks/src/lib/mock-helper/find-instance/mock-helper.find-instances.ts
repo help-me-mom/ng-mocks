@@ -5,6 +5,8 @@ import mockHelperFindAll from '../find/mock-helper.find-all';
 import funcGetFromNode from '../func.get-from-node';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgs from '../func.parse-find-args';
+import { getInjection } from '../../common/core.helpers';
+import { Type } from '../../common/core.types';
 
 import funcIsValidFindInstanceSelector from './func.is-valid-find-instance-selector';
 
@@ -14,21 +16,30 @@ export default <T>(...args: any[]): T[] => {
     throw new Error('Only classes or tokens are accepted');
   }
 
-  const declaration = getSourceOfMock(sel);
+  const declaration: Type<T> = getSourceOfMock(sel);
   const result: T[] = [];
   const scanned: any[] = [];
-  const elements = mockHelperFindAll(funcGetLastFixture(), el, undefined);
-  for (const element of elements) {
-    mockHelperCrawl(
-      element,
-      node => {
-        if (scanned.indexOf(node) === -1) {
-          funcGetFromNode(result, node, declaration);
-          scanned.push(node);
-        }
-      },
-      true,
-    );
+  const fixture = funcGetLastFixture();
+  if (fixture) {
+    const elements = mockHelperFindAll(fixture, el, undefined);
+    for (const element of elements) {
+      mockHelperCrawl(
+        element,
+        node => {
+          if (scanned.indexOf(node) === -1) {
+            funcGetFromNode(result, node, declaration);
+            scanned.push(node);
+          }
+        },
+        true,
+      );
+    }
+  } else {
+    try {
+      result.push(getInjection(declaration));
+    } catch {
+      // nothing to do
+    }
   }
 
   return result;
