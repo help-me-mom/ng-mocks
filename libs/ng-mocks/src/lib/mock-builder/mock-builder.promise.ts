@@ -3,6 +3,7 @@ import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
+import funcGetName from '../common/func.get-name';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -142,6 +143,14 @@ export class MockBuilderPromise implements IMockBuilder {
     const { def, providers } = normaliseModule(input);
 
     const { config, mock } = parseMockArguments(def, a1, a2, defaultMock);
+    if (isNgDef(mock) && isNgDef(input) && !isNgDef(input, 't')) {
+      throw new Error(
+        [
+          `MockBuilder.mock(${funcGetName(input)}) received a class when its shape is expected.`,
+          'Please try ngMocks.defaultMock instead.',
+        ].join(' '),
+      );
+    }
 
     const existing = this.mockDef.has(def) ? this.defProviders.get(def) : [];
     this.wipe(def);

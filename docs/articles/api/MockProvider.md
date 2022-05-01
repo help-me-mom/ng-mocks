@@ -30,6 +30,138 @@ TestBed.configureTestingModule({
 });
 ```
 
+## useValue
+
+```ts
+TestBed.configureTestingModule({
+  providers: [
+    MockProvider(Service, {name: 'mock'}, 'useValue'),
+    // generates
+    // {
+    //   provide: Service,
+    //   useValue: {name: 'mock},
+    // }
+    
+    MockProvider(TOKEN, 'token', 'useValue', true),
+    // generates
+    // {
+    //   provide: TOKEN,
+    //   useValue: 'token',
+    //   multi: true,
+    // }
+  ],
+});
+```
+
+## useExisting
+
+```ts
+TestBed.configureTestingModule({
+  providers: [
+    MockProvider(Service, MockService, 'useExisting'),
+    // generates
+    // {
+    //   provide: Service,
+    //   useExisting: MockService,
+    // }
+    
+    MockProvider(TOKEN, FAKE, 'useExisting', true),
+    // generates
+    // {
+    //   provide: TOKEN,
+    //   useExisting: FAKE,
+    //   multi: true,
+    // }
+  ],
+});
+```
+
+## useClass
+
+```ts
+TestBed.configureTestingModule({
+  providers: [
+    MockProvider(Service, MockService, 'useClass'),
+    // generates
+    // {
+    //   provide: Service,
+    //   useClass: MockService,
+    // }
+    
+    MockProvider(Service, MockService, 'useClass', true),
+    // generates
+    // {
+    //   provide: Service,
+    //   useClass: MockService,
+    //   multi: true,
+    // }
+
+    MockProvider(Service, MockService, 'useClass', [DbService]),
+    // generates
+    // {
+    //   provide: Service,
+    //   useClass: MockService,
+    //   deps: [DbService],
+    // }
+    
+    MockProvider(Service, MockService, 'useClass', {
+      multi: true,
+      deps: [DbService],
+    }),
+    // generates
+    // {
+    //   provide: Service,
+    //   useClass: MockService,
+    //   deps: [DbService],
+    //   multi: true,
+    // }
+  ],
+});
+```
+
+## useFactory
+
+```ts
+TestBed.configureTestingModule({
+  providers: [
+    MockProvider(Service, () => new MockService(), 'useFactory'),
+    // generates
+    // {
+    //   provide: Service,
+    //   useFactory: () => new MockService(),
+    // }
+    
+    MockProvider(Service, () => new MockService(), 'useFactory', true),
+    // generates
+    // {
+    //   provide: Service,
+    //   useFactory: () => new MockService(),
+    //   multi: true,
+    // }
+
+    MockProvider(Service, () => new MockService(), 'useFactory', [DbService]),
+    // generates
+    // {
+    //   provide: Service,
+    //   useFactory: (db) => new MockService(db),
+    //   deps: [DbService],
+    // }
+    
+    MockProvider(Service, MockService, 'useFactory', {
+      multi: true,
+      deps: [DbService],
+    }),
+    // generates
+    // {
+    //   provide: Service,
+    //   useFactory: (db) => new MockService(db),
+    //   deps: [DbService],
+    //   multi: true,
+    // }
+  ],
+});
+```
+
 ## Simple example
 
 Let's pretend that in an Angular application `TargetComponent` depends on `DependencyService` service,
