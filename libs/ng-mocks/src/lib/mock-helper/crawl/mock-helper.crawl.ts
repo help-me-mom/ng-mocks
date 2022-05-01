@@ -8,7 +8,7 @@ import nestedCheck from './nested-check';
 
 export default (
   sel: DebugNode | DebugNodeSelector,
-  callback: (node: DebugNode) => void | boolean,
+  callback: (node: DebugNode, parent?: DebugNode) => void | boolean,
   includeTextNode = false,
 ): void => {
   const el = mockHelperFind(funcGetLastFixture(), sel, undefined);

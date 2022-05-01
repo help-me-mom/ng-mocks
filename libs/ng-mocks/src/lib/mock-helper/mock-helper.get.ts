@@ -1,3 +1,5 @@
+import { DebugElement } from '@angular/core';
+
 import { Type } from '../common/core.types';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
 import { MockedDebugElement } from '../mock-render/types';
@@ -5,6 +7,7 @@ import { MockedDebugElement } from '../mock-render/types';
 import mockHelperFind from './find/mock-helper.find';
 import funcGetFromNode from './func.get-from-node';
 import funcGetLastFixture from './func.get-last-fixture';
+import nestedCheckParent from './crawl/nested-check-parent';
 
 const defaultNotFoundValue = {}; // simulating Symbol
 
@@ -22,24 +25,28 @@ const parseArgs = <T>(
 
 export default <T>(...args: any[]) => {
   const { el, sel, notFoundValue } = parseArgs<T>(args);
-  const root = mockHelperFind(funcGetLastFixture(), el, undefined);
+  const root: DebugElement | undefined = mockHelperFind(funcGetLastFixture(), el, undefined);
+  const source = getSourceOfMock(sel);
 
-  const res1 = funcGetFromNode([], root, getSourceOfMock(sel));
-  if (res1.length > 0) {
-    return res1[0];
+  // Looking in the root.
+  if (root) {
+    const result = funcGetFromNode([], root, source);
+    if (result.length > 0) {
+      return result[0];
+    }
   }
 
-  // Looking for related structural directive.
-  const prevNode = root?.nativeNode.previousSibling;
-  const matches =
-    !prevNode || prevNode.nodeName !== '#comment' || !root || !root.parent
-      ? []
-      : root.parent.queryAllNodes(node => node.nativeNode === prevNode);
-  const matchedNode = matches[0];
-  const res2 = funcGetFromNode([], matchedNode, getSourceOfMock(sel));
-  if (res2.length > 0) {
-    return res2[0];
+  // Looking for a related structural directive.
+  if (root) {
+    const parent = nestedCheckParent(root, undefined);
+    if (parent && parent.nativeNode.nodeName === '#comment') {
+      const result = funcGetFromNode([], parent, source);
+      if (result.length > 0) {
+        return result[0];
+      }
+    }
   }
+
   if (notFoundValue !== defaultNotFoundValue) {
     return notFoundValue;
   }

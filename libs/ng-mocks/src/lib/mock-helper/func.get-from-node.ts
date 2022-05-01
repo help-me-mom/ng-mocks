@@ -28,11 +28,7 @@ export interface Node {
   parent?: (DebugNode & Node) | null;
 }
 
-export default <T>(
-  result: T[],
-  node: (DebugNode & Node) | null | undefined,
-  proto: Type<T> | InjectionToken<T>,
-): T[] => {
+export default <T>(result: T[], node: DebugNode & Node, proto: Type<T> | InjectionToken<T>): T[] => {
   funcGetFromNodeInjector(result, node, proto);
   if (!isNgDef(proto, 't')) {
     funcGetFromNodeStandard(result, node, proto);
