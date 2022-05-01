@@ -1,3 +1,16 @@
+# [13.5.0](https://github.com/ike18t/ng-mocks/compare/v13.4.2...v13.5.0) (2022-05-01)
+
+
+### Bug Fixes
+
+* **ngMocks.findInstance:** finds pipes in attributes [#2314](https://github.com/ike18t/ng-mocks/issues/2314) ([1b8868f](https://github.com/ike18t/ng-mocks/commit/1b8868f21cd01f9aaa65ed0a5273e6f5a62c2228))
+* **ngMocks.findInstance:** works without fixture [#2311](https://github.com/ike18t/ng-mocks/issues/2311) ([7752914](https://github.com/ike18t/ng-mocks/commit/7752914d9574cce447559c7196764ab484769fa1))
+
+
+### Features
+
+* **MockProvider:** simple generators for different types [#599](https://github.com/ike18t/ng-mocks/issues/599) ([9d90121](https://github.com/ike18t/ng-mocks/commit/9d90121faea5e70d679d5fb9b2c1e4a4a7345232))
+
 ## [13.4.2](https://github.com/ike18t/ng-mocks/compare/v13.4.1...v13.4.2) (2022-04-11)
 
 
