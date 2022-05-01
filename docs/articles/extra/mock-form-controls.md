@@ -156,9 +156,12 @@ describe('MockForms', () => {
     MockInstance(DependencyComponent, 'writeValue', writeValue);
 
     const fixture = MockRender(TestedComponent);
+    // FormsModule needs fixture.whenStable()
+    // right after MockRender to install all hooks.
+    await fixture.whenStable();
     const component = fixture.point.componentInstance;
 
-    // During initialization it should be called
+    // During initialization, it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
@@ -166,12 +169,12 @@ describe('MockForms', () => {
     // and simulate its change, like a user does it.
     const mockControlEl = ngMocks.find(DependencyComponent);
     ngMocks.change(mockControlEl, 'foo');
-    await fixture.whenStable();
     expect(component.value).toBe('foo');
 
     // Let's check that change on existing value
     // causes calls of `writeValue` on the mock component.
     component.value = 'bar';
+    // Both below are needed to trigger writeValue.
     fixture.detectChanges();
     await fixture.whenStable();
     expect(writeValue).toHaveBeenCalledWith('bar');
