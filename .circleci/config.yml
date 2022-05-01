@@ -937,48 +937,59 @@ jobs:
       name: win/default
       shell: bash.exe
     steps:
-      - checkout
-      - run: nvm install $(cat e2e/a5es5/.nvmrc)
-      - run: nvm use $(cat e2e/a5es5/.nvmrc)
-      - attach_workspace:
-          at: dist
-      - run:
-          name: NPM Shell
-          command: npm config set script-shell bash.exe
-      - restore_cache:
-          key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-      - run:
-          name: NPM Install
-          command: |
-            if [ ! -d "e2e/a5es5/node_modules/" ]; then
-              npm run i:a5es5
-            fi
-      - save_cache:
-          key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-          paths:
-            - ./e2e/a5es5/node_modules
-      - run:
-          name: Spreading Build
-          command: |
-            P=e2e/a5es5/node_modules/ng-mocks
-            rm -Rf $P
-            mkdir -p $P
-            cp -R dist/libs/ng-mocks/. $P
-      - run:
-          name: Spreading Tests
-          command: |
-            P=e2e/a5es5/src/test
-            rm -Rf $P
-            mkdir -p $P
-            cp -R tests $P
-            cp -R examples $P
-            rm $P/examples/TestRoutingGuard/test.spec.ts
-            rm $P/examples/TestRoutingResolver/test.spec.ts
-      - run:
-          name: Unit Tests
-          command: |
-            cd e2e/a5es5
-            npm run test:jasmine
+      - when:
+          condition:
+            or:
+              - not:
+                  matches:
+                    pattern: '^renovate/e2e/'
+                    value: << pipeline.git.branch >>
+              - matches:
+                  pattern: '^renovate/e2e/a5es5/'
+                  value: << pipeline.git.branch >>
+          steps:
+            - checkout
+            - run: nvm install $(cat e2e/a5es5/.nvmrc)
+            - run: nvm use $(cat e2e/a5es5/.nvmrc)
+            - attach_workspace:
+                at: dist
+            - run:
+                name: NPM Shell
+                command: npm config set script-shell bash.exe
+            - restore_cache:
+                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+            - run:
+                name: NPM Install
+                command: |
+                  if [ ! -d "e2e/a5es5/node_modules/" ]; then
+                    npm run i:a5es5
+                  fi
+            - save_cache:
+                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+                paths:
+                  - ./e2e/a5es5/node_modules
+            - run:
+                name: Spreading Build
+                command: |
+                  P=e2e/a5es5/node_modules/ng-mocks
+                  rm -Rf $P
+                  mkdir -p $P
+                  cp -R dist/libs/ng-mocks/. $P
+            - run:
+                name: Spreading Tests
+                command: |
+                  P=e2e/a5es5/src/test
+                  rm -Rf $P
+                  mkdir -p $P
+                  cp -R tests $P
+                  cp -R examples $P
+                  rm $P/examples/TestRoutingGuard/test.spec.ts
+                  rm $P/examples/TestRoutingResolver/test.spec.ts
+            - run:
+                name: Unit Tests
+                command: |
+                  cd e2e/a5es5
+                  npm run test:jasmine
     environment:
       IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
 workflows:
