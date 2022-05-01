@@ -1,30 +1,8 @@
 import { MockedDebugNode } from '../../mock-render/types';
 
 import detectTextNode from './detect-text-node';
-import elDefCompare from './el-def-compare';
-import elDefGetNode from './el-def-get-node';
-import elDefGetParent from './el-def-get-parent';
 import nestedCheckChildren from './nested-check-children';
-
-const detectParent = (node: MockedDebugNode, parent: MockedDebugNode | undefined): MockedDebugNode | undefined => {
-  if (parent) {
-    return parent;
-  }
-
-  const expected = elDefGetParent(node);
-  const currentParent = node.parent ? elDefGetNode(node.parent) : undefined;
-  if (node.parent && elDefCompare(expected, currentParent)) {
-    return node.parent;
-  }
-  for (const childNode of node.parent?.childNodes || []) {
-    const childElDef = elDefGetNode(childNode);
-    if (elDefCompare(expected, childElDef)) {
-      return childNode;
-    }
-  }
-
-  return undefined;
-};
+import nestedCheckParent from './nested-check-parent';
 
 const nestedCheck = (
   node: MockedDebugNode | null | undefined,
@@ -38,7 +16,7 @@ const nestedCheck = (
   if (!includeTextNode && detectTextNode(node)) {
     return false;
   }
-  if (check(node, detectParent(node, parent))) {
+  if (check(node, nestedCheckParent(node, parent))) {
     return true;
   }
 

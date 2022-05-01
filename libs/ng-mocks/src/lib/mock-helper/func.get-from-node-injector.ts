@@ -19,12 +19,8 @@ const getParentWithInjector = (node: (DebugNode & Node) | null): Injector | unde
   return undefined;
 };
 
-export default <T>(
-  result: T[],
-  node: (DebugNode & Node) | null | undefined,
-  proto: Type<T> | InjectionToken<T>,
-): void => {
-  if (!node?.injector || node.injector.constructor.name === 'NullInjector') {
+export default <T>(result: T[], node: DebugNode & Node, proto: Type<T> | InjectionToken<T>): void => {
+  if (!node.injector || node.injector.constructor.name === 'NullInjector') {
     return;
   }
 

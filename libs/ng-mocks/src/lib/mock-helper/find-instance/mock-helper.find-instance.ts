@@ -25,8 +25,11 @@ export default <T>(...args: any[]): T => {
   if (fixture) {
     mockHelperCrawl(
       mockHelperFind(fixture, el, undefined),
-      node => {
+      (node, parent) => {
         funcGetFromNode(result, node, declaration);
+        if (result.length === 0 && parent && parent.nativeNode.nodeName === '#comment') {
+          funcGetFromNode(result, parent, declaration);
+        }
 
         return result.length > 0;
       },

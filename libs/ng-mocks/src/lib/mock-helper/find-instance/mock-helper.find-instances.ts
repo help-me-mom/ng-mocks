@@ -25,10 +25,14 @@ export default <T>(...args: any[]): T[] => {
     for (const element of elements) {
       mockHelperCrawl(
         element,
-        node => {
+        (node, parent) => {
           if (scanned.indexOf(node) === -1) {
             funcGetFromNode(result, node, declaration);
             scanned.push(node);
+          }
+          if (parent && parent.nativeNode.nodeName === '#comment' && scanned.indexOf(parent) === -1) {
+            funcGetFromNode(result, parent, declaration);
+            scanned.push(parent);
           }
         },
         true,

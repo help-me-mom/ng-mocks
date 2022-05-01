@@ -3,6 +3,17 @@ import { DebugNode } from '@angular/core';
 import { Type } from '../common/core.types';
 
 const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boolean => {
+  // LContainer for structural directives can be a trigger for pipes.
+  if (
+    el &&
+    el.nativeNode &&
+    el.nativeNode.nodeName === '#comment' &&
+    Array.isArray(node) &&
+    node[0] === el.nativeNode
+  ) {
+    return true;
+  }
+
   // LContainer should stop the scan.
   if (Array.isArray(node)) {
     return false;
@@ -10,6 +21,12 @@ const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boo
 
   if (!el || !node.nodeName) {
     return gather;
+  }
+
+  // checking if a commentNode belongs to the current element.
+  // it comes from structural directives.
+  if (node.nodeName === '#comment') {
+    return node === el.nativeNode;
   }
 
   // checking if a textNode belongs to the current element.
@@ -44,8 +61,13 @@ const scan = <T>(
   scanned.push(nodes);
   let gather = gatherDefault;
 
-  for (const raw of nodes) {
-    const node = normalize(raw);
+  let nodesLength = nodes.length;
+  if (nodes.length > 1 && nodes[1] && typeof nodes[1] === 'object' && nodes[1].bindingStartIndex) {
+    nodesLength = nodes[1].bindingStartIndex;
+  }
+
+  for (let index = 0; index < nodesLength; index += 1) {
+    const node = normalize(nodes[index]);
     if (isNotObject(node)) {
       continue;
     }
