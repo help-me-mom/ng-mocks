@@ -212,7 +212,7 @@ jobs:
                     pattern: 'renovate/e2e/.*'
                     value: << pipeline.git.branch >>
               - matches:
-                  pattern: 'renovate/e2e/a5es5/.*'
+                  pattern: 'renovate/e2e/a5/.*'
                   value: << pipeline.git.branch >>
           steps:
             - checkout
@@ -253,7 +253,7 @@ jobs:
                     pattern: 'renovate/e2e/.*'
                     value: << pipeline.git.branch >>
               - matches:
-                  pattern: 'renovate/e2e/a5es2015/.*'
+                  pattern: 'renovate/e2e/a5/.*'
                   value: << pipeline.git.branch >>
           steps:
             - checkout
@@ -1537,7 +1537,7 @@ jobs:
                     pattern: 'renovate/e2e/.*'
                     value: << pipeline.git.branch >>
               - matches:
-                  pattern: 'renovate/e2e/a5es5/.*'
+                  pattern: 'renovate/e2e/a5/.*'
                   value: << pipeline.git.branch >>
           steps:
             - checkout
