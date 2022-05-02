@@ -107,7 +107,7 @@
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["@types/jasmine", "jasmine-core"],
-      "allowedVersions": "<=2.8"
+      "allowedVersions": "<=2.8.9"
     },
     {
       "additionalBranchPrefix": "e2e/a5/",
