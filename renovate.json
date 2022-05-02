@@ -236,7 +236,7 @@
       "additionalBranchPrefix": "e2e/a6/",
       "paths": ["e2e/a6/package.json"],
       "packageNames": ["@types/node"],
-      "allowedVersions": "<=8"
+      "allowedVersions": "<=8.9"
     },
     {
       "additionalBranchPrefix": "e2e/a6/",
