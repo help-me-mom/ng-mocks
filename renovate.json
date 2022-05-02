@@ -113,7 +113,7 @@
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
       "packageNames": ["@types/node"],
-      "allowedVersions": "<=6"
+      "allowedVersions": "<=6.14.10"
     },
     {
       "additionalBranchPrefix": "e2e/a5/",
