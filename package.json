@@ -196,7 +196,7 @@
     "@typescript-eslint/eslint-plugin": "5.22.0",
     "@typescript-eslint/parser": "5.22.0",
     "codecov": "3.8.3",
-    "core-js": "3.22.3",
+    "core-js": "3.22.4",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
     "dts-bundle-generator": "6.9.0",
