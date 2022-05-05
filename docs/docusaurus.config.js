@@ -12,11 +12,15 @@ module.exports = {
   organizationName: 'ike18t',
   projectName: 'ng-mocks',
   themeConfig: {
-    hideableSidebar: true,
     announcementBar: {
       id: 'give-a-start',
       content:
         'If you like ng-mocks, please support it with a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ike18t/ng-mocks">GitHub</a>.',
+    },
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
     },
     navbar: {
       title: 'ng-mocks',
