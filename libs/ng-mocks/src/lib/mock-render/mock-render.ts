@@ -1,10 +1,16 @@
 import { InjectionToken } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
 
 import { AnyType } from '../common/core.types';
 
 import { MockRenderFactory } from './mock-render-factory';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
+
+/**
+ * This signature of MockRender lets create an empty fixture.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockRender
+ */
+export function MockRender(): MockedComponentFixture<void, void>;
 
 /**
  * This signature of MockRender lets create a fixture to access a token.
@@ -58,13 +64,6 @@ export function MockRender<MComponent, TComponent extends object = Record<keyof 
 export function MockRender<MComponent>(template: AnyType<MComponent>): MockedComponentFixture<MComponent, MComponent>;
 
 /**
- * This signature of MockRender with an empty template does not have the point.
- *
- * @see https://ng-mocks.sudo.eu/api/MockRender
- */
-export function MockRender(template: ''): ComponentFixture<void> & { point: undefined };
-
-/**
  * This signature of MockRender without params should not autocomplete any keys of any types.
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender
@@ -105,13 +104,14 @@ export function MockRender<MComponent, TComponent extends Record<keyof any, any>
 ): MockedComponentFixture<MComponent, TComponent>;
 
 export function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
-  template: string | AnyType<MComponent> | InjectionToken<MComponent>,
+  template?: string | AnyType<MComponent> | InjectionToken<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {
+  const tpl = arguments.length === 0 ? '' : template;
   const bindings = params && typeof params === 'object' ? Object.keys(params) : params;
   const options = typeof flags === 'boolean' ? { detectChanges: flags } : { ...flags };
-  const factory = (MockRenderFactory as any)(template, bindings, options);
+  const factory = (MockRenderFactory as any)(tpl, bindings, options);
 
   return factory(params, options.detectChanges);
 }

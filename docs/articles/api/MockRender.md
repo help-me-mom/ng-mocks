@@ -437,6 +437,27 @@ fixture.componentInstance;
 fixture.point.componentInstance;
 ```
 
+## Example with a pipe
+
+```ts
+const fixture = MockRender(DatePipe, {
+  $implicit: new Date(), // the value to transform
+});
+
+// is a middle component to manage params
+fixture.componentInstance.$implicit.setHours(5);
+
+// an instance of DatePipe
+fixture.point.componentInstance;
+```
+
+```ts
+const fixture = MockRender('{{ 3.99 | currency }}');
+
+// an unknown instance
+fixture.point.componentInstance;
+```
+
 ## Example with a service
 
 ```ts

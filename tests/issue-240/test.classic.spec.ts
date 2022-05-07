@@ -42,7 +42,7 @@ describe('issue-240:classic', () => {
     expect(countPure).toEqual(1);
     expect(countImpure).toEqual(2);
 
-    const pure = ngMocks.get(fixture.point, PurePipe);
+    const pure = ngMocks.findInstance(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
 
     // We do not have auto-spies, because we provided callbacks.

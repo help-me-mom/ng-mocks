@@ -104,6 +104,7 @@ export default (
 
   ctor = generateWrapper({ ...meta, bindings, options });
   coreDefineProperty(ctor, 'cacheKey', cacheKey);
+  coreDefineProperty(ctor, 'tpl', mockTemplate);
   caches.unshift(ctor as any);
   caches.splice(ngMocksUniverse.global.get('mockRenderCacheSize') ?? coreConfig.mockRenderCacheSize);
 

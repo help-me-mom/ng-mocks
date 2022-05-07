@@ -10,6 +10,8 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import { MockService } from '../mock-service/mock-service';
+import funcGetName from '../common/func.get-name';
+import { getInjection } from '../common/core.helpers';
 
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
@@ -23,21 +25,41 @@ export interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
   <T extends Record<F, any>>(params?: Partial<T>, detectChanges?: boolean): MockedComponentFixture<C, T>;
 }
 
-const isExpectedRender = (template: any): boolean =>
-  typeof template === 'string' || isNgDef(template, 'c') || isNgDef(template, 'd');
-
 const renderDeclaration = (fixture: any, template: any, params: any): void => {
-  fixture.point = fixture.debugElement.children[0] || fixture.debugElement.childNodes[0];
+  fixture.point =
+    fixture.debugElement.children[0] &&
+    fixture.debugElement.children[0].nativeElement.nodeName !== '#text' &&
+    fixture.debugElement.children[0].nativeElement.nodeName !== '#comment'
+      ? fixture.debugElement.children[0]
+      : fixture.debugElement;
   if (isNgDef(template, 'd')) {
     helperDefinePropertyDescriptor(fixture.point, 'componentInstance', {
       get: () => ngMocks.get(fixture.point, template),
     });
+  } else if (isNgDef(template, 'p')) {
+    helperDefinePropertyDescriptor(fixture.point, 'componentInstance', {
+      get: () => ngMocks.findInstance(fixture.point, template),
+    });
   }
-  tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point?.componentInstance, []));
+  tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, []));
 };
 
 const renderInjection = (fixture: any, template: any, params: any): void => {
-  const instance = TestBed.get(template);
+  let instance: any;
+  try {
+    instance = getInjection(template);
+  } catch (error) {
+    if (isNgDef(template, 'p')) {
+      throw new Error(
+        [
+          `Cannot render ${funcGetName(template)}.`,
+          'Did you forget to set $implicit param, or add the pipe to providers?',
+          'https://ng-mocks.sudo.eu/guides/pipe',
+        ].join(' '),
+      );
+    }
+    throw error;
+  }
   if (params) {
     ngMocks.stub(instance, params);
   }
@@ -111,7 +133,7 @@ const generateFactoryInstall = (ctor: AnyType<any>, options: IMockRenderFactoryO
 };
 
 const generateFactory = (
-  componentCtor: Type<any>,
+  componentCtor: Type<any> & { tpl?: string },
   bindings: undefined | null | string[],
   template: any,
   options: IMockRenderFactoryOptions,
@@ -127,7 +149,12 @@ const generateFactory = (
       fixture.detectChanges();
     }
 
-    if (isExpectedRender(template)) {
+    if (
+      typeof template === 'string' ||
+      isNgDef(template, 'c') ||
+      isNgDef(template, 'd') ||
+      (componentCtor.tpl && isNgDef(template, 'p'))
+    ) {
       renderDeclaration(fixture, template, params);
     } else {
       renderInjection(fixture, template, params);

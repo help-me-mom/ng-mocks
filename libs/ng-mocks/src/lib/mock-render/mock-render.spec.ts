@@ -176,11 +176,6 @@ describe('MockRender', () => {
     );
   });
 
-  it('renders empty templates w/o point', () => {
-    const fixture = MockRender('');
-    expect(fixture.point).toBeUndefined();
-  });
-
   it('assigns outputs to a literals', () => {
     const fixture = MockRender(RenderRealComponent, {
       trigger: undefined,
