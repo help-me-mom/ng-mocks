@@ -55,13 +55,29 @@
     },
 
     {
-      "paths": [
-        "e2e/a-jasmine/package.json",
-        "e2e/a-jest/package.json",
-        "e2e/a-min/package.json",
-        "e2e/nx/package.json"
-      ],
-      "additionalBranchPrefix": "e2e/latest/",
+      "paths": ["e2e/a-jasmine/package.json"],
+      "additionalBranchPrefix": "e2e/jasmine/",
+      "allowedVersions": "/.+/",
+      "ignoreUnstable": false
+    },
+
+    {
+      "paths": ["e2e/a-jest/package.json"],
+      "additionalBranchPrefix": "e2e/jest/",
+      "allowedVersions": "/.+/",
+      "ignoreUnstable": false
+    },
+
+    {
+      "paths": ["e2e/a-min/package.json"],
+      "additionalBranchPrefix": "e2e/min/",
+      "allowedVersions": "/.+/",
+      "ignoreUnstable": false
+    },
+
+    {
+      "paths": ["e2e/nx/package.json"],
+      "additionalBranchPrefix": "e2e/nx/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
