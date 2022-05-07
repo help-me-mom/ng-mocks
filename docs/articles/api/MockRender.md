@@ -1,15 +1,15 @@
 ---
-title: MockRender - shallow rendering in Angular tests
-describe: Information about shallow rendering in Angular tests via MockRender from ng-mocks
+title: MockRender - advanced rendering in Angular tests
+describe: Information about rendering in Angular tests via MockRender from ng-mocks
 sidebar_label: MockRender
 ---
 
-**Shallow rendering in Angular tests** is provided via `MockRender` function.
-`MockRender` helps when we want to assert `Inputs`, `Outputs`, `ChildContent`, or to render custom templates.
+**Advanced rendering in Angular tests** is provided via `MockRender` function.
+`MockRender` helps when you want to assert `Inputs`, `Outputs`, `ChildContent`, or to render custom templates.
 
 `MockRender` uses Angular `TestBed.createComponent` under the hood and provides:
 
-- shallow rendering of Components, Directives, Services, Tokens
+- correct bindings to `Inputs` and `Outputs`
 - rendering of custom templates
 - support for all lifecycle hooks (`ngOnInit`, `ngOnChanges` etc)
 - support for testing `ChangeDetectionStrategy.OnPush` components
@@ -35,13 +35,17 @@ and **supports not only components, but also directives, services and tokens**.
 
 ### Proxy between params and fixture
 
-When `MockRender(Component, params)` is used then `fixture.componentInstance` is a proxy to existing keys in `params`,
+There are `fixture.componentInstance` and `fixture.point.componentInstance` with `MockRender` usage,
+and, it's important to know their difference: 
+
+- `fixture.point.componentInstance` is the real component instance
+- `fixture.componentInstance` correctly controls `@Inputs` and `@Outputs` of the component
+
+When `MockRender(Component, params)` is used then `fixture.componentInstance` is a proxy to the `params`,
 therefore, changing `fixture.componentInstance` is the same as changing `params` and vise-versa.
 
-The same happens with `fixture.componentInstance` and `fixture.point.componentInstance`.
-If `params` don't have a property which exists in `fixture.point.componentInstance`,
-then changing this property via `fixture.componentInstance`
-will change it in `fixture.point.componentInstance` and vise-versa.
+When `MockRender(Component)` is used without params then `fixture.componentInstance` controls `@Inputs` and `@Outputs`
+of the component. That let trigger correct lifecycle hooks. 
 
 An example:
 
@@ -73,7 +77,8 @@ fixture.componentInstance.i1 = 7;
 
 params.i2 = 8;
 // It does nothing, because the proxy is based on
-// the initial keys of params.
+// the initial keys of params,
+// and i2 isn't present there.
 
 fixture.point.componentInstance.i2 = 3;
 // Now fixture.componentInstance.i2 = 3.
@@ -83,13 +88,16 @@ fixture.componentInstance.i2 = 4;
 
 fixture.point.componentInstance.i3 = 5;
 // It does nothing, because the proxy is based on
-// the initial properties in the point.
+// the initial properties in the point,
+// and i3 isn't present there.
 ```
 
 Looks too complicated, right?
 
-That's why the best way to write tests with `MockRender` is to rely on `params` and `fixture.point` only
-and to avoid usage of `fixture.componentInstance`.
+That's why the best way to write tests with `MockRender` is to rely on
+
+- `fixture.componentInstance` or `params` if you want to change inputs / outputs
+- `fixture.point.componentInstance` if you want to assert expectations
 
 :::tip
 As a possible solution, `params` might be spread:
@@ -102,8 +110,8 @@ const fixture = MockRender(Component, { ...params });
 ### One MockRender per one test
 
 `MockRender` creates a special wrapper component which should be injected into `TestBed`.
-The component is needed in order to render a custom template, which is provided or generated based on parameters.
-An injection of a component into `TestBed` is possible only if `TestBed` has not been used yet.
+The wrapper is needed in order to render a custom template, which is provided or generated based on parameters.
+A declaration of new components in `TestBed` is possible only if `TestBed` has not been used yet.
 
 Because of this,
 usage of `MockRender` after usage of `TestBed.get`, `TestBed.inject`, `TestBed.createComponent` or another `MockRender`
@@ -111,7 +119,7 @@ triggers an error about dirty `TestBed`.
 
 However, it is still possible to use `MockRender` more than once in a test.
 It requires a reset of `TestBed` (check [`ngMocks.flushTestBed`](./ngMocks/flushTestBed.md)).
-Please pay attention, that this makes all existing service instances obsolete.
+Please note, that this makes all existing service instances obsolete.
 
 ```ts
 it('two renders', () => {

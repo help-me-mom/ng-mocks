@@ -14,25 +14,16 @@ jobs:
       - checkout
       - restore_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
       - run:
           name: NPM Install
           command: |
             if [ ! -d "./node_modules/" ]; then
               npm ci --no-optional
             fi
-            if [ ! -d "./docs/node_modules/" ]; then
-              cd docs && npm ci --no-optional && cd ..
-            fi
       - save_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
-      - save_cache:
-          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
-          paths:
-            - ./docs/node_modules
       - run:
           name: Prettier
           command: npm run prettier:check
@@ -60,9 +51,6 @@ jobs:
       - run:
           name: Unit Tests
           command: WITH_COVERAGE=1 npm run test
-      - run:
-          name: Docs
-          command: npm run build:docs
       - store_test_results:
           path: ./test-reports
       - store_artifacts:
@@ -119,6 +107,27 @@ jobs:
             - run:
                 name: E2E
                 command: npm run e2e
+  'Docs':
+    docker:
+      - image: satantime/puppeteer-node:16.15.0
+    resource_class: medium
+    steps:
+      - checkout
+      - restore_cache:
+          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "./docs/node_modules/" ]; then
+              cd docs && npm ci --no-optional && cd ..
+            fi
+      - save_cache:
+          key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
+          paths:
+            - ./docs/node_modules
+      - run:
+          name: Docs
+          command: npm run build:docs
   'Angular Jasmine Install':
     docker:
       - image: satantime/puppeteer-node:16.15.0
@@ -1575,9 +1584,13 @@ jobs:
           condition:
             or:
               - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
+                  and:
+                    - matches:
+                        pattern: 'renovate/e2e/.*'
+                        value: << pipeline.git.branch >>
+                    - matches:
+                        pattern: 'docs/.*'
+                        value: << pipeline.git.branch >>
               - matches:
                   pattern: 'renovate/e2e/a5/.*'
                   value: << pipeline.git.branch >>
@@ -1638,6 +1651,9 @@ workflows:
           requires:
             - Core
       - 'Performance':
+          requires:
+            - Core
+      - 'Docs':
           requires:
             - Core
       - 'Angular Jasmine Install':

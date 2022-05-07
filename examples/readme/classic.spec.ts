@@ -99,20 +99,12 @@ const assertion: any =
 // In the following test suite, we would like to
 // cover behavior of the component.
 describe('profile:classic', () => {
-  // First of all, we would like to reuse the same
-  // TestBed in every test.
-  // ngMocks.faster suppresses reset of TestBed
-  // after each test and allows to use TestBed,
-  // MockBuilder and MockRender in beforeAll.
-  // https://ng-mocks.sudo.eu/api/ngMocks/faster
-  ngMocks.faster();
-
   // Helps to reset customizations after each test.
   MockInstance.scope();
 
   // Let's declare TestBed in beforeAll instead of beforeEach.
   // The code mocks everything in SharedModule and provides a mock AuthService.
-  beforeAll(async () => {
+  beforeEach(async () => {
     return TestBed.configureTestingModule({
       imports: [
         MockModule(SharedModule), // mock
