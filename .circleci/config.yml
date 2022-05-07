@@ -1589,7 +1589,10 @@ jobs:
                         pattern: 'renovate/e2e/.*'
                         value: << pipeline.git.branch >>
                     - matches:
-                        pattern: 'docs/.*'
+                        pattern: 'renovate/docs/.*'
+                        value: << pipeline.git.branch >>
+                    - matches:
+                        pattern: 'master|alpha|beta|next|rc'
                         value: << pipeline.git.branch >>
               - matches:
                   pattern: 'renovate/e2e/a5/.*'
@@ -1643,13 +1646,25 @@ workflows:
   version: 2
   Testing:
     jobs:
-      - Core
+      - Core:
+          filters:
+            tags:
+              only: .*
       - E2E:
           requires:
             - Core
       - 'Core IE':
           requires:
             - Core
+          filters:
+            branches:
+              ignore:
+                - master
+                - alpha
+                - beta
+                - next
+                - rc
+                - renovate/docs/.*
       - 'Performance':
           requires:
             - Core
