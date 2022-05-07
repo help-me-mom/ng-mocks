@@ -1,4 +1,9 @@
 CHANGELOG.md
+.browserslistrc
+.dockerignore
+.eslintignore
+.gitignore
+.prettierignore
 
 dist/
 docs/**/*.md

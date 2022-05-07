@@ -25,9 +25,9 @@ settings:
         - ./e2e/a12/tsconfig.json
         - ./e2e/a13/tsconfig.json
         - ./e2e/a14/tsconfig.json
-        - ./e2e/a-jasmine/tsconfig.json
-        - ./e2e/a-jest/tsconfig.json
-        - ./e2e/a-min/tsconfig.json
+        - ./e2e/jasmine/tsconfig.json
+        - ./e2e/jest/tsconfig.json
+        - ./e2e/min/tsconfig.json
         - ./e2e/nx/apps/a-nx/tsconfig.json
   es-roikoren:
     aggressive: true
@@ -52,9 +52,9 @@ overrides:
         - ./e2e/a12/tsconfig.json
         - ./e2e/a13/tsconfig.json
         - ./e2e/a14/tsconfig.json
-        - ./e2e/a-jasmine/tsconfig.json
-        - ./e2e/a-jest/tsconfig.json
-        - ./e2e/a-min/tsconfig.json
+        - ./e2e/jasmine/tsconfig.json
+        - ./e2e/jest/tsconfig.json
+        - ./e2e/min/tsconfig.json
         - ./e2e/nx/apps/a-nx/tsconfig.json
     extends:
       - 'eslint:recommended'
