@@ -1,3 +1,6 @@
+import { isNgDef } from '../common/func.is-ng-def';
+import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
+
 const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i' ? `[${prop}]` : `(${prop})`);
 
 const generateTemplateAttrWithParams = (prop: string, type: 'i' | 'o'): string => {
@@ -31,6 +34,8 @@ export default (declaration: any, { selector, bindings, inputs, outputs }: any):
   // istanbul ignore else
   if (typeof declaration === 'string') {
     mockTemplate = declaration;
+  } else if (isNgDef(declaration, 'p') && bindings && bindings.indexOf('$implicit') !== -1) {
+    mockTemplate = `{{ $implicit | ${coreReflectPipeResolve(declaration).name} }}`;
   } else if (selector) {
     mockTemplate += `<${selector}`;
     mockTemplate += generateTemplateAttr(bindings, inputs, 'i');

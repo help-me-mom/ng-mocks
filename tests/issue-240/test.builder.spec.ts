@@ -15,7 +15,7 @@ describe('issue-240:builder', () => {
     );
 
     const pure = ngMocks.findInstance(PurePipe);
-    const impure = ngMocks.get(fixture.point, ImpurePipe);
+    const impure = ngMocks.findInstance(fixture.point, ImpurePipe);
 
     // Without auto-spy we need the code below.
     // Calls would start with 0.

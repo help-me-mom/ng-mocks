@@ -171,7 +171,6 @@ export class MockBuilderPromise implements IMockBuilder {
     for (const provider of flatten(def)) {
       const { provide, multi } = parseProvider(provider);
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
-      this.wipe(provide);
       this.providerDef.set(provide, generateProviderValue(provider, existing, multi));
     }
 

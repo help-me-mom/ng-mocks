@@ -20,7 +20,7 @@ describe('issue-240:guts', () => {
       `,
     );
 
-    const pure = ngMocks.get(fixture.point, PurePipe);
+    const pure = ngMocks.findInstance(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
 
     // Without auto-spy we need the code below.

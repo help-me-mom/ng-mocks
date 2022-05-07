@@ -28,15 +28,15 @@ describe('TestPipe', () => {
   beforeEach(() => MockBuilder(TargetPipe));
 
   it('sorts strings', () => {
-    const fixture = MockRender('{{ values | target}}', {
-      values: ['1', '3', '2'],
+    const fixture = MockRender(TargetPipe, {
+      $implicit: ['1', '3', '2'],
     });
 
     expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
   });
 
   it('reverses strings on param', () => {
-    const fixture = MockRender('{{ values | target:flag}}', {
+    const fixture = MockRender('{{ values | target:flag }}', {
       flag: false,
       values: ['1', '3', '2'],
     });

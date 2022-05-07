@@ -14,10 +14,9 @@ import funcGetName from './func.get-name';
  * @internal
  */
 export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
-  const testBed: any = getTestBed();
   try {
     // istanbul ignore next
-    return testBed.inject ? testBed.inject(token) : testBed.get(token);
+    return getInjection(token);
   } catch {
     return undefined;
   }
@@ -29,7 +28,7 @@ export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I
  * @deprecated
  * @internal
  */
-export const getInjection = <I>(token: Type<I> | InjectionToken<I>): I => {
+export const getInjection = <I>(token: AnyType<I> | InjectionToken<I>): I => {
   const testBed: any = getTestBed();
 
   // istanbul ignore next
