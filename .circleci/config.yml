@@ -1,15 +1,114 @@
 version: 2.1
-orbs:
-  win: circleci/windows@4.1.1
+
 parameters:
   lockindex:
     type: string
-    default: '3'
-jobs:
-  Core:
+    default: '1'
+
+orbs:
+  win: circleci/windows@4.1.1
+
+executors:
+  core:
     docker:
       - image: satantime/puppeteer-node:16.15.0
     resource_class: medium
+  a5:
+    docker:
+      - image: satantime/puppeteer-node:6.17.1
+    resource_class: medium
+  a6:
+    docker:
+      - image: satantime/puppeteer-node:8.17.0
+    resource_class: medium
+  a7:
+    docker:
+      - image: satantime/puppeteer-node:8.17.0
+    resource_class: medium
+  a8:
+    docker:
+      - image: satantime/puppeteer-node:10.24.1
+    resource_class: medium
+  a9:
+    docker:
+      - image: satantime/puppeteer-node:12.22.12
+    resource_class: medium
+  a10:
+    docker:
+      - image: satantime/puppeteer-node:12.22.12
+    resource_class: medium
+  a11:
+    docker:
+      - image: satantime/puppeteer-node:12.22.12
+    resource_class: medium
+  a12:
+    docker:
+      - image: satantime/puppeteer-node:12.22.12
+    resource_class: medium
+  a13:
+    docker:
+      - image: satantime/puppeteer-node:12.22.12
+    resource_class: medium
+  a14:
+    docker:
+      - image: satantime/puppeteer-node:16.15.0
+    resource_class: medium
+
+commands:
+  install:
+    parameters:
+      dir:
+        description: Directory in /e2e/
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+      - run:
+          name: NPM Install
+          command: |
+            if [ ! -d "e2e/<< parameters.dir >>/node_modules/" ]; then
+              npm run i:ci:<< parameters.dir >>
+            fi
+      - save_cache:
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+          paths:
+            - ./e2e/<< parameters.dir >>/node_modules
+  test:
+    parameters:
+      dir:
+        description: Directory in /e2e/
+        type: string
+      es:
+        description: ES Version
+        type: string
+        default: ''
+      engine:
+        description: Angular View Engine
+        type: enum
+        enum:
+          - ''
+          - ivy
+        default: ''
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:<< parameters.dir >>
+      - run:
+          name: Spreading Tests
+          command: npm run s:test:<< parameters.dir >>
+      - run:
+          name: Unit Tests
+          command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >>
+
+jobs:
+  Core:
+    executor: core
     steps:
       - checkout
       - restore_cache:
@@ -79,9 +178,7 @@ jobs:
             $HOME/codeclimate upload-coverage \
               -i test-reports/codeclimate.json
   E2E:
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
+    executor: core
     steps:
       - run: date
       - when:
@@ -107,10 +204,8 @@ jobs:
             - run:
                 name: E2E
                 command: npm run e2e
-  'Docs':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
+  Docs:
+    executor: core
     steps:
       - checkout
       - restore_cache:
@@ -128,100 +223,8 @@ jobs:
       - run:
           name: Docs
           command: npm run build:docs
-  'Angular Jasmine Install':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jasmine/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a-jasmine/node_modules/" ]; then
-                    npm run i:ci:a-jasmine
-                  fi
-            - save_cache:
-                key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
-                paths:
-                  - ./e2e/a-jasmine/node_modules
-  'Angular Jest Install':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jest/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a-jest/node_modules/" ]; then
-                    npm run i:ci:a-jest
-                  fi
-            - save_cache:
-                key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
-                paths:
-                  - ./e2e/a-jest/node_modules
-  'Angular Min Install':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/min/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a-min/node_modules/" ]; then
-                    npm run i:ci:a-min
-                  fi
-            - save_cache:
-                key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
-                paths:
-                  - ./e2e/a-min/node_modules
-  'Performance':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
+  Performance:
+    executor: core
     steps:
       - run: date
       - when:
@@ -249,1332 +252,7 @@ jobs:
             - run:
                 name: Large Modules
                 command: KARMA_SUITE=tests-performance/ng-mocks.spec.ts npm run test
-  'Angular 5 ES5':
-    docker:
-      - image: satantime/puppeteer-node:6.17.1
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a5/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a5es5/node_modules/" ]; then
-                    npm run i:a5es5
-                  fi
-            - save_cache:
-                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
-                paths:
-                  - ./e2e/a5es5/node_modules
-            - attach_workspace:
-                at: dist
-            - run:
-                name: Spreading Build
-                command: npm run s:a5es5
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a5es5
-            - run:
-                name: Unit Tests
-                command: npm run test:a5es5
-  'Angular 5 ES2015':
-    docker:
-      - image: satantime/puppeteer-node:6.17.1
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a5/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a5es2015/node_modules/" ]; then
-                    npm run i:a5es2015
-                  fi
-            - save_cache:
-                key: a5es2015-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es2015/package-lock.json" }}
-                paths:
-                  - ./e2e/a5es2015/node_modules
-            - attach_workspace:
-                at: dist
-            - run:
-                name: Spreading Build
-                command: npm run s:a5es2015
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a5es2015
-            - run:
-                name: Unit Tests
-                command: npm run test:a5es2015
-  'Angular 6 Install':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a6/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a6/node_modules/" ]; then
-                    npm run i:ci:a6
-                  fi
-            - save_cache:
-                key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-                paths:
-                  - ./e2e/a6/node_modules
-  'Angular 6 ES5':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a6/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a6
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a6
-            - run:
-                name: Unit Tests
-                command: npm run test:a6es5
-  'Angular 6 ES2015':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a6/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a6-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a6/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a6
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a6
-            - run:
-                name: Unit Tests
-                command: npm run test:a6es2015
-  'Angular 7 Install':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a7/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a7/node_modules/" ]; then
-                    npm run i:ci:a7
-                  fi
-            - save_cache:
-                key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-                paths:
-                  - ./e2e/a7/node_modules
-  'Angular 7 ES5':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a7/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a7
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a7
-            - run:
-                name: Unit Tests
-                command: npm run test:a7es5
-  'Angular 7 ES2015':
-    docker:
-      - image: satantime/puppeteer-node:8.17.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a7/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a7-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a7/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a7
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a7
-            - run:
-                name: Unit Tests
-                command: npm run test:a7es2015
-  'Angular 8 Install':
-    docker:
-      - image: satantime/puppeteer-node:10.24.1
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a8/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a8/node_modules/" ]; then
-                    npm run i:ci:a8
-                  fi
-            - save_cache:
-                key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-                paths:
-                  - ./e2e/a8/node_modules
-  'Angular 8 ES5':
-    docker:
-      - image: satantime/puppeteer-node:10.24.1
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a8/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a8
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a8
-            - run:
-                name: Unit Tests
-                command: npm run test:a8es5
-  'Angular 8 ES2015':
-    docker:
-      - image: satantime/puppeteer-node:10.24.1
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a8/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a8-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a8/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a8
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a8
-            - run:
-                name: Unit Tests
-                command: npm run test:a8es2015
-  'Angular 9 Install':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a9/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a9/node_modules/" ]; then
-                    npm run i:ci:a9
-                  fi
-            - save_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-                paths:
-                  - ./e2e/a9/node_modules
-  'Angular 9 ES5':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a9/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a9
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a9
-            - run:
-                name: Unit Tests
-                command: npm run test:a9es5
-  'Angular 9 ES2015':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a9/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a9
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a9
-            - run:
-                name: Unit Tests
-                command: npm run test:a9es2015
-  'Angular 9 ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a9/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a9
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a9
-            - run:
-                name: Unit Tests
-                command: npm run test:a9es5ivy
-  'Angular 9 ES2016 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a9/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a9-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a9/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a9
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a9
-            - run:
-                name: Unit Tests
-                command: npm run test:a9es2015ivy
-  'Angular 10 Install':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a10/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a10/node_modules/" ]; then
-                    npm run i:ci:a10
-                  fi
-            - save_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-                paths:
-                  - ./e2e/a10/node_modules
-  'Angular 10 ES5':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a10/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a10
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a10
-            - run:
-                name: Unit Tests
-                command: npm run test:a10es5
-  'Angular 10 ES2017':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a10/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a10
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a10
-            - run:
-                name: Unit Tests
-                command: npm run test:a10es2015
-  'Angular 10 ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a10/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a10
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a10
-            - run:
-                name: Unit Tests
-                command: npm run test:a10es5ivy
-  'Angular 10 ES2018 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a10/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a10-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a10/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a10
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a10
-            - run:
-                name: Unit Tests
-                command: npm run test:a10es2015ivy
-  'Angular 11 Install':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a11/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a11/node_modules/" ]; then
-                    npm run i:ci:a11
-                  fi
-            - save_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-                paths:
-                  - ./e2e/a11/node_modules
-  'Angular 11 ES5':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a11/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a11
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a11
-            - run:
-                name: Unit Tests
-                command: npm run test:a11es5
-  'Angular 11 ES2019':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a11/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a11
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a11
-            - run:
-                name: Unit Tests
-                command: npm run test:a11es2015
-  'Angular 11 ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a11/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a11
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a11
-            - run:
-                name: Unit Tests
-                command: npm run test:a11es5ivy
-  'Angular 11 ES2020 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a11/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a11-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a11/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a11
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a11
-            - run:
-                name: Unit Tests
-                command: npm run test:a11es2015ivy
-  'Angular 12 Install':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a12/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a12/node_modules/" ]; then
-                    npm run i:ci:a12
-                  fi
-            - save_cache:
-                key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
-                paths:
-                  - ./e2e/a12/node_modules
-  'Angular 12 ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a12/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a12
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a12
-            - run:
-                name: Unit Tests
-                command: npm run test:a12es5ivy
-  'Angular 12 ES2020 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a12/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a12-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a12/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a12
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a12
-            - run:
-                name: Unit Tests
-                command: npm run test:a12es2015ivy
-  'Angular 13 Install':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a13/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a13/node_modules/" ]; then
-                    npm run i:ci:a13
-                  fi
-            - save_cache:
-                key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
-                paths:
-                  - ./e2e/a13/node_modules
-  'Angular 13 ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a13/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a13
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a13
-            - run:
-                name: Unit Tests
-                command: npm run test:a13es5ivy
-  'Angular 13 ES2020 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:12.22.12
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a13/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a13-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a13/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a13
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a13
-            - run:
-                name: Unit Tests
-                command: npm run test:a13es2015ivy
-  'Angular 14 Install':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a14/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a14-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a14/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/a14/node_modules/" ]; then
-                    npm run i:ci:a14
-                  fi
-            - save_cache:
-                key: a14-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a14/package-lock.json" }}
-                paths:
-                  - ./e2e/a14/node_modules
-  'Angular 14 ES5':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a14/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a14-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a14/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a14
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a14
-            - run:
-                name: Unit Tests
-                command: npm run test:a14es5
-  'Angular 14 ES2020':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/a14/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a14-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a14/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a14
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a14
-            - run:
-                name: Unit Tests
-                command: npm run test:a14es2015
-  'Angular Jasmine ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jasmine/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-jasmine
-            - run:
-                name: Unit Tests
-                command: npm run test:a-jasmine:es5ivy
-  'Angular Jasmine ES2020 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jasmine/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-jasmine-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jasmine/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-jasmine
-            - run:
-                name: Unit Tests
-                command: npm run test:a-jasmine:es2015ivy
-  'Angular Jest ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jest/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-jest
-            - run:
-                name: Unit Tests
-                command: npm run test:a-jest:es5ivy
-  'Angular Jest ES2020 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/jest/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-jest-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-jest/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-jest
-            - run:
-                name: Unit Tests
-                command: npm run test:a-jest:es2015ivy
-  'Angular Min ES5 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/min/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-min
-            - run:
-                name: Unit Tests
-                command: npm run test:a-min:es5ivy
-  'Angular Min ES2015 Ivy':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/min/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-min-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a-min/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-min
-            - run:
-                name: Unit Tests
-                command: npm run test:a-min:es2015ivy
-  'Angular NX Install':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/nx/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - restore_cache:
-                key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
-            - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "e2e/nx/node_modules/" ]; then
-                    npm run i:ci:a-nx
-                  fi
-            - save_cache:
-                key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
-                paths:
-                  - ./e2e/nx/node_modules
-  'Angular NX':
-    docker:
-      - image: satantime/puppeteer-node:16.15.0
-    resource_class: medium
-    steps:
-      - run: date
-      - when:
-          condition:
-            or:
-              - not:
-                  matches:
-                    pattern: 'renovate/e2e/.*'
-                    value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'renovate/e2e/nx/.*'
-                  value: << pipeline.git.branch >>
-          steps:
-            - checkout
-            - attach_workspace:
-                at: dist
-            - restore_cache:
-                key: a-nx-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/nx/package-lock.json" }}
-            - run:
-                name: Spreading Build
-                command: npm run s:a-nx
-            - run:
-                name: Spreading Tests
-                command: npm run s:test:a-nx
-            - run:
-                name: Unit Tests
-                command: npm run test:a-nx
-  Core IE:
+  IE:
     executor:
       name: win/default
       shell: bash.exe
@@ -1642,20 +320,89 @@ jobs:
                   npm run test:jasmine
     environment:
       IE_BIN: 'C:\Program Files\Internet Explorer\iexplore.exe'
+  E2E Install:
+    parameters:
+      node:
+        type: executor
+        default: core
+      dir:
+        type: string
+      branch:
+        type: string
+    executor: << parameters.node >>
+    steps:
+      - run: date
+      - when:
+          condition:
+            or:
+              - not:
+                  matches:
+                    pattern: 'renovate/e2e/.*'
+                    value: << pipeline.git.branch >>
+              - matches:
+                  pattern: 'renovate/e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
+          steps:
+            - install:
+                dir: << parameters.dir >>
+  E2E Test:
+    parameters:
+      node:
+        type: executor
+        default: core
+      dir:
+        type: string
+      branch:
+        type: string
+      es:
+        type: enum
+        enum:
+          - ''
+          - es5
+          - es2015
+        default: ''
+      engine:
+        type: enum
+        enum:
+          - ''
+          - ivy
+        default: ''
+    executor: << parameters.node >>
+    steps:
+      - run: date
+      - when:
+          condition:
+            or:
+              - not:
+                  matches:
+                    pattern: 'renovate/e2e/.*'
+                    value: << pipeline.git.branch >>
+              - matches:
+                  pattern: 'renovate/e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
+          steps:
+            - test:
+                dir: << parameters.dir >>
+                es: << parameters.es >>
+                engine: << parameters.engine >>
+
 workflows:
   version: 2
   Testing:
     jobs:
       - Core:
+          name: core
           filters:
             tags:
-              only: .*
+              only: /.*/
       - E2E:
+          name: core:e2e
           requires:
-            - Core
-      - 'Core IE':
+            - core
+      - IE:
+          name: core:ie
           requires:
-            - Core
+            - core
           filters:
             branches:
               ignore:
@@ -1664,148 +411,152 @@ workflows:
                 - beta
                 - next
                 - rc
-                - renovate/docs/.*
-      - 'Performance':
+                - /renovate\/docs\/.*/
+      - Performance:
+          name: core:performance
           requires:
-            - Core
-      - 'Docs':
+            - core
+      - Docs:
+          name: core:docs
           requires:
-            - Core
-      - 'Angular Jasmine Install':
+            - core
+
+      # installing latest
+      - E2E Install:
+          name: << matrix.dir >>:install
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
           requires:
-            - Core
-      - 'Angular Jest Install':
+            - core
+          matrix:
+            parameters:
+              dir:
+                - jasmine
+                - jest
+                - min
+                - nx
+
+      # testing latest
+      - E2E Test:
+          name: << matrix.dir >>:test:<< matrix.es >>:ivy
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          es: << matrix.es >>
+          engine: ivy
           requires:
-            - Core
-      - 'Angular Min Install':
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - jasmine
+                - jest
+                - min
+              es:
+                - es5
+                - es2015
+
+      # testing nx (exceptional)
+      - E2E Test:
+          name: << matrix.dir >>:test
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
           requires:
-            - Core
-      - 'Angular 6 Install':
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - nx
+
+      # installing a5 (exceptional)
+      - E2E Install:
+          name: << matrix.dir >>:install
+          node: a5
+          dir: << matrix.dir >>
+          branch: a5
           requires:
-            - Core
-      - 'Angular 7 Install':
+            - core
+          matrix:
+            parameters:
+              dir:
+                - a5es5
+                - a5es2015
+
+      # installing e2e
+      - E2E Install:
+          name: << matrix.dir >>:install
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
           requires:
-            - Core
-      - 'Angular 8 Install':
+            - core
+          matrix:
+            parameters:
+              dir:
+                - a6
+                - a7
+                - a8
+                - a9
+                - a10
+                - a11
+                - a12
+                - a13
+                - a14
+
+      # testing a5 (exceptional)
+      - E2E Test:
+          name: << matrix.dir >>:test
+          node: a5
+          dir: << matrix.dir >>
+          branch: a5
           requires:
-            - Core
-      - 'Angular 9 Install':
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - a5es5
+                - a5es2015
+
+      # testing classic view engine
+      - E2E Test:
+          name: << matrix.dir >>:test:<< matrix.es >>
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          es: << matrix.es >>
           requires:
-            - Core
-      - 'Angular 10 Install':
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - a6
+                - a7
+                - a8
+                - a9
+                - a10
+                - a11
+              es:
+                - es5
+                - es2015
+
+      # testing ivy view engine
+      - E2E Test:
+          name: << matrix.dir >>:test:<< matrix.es >>:ivy
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          es: << matrix.es >>
+          engine: ivy
           requires:
-            - Core
-      - 'Angular 11 Install':
-          requires:
-            - Core
-      - 'Angular 12 Install':
-          requires:
-            - Core
-      - 'Angular 13 Install':
-          requires:
-            - Core
-      - 'Angular 14 Install':
-          requires:
-            - Core
-      - 'Angular NX Install':
-          requires:
-            - Core
-      - 'Angular 5 ES5':
-          requires:
-            - Core
-      - 'Angular 5 ES2015':
-          requires:
-            - Core
-      - 'Angular 6 ES5':
-          requires:
-            - Angular 6 Install
-      - 'Angular 6 ES2015':
-          requires:
-            - Angular 6 Install
-      - 'Angular 7 ES5':
-          requires:
-            - Angular 7 Install
-      - 'Angular 7 ES2015':
-          requires:
-            - Angular 7 Install
-      - 'Angular 8 ES5':
-          requires:
-            - Angular 8 Install
-      - 'Angular 8 ES2015':
-          requires:
-            - Angular 8 Install
-      - 'Angular 9 ES5':
-          requires:
-            - Angular 9 Install
-      - 'Angular 9 ES2015':
-          requires:
-            - Angular 9 Install
-      - 'Angular 9 ES5 Ivy':
-          requires:
-            - Angular 9 Install
-      - 'Angular 9 ES2016 Ivy':
-          requires:
-            - Angular 9 Install
-      - 'Angular 10 ES5':
-          requires:
-            - Angular 10 Install
-      - 'Angular 10 ES2017':
-          requires:
-            - Angular 10 Install
-      - 'Angular 10 ES5 Ivy':
-          requires:
-            - Angular 10 Install
-      - 'Angular 10 ES2018 Ivy':
-          requires:
-            - Angular 10 Install
-      - 'Angular 11 ES5':
-          requires:
-            - Angular 11 Install
-      - 'Angular 11 ES2019':
-          requires:
-            - Angular 11 Install
-      - 'Angular 11 ES5 Ivy':
-          requires:
-            - Angular 11 Install
-      - 'Angular 11 ES2020 Ivy':
-          requires:
-            - Angular 11 Install
-      - 'Angular 12 ES5 Ivy':
-          requires:
-            - Angular 12 Install
-      - 'Angular 12 ES2020 Ivy':
-          requires:
-            - Angular 12 Install
-      - 'Angular 13 ES5 Ivy':
-          requires:
-            - Angular 13 Install
-      - 'Angular 13 ES2020 Ivy':
-          requires:
-            - Angular 13 Install
-      - 'Angular 14 ES5':
-          requires:
-            - Angular 14 Install
-      - 'Angular 14 ES2020':
-          requires:
-            - Angular 14 Install
-      - 'Angular Jasmine ES5 Ivy':
-          requires:
-            - Angular Jasmine Install
-      - 'Angular Jasmine ES2020 Ivy':
-          requires:
-            - Angular Jasmine Install
-      - 'Angular Jest ES5 Ivy':
-          requires:
-            - Angular Jest Install
-      - 'Angular Jest ES2020 Ivy':
-          requires:
-            - Angular Jest Install
-      - 'Angular Min ES5 Ivy':
-          requires:
-            - Angular Min Install
-      - 'Angular Min ES2015 Ivy':
-          requires:
-            - Angular Min Install
-      - 'Angular NX':
-          requires:
-            - Angular NX Install
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - a9
+                - a10
+                - a11
+                - a12
+                - a13
+                - a14
+              es:
+                - es5
+                - es2015

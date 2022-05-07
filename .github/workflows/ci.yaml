@@ -316,38 +316,38 @@ jobs:
         if: steps.a14.outputs.cache-hit != 'true'
         run: npm run i:ci:a14
 
-      - name: e2e/a-jasmine/node_modules
-        id: a-jasmine
+      - name: e2e/jasmine/node_modules
+        id: jasmine
         uses: actions/cache@v3
         with:
-          path: e2e/a-jasmine/node_modules
-          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+          path: e2e/jasmine/node_modules
+          key: ${{ runner.os }}-jasmine-v1-${{ hashFiles('./e2e/jasmine/package-lock.json') }}
 
       - name: Install A Jasmine dependencies
-        if: steps.a-jasmine.outputs.cache-hit != 'true'
-        run: npm run i:ci:a-jasmine
+        if: steps.jasmine.outputs.cache-hit != 'true'
+        run: npm run i:ci:jasmine
 
-      - name: e2e/a-jest/node_modules
-        id: a-jest
+      - name: e2e/jest/node_modules
+        id: jest
         uses: actions/cache@v3
         with:
-          path: e2e/a-jest/node_modules
-          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+          path: e2e/jest/node_modules
+          key: ${{ runner.os }}-jest-v1-${{ hashFiles('./e2e/jest/package-lock.json') }}
 
       - name: Install A Jest dependencies
-        if: steps.a-jest.outputs.cache-hit != 'true'
-        run: npm run i:ci:a-jest
+        if: steps.jest.outputs.cache-hit != 'true'
+        run: npm run i:ci:jest
 
-      - name: e2e/a-min/node_modules
-        id: a-min
+      - name: e2e/min/node_modules
+        id: min
         uses: actions/cache@v3
         with:
-          path: e2e/a-min/node_modules
-          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
+          path: e2e/min/node_modules
+          key: ${{ runner.os }}-min-v1-${{ hashFiles('./e2e/min/package-lock.json') }}
 
       - name: Install A Min dependencies
-        if: steps.a-min.outputs.cache-hit != 'true'
-        run: npm run i:ci:a-min
+        if: steps.min.outputs.cache-hit != 'true'
+        run: npm run i:ci:min
 
   a5es5:
     needs: Install
@@ -1192,12 +1192,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-jasmine/node_modules
+      - name: e2e/jasmine/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-jasmine/node_modules
-          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+          path: e2e/jasmine/node_modules
+          key: ${{ runner.os }}-jasmine-v1-${{ hashFiles('./e2e/jasmine/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1206,9 +1206,9 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-jasmine
+        run: npm run s:jasmine
       - name: Unit Tests
-        run: npm run test:a-jasmine:es5ivy
+        run: npm run test:jasmine:es5ivy
 
   ajasminees2015ivy:
     needs: Install
@@ -1222,12 +1222,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-jasmine/node_modules
+      - name: e2e/jasmine/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-jasmine/node_modules
-          key: ${{ runner.os }}-a-jasmine-v1-${{ hashFiles('./e2e/a-jasmine/package-lock.json') }}
+          path: e2e/jasmine/node_modules
+          key: ${{ runner.os }}-jasmine-v1-${{ hashFiles('./e2e/jasmine/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1236,9 +1236,9 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-jasmine
+        run: npm run s:jasmine
       - name: Unit Tests
-        run: npm run test:a-jasmine:es2015ivy
+        run: npm run test:jasmine:es2015ivy
 
   ajestes5ivy:
     needs: Install
@@ -1252,12 +1252,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-jest/node_modules
+      - name: e2e/jest/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-jest/node_modules
-          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+          path: e2e/jest/node_modules
+          key: ${{ runner.os }}-jest-v1-${{ hashFiles('./e2e/jest/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1266,9 +1266,9 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-jest
+        run: npm run s:jest
       - name: Unit Tests
-        run: npm run test:a-jest:es5ivy
+        run: npm run test:jest:es5ivy
 
   ajestes2015ivy:
     needs: Install
@@ -1282,12 +1282,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-jest/node_modules
+      - name: e2e/jest/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-jest/node_modules
-          key: ${{ runner.os }}-a-jest-v1-${{ hashFiles('./e2e/a-jest/package-lock.json') }}
+          path: e2e/jest/node_modules
+          key: ${{ runner.os }}-jest-v1-${{ hashFiles('./e2e/jest/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1296,9 +1296,9 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-jest
+        run: npm run s:jest
       - name: Unit Tests
-        run: npm run test:a-jest:es2015ivy
+        run: npm run test:jest:es2015ivy
 
   ames5ivy:
     needs: Install
@@ -1312,12 +1312,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-min/node_modules
+      - name: e2e/min/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-min/node_modules
-          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
+          path: e2e/min/node_modules
+          key: ${{ runner.os }}-min-v1-${{ hashFiles('./e2e/min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1326,11 +1326,11 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-min
+        run: npm run s:min
       - name: Unit Tests
-        run: npm run test:a-min:es5ivy
+        run: npm run test:min:es5ivy
       - name: Build
-        run: npm run build:a-min:es5ivy
+        run: npm run build:min:es5ivy
 
   ames2015ivy:
     needs: Install
@@ -1344,12 +1344,12 @@ jobs:
         with:
           node-version: 14.16.0
 
-      - name: e2e/a-min/node_modules
+      - name: e2e/min/node_modules
         id: cache
         uses: actions/cache@v3
         with:
-          path: e2e/a-min/node_modules
-          key: ${{ runner.os }}-a-min-v1-${{ hashFiles('./e2e/a-min/package-lock.json') }}
+          path: e2e/min/node_modules
+          key: ${{ runner.os }}-min-v1-${{ hashFiles('./e2e/min/package-lock.json') }}
 
       - name: Workspace
         uses: actions/download-artifact@v3
@@ -1358,8 +1358,8 @@ jobs:
           path: dist
 
       - name: Spreading Build
-        run: npm run s:a-min
+        run: npm run s:min
       - name: Unit Tests
-        run: npm run test:a-min:es2015ivy
+        run: npm run test:min:es2015ivy
       - name: Build
-        run: npm run build:a-min:es2015ivy
+        run: npm run build:min:es2015ivy

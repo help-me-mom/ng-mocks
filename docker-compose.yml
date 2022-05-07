@@ -155,11 +155,11 @@ services:
       - install
       - --force
 
-  a-jasmine:
+  jasmine:
     image: satantime/puppeteer-node:16.15.0
     working_dir: /app
     volumes:
-      - ./e2e/a-jasmine:/app
+      - ./e2e/jasmine:/app
       - /root/.node-gyp
       - /root/.npm
     command:
@@ -167,11 +167,11 @@ services:
       - install
       - --force
 
-  a-jest:
+  jest:
     image: satantime/puppeteer-node:16.15.0
     working_dir: /app
     volumes:
-      - ./e2e/a-jest:/app
+      - ./e2e/jest:/app
       - /root/.node-gyp
       - /root/.npm
     command:
@@ -179,11 +179,11 @@ services:
       - install
       - --force
 
-  a-min:
+  min:
     image: satantime/puppeteer-node:16.15.0
     working_dir: /app
     volumes:
-      - ./e2e/a-min:/app
+      - ./e2e/min:/app
       - /root/.node-gyp
       - /root/.npm
     command:

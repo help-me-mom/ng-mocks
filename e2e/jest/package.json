@@ -1,6 +1,6 @@
 {
-  "name": "a-jest",
-  "description": "Angular Jest only",
+  "name": "jest",
+  "description": "Angular Jest Only",
   "version": "0.0.0",
   "private": true,
   "scripts": {
