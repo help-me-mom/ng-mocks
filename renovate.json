@@ -1095,13 +1095,13 @@
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
       "packageNames": ["@types/jest", "jest"],
-      "allowedVersions": "<=27"
+      "allowedVersions": "/^2[78]\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
       "packageNames": ["jest-preset-angular"],
-      "allowedVersions": "<=11"
+      "allowedVersions": "/^12\\./"
     },
     {
       "additionalBranchPrefix": "e2e/a14/",
