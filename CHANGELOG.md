@@ -1,3 +1,10 @@
+## [13.5.1](https://github.com/ike18t/ng-mocks/compare/v13.5.0...v13.5.1) (2022-05-07)
+
+
+### Bug Fixes
+
+* **MockRender:** renders pipes with $implicit param [#2398](https://github.com/ike18t/ng-mocks/issues/2398) ([03f5f5e](https://github.com/ike18t/ng-mocks/commit/03f5f5e944cb7b4dedbdd8bf0e5e380bfbfc1257))
+
 # [13.5.0](https://github.com/ike18t/ng-mocks/compare/v13.4.2...v13.5.0) (2022-05-01)
 
 
