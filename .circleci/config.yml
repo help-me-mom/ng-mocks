@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   lockindex:
     type: string
-    default: '1'
+    default: '2'
 
 orbs:
   win: circleci/windows@4.1.1
@@ -117,7 +117,7 @@ jobs:
           name: NPM Install
           command: |
             if [ ! -d "./node_modules/" ]; then
-              npm ci --no-optional
+              npm ci
             fi
       - save_cache:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
@@ -192,16 +192,6 @@ jobs:
             - restore_cache:
                 key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
             - run:
-                name: NPM Install
-                command: |
-                  if [ ! -d "./node_modules/" ]; then
-                    npm ci --no-optional
-                  fi
-            - save_cache:
-                key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
-                paths:
-                  - ./node_modules
-            - run:
                 name: E2E
                 command: npm run e2e
   Docs:
@@ -222,7 +212,7 @@ jobs:
                 name: NPM Install
                 command: |
                   if [ ! -d "./docs/node_modules/" ]; then
-                    cd docs && npm ci --no-optional && cd ..
+                    npm run i:docs
                   fi
             - save_cache:
                 key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
