@@ -216,7 +216,7 @@
     "eslint-plugin-unused-imports": "2.0.0",
     "eslint-plugin-yml": "0.14.0",
     "husky": "8.0.1",
-    "jasmine-core": "4.1.0",
+    "jasmine-core": "4.1.1",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.3.19",
     "karma-chrome-launcher": "3.1.1",
