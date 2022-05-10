@@ -4,7 +4,12 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { getMockedNgDefOf, MockBuilder, MockRender } from 'ng-mocks';
+import {
+  getMockedNgDefOf,
+  MockBuilder,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 @Component({
   selector: 'modal',
@@ -55,8 +60,9 @@ describe('issue-736', () => {
     const fixture = MockRender(TargetComponent, undefined, false);
 
     // getting current instance of mock ComponentFactoryResolver
-    const componentFactoryResolver =
-      fixture.debugElement.injector.get(ComponentFactoryResolver);
+    const componentFactoryResolver = ngMocks.findInstance(
+      ComponentFactoryResolver,
+    );
 
     // its spied resolveComponentFactory shouldn't be called
     // the bug was that it is not a spy anymore.

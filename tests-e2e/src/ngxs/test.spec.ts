@@ -22,7 +22,7 @@ class SetValue {
   defaults: 'init',
 })
 @Injectable()
-export class TestState {
+class TestState {
   @((Action as any)(SetValue))
   setValue(ctx: StateContext<string>, { value }: SetValue) {
     ctx.setState(value);

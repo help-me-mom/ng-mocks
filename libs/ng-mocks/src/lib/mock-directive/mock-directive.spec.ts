@@ -145,7 +145,7 @@ describe('MockDirective', () => {
     const debugElement = fixture.debugElement.query(
       By.directive(ExampleDirective),
     );
-    const element = debugElement.injector.get(ExampleDirective);
+    const element = ngMocks.get(debugElement, ExampleDirective);
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
   });
@@ -154,7 +154,7 @@ describe('MockDirective', () => {
     const debugElement = fixture.debugElement.query(
       By.directive(ExampleDirective),
     );
-    const element = debugElement.injector.get(ExampleDirective);
+    const element = ngMocks.get(debugElement, ExampleDirective);
 
     element.someOutput.emit(true);
     expect(component.emitted).toEqual(true);

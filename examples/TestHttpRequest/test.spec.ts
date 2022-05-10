@@ -6,7 +6,7 @@ import {
 import { Injectable, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A service that does http requests.
 @Injectable()
@@ -39,12 +39,11 @@ describe('TestHttpRequest', () => {
   });
 
   it('sends a request', () => {
-    const fixture = MockRender('');
+    MockRender();
+
     // Let's extract the service and http controller for testing.
-    const service: TargetService =
-      fixture.debugElement.injector.get(TargetService);
-    const httpMock: HttpTestingController =
-      fixture.debugElement.injector.get(HttpTestingController);
+    const service = ngMocks.findInstance(TargetService);
+    const httpMock = ngMocks.findInstance(HttpTestingController);
 
     // A simple subscription to check what the service returns.
     let actual: any;
