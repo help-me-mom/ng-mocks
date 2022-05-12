@@ -260,7 +260,7 @@ jobs:
           condition:
             or:
               - not:
-                  and:
+                  or:
                     - matches:
                         pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
                         value: << pipeline.git.branch >>
@@ -418,8 +418,8 @@ workflows:
                 - beta
                 - next
                 - rc
-                - renovate/docs/.*
-                - dependabot/npm_and_yarn/docs/.*
+                - /renovate\/docs\/.*/
+                - /dependabot\/npm_and_yarn\/docs\/.*/
       - Performance:
           name: core:performance
           requires:
