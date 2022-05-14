@@ -1,6 +1,6 @@
 import { DebugNode } from '@angular/core';
 
-import { Type } from '../common/core.types';
+import { AnyType } from '../common/core.types';
 
 const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boolean => {
   // LContainer for structural directives can be a trigger for pipes.
@@ -52,7 +52,7 @@ const scan = <T>(
     el: DebugNode | null;
     nodes: any[];
     normalize: (item: any) => any;
-    proto: Type<T>;
+    proto: AnyType<T>;
     result: T[];
   },
   gatherDefault: boolean,

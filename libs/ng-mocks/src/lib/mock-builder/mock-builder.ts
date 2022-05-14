@@ -1,13 +1,11 @@
-import { InjectionToken } from '@angular/core';
-
 import { flatten } from '../common/core.helpers';
-import { AnyType } from '../common/core.types';
+import { AnyDeclaration } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 
 import { MockBuilderPerformance } from './mock-builder.performance';
 import { IMockBuilder } from './types';
 
-export type MockBuilderParam = string | AnyType<any> | InjectionToken<any> | NgModuleWithProviders;
+export type MockBuilderParam = string | AnyDeclaration<any> | NgModuleWithProviders;
 
 /**
  * MockBuilder provides reach and simple interfaces of chain functions

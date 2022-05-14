@@ -1,6 +1,6 @@
-import { DebugNode, InjectionToken } from '@angular/core';
+import { DebugNode } from '@angular/core';
 
-import { Type } from '../common/core.types';
+import { AnyDeclaration } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 
 import funcGetFromNodeInjector from './func.get-from-node-injector';
@@ -28,7 +28,7 @@ export interface Node {
   parent?: (DebugNode & Node) | null;
 }
 
-export default <T>(result: T[], node: DebugNode & Node, proto: Type<T> | InjectionToken<T>): T[] => {
+export default <T>(result: T[], node: DebugNode & Node, proto: AnyDeclaration<T>): T[] => {
   funcGetFromNodeInjector(result, node, proto);
   if (!isNgDef(proto, 't')) {
     funcGetFromNodeStandard(result, node, proto);

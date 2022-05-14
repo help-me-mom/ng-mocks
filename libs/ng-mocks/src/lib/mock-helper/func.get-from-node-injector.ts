@@ -1,7 +1,7 @@
-import { DebugNode, InjectionToken, Injector } from '@angular/core';
+import { DebugNode, Injector } from '@angular/core';
 
 import coreInjector from '../common/core.injector';
-import { Type } from '../common/core.types';
+import { AnyDeclaration } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 
 import { Node } from './func.get-from-node';
@@ -19,7 +19,7 @@ const getParentWithInjector = (node: (DebugNode & Node) | null): Injector | unde
   return undefined;
 };
 
-export default <T>(result: T[], node: DebugNode & Node, proto: Type<T> | InjectionToken<T>): void => {
+export default <T>(result: T[], node: DebugNode & Node, proto: AnyDeclaration<T>): void => {
   if (!node.injector || node.injector.constructor.name === 'NullInjector') {
     return;
   }

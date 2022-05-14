@@ -1,9 +1,7 @@
-import { InjectionToken } from '@angular/core';
-
 import { IMockBuilderConfig } from '../mock-builder/types';
 
 import coreConfig from './core.config';
-import { AnyType } from './core.types';
+import { AnyDeclaration } from './core.types';
 import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
 
@@ -33,7 +31,7 @@ interface NgMocksUniverse {
   hasBuildDeclaration: (def: any) => boolean;
   isExcludedDef: (def: any) => boolean;
   isProvidedDef: (def: any) => boolean;
-  touches: Set<AnyType<any> | InjectionToken<any> | string>;
+  touches: Set<AnyDeclaration<any> | string>;
 }
 
 funcGetGlobal().ngMocksUniverse = funcGetGlobal().ngMocksUniverse || {};

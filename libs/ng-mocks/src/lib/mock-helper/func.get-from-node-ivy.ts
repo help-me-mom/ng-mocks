@@ -1,6 +1,6 @@
 import { DebugNode } from '@angular/core';
 
-import { Type } from '../common/core.types';
+import { AnyType } from '../common/core.types';
 
 import { Node } from './func.get-from-node';
 import funcGetFromNodeElement from './func.get-from-node-element';
@@ -44,7 +44,7 @@ const detectContext = (node: DebugNode): any => {
 
 const contextToNodes = (context: any): any => (Array.isArray(context) ? context : context?.lView);
 
-export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: Type<T>): void => {
+export default <T>(result: T[], node: (DebugNode & Node) | null | undefined, proto: AnyType<T>): void => {
   if (!node || node._debugContext) {
     return;
   }

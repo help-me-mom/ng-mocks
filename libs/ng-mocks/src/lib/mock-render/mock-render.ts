@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { AnyType } from '../common/core.types';
+import { AnyDeclaration, AnyType } from '../common/core.types';
 
 import { MockRenderFactory } from './mock-render-factory';
 import { IMockRenderOptions, MockedComponentFixture } from './types';
@@ -104,7 +104,7 @@ export function MockRender<MComponent, TComponent extends Record<keyof any, any>
 ): MockedComponentFixture<MComponent, TComponent>;
 
 export function MockRender<MComponent, TComponent extends Record<keyof any, any>>(
-  template?: string | AnyType<MComponent> | InjectionToken<MComponent>,
+  template?: string | AnyDeclaration<MComponent>,
   params?: TComponent,
   flags: boolean | IMockRenderOptions = true,
 ): any {

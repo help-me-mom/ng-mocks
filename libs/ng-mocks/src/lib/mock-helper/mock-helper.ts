@@ -3,7 +3,7 @@
 import { DebugNode, EventEmitter, InjectionToken, Injector, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 
-import { AnyType, DebugNodeSelector, Type } from '../common/core.types';
+import { AnyDeclaration, AnyType, DebugNodeSelector, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { IMockBuilderConfig } from '../mock-builder/types';
 import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
@@ -37,7 +37,7 @@ export const ngMocks: {
    *
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultConfig
    */
-  defaultConfig<T>(token: string | InjectionToken<T> | AnyType<T>, config?: IMockBuilderConfig): void;
+  defaultConfig<T>(token: string | AnyDeclaration<T>, config?: IMockBuilderConfig): void;
 
   /**
    * ngMocks.defaultMock sets default customizations of mock tokens.
@@ -82,7 +82,7 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/defaultMock
    */
   defaultMock<T = any>(
-    defs: Array<AnyType<T> | InjectionToken<T>>,
+    defs: Array<AnyDeclaration<T>>,
     handler?: (value: undefined | T, injector: Injector) => undefined | Partial<T>,
     config?: IMockBuilderConfig,
   ): void;
@@ -97,7 +97,7 @@ export const ngMocks: {
    * ngMocks.globalExclude(TranslationModule);
    * ```
    */
-  globalExclude(source: AnyType<any> | InjectionToken<any>): void;
+  globalExclude(source: AnyDeclaration<any>): void;
 
   /**
    * ngMocks.globalKeep configures which declarations, providers and tokens
@@ -109,7 +109,7 @@ export const ngMocks: {
    * ngMocks.globalKeep(TranslationModule);
    * ```
    */
-  globalKeep(source: AnyType<any> | InjectionToken<any>): void;
+  globalKeep(source: AnyDeclaration<any>): void;
 
   /**
    * ngMocks.globalMock configures which declarations, providers and tokens
@@ -121,7 +121,7 @@ export const ngMocks: {
    * ngMocks.globalMock(TranslationModule);
    * ```
    */
-  globalMock(source: AnyType<any> | InjectionToken<any>): void;
+  globalMock(source: AnyDeclaration<any>): void;
 
   /**
    * ngMocks.globalReplace configures which declarations, providers and tokens
@@ -145,7 +145,7 @@ export const ngMocks: {
    * ngMocks.globalWipe(BrowserAnimationsModule);
    * ```
    */
-  globalWipe(source: AnyType<any> | InjectionToken<any>): void;
+  globalWipe(source: AnyDeclaration<any>): void;
 
   /**
    * ngMocks.change triggers ControlValueAccessor update.
@@ -650,7 +650,7 @@ export const ngMocks: {
    * const myDirective = ngMocks.get('my-component', MyDirective);
    * ```
    */
-  get<T>(elSelector: DebugNodeSelector, provider: AnyType<T> | InjectionToken<T>): T;
+  get<T>(elSelector: DebugNodeSelector, provider: AnyDeclaration<T>): T;
 
   /**
    * ngMocks.get tries to get an instance of declaration, provider or token
@@ -663,7 +663,7 @@ export const ngMocks: {
    * const myDirective = ngMocks.get('my-component', MyDirective, null);
    * ```
    */
-  get<T, D>(elSelector: DebugNodeSelector, provider: AnyType<T> | InjectionToken<T>, notFoundValue: D): D | T;
+  get<T, D>(elSelector: DebugNodeSelector, provider: AnyDeclaration<T>, notFoundValue: D): D | T;
 
   /**
    * ngMocks.findInstance searches for an instance of declaration, provider or token,
@@ -677,7 +677,7 @@ export const ngMocks: {
    * const config = ngMocks.findInstance(APP_CONFIG);
    * ```
    */
-  findInstance<T>(instanceClass: AnyType<T> | InjectionToken<T>): T;
+  findInstance<T>(instanceClass: AnyDeclaration<T>): T;
 
   /**
    * ngMocks.findInstance searches for an instance of declaration, provider or token
@@ -691,7 +691,7 @@ export const ngMocks: {
    * const config = ngMocks.findInstance(debugElement, APP_CONFIG);
    * ```
    */
-  findInstance<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T> | InjectionToken<T>): T;
+  findInstance<T>(elSelector: DebugNodeSelector, instanceClass: AnyDeclaration<T>): T;
 
   /**
    * ngMocks.findInstance searches for an instance of declaration, provider or token,
@@ -704,7 +704,7 @@ export const ngMocks: {
    * const service = ngMocks.findInstance(AuthService, null);
    * const config = ngMocks.findInstance(APP_CONFIG, false);
    */
-  findInstance<T, D>(instanceClass: AnyType<T> | InjectionToken<T>, notFoundValue: D): D | T;
+  findInstance<T, D>(instanceClass: AnyDeclaration<T>, notFoundValue: D): D | T;
 
   /**
    * ngMocks.findInstance searches for an instance of declaration, provider or token
@@ -718,11 +718,7 @@ export const ngMocks: {
    * const config = ngMocks.findInstance(debugElement, APP_CONFIG, false);
    * ```
    */
-  findInstance<T, D>(
-    elSelector: DebugNodeSelector,
-    instanceClass: AnyType<T> | InjectionToken<T>,
-    notFoundValue: D,
-  ): D | T;
+  findInstance<T, D>(elSelector: DebugNodeSelector, instanceClass: AnyDeclaration<T>, notFoundValue: D): D | T;
 
   /**
    * ngMocks.findInstances searches for all instances of declaration, provider or token,
@@ -736,7 +732,7 @@ export const ngMocks: {
    * const configs = ngMocks.findInstances(APP_CONFIG);
    * ```
    */
-  findInstances<T>(instanceClass: AnyType<T> | InjectionToken<T>): T[];
+  findInstances<T>(instanceClass: AnyDeclaration<T>): T[];
 
   /**
    * ngMocks.findInstances searches for all instances of declaration, provider or token
@@ -750,7 +746,7 @@ export const ngMocks: {
    * const configs = ngMocks.findInstances(debugElement, APP_CONFIG);
    * ```
    */
-  findInstances<T>(elSelector: DebugNodeSelector, instanceClass: AnyType<T> | InjectionToken<T>): T[];
+  findInstances<T>(elSelector: DebugNodeSelector, instanceClass: AnyDeclaration<T>): T[];
 
   /**
    * ngMocks.findTemplateRef searches for a TemplateRef which is matching the selector,
@@ -938,22 +934,15 @@ export const ngMocks: {
    * @see https://ng-mocks.sudo.eu/api/ngMocks/guts
    */
   guts(
-    keep:
-      | AnyType<any>
-      | InjectionToken<any>
-      | Provider
-      | Array<AnyType<any> | InjectionToken<any> | Provider>
-      | null
-      | undefined,
+    keep: AnyDeclaration<any> | Provider | Array<AnyDeclaration<any> | Provider> | null | undefined,
     mock?:
-      | AnyType<any>
-      | InjectionToken<any>
+      | AnyDeclaration<any>
       | NgModuleWithProviders
       | Provider
-      | Array<AnyType<any> | InjectionToken<any> | NgModuleWithProviders | Provider>
+      | Array<AnyDeclaration<any> | NgModuleWithProviders | Provider>
       | null
       | undefined,
-    exclude?: AnyType<any> | InjectionToken<any> | Array<AnyType<any> | InjectionToken<any>> | null | undefined,
+    exclude?: AnyDeclaration<any> | Array<AnyDeclaration<any>> | null | undefined,
   ): TestModuleMetadata;
 
   /**

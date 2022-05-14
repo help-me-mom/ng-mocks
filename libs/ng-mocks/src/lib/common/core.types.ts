@@ -1,17 +1,18 @@
 // istanbul ignore file
+/* eslint-disable @typescript-eslint/ban-types */
 
-import { DebugNode } from '@angular/core';
+import { DebugNode, InjectionToken } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
 /**
- * It has to be an interface.
+ * A5 requires it to be a type, because interface doesn't work with A5.
  * It matches abstract classes.
  *
  * @internal
  */
-export interface AbstractType<T> extends Function {
+type AbstractType<T> = Function & {
   prototype: T;
-}
+};
 
 /**
  * It has to be an interface.
@@ -29,6 +30,13 @@ export interface Type<T> extends Function {
  * @internal
  */
 export type AnyType<T> = Type<T> | AbstractType<T>;
+
+/**
+ * It matches any declaration in angular.
+ *
+ * @internal
+ */
+export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T>;
 
 /**
  * DebugNodeSelector describes supported types of selectors
