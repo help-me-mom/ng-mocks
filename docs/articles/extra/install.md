@@ -21,7 +21,7 @@ There is a way to reset all customizations automatically on `afterEach` and `aft
 Simply add the next code to `src/test.ts` or `src/setup-jest.ts` / `src/test-setup.ts` in case of jest:
 
 ```ts title="src/test.ts"
-import { ngMocks } from 'ng-mocks';
+import { MockInstance, ngMocks } from 'ng-mocks';
 
 // auto spy
 ngMocks.autoSpy('jasmine');
