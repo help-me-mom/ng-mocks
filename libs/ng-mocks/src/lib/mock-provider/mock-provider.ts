@@ -8,7 +8,7 @@ import {
   ValueProvider,
 } from '@angular/core';
 
-import { AnyType } from '../common/core.types';
+import { AnyDeclaration, AnyType } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import helperUseFactory from '../mock-service/helper.use-factory';
@@ -30,7 +30,7 @@ const defaultValue = {};
  * });
  * ```
  */
-export function MockProviders(...providers: Array<AnyType<any> | InjectionToken<any>>): FactoryProvider[] {
+export function MockProviders(...providers: Array<AnyDeclaration<any>>): FactoryProvider[] {
   return providers.map((provider: any) => MockProvider(provider, defaultValue));
 }
 
@@ -105,7 +105,7 @@ export function MockProvider<I = any>(provider: string, useValue?: Partial<I>): 
  * ```
  */
 export function MockProvider<I>(
-  provider: AnyType<I> | InjectionToken<I>,
+  provider: AnyDeclaration<I>,
   value: ValueProvider['useValue'],
   style: 'useValue',
   multi?: ValueProvider['multi'],
@@ -126,7 +126,7 @@ export function MockProvider<I>(
  * ```
  */
 export function MockProvider<I>(
-  provider: AnyType<I> | InjectionToken<I>,
+  provider: AnyDeclaration<I>,
   value: ExistingProvider['useExisting'],
   style: 'useExisting',
   multi?: ExistingProvider['multi'],
@@ -150,7 +150,7 @@ export function MockProvider<I>(
  * ```
  */
 export function MockProvider<I>(
-  provider: AnyType<I> | InjectionToken<I>,
+  provider: AnyDeclaration<I>,
   value: StaticClassProvider['useClass'],
   style: 'useClass',
   multiDeps?:
@@ -184,7 +184,7 @@ export function MockProvider<I>(
  * ```
  */
 export function MockProvider<I>(
-  provider: AnyType<I> | InjectionToken<I>,
+  provider: AnyDeclaration<I>,
   value: FactoryProvider['useFactory'],
   style: 'useFactory',
   multiDeps?:

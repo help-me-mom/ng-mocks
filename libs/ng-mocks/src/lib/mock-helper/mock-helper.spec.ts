@@ -72,7 +72,7 @@ describe('MockHelper:getDirective', () => {
     const debugElement = fixture.debugElement.query(
       By.directive(ExampleDirective),
     );
-    const element = debugElement.injector.get(ExampleDirective);
+    const element = ngMocks.get(debugElement, ExampleDirective);
 
     // Using helper.
     const elementFromHelper = ngMocks.get(

@@ -1,6 +1,6 @@
 import { InjectionToken, Injector } from '@angular/core';
 
-import { AbstractType, Type } from '../common/core.types';
+import { AnyDeclaration, AnyType } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import ngMocksStack, { NgMocksStack } from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -59,7 +59,7 @@ if (typeof beforeEach !== 'undefined') {
 }
 
 const mockInstanceConfig = <T>(
-  declaration: Type<T> | AbstractType<T> | InjectionToken<T>,
+  declaration: AnyDeclaration<T>,
   name: string | undefined,
   stub: any,
   encapsulation?: 'get' | 'set',
@@ -93,7 +93,7 @@ const mockInstanceConfig = <T>(
  * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends () => T[K]>(
-  instance: Type<T> | AbstractType<T>,
+  instance: AnyType<T>,
   name: K,
   stub: S,
   encapsulation: 'get',
@@ -113,7 +113,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends () =
  * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends (value: T[K]) => void>(
-  instance: Type<T> | AbstractType<T>,
+  instance: AnyType<T>,
   name: K,
   stub: S,
   encapsulation: 'set',
@@ -132,7 +132,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends (val
  * ```
  */
 export function MockInstance<T extends object, K extends keyof T, S extends T[K]>(
-  instance: Type<T> | AbstractType<T>,
+  instance: AnyType<T>,
   name: K,
   stub: S,
 ): S;
@@ -189,7 +189,7 @@ export function MockInstance<T>(
  * ```
  */
 export function MockInstance<T>(
-  declaration: Type<T> | AbstractType<T>,
+  declaration: AnyType<T>,
   init?: (instance: T, injector: Injector | undefined) => void | Partial<T>,
 ): void;
 
@@ -217,13 +217,13 @@ export function MockInstance<T>(
  * ```
  */
 export function MockInstance<T>(
-  declaration: Type<T> | AbstractType<T>,
+  declaration: AnyType<T>,
   config?: {
     init?: (instance: T, injector: Injector | undefined) => void | Partial<T>;
   },
 ): void;
 
-export function MockInstance<T>(declaration: Type<T> | AbstractType<T> | InjectionToken<T>, ...args: any[]) {
+export function MockInstance<T>(declaration: AnyDeclaration<T>, ...args: any[]) {
   funcImportExists(declaration, 'MockInstance');
 
   if (args.length > 0) {

@@ -175,7 +175,7 @@ describe('issue-2097', () => {
   });
 
   it('fails on unknown tokens', () => {
-    MockRender('');
+    MockRender();
     expect(() =>
       ngMocks.findInstance(new InjectionToken('TOKEN')),
     ).toThrowError(

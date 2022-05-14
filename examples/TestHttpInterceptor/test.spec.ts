@@ -18,6 +18,7 @@ import {
   MockBuilder,
   MockRender,
   NG_MOCKS_INTERCEPTORS,
+  ngMocks,
 } from 'ng-mocks';
 
 // An interceptor we want to test.
@@ -92,13 +93,13 @@ describe('TestHttpInterceptor', () => {
   });
 
   it('triggers interceptor', () => {
-    const fixture = MockRender('');
-    const client: HttpClient =
-      fixture.debugElement.injector.get(HttpClient);
-    const httpMock: HttpTestingController =
-      fixture.debugElement.injector.get(HttpTestingController);
+    MockRender();
 
-    // Let's do a simply request.
+    // Let's extract the service and http controller for testing.
+    const client = ngMocks.findInstance(HttpClient);
+    const httpMock = ngMocks.findInstance(HttpTestingController);
+
+    // Let's do a simple request.
     client.get('/target').subscribe();
 
     // Now we can assert that a header has been added to the request.

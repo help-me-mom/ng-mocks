@@ -1,6 +1,6 @@
 import { APP_ID, InjectionToken, NgModule } from '@angular/core';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 const MY_APP_ID = new InjectionToken('MY_APP_ID');
 
@@ -23,14 +23,14 @@ describe('provider-never-mock', () => {
   beforeEach(() => MockBuilder(null, TargetModule));
 
   it('does not mock APP_ID', () => {
-    const fixture = MockRender('');
+    MockRender();
 
     // should stay as it is.
-    const appId = fixture.debugElement.injector.get(APP_ID);
+    const appId = ngMocks.findInstance(APP_ID);
     expect(appId).not.toEqual('');
 
     // should be an empty string due to mocking.
-    const myAppId = fixture.debugElement.injector.get(MY_APP_ID);
+    const myAppId = ngMocks.findInstance(MY_APP_ID);
     expect(myAppId).toEqual('');
   });
 });

@@ -100,7 +100,7 @@ describe('TestLifecycleHooks', () => {
     const service: TargetService =
       fixture.debugElement.injector.get(TargetService);
 
-    // By default nothing should be initialized.
+    // By default, nothing should be initialized.
     expect(service.onChanges).toHaveBeenCalledTimes(0);
 
     // Now let's render the component.

@@ -1,9 +1,8 @@
-import { InjectionToken } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import coreDefineProperty from './core.define-property';
 import coreReflectParametersResolve from './core.reflect.parameters-resolve';
-import { AnyType, Type } from './core.types';
+import { AnyDeclaration, AnyType, Type } from './core.types';
 import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
 
@@ -13,7 +12,7 @@ import funcGetName from './func.get-name';
  * @deprecated
  * @internal
  */
-export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I | undefined => {
+export const getTestBedInjection = <I>(token: AnyDeclaration<I>): I | undefined => {
   try {
     // istanbul ignore next
     return getInjection(token);
@@ -28,7 +27,7 @@ export const getTestBedInjection = <I>(token: AnyType<I> | InjectionToken<I>): I
  * @deprecated
  * @internal
  */
-export const getInjection = <I>(token: AnyType<I> | InjectionToken<I>): I => {
+export const getInjection = <I>(token: AnyDeclaration<I>): I => {
   const testBed: any = getTestBed();
 
   // istanbul ignore next

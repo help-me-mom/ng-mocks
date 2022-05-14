@@ -2,7 +2,7 @@ import { DebugElement, Directive, InjectionToken } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
-import { AnyType, Type } from '../common/core.types';
+import { AnyDeclaration, AnyType, Type } from '../common/core.types';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksStack from '../common/ng-mocks-stack';
@@ -246,7 +246,7 @@ export function MockRenderFactory<MComponent = void, TKeys extends keyof any = k
 ): MockRenderFactory<MComponent, TKeys>;
 
 export function MockRenderFactory<MComponent, TKeys extends string>(
-  template: string | AnyType<MComponent> | InjectionToken<MComponent>,
+  template: string | AnyDeclaration<MComponent>,
   bindings?: undefined | null | TKeys[],
   options: IMockRenderFactoryOptions = {},
 ): any {
