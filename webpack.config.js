@@ -11,6 +11,7 @@ module.exports = {
     library: {
       type: 'umd',
     },
+    globalObject: 'this',
   },
   externals: /^@angular\//,
   module: {
