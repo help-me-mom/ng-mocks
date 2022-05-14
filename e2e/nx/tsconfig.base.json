@@ -1,5 +1,6 @@
 {
   "compileOnSave": false,
+  "include": ["jest.config.ts"],
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,

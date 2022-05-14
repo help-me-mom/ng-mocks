@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'a-nx',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

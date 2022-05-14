@@ -1,6 +1,5 @@
 {
   "projectType": "application",
-  "root": "apps/a-nx",
   "sourceRoot": "apps/a-nx/src",
   "prefix": "nx",
   "targets": {
@@ -35,23 +34,11 @@
       },
       "defaultConfiguration": "development"
     },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "browserTarget": "a-nx:build"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/a-nx/src/**/*.ts", "apps/a-nx/src/**/*.html"]
-      }
-    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/a-nx"],
       "options": {
-        "jestConfig": "apps/a-nx/jest.config.js",
+        "jestConfig": "apps/a-nx/jest.config.ts",
         "passWithNoTests": true
       }
     }
