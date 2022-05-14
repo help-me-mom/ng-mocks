@@ -1,3 +1,11 @@
+## [13.5.2](https://github.com/ike18t/ng-mocks/compare/v13.5.1...v13.5.2) (2022-05-14)
+
+
+### Bug Fixes
+
+* **core:** correct type for AbstractType ([6fbf18d](https://github.com/ike18t/ng-mocks/commit/6fbf18d746c8cea5d284dfd9abbf5fbb51ac17eb))
+* **core:** using this as global object ([5d21523](https://github.com/ike18t/ng-mocks/commit/5d21523ce03aa6c0a10cf69b564d3c030964d1ae))
+
 ## [13.5.1](https://github.com/ike18t/ng-mocks/compare/v13.5.0...v13.5.1) (2022-05-07)
 
 
