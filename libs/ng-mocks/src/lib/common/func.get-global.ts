@@ -1,2 +1,8 @@
-// istanbul ignore next
-export default (): Record<keyof any, any> => (typeof window === 'undefined' ? global : window);
+export default (): Record<keyof any, any> => {
+  // istanbul ignore if
+  if (typeof window === 'undefined') {
+    return global;
+  }
+
+  return window;
+};
