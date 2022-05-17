@@ -40,7 +40,7 @@
     "@nrwl/workspace": "14.1.6",
     "@types/jasmine": "4.0.3",
     "@types/jest": "27.5.1",
-    "@types/node": "16.11.35",
+    "@types/node": "16.11.36",
     "jest": "27.5.1",
     "jest-preset-angular": "11.1.2",
     "prettier": "2.6.2",
