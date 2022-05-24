@@ -25,19 +25,19 @@ Then, we can find `ng-template` like that:
 
 ```ts
 // returns 2 elements
-const allByDirective = ngMocks.findTemplateRef(MyTplDirective);
+const allByDirective = ngMocks.findTemplateRefs(MyTplDirective);
 
 // returns 2 elements
-const allByAttribute = ngMocks.findTemplateRef(['myTpl']);
+const allByAttribute = ngMocks.findTemplateRefs(['myTpl']);
 
 // returns 1 element
-const onlyHeaders = ngMocks.findTemplateRef(['myTpl', 'header']);
+const onlyHeaders = ngMocks.findTemplateRefs(['myTpl', 'header']);
 
 // returns 1 element
-const onlyFooters = ngMocks.findTemplateRef(['myTpl', 'footer']);
+const onlyFooters = ngMocks.findTemplateRefs(['myTpl', 'footer']);
 
 // returns 0 elements
-const empty = ngMocks.findTemplateRef(['myTpl', 'body']);
+const empty = ngMocks.findTemplateRefs(['myTpl', 'body']);
 ```
 
 More information can be found in [`ngMocks.findTemplateRef`](./findTemplateRef.md).
