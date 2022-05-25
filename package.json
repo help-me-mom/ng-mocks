@@ -173,7 +173,7 @@
     "@angular/platform-browser": "13.3.9",
     "@angular/platform-browser-dynamic": "13.3.9",
     "@angular/router": "13.3.9",
-    "@commitlint/cli": "17.0.0",
+    "@commitlint/cli": "17.0.1",
     "@commitlint/config-conventional": "17.0.0",
     "@ng-select/ng-select": "8.1.1",
     "@ngneat/spectator": "10.0.1",
