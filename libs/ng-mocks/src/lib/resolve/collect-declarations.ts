@@ -1,11 +1,13 @@
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
+import { AnyDeclaration } from '../common/core.types';
 
 interface Declaration {
   host: Record<string, string | undefined>;
   hostBindings: Array<[string, string?, ...any[]]>;
   hostListeners: Array<[string, string?, ...any[]]>;
+  attributes: string[];
   inputs: string[];
   outputs: string[];
   propDecorators: Record<string, any[]>;
@@ -27,11 +29,44 @@ const createDeclarations = (parent: Partial<Declaration>): Declaration => {
     host: parent.host ? { ...parent.host } : {},
     hostBindings: parent.hostBindings ? [...parent.hostBindings] : [],
     hostListeners: parent.hostListeners ? [...parent.hostListeners] : [],
+    attributes: parent.attributes ? [...parent.attributes] : [],
     inputs: parent.inputs ? [...parent.inputs] : [],
     outputs: parent.outputs ? [...parent.outputs] : [],
     propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
     queries: parent.queries ? { ...parent.queries } : {},
   };
+};
+
+const parseParameters = (
+  def: {
+    __parameters__?: Array<null | Array<
+      | {
+          attributeName: string;
+          ngMetadataName: 'Attribute';
+        }
+      | {
+          token: AnyDeclaration<any>;
+          ngMetadataName: 'Inject';
+        }
+      | {
+          ngMetadataName: 'Optional';
+        }
+    >>;
+  },
+  declaration: Declaration,
+): void => {
+  if (Object.prototype.hasOwnProperty.call(def, '__parameters__') && def.__parameters__) {
+    for (const decorators of def.__parameters__) {
+      for (const decorator of decorators || []) {
+        if (
+          decorator.ngMetadataName === 'Attribute' &&
+          declaration.attributes.indexOf(decorator.attributeName) === -1
+        ) {
+          declaration.attributes.push(decorator.attributeName);
+        }
+      }
+    }
+  }
 };
 
 const parseAnnotations = (
@@ -49,7 +84,7 @@ const parseAnnotations = (
         continue;
       }
 
-      declaration[ngMetadataName] = { ...annotation };
+      declaration[ngMetadataName] = { ...annotation, attributes: declaration.attributes };
     }
   }
 };
@@ -369,6 +404,7 @@ const parse = (def: any): any => {
   const parentDeclarations = parent ? parse(parent) : {};
   const declaration = createDeclarations(parentDeclarations);
   coreDefineProperty(def, '__ngMocksParsed', true);
+  parseParameters(def, declaration);
   parseAnnotations(def, declaration);
   parseDecorators(def, declaration);
   parsePropDecorators(def, declaration);
