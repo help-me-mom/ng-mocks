@@ -135,7 +135,14 @@ module.exports = {
         sidebarPath: require.resolve('./sidebars.js'),
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
-        editUrl: 'https://github.com/ike18t/ng-mocks/tree/master/docs/',
+        editUrl: params =>
+          [
+            'https://github.com/ike18t/ng-mocks/edit/master/docs/',
+            params.versionDocsDirPath,
+            '/',
+            params.docPath,
+            '?message=docs:%20updating%20docs',
+          ].join(''),
         remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
       },
     ],
