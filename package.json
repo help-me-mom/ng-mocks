@@ -206,7 +206,7 @@
     "eslint": "8.16.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "2.7.1",
-    "eslint-plugin-es-roikoren": "2.0.11",
+    "eslint-plugin-es-roikoren": "3.0.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-json": "3.1.0",
     "eslint-plugin-mdx": "1.17.0",
