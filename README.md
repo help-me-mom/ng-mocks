@@ -1,8 +1,8 @@
-[![chat on gitter](https://img.shields.io/gitter/room/ike18t/ng-mocks)](https://gitter.im/ng-mocks/community)
-[![npm version](https://img.shields.io/npm/v/ng-mocks)](https://www.npmjs.com/package/ng-mocks)
-[![build status](https://img.shields.io/circleci/build/github/ike18t/ng-mocks/master)](https://app.circleci.com/pipelines/github/ike18t/ng-mocks?branch=master)
-[![coverage status](https://img.shields.io/coveralls/github/ike18t/ng-mocks/master)](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
-[![language grade](https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks)](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
+[<img src="https://img.shields.io/gitter/room/ike18t/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
+[<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
+[<img src="https://img.shields.io/circleci/build/github/ike18t/ng-mocks/master" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/ike18t/ng-mocks?branch=master)
+[<img src="https://img.shields.io/coveralls/github/ike18t/ng-mocks/master" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
+[<img src="https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks" alt="language grade" width="138" height="20" />](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
 
 # Mock components, services and more out of annoying dependencies for simplification of Angular testing
 
