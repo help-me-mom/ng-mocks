@@ -30,7 +30,7 @@ const service = fixture.point.injector.get(TargetService);
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts"
 import { Component, Injectable } from '@angular/core';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple service, might have contained more logic,
 // but it is redundant for the test demonstration.
@@ -61,9 +61,9 @@ describe('TestProviderInComponent', () => {
     // to access the service.
     const fixture = MockRender(TargetComponent);
 
-    // The root element is fixture.point and it is the TargetComponent
-    // with its injector for extracting internal services.
-    const service = fixture.point.injector.get(TargetService);
+    // The component's element is fixture.point.
+    // Now we can use ngMocks.get to extract internal services.
+    const service = ngMocks.get(fixture.point, TargetService);
 
     // Here we go, now we can assert everything about the service.
     expect(service.value).toEqual('target');

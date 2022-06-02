@@ -3,6 +3,7 @@ import { isNgDef } from '../../common/func.is-ng-def';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import { MockModule } from '../../mock-module/mock-module';
 import mockNgDef from '../../mock-module/mock-ng-def';
+import collectDeclarations from '../../resolve/collect-declarations';
 
 export default (
   keepDef: Set<any>,
@@ -13,21 +14,31 @@ export default (
   const loProviders = new Map();
 
   for (const def of [...mapValues(keepDef), ...mapValues(mockDef), ...mapValues(replaceDef)]) {
-    if (!isNgDef(def, 'm')) {
-      continue;
+    const meta = collectDeclarations(def);
+    const providers = [
+      ...(defProviders.get(def) ?? []),
+      ...(meta.Component?.providers ?? []),
+      ...(meta.Directive?.providers ?? []),
+    ];
+
+    const deleteTouch = !ngMocksUniverse.touches.has(def);
+    if (!mockDef.has(def)) {
+      ngMocksUniverse.flags.add('skipMock');
     }
 
-    if (defProviders.has(def)) {
-      if (!mockDef.has(def)) {
-        ngMocksUniverse.flags.add('skipMock');
-      }
-      const [, loDef] = mockNgDef({ providers: defProviders.get(def) });
+    const isModule = isNgDef(def, 'm');
+    if (providers.length > 0) {
+      const [, loDef] = mockNgDef({ providers, skipMarkProviders: !isModule });
       loProviders.set(def, loDef.providers);
-      ngMocksUniverse.flags.delete('skipMock');
+    }
+    if (isModule) {
+      ngMocksUniverse.builtDeclarations.set(def, MockModule(def));
     }
 
-    ngMocksUniverse.builtDeclarations.set(def, MockModule(def));
-    ngMocksUniverse.touches.delete(def);
+    ngMocksUniverse.flags.delete('skipMock');
+    if (deleteTouch) {
+      ngMocksUniverse.touches.delete(def);
+    }
   }
 
   return loProviders;

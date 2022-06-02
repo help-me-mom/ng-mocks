@@ -9,8 +9,6 @@ import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderStash } from './mock-builder-stash';
-import addMissingKeepDeclarationsAndModules from './promise/add-missing-keep-declarations-and-modules';
-import addMissingMockDeclarationsAndModules from './promise/add-missing-mock-declarations-and-modules';
 import addRequestedProviders from './promise/add-requested-providers';
 import applyPlatformModules from './promise/apply-platform-modules';
 import createNgMocksOverridesToken from './promise/create-ng-mocks-overrides-token';
@@ -80,8 +78,6 @@ export class MockBuilderPromise implements IMockBuilder {
 
       const ngModule = initNgModules(params, initUniverse(params));
       detectWrongDeclarations(params);
-      addMissingKeepDeclarationsAndModules(ngModule, params);
-      addMissingMockDeclarationsAndModules(ngModule, params);
       addRequestedProviders(ngModule, params);
       handleRootProviders(ngModule, params);
       handleEntryComponents(ngModule);
