@@ -38,7 +38,7 @@
     "@types/node": "16.11.38",
     "jest": "28.1.0",
     "jest-preset-angular": "12.0.1",
-    "npm": "8.12.0",
+    "npm": "8.12.1",
     "typescript": "4.6.4"
   }
 }
