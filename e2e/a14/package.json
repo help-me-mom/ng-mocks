@@ -23,14 +23,14 @@
     "ng-mocks": "*"
   },
   "dependencies": {
-    "@angular/animations": "14.0.0-rc.3",
-    "@angular/common": "14.0.0-rc.3",
-    "@angular/compiler": "14.0.0-rc.3",
-    "@angular/core": "14.0.0-rc.3",
-    "@angular/forms": "14.0.0-rc.3",
-    "@angular/platform-browser": "14.0.0-rc.3",
-    "@angular/platform-browser-dynamic": "14.0.0-rc.3",
-    "@angular/router": "14.0.0-rc.3",
+    "@angular/animations": "14.0.0",
+    "@angular/common": "14.0.0",
+    "@angular/compiler": "14.0.0",
+    "@angular/core": "14.0.0",
+    "@angular/forms": "14.0.0",
+    "@angular/platform-browser": "14.0.0",
+    "@angular/platform-browser-dynamic": "14.0.0",
+    "@angular/router": "14.0.0",
     "rxjs": "7.5.5",
     "tslib": "2.4.0",
     "zone.js": "0.11.5"
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "14.0.0-rc.3",
     "@angular/cli": "14.0.0-rc.3",
-    "@angular/compiler-cli": "14.0.0-rc.3",
+    "@angular/compiler-cli": "14.0.0",
     "@types/jasmine": "3.10.6",
     "@types/jest": "28.1.0",
     "@types/node": "16.11.38",
