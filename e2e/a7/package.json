@@ -26,7 +26,7 @@
     "@angular/animations": "7.2.16",
     "@angular/common": "7.2.16",
     "@angular/compiler": "7.2.16",
-    "@angular/core": "7.2.16",
+    "@angular/core": "11.0.5",
     "@angular/forms": "7.2.16",
     "@angular/platform-browser": "7.2.16",
     "@angular/platform-browser-dynamic": "7.2.16",
