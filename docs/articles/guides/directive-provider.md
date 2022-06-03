@@ -82,26 +82,30 @@ describe('TestProviderInDirective', () => {
   beforeEach(() => MockBuilder(TargetService, TargetDirective));
 
   it('has access to the service via a directive', () => {
-    // Let's render a div with the directive. It provides a point
-    // to access the service.
-    const fixture = MockRender('<div target></div>');
+    // Let's render a div with the directive.
+    MockRender('<div target></div>');
 
-    // The root element is fixture.point and it has access to the
-    // context of the directive. Its injector can extract the service.
-    const service = fixture.point.injector.get(TargetService);
+    // Let's find the debugElement with the directive.
+    // Please note, that we use ngMocks.find here.
+    const el = ngMocks.find(TargetDirective);
+
+    // Let's extract the service.
+    const service = ngMocks.get(el, TargetService);
 
     // Here we go, now we can assert everything about the service.
     expect(service.value).toEqual(true);
   });
 
   it('has access to the service via a structural directive', () => {
-    // Let's render a div with the directive. It provides a point to
-    // access the service.
-    const fixture = MockRender('<div *target></div>');
+    // Let's render a div with the directive.
+    MockRender('<div *target></div>');
 
-    // The root element is fixture.point and it has access to the
-    // context of the directive. Its injector can extract the service.
-    const service = fixture.point.injector.get(TargetService);
+    // Let's find the debugNode with the directive.
+    // Please note, that we use ngMocks.reveal here.
+    const node = ngMocks.reveal(TargetDirective);
+
+    // Let's extract the service.
+    const service = ngMocks.get(node, TargetService);
 
     // Here we go, now we can assert everything about the service.
     expect(service.value).toEqual(true);

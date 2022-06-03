@@ -36,7 +36,9 @@ const configureProcessMetaKeys = (
 ];
 
 const processMeta = (
-  ngModule: Partial<NgModule & Component & Directive & Pipe>,
+  ngModule: Partial<NgModule & Component & Directive & Pipe> & {
+    skipMarkProviders?: boolean;
+  },
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
 ): NgModule => {
@@ -52,8 +54,10 @@ const processMeta = (
       mockModuleDef[key] = flatToExisting(ngModule[key], callback);
     }
   }
-  markProviders(mockModuleDef.providers);
-  markProviders(mockModuleDef.viewProviders);
+  if (!ngModule.skipMarkProviders) {
+    markProviders(mockModuleDef.providers);
+    markProviders(mockModuleDef.viewProviders);
+  }
 
   if (!cachePipe) {
     ngMocksUniverse.flags.delete('cachePipe');
@@ -116,7 +120,12 @@ const addExports = (
   }
 };
 
-export default (ngModuleDef: NgModule, ngModule?: Type<any>): [boolean, NgModule] => {
+export default (
+  ngModuleDef: NgModule & {
+    skipMarkProviders?: boolean;
+  },
+  ngModule?: Type<any>,
+): [boolean, NgModule] => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new Map());
