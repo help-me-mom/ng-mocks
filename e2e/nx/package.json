@@ -42,6 +42,7 @@
     "@types/jest": "28.1.0",
     "@types/node": "16.11.38",
     "jest": "28.1.0",
+    "jest-environment-jsdom": "28.1.0",
     "jest-preset-angular": "12.1.0",
     "prettier": "2.6.2",
     "ts-jest": "28.0.4",
