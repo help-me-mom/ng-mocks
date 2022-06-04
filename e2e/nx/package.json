@@ -39,7 +39,7 @@
     "@nrwl/tao": "14.1.9",
     "@nrwl/workspace": "14.1.9",
     "@types/jasmine": "4.0.3",
-    "@types/jest": "28.1.0",
+    "@types/jest": "28.1.1",
     "@types/node": "16.11.38",
     "jest": "28.1.0",
     "jest-environment-jsdom": "28.1.0",
