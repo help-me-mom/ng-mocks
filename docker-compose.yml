@@ -2,7 +2,7 @@ version: '3'
 
 services:
   ng-mocks:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - .:/app
@@ -15,7 +15,7 @@ services:
       - --omit=optional
 
   docs:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./docs:/app
@@ -156,7 +156,7 @@ services:
       - --no-optional
 
   a14:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./e2e/a14:/app
@@ -169,7 +169,7 @@ services:
       - --omit=optional
 
   jasmine:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./e2e/jasmine:/app
@@ -182,7 +182,7 @@ services:
       - --omit=optional
 
   jest:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./e2e/jest:/app
@@ -195,7 +195,7 @@ services:
       - --omit=optional
 
   min:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./e2e/min:/app
@@ -208,7 +208,7 @@ services:
       - --omit=optional
 
   nx:
-    image: satantime/puppeteer-node:16.15.0
+    image: satantime/puppeteer-node:16.15.1
     working_dir: /app
     volumes:
       - ./e2e/nx:/app
