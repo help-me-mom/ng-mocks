@@ -1,5 +1,4 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
@@ -55,7 +54,7 @@ describe('tokens-value', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
   it('mocks TOKEN_OBJECT via MockService', () => {
-    const actual = TestBed.get(TOKEN_OBJECT);
+    const actual = ngMocks.findInstance<any>(TOKEN_OBJECT);
     expect(actual).toEqual({
       func: assertion.anything(),
     });
@@ -63,27 +62,27 @@ describe('tokens-value', () => {
   });
 
   it('mocks TOKEN_CLASS as undefined', () => {
-    const actual = TestBed.get(TOKEN_CLASS);
+    const actual = ngMocks.findInstance(TOKEN_CLASS);
     expect(actual).toBeUndefined();
   });
 
   it('mocks TOKEN_BOOLEAN as false', () => {
-    const actual = TestBed.get(TOKEN_BOOLEAN);
+    const actual = ngMocks.findInstance(TOKEN_BOOLEAN);
     expect(actual).toBe(false);
   });
 
   it('mocks TOKEN_NUMBER as 0', () => {
-    const actual = TestBed.get(TOKEN_NUMBER);
+    const actual = ngMocks.findInstance(TOKEN_NUMBER);
     expect(actual).toBe(0);
   });
 
   it('mocks TOKEN_STRING as an empty string', () => {
-    const actual = TestBed.get(TOKEN_STRING);
+    const actual = ngMocks.findInstance(TOKEN_STRING);
     expect(actual).toBe('');
   });
 
   it('mocks TOKEN_NULL as null', () => {
-    const actual = TestBed.get(TOKEN_NULL);
+    const actual = ngMocks.findInstance(TOKEN_NULL);
     expect(actual).toBe(null);
   });
 });

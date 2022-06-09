@@ -84,7 +84,8 @@ and [`MockRender`](MockRender.md):
 ```ts
 describe('Test', () => {
   beforeEach(() => {
-    return MockBuilder(TargetComponent).mock(DependencyDirective);
+    // DependencyDirective is a declaration in ItsModule.
+    return MockBuilder(TargetComponent, ItsModule);
   });
 
   it('should create', () => {
@@ -105,11 +106,12 @@ Please, pay attention to comments in the code.
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts"
 describe('MockDirective:Attribute', () => {
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyDirective);
+    // DependencyDirective is a declaration in ItsModule.
+    return MockBuilder(MyComponent, ItsModule);
   });
 
   it('sends the correct value to the input', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -123,7 +125,7 @@ describe('MockDirective:Attribute', () => {
     );
 
     // Let's pretend DependencyDirective has 'someInput'
-    // as an input. TestedComponent sets its value via
+    // as an input. MyComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
     // the mock directive so we can assert on it.
     component.value = 'foo';
@@ -134,7 +136,7 @@ describe('MockDirective:Attribute', () => {
   });
 
   it('does something on an emit of the child directive', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -148,7 +150,7 @@ describe('MockDirective:Attribute', () => {
     );
 
     // Again, let's pretend DependencyDirective has an output called
-    // 'someOutput'. TestedComponent listens on the output via
+    // 'someOutput'. MyComponent listens on the output via
     // `(someOutput)="trigger()"`.
     // Let's install a spy and trigger the output.
     ngMocks.stubMember(
@@ -184,7 +186,8 @@ describe('MockDirective:Structural', () => {
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() => {
-    return MockBuilder(TargetComponent, TargetModule).mock(
+    // DependencyDirective is a declaration in ItsModule.
+    return MockBuilder(TargetComponent, ItsModule).mock(
       DependencyDirective,
       {
         // render: true, // <-- a flag to render the directive by default

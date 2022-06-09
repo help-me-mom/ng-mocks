@@ -1,5 +1,4 @@
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
@@ -56,25 +55,25 @@ describe('tokens-class', () => {
   );
 
   it('resolves Class1Service as a mock instance', () => {
-    const actual = TestBed.get(Class1Service);
+    const actual = ngMocks.findInstance(Class1Service);
     expect(actual).toEqual(assertion.any(Class1Service));
     expect(actual.name).toBeUndefined();
   });
 
   it('resolves Class2Service as a real instance', () => {
-    const actual = TestBed.get(Class2Service);
+    const actual = ngMocks.findInstance(Class2Service);
     expect(actual).toEqual(assertion.any(Class2Service));
     expect(actual.name).toEqual('class2');
   });
 
   it('resolves TOKEN_EXISTING_MOCK as a mock instance', () => {
-    const actual = TestBed.get(TOKEN_CLASS_MOCK);
+    const actual = ngMocks.findInstance<any>(TOKEN_CLASS_MOCK);
     expect(actual).toEqual(assertion.any(Class1Service));
     expect(actual.name).toBeUndefined();
   });
 
   it('resolves TOKEN_EXISTING_KEEP as a real instance', () => {
-    const actual = TestBed.get(TOKEN_CLASS_KEEP);
+    const actual = ngMocks.findInstance<any>(TOKEN_CLASS_KEEP);
     expect(actual).toEqual(assertion.any(Class2Service));
     expect(actual.name).toEqual('class2');
   });

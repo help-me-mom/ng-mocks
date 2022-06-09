@@ -21,7 +21,7 @@ describe('InternalOnlyNested:mock', () => {
       .mock(InternalComponent, { export: true }),
   );
 
-  // The expectation is to see that InternalComponent was exported to the level of the TestingModule
+  // The expectation is to see that InternalComponent was exported to the level of the MyModule
   // and can be accessed in the test even it was deeply nested.
   it('should render', () => {
     const fixture = MockRender(InternalComponent);

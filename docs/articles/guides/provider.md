@@ -27,9 +27,11 @@ There are 3 options: `.mock`, `.provide` and `MockInstance`. All of them are a g
 ```ts
 beforeEach(() =>
   MockBuilder(TargetService, TargetModule)
+    // Service2 is provided / imported in TargetModule
     .mock(Service2, {
       trigger: () => 'mock2',
     })
+    // Service3 will be provided in TestBed
     .provide({
       provide: Service3,
       useValue: {

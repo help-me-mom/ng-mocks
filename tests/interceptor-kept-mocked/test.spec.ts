@@ -12,10 +12,14 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
-import { MockBuilder, MockInstance, MockReset } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockReset,
+  ngMocks,
+} from 'ng-mocks';
 
 @Injectable()
 class Target1Interceptor implements HttpInterceptor {
@@ -91,10 +95,8 @@ describe('interceptor-kept-mock', () => {
   afterAll(MockReset);
 
   it('triggers interceptor', () => {
-    const client: HttpClient = TestBed.get(HttpClient);
-    const httpMock: HttpTestingController = TestBed.get(
-      HttpTestingController,
-    );
+    const client = ngMocks.findInstance(HttpClient);
+    const httpMock = ngMocks.findInstance(HttpTestingController);
 
     // Let's do a simply request.
     client.get('/target').subscribe();

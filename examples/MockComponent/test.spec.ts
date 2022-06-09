@@ -3,9 +3,11 @@ import {
   ContentChild,
   EventEmitter,
   Input,
+  NgModule,
   Output,
   TemplateRef,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
@@ -33,18 +35,24 @@ class DependencyComponent {
     ></app-child>
   `,
 })
-class TestedComponent {
+class MyComponent {
   public value = '';
   public trigger = (obj: any) => obj;
 }
 
+@NgModule({
+  imports: [CommonModule],
+  declarations: [MyComponent, DependencyComponent],
+})
+class ItsModule {}
+
 describe('MockComponent', () => {
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyComponent);
+    return MockBuilder(MyComponent, ItsModule);
   });
 
   it('sends the correct value to the child input', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -58,7 +66,7 @@ describe('MockComponent', () => {
       ).componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
-    // an input. TestedComponent sets its value via
+    // an input. MyComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
     // the mock component so we can assert on it.
     component.value = 'foo';
@@ -69,7 +77,7 @@ describe('MockComponent', () => {
   });
 
   it('does something on an emit of the child component', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -80,7 +88,7 @@ describe('MockComponent', () => {
     const mockComponent = ngMocks.findInstance(DependencyComponent);
 
     // Again, let's pretend DependencyComponent has an output
-    // called 'someOutput'. TestedComponent listens on the output via
+    // called 'someOutput'. MyComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
     ngMocks.stubMember(

@@ -10,6 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
+// @TODO remove with A5 support
 const injectableArgs = [
   {
     providedIn: 'root',

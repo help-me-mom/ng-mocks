@@ -61,7 +61,9 @@ describe('issue-623:nested', () => {
       target = 0;
       expect(ngMocks.formatText(factory())).toEqual('target:1');
       expect(ngMocks.formatText(factory())).toEqual('target:1');
-      expect(TestBed.get(TargetService).name).toEqual('target:1');
+      expect(ngMocks.findInstance(TargetService).name).toEqual(
+        'target:1',
+      );
     });
   });
 });

@@ -30,7 +30,7 @@ export interface Node {
 
 export default <T>(result: T[], node: DebugNode & Node, proto: AnyDeclaration<T>): T[] => {
   funcGetFromNodeInjector(result, node, proto);
-  if (!isNgDef(proto, 't')) {
+  if (!isNgDef(proto, 't') && typeof proto !== 'string') {
     funcGetFromNodeStandard(result, node, proto);
     funcGetFromNodeIvy(result, node, proto);
   }

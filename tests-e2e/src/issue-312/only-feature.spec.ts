@@ -111,9 +111,14 @@ describe('issue-312:only-feature', () => {
 
   describe('builder', () => {
     beforeEach(() =>
-      MockBuilder(MyComponent, MyModule)
-        .keep(StoreModule.forRoot({}))
-        .keep(EffectsModule.forRoot())
+      MockBuilder(
+        [
+          MyComponent,
+          StoreModule.forRoot({}),
+          EffectsModule.forRoot(),
+        ],
+        MyModule,
+      )
         .keep(StoreFeatureModule)
         .keep(EffectsFeatureModule),
     );

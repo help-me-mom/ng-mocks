@@ -1,7 +1,6 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 const TOKEN_FACTORY1 = new InjectionToken('FACTORY1');
 const TOKEN_FACTORY2 = new InjectionToken('FACTORY2');
@@ -29,10 +28,10 @@ describe('tokens-factory', () => {
   // If a factory returns something else - it should be replaced with a mock copy manually
   // with a proper value.
   it('mocks TOKEN_FACTORY as an empty object', () => {
-    const actual1 = TestBed.get(TOKEN_FACTORY1);
+    const actual1 = ngMocks.findInstance(TOKEN_FACTORY1);
     expect(actual1).toEqual({});
 
-    const actual2 = TestBed.get(TOKEN_FACTORY2);
+    const actual2 = ngMocks.findInstance(TOKEN_FACTORY2);
     expect(actual2).toEqual({});
   });
 });

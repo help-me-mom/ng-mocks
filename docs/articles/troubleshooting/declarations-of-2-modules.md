@@ -38,9 +38,8 @@ The only task now is to rewrite `beforeEach` to use [`MockBuilder`](../api/MockB
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(ComponentToTest)
-    .keep(SharedModule)
-    .mock(ModuleWithServicesAndSharedModule);
+  return MockBuilder(MyComponent, ModuleWithServicesAndSharedModule)
+    .keep(SharedModule);
 });
 ```
 

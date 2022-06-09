@@ -253,7 +253,8 @@ describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
+  // ChildComponent is declaration of ItsModule.
+  beforeEach(() => MockBuilder(RealComponent, ItsModule));
 
   beforeEach(() => {
     // Because TargetComponent is replaced with its mock object,

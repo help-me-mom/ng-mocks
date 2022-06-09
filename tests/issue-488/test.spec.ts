@@ -32,7 +32,7 @@ describe('issue-488', () => {
 
   describe('classic', () => {
     beforeEach(() => {
-      service = TestBed.get(TargetService);
+      service = ngMocks.findInstance(TargetService);
       ngMocks.stubMember(
         service,
         'method',
@@ -51,7 +51,7 @@ describe('issue-488', () => {
     it('throws an error about usage of the injector', () => {
       const testBed: any = getTestBed();
 
-      service = TestBed.get(TargetService);
+      service = ngMocks.findInstance(TargetService);
       ngMocks.stubMember(
         service,
         'method',

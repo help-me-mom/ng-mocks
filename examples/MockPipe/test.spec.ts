@@ -23,7 +23,7 @@ class TargetComponent {}
 @NgModule({
   declarations: [TargetComponent, DependencyPipe],
 })
-class TargetModule {}
+class ItsModule {}
 
 // A fake transform function.
 const fakeTransform = (...args: string[]) => JSON.stringify(args);
@@ -39,9 +39,10 @@ describe('MockPipe', () => {
   // const spy = jest.fn().mockImplementation(fakeTransform);
 
   beforeEach(() => {
-    return MockBuilder(TargetComponent, TargetModule).mock(
-      DependencyPipe,
-      spy,
+    return (
+      MockBuilder(TargetComponent, ItsModule)
+        // DependencyPipe is a declaration in ItsModule
+        .mock(DependencyPipe, spy)
     );
   });
 

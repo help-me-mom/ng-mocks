@@ -34,15 +34,21 @@ you need to add `.forRoot()` manually:
 
 ```ts
 beforeEach(() =>
-  MockBuilder(SomeComponent, LazyLoadedModule)
-    
-    // providing root tools
-    .keep(StoreModule.forRoot({}))
-    .keep(EffectsModule.forRoot())
-    
-    // keeping lazy loaded module imports
-    .keep(StoreFeatureModule) // keeps all StoreModule.forFeature
-    .keep(EffectsFeatureModule) // keeps all EffectsModule.forFeature
+  MockBuilder(
+    // keep and export
+    [
+      SomeComponent,
+      // providing root tools
+      StoreModule.forRoot({}),
+      EffectsModule.forRoot(),     
+    ],
+    // mock
+    LazyLoadedModule,
+  )
+
+  // keeping lazy loaded module imports
+  .keep(StoreFeatureModule) // keeps all StoreModule.forFeature
+  .keep(EffectsFeatureModule) // keeps all EffectsModule.forFeature
 );
 ```
 

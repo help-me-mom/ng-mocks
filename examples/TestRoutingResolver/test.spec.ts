@@ -88,9 +88,14 @@ describe('TestRoutingResolver', () => {
   // add RouterTestingModule.withRoutes([]), yes yes, with empty
   // routes to have tools for testing.
   beforeEach(() => {
-    return MockBuilder(DataResolver, TargetModule)
-      .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]));
+    return MockBuilder(
+      [
+        DataResolver,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      TargetModule,
+    );
   });
 
   // It is important to run routing tests in fakeAsync.

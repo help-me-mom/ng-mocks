@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, NgModule } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -34,18 +34,24 @@ class DependencyComponent implements ControlValueAccessor {
   selector: 'tested',
   template: ' <app-child [formControl]="formControl"></app-child> ',
 })
-class TestedComponent {
+class MyComponent {
   public readonly formControl = new FormControl();
 }
+
+@NgModule({
+  imports: [ReactiveFormsModule],
+  declarations: [MyComponent, DependencyComponent],
+})
+class ItsModule {}
 
 describe('MockReactiveForms', () => {
   // Helps to reset MockInstance customizations after each test.
   MockInstance.scope();
 
   beforeEach(() => {
-    return MockBuilder(TestedComponent)
-      .mock(DependencyComponent)
-      .keep(ReactiveFormsModule);
+    return MockBuilder(MyComponent, ItsModule).keep(
+      ReactiveFormsModule,
+    );
   });
 
   it('sends the correct value to the mock form component', () => {
@@ -62,7 +68,7 @@ describe('MockReactiveForms', () => {
     // the spy via MockInstance before the render.
     MockInstance(DependencyComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // During initialization it should be called

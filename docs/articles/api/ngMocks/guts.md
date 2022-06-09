@@ -5,7 +5,7 @@ description: Documentation about ngMocks.guts from ng-mocks library
 
 Generates and returns metadata for `TestBed` module.
 
-- `ngMocks.guts( TestingDeclaration, ItsModule )`
+- `ngMocks.guts( MyDeclaration, ItsModule )`
 - `ngMocks.guts( [Thing1, Thing2], [ToMock1, ToMock2], [Skip1, Skip2] )`
 
 The first parameter can be a declaration or array of them which we want to test.

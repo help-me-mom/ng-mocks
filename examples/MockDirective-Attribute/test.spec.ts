@@ -3,6 +3,7 @@ import {
   Directive,
   EventEmitter,
   Input,
+  NgModule,
   Output,
 } from '@angular/core';
 
@@ -29,18 +30,24 @@ class DependencyDirective {
     ></span>
   `,
 })
-class TestedComponent {
+class MyComponent {
   public value = '';
   public trigger = () => undefined;
 }
 
+@NgModule({
+  declarations: [MyComponent, DependencyDirective],
+})
+class ItsModule {}
+
 describe('MockDirective:Attribute', () => {
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyDirective);
+    // DependencyDirective is a declaration in ItsModule.
+    return MockBuilder(MyComponent, ItsModule);
   });
 
   it('sends the correct value to the input', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -54,7 +61,7 @@ describe('MockDirective:Attribute', () => {
     );
 
     // Let's pretend DependencyDirective has 'someInput'
-    // as an input. TestedComponent sets its value via
+    // as an input. MyComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
     // the mock directive so we can assert on it.
     component.value = 'foo';
@@ -65,7 +72,7 @@ describe('MockDirective:Attribute', () => {
   });
 
   it('does something on an emit of the child directive', () => {
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -79,7 +86,7 @@ describe('MockDirective:Attribute', () => {
     );
 
     // Again, let's pretend DependencyDirective has an output called
-    // 'someOutput'. TestedComponent listens on the output via
+    // 'someOutput'. MyComponent listens on the output via
     // `(someOutput)="trigger()"`.
     // Let's install a spy and trigger the output.
     ngMocks.stubMember(

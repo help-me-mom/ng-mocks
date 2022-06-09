@@ -4,9 +4,13 @@ import {
   NgModule,
   OnInit,
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockInstance,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 /*
  * As you can see, SomeService provided in forRoot() function.
@@ -75,9 +79,10 @@ describe('issue-625', () => {
   let spy: any;
 
   beforeEach(() => {
-    return MockBuilder(MyComponent, MyModule)
-      .keep(SomeModule.forRoot())
-      .mock(SomeService);
+    return MockBuilder(
+      [MyComponent, SomeModule.forRoot()],
+      MyModule,
+    ).mock(SomeService);
   });
 
   beforeEach(() => {
@@ -93,8 +98,12 @@ describe('issue-625', () => {
     MockRender(MyComponent);
     expect(spy).toHaveBeenCalled();
     // mocks the service
-    expect(TestBed.get(SomeService).name).toEqual(undefined);
+    expect(ngMocks.findInstance(SomeService).name).toEqual(
+      undefined as any,
+    );
     // keeps another one
-    expect(TestBed.get(AnotherService).name).toEqual('another');
+    expect(ngMocks.findInstance(AnotherService).name).toEqual(
+      'another',
+    );
   });
 });

@@ -47,7 +47,8 @@ describe('beforeEach:mock-instance', () => {
   // A normal setup of the TestBed, TargetService will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(TargetComponent).mock(TargetService));
+  // TargetService is a provider in ItsModule.
+  beforeEach(() => MockBuilder(TargetComponent, ItsModule));
 
   // Configuring behavior of the mock TargetService.
   beforeAll(() => {
@@ -92,7 +93,9 @@ describe('beforeEach:manual-spy', () => {
   // A normal setup of the TestBed, TargetService will be replaced
   // with its mock object.
   beforeEach(() => {
-    return MockBuilder(TargetComponent).mock(TargetService, mock);
+    return MockBuilder(TargetComponent, ItsModule)
+      // TargetService is a provider in ItsModule.
+      .mock(TargetService, mock);
   });
 });
 ```

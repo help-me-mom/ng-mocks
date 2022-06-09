@@ -30,11 +30,8 @@ const createComponent = createComponentFactory({
 If we use [`MockBuilder`](../api/MockBuilder.md) we need [`.exclude`](../api/MockBuilder.md#exclude), [`.mock`](../api/MockBuilder.md#mock) and [`exportAll`](../api/MockBuilder.md#exportall-flag) flag.
 
 ```ts
-const dependencies = MockBuilder()
+const dependencies = MockBuilder(null, MyModule)
   .exclude(MyComponent)
-  .mock(MyModule, {
-    exportAll: true,
-  })
   .build();
 
 const createComponent = createComponentFactory({
@@ -59,11 +56,8 @@ await render(MyComponent, dependencies);
 In case of [`MockBuilder`](../api/MockBuilder.md):
 
 ```ts
-const dependencies = MockBuilder()
+const dependencies = MockBuilder(null, MyModule)
   .exclude(MyComponent)
-  .mock(MyModule, {
-    exportAll: true,
-  })
   .build();
 await render(MyComponent, dependencies);
 ```

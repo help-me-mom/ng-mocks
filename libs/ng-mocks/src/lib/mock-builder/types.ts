@@ -19,7 +19,7 @@ export interface IMockBuilderConfigAll {
   /**
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#dependency-flag
    */
-  dependency?: boolean; //
+  dependency?: boolean;
 
   /**
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#export-flag

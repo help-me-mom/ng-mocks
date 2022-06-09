@@ -3,6 +3,9 @@ import funcGetProvider from '../../common/func.get-provider';
 import { isNgDef } from '../../common/func.is-ng-def';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import markProviders from '../../mock-module/mark-providers';
+import funcGetName from '../../common/func.get-name';
+import { AnyDeclaration } from '../../common/core.types';
+import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
@@ -41,19 +44,52 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
   }
 };
 
-export default ({ configDef, keepDef, mockDef, replaceDef }: BuilderData, defProviders: Map<any, any>): NgMeta => {
+export default (
+  { configDef, configDefault, keepDef, mockDef, replaceDef }: BuilderData,
+  defProviders: Map<any, any>,
+): NgMeta => {
   const meta: NgMeta = { imports: [], declarations: [], providers: [] };
+
+  const forgotten: AnyDeclaration<any>[] = [];
 
   // Adding suitable leftovers.
   for (const def of [...mapValues(mockDef), ...mapValues(keepDef), ...mapValues(replaceDef)]) {
     const configInstance = ngMocksUniverse.configInstance.get(def);
     const config = configDef.get(def);
 
-    if (!config?.dependency && config?.export && !configInstance?.exported && (isNgDef(def, 'i') || !isNgDef(def))) {
+    if (!config.dependency && config.export && !configInstance?.exported && (isNgDef(def, 'i') || !isNgDef(def))) {
       handleDef(meta, def, defProviders);
       markProviders([def]);
-    } else if (!ngMocksUniverse.touches.has(def) && !config?.dependency) {
+    } else if (!ngMocksUniverse.touches.has(def) && !config.dependency) {
       handleDef(meta, def, defProviders);
+    } else if (
+      config.dependency &&
+      configDefault.dependency &&
+      coreReflectProvidedIn(def) !== 'root' &&
+      (typeof def !== 'object' || !(def as any).__ngMocksSkip)
+    ) {
+      forgotten.push(def);
+    }
+  }
+
+  // Checking missing dependencies
+  const globalFlags = ngMocksUniverse.global.get('flags');
+  for (const def of forgotten) {
+    if (ngMocksUniverse.touches.has(def)) {
+      continue;
+    }
+
+    const errorMessage = [
+      `MockBuilder has found a missing dependency: ${funcGetName(def)}.`,
+      'It means no module provides it.',
+      'Please, use the "export" flag if you want to add it explicitly.',
+      'https://ng-mocks.sudo.eu/api/MockBuilder#export-flag',
+    ].join(' ');
+
+    if (globalFlags.onMockBuilderMissingDependency === 'warn') {
+      console.warn(errorMessage);
+    } else if (globalFlags.onMockBuilderMissingDependency === 'throw') {
+      throw new Error(errorMessage);
     }
   }
 

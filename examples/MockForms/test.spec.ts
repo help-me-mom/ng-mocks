@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, NgModule } from '@angular/core';
 import {
   ControlValueAccessor,
   FormsModule,
@@ -33,18 +33,27 @@ class DependencyComponent implements ControlValueAccessor {
   selector: 'tested',
   template: ` <app-child [(ngModel)]="value"></app-child> `,
 })
-class TestedComponent {
+class MyComponent {
   public value: any;
 }
+
+@NgModule({
+  imports: [FormsModule],
+  declarations: [MyComponent, DependencyComponent],
+})
+class ItsModule {}
 
 describe('MockForms', () => {
   // Helps to reset customizations after each test.
   MockInstance.scope();
 
   beforeEach(() => {
-    return MockBuilder(TestedComponent)
-      .mock(DependencyComponent)
-      .keep(FormsModule);
+    // DependencyComponent is a declaration in ItsModule.
+    return (
+      MockBuilder(MyComponent, ItsModule)
+        // FormsModule is an import in ItsModule.
+        .keep(FormsModule)
+    );
   });
 
   it('sends the correct value to the mock form component', async () => {
@@ -61,7 +70,7 @@ describe('MockForms', () => {
     // the spy via MockInstance before the render.
     MockInstance(DependencyComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     // FormsModule needs fixture.whenStable()
     // right after MockRender to install all hooks.
     await fixture.whenStable();

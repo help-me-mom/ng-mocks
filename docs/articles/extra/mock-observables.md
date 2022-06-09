@@ -114,9 +114,11 @@ let todoServiceList$: Subject<any>; // <- a context variable.
 beforeEach(() => {
   todoServiceList$ = new Subject(); // <- create the subject.
 
-  return MockBuilder(TodoComponent).mock(TodoService, {
-    list$: () => todoServiceList$,
-  });
+  return MockBuilder(TodoComponent, ItsModule)
+    // TodoService is provided in ItsModule
+    .mock(TodoService, {
+      list$: () => todoServiceList$,
+    });
 });
 
 it('test', () => {

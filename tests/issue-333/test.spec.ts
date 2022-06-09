@@ -51,9 +51,10 @@ describe('issue-333', () => {
   describe('1:keep', () => {
     // this should work with and without ivy
     beforeEach(() =>
-      MockBuilder(DynamicOverlayComponent, OverlayModule)
-        .keep(MockComponent)
-        .keep(DepComponent),
+      MockBuilder(
+        [DynamicOverlayComponent, MockComponent, DepComponent],
+        OverlayModule,
+      ),
     );
 
     it('should render', () => {
@@ -76,9 +77,10 @@ describe('issue-333', () => {
   describe('2:mock', () => {
     // this should work with and without ivy
     beforeEach(() =>
-      MockBuilder(DynamicOverlayComponent, OverlayModule)
-        .mock(MockComponent)
-        .keep(CommonModule, { export: true }),
+      MockBuilder(DynamicOverlayComponent, [
+        OverlayModule,
+        MockComponent,
+      ]).keep(CommonModule, { export: true }),
     );
 
     it('renders a mock component', () => {

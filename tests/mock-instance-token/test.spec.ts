@@ -4,9 +4,8 @@ import {
   InjectionToken,
   NgModule,
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockInstance } from 'ng-mocks';
+import { MockBuilder, MockInstance, ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken<string>('TOKEN');
 
@@ -39,7 +38,7 @@ describe('mock-instance-token', () => {
   it('provides tokens', () => {
     MockInstance(TOKEN, () => 'mock');
 
-    const actual = TestBed.get(TargetService).echo();
+    const actual = ngMocks.findInstance(TargetService).echo();
     expect(actual).toEqual('mock');
   });
 });

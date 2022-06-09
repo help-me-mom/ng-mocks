@@ -37,7 +37,7 @@ class DependencyModule {}
     ></app-child>
   `,
 })
-class TestedComponent {
+class MyComponent {
   @Output() public readonly trigger = new EventEmitter();
   @Input() public value1 = 'default1';
   @Input() public value2 = 'default2';
@@ -45,7 +45,7 @@ class TestedComponent {
 
 describe('MockRender', () => {
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
+  beforeEach(() => MockBuilder(MyComponent, DependencyModule));
 
   it('renders template', () => {
     const spy =
@@ -93,7 +93,7 @@ describe('MockRender', () => {
     // Generates a template like:
     // <tested [value1]="value1" [value2]="value2"
     // (trigger)="trigger"></tested>.
-    const fixture = MockRender(TestedComponent, {
+    const fixture = MockRender(MyComponent, {
       trigger: spy,
       value1: 'something2',
     });

@@ -22,7 +22,7 @@ import initUniverse from './promise/init-universe';
 import parseMockArguments from './promise/parse-mock-arguments';
 import parseProvider from './promise/parse-provider';
 import { BuilderData } from './promise/types';
-import { IMockBuilder, IMockBuilderConfig, IMockBuilderResult } from './types';
+import { IMockBuilder, IMockBuilderConfig, IMockBuilderConfigAll, IMockBuilderResult } from './types';
 
 const normaliseModule = (
   module: any,
@@ -55,7 +55,7 @@ export class MockBuilderPromise implements IMockBuilder {
   protected replaceDef: BuilderData['replaceDef'] = new Set();
   protected stash: MockBuilderStash = new MockBuilderStash();
 
-  public constructor() {
+  public constructor(protected configDefault: IMockBuilderConfigAll) {
     // istanbul ignore else
     if (typeof Symbol !== 'undefined') {
       (this as any)[Symbol.toStringTag] = 'Promise';
@@ -126,11 +126,7 @@ export class MockBuilderPromise implements IMockBuilder {
       this.defProviders.set(def, [...(existing || /* istanbul ignore next */ []), ...providers]);
     }
 
-    if (config) {
-      this.configDef.set(def, config);
-    } else {
-      this.configDef.delete(def);
-    }
+    this.setConfigDef(def, config);
 
     return this;
   }
@@ -183,12 +179,7 @@ export class MockBuilderPromise implements IMockBuilder {
     this.wipe(source);
     this.replaceDef.add(source);
     this.defValue.set(source, destination);
-
-    if (config) {
-      this.configDef.set(source, config);
-    } else {
-      this.configDef.delete(source);
-    }
+    this.setConfigDef(source, config);
 
     return this;
   }
@@ -215,6 +206,7 @@ export class MockBuilderPromise implements IMockBuilder {
   private combineParams(): BuilderData {
     return {
       configDef: this.configDef,
+      configDefault: this.configDefault,
       defProviders: this.defProviders,
       defValue: this.defValue,
       excludeDef: this.excludeDef,
@@ -226,11 +218,7 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   private setConfigDef(def: any, config: any): void {
-    if (config) {
-      this.configDef.set(def, config);
-    } else {
-      this.configDef.delete(def);
-    }
+    this.configDef.set(def, config ?? this.configDefault);
   }
 
   private setDefValue(def: any, mock: any): void {

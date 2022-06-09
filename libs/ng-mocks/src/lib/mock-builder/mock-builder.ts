@@ -16,8 +16,12 @@ export type MockBuilderParam = string | AnyDeclaration<any> | NgModuleWithProvid
 export function MockBuilder(
   keepDeclaration?: MockBuilderParam | MockBuilderParam[] | null | undefined,
   itsModuleToMock?: MockBuilderParam | MockBuilderParam[] | null | undefined,
-): IMockBuilder {
-  const instance = new MockBuilderPerformance();
+): IMockBuilder;
+
+export function MockBuilder(...args: Array<MockBuilderParam | MockBuilderParam[] | null | undefined>): IMockBuilder {
+  const [keepDeclaration, itsModuleToMock] = args;
+
+  const instance = new MockBuilderPerformance(args.length < 2 ? { export: true } : { dependency: true });
 
   if (keepDeclaration) {
     for (const declaration of flatten(keepDeclaration)) {

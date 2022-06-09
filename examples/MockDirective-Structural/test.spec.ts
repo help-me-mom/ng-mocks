@@ -33,7 +33,7 @@ class TargetComponent {
 @NgModule({
   declarations: [TargetComponent, DependencyDirective],
 })
-class TargetModule {}
+class ItsModule {}
 
 describe('MockDirective:Structural', () => {
   // IMPORTANT: by default structural directives are not rendered.
@@ -41,7 +41,8 @@ describe('MockDirective:Structural', () => {
   // Usually a developer knows the context and can render it
   // manually with proper setup.
   beforeEach(() => {
-    return MockBuilder(TargetComponent, TargetModule).mock(
+    // DependencyDirective is a declaration in ItsModule.
+    return MockBuilder(TargetComponent, ItsModule).mock(
       DependencyDirective,
       {
         // render: true, // <-- a flag to render the directive by default

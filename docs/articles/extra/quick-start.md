@@ -273,7 +273,9 @@ the code would look like:
 ```ts
 beforeEach(() => {
   return MockBuilder(AppBaseComponent, AppBaseModule)
+    // TranslatePipe is declarared / imported in AppBaseModule
     .mock(TranslatePipe, v => `translated:${v}`)
+    // SearchService is provided / imported in AppBaseModule
     .mock(SearchService, {
       result$: EMPTY,
     });

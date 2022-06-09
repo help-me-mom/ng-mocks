@@ -4,10 +4,14 @@ import {
   NgModule,
   VERSION,
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
+import {
+  MockBuilder,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
 
+// @TODO remove with A5 support
 const injectableTargetServiceArgs = [
   {
     providedIn: 'root',
@@ -70,7 +74,7 @@ describe('issue-222:kept-root-injection', () => {
     );
 
     it('does not mock kept dependency', () => {
-      const service: TargetService = TestBed.get(TargetService);
+      const service = ngMocks.findInstance(TargetService);
       expect(service.echo()).toBeDefined();
     });
   });
@@ -83,7 +87,7 @@ describe('issue-222:kept-root-injection', () => {
     );
 
     it('does not mock kept dependency', () => {
-      const service: TargetService = TestBed.get(TargetService);
+      const service = ngMocks.findInstance(TargetService);
       expect(service.echo()).toBeUndefined();
     });
   });

@@ -49,9 +49,10 @@ describe('module-with-factory-tokens:keep', () => {
   }
 
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule)
-      .keep(MY_TOKEN_SINGLE)
-      .keep(MY_TOKEN_MULTI),
+    MockBuilder(
+      [TargetComponent, MY_TOKEN_SINGLE, MY_TOKEN_MULTI],
+      TargetModule,
+    ),
   );
 
   it('renders all tokens', () => {
@@ -89,9 +90,11 @@ describe('module-with-factory-tokens:mock-0', () => {
 // Result of the render is an empty string because there is no way to pass multi.
 describe('module-with-factory-tokens:mock-1', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule)
-      .mock(MY_TOKEN_SINGLE)
-      .mock(MY_TOKEN_MULTI),
+    MockBuilder(TargetComponent, [
+      TargetModule,
+      MY_TOKEN_SINGLE,
+      MY_TOKEN_MULTI,
+    ]),
   );
 
   it('renders all tokens', () => {
@@ -107,8 +110,8 @@ describe('module-with-factory-tokens:mock-1', () => {
 describe('module-with-factory-tokens:mock-2', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
-      .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE')
-      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI'),
+      .mock(MY_TOKEN_SINGLE, 'MOCK_MY_TOKEN_SINGLE', { export: true })
+      .mock(MY_TOKEN_MULTI, 'MOCK_MY_TOKEN_MULTI', { export: true }),
   );
 
   it('renders all tokens', () => {
@@ -136,9 +139,10 @@ describe('module-with-factory-tokens:mock-3', () => {
   }
 
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule)
-      .keep(MY_TOKEN_SINGLE)
-      .keep(MY_TOKEN_MULTI),
+    MockBuilder(
+      [TargetComponent, MY_TOKEN_SINGLE, MY_TOKEN_MULTI],
+      TargetModule,
+    ),
   );
 
   it('renders all tokens', () => {

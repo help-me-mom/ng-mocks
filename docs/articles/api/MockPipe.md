@@ -79,7 +79,8 @@ and call [`MockRender`](MockRender.md):
 ```ts
 describe('Test', () => {
   beforeEach(() => {
-    return MockBuilder(TargetComponent)
+    return MockBuilder(TargetComponent, ItsModule)
+      // DependencyPipe is a declaration in ItsModule
       .mock(DependencyPipe, value => `mock:${value}`);
   });
 
@@ -115,10 +116,12 @@ describe('MockPipe', () => {
   // const spy = jest.fn().mockImplementation(fakeTransform);
 
   beforeEach(() => {
-    return MockBuilder(TargetComponent, TargetModule).mock(
-      DependencyPipe,
-      spy,
-    );
+    return MockBuilder(TargetComponent, ItsModule)
+      // DependencyPipe is a declaration in ItsModule
+      .mock(
+        DependencyPipe,
+        spy,
+      );
   });
 
   it('transforms values to json', () => {

@@ -15,6 +15,7 @@ const TOKEN = new (InjectionToken as any)('TOKEN', {
   providedIn: 'root',
 });
 
+// @TODO remove with A5 support
 const injectableServiceArgs = [
   {
     providedIn: 'root',

@@ -91,8 +91,9 @@ describe('MockReactiveForms', () => {
   MockInstance.scope();
 
   beforeEach(() => {
-    return MockBuilder(TestedComponent)
-      .mock(DependencyComponent)
+    // DependencyComponent is a declaration in ItsModule. 
+    return MockBuilder(MyComponent, ItsModule)
+      // ReactiveFormsModule is an import in ItsModule.
       .keep(ReactiveFormsModule);
   });
 
@@ -107,7 +108,7 @@ describe('MockReactiveForms', () => {
     // the spy via MockInstance before the render.
     MockInstance(DependencyComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     // During initialization it should be called
@@ -139,8 +140,9 @@ describe('MockForms', () => {
   MockInstance.scope();
 
   beforeEach(() => {
-    return MockBuilder(TestedComponent)
-      .mock(DependencyComponent)
+    // DependencyComponent is a declaration in ItsModule.
+    return MockBuilder(MyComponent, ItsModule)
+      // FormsModule is an import in ItsModule.
       .keep(FormsModule);
   });
 
@@ -155,7 +157,7 @@ describe('MockForms', () => {
     // the spy via MockInstance before the render.
     MockInstance(DependencyComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(TestedComponent);
+    const fixture = MockRender(MyComponent);
     // FormsModule needs fixture.whenStable()
     // right after MockRender to install all hooks.
     await fixture.whenStable();

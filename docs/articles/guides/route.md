@@ -15,8 +15,14 @@ This guarantees that the application routes will be used, and tests fail if a ro
 
 ```ts
 beforeEach(() =>
-  MockBuilder(RouterModule, TargetModule).keep(
-    RouterTestingModule.withRoutes([])
+  MockBuilder(
+    // Things to keep and export.
+    [
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+    ], 
+    // Things to mock.
+    TargetModule,
   )
 );
 ```
@@ -60,9 +66,16 @@ to `.keep` `RouterModule` and to render the component instead of `RouterOutlet`.
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetComponent, TargetModule)
-    .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([]))
+  MockBuilder(
+    // Things to keep and export.
+    [
+      TargetComponent,
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+    ], 
+    // Things to mock.
+    TargetModule,
+  )
 );
 ```
 
@@ -163,8 +176,12 @@ class TargetModule {}
 
 describe('TestRoute:Route', () => {
   beforeEach(() => {
-    return MockBuilder(RouterModule, TargetModule).keep(
-      RouterTestingModule.withRoutes([]),
+    return MockBuilder(
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      TargetModule,
     );
   });
 
@@ -214,9 +231,14 @@ describe('TestRoute:Component', () => {
   // RouterTestingModule.withRoutes([]), yes yes, with empty routes
   // to have tools for testing.
   beforeEach(() => {
-    return MockBuilder(TargetComponent, TargetModule)
-      .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]));
+    return MockBuilder(
+      [
+        TargetComponent,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      TargetModule,
+    );
   });
 
   it('navigates between pages', fakeAsync(() => {
@@ -230,8 +252,8 @@ describe('TestRoute:Component', () => {
       tick(); // is needed for rendering of the current route.
     }
 
-    // By default our routes do not have a component.
-    // Therefore non of them should be rendered.
+    // By default, our routes do not have a component.
+    // Therefore, none of them should be rendered.
     expect(location.path()).toEqual('/');
     expect(() => ngMocks.find(Target1Component)).toThrow();
     expect(() => ngMocks.find(Target2Component)).toThrow();

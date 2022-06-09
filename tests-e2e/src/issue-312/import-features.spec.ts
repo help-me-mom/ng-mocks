@@ -89,15 +89,20 @@ class MyModule {}
 
 describe('issue-312:import-features', () => {
   beforeEach(() =>
-    MockBuilder(MyComponent, MyModule)
-      .keep(FormsModule)
-      .keep(ReactiveFormsModule)
-      .keep(StoreModule.forRoot({}))
-      .keep(EffectsModule.forRoot())
+    MockBuilder(
+      [
+        MyComponent,
+        StoreModule.forRoot({}),
+        EffectsModule.forRoot(),
+        StoreModule.forFeature('f1', createReducer(undefined)),
+        StoreModule.forFeature('f2', createReducer(undefined)),
+        FormsModule,
+        ReactiveFormsModule,
+      ],
+      MyModule,
+    )
       .keep(StoreFeatureModule)
-      .keep(EffectsFeatureModule)
-      .keep(StoreModule.forFeature('f1', createReducer(undefined)))
-      .keep(StoreModule.forFeature('f2', createReducer(undefined))),
+      .keep(EffectsFeatureModule),
   );
 
   it('providers modules correctly', () => {
