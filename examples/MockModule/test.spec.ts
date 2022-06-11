@@ -42,18 +42,25 @@ class DependencyModule {}
     ></app-child>
   `,
 })
-class TestedComponent {
+class MyComponent {
   public value = '';
   public trigger = () => undefined;
 }
 
+@NgModule({
+  imports: [DependencyModule],
+  declarations: [MyComponent],
+})
+class ItsModule {}
+
 describe('MockModule', () => {
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyModule);
+    // DependencyModule is an import of ItsModule.
+    return MockBuilder(MyComponent, ItsModule);
   });
 
-  it('renders TestedComponent with its dependencies', () => {
-    const fixture = MockRender(TestedComponent);
+  it('renders MyComponent with its dependencies', () => {
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     expect(component).toBeTruthy();

@@ -115,10 +115,10 @@ describe('TestRoutingGuard', () => {
   // to have tools for testing. And the last thing is to exclude
   // `NG_MOCKS_GUARDS` to remove all other guards.
   beforeEach(() => {
-    return MockBuilder(LoginGuard, TargetModule)
-      .exclude(NG_MOCKS_GUARDS)
-      .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]));
+    return MockBuilder(
+      [LoginGuard, RouterModule, RouterTestingModule.withRoutes([])],
+      TargetModule,
+    ).exclude(NG_MOCKS_GUARDS);
   });
 
   // It is important to run routing tests in fakeAsync.

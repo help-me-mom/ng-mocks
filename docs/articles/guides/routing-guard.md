@@ -13,10 +13,16 @@ excluded from `TestBed` and we can be sure, that we are **testing only the guard
 
 ```ts
 beforeEach(() =>
-  MockBuilder(LoginGuard, TargetModule)
-    .exclude(NG_MOCKS_GUARDS)
-    .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([]))
+  MockBuilder(
+    // Things to keep and export.
+    [
+      LoginGuard,
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+    ], 
+    // Things to mock
+    TargetModule,
+  ).exclude(NG_MOCKS_GUARDS)
 );
 ```
 
@@ -159,10 +165,14 @@ describe('TestRoutingGuard', () => {
   // to have tools for testing. And the last thing is to exclude
   // `NG_MOCKS_GUARDS` to remove all other guards.
   beforeEach(() => {
-    return MockBuilder(LoginGuard, TargetModule)
-      .exclude(NG_MOCKS_GUARDS)
-      .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]));
+    return MockBuilder(
+      [
+        LoginGuard,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      TargetModule,
+    ).exclude(NG_MOCKS_GUARDS);
   });
 
   // It is important to run routing tests in fakeAsync.

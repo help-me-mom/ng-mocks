@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockInstance } from 'ng-mocks';
+import { MockBuilder, MockInstance, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -35,18 +34,18 @@ describe('mock-instance-in-it', () => {
         echo: () => 'it',
       }));
 
-      const actual = TestBed.get(TargetService).echo();
+      const actual = ngMocks.findInstance(TargetService).echo();
       expect(actual).toEqual('it');
     });
 
     it('uses beforeEach in the 2nd it', () => {
-      const actual = TestBed.get(TargetService).echo();
+      const actual = ngMocks.findInstance(TargetService).echo();
       expect(actual).toEqual('beforeEach');
     });
   });
 
   it('receives default value', () => {
-    const actual = TestBed.get(TargetService).echo();
+    const actual = ngMocks.findInstance(TargetService).echo();
     expect(actual).toEqual('beforeAll');
   });
 });

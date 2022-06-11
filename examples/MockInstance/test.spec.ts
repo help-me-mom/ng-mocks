@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   Component,
   Injector,
+  NgModule,
   ViewChild,
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
@@ -39,11 +41,17 @@ class RealComponent implements AfterViewInit {
   }
 }
 
+@NgModule({
+  imports: [CommonModule],
+  declarations: [RealComponent, ChildComponent],
+})
+class ItsModule {}
+
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(RealComponent).mock(ChildComponent));
+  beforeEach(() => MockBuilder(RealComponent, ItsModule));
 
   beforeEach(() => {
     // Because TargetComponent is replaced with its mock object,

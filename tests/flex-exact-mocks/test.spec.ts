@@ -1,10 +1,9 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
-const TOKEN = new InjectionToken('TOKEN');
+const TOKEN = new InjectionToken<any>('TOKEN');
 
 @Injectable()
 class TargetService {
@@ -31,19 +30,19 @@ describe('flex-exact-mocks:no-precise', () => {
   });
 
   it('extends a mock service', () => {
-    // By default a service is extended with its mock copy.
-    const service: TargetService = TestBed.get(TargetService);
+    // By default, a service is extended with its mock copy.
+    const service = ngMocks.findInstance(TargetService);
     expect(service.o1$).toBeDefined();
     expect(service.o1$).toBe(mockService.o1$);
     expect(service.echo).toBeDefined();
     expect(service.echo()).toBeUndefined();
 
     // Tokens should stay as they are.
-    const token: typeof mockToken = TestBed.get(TOKEN);
+    const token: typeof mockToken = ngMocks.findInstance(TOKEN);
     expect(token).toBe(mockToken);
 
     // strings should stay as they are.
-    const str: typeof mockStr = TestBed.get('token');
+    const str: typeof mockStr = ngMocks.findInstance('token');
     expect(str).toBe(mockStr);
   });
 });
@@ -65,15 +64,15 @@ describe('flex-exact-mocks:precise', () => {
 
   it('extends a mock service', () => {
     // The instance should be the passed mock copy due to the flag.
-    const service: TargetService = TestBed.get(TargetService);
+    const service = ngMocks.findInstance(TargetService);
     expect(service).toBe(mock as any);
 
     // The flag does not affect tokens.
-    const token: typeof mockToken = TestBed.get(TOKEN);
+    const token: typeof mockToken = ngMocks.findInstance(TOKEN);
     expect(token).toBe(mockToken);
 
     // The flag does not affect strings.
-    const str: typeof mockStr = TestBed.get('token');
+    const str: typeof mockStr = ngMocks.findInstance('token');
     expect(str).toBe(mockStr);
   });
 });

@@ -13,6 +13,7 @@ import { AnyType } from './core.types';
  * ```
  */
 export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
+(NG_MOCKS as any).__ngMocksSkip = true;
 
 /**
  * NG_MOCKS_TOUCHES token is a set of all touched declarations during mock process.
@@ -24,6 +25,7 @@ export const NG_MOCKS = new InjectionToken<Map<any, any>>('NG_MOCKS');
  * ```
  */
 export const NG_MOCKS_TOUCHES = new InjectionToken<Set<any>>('NG_MOCKS_TOUCHES');
+(NG_MOCKS_TOUCHES as any).__ngMocksSkip = true;
 
 /**
  * NG_MOCKS_OVERRIDES token contains overrides for:
@@ -38,6 +40,7 @@ export const NG_MOCKS_TOUCHES = new InjectionToken<Set<any>>('NG_MOCKS_TOUCHES')
  * @internal
  */
 export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<AnyType<any>, MetadataOverride<any>>>('NG_MOCKS_OVERRIDES');
+(NG_MOCKS_OVERRIDES as any).__ngMocksSkip = true;
 
 /**
  * NG_MOCKS_GUARDS token influences on provided guards in MockBuilder.
@@ -47,6 +50,7 @@ export const NG_MOCKS_OVERRIDES = new InjectionToken<Map<AnyType<any>, MetadataO
  * @see https://ng-mocks.sudo.eu/guides/routing-guard
  */
 export const NG_MOCKS_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
+(NG_MOCKS_GUARDS as any).__ngMocksSkip = true;
 
 /**
  * NG_MOCKS_INTERCEPTORS token influences on provided interceptors in MockBuilder.
@@ -56,6 +60,7 @@ export const NG_MOCKS_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
  * @see https://ng-mocks.sudo.eu/guides/http-interceptor
  */
 export const NG_MOCKS_INTERCEPTORS = new InjectionToken<void>('NG_MOCKS_INTERCEPTORS');
+(NG_MOCKS_INTERCEPTORS as any).__ngMocksSkip = true;
 
 /**
  * NG_MOCKS_ROOT_PROVIDERS token influences on root providers in MockBuilder,
@@ -65,3 +70,4 @@ export const NG_MOCKS_INTERCEPTORS = new InjectionToken<void>('NG_MOCKS_INTERCEP
  * @see https://ng-mocks.sudo.eu/api/MockBuilder#ng_mocks_root_providers-token
  */
 export const NG_MOCKS_ROOT_PROVIDERS = new InjectionToken<void>('NG_MOCKS_ROOT_PROVIDERS');
+(NG_MOCKS_ROOT_PROVIDERS as any).__ngMocksSkip = true;

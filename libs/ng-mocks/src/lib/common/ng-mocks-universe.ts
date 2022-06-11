@@ -49,6 +49,8 @@ ngMocksUniverse.touches = new Set();
 
 ngMocksUniverse.global.set('flags', {
   // @deprecated and will be changed in A13 to 'throw'
+  onMockBuilderMissingDependency: coreConfig.onMockBuilderMissingDependency,
+  // @deprecated and will be changed in A13 to 'throw'
   onMockInstanceRestoreNeed: coreConfig.onMockInstanceRestoreNeed,
   // @deprecated and will be changed in A13 to 'throw'
   onTestBedFlushNeed: coreConfig.onTestBedFlushNeed,

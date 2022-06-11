@@ -13,6 +13,8 @@ const resetFixtures = (id: never) => {
   for (let i = activeFixtures.length - 1; i >= 0; i -= 1) {
     if (!activeFixtures[i].ngMocksStackId || activeFixtures[i].ngMocksStackId === id) {
       activeFixtures[i].ngMocksStackId = undefined;
+      activeFixtures[i].destroy();
+      activeFixtures.splice(i, 1);
     } else {
       active += 1;
     }

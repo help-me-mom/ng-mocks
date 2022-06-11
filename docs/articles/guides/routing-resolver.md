@@ -11,10 +11,16 @@ Optionally, we can disable guards to avoid influence of their mocked methods ret
 
 ```ts
 beforeEach(() =>
-  MockBuilder(DataResolver, TargetModule)
-    .exclude(NG_MOCKS_GUARDS)
-    .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([]))
+  MockBuilder(
+    // Things to keep and export.
+    [
+      DataResolver,
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+    ],
+    // Things to mock.
+    TargetModule,
+  ).exclude(NG_MOCKS_GUARDS)
 );
 ```
 
@@ -156,9 +162,14 @@ describe('TestRoutingResolver', () => {
   // add RouterTestingModule.withRoutes([]), yes yes, with empty
   // routes to have tools for testing.
   beforeEach(() => {
-    return MockBuilder(DataResolver, TargetModule)
-      .keep(RouterModule)
-      .keep(RouterTestingModule.withRoutes([]));
+    return MockBuilder(
+      [
+        DataResolver,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      TargetModule,
+    );
   });
 
   // It is important to run routing tests in fakeAsync.

@@ -52,12 +52,10 @@ describe('TestToken', () => {
   // initialization we need to pass its module as the second
   // parameter.
   beforeEach(() => {
-    return MockBuilder()
-      .mock(TargetModule)
-      .keep(TOKEN_CLASS)
-      .keep(TOKEN_EXISTING)
-      .keep(TOKEN_FACTORY)
-      .keep(TOKEN_VALUE);
+    return MockBuilder(
+      [TOKEN_CLASS, TOKEN_EXISTING, TOKEN_FACTORY, TOKEN_VALUE],
+      TargetModule,
+    );
   });
 
   it('creates TOKEN_CLASS', () => {

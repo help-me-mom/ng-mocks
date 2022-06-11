@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @NgModule({
   providers: [
@@ -19,8 +18,8 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder('STRING'));
 
     it('works correctly', () => {
-      expect(() => TestBed.get('STRING')).toThrowError(
-        /No provider for STRING/,
+      expect(() => ngMocks.findInstance('STRING')).toThrowError(
+        'Cannot find an instance via ngMocks.findInstance(STRING)',
       );
     });
   });
@@ -29,7 +28,7 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder('STRING', TargetModule));
 
     it('works correctly', () => {
-      const token = TestBed.get('STRING');
+      const token = ngMocks.findInstance('STRING');
       expect(token).toEqual('TOKEN');
     });
   });
@@ -38,7 +37,7 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder(['STRING'], TargetModule));
 
     it('works correctly', () => {
-      const token = TestBed.get('STRING');
+      const token = ngMocks.findInstance('STRING');
       expect(token).toEqual('TOKEN');
     });
   });
@@ -47,7 +46,7 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder(null, 'STRING'));
 
     it('works correctly', () => {
-      const token = TestBed.get('STRING');
+      const token = ngMocks.findInstance('STRING');
       expect(token).toEqual(undefined);
     });
   });
@@ -56,7 +55,7 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder(TargetModule, 'STRING'));
 
     it('works correctly', () => {
-      const token = TestBed.get('STRING');
+      const token = ngMocks.findInstance('STRING');
       expect(token).toEqual(undefined);
     });
   });
@@ -65,7 +64,7 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder(TargetModule, ['STRING']));
 
     it('works correctly', () => {
-      const token = TestBed.get('STRING');
+      const token = ngMocks.findInstance('STRING');
       expect(token).toEqual(undefined);
     });
   });

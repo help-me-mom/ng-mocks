@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
@@ -17,7 +16,7 @@ describe('auto-spy', () => {
     beforeEach(() => MockBuilder().mock(TargetService));
 
     it('returns mock', () => {
-      const service: TargetService = TestBed.get(TargetService);
+      const service = ngMocks.findInstance(TargetService);
       expect(service.echo).not.toHaveBeenCalled();
 
       service.echo();
@@ -32,7 +31,7 @@ describe('auto-spy', () => {
     beforeEach(() => MockBuilder().mock(TargetService));
 
     it('returns mock', () => {
-      const service: TargetService = TestBed.get(TargetService);
+      const service = ngMocks.findInstance(TargetService);
       expect(() =>
         expect(service.echo).not.toHaveBeenCalled(),
       ).toThrow();
@@ -54,7 +53,7 @@ describe('auto-spy', () => {
     beforeEach(() => MockBuilder().mock(TargetService));
 
     it('returns mock', () => {
-      const service: TargetService = TestBed.get(TargetService);
+      const service = ngMocks.findInstance(TargetService);
       expect(called).toBeUndefined();
 
       service.echo();

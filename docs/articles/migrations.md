@@ -10,6 +10,71 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](./need-help.md).
 
+## From 13 to 14
+
+[`MockBuilder`](./api/MockBuilder.md) becomes stricter and starts to throw errors on wrong configuration.
+If you call [`MockBuilder`](./api/MockBuilder.md) with 2 parameters and use the chain for dependencies:
+
+```ts
+beforeEach(() => {
+  return MockBuilder(Declaration, ItsModule)
+    .keep(Dep1)
+    .mock(Dep2);
+});
+```
+
+[`MockBuilder`](./api/MockBuilder.md) throws an error
+if `Dep1` or `Dep2` hasn't been imported or declared somewhere in `ItsModule` and its imports.
+
+You can change this to `console.warn` or disable it.
+For that, please change the config of `ng-mocks` in `src/test.ts`, `src/setup-jest.ts` or `src/test-setup.ts`:
+
+```ts
+ngMocks.config({
+  onMockBuilderMissingDependency: 'warn', // or 'i-know-but-disable'
+});
+```
+
+If you need `Dep1` or `Dep2` even if they aren't imported in `ItsModule`, please add them in params of `MockBuilder`:
+
+```ts
+beforeEach(() => {
+  return MockBuilder(
+    // Things to keep and export.
+    [Declaration, Dep1],
+    // Things to mock and export.
+    [ItsModule, Dep2],
+  );
+});
+```
+
+Please note, that if you call [`MockBuilder`](./api/MockBuilder.md) with 0 or 1 parameters, all chained dependencies
+are added to TestBed and exported by default now:
+
+```ts
+// It doesn't throw, allows access to Declaration, Dep1, Dep2 and ItsModule in TestBed.
+beforeEach(() => {
+  return MockBuilder(Declaration)
+    .mock(ItsModule)
+    .keep(Dep1)
+    .mock(Dep2);
+});
+
+// It doesn't throw, allows access to Declaration, Dep1, Dep2 and ItsModule in TestBed.
+beforeEach(() => {
+  return MockBuilder()
+    .keep(Declaration)
+    .mock(ItsModule)
+    .keep(Dep1)
+    .mock(Dep2);
+});
+```
+
+## From 12 to 13
+
+There are no special cases.
+The update should be straight forward.
+
 ## From any old one to 12.4.0
 
 Because of issues with the speed of merging a fix for `jest`, there is a braking change in `12.4.0`.

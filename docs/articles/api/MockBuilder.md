@@ -11,15 +11,21 @@ but with minimum overhead.
 Usually, we have something simple to test, but time to time, the simplicity is killed by nightmarish dependencies.
 The good thing here is that commonly the dependencies have been declared or imported in the same module, where our
 tested thing is. Therefore, with help of `MockBuilder` we can quite easily define a testing module,
-where **everything in the module will be replaced with their mocks**, except the tested thing: `MockBuilder( TheThing, ItsModule )`.
+where **everything in the module will be replaced with their mocks**, except the tested thing:
 
-MockBuilder tends to provide **a simple instrument to turn Angular dependencies into their mocks**,
+```ts
+beforeEach(() => {
+  return MockBuilder(TheThing, ItsModule);
+});
+```
+
+`MockBuilder` tends to provide **a simple instrument to turn Angular dependencies into their mocks**,
 does it in isolated scopes,
 and has a rich toolkit that supports:
 
 - detection and creation of mocks for root providers
-- replacement of modules and declarations in any depth
-- exclusion of modules, declarations and providers in any depth
+- replacement of modules and declarations at any depth
+- exclusion of modules, declarations and providers at any depth
 
 ## Simple example
 
@@ -50,6 +56,94 @@ describe('MockBuilder:simple', () => {
 });
 ```
 
+## Flex mode
+
+You can use the flex mode to build TestBed in the way you want.
+Let's assume you want to test `TargetComponent` and it has 3 dependencies:
+
+- `CurrencyPipe` should be a mock
+- `TimeService` should be a mock
+- `ReactiveFormModule` should stay as it is
+
+For this case, `MockBuilder` can be called like that:
+
+```ts
+beforeEach(() => {
+  return MockBuilder()
+    // It will be declared as it is in the TestBed.
+    .keep(TargetComponent)
+    
+    // It will be declared as a mock in the TestBed.
+    .mock(CurrencyPipe)
+
+    // It will be provided as a mock in the TestBed.
+    .mock(TimeService)
+
+    // It will be imported as it is in the TestBed.
+    .keep(ReactiveFormModule);
+});
+```
+
+This approach is good, however the problem is that dependencies are provided explicitly,
+and if someone has removed `ReactiveFormModule` from the module where `TargetComponent` has been declared,
+the test won't fail, whereas the app will.
+
+There is where the [strict mode](#strict-mode) shines.
+
+## Strict mode
+
+The strict mode is enabled if you pass 2 parameters to `MockBuilder`:
+
+- the first parameter is what should be provided and kept as it is for testing
+- the second parameter is what should be provided and mocked for testing
+- the chain calls only customize these declarations
+
+If we consider the example from the [flex mode](#flex-mode), then, to enable the strict mode, the code should look like:
+
+```ts
+beforeEach(() => {
+  // TargetComponent is exported as it is from TargetModule
+  // all imports and declarations of TargetModule should be mocked
+  return MockBuilder(TargetComponent, TargetModule)
+    
+    // It marks ReactiveFormModule to be kept as it is in TargetModule
+    // and throw an error if TargetModule or its imports don't import it.
+    .keep(ReactiveFormModule);
+});
+```
+
+All dependencies of `TargetComponent` are in `TargetModule`, and if any of them have been deleted, tests will fail.
+
+Also, if someone has deleted `ReactiveFormModule` from `TargetModule`, tests will fail too,
+because `MockBuilder` will throw an error about missing `ReactiveFormModule` which should be kept.
+
+However, what if more than 1 module is requires? For example, for lazy modules.
+In the case of lazy loaded modules, you need to import more than 1 module in TestBed.
+Usually, it's an `AppModule` which provides root declarations, and a `LazyModule` which belongs to a specific route.
+In order to do so, simply pass arrays as parameters of `MockBuilder`:
+
+```ts
+beforeEach(() => {
+  return MockBuilder(
+    // It can be an array too, if you want to keep and export more than 1 thing
+    TargetComponent,
+
+    [
+      // It will mock and import TargetModule in TestBed  
+      TargetModule,
+      // It will mock and import AppModule in TestBed  
+      AppModule,
+    ],
+  )
+    
+  // It will keep CurrencyPipe as it is,
+  // and throw if neither TargetModule nor AppModule declares or imports it.
+  .keep(CurrencyPipe);
+});
+```
+
+**The strict mode is the recommended approach**.
+
 ## Chain functions
 
 ### .keep()
@@ -58,7 +152,7 @@ If we want to keep a module, component, directive, pipe or provider as it is. We
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyComponent, MyModule)
+  return MockBuilder(MyComponent)
     .keep(SomeModule)
     .keep(SomeModule.forSome())
     .keep(SomeModule.forAnother())
@@ -76,7 +170,7 @@ If we want to turn anything into a mock object, even a part of a kept module we 
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyComponent, MyModule)
+  return MockBuilder(MyComponent)
     .mock(SomeModule)
     .mock(SomeModule.forSome())
     .mock(SomeModule.forAnother())
@@ -92,7 +186,7 @@ For pipes, we can set their handlers as the 2nd parameter of `.mock`.
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyComponent, MyModule)
+  return MockBuilder(MyComponent)
     .mock(SomePipe, value => 'My Custom Content');
 });
 ```
@@ -102,7 +196,7 @@ Please keep in mind that the mock object of the service will be extended with th
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyComponent, MyModule)
+  return MockBuilder(MyComponent)
     .mock(SomeService3, anything1)
     .mock(SOME_TOKEN, anything2);
 });
@@ -153,7 +247,7 @@ In case of `RouterTestingModule` we need to use [`.keep`](#keep) for both of the
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyComponent, MyModule)
+  return MockBuilder(MyComponent)
     .keep(RouterModule)
     .keep(RouterTestingModule.withRoutes([]));
 });
@@ -213,7 +307,7 @@ beforeEach(() => {
 
 If we want to test a component, directive or pipe which, unfortunately, has not been exported,
 then we need to mark it with the `export` flag.
-Does not matter how deep it is. It will be exported to the level of `TestingModule`.
+Does not matter how deep it is. It will be exported to the level of `MyModule`.
 
 ```ts
 beforeEach(() => {
@@ -248,16 +342,17 @@ beforeEach(() => {
 
 ### `dependency` flag
 
-By default, all definitions are added to the `TestingModule` if they are not a dependency of another definition.
-Modules are added as imports to the `TestingModule`.
-Components, Directive, Pipes are added as declarations to the `TestingModule`.
-Tokens and Services are added as providers to the `TestingModule`.
-If we do not want something to be added to the `TestingModule` at all, then we need to mark it with the `dependency` flag.
+By default, all definitions are added to the `MyModule` if they are not a dependency of another definition.
+Modules are added as imports to the `MyModule`.
+Components, Directive, Pipes are added as declarations to the `MyModule`.
+Tokens and Services are added as providers to the `MyModule`.
+If we do not want something to be added to the `MyModule` at all, then we need to mark it with the `dependency` flag.
 
 ```ts
 beforeEach(() => {
   return (
-    MockBuilder(MyComponent, MyModule)
+    MockBuilder(MyComponent)
+      .mock(MyModule)
       .keep(SomeModuleComponentDirectivePipeProvider1, {
         dependency: true,
       })
@@ -394,7 +489,7 @@ const ngModule = MockBuilder()
   .build();
 ```
 
-Also, we can suppress the first parameter with `null` if we want to create mocks for all declarations.
+Also, we can suppress the first parameter with `null` or `undefined` if we want to create mocks for all declarations.
 
 ```ts
 const ngModule = MockBuilder(null, MyModule)

@@ -36,7 +36,7 @@ export type AnyType<T> = Type<T> | AbstractType<T>;
  *
  * @internal
  */
-export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T>;
+export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T> | string;
 
 /**
  * DebugNodeSelector describes supported types of selectors

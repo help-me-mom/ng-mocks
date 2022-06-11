@@ -32,8 +32,8 @@ describe('ng-mocks-default-mock:unset', () => {
   );
 
   it('unsets defaultMock', () => {
-    const t1 = TestBed.get(TOKEN1);
-    const t2 = TestBed.get(TOKEN2);
+    const t1 = ngMocks.findInstance(TOKEN1);
+    const t2 = ngMocks.findInstance(TOKEN2);
 
     // default mock.
     expect(t1).toEqual('mockToken1');

@@ -15,7 +15,7 @@ const createInstance = (existing: any, params: any, config: IMockBuilderConfigMo
 
 export default (def: any, defValue: Map<any, any>): void => {
   if (isNgDef(def, 'i') && defValue.has(def)) {
-    const config: IMockBuilderConfigMock = ngMocksUniverse.config.get(def) || {};
+    const config: IMockBuilderConfigMock = ngMocksUniverse.config.get(def);
     const instance = defValue.get(def);
     ngMocksUniverse.builtProviders.set(
       def,

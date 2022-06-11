@@ -1,7 +1,6 @@
-import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { MockBuilder } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 // @see https://github.com/ike18t/ng-mocks/issues/197
 describe('issue-197:abstract', () => {
@@ -13,7 +12,7 @@ describe('issue-197:abstract', () => {
   });
 
   it('mocks abstract classes', () => {
-    const actual = TestBed.get(DomSanitizer);
+    const actual = ngMocks.findInstance<any>(DomSanitizer);
     expect(actual).toBe(expected);
   });
 });

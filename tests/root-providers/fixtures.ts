@@ -12,6 +12,7 @@ export class ModuleService {
   public readonly name = 'module';
 }
 
+// @TODO remove with A5 support
 const injectableTargetServiceArgs = [
   {
     providedIn: 'root',
@@ -23,6 +24,7 @@ export class TargetService {
   public readonly name = 'service';
 }
 
+// @TODO remove with A5 support
 const injectableFakeServiceArgs = [
   {
     providedIn: 'root',

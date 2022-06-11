@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import {
   createAction,
   createFeatureSelector,
@@ -66,9 +65,10 @@ describe('issue-488', () => {
   ngMocks.faster();
 
   beforeAll(() =>
-    MockBuilder(MyComponent, MyModule)
-      .keep(StoreModule.forRoot({}))
-      .keep(StoreFeatureModule),
+    MockBuilder(
+      [MyComponent, StoreModule.forRoot({})],
+      MyModule,
+    ).keep(StoreFeatureModule),
   );
 
   describe('faster multi render', () => {
@@ -77,7 +77,7 @@ describe('issue-488', () => {
     it('first test has brand new render', () => {
       expect(ngMocks.formatText(fixture)).toEqual('1');
 
-      TestBed.get(Store).dispatch(increaseValue());
+      ngMocks.findInstance(Store).dispatch(increaseValue());
       fixture.detectChanges();
       expect(ngMocks.formatText(fixture)).toEqual('2');
 
@@ -89,7 +89,7 @@ describe('issue-488', () => {
     it('second test has brand new render', () => {
       expect(ngMocks.formatText(fixture)).toEqual('1');
 
-      TestBed.get(Store).dispatch(increaseValue());
+      ngMocks.findInstance(Store).dispatch(increaseValue());
       fixture.detectChanges();
       expect(ngMocks.formatText(fixture)).toEqual('2');
 
@@ -105,7 +105,7 @@ describe('issue-488', () => {
     it('first test has render of 1', () => {
       expect(ngMocks.formatText(fixture)).toEqual('1');
 
-      TestBed.get(Store).dispatch(increaseValue());
+      ngMocks.findInstance(Store).dispatch(increaseValue());
       fixture.detectChanges();
       expect(ngMocks.formatText(fixture)).toEqual('2');
 
@@ -117,7 +117,7 @@ describe('issue-488', () => {
     it('second test continues the prev state', () => {
       expect(ngMocks.formatText(fixture)).toEqual('0');
 
-      TestBed.get(Store).dispatch(increaseValue());
+      ngMocks.findInstance(Store).dispatch(increaseValue());
       fixture.detectChanges();
       expect(ngMocks.formatText(fixture)).toEqual('1');
 

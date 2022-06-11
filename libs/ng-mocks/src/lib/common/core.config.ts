@@ -30,6 +30,7 @@ export default {
     'InjectionToken LocaleId', // LOCALE_ID
     'InjectionToken SCHEDULER_TOKEN', // SCHEDULER
   ],
+  onMockBuilderMissingDependency: 'throw',
   onMockInstanceRestoreNeed: 'warn',
   onTestBedFlushNeed: 'warn',
 };

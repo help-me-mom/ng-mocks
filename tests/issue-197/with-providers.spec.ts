@@ -70,8 +70,9 @@ describe('issue-197:with-providers:manually-injection', () => {
 // @see https://github.com/ike18t/ng-mocks/issues/197
 describe('issue-197:with-providers:keep', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(
-      DependencyModule.withProviders(),
+    MockBuilder(
+      [TargetComponent, DependencyModule.withProviders()],
+      TargetModule,
     ),
   );
 
@@ -87,9 +88,10 @@ describe('issue-197:with-providers:keep', () => {
 // @see https://github.com/ike18t/ng-mocks/issues/197
 describe('issue-197:with-providers:mock', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).mock(
+    MockBuilder(TargetComponent, [
+      TargetModule,
       DependencyModule.withProviders(),
-    ),
+    ]),
   );
 
   it('creates component with provided dependencies', () => {

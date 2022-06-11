@@ -12,7 +12,7 @@ import funcIsValidFindInstanceSelector from './func.is-valid-find-instance-selec
 
 export default <T>(...args: any[]): T[] => {
   const [el, sel] = funcParseFindArgs(args, funcIsValidFindInstanceSelector);
-  if (typeof sel !== 'function' && !isNgDef(sel, 't')) {
+  if (typeof sel !== 'function' && !isNgDef(sel, 't') && typeof sel !== 'string') {
     throw new Error('Only classes or tokens are accepted');
   }
 

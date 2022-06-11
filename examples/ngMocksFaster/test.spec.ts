@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, NgModule } from '@angular/core';
 
 import {
   MockBuilder,
@@ -26,15 +26,20 @@ class TargetComponent {
   public constructor(public readonly service: TargetService) {}
 }
 
+@NgModule({
+  declarations: [TargetComponent],
+  providers: [TargetService],
+})
+class ItsModule {}
+
 describe('examples:performance', () => {
   describe('beforeEach:mock-instance', () => {
     ngMocks.faster(); // <-- add it before
 
     // A normal setup of the TestBed, TargetService will be replaced
     // with its mock copy.
-    beforeEach(() => {
-      return MockBuilder(TargetComponent).mock(TargetService);
-    });
+    // TargetService is a provider in ItsModule.
+    beforeEach(() => MockBuilder(TargetComponent, ItsModule));
 
     // Configuring behavior of the mock TargetService.
     beforeAll(() => {
@@ -108,7 +113,11 @@ describe('examples:performance', () => {
     // A normal setup of the TestBed, TargetService will be replaced
     // with its mock copy.
     beforeEach(() => {
-      return MockBuilder(TargetComponent).mock(TargetService, mock);
+      return (
+        MockBuilder(TargetComponent, ItsModule)
+          // TargetService is a provider in ItsModule.
+          .mock(TargetService, mock)
+      );
     });
 
     it('test:1', () => {

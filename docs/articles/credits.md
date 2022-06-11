@@ -13,6 +13,14 @@ sidebar_label: Credits
 
 ## Supporters  
 
+- [DmitryEfimenko](https://github.com/DmitryEfimenko)
+  provided valuable feedback and ideas how to improve the library
+- [philmayfield](https://github.com/philmayfield)
+  donated to support the development
+- [patelvimal](https://github.com/patelvimal)
+  donated to support the development
+- [qdelettre](https://github.com/qdelettre)
+  donated to support the development
 - [santoshyadavdev](https://github.com/santoshyadavdev)
   donated to support the development
 - [SerkanSipahi](https://github.com/SerkanSipahi)

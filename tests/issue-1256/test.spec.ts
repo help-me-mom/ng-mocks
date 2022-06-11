@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockInstance, MockProvider } from 'ng-mocks';
+import { MockInstance, MockProvider, ngMocks } from 'ng-mocks';
 
 const myToken = new InjectionToken('MY_TOKEN');
 
@@ -18,12 +18,12 @@ describe('issue-1256', () => {
 
   it('changes value #1', () => {
     MockInstance(myToken, () => ({ test: 2 }));
-    const value: any = TestBed.get(myToken);
+    const value = ngMocks.findInstance<any>(myToken);
     expect(value.test).toEqual(2);
   });
 
   it('uses the default value', () => {
-    const value: any = TestBed.get(myToken);
+    const value = ngMocks.findInstance<any>(myToken);
     expect(value.test).toEqual(1);
   });
 });

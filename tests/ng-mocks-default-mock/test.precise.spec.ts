@@ -1,5 +1,4 @@
 import { Injectable, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
@@ -38,8 +37,8 @@ describe('ng-mocks-default-mock:precise', () => {
   );
 
   it('overrides default mock', () => {
-    const s1 = TestBed.get(Service1);
-    const s2 = TestBed.get(Service2);
+    const s1 = ngMocks.findInstance<any>(Service1);
+    const s2 = ngMocks.findInstance<any>(Service2);
 
     // extended.
     expect(s1).not.toBe(m1);

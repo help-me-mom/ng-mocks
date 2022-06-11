@@ -1035,6 +1035,7 @@ export const ngMocks: {
    */
   config(config: {
     mockRenderCacheSize?: number | null;
+    onMockBuilderMissingDependency?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onMockInstanceRestoreNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
   }): void;

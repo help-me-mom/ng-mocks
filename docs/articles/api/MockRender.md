@@ -540,7 +540,7 @@ Please, pay attention to comments in the code.
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockRender/test.spec.ts"
 describe('MockRender', () => {
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(TestedComponent, DependencyModule));
+  beforeEach(() => MockBuilder(MyComponent, DependencyModule));
 
   it('renders template', () => {
     const spy = jasmine.createSpy();
@@ -586,7 +586,7 @@ describe('MockRender', () => {
     // Generates a template like:
     // <tested [value1]="value1" [value2]="value2"
     // (trigger)="trigger"></tested>.
-    const fixture = MockRender(TestedComponent, {
+    const fixture = MockRender(MyComponent, {
       trigger: spy,
       value1: 'something2',
     });

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { AppComponent } from './app/app.component';
 import { AppModule } from './app/app.module';
@@ -14,16 +14,16 @@ describe('issue-151', () => {
   describe('mock AppRoutingModule', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
-        MockBuilder(AppComponent, AppModule)
-          .keep(RouterModule)
-          .keep(RouterTestingModule)
-          .build(),
+        MockBuilder(
+          [AppComponent, RouterModule, RouterTestingModule],
+          AppModule,
+        ).build(),
       ),
     );
 
     beforeEach(async () => {
       fixture = MockRender(AppComponent);
-      const router = TestBed.get(Router);
+      const router = ngMocks.findInstance(Router);
       if (fixture.ngZone) {
         fixture.ngZone.run(() => router.initialNavigation());
       }

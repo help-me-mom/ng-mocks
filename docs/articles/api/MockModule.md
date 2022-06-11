@@ -107,11 +107,12 @@ Please, pay attention to comments in the code.
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockModule/test.spec.ts"
 describe('MockModule', () => {
   beforeEach(() => {
-    return MockBuilder(TestedComponent).mock(DependencyModule);
+    // DependencyModule is an import of ItsModule.
+    return MockBuilder(MyComponent, ItsModule);
   });
 
-  it('renders TestedComponent with its dependencies', () => {
-    const fixture = MockRender(TestedComponent);
+  it('renders MyComponent with its dependencies', () => {
+    const fixture = MockRender(MyComponent);
     const component = fixture.point.componentInstance;
 
     expect(component).toBeTruthy();

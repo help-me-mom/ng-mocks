@@ -212,8 +212,9 @@ and call [`MockRender`](MockRender.md):
 ```ts
 describe('Test', () => {
   beforeEach(() => {
-    return MockBuilder(TargetComponent)
-      .mock(DependencyService)
+    // DependencyService is a provider in ItsModule.
+    return MockBuilder(TargetComponent, ItsModule)
+      // ObservableService is a provider in ItsModule, which we need to customize
       .mock(ObservableService, {
         prop$: EMPTY,
         getStream$: () => EMPTY,

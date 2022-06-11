@@ -18,6 +18,7 @@ interface InjectedAbstraction {
   hello: () => number;
 }
 
+// @TODO remove with A5 support
 const injectableArgs = [
   {
     providedIn: 'root',

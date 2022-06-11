@@ -11,6 +11,7 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
 } from 'ng-mocks';
 
+// @TODO remove with A5 support
 const injectableTarget1ServiceArgs = [
   {
     providedIn: 'root',
@@ -36,6 +37,7 @@ class Target1Component {
 })
 class Target1Module {}
 
+// @TODO remove with A5 support
 const injectableTarget2ServiceArgs = [
   {
     providedIn: 'root',

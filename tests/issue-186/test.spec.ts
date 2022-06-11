@@ -1,7 +1,7 @@
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockModule } from 'ng-mocks';
+import { MockModule, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class ExampleProvider {
@@ -22,7 +22,7 @@ describe('issue-186:real', () => {
       imports: [ExampleModule],
     });
 
-    exampleProvider = TestBed.get(ExampleProvider);
+    exampleProvider = ngMocks.findInstance(ExampleProvider);
   });
 
   it('should not be able to pass state between tests (setup phase)', () => {
@@ -47,7 +47,7 @@ describe('issue-186:mock', () => {
       imports: [MockModule(ExampleModule)],
     });
 
-    exampleProvider = TestBed.get(ExampleProvider);
+    exampleProvider = ngMocks.findInstance(ExampleProvider);
   });
 
   it('should not be able to pass state between tests (setup phase)', () => {

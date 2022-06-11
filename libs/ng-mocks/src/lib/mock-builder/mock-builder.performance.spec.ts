@@ -81,7 +81,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed beforeCC', () => {
+  it('fails on a missing beforeCC', () => {
     const beforeCC1 = () => undefined;
     const beforeCC2 = () => undefined;
 
@@ -109,7 +109,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed keepDef', () => {
+  it('fails on a missing keepDef', () => {
     const ngModule1 = MockBuilder().keep(Target1Module).build();
     const ngModule2 = MockBuilder().keep(Target2Module).build();
 
@@ -137,7 +137,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed replaceDef', () => {
+  it('fails on a missing replaceDef', () => {
     const ngModule1 = MockBuilder()
       .keep(Target1Module)
       .replace(Target1Component, Target2Component)
@@ -171,7 +171,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed excludeDef', () => {
+  it('fails on a missing excludeDef', () => {
     const ngModule1 = MockBuilder()
       .keep(Target1Module)
       .exclude(Target1Component)
@@ -202,7 +202,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed mockDef', () => {
+  it('fails on a missing mockDef', () => {
     const ngModule1 = MockBuilder().mock(Target1Module).build();
     const ngModule2 = MockBuilder().mock(Target2Module).build();
 
@@ -223,7 +223,7 @@ describe('MockBuilderPerformance', () => {
       ngModule2.providers?.[0],
     );
   });
-  it('fails on a missed providerDef', () => {
+  it('fails on a missing providerDef', () => {
     const ngModule1 = MockBuilder().provide(Target1Service).build();
     const ngModule2 = MockBuilder().provide(Target2Service).build();
 
@@ -441,7 +441,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.imports?.[0]).not.toBe(ngModule2.imports?.[0]);
   });
-  it('fails on a missed defProviders', () => {
+  it('fails on a missing defProviders', () => {
     const ngModule1 = MockBuilder()
       .keep(Target2Module)
       .keep({
@@ -549,7 +549,7 @@ describe('MockBuilderPerformance', () => {
       ngModule2.providers?.[0],
     );
   });
-  it('fails on a missed defValue', () => {
+  it('fails on a missing defValue', () => {
     const ngModule1 = MockBuilder()
       .mock(Target1Module)
       .mock(Target1Service)
@@ -588,20 +588,22 @@ describe('MockBuilderPerformance', () => {
   });
   it('fails on a different size configDef', () => {
     const ngModule1 = MockBuilder().keep(Target1Module).build();
-    const ngModule2 = MockBuilder().keep(Target1Module, {}).build();
+    const ngModule2 = MockBuilder()
+      .keep(Target1Module, { dependency: true })
+      .build();
 
     expect(ngModule1.providers?.[0]).not.toBe(
       ngModule2.providers?.[0],
     );
   });
-  it('fails on a missed configDef', () => {
+  it('fails on a missing configDef', () => {
     const ngModule1 = MockBuilder()
       .keep(Target1Module)
-      .keep(Target2Module, {})
+      .keep(Target2Module, { dependency: true })
       .build();
     const ngModule2 = MockBuilder()
       .keep(Target2Module)
-      .keep(Target1Module, {})
+      .keep(Target1Module, { dependency: true })
       .build();
 
     expect(ngModule1.providers?.[0]).not.toBe(
@@ -755,7 +757,7 @@ describe('MockBuilderPerformance', () => {
 
     expect(ngModule1.providers?.[0]).toBe(ngModule2.providers?.[0]);
   });
-  it('fails on missed definition configDef', () => {
+  it('fails on missing definition configDef', () => {
     const ngModule1 = MockBuilder()
       .mock(Target1Module, { render: {} })
       .build();

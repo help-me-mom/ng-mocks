@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // Thanks A5.
 const TOKEN = new (InjectionToken as any)('TOKEN', {
   factory: () => 'token',
 });
 
+// @TODO remove with A5 support
 const injectableTargetServiceArgs = [
   {
     providedIn: 'root',
@@ -77,7 +78,7 @@ describe('root-provider-with-root-dep', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain('"name:"');
       // A nested token as a dependency should be replaced with a mock copy.
-      expect(TestBed.get(TOKEN)).toBeUndefined();
+      expect(ngMocks.findInstance(TOKEN, undefined)).toBeUndefined();
     });
   });
 });
