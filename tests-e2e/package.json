@@ -38,7 +38,7 @@
     "@ngrx/store-devtools": "13.2.0",
     "@ngxs/store": "3.7.4",
     "@types/jasmine": "4.0.3",
-    "@types/node": "16.11.39",
+    "@types/node": "16.11.40",
     "jasmine-core": "4.2.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.0",
