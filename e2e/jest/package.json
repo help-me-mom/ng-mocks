@@ -35,7 +35,7 @@
     "@angular/cli": "14.0.2",
     "@angular/compiler-cli": "14.0.2",
     "@types/jest": "28.1.1",
-    "@types/node": "16.11.41",
+    "@types/node": "18.0.0",
     "jest": "28.1.1",
     "jest-preset-angular": "12.1.0",
     "npm": "8.12.1",
