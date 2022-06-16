@@ -3,7 +3,7 @@ import { NgModule, Provider } from '@angular/core';
 import coreConfig from '../common/core.config';
 import { extendClass } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
-import { Type } from '../common/core.types';
+import { AnyType, Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
 import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
@@ -25,7 +25,7 @@ const flagReplace = (resolution?: string): boolean =>
 const flagNever = (ngModule?: any): boolean =>
   coreConfig.neverMockModule.indexOf(funcGetName(ngModule)) !== -1 && !ngMocksUniverse.flags.has('skipMock');
 
-const preProcessFlags = (ngModule: Type<any>): { isRootModule: boolean; toggleSkipMockFlag: boolean } => {
+const preProcessFlags = (ngModule: AnyType<any>): { isRootModule: boolean; toggleSkipMockFlag: boolean } => {
   let toggleSkipMockFlag = false;
   let isRootModule = true;
 
@@ -163,9 +163,9 @@ const getMockProviders = (ngModuleProviders: Provider[] | undefined): Provider[]
 
 const generateReturn = (
   module: any,
-  ngModule: Type<any>,
+  ngModule: AnyType<any>,
   ngModuleProviders: Provider[] | undefined,
-  mockModule: Type<any>,
+  mockModule: AnyType<any>,
   mockModuleProviders: Provider[] | undefined,
 ): any =>
   mockModule === ngModule && mockModuleProviders === ngModuleProviders

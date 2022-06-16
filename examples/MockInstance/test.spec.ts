@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -6,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 

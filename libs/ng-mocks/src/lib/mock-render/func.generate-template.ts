@@ -1,5 +1,5 @@
-import { isNgDef } from '../common/func.is-ng-def';
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
+import { isNgDef } from '../common/func.is-ng-def';
 
 const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i' ? `[${prop}]` : `(${prop})`);
 

@@ -3,7 +3,7 @@ import { MockedDirective } from '../mock-directive/types';
 import { MockedModule } from '../mock-module/types';
 import { MockedPipe } from '../mock-pipe/types';
 
-import { Type } from './core.types';
+import { AnyType, Type } from './core.types';
 import { isNgDef } from './func.is-ng-def';
 
 /**
@@ -17,7 +17,7 @@ import { isNgDef } from './func.is-ng-def';
  * isMockNgDef(ArbitraryClass, 'c'); // returns false
  * ```
  */
-export function isMockNgDef<T>(component: Type<T>, ngType: 'c'): component is Type<MockedComponent<T>>;
+export function isMockNgDef<T>(component: AnyType<T>, ngType: 'c'): component is Type<MockedComponent<T>>;
 
 /**
  * isMockNgDef verifies whether a class is a mock directive class.
@@ -30,7 +30,7 @@ export function isMockNgDef<T>(component: Type<T>, ngType: 'c'): component is Ty
  * isMockNgDef(ArbitraryClass, 'd'); // returns false
  * ```
  */
-export function isMockNgDef<T>(directive: Type<T>, ngType: 'd'): directive is Type<MockedDirective<T>>;
+export function isMockNgDef<T>(directive: AnyType<T>, ngType: 'd'): directive is Type<MockedDirective<T>>;
 
 /**
  * isMockNgDef verifies whether a class is a mock pipe class.
@@ -43,7 +43,7 @@ export function isMockNgDef<T>(directive: Type<T>, ngType: 'd'): directive is Ty
  * isMockNgDef(ArbitraryClass, 'p'); // returns false
  * ```
  */
-export function isMockNgDef<T>(pipe: Type<T>, ngType: 'p'): pipe is Type<MockedPipe<T>>;
+export function isMockNgDef<T>(pipe: AnyType<T>, ngType: 'p'): pipe is Type<MockedPipe<T>>;
 
 /**
  * isMockNgDef verifies whether a class is a mock module class.
@@ -56,7 +56,7 @@ export function isMockNgDef<T>(pipe: Type<T>, ngType: 'p'): pipe is Type<MockedP
  * isMockNgDef(ArbitraryClass, 'm'); // returns false
  * ```
  */
-export function isMockNgDef<T>(module: Type<T>, ngType: 'm'): module is Type<MockedModule<T>>;
+export function isMockNgDef<T>(module: AnyType<T>, ngType: 'm'): module is Type<MockedModule<T>>;
 
 /**
  * isMockNgDef verifies whether a class is a mock class.
@@ -72,7 +72,7 @@ export function isMockNgDef<T>(module: Type<T>, ngType: 'm'): module is Type<Moc
 export function isMockNgDef<T>(module: Type<T>): module is Type<T>;
 
 export function isMockNgDef<TComponent>(
-  component: Type<TComponent> & { mockOf?: any },
+  component: AnyType<TComponent> & { mockOf?: any },
   type?: 'c' | 'd' | 'p' | 'm',
 ): component is Type<TComponent> {
   if (!(component as any).mockOf) {

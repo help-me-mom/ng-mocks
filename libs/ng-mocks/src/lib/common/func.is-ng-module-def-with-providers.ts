@@ -1,7 +1,6 @@
 import { Provider } from '@angular/core';
 
 import { Type } from './core.types';
-import { isNgDef } from './func.is-ng-def';
 
 /**
  * NgModuleWithProviders helps to support ModuleWithProviders in all angular versions.
@@ -20,7 +19,4 @@ export interface NgModuleWithProviders<T = any> {
  * @internal
  */
 export const isNgModuleDefWithProviders = (declaration: any): declaration is NgModuleWithProviders =>
-  declaration &&
-  typeof declaration === 'object' &&
-  declaration.ngModule !== undefined &&
-  isNgDef(declaration.ngModule, 'm');
+  declaration && typeof declaration === 'object' && typeof declaration.ngModule === 'function';

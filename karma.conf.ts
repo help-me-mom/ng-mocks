@@ -3,8 +3,8 @@
 import { join } from 'node:path';
 
 import { Config } from 'karma';
-import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import puppeteer from 'puppeteer';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
 process.env.CHROME_BIN = (puppeteer as any as puppeteer.PuppeteerNode).executablePath();
 

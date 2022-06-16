@@ -17,6 +17,26 @@ where **everything in the module will be replaced with their mocks**, except the
 beforeEach(() => {
   return MockBuilder(TheThing, ItsModule);
 });
+
+// To test a component
+beforeEach(() => {
+  return MockBuilder(TheComponent, ItsModule);
+});
+
+// To test a directive
+beforeEach(() => {
+  return MockBuilder(TheDirective, ItsModule);
+});
+
+// To test a pipe
+beforeEach(() => {
+  return MockBuilder(ThePipe, ItsModule);
+});
+
+// To test a standalone declarations
+beforeEach(() => {
+  return MockBuilder(TheStandaloneDeclaration).mock(OneOfItsImports);
+});
 ```
 
 `MockBuilder` tends to provide **a simple instrument to turn Angular dependencies into their mocks**,
@@ -26,6 +46,7 @@ and has a rich toolkit that supports:
 - detection and creation of mocks for root providers
 - replacement of modules and declarations at any depth
 - exclusion of modules, declarations and providers at any depth
+- shallow testing of [standalone declarations](#shallow-flag)
 
 ## Simple example
 
@@ -375,6 +396,30 @@ beforeEach(() => {
 });
 ```
 
+### `shallow` flag
+
+The `shallow` flag works with kept standalone declarations.
+It signals `MockBuilder` to mock all imports of the declaration, whereas the declaration itself won't be mocked.
+
+```ts
+beforeEach(() => {
+  return MockBuilder()
+    .keep(StandaloneComponent, {
+      shallow: true, // all imports of StandaloneComponent will be mocks.
+    });
+});
+```
+
+Also, if a standalone declaration has been passed as the first parameter of `MockBuilder`,
+then the `shallow` flag will be automatically set. It allows smooth shallow testing of them.
+
+```ts
+beforeEach(() => {
+  // All imports, apart from OneOfItsDependenciesPipe, of StandaloneComponent will be mocks.
+  return MockBuilder(StandaloneComponent).keep(OneOfItsDependenciesPipe);
+});
+```
+
 ### `render` flag
 
 When we want to render a structural directive by default, we can do that via adding the `render` flag in its config.
@@ -473,6 +518,13 @@ then only root providers for kept modules will stay as they are.
 All other root providers will be replaced with their mocks, even for kept declarations of mock modules.
 
 ## Factory function
+
+You might be using other [testing frameworks for angular](../extra/with-3rd-party),
+such as `@ngneat/spectator` or `@testing-library/angular`.
+
+This is a use-case for the factory function.
+
+The factory function allows you to get a preconfigured `TestBed` declarations which can be passed wherever else. 
 
 ```ts
 const ngModule = MockBuilder(MyComponent, MyModule)

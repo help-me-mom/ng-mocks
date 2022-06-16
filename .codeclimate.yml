@@ -46,6 +46,7 @@ exclude_patterns:
   - 'karma.conf.ts'
   - 'karma.ie.sh'
   - 'renovate.json'
+  - 'webpack.config.js'
   - '**/*.json'
   - '**/*.md'
   - '**/*.yml'

@@ -2,7 +2,9 @@ import { DebugElement, Directive, InjectionToken } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
+import { getInjection } from '../common/core.helpers';
 import { AnyDeclaration, AnyType, Type } from '../common/core.types';
+import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksStack from '../common/ng-mocks-stack';
@@ -10,8 +12,6 @@ import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import { MockService } from '../mock-service/mock-service';
-import funcGetName from '../common/func.get-name';
-import { getInjection } from '../common/core.helpers';
 
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';

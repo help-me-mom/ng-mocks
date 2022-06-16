@@ -14,12 +14,21 @@ export default (def: any, type: any, func: string, cacheFlag: string, base: any,
     return ngMocksUniverse.cacheDeclarations.get(def);
   }
 
+  const hasNgMocksDepsResolution = ngMocksUniverse.config.has('ngMocksDepsResolution');
+  if (!hasNgMocksDepsResolution) {
+    ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
+  }
+
   const mock = extendClass(base);
   decorator(def, mock);
 
   // istanbul ignore else
   if (ngMocksUniverse.flags.has(cacheFlag)) {
     ngMocksUniverse.cacheDeclarations.set(def, mock);
+  }
+
+  if (!hasNgMocksDepsResolution) {
+    ngMocksUniverse.config.delete('ngMocksDepsResolution');
   }
 
   return mock as any;

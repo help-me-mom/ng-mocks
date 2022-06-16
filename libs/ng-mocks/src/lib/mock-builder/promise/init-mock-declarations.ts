@@ -5,8 +5,9 @@ import tryMockDeclaration from './try-mock-declaration';
 import tryMockProvider from './try-mock-provider';
 
 export default (mockDef: Set<any>, defValue: Map<any, any>): void => {
+  const resolutions: Map<any, string> = ngMocksUniverse.config.get('ngMocksDepsResolution');
   for (const def of mapValues(mockDef)) {
-    ngMocksUniverse.config.get('ngMocksDepsResolution').set(def, 'mock');
+    resolutions.set(def, 'mock');
     tryMockDeclaration(def, defValue);
     tryMockProvider(def, defValue);
 

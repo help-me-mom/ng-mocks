@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ContentChild,
@@ -7,7 +8,6 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
