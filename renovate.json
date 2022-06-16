@@ -22,7 +22,7 @@
     },
 
     {
-      "packagePatterns": ["satantime/puppeteer-node"],
+      "packagePatterns": ["satantime/puppeteer-node", "@types/node"],
       "major": {
         "enabled": false
       },
