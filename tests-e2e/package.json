@@ -48,7 +48,7 @@
     "ng-mocks": "*",
     "npm": "8.12.2",
     "primeng": "13.4.1",
-    "puppeteer": "14.4.0",
+    "puppeteer": "14.4.1",
     "rxjs": "7.5.5",
     "ts-node": "10.8.1",
     "tslib": "2.4.0",
