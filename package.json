@@ -176,7 +176,7 @@
     "@commitlint/cli": "17.0.2",
     "@commitlint/config-conventional": "17.0.2",
     "@ng-select/ng-select": "8.3.0",
-    "@ngneat/spectator": "11.0.1",
+    "@ngneat/spectator": "10.0.1",
     "@ngrx/effects": "13.2.0",
     "@ngrx/store": "13.2.0",
     "@ngrx/store-devtools": "13.2.0",
