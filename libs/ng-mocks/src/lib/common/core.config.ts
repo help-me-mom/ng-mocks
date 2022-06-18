@@ -33,4 +33,14 @@ export default {
   onMockBuilderMissingDependency: 'throw',
   onMockInstanceRestoreNeed: 'warn',
   onTestBedFlushNeed: 'warn',
+
+  dependencies: [
+    'declarations',
+    'entryComponents',
+    'bootstrap',
+    'providers',
+    'viewProviders',
+    'imports',
+    'exports',
+  ] as const,
 };
