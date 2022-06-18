@@ -185,7 +185,7 @@ jobs:
           condition:
             not:
               matches:
-                pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
+                pattern: '(renovate|dependabot/npm_and_yarn)/(e2e|docs)/.*'
                 value: << pipeline.git.branch >>
           steps:
             - checkout
@@ -212,7 +212,7 @@ jobs:
           condition:
             not:
               matches:
-                pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
+                pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e)/.*'
                 value: << pipeline.git.branch >>
           steps:
             - checkout
@@ -239,7 +239,7 @@ jobs:
           condition:
             not:
               matches:
-                pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
+                pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|docs)/.*'
                 value: << pipeline.git.branch >>
           steps:
             - checkout
@@ -267,19 +267,9 @@ jobs:
           condition:
             or:
               - not:
-                  or:
-                    - matches:
-                        pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
-                        value: << pipeline.git.branch >>
-                    - matches:
-                        pattern: '(renovate|dependabot/npm_and_yarn)/docs/.*'
-                        value: << pipeline.git.branch >>
-                    - matches:
-                        pattern: '(renovate|dependabot/npm_and_yarn)/tests-e2e/.*'
-                        value: << pipeline.git.branch >>
-                    - matches:
-                        pattern: 'master|alpha|beta|next|rc'
-                        value: << pipeline.git.branch >>
+                  matches:
+                    pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|docs)/.*'
+                    value: << pipeline.git.branch >>
               - matches:
                   pattern: 'renovate/e2e/a5/.*'
                   value: << pipeline.git.branch >>
@@ -348,13 +338,10 @@ jobs:
             or:
               - not:
                   matches:
-                    pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
+                    pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|docs)/.*'
                     value: << pipeline.git.branch >>
               - matches:
-                  pattern: 'renovate/e2e/<< parameters.branch >>/.*'
-                  value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'dependabot/npm_and_yarn/e2e/<< parameters.dir >>/.*'
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
                   value: << pipeline.git.branch >>
           steps:
             - install:
@@ -389,13 +376,10 @@ jobs:
             or:
               - not:
                   matches:
-                    pattern: '(renovate|dependabot/npm_and_yarn)/e2e/.*'
+                    pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|docs)/.*'
                     value: << pipeline.git.branch >>
               - matches:
-                  pattern: 'renovate/e2e/<< parameters.branch >>/.*'
-                  value: << pipeline.git.branch >>
-              - matches:
-                  pattern: 'dependabot/npm_and_yarn/e2e/<< parameters.dir >>/.*'
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
                   value: << pipeline.git.branch >>
           steps:
             - test:
@@ -428,10 +412,7 @@ workflows:
                 - beta
                 - next
                 - rc
-                - /renovate\/docs\/.*/
-                - /dependabot\/npm_and_yarn\/docs\/.*/
-                - /renovate\/tests-e2e\/.*/
-                - /dependabot\/npm_and_yarn\/tests-e2e\/.*/
+                - /(renovate|dependabot\/npm_and_yarn)\/(tests-e2e|docs)\/.*/
       - Performance:
           name: core:performance
           requires:
