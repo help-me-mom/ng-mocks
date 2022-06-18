@@ -27,6 +27,19 @@ services:
       - --no-audit
       - --omit=optional
 
+  e2e:
+    image: satantime/puppeteer-node:16.15.1
+    working_dir: /app
+    volumes:
+      - ./tests-e2e:/app
+      - /root/.node-gyp
+      - /root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+      - --omit=optional
+
   a5es5:
     image: satantime/puppeteer-node:6.17.1
     working_dir: /app
