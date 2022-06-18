@@ -52,3 +52,15 @@ export type DebugNodeSelector =
   | [string, string | number]
   | null
   | undefined;
+
+/**
+ * @internal
+ */
+export type dependencyKeys =
+  | 'declarations'
+  | 'entryComponents'
+  | 'bootstrap'
+  | 'providers'
+  | 'viewProviders'
+  | 'imports'
+  | 'exports';

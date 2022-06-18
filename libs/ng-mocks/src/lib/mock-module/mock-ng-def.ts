@@ -1,7 +1,7 @@
 import { Component, Directive, NgModule, Pipe, Provider } from '@angular/core';
 
 import { flatten } from '../common/core.helpers';
-import { Type } from '../common/core.types';
+import { dependencyKeys, Type } from '../common/core.types';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -13,19 +13,10 @@ const flatToExisting = <T, R>(data: T | T[], callback: (arg: T) => R | undefined
     .map(callback)
     .filter((item): item is R => !!item);
 
-type processMeta =
-  | 'declarations'
-  | 'entryComponents'
-  | 'bootstrap'
-  | 'providers'
-  | 'viewProviders'
-  | 'imports'
-  | 'exports';
-
 const configureProcessMetaKeys = (
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
-): Array<[processMeta, (def: any) => any]> => [
+): Array<[dependencyKeys, (def: any) => any]> => [
   ['declarations', resolve],
   ['entryComponents', resolve],
   ['bootstrap', resolve],
@@ -36,7 +27,7 @@ const configureProcessMetaKeys = (
 ];
 
 const processMeta = (
-  ngModule: Partial<NgModule & Component & Directive & Pipe> & {
+  ngModule: Partial<Record<dependencyKeys, any>> & {
     skipMarkProviders?: boolean;
   },
   resolve: (def: any) => any,

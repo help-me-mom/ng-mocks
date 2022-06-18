@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, Pipe, ViewContainerRef } from '@angular/core';
+import { ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
@@ -8,6 +8,7 @@ import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
 import { MockProvider } from '../mock-provider/mock-provider';
 import helperCreateClone from '../mock-service/helper.create-clone';
 
+import coreConfig from './core.config';
 import coreDefineProperty from './core.define-property';
 import { flatten, mapEntries, mapValues } from './core.helpers';
 import coreInjector from './core.injector';
@@ -15,7 +16,7 @@ import coreReflectMeta from './core.reflect.meta';
 import coreReflectModuleResolve from './core.reflect.module-resolve';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS, NG_MOCKS_TOUCHES } from './core.tokens';
-import { AnyType } from './core.types';
+import { AnyType, dependencyKeys } from './core.types';
 import funcGetProvider from './func.get-provider';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
@@ -67,21 +68,8 @@ const initTestBed = () => {
   }
 };
 
-const generateTouchesKey = [
-  'bootstrap',
-  'declarations',
-  'entryComponents',
-  'exports',
-  'imports',
-  'providers',
-  'viewProviders',
-] as const;
-
-const generateTouches = (
-  moduleDef: Partial<TestModuleMetadata & NgModule & Directive & Pipe & Component>,
-  touches: Set<any>,
-): void => {
-  for (const key of generateTouchesKey) {
+const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touches: Set<any>): void => {
+  for (const key of coreConfig.dependencies) {
     for (const item of moduleDef[key] ? flatten(moduleDef[key]) : []) {
       let def = funcGetProvider(item);
       if (isNgModuleDefWithProviders(def)) {

@@ -346,13 +346,16 @@ const parsePropMetadataMap: any = {
 
 const parsePropMetadata = (
   def: {
-    __prop__metadata__?: Record<string, any[]>;
+    __prop__metadata__?: Record<keyof any, any[]>;
   },
   declaration: Declaration,
 ): void => {
   if (Object.prototype.hasOwnProperty.call(def, '__prop__metadata__') && def.__prop__metadata__) {
     for (const prop of getAllKeys(def.__prop__metadata__)) {
-      for (const decorator of def.__prop__metadata__[prop]) {
+      const decorators: Array<{
+        ngMetadataName?: string;
+      }> = def.__prop__metadata__[prop];
+      for (const decorator of decorators) {
         const ngMetadataName = decorator?.ngMetadataName;
         if (!ngMetadataName) {
           continue;
