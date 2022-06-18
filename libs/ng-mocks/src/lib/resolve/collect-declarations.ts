@@ -12,8 +12,25 @@ interface Declaration {
   outputs: string[];
   propDecorators: Record<string, any[]>;
   queries: Record<string, any>;
+  decorators: Array<'Injectable' | 'Pipe' | 'Directive' | 'Component' | 'NgModule'>;
   [key: string]: any;
 }
+
+const pushDecorator = (decorators: string[], decorator: string): void => {
+  const deleteIndex = decorators.indexOf(decorator);
+  if (deleteIndex !== -1) {
+    decorators.splice(deleteIndex, 1);
+  }
+  if (
+    decorator === 'Injectable' ||
+    decorator === 'Pipe' ||
+    decorator === 'Directive' ||
+    decorator === 'Component' ||
+    decorator === 'NgModule'
+  ) {
+    decorators.push(decorator);
+  }
+};
 
 const getAllKeys = <T>(instance: T): Array<keyof T> => {
   const props: string[] = [];
@@ -24,18 +41,17 @@ const getAllKeys = <T>(instance: T): Array<keyof T> => {
   return props as never;
 };
 
-const createDeclarations = (parent: Partial<Declaration>): Declaration => {
-  return {
-    host: parent.host ? { ...parent.host } : {},
-    hostBindings: parent.hostBindings ? [...parent.hostBindings] : [],
-    hostListeners: parent.hostListeners ? [...parent.hostListeners] : [],
-    attributes: parent.attributes ? [...parent.attributes] : [],
-    inputs: parent.inputs ? [...parent.inputs] : [],
-    outputs: parent.outputs ? [...parent.outputs] : [],
-    propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
-    queries: parent.queries ? { ...parent.queries } : {},
-  };
-};
+const createDeclarations = (parent: Partial<Declaration>): Declaration => ({
+  host: parent.host ? { ...parent.host } : {},
+  hostBindings: parent.hostBindings ? [...parent.hostBindings] : [],
+  hostListeners: parent.hostListeners ? [...parent.hostListeners] : [],
+  attributes: parent.attributes ? [...parent.attributes] : [],
+  inputs: parent.inputs ? [...parent.inputs] : [],
+  outputs: parent.outputs ? [...parent.outputs] : [],
+  propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
+  queries: parent.queries ? { ...parent.queries } : {},
+  decorators: parent.decorators ? [...parent.decorators] : [],
+});
 
 const parseParameters = (
   def: {
@@ -83,8 +99,8 @@ const parseAnnotations = (
       if (!ngMetadataName) {
         continue;
       }
-
       declaration[ngMetadataName] = { ...annotation, attributes: declaration.attributes };
+      pushDecorator(declaration.decorators, ngMetadataName);
     }
   }
 };
@@ -108,8 +124,8 @@ const parseDecorators = (
       if (!ngMetadataName) {
         continue;
       }
-
       declaration[ngMetadataName] = decorator.args ? { ...decorator.args[0] } : {};
+      pushDecorator(declaration.decorators, ngMetadataName);
     }
   }
 };
@@ -424,4 +440,4 @@ const parse = (def: any): any => {
   return def.__ngMocksDeclarations;
 };
 
-export default ((): ((def: any) => any) => parse)();
+export default ((): ((def: any) => Declaration) => parse)();

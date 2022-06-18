@@ -1,4 +1,4 @@
-import { Component, Directive, Provider, ViewChild } from '@angular/core';
+import { Component, Directive, NgModule, Provider, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
@@ -7,6 +7,7 @@ import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
 import { ngMocksMockConfig } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
+import mockNgDef from '../mock-module/mock-ng-def';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import cloneProviders from './clone-providers';
@@ -30,31 +31,42 @@ const buildConfig = (
   };
 };
 
-export default <T extends Component | Directive>(
+export default <T extends Component & Directive>(
   source: AnyType<any>,
   mock: AnyType<any>,
-  meta: {
-    hostBindings?: Array<[string, any]>;
-    hostListeners?: Array<[string, any, any]>;
-    inputs?: string[];
-    outputs?: string[];
-    providers?: Provider[];
-    queries?: Record<string, ViewChild>;
-    viewProviders?: Provider[];
-  },
-  params: T,
+  meta: Component &
+    Directive &
+    NgModule & {
+      hostBindings?: Array<[string, any]>;
+      hostListeners?: Array<[string, any, any]>;
+      imports?: any[];
+    },
+  params: T & { standalone?: boolean },
 ) => {
-  const data = cloneProviders(source, mock, meta.providers || []);
-  const providers = [toExistingProvider(source, mock), ...data.providers];
-  const { providers: viewProviders } = cloneProviders(source, mock, meta.viewProviders || []);
-  const options: T = { ...params, providers: providers, viewProviders: viewProviders };
+  const options: T & { imports?: any[] } = { ...params };
 
-  if (data.setControlValueAccessor === undefined) {
-    data.setControlValueAccessor =
-      helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1;
+  const { setControlValueAccessor, providers } = cloneProviders(source, mock, meta.providers || []);
+  providers.push(toExistingProvider(source, mock));
+  options.providers = providers;
+
+  const { providers: viewProviders } = cloneProviders(source, mock, meta.viewProviders || []);
+  if (viewProviders.length > 0) {
+    options.viewProviders = viewProviders;
   }
 
-  const config: ngMocksMockConfig = buildConfig(source, meta, data.setControlValueAccessor);
+  if (params.standalone && meta.imports) {
+    const { imports } = mockNgDef({ imports: meta.imports })[1];
+    if (imports?.length) {
+      options.imports = imports as never;
+    }
+  }
+
+  const config: ngMocksMockConfig = buildConfig(
+    source,
+    meta,
+    setControlValueAccessor ??
+      helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1,
+  );
   decorateMock(mock, source, config);
 
   // istanbul ignore else

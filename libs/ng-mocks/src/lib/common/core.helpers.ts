@@ -110,7 +110,7 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
   }
 };
 
-const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
+export const extendClassicClass = <I>(base: AnyType<I>): Type<I> => {
   let child: any;
   const glb = funcGetGlobal();
 
@@ -134,7 +134,7 @@ const extendClassicClass = <I extends object>(base: AnyType<I>): Type<I> => {
   return child;
 };
 
-export const extendClass = <I extends object>(base: AnyType<I>): Type<I> => {
+export const extendClass = <I>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
   coreDefineProperty(child, 'name', `MockMiddleware${funcGetName(base)}`, true);
 

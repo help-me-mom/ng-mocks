@@ -1,7 +1,6 @@
-import { Component, Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 import {
   Action,
   NgxsModule,
@@ -9,6 +8,7 @@ import {
   StateContext,
   Store,
 } from '@ngxs/store';
+import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 import { first, tap } from 'rxjs';
 
 class SetValue {

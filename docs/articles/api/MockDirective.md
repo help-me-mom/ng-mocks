@@ -30,6 +30,7 @@ A mock directive has:
 - support for `@ContentChild` and `@ContentChildren`
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - supports `exportAs`
+- support for [standalone directives](#standalone-directives)
 
 :::tip
 Information about mocking FormControl, ControlValueAccessor, Validator and AsyncValidator
@@ -84,7 +85,7 @@ and [`MockRender`](MockRender.md):
 ```ts
 describe('Test', () => {
   beforeEach(() => {
-    // DependencyDirective is a declaration in ItsModule.
+    // DependencyDirective is a declaration or imported somewhere in ItsModule.
     return MockBuilder(TargetComponent, ItsModule);
   });
 
@@ -94,6 +95,31 @@ describe('Test', () => {
   });
 });
 ```
+
+## Standalone directives
+
+Angular 14 has introduced support for standalone directives.
+`ng-mocks` recognizes and properly mocks them.
+To mock a standalone directive, you need to call `MockDirective` in imports:
+
+```ts
+TestBed.configureTestingModule({
+  imports: [
+    // for a single directive
+    MockDirective(StandaloneDirective),
+
+    // for a set of directives
+    ...MockDirectives(Standalone1Directive, Standalone2Directive),
+  ],
+  declarations: [
+    // our component for testing
+    TargetComponent,
+  ],
+});
+```
+
+[`MockBuilder`](./MockBuilder.md) recognizes and handles standalone directives.
+Also, it allows to mock their imports only for shallow testing.
 
 ## Advanced example with attribute directives
 

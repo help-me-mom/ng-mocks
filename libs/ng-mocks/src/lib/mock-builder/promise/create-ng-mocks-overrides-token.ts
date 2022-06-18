@@ -24,7 +24,14 @@ export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider =>
     if (!override) {
       continue;
     }
-    overrides.set(value, [{ set: override }, { set: original }]);
+
+    // We need to delete standalone, because Angular was too lazy to check whether it has been really changed.
+    const patchedOriginal: Partial<typeof original> = {};
+    for (const key of Object.keys(override)) {
+      patchedOriginal[key] = original[key];
+    }
+
+    overrides.set(value, [{ set: override }, { set: patchedOriginal }]);
   }
 
   return {

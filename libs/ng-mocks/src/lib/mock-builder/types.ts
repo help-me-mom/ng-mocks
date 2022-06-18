@@ -25,6 +25,11 @@ export interface IMockBuilderConfigAll {
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#export-flag
    */
   export?: boolean;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#shallow-flag
+   */
+  shallow?: boolean;
 }
 
 /**

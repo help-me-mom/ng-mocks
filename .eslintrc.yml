@@ -151,14 +151,12 @@ overrides:
         - single
         - avoidEscape: true
           allowTemplateLiterals: true
-      sort-imports:
-        - error
-        - ignoreCase: true
-          ignoreDeclarationSort: true
-          allowSeparatedGroups: true
       import/order:
         - error
         - newlines-between: always
+          alphabetize:
+            order: asc
+            caseInsensitive: true
           groups:
             - builtin
             - external

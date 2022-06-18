@@ -666,6 +666,18 @@ export const ngMocks: {
   get<T, D>(elSelector: DebugNodeSelector, provider: AnyDeclaration<T>, notFoundValue: D): D | T;
 
   /**
+   * ngMocks.get tries to get an instance of provider or token for TestBed.
+   *
+   * @see https://ng-mocks.sudo.eu/api/ngMocks/get
+   *
+   * ```ts
+   * const myComponent = ngMocks.get(MyComponent);
+   * const myDirective = ngMocks.get(MyDirective);
+   * ```
+   */
+  get<T>(provider: AnyDeclaration<T>): T;
+
+  /**
    * ngMocks.findInstance searches for an instance of declaration, provider or token,
    * and returns the first one.
    *

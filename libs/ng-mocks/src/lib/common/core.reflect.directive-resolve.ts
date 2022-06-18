@@ -4,7 +4,7 @@ import collectDeclarations from '../resolve/collect-declarations';
 
 import coreReflectBodyCatch from './core.reflect.body-catch';
 
-export default (def: any): Directive & Partial<Component> =>
+export default (def: any): Directive & Partial<Component> & { standalone?: boolean } =>
   coreReflectBodyCatch((arg: any) => {
     const declaration = collectDeclarations(arg);
     if (declaration.Component) {

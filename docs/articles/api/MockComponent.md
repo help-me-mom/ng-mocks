@@ -30,6 +30,7 @@ The class of a mock component has:
 - support for `@ContentChild` and `@ContentChildren`
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - support for `exportAs`
+- support for [standalone components](#standalone-components)
 
 :::tip
 Information about mocking FormControl, ControlValueAccessor, Validator and AsyncValidator
@@ -84,6 +85,7 @@ and [`MockRender`](MockRender.md):
 ```ts
 describe('Test', () => {
   beforeEach(() => {
+    // DependencyComponent is a declaration or imported somewhere in ItsModule.
     return MockBuilder(TargetComponent, ItsModule);
   });
 
@@ -93,6 +95,30 @@ describe('Test', () => {
   });
 });
 ```
+
+## Standalone components
+
+Starting Angular 14, it provides support for standalone components.
+They are supported by `ng-mocks`. To mock a standalone component, you need to call `MockComponent` in imports:
+
+```ts
+TestBed.configureTestingModule({
+  imports: [
+    // for a single component
+    MockComponent(StandaloneComponent),
+
+    // for a set of components
+    ...MockComponents(Standalone1Component, Standalone2Component),
+  ],
+  declarations: [
+    // our component for testing
+    TargetComponent,
+  ],
+});
+```
+
+[`MockBuilder`](./MockBuilder.md) also supports standalone components
+and allows to mock their imports only for shallow rendering.
 
 ## Advanced example
 

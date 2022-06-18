@@ -1,3 +1,6 @@
+import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import {
   createAction,
   createFeatureSelector,
@@ -7,12 +10,9 @@ import {
   Store,
   StoreModule,
 } from '@ngrx/store';
-import { Component, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 import { first, tap } from 'rxjs';
-import { provideMockStore } from '@ngrx/store/testing';
 
 const setValue = createAction(
   'set-value',

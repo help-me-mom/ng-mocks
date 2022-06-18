@@ -1,6 +1,7 @@
 import { flatten } from '../common/core.helpers';
 import { AnyDeclaration } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import { isStandalone } from '../common/func.is-standalone';
 
 import { MockBuilderPerformance } from './mock-builder.performance';
 import { IMockBuilder } from './types';
@@ -27,6 +28,7 @@ export function MockBuilder(...args: Array<MockBuilderParam | MockBuilderParam[]
     for (const declaration of flatten(keepDeclaration)) {
       instance.keep(declaration, {
         export: true,
+        shallow: isStandalone(declaration),
       });
     }
   }

@@ -30,6 +30,7 @@ A mock pipe has:
 
 - the same `name`
 - default transform is `() => undefined` to prevent problems with chaining
+- support for [standalone pipes](#standalone-pipes)
 
 ## Simple example
 
@@ -95,6 +96,27 @@ describe('Test', () => {
   });
 });
 ```
+
+## Standalone pipes
+
+Since Angular 14, pipes can be implemented as a standalone declaration.
+`ng-mocks` detects and correctly mocks them.
+To mock a standalone pipe, you need to call `MockPipe` in imports:
+
+```ts
+TestBed.configureTestingModule({
+  imports: [
+    // for a single pipe
+    MockPipe(StandalonePipe),
+  ],
+  declarations: [
+    // our component for testing
+    TargetComponent,
+  ],
+});
+```
+
+[`MockBuilder`](./MockBuilder.md) also supports and correctly works with standalone pipes.
 
 ## Advanced example
 

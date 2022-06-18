@@ -1,11 +1,12 @@
 import { flatten, mapValues } from '../../common/core.helpers';
+import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
+import { AnyDeclaration } from '../../common/core.types';
+import funcGetName from '../../common/func.get-name';
 import funcGetProvider from '../../common/func.get-provider';
 import { isNgDef } from '../../common/func.is-ng-def';
+import { isStandalone } from '../../common/func.is-standalone';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import markProviders from '../../mock-module/mark-providers';
-import funcGetName from '../../common/func.get-name';
-import { AnyDeclaration } from '../../common/core.types';
-import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
@@ -27,7 +28,7 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
   }
 
   if (isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p')) {
-    declarations.push(ngMocksUniverse.getBuildDeclaration(def));
+    (isStandalone(def) ? imports : declarations).push(ngMocksUniverse.getBuildDeclaration(def));
     touched = true;
   }
 

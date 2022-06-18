@@ -1,4 +1,4 @@
-import { mapEntries } from '../../common/core.helpers';
+import { mapEntries, mapValues } from '../../common/core.helpers';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import initExcludeDef from './init-exclude-def';
@@ -27,13 +27,25 @@ export default ({
   ngMocksUniverse.config.set('ngMocksDepsSkip', new Set());
   // flags to understand how to mock nested declarations.
   ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
+
+  const standaloneMocks = initKeepDef(keepDef, configDef);
+  for (const def of mapValues(standaloneMocks)) {
+    if (configDef.has(def)) {
+      continue;
+    }
+    mockDef.add(def);
+    configDef.set(def, {
+      dependency: true,
+    });
+  }
+
   for (const [k, v] of mapEntries(configDef)) {
     ngMocksUniverse.config.set(k, {
       ...ngMocksUniverse.getConfigMock().get(k),
       ...v,
     });
   }
-  initKeepDef(keepDef);
+
   initReplaceDef(replaceDef, defValue);
   initExcludeDef(excludeDef);
   initMockDeclarations(mockDef, defValue);
