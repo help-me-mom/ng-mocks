@@ -1,3 +1,22 @@
+# [14.0.0](https://github.com/ike18t/ng-mocks/compare/v13.5.2...v14.0.0) (2022-06-18)
+
+
+### Bug Fixes
+
+* **MockBuilder:** respect extention of classes with different decorators [#2646](https://github.com/ike18t/ng-mocks/issues/2646) ([d069a90](https://github.com/ike18t/ng-mocks/commit/d069a9047cc3188bea384632ffa1d3a0a62a09da))
+
+
+### Features
+
+* **core:** Support of standalone declarations [#2687](https://github.com/ike18t/ng-mocks/issues/2687) ([797cec3](https://github.com/ike18t/ng-mocks/commit/797cec34c9afa94298fdfa3a971d92d54439969b))
+* **MockBuilder:** default flags as dependency or export [#2647](https://github.com/ike18t/ng-mocks/issues/2647) ([f37a663](https://github.com/ike18t/ng-mocks/commit/f37a663761ec7a5cc122661cb91b6b82f99b5ed4)), closes [/ng-mocks.sudo.eu/migrations#from-13-to-14](https://github.com//ng-mocks.sudo.eu/migrations/issues/from-13-to-14)
+
+
+### BREAKING CHANGES
+
+* **MockBuilder:** MockBuilder with 2 params marks all chain calls as dependency
+* **MockBuilder:** MockBuilder with 0-1 params marks all chain calls as export
+
 ## [13.5.2](https://github.com/ike18t/ng-mocks/compare/v13.5.1...v13.5.2) (2022-05-14)
 
 
