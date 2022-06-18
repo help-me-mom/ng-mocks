@@ -9,7 +9,7 @@
 ### Features
 
 * **core:** Support of standalone declarations [#2687](https://github.com/ike18t/ng-mocks/issues/2687) ([797cec3](https://github.com/ike18t/ng-mocks/commit/797cec34c9afa94298fdfa3a971d92d54439969b))
-* **MockBuilder:** default flags as dependency or export [#2647](https://github.com/ike18t/ng-mocks/issues/2647) ([f37a663](https://github.com/ike18t/ng-mocks/commit/f37a663761ec7a5cc122661cb91b6b82f99b5ed4)), closes [/ng-mocks.sudo.eu/migrations#from-13-to-14](https://github.com//ng-mocks.sudo.eu/migrations/issues/from-13-to-14)
+* **MockBuilder:** default flags as dependency or export [#2647](https://github.com/ike18t/ng-mocks/issues/2647) ([f37a663](https://github.com/ike18t/ng-mocks/commit/f37a663761ec7a5cc122661cb91b6b82f99b5ed4))
 
 
 ### BREAKING CHANGES
