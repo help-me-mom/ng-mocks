@@ -37,13 +37,20 @@
     },
 
     {
-      "paths": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "tests-e2e/package.json", "package.json"],
+      "paths": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "package.json"],
       "additionalBranchPrefix": "root/"
     },
 
     {
       "paths": ["docs/package.json"],
       "additionalBranchPrefix": "docs/",
+      "allowedVersions": "/.+/",
+      "ignoreUnstable": false
+    },
+
+    {
+      "paths": ["tests-e2e/package.json"],
+      "additionalBranchPrefix": "tests-e2e/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },

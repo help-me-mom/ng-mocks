@@ -131,7 +131,7 @@ jobs:
           command: npx commitlint --from=origin/master
       - run:
           name: Lint code style
-          command: npm run lint -- --ignore-pattern e2e/
+          command: npm run lint -- --ignore-pattern e2e/ --ignore-pattern tests-e2e/
       - run:
           name: Lint typescript
           command: npm run ts:check
@@ -190,7 +190,17 @@ jobs:
           steps:
             - checkout
             - restore_cache:
-                key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
+                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package-lock.json" }}
+            - run:
+                name: NPM Install
+                command: |
+                  if [ ! -d "./tests-e2e/node_modules/" ]; then
+                    npm run i:tests-e2e
+                  fi
+            - save_cache:
+                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package-lock.json" }}
+                paths:
+                  - ./tests-e2e/node_modules
             - run:
                 name: E2E
                 command: npm run e2e
@@ -247,9 +257,6 @@ jobs:
             - run:
                 name: MockRender
                 command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
-            - run:
-                name: Large Modules
-                command: KARMA_SUITE=tests-performance/ng-mocks.spec.ts npm run test
   IE:
     executor:
       name: win/default
@@ -266,6 +273,9 @@ jobs:
                         value: << pipeline.git.branch >>
                     - matches:
                         pattern: '(renovate|dependabot/npm_and_yarn)/docs/.*'
+                        value: << pipeline.git.branch >>
+                    - matches:
+                        pattern: '(renovate|dependabot/npm_and_yarn)/tests-e2e/.*'
                         value: << pipeline.git.branch >>
                     - matches:
                         pattern: 'master|alpha|beta|next|rc'
@@ -420,6 +430,8 @@ workflows:
                 - rc
                 - /renovate\/docs\/.*/
                 - /dependabot\/npm_and_yarn\/docs\/.*/
+                - /renovate\/tests-e2e\/.*/
+                - /dependabot\/npm_and_yarn\/tests-e2e\/.*/
       - Performance:
           name: core:performance
           requires:

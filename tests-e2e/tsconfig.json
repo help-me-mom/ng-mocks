@@ -2,7 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "node_modules",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -10,10 +10,10 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "module": "ES2015",
+    "lib": ["es2015", "dom"],
     "paths": {
-      "ng-mocks": ["../libs/ng-mocks/src/index"]
+      "ng-mocks": ["../../libs/ng-mocks/src/index.ts"]
     }
   }
 }
