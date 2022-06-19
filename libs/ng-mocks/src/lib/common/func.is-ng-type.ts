@@ -12,6 +12,7 @@ import { AnyType } from './core.types';
  * isNgType(MockModule, 'NgModule'); // returns true
  * isNgType(RealComponent, 'Component'); // returns true
  * isNgType(ArbitraryClass, 'Directive'); // returns false
+ * isNgType(ArbitraryClass, 'Injectable'); // returns false
  * ```
  */
 export const isNgType = (declaration: AnyType<any>, type: string): boolean => {
