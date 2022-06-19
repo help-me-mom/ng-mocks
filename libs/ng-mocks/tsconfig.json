@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "./tsconfig.build.cjs.json",
   "compilerOptions": {
     "experimentalDecorators": true
   },
