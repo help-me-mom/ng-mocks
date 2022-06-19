@@ -1,9 +1,11 @@
 import { flatten, mapValues } from '../../common/core.helpers';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 import { AnyDeclaration } from '../../common/core.types';
+import errorJestMock from '../../common/error.jest-mock';
 import funcGetName from '../../common/func.get-name';
 import funcGetProvider from '../../common/func.get-provider';
 import { isNgDef } from '../../common/func.is-ng-def';
+import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import { isStandalone } from '../../common/func.is-standalone';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import markProviders from '../../mock-module/mark-providers';
@@ -11,12 +13,20 @@ import markProviders from '../../mock-module/mark-providers';
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
 
+const skipDef = (def: any): boolean =>
+  ngMocksUniverse.touches.has(def) || isNgDef(def) || isNgInjectionToken(def) || typeof def === 'string';
+
 const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defProviders: Map<any, any>): void => {
+  if (!skipDef(def)) {
+    errorJestMock(def);
+  }
+
   let touched = false;
 
   if (isNgDef(def, 'm')) {
     const extendedDef = initModule(def, defProviders);
     imports.push(extendedDef);
+    touched = true;
 
     // adding providers to touches
     if (typeof extendedDef === 'object' && extendedDef.providers) {
@@ -24,7 +34,6 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
         ngMocksUniverse.touches.add(funcGetProvider(provider));
       }
     }
-    touched = true;
   }
 
   if (isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p')) {
@@ -32,12 +41,12 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
     touched = true;
   }
 
-  if (isNgDef(def, 'i') || isNgDef(def, 't') || typeof def === 'string') {
+  if (isNgDef(def, 'i') || !isNgDef(def)) {
     const mock = ngMocksUniverse.builtProviders.get(def);
     if (mock && typeof mock !== 'string' && isNgDef(mock, 't') === false) {
       providers.push(mock);
+      touched = true;
     }
-    touched = true;
   }
 
   if (touched) {
