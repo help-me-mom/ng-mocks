@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "0.0.0",
-  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests, which includes shallow rendering, precise stubs to dump child dependencies, supports Angular 5 6 7 8 9 10 11 12 13, jasmine and jest.",
+  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests. It provides shallow rendering, precise stubs to fake child dependencies. ng-mocks works with Angular 5 6 7 8 9 10 11 12 13 14, jasmine and jest.",
   "keywords": [
     "angular",
     "test",
@@ -20,8 +20,8 @@
     "jest",
     "jasmine",
     "enzyme",
-    "create a dummy stub out of child dependency",
-    "stubbing via dumb render"
+    "stub",
+    "dependency"
   ],
   "author": {
     "name": "Isaac Datlof",
