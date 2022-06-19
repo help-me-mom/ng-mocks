@@ -1,3 +1,11 @@
+## [14.0.1](https://github.com/ike18t/ng-mocks/compare/v14.0.0...v14.0.1) (2022-06-19)
+
+
+### Bug Fixes
+
+* **core:** provide mjs in package.json [#2846](https://github.com/ike18t/ng-mocks/issues/2846) ([1d007dd](https://github.com/ike18t/ng-mocks/commit/1d007dd282db7cd35e7c12548ca5f5f0e7d77fb9))
+* **MockBuilder:** add undecorated classes to providers [#2845](https://github.com/ike18t/ng-mocks/issues/2845) ([29b6591](https://github.com/ike18t/ng-mocks/commit/29b6591e93512bcf109151925f92615968e4f9b4))
+
 # [14.0.0](https://github.com/ike18t/ng-mocks/compare/v13.5.2...v14.0.0) (2022-06-18)
 
 
