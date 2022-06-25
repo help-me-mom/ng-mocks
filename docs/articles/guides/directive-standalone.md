@@ -65,8 +65,8 @@ beforeEach(() => {
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
 
 ```ts title="https://github.com/ike18t/ng-mocks/tree/master/examples/TestStandaloneDirective/test.spec.ts"
 import {

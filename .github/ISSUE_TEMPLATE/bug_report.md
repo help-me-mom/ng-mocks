@@ -16,8 +16,8 @@ assignees: satanTime
   A zip file or github repo with the failure is the best,
   but if it's a simple failure which requires just a spec file,
   then please use one of the preconfigured templates:
-  - codesandbox: https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts
-  - stackblitz: https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts
+  - codesandbox: https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts
+  - stackblitz: https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts
 -->
 
 Link:

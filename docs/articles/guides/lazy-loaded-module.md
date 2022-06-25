@@ -29,8 +29,8 @@ Profit.
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/TestLazyModule/test.spec.ts&initialpath=%3Fspec%3DTestLazyModule)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/TestLazyModule/test.spec.ts&initialpath=%3Fspec%3DTestLazyModule)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestLazyModule/test.spec.ts&initialpath=%3Fspec%3DTestLazyModule)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestLazyModule/test.spec.ts&initialpath=%3Fspec%3DTestLazyModule)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestLazyModule/test.spec.ts"
 import { Component, NgModule } from '@angular/core';
