@@ -10,10 +10,12 @@ assignees: satanTime
 
 <!-- A clear and concise description of what the bug is. -->
 
-### A repo with an example of the bug
+### An example of the bug
 
 <!--
-  Use one of the preconfigured templates:
+  A zip file or github repo with the failure is the best,
+  but if it's a simple failure which requires just a spec file,
+  then please use one of the preconfigured templates:
   - codesandbox: https://codesandbox.io/s/github/ng-mocks/examples?file=/src/test.spec.ts
   - stackblitz: https://stackblitz.com/github/ng-mocks/examples?file=src/test.spec.ts
 -->
