@@ -245,8 +245,8 @@ of the instance is not `undefined`, but an `Observable`.
 An advanced example of **customizing a mock component before its initialization** in Angular tests.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/ng-mocks/examples/tree/tests?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/ng-mocks/examples/tree/tests?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 
 ```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
 describe('MockInstance', () => {
