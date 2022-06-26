@@ -42,7 +42,7 @@
     "@angular-devkit/build-angular": "13.3.8",
     "@angular/cli": "13.3.8",
     "@angular/compiler-cli": "13.3.11",
-    "@ngneat/spectator": "10.0.1",
+    "@ngneat/spectator": "11.1.0",
     "@types/jasmine": "4.0.3",
     "@types/jest": "28.1.3",
     "@types/mocha": "9.1.1",
