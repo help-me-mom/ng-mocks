@@ -204,7 +204,7 @@
     "eslint-plugin-mdx": "1.17.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-unicorn": "42.0.0",
+    "eslint-plugin-unicorn": "43.0.0",
     "eslint-plugin-unused-imports": "2.0.0",
     "eslint-plugin-yml": "1.0.0",
     "husky": "8.0.1",
