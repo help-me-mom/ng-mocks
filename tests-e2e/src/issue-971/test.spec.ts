@@ -51,9 +51,10 @@ describe('issue-971', () => {
   describe('MockBuilder', () => {
     let spectator: Spectator<TargetComponent>;
 
-    const dependencies = MockBuilder(null, TargetModule)
-      .exclude(TargetComponent)
-      .build();
+    const dependencies = MockBuilder(
+      TargetComponent,
+      TargetModule,
+    ).build();
     const createComponent = createComponentFactory({
       component: TargetComponent,
       ...dependencies,
