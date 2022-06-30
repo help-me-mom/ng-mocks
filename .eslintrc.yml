@@ -98,14 +98,16 @@ overrides:
       unicorn/no-for-loop: off
       unicorn/no-null: off
       unicorn/no-useless-undefined: off
+      unicorn/prefer-array-flat: off
+      unicorn/prefer-event-target: off
+      unicorn/prefer-includes: off
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
+      unicorn/prefer-spread: off
       unicorn/prefer-switch: off
+      unicorn/prefer-top-level-await: off
       unicorn/prefer-type-error: off
       unicorn/prevent-abbreviations: off
-      unicorn/prefer-includes: off
-      unicorn/prefer-array-flat: off
-      unicorn/prefer-spread: off
 
       es-roikoren/no-array-from: error
       es-roikoren/no-array-isarray: off
@@ -175,6 +177,7 @@ overrides:
       max-lines: off
       max-lines-per-function: off
       unicorn/consistent-function-scoping: off
+      unicorn/prefer-logical-operator-over-ternary: off
 
   - files:
       - '*.js'

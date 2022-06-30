@@ -100,7 +100,7 @@ export function getMockedNgDefOf<T>(declaration: AnyType<T>, type: 'p'): Type<Mo
 export function getMockedNgDefOf<T>(declaration: AnyType<T>): Type<T>;
 
 export function getMockedNgDefOf(declaration: any, type?: any): any {
-  const source = declaration.mockOf ? declaration.mockOf : declaration;
+  const source = declaration.mockOf ?? declaration;
   const mocks = coreInjector(NG_MOCKS);
 
   const mock = getMock(declaration, source, mocks);

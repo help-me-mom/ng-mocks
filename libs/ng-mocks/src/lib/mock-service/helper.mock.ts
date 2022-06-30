@@ -5,9 +5,9 @@ import { MockedFunction } from './types';
 
 // istanbul ignore next
 const createName = (name: string, mockName?: string, instance?: any, accessType?: string) =>
-  `${
-    mockName ? mockName : typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance)
-  }.${name}${accessType || ''}`;
+  `${mockName ?? (typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance))}.${name}${
+    accessType ?? ''
+  }`;
 
 const generateMockDef = (def: any, mock: any, accessType?: string): PropertyDescriptor => ({
   ...(accessType === 'get' && def && def.set

@@ -6,6 +6,7 @@ const mockFunction: {
   (mockName: string, original?: boolean): MockedFunction;
   customMockFunction?: CustomMockFunction;
 } = (mockName: string, original = false): MockedFunction => {
+  // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
   const func =
     mockFunction.customMockFunction && !original
       ? mockFunction.customMockFunction(mockName)
