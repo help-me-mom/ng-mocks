@@ -46,7 +46,7 @@ class MockComponent {
 })
 class MockModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/333
+// @see https://github.com/help-me-mom/ng-mocks/issues/333
 describe('issue-333', () => {
   describe('1:keep', () => {
     // this should work with and without ivy

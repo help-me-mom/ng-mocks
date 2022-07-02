@@ -36,7 +36,7 @@ export class TargetModule {
 })
 export class TargetComponent {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/142
+// @see https://github.com/help-me-mom/ng-mocks/issues/142
 describe('issue-142', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({

@@ -15,7 +15,7 @@ module.exports = {
     announcementBar: {
       id: 'give-a-start',
       content:
-        'If you like ng-mocks, please support it with a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ike18t/ng-mocks">GitHub</a>.',
+        'If you like ng-mocks, please support it with a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/help-me-mom/ng-mocks">GitHub</a>.',
     },
     docs: {
       sidebar: {
@@ -45,7 +45,7 @@ module.exports = {
           href: 'https://satantime.github.io/puppeteer-node/',
         },
         {
-          href: 'https://github.com/ike18t/ng-mocks',
+          href: 'https://github.com/help-me-mom/ng-mocks',
           label: 'GitHub repo',
           position: 'right',
         },
@@ -97,7 +97,7 @@ module.exports = {
             },
             {
               label: 'Report an issue on GitHub',
-              href: 'https://github.com/ike18t/ng-mocks/issues',
+              href: 'https://github.com/help-me-mom/ng-mocks/issues',
             },
           ],
         },
@@ -106,7 +106,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub repo',
-              href: 'https://github.com/ike18t/ng-mocks',
+              href: 'https://github.com/help-me-mom/ng-mocks',
             },
             {
               label: 'NPM package',
@@ -137,7 +137,7 @@ module.exports = {
         showLastUpdateTime: true,
         editUrl: params =>
           [
-            'https://github.com/ike18t/ng-mocks/edit/master/docs/',
+            'https://github.com/help-me-mom/ng-mocks/edit/master/docs/',
             params.versionDocsDirPath,
             '/',
             params.docPath,

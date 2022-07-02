@@ -23,7 +23,7 @@ class Example {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/177
+// @see https://github.com/help-me-mom/ng-mocks/issues/177
 describe('issue-177', () => {
   it('should mock get/set properties and methods', () => {
     const mockExample = MockService(Example);

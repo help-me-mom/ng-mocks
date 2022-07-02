@@ -27,7 +27,7 @@ class MyPipe implements PipeTransform {
 })
 export class AppComponent {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/298
+// @see https://github.com/help-me-mom/ng-mocks/issues/298
 describe('issue-298:pipes', () => {
   beforeEach(() => MockBuilder(AppComponent).keep(MyPipe));
 

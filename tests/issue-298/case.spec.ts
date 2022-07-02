@@ -10,7 +10,7 @@ class MyDirective {
   @Input() public readonly value: string | null = null;
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/298
+// @see https://github.com/help-me-mom/ng-mocks/issues/298
 describe('issue-298:case', () => {
   beforeEach(() => MockBuilder(MyDirective));
 

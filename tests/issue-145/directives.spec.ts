@@ -33,7 +33,7 @@ export class ValueAccessorDirective {}
 export class ValidatorDirective {}
 
 // providers should be added to directives only in case if they were specified in the original directive.
-// @see https://github.com/ike18t/ng-mocks/issues/145
+// @see https://github.com/help-me-mom/ng-mocks/issues/145
 describe('issue-145:directives', () => {
   ngMocks.faster();
 

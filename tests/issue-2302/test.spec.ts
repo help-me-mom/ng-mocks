@@ -48,7 +48,7 @@ export class CakeItemContainerComponent
 }
 
 // no issue here
-// @see https://github.com/ike18t/ng-mocks/issues/2302
+// @see https://github.com/help-me-mom/ng-mocks/issues/2302
 describe('issue-2302', () => {
   describe('ItemContainerComponent', () => {
     beforeEach(() =>

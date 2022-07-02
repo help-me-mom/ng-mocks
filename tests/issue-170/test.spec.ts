@@ -58,7 +58,7 @@ export class RealComponent implements AfterViewInit {
 }
 
 // a normal case is a creation without an error.
-// @see https://github.com/ike18t/ng-mocks/issues/170
+// @see https://github.com/help-me-mom/ng-mocks/issues/170
 describe('issue-170:real', () => {
   beforeEach(() => MockBuilder(RealComponent).keep(TargetComponent));
 
@@ -68,7 +68,7 @@ describe('issue-170:real', () => {
 });
 
 // when we mock a ViewChild component then we should have an option to customize its initialization with MockInstance.
-// @see https://github.com/ike18t/ng-mocks/issues/170
+// @see https://github.com/help-me-mom/ng-mocks/issues/170
 describe('issue-170:mock', () => {
   beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
 
@@ -96,7 +96,7 @@ describe('issue-170:mock', () => {
 });
 
 // if we call MockInstance without a callback then it should reset its state.
-// @see https://github.com/ike18t/ng-mocks/issues/170
+// @see https://github.com/help-me-mom/ng-mocks/issues/170
 describe('issue-170:mock:reset', () => {
   beforeEach(() => MockBuilder(RealComponent).mock(TargetComponent));
 

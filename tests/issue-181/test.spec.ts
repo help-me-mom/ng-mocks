@@ -36,7 +36,7 @@ class TargetDirective {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/181
+// @see https://github.com/help-me-mom/ng-mocks/issues/181
 describe('issue-181:real', () => {
   beforeEach(() => MockBuilder().keep(TargetModule));
 
@@ -59,7 +59,7 @@ describe('issue-181:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/181
+// @see https://github.com/help-me-mom/ng-mocks/issues/181
 describe('issue-181:mock', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 

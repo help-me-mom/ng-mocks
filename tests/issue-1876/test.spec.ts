@@ -38,7 +38,7 @@ export class HelloDirective {
 }
 
 // Components without selectors should still inherit mocked providers.
-// https://github.com/ike18t/ng-mocks/issues/1876
+// https://github.com/help-me-mom/ng-mocks/issues/1876
 describe('issue-1876', () => {
   beforeEach(() =>
     MockBuilder([HelloComponent, HelloDirective]).mock(HelloService, {

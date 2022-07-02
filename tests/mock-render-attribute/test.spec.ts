@@ -29,7 +29,7 @@ class TargetComponent extends TargetDirective {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/discussions/2548
+// @see https://github.com/help-me-mom/ng-mocks/discussions/2548
 describe('mock-render-attribute', () => {
   beforeEach(() =>
     MockBuilder([TargetComponent, TargetDirective, TargetModule]),

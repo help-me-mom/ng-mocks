@@ -4,7 +4,7 @@ import { MockPipe, MockRender, ngMocks } from 'ng-mocks';
 
 import { ImpurePipe, PurePipe } from './fixtures';
 
-// @see https://github.com/ike18t/ng-mocks/issues/240
+// @see https://github.com/help-me-mom/ng-mocks/issues/240
 describe('issue-240:classic', () => {
   let countPure = 0;
   let countImpure = 0;

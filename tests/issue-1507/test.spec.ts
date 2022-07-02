@@ -37,7 +37,7 @@ export class HelloComponent {
   ) {}
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/1507
+// @see https://github.com/help-me-mom/ng-mocks/issues/1507
 // Difference between MockBuilder.provide and MockBuilder.mock
 // Only MockBuilder.mock replaces providers on the component / directive level.
 // MockBuilder.provide simply adds a service to global scope.

@@ -160,13 +160,13 @@ jobs:
           paths:
             - .
       - run:
-          name: Collecting https://coveralls.io/github/ike18t/ng-mocks
+          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
           command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
       - run:
-          name: Collecting https://codecov.io/gh/ike18t/ng-mocks
+          name: Collecting https://codecov.io/gh/help-me-mom/ng-mocks
           command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
       - run:
-          name: Collecting https://codeclimate.com/github/ike18t/ng-mocks
+          name: Collecting https://codeclimate.com/github/help-me-mom/ng-mocks
           command: |
             curl -sL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 \
               > $HOME/codeclimate

@@ -13,7 +13,7 @@ class TargetComponent {
 }
 
 // Updates CommonModule on platform level based on the global setup.
-// @see https://github.com/ike18t/ng-mocks/issues/735
+// @see https://github.com/help-me-mom/ng-mocks/issues/735
 describe('issue-735:date-pipe', () => {
   describe('ngMocks.defaultMock', () => {
     beforeAll(() => ngMocks.globalMock(DatePipe));

@@ -19,7 +19,7 @@ class TargetModule {}
 
 // this test ensures that a mock FormsModule is not broken because of
 // NgControl and how NgModel refers to it via useExisting.
-// @see https://github.com/ike18t/ng-mocks/issues/288
+// @see https://github.com/help-me-mom/ng-mocks/issues/288
 describe('issue-288:ng-model', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 

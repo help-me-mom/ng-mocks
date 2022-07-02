@@ -54,7 +54,7 @@ class TargetModule {}
 
 // It's a tricky thing, because it behaves like that in Ivy only.
 // But even in Ivy, it doesn't render the child component properly.
-// @see https://github.com/ike18t/ng-mocks/issues/1596
+// @see https://github.com/help-me-mom/ng-mocks/issues/1596
 describe('issue-1596', () => {
   beforeEach(() => MockBuilder(ParentComponent, TargetModule));
 

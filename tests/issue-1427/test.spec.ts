@@ -11,7 +11,7 @@ export class TargetComponent {
   @HostListener('click') public click = () => undefined;
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/1427
+// @see https://github.com/help-me-mom/ng-mocks/issues/1427
 describe('issue-1427', () => {
   beforeEach(() => MockBuilder(null, TargetComponent));
 

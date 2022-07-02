@@ -108,7 +108,7 @@ With its help, `MockRender` can be called in either `beforeEach` or `beforeAll`.
 `beforeAll` won't reset its fixture after a test, and the fixture can be used in the next test.
 Please pay attention that state of components also stays the same.
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/tests/issue-488/faster.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/tests/issue-488/faster.spec.ts"
 describe('issue-488:faster', () => {
   let fixture: MockedComponentFixture<MyComponent>;
 

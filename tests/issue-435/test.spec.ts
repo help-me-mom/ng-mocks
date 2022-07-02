@@ -17,7 +17,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/435
+// @see https://github.com/help-me-mom/ng-mocks/issues/435
 describe('issue-435', () => {
   describe('mock pipe', () => {
     beforeEach(() =>

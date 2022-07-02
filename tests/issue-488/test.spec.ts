@@ -20,7 +20,7 @@ export class TargetComponent {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/488
+// @see https://github.com/help-me-mom/ng-mocks/issues/488
 describe('issue-488', () => {
   ngMocks.throwOnConsole();
 

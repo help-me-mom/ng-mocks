@@ -20,7 +20,7 @@ expect(values.length).toEqual(4);
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestMultiToken/test.spec.ts&initialpath=%3Fspec%3DTestMultiToken)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestMultiToken/test.spec.ts&initialpath=%3Fspec%3DTestMultiToken)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestMultiToken/test.spec.ts"
 import { Injectable, InjectionToken, NgModule } from '@angular/core';
 
 import { MockBuilder, MockRender } from 'ng-mocks';

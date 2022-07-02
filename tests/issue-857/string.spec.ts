@@ -16,7 +16,7 @@ class TargetModule {}
 
 ngMocks.globalExclude('@Target857Component' as never);
 
-// @see https://github.com/ike18t/ng-mocks/issues/857
+// @see https://github.com/help-me-mom/ng-mocks/issues/857
 describe('issue-857:string', () => {
   ngMocks.throwOnConsole('error');
   beforeEach(() => MockBuilder(null, TargetModule));

@@ -9,7 +9,7 @@ class TplDirective {
   public constructor(public readonly tpl: TemplateRef<any>) {}
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/289
+// @see https://github.com/help-me-mom/ng-mocks/issues/289
 describe('issue-289', () => {
   beforeEach(() => MockBuilder(null, TplDirective));
 

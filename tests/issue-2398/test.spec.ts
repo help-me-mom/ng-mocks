@@ -15,7 +15,7 @@ class PhonePipe implements PipeTransform {
   }
 }
 
-// https://github.com/ike18t/ng-mocks/issues/2398
+// https://github.com/help-me-mom/ng-mocks/issues/2398
 describe('issue-2398', () => {
   describe('provided', () => {
     beforeEach(() => MockBuilder(PhonePipe).provide(PhonePipe));

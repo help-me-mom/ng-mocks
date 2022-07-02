@@ -26,7 +26,7 @@ ngMocks.defaultMock(TargetService, () => ({
 }));
 
 // ngMocks.guts and MockBuilder.build should be compatible with createComponentFactory.
-// @see https://github.com/ike18t/ng-mocks/issues/971#issuecomment-902467692
+// @see https://github.com/help-me-mom/ng-mocks/issues/971#issuecomment-902467692
 describe('issue-971', () => {
   describe('ngMocks.guts', () => {
     let spectator: Spectator<TargetComponent>;

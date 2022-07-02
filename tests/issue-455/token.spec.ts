@@ -55,7 +55,7 @@ ngMocks.defaultMock(
       : jest.fn().mockReturnValue('FOO')) as any,
 );
 
-// @see https://github.com/ike18t/ng-mocks/issues/455
+// @see https://github.com/help-me-mom/ng-mocks/issues/455
 describe('issue-455:token', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {

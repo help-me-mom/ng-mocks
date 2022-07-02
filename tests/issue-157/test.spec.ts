@@ -114,7 +114,7 @@ export class ActualTokenDirective implements ControlValueAccessor {
   protected touch: any = () => undefined;
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/157
+// @see https://github.com/help-me-mom/ng-mocks/issues/157
 describe('issue-157:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -245,7 +245,7 @@ describe('issue-157:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/157
+// @see https://github.com/help-me-mom/ng-mocks/issues/157
 describe('issue-157:mock', () => {
   beforeEach(() =>
     MockBuilder(ReactiveFormsModule)

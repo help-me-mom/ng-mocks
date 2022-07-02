@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-// @see https://github.com/ike18t/ng-mocks/issues/576
+// @see https://github.com/help-me-mom/ng-mocks/issues/576
 describe('issue-576', () => {
   describe('env:1', () => {
     ngMocks.faster();

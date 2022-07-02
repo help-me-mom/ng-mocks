@@ -121,7 +121,7 @@ We can find the directive via providing its class,
 but, unfortunately, not its selector.
 
 However, good news is that it will be changed soon.
-Please follow this issue on github: [render by selector](https://github.com/ike18t/ng-mocks/issues/292).
+Please follow this issue on github: [render by selector](https://github.com/help-me-mom/ng-mocks/issues/292).
 :::
 
 ```ts

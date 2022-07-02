@@ -16,7 +16,7 @@ class ReproductionComponent {
   public readonly control = new FormControl();
 }
 
-// https://github.com/ike18t/ng-mocks/issues/302
+// https://github.com/help-me-mom/ng-mocks/issues/302
 // The problem derives from internal usage of injector with NgControl.
 // Because internal usage hides priorities,
 // it is possible that a mock instance wants to get NgControl,

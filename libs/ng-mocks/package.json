@@ -54,10 +54,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ike18t/ng-mocks"
+    "url": "https://github.com/help-me-mom/ng-mocks"
   },
   "bugs": {
-    "url": "https://github.com/ike18t/ng-mocks/issues"
+    "url": "https://github.com/help-me-mom/ng-mocks/issues"
   },
   "homepage": "https://ng-mocks.sudo.eu",
   "license": "MIT",

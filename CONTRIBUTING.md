@@ -3,7 +3,7 @@
 The best way would be to discuss an issue or an improvement first:
 
 - [ask a question on gitter](https://gitter.im/ng-mocks/community)
-- [report it as an issue on github](https://github.com/ike18t/ng-mocks/issues)
+- [report it as an issue on github](https://github.com/help-me-mom/ng-mocks/issues)
 
 ## How tu run unit tests locally
 
@@ -66,7 +66,7 @@ GIT_COMMITTER_EMAIL=best@coder.com
 
 After that you need to execute 2 commands:
 
-- `npm run release -- --no-ci` - to generate a release and publish it on [github.com](https://github.com/ike18t/ng-mocks/releases)
+- `npm run release -- --no-ci` - to generate a release and publish it on [github.com](https://github.com/help-me-mom/ng-mocks/releases)
 - `npm publish ./tmp/ng-mocks-N.N.N.tgz` - to publish it on [npmjs.com](https://www.npmjs.com/package/ng-mocks)
 
 Profit.

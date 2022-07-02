@@ -139,7 +139,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockObservable/test.spec.ts&initialpath=%3Fspec%3DMockObservable)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockObservable/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockObservable/test.spec.ts"
 describe('MockObservable', () => {
   // Because we want to test the component, we pass it as the first
   // parameter of MockBuilder. To create its mock dependencies

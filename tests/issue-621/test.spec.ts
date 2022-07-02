@@ -20,7 +20,7 @@ class TargetComponent {
   @Input() public readonly value: number | null | undefined = null;
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/621
+// @see https://github.com/help-me-mom/ng-mocks/issues/621
 describe('issue-621', () => {
   ngMocks.faster();
 

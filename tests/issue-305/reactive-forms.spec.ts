@@ -30,7 +30,7 @@ class MyComponent {
 class MyModule {}
 
 // checking how normal form works
-// @see https://github.com/ike18t/ng-mocks/issues/305
+// @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:reactive-forms:real', () => {
   beforeEach(() => MockBuilder(MyComponent).keep(MyModule));
 
@@ -56,7 +56,7 @@ describe('issue-305:reactive-forms:real', () => {
 });
 
 // a mock version should behavior similarly but via our own interface
-// @see https://github.com/ike18t/ng-mocks/issues/305
+// @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:reactive-forms:mock', () => {
   beforeEach(() =>
     MockBuilder(MyComponent)

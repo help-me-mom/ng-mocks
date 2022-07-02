@@ -50,7 +50,7 @@ export class TargetComponent {
   public true$ = new BehaviorSubject(true);
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/2314
+// @see https://github.com/help-me-mom/ng-mocks/issues/2314
 describe('issue-2314', () => {
   let fixture: ComponentFixture<TargetComponent>;
 

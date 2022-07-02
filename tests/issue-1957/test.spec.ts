@@ -17,7 +17,7 @@ class TargetModule {}
 
 const dateSpy = (value: string) => value.length;
 
-// @see https://github.com/ike18t/ng-mocks/issues/1957
+// @see https://github.com/help-me-mom/ng-mocks/issues/1957
 describe('issue-1957:MockBuilder', () => {
   describe('mock', () => {
     ngMocks.faster();

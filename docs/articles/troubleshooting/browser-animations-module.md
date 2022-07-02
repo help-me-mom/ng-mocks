@@ -53,5 +53,5 @@ ngMocks.guts(MyComponent, MyModule, BrowserAnimationsModule);
 ## fakeAsync
 
 A kept / mock `BrowserAnimationsModule` causes issues with `fakeAsync`.
-Please open an issue on [github](https://github.com/ike18t/ng-mocks/issues),
+Please open an issue on [github](https://github.com/help-me-mom/ng-mocks/issues),
 if you have a case where `NoopAnimationsModule` isn't a solution.
