@@ -7,7 +7,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { AppComponent } from './app/app.component';
 import { AppModule } from './app/app.module';
 
-// @see https://github.com/ike18t/ng-mocks/issues/151
+// @see https://github.com/help-me-mom/ng-mocks/issues/151
 describe('issue-151', () => {
   let fixture: ComponentFixture<AppComponent>;
 

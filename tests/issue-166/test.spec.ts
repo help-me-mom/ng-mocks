@@ -18,7 +18,7 @@ class MyService {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/166
+// @see https://github.com/help-me-mom/ng-mocks/issues/166
 describe('issue-166', () => {
   it('accepts spies', () => {
     const spy =

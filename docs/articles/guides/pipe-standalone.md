@@ -51,7 +51,7 @@ beforeEach(() => {
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestStandalonePipe/test.spec.ts&initialpath=%3Fspec%3DTestStandalonePipe)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestStandalonePipe/test.spec.ts&initialpath=%3Fspec%3DTestStandalonePipe)
 
-```ts title="https://github.com/ike18t/ng-mocks/tree/master/examples/TestStandalonePipe/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/tree/master/examples/TestStandalonePipe/test.spec.ts"
 import {
   Injectable,
   Pipe,

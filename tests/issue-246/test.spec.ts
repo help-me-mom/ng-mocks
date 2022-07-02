@@ -110,7 +110,7 @@ class TargetAsyncDirective implements Validator {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/246
+// @see https://github.com/help-me-mom/ng-mocks/issues/246
 describe('issue-246:real', () => {
   beforeEach(async () => {
     return TestBed.configureTestingModule({
@@ -157,7 +157,7 @@ describe('issue-246:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/246
+// @see https://github.com/help-me-mom/ng-mocks/issues/246
 describe('issue-246:mock', () => {
   beforeEach(() =>
     MockBuilder(ReactiveFormsModule)

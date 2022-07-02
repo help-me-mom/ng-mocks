@@ -57,7 +57,7 @@ export class RealComponent {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/167
+// @see https://github.com/help-me-mom/ng-mocks/issues/167
 describe('issue-167:NG_VALIDATORS:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -75,7 +75,7 @@ describe('issue-167:NG_VALIDATORS:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/167
+// @see https://github.com/help-me-mom/ng-mocks/issues/167
 describe('issue-167:NG_VALIDATORS:mock', () => {
   beforeEach(() =>
     MockBuilder(RealComponent, TargetModule).keep(

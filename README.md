@@ -1,8 +1,8 @@
-[<img src="https://img.shields.io/gitter/room/ike18t/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
+[<img src="https://img.shields.io/gitter/room/help-me-mom/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
 [<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
-[<img src="https://img.shields.io/circleci/build/github/ike18t/ng-mocks/master" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/ike18t/ng-mocks?branch=master)
-[<img src="https://img.shields.io/coveralls/github/ike18t/ng-mocks/master" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/ike18t/ng-mocks?branch=master)
-[<img src="https://img.shields.io/lgtm/grade/javascript/g/ike18t/ng-mocks" alt="language grade" width="138" height="20" />](https://lgtm.com/projects/g/ike18t/ng-mocks/context:javascript)
+[<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/master" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=master)
+[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/master" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=master)
+[<img src="https://img.shields.io/lgtm/grade/javascript/g/help-me-mom/ng-mocks" alt="language grade" width="138" height="20" />](https://lgtm.com/projects/g/help-me-mom/ng-mocks/context:javascript)
 
 # Mock components, services and more out of annoying dependencies for simplification of Angular testing
 
@@ -30,8 +30,8 @@ The current version of the library **has been tested** and **can be used** with:
 ## Important links
 
 - **[Documentation with examples of Angular testing](https://ng-mocks.sudo.eu)**
-- [CHANGELOG](https://github.com/ike18t/ng-mocks/blob/master/CHANGELOG.md)
-- [GitHub repo](https://github.com/ike18t/ng-mocks)
+- [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/master/CHANGELOG.md)
+- [GitHub repo](https://github.com/help-me-mom/ng-mocks)
 - [NPM package](https://www.npmjs.com/package/ng-mocks)
 
 * Live [example on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts)
@@ -39,7 +39,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 - [chat on gitter](https://gitter.im/ng-mocks/community)
 - **[ask a question on Stackoverflow](https://stackoverflow.com/questions/ask?tags=ng-mocks%20angular%20testing%20mocking)**
-- [report an issue on GitHub](https://github.com/ike18t/ng-mocks/issues)
+- [report an issue on GitHub](https://github.com/help-me-mom/ng-mocks/issues)
 
 ## Very short introduction
 
@@ -178,7 +178,7 @@ Profit.
 
 If you like `ng-mocks`, please support it:
 
-- [with a star on GitHub](https://github.com/ike18t/ng-mocks)
+- [with a star on GitHub](https://github.com/help-me-mom/ng-mocks)
 - [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
 
 Thank you!

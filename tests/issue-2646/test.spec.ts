@@ -36,7 +36,7 @@ class TargetComponent {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/2646
+// @see https://github.com/help-me-mom/ng-mocks/issues/2646
 // MockBuilder should build a module correctly based on all providers,
 // even if declarations derive from services
 describe('issue-2646', () => {

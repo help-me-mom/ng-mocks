@@ -25,7 +25,7 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
     declarations: [child],
   });
 
-  // https://github.com/ike18t/ng-mocks/issues/1876
+  // https://github.com/help-me-mom/ng-mocks/issues/1876
   // We need to apply overrides to our cloned declaration.
   try {
     const ngMocksOverrides: Map<any, any> = (TestBed as any).ngMocksOverrides;

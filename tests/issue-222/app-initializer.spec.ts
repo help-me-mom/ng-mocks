@@ -18,7 +18,7 @@ class TargetComponent {}
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:APP_INITIALIZER:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
@@ -30,7 +30,7 @@ describe('issue-222:APP_INITIALIZER:mock', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:APP_INITIALIZER:keep', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)
@@ -46,7 +46,7 @@ describe('issue-222:APP_INITIALIZER:keep', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:APP_INITIALIZER:guts', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(

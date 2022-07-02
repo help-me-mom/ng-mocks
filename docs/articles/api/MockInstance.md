@@ -248,7 +248,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
 describe('MockInstance', () => {
   // A normal setup of the TestBed, TargetComponent will be replaced
   // with its mock object.

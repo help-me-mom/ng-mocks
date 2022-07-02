@@ -11,7 +11,7 @@ class TargetComponent {
   public readonly seriesTooltipTemplate?: TemplateRef<any>;
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/567
+// @see https://github.com/help-me-mom/ng-mocks/issues/567
 describe('issue-567', () => {
   beforeEach(() => MockBuilder(null, TargetComponent));
 

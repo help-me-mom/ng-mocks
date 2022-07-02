@@ -27,7 +27,7 @@ ngMocks.defaultMock<{ name: string }>(
   }),
 );
 
-// @see https://github.com/ike18t/ng-mocks/issues/568
+// @see https://github.com/help-me-mom/ng-mocks/issues/568
 describe('issue-568', () => {
   describe('MockBuilder', () => {
     ngMocks.faster();

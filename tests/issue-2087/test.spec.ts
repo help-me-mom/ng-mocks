@@ -27,7 +27,7 @@ class TargetComponent {
 class TargetModule {}
 
 // MockInstance doesn't provide falsy values.
-// @see https://github.com/ike18t/ng-mocks/issues/2087
+// @see https://github.com/help-me-mom/ng-mocks/issues/2087
 describe('issue-2087', () => {
   MockInstance.scope();
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));

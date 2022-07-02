@@ -19,7 +19,7 @@ class Target2Component {}
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/885
+// @see https://github.com/help-me-mom/ng-mocks/issues/885
 describe('issue-885', () => {
   describe('Target1Component', () => {
     beforeEach(() => MockBuilder(Target1Component, TargetModule));

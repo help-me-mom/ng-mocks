@@ -43,7 +43,7 @@ class TargetModule {}
 
 // The test ensures that a provider is available everywhere,
 // despite a missing export of its module.
-// @see https://github.com/ike18t/ng-mocks/issues/623
+// @see https://github.com/help-me-mom/ng-mocks/issues/623
 describe('issue-623:nested', () => {
   const factory = MockRenderFactory(TargetComponent);
 

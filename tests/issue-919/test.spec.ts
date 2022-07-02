@@ -25,7 +25,7 @@ class TargetComponent {
 class TargetModule {}
 
 // The goal is to provide properties before the real render.
-// @see https://github.com/ike18t/ng-mocks/issues/919
+// @see https://github.com/help-me-mom/ng-mocks/issues/919
 describe('issue-919', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 

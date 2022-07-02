@@ -46,7 +46,7 @@ describe('issue-305:forms:real', () => {
 });
 
 // a mock version should behavior similarly but via our own interface
-// @see https://github.com/ike18t/ng-mocks/issues/305
+// @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:forms:mock', () => {
   beforeEach(() =>
     MockBuilder(MyComponent)

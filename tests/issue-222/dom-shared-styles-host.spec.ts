@@ -60,7 +60,7 @@ class TargetComponent {
 class TargetModule {}
 
 // Mocks BrowserAnimationsModule
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:DomSharedStylesHost:classic', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(
@@ -79,7 +79,7 @@ describe('issue-222:DomSharedStylesHost:classic', () => {
 });
 
 // Mocks BrowserAnimationsModule
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:DomSharedStylesHost:mock', () => {
   beforeAll(() =>
     ngMocks.globalReplace(
@@ -106,7 +106,7 @@ describe('issue-222:DomSharedStylesHost:mock', () => {
 });
 
 // Replaces BrowserAnimationsModule with Noop.
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:DomSharedStylesHost:keep', () => {
   beforeAll(() =>
     ngMocks.globalReplace(
@@ -129,7 +129,7 @@ describe('issue-222:DomSharedStylesHost:keep', () => {
 });
 
 // Mocks BrowserAnimationsModule as any other module
-// @see https://github.com/ike18t/ng-mocks/issues/222
+// @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:DomSharedStylesHost:guts', () => {
   beforeEach(() =>
     TestBed.configureTestingModule(

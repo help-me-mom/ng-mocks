@@ -33,7 +33,7 @@ class ChildComponent {}
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/2097
+// @see https://github.com/help-me-mom/ng-mocks/issues/2097
 describe('issue-2097:nested', () => {
   beforeEach(() =>
     MockBuilder(

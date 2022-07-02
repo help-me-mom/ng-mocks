@@ -35,7 +35,7 @@ export class ValueAccessorComponent {}
 })
 export class ValidatorComponent {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/145
+// @see https://github.com/help-me-mom/ng-mocks/issues/145
 describe('issue-145:components', () => {
   ngMocks.faster();
 

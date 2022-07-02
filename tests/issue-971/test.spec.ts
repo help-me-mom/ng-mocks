@@ -79,7 +79,7 @@ ngMocks.defaultConfig(HideDirective, {
 });
 ngMocks.defaultConfig(HideDirective);
 
-// @see https://github.com/ike18t/ng-mocks/issues/971#issuecomment-902467724
+// @see https://github.com/help-me-mom/ng-mocks/issues/971#issuecomment-902467724
 describe('issue-971:MockBuilder', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 

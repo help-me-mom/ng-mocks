@@ -129,7 +129,7 @@ Please, pay attention to comments in the code.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockDirective-Attribute/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AAttribute)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockDirective-Attribute/test.spec.ts"
 describe('MockDirective:Attribute', () => {
   beforeEach(() => {
     // DependencyDirective is a declaration in ItsModule.
@@ -205,7 +205,7 @@ if we want to assert on its nested elements.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockDirective-Structural/test.spec.ts&initialpath=%3Fspec%3DMockDirective%3AStructural)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockDirective-Structural/test.spec.ts"
 describe('MockDirective:Structural', () => {
   // IMPORTANT: by default structural directives are not rendered.
   // Because they might require a context which should be provided.

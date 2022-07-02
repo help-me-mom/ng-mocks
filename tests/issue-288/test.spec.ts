@@ -48,7 +48,7 @@ class AppComponent {
 })
 class AppModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/288
+// @see https://github.com/help-me-mom/ng-mocks/issues/288
 describe('issue-288:real', () => {
   beforeEach(() => MockBuilder(AppComponent).keep(AppModule));
 
@@ -64,7 +64,7 @@ describe('issue-288:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/288
+// @see https://github.com/help-me-mom/ng-mocks/issues/288
 describe('issue-288:mock', () => {
   beforeEach(() => MockBuilder(AppComponent, AppModule));
 

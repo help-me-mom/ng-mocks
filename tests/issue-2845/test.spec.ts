@@ -15,7 +15,7 @@ class TargetComponent {
   ) {}
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/2845
+// @see https://github.com/help-me-mom/ng-mocks/issues/2845
 // MockBuilder should add undecorated classes, such as ActivatedRoute, to providers.
 describe('issue-2845', () => {
   beforeEach(() =>

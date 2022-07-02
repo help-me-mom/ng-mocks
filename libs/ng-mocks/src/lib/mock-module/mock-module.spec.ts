@@ -157,7 +157,7 @@ describe('RouterModule', () => {
 
 // What we mock should always export own private imports and declarations to allow us to use it in TestBed.
 // In this test we check that nested module from cache still provides own private things.
-// See https://github.com/ike18t/ng-mocks/pull/35
+// See https://github.com/help-me-mom/ng-mocks/pull/35
 describe('Usage of cached nested module', () => {
   let fixture: ComponentFixture<ExampleConsumerComponent>;
 

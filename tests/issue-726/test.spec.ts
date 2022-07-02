@@ -36,7 +36,7 @@ class ProviderComponent {}
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/726
+// @see https://github.com/help-me-mom/ng-mocks/issues/726
 describe('issue-726', () => {
   const view = MockRenderFactory('<view><target></target></view>');
   const provider = MockRenderFactory(

@@ -44,7 +44,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/197
+// @see https://github.com/help-me-mom/ng-mocks/issues/197
 describe('issue-197:with-providers:manually-injection', () => {
   beforeEach(async () => {
     const module = MockBuilder(TargetComponent, TargetModule).build();
@@ -67,7 +67,7 @@ describe('issue-197:with-providers:manually-injection', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/197
+// @see https://github.com/help-me-mom/ng-mocks/issues/197
 describe('issue-197:with-providers:keep', () => {
   beforeEach(() =>
     MockBuilder(
@@ -85,7 +85,7 @@ describe('issue-197:with-providers:keep', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/197
+// @see https://github.com/help-me-mom/ng-mocks/issues/197
 describe('issue-197:with-providers:mock', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, [

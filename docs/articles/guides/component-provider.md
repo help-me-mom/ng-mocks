@@ -27,7 +27,7 @@ const service = fixture.point.injector.get(TargetService);
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestProviderInComponent/test.spec.ts&initialpath=%3Fspec%3DTestProviderInComponent)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestProviderInComponent/test.spec.ts&initialpath=%3Fspec%3DTestProviderInComponent)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestProviderInComponent/test.spec.ts"
 import { Component, Injectable } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';

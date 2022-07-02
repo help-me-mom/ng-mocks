@@ -22,7 +22,7 @@ class TargetComponent {
   }
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/537
+// @see https://github.com/help-me-mom/ng-mocks/issues/537
 describe('issue-537', () => {
   ngMocks.faster();
   beforeAll(() => MockBuilder(TargetComponent));

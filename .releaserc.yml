@@ -17,7 +17,7 @@ plugins:
     - assets:
         - tmp/*.tgz
       successComment: >-
-        [v${nextRelease.version}](https://github.com/ike18t/ng-mocks/releases/tag/v${nextRelease.version})
+        [v${nextRelease.version}](https://github.com/help-me-mom/ng-mocks/releases/tag/v${nextRelease.version})
         has been released and contains a fix for the issue.
         Feel free to reopen the issue or to submit a new one if you meet any problems.
       failTitle: false

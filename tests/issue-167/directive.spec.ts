@@ -89,7 +89,7 @@ class TargetModule {}
 // NG_VALIDATORS and NG_VALUE_ACCESSOR should work together without an issue.
 // material style of @Self() @Optional() ngControl?: NgControl does not work and throws
 // Error: Circular dep for MockOfMyFormControlComponent
-// @see https://github.com/ike18t/ng-mocks/issues/167
+// @see https://github.com/help-me-mom/ng-mocks/issues/167
 describe('issue-167:directive:real', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
@@ -129,7 +129,7 @@ describe('issue-167:directive:real', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/167
+// @see https://github.com/help-me-mom/ng-mocks/issues/167
 describe('issue-167:directive:mock', () => {
   beforeEach(() =>
     MockBuilder(RealComponent, TargetModule).keep(

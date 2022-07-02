@@ -41,7 +41,7 @@ class TargetComponent {
 })
 class TargetModule {}
 
-// @see https://github.com/ike18t/ng-mocks/issues/296
+// @see https://github.com/help-me-mom/ng-mocks/issues/296
 describe('issue-296:without-entry', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)
@@ -54,7 +54,7 @@ describe('issue-296:without-entry', () => {
   });
 });
 
-// @see https://github.com/ike18t/ng-mocks/issues/296
+// @see https://github.com/help-me-mom/ng-mocks/issues/296
 describe('issue-296:with-entry', () => {
   beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 

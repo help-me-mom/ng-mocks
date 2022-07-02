@@ -95,7 +95,7 @@ ngMocks
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestViewChild/test.spec.ts&initialpath=%3Fspec%3DTestViewChild)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestViewChild/test.spec.ts&initialpath=%3Fspec%3DTestViewChild)
 
-```ts title="https://github.com/ike18t/ng-mocks/blob/master/examples/TestViewChild/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestViewChild/test.spec.ts"
 import {
   Component,
   Directive,

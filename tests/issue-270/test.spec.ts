@@ -20,7 +20,7 @@ class TargetComponent {
   public constructor(public readonly service: TargetService) {}
 }
 
-// @see https://github.com/ike18t/ng-mocks/issues/270
+// @see https://github.com/help-me-mom/ng-mocks/issues/270
 describe('issue-270', () => {
   const mock = {
     stream$: new Subject<number>(),
