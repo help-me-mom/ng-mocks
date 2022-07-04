@@ -44,14 +44,14 @@ exclude_patterns:
   - 'empty.ts'
   - 'karma-test-shim.ts'
   - 'karma.conf.ts'
-  - 'karma.ie.sh'
   - 'renovate.json'
   - 'webpack.config.js'
+  - '**/*.fixtures.ts'
   - '**/*.json'
   - '**/*.md'
-  - '**/*.yml'
+  - '**/*.sh'
   - '**/*.spec.ts'
-  - '**/*.fixtures.ts'
+  - '**/*.yml'
   - '**/karma.conf.js'
 plugins:
   structure:

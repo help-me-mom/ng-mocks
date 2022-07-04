@@ -17,3 +17,5 @@ test-reports/
 tests-e2e/.angular
 tests-failures/
 tmp/
+
+**/*.sh

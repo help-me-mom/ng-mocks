@@ -15,3 +15,5 @@ node_modules/
 tests-e2e/.angular
 test-reports/
 tmp/
+
+**/*.sh
