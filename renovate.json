@@ -228,7 +228,7 @@
       "additionalBranchPrefix": "e2e/a6/",
       "paths": ["e2e/a6/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.8\\./",
+      "allowedVersions": "/^0\\.8\\./",
       "ignoreUnstable": false
     },
     {
@@ -345,7 +345,7 @@
       "additionalBranchPrefix": "e2e/a7/",
       "paths": ["e2e/a7/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.13\\./",
+      "allowedVersions": "/^0\\.13\\./",
       "ignoreUnstable": false
     },
     {
@@ -456,7 +456,7 @@
       "additionalBranchPrefix": "e2e/a8/",
       "paths": ["e2e/a8/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.8\\d\\d\\./",
+      "allowedVersions": "/^0\\.8\\d\\d\\./",
       "ignoreUnstable": false
     },
     {
@@ -567,7 +567,7 @@
       "additionalBranchPrefix": "e2e/a9/",
       "paths": ["e2e/a9/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.9\\d\\d\\./",
+      "allowedVersions": "/^0\\.9\\d\\d\\./",
       "ignoreUnstable": false
     },
     {
@@ -678,7 +678,7 @@
       "additionalBranchPrefix": "e2e/a10/",
       "paths": ["e2e/a10/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.10\\d\\d\\./",
+      "allowedVersions": "/^0\\.10\\d\\d\\./",
       "ignoreUnstable": false
     },
     {
@@ -789,7 +789,7 @@
       "additionalBranchPrefix": "e2e/a11/",
       "paths": ["e2e/a11/package.json"],
       "packageNames": ["@angular-devkit/build-angular"],
-      "allowedVersions": "/0\\.11\\d\\d\\./",
+      "allowedVersions": "/^0\\.11\\d\\d\\./",
       "ignoreUnstable": false
     },
     {

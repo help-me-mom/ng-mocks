@@ -6,8 +6,8 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -19,8 +19,8 @@ services:
     working_dir: /app
     volumes:
       - ./docs:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -32,8 +32,8 @@ services:
     working_dir: /app
     volumes:
       - ./tests-e2e:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -45,8 +45,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a5es5:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -58,8 +58,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a5es2015:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -71,8 +71,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a6:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -84,8 +84,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a7:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -97,8 +97,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a8:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -121,8 +121,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a10:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -134,8 +134,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a11:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -147,8 +147,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a12:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -160,8 +160,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a13:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -173,8 +173,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a14:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -186,8 +186,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/jasmine:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -199,8 +199,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/jest:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -212,8 +212,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/min:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
@@ -225,10 +225,14 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/nx:/app
-      - /root/.node-gyp
-      - /root/.npm
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
       - --no-audit
       - --omit=optional
+
+volumes:
+  npm:
+  gyp:

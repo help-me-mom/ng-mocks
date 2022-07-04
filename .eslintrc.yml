@@ -166,6 +166,9 @@ overrides:
             - index
             - parent
             - sibling
+          pathGroups:
+            - pattern: '@angular/**'
+              group: external
       unused-imports/no-unused-imports: error
       prefer-arrow/prefer-arrow-functions:
         - error
