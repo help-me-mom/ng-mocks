@@ -26,7 +26,12 @@ beforeEach(() => {
 [`MockBuilder`](./api/MockBuilder.md) throws an error
 if `Dep1` or `Dep2` hasn't been imported or declared somewhere in `ItsModule` and its imports.
 
-You can change this to `console.warn` or disable it.
+:::important
+That has been done to let you know when one of dependencies is missing.
+So, if a developer has removed `Dep2` from `ItsModule` you would get an error during CI instead of production.
+:::
+
+It's not recommended, but you can change this to `console.warn` or disable it.
 For that, please change the config of `ng-mocks` in `src/test.ts`, `src/setup-jest.ts` or `src/test-setup.ts`:
 
 ```ts
@@ -35,15 +40,17 @@ ngMocks.config({
 });
 ```
 
-If you need `Dep1` or `Dep2` even if they aren't imported in `ItsModule`, please add them in params of `MockBuilder`:
+Usually, you need `Dep1` or `Dep2` which aren't imported in `ItsModule`,
+when they are external dependencies, such as `MatDialogRef` or `ActivatedRoute`.
+In this case, please add them explicitly to the params of `MockBuilder` instead of chain methods:
 
 ```ts
 beforeEach(() => {
   return MockBuilder(
     // Things to keep and export.
-    [Declaration, Dep1],
+    [Declaration, Dep1, MatDialogRef], // providing and keeping MatDialogRef
     // Things to mock and export.
-    [ItsModule, Dep2],
+    [ItsModule, Dep2, ActivatedRoute], // providing and mocking ActivatedRoute
   );
 });
 ```
@@ -52,21 +59,21 @@ Please note, that if you call [`MockBuilder`](./api/MockBuilder.md) with 0 or 1 
 are added to TestBed and exported by default now:
 
 ```ts
-// It doesn't throw, allows access to Declaration, Dep1, Dep2 and ItsModule in TestBed.
+// It doesn't throw, allows access to Declaration, MatDialogRef, Dep2 and ItsModule in TestBed.
 beforeEach(() => {
   return MockBuilder(Declaration)
     .mock(ItsModule)
-    .keep(Dep1)
+    .keep(MatDialogRef)
     .mock(Dep2);
 });
 
-// It doesn't throw, allows access to Declaration, Dep1, Dep2 and ItsModule in TestBed.
+// It doesn't throw, allows access to Declaration, Dep1, ActivatedRoute and ItsModule in TestBed.
 beforeEach(() => {
   return MockBuilder()
     .keep(Declaration)
     .mock(ItsModule)
     .keep(Dep1)
-    .mock(Dep2);
+    .mock(ActivatedRoute);
 });
 ```
 
