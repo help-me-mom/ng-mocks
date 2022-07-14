@@ -16,7 +16,7 @@
     "test:jasmine:es2015:ivy": "ng test --ts-config ./tsconfig.es2015ivy.spec.json --progress=false",
     "test:jasmine:es2015:no-ivy": "ng test --ts-config ./tsconfig.es2015noivy.spec.json --progress=false",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
-    "test:jest": "npm run test:jest:es5:ivy && npm run test:jest:es5:no-ivy &&npm run test:jest:es2015:ivy &&npm run test:jest:es2015:no-ivy",
+    "test:jest": "npm run test:jest:es5:ivy && npm run test:jest:es5:no-ivy && npm run test:jest:es2015:ivy && npm run test:jest:es2015:no-ivy",
     "test:jest:es5:ivy": "jest -i --config jest.es5ivy.js",
     "test:jest:es5:no-ivy": "jest -i --config jest.es5noivy.js",
     "test:jest:es2015:ivy": "jest -i --config jest.es2015ivy.js",
