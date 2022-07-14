@@ -24,7 +24,7 @@ const generateWrapperOutput =
     instance[prop] = event;
   };
 
-const generateWrapper = ({ bindings, options, inputs }: any) => {
+const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
   class MockRenderComponent {
     public constructor() {
       coreDefineProperty(this, '__ngMocksOutput', generateWrapperOutput(this));
@@ -43,6 +43,16 @@ const generateWrapper = ({ bindings, options, inputs }: any) => {
   Component(options)(MockRenderComponent);
 
   return MockRenderComponent;
+};
+
+const generateWrapperDirective = ({ selector, options }: any) => {
+  class MockRenderDirective {}
+  Directive({
+    selector,
+    providers: options.providers,
+  })(MockRenderDirective);
+
+  return MockRenderDirective;
 };
 
 const getCache = () => {
@@ -102,9 +112,15 @@ export default (
     viewProviders: flags.viewProviders,
   };
 
-  ctor = generateWrapper({ ...meta, bindings, options });
+  ctor = generateWrapperComponent({ ...meta, bindings, options });
   coreDefineProperty(ctor, 'cacheKey', cacheKey);
   coreDefineProperty(ctor, 'tpl', mockTemplate);
+
+  if (meta.selector && options.providers) {
+    const dir = generateWrapperDirective({ ...meta, bindings, options });
+    coreDefineProperty(ctor, 'providers', dir);
+  }
+
   caches.unshift(ctor as any);
   caches.splice(ngMocksUniverse.global.get('mockRenderCacheSize') ?? coreConfig.mockRenderCacheSize);
 

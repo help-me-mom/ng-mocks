@@ -110,27 +110,33 @@ const flushTestBed = (flags: Record<string, any>): void => {
   }
 };
 
-const generateFactoryInstall = (ctor: AnyType<any>, options: IMockRenderFactoryOptions) => () => {
-  const testBed: TestBed & {
-    _compiler?: {
+const generateFactoryInstall =
+  (ctor: AnyType<any> & { providers?: AnyType<any> }, options: IMockRenderFactoryOptions) => () => {
+    const testBed: TestBed & {
+      _compiler?: {
+        declarations?: Array<AnyType<any>>;
+      };
+      _declarations?: Array<AnyType<any>>;
       declarations?: Array<AnyType<any>>;
-    };
-    _declarations?: Array<AnyType<any>>;
-    declarations?: Array<AnyType<any>>;
-  } = getTestBed();
-  // istanbul ignore next
-  const declarations = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
-  if (!declarations || declarations.indexOf(ctor) === -1) {
-    flushTestBed(options);
-    try {
-      TestBed.configureTestingModule({
-        declarations: [ctor],
-      });
-    } catch (error) {
-      handleFixtureError(error);
+    } = getTestBed();
+    // istanbul ignore next
+    const existing = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
+    if (!existing || existing.indexOf(ctor) === -1) {
+      flushTestBed(options);
+      try {
+        const declarations: Array<AnyType<any>> = [];
+        if (ctor.providers) {
+          declarations.push(ctor.providers);
+        }
+        declarations.push(ctor);
+        TestBed.configureTestingModule({
+          declarations,
+        });
+      } catch (error) {
+        handleFixtureError(error);
+      }
     }
-  }
-};
+  };
 
 const generateFactory = (
   componentCtor: Type<any> & { tpl?: string },

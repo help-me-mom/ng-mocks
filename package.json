@@ -110,7 +110,7 @@
     "s:test:jest": "node --version",
     "s:test:min": "node --version",
     "s:test:nx": "P=e2e/nx/apps/a-nx/src/test && rm -Rf $P && mkdir -p $P && cp -R tests $P && cp -R examples $P",
-    "test:e2e": "npm run test:a5 && npm run test:a6 && npm run test:a7 &&npm run test:a8 && npm run test:a9 && npm run test:a10 && npm run test:a11 && npm run test:a12 && npm run test:a13 && npm run test:a14 && npm run test:jasmine && npm run test:jest && npm run test:min && npm run test:nx",
+    "test:e2e": "npm run test:a5 && npm run test:a6 && npm run test:a7 && npm run test:a8 && npm run test:a9 && npm run test:a10 && npm run test:a11 && npm run test:a12 && npm run test:a13 && npm run test:a14 && npm run test:jasmine && npm run test:jest && npm run test:min && npm run test:nx",
     "test:a5": "npm run test:a5es5 && npm run test:a5es2015",
     "test:a5es5": "cd e2e/a5es5 && npm run test",
     "test:a5es2015": "cd e2e/a5es2015 && npm run test",
