@@ -2,8 +2,8 @@ const path = require('node:path');
 
 module.exports = [
   {
-    mode: 'production',
-    devtool: 'source-map',
+    mode: process.env.MODE || 'production',
+    devtool: process.env.MODE ? false : 'source-map',
     entry: './libs/ng-mocks/src/index.ts',
     target: ['web', 'es3'],
     output: {
@@ -36,8 +36,8 @@ module.exports = [
     },
   },
   {
-    mode: 'production',
-    devtool: 'source-map',
+    mode: process.env.MODE || 'production',
+    devtool: process.env.MODE ? false : 'source-map',
     entry: './libs/ng-mocks/src/index.ts',
     target: ['web', 'es2015'],
     experiments: {
