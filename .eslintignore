@@ -19,3 +19,4 @@ tests-failures/
 tmp/
 
 **/*.sh
+**/.nvmrc

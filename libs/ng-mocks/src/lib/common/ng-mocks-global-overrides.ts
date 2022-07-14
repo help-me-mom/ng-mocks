@@ -87,10 +87,10 @@ const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touche
       if (!Object.prototype.hasOwnProperty.call(def, '__ngMocksTouches')) {
         const local = new Set<any>();
         const meta = coreReflectMeta(def);
+        coreDefineProperty(def, '__ngMocksTouches', local, false);
         if (meta) {
           generateTouches(meta, local);
         }
-        coreDefineProperty(def, '__ngMocksTouches', local, false);
       }
 
       mapValues(def.__ngMocksTouches, touches);

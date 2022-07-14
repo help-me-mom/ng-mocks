@@ -110,6 +110,8 @@ services:
     working_dir: /app
     volumes:
       - ./e2e/a9:/app
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
     command:
       - npm
       - install
