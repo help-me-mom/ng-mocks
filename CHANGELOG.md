@@ -1,3 +1,16 @@
+# [14.1.0](https://github.com/ike18t/ng-mocks/compare/v14.0.2...v14.1.0) (2022-07-15)
+
+
+### Bug Fixes
+
+* **core:** detecting and mocking standalone directives correctly [#3100](https://github.com/ike18t/ng-mocks/issues/3100) ([560b334](https://github.com/ike18t/ng-mocks/commit/560b33435279b0694ea6a941ca45ffb7af24a404))
+* **core:** preventing recursion of self pointers [#3095](https://github.com/ike18t/ng-mocks/issues/3095) ([793a3c5](https://github.com/ike18t/ng-mocks/commit/793a3c53700f21f31bccca7d3df3c56f0cfbd6be))
+
+
+### Features
+
+* **MockRender:** supports Self providers [#3053](https://github.com/ike18t/ng-mocks/issues/3053) ([c455e25](https://github.com/ike18t/ng-mocks/commit/c455e25ee6000c8f786667e4a763bdfc1e7f6990))
+
 ## [14.0.2](https://github.com/ike18t/ng-mocks/compare/v14.0.1...v14.0.2) (2022-07-11)
 
 * Moved to [help-me-mom](https://github.com/help-me-mom) organization on GitHub
