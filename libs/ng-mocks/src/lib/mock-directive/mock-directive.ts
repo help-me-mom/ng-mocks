@@ -85,8 +85,7 @@ coreDefineProperty(DirectiveMockBase, 'parameters', [
 
 const decorateClass = (directive: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(directive);
-  const mockParams = { exportAs: meta.exportAs, selector: meta.selector };
-  const options = decorateDeclaration(directive, mock, meta, mockParams);
+  const options = decorateDeclaration(directive, mock, meta, {});
   Directive(options)(mock);
 };
 
