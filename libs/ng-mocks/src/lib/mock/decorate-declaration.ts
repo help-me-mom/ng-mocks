@@ -40,10 +40,23 @@ export default <T extends Component & Directive>(
       hostBindings?: Array<[string, any]>;
       hostListeners?: Array<[string, any, any]>;
       imports?: any[];
+      standalone?: boolean;
     },
-  params: T & { standalone?: boolean },
-) => {
-  const options: T & { imports?: any[] } = { ...params };
+  params: T,
+): Component & Directive => {
+  const options: T & { imports?: any[]; standalone?: boolean } = {
+    ...params,
+  };
+
+  if (meta.exportAs !== undefined) {
+    options.exportAs = meta.exportAs;
+  }
+  if (meta.selector !== undefined) {
+    options.selector = meta.selector;
+  }
+  if (meta.standalone !== undefined) {
+    options.standalone = meta.standalone;
+  }
 
   const { setControlValueAccessor, providers } = cloneProviders(source, mock, meta.providers || []);
   providers.push(toExistingProvider(source, mock));
@@ -54,7 +67,7 @@ export default <T extends Component & Directive>(
     options.viewProviders = viewProviders;
   }
 
-  if (params.standalone && meta.imports) {
+  if (meta.standalone && meta.imports) {
     const { imports } = mockNgDef({ imports: meta.imports })[1];
     if (imports?.length) {
       options.imports = imports as never;

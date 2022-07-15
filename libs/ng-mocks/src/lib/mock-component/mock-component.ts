@@ -198,14 +198,11 @@ coreDefineProperty(ComponentMockBase, 'parameters', [
 
 const decorateClass = (component: Type<any>, mock: Type<any>): void => {
   const meta = coreReflectDirectiveResolve(component);
-  const template = generateTemplate(meta.queries);
-  const mockParams = {
-    exportAs: meta.exportAs,
-    selector: meta.selector,
-    standalone: meta.standalone,
-    template,
-  };
-  Component(decorateDeclaration(component, mock, meta, mockParams))(mock);
+  Component(
+    decorateDeclaration(component, mock, meta, {
+      template: generateTemplate(meta.queries),
+    }),
+  )(mock);
 };
 
 /**
