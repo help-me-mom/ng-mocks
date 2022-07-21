@@ -159,12 +159,12 @@
     "test:nx": "cd e2e/nx && npm run test"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "14.0.6",
+    "@angular-devkit/build-angular": "14.0.7",
     "@angular-eslint/eslint-plugin": "14.0.2",
     "@angular-eslint/eslint-plugin-template": "14.0.2",
     "@angular-eslint/template-parser": "14.0.2",
     "@angular/animations": "14.0.6",
-    "@angular/cli": "14.0.6",
+    "@angular/cli": "14.0.7",
     "@angular/common": "14.0.6",
     "@angular/compiler": "14.0.6",
     "@angular/compiler-cli": "14.0.6",
