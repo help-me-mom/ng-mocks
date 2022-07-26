@@ -42,7 +42,7 @@
     "@angular-devkit/build-angular": "14.1.0",
     "@angular/cli": "14.1.0",
     "@angular/compiler-cli": "14.1.0",
-    "@ngneat/spectator": "11.1.2",
+    "@ngneat/spectator": "11.1.3",
     "@testing-library/angular": "12.1.0",
     "@types/jasmine": "4.0.3",
     "@types/jest": "28.1.6",
