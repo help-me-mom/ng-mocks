@@ -42,7 +42,7 @@
     "@angular/compiler-cli": "14.1.0",
     "@types/jasmine": "4.0.3",
     "@types/jest": "28.1.6",
-    "@types/node": "16.11.45",
+    "@types/node": "16.11.46",
     "jasmine-core": "4.3.0",
     "jasmine-spec-reporter": "7.0.0",
     "jest": "28.1.3",
