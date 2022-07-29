@@ -6,7 +6,7 @@ parameters:
     default: '2'
 
 orbs:
-  win: circleci/windows@4.1.1
+  win: circleci/windows@5.0.0
 
 executors:
   core:
