@@ -131,7 +131,7 @@ export default (config: Config) => {
         plugins: [
           new TsconfigPathsPlugin({
             configFile: './tsconfig.json',
-          }),
+          }) as any,
         ],
       },
     },
