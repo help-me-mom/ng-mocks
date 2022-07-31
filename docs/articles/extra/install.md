@@ -13,15 +13,28 @@ npm install ng-mocks --save-dev
 
 ## Default customizations
 
+There are several things you might need to configure globally for all tests:
+
+- default mocks should look like for different strategies (abstract classes)
+- adding spy to all mock methods automatically
+
 It may be useful to configure [auto spy](./auto-spy.md) for all methods, getters and setters in mock declarations.
 
 Apart from [auto spy](./auto-spy.md), we may want to customize mock behavior via [MockInstance](../api/MockInstance.md).
 There is a way to reset all customizations automatically on `afterEach` and `afterAll` levels.
 
-Simply add the next code to `src/test.ts` or `src/setup-jest.ts` / `src/test-setup.ts` in case of jest:
+Simply add the next code to `src/test.ts` or `src/setup-jest.ts` / `src/test-setup.ts` in case of jest,
+and comment / uncomment related blocks:
 
 ```ts title="src/test.ts"
 import { MockInstance, ngMocks } from 'ng-mocks';
+
+// In case, if you use @angular/router and Angular 14+.
+// You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
+// A14 fix: making DefaultTitleStrategy to be a default mock for TitleStrategy
+import { DefaultTitleStrategy, TitleStrategy } from "@angular/router";
+import { MockService, ngMocks } from 'ng-mocks';
+ngMocks.defaultMock(TitleStrategy, () => MockService(DefaultTitleStrategy));
 
 // auto spy
 ngMocks.autoSpy('jasmine');

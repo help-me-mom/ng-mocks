@@ -17,7 +17,7 @@
       "node"
     ]
   },
-  "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "karma-test-shim.ts", "karma.conf.ts"],
+  "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "test.ts", "karma.conf.ts"],
   "exclude": ["e2e", "node_modules"],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",

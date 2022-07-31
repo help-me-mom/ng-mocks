@@ -107,6 +107,7 @@ module.exports = {
         'troubleshooting/not-a-known-element',
         'troubleshooting/internals-vs-externals',
         'troubleshooting/browser-animations-module',
+        'troubleshooting/faq',
       ],
     },
     {

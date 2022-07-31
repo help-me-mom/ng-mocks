@@ -72,7 +72,7 @@ export default (config: Config) => {
     },
     files: [
       { pattern: './empty.ts', watched: false },
-      { pattern: './karma-test-shim.ts', watched: false },
+      { pattern: './test.ts', watched: false },
       {
         pattern: './libs/ng-mocks/src/index.ts',
         watched: false,
