@@ -1,3 +1,10 @@
+## [14.1.1](https://github.com/ike18t/ng-mocks/compare/v14.1.0...v14.1.1) (2022-07-31)
+
+
+### Bug Fixes
+
+* **MockBuilder:** respects global configuration for standalone dependencies [#3161](https://github.com/ike18t/ng-mocks/issues/3161) ([577e1d4](https://github.com/ike18t/ng-mocks/commit/577e1d4541a2fb928414ff3bb49fa9310790e773))
+
 # [14.1.0](https://github.com/ike18t/ng-mocks/compare/v14.0.2...v14.1.0) (2022-07-15)
 
 
