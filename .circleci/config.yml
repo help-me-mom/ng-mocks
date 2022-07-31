@@ -6,7 +6,7 @@ parameters:
     default: '2'
 
 orbs:
-  win: circleci/windows@5.0.0
+  windows: circleci/windows@5.0.0
 
 executors:
   core:
@@ -259,7 +259,7 @@ jobs:
                 command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
   IE:
     executor:
-      name: win/default
+      name: windows/server-2019
       shell: bash.exe
     steps:
       - run: date
