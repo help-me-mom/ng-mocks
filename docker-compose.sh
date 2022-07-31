@@ -15,4 +15,8 @@ echo "Starting" && \
   docker-compose up -- a12 && \
   docker-compose up -- a13 && \
   docker-compose up -- a14 && \
-  docker-compose down
+  docker-compose up -- jasmine && \
+  docker-compose up -- jest && \
+  docker-compose up -- min && \
+  docker-compose up -- nx && \
+  docker-compose down --remove-orphans
