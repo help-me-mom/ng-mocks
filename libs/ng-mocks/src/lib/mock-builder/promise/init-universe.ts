@@ -28,13 +28,27 @@ export default ({
   // flags to understand how to mock nested declarations.
   ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
 
-  const standaloneMocks = initKeepDef(keepDef, configDef);
-  for (const def of mapValues(standaloneMocks)) {
-    if (configDef.has(def)) {
+  const dependencies = initKeepDef(keepDef, configDef);
+  for (const dependency of mapValues(dependencies)) {
+    // MockBuilder has instruction about the dependency, skipping it.
+    if (configDef.has(dependency)) {
       continue;
     }
-    mockDef.add(def);
-    configDef.set(def, {
+
+    // Checking global configuration for the dependency.
+    const resolution = ngMocksUniverse.getResolution(dependency);
+    if (resolution === 'replace') {
+      replaceDef.add(dependency);
+      defValue.set(dependency, ngMocksUniverse.getBuildDeclaration(dependency));
+    } else if (resolution === 'keep') {
+      keepDef.add(dependency);
+    } else if (resolution === 'exclude') {
+      excludeDef.add(dependency);
+    } else {
+      mockDef.add(dependency);
+    }
+
+    configDef.set(dependency, {
       dependency: true,
     });
   }

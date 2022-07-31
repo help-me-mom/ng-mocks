@@ -3,7 +3,7 @@ import { funcExtractDeps } from '../../common/func.extract-deps';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
-  const mockDef = new Set<any>();
+  const dependencies = new Set<any>();
   const builtDeclarations = ngMocksUniverse.builtDeclarations;
   const builtProviders = ngMocksUniverse.builtProviders;
   const resolutions = ngMocksUniverse.config.get('ngMocksDepsResolution');
@@ -14,9 +14,9 @@ export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
 
     const config = configDef.get(def);
     if (config.shallow) {
-      funcExtractDeps(def, mockDef);
+      funcExtractDeps(def, dependencies);
     }
   }
 
-  return mockDef;
+  return dependencies;
 };
