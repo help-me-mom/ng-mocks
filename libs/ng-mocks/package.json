@@ -23,23 +23,12 @@
     "stub",
     "dependency"
   ],
+  "funding": "https://github.com/sponsors/satanTime",
   "author": {
     "name": "Isaac Datlof",
     "email": "ike18t@gmail.com",
     "url": "https://github.com/ike18t"
   },
-  "contributors": [
-    {
-      "name": "Isaac Datlof",
-      "email": "ike18t@gmail.com",
-      "url": "https://github.com/ike18t"
-    },
-    {
-      "name": "satanTime",
-      "email": "m@sudo.eu",
-      "url": "https://sudo.eu"
-    }
-  ],
   "maintainers": [
     {
       "name": "Isaac Datlof",
@@ -49,7 +38,7 @@
     {
       "name": "satanTime",
       "email": "m@sudo.eu",
-      "url": "https://sudo.eu"
+      "url": "https://github.com/satanTime"
     }
   ],
   "repository": {
