@@ -1,3 +1,10 @@
+## [14.1.2](https://github.com/ike18t/ng-mocks/compare/v14.1.1...v14.1.2) (2022-08-07)
+
+
+### Bug Fixes
+
+* **MockBuilder:** respects initial config of declarations [#3265](https://github.com/ike18t/ng-mocks/issues/3265) ([1bea651](https://github.com/ike18t/ng-mocks/commit/1bea651e0f6d6199306d76bf76d7a8559ec9361d))
+
 ## [14.1.1](https://github.com/ike18t/ng-mocks/compare/v14.1.0...v14.1.1) (2022-07-31)
 
 
