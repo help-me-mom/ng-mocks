@@ -216,7 +216,9 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   private setConfigDef(def: any, config: any): void {
-    this.configDef.set(def, config ?? this.configDefault);
+    if (config || !this.configDef.has(def)) {
+      this.configDef.set(def, config ?? this.configDefault);
+    }
   }
 
   private setDefValue(def: any, mock: any): void {
