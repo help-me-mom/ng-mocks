@@ -5,7 +5,7 @@
     "npm": "npm",
     "postinstall": "husky install",
     "release": "export $(cat .env) && semantic-release",
-    "build": "npm run clean && npm run build:webpack && npm run build:types && cp CHANGELOG.md dist/libs/ng-mocks && cp README.md dist/libs/ng-mocks && cp LICENSE dist/libs/ng-mocks && cp libs/ng-mocks/package.json dist/libs/ng-mocks/package.json && cp libs/ng-mocks/migrations.json dist/libs/ng-mocks/migrations.json && cp -R examples dist/libs/ng-mocks",
+    "build": "npm run clean && npm run build:webpack && npm run build:types && cp CHANGELOG.md dist/libs/ng-mocks && cp README.md dist/libs/ng-mocks && cp LICENSE dist/libs/ng-mocks && cp libs/ng-mocks/package.json dist/libs/ng-mocks/package.json && cp libs/ng-mocks/migrations.json dist/libs/ng-mocks/migrations.json && cp examples/main/test.spec.ts dist/libs/ng-mocks/example.spec.ts",
     "build:dev": "MODE=development npm run build",
     "build:webpack": "webpack",
     "build:types": "dts-bundle-generator --no-banner -o ./dist/libs/ng-mocks/index.d.ts --project ./libs/ng-mocks/tsconfig.build.cjs.json --no-check --export-referenced-types=false ./libs/ng-mocks/src/index.ts",
