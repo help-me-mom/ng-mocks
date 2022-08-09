@@ -93,7 +93,7 @@ describe('MockService', () => {
     const mockService = MockService(() => 0);
     expect(mockService).toEqual(jasmine.any(Function));
     expect(mockService()).toBeUndefined();
-    expect(mockService.and.identity).toBe('func:arrow-function');
+    expect(mockService.and.identity).toBe('func:arrowFunction');
   });
 
   it('should convert normal functions to () => undefined', () => {
