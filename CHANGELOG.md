@@ -1,3 +1,10 @@
+## [14.1.3](https://github.com/ike18t/ng-mocks/compare/v14.1.2...v14.1.3) (2022-08-09)
+
+
+### Bug Fixes
+
+* **core:** generates compatible function names [#3274](https://github.com/ike18t/ng-mocks/issues/3274) ([3a1dfab](https://github.com/ike18t/ng-mocks/commit/3a1dfab358f581f121b78d1bd2f52b5b1ec0e5bd))
+
 ## [14.1.2](https://github.com/ike18t/ng-mocks/compare/v14.1.1...v14.1.2) (2022-08-07)
 
 
