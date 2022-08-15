@@ -35,7 +35,7 @@
     "@angular/cli": "14.1.2",
     "@angular/compiler-cli": "14.1.2",
     "@types/jasmine": "4.0.3",
-    "@types/node": "16.11.48",
+    "@types/node": "16.11.49",
     "jasmine-core": "4.3.0",
     "karma": "6.4.0",
     "karma-chrome-launcher": "3.1.1",
