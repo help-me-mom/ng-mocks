@@ -47,7 +47,7 @@
     "@types/jasmine": "4.0.3",
     "@types/jest": "28.1.6",
     "@types/mocha": "9.1.1",
-    "@types/node": "16.11.48",
+    "@types/node": "16.11.49",
     "jasmine-core": "4.3.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.0",
