@@ -4,6 +4,7 @@ import coreForm from '../../common/core.form';
 import { DebugNodeSelector } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import helperDefinePropertyDescriptor from '../../mock-service/helper.define-property-descriptor';
+import helperExtractMethodsFromPrototype from '../../mock-service/helper.extract-methods-from-prototype';
 import mockHelperTrigger from '../events/mock-helper.trigger';
 import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
@@ -53,9 +54,38 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
 const hasListener = (el: DebugElement): boolean =>
   el.listeners.some(listener => listener.name === 'input' || listener.name === 'change');
 
-const keys = ['onChange', '_onChange', 'changeFn', '_onChangeCallback', 'onModelChange'];
+const keys = [
+  'onChange',
+  'onChangeCallback',
+  'onChangeCb',
+  'onChangeClb',
+  'onChangeFn',
 
-export default (selector: DebugNodeSelector, value: any): void => {
+  '_onChange',
+  '_onChangeCallback',
+  '_onChangeCb',
+  '_onChangeClb',
+  '_onChangeFn',
+
+  'changeFn',
+  '_changeFn',
+
+  'onModelChange',
+
+  'cvaOnChange',
+  'cvaOnChangeCallback',
+  'cvaOnChangeCb',
+  'cvaOnChangeClb',
+  'cvaOnChangeFn',
+
+  '_cvaOnChange',
+  '_cvaOnChangeCallback',
+  '_cvaOnChangeCb',
+  '_cvaOnChangeClb',
+  '_cvaOnChangeFn',
+];
+
+export default (selector: DebugNodeSelector, value: any, methodName?: string): void => {
   const el = mockHelperFind(funcGetLastFixture(), selector, undefined);
   if (!el) {
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
@@ -68,7 +98,7 @@ export default (selector: DebugNodeSelector, value: any): void => {
     return;
   }
 
-  for (const key of keys) {
+  for (const key of methodName ? [methodName] : keys) {
     if (typeof valueAccessor[key] === 'function') {
       valueAccessor.writeValue(value);
       valueAccessor[key](value);
@@ -77,5 +107,13 @@ export default (selector: DebugNodeSelector, value: any): void => {
     }
   }
 
-  throw new Error('Unsupported type of ControlValueAccessor');
+  const methods = helperExtractMethodsFromPrototype(valueAccessor);
+  throw new Error(
+    [
+      'Unsupported type of ControlValueAccessor,',
+      `please ensure it has '${methodName || 'onChange'}' method.`,
+      `If it is a 3rd-party library, please provide the correct name of the method in the 'methodName' parameter.`,
+      'Possible Names: ' + methods.join(', ') + '.',
+    ].join(' '),
+  );
 };
