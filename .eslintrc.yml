@@ -181,6 +181,7 @@ overrides:
       max-lines-per-function: off
       unicorn/consistent-function-scoping: off
       unicorn/prefer-logical-operator-over-ternary: off
+      '@typescript-eslint/no-empty-function': off
 
   - files:
       - '*.js'

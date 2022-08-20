@@ -95,7 +95,7 @@ describe('ng-mocks-touch:mock', () => {
     const valueAccessorEl = ngMocks.find('custom');
 
     expect(() => ngMocks.touch(valueAccessorEl)).toThrowError(
-      'Unsupported type of ControlValueAccessor',
+      /Unsupported type of ControlValueAccessor/,
     );
   });
 });

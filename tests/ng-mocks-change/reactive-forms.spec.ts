@@ -108,7 +108,7 @@ describe('ng-mocks-change:reactive-forms:mock', () => {
     const valueAccessorEl = ngMocks.find('custom');
 
     expect(() => ngMocks.change(valueAccessorEl, 123)).toThrowError(
-      'Unsupported type of ControlValueAccessor',
+      /Unsupported type of ControlValueAccessor/,
     );
   });
 });

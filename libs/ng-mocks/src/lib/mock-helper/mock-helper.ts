@@ -152,14 +152,14 @@ export const ngMocks: {
    *
    * @see https://ng-mocks.sudo.eu/api/ngMocks/change
    */
-  change(elSelector: DebugNodeSelector, value: any): void;
+  change(elSelector: DebugNodeSelector, value: any, methodName?: string): void;
 
   /**
    * ngMocks.touch triggers ControlValueAccessor touch.
    *
    * @see https://ng-mocks.sudo.eu/api/ngMocks/touch
    */
-  touch(elSelector: DebugNode | DebugNodeSelector): void;
+  touch(elSelector: DebugNode | DebugNodeSelector, methodName?: string): void;
 
   /**
    * ngMocks.click properly simulates a click on an element.
