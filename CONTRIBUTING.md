@@ -5,23 +5,21 @@ The best way would be to discuss an issue or an improvement first:
 - [ask a question on gitter](https://gitter.im/ng-mocks/community)
 - [report it as an issue on github](https://github.com/help-me-mom/ng-mocks/issues)
 
-## How tu run unit tests locally
-
-- open a terminal and execute
-
-  ```shell
-  npm run test
-  ```
-
-## How tu run E2E tests locally
+## How to install dependencies
 
 - install docker: https://hub.docker.com
 - install docker-compose: https://docs.docker.com/compose/install/
 - open a terminal and execute
 
   ```shell
-  docker-compose up --build
+  sh ./docker-compose.sh
   ```
+
+## How to run unit tests locally
+
+```shell
+npm run test
+```
 
 ## How to run tests in IE locally
 
