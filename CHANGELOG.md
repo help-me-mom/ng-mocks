@@ -1,3 +1,10 @@
+# [14.2.0](https://github.com/ike18t/ng-mocks/compare/v14.1.3...v14.2.0) (2022-08-21)
+
+
+### Features
+
+* **ngMocks:** supports custom method names for change and touch [#3341](https://github.com/ike18t/ng-mocks/issues/3341) ([5068407](https://github.com/ike18t/ng-mocks/commit/5068407265531af88ad3d7679c7ef028965b1763))
+
 ## [14.1.3](https://github.com/ike18t/ng-mocks/compare/v14.1.2...v14.1.3) (2022-08-09)
 
 
