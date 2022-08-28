@@ -1,5 +1,5 @@
 import { InjectionToken, PipeTransform, Provider } from '@angular/core';
-import { TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import { AnyType } from '../common/core.types';
 
@@ -7,7 +7,7 @@ import { AnyType } from '../common/core.types';
  * The interface describes the type of the next value in MockBuilder().then().
  */
 export interface IMockBuilderResult {
-  testBed: typeof TestBed;
+  testBed: TestBedStatic;
 }
 
 /**
@@ -115,7 +115,7 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
    *
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#adding-schemas
    */
-  beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this;
+  beforeCompileComponents(callback: (testBed: TestBedStatic) => void): this;
 
   /**
    * .build() returns a declaration which can be used in TestBed.configureTestingModule.
