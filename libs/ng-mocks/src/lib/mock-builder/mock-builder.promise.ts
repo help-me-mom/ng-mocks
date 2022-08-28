@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
@@ -43,7 +43,7 @@ export interface MockBuilderPromise {
 }
 
 export class MockBuilderPromise implements IMockBuilder {
-  protected beforeCC: Set<(testBed: typeof TestBed) => void> = new Set();
+  protected beforeCC: Set<(testBed: TestBedStatic) => void> = new Set();
   protected configDef: BuilderData['configDef'] = new Map();
   protected defProviders: BuilderData['defProviders'] = new Map();
   protected defValue: BuilderData['defValue'] = new Map();
@@ -61,7 +61,7 @@ export class MockBuilderPromise implements IMockBuilder {
     }
   }
 
-  public beforeCompileComponents(callback: (testBed: typeof TestBed) => void): this {
+  public beforeCompileComponents(callback: (testBed: TestBedStatic) => void): this {
     this.beforeCC.add(callback);
 
     return this;
