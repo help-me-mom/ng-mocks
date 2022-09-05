@@ -176,7 +176,10 @@ const applyPlatformOverrides = (testBed: TestBed, touches: Set<any>) => {
 };
 
 const configureTestingModule =
-  (original: TestBedStatic['configureTestingModule']): TestBedStatic['configureTestingModule'] =>
+  (
+    original: TestBedStatic['configureTestingModule'],
+    instance: TestBedStatic,
+  ): TestBedStatic['configureTestingModule'] =>
   (moduleDef: TestModuleMetadata) => {
     initTestBed();
 
@@ -202,18 +205,18 @@ const configureTestingModule =
       applyPlatformOverrides(testBed, touches);
     }
 
-    return original.call(TestBed, moduleDef);
+    return original.call(instance, moduleDef);
   };
 
 const resetTestingModule =
-  (original: TestBedStatic['resetTestingModule']): TestBedStatic['resetTestingModule'] =>
+  (original: TestBedStatic['resetTestingModule'], instance: TestBedStatic): TestBedStatic['resetTestingModule'] =>
   () => {
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
     (TestBed as any).ngMocksSelectors = undefined;
     applyNgMocksOverrides(TestBed);
 
-    return original.call(TestBed);
+    return original.call(instance);
   };
 
 const viewContainerInstall = () => {

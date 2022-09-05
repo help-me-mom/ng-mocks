@@ -1,6 +1,6 @@
 import { Injectable, NgModule } from '@angular/core';
 
-import { getTestBedInjection, MockBuilder } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
 abstract class LoggerInterface {
@@ -30,7 +30,7 @@ describe('abstract-methods-provider', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
   it('provides a mock copy with an implemented abstract method', () => {
-    const actual = getTestBedInjection(LoggerInterface);
+    const actual = ngMocks.get(LoggerInterface);
     expect(actual && actual.log).toBeDefined();
   });
 });

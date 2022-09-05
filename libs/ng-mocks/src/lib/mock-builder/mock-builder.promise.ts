@@ -188,7 +188,7 @@ export class MockBuilderPromise implements IMockBuilder {
     reject?: ((reason: any) => PromiseLike<any>) | undefined | null,
   ): Promise<TResult1> {
     const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
-      const testBed = TestBed.configureTestingModule(this.build());
+      const testBed: TestBedStatic = TestBed.configureTestingModule(this.build()) as never;
       for (const callback of mapValues(this.beforeCC)) {
         callback(testBed);
       }
