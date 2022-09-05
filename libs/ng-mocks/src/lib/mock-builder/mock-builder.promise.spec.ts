@@ -8,8 +8,8 @@ import {
   PipeTransform,
 } from '@angular/core';
 
-import { getTestBedInjection } from '../common/core.helpers';
 import mockHelperConsoleThrow from '../mock-helper/mock-helper.console-throw';
+import mockHelperGet from '../mock-helper/mock-helper.get';
 
 import { MockBuilder } from './mock-builder';
 
@@ -50,24 +50,28 @@ describe('MockBuilderPromise', () => {
 
   it('skips dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService, { dependency: true });
-    expect(getTestBedInjection(TargetService)).toBeFalsy();
+    expect(() => mockHelperGet(TargetService)).toThrowError(
+      /Cannot find an instance/,
+    );
   });
 
   it('adds non dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService);
-    expect(getTestBedInjection(TargetService)).toBeTruthy();
+    expect(mockHelperGet(TargetService)).toBeTruthy();
   });
 
   it('skips dependencies in mock providers', async () => {
     await MockBuilder().mock(TargetService, TargetService, {
       dependency: true,
     });
-    expect(getTestBedInjection(TargetService)).toBeFalsy();
+    expect(() => mockHelperGet(TargetService)).toThrowError(
+      /Cannot find an instance/,
+    );
   });
 
   it('adds non dependencies in mock providers', async () => {
     await MockBuilder().mock(TargetService);
-    expect(getTestBedInjection(TargetService)).toBeTruthy();
+    expect(mockHelperGet(TargetService)).toBeTruthy();
   });
 
   it('respects several kept overloads', async () => {
@@ -92,7 +96,7 @@ describe('MockBuilderPromise', () => {
           },
         ],
       });
-    expect(getTestBedInjection(TARGET_TOKEN)).toEqual([1, 2]);
+    expect(mockHelperGet(TARGET_TOKEN)).toEqual([1, 2]);
   });
 
   it('respects several mock overloads', async () => {
@@ -117,7 +121,9 @@ describe('MockBuilderPromise', () => {
           },
         ],
       });
-    expect(getTestBedInjection(TARGET_TOKEN)).toBeUndefined();
+    expect(() => mockHelperGet(TARGET_TOKEN)).toThrowError(
+      /Cannot find an instance/,
+    );
   });
 
   it('throws an error on a services replacement', () => {

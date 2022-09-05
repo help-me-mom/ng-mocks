@@ -8,6 +8,7 @@ import funcGetName from './func.get-name';
 
 /**
  * It will be removed from public interface with the next release: A14
+ * Use ngMocks.get(token) instead.
  *
  * @deprecated
  * @internal

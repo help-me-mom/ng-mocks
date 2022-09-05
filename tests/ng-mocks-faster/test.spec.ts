@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { getTestBedInjection, ngMocks } from 'ng-mocks';
+import { ngMocks } from 'ng-mocks';
 
 const TOKEN = new InjectionToken('TOKEN');
 
@@ -33,7 +33,9 @@ describe('ngMocks.faster', () => {
       ngMocks.faster();
 
       it('works in clear reset', () => {
-        expect(getTestBedInjection(TOKEN)).toBeUndefined();
+        expect(() => ngMocks.get(TOKEN)).toThrowError(
+          /Cannot find an instance/,
+        );
       });
     });
   });
