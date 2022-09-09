@@ -32,7 +32,7 @@ const pushDecorator = (decorators: string[], decorator: string): void => {
   }
 };
 
-const getAllKeys = <T>(instance: T): Array<keyof T> => {
+const getAllKeys = <T extends Record<keyof any, any>>(instance: T): Array<keyof T> => {
   const props: string[] = [];
   for (const key of Object.keys(instance)) {
     props.push(key);

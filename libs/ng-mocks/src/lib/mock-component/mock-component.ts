@@ -58,7 +58,7 @@ const mixRenderReorderViews = (
   }
 };
 
-const mixRenderApplyContext = (view: EmbeddedViewRef<any>, context: Record<any, any>): void => {
+const mixRenderApplyContext = (view: EmbeddedViewRef<any>, context: Record<keyof any, any>): void => {
   for (const contextKey of Object.keys(view.context)) {
     view.context[contextKey] = undefined;
   }
@@ -74,7 +74,7 @@ const mixRenderHandleViews = (
   templates: any[],
   views: Array<EmbeddedViewRef<any>>,
   indices: undefined | number[],
-  context: Record<any, any>,
+  context: Record<keyof any, any>,
 ): number => {
   let index = -1;
 
