@@ -53,6 +53,10 @@ executors:
     docker:
       - image: satantime/puppeteer-node:16.17.0
     resource_class: medium
+  a15:
+    docker:
+      - image: satantime/puppeteer-node:16.17.0
+    resource_class: medium
 
 commands:
   install:
@@ -506,6 +510,7 @@ workflows:
                 - a12
                 - a13
                 - a14
+                - a15
 
       # testing a5 (exceptional)
       - E2E Test:
@@ -565,3 +570,16 @@ workflows:
               es:
                 - es5
                 - es2015
+
+      # testing ivy view engine
+      - E2E Test:
+          name: << matrix.dir >>:test
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          requires:
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - a15
