@@ -96,6 +96,13 @@ docker-compose up -- a14 && \
   node ./node_modules/puppeteer/install.js && \
   cd ../..
 
+docker-compose up -- a15 && \
+  cd ./e2e/a15 && \
+  nvm install && \
+  nvm use && \
+  node ./node_modules/puppeteer/install.js && \
+  cd ../..
+
 docker-compose up -- jasmine && \
   cd ./e2e/jasmine && \
   nvm install && \

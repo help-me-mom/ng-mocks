@@ -183,6 +183,19 @@ services:
       - --no-audit
       - --omit=optional
 
+  a15:
+    image: satantime/puppeteer-node:16.17.0
+    working_dir: /app
+    volumes:
+      - ./e2e/a15:/app
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+      - --omit=optional
+
   jasmine:
     image: satantime/puppeteer-node:16.17.0
     working_dir: /app
