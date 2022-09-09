@@ -78,7 +78,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     return config;
   }
 
-  private equalsTo(prototype: Record<any, any>): boolean {
+  private equalsTo(prototype: Record<keyof any, any>): boolean {
     for (const key of ['beforeCC', 'keepDef', 'replaceDef', 'excludeDef', 'mockDef']) {
       if (!areEqualSets((this as any)[key], prototype[key])) {
         return false;

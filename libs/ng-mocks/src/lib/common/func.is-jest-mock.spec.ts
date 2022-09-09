@@ -26,7 +26,7 @@ describe('func.is-jest-mock', () => {
   });
 
   it('handles objects', () => {
-    const test: Record<any, any> = {};
+    const test: Record<keyof any, any> = {};
     expect(funcIsJestMock(test)).toEqual(false);
 
     test._isMockFunction = true;

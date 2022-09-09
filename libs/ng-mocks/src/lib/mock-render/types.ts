@@ -75,6 +75,6 @@ export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> 
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
-export type DefaultRenderComponent<MComponent extends Record<keyof any, any>> = {
+export type DefaultRenderComponent<MComponent> = {
   [K in keyof MComponent]: MComponent[K];
 };
