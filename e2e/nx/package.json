@@ -38,10 +38,10 @@
     "@nrwl/tao": "14.6.4",
     "@nrwl/workspace": "14.6.4",
     "@types/jasmine": "4.3.0",
-    "@types/jest": "28.1.8",
+    "@types/jest": "29.0.0",
     "@types/node": "16.11.57",
-    "jest": "28.1.3",
-    "jest-environment-jsdom": "28.1.3",
+    "jest": "29.0.2",
+    "jest-environment-jsdom": "29.0.2",
     "jest-preset-angular": "12.2.2",
     "ts-jest": "28.0.8",
     "typescript": "4.7.4"
