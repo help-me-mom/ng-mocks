@@ -1,3 +1,12 @@
+## [14.2.1](https://github.com/ike18t/ng-mocks/compare/v14.2.0...v14.2.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* **core:** supports TS 4.8.3 [#3514](https://github.com/ike18t/ng-mocks/issues/3514) ([5b49b92](https://github.com/ike18t/ng-mocks/commit/5b49b92249a28c71038b3540f92197c3d3be88fc))
+* **MockBuilder:** type of TestBed [#3466](https://github.com/ike18t/ng-mocks/issues/3466) ([6d8cef7](https://github.com/ike18t/ng-mocks/commit/6d8cef79cdfef529478893053592218999744a96))
+* **ngMocks.faster:** support of angular 14.2.0 [#3466](https://github.com/ike18t/ng-mocks/issues/3466) ([5f893bb](https://github.com/ike18t/ng-mocks/commit/5f893bb98172eef78fab3aecb025159f1860cbfc))
+
 # [14.2.0](https://github.com/ike18t/ng-mocks/compare/v14.1.3...v14.2.0) (2022-08-21)
 
 
