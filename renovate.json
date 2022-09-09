@@ -15,6 +15,13 @@
   "vulnerabilityAlerts": {
     "enabled": false
   },
+  "hostRules": [
+    {
+      "matchHost": "docker.io",
+      "username": "satantime",
+      "password": "dckr_pat_aLRNk3vH9pYc1EtJgrHdOntl4Fs"
+    }
+  ],
   "packageRules": [
     {
       "paths": ["libs/ng-mocks/package.json"],
