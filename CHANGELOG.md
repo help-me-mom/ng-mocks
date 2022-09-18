@@ -1,3 +1,10 @@
+## [14.2.2](https://github.com/ike18t/ng-mocks/compare/v14.2.1...v14.2.2) (2022-09-18)
+
+
+### Bug Fixes
+
+* **a15:** adding A15 support [#3495](https://github.com/ike18t/ng-mocks/issues/3495) ([f1125a7](https://github.com/ike18t/ng-mocks/commit/f1125a71cbe2bf18f3a7c16acf90ab3933fd9a67))
+
 ## [14.2.1](https://github.com/ike18t/ng-mocks/compare/v14.2.0...v14.2.1) (2022-09-09)
 
 
