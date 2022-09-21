@@ -166,9 +166,9 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "14.2.3",
-    "@angular-eslint/eslint-plugin": "14.1.1",
-    "@angular-eslint/eslint-plugin-template": "14.1.1",
-    "@angular-eslint/template-parser": "14.1.1",
+    "@angular-eslint/eslint-plugin": "14.1.2",
+    "@angular-eslint/eslint-plugin-template": "14.1.2",
+    "@angular-eslint/template-parser": "14.1.2",
     "@angular/animations": "14.2.3",
     "@angular/cli": "14.2.3",
     "@angular/common": "14.2.3",
