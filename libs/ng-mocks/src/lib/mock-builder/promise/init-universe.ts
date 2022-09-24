@@ -51,6 +51,7 @@ export default ({
     configDef.set(dependency, {
       dependency: true,
     });
+    ngMocksUniverse.touches.add(dependency);
   }
 
   for (const [k, v] of mapEntries(configDef)) {
