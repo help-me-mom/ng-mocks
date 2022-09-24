@@ -48,24 +48,32 @@ export default (template: AnyType<any>): Directive => {
     return {};
   }
 
-  const meta = { ...coreReflectDirectiveResolve(template) };
+  const meta = coreReflectDirectiveResolve(template);
+  const override: Directive = {};
+  for (const key of Object.keys(meta)) {
+    if (key === 'standalone') {
+      continue;
+    }
 
-  if (meta.selector && /[\s,[\]]/.test(meta.selector)) {
-    meta.selector = '';
+    override[key as never] = meta[key as never];
   }
 
-  if (!meta.selector) {
+  if (override.selector && /[\s,[\]]/.test(override.selector)) {
+    override.selector = '';
+  }
+
+  if (!override.selector) {
     // istanbul ignore next
-    meta.selector = (TestBed as any).ngMocksSelectors?.get(template) || '';
-    if (!meta.selector) {
-      meta.selector = `ng-mocks-${template.name}`;
-      registerTemplateMiddleware(template, meta);
+    override.selector = (TestBed as any).ngMocksSelectors?.get(template) || '';
+    if (!override.selector) {
+      override.selector = `ng-mocks-${template.name}`;
+      registerTemplateMiddleware(template, override);
       // istanbul ignore else
       if ((TestBed as any).ngMocksSelectors) {
-        (TestBed as any).ngMocksSelectors.set(template, meta.selector);
+        (TestBed as any).ngMocksSelectors.set(template, override.selector);
       }
     }
   }
 
-  return meta;
+  return override;
 };
