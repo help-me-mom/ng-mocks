@@ -3,12 +3,12 @@ import {
   AfterViewInit,
   Component,
   Injector,
-  NgModule,
   ViewChild,
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { Observable, Subject } from 'rxjs';
 
-import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
+import { MockComponent, MockInstance } from 'ng-mocks';
 
 // A copy of EMPTY, which does not exist in A5.
 const EMPTY = new Subject<any>();
@@ -41,20 +41,17 @@ class RealComponent implements AfterViewInit {
   }
 }
 
-@NgModule({
-  imports: [CommonModule],
-  declarations: [RealComponent, ChildComponent],
-})
-class ItsModule {}
-
-describe('MockInstance', () => {
+describe('MockInstance:component', () => {
   // Creates a scope to reset customizations automatically after this test.
   MockInstance.scope();
 
-  // A normal setup of the TestBed, ChildComponent will be replaced
-  // with its mock object.
-  // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(RealComponent, ItsModule));
+  // Configuring TestBed with a mock for ChildComponent.
+  beforeEach(() => {
+    return TestBed.configureTestingModule({
+      imports: [CommonModule],
+      declarations: [RealComponent, MockComponent(ChildComponent)],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     // Because ChildComponent is replaced with its mock object,
@@ -70,6 +67,8 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => MockRender(RealComponent)).not.toThrow();
+    expect(() =>
+      TestBed.createComponent(RealComponent).detectChanges(),
+    ).not.toThrow();
   });
 });
