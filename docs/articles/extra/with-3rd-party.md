@@ -9,7 +9,8 @@ and at the same time to **turn dependencies into mocks**.
 
 ## @ngneat/spectator
 
-For example, if there is a need to mock declarations in `@ngneat/spectator` and its functions
+For example, if there is a need to mock declarations
+in [`@ngneat/spectator`](https://www.npmjs.com/package/@ngneat/spectator) and its functions
 like `createHostFactory`, `createComponentFactory`, `createDirectiveFactory` and so on,
 you can use two options from `ng-mocks`: [`ngMocks.guts`](../api/ngMocks/guts.md) and [`MockBuilder`](../api/MockBuilder.md)
 
@@ -56,7 +57,7 @@ Profit.
 
 ## @testing-library/angular
 
-The same applies to `@testing-library/angular`.
+The same applies to [`@testing-library/angular`](https://www.npmjs.com/package/@testing-library/angular).
 
 ### @testing-library/angular and ngMocks.guts
 

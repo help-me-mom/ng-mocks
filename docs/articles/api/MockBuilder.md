@@ -520,7 +520,8 @@ All other root providers will be replaced with their mocks, even for kept declar
 ## Factory function
 
 You might be using other [testing frameworks for angular](../extra/with-3rd-party),
-such as `@ngneat/spectator` or `@testing-library/angular`.
+such as [`@ngneat/spectator`](https://www.npmjs.com/package/@ngneat/spectator)
+or [`@testing-library/angular`](https://www.npmjs.com/package/@testing-library/angular).
 
 This is a use-case for the factory function.
 
