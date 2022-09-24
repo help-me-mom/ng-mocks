@@ -1,3 +1,11 @@
+## [14.2.3](https://github.com/ike18t/ng-mocks/compare/v14.2.2...v14.2.3) (2022-09-24)
+
+
+### Bug Fixes
+
+* **MockBuilder:** better detection of provided dependencies [#3635](https://github.com/ike18t/ng-mocks/issues/3635) ([4e9aeab](https://github.com/ike18t/ng-mocks/commit/4e9aeab8fb553dd836675956f55479b722bdec30))
+* **MockRender:** does not throw on standalone declarations [#3636](https://github.com/ike18t/ng-mocks/issues/3636) ([b2de841](https://github.com/ike18t/ng-mocks/commit/b2de841fe74685b93ad27511f35c7e4f778defbf))
+
 ## [14.2.2](https://github.com/ike18t/ng-mocks/compare/v14.2.1...v14.2.2) (2022-09-18)
 
 
