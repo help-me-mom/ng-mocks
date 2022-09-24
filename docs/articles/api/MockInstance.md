@@ -4,11 +4,20 @@ description: Information how to customize mock components, directives, services 
 sidebar_label: MockInstance
 ---
 
-**MockInstance** helps to define **customizations for declarations** and providers in test suites
+**MockInstance** helps to define **customizations for mock declarations** and mock providers in test suites
 before the desired instance have been created.
 
 It is useful, when we want to configure spies before their usage.
 It supports: modules, components, directives, pipes, services and tokens.
+
+The mocks should be created by:
+- [`MockBuilder`](../api/MockBuilder.md)
+- [`MockModule`](../api/MockModule.md)
+- [`MockComponent`](../api/MockComponent.md)
+- [`MockDirective`](../api/MockDirective.md)
+- [`MockProvider`](../api/MockProvider.md)
+
+## Define customizations
 
 There are **three ways how to customize** a mock instance:
 
@@ -16,18 +25,25 @@ There are **three ways how to customize** a mock instance:
 - manipulate the instance (with access to injector)
 - return the desired shape (with access to injector)
 
-## Set desired values
+### Set desired values
 
-It helps to provide a predefined spy or value.
+It helps to provide a predefined value or fake implementation.
 
 ```ts
+// Setting custom implementation of Service.methodName().
 MockInstance(Service, 'methodName', () => 'fake');
+
+// Setting custom value of Component.propName.
 MockInstance(Component, 'propName', 'fake');
+
+// Setting the getter of Directive.propName.
 MockInstance(Directive, 'propName', () => 'fake', 'get');
+
+// Setting the setter of Pipe.propName.
 MockInstance(Pipe, 'propName', () => undefined, 'set');
 ```
 
-It returns the provided value, that allows to customize spies.
+Also, `MockInstance` returns the provided value, that allows to customize spies.
 
 ```ts
 MockInstance(Service, 'methodName', jasmine.createSpy())
@@ -36,7 +52,7 @@ MockInstance(Service, 'propName', jest.fn(), 'get')
   .mockReturnValue('fake');
 ```
 
-## Manipulate the instance
+### Manipulate the instance
 
 If we pass a callback as the second parameter to **MockInstance**,
 then we have access to the instance and to the related injector.
@@ -49,7 +65,7 @@ MockInstance(Service, (instance, injector) => {
 });
 ```
 
-## Return the desired shape
+### Return the desired shape
 
 If the callback of the second parameter of **MockInstance** returns something,
 then the returned value will be applied to the instance.
@@ -70,7 +86,7 @@ MockInstance(Service, () => ({
 }));
 ```
 
-## Customizing tokens
+### Customizing tokens
 
 In case of tokens, a callback should return the token value.
 
@@ -81,34 +97,22 @@ MockInstance(TOKEN, (instance, injector) => {
 MockInstance(TOKEN, () => true);
 ```
 
-## Resetting customization
-
-In order to reset the provided callback, `MockInstance` should be called without it.
-
-```ts
-MockInstance(Service);
-MockInstance(TOKEN);
-// Or simply one call.
-// It resets all customizations for all declarations.
-MockReset();
-```
-
-### Customization scopes
+## Customization scopes
 
 Time to time, we need to apply a set of customizations for a suite or a test.
 To discard each customization might require writing boring resets, especially, when we have a lot of them.
 In such a case, [`MockInstance.remember()`](#remember) and [`MockInstance.restore()`](#restore) come for help. 
 
-#### Remember
+### Remember
 
 `MockInstance.remember()` creates a check point. Any mock customizations via `MockInstance` after the checkpoint will be recorded separately.
 
-#### Restore
+### Restore
 
 `MockInstance.restore()` discards mock customizations starting from the last known checkpoint.
 The operation can be repeated unless there is a checkpoint.
 
-#### Example
+### Example
 
 For example, we can create checkpoints in `beforeAll` or `beforeEach`,
 and discard their mock customizations in `afterAll` or `afterEach`.
@@ -135,7 +139,7 @@ describe('suite', () => {
 });
 ```
 
-#### Scope
+### Scope
 
 There is `MockInstance.scope()` to reduce the code to one line:
 
@@ -162,6 +166,20 @@ describe('suite', () => {
 });
 ```
 
+## Hard reset customization
+
+In order to reset the provided callback, `MockInstance` should be called without it.
+Usually, it's used in `afterEach` or `afterAll`, but better to use [scopes](#scope).
+
+```ts
+afterEach(() => MockInstance(Service)); // resets customizations of Service
+afterEach(() => MockInstance(TOKEN)); // resets customizations of TOKEN
+
+// Or simply one call.
+// It resets all customizations for all declarations.
+afterEach(() => MockReset());
+```
+
 ## Overriding customization
 
 Every call of `MockInstance` overrides the previous callback.
@@ -171,11 +189,14 @@ and to call `MockInstance` in `beforeEach` or in `it`,
 then the callback has its effect only during the current spec.
 
 ```ts
+// Defining the scope for this suite.
+MockInstance.scope();
+
+// Defining default customization for a token.
 beforeAll(() => MockInstance(TOKEN, () => true));
-// If we do not call MockReset,
-// then TOKEN will be true in other suites too.
-// To avoid this side effect, beforeEach should be used.
-afterAll(MockReset);
+
+// ItsModule provides TOKEN which is used in TargetComponent.
+beforEach(() => MockBuilder(TargetComponent, ItsModule));
 
 it('test 1', () => {
   // token is true
@@ -240,7 +261,7 @@ beforeEach(() => MockInstance(ChildComponent, 'update$', EMPTY));
 Profit. When Angular creates an instance of `ChildComponent`, the rule is applied in its constructor, and `update$` property
 of the instance is not `undefined`, but an `Observable`.
 
-## Advanced example
+## An example with MockBuilder
 
 An advanced example of **customizing a mock component before its initialization** in Angular tests.
 Please, pay attention to comments in the code.
@@ -250,14 +271,16 @@ Please, pay attention to comments in the code.
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
 describe('MockInstance', () => {
-  // A normal setup of the TestBed, TargetComponent will be replaced
+  // Creates a scope to reset customizations automatically after this test.
+  MockInstance.scope();
+
+  // A normal setup of the TestBed, ChildComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
-  // ChildComponent is declaration of ItsModule.
   beforeEach(() => MockBuilder(RealComponent, ItsModule));
 
   beforeEach(() => {
-    // Because TargetComponent is replaced with its mock object,
+    // Because ChildComponent is replaced with its mock object,
     // its update$ is undefined and ngAfterViewInit of the parent
     // component will fail on .subscribe().
     // Let's fix it via defining customization for the mock object.
@@ -267,15 +290,53 @@ describe('MockInstance', () => {
     }));
   });
 
-  afterEach(() => {
-    // Resets customizations
-    MockInstance(ChildComponent);
+  it('should render', () => {
+    // Without the custom initialization rendering would fail here
+    // with "Cannot read property 'subscribe' of undefined".
+    expect(() => MockRender(RealComponent)).not.toThrow();
+  });
+});
+```
+
+## An example with TestBed and MockComponent
+
+An advanced example of **customizing a mock component before its initialization** in Angular tests.
+Please, pay attention to comments in the code.
+
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/component.spec.ts&initialpath=%3Fspec%3DMockInstance%3Acomponent)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockInstance/component.spec.ts&initialpath=%3Fspec%3DMockInstance%3Acomponent)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockInstance/component.spec.ts"
+describe('MockInstance:component', () => {
+  // Creates a scope to reset customizations automatically after this test.
+  MockInstance.scope();
+
+  // Configuring TestBed with a mock for ChildComponent.
+  beforeEach(() => {
+    return TestBed.configureTestingModule({
+      imports: [CommonModule],
+      declarations: [
+        RealComponent,
+        MockComponent(ChildComponent),
+      ],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    // Because ChildComponent is replaced with its mock object,
+    // its update$ is undefined and ngAfterViewInit of the parent
+    // component will fail on .subscribe().
+    // Let's fix it via defining customization for the mock object.
+    MockInstance(ChildComponent, () => ({
+      // comment the next line to check the failure.
+      update$: EMPTY,
+    }));
   });
 
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => MockRender(RealComponent)).not.toThrow();
+    expect(() => TestBed.createComponent(RealComponent).detectChanges()).not.toThrow();
   });
 });
 ```
