@@ -120,3 +120,5 @@ docker-compose up -- min && \
   cd ../..
 
 docker-compose up -- nx
+
+docker-compose down --remove-orphans
