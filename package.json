@@ -229,7 +229,7 @@
     "npm": "8.19.2",
     "prettier": "2.7.1",
     "puppeteer": "18.0.5",
-    "rxjs": "7.5.6",
+    "rxjs": "7.5.7",
     "semantic-release": "19.0.5",
     "ts-loader": "9.4.1",
     "ts-node": "10.9.1",
