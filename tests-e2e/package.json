@@ -46,7 +46,7 @@
     "@testing-library/angular": "12.1.2",
     "@types/jasmine": "4.3.0",
     "@types/jest": "28.1.8",
-    "@types/mocha": "9.1.1",
+    "@types/mocha": "10.0.0",
     "@types/node": "16.11.62",
     "jasmine-core": "4.4.0",
     "jasmine-spec-reporter": "7.0.0",
