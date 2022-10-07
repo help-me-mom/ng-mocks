@@ -34,14 +34,17 @@ export class CustomRootComponent implements AfterContentInit {
   public ngAfterContentInit(): void {
     for (const template of this.templates ? this.templates.toArray() : []) {
       switch (template.type) {
-        case 'template1':
+        case 'template1': {
           this.template1 = template.template;
           break;
-        case 'template2':
+        }
+        case 'template2': {
           this.template2 = template.template;
           break;
-        default:
+        }
+        default: {
           this.template = template.template;
+        }
       }
     }
   }
