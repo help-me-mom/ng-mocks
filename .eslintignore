@@ -9,7 +9,9 @@ dist/
 docs/**/*.md
 docs/.docusaurus
 e2e/*/.angular
+e2e/*/src/app
 e2e/*/src/test
+e2e/nx/apps/*/src/app
 e2e/nx/apps/*/src/test
 e2e/nx/decorate-angular-cli.js
 node_modules/

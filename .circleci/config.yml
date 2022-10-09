@@ -104,11 +104,34 @@ commands:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
       - run:
+          name: Spreading App
+          command: npm run s:app:<< parameters.dir >>
+      - run:
           name: Spreading Tests
           command: npm run s:test:<< parameters.dir >>
       - run:
           name: Unit Tests
           command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >>
+  lib:
+    parameters:
+      dir:
+        description: Directory in /e2e/
+        type: string
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - restore_cache:
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+      - run:
+          name: Spreading Build
+          command: npm run s:<< parameters.dir >>
+      - run:
+          name: Spreading App
+          command: npm run s:app:<< parameters.dir >>
+      - run:
+          name: Building Lib
+          command: npm run lib:<< parameters.dir >>
 
 jobs:
   Core:
@@ -394,6 +417,31 @@ jobs:
                 dir: << parameters.dir >>
                 es: << parameters.es >>
                 engine: << parameters.engine >>
+  Lib Build:
+    parameters:
+      node:
+        type: executor
+        default: core
+      dir:
+        type: string
+      branch:
+        type: string
+    executor: << parameters.node >>
+    steps:
+      - run: date
+      - when:
+          condition:
+            or:
+              - not:
+                  matches:
+                    pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|docs)/.*'
+                    value: << pipeline.git.branch >>
+              - matches:
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
+          steps:
+            - lib:
+                dir: << parameters.dir >>
 
 workflows:
   version: 2
@@ -583,3 +631,39 @@ workflows:
             parameters:
               dir:
                 - a15
+
+      # testing lib build
+      - Lib Build:
+          name: << matrix.dir >>:build
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          requires:
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - a6
+                - a7
+                - a8
+                - a9
+                - a10
+                - a11
+                - a12
+                - a13
+                - a14
+                - a15
+
+      # testing lib build
+      - Lib Build:
+          name: << matrix.dir >>:build
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          requires:
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - jasmine
+                - jest
+                - min

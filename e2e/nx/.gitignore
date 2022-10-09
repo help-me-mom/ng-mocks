@@ -1,2 +1,4 @@
+/dist
 /node_modules
+/apps/a-nx/src/app
 /apps/a-nx/src/test

@@ -63,6 +63,21 @@
           }
         }
       }
+    },
+    "lib": {
+      "projectType": "library",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "ng-package.json",
+            "tsConfig": "tsconfig.app.json"
+          }
+        }
+      }
     }
   },
   "defaultProject": "a-min"

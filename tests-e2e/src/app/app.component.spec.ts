@@ -13,9 +13,7 @@ describe('AppComponent', () => {
 
   it('should have a title', () => {
     const fixture = MockRender(AppComponent);
-    expect(fixture.point.componentInstance.title).toEqual(
-      'Hello World',
-    );
+    expect(fixture.point.componentInstance.title).toEqual('hello');
   });
 
   it('should render title', () => {

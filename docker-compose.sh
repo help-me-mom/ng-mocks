@@ -24,6 +24,7 @@ docker-compose up -- a5es5 && \
   nvm install && \
   nvm use && \
   node ./node_modules/puppeteer/install.js && \
+  node ./node_modules/node-sass/scripts/install.js && \
   cd ../..
 
 docker-compose up -- a5es2015 && \
@@ -31,6 +32,7 @@ docker-compose up -- a5es2015 && \
   nvm install && \
   nvm use && \
   node ./node_modules/puppeteer/install.js && \
+  node ./node_modules/node-sass/scripts/install.js && \
   cd ../..
 
 docker-compose up -- a6 && \
@@ -38,6 +40,7 @@ docker-compose up -- a6 && \
   nvm install && \
   nvm use && \
   node ./node_modules/puppeteer/install.js && \
+  node ./node_modules/node-sass/scripts/install.js && \
   cd ../..
 
 docker-compose up -- a7 && \
