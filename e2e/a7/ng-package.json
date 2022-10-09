@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "./dist/lib",
+  "lib": {
+    "entryFile": "src/app/app.module.ts"
+  },
+  "whitelistedNonPeerDependencies": ["@angular/", "rxjs", "zone.js", "core-js"]
+}

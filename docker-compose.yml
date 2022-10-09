@@ -41,7 +41,7 @@ services:
       - --omit=optional
 
   a5es5:
-    image: satantime/puppeteer-node:6.17.1
+    image: satantime/puppeteer-node:8.17.0
     working_dir: /app
     volumes:
       - ./e2e/a5es5:/app
@@ -54,7 +54,7 @@ services:
       - --no-optional
 
   a5es2015:
-    image: satantime/puppeteer-node:6.17.1
+    image: satantime/puppeteer-node:8.17.0
     working_dir: /app
     volumes:
       - ./e2e/a5es2015:/app

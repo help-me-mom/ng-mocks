@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: 'ng-mocks:{{ title }}',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  public readonly title: string = 'Hello World';
+  public readonly title: string = 'hello';
 }
