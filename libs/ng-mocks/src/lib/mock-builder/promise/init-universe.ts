@@ -50,6 +50,7 @@ export default ({
 
     configDef.set(dependency, {
       dependency: true,
+      __internal: true,
     });
     ngMocksUniverse.touches.add(dependency);
   }

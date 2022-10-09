@@ -103,6 +103,7 @@ export class MockBuilderPromise implements IMockBuilder {
   public exclude(def: any): this {
     this.wipe(def);
     this.excludeDef.add(def);
+    this.setConfigDef(def);
 
     return this;
   }
@@ -215,7 +216,7 @@ export class MockBuilderPromise implements IMockBuilder {
     };
   }
 
-  private setConfigDef(def: any, config: any): void {
+  private setConfigDef(def: any, config?: any): void {
     if (config || !this.configDef.has(def)) {
       this.configDef.set(def, config ?? this.configDefault);
     }
