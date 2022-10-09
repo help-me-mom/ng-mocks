@@ -100,7 +100,7 @@ describe('TestRoutingResolver', () => {
 
   // It is important to run routing tests in fakeAsync.
   it('provides data to on the route', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet);
+    const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
     const dataService: DataService =
