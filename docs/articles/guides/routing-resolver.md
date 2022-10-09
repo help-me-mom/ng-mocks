@@ -27,7 +27,7 @@ beforeEach(() =>
 To test the resolver we need to render `RouterOutlet`.
 
 ```ts
-const fixture = MockRender(RouterOutlet);
+const fixture = MockRender(RouterOutlet, {}); // {} is required to leave inputs untouched.
 ```
 
 Additionally, we also need to properly customize mocked services if the resolver is using them to fetch data.
@@ -174,7 +174,7 @@ describe('TestRoutingResolver', () => {
 
   // It is important to run routing tests in fakeAsync.
   it('provides data to on the route', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet);
+    const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
     const dataService: DataService =

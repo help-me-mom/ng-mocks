@@ -29,11 +29,12 @@ beforeEach(() =>
 
 The next and very import step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
 We need this, because `RouterModule` relies on async zones.
+Also, please note an empty object as the second parameter, it's needed to leave inputs of `RouterOutlet` untouched.
 
 ```ts
 // fakeAsync --------------------------|||||||||
 it('renders /1 with Target1Component', fakeAsync(() => {
-  const fixture = MockRender(RouterOutlet);
+  const fixture = MockRender(RouterOutlet, {});
 }));
 ```
 
@@ -186,7 +187,7 @@ describe('TestRoute:Route', () => {
   });
 
   it('renders /1 with Target1Component', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet);
+    const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
 
@@ -203,7 +204,7 @@ describe('TestRoute:Route', () => {
   }));
 
   it('renders /2 with Target2Component', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet);
+    const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
 
