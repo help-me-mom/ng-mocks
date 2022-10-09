@@ -1,3 +1,11 @@
+## [14.2.4](https://github.com/ike18t/ng-mocks/compare/v14.2.3...v14.2.4) (2022-10-09)
+
+
+### Bug Fixes
+
+* **core:** exporting internal types [#3709](https://github.com/ike18t/ng-mocks/issues/3709) ([8b9cb23](https://github.com/ike18t/ng-mocks/commit/8b9cb2336ed21ae491a0ccd6e73486a7164df38c))
+* **core:** providers with useExisting will be kept if their value is a kept declaration [#3778](https://github.com/ike18t/ng-mocks/issues/3778) ([4ef2885](https://github.com/ike18t/ng-mocks/commit/4ef2885ce873c3432dcc38e2a148969b60ffa430))
+
 ## [14.2.3](https://github.com/ike18t/ng-mocks/compare/v14.2.2...v14.2.3) (2022-09-24)
 
 
