@@ -1,5 +1,6 @@
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
+import funcExtractForwardRef from '../common/func.extract-forward-ref';
 import funcGetProvider from '../common/func.get-provider';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -48,7 +49,7 @@ const excludeInterceptors = (provider: any, provide: any): boolean => {
     if (provider.useFactory || provider.useValue) {
       return true;
     }
-    const interceptor = provider.useExisting || provider.useClass;
+    const interceptor = funcExtractForwardRef(provider.useExisting) || provider.useClass;
     if (!ngMocksUniverse.builtProviders.has(interceptor) || ngMocksUniverse.builtProviders.get(interceptor) === null) {
       return true;
     }
@@ -149,7 +150,7 @@ const areEqualDefs = (mockDef: any, provider: any, provide: any): boolean => {
 
 const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
   //  we should not touch excluded providers.
-  if (ngMocksUniverse.builtProviders.has(provide) && ngMocksUniverse.builtProviders.get(provide) === null) {
+  if (ngMocksUniverse.builtProviders.get(provide) === null) {
     return true;
   }
 
@@ -160,15 +161,33 @@ const isPreconfiguredDependency = (provider: any, provide: any): boolean => {
   return excludeInterceptors(provider, provide);
 };
 
+const isPreconfiguredUseExisting = (provider: any, provide: any): boolean => {
+  //  we should not touch non-useExisting providers.
+  if (!provider || typeof provider !== 'object' || !provider.useExisting) {
+    return false;
+  }
+  if (provider.useExisting.mockOf) {
+    return true;
+  }
+
+  // skipping explicit declarations (not internally processed)
+  if (ngMocksUniverse.getResolution(provide) && !ngMocksUniverse.config.get(provide).__internal) {
+    return false;
+  }
+
+  return ngMocksUniverse.getResolution(funcExtractForwardRef(provider.useExisting)) === 'keep';
+};
+
 // tries to resolve a provider based on current universe state.
 export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
   const { provide, multi, change } = parseProvider(provider, changed);
-  //  we should not touch our system providers.
-  if (provider && typeof provider === 'object' && provider.useExisting && provider.useExisting.mockOf) {
-    return provider;
-  }
   if (isPreconfiguredDependency(provider, provide)) {
     return change();
+  }
+  if (isPreconfiguredUseExisting(provider, provide)) {
+    ngMocksUniverse.touches.add(provide);
+
+    return provider;
   }
   if (resolutions.has(provide)) {
     return createFromResolution(provide, resolutions.get(provide));

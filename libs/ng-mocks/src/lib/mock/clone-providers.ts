@@ -3,6 +3,7 @@ import { Provider } from '@angular/core';
 import coreForm from '../common/core.form';
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
+import funcExtractForwardRef from '../common/func.extract-forward-ref';
 import funcGetProvider from '../common/func.get-provider';
 import {
   MockAsyncValidatorProxy,
@@ -37,15 +38,7 @@ const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>,
     return undefined;
   }
 
-  if (provider !== provide && provider.useExisting === sourceType) {
-    return toExistingProvider(provide, mockType);
-  }
-  if (
-    provider !== provide &&
-    provider.useExisting &&
-    provider.useExisting.__forward_ref__ &&
-    provider.useExisting() === sourceType
-  ) {
+  if (provider !== provide && funcExtractForwardRef(provider.useExisting) === sourceType) {
     return toExistingProvider(provide, mockType);
   }
 
