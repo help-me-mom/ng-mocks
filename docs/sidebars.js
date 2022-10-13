@@ -3,7 +3,14 @@ module.exports = {
     {
       type: 'category',
       label: 'Introduction',
-      items: ['index', 'tl-dr', 'extra/install', 'extra/quick-start', 'extra/extensive-example'],
+      items: [
+        'index',
+        'tl-dr',
+        'extra/install',
+        'extra/quick-start',
+        'extra/how-to-write-tests',
+        'extra/extensive-example',
+      ],
     },
     {
       type: 'category',

@@ -7,6 +7,7 @@ description: Brief summary how to read documentation about ng-mocks
 
 1. Read titles from **TOC**
 1. Read the [quick start](extra/quick-start.md)
+1. Read the [how to write tests](extra/how-to-write-tests.md)
 1. Check the [extensive example](extra/extensive-example.md)
 
 **TL;DR**
