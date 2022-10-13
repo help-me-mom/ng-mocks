@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`issue-3811 should render mock-render without __ngContext__ on the first run 1`] = `
+<mock-render>
+  <hello>
+    <h1>
+      Hello Joe!
+    </h1>
+  </hello>
+</mock-render>
+`;
+
+exports[`issue-3811 should render mock-render without __ngContext__ on the second run 1`] = `
+<mock-render>
+  <hello>
+    <h1>
+      Hello Jane!
+    </h1>
+  </hello>
+</mock-render>
+`;

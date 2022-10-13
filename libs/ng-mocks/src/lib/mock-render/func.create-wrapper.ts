@@ -29,6 +29,16 @@ const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
     public constructor() {
       coreDefineProperty(this, '__ngMocksOutput', generateWrapperOutput(this));
 
+      // The getter helps to remove the __ngContext__ attribute from <mock-render> tag.
+      // It helps with snapshot assertions.
+      // @see https://github.com/help-me-mom/ng-mocks/issues/3811
+      let ngContext = 0;
+      helperDefinePropertyDescriptor(this, '__ngContext__', {
+        get: () => ngContext,
+        set: (newValue: any) => (ngContext = newValue),
+        enumerable: false,
+      });
+
       if (!bindings) {
         for (const input of inputs || []) {
           let value: any = null;
