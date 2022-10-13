@@ -1,3 +1,10 @@
+# [14.3.0](https://github.com/ike18t/ng-mocks/compare/v14.2.4...v14.3.0) (2022-10-13)
+
+
+### Features
+
+* **MockRender:** the host element doesn't have __ngContext__ attribute anymore [#3811](https://github.com/ike18t/ng-mocks/issues/3811) ([0138df7](https://github.com/ike18t/ng-mocks/commit/0138df747fc73608519a88d8ac6066a7d25fb69c))
+
 ## [14.2.4](https://github.com/ike18t/ng-mocks/compare/v14.2.3...v14.2.4) (2022-10-09)
 
 
