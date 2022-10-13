@@ -21,4 +21,5 @@ tests-failures/
 tmp/
 
 **/*.sh
+**/*.snap
 **/.nvmrc

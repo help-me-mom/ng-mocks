@@ -3,7 +3,7 @@ rules:
   body-max-line-length:
     - 2
     - always
-    - 120
+    - Infinity
   subject-case:
     - 0
     - always

@@ -19,4 +19,5 @@ test-reports/
 tmp/
 
 **/*.sh
+**/*.snap
 **/.nvmrc
