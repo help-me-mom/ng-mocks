@@ -12,7 +12,7 @@
     "test": "nx test -i"
   },
   "peerDependencies": {
-    "ng-mocks": "*"
+    "ng-mocks": "14.3.0"
   },
   "dependencies": {
     "@angular/animations": "14.2.6",
