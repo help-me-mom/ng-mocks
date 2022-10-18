@@ -22,7 +22,7 @@
     "test:jest:debug": "jest -w 1 --watch"
   },
   "peerDependencies": {
-    "ng-mocks": "*"
+    "ng-mocks": "14.2.4"
   },
   "dependencies": {
     "@angular/common": "14.2.6",
