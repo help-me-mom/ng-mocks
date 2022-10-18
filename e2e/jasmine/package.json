@@ -15,7 +15,7 @@
     "test:jasmine:es2015:ivy": "ng test --ts-config ./tsconfig.es2015ivy.spec.json --progress=false"
   },
   "peerDependencies": {
-    "ng-mocks": "*"
+    "ng-mocks": "14.2.4"
   },
   "dependencies": {
     "@angular/animations": "14.2.6",
