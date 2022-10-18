@@ -20,6 +20,10 @@
       "matchHost": "docker.io",
       "username": "satantime",
       "password": "dckr_pat_aLRNk3vH9pYc1EtJgrHdOntl4Fs"
+    },
+    {
+      "matchHost": "api.github.com",
+      "token": "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"
     }
   ],
   "packageRules": [
