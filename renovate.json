@@ -27,6 +27,10 @@
       "paths": ["libs/ng-mocks/package.json"],
       "enabled": false
     },
+    {
+      "packagePatterns": ["ng-mocks"],
+      "enabled": false
+    },
 
     {
       "packagePatterns": ["satantime/puppeteer-node", "@types/node", "node"],
