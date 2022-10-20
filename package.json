@@ -240,7 +240,7 @@
     "dts-bundle-generator": "7.0.0",
     "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-import-resolver-typescript": "3.5.1",
+    "eslint-import-resolver-typescript": "3.5.2",
     "eslint-plugin-es-roikoren": "3.0.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-json": "3.1.0",
