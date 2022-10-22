@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   lockindex:
     type: string
-    default: '2'
+    default: '1'
 
 orbs:
   windows: circleci/windows@5.0.0
@@ -78,6 +78,7 @@ commands:
           key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
           paths:
             - ./e2e/<< parameters.dir >>/node_modules
+            - ~/.cache/puppeteer
   test:
     parameters:
       dir:
@@ -150,6 +151,7 @@ jobs:
           key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+            - ~/.cache/puppeteer
       - run:
           name: Prettier
           command: npm run prettier:check
@@ -228,6 +230,7 @@ jobs:
                 key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package-lock.json" }}
                 paths:
                   - ./tests-e2e/node_modules
+                  - ~/.cache/puppeteer
             - run:
                 name: E2E
                 command: npm run e2e
@@ -255,6 +258,7 @@ jobs:
                 key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package-lock.json" }}
                 paths:
                   - ./docs/node_modules
+                  - ~/.cache/puppeteer
             - run:
                 name: Docs
                 command: npm run build:docs
@@ -328,6 +332,7 @@ jobs:
                 key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
                 paths:
                   - ./e2e/a5es5/node_modules
+                  - ~/.cache/puppeteer
             - run:
                 name: Spreading Build
                 command: |
