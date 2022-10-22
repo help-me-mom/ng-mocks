@@ -56,7 +56,7 @@ import {
 import { Injectable, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A service that does http requests.
 @Injectable()

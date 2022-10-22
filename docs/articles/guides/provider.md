@@ -258,7 +258,7 @@ describe('TestProviderWithUseClass', () => {
   it('respects all dependencies', () => {
     const service = MockRender<
       Target1Service & Partial<Target2Service>
-      >(Target1Service).point.componentInstance;
+    >(Target1Service).point.componentInstance;
 
     // Let's assert that service has a flag from Target2Service.
     expect(service.flag).toBeTruthy();
@@ -397,7 +397,7 @@ describe('TestProviderWithUseExisting', () => {
   it('creates TargetService', () => {
     const service = MockRender<
       TargetService & Partial<{ name: string }>
-      >(TargetService).point.componentInstance;
+    >(TargetService).point.componentInstance;
 
     // Because Service2 has been replaced with a mock copy,
     // we are getting here a mock copy of Service2 instead of Service1.

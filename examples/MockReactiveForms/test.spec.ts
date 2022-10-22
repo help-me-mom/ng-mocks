@@ -49,8 +49,11 @@ describe('MockReactiveForms', () => {
   MockInstance.scope();
 
   beforeEach(() => {
-    return MockBuilder(MyComponent, ItsModule).keep(
-      ReactiveFormsModule,
+    // DependencyComponent is a declaration in ItsModule.
+    return (
+      MockBuilder(MyComponent, ItsModule)
+        // ReactiveFormsModule is an import in ItsModule.
+        .keep(ReactiveFormsModule)
     );
   });
 

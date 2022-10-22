@@ -138,7 +138,7 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy = jasmine.createSpy();
+    const logoClickSpy = jasmine.createSpy(); // or jest.fn();
     // in case of jest
     // const logoClickSpy = jest.fn();
 
