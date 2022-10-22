@@ -63,9 +63,8 @@ describe('issue-305:overrides', () => {
     fixture.detectChanges();
     expect(writeValue).toHaveBeenCalledWith(123);
 
-    expect(setDisabledState).not.toHaveBeenCalled();
     component.myControl.disable();
     fixture.detectChanges();
-    expect(setDisabledState).toHaveBeenCalled();
+    expect(setDisabledState).toHaveBeenCalledWith(true);
   });
 });
