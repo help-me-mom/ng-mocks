@@ -10,7 +10,17 @@ import { Type } from './core.types';
  */
 export interface NgModuleWithProviders<T = any> {
   ngModule: Type<T>;
-  providers?: Provider[];
+  providers?: Array<Provider>;
+}
+
+/**
+ * NgModuleWithProviders which supports A15
+ *
+ * @internal remove after removal of A5 support and switch to NgModuleWithProviders
+ */
+export interface NgModuleWithProvidersA15<T = any> {
+  ngModule: Type<T>;
+  providers?: Array<Provider | { ɵbrand: string }>;
 }
 
 /**

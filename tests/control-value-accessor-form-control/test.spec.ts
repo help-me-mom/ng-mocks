@@ -40,7 +40,6 @@ describe('control-value-accessor-form-control:real', () => {
     fixture.detectChanges();
 
     expect(mock.writeValue).toHaveBeenCalledWith(null);
-    expect(mock.setDisabledState).not.toHaveBeenCalled();
     expect(
       fixture.point.componentInstance.control.touched,
     ).toBeFalsy();
@@ -77,7 +76,7 @@ describe('control-value-accessor-form-control:real', () => {
     expect(mock.setDisabledState).toHaveBeenCalledWith(false);
 
     // changeValue does not trigger anything else but the callback.
-    // Therefore it does not render new value.
+    // Therefore, it does not render new value.
     // It only updates the original control's value.
     mock.changeValue('test3');
     expect(mock.writeValue).not.toHaveBeenCalledWith('test3');
@@ -135,7 +134,6 @@ describe('control-value-accessor-form-control:mock', () => {
     fixture.detectChanges();
 
     expect(mock.writeValue).toHaveBeenCalledWith(null);
-    expect(mock.setDisabledState).not.toHaveBeenCalled();
     expect(
       fixture.point.componentInstance.control.touched,
     ).toBeFalsy();
@@ -183,7 +181,7 @@ describe('control-value-accessor-form-control:mock', () => {
     expect(mock.setDisabledState).toHaveBeenCalledWith(false);
 
     // changeValue does not trigger anything else but the callback.
-    // Therefore it does not render new value.
+    // Therefore, it does not render new value.
     // It only updates the original control's value.
     mock.__simulateChange('test3');
     expect(mock.writeValue).not.toHaveBeenCalledWith('test3');
