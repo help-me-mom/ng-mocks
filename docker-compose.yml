@@ -12,7 +12,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   docs:
     image: satantime/puppeteer-node:16.18.0
@@ -25,7 +24,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   e2e:
     image: satantime/puppeteer-node:16.18.0
@@ -38,7 +36,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   a5es5:
     image: satantime/puppeteer-node:8.17.0
@@ -181,7 +178,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   a15:
     image: satantime/puppeteer-node:16.18.0
@@ -194,7 +190,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   jasmine:
     image: satantime/puppeteer-node:16.18.0
@@ -207,7 +202,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   jest:
     image: satantime/puppeteer-node:16.18.0
@@ -220,7 +214,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   min:
     image: satantime/puppeteer-node:16.18.0
@@ -233,7 +226,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
   nx:
     image: satantime/puppeteer-node:16.18.0
@@ -246,7 +238,6 @@ services:
       - npm
       - install
       - --no-audit
-      - --omit=optional
 
 volumes:
   npm:
