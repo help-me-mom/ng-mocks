@@ -77,6 +77,7 @@ import {
   MockBuilder,
   MockRender,
   NG_MOCKS_INTERCEPTORS,
+  ngMocks,
 } from 'ng-mocks';
 
 // An interceptor we want to test.
