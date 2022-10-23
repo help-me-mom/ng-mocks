@@ -1,3 +1,10 @@
+## [14.3.1](https://github.com/ike18t/ng-mocks/compare/v14.3.0...v14.3.1) (2022-10-23)
+
+
+### Bug Fixes
+
+* **a15:** supporting env provides [#3887](https://github.com/ike18t/ng-mocks/issues/3887) ([2769644](https://github.com/ike18t/ng-mocks/commit/2769644a545147ea57398c20ca1074a807ced5e4))
+
 # [14.3.0](https://github.com/ike18t/ng-mocks/compare/v14.2.4...v14.3.0) (2022-10-13)
 
 
