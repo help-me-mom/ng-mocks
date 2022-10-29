@@ -1,4 +1,10 @@
 version: 2
 updates:
-  - commit-message:
+  - package-ecosystem: 'npm'
+    directory: /
+    commit-message:
+      prefix: 'chore(deps)'
+  - package-ecosystem: 'docker'
+    directory: /
+    commit-message:
       prefix: 'chore(deps)'
