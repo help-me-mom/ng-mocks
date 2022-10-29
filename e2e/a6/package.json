@@ -54,7 +54,7 @@
     "karma-jasmine": "1.1.2",
     "karma-jasmine-html-reporter": "0.2.2",
     "ng-packagr": "5.7.1",
-    "npm": "6.14.16",
+    "npm": "8.19.2",
     "puppeteer": "2.1.1",
     "ts-jest": "23.10.5",
     "ts-node": "7.0.1",
