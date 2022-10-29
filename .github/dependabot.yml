@@ -8,6 +8,132 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
 
+  - package-ecosystem: 'npm'
+    directory: /docs/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /tests-e2e/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a5es5/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a5es2015/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a6/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a7/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a8/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a9/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a10/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a11/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a12/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a13/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a14/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/a15/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/jasmine/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/jest/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/min/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
+    directory: /e2e/nx/
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
   - package-ecosystem: 'docker'
     directory: /
     schedule:
