@@ -47,7 +47,7 @@
     "jest-preset-angular": "12.2.2",
     "karma": "6.3.20",
     "karma-chrome-launcher": "3.1.1",
-    "karma-jasmine": "4.0.2",
+    "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "1.7.0",
     "ng-packagr": "14.2.2",
     "npm": "8.19.2",
