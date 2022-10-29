@@ -29,7 +29,7 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@angular/router": "5.2.11",
-    "core-js": "2.4.1",
+    "core-js": "3.26.0",
     "rxjs": "5.5.12",
     "zone.js": "0.8.29"
   },
