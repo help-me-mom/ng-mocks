@@ -1,3 +1,10 @@
+## [14.3.2](https://github.com/ike18t/ng-mocks/compare/v14.3.1...v14.3.2) (2022-10-30)
+
+
+### Bug Fixes
+
+* **MockRender:** respecting customizations for declarations without selectors [#4032](https://github.com/ike18t/ng-mocks/issues/4032) ([880f5dd](https://github.com/ike18t/ng-mocks/commit/880f5dd63a2468c148185bcd398c6ea231024ed0))
+
 ## [14.3.1](https://github.com/ike18t/ng-mocks/compare/v14.3.0...v14.3.1) (2022-10-23)
 
 
