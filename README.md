@@ -71,28 +71,21 @@ An example of a spec for a profile edit component.
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
 // cover behavior of the component.
-describe('profile:classic', () => {
+describe('profile:builder', () => {
   // Helps to reset customizations after each test.
   MockInstance.scope();
 
-  // Let's declare TestBed in beforeAll
-  // instead of beforeEach.
-  // The code mocks everything in SharedModule
-  // and provides a mock AuthService.
-  beforeAll(async () => {
-    return TestBed.configureTestingModule({
-      imports: [
-        MockModule(SharedModule), // mock
-        ReactiveFormsModule, // real
-      ],
-      declarations: [
-        MockComponent(AvatarComponent), // mock
-        ProfileComponent, // real
-      ],
-      providers: [
-        MockProvider(AuthService), // mock
-      ],
-    }).compileComponents();
+  // Let's configure TestBed via MockBuilder.
+  // The code below says to mock everything in
+  // ProfileModule except ProfileComponent and
+  // ReactiveFormsModule.
+  beforeEach(() => {
+    // The result of MockBuilder should be returned.
+    // https://ng-mocks.sudo.eu/api/MockBuilder
+    return MockBuilder(
+      ProfileComponent,
+      ProfileModule,
+    ).keep(ReactiveFormsModule);
   });
 
   // A test to ensure that ProfileComponent
@@ -104,12 +97,14 @@ describe('profile:classic', () => {
     // onPush change detection, and creates a
     // wrapper component with a template like
     // <app-root ...allInputs></profile>
+    // and renders it.
+    // It also respects all lifecycle hooks.
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
     expect(
       fixture.point.componentInstance,
-    ).toEqual(jasmine.any(ProfileComponent));
+    ).toEqual(assertion.any(ProfileComponent));
   });
 
   // A test to ensure that the component listens
