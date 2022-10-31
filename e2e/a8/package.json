@@ -44,7 +44,7 @@
     "@types/jasmine": "3.4.6",
     "@types/jest": "25.2.3",
     "@types/node": "8.10.66",
-    "jasmine-core": "3.4.0",
+    "jasmine-core": "4.5.0",
     "jasmine-spec-reporter": "4.2.1",
     "jest": "25.5.4",
     "jest-preset-angular": "8.2.1",
