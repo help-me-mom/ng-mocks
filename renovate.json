@@ -28,19 +28,19 @@
       "enabled": false
     },
     {
-      "packagePatterns": ["ng-mocks"],
+      "packageNames": ["ng-mocks"],
       "enabled": false
     },
 
     {
-      "packagePatterns": ["satantime/puppeteer-node", "@types/node", "node"],
+      "packageNames": ["satantime/puppeteer-node", "@types/node", "node"],
       "major": {
         "enabled": false
       },
       "additionalBranchPrefix": "root/"
     },
     {
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "major": {
         "enabled": false
       },
@@ -104,7 +104,7 @@
     {
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
-      "packagePatterns": ["ng-packagr"],
+      "packageNames": ["ng-packagr"],
       "allowedVersions": "/^3\\./",
       "ignoreUnstable": false
     },
@@ -207,7 +207,7 @@
     {
       "additionalBranchPrefix": "e2e/a5/",
       "paths": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^3\\.10\\./"
     },
 
@@ -324,7 +324,7 @@
     {
       "additionalBranchPrefix": "e2e/a6/",
       "paths": ["e2e/a6/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.13\\./"
     },
 
@@ -441,7 +441,7 @@
     {
       "additionalBranchPrefix": "e2e/a7/",
       "paths": ["e2e/a7/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.13\\./"
     },
 
@@ -552,7 +552,7 @@
     {
       "additionalBranchPrefix": "e2e/a8/",
       "paths": ["e2e/a8/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -663,7 +663,7 @@
     {
       "additionalBranchPrefix": "e2e/a9/",
       "paths": ["e2e/a9/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -774,7 +774,7 @@
     {
       "additionalBranchPrefix": "e2e/a10/",
       "paths": ["e2e/a10/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -886,7 +886,7 @@
     {
       "additionalBranchPrefix": "e2e/a11/",
       "paths": ["e2e/a11/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -991,7 +991,7 @@
     {
       "additionalBranchPrefix": "e2e/a12/",
       "paths": ["e2e/a12/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -1083,7 +1083,7 @@
     {
       "additionalBranchPrefix": "e2e/a13/",
       "paths": ["e2e/a13/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
 
@@ -1181,7 +1181,7 @@
     {
       "additionalBranchPrefix": "e2e/a14/",
       "paths": ["e2e/a14/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^8\\./"
     },
 
@@ -1273,7 +1273,7 @@
     {
       "additionalBranchPrefix": "e2e/a15/",
       "paths": ["e2e/a15/package.json"],
-      "packagePatterns": ["npm"],
+      "packageNames": ["npm"],
       "allowedVersions": "/^8\\./"
     }
   ]
