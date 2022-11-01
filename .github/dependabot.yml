@@ -3,6 +3,7 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: /
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -10,6 +11,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /docs/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -17,6 +19,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /tests-e2e/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -24,6 +27,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a5es5/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -31,6 +35,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a5es2015/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -38,6 +43,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a6/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -45,6 +51,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a7/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -52,6 +59,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a8/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -59,6 +67,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a9/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -66,6 +75,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a10/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -73,6 +83,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a11/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -80,6 +91,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a12/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -87,6 +99,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a13/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -94,6 +107,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a14/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -101,6 +115,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/a15/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -108,6 +123,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/jasmine/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -115,6 +131,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/jest/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -122,6 +139,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/min/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -129,6 +147,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: /e2e/nx/
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
@@ -136,6 +155,7 @@ updates:
 
   - package-ecosystem: 'docker'
     directory: /
+    open-pull-requests-limit: 0
     schedule:
       interval: 'daily'
     commit-message:
