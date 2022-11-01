@@ -54,7 +54,7 @@
     "puppeteer": "1.20.0",
     "ts-jest": "22.4.6",
     "ts-node": "4.1.0",
-    "typescript": "2.5.3"
+    "typescript": "2.6.2"
   },
   "jest": {
     "preset": "jest-preset-angular",
