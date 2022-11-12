@@ -151,7 +151,7 @@ describe('MockBuilder:deep', () => {
     const fixture = MockRender(MyComponent);
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML.replace(
-      /<!--.*?-->/gm,
+      new RegExp('<!--(.|\\n|\\r)*?-->|<!--(.|\\n|\\r)*', 'mg'),
       '',
     );
     expect(content).toContain('<div>My Content</div>');

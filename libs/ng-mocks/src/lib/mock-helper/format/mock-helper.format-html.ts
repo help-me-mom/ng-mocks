@@ -5,9 +5,9 @@ import isText from './is-text';
 
 const normalizeValue = (html: string | undefined): string =>
   html
-    ? html // lgtm [js/incomplete-multi-character-sanitization]
+    ? html
         .replace(new RegExp('\\s+', 'mg'), ' ')
-        .replace(new RegExp('<!--.*?-->', 'mg'), '')
+        .replace(new RegExp('<!--(.|\\n|\\r)*?-->|<!--(.|\\n|\\r)*', 'mg'), '')
         .replace(new RegExp('\\s+', 'mg'), ' ')
         .replace(new RegExp('>\\s+<', 'mg'), '><')
         .replace(new RegExp('"\\s+>', 'mg'), '">')
