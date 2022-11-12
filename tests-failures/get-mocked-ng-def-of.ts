@@ -9,8 +9,11 @@ declare class Actual {
   public name: number;
 }
 
+declare let result1: Type<Actual>;
+declare let result2: Type<Expected>;
+
 // @ts-expect-error: string is not boolean
-const result1: Type<Actual> = getMockedNgDefOf(Expected);
+result1 = getMockedNgDefOf(Expected);
 
 // boolean is boolean
-const result2: Type<Expected> = getMockedNgDefOf(Expected);
+result2 = getMockedNgDefOf(Expected);

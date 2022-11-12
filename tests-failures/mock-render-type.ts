@@ -26,7 +26,7 @@ fixture1.point.componentInstance = new TargetComponent();
 fixture1.point.componentInstance = new WrongComponent();
 
 // @ts-expect-error: fails due to wrong type.
-const fixture2 = MockRender<WrongComponent>(TargetComponent);
+MockRender<WrongComponent>(TargetComponent);
 
 // if we provide params only then point is undefined,
 // and componentInstance is anything.
