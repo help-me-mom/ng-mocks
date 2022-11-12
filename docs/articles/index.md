@@ -96,6 +96,21 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/MockBuilder
     return MockBuilder(ProfileComponent, ProfileModule)
       .keep(ReactiveFormsModule);
+    // // or old fashion way
+    // return TestBed.configureTestingModule({
+    //   imports: [
+    //     MockModule(SharedModule), // mock
+    //     ReactiveFormsModule, // real
+    //   ],
+    //   declarations: [
+    //     ProfileComponent, // real
+    //     MockPipe(CurrencyPipe), // mock
+    //     MockDirective(HoverDirective), // mock
+    //   ],
+    //   providers: [
+    //     MockProvider(AuthService), // mock
+    //   ],
+    // }).compileComponents();
   });
 
   // A test to ensure that ProfileComponent
