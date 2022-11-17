@@ -28,7 +28,7 @@
     "@angular/platform-browser": "14.2.11",
     "@angular/platform-browser-dynamic": "14.2.11",
     "@angular/router": "14.2.11",
-    "@ng-select/ng-select": "9.1.0",
+    "@ng-select/ng-select": "10.0.0",
     "@ngrx/effects": "14.3.2",
     "@ngrx/store": "14.3.2",
     "@ngrx/store-devtools": "14.3.2",
