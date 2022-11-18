@@ -201,12 +201,12 @@
     "lib:nx": "cd e2e/nx && npm run build lib"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "14.2.10",
+    "@angular-devkit/build-angular": "15.0.0",
     "@angular-eslint/eslint-plugin": "14.3.0",
     "@angular-eslint/eslint-plugin-template": "14.3.0",
     "@angular-eslint/template-parser": "14.3.0",
     "@angular/animations": "14.2.11",
-    "@angular/cli": "14.2.10",
+    "@angular/cli": "15.0.0",
     "@angular/common": "14.2.11",
     "@angular/compiler": "14.2.11",
     "@angular/compiler-cli": "14.2.11",
