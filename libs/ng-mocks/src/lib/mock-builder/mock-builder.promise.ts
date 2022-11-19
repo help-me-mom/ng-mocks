@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import { flatten, mapValues } from '../common/core.helpers';
@@ -27,7 +27,7 @@ const normaliseModule = (
   module: any,
 ): {
   def: Type<any>;
-  providers?: Provider[];
+  providers?: NgModule['providers'];
 } =>
   isNgModuleDefWithProviders(module)
     ? { def: module.ngModule, providers: module.providers }
