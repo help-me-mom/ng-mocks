@@ -4,7 +4,6 @@ import {
 } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 import {
   NG_MOCKS_GUARDS,
@@ -370,7 +369,7 @@ describe('replaceWithMocks', () => {
       .mock(TargetModule)
       .keep('test')
       .exclude(ParentClass);
-    const actual = TestBed.get('test');
+    const actual = ngMocks.get('test');
     expect(actual).toEqual([
       DeepParentClass,
       GetterSetterMethodHuetod,
@@ -396,7 +395,7 @@ describe('replaceWithMocks', () => {
       .mock(TargetModule)
       .keep('test')
       .exclude(ParentClass);
-    const actual = TestBed.get('test');
+    const actual = ngMocks.get('test');
     expect(actual).toEqual({
       DeepParentClass,
       GetterSetterMethodHuetod,
@@ -421,7 +420,7 @@ describe('replaceWithMocks', () => {
     class TargetModule {}
 
     await MockBuilder().mock(TargetModule).keep('test');
-    const actual = TestBed.get('test');
+    const actual = ngMocks.get('test');
     expect(actual).toEqual({
       canActivate: [
         DeepParentClass,
@@ -452,7 +451,7 @@ describe('replaceWithMocks', () => {
       .mock(TargetModule)
       .keep('test')
       .exclude(NG_MOCKS_GUARDS);
-    const actual = TestBed.get('test');
+    const actual = ngMocks.get('test');
     expect(actual).toEqual({
       canActivate: [],
     });
@@ -483,7 +482,8 @@ describe('resolveProvider', () => {
       .replace(HttpClientModule, HttpClientTestingModule)
       .keep(HTTP_INTERCEPTORS)
       .exclude(NG_MOCKS_INTERCEPTORS);
-    const actual = TestBed.get(HTTP_INTERCEPTORS);
+
+    const actual = ngMocks.findInstance(HTTP_INTERCEPTORS, []);
     expect(actual).not.toEqual(
       jasmine.arrayContaining([false, true]),
     );

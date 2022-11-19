@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, Provider, ViewChild } from '@angular/core';
+import { Component, Directive, NgModule, ViewChild } from '@angular/core';
 
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
@@ -18,7 +18,7 @@ const buildConfig = (
   meta: {
     inputs?: string[];
     outputs?: string[];
-    providers?: Provider[];
+    providers?: NgModule['providers'];
     queries?: Record<string, ViewChild>;
   },
   setControlValueAccessor: boolean,

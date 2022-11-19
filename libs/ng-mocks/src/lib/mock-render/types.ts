@@ -1,6 +1,6 @@
 // istanbul ignore file
 
-import { DebugElement, DebugNode, Provider } from '@angular/core';
+import { DebugElement, DebugNode, NgModule } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
 /**
@@ -33,7 +33,7 @@ export interface IMockRenderOptions {
   /**
    * Extra providers for the testing environment.
    */
-  providers?: Provider[];
+  providers?: NgModule['providers'];
 
   /**
    * Pass true to reset TestBed before render.
@@ -44,7 +44,7 @@ export interface IMockRenderOptions {
   /**
    * Extra providers for the testing environment.
    */
-  viewProviders?: Provider[];
+  viewProviders?: NgModule['providers'];
 }
 
 /**

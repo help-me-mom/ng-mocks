@@ -1,4 +1,4 @@
-import { NgModule, Provider } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import coreConfig from '../common/core.config';
 import { extendClass } from '../common/core.helpers';
@@ -76,10 +76,10 @@ const extractModuleAndProviders = (
   module: any,
 ): {
   ngModule: Type<any>;
-  ngModuleProviders: Provider[] | undefined;
+  ngModuleProviders: NgModule['providers'];
 } => {
   let ngModule: Type<any>;
-  let ngModuleProviders: Provider[] | undefined;
+  let ngModuleProviders: NgModule['providers'];
 
   if (isNgModuleDefWithProviders(module)) {
     ngModule = module.ngModule;
@@ -151,7 +151,7 @@ const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any
   return mockModule || ngModule;
 };
 
-const getMockProviders = (ngModuleProviders: Provider[] | undefined): Provider[] | undefined => {
+const getMockProviders = (ngModuleProviders: NgModule['providers']): NgModule['providers'] => {
   if (ngModuleProviders) {
     const [changed, ngModuleDef] = mockNgDef({ providers: ngModuleProviders });
 
@@ -164,9 +164,9 @@ const getMockProviders = (ngModuleProviders: Provider[] | undefined): Provider[]
 const generateReturn = (
   module: any,
   ngModule: AnyType<any>,
-  ngModuleProviders: Provider[] | undefined,
+  ngModuleProviders: NgModule['providers'],
   mockModule: AnyType<any>,
-  mockModuleProviders: Provider[] | undefined,
+  mockModuleProviders: NgModule['providers'],
 ): any =>
   mockModule === ngModule && mockModuleProviders === ngModuleProviders
     ? module
