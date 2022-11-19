@@ -24,6 +24,7 @@ const configureProcessMetaKeys = (
   ['viewProviders', resolveProvider],
   ['imports', resolve],
   ['exports', resolve],
+  ['schemas', v => v],
 ];
 
 const processMeta = (

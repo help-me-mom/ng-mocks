@@ -63,4 +63,5 @@ export type dependencyKeys =
   | 'providers'
   | 'viewProviders'
   | 'imports'
-  | 'exports';
+  | 'exports'
+  | 'schemas';
