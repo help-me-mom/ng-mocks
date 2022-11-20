@@ -11,6 +11,7 @@ export default {
     // https://github.com/help-me-mom/ng-mocks/issues/538
     'Sanitizer',
     'DomSanitizer',
+    'DomSanitizerImpl',
 
     // ApplicationModule, A14 made them global at root level
     'ApplicationInitStatus',

@@ -70,15 +70,16 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public build(): TestModuleMetadata {
     this.stash.backup();
-    ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
+    const defStack = new CoreDefStack();
+    ngMocksUniverse.config.set('mockNgDefResolver', defStack);
     ngMocksUniverse.flags.add('hasRootModule');
 
     try {
       const params = this.combineParams();
 
       const ngModule = initNgModules(params, initUniverse(params));
-      addRequestedProviders(ngModule, params);
-      handleRootProviders(ngModule, params, ngMocksUniverse.config.get('mockNgDefResolver'));
+      addRequestedProviders(ngModule, params, defStack);
+      handleRootProviders(ngModule, params, defStack);
       handleEntryComponents(ngModule);
       applyPlatformModules();
 

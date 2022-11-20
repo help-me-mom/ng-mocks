@@ -93,12 +93,14 @@ overrides:
 
       '@typescript-eslint/no-explicit-any': off
       '@typescript-eslint/no-namespace': off
+      '@typescript-eslint/no-this-alias': off
       '@typescript-eslint/no-unused-vars': error
 
       unicorn/no-array-callback-reference: off
       unicorn/no-array-method-this-argument: off
       unicorn/no-for-loop: off
       unicorn/no-null: off
+      unicorn/no-this-assignment: off
       unicorn/no-typeof-undefined: off
       unicorn/no-useless-undefined: off
       unicorn/prefer-array-flat: off
