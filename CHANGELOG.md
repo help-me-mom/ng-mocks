@@ -1,3 +1,11 @@
+## [14.3.4](https://github.com/ike18t/ng-mocks/compare/v14.3.3...v14.3.4) (2022-11-22)
+
+
+### Bug Fixes
+
+* **core:** respecting schemas in mock modules [#4228](https://github.com/ike18t/ng-mocks/issues/4228) ([b13bf34](https://github.com/ike18t/ng-mocks/commit/b13bf340e93ac4aa64ba50cae380fa1f8be61595))
+* **core:** support for EnvironmentProviders ([bcb8112](https://github.com/ike18t/ng-mocks/commit/bcb81123abcac3cf9f237c77d9a097084e46c8ca))
+
 ## [14.3.3](https://github.com/ike18t/ng-mocks/compare/v14.3.2...v14.3.3) (2022-11-12)
 
 ## [14.3.2](https://github.com/ike18t/ng-mocks/compare/v14.3.1...v14.3.2) (2022-10-30)
