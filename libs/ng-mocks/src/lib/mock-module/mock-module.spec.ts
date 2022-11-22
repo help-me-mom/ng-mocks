@@ -245,9 +245,9 @@ describe('mockProvider', () => {
       },
     ]);
 
-    const provider: any = !Array.isArray(def.providers?.[0])
-      ? def.providers?.[0]
-      : undefined;
+    const provider: any = Array.isArray(def.providers?.[0])
+      ? undefined
+      : def.providers?.[0];
     expect(provider?.useFactory()).toEqual('');
   });
 

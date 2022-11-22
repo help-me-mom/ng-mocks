@@ -223,10 +223,10 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   private setDefValue(def: any, mock: any): void {
-    if (mock !== defaultMock) {
-      this.defValue.set(def, mock);
-    } else {
+    if (mock === defaultMock) {
       this.defValue.delete(def);
+    } else {
+      this.defValue.set(def, mock);
     }
   }
 

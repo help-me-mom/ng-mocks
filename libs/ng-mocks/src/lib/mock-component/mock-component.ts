@@ -177,12 +177,12 @@ class ComponentMockBase extends LegacyControlValueAccessor implements AfterConte
     if (!(this as any).__rendered && config && config.render) {
       for (const block of Object.keys(config.render)) {
         const { $implicit, variables } =
-          config.render[block] !== true
-            ? config.render[block]
-            : {
+          config.render[block] === true
+            ? {
                 $implicit: undefined,
                 variables: {},
-              };
+              }
+            : config.render[block];
         (this as any).__render(block, $implicit, variables);
       }
       (this as any).__rendered = true;

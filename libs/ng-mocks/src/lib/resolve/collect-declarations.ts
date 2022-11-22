@@ -276,8 +276,8 @@ const parsePropMetadataParserFactoryQueryChild =
         isViewQuery,
         ngMetadataName,
         selector: decorator.selector,
-        ...(decorator.read !== undefined ? { read: decorator.read } : {}),
-        ...(decorator.static !== undefined ? { static: decorator.static } : {}),
+        ...(decorator.read === undefined ? {} : { read: decorator.read }),
+        ...(decorator.static === undefined ? {} : { static: decorator.static }),
       };
     }
   };
@@ -302,11 +302,11 @@ const parsePropMetadataParserFactoryQueryChildren =
         isViewQuery,
         ngMetadataName,
         selector: decorator.selector,
-        ...(decorator.descendants !== undefined ? { descendants: decorator.descendants } : {}),
-        ...(decorator.emitDistinctChangesOnly !== undefined
-          ? { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }
-          : {}),
-        ...(decorator.read !== undefined ? { read: decorator.read } : {}),
+        ...(decorator.descendants === undefined ? {} : { descendants: decorator.descendants }),
+        ...(decorator.emitDistinctChangesOnly === undefined
+          ? {}
+          : { emitDistinctChangesOnly: decorator.emitDistinctChangesOnly }),
+        ...(decorator.read === undefined ? {} : { read: decorator.read }),
       };
     }
   };
