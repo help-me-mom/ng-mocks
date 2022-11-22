@@ -25,9 +25,7 @@ export default (args: any[], defaultNotFoundValue?: any): [any, any, any] => {
   } else if (args.length === 1) {
     el = findDebugElement(funcGetLastFixture());
     [sel] = args;
-  } else if (!args[0]) {
-    sel = args[1];
-  } else {
+  } else if (args[0]) {
     el = findDebugElement(args[0]);
     if (el) {
       sel = args[1];
@@ -35,6 +33,8 @@ export default (args: any[], defaultNotFoundValue?: any): [any, any, any] => {
       el = findDebugElement(funcGetLastFixture());
       [sel, notFoundValue] = args;
     }
+  } else {
+    sel = args[1];
   }
   sel = findDebugElement(sel) ?? sel;
 

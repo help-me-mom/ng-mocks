@@ -38,12 +38,12 @@ class DirectiveMockBase extends LegacyControlValueAccessor implements OnInit {
     const config = (this.__ngMocksConfig as any).config;
     if (config?.render) {
       const { $implicit, variables } =
-        config.render !== true
-          ? config.render
-          : {
+        config.render === true
+          ? {
               $implicit: undefined,
               variables: {},
-            };
+            }
+          : config.render;
       (this as any).__render($implicit, variables);
     }
   }
