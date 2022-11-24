@@ -202,9 +202,9 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "15.0.1",
-    "@angular-eslint/eslint-plugin": "15.0.0",
-    "@angular-eslint/eslint-plugin-template": "15.0.0",
-    "@angular-eslint/template-parser": "15.0.0",
+    "@angular-eslint/eslint-plugin": "15.1.0",
+    "@angular-eslint/eslint-plugin-template": "15.1.0",
+    "@angular-eslint/template-parser": "15.1.0",
     "@angular/animations": "15.0.0",
     "@angular/cli": "15.0.1",
     "@angular/common": "15.0.0",
