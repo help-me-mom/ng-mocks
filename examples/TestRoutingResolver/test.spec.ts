@@ -12,7 +12,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
 
 // A simple service simulating a data request.
 @Injectable()
@@ -93,6 +98,7 @@ describe('TestRoutingResolver', () => {
         DataResolver,
         RouterModule,
         RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
     );

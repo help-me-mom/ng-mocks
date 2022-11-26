@@ -2,7 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
 
 import { AppComponent } from './app/app.component';
 import { AppModule } from './app/app.module';
@@ -15,7 +20,12 @@ describe('issue-151', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
         MockBuilder(
-          [AppComponent, RouterModule, RouterTestingModule],
+          [
+            AppComponent,
+            RouterModule,
+            RouterTestingModule,
+            NG_MOCKS_ROOT_PROVIDERS,
+          ],
           AppModule,
         ).build(),
       ),

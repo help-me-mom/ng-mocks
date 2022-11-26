@@ -70,6 +70,7 @@ import {
   MockBuilder,
   MockRender,
   NG_MOCKS_GUARDS,
+  NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
 
@@ -170,6 +171,7 @@ describe('TestRoutingGuard', () => {
         LoginGuard,
         RouterModule,
         RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
     ).exclude(NG_MOCKS_GUARDS);
