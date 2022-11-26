@@ -19,9 +19,9 @@ export class AnotherExamplePipe implements PipeTransform {
 @Component({
   selector: 'example-component',
   template: `
-    <span id="examplePipe">{{ someStuff | mockPipe: 'foo' }}</span>
+    <span id="examplePipe">{{ someStuff | mockPipe : 'foo' }}</span>
     <span id="anotherExamplePipe">{{
-      someStuff | anotherMockPipe: 'fighters'
+      someStuff | anotherMockPipe : 'fighters'
     }}</span>
   `,
 })
