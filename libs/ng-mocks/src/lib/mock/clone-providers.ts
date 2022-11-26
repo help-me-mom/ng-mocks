@@ -1,5 +1,6 @@
 import { Provider } from '@angular/core';
 
+import CoreDefStack from '../common/core.def-stack';
 import coreForm from '../common/core.form';
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
@@ -49,7 +50,7 @@ const processProvider = (
   sourceType: AnyType<any>,
   mockType: AnyType<any>,
   provider: any,
-  resolutions: Map<any, any>,
+  resolutions: CoreDefStack<any, any>,
 ): any => {
   const token = processTokens(mockType, provider);
   if (token) {
@@ -67,14 +68,14 @@ const processProvider = (
 export default (
   sourceType: AnyType<any>,
   mockType: AnyType<any>,
-  providers?: any[],
+  providers: any[],
+  resolutions: CoreDefStack<any, any>,
 ): {
   providers: Provider[];
   setControlValueAccessor?: boolean;
 } => {
   const result: Provider[] = [];
   let setControlValueAccessor: boolean | undefined;
-  const resolutions = new Map();
 
   for (const provider of flatten(providers || /* istanbul ignore next */ [])) {
     const provide = funcGetProvider(provider);

@@ -1,5 +1,6 @@
 import { Provider } from '@angular/core';
 
+import CoreDefStack from '../common/core.def-stack';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -35,14 +36,18 @@ const processDef = (def: any) => {
 
 // resolveProvider is a special case because of the def structure.
 const createResolveProvider =
-  (resolutions: Map<any, any>, change: () => void): ((def: Provider) => any) =>
+  (resolutions: CoreDefStack<any, any>, change: () => void): ((def: Provider) => any) =>
   (def: Provider) =>
     helperMockService.resolveProvider(def, resolutions, change);
 
 const createResolveWithProviders = (def: any, mockDef: any): boolean =>
   mockDef && mockDef.ngModule && isNgModuleDefWithProviders(def);
 
-const createResolveExisting = (def: any, resolutions: Map<any, any>, change: (flag?: boolean) => void): any => {
+const createResolveExisting = (
+  def: any,
+  resolutions: CoreDefStack<any, any>,
+  change: (flag?: boolean) => void,
+): any => {
   const mockDef = resolutions.get(def);
   if (def !== mockDef) {
     change();
@@ -51,14 +56,18 @@ const createResolveExisting = (def: any, resolutions: Map<any, any>, change: (fl
   return mockDef;
 };
 
-const createResolveExcluded = (def: any, resolutions: Map<any, any>, change: (flag?: boolean) => void): void => {
+const createResolveExcluded = (
+  def: any,
+  resolutions: CoreDefStack<any, any>,
+  change: (flag?: boolean) => void,
+): void => {
   resolutions.set(def, undefined);
 
   change();
 };
 
 const createResolve =
-  (resolutions: Map<any, any>, change: (flag?: boolean) => void): ((def: any) => any) =>
+  (resolutions: CoreDefStack<any, any>, change: (flag?: boolean) => void): ((def: any) => any) =>
   (def: any) => {
     if (resolutions.has(def)) {
       return createResolveExisting(def, resolutions, change);
@@ -85,7 +94,7 @@ const createResolve =
 
 export default (
   change: () => void,
-  resolutions: Map<any, any>,
+  resolutions: CoreDefStack<any, any>,
 ): {
   resolve: (def: any) => any;
   resolveProvider: (def: Provider) => any;

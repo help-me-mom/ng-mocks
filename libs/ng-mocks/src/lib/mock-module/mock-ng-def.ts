@@ -1,5 +1,6 @@
 import { Component, Directive, NgModule, Pipe, Provider } from '@angular/core';
 
+import CoreDefStack from '../common/core.def-stack';
 import { flatten } from '../common/core.helpers';
 import { dependencyKeys, Type } from '../common/core.types';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
@@ -18,11 +19,11 @@ const configureProcessMetaKeys = (
   resolveProvider: (def: Provider) => any,
 ): Array<[dependencyKeys, (def: any) => any]> => [
   ['declarations', resolve],
+  ['imports', resolve],
   ['entryComponents', resolve],
   ['bootstrap', resolve],
   ['providers', resolveProvider],
   ['viewProviders', resolveProvider],
-  ['imports', resolve],
   ['exports', resolve],
   ['schemas', v => v],
 ];
@@ -117,11 +118,13 @@ export default (
     skipMarkProviders?: boolean;
   },
   ngModule?: Type<any>,
-): [boolean, NgModule] => {
+): [boolean, NgModule, Map<any, any>] => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
-    ngMocksUniverse.config.set('mockNgDefResolver', new Map());
+    ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
   }
+  ngMocksUniverse.config.get('mockNgDefResolver').push();
+
   let changed = !ngMocksUniverse.flags.has('skipMock');
   const change = (flag = true) => {
     changed = changed || flag;
@@ -130,9 +133,10 @@ export default (
   const mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
   addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
 
+  const resolutions = ngMocksUniverse.config.get('mockNgDefResolver').pop();
   if (!hasResolver) {
     ngMocksUniverse.config.delete('mockNgDefResolver');
   }
 
-  return [changed, mockModuleDef];
+  return [changed, mockModuleDef, resolutions];
 };

@@ -1,5 +1,6 @@
 import { Component, Directive, NgModule, ViewChild } from '@angular/core';
 
+import CoreDefStack from '../common/core.def-stack';
 import { AnyType } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
@@ -44,6 +45,11 @@ export default <T extends Component & Directive>(
     },
   params: T,
 ): Component & Directive => {
+  const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
+  if (!hasResolver) {
+    ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
+  }
+
   const options: T & { imports?: any[]; standalone?: boolean } = {
     ...params,
   };
@@ -58,20 +64,30 @@ export default <T extends Component & Directive>(
     options.standalone = meta.standalone;
   }
 
-  const { setControlValueAccessor, providers } = cloneProviders(source, mock, meta.providers || []);
-  providers.push(toExistingProvider(source, mock));
-  options.providers = providers;
-
-  const { providers: viewProviders } = cloneProviders(source, mock, meta.viewProviders || []);
-  if (viewProviders.length > 0) {
-    options.viewProviders = viewProviders;
-  }
-
   if (meta.standalone && meta.imports) {
-    const { imports } = mockNgDef({ imports: meta.imports })[1];
+    const [, { imports }] = mockNgDef({ imports: meta.imports });
     if (imports?.length) {
       options.imports = imports as never;
     }
+  }
+
+  const { setControlValueAccessor, providers } = cloneProviders(
+    source,
+    mock,
+    meta.providers || [],
+    ngMocksUniverse.config.get('mockNgDefResolver'),
+  );
+  providers.push(toExistingProvider(source, mock));
+  options.providers = providers;
+
+  const { providers: viewProviders } = cloneProviders(
+    source,
+    mock,
+    meta.viewProviders || [],
+    ngMocksUniverse.config.get('mockNgDefResolver'),
+  );
+  if (viewProviders.length > 0) {
+    options.viewProviders = viewProviders;
   }
 
   const config: ngMocksMockConfig = buildConfig(
@@ -105,6 +121,10 @@ export default <T extends Component & Directive>(
     if (config.hostListeners.indexOf(key) === -1) {
       config.hostListeners.push(key);
     }
+  }
+
+  if (!hasResolver) {
+    ngMocksUniverse.config.delete('mockNgDefResolver');
   }
 
   return options;

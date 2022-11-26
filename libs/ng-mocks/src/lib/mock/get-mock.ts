@@ -3,6 +3,8 @@ import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+import returnCachedMock from './return-cached-mock';
+
 export default (def: any, type: any, func: string, cacheFlag: string, base: any, decorator: any) => {
   funcImportExists(def, func);
 
@@ -11,7 +13,7 @@ export default (def: any, type: any, func: string, cacheFlag: string, base: any,
   }
 
   if (ngMocksUniverse.flags.has(cacheFlag) && ngMocksUniverse.cacheDeclarations.has(def)) {
-    return ngMocksUniverse.cacheDeclarations.get(def);
+    return returnCachedMock(def);
   }
 
   const hasNgMocksDepsResolution = ngMocksUniverse.config.has('ngMocksDepsResolution');
