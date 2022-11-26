@@ -313,8 +313,6 @@ jobs:
                   value: << pipeline.git.branch >>
           steps:
             - checkout
-            - run: nvm install $(cat e2e/a5es5/.nvmrc)
-            - run: nvm use $(cat e2e/a5es5/.nvmrc)
             - attach_workspace:
                 at: dist
             - run:
@@ -322,6 +320,8 @@ jobs:
                 command: npm config set script-shell bash.exe
             - restore_cache:
                 key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+            - run: nvm install $(cat e2e/a5es5/.nvmrc)
+            - run: nvm use $(cat e2e/a5es5/.nvmrc)
             - run:
                 name: NPM Install
                 command: |
@@ -333,6 +333,7 @@ jobs:
                 paths:
                   - ./e2e/a5es5/node_modules
                   - ~/.cache/puppeteer
+                  - /ProgramData/nvm/temp
             - run:
                 name: Spreading Build
                 command: |
@@ -350,6 +351,8 @@ jobs:
                   cp -R examples $P
                   rm $P/examples/TestRoutingGuard/test.spec.ts
                   rm $P/examples/TestRoutingResolver/test.spec.ts
+                  rm $P/tests/issue-4282/test.spec.ts
+                  rm $P/tests/issue-4282/global.spec.ts
             - run:
                 name: Unit Tests
                 command: |

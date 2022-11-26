@@ -1,4 +1,4 @@
-import { ViewContainerRef } from '@angular/core';
+import { Injector, ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
@@ -264,6 +264,49 @@ const viewContainerInstall = () => {
   }
 };
 
+// this function monkey-patches Angular injectors.
+const installInjector = (injector: Injector & { __ngMocksInjector?: any }): Injector => {
+  // skipping the matched injector
+  if (injector.constructor.prototype.__ngMocksInjector || !injector.constructor.prototype.get) {
+    return injector;
+  }
+
+  // marking the injector as patched
+  coreDefineProperty(injector.constructor.prototype, '__ngMocksInjector', true);
+  const injectorGet = injector.constructor.prototype.get;
+
+  // patch
+  injector.constructor.prototype.get = helperCreateClone(
+    injectorGet,
+    undefined,
+    undefined,
+    function (token: any, ...argsGet: any) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const binding: any = this;
+
+      // Here we can implement custom logic how to inject token,
+      // for example, replace with a provider def we need.
+
+      const result = injectorGet.call(binding, token, ...argsGet);
+      // If the result is an injector, we should patch it too.
+      if (
+        result &&
+        typeof result === 'object' &&
+        typeof result.constructor === 'function' &&
+        typeof result.constructor.name === 'string' &&
+        result.constructor.name.slice(-8) === 'Injector'
+      ) {
+        installInjector(result);
+      }
+
+      return result;
+    },
+  );
+
+  return injector;
+};
+
 const install = () => {
   // istanbul ignore else
   if (!(TestBed as any).ngMocksOverridesInstalled) {
@@ -280,6 +323,16 @@ const install = () => {
     }
 
     coreDefineProperty(TestBed, 'ngMocksOverridesInstalled', true);
+    const injectorCreate = Injector.create;
+    Injector.create = helperCreateClone(injectorCreate, undefined, undefined, (...argsCreate: any) =>
+      installInjector(injectorCreate.apply(Injector, argsCreate)),
+    );
+    try {
+      // force install of our injector.
+      Injector.create({ length: 0, providers: [] } as never);
+    } catch {
+      // nothing to do.
+    }
   }
 };
 
