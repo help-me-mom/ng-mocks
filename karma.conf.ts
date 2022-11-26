@@ -6,7 +6,7 @@ import { Config } from 'karma';
 import puppeteer from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
-process.env.CHROME_BIN = (puppeteer as any as puppeteer.PuppeteerNode).executablePath();
+process.env.CHROME_BIN = puppeteer.executablePath();
 
 const suite: any[] = [];
 if (!process.env.KARMA_SUITE) {
