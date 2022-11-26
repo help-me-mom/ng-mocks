@@ -33,7 +33,7 @@
     "@ngrx/store": "14.3.2",
     "@ngrx/store-devtools": "14.3.2",
     "@ngxs/store": "3.7.6",
-    "primeng": "14.2.2",
+    "primeng": "15.0.0-rc.1",
     "rxjs": "7.5.7",
     "tslib": "2.4.1",
     "zone.js": "0.11.8"
