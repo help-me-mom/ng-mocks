@@ -39,8 +39,8 @@
     "zone.js": "0.11.8"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "14.2.10",
-    "@angular/cli": "14.2.10",
+    "@angular-devkit/build-angular": "15.0.1",
+    "@angular/cli": "15.0.1",
     "@angular/compiler-cli": "14.2.12",
     "@ngneat/spectator": "12.2.0",
     "@testing-library/angular": "12.1.2",
