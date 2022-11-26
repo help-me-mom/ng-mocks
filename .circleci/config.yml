@@ -382,6 +382,9 @@ jobs:
               - matches:
                   pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
                   value: << pipeline.git.branch >>
+              - matches:
+                  pattern: 'e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
           steps:
             - install:
                 dir: << parameters.dir >>
@@ -420,6 +423,9 @@ jobs:
               - matches:
                   pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
                   value: << pipeline.git.branch >>
+              - matches:
+                  pattern: 'e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
           steps:
             - test:
                 dir: << parameters.dir >>
@@ -446,6 +452,9 @@ jobs:
                     value: << pipeline.git.branch >>
               - matches:
                   pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
+                  value: << pipeline.git.branch >>
+              - matches:
+                  pattern: 'e2e/<< parameters.branch >>/.*'
                   value: << pipeline.git.branch >>
           steps:
             - lib:
