@@ -4,7 +4,12 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
 
 // A layout component that renders the current route.
 @Component({
@@ -61,7 +66,11 @@ class TargetModule {}
 describe('TestRoute:Route', () => {
   beforeEach(() => {
     return MockBuilder(
-      [RouterModule, RouterTestingModule.withRoutes([])],
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       TargetModule,
     );
   });
@@ -117,6 +126,7 @@ describe('TestRoute:Component', () => {
         TargetComponent,
         RouterModule,
         RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
     );
