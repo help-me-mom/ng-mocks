@@ -1,5 +1,6 @@
 import { TestModuleMetadata } from '@angular/core/testing';
 
+import CoreDefStack from '../common/core.def-stack';
 import { flatten, mapKeys, mapValues } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import funcGetProvider from '../common/func.get-provider';
@@ -226,7 +227,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
     resolutions.set(mockDef, 'exclude');
   }
 
-  ngMocksUniverse.config.set('mockNgDefResolver', new Map());
+  ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
   for (const def of mapValues(data.mock)) {
     resolutions.set(def, 'mock');
     if (data.optional.has(def)) {

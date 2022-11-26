@@ -1,6 +1,7 @@
 import { NgModule, Provider } from '@angular/core';
 import { TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
+import CoreDefStack from '../common/core.def-stack';
 import { flatten, mapValues } from '../common/core.helpers';
 import { Type } from '../common/core.types';
 import funcGetName from '../common/func.get-name';
@@ -69,7 +70,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
   public build(): TestModuleMetadata {
     this.stash.backup();
-    ngMocksUniverse.config.set('mockNgDefResolver', new Map());
+    ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
     ngMocksUniverse.flags.add('hasRootModule');
 
     try {
@@ -77,7 +78,7 @@ export class MockBuilderPromise implements IMockBuilder {
 
       const ngModule = initNgModules(params, initUniverse(params));
       addRequestedProviders(ngModule, params);
-      handleRootProviders(ngModule, params);
+      handleRootProviders(ngModule, params, ngMocksUniverse.config.get('mockNgDefResolver'));
       handleEntryComponents(ngModule);
       applyPlatformModules();
 

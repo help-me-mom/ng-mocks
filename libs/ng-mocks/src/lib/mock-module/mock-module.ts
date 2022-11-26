@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import coreConfig from '../common/core.config';
+import coreDefineProperty from '../common/core.define-property';
 import { extendClass } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { AnyType, Type } from '../common/core.types';
@@ -12,6 +13,7 @@ import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders, NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { Mock } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
+import returnCachedMock from '../mock/return-cached-mock';
 
 import mockNgDef from './mock-ng-def';
 
@@ -104,7 +106,7 @@ const getExistingMockModule = (ngModule: Type<any>, isRootModule: boolean): Type
   // Every module should be replaced with its mock copy only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
   if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {
-    return ngMocksUniverse.cacheDeclarations.get(ngModule);
+    return returnCachedMock(ngModule);
   }
 
   // Now we check if we need to keep the original module or to replace it with some other.
@@ -122,27 +124,20 @@ const getExistingMockModule = (ngModule: Type<any>, isRootModule: boolean): Type
   return undefined;
 };
 
-const getMockModuleDef = (ngModule: Type<any>, mockModule?: Type<any>): NgModule | undefined => {
-  if (!mockModule) {
-    const meta = coreReflectModuleResolve(ngModule);
-    const [changed, ngModuleDef] = mockNgDef(meta, ngModule);
-    if (changed) {
-      return ngModuleDef;
-    }
+const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any> => {
+  const [changed, ngModuleDef, resolutions] = mockModule
+    ? [false]
+    : mockNgDef(coreReflectModuleResolve(ngModule), ngModule);
+  if (resolutions) {
+    coreDefineProperty(ngModule, '__ngMocksResolutions', resolutions);
   }
 
-  return undefined;
-};
-
-const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any> => {
-  const mockModuleDef = getMockModuleDef(ngModule, mockModule);
-
-  if (mockModuleDef) {
+  if (changed) {
     const parent = ngMocksUniverse.flags.has('skipMock') ? ngModule : Mock;
     const mock = extendClass(parent);
 
     // the last thing is to apply decorators.
-    NgModule(mockModuleDef)(mock);
+    NgModule(ngModuleDef)(mock);
     decorateMock(mock, ngModule);
 
     return mock;

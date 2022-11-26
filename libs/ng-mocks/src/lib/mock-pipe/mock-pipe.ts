@@ -10,6 +10,7 @@ import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { Mock } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperMockService from '../mock-service/helper.mock-service';
+import returnCachedMock from '../mock/return-cached-mock';
 
 import { MockedPipe } from './types';
 
@@ -79,7 +80,7 @@ export function MockPipe<TPipe extends PipeTransform>(
 
   // istanbul ignore next
   if (ngMocksUniverse.flags.has('cachePipe') && ngMocksUniverse.cacheDeclarations.has(pipe)) {
-    return ngMocksUniverse.cacheDeclarations.get(pipe);
+    return returnCachedMock(pipe);
   }
 
   const mock = getMockClass(pipe, transform);

@@ -10,5 +10,5 @@ export default <T>(
     __template?: TemplateRef<any>;
     __vcr?: ViewContainerRef;
   } => {
-  return value && typeof value === 'object' && !!(value as any).__ngMocksConfig;
+  return value && typeof value === 'object' && !!(value as any).__ngMocks;
 };

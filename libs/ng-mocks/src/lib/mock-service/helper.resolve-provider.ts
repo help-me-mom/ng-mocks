@@ -1,3 +1,4 @@
+import CoreDefStack from '../common/core.def-stack';
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import funcExtractForwardRef from '../common/func.extract-forward-ref';
@@ -179,7 +180,7 @@ const isPreconfiguredUseExisting = (provider: any, provide: any): boolean => {
 };
 
 // tries to resolve a provider based on current universe state.
-export default (provider: any, resolutions: Map<any, any>, changed?: () => void) => {
+export default (provider: any, resolutions: CoreDefStack<any, any>, changed?: () => void) => {
   const { provide, multi, change } = parseProvider(provider, changed);
   if (isPreconfiguredDependency(provider, provide)) {
     return change();
