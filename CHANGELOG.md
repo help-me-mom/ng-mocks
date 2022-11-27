@@ -1,3 +1,16 @@
+# [14.4.0](https://github.com/ike18t/ng-mocks/compare/v14.3.4...v14.4.0) (2022-11-27)
+
+
+### Bug Fixes
+
+* **a15:** adding NG_MOCKS_ROOT_PROVIDERS for RouteReuseStrategy ([737247d](https://github.com/ike18t/ng-mocks/commit/737247db1b1983d6319d7476ddcba5a5989683b7))
+* **core:** correct caching of touched declarations [#4344](https://github.com/ike18t/ng-mocks/issues/4344) ([233f014](https://github.com/ike18t/ng-mocks/commit/233f014387993ad24c599cb433cf7dcaba01d75b))
+
+
+### Features
+
+* **MockBuilder:** mocks root providers via inject function [#4282](https://github.com/ike18t/ng-mocks/issues/4282) ([dc7026e](https://github.com/ike18t/ng-mocks/commit/dc7026e1431eabea1bcf2b27e511e99e51a5995c))
+
 ## [14.3.4](https://github.com/ike18t/ng-mocks/compare/v14.3.3...v14.3.4) (2022-11-22)
 
 
