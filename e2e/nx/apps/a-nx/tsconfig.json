@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "noImplicitOverride": false,
     "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "module": "commonjs",
     "types": ["jest", "jasmine", "node"]
   },
