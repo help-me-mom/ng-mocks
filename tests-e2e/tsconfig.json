@@ -4,16 +4,35 @@
   "compilerOptions": {
     "baseUrl": "node_modules",
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "module": "ES2015",
-    "lib": ["es2015", "dom"],
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["es2020", "dom"],
+    "types": ["node", "jasmine", "jest", "mocha"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": false,
     "paths": {
       "ng-mocks": ["../../libs/ng-mocks/src/index.ts"]
     }
-  }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
