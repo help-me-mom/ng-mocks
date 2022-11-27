@@ -21,7 +21,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "tsconfig.json",
             "aot": true
           },
           "configurations": {
@@ -58,7 +58,7 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
+            "tsConfig": "tsconfig.json",
             "karmaConfig": "karma.conf.js"
           }
         }
@@ -74,7 +74,7 @@
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "ng-package.json",
-            "tsConfig": "tsconfig.app.json"
+            "tsConfig": "tsconfig.json"
           }
         }
       }

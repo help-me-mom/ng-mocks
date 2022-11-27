@@ -1,3 +1,4 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -5,6 +6,8 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -13,12 +16,13 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "module": "es2020",
-    "lib": ["es2018", "dom"],
-    "emitDecoratorMetadata": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["es2020", "dom"],
+    "types": ["jest", "node"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["jest", "node"]
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -27,5 +31,5 @@
     "strictTemplates": true
   },
   "files": ["src/main.ts", "src/polyfills.ts", "src/setup-jest.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }

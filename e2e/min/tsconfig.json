@@ -4,18 +4,32 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["es2020", "dom"],
+    "types": ["jasmine", "jest", "node"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["jasmine", "jest", "node"]
+    "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   },
   "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }
