@@ -9,10 +9,8 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine",
-    "test:debug": "npm run test:jasmine:es2015:ivy -- --browsers=Chrome --watch",
-    "test:jasmine": "npm run test:jasmine:es5:ivy && npm run test:jasmine:es2015:ivy",
-    "test:jasmine:es5:ivy": "ng test --ts-config ./tsconfig.es5ivy.spec.json --progress=false",
-    "test:jasmine:es2015:ivy": "ng test --ts-config ./tsconfig.es2015ivy.spec.json --progress=false"
+    "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
+    "test:jasmine": "ng test"
   },
   "peerDependencies": {
     "ng-mocks": "*"

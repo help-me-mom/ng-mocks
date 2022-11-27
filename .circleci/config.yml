@@ -552,12 +552,23 @@ workflows:
           matrix:
             parameters:
               dir:
-                - jasmine
                 - jest
                 - min
               es:
                 - es5
                 - es2015
+
+      # testing latest
+      - E2E Test:
+          name: << matrix.dir >>:test
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          requires:
+            - << matrix.dir >>:install
+          matrix:
+            parameters:
+              dir:
+                - jasmine
 
       # testing nx (exceptional)
       - E2E Test:
