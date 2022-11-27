@@ -7,7 +7,7 @@
     "npm": "npm",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build",
     "build:lib": "ng-packagr",
     "test": "npm run test:jasmine -- --progress=false && npm run test:jest",
     "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch --single-run=false",

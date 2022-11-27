@@ -20,7 +20,7 @@ describe('issue-857', () => {
   beforeEach(() => MockBuilder(null, TargetComponent));
 
   describe('throws on forgotten resets', () => {
-    let consoleWarn;
+    let consoleWarn: typeof console.warn;
     beforeAll(() => {
       consoleWarn = console.warn;
       console.warn =

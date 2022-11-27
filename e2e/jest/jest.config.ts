@@ -1,11 +1,13 @@
-module.exports = {
+export default {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
-  testURL: 'http://localhost',
+  testEnvironmentOptions: {
+    url: 'http://localhost',
+  },
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.es2015ivy.spec.json',
+      tsconfig: 'tsconfig.json',
     },
   },
 };
