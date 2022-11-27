@@ -19,9 +19,9 @@
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["es2020", "dom"],
+    "types": ["jasmine", "jest", "node"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["jasmine", "jest", "node"],
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
