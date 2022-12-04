@@ -9,6 +9,7 @@ import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+import { MockBuilder } from './mock-builder';
 import { MockBuilderStash } from './mock-builder-stash';
 import addRequestedProviders from './promise/add-requested-providers';
 import applyPlatformModules from './promise/apply-platform-modules';
@@ -87,6 +88,7 @@ export class MockBuilderPromise implements IMockBuilder {
         createNgMocksToken(),
         createNgMocksTouchesToken(),
         createNgMocksOverridesToken(this.replaceDef, this.defValue),
+        MockBuilder as never,
       );
 
       return ngModule;

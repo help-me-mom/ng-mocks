@@ -1,7 +1,7 @@
 import CoreDefStack from '../../common/core.def-stack';
 import { extractDependency, flatten, mapValues } from '../../common/core.helpers';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
-import funcGetProvider from '../../common/func.get-provider';
+import funcGetType from '../../common/func.get-type';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import helperResolveProvider from '../../mock-service/helper.resolve-provider';
 
@@ -15,7 +15,7 @@ export default (ngModule: NgMeta, { providerDef, mockDef }: BuilderData, resolut
 
   // Analyzing providers.
   for (const provider of flatten(ngModule.providers)) {
-    const provide = funcGetProvider(provider);
+    const provide = funcGetType(provider);
     ngMocksUniverse.touches.add(provide);
 
     if (provide !== provider && (provider as any).deps) {

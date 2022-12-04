@@ -1,4 +1,4 @@
-import funcGetProvider from '../../common/func.get-provider';
+import funcGetType from '../../common/func.get-type';
 
 export default (
   provider: any,
@@ -6,7 +6,7 @@ export default (
   multi: boolean;
   provide: any;
 } => {
-  const provide = funcGetProvider(provider);
+  const provide = funcGetType(provider);
   const multi = provide !== provider && provider.multi;
 
   return {

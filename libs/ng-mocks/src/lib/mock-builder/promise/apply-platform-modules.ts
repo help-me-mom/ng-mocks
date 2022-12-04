@@ -1,6 +1,7 @@
 import { getTestBed } from '@angular/core/testing';
 
 import { flatten } from '../../common/core.helpers';
+import funcGetType from '../../common/func.get-type';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 export default () => {
@@ -8,12 +9,7 @@ export default () => {
   // istanbul ignore else
   if (testBed.ngModule) {
     for (const def of flatten<any>(testBed.ngModule)) {
-      // istanbul ignore if
-      if (typeof def === 'object' && /* istanbul ignore next */ def.ngModule) {
-        ngMocksUniverse.touches.add(def.ngModule);
-      } else {
-        ngMocksUniverse.touches.add(def);
-      }
+      ngMocksUniverse.touches.add(funcGetType(def));
     }
   }
 };

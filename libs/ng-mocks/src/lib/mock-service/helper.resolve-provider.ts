@@ -2,7 +2,7 @@ import CoreDefStack from '../common/core.def-stack';
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import funcExtractForwardRef from '../common/func.extract-forward-ref';
-import funcGetProvider from '../common/func.get-provider';
+import funcGetType from '../common/func.get-type';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -67,7 +67,7 @@ const parseProvider = (
   multi: boolean;
   provide: any;
 } => {
-  const provide = funcGetProvider(provider);
+  const provide = funcGetType(provider);
   const multi = provider !== provide && !!provider.multi;
 
   return {

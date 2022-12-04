@@ -3,7 +3,7 @@ import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 import { AnyDeclaration } from '../../common/core.types';
 import errorJestMock from '../../common/error.jest-mock';
 import funcGetName from '../../common/func.get-name';
-import funcGetProvider from '../../common/func.get-provider';
+import funcGetType from '../../common/func.get-type';
 import { isNgDef } from '../../common/func.is-ng-def';
 import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import { isStandalone } from '../../common/func.is-standalone';
@@ -31,7 +31,7 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
     // adding providers to touches
     if (typeof extendedDef === 'object' && extendedDef.providers) {
       for (const provider of flatten(extendedDef.providers)) {
-        ngMocksUniverse.touches.add(funcGetProvider(provider));
+        ngMocksUniverse.touches.add(funcGetType(provider));
       }
     }
   }
@@ -70,6 +70,8 @@ export default (
     if (!config.dependency && config.export && !configInstance?.exported && (isNgDef(def, 'i') || !isNgDef(def))) {
       handleDef(meta, def, defProviders);
       markProviders([def]);
+    } else if (!config.dependency && config.export && !configInstance?.exported) {
+      handleDef(meta, def, defProviders);
     } else if (!ngMocksUniverse.touches.has(def) && !config.dependency) {
       handleDef(meta, def, defProviders);
     } else if (
