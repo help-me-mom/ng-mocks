@@ -37,7 +37,7 @@
     "@angular-devkit/build-angular": "15.0.2",
     "@angular/cli": "15.0.2",
     "@angular/compiler-cli": "15.0.2",
-    "@ngneat/spectator": "12.2.0",
+    "@ngneat/spectator": "12.2.1",
     "@testing-library/angular": "13.0.0-beta.8",
     "@types/jasmine": "4.3.1",
     "@types/jest": "29.2.4",
