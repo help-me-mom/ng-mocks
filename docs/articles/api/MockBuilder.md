@@ -264,13 +264,18 @@ beforeEach(() => {
 });
 ```
 
-In case of `RouterTestingModule` we need to use [`.keep`](#keep) for both of the modules and to pass an empty array into `.withRoutes`.
+In case of `RouterTestingModule`,
+we need to use [`.keep`](#keep) for both of the modules and [`NG_MOCKS_ROOT_PROVIDERS`](#ngmocksrootproviders-token),
+and to pass an empty array into `.withRoutes`.
+[`NG_MOCKS_ROOT_PROVIDERS`](#ngmocksrootproviders-token) is needed,
+because `RouterModule` has many root dependencies which should be also kept. 
 
 ```ts
 beforeEach(() => {
   return MockBuilder(MyComponent)
     .keep(RouterModule)
-    .keep(RouterTestingModule.withRoutes([]));
+    .keep(RouterTestingModule.withRoutes([]))
+    .keep(NG_MOCKS_ROOT_PROVIDERS);
 });
 ```
 

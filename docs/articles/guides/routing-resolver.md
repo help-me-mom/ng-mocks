@@ -17,6 +17,7 @@ beforeEach(() =>
       DataResolver,
       RouterModule,
       RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
     ],
     // Things to mock.
     TargetModule,
