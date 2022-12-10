@@ -4,7 +4,7 @@ description: Covering an Angular routing guard with tests
 sidebar_label: Routing guard
 ---
 
-If you did not read ["How to test a route"](route.md), please do it first.
+If you have not read ["How to test a route"](route.md), please do it first.
 
 To test a guard means that we need to mock everything except the guard and `RouterModule`.
 But, what if we have several guards? If we mocked them they would block routes due to falsy returns of their mocked methods.
@@ -19,6 +19,7 @@ beforeEach(() =>
       LoginGuard,
       RouterModule,
       RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
     ], 
     // Things to mock
     TargetModule,

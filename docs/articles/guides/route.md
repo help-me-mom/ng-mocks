@@ -6,12 +6,19 @@ sidebar_label: Route
 
 Testing a route means that we want to assert that a specific page renders a specific component.
 
-With `ng-mocks` you can be confident, that a route exists and all its dependencies are present in the related module,
+With `ng-mocks` you can be confident, that a route exists and all its dependencies are present in the imported module,
 otherwise tests will fail.
 
-However, to test that, we need to configure `TestBed` a bit differently: it is fine to mock all components and declarations,
-we should only keep the `RouterModule` as it is, and to add `RouterTestingModule` with empty routes.
-This guarantees that the application routes will be used, and tests fail if a route or its dependencies have been removed.
+However, to test that, we need to configure `TestBed` a bit differently:
+
+- it is fine to mock all components and declarations
+- `RouterModule` should be kept the as it is, so it can do its job
+- `RouterTestingModule` should be added with empty routes
+- [`NG_MOCKS_ROOT_PROVIDERS`](../api/MockBuilder.md#ngmocksrootproviders-token) should be kept, 
+  because `RouterModule` depends on many root services which cannot be mocked.
+
+This guarantees that the application's routes will be used,
+and tests fail if a route or its dependencies have been removed.
 
 ```ts
 beforeEach(() =>
@@ -20,6 +27,7 @@ beforeEach(() =>
     [
       RouterModule,
       RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
     ], 
     // Things to mock.
     TargetModule,
@@ -62,8 +70,8 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 That is it.
 
 Additionally, we might assert that a link on a page navigates to the right route.
-In this case, we should pass a component of the link as the first parameter to [`MockBuilder`](https://www.npmjs.com/package/ng-mocks#mockbuilder),
-to `.keep` `RouterModule` and to render the component instead of `RouterOutlet`.
+In this case, we should pass the component with the link as the first parameter to [`MockBuilder`](https://www.npmjs.com/package/ng-mocks#mockbuilder),
+and to render the component instead of `RouterOutlet`.
 
 ```ts
 beforeEach(() =>
@@ -73,6 +81,7 @@ beforeEach(() =>
       TargetComponent,
       RouterModule,
       RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
     ], 
     // Things to mock.
     TargetModule,
