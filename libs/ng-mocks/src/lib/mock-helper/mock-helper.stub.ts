@@ -19,6 +19,9 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
 
   for (const key of Object.getOwnPropertyNames(applyOverrides)) {
     const desc = skipProps.indexOf(key) === -1 ? Object.getOwnPropertyDescriptor(applyOverrides, key) : undefined;
+    if (desc && Object.prototype.hasOwnProperty.call(desc, 'value') && desc.value === undefined) {
+      continue;
+    }
     helperMockService.definePropertyDescriptor(correctInstance, key, desc);
   }
 
