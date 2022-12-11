@@ -1,3 +1,11 @@
+# [14.5.0](https://github.com/ike18t/ng-mocks/compare/v14.4.0...v14.5.0) (2022-12-11)
+
+
+### Features
+
+* **core:** hidden usage of MockBuilder in TestBed if kept and mock modules are used together [#4344](https://github.com/ike18t/ng-mocks/issues/4344) ([d77b6f2](https://github.com/ike18t/ng-mocks/commit/d77b6f21abc8553540ae5087081669cb6d6b5890))
+* **MockInstance:** ignores undefined properties [#4367](https://github.com/ike18t/ng-mocks/issues/4367) ([70d9781](https://github.com/ike18t/ng-mocks/commit/70d9781bf23843a8afa1fa507c8038520c527e50))
+
 # [14.4.0](https://github.com/ike18t/ng-mocks/compare/v14.3.4...v14.4.0) (2022-11-27)
 
 
