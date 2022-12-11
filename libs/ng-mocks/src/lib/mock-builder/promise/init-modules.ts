@@ -28,7 +28,7 @@ export default (
 
     const isModule = isNgDef(def, 'm');
     if (providers.length > 0) {
-      const [, loDef] = mockNgDef({ providers, skipMarkProviders: !isModule });
+      const [, loDef] = mockNgDef({ providers, skipMarkProviders: !isModule, skipExports: true });
       loProviders.set(def, loDef.providers);
     }
     if (isModule) {

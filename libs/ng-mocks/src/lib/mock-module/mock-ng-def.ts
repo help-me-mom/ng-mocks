@@ -3,7 +3,7 @@ import { Component, Directive, NgModule, Pipe, Provider } from '@angular/core';
 import CoreDefStack from '../common/core.def-stack';
 import { flatten } from '../common/core.helpers';
 import { dependencyKeys, Type } from '../common/core.types';
-import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
+import funcGetType from '../common/func.get-type';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import createResolvers from './create-resolvers';
@@ -66,7 +66,7 @@ const resolveDefForExport = (
   ngModule?: Type<any>,
 ): Type<any> | undefined => {
   const moduleConfig = ngMocksUniverse.config.get(ngModule) || {};
-  const instance = isNgModuleDefWithProviders(def) ? def.ngModule : def;
+  const instance = funcGetType(def);
   const mockDef = resolve(instance);
   if (!mockDef) {
     return undefined;
@@ -84,6 +84,11 @@ const resolveDefForExport = (
   if (correctExports && !moduleConfig.exportAll && !config?.export) {
     return undefined;
   }
+
+  ngMocksUniverse.configInstance.set(instance, {
+    ...ngMocksUniverse.configInstance.get(instance),
+    exported: true,
+  });
 
   return mockDef;
 };
@@ -116,6 +121,7 @@ const addExports = (
 export default (
   ngModuleDef: NgModule & {
     skipMarkProviders?: boolean;
+    skipExports?: boolean;
   },
   ngModule?: Type<any>,
 ): [boolean, NgModule, Map<any, any>] => {
@@ -131,7 +137,9 @@ export default (
   };
   const { resolve, resolveProvider } = createResolvers(change, ngMocksUniverse.config.get('mockNgDefResolver'));
   const mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
-  addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+  if (!ngModuleDef.skipExports) {
+    addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+  }
 
   const resolutions = ngMocksUniverse.config.get('mockNgDefResolver').pop();
   if (!hasResolver) {

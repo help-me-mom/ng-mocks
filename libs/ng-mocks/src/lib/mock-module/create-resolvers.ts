@@ -1,6 +1,7 @@
 import { Provider } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
+import funcGetType from '../common/func.get-type';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isNgModuleDefWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
@@ -41,7 +42,7 @@ const createResolveProvider =
     helperMockService.resolveProvider(def, resolutions, change);
 
 const createResolveWithProviders = (def: any, mockDef: any): boolean =>
-  mockDef && mockDef.ngModule && isNgModuleDefWithProviders(def);
+  isNgModuleDefWithProviders(mockDef) && isNgModuleDefWithProviders(def);
 
 const createResolveExisting = (
   def: any,
@@ -73,7 +74,7 @@ const createResolve =
       return createResolveExisting(def, resolutions, change);
     }
 
-    const detectedDef = isNgModuleDefWithProviders(def) ? def.ngModule : def;
+    const detectedDef = funcGetType(def);
     if (ngMocksUniverse.isExcludedDef(detectedDef)) {
       return createResolveExcluded(def, resolutions, change);
     }

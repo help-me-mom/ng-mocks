@@ -5,7 +5,7 @@ import coreForm from '../common/core.form';
 import { flatten } from '../common/core.helpers';
 import { AnyType } from '../common/core.types';
 import funcExtractForwardRef from '../common/func.extract-forward-ref';
-import funcGetProvider from '../common/func.get-provider';
+import funcGetType from '../common/func.get-type';
 import {
   MockAsyncValidatorProxy,
   MockControlValueAccessorProxy,
@@ -17,7 +17,7 @@ import toExistingProvider from './to-existing-provider';
 import toFactoryProvider from './to-factory-provider';
 
 const processTokens = (mockType: AnyType<any>, provider: any) => {
-  const provide = funcGetProvider(provider);
+  const provide = funcGetType(provider);
   if (coreForm.NG_VALIDATORS && provide === coreForm.NG_VALIDATORS) {
     return toFactoryProvider(provide, () => new MockValidatorProxy(mockType));
   }
@@ -32,7 +32,7 @@ const processTokens = (mockType: AnyType<any>, provider: any) => {
 };
 
 const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>, provider: any) => {
-  const provide = funcGetProvider(provider);
+  const provide = funcGetType(provider);
 
   // Check tests/issue-302/test.spec.ts
   if (provide === coreForm.NgControl || provide === coreForm.FormControlDirective) {
@@ -78,7 +78,7 @@ export default (
   let setControlValueAccessor: boolean | undefined;
 
   for (const provider of flatten(providers || /* istanbul ignore next */ [])) {
-    const provide = funcGetProvider(provider);
+    const provide = funcGetType(provider);
     if (provide === coreForm.NG_VALUE_ACCESSOR) {
       setControlValueAccessor = false;
     }

@@ -148,7 +148,7 @@ const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any
 
 const getMockProviders = (ngModuleProviders: NgModule['providers']): NgModule['providers'] => {
   if (ngModuleProviders) {
-    const [changed, ngModuleDef] = mockNgDef({ providers: ngModuleProviders });
+    const [changed, ngModuleDef] = mockNgDef({ providers: ngModuleProviders, skipExports: true });
 
     return changed ? ngModuleDef.providers : ngModuleProviders;
   }

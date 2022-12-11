@@ -2,6 +2,7 @@ import { Injector, ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
+import { MockBuilder } from '../mock-builder/mock-builder';
 import getOverrideDef from '../mock-builder/promise/get-override-def';
 import { ngMocks } from '../mock-helper/mock-helper';
 import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
@@ -15,9 +16,11 @@ import coreInjector from './core.injector';
 import coreReflectMeta from './core.reflect.meta';
 import coreReflectModuleResolve from './core.reflect.module-resolve';
 import coreReflectProvidedIn from './core.reflect.provided-in';
-import { NG_MOCKS, NG_MOCKS_TOUCHES } from './core.tokens';
+import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
 import { AnyType, dependencyKeys } from './core.types';
-import funcGetProvider from './func.get-provider';
+import { getSourceOfMock } from './func.get-source-of-mock';
+import funcGetType from './func.get-type';
+import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
 import ngMocksUniverse from './ng-mocks-universe';
@@ -71,10 +74,9 @@ const initTestBed = () => {
 const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touches: Set<any>): void => {
   for (const key of coreConfig.dependencies) {
     for (const item of moduleDef[key] ? flatten(moduleDef[key]) : []) {
-      let def = funcGetProvider(item);
-      if (isNgModuleDefWithProviders(def)) {
-        generateTouches(def, touches);
-        def = def.ngModule;
+      const def = funcGetType(item);
+      if (isNgModuleDefWithProviders(item)) {
+        generateTouches(item, touches);
       }
       if (touches.has(def)) {
         continue;
@@ -117,7 +119,7 @@ const defineTouches = (testBed: TestBed, moduleDef: TestModuleMetadata, knownTou
 };
 
 const applyPlatformOverrideDef = (def: any) => {
-  const ngModule = isNgModuleDefWithProviders(def) ? /* istanbul ignore next */ def.ngModule : def;
+  const ngModule = funcGetType(def);
   if ((TestBed as any).ngMocksOverrides.has(ngModule)) {
     return;
   }
@@ -183,13 +185,55 @@ const configureTestingModule =
   (moduleDef: TestModuleMetadata) => {
     initTestBed();
 
+    const useMockBuilder =
+      typeof moduleDef === 'object' &&
+      !!moduleDef &&
+      (!moduleDef.providers || moduleDef.providers.indexOf(MockBuilder) === -1);
+    // 0b10 - mock exist
+    // 0b01 - real exist
+    let hasMocks = 0;
+    const mockBuilder: Array<[any, boolean]> = [];
+    for (const key of useMockBuilder ? ['imports', 'declarations'] : []) {
+      for (const declaration of flatten(moduleDef[key as never]) as any[]) {
+        if (!declaration) {
+          continue;
+        }
+        mockBuilder.push([
+          isNgModuleDefWithProviders(declaration)
+            ? {
+                ngModule: getSourceOfMock(declaration.ngModule),
+                providers: declaration.providers,
+              }
+            : getSourceOfMock(declaration),
+          isMockNgDef(funcGetType(declaration)),
+        ]);
+        if (key === 'imports') {
+          hasMocks |= mockBuilder[mockBuilder.length - 1][1] ? 0b10 : 0b01;
+        }
+      }
+    }
+    // We should do magic only then both mock and real exist.
+    let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
+    if (!finalModuleDef) {
+      let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
+      for (const [def, isMock] of mockBuilder) {
+        builder = isMock ? builder.mock(def) : builder.keep(def);
+      }
+      finalModuleDef = builder.build();
+      finalModuleDef = {
+        ...moduleDef,
+        ...finalModuleDef,
+        providers: [...(moduleDef.providers ?? []), ...(finalModuleDef.providers as never)],
+      };
+    }
+
     const testBed = getTestBed();
 
-    const providers = funcExtractTokens(moduleDef.providers);
+    const providers = funcExtractTokens(finalModuleDef.providers);
     const { mocks, overrides } = providers;
     // touches are important,
     // therefore we are trying to fetch them from the known providers.
-    const touches = defineTouches(testBed, moduleDef, providers.touches);
+    const touches = defineTouches(testBed, finalModuleDef, providers.touches);
 
     if (mocks) {
       ngMocks.flushTestBed();
@@ -205,7 +249,7 @@ const configureTestingModule =
       applyPlatformOverrides(testBed, touches);
     }
 
-    return original.call(instance, moduleDef);
+    return original.call(instance, finalModuleDef);
   };
 
 const resetTestingModule =
