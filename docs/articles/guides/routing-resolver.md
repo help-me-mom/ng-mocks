@@ -73,8 +73,8 @@ expect(route.snapshot.data).toEqual({
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/test.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestRoutingResolver/test.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/test.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoutingResolver/test.spec.ts"
 import { Location } from '@angular/common';

@@ -27,8 +27,8 @@ const service = fixture.point.injector.get(TargetService);
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestProviderInDirective/test.spec.ts&initialpath=%3Fspec%3DTestProviderInDirective)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestProviderInDirective/test.spec.ts&initialpath=%3Fspec%3DTestProviderInDirective)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestProviderInDirective/test.spec.ts&initialpath=%3Fspec%3DTestProviderInDirective)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestProviderInDirective/test.spec.ts"
 import {

@@ -31,13 +31,13 @@ module.exports = {
           position: 'left',
         },
         {
-          label: 'Try on StackBlitz',
-          href: 'https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts',
+          label: 'Try on CodeSandbox',
+          href: 'https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts',
           position: 'left',
         },
         {
-          label: 'Try on CodeSandbox',
-          href: 'https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts',
+          label: 'Try on StackBlitz',
+          href: 'https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts',
           position: 'left',
         },
         {
@@ -71,12 +71,12 @@ module.exports = {
               to: '/guides',
             },
             {
-              label: 'Try on StackBlitz',
-              href: 'https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts',
-            },
-            {
               label: 'Try on CodeSandbox',
               href: 'https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts',
+            },
+            {
+              label: 'Try on StackBlitz',
+              href: 'https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts',
             },
             {
               label: 'Execute tests on CI',

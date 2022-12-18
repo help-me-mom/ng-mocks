@@ -69,8 +69,8 @@ ngMocks.render(instance, instance, {
 
 ## Live example of static context
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestDirectiveLetOf/static.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Astatic)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestDirectiveLetOf/static.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Astatic)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestDirectiveLetOf/static.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Astatic)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestDirectiveLetOf/static.spec.ts"
 import {
@@ -129,8 +129,8 @@ describe('TestDirectiveLetOf:static', () => {
 
 ## Live example of dynamic context
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestDirectiveLetOf/dynamic.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Adynamic)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestDirectiveLetOf/dynamic.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Adynamic)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestDirectiveLetOf/dynamic.spec.ts&initialpath=%3Fspec%3DTestDirectiveLetOf%3Adynamic)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestDirectiveLetOf/dynamic.spec.ts"
 import {

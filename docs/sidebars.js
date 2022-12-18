@@ -167,7 +167,7 @@ module.exports = {
       type: 'category',
       label: 'How to mock',
       collapsed: false,
-      items: ['guides/mock/directive-structural-let-of'],
+      items: ['guides/mock/directive-structural-let-of', 'guides/mock/activated-route'],
     },
     {
       type: 'category',

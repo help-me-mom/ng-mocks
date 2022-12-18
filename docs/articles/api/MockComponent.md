@@ -125,8 +125,8 @@ and allows to mock their imports only for shallow rendering.
 An advanced example about **mocking components**.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockComponent/test.spec.ts&initialpath=%3Fspec%3DMockComponent)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockComponent/test.spec.ts"
 describe('MockComponent', () => {

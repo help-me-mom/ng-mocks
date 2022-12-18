@@ -120,8 +120,8 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoute/test.spec.ts"
 import { Location } from '@angular/common';
