@@ -123,8 +123,8 @@ TestBed.configureTestingModule({
 An advanced example of **mocking pipes** in Angular tests.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockPipe/test.spec.ts&initialpath=%3Fspec%3DMockPipe)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockPipe/test.spec.ts"
 // A fake transform function.

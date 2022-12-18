@@ -9,8 +9,8 @@ please pay attention to comments in the code, they explain purposes and intentio
 
 Also, you can play with the test in sandboxes:
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/main/test.spec.ts&initialpath=%3Fspec%3Dmain)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/main/test.spec.ts"
 @Pipe({

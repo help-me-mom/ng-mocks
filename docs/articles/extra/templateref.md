@@ -91,8 +91,8 @@ expect(footer.nativeElement.innerHTML)
 
 That is it. Now we have a test which verifies templates for `xd-card`.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestTemplateRefById/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefById)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestTemplateRefById/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefById)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestTemplateRefById/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefById)
 
 ### Templates by directive
 
@@ -151,8 +151,8 @@ expect(container.nativeElement.innerHTML)
 
 Done. Now we have a test which verifies that `xd-card` gets the desired templates.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestTemplateRefByDirective/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefByDirective)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestTemplateRefByDirective/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefByDirective)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestTemplateRefByDirective/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefByDirective)
 
 ### TemplateRef in properties
 

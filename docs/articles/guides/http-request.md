@@ -44,8 +44,8 @@ expect(actual).toEqual([false, true, false]);
 
 ## Live example
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestHttpRequest/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestHttpRequest/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestHttpRequest/test.spec.ts&initialpath=%3Fspec%3DTestHttpRequest)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestHttpRequest/test.spec.ts"
 import { HttpClient, HttpClientModule } from '@angular/common/http';

@@ -53,8 +53,8 @@ and has a rich toolkit that supports:
 A code sample demonstrating ease of creating mocks in Angular tests with help of `MockBuilder`.
 Please, pay attention to comments in the code.
 
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockBuilder/test.simple.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Asimple)
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockBuilder/test.simple.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Asimple)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockBuilder/test.simple.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Asimple)
 
 ```ts
 describe('MockBuilder:simple', () => {
