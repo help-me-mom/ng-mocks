@@ -44,6 +44,7 @@ const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): 
         helperMockService.mock(instance, 'transform', `${funcGetName(instance)}.transform`);
       }
     },
+    transform,
   });
 
   return mock;

@@ -192,7 +192,7 @@ const configureTestingModule =
     // 0b10 - mock exist
     // 0b01 - real exist
     let hasMocks = 0;
-    const mockBuilder: Array<[any, boolean]> = [];
+    const mockBuilder: Array<[any, any, boolean]> = [];
     for (const key of useMockBuilder ? ['imports', 'declarations'] : []) {
       for (const declaration of flatten(moduleDef[key as never]) as any[]) {
         if (!declaration) {
@@ -205,10 +205,11 @@ const configureTestingModule =
                 providers: declaration.providers,
               }
             : getSourceOfMock(declaration),
+          isNgModuleDefWithProviders(declaration) ? declaration.ngModule : declaration,
           isMockNgDef(funcGetType(declaration)),
         ]);
         if (key === 'imports') {
-          hasMocks |= mockBuilder[mockBuilder.length - 1][1] ? 0b10 : 0b01;
+          hasMocks |= mockBuilder[mockBuilder.length - 1][2] ? 0b10 : 0b01;
         }
       }
     }
@@ -216,8 +217,10 @@ const configureTestingModule =
     let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
     if (!finalModuleDef) {
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
-      for (const [def, isMock] of mockBuilder) {
-        builder = isMock ? builder.mock(def) : builder.keep(def);
+      for (const [source, def, isMock] of mockBuilder) {
+        const transform = def.prototype.__ngMocksConfig?.transform;
+        builder =
+          isMock && transform ? builder.mock(source, transform) : isMock ? builder.mock(source) : builder.keep(source);
       }
       finalModuleDef = builder.build();
       finalModuleDef = {
