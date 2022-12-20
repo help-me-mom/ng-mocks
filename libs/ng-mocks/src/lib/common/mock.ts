@@ -1,4 +1,4 @@
-import { EventEmitter, Injector, Optional, Self } from '@angular/core';
+import { EventEmitter, Injector, Optional, PipeTransform, Self } from '@angular/core';
 
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
@@ -116,6 +116,7 @@ export type ngMocksMockConfig = {
   outputs?: string[];
   queryScanKeys?: string[];
   setControlValueAccessor?: boolean;
+  transform?: PipeTransform['transform'];
 };
 
 const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void => {
