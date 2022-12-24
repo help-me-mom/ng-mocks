@@ -208,9 +208,7 @@ const configureTestingModule =
           isNgModuleDefWithProviders(declaration) ? declaration.ngModule : declaration,
           isMockNgDef(funcGetType(declaration)),
         ]);
-        if (key === 'imports') {
-          hasMocks |= mockBuilder[mockBuilder.length - 1][2] ? 0b10 : 0b01;
-        }
+        hasMocks |= mockBuilder[mockBuilder.length - 1][2] ? 0b10 : 0b01;
       }
     }
     // We should do magic only then both mock and real exist.
