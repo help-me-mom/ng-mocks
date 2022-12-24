@@ -1,3 +1,11 @@
+## [14.5.1](https://github.com/ike18t/ng-mocks/compare/v14.5.0...v14.5.1) (2022-12-24)
+
+
+### Bug Fixes
+
+* **core:** correctly defines TestBed with multiple declarations with the same selector [#4564](https://github.com/ike18t/ng-mocks/issues/4564) ([1e01f82](https://github.com/ike18t/ng-mocks/commit/1e01f82714a6275b863f0f67046944d879250d16))
+* **core:** respecting transform in mock pipes [#4564](https://github.com/ike18t/ng-mocks/issues/4564) ([df51240](https://github.com/ike18t/ng-mocks/commit/df51240f588eaed8bacae9d1863acc51bd439425))
+
 # [14.5.0](https://github.com/ike18t/ng-mocks/compare/v14.4.0...v14.5.0) (2022-12-11)
 
 
