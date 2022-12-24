@@ -1,12 +1,12 @@
 ---
 title: ngMocks.render
-description: Documentation about ngMocks.render from ng-mocks library
+description: Documentation about `ngMocks.render` from ng-mocks library
 ---
 
 `ngMocks.render` goes through **all queries**, such as `ContentChild` and `ContentChildren`,
 tries to find related `TemplateRef` or a **structural directive**, and render it with a given context.
 
-In order to hide them, use [`ngMocks.hide`](./hide.md).
+In order to hide them, use [`ngMocks.hide`](hide.md).
 
 ```ts
 ngMocks.render(declarationInst, templateRef);
@@ -44,8 +44,8 @@ To render a `TemplateRef` / `ng-template` we need to have 2 things:
 - a variable which points to a component / directive with the query
 - a variable which points to the template
 
-The first task can be solved by [`ngMocks.find`](./find.md) or [`ngMocks.findInstance`](./findInstance.md),
-the second task can be solved by [`ngMocks.findTemplateRef`](./findTemplateRef.md).
+The first task can be solved by [`ngMocks.find`](find.md) or [`ngMocks.findInstance`](findInstance.md),
+the second task can be solved by [`ngMocks.findTemplateRef`](findTemplateRef.md).
 
 Let's assume, that we have the next template:
 

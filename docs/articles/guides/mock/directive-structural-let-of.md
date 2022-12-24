@@ -20,8 +20,8 @@ and the string `'actionsCellTemplate'` will be assigned to the `dxTemplateOf` in
 ## Static context
 
 The simplest way is to provide a fake `$implicit` context of `DxTemplateDirective`.
-That can be done with help of the [`render`](../../api/MockBuilder.md#render-flag) flag,
-which is a part of [`MockBuilder`](../../api/MockBuilder.md).
+That can be done with help of the [`render`](/api/MockBuilder.md#render-flag) flag,
+which is a part of [`MockBuilder`](/api/MockBuilder.md).
 
 ```ts
 beforeEach(() =>
@@ -54,8 +54,8 @@ expect(instance.dxTemplateOf).toEqual('actionsCellTemplate');
 If static context isn't an option, then instead of rendering the structural directive with other elements,
 it can be rendered later on in the middle of testing.
 
-To do that we need to use [`ngMocks.render`](../../api/ngMocks/render.md#render-structural-directives) to render the directive,
-and [`ngMocks.hide`](../../api/ngMocks/hide.md#structural-directive) to hide the directive.
+To do that we need to use [`ngMocks.render`](/api/ngMocks/render.md#render-structural-directives) to render the directive,
+and [`ngMocks.hide`](/api/ngMocks/hide.md#structural-directive) to hide the directive.
 
 ```ts
 // We need to find the instance of the directive.

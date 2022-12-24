@@ -50,12 +50,12 @@ Therefore, to test it we need to:
 - assert templates
 
 :::note
-Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](../../api/ngMocks/render.md).
+Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](/api/ngMocks/render.md).
 :::
 
 ## Spec file
 
-The best way to mock everything except our component is to use [`MockBuilder`](../../api/MockBuilder.md).
+The best way to mock everything except our component is to use [`MockBuilder`](/api/MockBuilder.md).
 Let's assume that the component is called `TargetComponent` and the module it belongs to is called `TargetModule`.
 
 Then our `beforeEach` should look like that:
@@ -81,9 +81,9 @@ There are 5 inputs we bind on `ng-select` based on the template of the component
 
 Therefore, to write a test, we need to use:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
-- [`ngMocks.input`](../../api/ngMocks/input.md): to get an input's value
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
+- [`ngMocks.input`](/api/ngMocks/input.md): to get an input's value
 
 ```ts
 it('binds inputs', () => {
@@ -116,9 +116,9 @@ Following Angular naming convention, the name of output for `[(ngModel)]` is `ng
 
 Therefore, to convert it with a test, we need to use:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
-- [`ngMocks.output`](../../api/ngMocks/output.md): to get an output's `EventEmitter`
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
+- [`ngMocks.output`](/api/ngMocks/output.md): to get an output's `EventEmitter`
 
 ```ts
 it('binds outputs', () => {
@@ -146,10 +146,10 @@ and to render it with a proper context.
 
 To write a test, we need to use:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
-- [`ngMocks.findTemplateRef`](../../api/ngMocks/findTemplateRef.md): to find the template which belongs to `ng-label-tmp`
-- [`ngMocks.render`](../../api/ngMocks/render.md): to render the template
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element which belongs to `NgSelectComponent`
+- [`ngMocks.findTemplateRef`](/api/ngMocks/findTemplateRef.md): to find the template which belongs to `ng-label-tmp`
+- [`ngMocks.render`](/api/ngMocks/render.md): to render the template
 
 ```ts
 it('provides correct template for ng-label-tmp', () => {

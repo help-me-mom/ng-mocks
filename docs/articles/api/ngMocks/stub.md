@@ -1,6 +1,6 @@
 ---
 title: ngMocks.stub
-description: Documentation about ngMocks.stub from ng-mocks library
+description: Documentation about `ngMocks.stub` from ng-mocks library
 ---
 
 `ngMocks.stub` is needed in case if we want to create stub methods / properties of a service.

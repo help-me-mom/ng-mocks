@@ -1,6 +1,6 @@
 ---
 title: ngMocks.touch
-description: Documentation about ngMocks.touch from ng-mocks library
+description: Documentation about `ngMocks.touch` from ng-mocks library
 ---
 
 `ngMocks.touch` helps to **simulate external touches of a form control**.
@@ -29,7 +29,7 @@ ngMocks.touch(valueAccessorEl);
 expect(component.myControl.touched).toEqual(true);
 ```
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ```ts
 ngMocks.touch(['data-testid', 'inputControl']);

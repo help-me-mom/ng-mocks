@@ -8,7 +8,7 @@ The process of testing declarations of a lazy loaded module is the same
 as testing declarations of regular modules. However, we might need declarations from the parent module
 which loads the lazy loaded module.
 
-For such a case, [`MockBuilder`](../api/MockBuilder.md) supports an array of modules as the second parameter.
+For such a case, [`MockBuilder`](/api/MockBuilder.md) supports an array of modules as the second parameter.
 There we can provide the lazy loaded module and its parent module.
 
 ```ts

@@ -3,7 +3,7 @@ title: ngMocks.revealAll
 description: Documentation about ngMocks.revealAll from ng-mocks library
 ---
 
-Behavior of `ngMocks.revealAll` repeats [`ngMocks.reveal`](./reveal.md),
+Behavior of `ngMocks.revealAll` repeats [`ngMocks.reveal`](reveal.md),
 but, instead of returning the first suitable element,
 `ngMocks.revealAll` will collect all suitable elements and return all of them.
 

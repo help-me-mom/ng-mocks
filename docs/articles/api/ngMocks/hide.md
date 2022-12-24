@@ -1,9 +1,9 @@
 ---
 title: ngMocks.hide
-description: Documentation about ngMocks.hide from ng-mocks library
+description: Documentation about `ngMocks.hide` from ng-mocks library
 ---
 
-`ngMocks.hide` hides what [`ngMocks.render`](./render.md) has rendered. 
+`ngMocks.hide` hides what [`ngMocks.render`](render.md) has rendered. 
 
 ```ts
 ngMocks.hide(declarationInst);

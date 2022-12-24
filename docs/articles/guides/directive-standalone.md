@@ -9,7 +9,7 @@ Here you can find how to test a standalone directive.
 A standalone directive has the same feature set as a regular directive.
 The only possible dependencies for a standalone directive are root services and tokens. 
 In a unit test, developers prefer to mock such dependencies.
-[`MockBuilder`](../api/MockBuilder.md#shallow-flag) helps to configure `TestBed` in such the way.
+[`MockBuilder`](/api/MockBuilder.md#shallow-flag) helps to configure `TestBed` in such the way.
 
 Let's image we have the next standalone directive:
 
@@ -39,8 +39,8 @@ beforeEach(() => {
 });
 ```
 
-Under the hood it marks `StandaloneDirective` as [kept](../api/MockBuilder.md#keep)
-and sets [shallow](../api/MockBuilder.md#shallow-flag) and [export](../api/MockBuilder.md#export-flag) flags:
+Under the hood it marks `StandaloneDirective` as [kept](/api/MockBuilder.md#keep)
+and sets [shallow](/api/MockBuilder.md#shallow-flag) and [export](/api/MockBuilder.md#export-flag) flags:
 
 ```ts
 beforeEach(() => {
@@ -54,7 +54,7 @@ beforeEach(() => {
 Now all dependencies of `StandaloneDirective` are mocks,
 and the properties, methods, injections of the directive are available for testing.
 
-If you need to keep a dependency, simply call [`.keep`](../api/MockBuilder.md#keep) with it.
+If you need to keep a dependency, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
 For example, if we wanted to keep `RootService` then the code would look like:
 
 ```ts

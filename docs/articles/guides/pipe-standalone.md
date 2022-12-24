@@ -6,7 +6,7 @@ sidebar_label: Standalone Pipe
 
 A standalone pipe doesn't have many differences comparing to a regular pipe.
 It cannot import any dependencies, it can only inject root providers.
-In order to mock root providers, [`MockBuilder`](../api/MockBuilder.md#shallow-flag) can be used.
+In order to mock root providers, [`MockBuilder`](/api/MockBuilder.md#shallow-flag) can be used.
 
 Let's image we have the next standalone pipe:
 
@@ -37,7 +37,7 @@ beforeEach(() => {
 Now all root dependencies of `StandalonePipe` are mocks,
 and the properties, methods, injections of the pipe are available for testing.
 
-If you need to keep a dependency, simply call [`.keep`](../api/MockBuilder.md#keep) with it.
+If you need to keep a dependency, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
 For example, if we wanted to keep `RootService` then the code would look like:
 
 ```ts

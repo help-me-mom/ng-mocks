@@ -34,7 +34,7 @@ The class of a mock component has:
 
 :::tip
 Information about mocking FormControl, ControlValueAccessor, Validator and AsyncValidator
-is in [a different section](../extra/mock-form-controls.md).
+is in [a different section](/extra/mock-form-controls.md).
 :::
 
 ## Simple example
@@ -117,7 +117,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-[`MockBuilder`](./MockBuilder.md) also supports standalone components
+[`MockBuilder`](MockBuilder.md) also supports standalone components
 and allows to mock their imports only for shallow rendering.
 
 ## Advanced example

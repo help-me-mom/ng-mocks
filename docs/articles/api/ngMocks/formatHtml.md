@@ -51,7 +51,7 @@ becomes
 
 ## ng-container
 
-A cool thing is that `ngMocks.formatHtml` uses [`ngMocks.crawl`](./crawl.md) under the hood
+A cool thing is that `ngMocks.formatHtml` uses [`ngMocks.crawl`](crawl.md) under the hood
 and respects `ng-container`.
 
 so if we have a pointer to `ng-container`, we can assert its content.

@@ -62,9 +62,9 @@ and its template is the next:
 </ng-template>
 ```
 
-In this case, we can use [`MockBuilder`](../api/MockBuilder.md),
+In this case, we can use [`MockBuilder`](/api/MockBuilder.md),
 Let's pass `TargetComponent` as the first parameter, and its module
-as the second one into [`MockBuilder`](../api/MockBuilder.md).
+as the second one into [`MockBuilder`](/api/MockBuilder.md).
 Then `DependencyComponent` and `DependencyDirective` will be replaced
 with their mocks, therefore we can use fake emits and provide custom behavior if it is needed.
 
@@ -78,7 +78,7 @@ beforeEach(() => MockBuilder(
 ```
 
 In the test, we can access the mock declarations via normal queries
-or via [`ngMocks.findInstance`](../api/ngMocks/findInstance.md).
+or via [`ngMocks.findInstance`](/api/ngMocks/findInstance.md).
 
 For example, if we wanted to simulate an emit of the child component,
 we could call it like that:

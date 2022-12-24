@@ -1,6 +1,6 @@
 ---
 title: ngMocks.crawl
-description: Documentation about ngMocks.crawl from ng-mocks library
+description: Documentation about `ngMocks.crawl` from ng-mocks library
 ---
 
 `ngMocks.crawl` is a special function which goes through the passed `DebugNode` or `DebugElement`,
@@ -26,7 +26,7 @@ a different amount of text nodes for the same template.
 ngMocks.crawl(debugElement, callback, textNodes);
 ```
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ```ts
 ngMocks.crawl('div.root', callback, textNodes);

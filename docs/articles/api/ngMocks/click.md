@@ -1,6 +1,6 @@
 ---
 title: ngMocks.click
-description: Documentation about ngMocks.click, a simple tool to click any element in unit tests
+description: Documentation about `ngMocks.click`, a simple tool to click any element in unit tests
 ---
 
 There are several ways how to click an element in Angular unit tests.
@@ -27,7 +27,7 @@ ngMocks.click(el.nativeElement, {
 });
 ```
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ```ts
 ngMocks.click('a');
@@ -42,5 +42,5 @@ ngMocks.click(['data-role']);
 ngMocks.click(['data-role', 'link']);
 ```
 
-Under the hood `ngMocks.click` uses [`ngMocks.trigger`](./trigger.md),
-therefore all features of [`ngMocks.trigger`](./trigger.md) can be used.
+Under the hood `ngMocks.click` uses [`ngMocks.trigger`](trigger.md),
+therefore all features of [`ngMocks.trigger`](trigger.md) can be used.

@@ -164,4 +164,4 @@ wouldn't be confused by the new structure.
 
 So my recommendation is: always follow the structure above,
 and read the rest of documentation as a reference of `ng-mocks` features.
-Also, feel free ping our community if [you need help with `ng-mocks`](../need-help.md).
+Also, feel free ping our community if [you need help with `ng-mocks`](/need-help.md).

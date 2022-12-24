@@ -231,7 +231,7 @@ describe('Test', () => {
 :::warning Please note
 The most common error developers meet, when they create mock services, is "**TypeError: Cannot read property 'subscribe' of undefined**".
 
-If we are encountering it too, please read a section called [How to fix TypeError: Cannot read property 'subscribe' of undefined](../troubleshooting/read-property-of-undefined.md).
+If we are encountering it too, please read a section called [How to fix TypeError: Cannot read property 'subscribe' of undefined](/troubleshooting/read-property-of-undefined.md).
 :::
 
 ## Advanced example

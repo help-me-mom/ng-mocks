@@ -9,7 +9,7 @@ If the element is not specified, then the current fixture is used.
 - `ngMocks.findInstance( fixture?, directive, notFoundValue? )`
 - `ngMocks.findInstance( debugElement?, directive, notFoundValue? )`
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 - `ngMocks.findInstance( cssSelector?, directive, notFoundValue? )`
 

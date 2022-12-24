@@ -118,7 +118,7 @@ usage of `MockRender` after usage of `TestBed.get`, `TestBed.inject`, `TestBed.c
 triggers an error about dirty `TestBed`.
 
 However, it is still possible to use `MockRender` more than once in a test.
-It requires a reset of `TestBed` (check [`ngMocks.flushTestBed`](./ngMocks/flushTestBed.md)).
+It requires a reset of `TestBed` (check [`ngMocks.flushTestBed`](ngMocks/flushTestBed.md)).
 Please note, that this makes all existing service instances obsolete.
 
 ```ts

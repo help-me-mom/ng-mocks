@@ -265,9 +265,9 @@ beforeEach(() => {
 ```
 
 In case of `RouterTestingModule`,
-we need to use [`.keep`](#keep) for both of the modules and [`NG_MOCKS_ROOT_PROVIDERS`](#ngmocksrootproviders-token),
+we need to use [`.keep`](#keep) for both of the modules and [`NG_MOCKS_ROOT_PROVIDERS`](#ng_mocks_root_providers-token),
 and to pass an empty array into `.withRoutes`.
-[`NG_MOCKS_ROOT_PROVIDERS`](#ngmocksrootproviders-token) is needed,
+[`NG_MOCKS_ROOT_PROVIDERS`](#ng_mocks_root_providers-token) is needed,
 because `RouterModule` has many root dependencies which should be also kept. 
 
 ```ts
@@ -296,7 +296,7 @@ beforeEach(() => {
 ## Config
 
 You can customize default behavior of mock things.
-Also, it can be done globally via [`ngMocks.defaultConfig()`](./ngMocks/defaultConfig.md) to avoid repetitions.
+Also, it can be done globally via [`ngMocks.defaultConfig()`](ngMocks/defaultConfig.md) to avoid repetitions.
 
 ### `precise` flag
 
@@ -524,7 +524,7 @@ All other root providers will be replaced with their mocks, even for kept declar
 
 ## Factory function
 
-You might be using other [testing frameworks for angular](../extra/with-3rd-party),
+You might be using other [testing frameworks for angular](/extra/with-3rd-party.md),
 such as [`@ngneat/spectator`](https://www.npmjs.com/package/@ngneat/spectator)
 or [`@testing-library/angular`](https://www.npmjs.com/package/@testing-library/angular).
 

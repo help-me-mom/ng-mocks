@@ -4,9 +4,9 @@ description: Information how to use ng-mocks in order to interact with mock form
 sidebar_label: Mock form controls
 ---
 
-`ng-mocks` respects `ControlValueAccessor` interface if [a directive](../api/MockDirective.md),
-or [a component](../api/MockComponent.md) implements it.
-Apart from that, `ng-mocks` provides helper functions to emit [changes](../api/ngMocks/change.md) and [touches](../api/ngMocks/touch.md).
+`ng-mocks` respects `ControlValueAccessor` interface if [a directive](/api/MockDirective.md),
+or [a component](/api/MockComponent.md) implements it.
+Apart from that, `ng-mocks` provides helper functions to emit [changes](/api/ngMocks/change.md) and [touches](/api/ngMocks/touch.md).
 
 it supports both `FormsModule` and `ReactiveFormsModule`:
 
@@ -30,11 +30,11 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 
 ## Related tools
 
-- [`ngMocks.change()`](../api/ngMocks/change.md)
-- [`ngMocks.touch()`](../api/ngMocks/touch.md)
+- [`ngMocks.change()`](/api/ngMocks/change.md)
+- [`ngMocks.touch()`](/api/ngMocks/touch.md)
 
-* [`isMockControlValueAccessor()`](../api/helpers/isMockControlValueAccessor.md)
-* [`isMockValidator()`](../api/helpers/isMockValidator.md)
+* [`isMockControlValueAccessor()`](/api/helpers/isMockControlValueAccessor.md)
+* [`isMockValidator()`](/api/helpers/isMockValidator.md)
 
 ## Caution
 

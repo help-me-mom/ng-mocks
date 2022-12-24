@@ -5,9 +5,9 @@ sidebar_label: Mock observables
 ---
 
 **A mock observable in Angular tests** can be created by
-[`MockProvider`](../api/MockProvider.md),
-[`MockInstance`](../api/MockInstance.md) or
-[`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md).
+[`MockProvider`](/api/MockProvider.md),
+[`MockInstance`](/api/MockInstance.md) or
+[`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md).
 
 ## The problem
 
@@ -46,7 +46,7 @@ returns a spy, if [auto spy](auto-spy.md) has been configured, or `undefined`. T
 ## The solution
 
 Obviously, to solve this, we need to get the method to return an observable stream.
-For that, we could extend the mock object via passing overrides as the second parameter into [`MockProvider`](../api/MockProvider.md).
+For that, we could extend the mock object via passing overrides as the second parameter into [`MockProvider`](/api/MockProvider.md).
 
 ```ts
 TestBed.configureTestingModule({
@@ -63,7 +63,7 @@ Profit, now initialization of the component does not throw the error anymore.
 
 ## Permanent fix
 
-If we want to do it for all tests globally, we might use [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md).
+If we want to do it for all tests globally, we might use [`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md).
 
 ```ts
 ngMocks.defaultMock(TodoService, () => ({
@@ -78,7 +78,7 @@ Then, every time tests need a mock object of `TodoService`, its `list$()` will r
 Nevertheless, usually, we want not only to return a stub result as `EMPTY` observable stream,
 but also to provide a fake subject, that would simulate its calls.
 
-A possible solution is to use [`MockInstance`](../api/MockInstance.md) within the `it` context:
+A possible solution is to use [`MockInstance`](/api/MockInstance.md) within the `it` context:
 
 ```ts
 beforeEach(() => {
@@ -106,7 +106,7 @@ it('test', () => {
 });
 ```
 
-A solution for [`MockBuilder`](../api/MockBuilder.md) is quite similar.
+A solution for [`MockBuilder`](/api/MockBuilder.md) is quite similar.
 
 ```ts
 let todoServiceList$: Subject<any>; // <- a context variable.
@@ -128,7 +128,7 @@ it('test', () => {
 });
 ```
 
-This all might be implemented with [`MockInstance`](../api/MockInstance.md) too,
+This all might be implemented with [`MockInstance`](/api/MockInstance.md) too,
 but it goes beyond the topic.
 
 ## Advanced example

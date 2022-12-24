@@ -28,7 +28,7 @@ class TargetComponent {
 ```
 
 In our test as a mock `ActivatedRoute`, we would like to provide `paramValue` as `paramId`.
-To do so, we can use [`MockInstance`](../../api/MockInstance.md).
+To do so, we can use [`MockInstance`](/api/MockInstance.md).
 
 The first step is to call a spy when someone wants to access `snapshot`: 
 
