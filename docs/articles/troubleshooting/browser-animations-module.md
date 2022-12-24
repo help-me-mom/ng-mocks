@@ -6,7 +6,7 @@ sidebar_label: BrowserAnimationsModule
 
 By default, Angular recommends replacing `BrowserAnimationsModule` with `NoopAnimationsModule` in unit tests.
 
-In order to do so globally, you can use [`ngMocks.globalReplace`](../api/ngMocks/globalReplace.md):
+In order to do so globally, you can use [`ngMocks.globalReplace`](/api/ngMocks/globalReplace.md):
 
 ```ts title="src/test.ts"
 ngMocks.globalReplace(BrowserAnimationsModule, NoopAnimationsModule);
@@ -16,7 +16,7 @@ Now, every time `ng-mocks` sees `BrowserAnimationsModule`, it will substitute it
 
 ## MockBuilder
 
-Please check how [`MockBuilder`](../api/MockBuilder.md) behaves in this case: 
+Please check how [`MockBuilder`](/api/MockBuilder.md) behaves in this case: 
 
 ```ts
 // BrowserAnimationsModule is replaced by NoopAnimationsModule.
@@ -34,7 +34,7 @@ MockBuilder(MyComponent, MyModule).exclude(BrowserAnimationsModule);
 
 ## ngMocks.guts
 
-Please check how [`ngMocks.guts`](../api/ngMocks/guts.md) behaves in this case:
+Please check how [`ngMocks.guts`](/api/ngMocks/guts.md) behaves in this case:
 
 ```ts
 // BrowserAnimationsModule is replaced by NoopAnimationsModule.
@@ -53,5 +53,5 @@ ngMocks.guts(MyComponent, MyModule, BrowserAnimationsModule);
 ## fakeAsync
 
 A kept / mock `BrowserAnimationsModule` causes issues with `fakeAsync`.
-Please open an issue on [github](https://github.com/help-me-mom/ng-mocks/issues),
+Please open an issue on [GitHub](https://github.com/help-me-mom/ng-mocks/issues),
 if you have a case where `NoopAnimationsModule` isn't a solution.

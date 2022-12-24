@@ -1,6 +1,6 @@
 ---
 title: ngMocks.trigger
-description: Documentation about ngMocks.trigger, a tool with a simple interface to trigger any events in unit tests
+description: Documentation about `ngMocks.trigger`, a tool with a simple interface to trigger any events in unit tests
 ---
 
 `ngMocks.trigger` provides a simple interface which allows to trigger all the variety of events and to customize their properties.
@@ -19,7 +19,7 @@ ngMocks.trigger(el, 'mouseleave', {
 });
 ```
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ```ts
 ngMocks.trigger('input[name="address"]', 'focus');
@@ -40,7 +40,7 @@ ngMocks.trigger(el, 'keyup.meta.s');
 ## Custom events
 
 Instead of the name of an event, an event object can be passed.
-In order to create an event object [`ngMocks.event`](./event.md) can be used.
+In order to create an event object [`ngMocks.event`](event.md) can be used.
 
 ```ts
 const el = ngMocks.find('input');

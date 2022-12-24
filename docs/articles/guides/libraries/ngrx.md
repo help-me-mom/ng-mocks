@@ -14,7 +14,7 @@ Under the hood, `NGRX` uses four modules, and these modules should be configured
 * `EffectsFeatureModule` for `EffectsModule.forFeature`
 
 Let's imagine that we want to keep `ngrx` in a test.
-In this case, we should pass the modules into [`.keep`](../../api/MockBuilder.md#keep):
+In this case, we should pass the modules into [`.keep`](/api/MockBuilder.md#keep):
 
 ```ts
 beforeEach(() =>
@@ -68,7 +68,7 @@ beforeEach(() =>
 );
 ```
 
-It might be needed to use [`MockRenderFactory`](../../api/MockRender.md#factory),
+It might be needed to use [`MockRenderFactory`](/api/MockRender.md#factory),
 if you need to get a `Store` instance before rendering:
 
 ```ts

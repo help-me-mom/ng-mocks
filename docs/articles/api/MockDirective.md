@@ -34,7 +34,7 @@ A mock directive has:
 
 :::tip
 Information about mocking FormControl, ControlValueAccessor, Validator and AsyncValidator
-is in [a different section](../extra/mock-form-controls.md).
+is in [a different section](/extra/mock-form-controls.md).
 :::
 
 ## Simple example
@@ -118,7 +118,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-[`MockBuilder`](./MockBuilder.md) recognizes and handles standalone directives.
+[`MockBuilder`](MockBuilder.md) recognizes and handles standalone directives.
 Also, it allows to mock their imports only for shallow testing.
 
 ## Advanced example with attribute directives

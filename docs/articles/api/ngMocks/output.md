@@ -1,6 +1,6 @@
 ---
 title: ngMocks.output
-description: Documentation about ngMocks.output from ng-mocks library
+description: Documentation about `ngMocks.output` from ng-mocks library
 ---
 
 Returns an emitter of an `output` of an element.
@@ -8,7 +8,7 @@ It avoids the issue of knowing the name of a component / directive the output be
 
 - `ngMocks.output( debugElement, output, notFoundValue? )`
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 - `ngMocks.output( cssSelector, output, notFoundValue? )`
 

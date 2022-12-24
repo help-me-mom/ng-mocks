@@ -1,6 +1,6 @@
 ---
 title: ngMocks.get
-description: Documentation about ngMocks.get from ng-mocks library
+description: Documentation about `ngMocks.get` from ng-mocks library
 ---
 
 Returns a component, directive, service or token, which can be attribute or structural directives,
@@ -25,7 +25,7 @@ const service = ngMocks.get(MyServiceType);
 ```
 
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 - `ngMocks.get( cssSelector, Directive, notFoundValue? )`
 ```ts

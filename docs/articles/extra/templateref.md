@@ -8,8 +8,8 @@ sidebar_label: Testing TemplateRef
 
 Please use:
 
-- [ngMocks.render](../api/ngMocks/render.md)
-- [ngMocks.hide](../api/ngMocks/hide.md)
+- [ngMocks.render](/api/ngMocks/render.md)
+- [ngMocks.hide](/api/ngMocks/hide.md)
 
 :::
 
@@ -41,9 +41,9 @@ but when and how they are rendered by the library - we do not want to care.
 
 There are several **test examples** for different UI libraries:
 
-- [ng-select](../guides/libraries/ng-select.md)
-- [Angular Material and `mat-table`](../guides/libraries/angular-material.md)
-- [PrimeNG and `p-calendar`](../guides/libraries/primeng.md)
+- [ng-select](/guides/libraries/ng-select.md)
+- [Angular Material and `mat-table`](/guides/libraries/angular-material.md)
+- [PrimeNG and `p-calendar`](/guides/libraries/primeng.md)
 
 Other libraries / components can be tested in the similar way.
 
@@ -121,7 +121,7 @@ We can find the directive via providing its class,
 but, unfortunately, not its selector.
 
 However, good news is that it will be changed soon.
-Please follow this issue on github: [render by selector](https://github.com/help-me-mom/ng-mocks/issues/292).
+Please follow this issue on GitHub: [render by selector](https://github.com/help-me-mom/ng-mocks/issues/292).
 :::
 
 ```ts

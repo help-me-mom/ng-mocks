@@ -116,7 +116,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-[`MockBuilder`](./MockBuilder.md) also supports and correctly works with standalone pipes.
+[`MockBuilder`](MockBuilder.md) also supports and correctly works with standalone pipes.
 
 ## Advanced example
 

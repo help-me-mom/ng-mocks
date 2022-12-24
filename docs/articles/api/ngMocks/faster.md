@@ -1,6 +1,6 @@
 ---
 title: ngMocks.faster
-description: Documentation about ngMocks.faster from ng-mocks library
+description: Documentation about `ngMocks.faster` from ng-mocks library
 ---
 
 There is a `ngMocks.faster` feature that optimizes setup of similar test modules between tests
@@ -35,7 +35,7 @@ describe('performance:correct', () => {
 If a test creates spies in `beforeEach` then this should be tuned,
 because `ngMocks.faster` will detect this difference and display a notice.
 
-A possible solution is usage of [MockInstance](../MockInstance.md) instead of manual declaration,
+A possible solution is usage of [MockInstance](/api/MockInstance.md) instead of manual declaration,
 or to move creation of spies outside of `beforeEach`.
 
 ## Example of MockInstance
@@ -102,7 +102,7 @@ describe('beforeEach:manual-spy', () => {
 
 ## MockRender
 
-Usage of `ngMocks.faster()` covers [`MockRender`](../MockRender.md) too.
+Usage of `ngMocks.faster()` covers [`MockRender`](/api/MockRender.md) too.
 
 With its help, `MockRender` can be called in either `beforeEach` or `beforeAll`.
 `beforeAll` won't reset its fixture after a test, and the fixture can be used in the next test.

@@ -3,7 +3,7 @@ title: ngMocks.defaultConfig
 description: Documentation about ngMocks.defaultConfig from ng-mocks library
 ---
 
-Sets default config for mocks in [`MockBuilder`](../MockBuilder.md#config).
+Sets default config for mocks in [`MockBuilder`](/api/MockBuilder.md#config).
 
 - `ngMocks.defaultConfig( Component, config )` - sets a default config for a component
 - `ngMocks.defaultConfig( Directive, config )` - sets a default config for a directive

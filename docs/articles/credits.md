@@ -15,23 +15,5 @@ sidebar_label: Credits
 
 - [DmitryEfimenko](https://github.com/DmitryEfimenko)
   provided valuable feedback and ideas how to improve the library
-- [philmayfield](https://github.com/philmayfield)
-  donated to support the development
-- [patelvimal](https://github.com/patelvimal)
-  donated to support the development
-- [qdelettre](https://github.com/qdelettre)
-  donated to support the development
-- [santoshyadavdev](https://github.com/santoshyadavdev)
-  donated to support the development
-- [SerkanSipahi](https://github.com/SerkanSipahi)
-  donated to support the development
-- [mattlewis92](https://github.com/mattlewis92)
-  donated to support the development
-- anonymous x3
-  donated to support the development
-- [LPCmedia](https://github.com/LPCmedia)
-  donated to support the development
-- [GerkinDev](https://github.com/GerkinDev)
-  donated to support the development
 - [Vinay Kaparthi](https://www.linkedin.com/in/vinay-kaparthi/)
   provided valuable feedback about performance of the library and shed light on some bottlenecks.

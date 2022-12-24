@@ -11,11 +11,11 @@ It is useful, when we want to configure spies before their usage.
 It supports: modules, components, directives, pipes, services and tokens.
 
 The mocks should be created by:
-- [`MockBuilder`](../api/MockBuilder.md)
-- [`MockModule`](../api/MockModule.md)
-- [`MockComponent`](../api/MockComponent.md)
-- [`MockDirective`](../api/MockDirective.md)
-- [`MockProvider`](../api/MockProvider.md)
+- [`MockBuilder`](/api/MockBuilder.md)
+- [`MockModule`](/api/MockModule.md)
+- [`MockComponent`](/api/MockComponent.md)
+- [`MockDirective`](/api/MockDirective.md)
+- [`MockProvider`](/api/MockProvider.md)
 
 ## Define customizations
 
@@ -219,8 +219,8 @@ it('test 3', () => {
 
 It is definitely the right time to use it, if a test fails like:
 
-- [TypeError: Cannot read property 'subscribe' of undefined](../troubleshooting/read-property-of-undefined.md)
-- [TypeError: Cannot read property 'pipe' of undefined](../troubleshooting/read-property-of-undefined.md)
+- [TypeError: Cannot read property 'subscribe' of undefined](/troubleshooting/read-property-of-undefined.md)
+- [TypeError: Cannot read property 'pipe' of undefined](/troubleshooting/read-property-of-undefined.md)
 - or any other issue like reading properties or calling methods of undefined
 
 Or we want to customize a mock declaration which is accessed via:
@@ -244,7 +244,7 @@ class RealComponent implements AfterViewInit {
 
 When we test `RealComponent` we would like to have a mock `ChildComponent`,
 and it would mean, if we replaced it with a mock `ChildComponent` then its `update$` would return `undefined`,
-therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](../troubleshooting/read-property-of-undefined.md).
+therefore our test would fail in `ngAfterViewInit` because of [`TypeError: Cannot read property 'subscribe' of undefined`](/troubleshooting/read-property-of-undefined.md).
 
 In our case, we have a component instance created by Angular, and does not look like `TestBed` provides
 a solution here. That is where `ng-mocks` helps again with the `MockInstance` helper function.

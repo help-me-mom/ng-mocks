@@ -114,6 +114,7 @@ module.exports = {
         'troubleshooting/not-a-known-element',
         'troubleshooting/internals-vs-externals',
         'troubleshooting/browser-animations-module',
+        'troubleshooting/multiple-components-match-node-with-tagname',
         'troubleshooting/faq',
       ],
     },

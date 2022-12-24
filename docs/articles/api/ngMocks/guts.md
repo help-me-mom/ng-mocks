@@ -1,6 +1,6 @@
 ---
 title: ngMocks.guts
-description: Documentation about ngMocks.guts from ng-mocks library
+description: Documentation about `ngMocks.guts` from ng-mocks library
 ---
 
 Generates and returns metadata for `TestBed` module.

@@ -10,7 +10,7 @@ If the element is not specified, then the current fixture is used.
 - `ngMocks.findTemplateRefs( debugElement?, id )`
 - `ngMocks.findTemplateRefs( debugElement?, [attribute, value?] )`
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 - `ngMocks.findTemplateRefs( cssSelector?, [attribute, value?] )`
 
@@ -40,4 +40,4 @@ const onlyFooters = ngMocks.findTemplateRefs(['myTpl', 'footer']);
 const empty = ngMocks.findTemplateRefs(['myTpl', 'body']);
 ```
 
-More information can be found in [`ngMocks.findTemplateRef`](./findTemplateRef.md).
+More information can be found in [`ngMocks.findTemplateRef`](findTemplateRef.md).

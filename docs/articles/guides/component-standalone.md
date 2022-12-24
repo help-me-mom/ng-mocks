@@ -1,5 +1,5 @@
 ---
-title: How to test a standalone component in Angular and mock its imports
+title: How to test a standalone component in Angular and mock its `imports`
 description: Covering an Angular standalone component with tests
 sidebar_label: Standalone Component
 ---
@@ -8,7 +8,7 @@ This section describes how to test a standalone component.
 
 Usually, developers want to mock all dependencies.
 For a standalone component, it means all its imports.
-This behavior is possible to achieve with [`MockBuilder`](../api/MockBuilder.md#shallow-flag).
+This behavior is possible to achieve with [`MockBuilder`](/api/MockBuilder.md#shallow-flag).
 
 Let's image we have the next standalone component:
 
@@ -35,8 +35,8 @@ beforeEach(() => {
 });
 ```
 
-Under the hood it marks `StandaloneComponent` as [kept](../api/MockBuilder.md#keep)
-and sets [shallow](../api/MockBuilder.md#shallow-flag) and [export](../api/MockBuilder.md#export-flag) flags:
+Under the hood it marks `StandaloneComponent` as [kept](/api/MockBuilder.md#keep)
+and sets [shallow](/api/MockBuilder.md#shallow-flag) and [export](/api/MockBuilder.md#export-flag) flags:
 
 ```ts
 beforeEach(() => {
@@ -50,7 +50,7 @@ beforeEach(() => {
 That's it. Now all imports of `StandaloneComponent` are mocks,
 and its properties, methods, injections and template are available for testing. 
 
-If you need to keep an import, simply call [`.keep`](../api/MockBuilder.md#keep) with it.
+If you need to keep an import, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
 For example, if we wanted to keep `StandalonePipe` then the code would look like:
 
 ```ts

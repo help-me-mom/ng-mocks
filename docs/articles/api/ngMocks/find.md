@@ -1,6 +1,6 @@
 ---
 title: ngMocks.find
-description: Documentation about ngMocks.find from ng-mocks library
+description: Documentation about `ngMocks.find` from ng-mocks library
 ---
 
 Returns a found DebugElement which belongs to a component with the correctly typed componentInstance,

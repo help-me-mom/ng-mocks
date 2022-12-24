@@ -35,7 +35,7 @@ or to export `DependencyComponent`.
 
 there are 3 solutions to do it:
 
-1. to call [`MockComponent`](../api/MockComponent.md) on it directly in the `TestBed`
+1. to call [`MockComponent`](/api/MockComponent.md) on it directly in the `TestBed`
 
    ```ts
    beforeEach(() => {
@@ -46,7 +46,7 @@ there are 3 solutions to do it:
    });
    ```
 
-2. to use [`ngMocks.guts`](../api/ngMocks/guts.md),
+2. to use [`ngMocks.guts`](/api/ngMocks/guts.md),
    it does the same things as the first solution,
    but provides mocks of all imports and declarations from `MyModule`.
 
@@ -57,7 +57,7 @@ there are 3 solutions to do it:
    });
    ```
 
-3. to use [`MockBuilder`](../api/MockBuilder.md),
+3. to use [`MockBuilder`](/api/MockBuilder.md),
    its behavior differs from the solutions above. It creates a mock `MyModule`,
    that exports all its imports and declarations including a mock `DependencyComponent`.
 
@@ -67,4 +67,4 @@ there are 3 solutions to do it:
    ```
 
 Profit. More detailed information about pros and cons of each approach you can read in
-[motivation and quick start from ng-mocks](../extra/quick-start.md).
+[motivation and quick start from ng-mocks](/extra/quick-start.md).

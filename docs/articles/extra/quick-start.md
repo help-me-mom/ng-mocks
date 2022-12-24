@@ -8,17 +8,17 @@ Angular testing is fun and easy until you have met complex dependencies,
 and setting up the `TestBed` becomes really annoying and time-consuming.
 
 `ng-mocks` helps to bring fun and ease back allowing developers
-**to create [mock child components](../api/MockComponent.md)**
+**to create [mock child components](/api/MockComponent.md)**
 and stub dependencies via a few lines of code with help of
-[`MockService`](../api/MockService.md),
-[`MockComponent`](../api/MockComponent.md),
-[`MockDirective`](../api/MockDirective.md),
-[`MockPipe`](../api/MockPipe.md),
-[`MockProvider`](../api/MockProvider.md),
-[`MockModule`](../api/MockModule.md),
+[`MockService`](/api/MockService.md),
+[`MockComponent`](/api/MockComponent.md),
+[`MockDirective`](/api/MockDirective.md),
+[`MockPipe`](/api/MockPipe.md),
+[`MockProvider`](/api/MockProvider.md),
+[`MockModule`](/api/MockModule.md),
 or with pro tools such as
-[`MockBuilder`](../api/MockBuilder.md) with
-[`MockRender`](../api/MockRender.md).
+[`MockBuilder`](/api/MockBuilder.md) with
+[`MockRender`](/api/MockRender.md).
 
 Let's suppose that in our Angular application you have a component, called `AppBaseComponent`,
 and its template looks like that:
@@ -49,7 +49,7 @@ This means that the component depends on the next child components, services and
 
 You could easily test it with `schemas: [NO_ERRORS_SCHEMA]`
 to avoid
-[`Template parse errors: <component> is not a known element`](../troubleshooting/not-a-known-element.md),
+[`Template parse errors: <component> is not a known element`](/troubleshooting/not-a-known-element.md),
 and it would work, but in this case you have zero guarantee, that our tests will fail
 if an interface of a dependency has been changed and requires
 code updates. Therefore, you have to avoid `NO_ERRORS_SCHEMA`.
@@ -114,10 +114,10 @@ TestBed.configureTestingModule({
 
 If you have noticed `search$ | async` in the template, you made the right assumption:
 you need to provide a fake observable stream to avoid failures
-like [`Cannot read property 'pipe' of undefined`](../troubleshooting/read-property-of-undefined.md),
+like [`Cannot read property 'pipe' of undefined`](/troubleshooting/read-property-of-undefined.md),
 when the component tries to execute `this.search$ = this.searchService.result$.pipe(...)` in `ngOnInit`.
 
-For example, you can implement it via [`MockInstance`](../api/MockInstance.md):
+For example, you can implement it via [`MockInstance`](/api/MockInstance.md):
 
 ```ts
 beforeEach(() =>
@@ -128,7 +128,7 @@ beforeEach(() =>
 ```
 
 or if you want to set that as default mock behavior for all tests,
-you can use [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md) in `src/test.ts`:
+you can use [`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md) in `src/test.ts`:
 
 ```ts title="src/test.ts"
 ngMocks.defaultMock(SearchService, () => ({
@@ -153,7 +153,7 @@ Then, if someone deletes `AppSearchModule` the test fails too.
 
 ## ngMocks.guts 
 
-[`ngMocks.guts`](../api/ngMocks/guts.md) works like that: it accepts 3 parameters, each one is optional.
+[`ngMocks.guts`](/api/ngMocks/guts.md) works like that: it accepts 3 parameters, each one is optional.
 
 - 1st parameter accepts things we want to test as they are, these won't be mocked.
 - 2nd parameter accepts dependencies of the things. These dependencies will be mocked. In the case of modules,
@@ -162,7 +162,7 @@ Then, if someone deletes `AppSearchModule` the test fails too.
 
 Any parameter can be `null` to neglect it, or an array if we want to pass more than one thing.
 
-Now, let's apply [`ngMocks.guts`](../api/ngMocks/guts.md) to `AppBaseComponent` and its `AppBaseModule`
+Now, let's apply [`ngMocks.guts`](/api/ngMocks/guts.md) to `AppBaseComponent` and its `AppBaseModule`
 from the beginning of this article.
 
 The goal is to mock guts of `AppBaseModule`, but to keep `AppBaseComponent` as it is for testing,
@@ -181,10 +181,10 @@ const testModuleDeclaration = ngMocks.guts(
 );
 ```
 
-[`ngMocks.guts`](../api/ngMocks/guts.md) detects that `AppBaseModule` is a module and extracts its guts
+[`ngMocks.guts`](/api/ngMocks/guts.md) detects that `AppBaseModule` is a module and extracts its guts
 respecting the 1st and the 3rd parameters, what should be mocked and excluded.
 
-The result of [`ngMocks.guts`](../api/ngMocks/guts.md) is the same as: 
+The result of [`ngMocks.guts`](/api/ngMocks/guts.md) is the same as: 
 
 ```ts
 const testModuleDeclaration = {
@@ -261,7 +261,7 @@ Profit. That should be enough for the start.
 
 The functions above help with an easy start, but they do not cover all
 possible cases and do not provide tools for customizing behavior.
-Consider reading [`MockBuilder`](../api/MockBuilder.md) and [`MockRender`](../api/MockRender.md)
+Consider reading [`MockBuilder`](/api/MockBuilder.md) and [`MockRender`](/api/MockRender.md)
 if you want **to create mocks for child dependencies like a pro**
 in Angular tests.
 
@@ -284,4 +284,4 @@ beforeEach(() => {
 
 Profit.
 
-Have a question still? Do not hesitate to [contact us](../need-help.md).
+Have a question still? Do not hesitate to [contact us](/need-help.md).

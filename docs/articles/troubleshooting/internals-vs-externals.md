@@ -61,7 +61,7 @@ but the code is starting to smell, because `ExternalModule` has been already imp
 `InternalDirective` belongs to,
 and an additional import of `MockModule(ExternalModule)` feels wrong.
 
-Seems like, if [`MockModule`](../api/MockModule.md) exported its imports and declarations, it would solve the issue.
+Seems like, if [`MockModule`](/api/MockModule.md) exported its imports and declarations, it would solve the issue.
 
 Yes... it was like that in versions before 9,
 but then another issue appeared, and it belongs to externals (exports).
@@ -91,20 +91,20 @@ Additionally, to the issue of `InternalDirective`, which has not been exported, 
 
 Because `MockModule(InternalModule)` exports `MockComponent(MyComponent)`, there are two declarations of `MyComponent`
 defined in the testing module now.
-Eventually, it will lead us to the error about [declarations of 2 modules](./declarations-of-2-modules.md).
+Eventually, it will lead us to the error about [declarations of 2 modules](declarations-of-2-modules.md).
 
 It means, that in tests for `MyComponent` where we want to mock dependencies, we cannot use `InternalModule` at all.
 
 ## Solution
 
-If you have read [quick start](../extra/quick-start.md), you know it.
-It can be achieved by [`MockBuilder`](../api/MockBuilder.md) or [`ngMocks.guts`](../api/ngMocks/guts.md).
+If you have read [quick start](/extra/quick-start.md), you know it.
+It can be achieved by [`MockBuilder`](/api/MockBuilder.md) or [`ngMocks.guts`](/api/ngMocks/guts.md).
 
 Both of them solve the issue, but in different ways.
 
 ### MockBuilder
 
-[`MockBuilder(InternalDirective, InternalModule)`](../api/MockBuilder.md) builds a new definition for `InternalModule`,
+[`MockBuilder(InternalDirective, InternalModule)`](/api/MockBuilder.md) builds a new definition for `InternalModule`,
 where `InternalDirective` has been exported, so `InternalDirective` has access to all its dependencies as before,
 and we have access to `InternalDirective` in the test:
 
@@ -131,12 +131,12 @@ TestBed.configureTestingModule({
 });
 ```
 
-With [`MockBuilder`](../api/MockBuilder.md), we can change export behavior when we need it,
-it can be achieved with [export](../api/MockBuilder.md#export-flag) and [exportAll](../api/MockBuilder.md#exportall-flag) flags.  
+With [`MockBuilder`](/api/MockBuilder.md), we can change export behavior when we need it,
+it can be achieved with [export](/api/MockBuilder.md#export-flag) and [exportAll](/api/MockBuilder.md#exportall-flag) flags.  
 
 ### ngMocks.guts
 
-[`ngMocks.guts(InternalDirective, InternalModule)`](../api/ngMocks/guts.md) simply mocks guts of `InternalModule`,
+[`ngMocks.guts(InternalDirective, InternalModule)`](/api/ngMocks/guts.md) simply mocks guts of `InternalModule`,
 so the definition of a testing module looks like: 
 
 ```ts

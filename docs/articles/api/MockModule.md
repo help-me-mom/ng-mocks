@@ -26,7 +26,7 @@ A mock module provides:
 - respect of tokens with a `useExisting` definition
 - empty objects instead of tokens with a `helperUseFactory` definition
 - base primitives instead of tokens with a `useValue` definition
-- mocks of tokens with a `useValue` definition can read in the section called [How to fix `Type is part of the declarations of 2 modules`](../troubleshooting/declarations-of-2-modules.md).
+- mocks of tokens with a `useValue` definition can read in the section called [How to fix `Type is part of the declarations of 2 modules`](/troubleshooting/declarations-of-2-modules.md).
 
 :::danger
 Do not use `MockModule` on modules which declare the tested declaration. 

@@ -27,12 +27,12 @@ To test it, we need to:
 - assert templates
 
 :::note
-Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](../../api/ngMocks/render.md).
+Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](/api/ngMocks/render.md).
 :::
 
 ## Spec file
 
-With [`MockBuilder`](../../api/MockBuilder.md), our spec file needs a single line to provide mocks:
+With [`MockBuilder`](/api/MockBuilder.md), our spec file needs a single line to provide mocks:
 
 ```ts
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
@@ -45,9 +45,9 @@ and `TargetModule` is its module.
 
 The tools from `ng-mocks` we need:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element which belongs to `p-calendar`
-- [`ngMocks.input`](../../api/ngMocks/input.md): to get an input's value
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element which belongs to `p-calendar`
+- [`ngMocks.input`](/api/ngMocks/input.md): to get an input's value
 
 ```ts
 it('binds inputs', () => {
@@ -68,9 +68,9 @@ it('binds inputs', () => {
 
 The tools from `ng-mocks` we need:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element which belongs to `p-calendar`
-- [`ngMocks.output`](../../api/ngMocks/output.md): to get an output's `EventEmitter`
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element which belongs to `p-calendar`
+- [`ngMocks.output`](/api/ngMocks/output.md): to get an output's `EventEmitter`
 
 ```ts
 it('binds outputs', () => {
@@ -98,10 +98,10 @@ render it, and assert the rendered html.
 
 The tools from `ng-mocks` we need:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.find`](../../api/ngMocks/find.md): to find a debug element of `p-calendar`
-- [`ngMocks.findTemplateRef`](../../api/ngMocks/findTemplateRef.md): to find a template which belongs `pTemplate`
-- [`ngMocks.render`](../../api/ngMocks/render.md): to render the template
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.find`](/api/ngMocks/find.md): to find a debug element of `p-calendar`
+- [`ngMocks.findTemplateRef`](/api/ngMocks/findTemplateRef.md): to find a template which belongs `pTemplate`
+- [`ngMocks.render`](/api/ngMocks/render.md): to render the template
 
 ```ts
 it('provides correct template for pTemplate="header"', () => {

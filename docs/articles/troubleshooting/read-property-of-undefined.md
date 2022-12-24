@@ -6,10 +6,10 @@ sidebar_label: Read property of undefined
 
 This issue means that something has been replaced with a mock object and returns a dummy result (`undefined`) instead of observable streams.
 
-There is an answer for this error in the section called [How to mock observables](../extra/mock-observables.md),
+There is an answer for this error in the section called [How to mock observables](/extra/mock-observables.md),
 if the error has been triggered by a mock service, and its property is of type of `undefined`.
 
-Or you might check [`MockInstance`](../api/MockInstance.md) or [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md)
+Or you might check [`MockInstance`](/api/MockInstance.md) or [`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md)
 in the case if the error has been caused by a mock component or a mock directive.
 
 ## Angular Material UI
@@ -26,8 +26,8 @@ and customize its mock to return `Observable` instead of `undefined`.
 ### Skip mocking of root providers
 
 To skip mocking of root providers simply
-add [`.keep(NG_MOCKS_ROOT_PROVIDERS)`](../api/MockBuilder.md#ngmocksrootproviders-token)
-to your [`MockBuilder`](../api/MockBuilder.md) definition:
+add [`.keep(NG_MOCKS_ROOT_PROVIDERS)`](/api/MockBuilder.md#ng_mocks_root_providers-token)
+to your [`MockBuilder`](/api/MockBuilder.md) definition:
 
 ```ts
 import { MockBuilder, NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
@@ -42,7 +42,7 @@ describe('suite', () => {
 
 ### To customize a mock
 
-To customize a mock, you can use `EMPTY` and [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md):
+To customize a mock, you can use `EMPTY` and [`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md):
 
 ```ts title="src/test.ts"
 import { EMPTY } from 'rxjs';

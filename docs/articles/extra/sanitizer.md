@@ -17,8 +17,8 @@ Because of that `ng-mocks` avoids its mocking by default.
 Another problem is that the class is abstract and there is no way to detect their abstract methods in javascript runtime
 in order to provide mock functions or spies instead.
 
-However, `ng-mocks` contains [`MockRender`](../api/MockRender.md) which supports additional providers for rendered things.
-Therefore, if we use [`MockRender`](../api/MockRender.md) and [`MockProvider`](../api/MockProvider.md), we can achieve desired environment and behavior:
+However, `ng-mocks` contains [`MockRender`](/api/MockRender.md) which supports additional providers for rendered things.
+Therefore, if we use [`MockRender`](/api/MockRender.md) and [`MockProvider`](/api/MockProvider.md), we can achieve desired environment and behavior:
 
 ```ts
 // rendering TargetComponent component
@@ -40,7 +40,7 @@ Profit.
 ## Always mock / spy DomSanitizer
 
 If you want to spy `DomSanitizer` globally,
-you can use [`ngMocks.globalMock`](../api/ngMocks/globalMock.md) and [`ngMocks.defaultMock`](../api/ngMocks/defaultMock.md).
+you can use [`ngMocks.globalMock`](/api/ngMocks/globalMock.md) and [`ngMocks.defaultMock`](/api/ngMocks/defaultMock.md).
 
 In this case, `ng-mocks` understands that `DomSanitizer` should be mocked by default.
 

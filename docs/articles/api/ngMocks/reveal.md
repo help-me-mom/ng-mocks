@@ -1,18 +1,18 @@
 ---
 title: ngMocks.reveal
-description: Documentation about ngMocks.reveal from ng-mocks library
+description: Documentation about `ngMocks.reveal` from ng-mocks library
 ---
 
 There are `ng-container` and `ng-template` besides normal html elements in Angular.
 
-But, the problem is that [`ngMocks.find`](./find.md) and [`ngMocks.findAll`](./findAll.md), which use `debugElement.query` and `debugElement.queryAll`,
+But, the problem is that [`ngMocks.find`](find.md) and [`ngMocks.findAll`](findAll.md), which use `debugElement.query` and `debugElement.queryAll`,
 can find neither `ng-container` nor `ng-template`.
 
 However, a wish to assert on the content of a `ng-container` never leaves the head.
 Likewise, a wish to get a `ng-template` and to render it with a custom context, just because it is a test.
 
 **Here we go!** `ngMocks.reveal` has been made for that.
-It is like [`ngMocks.find`](./find.md) and [`ngMocks.findAll`](./findAll.md),
+It is like [`ngMocks.find`](find.md) and [`ngMocks.findAll`](findAll.md),
 but its **queries are based on Angular declarations** instead of css and html.
 
 Now, if we had a template like that:
@@ -60,7 +60,7 @@ ngMocks.reveal('never-possible');
 ## Narrowing context
 
 `ngMocks.reveal` supports `ComponentFixture`, `DebugElements`, `DebugNodes`
-and selectors which are supported by [`ngMocks.find`](./find.md).
+and selectors which are supported by [`ngMocks.find`](find.md).
 If none has been provided, then the latest known fixture is used.
 
 In a template like:
@@ -184,7 +184,7 @@ const footer = ngMocks.reveal(['tpl', 'footer']);
 
 ## Query by id
 
-Also we can query by ids. Simply prefix the desired id with `#`.
+Also, we can query by ids. Simply prefix the desired id with `#`.
 
 In a template like:
 

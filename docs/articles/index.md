@@ -47,11 +47,11 @@ Also, there is a brief summary with **the latest changes** in [CHANGELOG](https:
 
 ## Quick Navigation
 
-- [How to read this manual](./tl-dr.md)
-- [Making tests faster](./api/ngMocks/faster.md)
-- [Autospy everything](./extra/auto-spy.md)
-- [Testing inputs, outputs and lifecycle hooks](./api/MockRender.md)
-- [Mocking methods in components before their initialization](./api/MockInstance.md)
+- [How to read this manual](tl-dr.md)
+- [Making tests faster](api/ngMocks/faster.md)
+- [Auto-spy everything](extra/auto-spy.md)
+- [Testing inputs, outputs and lifecycle hooks](api/MockRender.md)
+- [Mocking methods in components before their initialization](api/MockInstance.md)
 
 ## Very short introduction
 
@@ -201,4 +201,4 @@ If you like `ng-mocks`, please support it:
 
 Thank you!
 
-P.S. Feel free to [contact us](./need-help.md) if you need help.
+P.S. Feel free to [contact us](need-help.md) if you need help.

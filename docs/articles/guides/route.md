@@ -14,7 +14,7 @@ However, to test that, we need to configure `TestBed` a bit differently:
 - it is fine to mock all components and declarations
 - `RouterModule` should be kept the as it is, so it can do its job
 - `RouterTestingModule` should be added with empty routes
-- [`NG_MOCKS_ROOT_PROVIDERS`](../api/MockBuilder.md#ngmocksrootproviders-token) should be kept, 
+- [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept, 
   because `RouterModule` depends on many root services which cannot be mocked.
 
 This guarantees that the application's routes will be used,

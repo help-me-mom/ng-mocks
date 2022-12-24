@@ -9,7 +9,7 @@ If you are here in order to mock **a service** or **a token**,
 please read [corresponding section about MockProvider](MockProvider.md).
 
 If you want to change default mock behavior,
-please read [how to customize mocks](../extra/customize-mocks.md).
+please read [how to customize mocks](/extra/customize-mocks.md).
 :::
 
 If you **need a mock object of a class** which does not belong to Angular declarations, for instance `HTMLInputElement`,

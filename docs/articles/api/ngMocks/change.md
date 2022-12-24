@@ -1,6 +1,6 @@
 ---
 title: ngMocks.change
-description: Documentation about ngMocks.change from ng-mocks library
+description: Documentation about `ngMocks.change` from ng-mocks library
 ---
 
 `ngMocks.change` helps to **simulate external changes of a form control**.
@@ -29,7 +29,7 @@ ngMocks.change(el, 123);
 expect(component.value).toEqual(123);
 ```
 
-or simply with selectors which are supported by [`ngMocks.find`](./find.md).
+or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ```ts
 ngMocks.change('input', 123);

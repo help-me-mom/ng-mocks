@@ -35,12 +35,12 @@ A test of such a template requires to:
 - assert the rest of templates
 
 :::note
-Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](../../api/ngMocks/render.md).
+Information about testing `ng-template` and its `TemplateRef` is taken from the [ngMocks.render](/api/ngMocks/render.md).
 :::
 
 ## Spec file
 
-With [`MockBuilder`](../../api/MockBuilder.md), our spec file needs a single line to provide mocks:
+With [`MockBuilder`](/api/MockBuilder.md), our spec file needs a single line to provide mocks:
 
 ```ts
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
@@ -55,9 +55,9 @@ In this test we need to verify that `mat-table` data from out component's instan
 
 The tools from `ng-mocks` we need:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.reveal`](../../api/ngMocks/reveal.md): to find a debug element of `MatTable`
-- [`ngMocks.input`](../../api/ngMocks/input.md): to get an input's value
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.reveal`](/api/ngMocks/reveal.md): to find a debug element of `MatTable`
+- [`ngMocks.input`](/api/ngMocks/input.md): to get an input's value
 
 ```ts
 it('binds inputs', () => {
@@ -83,10 +83,10 @@ render them, and assert the rendered html.
 
 The tools from `ng-mocks` we need:
 
-- [`MockRender`](../../api/MockRender.md): to render `TargetComponent` and get its instance
-- [`ngMocks.reveal`](../../api/ngMocks/reveal.md): to find debug elements of `mat-table` and `ng-container`
-- [`ngMocks.formatHtml`](../../api/ngMocks/formatHtml.md): to get html of a `ng-container`
-- [`ngMocks.render`](../../api/ngMocks/render.md): to render the templates
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.reveal`](/api/ngMocks/reveal.md): to find debug elements of `mat-table` and `ng-container`
+- [`ngMocks.formatHtml`](/api/ngMocks/formatHtml.md): to get html of a `ng-container`
+- [`ngMocks.render`](/api/ngMocks/render.md): to render the templates
 
 ```ts
 it('provides correct template for matColumnDef="position"', () => {
@@ -127,7 +127,7 @@ it is `MatHeaderRowDef`.
 
 The tools from `ng-mocks` we need:
 
-- [`ngMocks.findInstance`](../../api/ngMocks/findInstance.md): to find the instance of `MatHeaderRowDef`
+- [`ngMocks.findInstance`](/api/ngMocks/findInstance.md): to find the instance of `MatHeaderRowDef`
 
 ```ts
 it('provides correct template for mat-header-row', () => {
