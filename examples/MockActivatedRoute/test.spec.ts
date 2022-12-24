@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
@@ -7,11 +7,10 @@ import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
   selector: 'target',
   template: '{{ param }}',
 })
-class TargetComponent {
+class TargetComponent implements OnInit {
   public param: string | null = null;
 
   public constructor(private route: ActivatedRoute) {}
-
   ngOnInit() {
     this.param = this.route.snapshot.paramMap.get('paramId');
   }

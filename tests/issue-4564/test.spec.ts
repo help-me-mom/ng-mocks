@@ -87,26 +87,57 @@ class SubjectUnderTestComponent {}
 describe('issue-4564', () => {
   ngMocks.throwOnConsole();
 
-  beforeEach(() =>
-    TestBed.configureTestingModule({
-      imports: [ComponentModule, MockModule(PipeModule)],
-      declarations: [
-        SubjectUnderTestComponent,
-        MockPipe(TargetPipe, () => 'mock'),
-        MockPipe(StandardPipe),
-      ],
-      providers: [
-        MockProvider(TOKEN, 'mock'),
-        MockProvider(TargetService, {
-          func: () => 'mock',
-        }),
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents(),
-  );
+  describe('issue', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule({
+        imports: [ComponentModule, MockModule(PipeModule)],
+        declarations: [
+          SubjectUnderTestComponent,
+          MockPipe(TargetPipe, () => 'mock'),
+          MockPipe(StandardPipe),
+        ],
+        providers: [
+          MockProvider(TOKEN, 'mock'),
+          MockProvider(TargetService, {
+            func: () => 'mock',
+          }),
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents(),
+    );
 
-  it('customizes pipe', () => {
-    const fixture = MockRender(SubjectUnderTestComponent);
-    expect(ngMocks.formatText(fixture)).toEqual('mock:mock:mock');
+    it('customizes pipes', () => {
+      const fixture = MockRender(SubjectUnderTestComponent);
+      expect(ngMocks.formatText(fixture)).toEqual('mock:mock:mock');
+    });
+  });
+
+  describe('only mock imports', () => {
+    beforeEach(() =>
+      TestBed.configureTestingModule({
+        imports: [
+          MockModule(ComponentModule),
+          MockModule(PipeModule),
+        ],
+        declarations: [
+          TargetComponent,
+          SubjectUnderTestComponent,
+          MockPipe(TargetPipe, () => 'mock'),
+          MockPipe(StandardPipe),
+        ],
+        providers: [
+          MockProvider(TOKEN, 'mock'),
+          MockProvider(TargetService, {
+            func: () => 'mock',
+          }),
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents(),
+    );
+
+    it('customizes pipes', () => {
+      const fixture = MockRender(SubjectUnderTestComponent);
+      expect(ngMocks.formatText(fixture)).toEqual('mock:mock:mock');
+    });
   });
 });
