@@ -70,6 +70,8 @@ export default (
     if (!config.dependency && config.export && !configInstance?.exported && (isNgDef(def, 'i') || !isNgDef(def))) {
       handleDef(meta, def, defProviders);
       markProviders([def]);
+    } else if (!config.dependency && isNgDef(def, 'm') && defProviders.has(def)) {
+      handleDef(meta, def, defProviders);
     } else if (!config.dependency && config.export && !configInstance?.exported) {
       handleDef(meta, def, defProviders);
     } else if (!ngMocksUniverse.touches.has(def) && !config.dependency) {
