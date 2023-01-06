@@ -1,3 +1,10 @@
+## [14.5.2](https://github.com/ike18t/ng-mocks/compare/v14.5.1...v14.5.2) (2023-01-06)
+
+
+### Bug Fixes
+
+* **MockBuilder:** imports modules with providers on root level [#4613](https://github.com/ike18t/ng-mocks/issues/4613) ([3ed8ae4](https://github.com/ike18t/ng-mocks/commit/3ed8ae4d46bb5f56228175951331b2efb579a6cb))
+
 ## [14.5.1](https://github.com/ike18t/ng-mocks/compare/v14.5.0...v14.5.1) (2022-12-24)
 
 
