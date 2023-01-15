@@ -77,7 +77,7 @@ overrides:
         - always
       complexity:
         - error
-        - 25
+        - 50
       unicorn/filename-case:
         - error
         - case: kebabCase

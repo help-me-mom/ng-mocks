@@ -67,7 +67,14 @@ export default (
     const configInstance = ngMocksUniverse.configInstance.get(def);
     const config = configDef.get(def);
 
-    if (!config.dependency && config.export && !configInstance?.exported && (isNgDef(def, 'i') || !isNgDef(def))) {
+    if (isNgDef(def, 'm') && config.onRoot) {
+      handleDef(meta, def, defProviders);
+    } else if (
+      !config.dependency &&
+      config.export &&
+      !configInstance?.exported &&
+      (isNgDef(def, 'i') || !isNgDef(def))
+    ) {
       handleDef(meta, def, defProviders);
       markProviders([def]);
     } else if (!config.dependency && isNgDef(def, 'm') && defProviders.has(def)) {

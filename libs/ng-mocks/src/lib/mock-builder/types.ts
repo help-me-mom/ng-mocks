@@ -30,6 +30,11 @@ export interface IMockBuilderConfigAll {
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#shallow-flag
    */
   shallow?: boolean;
+
+  /**
+   * @see https://ng-mocks.sudo.eu/api/MockBuilder#onroot-flag
+   */
+  onRoot?: boolean;
 }
 
 /**
