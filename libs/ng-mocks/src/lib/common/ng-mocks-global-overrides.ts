@@ -215,11 +215,22 @@ const configureTestingModule =
     let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
     if (!finalModuleDef) {
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
+
       for (const [source, def, isMock] of mockBuilder) {
         const transform = def.prototype.__ngMocksConfig?.transform;
+        const options = {
+          export: !isNgDef(source, 'm'),
+          exportAll: false,
+          onRoot: true,
+        };
         builder =
-          isMock && transform ? builder.mock(source, transform) : isMock ? builder.mock(source) : builder.keep(source);
+          isMock && transform
+            ? builder.mock(source, transform, options)
+            : isMock
+            ? builder.mock(source, options)
+            : builder.keep(source, options);
       }
+
       finalModuleDef = builder.build();
       finalModuleDef = {
         ...moduleDef,

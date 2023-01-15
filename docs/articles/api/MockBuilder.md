@@ -466,6 +466,12 @@ beforeEach(() => {
 });
 ```
 
+### `onRoot` flag
+
+This is an internal flag and should not be used explicitly.
+It indicates whether a module or declaration should be directly defined in `TestBedModule`,
+even if it has been imported or declared in nested modules.
+
 ## Tokens
 
 ### `NG_MOCKS_GUARDS` token
