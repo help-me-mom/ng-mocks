@@ -181,7 +181,7 @@ jobs:
           command: WITH_COVERAGE=1 npm run test
       - run:
           name: Release
-          command: npx semantic-release --dry-run
+          command: npx semantic-release -h
       - store_test_results:
           path: ./test-reports
       - store_artifacts:
