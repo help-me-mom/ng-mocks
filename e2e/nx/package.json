@@ -45,6 +45,6 @@
     "jest-preset-angular": "12.2.3",
     "ng-packagr": "15.1.1",
     "ts-jest": "28.0.8",
-    "typescript": "4.8.4"
+    "typescript": "4.9.4"
   }
 }
