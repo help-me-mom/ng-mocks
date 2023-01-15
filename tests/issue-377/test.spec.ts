@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+} from 'ng-mocks';
 
 @Component({
   selector: 'app-form',
@@ -14,7 +18,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 })
 class FormComponent {
   public form = this.fb.group({
-    name: [],
+    name: null,
   });
 
   public constructor(private readonly fb: FormBuilder) {}
@@ -36,7 +40,9 @@ describe('issue-377:classic', () => {
 
 describe('issue-377:mock', () => {
   beforeEach(() =>
-    MockBuilder(FormComponent).keep(ReactiveFormsModule),
+    MockBuilder(FormComponent)
+      .keep(ReactiveFormsModule)
+      .keep(NG_MOCKS_ROOT_PROVIDERS),
   );
 
   it('sets TestBed correctly', () => {
