@@ -1,3 +1,10 @@
+## [14.5.3](https://github.com/ike18t/ng-mocks/compare/v14.5.2...v14.5.3) (2023-01-15)
+
+
+### Bug Fixes
+
+* **MockBuilder:** precise exports via TestBed.configureTestingModule [#4641](https://github.com/ike18t/ng-mocks/issues/4641) ([66a8ecc](https://github.com/ike18t/ng-mocks/commit/66a8ecc403c1f1705e151eeb680b2b6552799e16))
+
 ## [14.5.2](https://github.com/ike18t/ng-mocks/compare/v14.5.1...v14.5.2) (2023-01-06)
 
 
