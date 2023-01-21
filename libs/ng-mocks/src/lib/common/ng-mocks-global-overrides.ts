@@ -275,6 +275,48 @@ const resetTestingModule =
     return original.call(instance);
   };
 
+// Monkey-patching ViewContainerRef.createComponent to replace dynamic imports with mocked declarations.
+const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
+  if (!(ViewContainerRef as any).ngMocksOverridesPatched) {
+    coreDefineProperty(ViewContainerRef, 'ngMocksOverridesPatched', true);
+
+    // istanbul ignore else
+    if (vcrInstance.createComponent) {
+      const createComponent = vcrInstance.createComponent;
+      const patchedCreateComponent = helperCreateClone(
+        createComponent,
+        undefined,
+        undefined,
+        function (component: any, ...createComponentArgs: any[]) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const thisVrc: ViewContainerRef = this;
+          const map = coreInjector(NG_MOCKS, thisVrc.injector);
+
+          return createComponent.apply(thisVrc, [map?.get(component) ?? component, ...createComponentArgs] as any);
+        },
+      );
+
+      coreDefineProperty(vcrInstance.constructor.prototype, 'createComponent', patchedCreateComponent, true);
+      coreDefineProperty(vcrInstance, 'createComponent', patchedCreateComponent, true);
+    }
+  }
+};
+
+const createComponent =
+  (original: TestBedStatic['createComponent'], instance: TestBedStatic): TestBedStatic['createComponent'] =>
+  component => {
+    const fixture = original.call(instance, component);
+    try {
+      const vcr = fixture.debugElement.injector.get(ViewContainerRef);
+      patchVcrInstance(vcr);
+    } catch {
+      // nothing to do
+    }
+
+    return fixture as never;
+  };
+
 const viewContainerInstall = () => {
   const vcr: any = ViewContainerRef;
 
@@ -289,32 +331,14 @@ const viewContainerInstall = () => {
         '__NG_ELEMENT_ID__',
         helperCreateClone(ngElementId, undefined, undefined, (...ngElementIdArgs: any[]) => {
           const vcrInstance = ngElementId.apply(ngElementId, ngElementIdArgs);
-
-          const createComponent = vcrInstance.createComponent;
-          coreDefineProperty(
-            vcrInstance,
-            'createComponent',
-            helperCreateClone(
-              createComponent,
-              undefined,
-              undefined,
-              (component: any, ...createComponentArgs: any[]) => {
-                const map = coreInjector(NG_MOCKS, vcrInstance.injector);
-
-                return createComponent.apply(vcrInstance, [
-                  map?.get(component) ?? component,
-                  ...createComponentArgs,
-                ] as any);
-              },
-            ),
-            true,
-          );
+          patchVcrInstance(vcrInstance);
 
           return vcrInstance;
         }),
         true,
       );
     }
+    coreDefineProperty(TestBed, 'createComponent', createComponent(TestBed.createComponent as never, TestBed as never));
 
     coreDefineProperty(ViewContainerRef, 'ngMocksOverridesInstalled', true);
   }
