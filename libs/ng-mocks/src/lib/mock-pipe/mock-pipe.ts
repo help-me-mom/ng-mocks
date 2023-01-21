@@ -9,8 +9,8 @@ import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { Mock } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
-import helperMockService from '../mock-service/helper.mock-service';
 import returnCachedMock from '../mock/return-cached-mock';
+import helperMockService from '../mock-service/helper.mock-service';
 
 import { MockedPipe } from './types';
 
