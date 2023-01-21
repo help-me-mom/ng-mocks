@@ -1,3 +1,10 @@
+# [14.6.0](https://github.com/ike18t/ng-mocks/compare/v14.5.3...v14.6.0) (2023-01-21)
+
+
+### Features
+
+* **core:** ViewContainerRef.createComponent respects mocks [#4742](https://github.com/ike18t/ng-mocks/issues/4742) ([bd93b7b](https://github.com/ike18t/ng-mocks/commit/bd93b7b671306aa11e5732d0d72020e177330d52))
+
 ## [14.5.3](https://github.com/ike18t/ng-mocks/compare/v14.5.2...v14.5.3) (2023-01-15)
 
 
