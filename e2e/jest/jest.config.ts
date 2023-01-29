@@ -5,9 +5,7 @@ export default {
     url: 'http://localhost',
   },
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
+  transform: {
+    '\\.tsx?$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
   },
 };
