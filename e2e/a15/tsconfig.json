@@ -31,5 +31,5 @@
     "strictTemplates": true
   },
   "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }

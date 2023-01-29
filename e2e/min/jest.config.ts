@@ -3,9 +3,7 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testURL: 'http://localhost',
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
+  transform: {
+    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
   },
 };

@@ -6,6 +6,6 @@ export default {
   },
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
   transform: {
-    '\\.tsx?$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
   },
 };
