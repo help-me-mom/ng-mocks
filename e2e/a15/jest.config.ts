@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testEnvironmentOptions: {
@@ -6,6 +6,6 @@ module.exports = {
   },
   testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
   transform: {
-    '\\.tsx?$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
   },
 };

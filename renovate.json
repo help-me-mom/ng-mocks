@@ -1267,6 +1267,12 @@
     {
       "additionalBranchPrefix": "e2e/a15/",
       "paths": ["e2e/a15/package.json"],
+      "packageNames": ["ts-node"],
+      "allowedVersions": "/^10\\./"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a15/",
+      "paths": ["e2e/a15/package.json"],
       "packageNames": ["typescript"],
       "allowedVersions": "/^4\\.[78]\\./"
     },
