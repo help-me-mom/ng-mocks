@@ -13,7 +13,11 @@ if [ "$1" = "" ] || [ "$1" = "root" ]; then
 fi
 
 if [ "$1" = "" ] || [ "$1" = "docs" ]; then
-  docker-compose up -- docs
+  docker-compose up -- docs && \
+    cd ./docs && \
+    nvm install && \
+    nvm use && \
+    cd ..
 fi
 
 if [ "$1" = "" ] || [ "$1" = "e2e" ]; then
