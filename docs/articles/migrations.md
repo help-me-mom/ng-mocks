@@ -10,6 +10,21 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
 
+## From 14 to 15
+
+### `test.ts`
+
+If you want to use global configuration and features like [`ngMocks.autoSpy`](./extra/auto-spy.md),
+you need to add `test.ts` back to your project: [How to add ng-mocks to a fresh Angular 15 project](https://stackoverflow.com/questions/75320328/how-to-add-ng-mocks-to-a-fresh-angular-15-project/75323651#75323651)
+
+### `RouterOutlet`
+
+If you have been testing `RouterModule` using `MockRender(RouterOutlet)`, you need to add empty params to `MockRender`:
+
+```ts
+const fixture = MockRender(RouterOutlet, {});
+```
+
 ## From 13 to 14
 
 [`MockBuilder`](api/MockBuilder.md) becomes stricter and starts to throw errors on wrong configuration.
