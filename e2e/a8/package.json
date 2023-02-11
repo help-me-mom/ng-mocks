@@ -52,7 +52,7 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.2",
-    "ng-packagr": "5.7.1",
+    "ng-packagr": "15.1.2",
     "npm": "6.14.18",
     "puppeteer": "5.5.0",
     "ts-jest": "25.5.1",
