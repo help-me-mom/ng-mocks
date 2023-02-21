@@ -32,7 +32,7 @@ describe('BannerComponent', () => {
     
     // some spies    
     userService = TestBed.inject(UserService);
-    userSaveSpy = spyOne(userService, 'save');
+    userSaveSpy = spyOn(userService, 'save');
     
     fixture.detectChanges();
   });
@@ -103,7 +103,7 @@ describe('BannerComponent', () => {
   it('should do something with a service', () => {
     // 2. customizing mocks, configuring inputs, etc
     const userService = TestBed.inject(UserService);
-    const userSaveSpy = spyOne(userService, 'save');
+    const userSaveSpy = spyOn(userService, 'save');
 
     // 3. creating a fixture
     const fixture = TestBed.createComponent(BannerComponent);
