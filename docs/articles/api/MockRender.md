@@ -50,7 +50,7 @@ of the component. That lets it trigger the correct lifecycle hooks.
 An example:
 
 ```ts
-class Comopnent {
+class Component {
   @Input() public i1: number = 1;
   @Input() public i2: number = 2;
 }
