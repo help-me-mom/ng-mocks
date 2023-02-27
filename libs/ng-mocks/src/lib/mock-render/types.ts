@@ -4,7 +4,7 @@ import { DebugElement, DebugNode, NgModule } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 
 /**
- * MockedDebugNode is a way to simply the type of DebugNode.
+ * MockedDebugNode is a way to simplify the type of DebugNode.
  * Usually, it should not be used externally.
  */
 export interface MockedDebugNode<T = any> extends DebugNode {
@@ -12,7 +12,7 @@ export interface MockedDebugNode<T = any> extends DebugNode {
 }
 
 /**
- * MockedDebugElement is a way to simply the type of DebugElement.
+ * MockedDebugElement is a way to simplify the type of DebugElement.
  * Usually, it should not be used externally.
  */
 export interface MockedDebugElement<T = any> extends DebugElement, MockedDebugNode<T> {
