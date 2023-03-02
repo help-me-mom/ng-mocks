@@ -256,7 +256,7 @@
     "karma-sourcemap-loader": "0.4.0",
     "karma-webpack": "5.0.0",
     "lint-staged": "13.1.2",
-    "npm": "9.5.1",
+    "npm": "9.6.0",
     "prettier": "2.8.4",
     "puppeteer": "19.7.2",
     "rxjs": "7.8.0",
