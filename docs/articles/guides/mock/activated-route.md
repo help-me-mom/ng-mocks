@@ -59,6 +59,36 @@ MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get')
 Profit. Now, when someone accesses `snapshot` of `ActivatedRoute`, the spy will be called,
 which returns a stub `paramMap` with the params we wanted.
 
+
+## RouterModule.forRoot
+
+In situation when you want to mock a module which imports `RouterModule.forRoot`.
+
+In this case, only the component under test should be kept:
+
+```ts
+// TargetModule and RouterModule.forRoot will be mocks
+beforeEach(() => MockBuilder(
+  TargetComponent, // keep
+  TargetModule, // mock
+));
+```
+
+## RouterModule.forChild
+
+In situation when you want to mock a module which imports `RouterModule.forChild`,
+you have to add `RouterModule.forRoot` to mocks too.
+
+Otherwise, `ActivatedRoute` and other dependencies won't be available: 
+
+```ts
+// TargetModule, RouterModule.forChild and RouterModule.forRoot will be mocks
+beforeEach(() => MockBuilder(
+  TargetComponent, // keep
+  [TargetModule, RouterModule.forRoot([])], // mock, add here RouterModule.forRoot([])
+));
+```
+
 ## Live example how to mock ActivatedRoute
 
 - [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockActivatedRoute/test.spec.ts&initialpath=%3Fspec%3DMockActivatedRoute)
