@@ -1,3 +1,15 @@
+# [14.7.0](https://github.com/ike18t/ng-mocks/compare/v14.6.0...v14.7.0) (2023-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update nrwl monorepo to v15.8.5 ([f73f25a](https://github.com/ike18t/ng-mocks/commit/f73f25ac097e9892aec2c7c185f2677effc17df0))
+
+
+### Features
+
+* **ngMocks:** keep CommonModule [#5047](https://github.com/ike18t/ng-mocks/issues/5047) ([af1bd9e](https://github.com/ike18t/ng-mocks/commit/af1bd9e8808aa4e2520179a2a7a3abe3e2cd7bfc))
+
 # [14.6.0](https://github.com/ike18t/ng-mocks/compare/v14.5.3...v14.6.0) (2023-01-21)
 
 
