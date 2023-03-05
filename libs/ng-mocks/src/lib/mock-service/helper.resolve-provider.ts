@@ -172,7 +172,7 @@ const isPreconfiguredUseExisting = (provider: any, provide: any): boolean => {
   }
 
   // skipping explicit declarations (not internally processed)
-  if (ngMocksUniverse.getResolution(provide) && !ngMocksUniverse.config.get(provide).__internal) {
+  if (ngMocksUniverse.getResolution(provide) && !ngMocksUniverse.config.get(provide)?.__internal) {
     return false;
   }
 

@@ -27,19 +27,27 @@ Simply add the next code to `src/test.ts` or `src/setup-jest.ts` / `src/test-set
 and comment / uncomment related blocks:
 
 ```ts title="src/test.ts"
-import { MockInstance, ngMocks } from 'ng-mocks';
-
-// In case, if you use @angular/router and Angular 14+.
-// You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
-// A14 fix: making DefaultTitleStrategy to be a default mock for TitleStrategy
-import { DefaultTitleStrategy, TitleStrategy } from "@angular/router";
-import { MockService, ngMocks } from 'ng-mocks';
-ngMocks.defaultMock(TitleStrategy, () => MockService(DefaultTitleStrategy));
+import { MockInstance, ngMocks } from 'ng-mocks'; // eslint-disable-line import/order
 
 // auto spy
 ngMocks.autoSpy('jasmine');
 // in case of jest
 // ngMocks.autoSpy('jest');
+
+// In case, if you use @angular/router and Angular 14+.
+// You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
+// A14 fix: making DefaultTitleStrategy to be a default mock for TitleStrategy
+import { DefaultTitleStrategy, TitleStrategy } from '@angular/router'; // eslint-disable-line import/order
+ngMocks.defaultMock(TitleStrategy, () => MockService(DefaultTitleStrategy));
+
+// Usually, *ngIf and other declarations from CommonModule aren't expected to be mocked.
+// The code below keeps them.
+import { CommonModule } from '@angular/common'; // eslint-disable-line import/order
+import { ApplicationModule } from "@angular/core"; // eslint-disable-line import/order
+import { BrowserModule } from "@angular/platform-browser"; // eslint-disable-line import/order
+ngMocks.globalKeep(ApplicationModule, true);
+ngMocks.globalKeep(CommonModule, true);
+ngMocks.globalKeep(BrowserModule, true);
 
 // auto restore for jasmine and jest <27
 // declare const jasmine: any;
@@ -80,3 +88,10 @@ jasmine.getEnv().addReporter({
 //   },
 // });
 ```
+
+## Restoring `src/test.ts` in Angular 15
+
+If you are using Angular 15+, then you might not find `src/test.ts`.
+However, this file is required to provide global configuration for your tests.
+
+Please use this [answer on stackoverflow to restore `src/test.ts`](https://stackoverflow.com/a/75323651/13112018).

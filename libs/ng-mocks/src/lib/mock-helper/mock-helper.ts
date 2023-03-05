@@ -97,7 +97,7 @@ export const ngMocks: {
    * ngMocks.globalExclude(TranslationModule);
    * ```
    */
-  globalExclude(source: AnyDeclaration<any>): void;
+  globalExclude(source: AnyDeclaration<any>, recursively?: boolean): void;
 
   /**
    * ngMocks.globalKeep configures which declarations, providers and tokens
@@ -109,7 +109,7 @@ export const ngMocks: {
    * ngMocks.globalKeep(TranslationModule);
    * ```
    */
-  globalKeep(source: AnyDeclaration<any>): void;
+  globalKeep(source: AnyDeclaration<any>, recursively?: boolean): void;
 
   /**
    * ngMocks.globalMock configures which declarations, providers and tokens
@@ -121,7 +121,7 @@ export const ngMocks: {
    * ngMocks.globalMock(TranslationModule);
    * ```
    */
-  globalMock(source: AnyDeclaration<any>): void;
+  globalMock(source: AnyDeclaration<any>, recursively?: boolean): void;
 
   /**
    * ngMocks.globalReplace configures which declarations, providers and tokens
@@ -145,7 +145,7 @@ export const ngMocks: {
    * ngMocks.globalWipe(BrowserAnimationsModule);
    * ```
    */
-  globalWipe(source: AnyDeclaration<any>): void;
+  globalWipe(source: AnyDeclaration<any>, recursively?: boolean): void;
 
   /**
    * ngMocks.change triggers ControlValueAccessor update.
