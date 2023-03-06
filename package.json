@@ -233,7 +233,7 @@
     "coveralls": "3.1.1",
     "dts-bundle-generator": "7.2.0",
     "eslint": "8.35.0",
-    "eslint-config-prettier": "8.6.0",
+    "eslint-config-prettier": "8.7.0",
     "eslint-import-resolver-typescript": "3.5.3",
     "eslint-plugin-es-roikoren": "3.0.0",
     "eslint-plugin-import": "2.27.5",
