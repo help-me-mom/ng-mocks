@@ -29,8 +29,8 @@
     "zone.js": "0.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "15.2.1",
-    "@angular/cli": "15.2.1",
+    "@angular-devkit/build-angular": "15.2.2",
+    "@angular/cli": "15.2.2",
     "@angular/compiler-cli": "15.2.1",
     "@angular/language-service": "15.2.1",
     "@nrwl/cli": "15.8.5",
