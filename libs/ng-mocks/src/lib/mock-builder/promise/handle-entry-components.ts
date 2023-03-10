@@ -1,11 +1,4 @@
-import * as module from '@angular/core';
-
-let isIvy = false;
-try {
-  isIvy = module.ɵivyEnabled;
-} catch {
-  // nothing to do
-}
+import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
 
 import coreDefineProperty from '../../common/core.define-property';
 import { extendClass } from '../../common/core.helpers';
@@ -16,20 +9,26 @@ import helperCreateClone from '../../mock-service/helper.create-clone';
 import { NgMeta } from './types';
 
 class EntryComponentsModule {
-  protected originCFR: module.ComponentFactoryResolver['resolveComponentFactory'];
+  public constructor(map: Map<any, any>, componentFactoryResolver?: ComponentFactoryResolver) {
+    // istanbul ignore if
+    if (!componentFactoryResolver) {
+      return;
+    }
 
-  public constructor(map: Map<any, any>, protected componentFactoryResolver: module.ComponentFactoryResolver) {
-    this.originCFR = componentFactoryResolver.resolveComponentFactory;
+    const originCFR = componentFactoryResolver.resolveComponentFactory;
     componentFactoryResolver.resolveComponentFactory = helperCreateClone(
-      this.originCFR,
+      originCFR,
       undefined,
       undefined,
       (component: any, ...args: any[]) =>
-        this.originCFR.apply(componentFactoryResolver, [map.get(component) ?? component, ...args] as any),
+        originCFR.apply(componentFactoryResolver, [map.get(component) ?? component, ...args] as any),
     );
   }
 }
-coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [module.ComponentFactoryResolver]]);
+coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [ComponentFactoryResolver, new Optional()]]);
+
+class IvyModule {}
+NgModule()(IvyModule);
 
 export default (ngModule: NgMeta): void => {
   const entryComponents: any[] = [];
@@ -40,10 +39,11 @@ export default (ngModule: NgMeta): void => {
   }
   // the way to cause entryComponents to do its work
   const entryModule = extendClass(EntryComponentsModule);
-  module.NgModule({
+  NgModule({
     // Ivy knows how to make any component an entry point,
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
-    entryComponents: isIvy ? [] : /* istanbul ignore next */ entryComponents,
+    // ɵmod is added only if Ivy has been enabled.
+    entryComponents: (IvyModule as any).ɵmod ? [] : /* istanbul ignore next */ entryComponents,
   })(entryModule);
   ngModule.imports.push(entryModule);
 };

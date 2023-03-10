@@ -4,7 +4,6 @@ import {
   Injectable,
   NgModule,
 } from '@angular/core';
-import * as core from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -35,7 +34,7 @@ class ModuleWithComponent {}
 describe('double-decorator:without-selector', () => {
   // Because of junit issue we need to return before beforeEach
   // https://github.com/karma-runner/karma-junit-reporter/issues/186
-  if ((core as any).ɵivyEnabled) {
+  if ((ModuleWithComponent as any).ɵmod) {
     it('ivy fails differently', () => {
       // pending('ivy fails differently');
       expect(true).toBeTruthy();

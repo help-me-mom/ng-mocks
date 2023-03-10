@@ -1,36 +1,36 @@
 import { CommonModule } from '@angular/common';
-import * as core from '@angular/core';
+import { Component, NgModule, Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@core.Component({
+@Component({
   selector: 'dynamic-overlay',
   template:
     '<ng-container *ngComponentOutlet="component"></ng-container>',
 })
 export class DynamicOverlayComponent {
-  public component?: core.Type<any>;
+  public component?: Type<any>;
 
-  public attachComponent(component: core.Type<any>) {
+  public attachComponent(component: Type<any>) {
     this.component = component;
   }
 }
 
-@core.NgModule({
+@NgModule({
   declarations: [DynamicOverlayComponent],
   exports: [DynamicOverlayComponent],
   imports: [CommonModule],
 })
 export class OverlayModule {}
 
-@core.Component({
+@Component({
   selector: 'dep-component',
   template: 'Dependency',
 })
 class DepComponent {}
 
-@core.Component({
+@Component({
   selector: 'mock-component',
   template: '<h1 *ngIf="flag"><dep-component></dep-component></h1>',
 })
@@ -38,7 +38,7 @@ class MockComponent {
   public flag = true;
 }
 
-@core.NgModule({
+@NgModule({
   declarations: [MockComponent, DepComponent],
   entryComponents: [MockComponent],
   exports: [MockComponent],
@@ -103,7 +103,7 @@ describe('issue-333', () => {
       expect(isMockOf(instance, MockComponent)).toEqual(true);
     });
 
-    if (!(core as any).ɵivyEnabled) {
+    if (!(MockModule as any).ɵmod) {
       it('fails on unknown', () => {
         const fixture = MockRender(DynamicOverlayComponent);
         fixture.point.componentInstance.attachComponent(DepComponent);
@@ -117,7 +117,7 @@ describe('issue-333', () => {
   describe('3:mock', () => {
     // Because of junit issue we need to return before beforeEach
     // https://github.com/karma-runner/karma-junit-reporter/issues/186
-    if ((core as any).ɵivyEnabled) {
+    if ((MockModule as any).ɵmod) {
       it('ivy fails differently', () => {
         // pending('ivy fails differently');
         expect(true).toBeTruthy();
