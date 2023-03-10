@@ -1,3 +1,10 @@
+## [14.7.1](https://github.com/ike18t/ng-mocks/compare/v14.7.0...v14.7.1) (2023-03-10)
+
+
+### Bug Fixes
+
+* **core:** removing dependency on ɵivyEnabled [#5118](https://github.com/ike18t/ng-mocks/issues/5118) ([ce2af65](https://github.com/ike18t/ng-mocks/commit/ce2af65f7dca853274434e5a06802e2aae53fb10))
+
 # [14.7.0](https://github.com/ike18t/ng-mocks/compare/v14.6.0...v14.7.0) (2023-03-05)
 
 
