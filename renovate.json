@@ -1347,6 +1347,12 @@
     {
       "additionalBranchPrefix": "e2e/a16/",
       "paths": ["e2e/a16/package.json"],
+      "packageNames": ["karma-coverage"],
+      "allowedVersions": "<=2.2"
+    },
+    {
+      "additionalBranchPrefix": "e2e/a16/",
+      "paths": ["e2e/a16/package.json"],
       "packageNames": ["karma-jasmine"],
       "allowedVersions": "<=5.1"
     },
