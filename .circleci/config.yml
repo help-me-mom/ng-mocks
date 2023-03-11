@@ -57,6 +57,10 @@ executors:
     docker:
       - image: satantime/puppeteer-node:16.19.1
     resource_class: medium
+  a16:
+    docker:
+      - image: satantime/puppeteer-node:18.15.0
+    resource_class: medium
 
 commands:
   install:
@@ -593,6 +597,7 @@ workflows:
                 - a13
                 - a14
                 - a15
+                - a16
 
       # testing a5 (exceptional)
       - E2E Test:
@@ -665,6 +670,7 @@ workflows:
             parameters:
               dir:
                 - a15
+                - a16
 
       # testing lib build
       - Lib Build:
@@ -687,6 +693,7 @@ workflows:
                 - a13
                 - a14
                 - a15
+                - a16
 
       # testing lib build
       - Lib Build:
