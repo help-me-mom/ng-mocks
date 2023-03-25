@@ -51,7 +51,6 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
-import { CodeHighlighterModule } from 'primeng/codehighlighter';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -183,7 +182,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     CheckboxModule,
     ChipModule,
     ChipsModule,
-    CodeHighlighterModule,
     ColorPickerModule,
     ConfirmDialogModule,
     ConfirmPopupModule,
