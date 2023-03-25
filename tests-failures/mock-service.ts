@@ -12,8 +12,22 @@ class Service {
   }
 }
 
-MockService(TOKEN);
-MockService(Service);
+const token = MockService(TOKEN);
+const service = MockService(Service);
+
+// token is any, so it can be whatever
+const tokenCheck1: undefined = token;
+// token is any, so it can be  whatever
+const tokenCheck2: Service = token;
+// token is any, so it can be  whatever
+const tokenCheck3: number = token;
+
+// @ts-expect-error: Service is not undefined
+const serviceCheck1: undefined = service;
+// service is Service
+const serviceCheck2: Service = service;
+// @ts-expect-error: Service is not number
+const serviceCheck3: number = service;
 
 // @ts-expect-error: does not accept wrong types.
 MockService(Service, {
