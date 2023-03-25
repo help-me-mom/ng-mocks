@@ -13,4 +13,18 @@ describe('mock-service', () => {
     );
     expect(instance.echo1()).toBeUndefined();
   });
+
+  it('adds prefixes', () => {
+    const instance = MockService(
+      class {
+        private readonly value = 'unnamed';
+
+        public echo1() {
+          return this.value;
+        }
+      },
+      'prefix',
+    );
+    expect(instance.echo1()).toBeUndefined();
+  });
 });

@@ -18,16 +18,17 @@ const handleSection = (section: any[]) => {
   return guards;
 };
 
-const handleArray = (value: any[], callback: any): [boolean, any[]] => {
-  const mock = [];
+const handleArray = (cache: Map<any, any>, value: any[], callback: any): [boolean, any[]] => {
+  const mock: Array<any> = [];
   let updated = false;
+  cache.set(value, mock);
 
   for (const valueItem of value) {
     if (ngMocksUniverse.isExcludedDef(valueItem)) {
       updated = updated || true;
       continue;
     }
-    mock.push(callback(valueItem));
+    mock.push(callback(valueItem, cache));
     updated = updated || mock[mock.length - 1] !== valueItem;
   }
 
@@ -38,16 +39,21 @@ const handleItemKeys = ['canActivate', 'canActivateChild', 'canDeactivate', 'can
 const handleItemGetGuards = (mock: any, section: string) =>
   Array.isArray(mock[section]) ? handleSection(mock[section]) : mock[section];
 
-const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Record<keyof any, any>] => {
+const handleItem = (
+  cache: Map<any, any>,
+  value: Record<keyof any, any>,
+  callback: any,
+): [boolean, Record<keyof any, any>] => {
   let mock: Record<keyof any, any> = {};
   let updated = false;
+  cache.set(value, mock);
 
   for (const key of Object.keys(value)) {
     if (ngMocksUniverse.isExcludedDef(value[key])) {
       updated = updated || true;
       continue;
     }
-    mock[key] = callback(value[key]);
+    mock[key] = callback(value[key], cache);
     updated = updated || mock[key] !== value[key];
   }
 
@@ -63,11 +69,14 @@ const handleItem = (value: Record<keyof any, any>, callback: any): [boolean, Rec
   return [updated, mock];
 };
 
-const replaceWithMocks = (value: any): any => {
+const replaceWithMocks = (value: any, cache: Map<any, any>): any => {
   if (ngMocksUniverse.cacheDeclarations.has(value)) {
     return ngMocksUniverse.cacheDeclarations.get(value);
   }
   if (typeof value !== 'object') {
+    return value;
+  }
+  if (cache.has(value)) {
     return value;
   }
 
@@ -75,9 +84,9 @@ const replaceWithMocks = (value: any): any => {
   let updated = false;
 
   if (Array.isArray(value)) {
-    [updated, mock] = handleArray(value, replaceWithMocks);
+    [updated, mock] = handleArray(cache, value, replaceWithMocks);
   } else if (value) {
-    [updated, mock] = handleItem(value, replaceWithMocks);
+    [updated, mock] = handleItem(cache, value, replaceWithMocks);
   }
 
   if (updated) {
@@ -89,4 +98,12 @@ const replaceWithMocks = (value: any): any => {
   return value;
 };
 
-export default (() => replaceWithMocks)();
+const replaceWithMocksWrapper = (value: any) => {
+  const cache = new Map();
+  const result = replaceWithMocks(value, cache);
+  cache.clear();
+
+  return result;
+};
+
+export default (() => replaceWithMocksWrapper)();
