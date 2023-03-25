@@ -1,3 +1,11 @@
+## [14.7.2](https://github.com/ike18t/ng-mocks/compare/v14.7.1...v14.7.2) (2023-03-25)
+
+
+### Bug Fixes
+
+* **core:** detecting self-references in mocks [#5262](https://github.com/ike18t/ng-mocks/issues/5262) ([c699d57](https://github.com/ike18t/ng-mocks/commit/c699d57fc77fc878986cddf33c18b4ac43539b3f))
+* **core:** support of a16 [#5031](https://github.com/ike18t/ng-mocks/issues/5031) ([98bbc44](https://github.com/ike18t/ng-mocks/commit/98bbc441a3c1c8bb4dccd2348ac83e6468b75535))
+
 ## [14.7.1](https://github.com/ike18t/ng-mocks/compare/v14.7.0...v14.7.1) (2023-03-10)
 
 
