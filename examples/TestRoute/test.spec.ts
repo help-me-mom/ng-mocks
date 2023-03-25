@@ -13,7 +13,7 @@ import {
 
 // A layout component that renders the current route.
 @Component({
-  selector: 'target',
+  selector: 'target-route',
   template: `
     <a routerLink="/1">1</a>
     <a routerLink="/2">2</a>
@@ -24,14 +24,14 @@ class TargetComponent {}
 
 // A simple component for the first route.
 @Component({
-  selector: 'target1',
+  selector: 'target1-test-route',
   template: 'target1',
 })
 class Target1Component {}
 
 // A simple component for the second route.
 @Component({
-  selector: 'target2',
+  selector: 'target2-test-route',
   template: 'target2',
 })
 class Target2Component {}

@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-touch-317',
   template:
     '<input type="text" [formControl]="control" data-label="input">',
 })

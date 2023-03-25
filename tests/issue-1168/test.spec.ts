@@ -27,12 +27,12 @@ class TargetPipe implements PipeTransform {
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-1168',
 })
 class TargetDirective {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-1168',
   template: 'target',
 })
 class TargetComponent {}

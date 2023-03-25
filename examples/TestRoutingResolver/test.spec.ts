@@ -54,7 +54,7 @@ class MockResolver implements Resolve<{ mock: boolean }> {
 // A dummy component.
 // It will be replaced with a mock copy.
 @Component({
-  selector: 'target',
+  selector: 'target-routing-resolver',
   template: 'target',
 })
 class TargetComponent {}

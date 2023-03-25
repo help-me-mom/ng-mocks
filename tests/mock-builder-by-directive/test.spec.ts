@@ -1,3 +1,5 @@
+import { Component, NgModule } from '@angular/core';
+
 import {
   MockBuilder,
   MockComponent,
@@ -5,7 +7,17 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { InternalComponent, TargetModule } from './fixtures';
+@Component({
+  selector: 'internal-mock-builder-by-directive',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
+})
+export class TargetModule {}
 
 describe('MockBuilderByDirective:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-output-317',
   template: 'target',
 })
 class TargetComponent {
@@ -17,12 +17,12 @@ describe('ng-mocks-output:317', () => {
     const spy =
       typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
     MockRender(
-      '<div data-label="div">1</div><target data-target="target" (update)="spy($event)"></target>',
+      '<div data-label="div">1</div><target-ng-mocks-output-317 data-target="target" (update)="spy($event)"></target-ng-mocks-output-317>',
       { spy },
     );
 
     expect(spy).not.toHaveBeenCalled();
-    ngMocks.output('target', 'update').emit();
+    ngMocks.output('target-ng-mocks-output-317', 'update').emit();
     expect(spy).toHaveBeenCalledTimes(1);
 
     ngMocks.output(['data-target'], 'update').emit();

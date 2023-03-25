@@ -9,7 +9,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-instance-member',
   template: '',
 })
 class TargetComponent {

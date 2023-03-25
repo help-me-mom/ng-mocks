@@ -13,7 +13,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-performance',
   template: '{{ service.count }}',
 })
 class TargetComponent {

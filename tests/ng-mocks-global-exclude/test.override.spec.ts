@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target1',
+  selector: 'target1-ng-mocks-global-exclude',
   template: '{{ name }}',
 })
 class Target1Component {
@@ -12,7 +12,7 @@ class Target1Component {
 }
 
 @Component({
-  selector: 'target2',
+  selector: 'target2-ng-mocks-global-exclude',
   template: '{{ name }}',
 })
 class Target2Component {
@@ -43,10 +43,18 @@ describe('ng-mocks-global-exclude:override', () => {
     });
 
     it('cannot find Target1Component', () => {
-      expect(() => MockRender('<target2></target2>')).not.toThrow();
+      expect(() =>
+        MockRender(
+          '<target2-ng-mocks-global-exclude></target2-ng-mocks-global-exclude>',
+        ),
+      ).not.toThrow();
       ngMocks.flushTestBed();
-      expect(() => MockRender('<target1></target1>')).toThrowError(
-        /'target1' is not a known element/,
+      expect(() =>
+        MockRender(
+          '<target1-ng-mocks-global-exclude></target1-ng-mocks-global-exclude>',
+        ),
+      ).toThrowError(
+        /'target1-ng-mocks-global-exclude' is not a known element/,
       );
     });
   });
@@ -61,8 +69,12 @@ describe('ng-mocks-global-exclude:override', () => {
     });
 
     it('cannot find Target2Component too', () => {
-      expect(() => MockRender('<target2></target2>')).toThrowError(
-        /'target2' is not a known element/,
+      expect(() =>
+        MockRender(
+          '<target2-ng-mocks-global-exclude></target2-ng-mocks-global-exclude>',
+        ),
+      ).toThrowError(
+        /'target2-ng-mocks-global-exclude' is not a known element/,
       );
     });
   });

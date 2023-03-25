@@ -20,7 +20,7 @@ class TargetProvider extends TargetDirective {
 
 @Component({
   providers: [TargetProvider],
-  selector: 'target',
+  selector: 'target-double-decorator-1',
   template: '{{ service.name }}',
 })
 class TargetComponent {
@@ -65,7 +65,7 @@ describe('double-decorator:example-1', () => {
       const fixture = MockRender(TargetComponent);
 
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>mock</target>',
+        '<target-double-decorator-1>mock</target-double-decorator-1>',
       );
     });
   });

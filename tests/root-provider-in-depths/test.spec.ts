@@ -29,7 +29,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-root-provider-in-depths',
   template: '{{ service.name }}',
 })
 class TargetComponent {

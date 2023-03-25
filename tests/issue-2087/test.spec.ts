@@ -4,7 +4,7 @@ import { Component, Directive, NgModule } from '@angular/core';
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Directive({
-  selector: 'target',
+  selector: 'target-2087',
 })
 class MockDirective {
   public readonly boolean = false;
@@ -13,7 +13,7 @@ class MockDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-2087',
   template: '',
 })
 class TargetComponent {

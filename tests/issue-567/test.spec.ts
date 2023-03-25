@@ -3,7 +3,7 @@ import { Component, ContentChild, TemplateRef } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-567',
   template: '<ng-content></ng-content>',
 })
 class TargetComponent {

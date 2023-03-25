@@ -21,7 +21,7 @@ describe('ng-mocks-default-mock:guts:no-overrides', () => {
 
     // Renders an empty template.
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<target></target>',
+      '<target-ng-mocks-default-mock></target-ng-mocks-default-mock>',
     );
 
     // Component has a subject.

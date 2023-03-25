@@ -21,7 +21,7 @@ class TargetPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-export-all',
   template: `<ng-container *ngIf="!value">{{
     value | target
   }}</ng-container>`,

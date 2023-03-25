@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockModule, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-222-common-module',
   template: 'target',
 })
 class TargetComponent {}
@@ -32,7 +32,7 @@ describe('issue-222:CommonModule', () => {
   it('correctly handles kept and the mock CommonModule', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target></target>',
+      '<target-222-common-module></target-222-common-module>',
     );
   });
 });

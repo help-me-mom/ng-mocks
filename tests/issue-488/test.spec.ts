@@ -11,7 +11,7 @@ export class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-488',
   template: '',
 })
 export class TargetComponent {

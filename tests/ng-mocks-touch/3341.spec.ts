@@ -31,26 +31,26 @@ class CvaDirective implements ControlValueAccessor {
 }
 
 @Component({
-  selector: 'my',
+  selector: 'target-ng-mocks-touch-3341',
   template: ` <custom [formControl]="myControl"></custom> `,
 })
-class MyComponent {
+class TargetComponent {
   public readonly myControl = new FormControl();
 }
 
 @NgModule({
-  declarations: [MyComponent, CvaDirective],
-  exports: [MyComponent],
+  declarations: [TargetComponent, CvaDirective],
+  exports: [TargetComponent],
   imports: [ReactiveFormsModule],
 })
-class MyModule {}
+class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/3341
 describe('ng-mocks-touch:3341', () => {
-  beforeEach(() => MockBuilder(MyModule));
+  beforeEach(() => MockBuilder(TargetModule));
 
   it('throws error about the default method', () => {
-    MockRender(MyComponent);
+    MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
     expect(() => ngMocks.touch(cvaEl)).toThrowError(
@@ -59,7 +59,7 @@ describe('ng-mocks-touch:3341', () => {
   });
 
   it('throws error with suggestions', () => {
-    MockRender(MyComponent);
+    MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
     expect(() => ngMocks.touch(cvaEl)).toThrowError(
@@ -68,7 +68,7 @@ describe('ng-mocks-touch:3341', () => {
   });
 
   it('throws error about the wrongly provided method', () => {
-    MockRender(MyComponent);
+    MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
     expect(() => ngMocks.touch(cvaEl, 'triggerTouch')).toThrowError(
@@ -77,7 +77,8 @@ describe('ng-mocks-touch:3341', () => {
   });
 
   it('triggers touch correctly', () => {
-    const component = MockRender(MyComponent).point.componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     const cvaEl = ngMocks.find('custom');
 
     expect(component.myControl.touched).toEqual(false);

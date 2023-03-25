@@ -1,6 +1,19 @@
+import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { InternalComponent, TargetModule } from './fixtures';
+@Component({
+  selector: 'internal-only',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent],
+  imports: [CommonModule],
+})
+export class TargetModule {}
 
 describe('InternalOnly:real', () => {
   ngMocks.throwOnConsole();
@@ -9,7 +22,7 @@ describe('InternalOnly:real', () => {
 
   it('should render', () => {
     expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal-component' is not a known element/,
+      /'internal-only' is not a known element/,
     );
   });
 });
@@ -26,8 +39,6 @@ describe('InternalOnly:mock', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
-    expect(content).toEqual(
-      '<internal-component></internal-component>',
-    );
+    expect(content).toEqual('<internal-only></internal-only>');
   });
 });

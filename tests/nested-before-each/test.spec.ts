@@ -1,9 +1,19 @@
-import { Type } from '@angular/core';
+import { Type, Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockComponent } from 'ng-mocks';
 
-import { InternalComponent } from './fixtures';
+@Component({
+  selector: 'internal-nested-before-each',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
+})
+export class TargetModule {}
 
 describe('nested-before-each', () => {
   let level = 0;

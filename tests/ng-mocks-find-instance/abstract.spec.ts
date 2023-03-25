@@ -21,7 +21,7 @@ class TargetService implements AbstractService {
       useClass: TargetService,
     },
   ],
-  selector: 'target',
+  selector: 'target-ng-mocks-find-instance-abstract',
   template: '{{ service.echo() }}',
 })
 class TargetComponent {

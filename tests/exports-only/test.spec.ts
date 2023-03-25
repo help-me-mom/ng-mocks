@@ -1,6 +1,25 @@
+import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import { InternalComponent, TargetModule } from './fixtures';
+@Component({
+  selector: 'internal-exports-only',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
+  imports: [CommonModule],
+})
+export class InternalModule {}
+
+@NgModule({
+  exports: [InternalModule],
+})
+export class TargetModule {}
 
 describe('ExportsOnly:real', () => {
   beforeEach(() => MockBuilder(TargetModule));
@@ -9,7 +28,7 @@ describe('ExportsOnly:real', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<internal-component>internal</internal-component>',
+      '<internal-exports-only>internal</internal-exports-only>',
     );
   });
 });
@@ -23,7 +42,7 @@ describe('ExportsOnly:mock1', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toEqual(
-      '<internal-component></internal-component>',
+      '<internal-exports-only></internal-exports-only>',
     );
   });
 });
@@ -39,7 +58,7 @@ describe('ExportsOnly:mock2', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toEqual(
-      '<internal-component></internal-component>',
+      '<internal-exports-only></internal-exports-only>',
     );
   });
 });
@@ -52,7 +71,7 @@ describe('ExportsOnly:mock3', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture).toBeDefined();
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<internal-component>internal</internal-component>',
+      '<internal-exports-only>internal</internal-exports-only>',
     );
   });
 });

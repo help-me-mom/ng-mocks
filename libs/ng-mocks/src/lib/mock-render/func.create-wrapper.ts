@@ -50,6 +50,9 @@ const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
       }
     }
   }
+
+  // A16: adding unique property.
+  coreDefineProperty(MockRenderComponent.prototype, `__ngMocks_index_${ngMocksUniverse.index()}`, undefined, false);
   Component(options)(MockRenderComponent);
 
   return MockRenderComponent;

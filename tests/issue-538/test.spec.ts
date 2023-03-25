@@ -9,7 +9,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-538',
   template: `
     <div
       [innerHTML]="

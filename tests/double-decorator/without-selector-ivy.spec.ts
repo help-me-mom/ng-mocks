@@ -18,7 +18,7 @@ class MyProvider extends BaseClass {}
 
 @Component({
   providers: [MyProvider],
-  selector: 'target',
+  selector: 'target-double-decorator-without-selector-ivy',
   template: '{{ service.name }}',
 })
 class MyComponent {
@@ -67,7 +67,7 @@ describe('double-decorator-ivy:without-selector', () => {
     it('fixes the issue via exclude', () => {
       const fixture = MockRender(MyComponent);
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target></target>',
+        '<target-double-decorator-without-selector-ivy></target-double-decorator-without-selector-ivy>',
       );
     });
   });

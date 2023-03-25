@@ -27,29 +27,30 @@ class CustomDirective implements ControlValueAccessor {
 }
 
 @Component({
-  selector: 'my',
+  selector: 'target-ng-mocks-touch',
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
     <custom [formControl]="myControl"></custom>
   `,
 })
-class MyComponent {
+class TargetComponent {
   public readonly myControl = new FormControl();
 }
 
 @NgModule({
-  declarations: [MyComponent, CustomDirective],
-  exports: [MyComponent],
+  declarations: [TargetComponent, CustomDirective],
+  exports: [TargetComponent],
   imports: [ReactiveFormsModule],
 })
-class MyModule {}
+class TargetModule {}
 
 // checking how normal form works
 describe('ng-mocks-touch:real', () => {
-  beforeEach(() => MockBuilder(MyComponent).keep(MyModule));
+  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('correctly touches CVA', () => {
-    const component = MockRender(MyComponent).point.componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     const valueAccessorEl = ngMocks.find([
       'data-testid',
       'inputControl',
@@ -65,13 +66,14 @@ describe('ng-mocks-touch:real', () => {
 // a mock version should behavior similarly but via our own interface
 describe('ng-mocks-touch:mock', () => {
   beforeEach(() =>
-    MockBuilder(MyComponent)
-      .keep(MyModule)
+    MockBuilder(TargetComponent)
+      .keep(TargetModule)
       .mock(DefaultValueAccessor),
   );
 
   it('correctly touches CVA', () => {
-    const component = MockRender(MyComponent).point.componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
     const valueAccessorEl = ngMocks.find([
       'data-testid',
       'inputControl',
@@ -84,14 +86,14 @@ describe('ng-mocks-touch:mock', () => {
   });
 
   it('throws on bad element', () => {
-    const element = MockRender(MyComponent).point;
+    const element = MockRender(TargetComponent).point;
     expect(() => ngMocks.touch(element)).toThrowError(
       /Cannot find ControlValueAccessor on the element/,
     );
   });
 
   it('throws on unknown CVA', () => {
-    MockRender(MyComponent);
+    MockRender(TargetComponent);
     const valueAccessorEl = ngMocks.find('custom');
 
     expect(() => ngMocks.touch(valueAccessorEl)).toThrowError(

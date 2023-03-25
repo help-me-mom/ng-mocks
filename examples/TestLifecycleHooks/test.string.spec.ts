@@ -15,7 +15,7 @@ describe('TestLifecycleHooks:string', () => {
   it('triggers lifecycle hooks correctly via mock-render w/ params', () => {
     // First let's suppress detectChanges.
     const fixture = MockRender(
-      '<target [input]="input"></target>',
+      '<target-lifecycle-hooks [input]="input"></target-lifecycle-hooks>',
       { input: '' },
       {
         detectChanges: false,

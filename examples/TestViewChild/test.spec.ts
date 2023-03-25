@@ -14,7 +14,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'dependency',
+  selector: 'dependency-test-view-child',
   template: 'dependency',
 })
 class DependencyComponent {
@@ -33,12 +33,12 @@ class DependencyDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-view-child',
   template: `
-    <dependency
+    <dependency-test-view-child
       [dependency]="0"
       (trigger)="value = $event"
-    ></dependency>
+    ></dependency-test-view-child>
     <div>
       <span [dependency]="1" (trigger)="value = $event">1</span>
       <span [dependency]="2" (trigger)="value = $event">2</span>

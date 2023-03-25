@@ -4,7 +4,7 @@ import { Component, NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-1957',
   template: "{{ '2022-03-03' | date }}",
 })
 class TargetComponent {}

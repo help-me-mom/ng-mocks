@@ -72,7 +72,7 @@ export class TargetDirective
 }
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root-167-directive',
   template: '<div [formControl]="control" target></div>',
 })
 export class RealComponent {

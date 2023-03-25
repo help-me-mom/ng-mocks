@@ -28,13 +28,13 @@ class TargetPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-get-mocked-ng-def-of',
   template: 'target',
 })
 class TargetComponent {}
 
 @Directive({
-  selector: 'target',
+  selector: 'target-get-mocked-ng-def-of',
 })
 class TargetDirective {}
 

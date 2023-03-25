@@ -26,7 +26,7 @@ class UnusedDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-find-template-of',
   template: '',
 })
 class TargetComponent {}
@@ -34,7 +34,7 @@ class TargetComponent {}
 @Component({
   selector: 'test',
   template: `
-    <target>
+    <target-ng-mocks-find-template-of>
       1
       <ng-template #id1>id1</ng-template>
       2
@@ -52,7 +52,7 @@ class TargetComponent {}
         8
       </span>
       9
-    </target>
+    </target-ng-mocks-find-template-of>
   `,
 })
 class TestComponent {}

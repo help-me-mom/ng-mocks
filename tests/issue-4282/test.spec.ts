@@ -21,7 +21,7 @@ export class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-4282',
   template: `{{ service.name }}`,
 })
 export class TargetComponent {

@@ -15,13 +15,13 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-of-mock',
   template: '',
 })
 class TargetComponent {}
 
 @Directive({
-  selector: 'target',
+  selector: 'target-mock-of-mock',
 })
 class TargetDirective {}
 

@@ -1,10 +1,27 @@
+import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import {
-  ExternalComponent,
-  InternalComponent,
-  TargetModule,
-} from './fixtures';
+@Component({
+  selector: 'internal-internal-vs-external',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@Component({
+  selector: 'external-internal-vs-external',
+  template:
+    'external <internal-internal-vs-external></internal-internal-vs-external>',
+})
+export class ExternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent, ExternalComponent],
+  exports: [ExternalComponent],
+  imports: [CommonModule],
+})
+export class TargetModule {}
 
 describe('InternalVsExternal:real', () => {
   ngMocks.throwOnConsole();
@@ -16,12 +33,14 @@ describe('InternalVsExternal:real', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toContain(
-      'external <internal-component>internal</internal-component>',
+      'external <internal-internal-vs-external>internal</internal-internal-vs-external>',
     );
 
     expect(() =>
       MockRender(InternalComponent, null, { reset: true }),
-    ).toThrowError(/'internal-component' is not a known element/);
+    ).toThrowError(
+      /'(?:internal-){2}vs-external' is not a known element/,
+    );
   });
 });
 
@@ -36,12 +55,14 @@ describe('InternalVsExternal:mock', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toEqual(
-      '<external-component></external-component>',
+      '<external-internal-vs-external></external-internal-vs-external>',
     );
 
     expect(() =>
       MockRender(InternalComponent, null, { reset: true }),
-    ).toThrowError(/'internal-component' is not a known element/);
+    ).toThrowError(
+      /'(?:internal-){2}vs-external' is not a known element/,
+    );
   });
 });
 
@@ -53,10 +74,10 @@ describe('InternalVsExternal:legacy', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toEqual(
-      '<external-component></external-component>',
+      '<external-internal-vs-external></external-internal-vs-external>',
     );
 
-    // the code below will fail because the MockModule outside of the MockBuilder exports everything.
+    // the code below will fail because the MockModule outside the MockBuilder exports everything.
     // try {
     //   MockRender(InternalComponent);
     //   fail('should fail on the internal component');

@@ -10,7 +10,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-replace-component',
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -18,7 +18,7 @@ class TargetComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-replace-component',
   template: '{{ name }}',
 })
 class FakeComponent {
@@ -44,9 +44,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('works as usual', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -59,9 +61,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target-ng-mocks-global-replace-component>fake</target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -74,9 +78,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target-ng-mocks-global-replace-component>fake</target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -89,7 +95,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -101,9 +111,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -116,9 +128,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target-ng-mocks-global-replace-component>target</target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -127,9 +141,11 @@ describe('ng-mocks-global-replace:component', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target-ng-mocks-global-replace-component>fake</target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -140,7 +156,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -150,9 +170,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
       );
     });
   });
@@ -163,9 +185,11 @@ describe('ng-mocks-global-replace:component', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-component></target-ng-mocks-global-replace-component>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target-ng-mocks-global-replace-component>target</target-ng-mocks-global-replace-component>',
       );
     });
   });

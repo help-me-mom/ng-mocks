@@ -17,29 +17,31 @@ import {
     {
       multi: true,
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DependencyComponent),
+      useExisting: forwardRef(() => ChildComponent),
     },
   ],
-  selector: 'app-child',
+  selector: 'child-mock-forms',
   template: 'dependency',
 })
-class DependencyComponent implements ControlValueAccessor {
+class ChildComponent implements ControlValueAccessor {
   public registerOnChange = (fn: any): void => fn;
   public registerOnTouched = (fn: any): void => fn;
   public writeValue = (obj: any): void => obj;
 }
 
 @Component({
-  selector: 'tested',
-  template: ` <app-child [(ngModel)]="value"></app-child> `,
+  selector: 'target-mock-forms',
+  template: `
+    <child-mock-forms [(ngModel)]="value"></child-mock-forms>
+  `,
 })
-class MyComponent {
+class TargetComponent {
   public value: any;
 }
 
 @NgModule({
   imports: [FormsModule],
-  declarations: [MyComponent, DependencyComponent],
+  declarations: [TargetComponent, ChildComponent],
 })
 class ItsModule {}
 
@@ -50,7 +52,7 @@ describe('MockForms', () => {
   beforeEach(() => {
     // DependencyComponent is a declaration in ItsModule.
     return (
-      MockBuilder(MyComponent, ItsModule)
+      MockBuilder(TargetComponent, ItsModule)
         // FormsModule is an import in ItsModule.
         .keep(FormsModule)
     );
@@ -68,9 +70,9 @@ describe('MockForms', () => {
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.
-    MockInstance(DependencyComponent, 'writeValue', writeValue);
+    MockInstance(ChildComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     // FormsModule needs fixture.whenStable()
     // right after MockRender to install all hooks.
     await fixture.whenStable();
@@ -82,7 +84,7 @@ describe('MockForms', () => {
 
     // Let's find the form control element
     // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(DependencyComponent);
+    const mockControlEl = ngMocks.find(ChildComponent);
     ngMocks.change(mockControlEl, 'foo');
     expect(component.value).toBe('foo');
 

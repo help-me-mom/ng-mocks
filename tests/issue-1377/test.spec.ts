@@ -41,7 +41,7 @@ import {
       transition('closed => open', []),
     ]),
   ],
-  selector: 'target',
+  selector: 'target-1377',
   template: `
     <div [@openClose]="isOpen ? 'open' : 'closed'">
       The box is now {{ isOpen ? 'Open' : 'Closed' }}!
@@ -151,7 +151,9 @@ const expectThrow = () => {
 const expectEmpty = () => {
   const fixture = MockRender(TargetComponent);
 
-  expect(ngMocks.formatHtml(fixture)).toEqual('<target></target>');
+  expect(ngMocks.formatHtml(fixture)).toEqual(
+    '<target-1377></target-1377>',
+  );
   expect(
     isMockOf(fixture.point.componentInstance, TargetComponent, 'c'),
   ).toEqual(true);

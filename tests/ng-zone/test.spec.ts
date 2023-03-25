@@ -15,7 +15,7 @@ import {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'target',
+  selector: 'target-ng-zone',
   template: '{{ v }}',
 })
 class TargetComponent {

@@ -16,7 +16,7 @@ class NothingPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-2314',
   template: `
     <div
       class="array"

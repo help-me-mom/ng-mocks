@@ -6,7 +6,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { LazyComponent, LazyModule } from './lazy-module';
 
 @Component({
-  selector: 'target',
+  selector: 'target-lazy-module',
   template: '<router-outlet></router-outlet>',
 })
 class AppComponent {}

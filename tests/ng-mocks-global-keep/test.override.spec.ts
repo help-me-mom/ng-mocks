@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target1',
+  selector: 'target1-ng-mocks-global-keep',
   template: '{{ name }}',
 })
 class Target1Component {
@@ -12,7 +12,7 @@ class Target1Component {
 }
 
 @Component({
-  selector: 'target2',
+  selector: 'target2-ng-mocks-global-keep',
   template: '{{ name }}',
 })
 class Target2Component {
@@ -42,12 +42,20 @@ describe('ng-mocks-global-keep:override', () => {
 
     it('renders Target1Component', () => {
       expect(
-        MockRender('<target2></target2>').nativeElement.innerHTML,
-      ).toContain('<target2></target2>');
+        MockRender(
+          '<target2-ng-mocks-global-keep></target2-ng-mocks-global-keep>',
+        ).nativeElement.innerHTML,
+      ).toContain(
+        '<target2-ng-mocks-global-keep></target2-ng-mocks-global-keep>',
+      );
       ngMocks.flushTestBed();
       expect(
-        MockRender('<target1></target1>').nativeElement.innerHTML,
-      ).toContain('<target1>target1</target1>');
+        MockRender(
+          '<target1-ng-mocks-global-keep></target1-ng-mocks-global-keep>',
+        ).nativeElement.innerHTML,
+      ).toContain(
+        '<target1-ng-mocks-global-keep>target1</target1-ng-mocks-global-keep>',
+      );
     });
   });
 
@@ -62,12 +70,20 @@ describe('ng-mocks-global-keep:override', () => {
 
     it('renders Target2Component too', () => {
       expect(
-        MockRender('<target2></target2>').nativeElement.innerHTML,
-      ).toContain('<target2>target2</target2>');
+        MockRender(
+          '<target2-ng-mocks-global-keep></target2-ng-mocks-global-keep>',
+        ).nativeElement.innerHTML,
+      ).toContain(
+        '<target2-ng-mocks-global-keep>target2</target2-ng-mocks-global-keep>',
+      );
       ngMocks.flushTestBed();
       expect(
-        MockRender('<target1></target1>').nativeElement.innerHTML,
-      ).toContain('<target1>target1</target1>');
+        MockRender(
+          '<target1-ng-mocks-global-keep></target1-ng-mocks-global-keep>',
+        ).nativeElement.innerHTML,
+      ).toContain(
+        '<target1-ng-mocks-global-keep>target1</target1-ng-mocks-global-keep>',
+      );
     });
   });
 });

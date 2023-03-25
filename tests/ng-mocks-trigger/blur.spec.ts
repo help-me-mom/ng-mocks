@@ -21,7 +21,7 @@ try {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-trigger-blur',
   template: `
     <input
       [formControl]="control"

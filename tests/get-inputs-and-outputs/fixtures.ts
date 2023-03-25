@@ -9,7 +9,7 @@ const TARGET = new InjectionToken('TARGET');
       useValue: 'test',
     },
   ],
-  selector: 'target',
+  selector: 'target-get-inputs-and-outputs',
   template: '<a (click)="output.emit()">{{ input }}</a>',
 })
 export class TargetComponent {
@@ -24,7 +24,7 @@ export class TargetComponent {
       useValue: 'test',
     },
   ],
-  selector: 'target',
+  selector: 'target-get-inputs-and-outputs',
 })
 export class Target2Directive {
   @Input('input2') public input = '';
@@ -39,7 +39,7 @@ export class Target2Directive {
       useValue: 'test',
     },
   ],
-  selector: 'target',
+  selector: 'target-get-inputs-and-outputs',
 })
 export class Target3Directive {
   @Input('input3') public input = '';

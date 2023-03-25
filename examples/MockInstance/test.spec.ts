@@ -16,7 +16,7 @@ EMPTY.complete();
 
 // A child component that contains update$ the parent component wants to listen to.
 @Component({
-  selector: 'target',
+  selector: 'target-mock-instance-selector',
   template: '{{ update$ | async }}',
 })
 class ChildComponent {
@@ -28,7 +28,8 @@ class ChildComponent {
 // A parent component that uses @ViewChild to listen to update$ of its child component.
 @Component({
   selector: 'real',
-  template: '<target></target>',
+  template:
+    '<target-mock-instance-selector></target-mock-instance-selector>',
 })
 class RealComponent implements AfterViewInit {
   @ViewChild(ChildComponent, {} as any)

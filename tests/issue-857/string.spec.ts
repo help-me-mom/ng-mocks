@@ -3,7 +3,7 @@ import { Component, NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-857',
   template: 'target',
 })
 class Target857Component {}
@@ -23,7 +23,7 @@ describe('issue-857:string', () => {
 
   it('excludes by string', () => {
     expect(() => MockRender(Target857Component)).toThrowError(
-      /'target' is not a known element/,
+      /'target-857' is not a known element/,
     );
   });
 });

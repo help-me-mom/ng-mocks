@@ -41,7 +41,7 @@ class Mock3Directive {
 }
 
 @Component({
-  selector: 'component',
+  selector: 'mock-ng-mocks-render-component',
   template: `
     <div data-role="header" *ngIf="header">
       <ng-container *ngTemplateOutlet="header"></ng-container>
@@ -93,9 +93,9 @@ class MockComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-render-component',
   template: `
-    <component>
+    <mock-ng-mocks-render-component>
       :step:1:
       <ng-template #header>rendered-header</ng-template>
       :step:2:
@@ -119,7 +119,7 @@ class MockComponent {
         :step:8:
       </div>
       :step:9:
-    </component>
+    </mock-ng-mocks-render-component>
   `,
 })
 class TargetComponent {}

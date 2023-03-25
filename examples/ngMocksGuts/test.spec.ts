@@ -46,16 +46,16 @@ class Target1Pipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target2',
+  selector: 'target2-ng-mocks-guts',
   template: '<ng-content></ng-content>',
 })
 class Target2Component {}
 
 @Component({
-  selector: 'target1',
+  selector: 'target1-ng-mocks-guts',
   template: `<div (target1)="update.emit()">
     {{ greeting }} {{ greeting | target1 }}
-    <target2>{{ target }}</target2>
+    <target2-ng-mocks-guts>{{ target }}</target2-ng-mocks-guts>
   </div>`,
 })
 class Target1Component {
@@ -138,7 +138,7 @@ describe('ngMocks.guts:NO_ERRORS_SCHEMA', () => {
   it('creates component', () => {
     expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<target2></target2>',
+      '<target2-ng-mocks-guts></target2-ng-mocks-guts>',
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
@@ -177,7 +177,7 @@ describe('ngMocks.guts:legacy', () => {
   it('creates component', () => {
     expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<target2></target2>',
+      '<target2-ng-mocks-guts></target2-ng-mocks-guts>',
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';
@@ -201,7 +201,7 @@ describe('ngMocks.guts:normal', () => {
   it('creates component', () => {
     expect(component).toEqual(assertion.any(Target1Component));
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<target2></target2>',
+      '<target2-ng-mocks-guts></target2-ng-mocks-guts>',
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('hello');
     component.greeting = 'hello';

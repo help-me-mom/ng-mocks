@@ -1,6 +1,34 @@
+import { CommonModule } from '@angular/common';
+import { Component, NgModule } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { InternalComponent, TargetModule } from './fixtures';
+@Component({
+  selector: 'internal-only-nested',
+  template: 'internal',
+})
+export class InternalComponent {}
+
+@NgModule({
+  declarations: [InternalComponent],
+  imports: [CommonModule],
+})
+export class Nested1Module {}
+
+@NgModule({
+  imports: [Nested1Module],
+})
+export class Nested2Module {}
+
+@NgModule({
+  imports: [Nested1Module],
+})
+export class Nested3Module {}
+
+@NgModule({
+  imports: [Nested2Module, Nested3Module],
+})
+export class TargetModule {}
 
 describe('InternalOnlyNested:real', () => {
   ngMocks.throwOnConsole();
@@ -9,7 +37,7 @@ describe('InternalOnlyNested:real', () => {
 
   it('should render', () => {
     expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal-component' is not a known element/,
+      /'internal-only-nested' is not a known element/,
     );
   });
 });
@@ -28,7 +56,7 @@ describe('InternalOnlyNested:mock', () => {
     expect(fixture).toBeDefined();
     const content = fixture.nativeElement.innerHTML;
     expect(content).toEqual(
-      '<internal-component></internal-component>',
+      '<internal-only-nested></internal-only-nested>',
     );
   });
 });

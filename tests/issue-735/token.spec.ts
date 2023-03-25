@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-735-token',
   template: '{{ locale }}',
 })
 class TargetComponent {

@@ -18,7 +18,7 @@ import {
 class ModalComponent {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-736',
   template: 'target',
 })
 class TargetComponent implements OnInit {

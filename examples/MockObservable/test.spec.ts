@@ -21,7 +21,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-observable',
   template: '{{ list | json }}',
 })
 class TargetComponent {

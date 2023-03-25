@@ -11,7 +11,7 @@ describe('issue-241:builder', () => {
 
     // A mock pipe returns nothing.
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target></target>',
+      '<target-241></target-241>',
     );
   });
 });

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-288',
   template: ' <input [ngModel]="dateValue" /> ',
 })
 class TargetComponent {

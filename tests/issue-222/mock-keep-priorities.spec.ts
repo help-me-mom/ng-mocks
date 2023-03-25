@@ -32,7 +32,7 @@ class MockModule {}
 class KeepModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-222-mock-keep-priorities',
   template: 'target',
 })
 class TargetComponent {}

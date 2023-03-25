@@ -38,7 +38,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
       transition('closed => open', [animate('0.5s')]),
     ]),
   ],
-  selector: 'target',
+  selector: 'target-222-dom-shared-styles-host',
   template: `
     <div [@openClose]="isOpen ? 'open' : 'closed'">
       The box is now {{ isOpen ? 'Open' : 'Closed' }}!

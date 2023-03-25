@@ -10,7 +10,7 @@ import {
 } from 'ng-mocks';
 
 @Directive({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-replace-directive',
 })
 class TargetDirective {
   @HostBinding('attr.name')
@@ -18,7 +18,7 @@ class TargetDirective {
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-replace-directive',
 })
 class FakeDirective {
   @HostBinding('attr.name')
@@ -44,9 +44,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('works as usual', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -59,9 +61,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target name="fake"></target>',
+        '<target-ng-mocks-global-replace-directive name="fake"></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -74,9 +78,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target name="fake"></target>',
+        '<target-ng-mocks-global-replace-directive name="fake"></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -89,7 +95,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -101,9 +111,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -116,9 +128,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target name="target"></target>',
+        '<target-ng-mocks-global-replace-directive name="target"></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -127,9 +141,11 @@ describe('ng-mocks-global-replace:directive', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 
     it('replaces out of the box', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target name="fake"></target>',
+        '<target-ng-mocks-global-replace-directive name="fake"></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -140,7 +156,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -150,9 +170,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target></target>',
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
       );
     });
   });
@@ -163,9 +185,11 @@ describe('ng-mocks-global-replace:directive', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-replace-directive></target-ng-mocks-global-replace-directive>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target name="target"></target>',
+        '<target-ng-mocks-global-replace-directive name="target"></target-ng-mocks-global-replace-directive>',
       );
     });
   });

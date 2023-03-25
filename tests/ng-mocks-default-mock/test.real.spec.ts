@@ -25,7 +25,7 @@ describe('ng-mocks-default-mock:real', () => {
 
     // Renders proper html.
     expect(fixture.nativeElement.innerHTML).toContain(
-      '<target>pipe:target</target>',
+      '<target-ng-mocks-default-mock>pipe:target</target-ng-mocks-default-mock>',
     );
 
     // Component has a subject.

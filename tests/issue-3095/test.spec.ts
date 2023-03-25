@@ -15,7 +15,7 @@ Directive({
 })(RecursiveDirective);
 
 @Directive({
-  selector: 'target',
+  selector: 'target-2095',
   providers: [
     {
       provide: RecursiveDirective,

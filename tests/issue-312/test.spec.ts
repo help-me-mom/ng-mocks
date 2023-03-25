@@ -55,7 +55,7 @@ class ModuleService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-312',
   template: 'target',
 })
 class TargetComponent {

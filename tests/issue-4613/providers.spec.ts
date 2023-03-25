@@ -12,7 +12,7 @@ class Provider1Service {}
 class Provider2Service {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-4613-providers',
   template: '{{ service.constructor.name }}',
   providers: [Provider2Service],
 })

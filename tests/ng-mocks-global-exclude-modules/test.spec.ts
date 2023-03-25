@@ -1,8 +1,21 @@
+import { Component, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
-import { Target1Module } from './fixtures';
+@Component({
+  selector: 'target-ng-mocks-global-exclude-modules',
+  template: '{{ name }}',
+})
+class Target1Component {
+  public readonly name = 'target1';
+}
+
+@NgModule({
+  declarations: [Target1Component],
+  exports: [Target1Component],
+})
+class Target1Module {}
 
 ngMocks.globalExclude(Target1Module);
 
@@ -15,9 +28,11 @@ describe('ng-mocks-global-exclude-modules', () => {
   });
 
   it('mocks Target1Component', () => {
-    const fixture = MockRender('<target></target>');
+    const fixture = MockRender(
+      '<target-ng-mocks-global-exclude-modules></target-ng-mocks-global-exclude-modules>',
+    );
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target></target>',
+      '<target-ng-mocks-global-exclude-modules></target-ng-mocks-global-exclude-modules>',
     );
   });
 });

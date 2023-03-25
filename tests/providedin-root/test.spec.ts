@@ -28,7 +28,7 @@ class Service {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-providedin-root',
   template: ':{{ service.value }}:{{ token }}:{{localeId}}:',
 })
 class TargetComponent {
@@ -61,7 +61,7 @@ describe('providedIn:root', () => {
     it('finds token the root token', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target>:ROOT_SERVICE:ROOT_TOKEN:en-US:</target>',
+        '<target-providedin-root>:ROOT_SERVICE:ROOT_TOKEN:en-US:</target-providedin-root>',
       );
     });
   });
@@ -72,7 +72,7 @@ describe('providedIn:root', () => {
     it('mocks all root provides apart from ApplicationModule:LOCALE_ID', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target>:::en-US:</target>',
+        '<target-providedin-root>:::en-US:</target-providedin-root>',
       );
     });
   });
@@ -88,7 +88,7 @@ describe('providedIn:root', () => {
     it('keeps all original values', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target>:ROOT_SERVICE:ROOT_TOKEN:en-US:</target>',
+        '<target-providedin-root>:ROOT_SERVICE:ROOT_TOKEN:en-US:</target-providedin-root>',
       );
     });
   });
@@ -104,7 +104,7 @@ describe('providedIn:root', () => {
     it('mocks all values', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target>:MOCK_SERVICE:MOCK_TOKEN:MOCK_LOCALE_ID:</target>',
+        '<target-providedin-root>:MOCK_SERVICE:MOCK_TOKEN:MOCK_LOCALE_ID:</target-providedin-root>',
       );
     });
   });

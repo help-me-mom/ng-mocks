@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'cva',
+  selector: 'cva-ng-mocks-change-cdr-input',
   template: ' {{ show }} ',
 })
 class CvaComponent implements ControlValueAccessor {
@@ -36,14 +36,18 @@ class CvaComponent implements ControlValueAccessor {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-change-cdr-input',
   template: `
-    <cva
+    <cva-ng-mocks-change-cdr-input
       [formControl]="control"
       class="form-control"
       ngDefaultControl
-    ></cva>
-    <cva [(ngModel)]="value" class="ng-model" ngDefaultControl></cva>
+    ></cva-ng-mocks-change-cdr-input>
+    <cva-ng-mocks-change-cdr-input
+      [(ngModel)]="value"
+      class="ng-model"
+      ngDefaultControl
+    ></cva-ng-mocks-change-cdr-input>
   `,
 })
 class TargetComponent {

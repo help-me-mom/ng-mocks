@@ -15,7 +15,7 @@ class DependencyPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'component',
+  selector: 'target-mock-pipe',
   template: '{{ "foo" | dependency }}',
 })
 class TargetComponent {}
@@ -50,7 +50,7 @@ describe('MockPipe', () => {
     const fixture = MockRender(TargetComponent);
 
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<component>["foo"]</component>',
+      '<target-mock-pipe>["foo"]</target-mock-pipe>',
     );
 
     // Also we can find an instance of the pipe in

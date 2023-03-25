@@ -8,29 +8,29 @@ import {
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'my',
+  selector: 'target-305-overrides',
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
   `,
 })
-class MyComponent {
+class TargetComponent {
   public readonly myControl = new FormControl();
 }
 
 @NgModule({
-  declarations: [MyComponent],
-  exports: [MyComponent],
+  declarations: [TargetComponent],
+  exports: [TargetComponent],
   imports: [ReactiveFormsModule],
 })
-class MyModule {}
+class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:overrides', () => {
   MockInstance.scope();
 
   beforeEach(() =>
-    MockBuilder(MyComponent)
-      .keep(MyModule)
+    MockBuilder(TargetComponent)
+      .keep(TargetModule)
       .mock(DefaultValueAccessor),
   );
 
@@ -51,7 +51,7 @@ describe('issue-305:overrides', () => {
       writeValue,
     }));
 
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
 
     expect(registerOnChange).toHaveBeenCalled();
     expect(registerOnTouched).toHaveBeenCalled();

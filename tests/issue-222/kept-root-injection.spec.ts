@@ -42,7 +42,7 @@ class KeepModule {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-222-kept-root-injection',
   template: 'target',
 })
 class TargetComponent {}

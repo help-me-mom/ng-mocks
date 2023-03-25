@@ -15,7 +15,7 @@ class TargetDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-render-attribute',
   template: `{{ test }}`,
 })
 class TargetComponent extends TargetDirective {
@@ -36,7 +36,9 @@ describe('mock-render-attribute', () => {
   );
 
   it('sets attributes correctly', () => {
-    MockRender<TargetComponent>('<target test="123"></target>');
+    MockRender<TargetComponent>(
+      '<target-mock-render-attribute test="123"></target-mock-render-attribute>',
+    );
 
     const component = ngMocks.findInstance(TargetComponent);
     expect(component.test).toEqual('123');

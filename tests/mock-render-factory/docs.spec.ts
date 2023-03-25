@@ -9,10 +9,10 @@ import {
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'my',
+  selector: 'target-mock-render-factory-docs',
   template: '',
 })
-class MyComponent {
+class TargetComponent {
   @Input() public input1 = 0;
   @Input() public input2 = 0;
   @Output() public output1 = new EventEmitter<void>();
@@ -20,18 +20,24 @@ class MyComponent {
 }
 
 @NgModule({
-  declarations: [MyComponent],
+  declarations: [TargetComponent],
 })
-class MyModule {}
+class TargetModule {}
 
 describe('Maximum performance', () => {
   ngMocks.faster();
 
-  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  beforeAll(() => MockBuilder(TargetComponent, TargetModule));
 
-  let factory: MockRenderFactory<MyComponent, 'input1' | 'input2'>;
+  let factory: MockRenderFactory<
+    TargetComponent,
+    'input1' | 'input2'
+  >;
   beforeAll(() => {
-    factory = MockRenderFactory(MyComponent, ['input1', 'input2']);
+    factory = MockRenderFactory(TargetComponent, [
+      'input1',
+      'input2',
+    ]);
   });
 
   it('covers one case', () => {

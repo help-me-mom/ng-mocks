@@ -8,7 +8,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-434',
   template: '{{ prop1 }}:{{ prop2 }}',
 })
 class TargetComponent {

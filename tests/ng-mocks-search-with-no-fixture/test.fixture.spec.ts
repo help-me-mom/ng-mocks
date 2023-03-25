@@ -37,7 +37,9 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     });
 
     it('.find css selector', () => {
-      const element = ngMocks.find<TargetComponent>('target');
+      const element = ngMocks.find<TargetComponent>(
+        'target-ng-mocks-search-with-no-fixture',
+      );
       expect(
         isMockOf(element.componentInstance, TargetComponent),
       ).toBeTruthy();
@@ -66,7 +68,9 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     });
 
     it('.findAll css selector', () => {
-      const elements = ngMocks.findAll<TargetComponent>('target');
+      const elements = ngMocks.findAll<TargetComponent>(
+        'target-ng-mocks-search-with-no-fixture',
+      );
       expect(
         isMockOf(elements[0].componentInstance, TargetComponent),
       ).toBeTruthy();
@@ -129,7 +133,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     it('.find css selector', () => {
       const element = ngMocks.find<TargetComponent>(
         fixture,
-        'target',
+        'target-ng-mocks-search-with-no-fixture',
       );
       expect(
         isMockOf(element.componentInstance, TargetComponent),
@@ -161,7 +165,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     it('.findAll css selector', () => {
       const elements = ngMocks.findAll<TargetComponent>(
         fixture,
-        'target',
+        'target-ng-mocks-search-with-no-fixture',
       );
       expect(
         isMockOf(elements[0].componentInstance, TargetComponent),
@@ -237,7 +241,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     it('.find css selector', () => {
       const element = ngMocks.find<TargetComponent>(
         fixture.debugElement,
-        'target',
+        'target-ng-mocks-search-with-no-fixture',
       );
       expect(
         isMockOf(element.componentInstance, TargetComponent),
@@ -276,7 +280,7 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
     it('.findAll css selector', () => {
       const elements = ngMocks.findAll<TargetComponent>(
         fixture.debugElement,
-        'target',
+        'target-ng-mocks-search-with-no-fixture',
       );
       expect(
         isMockOf(elements[0].componentInstance, TargetComponent),

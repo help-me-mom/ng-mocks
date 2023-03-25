@@ -38,7 +38,7 @@ class TargetPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-218',
   template: '{{ value | target }} - {{ piped }}',
 })
 class TargetComponent implements OnInit {
