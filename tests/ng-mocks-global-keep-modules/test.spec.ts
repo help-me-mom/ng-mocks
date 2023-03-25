@@ -9,6 +9,10 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 })
 export class Target1Component {
   public readonly name = 'target1';
+
+  public target1() {
+    return true;
+  }
 }
 
 @Component({
@@ -17,6 +21,10 @@ export class Target1Component {
 })
 export class Fake1Component {
   public readonly name = 'fake1';
+
+  public fake1() {
+    return true;
+  }
 }
 
 @NgModule({

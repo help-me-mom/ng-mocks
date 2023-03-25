@@ -13,7 +13,11 @@ class TargetComponent {}
   selector: 'replace-4641-mixed',
   template: 'replace-real',
 })
-class ReplaceComponent {}
+class ReplaceComponent {
+  public replace() {
+    return true;
+  }
+}
 
 @NgModule({
   declarations: [ReplaceComponent],
@@ -25,7 +29,11 @@ class ReplaceModule {}
   selector: 'replace-4641-mixed',
   template: 'replace-mock',
 })
-class ReplaceMockComponent {}
+class ReplaceMockComponent {
+  public replaceMock() {
+    return true;
+  }
+}
 
 @Component({
   selector: 'dep1-4641-mixed',

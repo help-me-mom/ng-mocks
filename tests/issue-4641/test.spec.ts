@@ -7,7 +7,11 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
   selector: 'replace-4641',
   template: 'replace-real',
 })
-class ReplaceComponent {}
+class ReplaceComponent {
+  public replace() {
+    return true;
+  }
+}
 
 @NgModule({
   declarations: [ReplaceComponent],
@@ -19,7 +23,11 @@ class ReplaceModule {}
   selector: 'replace-4641',
   template: 'replace-mock',
 })
-class ReplaceMockComponent {}
+class ReplaceMockComponent {
+  public replaceMock() {
+    return true;
+  }
+}
 
 @Component({
   selector: 'target-4641',
