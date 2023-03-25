@@ -31,7 +31,7 @@ export class TargetModule {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-142',
   template: 'target',
 })
 export class TargetComponent {}

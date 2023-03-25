@@ -22,7 +22,7 @@ class BaseClass {
 
 @Component({
   providers: [BaseClass],
-  selector: 'target',
+  selector: 'target-double-decorator-3',
   template: '{{ service.name }}',
 })
 class MyComponent {
@@ -48,7 +48,7 @@ describe('double-decorator:example-3', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>directive</target>',
+        '<target-double-decorator-3>directive</target-double-decorator-3>',
       );
     });
   });
@@ -70,7 +70,7 @@ describe('double-decorator:example-3', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>mock</target>',
+        '<target-double-decorator-3>mock</target-double-decorator-3>',
       );
     });
   });
@@ -88,7 +88,7 @@ describe('double-decorator:example-3', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>mock</target>',
+        '<target-double-decorator-3>mock</target-double-decorator-3>',
       );
     });
   });

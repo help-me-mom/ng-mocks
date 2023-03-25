@@ -17,7 +17,7 @@ describe('issue-241:real', () => {
 
     // A real pipe returns the string's length.
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target>6</target>',
+      '<target-241>6</target-241>',
     );
   });
 });

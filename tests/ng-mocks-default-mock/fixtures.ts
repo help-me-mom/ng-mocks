@@ -49,7 +49,7 @@ export class TargetPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-default-mock',
   template: "{{ 'target' | target: true }}",
 })
 export class TargetComponent implements OnDestroy {
@@ -76,7 +76,7 @@ export class TargetComponent implements OnDestroy {
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-ng-mocks-default-mock',
 })
 export class TargetDirective implements OnDestroy {
   public readonly destroy$ = new Subject<void>();

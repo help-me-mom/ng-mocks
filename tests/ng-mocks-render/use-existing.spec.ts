@@ -33,23 +33,23 @@ class MockDirective {
 }
 
 @Component({
-  selector: 'target',
-  template: `
-    <component>
-      <ng-template mock>rendered-mock</ng-template>
-    </component>
-  `,
-})
-class TargetComponent {}
-
-@Component({
-  selector: 'component',
+  selector: 'mock-ng-mocks-render-use-existing',
   template: '',
 })
 class MockComponent {
   @ContentChild(TplDirective, {} as any)
   public readonly directive?: TplDirective;
 }
+
+@Component({
+  selector: 'target-ng-mocks-render-use-existing',
+  template: `
+    <mock-ng-mocks-render-use-existing>
+      <ng-template mock>rendered-mock</ng-template>
+    </mock-ng-mocks-render-use-existing>
+  `,
+})
+class TargetComponent {}
 
 @NgModule({
   declarations: [

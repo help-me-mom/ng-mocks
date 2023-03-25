@@ -9,7 +9,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-sanitizer',
   template: `
     <div
       [innerHTML]="sanitizer.sanitize(1, '<strong>value1</strong>')"

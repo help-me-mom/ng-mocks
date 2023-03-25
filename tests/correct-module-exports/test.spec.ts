@@ -9,7 +9,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'internal',
+  selector: 'internal-correct-module-exports',
   template: 'internal',
 })
 class InternalComponent {}
@@ -37,7 +37,7 @@ describe('correct-module-exports-11:proper', () => {
 
   it('fails on not exported module', () => {
     expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal' is not a known element/,
+      /'internal-correct-module-exports' is not a known element/,
     );
   });
 
@@ -59,7 +59,7 @@ describe('correct-module-exports-11:guts', () => {
   it('renders an internal module', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal></internal>',
+      '<internal-correct-module-exports></internal-correct-module-exports>',
     );
   });
 });
@@ -70,7 +70,7 @@ describe('correct-module-exports-11:builder', () => {
   it('renders an internal module', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal></internal>',
+      '<internal-correct-module-exports></internal-correct-module-exports>',
     );
   });
 });

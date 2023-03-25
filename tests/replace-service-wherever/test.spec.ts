@@ -28,7 +28,7 @@ class ReplacementService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-replace-server-wherever',
   template: "{{ service.name }} {{ service.called ? 'called' : '' }}",
 })
 class TargetComponent {

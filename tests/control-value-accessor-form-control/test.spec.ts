@@ -1,4 +1,11 @@
-import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, forwardRef, NgModule } from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import {
   MockBuilder,
@@ -7,11 +14,64 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import {
-  ControlComponent,
-  TargetComponent,
-  TargetModule,
-} from './fixtures';
+@Component({
+  selector: 'target-cva-form-control',
+  template:
+    '<control-cva-form-control [formControl]="control"></control-cva-form-control>',
+})
+class TargetComponent {
+  public readonly control = new FormControl();
+}
+
+@Component({
+  providers: [
+    {
+      multi: true,
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ControlComponent),
+    },
+  ],
+  selector: 'control-cva-form-control',
+  template: '',
+})
+class ControlComponent implements ControlValueAccessor {
+  public isDisabled = false;
+  public value: any;
+  public change: any = () => undefined;
+
+  public changeTouch(): void {
+    this.touch();
+  }
+
+  public changeValue(obj: any): void {
+    this.change(obj);
+  }
+
+  public registerOnChange(fn: any): void {
+    this.change = fn;
+  }
+
+  public registerOnTouched(fn: any): void {
+    this.touch = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
+  }
+
+  public touch: any = () => undefined;
+
+  public writeValue(obj: any): void {
+    this.value = obj;
+  }
+}
+
+@NgModule({
+  declarations: [TargetComponent, ControlComponent],
+  exports: [TargetComponent],
+  imports: [CommonModule, ReactiveFormsModule],
+})
+class TargetModule {}
 
 // a real case to check possible behavior.
 describe('control-value-accessor-form-control:real', () => {

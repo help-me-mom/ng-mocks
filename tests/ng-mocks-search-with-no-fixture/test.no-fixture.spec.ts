@@ -11,10 +11,17 @@ describe('ng-mocks-search-with-no-fixture:no-fixture', () => {
   });
 
   it('.find css selector', () => {
-    expect(() => ngMocks.find('target')).toThrowError(
-      /Cannot find an element via ngMocks.find\(target\)/,
+    expect(() =>
+      ngMocks.find('target-ng-mocks-search-with-no-fixture'),
+    ).toThrowError(
+      /Cannot find an element via ngMocks.find\(target-ng-mocks-search-with-no-fixture\)/,
     );
-    expect(ngMocks.find('target', undefined)).toBeUndefined();
+    expect(
+      ngMocks.find(
+        'target-ng-mocks-search-with-no-fixture',
+        undefined,
+      ),
+    ).toBeUndefined();
   });
 
   it('.findAll type', () => {
@@ -23,7 +30,9 @@ describe('ng-mocks-search-with-no-fixture:no-fixture', () => {
   });
 
   it('.findAll css selector', () => {
-    const elements = ngMocks.findAll('target');
+    const elements = ngMocks.findAll(
+      'target-ng-mocks-search-with-no-fixture',
+    );
     expect(elements.length).toEqual(0);
   });
 

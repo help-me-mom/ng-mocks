@@ -15,7 +15,7 @@ import {
 } from 'ng-mocks';
 
 @Directive({
-  selector: 'target',
+  selector: 'target-double-decorator-with-selector',
 })
 class BaseDirective {
   public name = 'directive';
@@ -26,7 +26,7 @@ class MyProvider extends BaseDirective {}
 
 @Component({
   providers: [MyProvider],
-  selector: 'target',
+  selector: 'target-double-decorator-with-selector',
   template: '{{ service.name }}',
 })
 class MyComponent {
@@ -55,7 +55,7 @@ describe('double-decorator:with-selector', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target>directive</target>',
+        '<target-double-decorator-with-selector>directive</target-double-decorator-with-selector>',
       );
     });
   });
@@ -78,7 +78,7 @@ describe('double-decorator:with-selector', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target>mock</target>',
+        '<target-double-decorator-with-selector>mock</target-double-decorator-with-selector>',
       );
     });
   });
@@ -95,7 +95,7 @@ describe('double-decorator:with-selector', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target>mock</target>',
+        '<target-double-decorator-with-selector>mock</target-double-decorator-with-selector>',
       );
     });
   });
@@ -109,7 +109,7 @@ describe('double-decorator:with-selector', () => {
       const fixture = MockRender(MyComponent);
 
       expect(fixture.nativeElement.innerHTML).toContain(
-        '<target>directive</target>',
+        '<target-double-decorator-with-selector>directive</target-double-decorator-with-selector>',
       );
     });
   });

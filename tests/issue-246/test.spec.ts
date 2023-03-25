@@ -28,7 +28,7 @@ import {
       useExisting: forwardRef(() => TargetComponent),
     },
   ],
-  selector: 'target',
+  selector: 'target-246',
   template: '{{ providedValue }}',
 })
 class TargetComponent implements ControlValueAccessor {
@@ -128,7 +128,7 @@ describe('issue-246:real', () => {
 
     // default render.
     const fixture = MockRender(
-      '<target [formControl]="control" target targetAsync></target>',
+      '<target-246 [formControl]="control" target targetAsync></target-246>',
       {
         control,
       },
@@ -171,7 +171,7 @@ describe('issue-246:mock', () => {
 
     // default render.
     const fixture = MockRender(
-      '<target [formControl]="control" target targetAsync></target>',
+      '<target-246 [formControl]="control" target targetAsync></target-246>',
       {
         control,
       },

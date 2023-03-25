@@ -25,7 +25,7 @@ abstract class AbstractService {
       useFactory: () => ({ name: 'service1' }),
     },
   ],
-  selector: 'target1',
+  selector: 'target1-2097',
   template: ' 1 ',
 })
 class Target1Component {}
@@ -41,7 +41,7 @@ class Target1Component {}
       useFactory: () => ({ name: 'service2' }),
     },
   ],
-  selector: 'target2',
+  selector: 'target2-2097',
   template: ' 2 ',
 })
 class Target2Component {}
@@ -73,18 +73,18 @@ describe('issue-2097', () => {
   it('finds tokens', () => {
     const fixture = MockRender(`
       <div class="root">
-        <target1></target1>
-        <target2></target2>
+        <target1-2097></target1-2097>
+        <target2-2097></target2-2097>
         <div class="child child1">
-          <target1></target1>
-          <target2></target2>
+          <target1-2097></target1-2097>
+          <target2-2097></target2-2097>
         </div>
         <div class="child child2">
-          <target1></target1>
-          <target2></target2>
+          <target1-2097></target1-2097>
+          <target2-2097></target2-2097>
           <div class="child child3">
-            <target1></target1>
-            <target2></target2>
+            <target1-2097></target1-2097>
+            <target2-2097></target2-2097>
           </div>
         </div>
       </div>
@@ -93,37 +93,37 @@ describe('issue-2097', () => {
     expect(ngMocks.formatText(fixture)).toEqual('1 2 1 2 1 2 1 2');
 
     {
-      const token = ngMocks.get('target1', TOKEN);
+      const token = ngMocks.get('target1-2097', TOKEN);
       expect(token).toEqual('token1');
-      const service = ngMocks.get('target1', AbstractService);
+      const service = ngMocks.get('target1-2097', AbstractService);
       expect(service.name).toEqual('service1');
     }
     {
-      const token = ngMocks.get('target2', TOKEN);
+      const token = ngMocks.get('target2-2097', TOKEN);
       expect(token).toEqual('token2');
-      const service = ngMocks.get('target2', AbstractService);
+      const service = ngMocks.get('target2-2097', AbstractService);
       expect(service.name).toEqual('service2');
     }
     {
-      const token = ngMocks.findInstance('target1', TOKEN);
+      const token = ngMocks.findInstance('target1-2097', TOKEN);
       expect(token).toEqual('token1');
       const service = ngMocks.findInstance(
-        'target1',
+        'target1-2097',
         AbstractService,
       );
       expect(service.name).toEqual('service1');
     }
     {
-      const token = ngMocks.findInstance('target2', TOKEN);
+      const token = ngMocks.findInstance('target2-2097', TOKEN);
       expect(token).toEqual('token2');
       const service = ngMocks.findInstance(
-        'target2',
+        'target2-2097',
         AbstractService,
       );
       expect(service.name).toEqual('service2');
     }
     {
-      const tokens = ngMocks.findInstances('target1', TOKEN);
+      const tokens = ngMocks.findInstances('target1-2097', TOKEN);
       expect(tokens).toEqual([
         'token1',
         'token1',
@@ -131,7 +131,7 @@ describe('issue-2097', () => {
         'token1',
       ]);
       const services = ngMocks.findInstances(
-        'target1',
+        'target1-2097',
         AbstractService,
       );
       expect(services as any).toEqual([
@@ -142,7 +142,7 @@ describe('issue-2097', () => {
       ]);
     }
     {
-      const tokens = ngMocks.findInstances('target2', TOKEN);
+      const tokens = ngMocks.findInstances('target2-2097', TOKEN);
       expect(tokens).toEqual([
         'token2',
         'token2',
@@ -150,7 +150,7 @@ describe('issue-2097', () => {
         'token2',
       ]);
       const services = ngMocks.findInstances(
-        'target2',
+        'target2-2097',
         AbstractService,
       );
       expect(services as any).toEqual([
@@ -161,10 +161,13 @@ describe('issue-2097', () => {
       ]);
     }
     {
-      const tokens = ngMocks.findInstances('.child2 target2', TOKEN);
+      const tokens = ngMocks.findInstances(
+        '.child2 target2-2097',
+        TOKEN,
+      );
       expect(tokens).toEqual(['token2', 'token2']);
       const services = ngMocks.findInstances(
-        '.child2 target2',
+        '.child2 target2-2097',
         AbstractService,
       );
       expect(services as any).toEqual([

@@ -61,7 +61,7 @@ class EmptyComponent {}
 
 @Component(
   {
-    selector: 'target',
+    selector: 'target-2687',
     template:
       '<standalone></standalone> pipe:{{ null | standalone }}',
     standalone: true,
@@ -159,7 +159,7 @@ describe('issue-2687', () => {
     it('renders TargetComponent', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target><standalone></standalone> pipe:</target>',
+        '<target-2687><standalone></standalone> pipe:</target-2687>',
       );
       expect(() =>
         ngMocks.findInstance(StandaloneComponent),
@@ -178,7 +178,7 @@ describe('issue-2687', () => {
     it('renders TargetComponent', () => {
       const fixture = MockRender(TargetComponent);
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target><standalone></standalone> pipe:StandalonePipe</target>',
+        '<target-2687><standalone></standalone> pipe:StandalonePipe</target-2687>',
       );
       expect(() =>
         ngMocks.findInstance(StandaloneComponent),

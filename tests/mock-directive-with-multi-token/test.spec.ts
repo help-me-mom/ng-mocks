@@ -12,7 +12,7 @@ const TOKEN = new InjectionToken('TOKEN');
       useValue: true,
     },
   ],
-  selector: 'target',
+  selector: 'target-mock-directive-with-multi-token',
 })
 class TargetDirective {}
 
@@ -20,6 +20,10 @@ describe('mock-directive-with-multi-token', () => {
   beforeEach(() => MockBuilder(null, TargetDirective));
 
   it('does not have the token', () => {
-    expect(() => MockRender('<target></target>')).not.toThrow();
+    expect(() =>
+      MockRender(
+        '<target-mock-directive-with-multi-token></target-mock-directive-with-multi-token>',
+      ),
+    ).not.toThrow();
   });
 });

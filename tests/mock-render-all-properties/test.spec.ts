@@ -56,7 +56,7 @@ class ParentClass {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-render-all-properties',
   template: `
     'pubChildProp:{{ pubChildProp }}' 'pubChildPropGet:{{
       pubChildPropGet

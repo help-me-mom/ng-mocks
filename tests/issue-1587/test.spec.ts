@@ -23,7 +23,7 @@ class TargetPipe extends DatePipe implements PipeTransform {}
 class TargetModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-1587',
   template: "{{ '2022-01-17' | target }}",
 })
 class TargetComponent {}
@@ -34,6 +34,8 @@ describe('issue-1587', () => {
 
   it('should contain valid html without user', () => {
     const fixture = MockRender(TargetComponent);
-    expect(ngMocks.formatHtml(fixture)).toEqual('<target></target>');
+    expect(ngMocks.formatHtml(fixture)).toEqual(
+      '<target-1587></target-1587>',
+    );
   });
 });

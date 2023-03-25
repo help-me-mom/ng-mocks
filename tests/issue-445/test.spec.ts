@@ -3,7 +3,7 @@ import { Component, ContentChild } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-445',
   template: '<ng-content></ng-content>',
 })
 export class ByAttributeComponent {
@@ -18,14 +18,14 @@ describe('issue-445', () => {
 
     it('should render correctly without content child but fails', () => {
       expect(() =>
-        MockRender('<target></target>', {}, true),
+        MockRender('<target-445></target-445>', {}, true),
       ).not.toThrowError();
     });
 
     it('should render correctly with content child but fails', () => {
       expect(() =>
         MockRender(
-          '<target><ng-template someAttribute>Yeeeeaaah</ng-template></target>',
+          '<target-445><ng-template someAttribute>Yeeeeaaah</ng-template></target-445>',
           {},
           true,
         ),
@@ -38,14 +38,14 @@ describe('issue-445', () => {
 
     it('should render correctly without content child but fails', () => {
       expect(() =>
-        MockRender('<target></target>', {}, true),
+        MockRender('<target-445></target-445>', {}, true),
       ).not.toThrowError();
     });
 
     it('should render correctly with content child but fails', () => {
       expect(() =>
         MockRender(
-          '<target><ng-template someAttribute>Yeeeeaaah</ng-template></target>',
+          '<target-445><ng-template someAttribute>Yeeeeaaah</ng-template></target-445>',
           {},
           true,
         ),

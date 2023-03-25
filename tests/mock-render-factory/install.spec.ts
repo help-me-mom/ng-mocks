@@ -3,7 +3,7 @@ import { Component, Input, NgModule } from '@angular/core';
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-render-factory-install',
   template: '{{ value }}',
 })
 class TargetComponent {

@@ -33,15 +33,17 @@ class MockDirective {
 }
 
 @Component({
-  selector: 'target',
-  template: `<component
-    ><ng-template mock>rendered-mock</ng-template></component
+  selector: 'target-ng-mocks-render-debug-node',
+  template: `<mock-ng-mocks-render-debug-node
+    ><ng-template mock
+      >rendered-mock</ng-template
+    ></mock-ng-mocks-render-debug-node
   >`,
 })
 class TargetComponent {}
 
 @Component({
-  selector: 'component',
+  selector: 'mock-ng-mocks-render-debug-node',
   template: '',
 })
 class MockComponent {
@@ -67,18 +69,18 @@ describe('ng-mocks-render:debug-node', () => {
     const fixture = MockRender(TargetComponent);
     const component = ngMocks.findInstance(MockComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<target><component></component></target>',
+      '<target-ng-mocks-render-debug-node><mock-ng-mocks-render-debug-node></mock-ng-mocks-render-debug-node></target-ng-mocks-render-debug-node>',
     );
 
     const mockEl = ngMocks.reveal(['mock']);
     ngMocks.render(component, mockEl);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<target><component>rendered-mock</component></target>',
+      '<target-ng-mocks-render-debug-node><mock-ng-mocks-render-debug-node>rendered-mock</mock-ng-mocks-render-debug-node></target-ng-mocks-render-debug-node>',
     );
 
     ngMocks.hide(component, mockEl);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<target><component></component></target>',
+      '<target-ng-mocks-render-debug-node><mock-ng-mocks-render-debug-node></mock-ng-mocks-render-debug-node></target-ng-mocks-render-debug-node>',
     );
 
     expect(() =>

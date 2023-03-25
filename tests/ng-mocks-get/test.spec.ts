@@ -9,7 +9,7 @@ class RootService {}
 class ComponentService {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-get',
   template: 'target',
   providers: [ComponentService],
 })

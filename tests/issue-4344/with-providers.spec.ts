@@ -23,7 +23,7 @@ import {
 class TargetService {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-4344-with-providers',
   template: '{{ 1 | number }}',
 })
 class TargetComponent {

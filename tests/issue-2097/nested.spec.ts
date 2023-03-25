@@ -11,13 +11,14 @@ const TOKEN = new InjectionToken<string>('TOKEN');
       useValue: 'parent',
     },
   ],
-  selector: 'parent',
-  template: '<child></child><child></child><ng-content></ng-content>',
+  selector: 'parent-2097-nested',
+  template:
+    '<child-2097-nested></child-2097-nested><child-2097-nested></child-2097-nested><ng-content></ng-content>',
 })
 class ParentComponent {}
 
 @Component({
-  selector: 'child',
+  selector: 'child-2097-nested',
   template: 'child',
 })
 class ChildComponent {}
@@ -44,14 +45,17 @@ describe('issue-2097:nested', () => {
 
   it('finds tokens correctly', () => {
     MockRender(`
-      <parent>
-        <child></child>
-        <child></child>
-      </parent>
+      <parent-2097-nested>
+        <child-2097-nested></child-2097-nested>
+        <child-2097-nested></child-2097-nested>
+      </parent-2097-nested>
     `);
 
     // it should be found on the parent node only.
-    const instances = ngMocks.findInstances('parent', TOKEN);
+    const instances = ngMocks.findInstances(
+      'parent-2097-nested',
+      TOKEN,
+    );
     expect(instances).toEqual(['parent']);
   });
 });

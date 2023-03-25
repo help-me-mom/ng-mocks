@@ -27,7 +27,7 @@ class NestedModule {}
 class ServiceModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-623-nested',
   template: '{{ service.name }}',
 })
 class TargetComponent {

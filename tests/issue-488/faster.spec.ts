@@ -8,7 +8,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-488-faster',
   template: '{{ value }}',
 })
 class MyComponent implements OnInit {

@@ -5,6 +5,7 @@ import coreReflectParametersResolve from './core.reflect.parameters-resolve';
 import { AnyDeclaration, AnyType, Type } from './core.types';
 import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
+import ngMocksUniverse from './ng-mocks-universe';
 
 /**
  * It will be removed from public interface with the next release: A14
@@ -131,6 +132,9 @@ export const extendClassicClass = <I>(base: AnyType<I>): Type<I> => {
     child = MockMiddleware;
   }
   glb.ngMocksParent = undefined;
+
+  // A16: adding unique property.
+  coreDefineProperty(child.prototype, `__ngMocks_index_${ngMocksUniverse.index()}`, undefined, false);
 
   return child;
 };

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { isMockOf, MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-component-render-hide',
   template: 'target',
 })
 class TargetComponent {}

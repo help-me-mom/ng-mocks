@@ -43,7 +43,7 @@ export class TargetDirective implements Validator {
 }
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root-167-ng-validators',
   template: '<input [formControl]="control" target>',
 })
 export class RealComponent {

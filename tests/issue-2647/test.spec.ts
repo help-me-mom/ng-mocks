@@ -3,7 +3,7 @@ import { Component, Directive, NgModule } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
-  selector: 'target',
+  selector: 'target-2647',
 })
 class TargetDirective {}
 
@@ -19,7 +19,7 @@ class DirectiveModule {}
 class MiddleModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-2647',
   template: `{{ directive.constructor.name }}`,
 })
 class TargetComponent {

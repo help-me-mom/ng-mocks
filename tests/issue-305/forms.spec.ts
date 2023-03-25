@@ -9,28 +9,29 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'my',
+  selector: 'target-305-forms',
   template: `
     <input data-testid="inputControl" [(ngModel)]="value" />
   `,
 })
-class MyComponent {
+class TargetComponent {
   public value: number | null = null;
 }
 
 @NgModule({
-  declarations: [MyComponent],
-  exports: [MyComponent],
+  declarations: [TargetComponent],
+  exports: [TargetComponent],
   imports: [FormsModule],
 })
-class MyModule {}
+class TargetModule {}
 
 // checking how normal form works
 describe('issue-305:forms:real', () => {
-  beforeEach(() => MockBuilder(MyComponent).keep(MyModule));
+  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('correctly mocks CVA', () => {
-    const component = MockRender(MyComponent).point.componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
 
     // DefaultValueAccessor does implement ControlValueAccessor
     const valueAccessor = ngMocks.get(
@@ -49,13 +50,13 @@ describe('issue-305:forms:real', () => {
 // @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:forms:mock', () => {
   beforeEach(() =>
-    MockBuilder(MyComponent)
-      .keep(MyModule)
+    MockBuilder(TargetComponent)
+      .keep(TargetModule)
       .mock(DefaultValueAccessor),
   );
 
   it('correctly mocks CVA', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
 
     const component = fixture.point.componentInstance;
 

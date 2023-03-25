@@ -3,7 +3,7 @@ import { Component, Input, NgModule } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-2105',
   template: ' {{ value }} ',
 })
 class TargetComponent {
@@ -22,18 +22,18 @@ describe('issue-2105', () => {
   it('finds all instances', () => {
     const fixture = MockRender(`
       <div class="root">
-        <target value="1"></target>
-        <target value="2"></target>
+        <target-2105 value="1"></target-2105>
+        <target-2105 value="2"></target-2105>
         <div class="child child1">
-          <target value="3"></target>
-          <target value="4"></target>
+          <target-2105 value="3"></target-2105>
+          <target-2105 value="4"></target-2105>
         </div>
         <div class="child child2">
-          <target value="5"></target>
-          <target value="6"></target>
+          <target-2105 value="5"></target-2105>
+          <target-2105 value="6"></target-2105>
           <div class="child child3">
-            <target value="7"></target>
-            <target value="8"></target>
+            <target-2105 value="7"></target-2105>
+            <target-2105 value="8"></target-2105>
           </div>
         </div>
       </div>

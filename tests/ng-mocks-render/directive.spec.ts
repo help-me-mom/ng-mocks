@@ -30,7 +30,7 @@ class MockDirective {
 }
 
 @Component({
-  selector: 'component',
+  selector: 'mock-ng-mocks-render-directive',
   template: '',
 })
 class MockComponent {
@@ -44,9 +44,9 @@ class MockComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-render-directive',
   template: `
-    <component>
+    <mock-ng-mocks-render-directive>
       :step:1:
       <ng-template tpl="header">rendered-header</ng-template>
       :step:2:
@@ -56,7 +56,7 @@ class MockComponent {
         :step:4:
       </div>
       :step:5:
-    </component>
+    </mock-ng-mocks-render-directive>
   `,
 })
 class TargetComponent {}

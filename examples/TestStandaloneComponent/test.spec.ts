@@ -22,7 +22,7 @@ class StandalonePipe implements PipeTransform {
 
 // A simple dependency component we are going to mock.
 @Component({
-  selector: 'dependency',
+  selector: 'dependency-standalone-component',
   template: '<ng-content></ng-content>',
 })
 class DependencyComponent {
@@ -39,9 +39,9 @@ class DependencyModule {}
 // A standalone component we are going to test.
 @Component({
   selector: 'standalone',
-  template: `<dependency [name]="name">{{
+  template: `<dependency-standalone-component [name]="name">{{
     name | standalone
-  }}</dependency>`,
+  }}</dependency-standalone-component>`,
   standalone: true,
   imports: [DependencyModule, StandalonePipe],
 } as never)
@@ -81,7 +81,7 @@ describe('TestStandaloneComponent', () => {
 
     // or asserting the generated html
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<standalone ng-reflect-name="test"><dependency ng-reflect-name="test"></dependency></standalone>',
+      '<standalone ng-reflect-name="test"><dependency-standalone-component ng-reflect-name="test"></dependency-standalone-component></standalone>',
     );
   });
 });

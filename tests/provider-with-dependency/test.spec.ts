@@ -1,13 +1,49 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-import {
-  InternalComponent,
-  ServiceReplacedParent,
-  TargetModule,
-} from './fixtures';
+@Injectable()
+export class ServiceParent {
+  protected value = 'parent';
+
+  public echo() {
+    return this.value;
+  }
+}
+
+@Injectable()
+export class ServiceReplacedParent extends ServiceParent {
+  protected value = 'replaced';
+}
+
+@Injectable()
+export class ServiceChild {
+  public constructor(public readonly parent: ServiceParent) {}
+}
+
+@Component({
+  selector: 'internal-provider-with-dependency',
+  template: '{{ child.parent.echo() }}',
+})
+export class InternalComponent {
+  public constructor(public readonly child: ServiceChild) {}
+}
+
+@NgModule({
+  declarations: [InternalComponent],
+  exports: [InternalComponent],
+  providers: [
+    ServiceParent,
+    ServiceReplacedParent,
+    {
+      deps: [ServiceReplacedParent],
+      provide: ServiceChild,
+      useFactory: (parent: ServiceParent) => new ServiceChild(parent),
+    },
+  ],
+})
+export class TargetModule {}
 
 @Injectable()
 class ServiceMock {
@@ -30,7 +66,7 @@ describe('provider-with-dependency:real', () => {
   it('should render "parent"', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>replaced</internal-component>',
+      '<internal-provider-with-dependency>replaced</internal-provider-with-dependency>',
     );
   });
 });
@@ -53,7 +89,7 @@ describe('provider-with-dependency:provided', () => {
   it('should render "parent"', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>mock</internal-component>',
+      '<internal-provider-with-dependency>mock</internal-provider-with-dependency>',
     );
   });
 });
@@ -75,7 +111,7 @@ describe('provider-with-dependency:mock', () => {
   it('should render "parent" even the providers where patched', () => {
     const fixture = MockRender(InternalComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-component>mock</internal-component>',
+      '<internal-provider-with-dependency>mock</internal-provider-with-dependency>',
     );
   });
 });

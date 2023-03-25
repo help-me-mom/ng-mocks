@@ -21,7 +21,7 @@ class XdTplDirective {
 }
 
 @Component({
-  selector: 'xd-card',
+  selector: 'xd-card-template-ref-by-directive',
   template: 'xd-card',
 })
 class XdCardComponent {
@@ -30,12 +30,12 @@ class XdCardComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-template-ref-by-directive',
   template: `
-    <xd-card>
+    <xd-card-template-ref-by-directive>
       <ng-template xdTpl="header">My Header</ng-template>
       <ng-template xdTpl="footer">My Footer</ng-template>
-    </xd-card>
+    </xd-card-template-ref-by-directive>
   `,
 })
 class TargetComponent {}
@@ -55,7 +55,9 @@ describe('TestTemplateRefByDirective', () => {
     // looking for the element
     // which is produced
     // by the desired component
-    const container = ngMocks.find('xd-card');
+    const container = ngMocks.find(
+      'xd-card-template-ref-by-directive',
+    );
 
     // fetching elements with directives
     const [header, footer] = ngMocks.findInstances(

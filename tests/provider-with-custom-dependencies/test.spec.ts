@@ -51,7 +51,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-provider-with-custom-dependencies',
   template: `
     "service:{{ service.service ? service.service.name : 'missed' }}"
     "optional:{{

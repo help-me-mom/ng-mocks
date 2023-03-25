@@ -33,7 +33,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'target',
+  selector: 'target-641',
   template: `<div @state (@state.done)="show = true">
     <span *ngIf="show">target</span>
   </div>`,

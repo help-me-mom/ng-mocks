@@ -3,7 +3,7 @@ import { Component, Input, NgModule } from '@angular/core';
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-render-factory-tpl',
   template: '{{ i1 }}:{{ i2 }}:{{ i3 }}',
 })
 class TargetComponent {
@@ -50,7 +50,7 @@ describe('mock-render-factory:tpl', () => {
 
   describe('w/ bindings', () => {
     const factory = MockRenderFactory(
-      '{{ i0 }}-<target [i1]="i1" [i2]="i2"></target>-{{ i4 }}',
+      '{{ i0 }}-<target-mock-render-factory-tpl [i1]="i1" [i2]="i2"></target-mock-render-factory-tpl>-{{ i4 }}',
       ['i0', 'i1', 'i2', 'i4'],
     );
 

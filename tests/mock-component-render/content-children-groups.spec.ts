@@ -18,7 +18,7 @@ class CellDirective {
 }
 
 @Component({
-  selector: 'app-table',
+  selector: 'app-table-mock-component-render-content-children-groups',
   template: `
     <ng-container *ngFor="let tpl of templates">
       <ng-container
@@ -35,8 +35,8 @@ class TableComponent {
 }
 
 @Component({
-  selector: 'app-root',
-  template: ` <app-table>
+  selector: 'app-root-mock-component-render-content-children-groups',
+  template: ` <app-table-mock-component-render-content-children-groups>
     <ng-template appCell let-item>
       <div class="custom-data-1">1: {{ item }}</div>
     </ng-template>
@@ -46,7 +46,7 @@ class TableComponent {
     <ng-template appCell let-item>
       <div class="custom-data-3">3: {{ item }}</div>
     </ng-template>
-  </app-table>`,
+  </app-table-mock-component-render-content-children-groups>`,
 })
 class AppComponent {}
 

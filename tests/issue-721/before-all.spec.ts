@@ -6,7 +6,7 @@ import { MockProvider, MockRender, ngMocks } from 'ng-mocks';
 const TOKEN = new InjectionToken('TOKEN');
 
 @Component({
-  selector: 'target',
+  selector: 'target-721-before-all',
   template: '{{ value }}',
 })
 class TargetComponent {

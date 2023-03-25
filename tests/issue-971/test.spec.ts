@@ -52,7 +52,7 @@ export class HideDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-971',
   template: `
     <ng-container *show="flag">:show:{{ content }}:</ng-container>
     <ng-container *hide="flag">:hide:{{ content }}:</ng-container>

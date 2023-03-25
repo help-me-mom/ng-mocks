@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-735-date-pipe',
   template: '{{ stamp | date }}',
 })
 class TargetComponent {

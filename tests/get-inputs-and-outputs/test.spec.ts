@@ -34,14 +34,14 @@ describe('get-inputs-and-outputs', () => {
       // output3: jest.fn().mockName('output3'),
     };
     const fixture = MockRender<TargetComponent, typeof params>(
-      `<target
+      `<target-get-inputs-and-outputs
         [input1]="input1"
         [input2]="input2"
         input3="3"
         (output1)="output1($event)"
         (output2)="output2($event)"
         (output3)="output3($event)"
-      ></target>`,
+      ></target-get-inputs-and-outputs>`,
       params,
     );
 

@@ -20,7 +20,7 @@ try {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-trigger',
   template: `
     <input
       [formControl]="control"

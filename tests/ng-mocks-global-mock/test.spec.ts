@@ -25,14 +25,14 @@ class TargetService {
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-mock',
 })
 class TargetDirective {
   public constructor(public readonly service: TargetService) {}
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-mock',
 })
 class MockDirective {
   public constructor(public readonly service: TargetService) {}
@@ -73,7 +73,9 @@ describe('ng-mocks-global-mock', () => {
     );
 
     it('get real service with a mock token', () => {
-      MockRender('<target></target>');
+      MockRender(
+        '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+      );
       const dir1 = ngMocks.findInstance(TargetDirective);
       const dir2 = ngMocks.findInstance(MockDirective);
 
@@ -88,7 +90,9 @@ describe('ng-mocks-global-mock', () => {
     beforeEach(() => MockBuilder(null, EntryModule));
 
     it('get real service with a mock token', () => {
-      MockRender('<target></target>');
+      MockRender(
+        '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+      );
       const dir1 = ngMocks.findInstance(TargetDirective);
       const dir2 = ngMocks.findInstance(MockDirective);
 
@@ -103,7 +107,11 @@ describe('ng-mocks-global-mock', () => {
     beforeEach(() => MockBuilder(null, EntryModule).exclude(TOKEN));
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -113,7 +121,9 @@ describe('ng-mocks-global-mock', () => {
     );
 
     it('switches to exclude', () => {
-      MockRender('<target></target>');
+      MockRender(
+        '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+      );
       expect(() => ngMocks.findInstance(MockDirective)).toThrow();
     });
   });
@@ -122,7 +132,9 @@ describe('ng-mocks-global-mock', () => {
     beforeEach(() => MockBuilder(null, EntryModule).keep(TOKEN));
 
     it('switches to exclude', () => {
-      MockRender('<target></target>');
+      MockRender(
+        '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+      );
       const dir1 = ngMocks.findInstance(TargetDirective);
 
       expect(dir1.service.token).toEqual('target');
@@ -135,7 +147,9 @@ describe('ng-mocks-global-mock', () => {
     );
 
     it('switches to exclude', () => {
-      MockRender('<target></target>');
+      MockRender(
+        '<target-ng-mocks-global-mock></target-ng-mocks-global-mock>',
+      );
       const dir2 = ngMocks.findInstance(MockDirective);
 
       expect(isMockOf(dir2, MockDirective)).toEqual(false);

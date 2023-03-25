@@ -9,7 +9,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-726',
   template: '{{ service.name }}',
 })
 class TargetComponent {
@@ -38,9 +38,11 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/726
 describe('issue-726', () => {
-  const view = MockRenderFactory('<view><target></target></view>');
+  const view = MockRenderFactory(
+    '<view><target-726></target-726></view>',
+  );
   const provider = MockRenderFactory(
-    '<provider><target></target></provider>',
+    '<provider><target-726></target-726></provider>',
   );
   const viewComponent = MockRenderFactory(ViewComponent);
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-activated-route',
   template: '{{ param }}',
 })
 class TargetComponent implements OnInit {

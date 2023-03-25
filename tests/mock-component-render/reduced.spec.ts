@@ -15,7 +15,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetDirective {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-component-render-reduced',
   template: 'target',
 })
 class TargetComponent {
@@ -39,14 +39,14 @@ describe('mock-component-render:reduced', () => {
     };
     const fixture = MockRender(
       `
-      <target>
+      <target-mock-component-render-reduced>
         <ng-template target>1</ng-template>
         <ng-template target>2</ng-template>
         <ng-container *ngIf="!reduce">
           <ng-template target>3</ng-template>
           <ng-template target>4</ng-template>
         </ng-container>
-      </target>`,
+      </target-mock-component-render-reduced>`,
       params,
     );
 

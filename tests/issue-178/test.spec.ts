@@ -5,13 +5,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'app-hello',
+  selector: 'app-hello-178',
   template: 'app-hello',
 })
 class HelloComponent {}
 
 @Component({
-  selector: 'app-hello2',
+  selector: 'app-hello2-178',
   template: 'app-hello2',
 })
 class Hello2Component {}

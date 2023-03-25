@@ -28,7 +28,7 @@ class TargetService {
 class TargetDirective {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-623',
   template: '{{ service.name }}',
 })
 class TargetComponent {
@@ -45,7 +45,7 @@ class TargetModule {}
 describe('issue-623', () => {
   const withoutDirective = MockRenderFactory(TargetComponent);
   const withDirective = MockRenderFactory(
-    '<target directive></target>',
+    '<target-623 directive></target-623>',
   );
 
   describe('TestBed', () => {

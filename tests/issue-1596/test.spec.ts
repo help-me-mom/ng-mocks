@@ -41,7 +41,7 @@ class ParentComponent implements OnDestroy {
 }
 
 @Component({
-  selector: 'child',
+  selector: 'child-1596',
   template: '<span #child>child</span>',
 })
 class ChildComponent {}

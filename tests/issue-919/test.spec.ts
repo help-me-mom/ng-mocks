@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-919',
   template: `<ng-container *ngIf="context.data$ | async as data">{{
     data.value
   }}</ng-container>`,

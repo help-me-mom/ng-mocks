@@ -25,7 +25,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
       useExisting: forwardRef(() => TargetComponent),
     },
   ],
-  selector: 'target',
+  selector: 'target-167',
   template: 'target',
 })
 export class TargetComponent
@@ -68,8 +68,8 @@ export class TargetComponent
 }
 
 @Component({
-  selector: 'app-root',
-  template: '<target [formControl]="control"></target>',
+  selector: 'app-root-167-component',
+  template: '<target-167 [formControl]="control"></target-167>',
 })
 export class RealComponent {
   public readonly control = new FormControl('mock');

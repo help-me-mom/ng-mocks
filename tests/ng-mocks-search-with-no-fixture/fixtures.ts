@@ -1,7 +1,7 @@
 import { Component, Input, NgModule } from '@angular/core';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-search-with-no-fixture',
   template: '{{ target }}',
 })
 export class TargetComponent {
@@ -16,7 +16,8 @@ export class MissedComponent {}
 
 @Component({
   selector: 'test',
-  template: '<target target="1"></target><target target="2"></target>',
+  template:
+    '<target-ng-mocks-search-with-no-fixture target="1"></target-ng-mocks-search-with-no-fixture><target-ng-mocks-search-with-no-fixture target="2"></target-ng-mocks-search-with-no-fixture>',
 })
 export class TestComponent {}
 

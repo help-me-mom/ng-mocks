@@ -18,7 +18,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-mock-render-mirrors-component',
   template: `
     <div data-role="input1">{{ input1 || 'input1' }}</div>
     <div data-role="input2">{{ input2 || 'input2' }}</div>

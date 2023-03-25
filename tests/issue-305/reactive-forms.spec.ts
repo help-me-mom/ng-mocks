@@ -13,29 +13,30 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'my',
+  selector: 'target-305-reactive-forms',
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
   `,
 })
-class MyComponent {
+class TargetComponent {
   public readonly myControl = new FormControl();
 }
 
 @NgModule({
-  declarations: [MyComponent],
-  exports: [MyComponent],
+  declarations: [TargetComponent],
+  exports: [TargetComponent],
   imports: [ReactiveFormsModule],
 })
-class MyModule {}
+class TargetModule {}
 
 // checking how normal form works
 // @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:reactive-forms:real', () => {
-  beforeEach(() => MockBuilder(MyComponent).keep(MyModule));
+  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
   it('correctly mocks CVA', () => {
-    const component = MockRender(MyComponent).point.componentInstance;
+    const component =
+      MockRender(TargetComponent).point.componentInstance;
 
     // DefaultValueAccessor does implement ControlValueAccessor
     const valueAccessor = ngMocks.get(
@@ -59,13 +60,13 @@ describe('issue-305:reactive-forms:real', () => {
 // @see https://github.com/help-me-mom/ng-mocks/issues/305
 describe('issue-305:reactive-forms:mock', () => {
   beforeEach(() =>
-    MockBuilder(MyComponent)
-      .keep(MyModule)
+    MockBuilder(TargetComponent)
+      .keep(TargetModule)
       .mock(DefaultValueAccessor),
   );
 
   it('correctly mocks CVA', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
 
     const component = fixture.point.componentInstance;
 

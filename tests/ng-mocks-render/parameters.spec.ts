@@ -11,7 +11,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'target',
+  selector: 'target-ng-mocks-render-parameters',
   template: '{{ value1 }}:{{ value2 }}',
 })
 class TargetComponent {

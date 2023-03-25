@@ -9,7 +9,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'xd-card',
+  selector: 'xd-card-template-ref-by-id',
   template: 'xd-card',
 })
 class XdCardComponent {
@@ -21,12 +21,12 @@ class XdCardComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-template-ref-by-id',
   template: `
-    <xd-card>
+    <xd-card-template-ref-by-id>
       <ng-template #header>My Header</ng-template>
       <ng-template #footer>My Footer</ng-template>
-    </xd-card>
+    </xd-card-template-ref-by-id>
   `,
 })
 class TargetComponent {}

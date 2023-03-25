@@ -22,7 +22,7 @@ class MyTplDirective {
 }
 
 @Component({
-  selector: 'xd-card',
+  selector: 'xd-card-template-ref-by-render',
   template: '',
 })
 class XdCardComponent {
@@ -44,7 +44,7 @@ describe('TestTemplateRefByRender', () => {
 
   beforeEach(() =>
     MockRender(`
-    <xd-card>
+    <xd-card-template-ref-by-render>
       <ng-template #id let-label="label">
         rendered-id-{{ label }}
       </ng-template>
@@ -56,12 +56,12 @@ describe('TestTemplateRefByRender', () => {
       <span my-tpl *myTpl="'footer'; let label">
         rendered-footer-{{ label }}
       </span>
-    </xd-card>
+    </xd-card-template-ref-by-render>
   `),
   );
 
   it('renders templates', () => {
-    const xdCardEl = ngMocks.find('xd-card');
+    const xdCardEl = ngMocks.find('xd-card-template-ref-by-render');
 
     const tplId = ngMocks.findTemplateRef(xdCardEl, 'id');
     const tplHeader = ngMocks.findTemplateRef(xdCardEl, [
@@ -92,7 +92,7 @@ describe('TestTemplateRefByRender', () => {
   });
 
   it('renders structural directives', () => {
-    const xdCardEl = ngMocks.find('xd-card');
+    const xdCardEl = ngMocks.find('xd-card-template-ref-by-render');
     const [header, footer] = ngMocks.findInstances(
       xdCardEl,
       MyTplDirective,

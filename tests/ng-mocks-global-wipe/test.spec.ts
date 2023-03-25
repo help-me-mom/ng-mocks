@@ -10,7 +10,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-wipe',
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -18,7 +18,7 @@ class TargetComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-wipe',
   template: '{{ name }}',
 })
 class FakeComponent {
@@ -26,7 +26,7 @@ class FakeComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-wipe',
   template: '{{ name }}',
 })
 class ShadowComponent {
@@ -56,9 +56,11 @@ describe('ng-mocks-global-replace', () => {
     );
 
     it('works as usual', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
     });
   });
@@ -72,10 +74,10 @@ describe('ng-mocks-global-replace', () => {
 
     it('mocks as usual', () => {
       const fixture = MockRender<TargetComponent>(
-        '<target></target>',
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.point.componentInstance.name).toEqual(
         undefined as any,
@@ -88,10 +90,10 @@ describe('ng-mocks-global-replace', () => {
 
     it('mocks as usual', () => {
       const fixture = MockRender<TargetComponent>(
-        '<target></target>',
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.point.componentInstance.name).toEqual(
         undefined as any,
@@ -105,7 +107,11 @@ describe('ng-mocks-global-replace', () => {
     );
 
     it('switches to exclude', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -118,9 +124,11 @@ describe('ng-mocks-global-replace', () => {
     );
 
     it('switches to replace', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>shadow</target>',
+        '<target-ng-mocks-global-wipe>shadow</target-ng-mocks-global-wipe>',
       );
     });
   });
@@ -131,9 +139,11 @@ describe('ng-mocks-global-replace', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target-ng-mocks-global-wipe>target</target-ng-mocks-global-wipe>',
       );
     });
   });

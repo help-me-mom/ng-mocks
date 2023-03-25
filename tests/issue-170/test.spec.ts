@@ -30,7 +30,7 @@ export class TargetService {
 
 @Component({
   providers: [TargetService, TargetChildService],
-  selector: 'target',
+  selector: 'target-170',
   template: 'target {{ service.print() }}',
 })
 export class TargetComponent {
@@ -43,7 +43,7 @@ export class TargetComponent {
 
 @Component({
   selector: 'real',
-  template: '<target></target>',
+  template: '<target-170></target-170>',
 })
 export class RealComponent implements AfterViewInit {
   @ViewChild(TargetComponent, {} as any)

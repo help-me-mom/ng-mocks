@@ -32,6 +32,8 @@ interface NgMocksUniverse {
   isExcludedDef: (def: any) => boolean;
   isProvidedDef: (def: any) => boolean;
   touches: Set<AnyDeclaration<any> | string>;
+  indexValue: number;
+  index: () => number;
 }
 
 funcGetGlobal().ngMocksUniverse = funcGetGlobal().ngMocksUniverse || {};
@@ -130,5 +132,10 @@ ngMocksUniverse.isProvidedDef = (def: any): boolean => hasBuildDeclaration(def) 
 
 // excluding StoreDevtoolsModule by default
 ngMocksUniverse.getDefaults().set('@StoreDevtoolsModule', ['exclude']);
+
+ngMocksUniverse.indexValue = 0;
+ngMocksUniverse.index = () => {
+  return ngMocksUniverse.indexValue++;
+};
 
 export default ((): NgMocksUniverse => ngMocksUniverse)();

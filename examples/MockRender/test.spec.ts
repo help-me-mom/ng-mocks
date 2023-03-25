@@ -12,10 +12,10 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'app-child',
+  selector: 'child-mock-render',
   template: 'dependency',
 })
-class DependencyComponent {
+class ChildComponent {
   @ContentChild('something', {} as any)
   public injectedSomething?: TemplateRef<any>;
   @Input() public someInput = '';
@@ -23,21 +23,21 @@ class DependencyComponent {
 }
 
 @NgModule({
-  declarations: [DependencyComponent],
+  declarations: [ChildComponent],
   imports: [CommonModule],
 })
-class DependencyModule {}
+class ChildModule {}
 
 @Component({
-  selector: 'tested',
+  selector: 'target-mock-render',
   template: `
-    <app-child
+    <child-mock-render
       [someInput]="value1"
       (someOutput)="trigger.emit($event)"
-    ></app-child>
+    ></child-mock-render>
   `,
 })
-class MyComponent {
+class TargetComponent {
   @Output() public readonly trigger = new EventEmitter();
   @Input() public value1 = 'default1';
   @Input() public value2 = 'default2';
@@ -45,7 +45,7 @@ class MyComponent {
 
 describe('MockRender', () => {
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(MyComponent, DependencyModule));
+  beforeEach(() => MockBuilder(TargetComponent, ChildModule));
 
   it('renders template', () => {
     const spy =
@@ -55,7 +55,7 @@ describe('MockRender', () => {
 
     const fixture = MockRender(
       `
-        <tested
+        <target-mock-render
           (trigger)="myListener1($event)"
           [value1]="myParam1"
           value2="check"
@@ -64,7 +64,7 @@ describe('MockRender', () => {
             something as ng-template
           </ng-template>
           something as ng-content
-        </tested>
+        </target-mock-render>
       `,
       {
         myListener1: spy,
@@ -91,9 +91,9 @@ describe('MockRender', () => {
     // const logoClickSpy = jest.fn();
 
     // Generates a template like:
-    // <tested [value1]="value1" [value2]="value2"
-    // (trigger)="trigger"></tested>.
-    const fixture = MockRender(MyComponent, {
+    // <target-mock-render [value1]="value1" [value2]="value2"
+    // (trigger)="trigger"></target-mock-render>.
+    const fixture = MockRender(TargetComponent, {
       trigger: spy,
       value1: 'something2',
     });

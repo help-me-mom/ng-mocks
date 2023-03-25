@@ -11,7 +11,7 @@ class TargetService {
 
 @Component({
   providers: [TargetService],
-  selector: 'target',
+  selector: 'target-provider-in-component',
   template: '{{ service.value }}',
 })
 class TargetComponent {

@@ -32,7 +32,7 @@ class DependencyModule {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-197',
   template: '{{ service.echo() }}',
 })
 class TargetComponent {
@@ -62,7 +62,7 @@ describe('issue-197:with-providers:manually-injection', () => {
   it('creates component with provided dependencies', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target>via-provider</target>',
+      '<target-197>via-provider</target-197>',
     );
   });
 });
@@ -80,7 +80,7 @@ describe('issue-197:with-providers:keep', () => {
     const fixture = MockRender(TargetComponent);
 
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target>via-provider</target>',
+      '<target-197>via-provider</target-197>',
     );
   });
 });
@@ -98,7 +98,7 @@ describe('issue-197:with-providers:mock', () => {
     const fixture = MockRender(TargetComponent);
 
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target></target>',
+      '<target-197></target-197>',
     );
   });
 });

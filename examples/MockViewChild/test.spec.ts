@@ -10,7 +10,7 @@ import {
 
 // A component we want to mock.
 @Component({
-  selector: 'child',
+  selector: 'child-mock-view-child',
   template: 'child',
 })
 class ChildComponent {
@@ -21,9 +21,9 @@ class ChildComponent {
 
 // A component we want to test.
 @Component({
-  selector: 'parent',
+  selector: 'parent-mock-view-child',
   template: `
-    <child #child></child>
+    <child-mock-view-child #child></child-mock-view-child>
     "Issue: {{ child.form.valid }}"
   `,
 })

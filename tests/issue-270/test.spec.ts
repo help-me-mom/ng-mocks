@@ -13,7 +13,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-270',
   template: '{{ service.stream$ | async }}',
 })
 class TargetComponent {
@@ -40,21 +40,21 @@ describe('issue-270', () => {
 
     // default template
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target></target>',
+      '<target-270></target-270>',
     );
 
     // emit 1
     mock.stream$.next(1);
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target>1</target>',
+      '<target-270>1</target-270>',
     );
 
     // emit 2
     mock.stream$.next(2);
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<target>2</target>',
+      '<target-270>2</target-270>',
     );
   });
 });

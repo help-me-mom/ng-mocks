@@ -8,7 +8,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root-162',
   template: `<a (click)="title = 'test'">click</a>`,
 })
 export class AppComponent {
@@ -16,7 +16,7 @@ export class AppComponent {
 }
 
 @Component({
-  selector: 'app-mock',
+  selector: 'app-mock-162',
   template: `<a (click)="title = 'test'">click</a>`,
 })
 export class MockComponent {

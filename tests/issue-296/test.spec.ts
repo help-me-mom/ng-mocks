@@ -25,7 +25,7 @@ export class ModalService {
 class ModalComponent {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-296',
   template: 'target',
 })
 class TargetComponent {

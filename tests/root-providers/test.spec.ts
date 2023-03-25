@@ -1,5 +1,17 @@
-import { VERSION } from '@angular/core';
+import {
+  VERSION,
+  Component,
+  Inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  NgModule,
+  Optional,
+  SkipSelf,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
   MockBuilder,
@@ -8,13 +20,95 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import {
-  ModuleComponent,
-  TargetComponent,
-  TargetModule,
-  TargetService,
-  TOKEN,
-} from './fixtures';
+// Thanks A5.
+const TOKEN = new (InjectionToken as any)('TOKEN', {
+  factory: () => 'token',
+});
+
+@Injectable()
+class ModuleService {
+  public readonly name = 'module';
+}
+
+// @TODO remove with A5 support
+const injectableTargetServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableTargetServiceArgs)
+class TargetService {
+  public readonly name = 'service';
+}
+
+// @TODO remove with A5 support
+const injectableFakeServiceArgs = [
+  {
+    providedIn: 'root',
+  } as never,
+];
+
+@Injectable(...injectableFakeServiceArgs)
+class FakeService {
+  public readonly name = 'fake';
+}
+
+const injectableProvidedServiceArgs = [
+  {
+    providedIn: 'any',
+  } as never,
+];
+
+@Injectable(...injectableProvidedServiceArgs)
+class ProvidedService {
+  public readonly name = 'provided';
+}
+
+@Component({
+  selector: 'target-root-providers',
+  template: `
+    "service:{{ service.name }}" "fake:{{ fake.name }}" "injected:{{
+      injected.name
+    }}" "provided:{{ provided.name }}" "token:{{ token }}"
+  `,
+})
+class TargetComponent {
+  public readonly injected: TargetService;
+
+  public constructor(
+    @Inject(FakeService) public readonly fake: TargetService,
+    @Optional()
+    @Inject(TOKEN)
+    @SkipSelf()
+    public readonly token: string,
+    @Optional() @SkipSelf() public readonly service: TargetService,
+    @Inject(TOKEN)
+    @Optional()
+    @SkipSelf()
+    public readonly token2: string,
+    public readonly provided: ProvidedService,
+    injector: Injector,
+  ) {
+    this.injected = injector.get(TargetService);
+  }
+}
+
+@Component({
+  selector: 'module',
+  template: '{{ moduleService.name }}',
+})
+class ModuleComponent {
+  public constructor(public readonly moduleService: ModuleService) {}
+}
+
+@NgModule({
+  declarations: [TargetComponent, ModuleComponent],
+  exports: [TargetComponent],
+  imports: [BrowserModule, BrowserAnimationsModule],
+  providers: [ProvidedService],
+})
+class TargetModule {}
 
 describe('root-providers', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-trigger-317',
   template: '<input (focus)="trigger.emit()" data-label="input">',
 })
 class TargetComponent {

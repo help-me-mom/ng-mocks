@@ -22,7 +22,7 @@ export class PipeModule {}
 export class TargetModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-241',
   template: "{{ 'target' | target }}",
 })
 export class TargetComponent {}

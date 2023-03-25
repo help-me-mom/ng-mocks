@@ -32,7 +32,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-root-provider-with-root-dep',
   template: ' "name:{{ service ? service.name : \'\' }}" ',
 })
 class TargetComponent {

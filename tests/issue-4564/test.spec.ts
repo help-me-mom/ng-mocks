@@ -59,7 +59,7 @@ class StandardPipe implements PipeTransform {
 class PipeModule {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-4564',
   template: '{{ null | target }}:{{ token }}:{{ service.func() }}',
 })
 class TargetComponent {
@@ -78,7 +78,8 @@ class ComponentModule {}
 
 @Component({
   selector: 'sut',
-  template: '<custom-component><target></target></custom-component>',
+  template:
+    '<custom-component><target-4564></target-4564></custom-component>',
 })
 class SubjectUnderTestComponent {}
 

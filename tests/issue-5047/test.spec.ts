@@ -26,7 +26,7 @@ describe('issue-5047', () => {
 
   // A standalone component we are going to test.
   @Component({
-    selector: 'target',
+    selector: 'target-5047',
     template: `<dependency *ngIf="name != null">target</dependency>`,
   })
   class TargetComponent {

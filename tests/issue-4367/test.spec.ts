@@ -20,7 +20,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-4367',
   template: '',
 })
 class TargetComponent {

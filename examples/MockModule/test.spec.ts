@@ -12,10 +12,10 @@ import {
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'app-child',
+  selector: 'child-mock-module',
   template: 'dependency',
 })
-class DependencyComponent {
+class ChildComponent {
   @ContentChild('something', {} as any)
   public injectedSomething?: TemplateRef<any>;
 
@@ -27,40 +27,40 @@ class DependencyComponent {
 }
 
 @NgModule({
-  declarations: [DependencyComponent],
-  exports: [DependencyComponent],
+  declarations: [ChildComponent],
+  exports: [ChildComponent],
   imports: [CommonModule],
 })
-class DependencyModule {}
+class ChildModule {}
 
 @Component({
-  selector: 'tested',
+  selector: 'target-mock-module',
   template: `
-    <app-child
+    <child-mock-module
       [someInput]="value"
       (someOutput)="trigger()"
-    ></app-child>
+    ></child-mock-module>
   `,
 })
-class MyComponent {
+class TargetComponent {
   public value = '';
   public trigger = () => undefined;
 }
 
 @NgModule({
-  imports: [DependencyModule],
-  declarations: [MyComponent],
+  imports: [ChildModule],
+  declarations: [TargetComponent],
 })
 class ItsModule {}
 
 describe('MockModule', () => {
   beforeEach(() => {
     // DependencyModule is an import of ItsModule.
-    return MockBuilder(MyComponent, ItsModule);
+    return MockBuilder(TargetComponent, ItsModule);
   });
 
   it('renders MyComponent with its dependencies', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     expect(component).toBeTruthy();

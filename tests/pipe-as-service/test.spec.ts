@@ -32,7 +32,7 @@ class TargetPipe implements PipeTransform {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-pipe-as-service',
   template: `
     'pipe:{{ '123' | target }}' 's:transform:{{
       service.transform('123')

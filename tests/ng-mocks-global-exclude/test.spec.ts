@@ -10,7 +10,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-exclude',
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -18,7 +18,7 @@ class TargetComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-global-exclude',
   template: '{{ name }}',
 })
 class FakeComponent {
@@ -44,9 +44,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('works as usual', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
       );
     });
   });
@@ -59,7 +61,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -71,7 +77,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -83,9 +93,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target-ng-mocks-global-exclude>target</target-ng-mocks-global-exclude>',
       );
     });
   });
@@ -98,9 +110,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
       );
     });
   });
@@ -109,7 +123,11 @@ describe('ng-mocks-global-exclude', () => {
     beforeEach(() => MockBuilder(null, TargetModule));
 
     it('excludes out of the box', () => {
-      expect(() => MockRender('<target></target>')).toThrow();
+      expect(() =>
+        MockRender(
+          '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+        ),
+      ).toThrow();
     });
   });
 
@@ -119,9 +137,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('switches to keep', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>target</target>',
+        '<target-ng-mocks-global-exclude>target</target-ng-mocks-global-exclude>',
       );
     });
   });
@@ -132,9 +152,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('switches to mock', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target></target>',
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
       );
     });
   });
@@ -148,9 +170,11 @@ describe('ng-mocks-global-exclude', () => {
     );
 
     it('switches to replace', () => {
-      const fixture = MockRender('<target></target>');
+      const fixture = MockRender(
+        '<target-ng-mocks-global-exclude></target-ng-mocks-global-exclude>',
+      );
       expect(fixture.nativeElement.innerHTML).toEqual(
-        '<target>fake</target>',
+        '<target-ng-mocks-global-exclude>fake</target-ng-mocks-global-exclude>',
       );
     });
   });

@@ -7,7 +7,7 @@ import { MockBuilder } from 'ng-mocks';
 class TargetService {}
 
 @Component({
-  selector: 'target',
+  selector: 'target-4613',
   template: '{{ service.constructor.name }}',
 })
 class TargetComponent {

@@ -22,7 +22,7 @@ class MockDirective {
 }
 
 @Component({
-  selector: 'component',
+  selector: 'mock-ng-mocks-render-idea',
   template: ' <ng-content></ng-content> ',
 })
 class MockComponent {
@@ -46,9 +46,9 @@ class MockComponent {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-ng-mocks-render-idea',
   template: `
-    <component>
+    <mock-ng-mocks-render-idea>
       :step:1:
       <ng-template #header>rendered-header</ng-template>
       :step:2:
@@ -56,7 +56,7 @@ class MockComponent {
       :step:3:
       <ng-template tpl="footer">tpl-footer</ng-template>
       :step:4:
-    </component>
+    </mock-ng-mocks-render-idea>
   `,
 })
 class TargetComponent {}

@@ -3,7 +3,7 @@ import { Directive, NgModule } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
-  selector: 'child',
+  selector: 'child-173',
 })
 class ChildDirective {}
 
@@ -15,7 +15,7 @@ class ChildDirective {}
       useValue: undefined,
     },
   ],
-  selector: 'parent',
+  selector: 'parent-173',
 })
 class ParentDirective {}
 

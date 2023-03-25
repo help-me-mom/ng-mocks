@@ -3,7 +3,7 @@ import { Component, Directive, Injectable } from '@angular/core';
 import { ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target1',
+  selector: 'target1-ng-mocks-global-replace-failures',
   template: '{{ name }}',
 })
 class Target1Component {
@@ -11,7 +11,7 @@ class Target1Component {
 }
 
 @Directive({
-  selector: 'target1',
+  selector: 'target1-ng-mocks-global-replace-failures',
 })
 class Fake1Directive {
   public readonly name = 'fake1';

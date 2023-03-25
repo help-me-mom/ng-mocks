@@ -18,7 +18,7 @@ class TargetService {
 }
 
 @Directive({
-  selector: 'target',
+  selector: 'target-2646',
 })
 class TargetDirective {
   echo() {
@@ -27,7 +27,7 @@ class TargetDirective {
 }
 
 @Component({
-  selector: 'target',
+  selector: 'target-2646',
   template: '{{ echo() | target }}',
 })
 class TargetComponent {
@@ -42,7 +42,7 @@ class TargetComponent {
 describe('issue-2646', () => {
   describe('directive', () => {
     @Directive({
-      selector: 'target',
+      selector: 'target-2646',
     })
     class ServiceToDirective extends TargetService {
       echo() {
@@ -97,7 +97,7 @@ describe('issue-2646', () => {
 
   describe('component', () => {
     @Component({
-      selector: 'target',
+      selector: 'target-2646',
       template: 'target',
     })
     class ServiceToComponent extends TargetService {

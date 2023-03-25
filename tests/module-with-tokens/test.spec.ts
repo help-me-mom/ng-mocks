@@ -1,11 +1,50 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Inject,
+  InjectionToken,
+  NgModule,
+} from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import {
-  MY_TOKEN_MULTI,
-  MY_TOKEN_SINGLE,
-  TargetComponent,
-  TargetModule,
-} from './fixtures';
+export const MY_TOKEN_SINGLE = new InjectionToken('MY_TOKEN_SINGLE');
+
+export const MY_TOKEN_MULTI = new InjectionToken('MY_TOKEN_MULTI');
+
+@Component({
+  selector: 'internal-module-with-tokens',
+  template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
+})
+export class TargetComponent {
+  public constructor(
+    @Inject(MY_TOKEN_SINGLE) public readonly tokenSingle: string,
+    @Inject(MY_TOKEN_MULTI) public readonly tokenMulti: string[],
+  ) {}
+}
+
+@NgModule({
+  declarations: [TargetComponent],
+  exports: [TargetComponent],
+  imports: [CommonModule],
+  providers: [
+    {
+      provide: MY_TOKEN_SINGLE,
+      useValue: 'MY_TOKEN_SINGLE',
+    },
+    {
+      multi: true,
+      provide: MY_TOKEN_MULTI,
+      useValue: 'MY_TOKEN_MULTI',
+    },
+    {
+      multi: true,
+      provide: MY_TOKEN_MULTI,
+      useValue: 'MY_TOKEN_MULTI_2',
+    },
+  ],
+})
+export class TargetModule {}
 
 // Preferred way.
 // Because tokens are provided in the testbed module with custom values the test should render them.
@@ -31,7 +70,7 @@ describe('module-with-tokens:mock-0', () => {
   it('fails to render all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component>"V1" [ "V2", "V3" ]</internal-component>',
+      '<internal-module-with-tokens>"V1" [ "V2", "V3" ]</internal-module-with-tokens>',
     );
   });
 });
@@ -48,7 +87,7 @@ describe('module-with-tokens:mock-1', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component> [ null, null ]</internal-component>',
+      '<internal-module-with-tokens> [ null, null ]</internal-module-with-tokens>',
     );
   });
 });
@@ -64,9 +103,9 @@ describe('module-with-tokens:mock-2', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component>' +
+      '<internal-module-with-tokens>' +
         '"MOCK_MY_TOKEN_SINGLE" [ "MOCK_MY_TOKEN_MULTI", "MOCK_MY_TOKEN_MULTI" ]' +
-        '</internal-component>',
+        '</internal-module-with-tokens>',
     );
   });
 });
@@ -99,7 +138,7 @@ describe('module-with-tokens:real', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
+      '<internal-module-with-tokens>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-module-with-tokens>',
     );
   });
 });
@@ -115,7 +154,7 @@ describe('module-with-tokens:keep', () => {
   it('renders all tokens', () => {
     const fixture = MockRender(TargetComponent);
     expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<internal-component>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-component>',
+      '<internal-module-with-tokens>"MY_TOKEN_SINGLE" [ "MY_TOKEN_MULTI", "MY_TOKEN_MULTI_2" ]</internal-module-with-tokens>',
     );
   });
 });

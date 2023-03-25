@@ -19,7 +19,7 @@ class CellDirective {
 }
 
 @Component({
-  selector: 'app-table',
+  selector: 'app-table-mock-component-render-content-children',
   template: ` <div *ngFor="let item of data">
     <ng-container *ngFor="let cell of cells">
       <ng-container
@@ -51,13 +51,15 @@ class TableComponent {
 }
 
 @Component({
-  selector: 'app-root',
-  template: ` <app-table [data]="data">
+  selector: 'app-root-mock-component-render-content-children',
+  template: ` <app-table-mock-component-render-content-children
+    [data]="data"
+  >
     <ng-template appCell let-item #cell>
       <div class="custom-data-element">Data: {{ item.data }}</div>
     </ng-template>
     <span #div>hello here</span>
-  </app-table>`,
+  </app-table-mock-component-render-content-children>`,
 })
 class AppComponent {
   public data = [{ data: 1 }, { data: 2 }];
