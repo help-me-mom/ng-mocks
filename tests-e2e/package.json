@@ -27,7 +27,7 @@
     "@ngrx/effects": "15.4.0",
     "@ngrx/store": "15.4.0",
     "@ngrx/store-devtools": "15.4.0",
-    "@ngxs/store": "3.7.6",
+    "@ngxs/store": "3.7.6-dev.master-6835a28",
     "primeng": "15.2.1",
     "rxjs": "7.8.0",
     "tslib": "2.5.0",
