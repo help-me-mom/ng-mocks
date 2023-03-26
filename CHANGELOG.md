@@ -1,3 +1,11 @@
+## [14.7.3](https://github.com/ike18t/ng-mocks/compare/v14.7.2...v14.7.3) (2023-03-26)
+
+
+### Bug Fixes
+
+* **MockBuilder:** configuration first, process later [#5239](https://github.com/ike18t/ng-mocks/issues/5239) ([992ef6a](https://github.com/ike18t/ng-mocks/commit/992ef6a77b895918a3daeb031110deb19a3f90ea))
+* **MockBuilder:** respects pipe-transform in early mocks [#5239](https://github.com/ike18t/ng-mocks/issues/5239) ([979d42b](https://github.com/ike18t/ng-mocks/commit/979d42bf668ee279a0f6dd9aed494095cc424573))
+
 ## [14.7.2](https://github.com/ike18t/ng-mocks/compare/v14.7.1...v14.7.2) (2023-03-25)
 
 
