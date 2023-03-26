@@ -10,7 +10,7 @@ export const funcExtractDeps = (def: any, result: Set<AnyDeclaration<any>>): Set
   const meta = collectDeclarations(def);
   const type = getNgType(def);
   // istanbul ignore if
-  if (!type) {
+  if (!type || type === 'Injectable') {
     return result;
   }
 

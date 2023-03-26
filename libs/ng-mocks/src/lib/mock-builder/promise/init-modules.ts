@@ -5,6 +5,8 @@ import { MockModule } from '../../mock-module/mock-module';
 import mockNgDef from '../../mock-module/mock-ng-def';
 import collectDeclarations from '../../resolve/collect-declarations';
 
+import tryMockDeclaration from './try-mock-declaration';
+
 export default (
   keepDef: Set<any>,
   mockDef: Set<any>,
@@ -39,6 +41,9 @@ export default (
     if (deleteTouch) {
       ngMocksUniverse.touches.delete(def);
     }
+  }
+  for (const def of mapValues(mockDef)) {
+    tryMockDeclaration(def);
   }
 
   return loProviders;

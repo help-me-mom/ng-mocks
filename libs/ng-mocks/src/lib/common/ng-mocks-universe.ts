@@ -14,6 +14,12 @@ const globalMap = (key: string) => () => {
 };
 
 interface NgMocksUniverse {
+  /**
+   * the value can be:
+   * - null - exclude
+   * - undefined - delayed initialization
+   * - value - the definition which should be used in tests: real value, replacement, mock.
+   */
   builtDeclarations: Map<any, any>;
   builtProviders: Map<any, any>;
   cacheDeclarations: Map<any, any>;
@@ -109,7 +115,9 @@ ngMocksUniverse.getBuildDeclaration = (def: any): undefined | null | any => {
 
 ngMocksUniverse.hasBuildDeclaration = (def: any): boolean => {
   if (ngMocksUniverse.builtDeclarations.has(def)) {
-    return true;
+    // undefined means that we know about this declaration,
+    // but its initialization is postponed at the moment.
+    return ngMocksUniverse.builtDeclarations.get(def) !== undefined;
   }
   const [mode] = getDefaults(def);
 

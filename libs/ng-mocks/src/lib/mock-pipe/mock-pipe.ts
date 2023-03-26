@@ -32,7 +32,9 @@ export function MockPipes(...pipes: Array<Type<PipeTransform>>): Array<Type<Pipe
   return pipes.map(pipe => MockPipe(pipe, undefined));
 }
 
-const getMockClass = (pipe: Type<any>, transform?: PipeTransform['transform']): Type<any> => {
+const getMockClass = (pipe: Type<any>, transformValue?: PipeTransform['transform']): Type<any> => {
+  const config = ngMocksUniverse.config.get(pipe);
+  const transform = transformValue ?? config?.defValue?.transform;
   const mock = extendClass(Mock);
   Pipe(coreReflectPipeResolve(pipe))(mock);
   decorateMock(mock, pipe, {
