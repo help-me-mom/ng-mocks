@@ -22,15 +22,13 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: 'actual-empty',
   template: '',
 })
-export class ActualEmptyComponent {}
+class ActualEmptyComponent {}
 
 @Component({
   selector: 'actual-injection',
   template: '',
 })
-export class ActualInjectionComponent
-  implements ControlValueAccessor
-{
+class ActualInjectionComponent implements ControlValueAccessor {
   protected value: any;
 
   public constructor(@Self() @Optional() ngControl: NgControl) {
@@ -66,7 +64,7 @@ export class ActualInjectionComponent
   selector: 'actual-token',
   template: '',
 })
-export class ActualTokenComponent implements ControlValueAccessor {
+class ActualTokenComponent implements ControlValueAccessor {
   protected value: any;
 
   public registerOnChange(fn: any): void {
@@ -95,7 +93,7 @@ export class ActualTokenComponent implements ControlValueAccessor {
   ],
   selector: '[actualToken]',
 })
-export class ActualTokenDirective implements ControlValueAccessor {
+class ActualTokenDirective implements ControlValueAccessor {
   protected value: any;
 
   public registerOnChange(fn: any): void {

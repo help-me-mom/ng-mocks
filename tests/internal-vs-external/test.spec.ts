@@ -7,21 +7,21 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'internal-internal-vs-external',
   template: 'internal',
 })
-export class InternalComponent {}
+class InternalComponent {}
 
 @Component({
   selector: 'external-internal-vs-external',
   template:
     'external <internal-internal-vs-external></internal-internal-vs-external>',
 })
-export class ExternalComponent {}
+class ExternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent, ExternalComponent],
   exports: [ExternalComponent],
   imports: [CommonModule],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('InternalVsExternal:real', () => {
   ngMocks.throwOnConsole();

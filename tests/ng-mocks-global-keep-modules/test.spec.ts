@@ -7,7 +7,7 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
   selector: 'target1-ng-mocks-global-keep-modules',
   template: '{{ name }}',
 })
-export class Target1Component {
+class Target1Component {
   public readonly name = 'target1';
 
   public target1() {
@@ -19,7 +19,7 @@ export class Target1Component {
   selector: 'target1-ng-mocks-global-keep-modules',
   template: '{{ name }}',
 })
-export class Fake1Component {
+class Fake1Component {
   public readonly name = 'fake1';
 
   public fake1() {
@@ -31,13 +31,13 @@ export class Fake1Component {
   declarations: [Target1Component],
   exports: [Target1Component],
 })
-export class Target1Module {}
+class Target1Module {}
 
 @Component({
   selector: 'target2-ng-mocks-global-keep-modules',
   template: '{{ name }}',
 })
-export class Target2Component {
+class Target2Component {
   public readonly name = 'target2';
 }
 
@@ -45,7 +45,7 @@ export class Target2Component {
   selector: 'normal2-ng-mocks-global-keep-modules',
   template: '{{ name }}',
 })
-export class Normal2Component {
+class Normal2Component {
   public readonly name = 'normal2';
 }
 
@@ -54,13 +54,13 @@ export class Normal2Component {
   exports: [Target2Component, Normal2Component],
   imports: [Target1Module],
 })
-export class Target2Module {}
+class Target2Module {}
 
 @NgModule({
   exports: [Target1Component, Target2Component, Normal2Component],
   imports: [Target1Module, Target2Module],
 })
-export class Target3Module {}
+class Target3Module {}
 
 ngMocks.globalExclude(Target2Component);
 ngMocks.globalKeep(Target2Module);

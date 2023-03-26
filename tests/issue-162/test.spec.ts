@@ -11,7 +11,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'app-root-162',
   template: `<a (click)="title = 'test'">click</a>`,
 })
-export class AppComponent {
+class AppComponent {
   public title = 'ng-routing-test';
 }
 
@@ -19,7 +19,7 @@ export class AppComponent {
   selector: 'app-mock-162',
   template: `<a (click)="title = 'test'">click</a>`,
 })
-export class MockComponent {
+class MockComponent {
   public title = 'ng-routing-test';
 }
 
@@ -29,7 +29,7 @@ export class MockComponent {
   exports: [MockComponent],
   imports: [BrowserModule],
 })
-export class AppModule {}
+class AppModule {}
 
 // fix for jest without jasmine assertions
 const assertion: any =

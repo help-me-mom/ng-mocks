@@ -8,15 +8,15 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-export const MY_TOKEN_SINGLE = new InjectionToken('MY_TOKEN_SINGLE');
+const MY_TOKEN_SINGLE = new InjectionToken('MY_TOKEN_SINGLE');
 
-export const MY_TOKEN_MULTI = new InjectionToken('MY_TOKEN_MULTI');
+const MY_TOKEN_MULTI = new InjectionToken('MY_TOKEN_MULTI');
 
 @Component({
   selector: 'internal-module-with-tokens',
   template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public constructor(
     @Inject(MY_TOKEN_SINGLE) public readonly tokenSingle: string,
     @Inject(MY_TOKEN_MULTI) public readonly tokenMulti: string[],
@@ -44,7 +44,7 @@ export class TargetComponent {
     },
   ],
 })
-export class TargetModule {}
+class TargetModule {}
 
 // Preferred way.
 // Because tokens are provided in the testbed module with custom values the test should render them.

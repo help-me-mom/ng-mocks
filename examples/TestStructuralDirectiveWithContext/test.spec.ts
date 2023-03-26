@@ -7,7 +7,7 @@ import {
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-export interface ITargetContext {
+interface ITargetContext {
   $implicit: string;
   myIndex: number;
 }

@@ -25,7 +25,7 @@ class MyPipe implements PipeTransform {
     <div class="p3">{{ 'd3' | pipe }}</div>
   `,
 })
-export class AppComponent {}
+class AppComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/298
 describe('issue-298:pipes', () => {

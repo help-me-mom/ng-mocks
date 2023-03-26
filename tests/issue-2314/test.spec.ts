@@ -43,7 +43,7 @@ class NothingPipe implements PipeTransform {
     </div>
   `,
 })
-export class TargetComponent {
+class TargetComponent {
   public array$ = new BehaviorSubject([1]);
   public false$ = new BehaviorSubject(false);
   public text$ = new BehaviorSubject('text');

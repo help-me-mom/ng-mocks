@@ -24,7 +24,7 @@ import {
 } from 'ng-mocks';
 
 // remove with A5
-export const EMPTY = new Subject<any>();
+const EMPTY = new Subject<any>();
 EMPTY.complete();
 
 interface User {

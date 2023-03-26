@@ -9,12 +9,12 @@ import {
 } from 'ng-mocks';
 
 @Injectable()
-export class ProviderService {
+class ProviderService {
   public description = 'real provider';
 }
 
 @Injectable()
-export class ViewProviderService {
+class ViewProviderService {
   public description = 'real viewProvider';
 }
 
@@ -28,7 +28,7 @@ export class ViewProviderService {
   `,
   viewProviders: [ViewProviderService],
 })
-export class HelloComponent {
+class HelloComponent {
   @Input() public readonly name: string | null = null;
 
   public constructor(

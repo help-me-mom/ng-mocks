@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 
 import { MockProvider, MockRender } from 'ng-mocks';
 
-export const EMPTY = new Subject<any>();
+const EMPTY = new Subject<any>();
 EMPTY.complete();
 
 @Injectable()

@@ -17,7 +17,7 @@ import { MockBuilder } from 'ng-mocks';
     changeDetection: ChangeDetectionStrategy.OnPush,
   } as never /* TODO: remove after upgrade to a14 */,
 )
-export class MyComponent {
+class MyComponent {
   constructor(public activatedRoute: ActivatedRoute) {}
 }
 

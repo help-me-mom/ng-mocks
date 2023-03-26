@@ -48,7 +48,7 @@ class TargetComponent {}
   ],
   providers: [],
 })
-export class TargetModule {}
+class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/222
 describe('issue-222:mock-keep-priorities', () => {

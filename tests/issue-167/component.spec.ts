@@ -28,9 +28,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'target-167',
   template: 'target',
 })
-export class TargetComponent
-  implements ControlValueAccessor, Validator
-{
+class TargetComponent implements ControlValueAccessor, Validator {
   public valRegisterOnChange: any;
   public valRegisterOnTouched: any;
   public valRegisterOnValidatorChange: any;
@@ -71,7 +69,7 @@ export class TargetComponent
   selector: 'app-root-167-component',
   template: '<target-167 [formControl]="control"></target-167>',
 })
-export class RealComponent {
+class RealComponent {
   public readonly control = new FormControl('mock');
 }
 

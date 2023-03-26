@@ -7,7 +7,7 @@ import { MockDirective, ngMocks } from 'ng-mocks';
 @Directive({
   selector: '[myDirective]',
 })
-export class MyDirective {
+class MyDirective {
   @Input() public value?: string;
 }
 
@@ -19,7 +19,7 @@ export class MyDirective {
     <div class="p3"><span myDirective value="d3"></span></div>
   `,
 })
-export class AppComponent {}
+class AppComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/298
 describe('issue-298:stack-blitz', () => {

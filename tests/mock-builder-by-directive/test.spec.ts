@@ -11,13 +11,13 @@ import {
   selector: 'internal-mock-builder-by-directive',
   template: 'internal',
 })
-export class InternalComponent {}
+class InternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent],
   exports: [InternalComponent],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('MockBuilderByDirective:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

@@ -7,28 +7,28 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'internal-only-nested',
   template: 'internal',
 })
-export class InternalComponent {}
+class InternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent],
   imports: [CommonModule],
 })
-export class Nested1Module {}
+class Nested1Module {}
 
 @NgModule({
   imports: [Nested1Module],
 })
-export class Nested2Module {}
+class Nested2Module {}
 
 @NgModule({
   imports: [Nested1Module],
 })
-export class Nested3Module {}
+class Nested3Module {}
 
 @NgModule({
   imports: [Nested2Module, Nested3Module],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('InternalOnlyNested:real', () => {
   ngMocks.throwOnConsole();

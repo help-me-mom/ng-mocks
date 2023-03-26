@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
-export class ServiceParent {
+class ServiceParent {
   protected value = 'parent';
 
   public echo() {
@@ -13,12 +13,12 @@ export class ServiceParent {
 }
 
 @Injectable()
-export class ServiceReplacedParent extends ServiceParent {
+class ServiceReplacedParent extends ServiceParent {
   protected value = 'replaced';
 }
 
 @Injectable()
-export class ServiceChild {
+class ServiceChild {
   public constructor(public readonly parent: ServiceParent) {}
 }
 
@@ -26,7 +26,7 @@ export class ServiceChild {
   selector: 'internal-provider-with-dependency',
   template: '{{ child.parent.echo() }}',
 })
-export class InternalComponent {
+class InternalComponent {
   public constructor(public readonly child: ServiceChild) {}
 }
 
@@ -43,7 +43,7 @@ export class InternalComponent {
     },
   ],
 })
-export class TargetModule {}
+class TargetModule {}
 
 @Injectable()
 class ServiceMock {

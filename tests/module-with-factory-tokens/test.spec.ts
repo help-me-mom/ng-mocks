@@ -9,14 +9,14 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-export const MY_TOKEN_SINGLE = new (InjectionToken as any)(
+const MY_TOKEN_SINGLE = new (InjectionToken as any)(
   /* A5 */ 'MY_TOKEN_SINGLE',
   {
     factory: () => 'MY_TOKEN_SINGLE',
   },
 );
 
-export const MY_TOKEN_MULTI = new (InjectionToken as any)(
+const MY_TOKEN_MULTI = new (InjectionToken as any)(
   /* A5 */ 'MY_TOKEN_MULTI',
   {
     factory: () => 'MY_TOKEN_MULTI',
@@ -27,7 +27,7 @@ export const MY_TOKEN_MULTI = new (InjectionToken as any)(
   selector: 'internal-module-with-factory-tokens',
   template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public constructor(
     @Inject(MY_TOKEN_SINGLE) public readonly tokenSingle: string,
     @Inject(MY_TOKEN_MULTI) public readonly tokenMulti: string[],
@@ -39,7 +39,7 @@ export class TargetComponent {
   exports: [TargetComponent],
   imports: [CommonModule],
 })
-export class TargetModule {}
+class TargetModule {}
 
 // Because all tokens have factories the test should render them correctly.
 // There is no way to specify multi in a factory, so we do not get an array.

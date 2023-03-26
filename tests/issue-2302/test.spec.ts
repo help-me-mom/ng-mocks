@@ -18,7 +18,7 @@ class ItemService {
   selector: 'app-item-container',
   template: 'ItemContainerComponent',
 })
-export class ItemContainerComponent implements OnInit {
+class ItemContainerComponent implements OnInit {
   items$?: Observable<Item[]>;
   constructor(protected itemService: ItemService) {}
 
@@ -31,7 +31,7 @@ export class ItemContainerComponent implements OnInit {
   selector: 'app-cake-item-container',
   template: 'CakeItemContainerComponent',
 })
-export class CakeItemContainerComponent
+class CakeItemContainerComponent
   extends ItemContainerComponent
   implements OnInit
 {

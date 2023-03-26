@@ -6,7 +6,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 @Directive({
   selector: 'directive1',
 })
-export class DefaultDirective {}
+class DefaultDirective {}
 
 @Directive({
   providers: [
@@ -18,7 +18,7 @@ export class DefaultDirective {}
   ],
   selector: 'directive2',
 })
-export class ValueAccessorDirective {}
+class ValueAccessorDirective {}
 
 @Directive({
   providers: [
@@ -30,7 +30,7 @@ export class ValueAccessorDirective {}
   ],
   selector: 'directive3',
 })
-export class ValidatorDirective {}
+class ValidatorDirective {}
 
 // providers should be added to directives only in case if they were specified in the original directive.
 // @see https://github.com/help-me-mom/ng-mocks/issues/145
