@@ -6,7 +6,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: 'target-445',
   template: '<ng-content></ng-content>',
 })
-export class ByAttributeComponent {
+class ByAttributeComponent {
   @ContentChild('[someAttribute]', {} as any)
   public readonly contentChild?: any;
 }

@@ -50,7 +50,7 @@ import {
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-export interface ITargetContext {
+interface ITargetContext {
   $implicit: string;
   myIndex: number;
 }
@@ -69,7 +69,7 @@ class TargetDirective {
   @Input() public set target(items: string[]) {
     this.viewContainerRef.clear();
 
-    for (let index = 0; index <= items.length; index += 1) {
+    for (let index = 0; index < items.length; index += 1) {
       const value = items[index];
       this.viewContainerRef.createEmbeddedView(this.templateRef, {
         $implicit: value,

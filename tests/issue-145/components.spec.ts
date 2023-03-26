@@ -7,7 +7,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'component1',
   template: '',
 })
-export class DefaultComponent {}
+class DefaultComponent {}
 
 @Component({
   providers: [
@@ -20,7 +20,7 @@ export class DefaultComponent {}
   selector: 'component2',
   template: '',
 })
-export class ValueAccessorComponent {}
+class ValueAccessorComponent {}
 
 @Component({
   providers: [
@@ -33,7 +33,7 @@ export class ValueAccessorComponent {}
   selector: 'component3',
   template: '',
 })
-export class ValidatorComponent {}
+class ValidatorComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/145
 describe('issue-145:components', () => {

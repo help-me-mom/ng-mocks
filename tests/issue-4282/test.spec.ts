@@ -16,7 +16,7 @@ const injectableTargetServiceArgs = [
 ];
 
 @Injectable(...injectableTargetServiceArgs)
-export class TargetService {
+class TargetService {
   name = 'real';
 }
 
@@ -24,7 +24,7 @@ export class TargetService {
   selector: 'target-4282',
   template: `{{ service.name }}`,
 })
-export class TargetComponent {
+class TargetComponent {
   readonly service = inject(TargetService);
 }
 

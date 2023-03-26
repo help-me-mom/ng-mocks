@@ -11,11 +11,13 @@ class TargetService {
 
 @Component({
   providers: [TargetService],
-  selector: 'target-provider-in-component',
+  selector: 'target',
   template: '{{ service.value }}',
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
+
+  public targetTestProviderInComponent() {}
 }
 
 describe('TestProviderInComponent', () => {

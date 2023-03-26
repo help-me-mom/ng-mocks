@@ -18,30 +18,33 @@ import {
     {
       multi: true,
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ChildComponent),
+      useExisting: forwardRef(() => CvaComponent),
     },
   ],
-  selector: 'child-mock-reactive-forms',
+  selector: 'cva',
   template: 'dependency',
 })
-class ChildComponent implements ControlValueAccessor {
+class CvaComponent implements ControlValueAccessor {
   public registerOnChange = (fn: any): void => fn;
   public registerOnTouched = (fn: any): void => fn;
   public writeValue = (obj: any): void => obj;
+
+  public cvaMockReactiveForms() {}
 }
 
 @Component({
-  selector: 'target-mock-reactive-forms',
-  template:
-    ' <child-mock-reactive-forms [formControl]="formControl"></child-mock-reactive-forms> ',
+  selector: 'target',
+  template: ' <cva [formControl]="formControl"></cva> ',
 })
 class TargetComponent {
   public readonly formControl = new FormControl();
+
+  public targetMockReactiveForms() {}
 }
 
 @NgModule({
   imports: [ReactiveFormsModule],
-  declarations: [TargetComponent, ChildComponent],
+  declarations: [TargetComponent, CvaComponent],
 })
 class ItsModule {}
 
@@ -70,18 +73,18 @@ describe('MockReactiveForms', () => {
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.
-    MockInstance(ChildComponent, 'writeValue', writeValue);
+    MockInstance(CvaComponent, 'writeValue', writeValue);
 
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // During initialization it should be called
+    // During initialization, it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
     // Let's find the form control element
     // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(ChildComponent);
+    const mockControlEl = ngMocks.find(CvaComponent);
     ngMocks.change(mockControlEl, 'foo');
     expect(component.formControl.value).toBe('foo');
 

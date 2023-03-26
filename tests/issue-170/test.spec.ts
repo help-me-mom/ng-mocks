@@ -13,14 +13,14 @@ import {
 } from 'ng-mocks';
 
 @Injectable()
-export class TargetChildService {
+class TargetChildService {
   public print(): string {
     return this.constructor.name;
   }
 }
 
 @Injectable()
-export class TargetService {
+class TargetService {
   public constructor(public child: TargetChildService) {}
 
   public print(): string {
@@ -33,7 +33,7 @@ export class TargetService {
   selector: 'target-170',
   template: 'target {{ service.print() }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public constructor(public service: TargetService) {}
 
   public someMethod() {
@@ -45,7 +45,7 @@ export class TargetComponent {
   selector: 'real',
   template: '<target-170></target-170>',
 })
-export class RealComponent implements AfterViewInit {
+class RealComponent implements AfterViewInit {
   @ViewChild(TargetComponent, {} as any)
   protected child?: TargetComponent;
 

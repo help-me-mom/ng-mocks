@@ -8,7 +8,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable()
-export class HelloService {
+class HelloService {
   public description = 'real service';
 }
 
@@ -16,7 +16,7 @@ export class HelloService {
   providers: [HelloService],
   template: '',
 })
-export class HelloComponent {
+class HelloComponent {
   public serviceDescription = '';
 
   public constructor(private readonly helloService: HelloService) {
@@ -28,7 +28,7 @@ export class HelloComponent {
   providers: [HelloService],
   selector: 'hello',
 })
-export class HelloDirective {
+class HelloDirective {
   @Input() public name = '';
   public serviceDescription = '';
 

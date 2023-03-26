@@ -7,19 +7,19 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: 'internal-exports-only',
   template: 'internal',
 })
-export class InternalComponent {}
+class InternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent],
   exports: [InternalComponent],
   imports: [CommonModule],
 })
-export class InternalModule {}
+class InternalModule {}
 
 @NgModule({
   exports: [InternalModule],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('ExportsOnly:real', () => {
   beforeEach(() => MockBuilder(TargetModule));

@@ -7,13 +7,13 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'internal-only',
   template: 'internal',
 })
-export class InternalComponent {}
+class InternalComponent {}
 
 @NgModule({
   declarations: [InternalComponent],
   imports: [CommonModule],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('InternalOnly:real', () => {
   ngMocks.throwOnConsole();

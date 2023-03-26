@@ -3,7 +3,7 @@ import { Component, Injectable, NgModule } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable()
-export class TargetService {
+class TargetService {
   public called = 0;
 
   public call(): void {
@@ -16,7 +16,7 @@ export class TargetService {
   template:
     '<internal-normal-usage-after-mock-builder></internal-normal-usage-after-mock-builder>{{ service.called }}',
 })
-export class TargetComponent {
+class TargetComponent {
   public constructor(public readonly service: TargetService) {}
 }
 
@@ -24,20 +24,20 @@ export class TargetComponent {
   selector: 'internal-normal-usage-after-mock-builder',
   template: 'real',
 })
-export class RealComponent {}
+class RealComponent {}
 
 @Component({
   selector: 'internal-normal-usage-after-mock-builder',
   template: 'fake',
 })
-export class FakeComponent {}
+class FakeComponent {}
 
 @NgModule({
   declarations: [TargetComponent, RealComponent],
   exports: [TargetComponent],
   providers: [TargetService],
 })
-export class TargetModule {
+class TargetModule {
   public constructor(protected service: TargetService) {
     this.service.call();
   }

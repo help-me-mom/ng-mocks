@@ -115,6 +115,7 @@ module.exports = {
         'troubleshooting/internals-vs-externals',
         'troubleshooting/browser-animations-module',
         'troubleshooting/multiple-components-match-node-with-tagname',
+        'troubleshooting/component-id-generation-collision-detected',
         'troubleshooting/faq',
       ],
     },

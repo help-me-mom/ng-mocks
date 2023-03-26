@@ -131,22 +131,21 @@ Please, pay attention to comments in the code.
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockComponent/test.spec.ts"
 describe('MockComponent', () => {
   beforeEach(() => {
-    return MockBuilder(MyComponent, ItsModule);
+    return MockBuilder(TargetComponent, ItsModule);
   });
 
   it('sends the correct value to the child input', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
     // fixture.debugElement.query(
-    //   By.css('app-child')
+    //   By.css('child')
     // ).componentInstance
     // but properly typed.
-    const mockComponent =
-      ngMocks.find<DependencyComponent>(
-        'app-child',
-      ).componentInstance;
+    const mockComponent = ngMocks.find<ChildComponent>(
+      'child',
+    ).componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. MyComponent sets its value via
@@ -160,7 +159,7 @@ describe('MockComponent', () => {
   });
 
   it('does something on an emit of the child component', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -168,7 +167,7 @@ describe('MockComponent', () => {
     //   By.directive(DependencyComponent)
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.findInstance(DependencyComponent);
+    const mockComponent = ngMocks.findInstance(ChildComponent);
 
     // Again, let's pretend DependencyComponent has an output
     // called 'someOutput'. MyComponent listens on the output via
@@ -190,10 +189,10 @@ describe('MockComponent', () => {
   });
 
   it('renders something inside of the child component', () => {
-    const localFixture = MockRender<DependencyComponent>(`
-      <app-child>
+    const localFixture = MockRender<ChildComponent>(`
+      <child>
         <p>inside content</p>
-      </app-child>
+      </child>
     `);
 
     // We can access html directly asserting on some side effect.
@@ -202,13 +201,13 @@ describe('MockComponent', () => {
   });
 
   it('renders ContentChild of the child component', () => {
-    const fixture = MockRender<DependencyComponent>(`
-      <app-child>
+    const fixture = MockRender<ChildComponent>(`
+      <child>
         <ng-template #something>
           <p>inside template</p>
         </ng-template>
         <p>inside content</p>
-      </app-child>
+      </child>
     `);
 
     // Injected ng-content rendered everything except templates.
@@ -227,8 +226,8 @@ describe('MockComponent', () => {
 
     // The rendered template is wrapped by <div data-key="something">.
     // We can use this selector to assert exactly its content.
-    const mockNgTemplate = ngMocks.find(DependencyComponent)
-      .nativeElement.innerHTML;
+    const mockNgTemplate =
+      ngMocks.find(ChildComponent).nativeElement.innerHTML;
     expect(mockNgTemplate).toContain('<p>inside template</p>');
   });
 });

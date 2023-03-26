@@ -32,9 +32,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   ],
   selector: '[target]',
 })
-export class TargetDirective
-  implements ControlValueAccessor, Validator
-{
+class TargetDirective implements ControlValueAccessor, Validator {
   public valRegisterOnChange: any;
   public valRegisterOnTouched: any;
   public valRegisterOnValidatorChange: any;
@@ -75,7 +73,7 @@ export class TargetDirective
   selector: 'app-root-167-directive',
   template: '<div [formControl]="control" target></div>',
 })
-export class RealComponent {
+class RealComponent {
   public readonly control = new FormControl();
 }
 

@@ -277,7 +277,7 @@ describe('MockInstance', () => {
   // A normal setup of the TestBed, ChildComponent will be replaced
   // with its mock object.
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(RealComponent, ItsModule));
+  beforeEach(() => MockBuilder(TargetComponent, ItsModule));
 
   beforeEach(() => {
     // Because ChildComponent is replaced with its mock object,
@@ -293,7 +293,7 @@ describe('MockInstance', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => MockRender(RealComponent)).not.toThrow();
+    expect(() => MockRender(TargetComponent)).not.toThrow();
   });
 });
 ```
@@ -315,10 +315,7 @@ describe('MockInstance:component', () => {
   beforeEach(() => {
     return TestBed.configureTestingModule({
       imports: [CommonModule],
-      declarations: [
-        RealComponent,
-        MockComponent(ChildComponent),
-      ],
+      declarations: [TargetComponent, MockComponent(ChildComponent)],
     }).compileComponents();
   });
 
@@ -336,7 +333,7 @@ describe('MockInstance:component', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => TestBed.createComponent(RealComponent).detectChanges()).not.toThrow();
+    expect(() => TestBed.createComponent(TargetComponent).detectChanges()).not.toThrow();
   });
 });
 ```

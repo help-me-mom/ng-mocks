@@ -28,7 +28,7 @@ import {
     <div data-role="var2">{{ var2 || 'var2' }}</div>
   `,
 })
-export class TargetComponent {
+class TargetComponent {
   @Input() public input1: string | null = null;
   @Input('input') public input2: string | null = null;
 
@@ -53,7 +53,7 @@ export class TargetComponent {
 @NgModule({
   declarations: [TargetComponent],
 })
-export class TargetModule {}
+class TargetModule {}
 
 describe('mock-render-mirrors-component', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));

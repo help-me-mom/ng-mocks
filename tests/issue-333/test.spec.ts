@@ -9,7 +9,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template:
     '<ng-container *ngComponentOutlet="component"></ng-container>',
 })
-export class DynamicOverlayComponent {
+class DynamicOverlayComponent {
   public component?: Type<any>;
 
   public attachComponent(component: Type<any>) {
@@ -22,7 +22,7 @@ export class DynamicOverlayComponent {
   exports: [DynamicOverlayComponent],
   imports: [CommonModule],
 })
-export class OverlayModule {}
+class OverlayModule {}
 
 @Component({
   selector: 'dep-component',

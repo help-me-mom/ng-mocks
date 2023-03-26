@@ -52,6 +52,8 @@ class TranslatePipe implements PipeTransform {
 class AppComponent {
   @Output() public logoClick = new EventEmitter<void>();
   @Input() public title = 'My Application';
+
+  public appRootMain() {}
 }
 
 // A dependency component out of which we want to create a mock
@@ -72,6 +74,8 @@ class AppHeaderComponent {
   public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
+
+  public appHeaderMain() {}
 }
 
 // The module where our components are declared.

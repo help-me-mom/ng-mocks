@@ -1,19 +1,13 @@
-import { Type, Component, NgModule } from '@angular/core';
+import { Type, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockComponent } from 'ng-mocks';
 
 @Component({
-  selector: 'internal-nested-before-each',
-  template: 'internal',
+  selector: 'target-nested-before-each',
+  template: 'target',
 })
-export class InternalComponent {}
-
-@NgModule({
-  declarations: [InternalComponent],
-  exports: [InternalComponent],
-})
-export class TargetModule {}
+class TargetComponent {}
 
 describe('nested-before-each', () => {
   let level = 0;
@@ -21,7 +15,7 @@ describe('nested-before-each', () => {
 
   beforeEach(() => {
     level = 0;
-    mock = MockComponent(InternalComponent);
+    mock = MockComponent(TargetComponent);
 
     return MockBuilder(mock);
   });
@@ -38,12 +32,12 @@ describe('nested-before-each', () => {
 
       it('should have the same mock after the first run', () => {
         expect(level).toBeGreaterThan(0);
-        expect(MockComponent(InternalComponent)).toBe(mock);
+        expect(MockComponent(TargetComponent)).toBe(mock);
       });
 
       it('should have the same mock after the second run', () => {
         expect(level).toBeGreaterThan(0);
-        expect(MockComponent(InternalComponent)).toBe(mock);
+        expect(MockComponent(TargetComponent)).toBe(mock);
       });
     });
   });
@@ -55,7 +49,7 @@ describe('nested-before-all', () => {
 
   beforeAll(() => {
     level = 0;
-    mock = MockComponent(InternalComponent);
+    mock = MockComponent(TargetComponent);
     TestBed.resetTestingModule();
 
     return MockBuilder(mock);
@@ -73,12 +67,12 @@ describe('nested-before-all', () => {
 
       it('should have the same mock after the first run', () => {
         expect(level).toBeGreaterThan(0);
-        expect(MockComponent(InternalComponent)).toBe(mock);
+        expect(MockComponent(TargetComponent)).toBe(mock);
       });
 
       it('should have the same mock after the second run', () => {
         expect(level).toBeGreaterThan(0);
-        expect(MockComponent(InternalComponent)).toBe(mock);
+        expect(MockComponent(TargetComponent)).toBe(mock);
       });
     });
   });

@@ -18,7 +18,7 @@ import {
 @Directive({
   selector: '[show]',
 })
-export class ShowDirective {
+class ShowDirective {
   public constructor(
     protected templateRef: TemplateRef<any>,
     protected viewContainerRef: ViewContainerRef,
@@ -36,7 +36,7 @@ export class ShowDirective {
 @Directive({
   selector: '[hide]',
 })
-export class HideDirective {
+class HideDirective {
   public constructor(
     protected templateRef: TemplateRef<any>,
     protected viewContainerRef: ViewContainerRef,
@@ -58,7 +58,7 @@ export class HideDirective {
     <ng-container *hide="flag">:hide:{{ content }}:</ng-container>
   `,
 })
-export class TargetComponent {
+class TargetComponent {
   @Input() public readonly content: string | null = null;
   @Input() public readonly flag: boolean | null = null;
 }

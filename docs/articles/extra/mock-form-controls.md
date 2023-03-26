@@ -91,10 +91,12 @@ describe('MockReactiveForms', () => {
   MockInstance.scope();
 
   beforeEach(() => {
-    // DependencyComponent is a declaration in ItsModule. 
-    return MockBuilder(MyComponent, ItsModule)
-      // ReactiveFormsModule is an import in ItsModule.
-      .keep(ReactiveFormsModule);
+    // DependencyComponent is a declaration in ItsModule.
+    return (
+      MockBuilder(TargetComponent, ItsModule)
+        // ReactiveFormsModule is an import in ItsModule.
+        .keep(ReactiveFormsModule)
+    );
   });
 
   it('sends the correct value to the mock form component', () => {
@@ -106,18 +108,18 @@ describe('MockReactiveForms', () => {
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.
-    MockInstance(DependencyComponent, 'writeValue', writeValue);
+    MockInstance(CvaComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // During initialization it should be called
+    // During initialization, it should be called
     // with null.
     expect(writeValue).toHaveBeenCalledWith(null);
 
     // Let's find the form control element
     // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(DependencyComponent);
+    const mockControlEl = ngMocks.find(CvaComponent);
     ngMocks.change(mockControlEl, 'foo');
     expect(component.formControl.value).toBe('foo');
 
@@ -141,9 +143,11 @@ describe('MockForms', () => {
 
   beforeEach(() => {
     // DependencyComponent is a declaration in ItsModule.
-    return MockBuilder(MyComponent, ItsModule)
-      // FormsModule is an import in ItsModule.
-      .keep(FormsModule);
+    return (
+      MockBuilder(TargetComponent, ItsModule)
+        // FormsModule is an import in ItsModule.
+        .keep(FormsModule)
+    );
   });
 
   it('sends the correct value to the mock form component', async () => {
@@ -155,9 +159,9 @@ describe('MockForms', () => {
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.
-    MockInstance(DependencyComponent, 'writeValue', writeValue);
+    MockInstance(CvaComponent, 'writeValue', writeValue);
 
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     // FormsModule needs fixture.whenStable()
     // right after MockRender to install all hooks.
     await fixture.whenStable();
@@ -169,7 +173,7 @@ describe('MockForms', () => {
 
     // Let's find the form control element
     // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(DependencyComponent);
+    const mockControlEl = ngMocks.find(CvaComponent);
     ngMocks.change(mockControlEl, 'foo');
     expect(component.value).toBe('foo');
 

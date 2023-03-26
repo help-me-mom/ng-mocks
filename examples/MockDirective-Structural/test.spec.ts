@@ -23,11 +23,13 @@ class DependencyDirective {
 }
 
 @Component({
-  selector: 'tested',
+  selector: 'target',
   template: '<span *dependency="value">content</span>',
 })
 class TargetComponent {
   public value = '';
+
+  public childMockDirectiveStructural() {}
 }
 
 @NgModule({

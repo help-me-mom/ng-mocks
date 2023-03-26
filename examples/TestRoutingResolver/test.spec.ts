@@ -54,20 +54,22 @@ class MockResolver implements Resolve<{ mock: boolean }> {
 // A dummy component.
 // It will be replaced with a mock copy.
 @Component({
-  selector: 'target-routing-resolver',
-  template: 'target',
+  selector: 'route',
+  template: 'route',
 })
-class TargetComponent {}
+class RouteComponent {
+  public routeTestRoutingResolver() {}
+}
 
 // Definition of the routing module.
 @NgModule({
-  declarations: [TargetComponent],
+  declarations: [RouteComponent],
   exports: [RouterModule],
   imports: [
     RouterModule.forRoot([
       {
-        component: TargetComponent,
-        path: 'target',
+        component: RouteComponent,
+        path: 'route',
         resolve: {
           data: DataResolver,
           mock: MockResolver,
@@ -117,7 +119,7 @@ describe('TestRoutingResolver', () => {
     dataService.data = () => from([false]);
 
     // Let's switch to the route with the resolver.
-    location.go('/target');
+    location.go('/route');
 
     // Now we can initialize navigation.
     if (fixture.ngZone) {
@@ -126,10 +128,10 @@ describe('TestRoutingResolver', () => {
     }
 
     // Checking that we are on the right page.
-    expect(location.path()).toEqual('/target');
+    expect(location.path()).toEqual('/route');
 
     // Let's extract ActivatedRoute of the current component.
-    const el = ngMocks.find(TargetComponent);
+    const el = ngMocks.find(RouteComponent);
     const route: ActivatedRoute = el.injector.get(ActivatedRoute);
 
     // Now we can assert that it has expected data.

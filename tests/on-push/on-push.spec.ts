@@ -11,7 +11,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   selector: 'item-list',
   template: '{{items.length}}',
 })
-export class ItemListComponent {
+class ItemListComponent {
   @Input() public items: string[] = [];
 }
 

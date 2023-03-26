@@ -17,10 +17,10 @@ import {
  * I did so to reproduce the situation with NgxsModule and Store provider.
  */
 @NgModule({})
-export class SomeRootModule {}
+class SomeRootModule {}
 
 @Injectable()
-export class SomeService {
+class SomeService {
   public readonly name = 'some';
 
   public method(): string {
@@ -29,7 +29,7 @@ export class SomeService {
 }
 
 @Injectable()
-export class AnotherService {
+class AnotherService {
   public readonly name = 'another';
 
   public method(): string {
@@ -40,7 +40,7 @@ export class AnotherService {
 @NgModule({
   imports: [],
 })
-export class SomeModule {
+class SomeModule {
   public static forRoot() {
     return {
       ngModule: SomeRootModule,
@@ -60,7 +60,7 @@ export class SomeModule {
   selector: 'my-component',
   template: '',
 })
-export class MyComponent implements OnInit {
+class MyComponent implements OnInit {
   public constructor(private readonly someService: SomeService) {}
 
   public ngOnInit(): void {
@@ -72,7 +72,7 @@ export class MyComponent implements OnInit {
   declarations: [MyComponent],
   imports: [SomeModule],
 })
-export class MyModule {}
+class MyModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/625
 describe('issue-625', () => {

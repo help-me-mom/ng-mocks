@@ -8,10 +8,10 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'target-488-faster',
+  selector: 'target',
   template: '{{ value }}',
 })
-class MyComponent implements OnInit {
+class TargetComponent implements OnInit {
   public value = 0;
 
   public ngOnInit(): void {
@@ -21,24 +21,26 @@ class MyComponent implements OnInit {
   public reset(): void {
     this.value = 0;
   }
+
+  public target488faster() {}
 }
 
 @NgModule({
-  declarations: [MyComponent],
+  declarations: [TargetComponent],
 })
-class MyModule {}
+class ItsModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/488
 describe('issue-488:faster', () => {
-  let fixture: MockedComponentFixture<MyComponent>;
+  let fixture: MockedComponentFixture<TargetComponent>;
 
   ngMocks.throwOnConsole();
   ngMocks.faster();
 
-  beforeAll(() => MockBuilder(MyComponent, MyModule));
+  beforeAll(() => MockBuilder(TargetComponent, ItsModule));
 
   describe('multi render', () => {
-    beforeEach(() => (fixture = MockRender(MyComponent)));
+    beforeEach(() => (fixture = MockRender(TargetComponent)));
 
     it('first test has brand new render', () => {
       expect(ngMocks.formatText(fixture)).toEqual('1');
@@ -66,7 +68,7 @@ describe('issue-488:faster', () => {
   });
 
   describe('single render', () => {
-    beforeAll(() => (fixture = MockRender(MyComponent)));
+    beforeAll(() => (fixture = MockRender(TargetComponent)));
 
     it('first test has initial render', () => {
       expect(ngMocks.formatText(fixture)).toEqual('1');

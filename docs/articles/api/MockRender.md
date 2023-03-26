@@ -540,7 +540,7 @@ Please, pay attention to comments in the code.
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockRender/test.spec.ts"
 describe('MockRender', () => {
   // Do not forget to return the promise of MockBuilder.
-  beforeEach(() => MockBuilder(MyComponent, DependencyModule));
+  beforeEach(() => MockBuilder(TargetComponent, ChildModule));
 
   it('renders template', () => {
     const spy = jasmine.createSpy();
@@ -549,7 +549,7 @@ describe('MockRender', () => {
 
     const fixture = MockRender(
       `
-        <tested
+        <target
           (trigger)="myListener1($event)"
           [value1]="myParam1"
           value2="check"
@@ -558,7 +558,7 @@ describe('MockRender', () => {
             something as ng-template
           </ng-template>
           something as ng-content
-        </tested>
+        </target>
       `,
       {
         myListener1: spy,
@@ -584,9 +584,9 @@ describe('MockRender', () => {
     // const logoClickSpy = jest.fn();
 
     // Generates a template like:
-    // <tested [value1]="value1" [value2]="value2"
-    // (trigger)="trigger"></tested>.
-    const fixture = MockRender(MyComponent, {
+    // <target [value1]="value1" [value2]="value2"
+    // (trigger)="trigger"></target>.
+    const fixture = MockRender(TargetComponent, {
       trigger: spy,
       value1: 'something2',
     });

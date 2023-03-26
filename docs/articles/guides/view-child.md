@@ -112,20 +112,20 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'dependency',
-  template: 'dependency',
+  selector: 'child',
+  template: 'child',
 })
-class DependencyComponent {
-  @Input() public dependency: number | null = null;
+class ChildComponent {
+  @Input() public child: number | null = null;
 
   @Output() public readonly trigger = new EventEmitter<string>();
 }
 
 @Directive({
-  selector: '[dependency]',
+  selector: '[child]',
 })
-class DependencyDirective {
-  @Input() public dependency: number | null = null;
+class ChildDirective {
+  @Input() public child: number | null = null;
 
   @Output() public readonly trigger = new EventEmitter<string>();
 }
@@ -133,14 +133,14 @@ class DependencyDirective {
 @Component({
   selector: 'target',
   template: `
-    <dependency
-      [dependency]="0"
+    <child
+      [child]="0"
       (trigger)="value = $event"
-    ></dependency>
+    ></child>
     <div>
-      <span [dependency]="1" (trigger)="value = $event">1</span>
-      <span [dependency]="2" (trigger)="value = $event">2</span>
-      <span [dependency]="3" (trigger)="value = $event">3</span>
+      <span [child]="1" (trigger)="value = $event">1</span>
+      <span [child]="2" (trigger)="value = $event">2</span>
+      <span [child]="3" (trigger)="value = $event">3</span>
     </div>
     <ng-template #tpl>
       {{ value }}
@@ -148,16 +148,16 @@ class DependencyDirective {
   `,
 })
 class TargetComponent {
-  @ViewChild(DependencyComponent)
-  public component?: DependencyComponent;
+  @ViewChild(ChildComponent)
+  public component?: ChildComponent;
 
-  @ViewChild(DependencyComponent, {
-    read: DependencyDirective,
+  @ViewChild(ChildComponent, {
+    read: ChildDirective,
   })
-  public directive?: DependencyDirective;
+  public directive?: ChildDirective;
 
-  @ViewChildren(DependencyDirective)
-  public directives?: QueryList<DependencyDirective>;
+  @ViewChildren(ChildDirective)
+  public directives?: QueryList<ChildDirective>;
 
   @ViewChild('tpl')
   public tpl?: TemplateRef<HTMLElement>;
@@ -167,8 +167,8 @@ class TargetComponent {
 
 @NgModule({
   declarations: [
-    DependencyComponent,
-    DependencyDirective,
+    ChildComponent,
+    ChildDirective,
     TargetComponent,
   ],
   exports: [TargetComponent],
@@ -182,61 +182,61 @@ describe('TestViewChild', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // checking @ViewChild(DependencyComponent)
+    // checking @ViewChild(ChildComponent)
     expect(component.component).toEqual(
-      jasmine.any(DependencyComponent),
+      jasmine.any(ChildComponent),
     );
     expect(
-      component.component && component.component.dependency,
+      component.component && component.component.child,
     ).toEqual(0);
 
-    // checking its read: DependencyDirective
+    // checking its read: ChildDirective
     expect(component.directive).toEqual(
-      jasmine.any(DependencyDirective),
+      jasmine.any(ChildDirective),
     );
     expect(
-      component.directive && component.directive.dependency,
+      component.directive && component.directive.child,
     ).toEqual(0);
 
     // checking TemplateRef
     expect(component.tpl).toEqual(jasmine.any(TemplateRef));
 
-    // @ViewChildren(DependencyDirective)
+    // @ViewChildren(ChildDirective)
     if (!component.directives) {
       throw new Error('component.directives are missed');
     }
     expect(component.directives.length).toEqual(4);
     const [dir0, dir1, dir2, dir3] = component.directives.toArray();
-    expect(dir0 && dir0.dependency).toEqual(0);
-    expect(dir1 && dir1.dependency).toEqual(1);
-    expect(dir2 && dir2.dependency).toEqual(2);
-    expect(dir3 && dir3.dependency).toEqual(3);
+    expect(dir0 && dir0.child).toEqual(0);
+    expect(dir1 && dir1.child).toEqual(1);
+    expect(dir2 && dir2.child).toEqual(2);
+    expect(dir3 && dir3.child).toEqual(3);
 
-    // asserting outputs of DependencyComponent
+    // asserting outputs of ChildComponent
     expect(component.value).toEqual('');
     ngMocks
-      .findInstance(DependencyComponent)
+      .findInstance(ChildComponent)
       .trigger.emit('component');
     expect(component.value).toEqual('component');
 
-    // asserting outputs DependencyDirective
+    // asserting outputs ChildDirective
     ngMocks
-      .findInstances(DependencyDirective)[0]
+      .findInstances(ChildDirective)[0]
       .trigger.emit('dir0');
     expect(component.value).toEqual('dir0');
 
     ngMocks
-      .findInstances(DependencyDirective)[1]
+      .findInstances(ChildDirective)[1]
       .trigger.emit('dir1');
     expect(component.value).toEqual('dir1');
 
     ngMocks
-      .findInstances(DependencyDirective)[2]
+      .findInstances(ChildDirective)[2]
       .trigger.emit('dir2');
     expect(component.value).toEqual('dir2');
 
     ngMocks
-      .findInstances(DependencyDirective)[3]
+      .findInstances(ChildDirective)[3]
       .trigger.emit('dir3');
     expect(component.value).toEqual('dir3');
   });

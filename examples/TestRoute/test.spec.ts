@@ -13,41 +13,47 @@ import {
 
 // A layout component that renders the current route.
 @Component({
-  selector: 'target-route',
+  selector: 'target',
   template: `
     <a routerLink="/1">1</a>
     <a routerLink="/2">2</a>
     <router-outlet></router-outlet>
   `,
 })
-class TargetComponent {}
+class TargetComponent {
+  public targetTestRoute() {}
+}
 
 // A simple component for the first route.
 @Component({
-  selector: 'target1-test-route',
-  template: 'target1',
+  selector: 'route1',
+  template: 'route1',
 })
-class Target1Component {}
+class Route1Component {
+  public route1TestRoute() {}
+}
 
 // A simple component for the second route.
 @Component({
-  selector: 'target2-test-route',
-  template: 'target2',
+  selector: 'route2',
+  template: 'route2',
 })
-class Target2Component {}
+class Route2Component {
+  public route2TestRoute() {}
+}
 
 // Definition of the routing module.
 @NgModule({
-  declarations: [Target1Component, Target2Component],
+  declarations: [Route1Component, Route2Component],
   exports: [RouterModule],
   imports: [
     RouterModule.forRoot([
       {
-        component: Target1Component,
+        component: Route1Component,
         path: '1',
       },
       {
-        component: Target2Component,
+        component: Route2Component,
         path: '2',
       },
     ]),
@@ -75,7 +81,7 @@ describe('TestRoute:Route', () => {
     );
   });
 
-  it('renders /1 with Target1Component', fakeAsync(() => {
+  it('renders /1 with Route1Component', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -87,12 +93,12 @@ describe('TestRoute:Route', () => {
       tick(); // is needed for rendering of the current route.
     }
 
-    // We should see Target1Component component on /1 page.
+    // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(Target1Component)).not.toThrow();
+    expect(() => ngMocks.find(Route1Component)).not.toThrow();
   }));
 
-  it('renders /2 with Target2Component', fakeAsync(() => {
+  it('renders /2 with Route2Component', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -104,9 +110,9 @@ describe('TestRoute:Route', () => {
       tick(); // is needed for rendering of the current route.
     }
 
-    // We should see Target2Component component on /2 page.
+    // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(Target2Component)).not.toThrow();
+    expect(() => ngMocks.find(Route2Component)).not.toThrow();
   }));
 });
 
@@ -146,8 +152,8 @@ describe('TestRoute:Component', () => {
     // By default, our routes do not have a component.
     // Therefore, none of them should be rendered.
     expect(location.path()).toEqual('/');
-    expect(() => ngMocks.find(Target1Component)).toThrow();
-    expect(() => ngMocks.find(Target2Component)).toThrow();
+    expect(() => ngMocks.find(Route1Component)).toThrow();
+    expect(() => ngMocks.find(Route2Component)).toThrow();
 
     // Let's extract our navigation links.
     const links = ngMocks.findAll('a');
@@ -164,9 +170,9 @@ describe('TestRoute:Component', () => {
       });
       tick(); // is needed for rendering of the current route.
     }
-    // We should see Target1Component component on /1 page.
+    // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(Target1Component)).not.toThrow();
+    expect(() => ngMocks.find(Route1Component)).not.toThrow();
 
     // Checking where we land if we click the second link.
     if (fixture.ngZone) {
@@ -178,8 +184,8 @@ describe('TestRoute:Component', () => {
       });
       tick(); // is needed for rendering of the current route.
     }
-    // We should see Target2Component component on /2 page.
+    // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(Target2Component)).not.toThrow();
+    expect(() => ngMocks.find(Route2Component)).not.toThrow();
   }));
 });

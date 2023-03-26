@@ -21,7 +21,7 @@ class DependencyDirective {
 }
 
 @Component({
-  selector: 'tested',
+  selector: 'target',
   template: `
     <span
       dependency
@@ -30,24 +30,26 @@ class DependencyDirective {
     ></span>
   `,
 })
-class MyComponent {
+class TargetComponent {
   public value = '';
   public trigger = () => undefined;
+
+  public targetMockDirectiveAttribute() {}
 }
 
 @NgModule({
-  declarations: [MyComponent, DependencyDirective],
+  declarations: [TargetComponent, DependencyDirective],
 })
 class ItsModule {}
 
 describe('MockDirective:Attribute', () => {
   beforeEach(() => {
     // DependencyDirective is a declaration in ItsModule.
-    return MockBuilder(MyComponent, ItsModule);
+    return MockBuilder(TargetComponent, ItsModule);
   });
 
   it('sends the correct value to the input', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
@@ -63,7 +65,7 @@ describe('MockDirective:Attribute', () => {
     // Let's pretend DependencyDirective has 'someInput'
     // as an input. MyComponent sets its value via
     // `[someInput]="value"`. The input's value will be passed into
-    // the mock directive so we can assert on it.
+    // the mock directive, so we can assert on it.
     component.value = 'foo';
     fixture.detectChanges();
 
@@ -72,7 +74,7 @@ describe('MockDirective:Attribute', () => {
   });
 
   it('does something on an emit of the child directive', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     // The same as
