@@ -4,7 +4,7 @@ import { MockComponent } from '../../mock-component/mock-component';
 import { MockDirective } from '../../mock-directive/mock-directive';
 import { MockPipe } from '../../mock-pipe/mock-pipe';
 
-export default (def: any, defValue: Map<any, any>): void => {
+export default (def: any): void => {
   if (isNgDef(def, 'c')) {
     ngMocksUniverse.builtDeclarations.set(def, MockComponent(def));
   }
@@ -12,10 +12,6 @@ export default (def: any, defValue: Map<any, any>): void => {
     ngMocksUniverse.builtDeclarations.set(def, MockDirective(def));
   }
   if (isNgDef(def, 'p')) {
-    const instance = defValue.get(def);
-    ngMocksUniverse.builtDeclarations.set(
-      def,
-      typeof instance?.transform === 'function' ? MockPipe(def, instance.transform) : MockPipe(def),
-    );
+    ngMocksUniverse.builtDeclarations.set(def, MockPipe(def));
   }
 };

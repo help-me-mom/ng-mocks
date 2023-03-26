@@ -10,7 +10,7 @@ export default (mockDef: Set<any>, defValue: Map<any, any>): void => {
     const deleteTouch = !ngMocksUniverse.touches.has(def);
 
     resolutions.set(def, 'mock');
-    tryMockDeclaration(def, defValue);
+    tryMockDeclaration(def);
     tryMockProvider(def, defValue);
 
     if (deleteTouch) {

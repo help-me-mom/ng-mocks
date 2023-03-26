@@ -59,6 +59,7 @@ export default ({
     ngMocksUniverse.config.set(k, {
       ...ngMocksUniverse.getConfigMock().get(k),
       ...v,
+      defValue: defValue.get(k),
     });
   }
 
