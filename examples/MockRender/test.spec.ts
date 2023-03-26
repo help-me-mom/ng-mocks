@@ -12,7 +12,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'child-mock-render',
+  selector: 'child',
   template: 'dependency',
 })
 class ChildComponent {
@@ -20,6 +20,8 @@ class ChildComponent {
   public injectedSomething?: TemplateRef<any>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();
+
+  public childMockRender() {}
 }
 
 @NgModule({
@@ -29,18 +31,20 @@ class ChildComponent {
 class ChildModule {}
 
 @Component({
-  selector: 'target-mock-render',
+  selector: 'target',
   template: `
-    <child-mock-render
+    <child
       [someInput]="value1"
       (someOutput)="trigger.emit($event)"
-    ></child-mock-render>
+    ></child>
   `,
 })
 class TargetComponent {
   @Output() public readonly trigger = new EventEmitter();
   @Input() public value1 = 'default1';
   @Input() public value2 = 'default2';
+
+  public targetMockRender() {}
 }
 
 describe('MockRender', () => {
@@ -55,7 +59,7 @@ describe('MockRender', () => {
 
     const fixture = MockRender(
       `
-        <target-mock-render
+        <target
           (trigger)="myListener1($event)"
           [value1]="myParam1"
           value2="check"
@@ -64,7 +68,7 @@ describe('MockRender', () => {
             something as ng-template
           </ng-template>
           something as ng-content
-        </target-mock-render>
+        </target>
       `,
       {
         myListener1: spy,
@@ -91,8 +95,8 @@ describe('MockRender', () => {
     // const logoClickSpy = jest.fn();
 
     // Generates a template like:
-    // <target-mock-render [value1]="value1" [value2]="value2"
-    // (trigger)="trigger"></target-mock-render>.
+    // <target [value1]="value1" [value2]="value2"
+    // (trigger)="trigger"></target>.
     const fixture = MockRender(TargetComponent, {
       trigger: spy,
       value1: 'something2',

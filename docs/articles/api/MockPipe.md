@@ -138,19 +138,18 @@ describe('MockPipe', () => {
   // const spy = jest.fn().mockImplementation(fakeTransform);
 
   beforeEach(() => {
-    return MockBuilder(TargetComponent, ItsModule)
-      // DependencyPipe is a declaration in ItsModule
-      .mock(
-        DependencyPipe,
-        spy,
-      );
+    return (
+      MockBuilder(TargetComponent, ItsModule)
+        // DependencyPipe is a declaration in ItsModule
+        .mock(DependencyPipe, spy)
+    );
   });
 
   it('transforms values to json', () => {
     const fixture = MockRender(TargetComponent);
 
     expect(fixture.nativeElement.innerHTML).toEqual(
-      '<component>["foo"]</component>',
+      '<target>["foo"]</target>',
     );
 
     // Also we can find an instance of the pipe in

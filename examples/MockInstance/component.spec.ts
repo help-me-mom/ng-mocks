@@ -16,21 +16,23 @@ EMPTY.complete();
 
 // A child component that contains update$ the parent component wants to listen to.
 @Component({
-  selector: 'target-mock-instance',
+  selector: 'child',
   template: '{{ update$ | async }}',
 })
 class ChildComponent {
   public readonly update$: Observable<void> = EMPTY;
 
   public constructor(public readonly injector: Injector) {}
+
+  public childMockInstanceComponent() {}
 }
 
 // A parent component that uses @ViewChild to listen to update$ of its child component.
 @Component({
-  selector: 'real',
-  template: '<target-mock-instance></target-mock-instance>',
+  selector: 'target',
+  template: '<child></child>',
 })
-class RealComponent implements AfterViewInit {
+class TargetComponent implements AfterViewInit {
   @ViewChild(ChildComponent, {} as any)
   protected child?: ChildComponent;
 
@@ -39,6 +41,8 @@ class RealComponent implements AfterViewInit {
       this.child.update$.subscribe();
     }
   }
+
+  public targetMockInstanceComponent() {}
 }
 
 describe('MockInstance:component', () => {
@@ -49,7 +53,7 @@ describe('MockInstance:component', () => {
   beforeEach(() => {
     return TestBed.configureTestingModule({
       imports: [CommonModule],
-      declarations: [RealComponent, MockComponent(ChildComponent)],
+      declarations: [TargetComponent, MockComponent(ChildComponent)],
     }).compileComponents();
   });
 
@@ -68,7 +72,7 @@ describe('MockInstance:component', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
     expect(() =>
-      TestBed.createComponent(RealComponent).detectChanges(),
+      TestBed.createComponent(TargetComponent).detectChanges(),
     ).not.toThrow();
   });
 });

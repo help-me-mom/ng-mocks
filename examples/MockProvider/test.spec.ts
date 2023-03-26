@@ -34,7 +34,7 @@ class Dependency2Service {
 }
 
 @Component({
-  selector: 'target-mock-provider',
+  selector: 'target',
   template: `
     "{{ dep1.name }}" "{{ dep2.name }}" "{{ unk }}" "{{ pri }}" "{{
       str
@@ -50,6 +50,8 @@ class TargetComponent {
     @Inject(OBJ_TOKEN) public readonly obj: any,
     @Inject('pri') public readonly pri: string,
   ) {}
+
+  public targetMockProvider() {}
 }
 
 describe('MockProvider', () => {

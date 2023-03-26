@@ -110,12 +110,12 @@ Please pay attention that state of components also stays the same.
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/tests/issue-488/faster.spec.ts"
 describe('issue-488:faster', () => {
-  let fixture: MockedComponentFixture<MyComponent>;
+  let fixture: MockedComponentFixture<TargetComponent>;
 
   ngMocks.faster();
 
-  beforeAll(() => MockBuilder(MyComponent, MyModule));
-  beforeAll(() => (fixture = MockRender(MyComponent)));
+  beforeAll(() => MockBuilder(TargetComponent, ItsModule));
+  beforeAll(() => (fixture = MockRender(TargetComponent)));
 
   it('first test has initial render', () => {
     expect(ngMocks.formatText(fixture)).toEqual('1');

@@ -108,11 +108,11 @@ Please, pay attention to comments in the code.
 describe('MockModule', () => {
   beforeEach(() => {
     // DependencyModule is an import of ItsModule.
-    return MockBuilder(MyComponent, ItsModule);
+    return MockBuilder(TargetComponent, ItsModule);
   });
 
   it('renders MyComponent with its dependencies', () => {
-    const fixture = MockRender(MyComponent);
+    const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
     expect(component).toBeTruthy();

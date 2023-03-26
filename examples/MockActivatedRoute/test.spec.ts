@@ -4,25 +4,28 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target-activated-route',
+  selector: 'route',
   template: '{{ param }}',
 })
-class TargetComponent implements OnInit {
+class RouteComponent implements OnInit {
   public param: string | null = null;
 
   public constructor(private route: ActivatedRoute) {}
+
   ngOnInit() {
     this.param = this.route.snapshot.paramMap.get('paramId');
   }
+
+  public routeMockActivatedRoute() {}
 }
 
 @NgModule({
-  declarations: [TargetComponent],
+  declarations: [RouteComponent],
   imports: [
     RouterModule.forRoot([
       {
         path: 'test/:paramId',
-        component: TargetComponent,
+        component: RouteComponent,
       },
     ]),
   ],
@@ -33,8 +36,8 @@ describe('MockActivatedRoute', () => {
   // Resets customizations after each test, in our case of `ActivatedRoute`.
   MockInstance.scope();
 
-  // Keeping TargetComponent as it is and mocking all declarations in TargetModule.
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+  // Keeping RouteComponent as it is and mocking all declarations in TargetModule.
+  beforeEach(() => MockBuilder(RouteComponent, TargetModule));
 
   it('uses paramId from ActivatedRoute', () => {
     // Let's set the params of the snapshot.
@@ -59,8 +62,8 @@ describe('MockActivatedRoute', () => {
       });
     }
 
-    // Rendering TargetComponent.
-    const fixture = MockRender(TargetComponent);
+    // Rendering RouteComponent.
+    const fixture = MockRender(RouteComponent);
 
     // Asserting it got the right paramId.
     expect(fixture.point.componentInstance.param).toEqual(

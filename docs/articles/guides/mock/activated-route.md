@@ -95,16 +95,16 @@ beforeEach(() => MockBuilder(
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockActivatedRoute/test.spec.ts&initialpath=%3Fspec%3DMockActivatedRoute)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockActivatedRoute/test.spec.ts"
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target',
+  selector: 'route',
   template: '{{ param }}',
 })
-class TargetComponent {
+class RouteComponent implements OnInit {
   public param: string | null = null;
 
   public constructor(private route: ActivatedRoute) {}
@@ -115,12 +115,12 @@ class TargetComponent {
 }
 
 @NgModule({
-  declarations: [TargetComponent],
+  declarations: [RouteComponent],
   imports: [
     RouterModule.forRoot([
       {
         path: 'test/:paramId',
-        component: TargetComponent,
+        component: RouteComponent,
       },
     ]),
   ],
@@ -131,8 +131,8 @@ describe('MockActivatedRoute', () => {
   // Resets customizations after each test, in our case of `ActivatedRoute`.
   MockInstance.scope();
 
-  // Keeping TargetComponent as it is and mocking all declarations in TargetModule.
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+  // Keeping RouteComponent as it is and mocking all declarations in TargetModule.
+  beforeEach(() => MockBuilder(RouteComponent, TargetModule));
 
   it('uses paramId from ActivatedRoute', () => {
     // Let's set the params of the snapshot.
@@ -154,8 +154,8 @@ describe('MockActivatedRoute', () => {
     //   paramMap: new Map([['paramId', 'paramValue']]),
     // });
 
-    // Rendering TargetComponent.
-    const fixture = MockRender(TargetComponent);
+    // Rendering RouteComponent.
+    const fixture = MockRender(RouteComponent);
 
     // Asserting it got the right paramId.
     expect(fixture.point.componentInstance.param).toEqual(

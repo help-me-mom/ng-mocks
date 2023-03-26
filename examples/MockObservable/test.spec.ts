@@ -21,7 +21,7 @@ class TargetService {
 }
 
 @Component({
-  selector: 'target-mock-observable',
+  selector: 'target',
   template: '{{ list | json }}',
 })
 class TargetComponent {
@@ -30,6 +30,8 @@ class TargetComponent {
   public constructor(service: TargetService) {
     service.value$.subscribe(list => (this.list = list));
   }
+
+  public targetMockObservable() {}
 }
 
 @NgModule({

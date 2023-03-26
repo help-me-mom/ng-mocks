@@ -12,7 +12,7 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'child-mock-component',
+  selector: 'child',
   template: 'child',
 })
 class ChildComponent {
@@ -24,15 +24,14 @@ class ChildComponent {
 
   @Output()
   public someOutput = new EventEmitter();
+
+  public childMockComponent() {}
 }
 
 @Component({
   selector: 'target-mock-component',
   template: `
-    <child-mock-component
-      [someInput]="value"
-      (someOutput)="trigger($event)"
-    ></child-mock-component>
+    <child [someInput]="value" (someOutput)="trigger($event)"></child>
   `,
 })
 class TargetComponent {
@@ -57,12 +56,11 @@ describe('MockComponent', () => {
 
     // The same as
     // fixture.debugElement.query(
-    //   By.css('child-mock-component')
+    //   By.css('child')
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find<ChildComponent>(
-      'child-mock-component',
-    ).componentInstance;
+    const mockComponent =
+      ngMocks.find<ChildComponent>('child').componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. MyComponent sets its value via
@@ -107,9 +105,9 @@ describe('MockComponent', () => {
 
   it('renders something inside of the child component', () => {
     const localFixture = MockRender<ChildComponent>(`
-      <child-mock-component>
+      <child>
         <p>inside content</p>
-      </child-mock-component>
+      </child>
     `);
 
     // We can access html directly asserting on some side effect.
@@ -119,12 +117,12 @@ describe('MockComponent', () => {
 
   it('renders ContentChild of the child component', () => {
     const fixture = MockRender<ChildComponent>(`
-      <child-mock-component>
+      <child>
         <ng-template #something>
           <p>inside template</p>
         </ng-template>
         <p>inside content</p>
-      </child-mock-component>
+      </child>
     `);
 
     // Injected ng-content rendered everything except templates.

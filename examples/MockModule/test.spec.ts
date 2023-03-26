@@ -12,7 +12,7 @@ import {
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'child-mock-module',
+  selector: 'child',
   template: 'dependency',
 })
 class ChildComponent {
@@ -24,6 +24,8 @@ class ChildComponent {
 
   @Output()
   public someOutput = new EventEmitter();
+
+  public childMockModule() {}
 }
 
 @NgModule({
@@ -34,17 +36,16 @@ class ChildComponent {
 class ChildModule {}
 
 @Component({
-  selector: 'target-mock-module',
+  selector: 'target',
   template: `
-    <child-mock-module
-      [someInput]="value"
-      (someOutput)="trigger()"
-    ></child-mock-module>
+    <child [someInput]="value" (someOutput)="trigger()"></child>
   `,
 })
 class TargetComponent {
   public value = '';
   public trigger = () => undefined;
+
+  public targetMockModule() {}
 }
 
 @NgModule({
