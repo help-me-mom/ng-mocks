@@ -46,10 +46,12 @@ class ParentComponent implements OnDestroy {
 })
 class ChildComponent {}
 
-@NgModule({
-  declarations: [ParentComponent, ChildComponent],
-  entryComponents: [ChildComponent],
-})
+@NgModule(
+  {
+    declarations: [ParentComponent, ChildComponent],
+    entryComponents: [ChildComponent],
+  } as never /* TODO remove entryComponents after A16+ support */,
+)
 class TargetModule {}
 
 // It's a tricky thing, because it behaves like that in Ivy only.
