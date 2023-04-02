@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import {
   MockInstance,
@@ -36,7 +36,7 @@ interface User {
 @Injectable()
 class AuthService {
   public readonly currentUser?: User;
-  public readonly isLoggedIn$ = new Subject<boolean>();
+  public readonly isLoggedIn$ = new Observable<boolean>();
 }
 
 @Injectable()
