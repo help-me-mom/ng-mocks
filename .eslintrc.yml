@@ -88,10 +88,11 @@ overrides:
         - 500
       max-lines-per-function:
         - error
-        - 100
+        - 150
 
       '@angular-eslint/no-input-rename': off
       '@angular-eslint/no-output-rename': off
+      '@angular-eslint/no-outputs-metadata-property': off
 
       '@typescript-eslint/no-explicit-any': off
       '@typescript-eslint/no-namespace': off

@@ -117,7 +117,24 @@ export default (
     return ctor;
   }
 
-  const mockTemplate = funcGenerateTemplate(template, { ...meta, bindings });
+  const inputs = meta.inputs ? [...meta.inputs] : [];
+  const outputs = meta.outputs ? [...meta.outputs] : [];
+  if (meta.hostDirectives) {
+    for (const hostDirective of meta.hostDirectives) {
+      if (typeof hostDirective !== 'object' || !hostDirective.directive) {
+        continue;
+      }
+
+      if (hostDirective.inputs) {
+        inputs.push(...hostDirective.inputs);
+      }
+      if (hostDirective.outputs) {
+        outputs.push(...hostDirective.outputs);
+      }
+    }
+  }
+
+  const mockTemplate = funcGenerateTemplate(template, { selector: meta.selector, inputs, outputs, bindings });
   const options: Component = {
     providers: flags.providers,
     selector: 'mock-render',

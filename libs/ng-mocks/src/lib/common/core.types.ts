@@ -58,6 +58,7 @@ export type DebugNodeSelector =
  */
 export type dependencyKeys =
   | 'declarations'
+  | 'hostDirectives'
   | 'entryComponents'
   | 'bootstrap'
   | 'providers'

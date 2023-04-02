@@ -5,5 +5,7 @@ export default (provider: any): any => {
     ? provider.provide
     : isNgModuleDefWithProviders(provider)
     ? provider.ngModule
+    : provider && typeof provider === 'object' && provider.directive
+    ? provider.directive
     : provider;
 };

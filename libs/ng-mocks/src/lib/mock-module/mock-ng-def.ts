@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, Pipe, Provider } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
 import { flatten } from '../common/core.helpers';
@@ -19,6 +19,21 @@ const configureProcessMetaKeys = (
   resolveProvider: (def: Provider) => any,
 ): Array<[dependencyKeys, (def: any) => any]> => [
   ['declarations', resolve],
+  [
+    'hostDirectives',
+    <T>(data: T) => {
+      const def = funcGetType(data);
+      const directive = resolve(def);
+      return directive === def
+        ? data
+        : data == def
+        ? directive
+        : {
+            ...data,
+            directive,
+          };
+    },
+  ],
   ['imports', resolve],
   ['entryComponents', resolve],
   ['bootstrap', resolve],
@@ -28,14 +43,16 @@ const configureProcessMetaKeys = (
   ['schemas', v => v],
 ];
 
-const processMeta = (
-  ngModule: Partial<Record<dependencyKeys, any>> & {
+const processMeta = <
+  T extends Partial<Record<dependencyKeys, any>> & {
     skipMarkProviders?: boolean;
   },
+>(
+  ngModule: T,
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
-): NgModule => {
-  const mockModuleDef: Partial<NgModule & Component & Directive & Pipe> = {};
+): Partial<T> => {
+  const mockModuleDef: Partial<T> = {};
   const keys = configureProcessMetaKeys(resolve, resolveProvider);
 
   const cachePipe = ngMocksUniverse.flags.has('cachePipe');
@@ -118,13 +135,16 @@ const addExports = (
   }
 };
 
-export default (
-  ngModuleDef: NgModule & {
+export default <
+  T extends NgModule & {
+    hostDirectives?: Array<any>;
     skipMarkProviders?: boolean;
     skipExports?: boolean;
   },
+>(
+  ngModuleDef: T,
   ngModule?: Type<any>,
-): [boolean, NgModule, Map<any, any>] => {
+): [boolean, Partial<T>, Map<any, any>] => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());

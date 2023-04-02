@@ -40,6 +40,7 @@ export default <T extends Component & Directive>(
     NgModule & {
       hostBindings?: Array<[string, any]>;
       hostListeners?: Array<[string, any, any]>;
+      hostDirectives?: Array<AnyType<any> | { directive: AnyType<any> }>;
       imports?: any[];
       standalone?: boolean;
     },
@@ -50,7 +51,7 @@ export default <T extends Component & Directive>(
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
   }
 
-  const options: T & { imports?: any[]; standalone?: boolean } = {
+  const options: T & { imports?: any[]; hostDirectives?: any[]; standalone?: boolean } = {
     ...params,
   };
 
@@ -68,6 +69,13 @@ export default <T extends Component & Directive>(
     const [, { imports }] = mockNgDef({ imports: meta.imports, skipExports: true });
     if (imports?.length) {
       options.imports = imports as never;
+    }
+  }
+
+  if (meta.hostDirectives) {
+    const [, { hostDirectives }] = mockNgDef({ hostDirectives: meta.hostDirectives, skipExports: true });
+    if (hostDirectives?.length) {
+      options.hostDirectives = hostDirectives;
     }
   }
 
