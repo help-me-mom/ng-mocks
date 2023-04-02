@@ -37,6 +37,7 @@ export default {
 
   dependencies: [
     'declarations',
+    'hostDirectives',
     'entryComponents',
     'bootstrap',
     'providers',

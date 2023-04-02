@@ -150,6 +150,7 @@ module.exports = {
         'guides/directive-structural',
         'guides/directive-structural-context',
         'guides/directive-standalone',
+        'guides/host-directive',
         'guides/pipe',
         'guides/pipe-standalone',
         'guides/view-child',
@@ -171,6 +172,7 @@ module.exports = {
       collapsed: false,
       items: [
         'guides/mock/directive-structural-let-of',
+        'guides/mock/host-directive',
         'guides/mock/activated-route',
         'guides/mock/dynamic-components',
       ],
