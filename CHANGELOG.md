@@ -1,3 +1,10 @@
+# [14.8.0](https://github.com/ike18t/ng-mocks/compare/v14.7.3...v14.8.0) (2023-04-02)
+
+
+### Features
+
+* **core:** support of HostDirectives [#5117](https://github.com/ike18t/ng-mocks/issues/5117) ([b8414a4](https://github.com/ike18t/ng-mocks/commit/b8414a4515c8b7a9021c1a592ea30820818dbb2e))
+
 ## [14.7.3](https://github.com/ike18t/ng-mocks/compare/v14.7.2...v14.7.3) (2023-03-26)
 
 
