@@ -1,3 +1,10 @@
+# [14.9.0](https://github.com/ike18t/ng-mocks/compare/v14.8.0...v14.9.0) (2023-04-15)
+
+
+### Features
+
+* **a16:** supporting required inputs [#5350](https://github.com/ike18t/ng-mocks/issues/5350) ([1303680](https://github.com/ike18t/ng-mocks/commit/1303680af24bedc503128b849e64d04b77cf9890))
+
 # [14.8.0](https://github.com/ike18t/ng-mocks/compare/v14.7.3...v14.8.0) (2023-04-02)
 
 
