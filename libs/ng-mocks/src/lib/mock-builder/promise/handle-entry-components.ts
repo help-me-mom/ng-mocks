@@ -44,6 +44,6 @@ export default (ngModule: NgMeta): void => {
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
     // ɵmod is added only if Ivy has been enabled.
     entryComponents: (IvyModule as any).ɵmod ? [] : /* istanbul ignore next */ entryComponents,
-  })(entryModule);
+  } as never)(entryModule);
   ngModule.imports.push(entryModule);
 };

@@ -1,21 +1,23 @@
 import { Input } from '@angular/core';
 
-import { AnyType } from './core.types';
+import { AnyType, DirectiveIo } from './core.types';
+import funcDirectiveIoBuild from './func.directive-io-build';
+import funcDirectiveIoParse from './func.directive-io-parse';
 
 // Looks like an A9 bug, that queries from @Component are not processed.
-// Also we have to pass prototype, not the class.
+// Also, we have to pass prototype, not the class.
 // The same issue happens with outputs, but time to time
 // (when I restart tests with refreshing browser manually).
 // https://github.com/help-me-mom/ng-mocks/issues/109
-export default (cls: AnyType<any>, inputs?: string[], exclude?: string[]) => {
+export default (cls: AnyType<any>, inputs?: Array<DirectiveIo>, exclude?: string[]) => {
   // istanbul ignore else
   if (inputs) {
     for (const input of inputs) {
-      const [key, alias] = input.split(': ');
-      if (exclude && exclude.indexOf(key) !== -1) {
+      const { name, alias, required } = funcDirectiveIoParse(input);
+      if (exclude && exclude.indexOf(name) !== -1) {
         continue;
       }
-      Input(alias)(cls.prototype, key);
+      Input(funcDirectiveIoBuild({ name, alias, required }, true) as never)(cls.prototype, name);
     }
   }
 };

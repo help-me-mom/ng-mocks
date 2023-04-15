@@ -8,7 +8,8 @@ import helperMockService from '../mock-service/helper.mock-service';
 import coreDefineProperty from './core.define-property';
 import coreForm from './core.form';
 import { mapValues } from './core.helpers';
-import { AnyType } from './core.types';
+import { AnyType, DirectiveIo } from './core.types';
+import funcDirectiveIoParse from './func.directive-io-parse';
 import funcIsMock from './func.is-mock';
 import { MockControlValueAccessorProxy } from './mock-control-value-accessor-proxy';
 import ngMocksUniverse from './ng-mocks-universe';
@@ -66,7 +67,7 @@ const applyNgValueAccessor = (instance: any, ngControl: any) => {
 const applyOutputs = (instance: MockConfig & Record<keyof any, any>) => {
   const mockOutputs = [];
   for (const output of instance.__ngMocksConfig.outputs || []) {
-    mockOutputs.push(output.split(':')[0]);
+    mockOutputs.push(funcDirectiveIoParse(output).name);
   }
 
   for (const output of mockOutputs) {
@@ -113,7 +114,7 @@ export type ngMocksMockConfig = {
   init?: (instance: any) => void;
   isControlValueAccessor?: boolean;
   isValidator?: boolean;
-  outputs?: string[];
+  outputs?: Array<DirectiveIo>;
   queryScanKeys?: string[];
   setControlValueAccessor?: boolean;
   transform?: PipeTransform['transform'];

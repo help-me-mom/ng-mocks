@@ -177,18 +177,24 @@ describe('collect-declarations', () => {
         propDecorators: {
           prop: [
             {
-              args: [],
+              args: [{ alias: 'alias', required: true }],
               type: { prototype: { ngMetadataName: 'Input' } },
             },
             {
-              args: [],
+              args: [{ alias: 'alias', required: true }],
               type: { prototype: { ngMetadataName: 'Input' } },
             },
           ],
         },
       });
 
-      expect(actual.inputs).toEqual(['prop']);
+      expect(actual.inputs).toEqual([
+        {
+          name: 'prop',
+          alias: 'alias',
+          required: true,
+        },
+      ]);
     });
 
     it('skips output duplicates', () => {

@@ -1,3 +1,4 @@
+import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { MockedDebugNode } from '../../mock-render/types';
 
 import funcGetPublicProviderKeys from './func.get-public-provider-keys';
@@ -7,11 +8,11 @@ const detectInClassic = (node: MockedDebugNode, attribute: string, value: any): 
   for (const key of funcGetPublicProviderKeys(node)) {
     const [inputs, expectedAttributes, nodeIndex] = funcParseInputsAndRequiresAttributes(node, key);
     for (const input of inputs) {
-      const [prop, alias] = input.split(': ');
-      if (attribute !== (alias || prop) || expectedAttributes.indexOf(prop) === -1) {
+      const { name, alias } = funcDirectiveIoParse(input);
+      if (attribute !== (alias || name) || expectedAttributes.indexOf(name) === -1) {
         continue;
       }
-      if (value === (node.injector as any).view.nodes[nodeIndex].instance[prop]) {
+      if (value === (node.injector as any).view.nodes[nodeIndex].instance[name]) {
         return true;
       }
     }

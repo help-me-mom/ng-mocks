@@ -37,7 +37,7 @@ const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boo
   return false;
 };
 
-const isNotObject = (node: any): boolean => !node || typeof node !== 'object';
+const isNotObject = <T>(node: T): boolean => !node || typeof node !== 'object';
 
 const shouldBeScanned = (scanned: any[], node: any): boolean => scanned.indexOf(node) === -1 && Array.isArray(node);
 
@@ -51,7 +51,7 @@ const scan = <T>(
   }: {
     el: DebugNode | null;
     nodes: any[];
-    normalize: (item: any) => any;
+    normalize: (item: T) => T;
     proto: AnyType<T>;
     result: T[];
   },
@@ -72,7 +72,7 @@ const scan = <T>(
       continue;
     }
 
-    if (shouldBeScanned(scanned, node)) {
+    if (shouldBeScanned(scanned, node) && Array.isArray(node)) {
       scan({ result, el, nodes: node, normalize, proto }, gather, scanned);
     }
 

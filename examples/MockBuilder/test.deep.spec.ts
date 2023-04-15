@@ -228,8 +228,8 @@ describe('MockBuilder:deep', () => {
     (httpBackend: HttpBackend) => {
       // Checking that replacement works.
       expect(httpBackend.constructor).toBeDefined();
-      expect(httpBackend.constructor.name).toEqual(
-        'HttpClientTestingBackend',
+      expect(httpBackend.constructor.name).toMatch(
+        /_?HttpClientTestingBackend$/,
       );
     },
   ));

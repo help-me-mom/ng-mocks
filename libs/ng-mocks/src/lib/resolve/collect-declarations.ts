@@ -1,15 +1,17 @@
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
-import { AnyDeclaration } from '../common/core.types';
+import { AnyDeclaration, DirectiveIo } from '../common/core.types';
+import funcDirectiveIoBuild from '../common/func.directive-io-build';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 
 interface Declaration {
   host: Record<string, string | undefined>;
   hostBindings: Array<[string, string?, ...any[]]>;
   hostListeners: Array<[string, string?, ...any[]]>;
   attributes: string[];
-  inputs: string[];
-  outputs: string[];
+  inputs: Array<DirectiveIo>;
+  outputs: Array<DirectiveIo>;
   propDecorators: Record<string, any[]>;
   queries: Record<string, any>;
   decorators: Array<'Injectable' | 'Pipe' | 'Directive' | 'Component' | 'NgModule'>;
@@ -130,130 +132,42 @@ const parseDecorators = (
   }
 };
 
-const parsePropDecoratorsParserFactoryProp =
-  (key: 'inputs' | 'outputs') =>
-  (
-    _: string,
-    prop: string,
-    decorator: {
-      args?: [string];
-    },
-    declaration: Declaration,
-  ): void => {
-    const value = prop + (decorator.args?.[0] ? `: ${decorator.args[0]}` : '');
-    if (declaration[key].indexOf(value) === -1) {
-      declaration[key].unshift(value);
-    }
-  };
-const parsePropDecoratorsParserInput = parsePropDecoratorsParserFactoryProp('inputs');
-const parsePropDecoratorsParserOutput = parsePropDecoratorsParserFactoryProp('outputs');
-
-const parsePropDecoratorsParserFactoryQuery =
-  (isViewQuery: boolean) =>
-  (
-    ngMetadataName: string,
-    prop: string,
-    decorator: {
-      args: [string] | [string, any];
-    },
-    declaration: Declaration,
-  ): void => {
-    if (!declaration.queries[prop]) {
-      declaration.queries[prop] = {
-        isViewQuery,
-        ngMetadataName,
-        selector: decorator.args[0],
-        ...decorator.args[1],
-      };
-    }
-  };
-const parsePropDecoratorsParserContent = parsePropDecoratorsParserFactoryQuery(false);
-const parsePropDecoratorsParserView = parsePropDecoratorsParserFactoryQuery(true);
-
-const parsePropDecoratorsParserHostBinding = (
-  _: string,
-  prop: string,
-  decorator: {
-    args?: [string] | [string, any[]];
-  },
-  declaration: Declaration,
-): void => {
-  const key = `[${decorator.args?.[0] || prop}]`;
-  if (!declaration.host[key]) {
-    declaration.host[key] = prop;
-  }
-  declaration.hostBindings.push([prop, ...(decorator.args || [])]);
-};
-
-const parsePropDecoratorsParserHostListener = (
-  _: string,
-  prop: string,
-  decorator: {
-    args?: any[];
-  },
-  declaration: Declaration,
-): void => {
-  const key = `(${decorator.args?.[0] || prop})`;
-  if (!declaration.host[key]) {
-    declaration.host[key] = `${prop}($event)`;
-  }
-  declaration.hostListeners.push([prop, ...(decorator.args || [])]);
-};
-
-const parsePropDecoratorsMap: any = {
-  ContentChild: parsePropDecoratorsParserContent,
-  ContentChildren: parsePropDecoratorsParserContent,
-  HostBinding: parsePropDecoratorsParserHostBinding,
-  HostListener: parsePropDecoratorsParserHostListener,
-  Input: parsePropDecoratorsParserInput,
-  Output: parsePropDecoratorsParserOutput,
-  ViewChild: parsePropDecoratorsParserView,
-  ViewChildren: parsePropDecoratorsParserView,
-};
-
-const parsePropDecorators = (
-  def: {
-    propDecorators?: Record<
-      string,
-      Array<{
-        args: any;
-        type?: {
-          prototype?: {
-            ngMetadataName?: string;
-          };
-        };
-      }>
-    >;
-  },
-  declaration: Declaration,
-): void => {
-  if (Object.prototype.hasOwnProperty.call(def, 'propDecorators') && def.propDecorators) {
-    for (const prop of getAllKeys(def.propDecorators)) {
-      declaration.propDecorators[prop] = [...(declaration.propDecorators[prop] || []), ...def.propDecorators[prop]];
-      for (const decorator of def.propDecorators[prop]) {
-        const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
-        if (!ngMetadataName) {
-          continue;
-        }
-        parsePropDecoratorsMap[ngMetadataName]?.(ngMetadataName, prop, decorator, declaration);
-      }
-    }
-  }
-};
-
 const parsePropMetadataParserFactoryProp =
   (key: 'inputs' | 'outputs') =>
   (
     _: string,
-    prop: string,
+    name: string,
     decorator: {
+      alias?: string;
+      required?: boolean;
       bindingPropertyName?: string;
     },
     declaration: Declaration,
   ): void => {
-    const value = prop + (decorator.bindingPropertyName ? `: ${decorator.bindingPropertyName}` : '');
-    if (declaration[key].indexOf(value) === -1) {
-      declaration[key].unshift(value);
+    const { alias, required } = funcDirectiveIoParse({
+      name,
+      alias: decorator.alias ?? decorator.bindingPropertyName,
+      required: decorator.required,
+    });
+
+    const normalizedDef = funcDirectiveIoBuild({ name, alias, required });
+
+    let add = true;
+    for (const def of declaration[key]) {
+      if (def === normalizedDef) {
+        add = false;
+        break;
+      }
+
+      const { name: defName, alias: defAlias, required: defRequired } = funcDirectiveIoParse(def);
+      if (defName === name && defAlias === alias && defRequired === required) {
+        add = false;
+        break;
+      }
+    }
+
+    if (add) {
+      declaration[key].unshift(normalizedDef);
     }
   };
 const parsePropMetadataParserInput = parsePropMetadataParserFactoryProp('inputs');
@@ -377,6 +291,121 @@ const parsePropMetadata = (
           continue;
         }
         parsePropMetadataMap[ngMetadataName]?.(ngMetadataName, prop, decorator, declaration);
+      }
+    }
+  }
+};
+
+const parsePropDecoratorsParserFactoryProp = (key: 'inputs' | 'outputs') => {
+  const callback = parsePropMetadataParserFactoryProp(key);
+  return (
+    _: string,
+    name: string,
+    decorator: {
+      args?: [DirectiveIo];
+    },
+    declaration: Declaration,
+  ): void => {
+    const { alias = undefined, required = undefined } =
+      typeof decorator.args?.[0] === 'undefined'
+        ? {}
+        : typeof decorator.args[0] === 'string'
+        ? { alias: decorator.args[0] }
+        : decorator.args[0];
+    callback(_, name, { alias, required, bindingPropertyName: alias }, declaration);
+  };
+};
+const parsePropDecoratorsParserInput = parsePropDecoratorsParserFactoryProp('inputs');
+const parsePropDecoratorsParserOutput = parsePropDecoratorsParserFactoryProp('outputs');
+
+const parsePropDecoratorsParserFactoryQuery =
+  (isViewQuery: boolean) =>
+  (
+    ngMetadataName: string,
+    prop: string,
+    decorator: {
+      args: [string] | [string, any];
+    },
+    declaration: Declaration,
+  ): void => {
+    if (!declaration.queries[prop]) {
+      declaration.queries[prop] = {
+        isViewQuery,
+        ngMetadataName,
+        selector: decorator.args[0],
+        ...decorator.args[1],
+      };
+    }
+  };
+const parsePropDecoratorsParserContent = parsePropDecoratorsParserFactoryQuery(false);
+const parsePropDecoratorsParserView = parsePropDecoratorsParserFactoryQuery(true);
+
+const parsePropDecoratorsParserHostBinding = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: [string] | [string, any[]];
+  },
+  declaration: Declaration,
+): void => {
+  const key = `[${decorator.args?.[0] || prop}]`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = prop;
+  }
+  declaration.hostBindings.push([prop, ...(decorator.args || [])]);
+};
+
+const parsePropDecoratorsParserHostListener = (
+  _: string,
+  prop: string,
+  decorator: {
+    args?: any[];
+  },
+  declaration: Declaration,
+): void => {
+  const key = `(${decorator.args?.[0] || prop})`;
+  if (!declaration.host[key]) {
+    declaration.host[key] = `${prop}($event)`;
+  }
+  declaration.hostListeners.push([prop, ...(decorator.args || [])]);
+};
+
+const parsePropDecoratorsMap: any = {
+  ContentChild: parsePropDecoratorsParserContent,
+  ContentChildren: parsePropDecoratorsParserContent,
+  HostBinding: parsePropDecoratorsParserHostBinding,
+  HostListener: parsePropDecoratorsParserHostListener,
+  Input: parsePropDecoratorsParserInput,
+  Output: parsePropDecoratorsParserOutput,
+  ViewChild: parsePropDecoratorsParserView,
+  ViewChildren: parsePropDecoratorsParserView,
+};
+
+const parsePropDecorators = (
+  def: {
+    propDecorators?: Record<
+      string,
+      Array<{
+        args: any;
+        type?: {
+          prototype?: {
+            ngMetadataName?: string;
+          };
+        };
+      }>
+    >;
+  },
+  declaration: Declaration,
+): void => {
+  if (Object.prototype.hasOwnProperty.call(def, 'propDecorators') && def.propDecorators) {
+    for (const prop of getAllKeys(def.propDecorators)) {
+      declaration.propDecorators[prop] = [...(declaration.propDecorators[prop] || []), ...def.propDecorators[prop]];
+      for (const decorator of def.propDecorators[prop]) {
+        const ngMetadataName = decorator?.type?.prototype?.ngMetadataName;
+        if (!ngMetadataName) {
+          continue;
+        }
+        parsePropDecoratorsMap[ngMetadataName]?.(ngMetadataName, prop, decorator, declaration);
       }
     }
   }

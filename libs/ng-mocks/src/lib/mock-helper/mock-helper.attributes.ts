@@ -1,3 +1,5 @@
+import { DirectiveIo } from '../common/core.types';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { MockedDebugElement } from '../mock-render/types';
 
 import mockHelperFind from './find/mock-helper.find';
@@ -13,11 +15,11 @@ const parseArgs = (args: any[]): [MockedDebugElement | null | undefined, string,
   args.length === 3 ? args[2] : defaultNotFoundValue,
 ];
 
-const attrMatches = (attribute: string, selector: string): string | undefined => {
-  const [prop, alias = ''] = attribute.split(':', 2).map(v => v.trim());
+const attrMatches = (attribute: DirectiveIo, selector: string): string | undefined => {
+  const { name, alias = '' } = funcDirectiveIoParse(attribute);
 
-  if ((!alias && prop === selector) || (!!alias && alias === selector)) {
-    return prop;
+  if ((!alias && name === selector) || (!!alias && alias === selector)) {
+    return name;
   }
 
   return undefined;

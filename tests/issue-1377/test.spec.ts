@@ -72,8 +72,8 @@ const expectBrowserAnimations = async () => {
     typeof (Element as any) !== 'undefined' &&
     typeof (Element as any).prototype.animate === 'function'
   ) {
-    expect(driver.constructor.name).not.toEqual(
-      'NoopAnimationDriver',
+    expect(driver.constructor.name).not.toMatch(
+      /_?NoopAnimationDriver$/,
     );
   }
   expect((driver as any).__ngMocks).toBeUndefined();
@@ -99,7 +99,7 @@ const expectNoopAnimations = async () => {
   const fixture = MockRender(TargetComponent);
   const driver = fixture.point.injector.get(AnimationDriver);
   // the noop provider
-  expect(driver.constructor.name).toEqual('NoopAnimationDriver');
+  expect(driver.constructor.name).toMatch(/_?NoopAnimationDriver$/);
   expect((driver as any).__ngMocks).toBeUndefined();
 
   {

@@ -34,11 +34,13 @@ class TargetComponent {
   }
 }
 
-@NgModule({
-  declarations: [TargetComponent, ModalComponent],
-  entryComponents: [ModalComponent],
-  providers: [ModalService],
-})
+@NgModule(
+  {
+    declarations: [TargetComponent, ModalComponent],
+    entryComponents: [ModalComponent],
+    providers: [ModalService],
+  } as never /* TODO remove entryComponents after A16+ support */,
+)
 class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/296

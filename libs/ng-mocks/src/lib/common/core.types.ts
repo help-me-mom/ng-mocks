@@ -39,6 +39,21 @@ export type AnyType<T> = Type<T> | AbstractType<T>;
 export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T> | string;
 
 /**
+ * Normalized Input / Output type.
+ * It should be A16 structure.
+ *
+ * @internal
+ */
+export type DirectiveIoParsed = { name: string; alias?: string; required?: boolean };
+
+/**
+ * Possible Input / Output type.
+ *
+ * @internal
+ */
+export type DirectiveIo = string | DirectiveIoParsed;
+
+/**
  * DebugNodeSelector describes supported types of selectors
  * to search elements and instances in fixtures.
  *

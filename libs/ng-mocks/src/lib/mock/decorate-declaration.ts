@@ -1,7 +1,7 @@
 import { Component, Directive, NgModule, ViewChild } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
-import { AnyType } from '../common/core.types';
+import { AnyType, DirectiveIo } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
@@ -17,8 +17,8 @@ import toExistingProvider from './to-existing-provider';
 const buildConfig = (
   source: AnyType<any>,
   meta: {
-    inputs?: string[];
-    outputs?: string[];
+    inputs?: Array<DirectiveIo>;
+    outputs?: Array<DirectiveIo>;
     providers?: NgModule['providers'];
     queries?: Record<string, ViewChild>;
   },
