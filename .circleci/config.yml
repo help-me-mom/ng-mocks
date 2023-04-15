@@ -11,7 +11,7 @@ orbs:
 executors:
   core:
     docker:
-      - image: satantime/puppeteer-node:18.15.0
+      - image: satantime/puppeteer-node:18.16.0
     resource_class: medium
   a5:
     docker:
@@ -59,7 +59,7 @@ executors:
     resource_class: medium
   a16:
     docker:
-      - image: satantime/puppeteer-node:18.15.0
+      - image: satantime/puppeteer-node:18.16.0
     resource_class: medium
 
 commands:
