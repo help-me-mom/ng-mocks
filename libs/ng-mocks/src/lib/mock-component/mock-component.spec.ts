@@ -46,7 +46,7 @@ import { MockedComponent } from './types';
     </simple-component>
     <simple-component
       [someInput]="'hi again'"
-      #f="seeimple"
+      #f="simple"
     ></simple-component>
     <empty-component></empty-component>
     <custom-form-control
@@ -96,7 +96,7 @@ describe('MockComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         ExampleContainerComponent,
-        MockComponents(
+        ...MockComponents(
           EmptyComponent,
           GetterSetterComponent,
           SimpleComponent,

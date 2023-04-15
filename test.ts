@@ -52,4 +52,8 @@ ngMocks.globalKeep(BrowserModule, true);
 //   },
 // });
 
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+// Initialize the Angular testing environment.
+getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting(), {
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});

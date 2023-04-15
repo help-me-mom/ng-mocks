@@ -9,7 +9,7 @@ export class BaseSimpleComponent {
 }
 
 @Component({
-  exportAs: 'seeimple',
+  exportAs: 'simple',
   selector: 'simple-component',
   template: 'some template',
 })

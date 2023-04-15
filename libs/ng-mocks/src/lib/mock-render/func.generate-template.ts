@@ -1,4 +1,6 @@
 import coreReflectPipeResolve from '../common/core.reflect.pipe-resolve';
+import { DirectiveIo } from '../common/core.types';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { isNgDef } from '../common/func.is-ng-def';
 
 const generateTemplateAttrWrap = (prop: string, type: 'i' | 'o') => (type === 'i' ? `[${prop}]` : `(${prop})`);
@@ -11,7 +13,7 @@ const generateTemplateAttrWithParams = (prop: string, type: 'i' | 'o'): string =
   return tpl;
 };
 
-const generateTemplateAttr = (bindings: null | undefined | any[], attr: any, type: 'i' | 'o') => {
+const generateTemplateAttr = (bindings: null | undefined | any[], attr: Array<DirectiveIo>, type: 'i' | 'o') => {
   // unprovided params for inputs should render empty placeholders
   if (!bindings && type === 'o') {
     return '';
@@ -20,9 +22,9 @@ const generateTemplateAttr = (bindings: null | undefined | any[], attr: any, typ
   let mockTemplate = '';
   const keys = bindings ?? attr;
   for (const definition of attr) {
-    const [property, alias] = definition.split(': ');
-    mockTemplate +=
-      keys.indexOf(alias || property) === -1 ? '' : generateTemplateAttrWithParams(alias || property, type);
+    const { name, alias } = funcDirectiveIoParse(definition);
+
+    mockTemplate += keys.indexOf(alias || name) === -1 ? '' : generateTemplateAttrWithParams(alias || name, type);
   }
 
   return mockTemplate;

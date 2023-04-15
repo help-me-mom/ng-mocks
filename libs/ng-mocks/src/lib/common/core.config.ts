@@ -1,7 +1,16 @@
 export default {
   flags: ['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports'],
   mockRenderCacheSize: 25,
-  neverMockModule: ['ApplicationModule', 'CommonModule', 'BrowserModule'],
+  neverMockModule: [
+    'ApplicationModule',
+    'CommonModule',
+    'BrowserModule',
+
+    // Angular 16 adds underscores
+    '_ApplicationModule',
+    '_CommonModule',
+    '_BrowserModule',
+  ],
   neverMockProvidedFunction: [
     'DomRendererFactory2',
     'EventManager',
@@ -19,6 +28,19 @@ export default {
     'Compiler',
     'IterableDiffers',
     'KeyValueDiffers',
+
+    // Angular 16 adds underscores
+    '_DomRendererFactory2',
+    '_EventManager',
+    '_Injector',
+    '_Sanitizer',
+    '_DomSanitizer',
+    '_DomSanitizerImpl',
+    '_ApplicationInitStatus',
+    '_ApplicationRef',
+    '_Compiler',
+    '_IterableDiffers',
+    '_KeyValueDiffers',
   ],
   neverMockToken: [
     'InjectionToken Set Injector scope.', // INJECTOR_SCOPE // ivy only

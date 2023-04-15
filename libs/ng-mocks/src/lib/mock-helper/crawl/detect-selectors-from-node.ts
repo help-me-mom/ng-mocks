@@ -1,3 +1,4 @@
+import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { MockedDebugNode } from '../../mock-render/types';
 import funcParseProviderTokensDirectives from '../func.parse-provider-tokens-directives';
 
@@ -23,9 +24,9 @@ const collectAttributesClassic = (node: MockedDebugNode): string[] => {
   for (const key of funcGetPublicProviderKeys(node)) {
     const [inputs, expectedAttributes] = funcParseInputsAndRequiresAttributes(node, key);
     for (const input of inputs) {
-      const [prop, alias] = input.split(': ');
-      const attr = alias || prop;
-      if (expectedAttributes.indexOf(prop) !== -1 && result.indexOf(attr) === -1) {
+      const { name, alias } = funcDirectiveIoParse(input);
+      const attr = alias || name;
+      if (expectedAttributes.indexOf(name) !== -1 && result.indexOf(attr) === -1) {
         result.push(attr);
       }
     }
