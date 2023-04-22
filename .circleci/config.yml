@@ -537,8 +537,6 @@ workflows:
           name: << matrix.dir >>:install
           dir: << matrix.dir >>
           branch: << matrix.dir >>
-          requires:
-            - core
           matrix:
             parameters:
               dir:
@@ -554,6 +552,7 @@ workflows:
           branch: << matrix.dir >>
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -568,8 +567,6 @@ workflows:
           node: a5
           dir: << matrix.dir >>
           branch: a5
-          requires:
-            - core
           matrix:
             parameters:
               dir:
@@ -582,8 +579,6 @@ workflows:
           node: << matrix.dir >>
           dir: << matrix.dir >>
           branch: << matrix.dir >>
-          requires:
-            - core
           matrix:
             parameters:
               dir:
@@ -607,6 +602,7 @@ workflows:
           branch: a5
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -622,6 +618,7 @@ workflows:
           es: << matrix.es >>
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -645,6 +642,7 @@ workflows:
           engine: ivy
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -666,6 +664,7 @@ workflows:
           branch: << matrix.dir >>
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -680,6 +679,7 @@ workflows:
           branch: << matrix.dir >>
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
@@ -702,6 +702,7 @@ workflows:
           branch: << matrix.dir >>
           requires:
             - << matrix.dir >>:install
+            - core
           matrix:
             parameters:
               dir:
