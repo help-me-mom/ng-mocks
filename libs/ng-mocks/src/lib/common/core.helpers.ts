@@ -114,27 +114,31 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
 
 export const extendClassicClass = <I>(base: AnyType<I>): Type<I> => {
   let child: any;
+  const index = ngMocksUniverse.index();
+
   const glb = funcGetGlobal();
+  glb.ngMocksParent = base;
 
   // First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
   // The next step is to respect constructor parameters as the parent class via jitReflector.
-  glb.ngMocksParent = base;
   // istanbul ignore next
   try {
     eval(`
       var glb = typeof window === 'undefined' ? global : window;
-      class MockMiddleware extends glb.ngMocksParent {}
-      glb.ngMocksResult = MockMiddleware
+      class MockMiddleware${index} extends glb.ngMocksParent {};
+      glb.ngMocksResult = MockMiddleware${index};
     `);
     child = glb.ngMocksResult;
   } catch {
     class MockMiddleware extends glb.ngMocksParent {}
     child = MockMiddleware;
+  } finally {
+    glb.ngMocksResult = undefined;
+    glb.ngMocksParent = undefined;
   }
-  glb.ngMocksParent = undefined;
 
   // A16: adding unique property.
-  coreDefineProperty(child.prototype, `__ngMocks_index_${ngMocksUniverse.index()}`, undefined, false);
+  coreDefineProperty(child.prototype, `__ngMocks_index_${index}`, undefined, false);
 
   return child;
 };
