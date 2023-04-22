@@ -44,7 +44,6 @@ import { BlockUIModule } from 'primeng/blockui';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
-import { CaptchaModule } from 'primeng/captcha';
 import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
@@ -67,7 +66,6 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FocusTrapModule } from 'primeng/focustrap';
 import { GalleriaModule } from 'primeng/galleria';
-import { GMapModule } from 'primeng/gmap';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -76,7 +74,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { KnobModule } from 'primeng/knob';
-import { LightboxModule } from 'primeng/lightbox';
 import { ListboxModule } from 'primeng/listbox';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { MenuModule } from 'primeng/menu';
@@ -175,7 +172,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     BreadcrumbModule,
     ButtonModule,
     CalendarModule,
-    CaptchaModule,
     CardModule,
     CarouselModule,
     CascadeSelectModule,
@@ -198,7 +194,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     FileUploadModule,
     FocusTrapModule,
     GalleriaModule,
-    GMapModule,
     ImageModule,
     InplaceModule,
     InputMaskModule,
@@ -208,7 +203,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     InputTextModule,
     KeyFilterModule,
     KnobModule,
-    LightboxModule,
     ListboxModule,
     MegaMenuModule,
     MenuModule,
