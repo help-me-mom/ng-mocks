@@ -476,13 +476,37 @@ even if it has been imported or declared in nested modules.
 
 ### `NG_MOCKS_GUARDS` token
 
-If we want to test guards, we need to [`.keep`](#keep) them, but what should we do with other guards we do not want to care about at all?
-The answer is to exclude `NG_MOCKS_GUARDS` token, it will **remove all the guards** from routes except the explicitly configured ones.
+`NG_MOCKS_GUARDS` helps to **remove guards from all routes** in a test.
+It's useful if you want to test a specific guard. 
+To do so, you need to [`.exclude`](#exclude) `NG_MOCKS_GUARDS` and to [`.keep`](#keep) the guard.
 
 ```ts
 beforeEach(() => {
-  return MockBuilder(MyGuard, MyModule)
-    .exclude(NG_MOCKS_GUARDS);
+  return MockBuilder(
+      [RouterModule, RouterTestingModule.withRoutes([])],
+      ModuleWithRoutes,
+    )
+    .exclude(NG_MOCKS_GUARDS) // <- remotes all guards
+    .keep(GuardUnderTest) // <- but keeps GuardUnderTest
+  ;
+});
+```
+
+### `NG_MOCKS_RESOLVERS` token
+
+`NG_MOCKS_RESOLVERS` helps to **remove all resolves from all routes** in a test.
+It's useful if you want to test a specific resolver.
+To do so, you need to [`.exclude`](#exclude) `NG_MOCKS_RESOLVERS` and to [`.keep`](#keep) the resolver.
+
+```ts
+beforeEach(() => {
+  return MockBuilder(
+      [RouterModule, RouterTestingModule.withRoutes([])],
+      ModuleWithRoutes,
+    )
+    .exclude(NG_MOCKS_RESOLVERS) // <- remotes all resolvers
+    .keep(ResolverUnderTest) // <- but keeps ResolverUnderTest
+  ;
 });
 ```
 

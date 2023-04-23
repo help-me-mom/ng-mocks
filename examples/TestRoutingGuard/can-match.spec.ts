@@ -1,19 +1,20 @@
 import { Location } from '@angular/common';
 import {
   Component,
+  inject,
   Injectable,
   NgModule,
   VERSION,
 } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import {
-  CanActivate,
+  CanMatchFn,
   Router,
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { from, Observable } from 'rxjs';
+import { from } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 import {
@@ -32,32 +33,17 @@ class LoginService {
 }
 
 // A guard we want to test.
-@Injectable()
-class LoginGuard implements CanActivate {
-  public constructor(
-    protected router: Router,
-    protected service: LoginService,
-  ) {}
-
-  public canActivate(): boolean | Observable<boolean> {
-    if (this.service.isLoggedIn) {
-      return true;
-    }
-
-    return from(this.router.navigate(['/login'])).pipe(mapTo(false));
+const canMatchGuard: CanMatchFn = (route, segments) => {
+  if (route && segments && inject(LoginService).isLoggedIn) {
+    return true;
   }
-}
 
-// A side guard, when it has been replaced with its mock copy
-// it blocks all routes, because `canActivate` returns undefined.
-@Injectable()
-class MockGuard implements CanActivate {
-  protected readonly allow = true;
+  return from(inject(Router).navigate(['/login'])).pipe(mapTo(false));
+};
 
-  public canActivate(): boolean {
-    return this.allow;
-  }
-}
+// Another guard like in a real world example,
+// which should be removed from testing to avoid side effects on the route.
+const sideEffectGuard: CanMatchFn = () => false;
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -66,7 +52,7 @@ class MockGuard implements CanActivate {
   template: 'login',
 })
 class LoginComponent {
-  public loginTestRoutingGuard() {}
+  public loginTestRoutingGuardCanMatch() {}
 }
 
 // A simple component pretending a protected dashboard.
@@ -76,7 +62,7 @@ class LoginComponent {
   template: 'dashboard',
 })
 class DashboardComponent {
-  public dashboardTestRoutingGuard() {}
+  public dashboardTestRoutingGuardCanMatch() {}
 }
 
 // Definition of the routing module.
@@ -86,62 +72,61 @@ class DashboardComponent {
   imports: [
     RouterModule.forRoot([
       {
-        canActivate: [MockGuard, 'canActivateToken'],
         component: LoginComponent,
         path: 'login',
       },
       {
-        canActivate: [LoginGuard, MockGuard, 'canActivateToken'],
-        component: DashboardComponent,
-        path: '**',
+        canMatch: [canMatchGuard, sideEffectGuard],
+        path: '',
+        children: [
+          {
+            component: DashboardComponent,
+            path: '**',
+          },
+        ],
       },
     ]),
   ],
-  providers: [
-    LoginService,
-    LoginGuard,
-    MockGuard,
-    {
-      provide: 'canActivateToken',
-      useValue: () => true,
-    },
-  ],
+  providers: [LoginService],
 })
 class TargetModule {}
 
-describe('TestRoutingGuard:test', () => {
-  // Because we want to test the guard, it means that we want to
-  // test its integration with RouterModule. Therefore, we pass
-  // the guard as the first parameter of MockBuilder. Then, to
-  // correctly satisfy its initialization, we need to pass its module
-  // as the second parameter. The next step is to avoid mocking of
-  // RouterModule to have its routes, and to add
-  // RouterTestingModule.withRoutes([]), yes yes, with empty routes
-  // to have tools for testing. And the last thing is to exclude
-  // `NG_MOCKS_GUARDS` to remove all other guards.
+describe('TestRoutingGuard:canMatch', () => {
+  // Because we want to test a canMatch guard, it means that we want to
+  // test its integration with RouterModule.
+  // Therefore, RouterModule and the guard should be kept,
+  // and the rest of the module which defines the route can be mocked.
+  // To configure RouterModule for the test,
+  // RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS
+  // should be specified as the first parameter of MockBuilder (yes, with empty routes).
+  // The module with routes and the guard should be specified
+  // as the second parameter of MockBuilder.
+  // Then `NG_MOCKS_GUARDS` should be excluded to remove all guards,
+  // and `canActivateGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
-        LoginGuard,
         RouterModule,
         RouterTestingModule.withRoutes([]),
         NG_MOCKS_ROOT_PROVIDERS,
       ],
-      TargetModule,
-    ).exclude(NG_MOCKS_GUARDS);
+      [TargetModule],
+    )
+      .exclude(NG_MOCKS_GUARDS)
+      .keep(canMatchGuard);
   });
 
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
-    if (Number.parseInt(VERSION.major, 10) <= 6) {
-      pending('Need Angular > 6');
+    if (Number.parseInt(VERSION.major, 10) < 7) {
+      pending('Need Angular 7+');
 
       return;
     }
 
     const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
+    const router = ngMocks.get(Router);
+    const location = ngMocks.get(Location);
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
@@ -157,10 +142,9 @@ describe('TestRoutingGuard:test', () => {
 
   it('loads dashboard', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
-    const loginService: LoginService =
-      fixture.point.injector.get(LoginService);
+    const router = ngMocks.get(Router);
+    const location = ngMocks.get(Location);
+    const loginService = ngMocks.get(LoginService);
 
     // Letting the guard know we have been logged in.
     loginService.isLoggedIn = true;

@@ -53,6 +53,16 @@ export const NG_MOCKS_GUARDS = new InjectionToken<void>('NG_MOCKS_GUARDS');
 (NG_MOCKS_GUARDS as any).__ngMocksSkip = true;
 
 /**
+ * NG_MOCKS_RESOLVERS token influences on provided resolvers in MockBuilder.
+ * More info by the links below.
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockBuilder#ng_mocks_resolvers-token
+ * @see https://ng-mocks.sudo.eu/guides/routing-resolver
+ */
+export const NG_MOCKS_RESOLVERS = new InjectionToken<void>('NG_MOCKS_RESOLVERS');
+(NG_MOCKS_RESOLVERS as any).__ngMocksSkip = true;
+
+/**
  * NG_MOCKS_INTERCEPTORS token influences on provided interceptors in MockBuilder.
  * More info by the links below.
  *

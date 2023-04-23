@@ -1,18 +1,19 @@
-import { NG_MOCKS_GUARDS } from '../common/core.tokens';
+import { NG_MOCKS_GUARDS, NG_MOCKS_RESOLVERS } from '../common/core.tokens';
+import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 const handleSection = (section: any[]) => {
   const guards: any[] = [];
 
   for (const guard of section) {
-    if (ngMocksUniverse.isProvidedDef(guard)) {
-      guards.push(guard);
+    if (!ngMocksUniverse.isProvidedDef(guard) && ngMocksUniverse.isExcludedDef(NG_MOCKS_GUARDS)) {
       continue;
     }
-    if (ngMocksUniverse.isExcludedDef(NG_MOCKS_GUARDS)) {
-      continue;
-    }
+
     guards.push(guard);
+    if (!isNgDef(guard)) {
+      ngMocksUniverse.touches.add(guard);
+    }
   }
 
   return guards;
@@ -35,7 +36,7 @@ const handleArray = (cache: Map<any, any>, value: any[], callback: any): [boolea
   return [updated, mock];
 };
 
-const handleItemKeys = ['canActivate', 'canActivateChild', 'canDeactivate', 'canLoad'];
+const handleItemKeys = ['canActivate', 'canActivateChild', 'canDeactivate', 'canMatch', 'canLoad'];
 const handleItemGetGuards = (mock: any, section: string) =>
   Array.isArray(mock[section]) ? handleSection(mock[section]) : mock[section];
 
@@ -63,6 +64,27 @@ const handleItem = (
     if (guards && mock[section].length !== guards.length) {
       updated = updated || true;
       mock = { ...mock, [section]: guards };
+    }
+  }
+
+  // Removal of resolvers.
+  if (typeof mock.resolve === 'object' && mock.resolve) {
+    const resolve: any = {};
+    let resolveUpdated = false;
+    for (const key of Object.keys(mock.resolve)) {
+      const resolver = mock.resolve[key];
+      if (!ngMocksUniverse.isProvidedDef(resolver) && ngMocksUniverse.isExcludedDef(NG_MOCKS_RESOLVERS)) {
+        resolveUpdated = resolveUpdated || true;
+        continue;
+      }
+      resolve[key] = resolver;
+      if (!isNgDef(resolver)) {
+        ngMocksUniverse.touches.add(resolver);
+      }
+    }
+    if (resolveUpdated) {
+      updated = updated || true;
+      mock = { ...mock, resolve };
     }
   }
 

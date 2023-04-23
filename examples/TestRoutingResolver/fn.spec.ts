@@ -1,9 +1,14 @@
 import { Location } from '@angular/common';
-import { Component, Injectable, NgModule } from '@angular/core';
+import {
+  Component,
+  inject,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
-  Resolve,
+  ResolveFn,
   Router,
   RouterModule,
   RouterOutlet,
@@ -15,6 +20,7 @@ import { map } from 'rxjs/operators';
 import {
   MockBuilder,
   MockRender,
+  NG_MOCKS_GUARDS,
   NG_MOCKS_RESOLVERS,
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
@@ -31,26 +37,15 @@ class DataService {
 }
 
 // A resolver we want to test.
-@Injectable()
-class DataResolver implements Resolve<{ flag: boolean }> {
-  public constructor(protected service: DataService) {}
-
-  public resolve() {
-    return combineLatest([this.service.data()]).pipe(
-      map(([flag]) => ({ flag })),
-    );
-  }
-}
+const dataResolver: ResolveFn<Observable<{ flag: boolean }>> = () =>
+  combineLatest([inject(DataService).data()]).pipe(
+    map(([flag]) => ({ flag })),
+  );
 
 // A resolver we want to ignore.
-@Injectable()
-class MockResolver implements Resolve<{ mock: boolean }> {
-  protected mock = true;
-
-  public resolve() {
-    return of({ mock: this.mock });
-  }
-}
+const sideEffectResolver: ResolveFn<
+  Observable<{ mock: boolean }>
+> = () => of({ mock: true });
 
 // A dummy component.
 // It will be replaced with a mock copy.
@@ -59,7 +54,7 @@ class MockResolver implements Resolve<{ mock: boolean }> {
   template: 'route',
 })
 class RouteComponent {
-  public routeTestRoutingResolver() {}
+  public routeTestRoutingFnResolver() {}
 }
 
 // Definition of the routing module.
@@ -72,44 +67,49 @@ class RouteComponent {
         component: RouteComponent,
         path: 'route',
         resolve: {
-          data: DataResolver,
-          mock: MockResolver,
+          data: dataResolver,
+          mock: sideEffectResolver,
         },
       },
     ]),
   ],
-  providers: [DataService, DataResolver, MockResolver],
+  providers: [DataService],
 })
 class TargetModule {}
 
-describe('TestRoutingResolver:test', () => {
-  // Because we want to test the resolver, it means that we want to
-  // test its integration with RouterModule. Therefore, we pass
-  // the resolver as the first parameter of MockBuilder. Then, to
-  // correctly satisfy its initialization, we need to pass its module
-  // as the second parameter. And, the last but not the least, we
-  // need to keep RouterModule to have its routes, and to
-  // add RouterTestingModule.withRoutes([]), yes yes, with empty
-  // routes to have tools for testing.
+describe('TestRoutingResolver:fn', () => {
+  // Because we want to test a resolver, it means that we want to
+  // test its integration with RouterModule.
+  // Therefore, RouterModule and the resolver should be kept,
+  // and the rest of the module which defines the route can be mocked.
+  // To configure RouterModule for the test,
+  // RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS
+  // should be specified as the first parameter of MockBuilder (yes, with empty routes).
+  // The module with routes and the resolver should be specified
+  // as the second parameter of MockBuilder.
+  // Then `NG_MOCKS_RESOLVERS` should be excluded to remove all resolvers,
+  // and `dataResolver` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
-        DataResolver,
+        RouteComponent, // not necessary, added for coverage
         RouterModule,
         RouterTestingModule.withRoutes([]),
         NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
-    ).exclude(NG_MOCKS_RESOLVERS);
+    )
+      .exclude(NG_MOCKS_GUARDS)
+      .exclude(NG_MOCKS_RESOLVERS)
+      .keep(dataResolver);
   });
 
   // It is important to run routing tests in fakeAsync.
   it('provides data to on the route', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
-    const dataService: DataService =
-      fixture.point.injector.get(DataService);
+    const router = ngMocks.get(Router);
+    const location = ngMocks.get(Location);
+    const dataService = ngMocks.get(DataService);
 
     // DataService has been replaced with a mock copy,
     // let's set a custom value we will assert later on.
@@ -129,7 +129,7 @@ describe('TestRoutingResolver:test', () => {
 
     // Let's extract ActivatedRoute of the current component.
     const el = ngMocks.find(RouteComponent);
-    const route: ActivatedRoute = el.injector.get(ActivatedRoute);
+    const route = ngMocks.findInstance(el, ActivatedRoute);
 
     // Now we can assert that it has expected data.
     expect(route.snapshot.data).toEqual({
