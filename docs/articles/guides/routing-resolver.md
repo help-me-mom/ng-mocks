@@ -6,22 +6,47 @@ sidebar_label: Routing resolver
 
 If you did not read ["How to test a route"](route.md), please do it first.
 
-When we want to test a resolver it means we need to mock everything except the resolver and `RouterModule`.
-Optionally, we can disable guards to avoid influence of their mocked methods returning falsy values and blocking routes.
+When you want to test a resolver, you need to remove all other resolves and guards to avoid side effects,
+to mock declarations to test the resolver in isolation,
+and to keep `RouterModule` and its dependencies to assert results on `Location` and `ActivatedRoute`.
+
+## Functional resolvers
+
+A functional resolver is a simple function which uses `inject` to get another services and to fetch data for its route.
+It's important to note that a functional resolver isn't defined as a service or a token,
+and, therefore, it exists only in the definition of a route.   
+
+Let's assume, the resolver is called `dataResolver` and the module with its route `TargetModule`.
+
+To configure `TestBed` as described above, the code can be next:
 
 ```ts
 beforeEach(() =>
   MockBuilder(
-    // Things to keep and export.
+    // first parameter
+    // providing RouterModule and its dependencies
     [
-      DataResolver,
       RouterModule,
       RouterTestingModule.withRoutes([]),
       NG_MOCKS_ROOT_PROVIDERS,
     ],
-    // Things to mock.
+  
+    // second parameter
+    // Mocking definition of TargetModule
     TargetModule,
-  ).exclude(NG_MOCKS_GUARDS)
+  )
+
+  // chain
+  // excluding all guards to avoid side effects
+  .exclude(NG_MOCKS_GUARDS)
+
+  // chain
+  // excluding all resolvers to avoid side effects
+  .exclude(NG_MOCKS_RESOLVERS)
+
+  // chain
+  // keeping dataResolver for testing
+  .keep(dataResolver)
 );
 ```
 
@@ -34,16 +59,15 @@ const fixture = MockRender(RouterOutlet, {}); // {} is required to leave inputs 
 Additionally, we also need to properly customize mocked services if the resolver is using them to fetch data.
 
 ```ts
-const dataService = TestBed.get(DataService);
-
+const dataService = ngMocks.get(DataService);
 dataService.data = () => from([false]);
 ```
 
 The next step is to go to the route where the resolver is, and to trigger initialization of the router.
 
 ```ts
-const location = TestBed.get(Location);
-const router = TestBed.get(Router);
+const location = ngMocks.get(Location);
+const router = ngMocks.get(Router);
 
 location.go('/target');
 if (fixture.ngZone) {
@@ -58,7 +82,7 @@ Let's pretend that `/target` renders `TargetComponent`.
 
 ```ts
 const el = ngMocks.find(fixture, TargetComponent);
-const route: ActivatedRoute = el.injector.get(ActivatedRoute);
+const route = ngMocks.get(el, ActivatedRoute);
 ```
 
 Profit, now we can assert the data the resolver has provided.
@@ -71,18 +95,63 @@ expect(route.snapshot.data).toEqual({
 });
 ```
 
+## Class Resolver (legacy)
+
+If your code has resolvers which a classes and angular services,
+the process is exactly the same as for [functional resolvers](#functional-resolvers).
+
+For example, if the class of the resolver is called `DataResolver`,
+the configuration of `TestBed` should be the next:
+
+```ts
+beforeEach(() =>
+  MockBuilder(
+    // first parameter
+    // providing RouterModule and its dependencies
+    [
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
+    ],
+  
+    // second parameter
+    // Mocking definition of TargetModule
+    TargetModule,
+  )
+
+  // chain
+  // excluding all guards to avoid side effects
+  .exclude(NG_MOCKS_GUARDS)
+
+  // chain
+  // excluding all resolvers to avoid side effects
+  .exclude(NG_MOCKS_RESOLVERS)
+
+  // chain
+  // keeping DataResolver for testing
+  .keep(DataResolver)
+);
+```
+
+Profit.
+
 ## Live example
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestRoutingResolver/test.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/test.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver)
+- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestRoutingResolver/fn.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver%3Afn)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/fn.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver%3Afn)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoutingResolver/test.spec.ts"
-import { Location } from '@angular/common';
-import { Component, Injectable, NgModule } from '@angular/core';
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoutingResolver/fn.spec.ts"
+import { Location } from 'import { Location } from '@angular/common';
+import {
+  Component,
+  inject,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
-  Resolve,
+  ResolveFn,
   Router,
   RouterModule,
   RouterOutlet,
@@ -94,6 +163,8 @@ import { map } from 'rxjs/operators';
 import {
   MockBuilder,
   MockRender,
+  NG_MOCKS_GUARDS,
+  NG_MOCKS_RESOLVERS,
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
@@ -109,26 +180,15 @@ class DataService {
 }
 
 // A resolver we want to test.
-@Injectable()
-class DataResolver implements Resolve<{ flag: boolean }> {
-  public constructor(protected service: DataService) {}
-
-  public resolve() {
-    return combineLatest([this.service.data()]).pipe(
-      map(([flag]) => ({ flag })),
-    );
-  }
-}
+const dataResolver: ResolveFn<Observable<{ flag: boolean }>> = () =>
+  combineLatest([inject(DataService).data()]).pipe(
+    map(([flag]) => ({ flag })),
+  );
 
 // A resolver we want to ignore.
-@Injectable()
-class MockResolver implements Resolve<{ mock: boolean }> {
-  protected mock = true;
-
-  public resolve() {
-    return of({ mock: this.mock });
-  }
-}
+const sideEffectResolver: ResolveFn<
+  Observable<{ mock: boolean }>
+> = () => of({ mock: true });
 
 // A dummy component.
 // It will be replaced with a mock copy.
@@ -136,7 +196,9 @@ class MockResolver implements Resolve<{ mock: boolean }> {
   selector: 'route',
   template: 'route',
 })
-class RouteComponent {}
+class RouteComponent {
+  public routeTestRoutingFnResolver() {}
+}
 
 // Definition of the routing module.
 @NgModule({
@@ -148,44 +210,48 @@ class RouteComponent {}
         component: RouteComponent,
         path: 'route',
         resolve: {
-          data: DataResolver,
-          mock: MockResolver,
+          data: dataResolver,
+          mock: sideEffectResolver,
         },
       },
     ]),
   ],
-  providers: [DataService, DataResolver, MockResolver],
+  providers: [DataService],
 })
 class TargetModule {}
 
-describe('TestRoutingResolver', () => {
-  // Because we want to test the resolver, it means that we want to
-  // test its integration with RouterModule. Therefore, we pass
-  // the resolver as the first parameter of MockBuilder. Then, to
-  // correctly satisfy its initialization, we need to pass its module
-  // as the second parameter. And, the last but not the least, we
-  // need to keep RouterModule to have its routes, and to
-  // add RouterTestingModule.withRoutes([]), yes yes, with empty
-  // routes to have tools for testing.
+describe('TestRoutingResolver:fn', () => {
+  // Because we want to test a resolver, it means that we want to
+  // test its integration with RouterModule.
+  // Therefore, RouterModule and the resolver should be kept,
+  // and the rest of the module which defines the route can be mocked.
+  // To configure RouterModule for the test,
+  // RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS
+  // should be specified as the first parameter of MockBuilder (yes, with empty routes).
+  // The module with routes and the resolver should be specified
+  // as the second parameter of MockBuilder.
+  // Then `NG_MOCKS_RESOLVERS` should be excluded to remove all resolvers,
+  // and `dataResolver` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
-        DataResolver,
         RouterModule,
         RouterTestingModule.withRoutes([]),
         NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
-    );
+    )
+      .exclude(NG_MOCKS_GUARDS)
+      .exclude(NG_MOCKS_RESOLVERS)
+      .keep(dataResolver);
   });
 
   // It is important to run routing tests in fakeAsync.
   it('provides data to on the route', fakeAsync(() => {
     const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
-    const dataService: DataService =
-      fixture.point.injector.get(DataService);
+    const router = ngMocks.get(Router);
+    const location = ngMocks.get(Location);
+    const dataService = ngMocks.get(DataService);
 
     // DataService has been replaced with a mock copy,
     // let's set a custom value we will assert later on.
@@ -205,16 +271,14 @@ describe('TestRoutingResolver', () => {
 
     // Let's extract ActivatedRoute of the current component.
     const el = ngMocks.find(RouteComponent);
-    const route: ActivatedRoute = el.injector.get(ActivatedRoute);
+    const route = ngMocks.findInstance(el, ActivatedRoute);
 
     // Now we can assert that it has expected data.
-    expect(route.snapshot.data).toEqual(
-      jasmine.objectContaining({
-        data: {
-          flag: false,
-        },
-      }),
-    );
+    expect(route.snapshot.data).toEqual({
+      data: {
+        flag: false,
+      },
+    });
   }));
 });
 ```

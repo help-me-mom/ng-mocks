@@ -378,6 +378,8 @@ jobs:
                   rm $P/examples/TestRoutingResolver/test.spec.ts
                   rm $P/tests/issue-4282/test.spec.ts
                   rm $P/tests/issue-4282/global.spec.ts
+                  rm $P/examples/TestRoutingGuard/can-*.spec.ts
+                  rm $P/examples/TestRoutingResolver/fn.spec.ts
             - run:
                 name: Unit Tests
                 command: |
