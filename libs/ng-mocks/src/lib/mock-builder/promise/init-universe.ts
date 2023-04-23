@@ -30,6 +30,8 @@ export default ({
 
   const dependencies = initKeepDef(keepDef, configDef);
   for (const dependency of mapValues(dependencies)) {
+    ngMocksUniverse.touches.add(dependency);
+
     // MockBuilder has instruction about the dependency, skipping it.
     if (configDef.has(dependency)) {
       continue;
@@ -52,7 +54,6 @@ export default ({
       dependency: true,
       __internal: true,
     });
-    ngMocksUniverse.touches.add(dependency);
   }
 
   for (const [k, v] of mapEntries(configDef)) {
