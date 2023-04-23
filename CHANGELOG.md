@@ -1,3 +1,16 @@
+# [14.10.0](https://github.com/ike18t/ng-mocks/compare/v14.9.0...v14.10.0) (2023-04-23)
+
+
+### Bug Fixes
+
+* **core:** better eval code to extend es6 classes [#5465](https://github.com/ike18t/ng-mocks/issues/5465) ([2dd66cd](https://github.com/ike18t/ng-mocks/commit/2dd66cd3b8d871e980629120ab974aacbe32ea1f))
+* **MockBuilder:** touches kept modules in standalone components [#5520](https://github.com/ike18t/ng-mocks/issues/5520) ([1589172](https://github.com/ike18t/ng-mocks/commit/1589172358e9cb6beb3312c774f2423636766423))
+
+
+### Features
+
+* **core:** supporting functional guards and resolvers [#5455](https://github.com/ike18t/ng-mocks/issues/5455) ([d8a13c1](https://github.com/ike18t/ng-mocks/commit/d8a13c15adf4454074326af0acb8a1bc1ae93e94))
+
 # [14.9.0](https://github.com/ike18t/ng-mocks/compare/v14.8.0...v14.9.0) (2023-04-15)
 
 
