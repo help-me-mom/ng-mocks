@@ -30,8 +30,8 @@ settings:
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json
-        - ./e2e/nx/tsconfig.base.json
-        - ./e2e/nx/apps/a-nx/tsconfig.json
+        - ./e2e/nx/tsconfig.json
+        - ./e2e/nx/tsconfig.spec.json
   es-roikoren:
     aggressive: true
 
@@ -60,8 +60,8 @@ overrides:
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json
-        - ./e2e/nx/tsconfig.base.json
-        - ./e2e/nx/apps/a-nx/tsconfig.json
+        - ./e2e/nx/tsconfig.json
+        - ./e2e/nx/tsconfig.spec.json
     extends:
       - 'eslint:recommended'
       - 'plugin:@typescript-eslint/recommended'

@@ -68,19 +68,7 @@ describe('issue-162', () => {
     let setSpy: any;
 
     // creating spies
-    if (typeof jest !== 'undefined') {
-      getSpy = jest.spyOn(
-        fixture.point.componentInstance,
-        'title',
-        'get',
-      );
-      setSpy = jest.spyOn(
-        fixture.point.componentInstance,
-        'title',
-        'set',
-      );
-      getSpy.mockReturnValue('spy');
-    } else if (typeof jasmine !== 'undefined') {
+    if (typeof jest === 'undefined') {
       getSpy = spyOnProperty(
         fixture.point.componentInstance,
         'title',
@@ -92,6 +80,18 @@ describe('issue-162', () => {
         'set',
       );
       getSpy.and.returnValue('spy');
+    } else {
+      getSpy = jest.spyOn(
+        fixture.point.componentInstance,
+        'title',
+        'get',
+      );
+      setSpy = jest.spyOn(
+        fixture.point.componentInstance,
+        'title',
+        'set',
+      );
+      getSpy.mockReturnValue('spy');
     }
     // in case of jest
     // getSpy = jest.spyOn(

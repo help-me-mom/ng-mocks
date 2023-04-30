@@ -1,19 +1,15 @@
 CHANGELOG.md
-.browserslistrc
 .dockerignore
 .eslintignore
 .gitignore
 .prettierignore
 
 dist/
-docs/**/*.md
+docs/articles/**/*.md
 docs/.docusaurus
 e2e/*/.angular
 e2e/*/src/app
 e2e/*/src/test
-e2e/nx/apps/*/src/app
-e2e/nx/apps/*/src/test
-e2e/nx/decorate-angular-cli.js
 node_modules/
 test-reports/
 tests-e2e/.angular
@@ -23,3 +19,4 @@ tmp/
 **/*.sh
 **/*.snap
 **/.nvmrc
+**/.browserslistrc

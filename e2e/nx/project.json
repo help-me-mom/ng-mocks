@@ -1,19 +1,20 @@
 {
-  "name": "a-nx",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "nx",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/a-nx/src",
   "prefix": "nx",
+  "sourceRoot": "./src",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/a-nx",
-        "index": "apps/a-nx/src/index.html",
-        "main": "apps/a-nx/src/main.ts",
-        "polyfills": "apps/a-nx/src/polyfills.ts",
-        "tsConfig": "apps/a-nx/tsconfig.json"
+        "outputPath": "dist/nx",
+        "index": "./src/index.html",
+        "main": "./src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "./tsconfig.json"
       },
       "configurations": {
         "development": {
@@ -31,19 +32,18 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "development": {
-          "browserTarget": "a-nx:build:development"
+          "browserTarget": "nx:build:development"
         }
       },
       "defaultConfiguration": "development"
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/a-nx"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
-        "jestConfig": "apps/a-nx/jest.config.ts",
+        "jestConfig": "jest.config.ts",
         "passWithNoTests": true
       }
     }
-  },
-  "tags": []
+  }
 }
