@@ -171,6 +171,7 @@ module.exports = {
       label: 'How to mock',
       collapsed: false,
       items: [
+        'guides/mock/initialization-logic',
         'guides/mock/directive-structural-let-of',
         'guides/mock/host-directive',
         'guides/mock/activated-route',
