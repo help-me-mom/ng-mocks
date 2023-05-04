@@ -242,7 +242,7 @@
     "eslint-plugin-es-roikoren": "3.0.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-json": "3.1.0",
-    "eslint-plugin-mdx": "2.0.5",
+    "eslint-plugin-mdx": "2.1.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-unicorn": "46.0.0",
