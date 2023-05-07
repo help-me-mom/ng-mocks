@@ -107,11 +107,13 @@ overrides:
       unicorn/no-typeof-undefined: off
       unicorn/no-useless-undefined: off
       unicorn/prefer-array-flat: off
+      unicorn/prefer-at: off
       unicorn/prefer-event-target: off
       unicorn/prefer-includes: off
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
       unicorn/prefer-spread: off
+      unicorn/prefer-string-replace-all: off
       unicorn/prefer-switch: off
       unicorn/prefer-top-level-await: off
       unicorn/prefer-type-error: off
