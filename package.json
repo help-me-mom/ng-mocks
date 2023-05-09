@@ -247,7 +247,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-unicorn": "47.0.0",
     "eslint-plugin-unused-imports": "2.0.0",
-    "eslint-plugin-yml": "1.6.0",
+    "eslint-plugin-yml": "1.7.0",
     "husky": "8.0.3",
     "jasmine-core": "4.6.0",
     "jasmine-spec-reporter": "7.0.0",
