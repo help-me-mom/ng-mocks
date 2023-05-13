@@ -148,7 +148,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends T[K]
  */
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
-  init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T>,
+  init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T> | Array<Partial<T>>,
 ): void;
 
 /**
@@ -166,7 +166,7 @@ export function MockInstance<T>(
 export function MockInstance<T>(
   declaration: InjectionToken<T>,
   config?: {
-    init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T>;
+    init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T> | Array<Partial<T>>;
   },
 ): void;
 
@@ -190,7 +190,7 @@ export function MockInstance<T>(
  */
 export function MockInstance<T>(
   declaration: AnyType<T>,
-  init?: (instance: T, injector: Injector | undefined) => void | Partial<T>,
+  init?: (instance: T, injector: Injector | undefined) => void | Partial<T> | Array<Partial<T>>,
 ): void;
 
 /**
@@ -219,7 +219,7 @@ export function MockInstance<T>(
 export function MockInstance<T>(
   declaration: AnyType<T>,
   config?: {
-    init?: (instance: T, injector: Injector | undefined) => void | Partial<T>;
+    init?: (instance: T, injector: Injector | undefined) => void | Partial<T> | Array<Partial<T>>;
   },
 ): void;
 
