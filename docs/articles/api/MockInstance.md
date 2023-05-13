@@ -97,6 +97,12 @@ MockInstance(TOKEN, (instance, injector) => {
 MockInstance(TOKEN, () => true);
 ```
 
+If you need to mock a multi-value token, simply return an array:
+
+```ts
+MockInstance(TOKEN, () => [multiValue1, multiValue2, multiValue3]);
+```
+
 ## Customization scopes
 
 Time to time, we need to apply a set of customizations for a suite or a test.
