@@ -1,3 +1,10 @@
+## [14.10.1](https://github.com/ike18t/ng-mocks/compare/v14.10.0...v14.10.1) (2023-05-13)
+
+
+### Bug Fixes
+
+* **MockInstance:** multi-token and multi-service [#5585](https://github.com/ike18t/ng-mocks/issues/5585) ([9c85dea](https://github.com/ike18t/ng-mocks/commit/9c85dea23cec56e91e571526bac719c8591c7d1b))
+
 # [14.10.0](https://github.com/ike18t/ng-mocks/compare/v14.9.0...v14.10.0) (2023-04-23)
 
 
