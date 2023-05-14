@@ -91,9 +91,33 @@ jasmine.getEnv().addReporter({
 // });
 ```
 
-## Restoring `src/test.ts` in Angular 15
+## Restoring `src/test.ts` in Angular 15+
 
 If you are using Angular 15+, then you might not find `src/test.ts`.
 However, this file is required to provide global configuration for your tests.
 
 Please use this [answer on stackoverflow to restore `src/test.ts`](https://stackoverflow.com/a/75323651/13112018).
+
+## Restoring `src/setup-jest.ts` in Angular 15+
+
+If you are using Angular 15+ and `@angular-builders/jest`, then you might not find `src/setup-jest.ts`.
+The file doesn't exist, because `@angular-builders/jest` provides default configuration in its own package.
+
+To restore `src/setup-jest.ts` you need to recreate this file with the next content:
+
+```ts title="src/setup-jest.ts"
+import 'jest-preset-angular/setup-jest';
+```
+
+Then, open `angular.json`, and at the `test` section of `"builder": "@angular-builders/jest:run"`, add the next option:
+
+```json
+"test": {
+  "builder": "@angular-builders/jest:run",
+  "options": {
+    "setupFilesAfterEnv": "./src/setup-jest.ts" // <-- this is the fix
+  }
+},
+```
+
+Profit, now you can extend `setup-jest.ts` to configure defaults for `ng-mocks`.
