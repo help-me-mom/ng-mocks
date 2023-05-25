@@ -23,7 +23,7 @@
     "@angular/platform-browser": "15.2.9",
     "@angular/platform-browser-dynamic": "15.2.9",
     "@angular/router": "15.2.9",
-    "@ng-select/ng-select": "10.0.4",
+    "@ng-select/ng-select": "11.0.0",
     "@ngrx/effects": "15.4.0",
     "@ngrx/store": "15.4.0",
     "@ngrx/store-devtools": "15.4.0",
