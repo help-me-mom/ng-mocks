@@ -221,7 +221,7 @@
     "@semantic-release/github": "8.0.7",
     "@semantic-release/npm": "10.0.3",
     "@types/core-js": "2.5.5",
-    "@types/jasmine": "4.3.1",
+    "@types/jasmine": "4.3.2",
     "@types/jest": "29.5.1",
     "@types/karma": "6.3.3",
     "@types/karma-coverage-istanbul-reporter": "2.1.1",
