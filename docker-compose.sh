@@ -175,4 +175,6 @@ if [ "$1" = "" ] || [ "$1" = "nx" ]; then
   docker-compose up -- nx
 fi
 
-docker-compose down --remove-orphans
+if [ "$1" = "" ]; then
+  docker-compose down --remove-orphans
+fi
