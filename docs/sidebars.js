@@ -96,13 +96,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Extra',
-      items: [
-        'extra/customize-mocks',
-        'extra/mock-observables',
-        'extra/mock-form-controls',
-        'extra/sanitizer',
-        'extra/with-3rd-party',
-      ],
+      items: ['extra/customize-mocks', 'extra/with-3rd-party'],
     },
     {
       type: 'category',
@@ -172,10 +166,13 @@ module.exports = {
       collapsed: false,
       items: [
         'guides/mock/initialization-logic',
+        'guides/mock/dynamic-components',
         'guides/mock/directive-structural-let-of',
         'guides/mock/host-directive',
         'guides/mock/activated-route',
-        'guides/mock/dynamic-components',
+        'extra/sanitizer',
+        'extra/mock-observables',
+        'extra/mock-form-controls',
       ],
     },
     {
