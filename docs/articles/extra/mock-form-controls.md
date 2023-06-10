@@ -1,7 +1,7 @@
 ---
 title: How to mock form controls in Angular tests
 description: Information how to use ng-mocks in order to interact with mock form controls in Angular tests
-sidebar_label: Mock form controls
+sidebar_label: Form Controls
 ---
 
 `ng-mocks` respects `ControlValueAccessor` interface if [a directive](/api/MockDirective.md),

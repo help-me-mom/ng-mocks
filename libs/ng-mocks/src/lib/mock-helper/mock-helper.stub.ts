@@ -1,3 +1,6 @@
+import helperExtractMethodsFromPrototype from '../mock-service/helper.extract-methods-from-prototype';
+import helperExtractPropertiesFromPrototype from '../mock-service/helper.extract-properties-from-prototype';
+import helperExtractPropertyDescriptor from '../mock-service/helper.extract-property-descriptor';
 import helperMockService from '../mock-service/helper.mock-service';
 import { MockedFunction } from '../mock-service/types';
 
@@ -17,8 +20,12 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
     skipProps.push(...Object.getOwnPropertyNames(correctInstance));
   }
 
-  for (const key of Object.getOwnPropertyNames(applyOverrides)) {
-    const desc = skipProps.indexOf(key) === -1 ? Object.getOwnPropertyDescriptor(applyOverrides, key) : undefined;
+  const keys = [
+    ...helperExtractMethodsFromPrototype(applyOverrides),
+    ...helperExtractPropertiesFromPrototype(applyOverrides),
+  ];
+  for (const key of keys) {
+    const desc = skipProps.indexOf(key) === -1 ? helperExtractPropertyDescriptor(applyOverrides, key) : undefined;
     if (desc && Object.prototype.hasOwnProperty.call(desc, 'value') && desc.value === undefined) {
       continue;
     }

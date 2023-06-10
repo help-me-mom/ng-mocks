@@ -1,7 +1,7 @@
 ---
 title: How to mock observable streams in Angular tests
 description: Information how to mock observables in Angular tests
-sidebar_label: Mock observables
+sidebar_label: Observables
 ---
 
 **A mock observable in Angular tests** can be created by
@@ -72,6 +72,85 @@ ngMocks.defaultMock(TodoService, () => ({
 ```
 
 Then, every time tests need a mock object of `TodoService`, its `list$()` will return `EMPTY`.
+
+## Mock `Subject`
+
+`EMPTY` is a very default good mock to suppress observables correctly.
+However, if you need to mock `Subject<T>` and its specializations such as
+`BehaviorSubject`, `ReplaySubject` and `AsyncSubject`,
+then `EMPTY`, as a type, cannot satisfy that due to the lack of required methods:
+`.next()`, `.error()` and `.complete()`.
+
+Let's assume we have a service like that:
+
+```ts
+class TodoService {
+  subject: Subject<boolean>;
+  behavior: BehaviorSubject<boolean>;
+  replay: ReplaySubject<boolean>;
+  async: AsyncSubject<boolean>;
+}
+```
+
+And we want all these properties to be `EMPTY` in our tests:
+
+```ts
+ngMocks.defaultMock(TodoService, () => ({
+  subject: EMPTY,
+  behavior: EMPTY,
+  replay: EMPTY,
+  async: EMPTY,
+}));
+```
+
+However, it won't work out of the box, and it will throw a type error:
+
+```text
+TS2769: No overload matches this call.
+  The last overload gave the following error.
+  Argument of type 'typeof TodoService' is not assignable to parameter of type
+    'AnyDeclaration<{
+      subject: Observable<never>;
+      behavior: Observable<never>;
+      replay: Observable<never>;
+      async: Observable<never>;
+    }>[]'.
+```
+
+And this makes sense, because indeed `Observable<never>` is not `Subject<boolean>` etc.
+
+To fix that, we need to have a mock of `Subject`, `BehaviorSubject`, `ReplaySubject`, and `AsyncSubject`,
+but it should behave as `EMPTY`: simply complete on subscribe.
+
+`ng-mocks` has [`MockService`](../api/MockService.md) which can take a class and provide a mock instance of it.
+Even more, its second parameter allows to customize the mock instance.
+Therefore, we can use it to mock `Subject` and to apply `EMPTY` logic like that:
+
+```ts
+ngMocks.defaultMock(TodoService, () => ({
+  subject: MockService(Subject, EMPTY),
+  behavior: MockService(BehaviorSubject, EMPTY),
+  replay: MockService(ReplaySubject, EMPTY),
+  async: MockService(AsyncSubject, EMPTY),
+}));
+```
+
+Profit, now all properties complete on subscribe and satisfy the required types.
+
+## Mock the first emit of `BehaviorSubject`
+
+Continuing the said above, it might be needed not only to suppress observables,
+but also to stub the first emit of `BehaviorSubject`.
+
+In this case, `of()` with the desired value should be used instead of `EMPTY`:
+
+```ts
+ngMocks.defaultMock(TodoService, () => ({
+  behavior: MockService(BehaviorSubject, of(false)),
+}));
+```
+
+Profit! now `TodoService.behavior` emits `false` on subscribe and completes the subscription.
 
 ## Customizing observable streams
 
