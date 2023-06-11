@@ -1,3 +1,15 @@
+# [14.11.0](https://github.com/ike18t/ng-mocks/compare/v14.10.1...v14.11.0) (2023-06-11)
+
+
+### Bug Fixes
+
+* **MockService:** respects prototypes of customizations [#5989](https://github.com/ike18t/ng-mocks/issues/5989) ([e9945fe](https://github.com/ike18t/ng-mocks/commit/e9945fe21c3e243d6e5785a3f9e960e170970dbd))
+
+
+### Features
+
+* **MockBuilder:** can be extended with custom methods [#5417](https://github.com/ike18t/ng-mocks/issues/5417) ([8da8c9d](https://github.com/ike18t/ng-mocks/commit/8da8c9d11d507fd9c664ceb82d22436e0e054808))
+
 ## [14.10.1](https://github.com/ike18t/ng-mocks/compare/v14.10.0...v14.10.1) (2023-05-13)
 
 
