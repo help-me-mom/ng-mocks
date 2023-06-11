@@ -212,3 +212,10 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
     config?: IMockBuilderConfigAll & IMockBuilderConfigModule,
   ): this;
 }
+
+/**
+ * IMockBuilderExtended
+ *
+ * @see https://ng-mocks.sudo.eu/api/MockBuilder#extending-mockbuilder
+ */
+export interface IMockBuilderExtended extends IMockBuilder {}
