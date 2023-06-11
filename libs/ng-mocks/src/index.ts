@@ -28,6 +28,7 @@ export { MockInstance, MockReset } from './lib/mock-instance/mock-instance';
 export { MockBuilder } from './lib/mock-builder/mock-builder';
 export {
   IMockBuilder,
+  IMockBuilderExtended,
   IMockBuilderConfig,
   IMockBuilderConfigAll,
   IMockBuilderConfigComponent,

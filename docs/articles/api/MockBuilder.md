@@ -612,6 +612,78 @@ beforeEach(() => {
 });
 ```
 
+## Extending `MockBuilder`
+
+If you want to add your own methods to `MockBuilder`, you can use `MockBuilder.extend(method, callback)` for that.
+
+Let's assume, we want to add a method called `customMock` which accepts a string,
+and the string will be used a return value in a service.
+
+Eventually, it should be used like that:
+
+```ts
+MockBuilder(/* ... */)
+  .mock(/* ... */)
+  .customMock('value') // <-- the extention to MockBuilder
+  .keep(/* ... */);
+```
+
+
+The first step is to declare `customMock` as a part of the type of `MockBuilder`:
+
+```ts
+declare module 'ng-mocks' {
+  interface IMockBuilderExtended {
+    // parameters can be whatever you want
+    customMock(value: string): this; // it has to return this
+  }
+}
+```
+
+Parameters of `customMock` can be whatever you want to pass to your custom callback, in our case, it's a string.
+However, please note, that the return type has to be `this`.
+
+The second step is to register a callback as an implementation of `customMock` via `MockBuilder.extend()`.
+
+The callback will receive two parameters:
+
+- the first parameter is the current instance of `MockBuilder`
+- the second parameter is an array of all parameters passed to `customMock`
+
+:::tip correct parameters type
+You can use a builtin type called `Parameters` to get a correct type tuple:
+`Parameters<IMockBuilderExtended['customMock']>`,
+simply replace `customMock` with the name of your custom method.
+::: 
+
+```ts
+// Builtin `Parameters` type can be used for type safety. 
+MockBuilder.extend(
+  'customMock', // <-- name of our custom method
+  
+  (builder, parameters: Parameters<IMockBuilderExtended['customMock']>) => {
+    // Extracting the value.
+    const value = parameters[0];
+    
+    // Calling custom logic on builder.
+    // In this case, TargetService.echo() should return the value.  
+    builder.mock(TargetService, {
+      echo: () => value,
+    });
+  },
+);
+```
+
+Profit, now if you call `MockBuilder().customMock('mock')` then,
+in its test, a call of `TargetService.echo()` will return `'mock'`.
+
+If you need to delete a custom method, simply call `MockBuilder.extend()` without the second parameter:
+
+```ts
+MockBuilder.extend('customMock');
+MockBulder().customMock(''); // throws an error now
+```
+
 ## Adding schemas
 
 `MockBuilder` provides a method called `beforeCompileComponents`,
