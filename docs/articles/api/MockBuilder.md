@@ -624,7 +624,7 @@ Eventually, it should be used like that:
 ```ts
 MockBuilder(/* ... */)
   .mock(/* ... */)
-  .customMock('value') // <-- the extention to MockBuilder
+  .customMock('value') // <-- the extension to MockBuilder
   .keep(/* ... */);
 ```
 
