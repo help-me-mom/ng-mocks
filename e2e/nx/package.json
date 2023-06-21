@@ -40,7 +40,7 @@
     "jest-environment-jsdom": "29.5.0",
     "jest-preset-angular": "13.1.1",
     "ng-packagr": "16.1.0",
-    "npm": "9.7.1",
+    "npm": "9.7.2",
     "nx": "16.3.2",
     "ts-jest": "29.1.0",
     "typescript": "5.1.3"
