@@ -30,7 +30,7 @@
     "@ngxs/store": "3.8.1",
     "primeng": "16.0.2",
     "rxjs": "7.8.1",
-    "tslib": "2.5.3",
+    "tslib": "2.6.0",
     "zone.js": "0.13.1"
   },
   "devDependencies": {
