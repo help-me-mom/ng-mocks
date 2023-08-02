@@ -136,7 +136,7 @@ describe('BannerComponent', () => {
     const fixture = MockRender(BannerComponent);
 
     // 4. asserting expectations
-    expect(fiture.point.componentInstance).toBeDefined();
+    expect(fixture.point.componentInstance).toBeDefined();
   });
   
   it('should do something with a service', () => {
