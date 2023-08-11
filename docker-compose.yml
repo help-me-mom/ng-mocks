@@ -168,7 +168,7 @@ services:
       - --no-optional
 
   a14:
-    image: satantime/puppeteer-node:16.20.1
+    image: satantime/puppeteer-node:16.20.2
     working_dir: /app
     volumes:
       - ./e2e/a14:/app
@@ -180,7 +180,7 @@ services:
       - --no-audit
 
   a15:
-    image: satantime/puppeteer-node:16.20.1
+    image: satantime/puppeteer-node:16.20.2
     working_dir: /app
     volumes:
       - ./e2e/a15:/app
