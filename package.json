@@ -236,7 +236,7 @@
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
     "dts-bundle-generator": "8.0.1",
-    "eslint": "8.46.0",
+    "eslint": "8.47.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-import-resolver-typescript": "3.6.0",
     "eslint-plugin-es-roikoren": "3.0.0",
