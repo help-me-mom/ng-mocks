@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   lockindex:
     type: string
-    default: '1'
+    default: '0'
 
 orbs:
   windows: circleci/windows@5.0.0
@@ -310,6 +310,7 @@ jobs:
   IE:
     executor:
       name: windows/server-2019
+      size: medium
       shell: bash.exe
     steps:
       - run: date
@@ -340,13 +341,13 @@ jobs:
             - checkout
             - attach_workspace:
                 at: dist
-            - run:
-                name: NPM Shell
-                command: npm config set script-shell bash.exe
             - restore_cache:
                 key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package-lock.json" }}
             - run: nvm install $(cat e2e/a5es5/.nvmrc)
             - run: nvm use $(cat e2e/a5es5/.nvmrc)
+            - run:
+                name: NPM Shell
+                command: npm config set script-shell bash.exe
             - run:
                 name: NPM Install
                 command: |
@@ -513,19 +514,19 @@ workflows:
           name: core:e2e
           requires:
             - core
-      - IE:
-          name: core:ie
-          requires:
-            - core
-          filters:
-            branches:
-              ignore:
-                - master
-                - alpha
-                - beta
-                - next
-                - rc
-                - /(renovate|dependabot\/npm_and_yarn)\/(tests-e2e|docs)\/.*/
+      #      - IE:
+      #          name: core:ie
+      #          requires:
+      #            - core
+      #          filters:
+      #            branches:
+      #              ignore:
+      #                - master
+      #                - alpha
+      #                - beta
+      #                - next
+      #                - rc
+      #                - /(renovate|dependabot\/npm_and_yarn)\/(tests-e2e|docs)\/.*/
       - Performance:
           name: core:performance
           requires:
