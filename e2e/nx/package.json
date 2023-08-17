@@ -21,7 +21,7 @@
     "@angular/platform-browser": "16.2.0",
     "@angular/platform-browser-dynamic": "16.2.0",
     "@angular/router": "16.2.0",
-    "@nx/angular": "16.6.0",
+    "@nx/angular": "16.7.1",
     "rxjs": "7.8.1",
     "tslib": "2.6.1",
     "zone.js": "0.13.1"
@@ -31,8 +31,8 @@
     "@angular/cli": "16.2.0",
     "@angular/compiler-cli": "16.2.0",
     "@angular/language-service": "16.2.0",
-    "@nx/jest": "16.6.0",
-    "@nx/workspace": "16.6.0",
+    "@nx/jest": "16.7.1",
+    "@nx/workspace": "16.7.1",
     "@types/jasmine": "4.3.5",
     "@types/jest": "29.5.3",
     "@types/node": "18.17.5",
@@ -41,7 +41,7 @@
     "jest-preset-angular": "13.1.1",
     "ng-packagr": "16.2.0",
     "npm": "9.8.1",
-    "nx": "16.6.0",
+    "nx": "16.7.1",
     "ts-jest": "29.1.1",
     "typescript": "5.1.6"
   }
