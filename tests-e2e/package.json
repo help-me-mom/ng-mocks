@@ -28,7 +28,7 @@
     "@ngrx/store": "16.2.0",
     "@ngrx/store-devtools": "16.2.0",
     "@ngxs/store": "3.8.1",
-    "primeng": "16.2.0",
+    "primeng": "16.3.1",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
     "zone.js": "0.13.1"
