@@ -271,7 +271,7 @@
     "typescript": "5.2.2",
     "webpack": "5.88.2",
     "webpack-cli": "5.1.4",
-    "zone.js": "0.13.1"
+    "zone.js": "0.13.2"
   },
   "repository": {
     "type": "git",
