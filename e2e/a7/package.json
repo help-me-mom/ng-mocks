@@ -42,7 +42,7 @@
     "@angular/cli": "7.3.10",
     "@angular/compiler-cli": "7.2.16",
     "@angular/language-service": "7.2.16",
-    "@types/jasmine": "2.8.19",
+    "@types/jasmine": "2.8.20",
     "@types/jest": "24.9.1",
     "@types/node": "8.10.66",
     "jasmine-core": "2.8.0",
