@@ -9,7 +9,7 @@ if [ "$1" = "" ] || [ "$1" = "root" ]; then
   docker-compose up -- ng-mocks && \
     nvm install && \
     nvm use && \
-    node ./node_modules/puppeteer/install.js
+    node ./node_modules/puppeteer/lib/esm/puppeteer/node/install.js
 fi
 
 if [ "$1" = "" ] || [ "$1" = "docs" ]; then
@@ -25,7 +25,7 @@ if [ "$1" = "" ] || [ "$1" = "e2e" ]; then
     cd ./tests-e2e && \
     nvm install && \
     nvm use && \
-    node ./node_modules/puppeteer/install.js && \
+    node ./node_modules/puppeteer/lib/esm/puppeteer/node/install.js && \
     cd ..
 fi
 
@@ -145,7 +145,7 @@ if [ "$1" = "" ] || [ "$1" = "a16" ]; then
     cd ./e2e/a16 && \
     nvm install && \
     nvm use && \
-    node ./node_modules/puppeteer/install.js && \
+    node ./node_modules/puppeteer/lib/esm/puppeteer/node/install.js && \
     cd ../..
 fi
 
@@ -154,7 +154,7 @@ if [ "$1" = "" ] || [ "$1" = "jasmine" ]; then
     cd ./e2e/jasmine && \
     nvm install && \
     nvm use && \
-    node ./node_modules/puppeteer/install.js && \
+    node ./node_modules/puppeteer/lib/esm/puppeteer/node/install.js && \
     cd ../..
 fi
 
@@ -167,7 +167,7 @@ if [ "$1" = "" ] || [ "$1" = "min" ]; then
     cd ./e2e/min && \
     nvm install && \
     nvm use && \
-    node ./node_modules/puppeteer/install.js && \
+    node ./node_modules/puppeteer/lib/esm/puppeteer/node/install.js && \
     cd ../..
 fi
 
