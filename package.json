@@ -227,7 +227,7 @@
     "@types/karma-coverage-istanbul-reporter": "2.1.3",
     "@types/karma-jasmine": "4.0.3",
     "@types/karma-junit-reporter": "2.0.3",
-    "@types/karma-webpack": "2.0.12",
+    "@types/karma-webpack": "2.0.13",
     "@types/node": "18.18.6",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
