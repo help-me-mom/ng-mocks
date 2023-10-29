@@ -1,6 +1,6 @@
 ---
 title: How to test an Angular application
-description: Guides and examples how to test an Angular application
+description: Guides and examples on how to test an Angular application
 sidebar_label: Testing of Angular application
 ---
 
