@@ -1,6 +1,6 @@
 ---
 title: How to read this
-description: Brief summary how to read documentation about ng-mocks
+description: Brief summary of how to read the documentation about ng-mocks
 ---
 
 **Essential**
