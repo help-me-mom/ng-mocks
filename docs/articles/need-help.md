@@ -1,6 +1,6 @@
 ---
 title: Find an issue or have a question or a request?
-description: Information how to contact ng-mocks maintainers
+description: Information on how to contact ng-mocks maintainers
 sidebar_label: Need help?
 ---
 
