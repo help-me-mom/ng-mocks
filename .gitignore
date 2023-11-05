@@ -2,6 +2,7 @@
 .angular
 .env
 .idea
+.nx
 /dist
 /node_modules
 /test-reports
