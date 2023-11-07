@@ -220,7 +220,7 @@
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "9.2.1",
     "@semantic-release/npm": "11.0.1",
-    "@types/core-js": "2.5.7",
+    "@types/core-js": "2.5.8",
     "@types/jasmine": "5.1.1",
     "@types/jest": "29.5.7",
     "@types/karma": "6.3.7",
