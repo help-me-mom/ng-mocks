@@ -10,8 +10,8 @@
   "separateMultipleMajor": true,
   "includeForks": false,
   "ignoreDeprecated": false,
-  "semanticCommitScope": "{{#if parentDir}}{{{parentDir}}}{{else}}deps{{/if}}",
-  "additionalBranchPrefix": "{{#if parentDir}}{{{parentDir}}}/{{else}}root/{{/if}}",
+  "semanticCommitScope": "{{#if packageFileDir}}{{{packageFileDir}}}{{else}}deps{{/if}}",
+  "additionalBranchPrefix": "{{#if packageFileDir}}{{{packageFileDir}}}/{{else}}root/{{/if}}",
   "vulnerabilityAlerts": {
     "enabled": false
   },
