@@ -49,6 +49,9 @@
       "additionalBranchPrefix": "e2e/a5/"
     },
     {
+      "matchFileNames": [
+        "**"
+      ],
       "matchPackageNames": [
         "satantime/puppeteer-node",
         "@types/node",
