@@ -1,5 +1,9 @@
 {
-  "extends": ["config:base", ":semanticCommits", ":semanticCommitTypeAll(chore)"],
+  "extends": [
+    "config:base",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
   "baseBranches": ["master"],
   "dependencyDashboard": false,
   "prConcurrentLimit": 0,
@@ -33,7 +37,17 @@
       "matchPackageNames": ["ng-mocks"],
       "enabled": false
     },
-
+    {
+      "matchPackageNames": [
+        "satantime/puppeteer-node",
+        "@types/node",
+        "nodejs/node"
+      ],
+      "major": {
+        "enabled": false
+      },
+      "additionalBranchPrefix": "root/"
+    },
     {
       "matchFileNames": [
         "package.json",
@@ -51,15 +65,12 @@
         "e2e/min/.nvmrc",
         "e2e/nx/.nvmrc"
       ],
-      "matchPackageNames": ["satantime/puppeteer-node", "@types/node", "nodejs/node"],
+      "matchPackageNames": [
+        "satantime/puppeteer-node",
+        "@types/node",
+        "nodejs/node"
+      ],
       "branchTopic": "node-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
-    },
-    {
-      "matchPackageNames": ["satantime/puppeteer-node", "@types/node", "nodejs/node"],
-      "major": {
-        "enabled": false
-      },
-      "additionalBranchPrefix": "root/"
     },
     {
       "matchPackageNames": ["npm"],
@@ -68,54 +79,46 @@
       },
       "additionalBranchPrefix": "npm/"
     },
-
     {
       "matchFileNames": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "package.json"],
       "additionalBranchPrefix": "root/"
     },
-
     {
       "matchFileNames": ["docs/package.json"],
       "additionalBranchPrefix": "docs/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "matchFileNames": ["tests-e2e/package.json"],
       "additionalBranchPrefix": "tests-e2e/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "matchFileNames": ["e2e/jasmine/package.json"],
       "additionalBranchPrefix": "e2e/jasmine/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "matchFileNames": ["e2e/jest/package.json"],
       "additionalBranchPrefix": "e2e/jest/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "matchFileNames": ["e2e/min/package.json"],
       "additionalBranchPrefix": "e2e/min/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "matchFileNames": ["e2e/nx/package.json"],
       "additionalBranchPrefix": "e2e/nx/",
       "allowedVersions": "/.+/",
       "ignoreUnstable": false
     },
-
     {
       "additionalBranchPrefix": "e2e/a5/",
       "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
@@ -226,7 +229,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^3\\.10\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a6/",
       "matchFileNames": ["e2e/a6/package.json"],
@@ -343,7 +345,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.13\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a7/",
       "matchFileNames": ["e2e/a7/package.json"],
@@ -460,7 +461,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.13\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a8/",
       "matchFileNames": ["e2e/a8/package.json"],
@@ -571,7 +571,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a9/",
       "matchFileNames": ["e2e/a9/package.json"],
@@ -682,7 +681,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a10/",
       "matchFileNames": ["e2e/a10/package.json"],
@@ -793,7 +791,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a11/",
       "matchFileNames": ["e2e/a11/package.json"],
@@ -905,7 +902,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a12/",
       "matchFileNames": ["e2e/a12/package.json"],
@@ -1010,7 +1006,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a13/",
       "matchFileNames": ["e2e/a13/package.json"],
@@ -1102,7 +1097,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^6\\.14\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a14/",
       "matchFileNames": ["e2e/a14/package.json"],
@@ -1200,7 +1194,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^8\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a15/",
       "matchFileNames": ["e2e/a15/package.json"],
@@ -1298,7 +1291,6 @@
       "matchPackageNames": ["npm"],
       "allowedVersions": "/^8\\./"
     },
-
     {
       "additionalBranchPrefix": "e2e/a16/",
       "matchFileNames": ["e2e/a16/package.json"],
