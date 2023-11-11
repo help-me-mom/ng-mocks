@@ -1,6 +1,6 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
   ],
@@ -38,6 +38,34 @@
       "enabled": false
     },
     {
+      "matchFileNames": [
+        "e2e/a5es5/package.json",
+        "e2e/a5es5/.nvmrc",
+        "e2e/a5es2015/package.json",
+        "e2e/a5es2015/.nvmrc",
+        "e2e/a6/package.json",
+        "e2e/a6/.nvmrc",
+        "e2e/a7/package.json",
+        "e2e/a7/.nvmrc",
+        "e2e/a8/package.json",
+        "e2e/a8/.nvmrc",
+        "e2e/a9/package.json",
+        "e2e/a9/.nvmrc",
+        "e2e/a10/package.json",
+        "e2e/a10/.nvmrc",
+        "e2e/a11/package.json",
+        "e2e/a11/.nvmrc",
+        "e2e/a12/package.json",
+        "e2e/a12/.nvmrc",
+        "e2e/a13/package.json",
+        "e2e/a13/.nvmrc",
+        "e2e/a14/package.json",
+        "e2e/a14/.nvmrc",
+        "e2e/a15/package.json",
+        "e2e/a15/.nvmrc",
+        "e2e/a16/package.json",
+        "e2e/a16/.nvmrc"
+      ],
       "matchPackageNames": [
         "satantime/puppeteer-node",
         "@types/node",
@@ -45,8 +73,41 @@
       ],
       "major": {
         "enabled": false
-      },
-      "additionalBranchPrefix": "root/"
+      }
+    },
+    {
+      "matchFileNames": [
+        "e2e/a5es5/package.json",
+        "e2e/a5es5/.nvmrc",
+        "e2e/a5es2015/package.json",
+        "e2e/a5es2015/.nvmrc",
+        "e2e/a6/package.json",
+        "e2e/a6/.nvmrc",
+        "e2e/a7/package.json",
+        "e2e/a7/.nvmrc",
+        "e2e/a8/package.json",
+        "e2e/a8/.nvmrc",
+        "e2e/a9/package.json",
+        "e2e/a9/.nvmrc",
+        "e2e/a10/package.json",
+        "e2e/a10/.nvmrc",
+        "e2e/a11/package.json",
+        "e2e/a11/.nvmrc",
+        "e2e/a12/package.json",
+        "e2e/a12/.nvmrc",
+        "e2e/a13/package.json",
+        "e2e/a13/.nvmrc",
+        "e2e/a14/package.json",
+        "e2e/a14/.nvmrc",
+        "e2e/a15/package.json",
+        "e2e/a15/.nvmrc",
+        "e2e/a16/package.json",
+        "e2e/a16/.nvmrc"
+      ],
+      "matchPackageNames": ["npm"],
+      "major": {
+        "enabled": false
+      }
     },
     {
       "matchFileNames": [
@@ -73,14 +134,12 @@
       "branchTopic": "node-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
-      "matchPackageNames": ["npm"],
-      "major": {
-        "enabled": false
-      },
-      "additionalBranchPrefix": "npm/"
-    },
-    {
-      "matchFileNames": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "package.json"],
+      "matchFileNames": [
+        ".circleci/config.yml",
+        "Dockerfile",
+        "docker-compose.yml",
+        "package.json"
+      ],
       "additionalBranchPrefix": "root/"
     },
     {
