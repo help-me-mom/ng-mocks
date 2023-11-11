@@ -8,7 +8,7 @@
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "separateMultipleMajor": true,
-  "includeForks": false,
+  "forkProcessing": "disabled",
   "ignoreDeprecated": false,
   "configMigration": true,
   "semanticCommitScope": "{{#if packageFileDir}}{{{packageFileDir}}}{{else}}deps{{/if}}",
@@ -118,7 +118,7 @@
     {
       "additionalBranchPrefix": "e2e/a5/",
       "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
-      "packagePatterns": ["^@angular/"],
+      "matchPackagePatterns": ["^@angular/"],
       "allowedVersions": "/^5\\./",
       "ignoreUnstable": false
     },
@@ -229,7 +229,7 @@
     {
       "additionalBranchPrefix": "e2e/a6/",
       "matchFileNames": ["e2e/a6/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^6\\./",
       "ignoreUnstable": false
     },
@@ -346,7 +346,7 @@
     {
       "additionalBranchPrefix": "e2e/a7/",
       "matchFileNames": ["e2e/a7/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^7\\./",
       "ignoreUnstable": false
     },
@@ -463,7 +463,7 @@
     {
       "additionalBranchPrefix": "e2e/a8/",
       "matchFileNames": ["e2e/a8/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^8\\./",
       "ignoreUnstable": false
     },
@@ -574,7 +574,7 @@
     {
       "additionalBranchPrefix": "e2e/a9/",
       "matchFileNames": ["e2e/a9/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^9\\./",
       "ignoreUnstable": false
     },
@@ -685,7 +685,7 @@
     {
       "additionalBranchPrefix": "e2e/a10/",
       "matchFileNames": ["e2e/a10/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^10\\./",
       "ignoreUnstable": false
     },
@@ -796,7 +796,7 @@
     {
       "additionalBranchPrefix": "e2e/a11/",
       "matchFileNames": ["e2e/a11/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^11\\./",
       "ignoreUnstable": false
     },
@@ -908,7 +908,7 @@
     {
       "additionalBranchPrefix": "e2e/a12/",
       "matchFileNames": ["e2e/a12/package.json"],
-      "packagePatterns": ["^(@angular/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|ng-packagr)"],
       "allowedVersions": "/^12\\./",
       "ignoreUnstable": false
     },
@@ -1013,7 +1013,7 @@
     {
       "additionalBranchPrefix": "e2e/a13/",
       "matchFileNames": ["e2e/a13/package.json"],
-      "packagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
       "allowedVersions": "/^13\\./",
       "ignoreUnstable": false
     },
@@ -1105,7 +1105,7 @@
     {
       "additionalBranchPrefix": "e2e/a14/",
       "matchFileNames": ["e2e/a14/package.json"],
-      "packagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
       "allowedVersions": "/^14\\./",
       "ignoreUnstable": false
     },
@@ -1203,7 +1203,7 @@
     {
       "additionalBranchPrefix": "e2e/a15/",
       "matchFileNames": ["e2e/a15/package.json"],
-      "packagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
       "allowedVersions": "/^15\\./",
       "ignoreUnstable": false
     },
@@ -1301,7 +1301,7 @@
     {
       "additionalBranchPrefix": "e2e/a16/",
       "matchFileNames": ["e2e/a16/package.json"],
-      "packagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
+      "matchPackagePatterns": ["^(@angular/|@angular-devkit/|ng-packagr)"],
       "allowedVersions": "/^16\\./",
       "ignoreUnstable": false
     },
