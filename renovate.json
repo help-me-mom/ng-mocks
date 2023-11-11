@@ -12,8 +12,8 @@
   "forkProcessing": "disabled",
   "ignoreDeprecated": false,
   "configMigration": true,
-  "semanticCommitScope": "{{#if packageFileDir}}{{{packageFileDir}}}{{else}}deps{{/if}}",
-  "additionalBranchPrefix": "{{#if packageFileDir}}{{{packageFileDir}}}/{{else}}root/{{/if}}",
+  "semanticCommitScope": "{{#if (equals packageFileDir '')}}root{{else}}{{{packageFileDir}}}{{/if}}",
+  "additionalBranchPrefix": "{{#if (equals packageFileDir '')}}root{{else}}{{{packageFileDir}}}{{/if}}/",
   "vulnerabilityAlerts": {
     "enabled": false
   },
