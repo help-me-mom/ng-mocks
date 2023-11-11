@@ -1,6 +1,6 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
   ],
@@ -80,7 +80,12 @@
       "additionalBranchPrefix": "npm/"
     },
     {
-      "matchFileNames": [".circleci/config.yml", "Dockerfile", "docker-compose.yml", "package.json"],
+      "matchFileNames": [
+        ".circleci/config.yml",
+        "Dockerfile",
+        "docker-compose.yml",
+        "package.json"
+      ],
       "additionalBranchPrefix": "root/"
     },
     {
