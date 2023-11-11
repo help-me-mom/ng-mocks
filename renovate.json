@@ -1,5 +1,6 @@
 {
   "extends": ["config:base", ":semanticCommits", ":semanticCommitTypeAll(chore)"],
+  "baseBranches": ["master"],
   "dependencyDashboard": false,
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
