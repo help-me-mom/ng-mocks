@@ -39,6 +39,7 @@
     },
     {
       "matchFileNames": [
+        ".circleci/config.yml",
         "e2e/a5es5/package.json",
         "e2e/a5es5/.nvmrc",
         "e2e/a5es2015/package.json",
@@ -77,6 +78,7 @@
     },
     {
       "matchFileNames": [
+        ".circleci/config.yml",
         "e2e/a5es5/package.json",
         "e2e/a5es5/.nvmrc",
         "e2e/a5es2015/package.json",
