@@ -149,6 +149,29 @@
       "matchFileNames": ["e2e/a11/package.json"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.11\\d\\d\\./"
+    },
+
+    {
+      "matchFileNames": [
+        "e2e/min/*"
+      ],
+      "matchPackageNames": [
+        "@angular-devkit/build-angular",
+        "@angular/animations",
+        "@angular/cli",
+        "@angular/common",
+        "@angular/compiler",
+        "@angular/compiler-cli",
+        "@angular/core",
+        "@angular/forms",
+        "@angular/platform-browser",
+        "@angular/platform-browser-dynamic",
+        "@angular/router",
+        "ng-packagr",
+        "typescript",
+        "zone.js"
+      ],
+      "branchTopic": "angular-monorepo-{{{updateType}}}-{{{newMajor}}}.{{{newMinor}}}.x-{{{newVersion}}}"
     }
   ]
 }
