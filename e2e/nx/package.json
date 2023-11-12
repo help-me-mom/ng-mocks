@@ -7,7 +7,7 @@
     "npm": "npm",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test --i=true"
+    "test": "nx test"
   },
   "peerDependencies": {
     "ng-mocks": "*"

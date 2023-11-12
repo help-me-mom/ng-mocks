@@ -1,5 +1,7 @@
 export default {
   displayName: 'nx',
+  workerIdleMemoryLimit: '1024MB',
+  maxWorkers: 1,
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   transform: {

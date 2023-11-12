@@ -12,8 +12,8 @@
     "test:debug": "npm run test:jasmine:debug",
     "test:jasmine": "ng test",
     "test:jasmine:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
-    "test:jest": "jest -w 1 --config jest.config.ts",
-    "test:jest:debug": "npm run test:jest -- --watch"
+    "test:jest": "jest --config jest.config.ts",
+    "test:jest:debug": "npm run test:jest -- -i --watch"
   },
   "peerDependencies": {
     "ng-mocks": "*"
