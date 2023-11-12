@@ -38,26 +38,12 @@
       "enabled": false
     },
     {
-      "matchFileNames": [
-        ".circleci/config.yml"
-      ],
-      "semanticCommitScope": "root",
-      "additionalBranchPrefix": "root/"
-    },
-    {
-      "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
-      "additionalBranchPrefix": "e2e/a5/"
-    },
-    {
-      "matchFileNames": [
-        "**"
-      ],
       "matchPackageNames": [
         "satantime/puppeteer-node",
         "@types/node",
         "nodejs/node"
       ],
-      "allowedVersions": "/^\\d*[02468]\\./",
+      "allowedVersions": "/^[^0-9]*\\d*[02468]\\./",
       "branchTopic": "node-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
@@ -74,6 +60,21 @@
         "jasmine-core"
       ],
       "branchTopic": "jasmine-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
+    },
+    {
+      "matchFileNames": [
+        ".circleci/config.yml"
+      ],
+      "semanticCommitScope": "root",
+      "additionalBranchPrefix": "root/"
+    },
+    {
+      "matchFileNames": [
+        "e2e/a5es5/*",
+        "e2e/a5es2015/*"
+      ],
+      "semanticCommitScope": "e2e/a5",
+      "additionalBranchPrefix": "e2e/a5/"
     },
     {
       "matchFileNames": [
@@ -115,20 +116,17 @@
         "typescript",
         "zone.js"
       ],
-      "major": {
-        "enabled": false
-      },
       "minor": {
         "enabled": false
       }
     },
     {
-      "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/jasmine", "jasmine-core"],
       "allowedVersions": "<=2.8.9"
     },
     {
-      "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/node"],
       "allowedVersions": "<=6.14.10"
     },
