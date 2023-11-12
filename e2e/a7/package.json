@@ -20,9 +20,6 @@
     "test:jest:es2015": "jest --config ./jest.es2015.js",
     "test:jest:debug": "jest -i --watch"
   },
-  "peerDependencies": {
-    "ng-mocks": "*"
-  },
   "dependencies": {
     "@angular/animations": "7.2.16",
     "@angular/common": "7.2.16",

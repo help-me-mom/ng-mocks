@@ -9,9 +9,6 @@
     "build": "nx build",
     "test": "nx test"
   },
-  "peerDependencies": {
-    "ng-mocks": "*"
-  },
   "dependencies": {
     "@angular/animations": "16.2.12",
     "@angular/common": "16.2.12",
