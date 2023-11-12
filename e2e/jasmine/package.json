@@ -12,9 +12,6 @@
     "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
     "test:jasmine": "ng test"
   },
-  "peerDependencies": {
-    "ng-mocks": "*"
-  },
   "dependencies": {
     "@angular/animations": "16.2.12",
     "@angular/common": "16.2.12",

@@ -19,9 +19,6 @@
     "test:jest:es2015": "jest --config jest.es2015ivy.js",
     "test:jest:debug": "jest -i --watch"
   },
-  "peerDependencies": {
-    "ng-mocks": "*"
-  },
   "dependencies": {
     "@angular/animations": "14.3.0",
     "@angular/common": "14.3.0",

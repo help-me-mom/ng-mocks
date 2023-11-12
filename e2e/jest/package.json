@@ -12,9 +12,6 @@
     "test:jest": "jest --config jest.config.ts",
     "test:jest:debug": "jest -i --watch"
   },
-  "peerDependencies": {
-    "ng-mocks": "*"
-  },
   "dependencies": {
     "@angular/animations": "16.2.12",
     "@angular/common": "16.2.12",
