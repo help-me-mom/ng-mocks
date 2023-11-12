@@ -273,6 +273,9 @@
     "webpack-cli": "5.1.4",
     "zone.js": "0.13.3"
   },
+  "engines": {
+    "npm": "10.2.3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ike18t/ng-mocks"
