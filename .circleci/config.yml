@@ -15,7 +15,7 @@ executors:
     resource_class: medium
   a5:
     docker:
-      - image: satantime/puppeteer-node:6.17.1
+      - image: satantime/puppeteer-node:7.10.1
     resource_class: medium
   a6:
     docker:
