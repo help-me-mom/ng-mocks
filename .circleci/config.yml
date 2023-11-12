@@ -11,55 +11,55 @@ orbs:
 executors:
   core:
     docker:
-      - image: satantime/puppeteer-node:18.18.2
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a5:
     docker:
-      - image: satantime/puppeteer-node:6.17.1
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a6:
     docker:
-      - image: satantime/puppeteer-node:8.17.0
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a7:
     docker:
-      - image: satantime/puppeteer-node:8.17.0
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a8:
     docker:
-      - image: satantime/puppeteer-node:10.24.1
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a9:
     docker:
-      - image: satantime/puppeteer-node:12.22.12
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a10:
     docker:
-      - image: satantime/puppeteer-node:12.22.12
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a11:
     docker:
-      - image: satantime/puppeteer-node:12.22.12
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a12:
     docker:
-      - image: satantime/puppeteer-node:12.22.12
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a13:
     docker:
-      - image: satantime/puppeteer-node:12.22.12
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a14:
     docker:
-      - image: satantime/puppeteer-node:16.20.2
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a15:
     docker:
-      - image: satantime/puppeteer-node:16.20.2
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
   a16:
     docker:
-      - image: satantime/puppeteer-node:18.18.2
+      - image: satantime/puppeteer-node:19.9.0
     resource_class: medium
 
 commands:
