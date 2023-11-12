@@ -149,6 +149,18 @@
       "matchFileNames": ["e2e/a11/package.json"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.11\\d\\d\\./"
+    },
+
+    {
+      "matchFileNames": [
+        "e2e/a5es5/**",
+        "e2e/a5es2015/**"
+      ],
+      "matchPackageNames": ["@types/jasmine"],
+      "branchTopic": "jasmine-{{{newVersion}}}",
+      "major": {
+        "enabled": false
+      }
     }
   ]
 }
