@@ -18,10 +18,10 @@
     "test:jasmine:es2015:no-ivy": "ng test --ts-config ./tsconfig.es2015noivy.spec.json --progress=false",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
     "test:jest": "npm run test:jest:es5:ivy && npm run test:jest:es5:no-ivy && npm run test:jest:es2015:ivy && npm run test:jest:es2015:no-ivy",
-    "test:jest:es5:ivy": "jest -i --config jest.es5ivy.js",
-    "test:jest:es5:no-ivy": "jest -i --config jest.es5noivy.js",
-    "test:jest:es2015:ivy": "jest -i --config jest.es2015ivy.js",
-    "test:jest:es2015:no-ivy": "jest -i --config jest.es2015noivy.js",
+    "test:jest:es5:ivy": "jest --config jest.es5ivy.js",
+    "test:jest:es5:no-ivy": "jest --config jest.es5noivy.js",
+    "test:jest:es2015:ivy": "jest --config jest.es2015ivy.js",
+    "test:jest:es2015:no-ivy": "jest --config jest.es2015noivy.js",
     "test:jest:debug": "jest -i --watch"
   },
   "peerDependencies": {

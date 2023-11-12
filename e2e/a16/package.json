@@ -12,7 +12,7 @@
     "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
     "test:jasmine": "ng test --ts-config ./tsconfig.json --progress=false",
     "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
-    "test:jest": "jest -i --config jest.config.ts",
+    "test:jest": "jest --config jest.config.ts",
     "test:jest:debug": "jest -i --watch"
   },
   "peerDependencies": {

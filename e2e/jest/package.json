@@ -9,8 +9,8 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jest",
-    "test:jest": "jest -w 1 --config jest.config.ts",
-    "test:jest:debug": "jest -w 1 --watch"
+    "test:jest": "jest --config jest.config.ts",
+    "test:jest:debug": "jest -i --watch"
   },
   "peerDependencies": {
     "ng-mocks": "*"
