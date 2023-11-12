@@ -45,13 +45,10 @@
       "additionalBranchPrefix": "root/"
     },
     {
-      "matchFileNames": ["e2e/a5es5/package.json", "e2e/a5es2015/package.json"],
+      "matchFileNames": ["e2e/a5es5/**", "e2e/a5es2015/**"],
       "additionalBranchPrefix": "e2e/a5/"
     },
     {
-      "matchFileNames": [
-        "**"
-      ],
       "matchPackageNames": [
         "satantime/puppeteer-node",
         "@types/node",
@@ -77,29 +74,6 @@
     },
     {
       "matchFileNames": [
-        ".circleci/config.yml",
-        "docker-compose.yml"
-      ],
-      "matchPackageNames": [
-        "satantime/puppeteer-node",
-        "@types/node",
-        "nodejs/node",
-        "npm"
-      ],
-      "major": {
-        "enabled": false
-      }
-    },
-    {
-      "matchFileNames": [
-        "e2e/a*/**"
-      ],
-      "major": {
-        "enabled": false
-      }
-    },
-    {
-      "matchFileNames": [
         "e2e/a*/**"
       ],
       "matchPackageNames": [
@@ -115,9 +89,6 @@
         "typescript",
         "zone.js"
       ],
-      "major": {
-        "enabled": false
-      },
       "minor": {
         "enabled": false
       }
