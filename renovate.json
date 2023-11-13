@@ -176,7 +176,7 @@
     {
       "matchFileNames": ["e2e/a9/*"],
       "matchPackageNames": ["jest-preset-angular"],
-      "allowedVersions": "<8.3.2"
+      "allowedVersions": "<8.3.0"
     },
     {
       "matchFileNames": ["e2e/a10/*"],
