@@ -23,7 +23,7 @@ describe('issue-735:date-pipe', () => {
         () =>
           ({
             transform: (value: string) => `MOCK:${value}`,
-          } as never),
+          }) as never,
       ),
     );
 
@@ -65,7 +65,7 @@ describe('issue-735:date-pipe', () => {
         () =>
           ({
             transform: (value: string) => `MOCK:${value}`,
-          } as never),
+          }) as never,
       ),
     );
 
@@ -103,7 +103,7 @@ describe('issue-735:date-pipe', () => {
         () =>
           ({
             transform: (value: string) => `MOCK:${value}`,
-          } as never),
+          }) as never,
       ),
     );
 

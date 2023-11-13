@@ -5,16 +5,16 @@ const getType = (value: any): string =>
   isNgDef(value, 'p')
     ? 'pipe'
     : isNgDef(value, 'd')
-    ? 'directive'
-    : isNgDef(value, 'c')
-    ? 'component'
-    : isNgDef(value, 'm')
-    ? 'module'
-    : isNgDef(value, 'i')
-    ? 'service'
-    : isNgDef(value, 't')
-    ? 'token'
-    : '';
+      ? 'directive'
+      : isNgDef(value, 'c')
+        ? 'component'
+        : isNgDef(value, 'm')
+          ? 'module'
+          : isNgDef(value, 'i')
+            ? 'service'
+            : isNgDef(value, 't')
+              ? 'token'
+              : '';
 
 export default (value: any, funcName: string) => {
   if (value === undefined || value === null) {

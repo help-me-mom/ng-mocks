@@ -227,8 +227,8 @@ const configureTestingModule =
           isMock && transform
             ? builder.mock(source, transform, options)
             : isMock
-            ? builder.mock(source, options)
-            : builder.keep(source, options);
+              ? builder.mock(source, options)
+              : builder.keep(source, options);
       }
 
       finalModuleDef = builder.build();

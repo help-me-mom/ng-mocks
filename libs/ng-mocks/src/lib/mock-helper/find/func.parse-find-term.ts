@@ -8,6 +8,6 @@ export default (selector: string | AnyType<any> | [string] | [string, any]): Pre
   return Array.isArray(selector)
     ? By.css(selector.length === 1 ? `[${selector[0]}]` : `[${selector[0]}="${selector[1]}"]`)
     : typeof selector === 'string'
-    ? By.css(selector)
-    : By.directive(getSourceOfMock(selector));
+      ? By.css(selector)
+      : By.directive(getSourceOfMock(selector));
 };

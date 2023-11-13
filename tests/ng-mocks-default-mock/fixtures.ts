@@ -37,7 +37,10 @@ export class TargetService {
 export class TargetPipe implements PipeTransform {
   public o1$: Observable<number> = new Subject();
 
-  public constructor(public readonly service: TargetService, @Inject(TOKEN) public readonly token: string) {}
+  public constructor(
+    public readonly service: TargetService,
+    @Inject(TOKEN) public readonly token: string,
+  ) {}
 
   public getO1(): Observable<number> {
     return this.o1$;
