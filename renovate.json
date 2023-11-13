@@ -18,6 +18,7 @@
   "configMigration": true,
   "semanticCommitScope": "{{#if (equals packageFileDir '')}}root{{else}}{{{packageFileDir}}}{{/if}}",
   "additionalBranchPrefix": "{{#if (equals packageFileDir '')}}root{{else}}{{{packageFileDir}}}{{/if}}/",
+  "branchTopic": "{{{depNameSanitized}}}-{{{newMajor}}}.{{{newMinor}}}.x",
   "vulnerabilityAlerts": {
     "enabled": false
   },
@@ -123,42 +124,66 @@
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/jasmine", "jasmine-core"],
-      "allowedVersions": "<=2.8.9"
+      "allowedVersions": "<2.8.22"
     },
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/node"],
-      "allowedVersions": "<=6.14.10"
+      "allowedVersions": "<6.14.11"
     },
     {
-      "matchFileNames": ["e2e/a6/package.json"],
+      "matchFileNames": ["e2e/a6/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.8\\./"
     },
     {
-      "matchFileNames": ["e2e/a7/package.json"],
+      "matchFileNames": ["e2e/a6/*"],
+      "matchPackageNames": [
+        "satantime/puppeteer-node",
+        "@types/node",
+        "nodejs/node"
+      ],
+      "allowedVersions": "<8.10.0"
+    },
+    {
+      "matchFileNames": ["e2e/a7/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.13\\./"
     },
     {
-      "matchFileNames": ["e2e/a8/package.json"],
+      "matchFileNames": ["e2e/a8/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.8\\d\\d\\./"
     },
     {
-      "matchFileNames": ["e2e/a9/package.json"],
+      "matchFileNames": ["e2e/a8/*"],
+      "matchPackageNames": ["jest-preset-angular"],
+      "allowedVersions": "<8.3.2"
+    },
+    {
+      "matchFileNames": ["e2e/a9/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.9\\d\\d\\./"
     },
     {
-      "matchFileNames": ["e2e/a10/package.json"],
+      "matchFileNames": ["e2e/a9/*"],
+      "matchPackageNames": ["jest-preset-angular"],
+      "allowedVersions": "<8.3.2"
+    },
+    {
+      "matchFileNames": ["e2e/a10/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.10\\d\\d\\./"
     },
     {
-      "matchFileNames": ["e2e/a11/package.json"],
+      "matchFileNames": ["e2e/a11/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.11\\d\\d\\./"
+    },
+    {
+      "matchFileNames": ["e2e/a14/*"],
+      "matchPackageNames": ["ng-packagr"],
+      "allowedVersions": "<14.3.0"
     }
   ]
 }
