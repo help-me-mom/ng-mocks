@@ -123,12 +123,20 @@
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/jasmine", "jasmine-core"],
-      "allowedVersions": "<2.8.22"
+      "allowedVersions": "<2.8.10"
+    },
+    {
+      "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
+      "matchPackageNames": [
+        "satantime/puppeteer-node",
+        "nodejs/node"
+      ],
+      "allowedVersions": "<9.0.0"
     },
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/node"],
-      "allowedVersions": "<6.14.11"
+      "allowedVersions": "<8.10.63"
     },
     {
       "matchFileNames": ["e2e/a6/*"],
