@@ -30,6 +30,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/polyfills.ts", "src/setup-jest.ts"],
+  "files": ["src/main.ts", "src/setup-jest.ts"],
   "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }
