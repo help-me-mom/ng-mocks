@@ -20,7 +20,7 @@
             "outputPath": "dist/a-jest",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.json",
             "aot": true
           },
@@ -51,7 +51,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.json",
             "karmaConfig": "karma.conf.js"
           }
@@ -73,6 +73,5 @@
         }
       }
     }
-  },
-  "defaultProject": "a-jest"
+  }
 }
