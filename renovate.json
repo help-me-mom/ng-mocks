@@ -146,6 +146,11 @@
       "allowedVersions": "/^0\\.8\\d\\d\\./"
     },
     {
+      "matchFileNames": ["e2e/a8/*"],
+      "matchPackageNames": ["jest-preset-angular"],
+      "allowedVersions": "<8.4.0"
+    },
+    {
       "matchFileNames": ["e2e/a9/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.9\\d\\d\\./"
