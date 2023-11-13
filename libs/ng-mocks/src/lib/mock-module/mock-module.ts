@@ -166,8 +166,8 @@ const generateReturn = (
   mockModule === ngModule && mockModuleProviders === ngModuleProviders
     ? module
     : isNgModuleDefWithProviders(module)
-    ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
-    : mockModule;
+      ? { ngModule: mockModule, ...(mockModuleProviders ? { providers: mockModuleProviders } : {}) }
+      : mockModule;
 
 /**
  * MockModule creates a mock module class out of an arbitrary module.

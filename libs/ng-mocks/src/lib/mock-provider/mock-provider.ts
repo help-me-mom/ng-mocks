@@ -214,11 +214,11 @@ export function MockProvider(
     typeof flags === 'boolean'
       ? { deps: undefined, multi: flags }
       : Array.isArray(flags)
-      ? {
-          deps: flags,
-          multi: undefined,
-        }
-      : flags;
+        ? {
+            deps: flags,
+            multi: undefined,
+          }
+        : flags;
 
   if (style) {
     return {

@@ -36,7 +36,7 @@ describe('issue-735', () => {
         () =>
           ({
             mock1: true,
-          } as never),
+          }) as never,
       ),
     );
 
@@ -82,7 +82,7 @@ describe('issue-735', () => {
         () =>
           ({
             mock2: true,
-          } as never),
+          }) as never,
       ),
     );
 

@@ -27,11 +27,11 @@ const configureProcessMetaKeys = (
       return directive === def
         ? data
         : data == def
-        ? directive
-        : {
-            ...data,
-            directive,
-          };
+          ? directive
+          : {
+              ...data,
+              directive,
+            };
     },
   ],
   ['imports', resolve],

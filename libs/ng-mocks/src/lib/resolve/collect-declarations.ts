@@ -310,8 +310,8 @@ const parsePropDecoratorsParserFactoryProp = (key: 'inputs' | 'outputs') => {
       typeof decorator.args?.[0] === 'undefined'
         ? {}
         : typeof decorator.args[0] === 'string'
-        ? { alias: decorator.args[0] }
-        : decorator.args[0];
+          ? { alias: decorator.args[0] }
+          : decorator.args[0];
     callback(_, name, { alias, required, bindingPropertyName: alias }, declaration);
   };
 };
