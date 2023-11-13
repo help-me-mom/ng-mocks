@@ -14,6 +14,6 @@ sidebar_label: Credits
 ## Supporters  
 
 - [DmitryEfimenko](https://github.com/DmitryEfimenko)
-  provided valuable feedback and ideas how to improve the library
+  provided valuable feedback and ideas on how to improve the library
 - [Vinay Kaparthi](https://www.linkedin.com/in/vinay-kaparthi/)
   provided valuable feedback about performance of the library and shed light on some bottlenecks.

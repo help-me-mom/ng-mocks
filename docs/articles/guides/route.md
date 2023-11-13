@@ -35,7 +35,7 @@ beforeEach(() =>
 );
 ```
 
-The next and very import step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
+The next and very important step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
 We need this, because `RouterModule` relies on async zones.
 Also, please note an empty object as the second parameter, it's needed to leave inputs of `RouterOutlet` untouched.
 
