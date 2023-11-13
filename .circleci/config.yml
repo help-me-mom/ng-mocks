@@ -413,7 +413,7 @@ jobs:
                         pattern: 'e2e/.*'
                         value: << pipeline.git.branch >>
               - matches:
-                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>(es5|es2015)?/.*'
                   value: << pipeline.git.branch >>
               - matches:
                   pattern: 'e2e/<< parameters.branch >>/.*'
@@ -458,7 +458,7 @@ jobs:
                         pattern: 'e2e/.*'
                         value: << pipeline.git.branch >>
               - matches:
-                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>(es5|es2015)?/.*'
                   value: << pipeline.git.branch >>
               - matches:
                   pattern: 'e2e/<< parameters.branch >>/.*'
@@ -492,7 +492,7 @@ jobs:
                         pattern: 'e2e/.*'
                         value: << pipeline.git.branch >>
               - matches:
-                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>/.*'
+                  pattern: '(renovate|dependabot/npm_and_yarn)/e2e/<< parameters.branch >>(es5|es2015)?/.*'
                   value: << pipeline.git.branch >>
               - matches:
                   pattern: 'e2e/<< parameters.branch >>/.*'
