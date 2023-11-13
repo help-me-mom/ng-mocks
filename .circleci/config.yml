@@ -161,7 +161,7 @@ jobs:
           command: npm run prettier:check
       - run:
           name: Lint commits
-          command: npx commitlint --from=origin/master
+          command: npx commitlint -V --from=origin/master
       - run:
           name: Lint code style
           command: npm run lint -- --ignore-pattern e2e/ --ignore-pattern tests-e2e/
