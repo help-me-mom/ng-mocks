@@ -123,7 +123,7 @@
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "matchPackageNames": ["@types/jasmine", "jasmine-core"],
-      "allowedVersions": "<2.9.0"
+      "allowedVersions": "<2.8.22"
     },
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
