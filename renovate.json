@@ -164,6 +164,11 @@
       "matchFileNames": ["e2e/a11/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.11\\d\\d\\./"
+    },
+    {
+      "matchFileNames": ["e2e/a14/*"],
+      "matchPackageNames": ["ng-packagr"],
+      "allowedVersions": "<14.3.0"
     }
   ]
 }
