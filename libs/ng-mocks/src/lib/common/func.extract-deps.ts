@@ -6,7 +6,11 @@ import { AnyDeclaration } from './core.types';
 import { getNgType } from './func.get-ng-type';
 import funcGetType from './func.get-type';
 
-export const funcExtractDeps = (def: any, result: Set<AnyDeclaration<any>>): Set<AnyDeclaration<any>> => {
+export const funcExtractDeps = (
+  def: any,
+  result: Set<AnyDeclaration<any>>,
+  recursive = false,
+): Set<AnyDeclaration<any>> => {
   const meta = collectDeclarations(def);
   const type = getNgType(def);
   // istanbul ignore if
@@ -22,7 +26,13 @@ export const funcExtractDeps = (def: any, result: Set<AnyDeclaration<any>>): Set
 
     for (const item of flatten(decorator[field])) {
       // istanbul ignore if: it is here for standalone things, however they don't support modules with providers.
-      result.add(funcGetType(item));
+      const itemType = funcGetType(item);
+      if (!result.has(itemType)) {
+        result.add(itemType);
+        if (recursive) {
+          funcExtractDeps(itemType, result);
+        }
+      }
     }
   }
 

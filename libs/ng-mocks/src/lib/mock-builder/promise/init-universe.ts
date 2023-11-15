@@ -1,4 +1,5 @@
 import { mapEntries, mapValues } from '../../common/core.helpers';
+import { funcExtractDeps } from '../../common/func.extract-deps';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import initExcludeDef from './init-exclude-def';
@@ -31,8 +32,20 @@ export default ({
   const dependencies = initKeepDef(keepDef, configDef);
   for (const dependency of mapValues(dependencies)) {
     ngMocksUniverse.touches.add(dependency);
-
-    // MockBuilder has instruction about the dependency, skipping it.
+  }
+  for (const dependency of mapValues(keepDef)) {
+    dependencies.add(dependency);
+    funcExtractDeps(dependency, dependencies, true);
+  }
+  for (const dependency of mapValues(mockDef)) {
+    dependencies.add(dependency);
+    funcExtractDeps(dependency, dependencies, true);
+  }
+  for (const dependency of mapValues(replaceDef)) {
+    dependencies.add(dependency);
+    funcExtractDeps(dependency, dependencies, true);
+  }
+  for (const dependency of mapValues(dependencies)) {
     if (configDef.has(dependency)) {
       continue;
     }
@@ -46,14 +59,21 @@ export default ({
       keepDef.add(dependency);
     } else if (resolution === 'exclude') {
       excludeDef.add(dependency);
-    } else {
+    } else if (resolution === 'mock') {
+      mockDef.add(dependency);
+    } else if (ngMocksUniverse.touches.has(dependency)) {
       mockDef.add(dependency);
     }
 
-    configDef.set(dependency, {
-      dependency: true,
-      __internal: true,
-    });
+    configDef.set(
+      dependency,
+      ngMocksUniverse.touches.has(dependency)
+        ? {
+            dependency: true,
+            __internal: true,
+          }
+        : {},
+    );
   }
 
   for (const [k, v] of mapEntries(configDef)) {
