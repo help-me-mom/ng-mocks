@@ -36,13 +36,18 @@ export const getInjection = <I>(token: AnyDeclaration<I>): I => {
   return testBed.inject ? testBed.inject(token) : testBed.get(token);
 };
 
-export const flatten = <T>(values: T | T[], result: T[] = []): T[] => {
+export const flatten = <T>(values: T | T[] | { ɵproviders: T[] }, result: T[] = []): T[] => {
   if (Array.isArray(values)) {
     for (const value of values) {
       flatten(value, result);
     }
+  } else if (values !== null && typeof values === 'object' && Array.isArray((values as any).ɵproviders)) {
+    for (const value of (values as any).ɵproviders) {
+      flatten(value, result);
+    }
   } else {
-    result.push(values);
+    // any is needed to cover ɵproviders
+    result.push(values as any);
   }
 
   return result;
