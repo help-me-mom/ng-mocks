@@ -198,7 +198,7 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
    *
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#provide
    */
-  provide(def: Provider): this;
+  provide(def: IMockBuilderProvider): this;
 
   /**
    * .replace() lets substitute declarations.
@@ -219,3 +219,14 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
  * @see https://ng-mocks.sudo.eu/api/MockBuilder#extending-mockbuilder
  */
 export interface IMockBuilderExtended extends IMockBuilder {}
+
+/**
+ * IMockBuilderProvider
+ *
+ * A special type to cover providers including EnvironmentProviders.
+ */
+export type IMockBuilderProvider =
+  | Provider
+  | {
+      ɵbrand: 'EnvironmentProviders';
+    };

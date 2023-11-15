@@ -1,6 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 import { MockBuilder } from 'ng-mocks';
+import { provideHttpClient } from '@angular/common/http';
 
 class MyService {
   public readonly name = 'MyService';
@@ -14,6 +15,9 @@ const TOKEN_OBJECT = new InjectionToken<{ prop: boolean }>('TOKEN_OBJECT');
 const TOKEN_BOOLEAN = new InjectionToken<boolean>('TOKEN_BOOLEAN');
 const TOKEN_STRING = new InjectionToken<string>('TOKEN_STRING');
 const TOKEN_UNKNOWN = new InjectionToken('TOKEN_UNKNOWN');
+
+// @see https://github.com/help-me-mom/ng-mocks/issues/7011
+const ENVIRONMENT_PROVIDERS = provideHttpClient();
 
 // Accepts classes only.
 MockBuilder()
@@ -44,7 +48,8 @@ MockBuilder()
       provide: TOKEN_UNKNOWN,
       useValue: undefined,
     },
-  ]);
+  ])
+  .provide(ENVIRONMENT_PROVIDERS);
 
 // @ts-expect-error: does not support wrong types.
 MockBuilder().provide('123');

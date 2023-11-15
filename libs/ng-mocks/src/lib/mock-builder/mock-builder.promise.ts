@@ -1,4 +1,4 @@
-import { NgModule, Provider } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import CoreDefStack from '../common/core.def-stack';
@@ -23,7 +23,13 @@ import initUniverse from './promise/init-universe';
 import parseMockArguments from './promise/parse-mock-arguments';
 import parseProvider from './promise/parse-provider';
 import { BuilderData } from './promise/types';
-import { IMockBuilder, IMockBuilderConfig, IMockBuilderConfigAll, IMockBuilderResult } from './types';
+import {
+  IMockBuilder,
+  IMockBuilderConfig,
+  IMockBuilderConfigAll,
+  IMockBuilderProvider,
+  IMockBuilderResult,
+} from './types';
 
 const normaliseModule = (
   module: any,
@@ -162,7 +168,7 @@ export class MockBuilderPromise implements IMockBuilder {
     return this;
   }
 
-  public provide(def: Provider): this {
+  public provide(def: IMockBuilderProvider): this {
     for (const provider of flatten(def)) {
       const { provide, multi } = parseProvider(provider);
       const existing = this.providerDef.has(provide) ? this.providerDef.get(provide) : [];
