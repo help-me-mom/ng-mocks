@@ -184,7 +184,7 @@ module.exports = {
         'guides/libraries/angular-material',
         'guides/libraries/primeng',
         'guides/libraries/ngrx',
-        'guides/libraries/ngrs',
+        'guides/libraries/ngxs',
       ],
     },
   ],
