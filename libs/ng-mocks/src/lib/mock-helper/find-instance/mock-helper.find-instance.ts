@@ -38,8 +38,11 @@ export default <T>(...args: any[]): T => {
   } else {
     try {
       result.push(getInjection(declaration));
-    } catch {
-      // nothing to do
+    } catch (error) {
+      // forwarding unexpected errors: https://github.com/help-me-mom/ng-mocks/issues/7041
+      if (!error || typeof error !== 'object' || (error as any).ngTempTokenPath === undefined) {
+        throw error;
+      }
     }
   }
 
