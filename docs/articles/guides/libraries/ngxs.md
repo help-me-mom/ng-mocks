@@ -1,9 +1,9 @@
 ---
-title: How to test NGRS in Angular applications
-sidebar_label: NGRS
+title: How to test NGXS in Angular applications
+sidebar_label: NGXS
 ---
 
-If you need to avoid mocking of `NGRS` in your modules, you need to use [`.keep`](/api/MockBuilder.md#keep).
+If you need to avoid mocking of `NGXS` in your modules, you need to use [`.keep`](/api/MockBuilder.md#keep).
 
 ```ts
 beforeEach(() =>
