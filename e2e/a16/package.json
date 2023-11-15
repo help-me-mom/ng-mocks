@@ -43,12 +43,12 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.0.0",
     "ng-packagr": "16.2.3",
-    "npm": "9.9.1",
+    "npm": "9.9.2",
     "puppeteer": "19.11.1",
     "ts-node": "10.9.1",
     "typescript": "5.0.4"
   },
   "engines": {
-    "npm": "9.9.1"
+    "npm": "9.9.2"
   }
 }
