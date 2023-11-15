@@ -35,6 +35,7 @@ export {
   IMockBuilderConfigDirective,
   IMockBuilderConfigModule,
   IMockBuilderResult,
+  IMockBuilderProvider,
 } from './lib/mock-builder/types';
 
 export { MockModule } from './lib/mock-module/mock-module';

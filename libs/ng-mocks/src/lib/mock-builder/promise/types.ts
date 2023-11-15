@@ -4,7 +4,7 @@ import { InjectionToken, NgModule, Provider } from '@angular/core';
 
 import { Type } from '../../common/core.types';
 import { NgModuleWithProviders } from '../../common/func.is-ng-module-def-with-providers';
-import { IMockBuilderConfigAll } from '../types';
+import { IMockBuilderConfigAll, IMockBuilderProvider } from '../types';
 
 export type BuilderData = {
   configDef: Map<Type<any> | InjectionToken<any> | string, any>;
@@ -21,5 +21,5 @@ export type BuilderData = {
 export type NgMeta = {
   declarations: Array<Type<any>>;
   imports: Array<Type<any> | NgModuleWithProviders>;
-  providers: Provider[];
+  providers: IMockBuilderProvider[];
 };
