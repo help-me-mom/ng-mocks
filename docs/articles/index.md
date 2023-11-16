@@ -85,6 +85,7 @@ An example of a spec for a profile edit component.
 // cover behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
+  // (You can alternatively also enable automatic resetting for jasmine.)
   MockInstance.scope();
 
   // Let's configure TestBed via MockBuilder.
