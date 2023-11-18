@@ -5,6 +5,7 @@ import { flatten } from '../common/core.helpers';
 import { dependencyKeys, Type } from '../common/core.types';
 import funcGetType from '../common/func.get-type';
 import ngMocksUniverse from '../common/ng-mocks-universe';
+import markExported from '../mock/mark-exported';
 
 import createResolvers from './create-resolvers';
 import markProviders from './mark-providers';
@@ -102,10 +103,7 @@ const resolveDefForExport = (
     return undefined;
   }
 
-  ngMocksUniverse.configInstance.set(instance, {
-    ...ngMocksUniverse.configInstance.get(instance),
-    exported: true,
-  });
+  markExported(instance, ngModule);
 
   return mockDef;
 };
@@ -159,6 +157,9 @@ export default <
   const mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
   if (!ngModuleDef.skipExports) {
     addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+  }
+  for (const def of ngModule && mockModuleDef.exports ? (flatten(mockModuleDef.exports) as Array<any>) : []) {
+    markExported(def, ngModule);
   }
 
   const resolutions = ngMocksUniverse.config.get('mockNgDefResolver').pop();
