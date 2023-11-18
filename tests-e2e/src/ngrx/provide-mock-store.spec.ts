@@ -51,6 +51,7 @@ class TargetComponent {
       )
       .subscribe();
   }
+  public targetComponentNgrxProvideMockStore() {}
 }
 
 @NgModule({

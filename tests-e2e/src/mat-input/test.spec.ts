@@ -22,6 +22,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetComponent {
   public readonly control = new FormControl();
   public value: any;
+  public targetComponentMatInput() {}
 }
 
 @NgModule({

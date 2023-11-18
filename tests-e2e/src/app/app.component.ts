@@ -7,4 +7,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class AppComponent {
   public readonly title: string = 'hello';
+
+  public appComponent() {}
 }

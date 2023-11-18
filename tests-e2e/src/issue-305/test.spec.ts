@@ -25,6 +25,8 @@ import {
 })
 class MyComponent {
   public readonly myControl = new FormControl();
+
+  public myComponent305() {}
 }
 
 @NgModule({

@@ -74,6 +74,8 @@ class MyComponent implements OnInit {
   public reset(): void {
     this.store.dispatch(resetValue());
   }
+
+  public myComponent312onlyFeature() {}
 }
 
 @NgModule({

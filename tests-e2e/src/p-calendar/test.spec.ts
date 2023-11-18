@@ -14,6 +14,8 @@ import { CalendarModule } from 'primeng/calendar';
 })
 class TargetComponent {
   public dateValue = new Date();
+
+  public targetComponentPCalendar() {}
 }
 
 @NgModule({

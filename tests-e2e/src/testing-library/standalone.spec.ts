@@ -7,7 +7,9 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
   template: 'header',
   standalone: true,
 } as never)
-class HeaderComponent {}
+class HeaderComponent {
+  public headerComponentTestingLibraryStandalone() {}
+}
 
 @Component({
   selector: 'target',
@@ -15,7 +17,9 @@ class HeaderComponent {}
   standalone: true,
   imports: [HeaderComponent],
 } as never)
-class TargetComponent {}
+class TargetComponent {
+  public targetComponentTestingLibraryStandalone() {}
+}
 
 describe('testing-library:standalone', () => {
   describe('TestBed', () => {

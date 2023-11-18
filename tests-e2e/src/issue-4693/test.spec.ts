@@ -15,6 +15,7 @@ class TargetComponent implements OnInit {
     const { ChildComponent } = await import('./child.component');
     this.containerRef.createComponent(ChildComponent);
   }
+  public targetComponent4693() {}
 }
 
 describe('issue-4693', () => {

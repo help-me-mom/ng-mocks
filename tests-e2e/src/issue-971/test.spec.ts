@@ -13,6 +13,7 @@ class TargetService {
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
+  public targetComponent971() {}
 }
 
 @NgModule({

@@ -260,13 +260,17 @@ class MockModule {}
   selector: 'app',
   template: '<dependency></dependency>',
 })
-class AppComponent {}
+class AppComponent {
+  public appComponentPerformance() {}
+}
 
 @Component({
   selector: 'dependency',
   template: 'dependency',
 })
-class DependencyComponent {}
+class DependencyComponent {
+  public dependencyComponentPerformance() {}
+}
 
 describe('performance:ng-mocks', () => {
   const time = performance.now();

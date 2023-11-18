@@ -41,6 +41,7 @@ class MyComponent implements OnInit {
   public reset(): void {
     this.store.dispatch(resetValue());
   }
+  public myComponent589devTools() {}
 }
 
 const metaReducer = (state: any) => state;
