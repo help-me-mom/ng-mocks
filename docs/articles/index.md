@@ -85,6 +85,7 @@ An example of a spec for a profile edit component.
 // cover behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
+  // Alternatively, you can enable automatic resetting in test.ts.
   MockInstance.scope();
 
   // Let's configure TestBed via MockBuilder.
