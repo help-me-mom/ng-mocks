@@ -18,7 +18,7 @@ import {
   imports: [MatMenuModule],
 })
 class DependencyComponent {
-  public dependency5239e2e() {}
+  public dependencyComponent5239() {}
 }
 
 // A standalone component we are going to test.
@@ -37,7 +37,7 @@ class DependencyComponent {
   `,
 })
 class TargetComponent {
-  public target5239e2e() {}
+  public targetComponent5239() {}
 }
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/5239

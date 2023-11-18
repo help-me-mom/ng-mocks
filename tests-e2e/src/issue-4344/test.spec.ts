@@ -16,7 +16,9 @@ import {
   template:
     '<cdk-virtual-scroll-viewport [itemSize]="15"></cdk-virtual-scroll-viewport>',
 })
-class DependencyComponent {}
+class DependencyComponent {
+  public dependencyComponent4344() {}
+}
 
 @NgModule({
   imports: [ScrollingModule],
@@ -30,7 +32,9 @@ class DependencyModule {}
   template:
     '<dependency></dependency><cdk-virtual-scroll-viewport [itemSize]="15"></cdk-virtual-scroll-viewport>',
 })
-class TargetComponent {}
+class TargetComponent {
+  public targetComponent4344() {}
+}
 
 @NgModule({
   imports: [DependencyModule],

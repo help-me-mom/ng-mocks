@@ -6,13 +6,17 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
   selector: 'header',
   template: 'header',
 })
-class HeaderComponent {}
+class HeaderComponent {
+  public headerComponentSpectator() {}
+}
 
 @Component({
   selector: 'target',
   template: '<header></header>',
 })
-class TargetComponent {}
+class TargetComponent {
+  public targetComponentSpectator() {}
+}
 
 @NgModule({
   declarations: [TargetComponent, HeaderComponent],

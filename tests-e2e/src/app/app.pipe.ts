@@ -7,4 +7,6 @@ export class AppPipe implements PipeTransform {
   transform(): string {
     return this.constructor.name;
   }
+
+  public appPipe() {}
 }

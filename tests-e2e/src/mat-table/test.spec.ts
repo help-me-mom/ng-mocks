@@ -71,6 +71,7 @@ class TargetComponent {
     this.displayedColumns[22] = 'weight';
     this.displayedColumns[23] = 'symbol';
   }
+  public targetComponentMatTable() {}
 }
 
 @NgModule({

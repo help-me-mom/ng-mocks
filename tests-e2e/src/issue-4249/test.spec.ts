@@ -14,6 +14,7 @@ import {
 })
 class TargetComponent {
   constructor(public readonly service: BreakpointObserver) {}
+  public myComponent4249() {}
 }
 
 @NgModule({

@@ -47,6 +47,7 @@ class TargetComponent {
       )
       .subscribe();
   }
+  public targetComponentNgxs() {}
 }
 
 @NgModule({

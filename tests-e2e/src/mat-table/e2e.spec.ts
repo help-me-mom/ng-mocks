@@ -36,6 +36,7 @@ class TargetComponent {
 
     this.displayedColumns[0] = 'position';
   }
+  public targetComponentMatTableE2E() {}
 }
 
 @NgModule({

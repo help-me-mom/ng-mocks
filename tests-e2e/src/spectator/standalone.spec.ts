@@ -7,7 +7,9 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
   template: 'header',
   standalone: true,
 } as never)
-class HeaderComponent {}
+class HeaderComponent {
+  public headerComponentSpectatorStandalone() {}
+}
 
 @Component({
   selector: 'target',
@@ -15,7 +17,9 @@ class HeaderComponent {}
   standalone: true,
   imports: [HeaderComponent],
 } as never)
-class TargetComponent {}
+class TargetComponent {
+  public targetComponentSpectatorStandalone() {}
+}
 
 // @see https://stackoverflow.com/questions/72708580/mockcomponent-still-includes-the-actual-component
 describe('spectator:standalone', () => {

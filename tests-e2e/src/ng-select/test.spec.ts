@@ -17,7 +17,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
         <strong>{{ item.name }}</strong>
       </ng-template>
       <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-        {{ index }} <img [src]="item.avatar" [alt]="item.name" />
+        {{ index }}
+        <span [title]="item.avatar" [id]="item.name"></span>
       </ng-template>
       <ng-template
         ng-option-tmp
@@ -43,6 +44,7 @@ class TargetComponent {
   ];
 
   public selectedCity = this.cities[0].name;
+  public targetComponentNgSelect() {}
 }
 
 @NgModule({
@@ -155,7 +157,7 @@ describe('ng-select:props', () => {
 
     // Asserting the rendered html.
     expect(ngSelectEl.nativeElement.innerHTML).toContain(
-      '7 <img src="test.jpeg" alt="test">',
+      '7 <span title="test.jpeg" id="test"></span>',
     );
   });
 

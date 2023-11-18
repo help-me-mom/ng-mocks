@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   selector: 'child',
   template: 'child',
 })
-export class ChildComponent {}
+export class ChildComponent {
+  public childComponent4693() {}
+}

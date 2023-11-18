@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class AppService {}
+export class AppService {
+  public appService() {}
+}
