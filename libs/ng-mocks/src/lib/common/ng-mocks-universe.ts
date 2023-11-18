@@ -105,7 +105,7 @@ ngMocksUniverse.getBuildDeclaration = (def: any): undefined | null | any => {
   if (mode === 'exclude') {
     return null;
   }
-  if (mode === 'keep') {
+  if (!mode || mode === 'keep') {
     return def;
   }
   if (mode === 'replace') {

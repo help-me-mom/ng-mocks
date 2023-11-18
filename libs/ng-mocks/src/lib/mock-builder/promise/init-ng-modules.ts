@@ -1,6 +1,6 @@
 import { flatten, mapValues } from '../../common/core.helpers';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
-import { AnyDeclaration } from '../../common/core.types';
+import { AnyDeclaration, Type } from '../../common/core.types';
 import errorJestMock from '../../common/error.jest-mock';
 import funcGetName from '../../common/func.get-name';
 import funcGetType from '../../common/func.get-type';
@@ -8,6 +8,7 @@ import { isNgDef } from '../../common/func.is-ng-def';
 import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import { isStandalone } from '../../common/func.is-standalone';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
+import markExported from '../../mock/mark-exported';
 import markProviders from '../../mock-module/mark-providers';
 
 import initModule from './init-module';
@@ -50,41 +51,87 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
   }
 
   if (touched) {
+    markExported(def);
     ngMocksUniverse.touches.add(def);
   }
 };
 
-export default (
-  { configDef, configDefault, keepDef, mockDef, replaceDef }: BuilderData,
-  defProviders: Map<any, any>,
-): NgMeta => {
+const isExportedOnRoot = (
+  def: any,
+  configInstance: Map<any, { exported?: Set<any> }>,
+  configDef: Map<any, any>,
+): undefined | Type<any> => {
+  const cnfInstance = configInstance.get(def);
+  const cnfDef = configDef.get(def);
+
+  if (isNgDef(def, 'm') && cnfDef.onRoot) {
+    return def;
+  }
+
+  if (!cnfInstance?.exported) {
+    return def;
+  }
+
+  for (const parent of mapValues(cnfInstance.exported)) {
+    const returnModule = isExportedOnRoot(parent, configInstance, configDef);
+    // istanbul ignore else
+    if (returnModule) {
+      return returnModule;
+    }
+  }
+
+  return undefined;
+};
+
+const moveModulesUp = <T>(a: T, b: T) => {
+  const isA = isNgDef(a, 'm');
+  const isB = isNgDef(b, 'm');
+  if (isA && isB) {
+    return 0;
+  }
+  if (isA) {
+    return -1;
+  }
+  if (isB) {
+    return 1;
+  }
+  return 0;
+};
+
+export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, defProviders: Map<any, any>): NgMeta => {
   const meta: NgMeta = { imports: [], declarations: [], providers: [] };
 
+  const processed: AnyDeclaration<any>[] = [];
   const forgotten: AnyDeclaration<any>[] = [];
 
-  // Adding suitable leftovers.
-  for (const def of [...mapValues(mockDef), ...mapValues(keepDef), ...mapValues(replaceDef)]) {
-    const configInstance = ngMocksUniverse.configInstance.get(def);
-    const config = configDef.get(def);
+  const defs = [...mapValues(mockDef), ...mapValues(keepDef), ...mapValues(replaceDef)];
+  defs.sort(moveModulesUp);
 
-    if (isNgDef(def, 'm') && config.onRoot) {
+  // Adding suitable leftovers.
+  for (const originalDef of defs) {
+    const def =
+      isNgDef(originalDef, 'm') && defProviders.has(originalDef)
+        ? originalDef
+        : isExportedOnRoot(originalDef, ngMocksUniverse.configInstance, ngMocksUniverse.config);
+    if (!def || processed.indexOf(def) !== -1) {
+      continue;
+    }
+
+    const cnfDef = ngMocksUniverse.config.get(def);
+    processed.push(def);
+    cnfDef.onRoot = cnfDef.onRoot || !cnfDef.dependency;
+
+    if (isNgDef(def, 'm') && cnfDef.onRoot) {
       handleDef(meta, def, defProviders);
-    } else if (
-      !config.dependency &&
-      config.export &&
-      !configInstance?.exported &&
-      (isNgDef(def, 'i') || !isNgDef(def))
-    ) {
+    } else if (!cnfDef.dependency && cnfDef.export && (isNgDef(def, 'i') || !isNgDef(def))) {
       handleDef(meta, def, defProviders);
       markProviders([def]);
-    } else if (!config.dependency && isNgDef(def, 'm') && defProviders.has(def)) {
+    } else if (!cnfDef.dependency && cnfDef.export) {
       handleDef(meta, def, defProviders);
-    } else if (!config.dependency && config.export && !configInstance?.exported) {
-      handleDef(meta, def, defProviders);
-    } else if (!ngMocksUniverse.touches.has(def) && !config.dependency) {
+    } else if (!ngMocksUniverse.touches.has(def) && !cnfDef.dependency) {
       handleDef(meta, def, defProviders);
     } else if (
-      config.dependency &&
+      cnfDef.dependency &&
       configDefault.dependency &&
       coreReflectProvidedIn(def) !== 'root' &&
       (typeof def !== 'object' || !(def as any).__ngMocksSkip)
