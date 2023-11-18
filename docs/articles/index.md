@@ -26,20 +26,21 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
-|  Angular |                           ng-mocks                            | Jasmine | Jest | Ivy |
-| -------: | :-----------------------------------------------------------: | :-----: | :--: | :-: |
-|       16 |                            latest                             |   yes   | yes  | yes |
-|       15 |                            latest                             |   yes   | yes  | yes |
-|       14 |                            latest                             |   yes   | yes  | yes |
-|       13 |                            latest                             |   yes   | yes  | yes |
-|       12 |                            latest                             |   yes   | yes  | yes |
-|       11 |                            latest                             |   yes   | yes  | yes |
-|       10 |                            latest                             |   yes   | yes  | yes |
-|        9 |                            latest                             |   yes   | yes  | yes |
-|        8 |                            latest                             |   yes   | yes  |     |
-|        7 |                            latest                             |   yes   | yes  |     |
-|        6 |                            latest                             |   yes   | yes  |     |
-|        5 |                            latest                             |   yes   | yes  |     |
+| Angular | ng-mocks | Jasmine | Jest | Ivy |
+|--------:|:--------:| :-----: | :--: | :-: |
+|      17 |  latest  |   yes   | yes  | yes |
+|      16 |  latest  |   yes   | yes  | yes |
+|      15 |  latest  |   yes   | yes  | yes |
+|      14 |  latest  |   yes   | yes  | yes |
+|      13 |  latest  |   yes   | yes  | yes |
+|      12 |  latest  |   yes   | yes  | yes |
+|      11 |  latest  |   yes   | yes  | yes |
+|      10 |  latest  |   yes   | yes  | yes |
+|       9 |  latest  |   yes   | yes  | yes |
+|       8 |  latest  |   yes   | yes  |     |
+|       7 |  latest  |   yes   | yes  |     |
+|       6 |  latest  |   yes   | yes  |     |
+|       5 |  latest  |   yes   | yes  |     |
 
 In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
@@ -85,7 +86,8 @@ An example of a spec for a profile edit component.
 // cover behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
-  // Alternatively, you can enable automatic resetting in test.ts.
+  // Alternatively, you can enable
+  // automatic resetting in test.ts.
   MockInstance.scope();
 
   // Let's configure TestBed via MockBuilder.

@@ -130,6 +130,14 @@ updates:
       prefix: 'chore(deps)'
 
   - package-ecosystem: 'npm'
+    directory: /e2e/a17/
+    open-pull-requests-limit: 0
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'npm'
     directory: /e2e/jasmine/
     open-pull-requests-limit: 0
     schedule:

@@ -105,6 +105,8 @@ describe('profile:builder', () => {
   ngMocks.faster();
 
   // Helps to reset customizations after each test.
+  // Alternatively, you can enable
+  // automatic resetting in test.ts.
   MockInstance.scope();
 
   // Let's configure TestBed via MockBuilder.

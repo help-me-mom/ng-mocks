@@ -49,6 +49,8 @@ class ItsModule {}
 
 describe('MockForms', () => {
   // Helps to reset customizations after each test.
+  // Alternatively, you can enable
+  // automatic resetting in test.ts.
   MockInstance.scope();
 
   beforeEach(() => {

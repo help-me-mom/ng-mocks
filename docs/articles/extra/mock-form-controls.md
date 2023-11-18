@@ -139,6 +139,8 @@ A usage example of mock FormControl with ngModel in Angular tests
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockForms/test.spec.ts"
 describe('MockForms', () => {
   // Helps to reset customizations after each test.
+  // Alternatively, you can enable
+  // automatic resetting in test.ts.
   MockInstance.scope();
 
   beforeEach(() => {

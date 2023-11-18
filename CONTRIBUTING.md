@@ -165,7 +165,6 @@ The next step is:
   - `description` should be `Angular 17`
   - `private` should be `true`
   - replace `scripts` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
-  - add `peerDependencies` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
   - remove flexible versions (`^~`) in `dependencies` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
   - remove flexible versions (`^~`) in `devDependencies` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
   - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
@@ -203,28 +202,25 @@ The next step is:
 - update `ng-mocks/.circleci/config.yml`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.eslintrc.yml`, search for `a16` and copy blocks to support `a17`
 - execute `sh docker-compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment
-- update `ng-mocks/renovate.json`
-  - scroll to the end of the file
-  - duplicate all rules of the prev version: `"additionalBranchPrefix": "e2e/a16/"`
-  - in the new rules, replace `a16` by `a17`
-  - in the new rules, update `allowedVersions` according to `package.json` of `a17`
 
 ### Step #4 - update ng-mocks dependencies
 
-- update `ng-mocks/package.json` to point to the desired angular version
-- execute `sh docker-compose.sh root` in `ng-mocks` to install new dependencies
+- update `ng-mocks/package.json` to point to the new angular version in dependencies
+- execute `sh docker-compose.sh root` in `ng-mocks` to install the dependencies
 
 ### Step #5 - verify that`ng-mocks` does not fail with the new version
+
+Replace `a16` with the new version below.
 
 - execute `nvm install` in `ng-mocks`
 - execute `nvm use`
 - execute `npm run build`
-- execute `npm run clean:a17`
-- execute `npm run s:a17`
-- execute `npm run s:app:a17`
-- execute `npm run s:test:a17`
-- execute `npm run test:a17`
-- tests should pass successfully
+- execute `npm run clean:a16`
+- execute `npm run s:a16`
+- execute `npm run s:app:a16`
+- execute `npm run s:test:a16`
+- execute `npm run test:a16`
+- tests should pass successfully without failures
 
 ### Step #6 - update version references
 
@@ -233,3 +229,10 @@ The next step is:
 - update the version table in `ng-mocks/README.md`
 - update `description` in `libs/ng-mocks/package.json`
 - update `peerDependencies` in `libs/ng-mocks/package.json`
+
+### Step #7 - verify
+
+- create a PR against the main branch
+- verify that CI doesn't fail
+- verify that CI has covered the new version
+- [release the new version of `ng-mocks`](#how-to-release-ng-mocks)

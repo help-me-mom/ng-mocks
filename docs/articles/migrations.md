@@ -10,6 +10,11 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
 
+## From 16 to 17
+
+There are no special cases.
+The update should be straight forward.
+
 ## From 15 to 16
 
 There are no special cases.
