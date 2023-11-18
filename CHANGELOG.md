@@ -1,3 +1,20 @@
+# [14.12.0](https://github.com/ike18t/ng-mocks/compare/v14.11.0...v14.12.0) (2023-11-18)
+
+
+### Bug Fixes
+
+* **ci:** running npm after nvm [#6505](https://github.com/ike18t/ng-mocks/issues/6505) ([5a115a7](https://github.com/ike18t/ng-mocks/commit/5a115a70359d7cf69d663afddc05cb441624c0f8))
+* **docs:** Fixed typo in MockBuilder docs ([3fa9b54](https://github.com/ike18t/ng-mocks/commit/3fa9b54d08bdd64ac0a9837c8181cacb6fc2827e))
+* **MockBuilder:** detecting parent modules to build correct TestBed [#6928](https://github.com/ike18t/ng-mocks/issues/6928) ([2d0012c](https://github.com/ike18t/ng-mocks/commit/2d0012c79b0028bb82cfe5dc13cc91b7fa16967a))
+* **MockBuilder:** respects global rules as they would be chain calls [#6402](https://github.com/ike18t/ng-mocks/issues/6402) ([23d9ba6](https://github.com/ike18t/ng-mocks/commit/23d9ba6876bf9984753e3d8bd80d6605c96cb6dc))
+* **ng-mocks:** a17 support ([ea19983](https://github.com/ike18t/ng-mocks/commit/ea19983476267759c8b18b02bfc22cfc9ab2bd72))
+* **ngMocks:** respects custom errors on lookups [#7041](https://github.com/ike18t/ng-mocks/issues/7041) ([6c78f54](https://github.com/ike18t/ng-mocks/commit/6c78f548a45fe761d9519cae189ffd70bdb629a8))
+
+
+### Features
+
+* **MockBuilder:** supports EnvironmentProviders [#7011](https://github.com/ike18t/ng-mocks/issues/7011) ([b3ca1d4](https://github.com/ike18t/ng-mocks/commit/b3ca1d49f7f282952ae4aad607a7609f165fa11b))
+
 # [14.11.0](https://github.com/ike18t/ng-mocks/compare/v14.10.1...v14.11.0) (2023-06-11)
 
 
