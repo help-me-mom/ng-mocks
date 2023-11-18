@@ -55,3 +55,20 @@ ngMocks.guts(MyComponent, MyModule, BrowserAnimationsModule);
 A kept / mock `BrowserAnimationsModule` causes issues with `fakeAsync`.
 Please open an issue on [GitHub](https://github.com/help-me-mom/ng-mocks/issues),
 if you have a case where `NoopAnimationsModule` isn't a solution.
+
+## Writing tests
+
+In contrast to regular tests, you need to await `fixture.whenStable()` after `fixture.detectChanges()`
+to render noop animations correctly.
+
+Because `fixture.whenStable()` returns a promise, you need to make the whole test `async`.
+
+```ts
+it('should see all elements', async () => { // <-- async
+  // ... configuration
+  fixture.detectChanges(); // <-- detecting changes
+  await fixture.whenStable(); // <-- awaiting animations
+  // ... assertion
+});
+```
+:::
