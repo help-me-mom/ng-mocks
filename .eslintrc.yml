@@ -27,6 +27,7 @@ settings:
         - ./e2e/a14/tsconfig.json
         - ./e2e/a15/tsconfig.json
         - ./e2e/a16/tsconfig.json
+        - ./e2e/a17/tsconfig.json
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json
@@ -57,6 +58,7 @@ overrides:
         - ./e2e/a14/tsconfig.json
         - ./e2e/a15/tsconfig.json
         - ./e2e/a16/tsconfig.json
+        - ./e2e/a17/tsconfig.json
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json

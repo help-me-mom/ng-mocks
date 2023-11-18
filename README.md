@@ -15,6 +15,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 | Angular | ng-mocks | Jasmine | Jest | Ivy |
 | ------: | :------: | :-----: | :--: | :-: |
+|      17 |  latest  |   yes   | yes  | yes |
 |      16 |  latest  |   yes   | yes  | yes |
 |      15 |  latest  |   yes   | yes  | yes |
 |      14 |  latest  |   yes   | yes  | yes |
@@ -73,6 +74,8 @@ An example of a spec for a profile edit component.
 // cover behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
+  // Alternatively, you can enable
+  // automatic resetting in test.ts.
   MockInstance.scope();
 
   // Let's configure TestBed via MockBuilder.
