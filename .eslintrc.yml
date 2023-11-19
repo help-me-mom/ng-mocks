@@ -93,6 +93,7 @@ overrides:
         - 150
 
       '@angular-eslint/no-input-rename': off
+      '@angular-eslint/no-inputs-metadata-property': off
       '@angular-eslint/no-output-rename': off
       '@angular-eslint/no-outputs-metadata-property': off
 

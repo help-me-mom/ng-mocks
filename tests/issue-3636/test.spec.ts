@@ -2,12 +2,11 @@ import { Component, VERSION } from '@angular/core';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
-@Component(
-  {
-    standalone: true,
-    template: ``,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  template: ``,
+})
 class MyComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/3636

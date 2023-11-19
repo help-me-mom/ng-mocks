@@ -82,7 +82,7 @@ export class MyControl implements ControlValueAccessor {
 An advanced example of **a mock FormControl with ReactiveForms** in Angular tests.
 Please, pay attention to comments in the code.
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockReactiveForms/test.spec.ts&initialpath=%3Fspec%3DMockReactiveForms)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockReactiveForms/test.spec.ts&initialpath=%3Fspec%3DMockReactiveForms)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockReactiveForms/test.spec.ts&initialpath=%3Fspec%3DMockReactiveForms)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockReactiveForms/test.spec.ts"
@@ -133,7 +133,7 @@ describe('MockReactiveForms', () => {
 
 A usage example of mock FormControl with ngModel in Angular tests
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockForms/test.spec.ts"

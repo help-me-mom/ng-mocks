@@ -9,14 +9,16 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { MockBuilder } from 'ng-mocks';
 
-@Component(
-  {
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: ` <a [routerLink]="['link']">Link</a> `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    CommonModule,
+    RouterModule,
+  ],
+  template: ` <a [routerLink]="['link']">Link</a> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 class MyComponent {
   constructor(public activatedRoute: ActivatedRoute) {}
 }

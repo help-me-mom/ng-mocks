@@ -38,14 +38,13 @@ class MockComponent {
   public flag = true;
 }
 
-@NgModule(
-  {
-    declarations: [MockComponent, DepComponent],
-    entryComponents: [MockComponent],
-    exports: [MockComponent],
-    imports: [CommonModule],
-  } as never /* TODO remove entryComponents after A16+ support */,
-)
+@NgModule({
+  declarations: [MockComponent, DepComponent],
+  ['entryComponents' as never /* TODO remove entryComponents after A16+ support */]:
+    [MockComponent],
+  exports: [MockComponent],
+  imports: [CommonModule],
+})
 class MockModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/333

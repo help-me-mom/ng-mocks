@@ -10,12 +10,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockDirectives, ngMocks } from 'ng-mocks';
 
-@Directive(
-  {
-    selector: 'base',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Directive({
+  selector: 'base',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class BaseDirective {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();
@@ -23,31 +22,31 @@ class BaseDirective {
   public base5117coverage() {}
 }
 
-@Directive(
-  {
-    selector: 'input',
-    standalone: true,
-    hostDirectives: [BaseDirective],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+@Directive({
+  selector: 'input',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [BaseDirective],
+})
 class InputDirective {
   @Input() public readonly input: string | undefined = undefined;
 
   public input5117coverage() {}
 }
 
-@Directive(
-  {
-    selector: 'output',
-    standalone: true,
-    hostDirectives: [
+@Directive({
+  selector: 'output',
+  ['standalone' as never /* TODO: remove after upgrade to a15 */]:
+    true,
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [
       {
         directive: InputDirective,
         inputs: ['input: customInput'],
       },
     ],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+})
 class OutputDirective {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();
@@ -55,19 +54,18 @@ class OutputDirective {
   public output25117coverage() {}
 }
 
-@Component(
-  {
-    selector: 'target',
-    template: '',
-    hostDirectives: [
+@Component({
+  selector: 'target',
+  template: '',
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [
       {
         directive: OutputDirective,
         inputs: ['input: customInput'],
         outputs: ['output: customOutput'],
       },
     ],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+})
 class TargetComponent {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();

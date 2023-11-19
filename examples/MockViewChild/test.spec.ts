@@ -28,7 +28,7 @@ class ChildComponent {
   `,
 })
 class ParentComponent {
-  @ViewChild('child', {} as any)
+  @ViewChild('child', {} as never)
   public readonly child?: ChildComponent;
 }
 
