@@ -100,6 +100,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'Start a discussion on GitHub',
+              href: 'https://github.com/help-me-mom/ng-mocks/discussions/new/choose',
+            },
+            {
               label: 'Chat on gitter',
               href: 'https://gitter.im/ng-mocks/community',
             },
