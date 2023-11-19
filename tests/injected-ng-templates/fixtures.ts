@@ -10,7 +10,7 @@ import { Component, ContentChild, Input, TemplateRef, ViewChild, ViewContainerRe
   `,
 })
 export class CustomInjectionComponent<T> {
-  @ContentChild('block', {} as any) public injectedBlock?: TemplateRef<any>;
+  @ContentChild('block', {} as never) public injectedBlock?: TemplateRef<any>;
   @Input() public items?: T[];
-  @ViewChild('child', {} as any) public ownChild?: ViewContainerRef;
+  @ViewChild('child', {} as never) public ownChild?: ViewContainerRef;
 }

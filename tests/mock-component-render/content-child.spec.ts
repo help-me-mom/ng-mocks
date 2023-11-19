@@ -29,22 +29,22 @@ class CellDirective {
 class TableComponent {
   @ContentChild('cell', {
     read: CellDirective,
-  } as any)
+  } as never)
   public cell?: CellDirective;
 
   @Input() public data: any[] = [];
 
   @ContentChild(CellDirective, {
     read: TemplateRef,
-  } as any)
+  } as never)
   public declarationTpl?: TemplateRef<CellDirective>;
 
-  @ContentChild('div', {} as any)
+  @ContentChild('div', {} as never)
   public div?: any; // TODO replace with ElementRef<HTMLElement> when A5 dies
 
   @ContentChild('cell', {
     read: TemplateRef,
-  } as any)
+  } as never)
   public idTpl?: TemplateRef<CellDirective>;
 }
 

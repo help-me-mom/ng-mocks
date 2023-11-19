@@ -31,17 +31,17 @@ class MockComponent {
 
   @ContentChildren(MockDirective, {
     read: ViewContainerRef,
-  } as any)
+  } as never)
   public readonly directivesVcr?: QueryList<ViewContainerRef>;
 
   @ContentChild('header', {
     read: TemplateRef,
-  } as any)
+  } as never)
   public readonly id?: TemplateRef<any>;
 
   @ContentChild('header', {
     read: ViewContainerRef,
-  } as any)
+  } as never)
   public readonly idVcr?: ViewContainerRef;
 }
 

@@ -7,7 +7,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   template: '<ng-content></ng-content>',
 })
 class ByAttributeComponent {
-  @ContentChild('[someAttribute]', {} as any)
+  @ContentChild('[someAttribute]', {} as never)
   public readonly contentChild?: any;
 }
 

@@ -14,12 +14,11 @@ import {
 } from 'ng-mocks';
 
 // A simple standalone pipe we are going to mock.
-@Pipe(
-  {
-    name: 'pipe',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Pipe({
+  name: 'pipe',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class StandalonePipe implements PipeTransform {
   transform(value: string | null): string {
     return `${value}:${this.constructor.name}`;
@@ -29,27 +28,30 @@ class StandalonePipe implements PipeTransform {
 }
 
 // A simple dependency component we are going to mock that imports the standalone pipe.
-@Component(
-  {
-    selector: 'dependency',
-    template: 'dependency',
-    standalone: true,
-    imports: [StandalonePipe],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'dependency',
+  template: 'dependency',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    StandalonePipe,
+  ],
+})
 class DependencyComponent {
   public dependency5239() {}
 }
 
 // A standalone component we are going to test.
-@Component(
-  {
-    selector: 'standalone',
-    template: `<dependency></dependency> {{ 'test' | pipe }}`,
-    standalone: true,
-    imports: [DependencyComponent, StandalonePipe],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'standalone',
+  template: `<dependency></dependency> {{ 'test' | pipe }}`,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    DependencyComponent,
+    StandalonePipe,
+  ],
+})
 class StandaloneComponent {
   public standalone5239() {}
 }

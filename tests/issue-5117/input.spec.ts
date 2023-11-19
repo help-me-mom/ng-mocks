@@ -3,30 +3,28 @@ import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Directive(
-  {
-    selector: 'input',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Directive({
+  selector: 'input',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class InputDirective {
   @Input() public readonly input: string | undefined = undefined;
 
   public input5117input() {}
 }
 
-@Component(
-  {
-    selector: 'target',
-    template: '',
-    hostDirectives: [
+@Component({
+  selector: 'target',
+  template: '',
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [
       {
         directive: InputDirective,
         inputs: ['input: customInput'],
       },
     ],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+})
 class TargetComponent {
   @Input() public readonly input: string | undefined = undefined;
 

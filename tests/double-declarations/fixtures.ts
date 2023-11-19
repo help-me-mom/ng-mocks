@@ -55,8 +55,8 @@ export class DivDirective {
   selector: 'base2',
 })
 export class BaseDirective {
-  @ContentChild(DivDirective, {} as any) public contentChildBase?: DivDirective;
-  @ContentChildren(DivDirective, {} as any) public contentChildrenBase?: QueryList<DivDirective>;
+  @ContentChild(DivDirective, {} as never) public contentChildBase?: DivDirective;
+  @ContentChildren(DivDirective, {} as never) public contentChildrenBase?: QueryList<DivDirective>;
 
   @HostBinding('attr.base1') public hostBase1: any;
   @HostBinding('attr.base2') public hostBase2: any;
@@ -87,8 +87,8 @@ export class BaseDirective {
   template: 'override2<ng-content></ng-content>',
 })
 export class OverrideComponent extends BaseDirective {
-  @ContentChild(DivDirective, {} as any) public contentChildOverride?: DivDirective;
-  @ContentChildren(DivDirective, {} as any) public contentChildrenOverride?: QueryList<DivDirective>;
+  @ContentChild(DivDirective, {} as never) public contentChildOverride?: DivDirective;
+  @ContentChildren(DivDirective, {} as never) public contentChildrenOverride?: QueryList<DivDirective>;
 
   @HostBinding('attr.override2') public hostBase2: any;
   @HostBinding('attr.override1') public hostOverride1: any;

@@ -25,7 +25,7 @@ class TplDirective {
   selector: '[mock]',
 })
 class MockDirective {
-  @ContentChild(TplDirective, {} as any)
+  @ContentChild(TplDirective, {} as never)
   public readonly tpl?: TplDirective;
 }
 
@@ -39,7 +39,7 @@ class MockComponent {
 
   @ContentChildren(TplDirective, {
     read: TemplateRef,
-  } as any)
+  } as never)
   public readonly templates?: QueryList<TemplateRef<any>>;
 }
 

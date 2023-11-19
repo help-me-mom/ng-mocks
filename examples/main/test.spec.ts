@@ -70,7 +70,7 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-  @ContentChild('menu', {} as any)
+  @ContentChild('menu', {} as never)
   public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
