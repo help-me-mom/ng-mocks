@@ -2,8 +2,9 @@
 
 The best way would be to discuss an issue or an improvement first:
 
-- [ask a question on gitter](https://gitter.im/ng-mocks/community)
-- [report it as an issue on github](https://github.com/help-me-mom/ng-mocks/issues)
+- [start a discussion on GitHub](https://github.com/help-me-mom/ng-mocks/discussions/new/choose)
+- [report an issue on GitHub](https://github.com/help-me-mom/ng-mocks/issues)
+- [chat on gitter](https://gitter.im/ng-mocks/community)
 
 * [update docs](#update-docs)
 * [Requirements on Mac](#requiements-on-mac)

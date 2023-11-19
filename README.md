@@ -39,9 +39,10 @@ The current version of the library **has been tested** and **can be used** with:
 * Live [example on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/master/?file=/src/test.spec.ts)
 * Live [example on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts)
 
-- [chat on gitter](https://gitter.im/ng-mocks/community)
+- [start a discussion on GitHub](https://github.com/help-me-mom/ng-mocks/discussions/new/choose)
 - **[ask a question on Stackoverflow](https://stackoverflow.com/questions/ask?tags=ng-mocks%20angular%20testing%20mocking)**
 - [report an issue on GitHub](https://github.com/help-me-mom/ng-mocks/issues)
+- [chat on gitter](https://gitter.im/ng-mocks/community)
 
 ## Very short introduction
 
