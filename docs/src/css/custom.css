@@ -52,3 +52,25 @@ main div.container article h5 {
 main div.container article h6 {
   font-size: 1rem;
 }
+
+.sponsor-button {
+  font-size: 0.875rem;
+  display: inline-flex;
+  height: 2.125rem;
+  align-items: center;
+  color: #24292f;
+  background-color: #f6f8fa;
+  border: 0.0625rem solid rgba(31, 35, 40, 0.15);
+  border-radius: 0.375rem;
+  padding: 0 0.75rem;
+}
+
+.sponsor-button:hover {
+  background-color: #f3f4f6;
+}
+
+.sponsor-button-icon {
+  fill: rgb(191, 57, 137);
+  color: rgb(191, 57, 137);
+  margin-right: 0.25rem;
+}
