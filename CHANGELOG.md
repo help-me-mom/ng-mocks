@@ -1,3 +1,10 @@
+## [14.12.1](https://github.com/ike18t/ng-mocks/compare/v14.12.0...v14.12.1) (2023-11-19)
+
+
+### Bug Fixes
+
+* undefined issue with some modules ([8045447](https://github.com/ike18t/ng-mocks/commit/804544735dcfacd8081d0f1f73583d87f8813d6b))
+
 # [14.12.0](https://github.com/ike18t/ng-mocks/compare/v14.11.0...v14.12.0) (2023-11-18)
 
 
