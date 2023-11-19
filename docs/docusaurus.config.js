@@ -32,7 +32,7 @@ module.exports = {
         },
         {
           label: 'Try on CodeSandbox',
-          href: 'https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts',
+          href: 'https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/master/?file=/src/test.spec.ts',
           position: 'left',
         },
         {
@@ -72,7 +72,7 @@ module.exports = {
             },
             {
               label: 'Try on CodeSandbox',
-              href: 'https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts',
+              href: 'https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/master/?file=/src/test.spec.ts',
             },
             {
               label: 'Try on StackBlitz',
