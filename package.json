@@ -211,9 +211,9 @@
     "lib:nx": "cd e2e/nx && npm run build lib"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "17.1.0",
-    "@angular-eslint/eslint-plugin-template": "17.1.0",
-    "@angular-eslint/template-parser": "17.1.0",
+    "@angular-eslint/eslint-plugin": "17.1.1",
+    "@angular-eslint/eslint-plugin-template": "17.1.1",
+    "@angular-eslint/template-parser": "17.1.1",
     "@angular/animations": "17.0.4",
     "@angular/common": "17.0.4",
     "@angular/core": "17.0.4",
