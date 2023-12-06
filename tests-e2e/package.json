@@ -29,7 +29,7 @@
     "@ngrx/store-devtools": "16.3.0",
     "@ngxs/store": "3.8.2",
     "primeng": "16.9.1",
-    "@ngneat/transloco": "6.0.0",
+    "@ngneat/transloco": "6.0.1",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
     "zone.js": "0.13.3"
