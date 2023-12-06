@@ -230,7 +230,7 @@
     "@semantic-release/npm": "11.0.1",
     "@types/core-js": "2.5.8",
     "@types/jasmine": "5.1.4",
-    "@types/jest": "29.5.10",
+    "@types/jest": "29.5.11",
     "@types/karma": "6.3.8",
     "@types/karma-coverage-istanbul-reporter": "2.1.4",
     "@types/karma-jasmine": "4.0.5",
