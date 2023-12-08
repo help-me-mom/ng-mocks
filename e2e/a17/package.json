@@ -45,7 +45,7 @@
     "ng-packagr": "17.0.2",
     "npm": "10.2.5",
     "puppeteer": "21.6.0",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "typescript": "5.2.2"
   },
   "engines": {
