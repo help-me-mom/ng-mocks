@@ -23,7 +23,7 @@
     "@angular/platform-browser": "17.0.6",
     "@angular/platform-browser-dynamic": "17.0.6",
     "@angular/router": "17.0.6",
-    "@ng-select/ng-select": "11.2.0",
+    "@ng-select/ng-select": "12.0.4",
     "@ngrx/effects": "17.0.1",
     "@ngrx/store": "17.0.1",
     "@ngrx/store-devtools": "17.0.1",
