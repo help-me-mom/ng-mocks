@@ -226,7 +226,7 @@
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "9.2.5",
+    "@semantic-release/github": "9.2.6",
     "@semantic-release/npm": "11.0.2",
     "@types/core-js": "2.5.8",
     "@types/jasmine": "5.1.4",
