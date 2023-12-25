@@ -19,11 +19,11 @@ export type MockBuilderParam = string | AnyDeclaration<any> | NgModuleWithProvid
  */
 export function MockBuilder(
   keepDeclaration?: MockBuilderParam | MockBuilderParam[] | null | undefined,
-  itsModuleToMock?: MockBuilderParam | MockBuilderParam[] | null | undefined,
+  itsModuleAndDependenciesToMock?: MockBuilderParam | MockBuilderParam[] | null | undefined,
 ): IMockBuilderExtended;
 
 export function MockBuilder(...args: Array<MockBuilderParam | MockBuilderParam[] | null | undefined>): IMockBuilder {
-  const [keepDeclaration, itsModuleToMock] = args;
+  const [keep, mock] = args;
 
   const instance = new MockBuilderPerformance(args.length < 2 ? { export: true } : { dependency: true });
   const extensions: Map<any, any> = ngMocksUniverse.config.get('MockBuilderExtensions');
@@ -37,16 +37,16 @@ export function MockBuilder(...args: Array<MockBuilderParam | MockBuilderParam[]
     });
   }
 
-  if (keepDeclaration) {
-    for (const declaration of flatten(keepDeclaration)) {
+  if (keep) {
+    for (const declaration of flatten(keep)) {
       instance.keep(declaration, {
         export: true,
         shallow: isStandalone(declaration),
       });
     }
   }
-  if (itsModuleToMock) {
-    for (const declaration of flatten(itsModuleToMock)) {
+  if (mock) {
+    for (const declaration of flatten(mock)) {
       instance.mock(declaration, declaration, {
         export: true,
         exportAll: true,
