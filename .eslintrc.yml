@@ -111,6 +111,7 @@ overrides:
       unicorn/no-null: off
       unicorn/no-this-assignment: off
       unicorn/no-typeof-undefined: off
+      unicorn/no-unnecessary-polyfills: off
       unicorn/no-useless-undefined: off
       unicorn/prefer-array-flat: off
       unicorn/prefer-at: off
