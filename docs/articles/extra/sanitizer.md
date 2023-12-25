@@ -53,15 +53,15 @@ ngMocks.globalMock(DomSanitizer);
 
 // Let ng-mocks know how the mock should be defined
 ngMocks.defaultMock(DomSanitizer, sanitizer => {
-	// Jasmine example
+  // Jasmine example
   sanitizer.sanitize = jasmine.createSpy().and.callFake(v => v);
   // all other methods
 
-	// Jest example
+  // Jest example
   sanitizer.bypassSecurityTrustHtml = jest.fn(v => v);
   // all other methods
 
-	return sanitizer;
+  return sanitizer;
 });
 ```
 

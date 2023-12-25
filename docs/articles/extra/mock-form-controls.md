@@ -36,7 +36,7 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 * [`isMockControlValueAccessor()`](/api/helpers/isMockControlValueAccessor.md)
 * [`isMockValidator()`](/api/helpers/isMockValidator.md)
 
-## Caution
+## Caution about ControlValueAccessor
 
 :::warning Use methods instead of properties
 It is important to implement ControlValueAccessor via methods
@@ -49,13 +49,13 @@ Usually, if you are using properties in a test, you would get `No value accessor
 
 ```ts title="Wrong definition via properties"
 export class MyControl implements ControlValueAccessor {
-	public writeValue = () => {
-	  // some magic
-  };
-	public registerOnChange = () => {
+  public writeValue = () => {
     // some magic
   };
-	public registerOnTouched = () => {
+  public registerOnChange = () => {
+    // some magic
+  };
+  public registerOnTouched = () => {
     // some magic
   };
 }
@@ -75,6 +75,33 @@ export class MyControl implements ControlValueAccessor {
     // some magic
   }
 }
+```
+
+## Caution about ngModel
+
+It's important to call `fixture.whenStable()` in addition to `fixture.detectChanges()`
+if `FormsModule` is kept in a test to let `ngModel` udpate its values correctly.
+
+Because `fixture.whenStable()` returns a promise, the whole test should be `async`.
+
+:::warning wait until fixture is stable
+After calling `fixture.detectChanges()`, make sure to call `await fixture.whenStable()`.
+:::
+
+```ts
+it('changes ngModel values', async () => { // <-- make `it` async
+  // MockRender calls detectChanges by default.
+  const fixture = MockRender(TargetComponent);
+  await fixture.whenStable(); // <-- let ngModel render inputs correctly
+
+  // ... assert old value
+
+  ngMocks.change('.input'', 'newValue');
+  fixture.detectChanges(); // <-- let ngModel render inputs correctly
+  await fixture.whenStable(); // <-- let ngModel render inputs correctly
+
+  // ... assert new value
+});
 ```
 
 ## Advanced example
@@ -135,12 +162,6 @@ A usage example of mock FormControl with ngModel in Angular tests
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
-
-## Caution
-
-:::warning Use async/await with ngModel
-Make sure to await fixture.whenStable() after calling MockRender()
-:::
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockForms/test.spec.ts"
 describe('MockForms', () => {
