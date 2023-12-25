@@ -141,6 +141,11 @@
     },
     {
       "matchFileNames": ["e2e/a6/*"],
+      "matchPackageNames": ["@types/jasmine"],
+      "allowedVersions": "<2.8.23"
+    },
+    {
+      "matchFileNames": ["e2e/a6/*"],
       "matchPackageNames": ["@angular-devkit/build-angular"],
       "allowedVersions": "/^0\\.8\\./"
     },
@@ -152,6 +157,11 @@
         "nodejs/node"
       ],
       "allowedVersions": "<8.10.0"
+    },
+    {
+      "matchFileNames": ["e2e/a7/*"],
+      "matchPackageNames": ["@types/jasmine"],
+      "allowedVersions": "<2.8.23"
     },
     {
       "matchFileNames": ["e2e/a7/*"],
