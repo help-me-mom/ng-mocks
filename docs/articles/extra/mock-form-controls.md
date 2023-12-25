@@ -136,6 +136,12 @@ A usage example of mock FormControl with ngModel in Angular tests
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockForms/test.spec.ts&initialpath=%3Fspec%3DMockForms)
 
+## Caution
+
+:::warning Use async/await with ngModel
+Make sure to await fixture.whenStable() after calling MockRender()
+:::
+
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockForms/test.spec.ts"
 describe('MockForms', () => {
   // Helps to reset customizations after each test.
