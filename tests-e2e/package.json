@@ -28,7 +28,7 @@
     "@ngrx/store": "17.0.1",
     "@ngrx/store-devtools": "17.0.1",
     "@ngxs/store": "3.8.2",
-    "primeng": "17.3.1",
+    "primeng": "17.3.2",
     "@ngneat/transloco": "6.0.4",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
