@@ -243,7 +243,7 @@
     "core-js": "3.35.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
-    "dts-bundle-generator": "9.2.1",
+    "dts-bundle-generator": "9.2.3",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-import-resolver-typescript": "3.6.1",
