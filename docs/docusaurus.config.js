@@ -9,7 +9,7 @@ module.exports = {
   onDuplicateRoutes: 'throw',
   baseUrlIssueBanner: false,
   favicon: 'img/favicon.ico',
-  organizationName: 'ike18t',
+  organizationName: 'help-me-mom',
   projectName: 'ng-mocks',
   themeConfig: {
     announcementBar: {
