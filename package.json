@@ -269,7 +269,7 @@
     "karma-webpack": "5.0.1",
     "lint-staged": "15.2.1",
     "npm": "10.4.0",
-    "prettier": "3.2.2",
+    "prettier": "3.2.5",
     "puppeteer": "21.11.0",
     "rxjs": "7.8.1",
     "semantic-release": "23.0.0",
