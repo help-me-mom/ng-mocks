@@ -44,7 +44,7 @@
     "karma-jasmine-html-reporter": "2.1.0",
     "ng-packagr": "17.2.0",
     "npm": "10.4.0",
-    "puppeteer": "22.2.0",
+    "puppeteer": "22.3.0",
     "ts-node": "10.9.2",
     "typescript": "5.3.3"
   },
