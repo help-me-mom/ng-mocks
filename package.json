@@ -221,7 +221,7 @@
     "@angular/platform-browser": "17.3.0",
     "@angular/platform-browser-dynamic": "17.3.0",
     "@angular/router": "17.3.0",
-    "@commitlint/cli": "19.1.0",
+    "@commitlint/cli": "19.2.0",
     "@commitlint/config-conventional": "19.1.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
