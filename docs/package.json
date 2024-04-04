@@ -13,11 +13,11 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "3.2.0",
-    "@docusaurus/plugin-content-docs": "3.2.0",
-    "@docusaurus/plugin-sitemap": "3.2.0",
-    "@docusaurus/remark-plugin-npm2yarn": "3.2.0",
-    "@docusaurus/theme-classic": "3.2.0",
+    "@docusaurus/core": "3.2.1",
+    "@docusaurus/plugin-content-docs": "3.2.1",
+    "@docusaurus/plugin-sitemap": "3.2.1",
+    "@docusaurus/remark-plugin-npm2yarn": "3.2.1",
+    "@docusaurus/theme-classic": "3.2.1",
     "@mdx-js/react": "3.0.1",
     "clsx": "2.1.0",
     "npm": "10.5.1",
