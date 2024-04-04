@@ -39,7 +39,7 @@
     "ng-packagr": "17.3.0",
     "npm": "10.5.1",
     "puppeteer": "22.6.2",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   },
   "engines": {
     "npm": "10.5.1"
