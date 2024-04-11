@@ -40,7 +40,7 @@
     "npm": "10.5.1",
     "nx": "18.2.4",
     "ts-jest": "29.1.2",
-    "typescript": "5.4.4"
+    "typescript": "5.4.5"
   },
   "engines": {
     "npm": "10.5.1"
