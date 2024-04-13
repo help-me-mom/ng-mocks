@@ -1,3 +1,10 @@
+## [14.12.2](https://github.com/help-me-mom/ng-mocks/compare/v14.12.1...v14.12.2) (2024-04-13)
+
+
+### Bug Fixes
+
+* unable to find instance in case of ng17 control flow ([f6418d7](https://github.com/help-me-mom/ng-mocks/commit/f6418d724a9f82830d90f64c2aced9c0ba00f451)), closes [#7216](https://github.com/help-me-mom/ng-mocks/issues/7216)
+
 ## [14.12.1](https://github.com/ike18t/ng-mocks/compare/v14.12.0...v14.12.1) (2023-11-19)
 
 
