@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 
-import { join } from 'node:path';
+import path from 'node:path';
 
 import { Config } from 'karma';
 import puppeteer from 'puppeteer';
@@ -85,7 +85,7 @@ export default (config: Config) => {
     ],
     frameworks: ['jasmine', 'webpack'],
     junitReporter: {
-      outputDir: join(__dirname, './test-reports'),
+      outputDir: path.join(__dirname, './test-reports'),
       outputFile: 'specs-junit.xml',
       useBrowserName: false,
     },
