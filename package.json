@@ -230,7 +230,7 @@
     "@angular/platform-browser": "18.0.0-next.4",
     "@angular/platform-browser-dynamic": "18.0.0-next.4",
     "@angular/router": "18.0.0-next.4",
-    "@commitlint/cli": "19.2.1",
+    "@commitlint/cli": "19.2.2",
     "@commitlint/config-conventional": "19.1.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
