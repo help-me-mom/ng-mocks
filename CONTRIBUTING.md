@@ -202,7 +202,7 @@ The next step is:
 - update `ng-mocks/.github/dependabot.yml`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.circleci/config.yml`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.eslintrc.yml`, search for `a16` and copy blocks to support `a17`
-- execute `sh docker-compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment
+- execute `sh docker-compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment in `docker-compose.yml` in the command for the new version
 
 ### Step #4 - update ng-mocks dependencies
 

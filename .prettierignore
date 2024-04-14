@@ -6,6 +6,7 @@ renovate.json
 .gitignore
 .prettierignore
 
+.husky/
 dist/
 docs/**/*.md
 docs/.docusaurus
@@ -15,8 +16,8 @@ e2e/*/src/test
 e2e/nx/apps/*/src/app
 e2e/nx/apps/*/src/test
 node_modules/
-tests-e2e/.angular
 test-reports/
+tests-e2e/.angular
 tmp/
 
 **/*.sh

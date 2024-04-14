@@ -15,6 +15,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 | Angular | ng-mocks | Jasmine | Jest | Ivy |
 | ------: | :------: | :-----: | :--: | :-: |
+|      18 |  latest  |   yes   | yes  | yes |
 |      17 |  latest  |   yes   | yes  | yes |
 |      16 |  latest  |   yes   | yes  | yes |
 |      15 |  latest  |   yes   | yes  | yes |
