@@ -27,7 +27,10 @@ const generateFinalQueries = (queries: {
 
   for (const key of Object.keys(queries)) {
     const query: Query & { ngMetadataName?: string } = queries[key];
-    final.push([key, query]);
+
+    if (!query.isViewQuery || isInternalKey(key)) {
+      final.push([key, query]);
+    }
 
     if (!query.isViewQuery && !isInternalKey(key)) {
       scanKeys.push(key);
