@@ -19,7 +19,7 @@
     "@docusaurus/remark-plugin-npm2yarn": "3.2.1",
     "@docusaurus/theme-classic": "3.2.1",
     "@mdx-js/react": "3.0.1",
-    "clsx": "2.1.0",
+    "clsx": "2.1.1",
     "npm": "10.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
