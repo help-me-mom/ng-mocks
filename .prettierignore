@@ -19,6 +19,7 @@ node_modules/
 test-reports/
 tests-e2e/.angular
 tmp/
+transformers/
 
 **/*.sh
 **/*.snap

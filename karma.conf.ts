@@ -5,6 +5,9 @@ import path from 'node:path';
 import { Config } from 'karma';
 import puppeteer from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
+import { Program } from 'typescript';
+
+import { angularJitApplicationTransform } from './transformers/jit-transform.js';
 
 process.env.CHROME_BIN = puppeteer.executablePath();
 
@@ -120,6 +123,9 @@ export default (config: Config) => {
                 options: {
                   configFile: './tsconfig.json',
                   transpileOnly: true,
+                  getCustomTransformers: (program: Program) => ({
+                    before: [angularJitApplicationTransform(program)],
+                  }),
                 },
               },
             ],

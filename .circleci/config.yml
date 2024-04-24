@@ -91,6 +91,7 @@ commands:
           paths:
             - ./e2e/<< parameters.dir >>/node_modules
             - ~/.cache/puppeteer
+            - ./transformers
   test:
     parameters:
       dir:
@@ -164,6 +165,7 @@ jobs:
           paths:
             - ./node_modules
             - ~/.cache/puppeteer
+            - ./transformers
       - run:
           name: Prettier
           command: npm run prettier:check
@@ -172,7 +174,7 @@ jobs:
           command: npx commitlint -V --from=origin/master
       - run:
           name: Lint code style
-          command: npm run lint -- --ignore-pattern e2e/ --ignore-pattern tests-e2e/
+          command: npm run lint -- --ignore-pattern e2e/ --ignore-pattern tests-e2e/ --ignore-pattern transformers/
       - run:
           name: Lint typescript
           command: npm run ts:check
@@ -250,6 +252,7 @@ jobs:
                 paths:
                   - ./tests-e2e/node_modules
                   - ~/.cache/puppeteer
+                  - ./transformers
             - run:
                 name: E2E
                 command: npm run e2e
@@ -282,6 +285,7 @@ jobs:
                 paths:
                   - ./docs/node_modules
                   - ~/.cache/puppeteer
+                  - ./transformers
             - run:
                 name: Docs
                 command: npm run build:docs
@@ -368,6 +372,7 @@ jobs:
                   - ./e2e/a5es5/node_modules
                   - ~/.cache/puppeteer
                   - /ProgramData/nvm/temp
+                  - ./transformers
             - run:
                 name: Spreading Build
                 command: |
