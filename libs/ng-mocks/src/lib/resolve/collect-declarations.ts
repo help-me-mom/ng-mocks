@@ -1,7 +1,7 @@
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
-import { AnyDeclaration, DirectiveIo } from '../common/core.types';
+import { DirectiveIo } from '../common/core.types';
 import funcDirectiveIoBuild from '../common/func.directive-io-build';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
 
@@ -54,38 +54,6 @@ const createDeclarations = (parent: Partial<Declaration>): Declaration => ({
   queries: parent.queries ? { ...parent.queries } : {},
   decorators: parent.decorators ? [...parent.decorators] : [],
 });
-
-const parseParameters = (
-  def: {
-    __parameters__?: Array<null | Array<
-      | {
-          attributeName: string;
-          ngMetadataName: 'Attribute';
-        }
-      | {
-          token: AnyDeclaration<any>;
-          ngMetadataName: 'Inject';
-        }
-      | {
-          ngMetadataName: 'Optional';
-        }
-    >>;
-  },
-  declaration: Declaration,
-): void => {
-  if (Object.prototype.hasOwnProperty.call(def, '__parameters__') && def.__parameters__) {
-    for (const decorators of def.__parameters__) {
-      for (const decorator of decorators || []) {
-        if (
-          decorator.ngMetadataName === 'Attribute' &&
-          declaration.attributes.indexOf(decorator.attributeName) === -1
-        ) {
-          declaration.attributes.push(decorator.attributeName);
-        }
-      }
-    }
-  }
-};
 
 const parseAnnotations = (
   def: {
@@ -452,7 +420,6 @@ const parse = (def: any): any => {
   const parentDeclarations = parent ? parse(parent) : {};
   const declaration = createDeclarations(parentDeclarations);
   coreDefineProperty(def, '__ngMocksParsed', true);
-  parseParameters(def, declaration);
   parseAnnotations(def, declaration);
   parseDecorators(def, declaration);
   parsePropDecorators(def, declaration);
