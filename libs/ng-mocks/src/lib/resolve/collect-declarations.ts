@@ -208,11 +208,7 @@ const parsePropMetadataParserHostBinding = (
   if (!declaration.host[key]) {
     declaration.host[key] = prop;
   }
-  declaration.hostBindings.push([
-    prop,
-    decorator.hostPropertyName || prop,
-    ...(decorator.args ? [decorator.args] : []),
-  ]);
+  declaration.hostBindings.push([prop, decorator.hostPropertyName || prop, decorator.args]);
 };
 
 const parsePropMetadataParserHostListener = (
@@ -228,7 +224,7 @@ const parsePropMetadataParserHostListener = (
   if (!declaration.host[key]) {
     declaration.host[key] = `${prop}($event)`;
   }
-  declaration.hostListeners.push([prop, decorator.eventName || prop, ...(decorator.args ? [decorator.args] : [])]);
+  declaration.hostListeners.push([prop, decorator.eventName || prop]);
 };
 
 const parsePropMetadataMap: any = {
