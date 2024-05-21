@@ -1,5 +1,7 @@
 const path = require('node:path');
 
+const { angularJitApplicationTransform } = require('./transformers/jit-transform');
+
 module.exports = [
   {
     mode: process.env.MODE || 'production',
@@ -25,6 +27,9 @@ module.exports = [
               options: {
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.build.cjs.json'),
                 transpileOnly: true,
+                getCustomTransformers: program => ({
+                  before: [angularJitApplicationTransform(program)],
+                }),
               },
             },
           ],
@@ -62,6 +67,9 @@ module.exports = [
               options: {
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.build.mjs.json'),
                 transpileOnly: true,
+                getCustomTransformers: program => ({
+                  before: [angularJitApplicationTransform(program)],
+                }),
               },
             },
           ],
