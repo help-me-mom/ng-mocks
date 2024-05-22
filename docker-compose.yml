@@ -192,7 +192,7 @@ services:
       - --no-audit
 
   a16:
-    image: satantime/puppeteer-node:18.20.2
+    image: satantime/puppeteer-node:18.20.3
     working_dir: /app
     volumes:
       - ./e2e/a16:/app
