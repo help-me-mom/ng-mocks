@@ -16,13 +16,13 @@
     "test:jest:debug": "npm run test:jest -- -i --watch"
   },
   "dependencies": {
-    "@angular/common": "17.3.9",
-    "@angular/compiler": "17.3.9",
-    "@angular/core": "17.3.9",
-    "@angular/forms": "17.3.9",
-    "@angular/platform-browser": "17.3.9",
-    "@angular/platform-browser-dynamic": "17.3.9",
-    "@angular/router": "17.3.9",
+    "@angular/common": "17.3.10",
+    "@angular/compiler": "17.3.10",
+    "@angular/core": "17.3.10",
+    "@angular/forms": "17.3.10",
+    "@angular/platform-browser": "17.3.10",
+    "@angular/platform-browser-dynamic": "17.3.10",
+    "@angular/router": "17.3.10",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
     "zone.js": "0.14.6"
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "17.3.8",
     "@angular/cli": "17.3.8",
-    "@angular/compiler-cli": "17.3.9",
+    "@angular/compiler-cli": "17.3.10",
     "@types/jasmine": "5.1.4",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.12",
