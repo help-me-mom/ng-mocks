@@ -393,6 +393,22 @@ describe('MockComponent', () => {
           ngMetadataName: 'ContentChildren',
         }),
       ],
+      o3: [
+        jasmine.objectContaining({
+          selector: 'i3',
+          isViewQuery: true,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      o4: [
+        jasmine.objectContaining({
+          selector: 'i4',
+          isViewQuery: true,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChildren',
+        }),
+      ],
       o5: [
         jasmine.objectContaining({
           selector: 'i5',
@@ -407,6 +423,22 @@ describe('MockComponent', () => {
           isViewQuery: false,
           read: ElementRef,
           ngMetadataName: 'ContentChildren',
+        }),
+      ],
+      o7: [
+        jasmine.objectContaining({
+          selector: 'i7',
+          isViewQuery: true,
+          read: ElementRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      o8: [
+        jasmine.objectContaining({
+          selector: 'i8',
+          isViewQuery: true,
+          read: ElementRef,
+          ngMetadataName: 'ViewChildren',
         }),
       ],
 
