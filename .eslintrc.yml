@@ -189,6 +189,7 @@ overrides:
           pathGroups:
             - pattern: '@angular/**'
               group: external
+      import/no-unresolved: off
       unused-imports/no-unused-imports: error
       prefer-arrow/prefer-arrow-functions:
         - error
