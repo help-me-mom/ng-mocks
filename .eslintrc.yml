@@ -123,6 +123,7 @@ overrides:
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
       unicorn/prefer-spread: off
+      unicorn/prefer-string-raw: off
       unicorn/prefer-string-replace-all: off
       unicorn/prefer-switch: off
       unicorn/prefer-top-level-await: off
