@@ -21,20 +21,20 @@ and click on the "Edit this page" link at the bottom of the page.
 ### Requirements on Mac
 
 - install `docker`: https://hub.docker.com
-- install `docker-compose`: https://docs.docker.com/compose/install/
+- install `compose`: https://docs.docker.com/compose/install/
 - install `nvm`: https://github.com/nvm-sh/nvm#installing-and-updating
 
 ### Requirements on Linux
 
 - install `docker`: https://hub.docker.com
-- install `docker-compose`: https://docs.docker.com/compose/install/
+- install `compose`: https://docs.docker.com/compose/install/
 - install `nvm`: https://github.com/nvm-sh/nvm#installing-and-updating
 
 ### Requirements on Windows
 
 - install `Git BASH`: https://gitforwindows.org
 - install `docker` for `WSL`: https://docs.docker.com/desktop/windows/wsl/
-- install `docker-compose`: https://docs.docker.com/compose/install/
+- install `compose`: https://docs.docker.com/compose/install/
 - install `nvm`: https://github.com/nvm-sh/nvm#installing-and-updating
 
 ## Development
@@ -48,7 +48,7 @@ To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Win
 - execute
 
   ```shell
-  sh ./docker-compose.sh
+  sh ./compose.sh
   ```
 
 - it will take a while, but afterwards you have all dependencies installed
@@ -196,18 +196,18 @@ The next step is:
 ### Step #3 - update scripts
 
 - update `ng-mocks/package.json`, search for `a16` and extended scripts to support `a17`
-- update `ng-mocks/docker-compose.yml`, search for `a16` and copy blocks to support `a17` with the right node version
-- update `ng-mocks/docker-compose.sh`, search for `a16` and copy blocks to support `a17` with the right command to install `puppeteer`
+- update `ng-mocks/compose.yml`, search for `a16` and copy blocks to support `a17` with the right node version
+- update `ng-mocks/compose.sh`, search for `a16` and copy blocks to support `a17` with the right command to install `puppeteer`
 - update `ng-mocks/.dockerignore`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.github/dependabot.yml`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.circleci/config.yml`, search for `a16` and copy blocks to support `a17`
 - update `ng-mocks/.eslintrc.yml`, search for `a16` and copy blocks to support `a17`
-- execute `sh docker-compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment in `docker-compose.yml` in the command for the new version
+- execute `sh compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment in `compose.yml` in the command for the new version
 
 ### Step #4 - update ng-mocks dependencies
 
 - update `ng-mocks/package.json` to point to the new angular version in dependencies
-- execute `sh docker-compose.sh root` in `ng-mocks` to install the dependencies
+- execute `sh compose.sh root` in `ng-mocks` to install the dependencies
 
 ### Step #5 - verify that`ng-mocks` does not fail with the new version
 
