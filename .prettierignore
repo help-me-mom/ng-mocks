@@ -1,10 +1,11 @@
-CHANGELOG.md
-renovate.json
 .browserslistrc
 .dockerignore
 .eslintignore
 .gitignore
 .prettierignore
+CHANGELOG.md
+CODEOWNERS
+renovate.json
 
 .husky/
 dist/
