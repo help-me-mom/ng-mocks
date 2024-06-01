@@ -231,7 +231,7 @@ overrides:
   - files:
       - '*.json'
     extends:
-      - 'plugin:json/recommended'
+      - 'plugin:json/recommended-legacy'
       - 'plugin:prettier/recommended'
 
   - files:
@@ -244,7 +244,7 @@ overrides:
       - 'tsconfig.json'
       - 'tsconfig.*.json'
     extends:
-      - 'plugin:json/recommended-with-comments'
+      - 'plugin:json/recommended-with-comments-legacy'
       - 'plugin:prettier/recommended'
 
   - files:
