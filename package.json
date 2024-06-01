@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "npm": "npm",
-    "postinstall": "husky install",
     "release": "export $(cat .env) && semantic-release",
     "build": "npm run clean && npm run build:webpack && npm run build:types && cp CHANGELOG.md dist/libs/ng-mocks && cp README.md dist/libs/ng-mocks && cp LICENSE dist/libs/ng-mocks && cp libs/ng-mocks/package.json dist/libs/ng-mocks/package.json && cp libs/ng-mocks/migrations.json dist/libs/ng-mocks/migrations.json && cp examples/main/test.spec.ts dist/libs/ng-mocks/example.spec.ts",
     "build:dev": "MODE=development npm run build",
