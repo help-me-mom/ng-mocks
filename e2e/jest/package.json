@@ -30,7 +30,7 @@
     "@angular/cli": "17.3.8",
     "@angular/compiler-cli": "17.3.10",
     "@types/jest": "29.5.12",
-    "@types/node": "20.12.13",
+    "@types/node": "20.12.14",
     "jest": "29.7.0",
     "jest-preset-angular": "14.1.0",
     "ng-packagr": "17.3.0",
