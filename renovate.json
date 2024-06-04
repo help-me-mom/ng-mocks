@@ -80,7 +80,7 @@
     {
       "matchFileNames": [
         ".circleci/config.yml",
-        "docker-compose.yml"
+        "compose.yml"
       ],
       "matchPackageNames": [
         "satantime/puppeteer-node",

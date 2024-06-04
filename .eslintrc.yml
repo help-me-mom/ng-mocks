@@ -123,6 +123,7 @@ overrides:
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
       unicorn/prefer-spread: off
+      unicorn/prefer-string-raw: off
       unicorn/prefer-string-replace-all: off
       unicorn/prefer-switch: off
       unicorn/prefer-top-level-await: off
@@ -230,7 +231,7 @@ overrides:
   - files:
       - '*.json'
     extends:
-      - 'plugin:json/recommended'
+      - 'plugin:json/recommended-legacy'
       - 'plugin:prettier/recommended'
 
   - files:
@@ -243,7 +244,7 @@ overrides:
       - 'tsconfig.json'
       - 'tsconfig.*.json'
     extends:
-      - 'plugin:json/recommended-with-comments'
+      - 'plugin:json/recommended-with-comments-legacy'
       - 'plugin:prettier/recommended'
 
   - files:

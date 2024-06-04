@@ -1,3 +1,10 @@
+# [14.13.0](https://github.com/help-me-mom/ng-mocks/compare/v14.12.2...v14.13.0) (2024-06-01)
+
+
+### Features
+
+* a18 support ([e2c1dff](https://github.com/help-me-mom/ng-mocks/commit/e2c1dffb189a451e933bb04aa052a55019ffb341))
+
 ## [14.12.2](https://github.com/help-me-mom/ng-mocks/compare/v14.12.1...v14.12.2) (2024-04-13)
 
 

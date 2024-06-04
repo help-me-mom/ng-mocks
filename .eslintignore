@@ -1,9 +1,10 @@
-CHANGELOG.md
-renovate.json
 .dockerignore
 .eslintignore
 .gitignore
 .prettierignore
+CHANGELOG.md
+CODEOWNERS
+renovate.json
 
 dist/
 docs/.docusaurus

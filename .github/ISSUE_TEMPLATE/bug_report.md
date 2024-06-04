@@ -3,7 +3,6 @@ name: Bug Report
 about: Use this template for reporting bugs.
 title: 'Bug: '
 labels: bug
-assignees: satanTime
 ---
 
 ### Description of the bug
