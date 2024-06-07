@@ -31,7 +31,7 @@
     "primeng": "17.18.0",
     "@ngneat/transloco": "6.0.4",
     "rxjs": "7.8.1",
-    "tslib": "2.6.2",
+    "tslib": "2.6.3",
     "zone.js": "0.14.7"
   },
   "devDependencies": {
