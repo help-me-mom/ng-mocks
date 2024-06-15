@@ -79,6 +79,7 @@ describe('ngxs:real', () => {
 describe('ngxs:MockBuilder', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule)
+      .keep(Store)
       .keep(NgxsModule.forRoot().ngModule)
       .keep(NgxsModule.forFeature().ngModule),
   );
