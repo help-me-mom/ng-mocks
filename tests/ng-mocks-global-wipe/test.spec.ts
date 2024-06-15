@@ -80,7 +80,7 @@ describe('ng-mocks-global-replace', () => {
         '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.point.componentInstance.name).toEqual(
-        undefined as any,
+        undefined as never,
       );
     });
   });
@@ -96,7 +96,7 @@ describe('ng-mocks-global-replace', () => {
         '<target-ng-mocks-global-wipe></target-ng-mocks-global-wipe>',
       );
       expect(fixture.point.componentInstance.name).toEqual(
-        undefined as any,
+        undefined as never,
       );
     });
   });

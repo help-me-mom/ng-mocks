@@ -16,7 +16,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: 'child',
 })
 class ChildComponent {
-  @ContentChild('something', {} as any)
+  @ContentChild('something', {} as never)
   public injectedSomething: TemplateRef<void> | undefined;
 
   @Input()

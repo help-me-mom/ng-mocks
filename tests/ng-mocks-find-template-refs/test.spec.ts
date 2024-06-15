@@ -20,7 +20,7 @@ class NoSelectorService {}
 })
 class NoAttributeSelectorDirective {}
 
-@Directive({} as any)
+@Directive({} as never)
 class NoSelectorDirective {}
 
 @Directive({

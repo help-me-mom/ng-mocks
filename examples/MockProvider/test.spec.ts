@@ -83,7 +83,7 @@ describe('MockProvider', () => {
       fixture.point.injector.get(Dependency2Service).echo(),
     ).toBeUndefined();
     expect(fixture.point.injector.get(OBJ_TOKEN)).toBe(
-      mockObj as any,
+      mockObj as never,
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
     expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');

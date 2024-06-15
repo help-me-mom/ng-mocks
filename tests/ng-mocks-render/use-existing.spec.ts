@@ -37,7 +37,7 @@ class MockDirective {
   template: '',
 })
 class MockComponent {
-  @ContentChild(TplDirective, {} as any)
+  @ContentChild(TplDirective, {} as never)
   public readonly directive?: TplDirective;
 }
 

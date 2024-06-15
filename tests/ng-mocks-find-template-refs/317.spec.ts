@@ -7,7 +7,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: 'target',
 })
 class TargetComponent {
-  @ContentChild('tpl', {} as any)
+  @ContentChild('tpl', {} as never)
   public readonly tpl?: TemplateRef<any>;
 }
 

@@ -33,7 +33,7 @@ class ChildComponent {
   template: '<child></child>',
 })
 class TargetComponent implements AfterViewInit {
-  @ViewChild(ChildComponent, {} as any)
+  @ViewChild(ChildComponent, {} as never)
   protected child?: ChildComponent;
 
   public ngAfterViewInit() {

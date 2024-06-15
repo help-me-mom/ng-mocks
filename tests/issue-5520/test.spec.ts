@@ -27,14 +27,15 @@ describe('issue-5520', () => {
   })
   class DependencyModule {}
 
-  @Component(
-    {
-      selector: 'standalone',
-      standalone: true,
-      template: '<dependency></dependency>',
-      imports: [DependencyModule],
-    } as never /* TODO: remove after upgrade to a15 */,
-  )
+  @Component({
+    selector: 'standalone',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      true,
+    template: '<dependency></dependency>',
+    ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+      DependencyModule,
+    ],
+  })
   class StandaloneComponent {
     standalone5520() {}
   }

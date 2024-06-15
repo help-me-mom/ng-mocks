@@ -77,7 +77,7 @@ describe('ng-mocks-default-mock:builder:overrides', () => {
       })
       .mock(TargetService, {
         echo: () => 'overrideEcho',
-        name: 'overrideName' as any,
+        name: 'overrideName' as never,
       });
   });
 

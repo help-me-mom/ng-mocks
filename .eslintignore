@@ -1,13 +1,15 @@
-CHANGELOG.md
-renovate.json
 .dockerignore
 .eslintignore
 .gitignore
 .prettierignore
+CHANGELOG.md
+CODEOWNERS
+renovate.json
 
 dist/
-docs/articles/**/*.md
 docs/.docusaurus
+docs/articles/**/*.md
+docs/src/css
 e2e/*/.angular
 e2e/*/src/app
 e2e/*/src/test

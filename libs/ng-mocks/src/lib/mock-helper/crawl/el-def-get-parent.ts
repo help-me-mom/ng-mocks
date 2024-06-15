@@ -24,6 +24,10 @@ const getScanViewRefRootNodes = (node: any, child: any): Array<[number, any]> =>
   const result: Array<[number, any]> = [];
   for (let vrIndex = 0; vrIndex < vcr.length; vrIndex += 1) {
     const vr = vcr.get(vrIndex);
+    if (!vr) {
+      continue;
+    }
+
     for (let rnIndex = 0; rnIndex < (vr as any).rootNodes.length; rnIndex += 1) {
       result.push([rnIndex, (vr as any).rootNodes[rnIndex]]);
     }

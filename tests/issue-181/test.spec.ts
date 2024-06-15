@@ -15,7 +15,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: '<ng-content></ng-content>',
 })
 class TargetComponent {
-  @ContentChild('header', {} as any)
+  @ContentChild('header', {} as never)
   public header: any;
 }
 
@@ -25,7 +25,7 @@ class TargetComponent {
   selector: '[appTarget]',
 })
 class TargetDirective {
-  @ContentChild('header', {} as any)
+  @ContentChild('header', {} as never)
   public header: any;
 }
 

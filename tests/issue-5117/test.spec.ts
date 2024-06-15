@@ -10,13 +10,13 @@ import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Directive(
-  {
-    selector: 'target1',
-    standalone: true,
-    hostDirectives: [],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+@Directive({
+  selector: 'target1',
+  ['standalone' as never /* TODO: remove after upgrade to a15 */]:
+    true,
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [],
+})
 class Target1Directive {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();
@@ -24,13 +24,13 @@ class Target1Directive {
   public target15117() {}
 }
 
-@Directive(
-  {
-    selector: 'target2',
-    standalone: true,
-    hostDirectives: [Target1Directive],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+@Directive({
+  selector: 'target2',
+  ['standalone' as never /* TODO: remove after upgrade to a15 */]:
+    true,
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [Target1Directive],
+})
 class Target2Directive {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();
@@ -38,19 +38,18 @@ class Target2Directive {
   public target25117() {}
 }
 
-@Component(
-  {
-    selector: 'target',
-    template: '',
-    hostDirectives: [
+@Component({
+  selector: 'target',
+  template: '',
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [
       {
         directive: Target2Directive,
         inputs: ['input: customInput'],
         outputs: ['output: customOutput'],
       },
     ],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+})
 class TargetComponent {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();

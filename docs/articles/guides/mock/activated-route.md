@@ -8,7 +8,9 @@ When we are talking about mocking `ActivatedRoute`,
 we mean a solution to provide stub params in the snapshot of `ActivatedRoute`
 which are used in the component under test.
 
-let's assume we have the next `TargetComponent` component,
+## activatedRoute.snapshot
+
+Let's assume we have the next `TargetComponent` component,
 which relies on the `paramId` of the `ActivatedRoute` snapshot. 
 
 ```ts
@@ -30,35 +32,56 @@ class TargetComponent {
 In our test as a mock `ActivatedRoute`, we would like to provide `paramValue` as `paramId`.
 To do so, we can use [`MockInstance`](/api/MockInstance.md).
 
-The first step is to call a spy when someone wants to access `snapshot`: 
+The first step is to call a spy when someone wants to access `snapshot`,
+and the second step is to return stub params:
 
 ```ts
-// for jasmine
-MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get');
+it('works with snapshot from ActivatedRoute', () => {
+  // for jasmine
+  // mocking the getter of ActivatedRoute.snapshot
+  MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get')
+    // using jasmine.spy.and.returnValue to customize what the getter returns.
+    .and.returnValue({
+      paramMap: new Map([['paramId', 'paramValue']]),
+    });
+  // for jest
+  // mocking the getter of ActivatedRoute.snapshot
+  MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get')
+    // using jest.fn.mockReturnValue to customize what the getter returns.
+    .mockReturnValue({
+      paramMap: new Map([['paramId', 'paramValue']]),
+    });
 
-// for jest
-MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get');
-```
-
-The second step is to return the stub params:
-
-```ts
-// for jasmine
-MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get')
-  .and.returnValue({
-    paramMap: new Map([['paramId', 'paramValue']]),
-  });
-
-// for jest
-MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get')
-  .mockReturnValue({
-    paramMap: new Map([['paramId', 'paramValue']]),
-  });
+  // the rest of the test
+  // ...
+});
 ```
 
 Profit. Now, when someone accesses `snapshot` of `ActivatedRoute`, the spy will be called,
 which returns a stub `paramMap` with the params we wanted.
 
+## activatedRoute.params
+
+If a component relies on `ActivatedRoute.params` and they should be mocked,
+then the approach is very similar to be [above one](#activatedroutesnapshot): 
+
+```ts
+it('works with params from ActivatedRoute', () => {
+  // for jasmine
+  // mocking the getter of ActivatedRoute.snapshot
+  MockInstance(ActivatedRoute, 'params', jasmine.createSpy(), 'get')
+    // using jasmine.spy.and.returnValue to customize what the getter returns.
+    .and.returnValue(of({paramId: 'paramValue'});
+  // for jest
+  // mocking the getter of ActivatedRoute.snapshot
+  MockInstance(ActivatedRoute, 'params', jest.fn(), 'get')
+    // using jest.fn.mockReturnValue to customize what the getter returns.
+    .mockReturnValue(of({paramId: 'paramValue'});
+
+  // the rest of the test
+  // ...
+});
+```
 
 ## RouterModule.forRoot
 
@@ -91,7 +114,7 @@ beforeEach(() => MockBuilder(
 
 ## Live example how to mock ActivatedRoute
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/MockActivatedRoute/test.spec.ts&initialpath=%3Fspec%3DMockActivatedRoute)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockActivatedRoute/test.spec.ts&initialpath=%3Fspec%3DMockActivatedRoute)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockActivatedRoute/test.spec.ts&initialpath=%3Fspec%3DMockActivatedRoute)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockActivatedRoute/test.spec.ts"

@@ -7,7 +7,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
   template: '<ng-content></ng-content>',
 })
 class TargetComponent {
-  @ContentChild('s-e_-_ri23sTo 12 o#ltTem_~_plate_', {} as any)
+  @ContentChild('s-e_-_ri23sTo 12 o#ltTem_~_plate_', {} as never)
   public readonly seriesTooltipTemplate?: TemplateRef<any>;
 }
 

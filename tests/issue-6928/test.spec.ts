@@ -40,14 +40,16 @@ describe('issue-6928', () => {
   })
   class SharedModule {}
 
-  @Component(
-    {
-      selector: 'app-standalone',
-      template: '<app-shared1></app-shared1>',
-      standalone: true,
-      imports: [CommonModule, SharedModule],
-    } as never /* TODO: remove after upgrade to a14 */,
-  )
+  @Component({
+    selector: 'app-standalone',
+    template: '<app-shared1></app-shared1>',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      true,
+    ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+      CommonModule,
+      SharedModule,
+    ],
+  })
   class StandaloneComponent {}
 
   @Component({
@@ -60,9 +62,9 @@ describe('issue-6928', () => {
   @NgModule({
     imports: [
       CommonModule,
-      StandaloneComponent,
+      StandaloneComponent as never /* TODO: remove after upgrade to a14 */,
       SharedModule,
-    ] as never /* TODO: remove after upgrade to a14 */,
+    ],
     declarations: [MyComponent],
   })
   class AppModule {}
@@ -70,12 +72,12 @@ describe('issue-6928', () => {
   describe('missing module import', () => {
     it('throws on 2 declarations w/o ng-mocks', () =>
       expect(() => {
-        TestBed.configureTestingModule(
-          {
-            imports: [StandaloneComponent],
-            declarations: [MyComponent, Shared2Component],
-          } as never /* TODO: remove after upgrade to a14 */,
-        ).compileComponents();
+        TestBed.configureTestingModule({
+          imports: [
+            StandaloneComponent as never /* TODO: remove after upgrade to a14 */,
+          ],
+          declarations: [MyComponent, Shared2Component],
+        }).compileComponents();
         TestBed.createComponent(MyComponent).detectChanges();
       }).toThrowError(
         /is part of the declarations of 2 modules: DynamicTestModule/,
@@ -83,15 +85,17 @@ describe('issue-6928', () => {
 
     it('handles TestBed correctly w/ ng-mocks', () => {
       expect(() => {
-        TestBed.configureTestingModule(
-          {
-            imports: [MockComponent(StandaloneComponent)],
-            declarations: [
-              MyComponent,
-              MockComponent(Shared2Component),
-            ],
-          } as never /* TODO: remove after upgrade to a14 */,
-        ).compileComponents();
+        TestBed.configureTestingModule({
+          imports: [
+            MockComponent(
+              StandaloneComponent,
+            ) as never /* TODO: remove after upgrade to a14 */,
+          ],
+          declarations: [
+            MyComponent,
+            MockComponent(Shared2Component),
+          ],
+        }).compileComponents();
         TestBed.createComponent(MyComponent).detectChanges();
       }).not.toThrow();
     });
@@ -110,26 +114,27 @@ describe('issue-6928', () => {
   describe('correct module import', () => {
     it('passes w/o ng-mocks', () =>
       expect(() => {
-        TestBed.configureTestingModule(
-          {
-            imports: [StandaloneComponent, SharedModule],
-            declarations: [MyComponent],
-          } as never /* TODO: remove after upgrade to a14 */,
-        ).compileComponents();
+        TestBed.configureTestingModule({
+          imports: [
+            StandaloneComponent as never /* TODO: remove after upgrade to a14 */,
+            SharedModule,
+          ],
+          declarations: [MyComponent],
+        }).compileComponents();
         TestBed.createComponent(MyComponent).detectChanges();
       }).not.toThrow());
 
     it('passes w/ ng-mocks', () =>
       expect(() => {
-        TestBed.configureTestingModule(
-          {
-            imports: [
-              MockComponent(StandaloneComponent),
-              MockModule(SharedModule),
-            ],
-            declarations: [MyComponent],
-          } as never /* TODO: remove after upgrade to a14 */,
-        ).compileComponents();
+        TestBed.configureTestingModule({
+          imports: [
+            MockComponent(
+              StandaloneComponent,
+            ) as never /* TODO: remove after upgrade to a14 */,
+            MockModule(SharedModule),
+          ],
+          declarations: [MyComponent],
+        }).compileComponents();
         TestBed.createComponent(MyComponent).detectChanges();
       }).not.toThrow());
 

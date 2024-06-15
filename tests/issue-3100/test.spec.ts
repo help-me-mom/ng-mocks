@@ -9,12 +9,11 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Directive(
-  {
-    selector: '[testDirective]',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Directive({
+  selector: '[testDirective]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class TestDirective implements AfterViewInit {
   @Input() color = 'red';
 
@@ -25,14 +24,15 @@ class TestDirective implements AfterViewInit {
   }
 }
 
-@Component(
-  {
-    selector: 'app-target',
-    standalone: true,
-    template: `<a testDirective>name: {{ name }}</a>`,
-    imports: [TestDirective],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'app-target',
+  template: `<a testDirective>name: {{ name }}</a>`,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    TestDirective,
+  ],
+})
 class TargetComponent {
   @Input() public readonly name: string = '';
 }

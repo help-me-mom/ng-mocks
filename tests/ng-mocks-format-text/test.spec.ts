@@ -54,13 +54,13 @@ describe('ng-mocks-format-text', () => {
     // nested arrays as strings
     {
       expect(
-        ngMocks.formatText([ngMocks.findAll('div') as any]),
+        ngMocks.formatText([ngMocks.findAll('div') as never]),
       ).toEqual(['b1b2d1 d2']);
     }
   });
 
   it('handles null as an empty string', () => {
-    expect(ngMocks.formatText(null as any)).toEqual('');
+    expect(ngMocks.formatText(null as never)).toEqual('');
   });
 
   it('handles broken html nodes as an empty string', () => {

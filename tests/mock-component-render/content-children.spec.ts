@@ -31,22 +31,22 @@ class CellDirective {
 class TableComponent {
   @ContentChildren('cell', {
     read: CellDirective,
-  } as any)
+  } as never)
   public cells?: QueryList<CellDirective>;
 
   @Input() public data: any[] = [];
 
   @ContentChildren(CellDirective, {
     read: TemplateRef,
-  } as any)
+  } as never)
   public declarationTpls?: QueryList<TemplateRef<CellDirective>>;
 
-  @ContentChildren('div', {} as any)
+  @ContentChildren('div', {} as never)
   public divs?: QueryList<any>; // TODO replace with ElementRef<HTMLElement> when A5 dies
 
   @ContentChildren('cell', {
     read: TemplateRef,
-  } as any)
+  } as never)
   public idTpls?: QueryList<TemplateRef<CellDirective>>;
 }
 

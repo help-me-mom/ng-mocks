@@ -26,14 +26,15 @@ class TranslateModule {}
 
 ngMocks.globalKeep(TranslateModule);
 
-@Component(
-  {
-    selector: 'standalone',
-    standalone: true,
-    template: `{{ name | translate }}`,
-    imports: [TranslateModule],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'standalone',
+  template: `{{ name | translate }}`,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    TranslateModule,
+  ],
+})
 class StandaloneComponent {
   @Input() public readonly name: string = '';
 }

@@ -1,3 +1,24 @@
+# [14.13.0](https://github.com/help-me-mom/ng-mocks/compare/v14.12.2...v14.13.0) (2024-06-01)
+
+
+### Features
+
+* a18 support ([e2c1dff](https://github.com/help-me-mom/ng-mocks/commit/e2c1dffb189a451e933bb04aa052a55019ffb341))
+
+## [14.12.2](https://github.com/help-me-mom/ng-mocks/compare/v14.12.1...v14.12.2) (2024-04-13)
+
+
+### Bug Fixes
+
+* unable to find instance in case of ng17 control flow ([f6418d7](https://github.com/help-me-mom/ng-mocks/commit/f6418d724a9f82830d90f64c2aced9c0ba00f451)), closes [#7216](https://github.com/help-me-mom/ng-mocks/issues/7216)
+
+## [14.12.1](https://github.com/ike18t/ng-mocks/compare/v14.12.0...v14.12.1) (2023-11-19)
+
+
+### Bug Fixes
+
+* undefined issue with some modules ([8045447](https://github.com/ike18t/ng-mocks/commit/804544735dcfacd8081d0f1f73583d87f8813d6b))
+
 # [14.12.0](https://github.com/ike18t/ng-mocks/compare/v14.11.0...v14.12.0) (2023-11-18)
 
 

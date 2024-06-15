@@ -18,39 +18,41 @@ class StandaloneService {}
 })
 class StandaloneModule {}
 
-@Pipe(
-  {
-    name: 'standalone',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Pipe({
+  name: 'standalone',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class StandalonePipe implements PipeTransform {
   transform(): string {
     return this.constructor.name;
   }
 }
 
-@Component(
-  {
-    selector: 'standalone',
-    template: 'service:{{ service.constructor.name }}',
-    standalone: true,
-    imports: [StandaloneModule, StandalonePipe],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'standalone',
+  template: 'service:{{ service.constructor.name }}',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    StandaloneModule,
+    StandalonePipe,
+  ],
+})
 class StandaloneComponent {
   constructor(public readonly service: StandaloneService) {}
 }
 
-@Component(
-  {
-    selector: 'target-2687-legacy',
-    template:
-      '<standalone></standalone> pipe:{{ null | standalone }}',
-    standalone: true,
-    imports: [StandaloneComponent, StandalonePipe],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'target-2687-legacy',
+  template: '<standalone></standalone> pipe:{{ null | standalone }}',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    StandaloneComponent,
+    StandalonePipe,
+  ],
+})
 class TargetComponent {}
 
 @Component({
