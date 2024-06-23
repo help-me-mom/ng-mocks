@@ -8,7 +8,7 @@ const viewChildTemplate = (selector: string, key: string): string => {
   const condition = `ngMocksRender_${key}_${selector}`;
   return hasControlFlow
     ? `@if (${condition}) { ${content} }`
-    : `<ng-template [ngIf]="${condition}">${content}</ng-template>`;
+    : /* istanbul ignore next */ `<ng-template [ngIf]="${condition}">${content}</ng-template>`;
 };
 
 const isTemplateRefQuery = (query: Query): boolean => {
