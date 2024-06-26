@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "18.0.5",
-    "@angular/cli": "18.0.5",
+    "@angular/cli": "18.0.6",
     "@angular/compiler-cli": "18.0.4",
     "@angular/language-service": "18.0.4",
     "@nx/jest": "19.3.1",
