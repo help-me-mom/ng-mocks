@@ -24,7 +24,7 @@ services:
       - --no-audit
 
   e2e:
-    image: satantime/puppeteer-node:20.14.0
+    image: satantime/puppeteer-node:4.2.6
     working_dir: /app
     volumes:
       - ./tests-e2e:/app
