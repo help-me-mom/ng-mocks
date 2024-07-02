@@ -1,9 +1,15 @@
-import { Query, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Query, TemplateRef, ViewChild, ViewContainerRef, VERSION } from '@angular/core';
 
+const hasControlFlow = Number.parseInt(VERSION.major, 10) >= 17;
 const viewChildArgs: any = { read: ViewContainerRef, static: false };
 
-const viewChildTemplate = (selector: string, key: string): string =>
-  `<div *ngIf="ngMocksRender_${key}_${selector}" data-${key}="${selector}"><ng-template #${key}_${selector}></ng-template></div>`;
+const viewChildTemplate = (selector: string, key: string): string => {
+  const content = `<div data-${key}="${selector}"><ng-template #${key}_${selector}></ng-template></div>`;
+  const condition = `ngMocksRender_${key}_${selector}`;
+  return hasControlFlow
+    ? `@if (${condition}) { ${content} }`
+    : /* istanbul ignore next */ `<ng-template [ngIf]="${condition}">${content}</ng-template>`;
+};
 
 const isTemplateRefQuery = (query: Query): boolean => {
   if (query.isViewQuery) {
