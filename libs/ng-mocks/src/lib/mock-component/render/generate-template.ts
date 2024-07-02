@@ -27,8 +27,11 @@ export default (queries?: Record<keyof any, any>): string => {
   }
 
   for (const key of Object.keys(queries)) {
-    const query: Query = queries[key];
+    const query: Query & { isSignal?: boolean } = queries[key];
     if (!isTemplateRefQuery(query)) {
+      continue;
+    }
+    if (query.isSignal) {
       continue;
     }
     if (typeof query.selector === 'string') {
