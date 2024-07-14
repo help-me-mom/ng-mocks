@@ -75,7 +75,7 @@ import { MockedComponent } from './types';
   `,
 })
 export class ExampleContainerComponent {
-  @ViewChild(ChildComponent, { static: true } as any)
+  @ViewChild(ChildComponent, { static: true } as never)
   public childComponent?: ChildComponent;
   public emitted = '';
   public someOutputHasEmitted = '';
@@ -356,22 +356,22 @@ describe('MockComponent', () => {
       template: '',
     })
     class MyComponent {
-      @ContentChild('i1', { read: TemplateRef } as any)
+      @ContentChild('i1', { read: TemplateRef } as never)
       public o1?: TemplateRef<any>;
-      @ContentChildren('i2', { read: TemplateRef } as any)
+      @ContentChildren('i2', { read: TemplateRef } as never)
       public o2?: QueryList<TemplateRef<any>>;
-      @ViewChild('i3', { read: TemplateRef } as any)
+      @ViewChild('i3', { read: TemplateRef } as never)
       public o3?: TemplateRef<any>;
-      @ViewChildren('i4', { read: TemplateRef } as any)
+      @ViewChildren('i4', { read: TemplateRef } as never)
       public o4?: QueryList<TemplateRef<any>>;
 
-      @ContentChild('i5', { read: ElementRef } as any)
+      @ContentChild('i5', { read: ElementRef } as never)
       public o5?: ElementRef;
-      @ContentChildren('i6', { read: ElementRef } as any)
+      @ContentChildren('i6', { read: ElementRef } as never)
       public o6?: QueryList<ElementRef>;
-      @ViewChild('i7', { read: ElementRef } as any)
+      @ViewChild('i7', { read: ElementRef } as never)
       public o7?: ElementRef;
-      @ViewChildren('i8', { read: ElementRef } as any)
+      @ViewChildren('i8', { read: ElementRef } as never)
       public o8?: QueryList<ElementRef>;
     }
 

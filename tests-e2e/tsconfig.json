@@ -33,6 +33,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts"],
+  "files": ["src/main.ts", "src/test.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

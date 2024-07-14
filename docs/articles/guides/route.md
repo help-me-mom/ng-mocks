@@ -12,7 +12,7 @@ otherwise tests will fail.
 However, to test that, we need to configure `TestBed` a bit differently:
 
 - it is fine to mock all components and declarations
-- `RouterModule` should be kept the as it is, so it can do its job
+- `RouterModule` should be kept as it is, so it can do its job
 - `RouterTestingModule` should be added with empty routes
 - [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept, 
   because `RouterModule` depends on many root services which cannot be mocked.
@@ -120,7 +120,7 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 
 ## Live example
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoute/test.spec.ts&initialpath=%3Fspec%3DTestRoute:Route)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoute/test.spec.ts"

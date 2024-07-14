@@ -5,23 +5,27 @@ import { RouterModule } from '@angular/router';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Component(
-  {
-    selector: 'my-test-one',
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: `<a [routerLink]="['test']">Test</a>`,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'my-test-one',
+  template: `<a [routerLink]="['test']">Test</a>`,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    CommonModule,
+    RouterModule,
+  ],
+})
 class TestOneComponent {}
 
-@Component(
-  {
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: `<a [routerLink]="['test']">Test</a>`,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    CommonModule,
+    RouterModule,
+  ],
+  template: `<a [routerLink]="['test']">Test</a>`,
+})
 class TestTwoComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/4032

@@ -31,7 +31,7 @@ class TargetComponent implements OnDestroy {
 
   private subscription?: rxjs.Subscription;
 
-  @ViewChild('element', {} as any)
+  @ViewChild('element', {} as never)
   public set element(value: ElementRef) {
     if (this.subscription) {
       this.subscription.unsubscribe();

@@ -93,7 +93,7 @@ describe('ng-mocks-format-html', () => {
       ngMocks.formatHtml({
         nodeName: '#text',
         wholeText: ' test ',
-      } as any),
+      } as never),
     ).toEqual('test');
 
     // outer
@@ -102,7 +102,7 @@ describe('ng-mocks-format-html', () => {
         {
           nodeName: '#text',
           wholeText: ' test ',
-        } as any,
+        } as never,
         true,
       ),
     ).toEqual(' test ');

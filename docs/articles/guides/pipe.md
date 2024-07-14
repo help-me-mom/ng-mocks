@@ -27,7 +27,7 @@ expect(fixture.nativeElement.innerHTML).toEqual('1, 2, 3');
 
 ## Live example
 
-- [Try it on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=/src/examples/TestPipe/test.spec.ts&initialpath=%3Fspec%3DTestPipe)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestPipe/test.spec.ts&initialpath=%3Fspec%3DTestPipe)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestPipe/test.spec.ts&initialpath=%3Fspec%3DTestPipe)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestPipe/test.spec.ts"

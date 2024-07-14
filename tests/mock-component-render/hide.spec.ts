@@ -18,7 +18,7 @@ describe('mock-component-render:hide', () => {
     if (isMockOf(component, TargetComponent, 'c')) {
       expect(() => component.__hide('fakeKey')).not.toThrow();
       expect(() =>
-        component.__hide(['fakeProp'] as any),
+        component.__hide(['fakeProp'] as never),
       ).not.toThrow();
     }
   });

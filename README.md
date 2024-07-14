@@ -15,6 +15,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 | Angular | ng-mocks | Jasmine | Jest | Ivy |
 | ------: | :------: | :-----: | :--: | :-: |
+|      18 |  latest  |   yes   | yes  | yes |
 |      17 |  latest  |   yes   | yes  | yes |
 |      16 |  latest  |   yes   | yes  | yes |
 |      15 |  latest  |   yes   | yes  | yes |
@@ -36,12 +37,13 @@ The current version of the library **has been tested** and **can be used** with:
 - [GitHub repo](https://github.com/help-me-mom/ng-mocks)
 - [NPM package](https://www.npmjs.com/package/ng-mocks)
 
-* Live [example on CodeSandbox](https://codesandbox.io/s/github/help-me-mom/ng-mocks-sandbox?file=/src/test.spec.ts)
+* Live [example on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/master/?file=/src/test.spec.ts)
 * Live [example on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox?file=src/test.spec.ts)
 
-- [chat on gitter](https://gitter.im/ng-mocks/community)
+- [start a discussion on GitHub](https://github.com/help-me-mom/ng-mocks/discussions/new/choose)
 - **[ask a question on Stackoverflow](https://stackoverflow.com/questions/ask?tags=ng-mocks%20angular%20testing%20mocking)**
 - [report an issue on GitHub](https://github.com/help-me-mom/ng-mocks/issues)
+- [chat on gitter](https://gitter.im/ng-mocks/community)
 
 ## Very short introduction
 
@@ -193,7 +195,7 @@ Profit.
 If you like `ng-mocks`, please support it:
 
 - [with a star on GitHub](https://github.com/help-me-mom/ng-mocks)
-- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
+- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fhelp-me-mom%2Fng-mocks)
 
 Thank you!
 

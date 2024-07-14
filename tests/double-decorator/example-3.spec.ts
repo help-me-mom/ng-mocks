@@ -14,7 +14,7 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-@Directive(undefined as any)
+@Directive(undefined as never)
 @Injectable()
 class BaseClass {
   public name = 'directive';

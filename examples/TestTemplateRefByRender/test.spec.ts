@@ -26,10 +26,10 @@ class MyTplDirective {
   template: '',
 })
 class XdCardComponent {
-  @ContentChild('id', {} as any)
+  @ContentChild('id', {} as never)
   public readonly id?: TemplateRef<any>;
 
-  @ContentChildren(MyTplDirective, {} as any)
+  @ContentChildren(MyTplDirective, {} as never)
   public readonly templates?: QueryList<MyTplDirective>;
 }
 

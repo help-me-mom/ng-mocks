@@ -28,6 +28,7 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 
 | Angular | ng-mocks | Jasmine | Jest | Ivy |
 |--------:|:--------:| :-----: | :--: | :-: |
+|      18 |  latest  |   yes   | yes  | yes |
 |      17 |  latest  |   yes   | yes  | yes |
 |      16 |  latest  |   yes   | yes  | yes |
 |      15 |  latest  |   yes   | yes  | yes |
@@ -201,7 +202,7 @@ describe('profile:builder', () => {
 If you like `ng-mocks`, please support it:
 
 - [with a star on GitHub](https://github.com/help-me-mom/ng-mocks)
-- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fike18t%2Fng-mocks)
+- [with a tweet](https://twitter.com/intent/tweet?text=Check%20ng-mocks%20package%20%23angular%20%23testing%20%23mocking&url=https%3A%2F%2Fgithub.com%2Fhelp-me-mom%2Fng-mocks)
 
 Thank you!
 

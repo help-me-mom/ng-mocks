@@ -52,13 +52,13 @@ describe('ng-mocks-render:params', () => {
   it('uses full proxy without params', () => {
     const fixture = MockRender(TargetComponent);
 
-    expect(fixture.componentInstance.value1).toEqual(null as any);
-    expect(fixture.componentInstance.value2).toEqual(null as any);
+    expect(fixture.componentInstance.value1).toEqual(null as never);
+    expect(fixture.componentInstance.value2).toEqual(null as never);
     expect(fixture.point.componentInstance.value1).toEqual(
-      null as any,
+      null as never,
     );
     expect(fixture.point.componentInstance.value2).toEqual(
-      null as any,
+      null as never,
     );
 
     // nothing is rendered

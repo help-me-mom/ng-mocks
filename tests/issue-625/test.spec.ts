@@ -99,7 +99,7 @@ describe('issue-625', () => {
     expect(spy).toHaveBeenCalled();
     // mocks the service
     expect(ngMocks.findInstance(SomeService).name).toEqual(
-      undefined as any,
+      undefined as never,
     );
     // keeps another one
     expect(ngMocks.findInstance(AnotherService).name).toEqual(

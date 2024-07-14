@@ -28,6 +28,7 @@ settings:
         - ./e2e/a15/tsconfig.json
         - ./e2e/a16/tsconfig.json
         - ./e2e/a17/tsconfig.json
+        - ./e2e/a18/tsconfig.json
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json
@@ -59,6 +60,7 @@ overrides:
         - ./e2e/a15/tsconfig.json
         - ./e2e/a16/tsconfig.json
         - ./e2e/a17/tsconfig.json
+        - ./e2e/a18/tsconfig.json
         - ./e2e/jasmine/tsconfig.json
         - ./e2e/jest/tsconfig.json
         - ./e2e/min/tsconfig.json
@@ -93,6 +95,7 @@ overrides:
         - 150
 
       '@angular-eslint/no-input-rename': off
+      '@angular-eslint/no-inputs-metadata-property': off
       '@angular-eslint/no-output-rename': off
       '@angular-eslint/no-outputs-metadata-property': off
 
@@ -104,12 +107,14 @@ overrides:
       '@typescript-eslint/no-unused-vars': error
 
       unicorn/expiring-todo-comments: off
+      unicorn/no-anonymous-default-export: off
       unicorn/no-array-callback-reference: off
       unicorn/no-array-method-this-argument: off
       unicorn/no-for-loop: off
       unicorn/no-null: off
       unicorn/no-this-assignment: off
       unicorn/no-typeof-undefined: off
+      unicorn/no-unnecessary-polyfills: off
       unicorn/no-useless-undefined: off
       unicorn/prefer-array-flat: off
       unicorn/prefer-at: off
@@ -118,6 +123,7 @@ overrides:
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
       unicorn/prefer-spread: off
+      unicorn/prefer-string-raw: off
       unicorn/prefer-string-replace-all: off
       unicorn/prefer-switch: off
       unicorn/prefer-top-level-await: off
@@ -225,7 +231,7 @@ overrides:
   - files:
       - '*.json'
     extends:
-      - 'plugin:json/recommended'
+      - 'plugin:json/recommended-legacy'
       - 'plugin:prettier/recommended'
 
   - files:
@@ -238,7 +244,7 @@ overrides:
       - 'tsconfig.json'
       - 'tsconfig.*.json'
     extends:
-      - 'plugin:json/recommended-with-comments'
+      - 'plugin:json/recommended-with-comments-legacy'
       - 'plugin:prettier/recommended'
 
   - files:

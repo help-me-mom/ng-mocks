@@ -36,7 +36,7 @@ class Mock2Directive {
 class Mock3Directive {
   @Input('tpl3') public readonly name: string | null = null;
 
-  @ContentChild('info', {} as any)
+  @ContentChild('info', {} as never)
   public readonly tpl?: TemplateRef<any>;
 }
 
@@ -77,18 +77,18 @@ class Mock3Directive {
   `,
 })
 class MockComponent {
-  @ContentChildren(Mock2Directive, {} as any)
+  @ContentChildren(Mock2Directive, {} as never)
   public readonly directives?: QueryList<Mock2Directive>;
 
-  @ContentChild('header', {} as any)
+  @ContentChild('header', {} as never)
   public readonly header?: TemplateRef<any>;
 
-  @ContentChild(Mock3Directive, {} as any)
+  @ContentChild(Mock3Directive, {} as never)
   public readonly info?: Mock3Directive;
 
   @ContentChildren(Mock1Directive, {
     read: TemplateRef,
-  } as any)
+  } as never)
   public readonly templates?: QueryList<TemplateRef<any>>;
 }
 
@@ -352,7 +352,7 @@ describe('ng-mocks-render:component:mock', () => {
 
     const directive = ngMocks.findInstance(Mock3Directive);
     expect(() =>
-      ngMocks.render(directive, undefined as any),
+      ngMocks.render(directive, undefined as never),
     ).toThrowError(
       'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
     );

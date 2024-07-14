@@ -49,18 +49,18 @@ class ChildDirective {
   `,
 })
 class TargetComponent {
-  @ViewChild(ChildComponent, {} as any)
+  @ViewChild(ChildComponent, {} as never)
   public component?: ChildComponent;
 
   @ViewChild(ChildComponent, {
     read: ChildDirective,
-  } as any)
+  } as never)
   public directive?: ChildDirective;
 
-  @ViewChildren(ChildDirective, {} as any)
+  @ViewChildren(ChildDirective, {} as never)
   public directives?: QueryList<ChildDirective>;
 
-  @ViewChild('tpl', {} as any)
+  @ViewChild('tpl', {} as never)
   public tpl?: TemplateRef<HTMLElement>;
 
   public value = '';

@@ -25,49 +25,51 @@ class StandaloneService {}
 })
 class StandaloneModule {}
 
-@Pipe(
-  {
-    name: 'standalone',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Pipe({
+  name: 'standalone',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class StandalonePipe implements PipeTransform {
   transform(): string {
     return this.constructor.name;
   }
 }
 
-@Component(
-  {
-    selector: 'standalone',
-    template: 'service:{{ service.constructor.name }}',
-    standalone: true,
-    imports: [StandaloneModule, StandalonePipe],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'standalone',
+  template: 'service:{{ service.constructor.name }}',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    StandaloneModule,
+    StandalonePipe,
+  ],
+})
 class StandaloneComponent {
   constructor(public readonly service: StandaloneService) {}
 }
 
-@Component(
-  {
-    selector: 'empty',
-    template: 'empty',
-    standalone: true,
-    imports: [], // this is the thing we assert: an empty imports array
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'empty',
+  template: 'empty',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [], // this is the thing we assert: an empty imports array
+})
 class EmptyComponent {}
 
-@Component(
-  {
-    selector: 'target-2687',
-    template:
-      '<standalone></standalone> pipe:{{ null | standalone }}',
-    standalone: true,
-    imports: [StandaloneComponent, StandalonePipe, EmptyComponent],
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Component({
+  selector: 'target-2687',
+  template: '<standalone></standalone> pipe:{{ null | standalone }}',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+  ['imports' as never /* TODO: remove after upgrade to a14 */]: [
+    StandaloneComponent,
+    StandalonePipe,
+    EmptyComponent,
+  ],
+})
 class TargetComponent {}
 
 describe('issue-2687', () => {
@@ -114,19 +116,21 @@ describe('issue-2687', () => {
     beforeEach(() => {
       TestBed.overrideComponent(TargetComponent, {
         set: {
-          imports: [
-            MockComponent(StandaloneComponent),
-            MockPipe(StandalonePipe),
-          ],
-        } as never /* TODO: remove after upgrade to a14 */,
+          ['imports' as never /* TODO: remove after upgrade to a14 */]:
+            [
+              MockComponent(StandaloneComponent),
+              MockPipe(StandalonePipe),
+            ],
+        },
       });
     });
 
     afterAll(() => {
       TestBed.overrideComponent(TargetComponent, {
         set: {
-          imports: [StandaloneComponent, StandalonePipe],
-        } as never /* TODO: remove after upgrade to a14 */,
+          ['imports' as never /* TODO: remove after upgrade to a14 */]:
+            [StandaloneComponent, StandalonePipe],
+        },
       });
     });
 

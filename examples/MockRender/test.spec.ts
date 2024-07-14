@@ -16,7 +16,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: 'dependency',
 })
 class ChildComponent {
-  @ContentChild('something', {} as any)
+  @ContentChild('something', {} as never)
   public injectedSomething?: TemplateRef<any>;
   @Input() public someInput = '';
   @Output() public readonly someOutput = new EventEmitter();

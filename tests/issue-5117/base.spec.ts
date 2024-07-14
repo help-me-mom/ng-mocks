@@ -10,12 +10,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-@Directive(
-  {
-    selector: 'base',
-    standalone: true,
-  } as never /* TODO: remove after upgrade to a14 */,
-)
+@Directive({
+  selector: 'base',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    true,
+})
 class BaseDirective {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();
@@ -23,13 +22,12 @@ class BaseDirective {
   public base5117base() {}
 }
 
-@Component(
-  {
-    selector: 'target',
-    template: '',
-    hostDirectives: [BaseDirective],
-  } as never /* TODO: remove after upgrade to a15 */,
-)
+@Component({
+  selector: 'target',
+  template: '',
+  ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
+    [BaseDirective],
+})
 class TargetComponent {
   @Input() public readonly input: string | undefined = undefined;
   @Output() public readonly output = new EventEmitter<void>();

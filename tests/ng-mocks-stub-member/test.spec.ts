@@ -28,7 +28,7 @@ describe('ng-mocks-stub-member', () => {
     expect(service.echo()).toEqual('target');
 
     // stub of name
-    ngMocks.stubMember(service, 'name', 'mockName' as any);
+    ngMocks.stubMember(service, 'name', 'mockName' as never);
     expect(service.name).toEqual('mockName');
     expect(service.echo()).toEqual('mockName');
 
@@ -48,7 +48,7 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(service, 'name', setSpy, 'set');
 
     // asserting getter
-    expect(service.name).toEqual('spy' as any);
+    expect(service.name).toEqual('spy' as never);
     expect(getSpy).toHaveBeenCalledTimes(1);
 
     // asserting setter
@@ -56,8 +56,8 @@ describe('ng-mocks-stub-member', () => {
     expect(setSpy).toHaveBeenCalledWith('test');
 
     // redefining getter
-    ngMocks.stubMember(service, 'name', () => 'new' as any, 'get');
-    expect(service.name).toEqual('new' as any);
+    ngMocks.stubMember(service, 'name', () => 'new' as never, 'get');
+    expect(service.name).toEqual('new' as never);
 
     // fake property
     ngMocks.stubMember(service as any, 'fake', 'fake');

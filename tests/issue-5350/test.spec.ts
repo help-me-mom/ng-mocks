@@ -20,7 +20,7 @@ describe('issue-5350', () => {
     return;
   }
 
-  @Directive(undefined as any)
+  @Directive(undefined as never)
   class TargetBase {
     @Input({
       alias: 'aInput1',
