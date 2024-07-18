@@ -264,7 +264,7 @@
     "eslint-plugin-unicorn": "54.0.0",
     "eslint-plugin-unused-imports": "3.2.0",
     "eslint-plugin-yml": "1.14.0",
-    "husky": "9.0.11",
+    "husky": "9.1.1",
     "jasmine-core": "5.1.2",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.3",
