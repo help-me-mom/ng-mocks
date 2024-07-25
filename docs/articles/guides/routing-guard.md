@@ -26,8 +26,8 @@ The example below is applicable for all types of guards:
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-match.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanMatch),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-match.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanMatch)
 - `canLoad` -
-  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-match.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanMatch),
-  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-match.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanMatch)
+  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad),
+  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad)
 - class guards (legacy) -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest)
