@@ -27,7 +27,7 @@
     "@ngrx/effects": "18.0.2",
     "@ngrx/store": "18.0.2",
     "@ngrx/store-devtools": "18.0.2",
-    "@ngxs/store": "18.1.0",
+    "@ngxs/store": "18.1.1",
     "primeng": "17.18.7",
     "@ngneat/transloco": "6.0.4",
     "rxjs": "7.8.1",
