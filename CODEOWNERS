@@ -1,3 +1,13 @@
 # This is a comment.
 # Each line is a file pattern followed by one or more owners.
-*       @satanTime
+*                             @satanTime
+
+**/.nvmrc
+**/compose.yml
+**/package.json
+**/package-lock.json
+
+/.circleci/config.yml
+/.github/workflows/codeql.yml
+
+/libs/ng-mocks/package.json   @satanTime
