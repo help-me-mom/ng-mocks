@@ -39,7 +39,7 @@
     "ng-packagr": "18.2.1",
     "npm": "10.8.2",
     "nx": "19.6.2",
-    "ts-jest": "29.2.4",
+    "ts-jest": "29.2.5",
     "typescript": "5.5.4"
   },
   "engines": {
