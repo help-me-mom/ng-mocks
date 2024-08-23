@@ -20,7 +20,7 @@
     "@angular/router": "18.2.0",
     "@nx/angular": "19.6.2",
     "rxjs": "7.8.1",
-    "tslib": "2.6.3",
+    "tslib": "2.7.0",
     "zone.js": "0.14.10"
   },
   "devDependencies": {
