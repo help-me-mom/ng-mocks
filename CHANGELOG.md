@@ -1,3 +1,10 @@
+## [14.13.1](https://github.com/help-me-mom/ng-mocks/compare/v14.13.0...v14.13.1) (2024-08-25)
+
+
+### Bug Fixes
+
+* unable to bind ngIf in angular 17+ ([7c816e6](https://github.com/help-me-mom/ng-mocks/commit/7c816e67ced783e943653d10aef2cdc393ffe8e0)), closes [#8884](https://github.com/help-me-mom/ng-mocks/issues/8884)
+
 # [14.13.0](https://github.com/help-me-mom/ng-mocks/compare/v14.12.2...v14.13.0) (2024-06-01)
 
 
