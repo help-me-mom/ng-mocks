@@ -166,8 +166,8 @@ Previously, it had been accepting a `meta` parameter, now it has been removed.
 
 #### Tokens
 
-- `NG_GUARDS` has been renamed to [`NG_MOCKS_GUARDS`](api/MockBuilder.md#ngmocksguards-token)
-- `NG_INTERCEPTORS` has been renamed to [`NG_MOCKS_INTERCEPTORS`](api/MockBuilder.md#ngmocksinterceptors-token)
+- `NG_GUARDS` has been renamed to [`NG_MOCKS_GUARDS`](api/MockBuilder.md#ng_mocks_guards-token)
+- `NG_INTERCEPTORS` has been renamed to [`NG_MOCKS_INTERCEPTORS`](api/MockBuilder.md#ng_mocks_interceptors-token)
 
 ## From 9 to 10
 
