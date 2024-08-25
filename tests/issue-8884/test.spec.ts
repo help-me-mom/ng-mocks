@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   ContentChild,
@@ -9,6 +10,10 @@ import {
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/8884
+// New control flow doesn't import NgIf or CommonModule by default.
+// However, it still allows to use conditions, and if `ContentChild` is used,
+// it causes errors such as "Can't bind to 'ngIf' since it isn't a known property of 'div'".
+// The fix is to remove dependency on NgIf or CommonModule.
 describe('issue-8884', () => {
   ngMocks.throwOnConsole();
 
@@ -20,47 +25,101 @@ describe('issue-8884', () => {
     return;
   }
 
-  describe('when standalone component does not import NgIf', () => {
+  describe('standalone component without NgIf', () => {
     @Component({
-      selector: 'app-standalone',
+      selector: 'standalone-8884',
       ['standalone' as never]: true,
+      ['imports' as never]: [NgTemplateOutlet],
       template: `<ng-template [ngTemplateOutlet]="content" />`,
     })
-    class StandaloneComponent {
+    class Standalone8884Component {
       @ContentChild('content', {} as never)
       content?: TemplateRef<any>;
     }
 
-    beforeEach(() => MockBuilder(null, StandaloneComponent));
+    describe('real', () => {
+      beforeEach(() => MockBuilder(Standalone8884Component));
 
-    it('should create', () => {
-      MockRender(`<app-standalone>Test content</app-standalone>`);
+      it('renders content', () => {
+        const fixture = MockRender(`
+          <standalone-8884>
+            <ng-template #content>content</ng-template>
+          </standalone-8884>
+        `);
 
-      expect(ngMocks.findInstance(StandaloneComponent)).toBeTruthy();
+        expect(ngMocks.formatText(fixture)).toEqual('content');
+      });
+    });
+
+    describe('mock', () => {
+      beforeEach(() => MockBuilder(null, Standalone8884Component));
+
+      it('renders content', () => {
+        const fixture = MockRender(`
+          <standalone-8884>
+            <ng-template #content>content</ng-template>
+          </standalone-8884>
+        `);
+        expect(ngMocks.formatText(fixture)).toEqual('');
+
+        ngMocks.render(
+          ngMocks.findInstance(Standalone8884Component),
+          ngMocks.findTemplateRef('content'),
+        );
+        expect(ngMocks.formatText(fixture)).toEqual('content');
+      });
     });
   });
 
-  describe('when NgIf is not avaiable to a component in a module', () => {
+  describe('classic component without NgIf import in its module', () => {
     @Component({
-      selector: 'app-target',
+      selector: 'target-8884',
       template: `<ng-template [ngTemplateOutlet]="content" />`,
     })
-    class TargetComponent {
+    class Target8884Component {
       @ContentChild('content', {} as never)
       content?: TemplateRef<any>;
     }
 
     @NgModule({
-      declarations: [TargetComponent],
+      imports: [NgTemplateOutlet],
+      declarations: [Target8884Component],
+      exports: [Target8884Component],
     })
     class TargetModule {}
 
-    beforeEach(() => MockBuilder(null, TargetModule));
+    describe('real', () => {
+      beforeEach(() => MockBuilder(TargetModule));
 
-    it('should create', () => {
-      MockRender(`<app-target>Test content</app-target>`);
+      it('renders content', () => {
+        const fixture = MockRender(`
+          <target-8884>
+            <ng-template #content>content</ng-template>
+          </target-8884>
+        `);
 
-      expect(ngMocks.findInstance(TargetComponent)).toBeTruthy();
+        expect(ngMocks.formatText(fixture)).toEqual('content');
+      });
+    });
+
+    describe('mock', () => {
+      beforeEach(() => MockBuilder(null, TargetModule));
+
+      it('render contents', () => {
+        const fixture = MockRender(`
+          <target-8884>
+            <ng-template #content>content</ng-template>
+          </target-8884>
+        `);
+
+        expect(ngMocks.formatText(fixture)).toEqual('');
+
+        ngMocks.render(
+          ngMocks.findInstance(Target8884Component),
+          ngMocks.findTemplateRef('content'),
+        );
+        expect(ngMocks.formatText(fixture)).toEqual('content');
+      });
     });
   });
 });

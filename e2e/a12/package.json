@@ -17,7 +17,7 @@
     "test:jest": "npm run test:jest:es5:ivy && npm run test:jest:es2015:ivy",
     "test:jest:es5:ivy": "jest --config jest.es5ivy.js",
     "test:jest:es2015:ivy": "jest --config jest.es2015ivy.js",
-    "test:jest:debug": "jest -i --watch"
+    "test:jest:debug": "npm run test:jest:es2015:ivy -- -i --watch"
   },
   "dependencies": {
     "@angular/animations": "12.2.17",
