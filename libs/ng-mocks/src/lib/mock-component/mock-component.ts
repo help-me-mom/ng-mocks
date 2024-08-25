@@ -1,5 +1,5 @@
 import {
-  AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   EmbeddedViewRef,
@@ -31,8 +31,11 @@ const mixRenderPrepareVcr = (
   selector: string,
   cdr: ChangeDetectorRef,
 ): ViewContainerRef | undefined => {
-  if (!instance[`ngMocksRender_${type}_${selector}`]) {
-    instance[`ngMocksRender_${type}_${selector}`] = true;
+  const vcrNgIf: ViewContainerRef = instance[`__vcrIf_${type}_${selector}`];
+  const trNgIf: TemplateRef<never> = instance[`__trIf_${type}_${selector}`];
+
+  if (vcrNgIf && trNgIf && !instance[`ngMocksRender_${type}_${selector}`]) {
+    instance[`ngMocksRender_${type}_${selector}`] = vcrNgIf.createEmbeddedView(trNgIf, {});
     cdr.detectChanges();
   }
 
@@ -152,13 +155,14 @@ const mixHide = (instance: MockConfig & Record<keyof any, any>, changeDetector: 
     mixHideHandler(instance, type, selector, indices);
 
     if (!indices) {
-      instance[`ngMocksRender_${type}_${selector}`] = false;
+      (instance[`ngMocksRender_${type}_${selector}`] as EmbeddedViewRef<never>).destroy();
+      instance[`ngMocksRender_${type}_${selector}`] = undefined;
     }
     changeDetector.detectChanges();
   });
 };
 
-class ComponentMockBase extends LegacyControlValueAccessor implements AfterContentInit {
+class ComponentMockBase extends LegacyControlValueAccessor implements AfterViewInit {
   // istanbul ignore next
   public constructor(
     injector: Injector,
@@ -172,7 +176,7 @@ class ComponentMockBase extends LegacyControlValueAccessor implements AfterConte
     }
   }
 
-  public ngAfterContentInit(): void {
+  public ngAfterViewInit(): void {
     const config = (this.__ngMocksConfig as any).config;
     if (!(this as any).__rendered && config && config.render) {
       for (const block of Object.keys(config.render)) {
