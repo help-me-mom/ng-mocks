@@ -1,9 +1,13 @@
 import { Query, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 
-const viewChildArgs: any = { read: ViewContainerRef, static: false };
+const vcrArgs: any = { read: ViewContainerRef, static: false };
+const trArgs: any = { read: TemplateRef, static: false };
 
-const viewChildTemplate = (selector: string, key: string): string =>
-  `<div *ngIf="ngMocksRender_${key}_${selector}" data-${key}="${selector}"><ng-template #${key}_${selector}></ng-template></div>`;
+const viewChildTemplate = (selector: string, key: string): string => {
+  const content = `<div data-${key}="${selector}"><ng-template #${key}_${selector}></ng-template></div>`;
+
+  return `<ng-template #ngIf_${key}_${selector}>${content}</ng-template>`;
+};
 
 const isTemplateRefQuery = (query: Query): boolean => {
   if (query.isViewQuery) {
@@ -28,16 +32,23 @@ export default (queries?: Record<keyof any, any>): string => {
 
   for (const key of Object.keys(queries)) {
     const query: Query = queries[key];
+    if (key.indexOf('__mock') === 0) {
+      continue;
+    }
     if (!isTemplateRefQuery(query)) {
       continue;
     }
     if (typeof query.selector === 'string') {
       const selector = query.selector.replace(new RegExp('\\W', 'mg'), '_');
-      queries[`__mockView_key_${selector}`] = new ViewChild(`key_${selector}`, viewChildArgs);
+      queries[`__vcrIf_key_${selector}`] = new ViewChild(`ngIf_key_${selector}`, vcrArgs);
+      queries[`__trIf_key_${selector}`] = new ViewChild(`ngIf_key_${selector}`, trArgs);
+      queries[`__mockView_key_${selector}`] = new ViewChild(`key_${selector}`, vcrArgs);
       queries[`__mockTpl_key_${selector}`] = query;
       parts.push(viewChildTemplate(selector, 'key'));
     }
-    queries[`__mockView_prop_${key}`] = new ViewChild(`prop_${key}`, viewChildArgs);
+    queries[`__vcrIf_prop_${key}`] = new ViewChild(`ngIf_prop_${key}`, vcrArgs);
+    queries[`__trIf_prop_${key}`] = new ViewChild(`ngIf_prop_${key}`, trArgs);
+    queries[`__mockView_prop_${key}`] = new ViewChild(`prop_${key}`, vcrArgs);
     parts.push(viewChildTemplate(key, 'prop'));
   }
 

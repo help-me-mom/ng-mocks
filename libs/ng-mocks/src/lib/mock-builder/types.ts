@@ -218,6 +218,7 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
  *
  * @see https://ng-mocks.sudo.eu/api/MockBuilder#extending-mockbuilder
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IMockBuilderExtended extends IMockBuilder {}
 
 /**

@@ -475,11 +475,30 @@ describe('MockComponent', () => {
         }),
       ],
 
+      __vcrIf_key_i1: [
+        jasmine.objectContaining({
+          selector: 'ngIf_key_i1',
+          isViewQuery: true,
+          static: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      __trIf_key_i1: [
+        jasmine.objectContaining({
+          selector: 'ngIf_key_i1',
+          isViewQuery: true,
+          static: false,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
       __mockView_key_i1: [
         jasmine.objectContaining({
           selector: 'key_i1',
           isViewQuery: true,
           static: false,
+          read: ViewContainerRef,
           ngMetadataName: 'ViewChild',
         }),
       ],
@@ -490,20 +509,58 @@ describe('MockComponent', () => {
           ngMetadataName: 'ContentChild',
         }),
       ],
+      __vcrIf_prop_o1: [
+        jasmine.objectContaining({
+          selector: 'ngIf_prop_o1',
+          isViewQuery: true,
+          static: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      __trIf_prop_o1: [
+        jasmine.objectContaining({
+          selector: 'ngIf_prop_o1',
+          isViewQuery: true,
+          static: false,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
       __mockView_prop_o1: [
         jasmine.objectContaining({
           selector: 'prop_o1',
           isViewQuery: true,
           static: false,
+          read: ViewContainerRef,
           ngMetadataName: 'ViewChild',
         }),
       ],
 
+      __vcrIf_key_i2: [
+        jasmine.objectContaining({
+          selector: 'ngIf_key_i2',
+          isViewQuery: true,
+          static: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      __trIf_key_i2: [
+        jasmine.objectContaining({
+          selector: 'ngIf_key_i2',
+          isViewQuery: true,
+          static: false,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
       __mockView_key_i2: [
         jasmine.objectContaining({
           selector: 'key_i2',
           isViewQuery: true,
           static: false,
+          read: ViewContainerRef,
           ngMetadataName: 'ViewChild',
         }),
       ],
@@ -514,11 +571,30 @@ describe('MockComponent', () => {
           ngMetadataName: 'ContentChildren',
         }),
       ],
+      __vcrIf_prop_o2: [
+        jasmine.objectContaining({
+          selector: 'ngIf_prop_o2',
+          isViewQuery: true,
+          static: false,
+          read: ViewContainerRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
+      __trIf_prop_o2: [
+        jasmine.objectContaining({
+          selector: 'ngIf_prop_o2',
+          isViewQuery: true,
+          static: false,
+          read: TemplateRef,
+          ngMetadataName: 'ViewChild',
+        }),
+      ],
       __mockView_prop_o2: [
         jasmine.objectContaining({
           selector: 'prop_o2',
           isViewQuery: true,
           static: false,
+          read: ViewContainerRef,
           ngMetadataName: 'ViewChild',
         }),
       ],
