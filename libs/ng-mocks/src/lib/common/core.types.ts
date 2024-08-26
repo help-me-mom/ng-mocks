@@ -1,5 +1,5 @@
 // istanbul ignore file
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 
 import { DebugNode, InjectionToken } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';

@@ -41,7 +41,7 @@ beforeEach(() =>
 );
 ```
 
-Or, you can keep all root providers with help of [`NG_MOCKS_ROOT_PROVIDERS`](../api/MockBuilder.md#ngmocksrootproviders-token).
+Or, you can keep all root providers with help of [`NG_MOCKS_ROOT_PROVIDERS`](../api/MockBuilder.md#ng_mocks_root_providers-token).
 
 ```ts
 beforeEach(() =>

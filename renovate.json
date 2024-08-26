@@ -10,6 +10,8 @@
   "prHourlyLimit": 0,
   "rangeStrategy": "pin",
   "rebaseWhen": "conflicted",
+  "autoApprove": true,
+  "automerge": true,
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "separateMultipleMajor": true,
