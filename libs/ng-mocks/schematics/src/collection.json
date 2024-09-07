@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "extends": ["@schematics/angular"],
+  "schematics": {
+    "ng-mocks-service": {
+      "description": "ngMocks service schematic",
+      "factory": "./ng-mocks/index#ngMocksServiceSchematic",
+      "schema": "./ng-mocks/service-schema.json"
+    }
+  }
+}
