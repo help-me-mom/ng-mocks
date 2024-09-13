@@ -41,7 +41,7 @@
     "@ngneat/spectator": "19.0.0",
     "@testing-library/angular": "17.3.1",
     "@types/jasmine": "5.1.4",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.13",
     "@types/mocha": "10.0.8",
     "@types/node": "20.16.5",
     "jasmine-core": "5.3.0",
