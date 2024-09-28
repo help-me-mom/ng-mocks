@@ -287,7 +287,7 @@
     "typescript": "5.6.2",
     "webpack": "5.95.0",
     "webpack-cli": "5.1.4",
-    "zone.js": "0.14.10"
+    "zone.js": "0.15.0"
   },
   "engines": {
     "npm": "10.8.3"
