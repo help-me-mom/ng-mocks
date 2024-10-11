@@ -23,7 +23,7 @@
     "@angular/platform-browser": "18.2.8",
     "@angular/platform-browser-dynamic": "18.2.8",
     "@angular/router": "18.2.8",
-    "@ng-select/ng-select": "13.9.0",
+    "@ng-select/ng-select": "13.9.1",
     "@ngrx/effects": "18.1.0",
     "@ngrx/store": "18.1.0",
     "@ngrx/store-devtools": "18.1.0",
