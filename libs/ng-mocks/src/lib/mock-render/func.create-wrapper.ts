@@ -140,6 +140,7 @@ export default (
     selector: 'mock-render',
     template: mockTemplate,
     viewProviders: flags.viewProviders,
+    standalone: false,
   };
 
   ctor = generateWrapperComponent({ ...meta, bindings, options });
