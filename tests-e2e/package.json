@@ -39,7 +39,7 @@
     "@angular/cli": "18.2.12",
     "@angular/compiler-cli": "18.2.13",
     "@ngneat/spectator": "19.1.2",
-    "@testing-library/angular": "17.3.3",
+    "@testing-library/angular": "17.3.4",
     "@types/jasmine": "5.1.5",
     "@types/jest": "29.5.14",
     "@types/mocha": "10.0.10",
