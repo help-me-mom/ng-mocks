@@ -37,12 +37,12 @@
     "jest-environment-jsdom": "29.7.0",
     "jest-preset-angular": "14.4.2",
     "ng-packagr": "18.2.1",
-    "npm": "10.9.2",
+    "npm": "11.0.0",
     "nx": "20.2.2",
     "ts-jest": "29.2.5",
     "typescript": "5.5.4"
   },
   "engines": {
-    "npm": "10.9.2"
+    "npm": "11.0.0"
   }
 }
