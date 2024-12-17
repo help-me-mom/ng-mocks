@@ -8,6 +8,6 @@
 **/package-lock.json
 
 /.circleci/config.yml
-/.github/workflows/codeql.yml
+/.github/workflows/codeql.yml @ytchenak
 
 /libs/ng-mocks/package.json   @satanTime
