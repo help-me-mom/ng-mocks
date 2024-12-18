@@ -151,12 +151,26 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
       continue;
     }
 
-    const errorMessage = [
-      `MockBuilder has found a missing dependency: ${funcGetName(def)}.`,
-      'It means no module provides it.',
-      'Please, use the "export" flag if you want to add it explicitly.',
-      'https://ng-mocks.sudo.eu/api/MockBuilder#export-flag',
-    ].join(' ');
+    const depName = funcGetName(def);
+    const errorMessages = ['Error:'];
+    const defStr = ngMocksUniverse.getResolution(def);
+
+    if (depName === 'Object') {
+      errorMessages.push(
+        `A provider object has been incorrectly passed to the`,
+        `MockerBuilder ${defStr}() method. Did you mean to use`,
+        `MockerBuilder.provide()?`,
+      );
+    } else {
+      errorMessages.push(
+        `MockBuilder has found a missing dependency: ${depName}.`,
+        'It means no module provides it.',
+        'Please, use the "export" flag if you want to add it explicitly.',
+        'https://ng-mocks.sudo.eu/api/MockBuilder#export-flag',
+      );
+    }
+
+    const errorMessage = errorMessages.join(' ');
 
     if (globalFlags.onMockBuilderMissingDependency === 'warn') {
       console.warn(errorMessage);
