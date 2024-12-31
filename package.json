@@ -1,5 +1,5 @@
 {
-  "name": "ng-mocks",
+  "name": "@bobbyg603/ng-mocks",
   "private": true,
   "scripts": {
     "npm": "npm",
