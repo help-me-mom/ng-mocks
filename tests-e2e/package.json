@@ -53,7 +53,7 @@
     "npm": "11.0.0",
     "puppeteer": "23.11.1",
     "ts-node": "10.9.2",
-    "typescript": "5.5.4"
+    "typescript": "5.7.3"
   },
   "engines": {
     "npm": "11.0.0"
