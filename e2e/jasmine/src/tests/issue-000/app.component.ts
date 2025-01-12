@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
+  standalone: false,
   template: 'ng-mocks:{{ scope }}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
