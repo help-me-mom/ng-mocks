@@ -202,6 +202,11 @@
     },
     {
       "matchFileNames": ["e2e/a14/*"],
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<16.18.109"
+    },
+    {
+      "matchFileNames": ["e2e/a14/*"],
       "matchPackageNames": ["ng-packagr"],
       "allowedVersions": "<14.3.0"
     }
