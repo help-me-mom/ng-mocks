@@ -39,7 +39,12 @@ import mockHelperRender from './render/mock-helper.render';
 import mockHelperFindTemplateRef from './template-ref/mock-helper.find-template-ref';
 import mockHelperFindTemplateRefs from './template-ref/mock-helper.find-template-refs';
 
-const flagNames = ['onMockBuilderMissingDependency', 'onMockInstanceRestoreNeed', 'onTestBedFlushNeed'] as const;
+const flagNames = [
+  'onMockBuilderMissingDependency',
+  'onMockInstanceRestoreNeed',
+  'onTestBedFlushNeed',
+  'defaultStandalone',
+] as const;
 
 export default {
   autoSpy: mockHelperAutoSpy,
@@ -50,6 +55,7 @@ export default {
     onMockBuilderMissingDependency?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onMockInstanceRestoreNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
+    defaultStandalone?: boolean | null;
   }) => {
     const flags = ngMocksUniverse.global.get('flags');
     for (const flag of flagNames) {
