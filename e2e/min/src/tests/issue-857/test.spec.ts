@@ -10,6 +10,7 @@ import {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ name }}',
 })
 class TargetComponent {
