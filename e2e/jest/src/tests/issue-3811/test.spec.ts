@@ -3,6 +3,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'hello',
+  standalone: false,
   template: `<h1>Hello {{ name }}!</h1>`,
 })
 export class HelloComponent {
