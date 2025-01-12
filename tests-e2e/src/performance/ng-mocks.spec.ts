@@ -49,7 +49,6 @@ import { CarouselModule } from 'primeng/carousel';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
-import { ChipsModule } from 'primeng/chips';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -61,7 +60,6 @@ import { DividerModule } from 'primeng/divider';
 import { DockModule } from 'primeng/dock';
 import { DragDropModule } from 'primeng/dragdrop';
 import { DropdownModule } from 'primeng/dropdown';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FocusTrapModule } from 'primeng/focustrap';
@@ -94,15 +92,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RatingModule } from 'primeng/rating';
 import { RippleModule } from 'primeng/ripple';
+import { ScrollerModule } from 'primeng/scroller';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
 import { SkeletonModule } from 'primeng/skeleton';
-import { SlideMenuModule } from 'primeng/slidemenu';
 import { SliderModule } from 'primeng/slider';
 import { SpeedDialModule } from 'primeng/speeddial';
-import { SpinnerModule } from 'primeng/spinner';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { SplitterModule } from 'primeng/splitter';
 import { StepsModule } from 'primeng/steps';
@@ -121,8 +118,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TreeModule } from 'primeng/tree';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
-import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
-import { VirtualScrollerModule } from 'primeng/virtualscroller';
 
 @NgModule({
   imports: [
@@ -165,8 +160,8 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     // primeng
     AccordionModule,
     AutoCompleteModule,
-    AvatarModule,
     AvatarGroupModule,
+    AvatarModule,
     BadgeModule,
     BlockUIModule,
     BreadcrumbModule,
@@ -177,7 +172,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     CascadeSelectModule,
     CheckboxModule,
     ChipModule,
-    ChipsModule,
     ColorPickerModule,
     ConfirmDialogModule,
     ConfirmPopupModule,
@@ -189,7 +183,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     DockModule,
     DragDropModule,
     DropdownModule,
-    DynamicDialogModule,
     FieldsetModule,
     FileUploadModule,
     FocusTrapModule,
@@ -214,8 +207,8 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     OrganizationChartModule,
     OverlayPanelModule,
     PaginatorModule,
-    PanelModule,
     PanelMenuModule,
+    PanelModule,
     PasswordModule,
     PickListModule,
     ProgressBarModule,
@@ -225,20 +218,19 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     RippleModule,
     ScrollPanelModule,
     ScrollTopModule,
+    ScrollerModule,
     SelectButtonModule,
     SidebarModule,
     SkeletonModule,
-    SlideMenuModule,
     SliderModule,
     SpeedDialModule,
-    SpinnerModule,
     SplitButtonModule,
     SplitterModule,
     StepsModule,
     StyleClassModule,
-    TableModule,
     TabMenuModule,
     TabViewModule,
+    TableModule,
     TagModule,
     TerminalModule,
     TieredMenuModule,
@@ -250,8 +242,6 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
     TreeModule,
     TreeSelectModule,
     TreeTableModule,
-    TriStateCheckboxModule,
-    VirtualScrollerModule,
   ],
 })
 class MockModule {}
