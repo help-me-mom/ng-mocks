@@ -52,7 +52,7 @@ class MockAuthService {
     false,
 })
 class TargetDirective {
-  @Output() readonly toggle = new EventEmitter<void>();
+  @Output() readonly triggerToggle = new EventEmitter<void>();
 
   @HostListener('click')
   hostListenerClick() {
@@ -70,11 +70,11 @@ class TargetDirective {
     false,
 })
 class MockTargetDirective {
-  @Output() readonly toggle = new EventEmitter<void>();
+  @Output() readonly triggerToggle = new EventEmitter<void>();
 
   @HostListener('click')
   hostListenerClick() {
-    this.toggle.emit();
+    this.triggerToggle.emit();
   }
 }
 
