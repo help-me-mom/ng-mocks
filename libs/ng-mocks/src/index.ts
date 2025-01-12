@@ -4,7 +4,6 @@ import './lib/common/ng-mocks-stack';
 import './lib/common/ng-mocks-global-overrides';
 
 export * from './lib/common/core.tokens';
-export * from './lib/common/func.is-standalone';
 
 export { getTestBedInjection, getInjection } from './lib/common/core.helpers';
 

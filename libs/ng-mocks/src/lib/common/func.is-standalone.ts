@@ -1,5 +1,4 @@
-import { VERSION } from '@angular/core';
-
+import ngMocksUniverse from '../common/ng-mocks-universe';
 import collectDeclarations from '../resolve/collect-declarations';
 
 import { getNgType } from './func.get-ng-type';
@@ -9,15 +8,9 @@ import { getNgType } from './func.get-ng-type';
  */
 export function isStandalone(declaration: any): boolean {
   const type = getNgType(declaration);
-  if (!type || type === 'Injectable') {
+  if (!type || type === 'Injectable' || type === 'NgModule') {
     return false;
   }
 
-  // Handle Angular 19+ default standalone behavior
-  const declarations = collectDeclarations(declaration);
-  if (Number(VERSION.major) >= 19 && type !== 'NgModule' && declarations[type].standalone === undefined) {
-    return true;
-  }
-
-  return declarations[type].standalone === true;
+  return collectDeclarations(declaration)[type].standalone ?? ngMocksUniverse.global.get('flags').defaultStandalone;
 }
