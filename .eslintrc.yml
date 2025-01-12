@@ -121,6 +121,7 @@ overrides:
       unicorn/prefer-array-flat: off
       unicorn/prefer-at: off
       unicorn/prefer-event-target: off
+      unicorn/prefer-global-this: off
       unicorn/prefer-includes: off
       unicorn/prefer-module: off
       unicorn/prefer-set-has: off
