@@ -4,6 +4,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-ng-mocks-trigger-317',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<input (focus)="trigger.emit()" data-label="input">',
 })
 class TargetComponent {

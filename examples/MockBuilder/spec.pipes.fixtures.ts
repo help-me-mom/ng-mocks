@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'my',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class MyPipe implements PipeTransform {
   protected prefix = 'MyPipe:';
@@ -13,6 +14,7 @@ export class MyPipe implements PipeTransform {
 
 @Pipe({
   name: 'keep',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class KeepPipe implements PipeTransform {
   protected prefix = 'KeepPipe:';
@@ -24,6 +26,7 @@ export class KeepPipe implements PipeTransform {
 
 @Pipe({
   name: 'mock',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class MockPipe implements PipeTransform {
   protected prefix = 'MockPipe:';
@@ -35,6 +38,7 @@ export class MockPipe implements PipeTransform {
 
 @Pipe({
   name: 'customize',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class CustomizePipe implements PipeTransform {
   protected prefix = 'CustomizePipe:';
@@ -46,6 +50,7 @@ export class CustomizePipe implements PipeTransform {
 
 @Pipe({
   name: 'restore',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class RestorePipe implements PipeTransform {
   protected prefix = 'RestorePipe:';

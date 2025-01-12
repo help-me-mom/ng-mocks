@@ -16,6 +16,8 @@ import {
 
 @Pipe({
   name: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetPipe implements PipeTransform {
   protected name = 'pipe:';
@@ -27,12 +29,16 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target-is-mocked-ng-def-of',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'target',
 })
 class TargetComponent {}
 
 @Directive({
   selector: 'target-is-mocked-ng-def-of',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {}
 

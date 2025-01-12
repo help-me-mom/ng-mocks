@@ -225,6 +225,18 @@ services:
       - install
       - --no-audit
 
+  a19:
+    image: satantime/puppeteer-node:22.13.0
+    working_dir: /app
+    volumes:
+      - ./e2e/a19:/app
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+
   jasmine:
     image: satantime/puppeteer-node:20.18.1
     working_dir: /app

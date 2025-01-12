@@ -20,6 +20,7 @@ const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
 
 @Pipe({
   name: 'target',
+  standalone: false,
 })
 class TargetPipe implements PipeTransform {
   protected name = 'pipe:';
@@ -31,12 +32,14 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}
 
 @Directive({
   selector: 'target',
+  standalone: false,
 })
 class TargetDirective {}
 

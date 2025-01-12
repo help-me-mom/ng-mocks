@@ -8,6 +8,8 @@ describe('issue-576', () => {
     ngMocks.faster();
 
     @Component({
+      ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+        false,
       template: '1:{{ value }}',
     })
     class TargetComponent {
@@ -35,6 +37,8 @@ describe('issue-576', () => {
     ngMocks.faster();
 
     @Component({
+      ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+        false,
       template: '2:{{ value }}',
     })
     class TargetComponent {

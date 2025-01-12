@@ -18,6 +18,8 @@ class TargetService {
 
 @Component({
   selector: 'target-spies',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<ng-content></ng-content>',
 })
 class TargetComponent {

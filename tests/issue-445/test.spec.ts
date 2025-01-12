@@ -4,6 +4,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target-445',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<ng-content></ng-content>',
 })
 class ByAttributeComponent {

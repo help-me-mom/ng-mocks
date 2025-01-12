@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 
-@Directive({ selector: '[example-directive]' })
+@Directive({ selector: '[example-directive]', standalone: false })
 export class ExampleDirective implements OnInit {
   public constructor(protected node: ElementRef) {}
 
@@ -13,7 +13,7 @@ export class ExampleDirective implements OnInit {
   }
 }
 
-@Pipe({ name: 'examplePipe' })
+@Pipe({ name: 'examplePipe', standalone: false })
 export class ExamplePipe implements PipeTransform {
   public transform = (text: string) => `Example: ${text}`;
 }
@@ -25,18 +25,21 @@ export class ExampleService {
 
 @Component({
   selector: 'example-private-component',
+  standalone: false,
   template: '<span>Private thing</span>',
 })
 export class ExamplePrivateComponent {}
 
 @Component({
   selector: 'example-component',
+  standalone: false,
   template: '<span>My Example</span>',
 })
 export class ExampleComponent {}
 
 @Component({
   selector: 'example-consumer-component',
+  standalone: false,
   template: '<example-component></example-component>',
 })
 export class ExampleConsumerComponent {}
@@ -129,6 +132,7 @@ export class CustomService {
 }
 @Component({
   selector: 'custom-service',
+  standalone: false,
   template: 'same imports',
 })
 export class CustomWithServiceComponent {

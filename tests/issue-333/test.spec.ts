@@ -6,6 +6,8 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'dynamic-overlay',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     '<ng-container *ngComponentOutlet="component"></ng-container>',
 })
@@ -26,12 +28,16 @@ class OverlayModule {}
 
 @Component({
   selector: 'dep-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'Dependency',
 })
 class DepComponent {}
 
 @Component({
   selector: 'mock-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<h1 *ngIf="flag"><dep-component></dep-component></h1>',
 })
 class MockComponent {

@@ -9,6 +9,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'item-list',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{items.length}}',
 })
 class ItemListComponent {

@@ -17,11 +17,13 @@ class TargetService {
 
 @Directive({
   selector: 'target',
+  standalone: false,
 })
 class TargetDirective {}
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ service.name }}',
 })
 class TargetComponent {

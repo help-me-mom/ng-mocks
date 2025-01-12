@@ -5,6 +5,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'component1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class DefaultComponent {}
@@ -18,6 +20,8 @@ class DefaultComponent {}
     },
   ],
   selector: 'component2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class ValueAccessorComponent {}
@@ -31,6 +35,8 @@ class ValueAccessorComponent {}
     },
   ],
   selector: 'component3',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class ValidatorComponent {}

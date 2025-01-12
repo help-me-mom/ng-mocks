@@ -50,6 +50,8 @@ const sideEffectGuard: CanDeactivateFn<LoginComponent> = () => false;
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'login',
 })
 class LoginComponent {
@@ -60,6 +62,8 @@ class LoginComponent {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'dashboard',
 })
 class DashboardComponent {
@@ -115,7 +119,7 @@ describe('TestRoutingGuard:canDeactivate', () => {
   // It is important to run routing tests in fakeAsync.
   it('cannot leave login', fakeAsync(() => {
     if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+');
+      pending('Need Angular 7+'); // TODO pending
 
       return;
     }

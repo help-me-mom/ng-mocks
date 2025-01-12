@@ -8,6 +8,7 @@ import { isMockControlValueAccessor } from './func.is-mock-control-value-accesso
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '',
 })
 class TargetComponent {
@@ -18,6 +19,7 @@ class TargetComponent {
 
 @Directive({
   selector: '[target]',
+  standalone: false,
 })
 class TargetDirective {
   public writeValue(obj: any) {

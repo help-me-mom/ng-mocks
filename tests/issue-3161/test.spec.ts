@@ -11,6 +11,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'translate',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TranslatePipe implements PipeTransform {
   transform(value: string) {
@@ -26,6 +28,8 @@ class TranslateModule {}
 
 @Pipe({
   name: 'translate',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class MockTranslatePipe implements PipeTransform {
   transform(value: string) {
@@ -58,7 +62,7 @@ class StandaloneComponent {
 describe('issue-3161', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('needs a14', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

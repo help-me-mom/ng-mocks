@@ -19,6 +19,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     },
   ],
   selector: 'custom',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class CustomDirective implements ControlValueAccessor {
   public registerOnChange = () => undefined;
@@ -29,6 +31,8 @@ class CustomDirective implements ControlValueAccessor {
 
 @Component({
   selector: 'target-ng-mocks-change-reactive-forms',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
     <input data-testid="ngModel" [(ngModel)]="value" />

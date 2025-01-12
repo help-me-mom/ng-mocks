@@ -12,6 +12,8 @@ const TOKEN = new InjectionToken<string>('TOKEN');
     },
   ],
   selector: 'parent-2097-nested',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     '<child-2097-nested></child-2097-nested><child-2097-nested></child-2097-nested><ng-content></ng-content>',
 })
@@ -19,6 +21,8 @@ class ParentComponent {}
 
 @Component({
   selector: 'child-2097-nested',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'child',
 })
 class ChildComponent {}

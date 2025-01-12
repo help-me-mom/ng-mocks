@@ -63,6 +63,8 @@ class MockGuard implements CanActivate {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'login',
 })
 class LoginComponent {
@@ -73,6 +75,8 @@ class LoginComponent {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'dashboard',
 })
 class DashboardComponent {
@@ -134,7 +138,7 @@ describe('TestRoutingGuard:test', () => {
   // It is important to run routing tests in fakeAsync.
   it('redirects to login', fakeAsync(() => {
     if (Number.parseInt(VERSION.major, 10) <= 6) {
-      pending('Need Angular > 6');
+      pending('Need Angular > 6'); // TODO pending
 
       return;
     }

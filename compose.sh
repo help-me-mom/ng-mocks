@@ -167,6 +167,15 @@ if [ "$1" = "" ] || [ "$1" = "a18" ]; then
     cd ../..
 fi
 
+if [ "$1" = "" ] || [ "$1" = "a19" ]; then
+  docker compose up --build -- a19 && \
+    cd ./e2e/a19 && \
+    nvm install && \
+    nvm use && \
+    node ./node_modules/puppeteer/install.mjs && \
+    cd ../..
+fi
+
 if [ "$1" = "" ] || [ "$1" = "jasmine" ]; then
   docker compose up --build -- jasmine && \
     cd ./e2e/jasmine && \

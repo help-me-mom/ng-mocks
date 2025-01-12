@@ -13,6 +13,8 @@ class TargetService {
 
 @Component({
   selector: 'root-normal-usage-after-mock-builder',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     '<internal-normal-usage-after-mock-builder></internal-normal-usage-after-mock-builder>{{ service.called }}',
 })
@@ -22,12 +24,16 @@ class TargetComponent {
 
 @Component({
   selector: 'internal-normal-usage-after-mock-builder',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'real',
 })
 class RealComponent {}
 
 @Component({
   selector: 'internal-normal-usage-after-mock-builder',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'fake',
 })
 class FakeComponent {}

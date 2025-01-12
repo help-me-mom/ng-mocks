@@ -26,22 +26,23 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
-| Angular | ng-mocks | Jasmine | Jest | Ivy |
-|--------:|:--------:| :-----: | :--: | :-: |
-|      18 |  latest  |   yes   | yes  | yes |
-|      17 |  latest  |   yes   | yes  | yes |
-|      16 |  latest  |   yes   | yes  | yes |
-|      15 |  latest  |   yes   | yes  | yes |
-|      14 |  latest  |   yes   | yes  | yes |
-|      13 |  latest  |   yes   | yes  | yes |
-|      12 |  latest  |   yes   | yes  | yes |
-|      11 |  latest  |   yes   | yes  | yes |
-|      10 |  latest  |   yes   | yes  | yes |
-|       9 |  latest  |   yes   | yes  | yes |
-|       8 |  latest  |   yes   | yes  |     |
-|       7 |  latest  |   yes   | yes  |     |
-|       6 |  latest  |   yes   | yes  |     |
-|       5 |  latest  |   yes   | yes  |     |
+| angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
+| ------: | :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
+|      19 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
+|      18 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
+|      17 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
+|      16 |  latest  |   yes   | yes  | yes |    yes     |   no    |       |
+|      15 |  latest  |   yes   | yes  | yes |    yes     |         |       |
+|      14 |  latest  |   yes   | yes  | yes |    yes     |         |       |
+|      13 |  latest  |   yes   | yes  | yes |            |         |       |
+|      12 |  latest  |   yes   | yes  | yes |            |         |       |
+|      11 |  latest  |   yes   | yes  | yes |            |         |       |
+|      10 |  latest  |   yes   | yes  | yes |            |         |       |
+|       9 |  latest  |   yes   | yes  | yes |            |         |       |
+|       8 |  latest  |   yes   | yes  |     |            |         |       |
+|       7 |  latest  |   yes   | yes  |     |            |         |       |
+|       6 |  latest  |   yes   | yes  |     |            |         |       |
+|       5 |  latest  |   yes   | yes  |     |            |         |       |
 
 In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.

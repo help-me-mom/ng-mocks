@@ -6,6 +6,8 @@ import { MockDirective, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[myDirective]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class MyDirective {
   @Input() public value?: string;
@@ -13,6 +15,8 @@ class MyDirective {
 
 @Component({
   selector: 'app',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <div class="p1"><span myDirective value="d1"></span></div>
     <div class="p2"><span myDirective value="d2"></span></div>

@@ -24,6 +24,8 @@ class StandalonePipe implements PipeTransform {
 // A simple dependency component we are going to mock.
 @Component({
   selector: 'dependency-standalone-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<ng-content></ng-content>',
 })
 class DependencyComponent {
@@ -57,7 +59,7 @@ class StandaloneComponent {
 describe('TestStandaloneComponent', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('needs a14', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

@@ -20,6 +20,8 @@ const TOKEN = new InjectionToken('TOKEN');
 
 @Pipe({
   name: 'pure',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class PurePipe implements PipeTransform {
   public value: any;
@@ -33,6 +35,8 @@ class PurePipe implements PipeTransform {
 
 @Pipe({
   name: 'impure',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   pure: false,
 })
 class ImpurePipe implements PipeTransform {
@@ -53,6 +57,8 @@ class ImpurePipe implements PipeTransform {
     },
   ],
   selector: '[tpl]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TplDirective {
   @Input() public readonly data: any = null;
@@ -69,6 +75,8 @@ class TplDirective {
     },
   ],
   selector: '[tpl2]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class Tpl2Directive {
   @Input('tpl') public readonly name: string | null = null;
@@ -84,6 +92,8 @@ class Tpl2Directive {
     },
   ],
   selector: '[block]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class BlockDirective {
   @Input('block') public readonly name: string | null = null;
@@ -103,6 +113,8 @@ class BlockDirective {
     },
   ],
   selector: 'mock',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class MockComponent {

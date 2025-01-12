@@ -12,17 +12,20 @@ import {
 
 @Component({
   selector: 'empty-template-container',
+  standalone: false,
   template: '',
 })
 class TargetComponent {}
 
 @Directive({
   selector: '[target]',
+  standalone: false,
 })
 class TargetDirective {}
 
 @Pipe({
   name: 'target',
+  standalone: false,
 })
 class TargetPipe implements PipeTransform {
   protected name = 'target';

@@ -23,12 +23,16 @@ describe('issue-6928', () => {
 
   @Component({
     selector: 'app-shared1',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
     template: '',
   })
   class Shared1Component {}
 
   @Component({
     selector: 'app-shared2',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
     template: '',
   })
   class Shared2Component {}
@@ -54,6 +58,8 @@ describe('issue-6928', () => {
 
   @Component({
     selector: 'app-my-component',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
     template:
       '<app-shared2></app-shared2><app-standalone></app-standalone>',
   })

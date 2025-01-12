@@ -15,12 +15,14 @@ const TARGET2_TOKEN = new InjectionToken('TARGET2');
 
 @Component({
   selector: 'target1',
+  standalone: false,
   template: 'target1',
 })
 class Target1Component {}
 
 @Directive({
   selector: '[target1]',
+  standalone: false,
 })
 class Target1Directive {}
 
@@ -35,12 +37,14 @@ export class Target1Module {}
 
 @Component({
   selector: 'target2',
+  standalone: false,
   template: 'target2',
 })
 class Target2Component {}
 
 @Directive({
   selector: '[target2]',
+  standalone: false,
 })
 class Target2Directive {}
 

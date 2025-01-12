@@ -37,14 +37,22 @@ const injectableArgs = [
 @Injectable(...injectableArgs)
 abstract class InjectedAbstraction {}
 
-@Component({ template: '' })
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
+  template: '',
+})
 class TestWithoutDecoratorComponent {
   public constructor(
     public myInjectedAbstraction: InjectedAbstraction,
   ) {}
 }
 
-@Component({ template: '' })
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
+  template: '',
+})
 class TestWithDecoratorComponent {
   public constructor(
     @Inject(InjectedAbstraction)
@@ -62,7 +70,7 @@ ngMocks.defaultMock(InjectedAbstraction, () => {
 describe('issue-455:abstract', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

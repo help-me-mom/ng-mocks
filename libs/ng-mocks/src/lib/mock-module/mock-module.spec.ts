@@ -36,6 +36,7 @@ import {
 
 @Component({
   selector: 'component-subject',
+  standalone: false,
   template: `
     <example-component></example-component>
     <span example-directive></span>
@@ -48,6 +49,7 @@ class SubjectComponent {
 
 @Component({
   selector: 'same-imports',
+  standalone: false,
   template: 'same imports',
 })
 class SameImportsComponent {}

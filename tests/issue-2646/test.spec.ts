@@ -19,6 +19,8 @@ class TargetService {
 
 @Directive({
   selector: 'target-2646',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {
   echo() {
@@ -28,6 +30,8 @@ class TargetDirective {
 
 @Component({
   selector: 'target-2646',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ echo() | target }}',
 })
 class TargetComponent {
@@ -43,6 +47,8 @@ describe('issue-2646', () => {
   describe('directive', () => {
     @Directive({
       selector: 'target-2646',
+      ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+        false,
     })
     class ServiceToDirective extends TargetService {
       echo() {
@@ -98,6 +104,8 @@ describe('issue-2646', () => {
   describe('component', () => {
     @Component({
       selector: 'target-2646',
+      ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+        false,
       template: 'target',
     })
     class ServiceToComponent extends TargetService {
@@ -154,6 +162,8 @@ describe('issue-2646', () => {
   describe('pipe', () => {
     @Pipe({
       name: 'target',
+      ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+        false,
     })
     class PipeFromService
       extends TargetService

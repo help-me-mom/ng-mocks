@@ -11,6 +11,8 @@ import {
 
 @Component({
   selector: 'target-ng-mocks-global-wipe',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -19,6 +21,8 @@ class TargetComponent {
 
 @Component({
   selector: 'target-ng-mocks-global-wipe',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class FakeComponent {
@@ -27,6 +31,8 @@ class FakeComponent {
 
 @Component({
   selector: 'target-ng-mocks-global-wipe',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class ShadowComponent {

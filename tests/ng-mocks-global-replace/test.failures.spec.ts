@@ -4,6 +4,8 @@ import { ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target1-ng-mocks-global-replace-failures',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class Target1Component {
@@ -12,6 +14,8 @@ class Target1Component {
 
 @Directive({
   selector: 'target1-ng-mocks-global-replace-failures',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class Fake1Directive {
   public readonly name = 'fake1';

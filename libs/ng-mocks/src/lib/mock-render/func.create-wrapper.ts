@@ -62,6 +62,7 @@ const generateWrapperDirective = ({ selector, options }: any) => {
   class MockRenderDirective {}
   Directive({
     selector,
+    standalone: false,
     providers: options.providers,
   })(MockRenderDirective);
 

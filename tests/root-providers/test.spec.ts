@@ -67,6 +67,8 @@ class ProvidedService {
 
 @Component({
   selector: 'target-root-providers',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     "service:{{ service.name }}" "fake:{{ fake.name }}" "injected:{{
       injected.name
@@ -96,6 +98,8 @@ class TargetComponent {
 
 @Component({
   selector: 'module',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ moduleService.name }}',
 })
 class ModuleComponent {
@@ -113,7 +117,7 @@ class TargetModule {}
 describe('root-providers', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

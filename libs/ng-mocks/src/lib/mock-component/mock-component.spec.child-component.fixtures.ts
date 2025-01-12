@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'child-component',
+  standalone: false,
   template: 'some template',
 })
 export class ChildComponent {

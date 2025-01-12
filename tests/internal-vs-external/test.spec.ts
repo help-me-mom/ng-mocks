@@ -5,12 +5,16 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'internal-internal-vs-external',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'internal',
 })
 class InternalComponent {}
 
 @Component({
   selector: 'external-internal-vs-external',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     'external <internal-internal-vs-external></internal-internal-vs-external>',
 })

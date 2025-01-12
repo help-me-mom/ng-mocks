@@ -12,6 +12,8 @@ import {
 
 @Component({
   selector: 'route',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ params$ | async }}',
 })
 class RouteComponent implements OnInit {

@@ -4,6 +4,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
   selector: 'target-2647',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {}
 
@@ -20,6 +22,8 @@ class MiddleModule {}
 
 @Component({
   selector: 'target-2647',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `{{ directive.constructor.name }}`,
 })
 class TargetComponent {

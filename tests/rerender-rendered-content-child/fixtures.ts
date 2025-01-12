@@ -3,6 +3,7 @@ import { Component, ContentChild, NgModule, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'ccc',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<ng-template ngFor [ngForOf]="[]" [ngForTemplate]="injectedBlock"></ng-template>',
 })
 export class ContentChildComponent {

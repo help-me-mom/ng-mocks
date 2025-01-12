@@ -20,12 +20,16 @@ class ModalService {
 
 @Component({
   selector: 'modal',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'modal',
 })
 class ModalComponent {}
 
 @Component({
   selector: 'target-296',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'target',
 })
 class TargetComponent {

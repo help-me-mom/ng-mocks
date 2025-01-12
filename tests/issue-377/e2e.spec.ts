@@ -36,6 +36,8 @@ const TOKEN = new (InjectionToken as any)('TOKEN', {
 
 @Component({
   selector: 'target-377',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'service:{{ service.echo() }} token:{{ token }}',
 })
 class TargetComponent {
@@ -49,7 +51,7 @@ class TargetComponent {
 describe('issue-377', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

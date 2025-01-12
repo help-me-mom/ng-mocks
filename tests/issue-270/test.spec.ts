@@ -14,6 +14,8 @@ class TargetService {
 
 @Component({
   selector: 'target-270',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.stream$ | async }}',
 })
 class TargetComponent {

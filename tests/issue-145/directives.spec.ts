@@ -5,6 +5,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'directive1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class DefaultDirective {}
 
@@ -17,6 +19,8 @@ class DefaultDirective {}
     },
   ],
   selector: 'directive2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class ValueAccessorDirective {}
 
@@ -29,6 +33,8 @@ class ValueAccessorDirective {}
     },
   ],
   selector: 'directive3',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class ValidatorDirective {}
 

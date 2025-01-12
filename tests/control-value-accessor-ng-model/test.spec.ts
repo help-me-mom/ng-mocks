@@ -16,6 +16,8 @@ import {
 
 @Component({
   selector: 'target-cva-ng-model',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     '<control-cva-ng-model [(ngModel)]="value" [disabled]="disabled"></control-cva-ng-model>',
 })
@@ -41,6 +43,8 @@ class TargetComponent {
     },
   ],
   selector: 'control-cva-ng-model',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class ControlComponent implements ControlValueAccessor {

@@ -4,6 +4,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-ng-mocks-click-317',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<a (click)="update.emit()" data-role="link"></a>',
 })
 class TargetComponent {

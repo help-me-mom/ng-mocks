@@ -16,6 +16,7 @@ import { TOKEN_CUSTOMIZE, TOKEN_KEEP, TOKEN_MOCK } from './spec.tokens.fixtures'
 
 @Component({
   selector: 'c-structural',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div *ngIf="items && items.length">
       <ng-template ngFor [ngForOf]="items" [ngForTemplate]="injectedBlock"></ng-template>
@@ -29,6 +30,7 @@ export class ContentChildComponent<T> {
 
 @Component({
   selector: 'c-my',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div>My Content</div>
 
@@ -96,30 +98,35 @@ export class MyComponent {
 
 @Component({
   selector: 'c-1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'MyComponent1',
 })
 export class My1Component {}
 
 @Component({
   selector: 'c-2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'MyComponent2',
 })
 export class My2Component {}
 
 @Component({
   selector: 'c-3',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'MyComponent3',
 })
 export class My3Component {}
 
 @Component({
   selector: 'c-keep',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'KeepComponent',
 })
 export class KeepComponent {}
 
 @Component({
   selector: 'c-mock',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'MockComponent',
 })
 export class MockComponent {}

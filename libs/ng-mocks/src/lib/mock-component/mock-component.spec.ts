@@ -34,6 +34,7 @@ import { MockedComponent } from './types';
 
 @Component({
   selector: 'example-component-container',
+  standalone: false,
   template: `
     <getter-setter></getter-setter>
     <simple-component
@@ -353,6 +354,7 @@ describe('MockComponent', () => {
 
   it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {
     @Component({
+      standalone: false,
       template: '',
     })
     class MyComponent {

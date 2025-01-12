@@ -12,6 +12,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   template: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetComponent {
   public readonly name = 'component';
@@ -19,6 +21,8 @@ class TargetComponent {
 
 @Directive({
   selector: '[target],[target1]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {
   public readonly name = 'directive';
@@ -27,6 +31,8 @@ class TargetDirective {
 
 @Pipe({
   name: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetPipe implements PipeTransform {
   public readonly value = '';

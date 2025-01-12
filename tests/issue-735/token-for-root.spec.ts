@@ -17,6 +17,8 @@ const TOKEN = new (InjectionToken as any)('TOKEN-FOR-ROOT', {
 
 @Component({
   selector: 'target-735-token-for-root',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ token }}',
 })
 class TargetComponent {
@@ -35,7 +37,7 @@ class TargetModule {}
 describe('issue-735:token-for-root', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

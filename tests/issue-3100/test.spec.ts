@@ -41,7 +41,7 @@ class TargetComponent {
 describe('issue-3100', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('needs a14', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

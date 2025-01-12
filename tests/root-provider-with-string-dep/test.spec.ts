@@ -5,6 +5,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target-root-provider-with-string-dep',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: ' "name:{{ name }}" ',
 })
 class TargetComponent {
@@ -20,7 +22,7 @@ class TargetModule {}
 describe('root-provider-with-string-dep', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

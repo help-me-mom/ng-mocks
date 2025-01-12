@@ -296,6 +296,7 @@ describe('collect-declarations', () => {
       // eslint-disable-next-line @angular-eslint/no-outputs-metadata-property
       outputs: ['output'],
       selector: 'target',
+      standalone: false,
       template: 'target',
     })
     class TargetComponent {

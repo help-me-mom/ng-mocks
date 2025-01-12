@@ -10,6 +10,7 @@ const TARGET = new InjectionToken('TARGET');
     },
   ],
   selector: 'target-get-inputs-and-outputs',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<a (click)="output.emit()">{{ input }}</a>',
 })
 export class TargetComponent {
@@ -25,6 +26,7 @@ export class TargetComponent {
     },
   ],
   selector: 'target-get-inputs-and-outputs',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target2Directive {
   @Input('input2') public input = '';
@@ -40,6 +42,7 @@ export class Target2Directive {
     },
   ],
   selector: 'target-get-inputs-and-outputs',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target3Directive {
   @Input('input3') public input = '';

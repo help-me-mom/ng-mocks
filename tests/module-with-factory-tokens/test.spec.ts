@@ -25,6 +25,8 @@ const MY_TOKEN_MULTI = new (InjectionToken as any)(
 
 @Component({
   selector: 'internal-module-with-factory-tokens',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
 })
 class TargetComponent {
@@ -46,7 +48,7 @@ class TargetModule {}
 describe('module-with-factory-tokens:real', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 
@@ -73,7 +75,7 @@ describe('module-with-factory-tokens:real', () => {
 describe('module-with-factory-tokens:keep', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 
@@ -163,7 +165,7 @@ describe('module-with-factory-tokens:mock-2', () => {
 describe('module-with-factory-tokens:mock-3', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 
