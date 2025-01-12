@@ -1,3 +1,14 @@
+## [14.13.2](https://github.com/help-me-mom/ng-mocks/compare/v14.13.1...v14.13.2) (2025-01-12)
+
+
+### Bug Fixes
+
+* **a19:** correct detection of standalone flag [#10306](https://github.com/help-me-mom/ng-mocks/issues/10306) [#10583](https://github.com/help-me-mom/ng-mocks/issues/10583) ([8963df3](https://github.com/help-me-mom/ng-mocks/commit/8963df3668b9faf3c28277aa86597331d608217f))
+* **a19:** correct detection of standalone flag [#10306](https://github.com/help-me-mom/ng-mocks/issues/10306) [#10583](https://github.com/help-me-mom/ng-mocks/issues/10583) ([#10751](https://github.com/help-me-mom/ng-mocks/issues/10751)) ([fec44bd](https://github.com/help-me-mom/ng-mocks/commit/fec44bd0e1db4a55e36f7ab9d61d9c6c0610640c))
+* **a19:** respecting default standalone flag since angular 19 ([fac711a](https://github.com/help-me-mom/ng-mocks/commit/fac711a323702842cc9d80f078ff8f73baae34ee))
+* **a19:** support of Angular 19 [#10503](https://github.com/help-me-mom/ng-mocks/issues/10503) [#10632](https://github.com/help-me-mom/ng-mocks/issues/10632) ([f9a73ab](https://github.com/help-me-mom/ng-mocks/commit/f9a73abd603d455d1101edfd0a435b739ed70f85))
+* **a19:** support of Angular 19 [#10503](https://github.com/help-me-mom/ng-mocks/issues/10503) [#10632](https://github.com/help-me-mom/ng-mocks/issues/10632) ([#10754](https://github.com/help-me-mom/ng-mocks/issues/10754)) ([b6b24d5](https://github.com/help-me-mom/ng-mocks/commit/b6b24d5d9cd4dade11967d9c12c17bff31a9f2f7))
+
 ## [14.13.1](https://github.com/help-me-mom/ng-mocks/compare/v14.13.0...v14.13.1) (2024-08-25)
 
 
