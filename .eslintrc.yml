@@ -100,6 +100,7 @@ overrides:
       '@angular-eslint/no-inputs-metadata-property': off
       '@angular-eslint/no-output-rename': off
       '@angular-eslint/no-outputs-metadata-property': off
+      '@angular-eslint/prefer-standalone': off
 
       '@typescript-eslint/no-empty-interface': off
       '@typescript-eslint/no-explicit-any': off
