@@ -4,6 +4,7 @@ import { TargetPipe } from './2.fixtures';
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ name }}',
 })
 export class TargetComponent {
@@ -12,6 +13,7 @@ export class TargetComponent {
 
 @Directive({
   selector: 'target',
+  standalone: false,
 })
 export class TargetDirective {
   public readonly name = 'target';
