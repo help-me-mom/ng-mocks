@@ -113,15 +113,15 @@ npm run test:debug
 ## How to add a new Angular version
 
 First, you need to install the new Angular version somewhere.
-Below is an example how to add Angular 19 to `ng-mocks`.
+Below is an example how to add Angular 20 to `ng-mocks`.
 
 ### Step #1 - create an empty project
 
-Let's create a fresh project with `@angular/cli` `v19`.
+Let's create a fresh project with `@angular/cli` `v20`.
 The name of the project should be `a + version`: `a20`.
 
 ```shell
-npx '@angular/cli@^19' new \
+npx '@angular/cli@^20' new \
   --routing \
   --skip-git=true \
   --skip-tests=true \
@@ -228,6 +228,8 @@ The next step is:
 - update `description` in `libs/ng-mocks/package.json`
 - update `peerDependencies` in `libs/ng-mocks/package.json`
 - update this file and replace `a20` with `a21`
+- update this file and replace `v20` with `v21`
+- update this file and replace `^20` with `^21`
 - update this file and replace `Angular 20` with `Angular 21`
 - update this file and replace `a19` with `a20`
 
