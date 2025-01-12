@@ -56,6 +56,8 @@ class ModuleService {
 
 @Component({
   selector: 'target-312',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'target',
 })
 class TargetComponent {
@@ -87,7 +89,7 @@ const assertion: any =
 describe('issue-312', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

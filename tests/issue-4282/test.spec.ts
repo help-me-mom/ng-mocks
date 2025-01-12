@@ -22,6 +22,8 @@ class TargetService {
 
 @Component({
   selector: 'target-4282',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `{{ service.name }}`,
 })
 class TargetComponent {
@@ -38,7 +40,7 @@ class TargetModule {}
 describe('issue-4282', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('a14', () => {
-      // pending('Need Angular >= 14');
+      // TODO pending('Need Angular >= 14');
       expect(true).toBeTruthy();
     });
 

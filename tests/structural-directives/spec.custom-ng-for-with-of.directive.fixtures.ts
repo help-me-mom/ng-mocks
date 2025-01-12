@@ -9,6 +9,7 @@ export interface ICustomNgForContext {
 
 @Directive({
   selector: '[customNgForWithOf]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class CustomNgForWithOfDirective {
   public constructor(

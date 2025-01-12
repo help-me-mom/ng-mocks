@@ -7,6 +7,8 @@ class UndecoratedService {}
 
 @Component({
   selector: 'target-2845',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `{{ service ? 'provided' : 'missing' }}`,
 })
 class TargetComponent {

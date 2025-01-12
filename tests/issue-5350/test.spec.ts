@@ -13,14 +13,17 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 describe('issue-5350', () => {
   if (Number.parseInt(VERSION.major, 10) < 16) {
     it('a16', () => {
-      // pending('Need Angular 16+');
+      // TODO pending('Need Angular 16+');
       expect(true).toBeTruthy();
     });
 
     return;
   }
 
-  @Directive(undefined as never)
+  @Directive({
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
+  } as never)
   class TargetBase {
     @Input({
       alias: 'aInput1',
@@ -32,6 +35,8 @@ describe('issue-5350', () => {
 
   @Component({
     selector: 'target',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
     template: '{{ input1 }}{{ input2 }}',
   })
   class TargetComponent extends TargetBase {

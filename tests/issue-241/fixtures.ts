@@ -2,6 +2,7 @@ import { Component, NgModule, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class TargetPipe implements PipeTransform {
   public transform(value: string): string {
@@ -23,6 +24,7 @@ export class TargetModule {}
 
 @Component({
   selector: 'target-241',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: "{{ 'target' | target }}",
 })
 export class TargetComponent {}

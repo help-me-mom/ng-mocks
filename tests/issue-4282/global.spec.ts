@@ -23,6 +23,8 @@ class TargetService {
 
 @Component({
   selector: 'target-4282-global',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `{{ service.name }}`,
 })
 class TargetComponent {
@@ -44,7 +46,7 @@ ngMocks.defaultMock(TargetService, () => ({
 describe('issue-4282:global', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('a14', () => {
-      // pending('Need Angular >= 14');
+      // TODO pending('Need Angular >= 14');
       expect(true).toBeTruthy();
     });
 

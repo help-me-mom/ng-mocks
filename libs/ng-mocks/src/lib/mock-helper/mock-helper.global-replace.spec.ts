@@ -6,6 +6,7 @@ import mockHelperGlobalReplace from './mock-helper.global-replace';
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -14,6 +15,7 @@ class TargetComponent {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ name }}',
 })
 class FakeComponent {

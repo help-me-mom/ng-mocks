@@ -5,6 +5,8 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'replace-4641',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'replace-real',
 })
 class ReplaceComponent {
@@ -21,6 +23,8 @@ class ReplaceModule {}
 
 @Component({
   selector: 'replace-4641',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'replace-mock',
 })
 class ReplaceMockComponent {
@@ -31,6 +35,8 @@ class ReplaceMockComponent {
 
 @Component({
   selector: 'target-4641',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     dep1:<dep1-4641></dep1-4641> dep2:<dep2-4641
     ></dep2-4641> replace:<replace-4641></replace-4641>
@@ -40,12 +46,16 @@ class TargetComponent {}
 
 @Component({
   selector: 'dep1-4641',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<replace-4641></replace-4641>',
 })
 class Dep1Component {}
 
 @Component({
   selector: 'dep2-4641',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<replace-4641></replace-4641>',
 })
 class Dep2Component {}

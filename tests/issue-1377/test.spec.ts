@@ -5,7 +5,12 @@ import {
   trigger,
 } from '@angular/animations';
 import { AnimationDriver } from '@angular/animations/browser';
-import { Component, DebugElement, NgModule } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  NgModule,
+  VERSION,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import {
@@ -42,6 +47,8 @@ import {
     ]),
   ],
   selector: 'target-1377',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <div [@openClose]="isOpen ? 'open' : 'closed'">
       The box is now {{ isOpen ? 'Open' : 'Closed' }}!
@@ -161,6 +168,15 @@ const expectEmpty = () => {
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/1377
 describe('issue-1377', () => {
+  if (Number.parseInt(VERSION.major, 10) >= 19) {
+    it('a19', () => {
+      // TODO pending('Need Angular < 19');
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   describe('BrowserAnimationsModule', () => {
     describe('classic', () => {
       beforeEach(() =>

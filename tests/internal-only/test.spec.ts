@@ -5,6 +5,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'internal-only',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'internal',
 })
 class InternalComponent {}

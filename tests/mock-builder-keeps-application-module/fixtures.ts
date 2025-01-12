@@ -2,6 +2,7 @@ import { APP_INITIALIZER, Component, InjectionToken, NgModule } from '@angular/c
 
 @Component({
   selector: 'target-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'target',
 })
 export class TargetComponent {}

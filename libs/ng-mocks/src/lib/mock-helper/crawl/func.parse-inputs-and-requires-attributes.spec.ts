@@ -4,6 +4,7 @@ import funcParseInputsAndRequiresAttributes from './func.parse-inputs-and-requir
 
 @Directive({
   selector: 'target',
+  standalone: false,
 })
 class TargetDirective {}
 

@@ -6,7 +6,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 describe('issue-5520', () => {
   if (Number.parseInt(VERSION.major, 10) < 15) {
     it('needs a15', () => {
-      // pending('Need Angular 15+');
+      // TODO pending('Need Angular 15+');
       expect(true).toBeTruthy();
     });
 
@@ -15,6 +15,8 @@ describe('issue-5520', () => {
 
   @Component({
     selector: 'dependency',
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+      false,
     template: '',
   })
   class DependencyComponent {

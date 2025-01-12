@@ -22,6 +22,8 @@ class TargetService implements AbstractService {
     },
   ],
   selector: 'target-ng-mocks-find-instance-abstract',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.echo() }}',
 })
 class TargetComponent {

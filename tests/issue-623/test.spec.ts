@@ -24,11 +24,15 @@ class TargetService {
 @Directive({
   providers: [TargetService],
   selector: '[directive]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {}
 
 @Component({
   selector: 'target-623',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.name }}',
 })
 class TargetComponent {

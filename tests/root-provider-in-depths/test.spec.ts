@@ -30,6 +30,8 @@ class TargetService {
 
 @Component({
   selector: 'target-root-provider-in-depths',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.name }}',
 })
 class TargetComponent {

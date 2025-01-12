@@ -6,6 +6,8 @@ import { MockRender } from 'ng-mocks';
 class RecursiveDirective {}
 Directive({
   selector: 'recursive',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   providers: [
     {
       provide: RecursiveDirective,
@@ -16,6 +18,8 @@ Directive({
 
 @Directive({
   selector: 'target-2095',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   providers: [
     {
       provide: RecursiveDirective,

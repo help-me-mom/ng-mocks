@@ -17,6 +17,8 @@ import {
 
 @Pipe({
   name: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 @Injectable()
 class TargetPipe implements PipeTransform {
@@ -33,6 +35,8 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target-pipe-as-service',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     'pipe:{{ '123' | target }}' 's:transform:{{
       service.transform('123')

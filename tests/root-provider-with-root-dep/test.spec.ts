@@ -33,6 +33,8 @@ class TargetService {
 
 @Component({
   selector: 'target-root-provider-with-root-dep',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: ' "name:{{ service ? service.name : \'\' }}" ',
 })
 class TargetComponent {
@@ -48,7 +50,7 @@ class TargetModule {}
 describe('root-provider-with-root-dep', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

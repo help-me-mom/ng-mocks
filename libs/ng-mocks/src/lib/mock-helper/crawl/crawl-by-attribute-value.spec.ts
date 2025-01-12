@@ -17,6 +17,7 @@ describe('crawl-by-attribute-value', () => {
     it('finds via injector with classic elDef', () => {
       @Component({
         selector: 'target',
+        standalone: false,
         template: 'target',
       })
       class TargetComponent {
@@ -60,6 +61,7 @@ describe('crawl-by-attribute-value', () => {
     it('finds via injector with classic elDef and alias', () => {
       @Component({
         selector: 'target',
+        standalone: false,
         template: 'target',
       })
       class TargetComponent {
@@ -103,6 +105,7 @@ describe('crawl-by-attribute-value', () => {
     it('does not find via injector with classic elDef', () => {
       @Component({
         selector: 'target',
+        standalone: false,
         template: 'target',
       })
       class TargetComponent {

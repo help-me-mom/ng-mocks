@@ -15,6 +15,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'child',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'child',
 })
 class ChildComponent {
@@ -27,6 +29,8 @@ class ChildComponent {
 
 @Directive({
   selector: '[child]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class ChildDirective {
   @Input() public child: number | null = null;
@@ -36,6 +40,8 @@ class ChildDirective {
 
 @Component({
   selector: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <child [child]="0" (trigger)="value = $event"></child>
     <div>

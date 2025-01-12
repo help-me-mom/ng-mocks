@@ -35,6 +35,8 @@ class KeepModule {
 
 @Component({
   selector: 'target-222-injector-scope',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'target',
 })
 class TargetComponent {}
@@ -49,7 +51,7 @@ class TargetModule {}
 describe('issue-222:INJECTOR_SCOPE', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

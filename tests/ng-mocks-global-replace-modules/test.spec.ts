@@ -5,6 +5,8 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-ng-mocks-global-replace-modules',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class Target1Component {
@@ -23,6 +25,8 @@ class Target1Module {}
 
 @Component({
   selector: 'target-ng-mocks-global-replace-modules',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ name }}',
 })
 class Target2Component {

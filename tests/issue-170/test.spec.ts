@@ -31,6 +31,8 @@ class TargetService {
 @Component({
   providers: [TargetService, TargetChildService],
   selector: 'target-170',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'target {{ service.print() }}',
 })
 class TargetComponent {
@@ -43,6 +45,8 @@ class TargetComponent {
 
 @Component({
   selector: 'real',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<target-170></target-170>',
 })
 class RealComponent implements AfterViewInit {

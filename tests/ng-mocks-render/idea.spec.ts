@@ -14,6 +14,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[tpl]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class MockDirective {
   @Input('tpl') public readonly name: string | null = null;
@@ -23,6 +25,8 @@ class MockDirective {
 
 @Component({
   selector: 'mock-ng-mocks-render-idea',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: ' <ng-content></ng-content> ',
 })
 class MockComponent {
@@ -47,6 +51,8 @@ class MockComponent {
 
 @Component({
   selector: 'target-ng-mocks-render-idea',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <mock-ng-mocks-render-idea>
       :step:1:

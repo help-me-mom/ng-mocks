@@ -2,6 +2,7 @@ import { Component, ContentChild, ElementRef, TemplateRef, ViewChild } from '@an
 
 @Component({
   selector: 'template-outlet-component',
+  standalone: false,
   template: `
     <h1><template [ngTemplateOutlet]="injectedBlock1"></template></h1>
     <h2><template [ngTemplateOutlet]="injectedBlock2"></template></h2>

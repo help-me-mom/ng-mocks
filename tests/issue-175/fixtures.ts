@@ -9,6 +9,7 @@ export class Target2Service {}
 @Component({
   providers: [Target1Service],
   selector: 'com-1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'com-1',
 })
 export class Target1Component {
@@ -17,6 +18,7 @@ export class Target1Component {
 
 @Component({
   selector: 'com-2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'com-2',
 })
 export class Target2Component {
@@ -26,6 +28,7 @@ export class Target2Component {
 @Directive({
   providers: [Target1Service],
   selector: 'dir-1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target1Directive {
   public constructor(public service: Target1Service) {}
@@ -33,6 +36,7 @@ export class Target1Directive {
 
 @Directive({
   selector: 'dir-2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target2Directive {
   public constructor(public service: Target2Service) {}
@@ -40,6 +44,7 @@ export class Target2Directive {
 
 @Pipe({
   name: 'pip1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target1Pipe implements PipeTransform {
   protected name = 'pip1';
@@ -51,6 +56,7 @@ export class Target1Pipe implements PipeTransform {
 
 @Pipe({
   name: 'pip2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 export class Target2Pipe implements PipeTransform {
   protected name = 'pip2';

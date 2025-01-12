@@ -52,6 +52,8 @@ class TargetService {
 
 @Component({
   selector: 'target-provider-with-custom-dependencies',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     "service:{{ service.service ? service.service.name : 'missed' }}"
     "optional:{{
@@ -87,7 +89,7 @@ class TargetModule {}
 describe('provider-with-custom-dependencies', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

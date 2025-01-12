@@ -31,7 +31,11 @@ const TOKEN: InjectionToken<InjectedAbstraction> =
     providedIn: 'root',
   });
 
-@Component({ template: '' })
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
+  template: '',
+})
 class TestWithoutDecoratorComponent {
   public constructor(
     @Inject(TOKEN)
@@ -39,7 +43,11 @@ class TestWithoutDecoratorComponent {
   ) {}
 }
 
-@Component({ template: '' })
+@Component({
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
+  template: '',
+})
 class TestWithDecoratorComponent {
   public constructor(
     @Inject(TOKEN)
@@ -59,7 +67,7 @@ ngMocks.defaultMock(
 describe('issue-455:token', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

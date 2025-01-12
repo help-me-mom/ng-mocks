@@ -32,6 +32,7 @@ import {
     },
   ],
   selector: 'target',
+  standalone: false,
   template: '',
 })
 class TargetComponent implements Validator {
@@ -48,6 +49,7 @@ class TargetComponent implements Validator {
     },
   ],
   selector: '[target]',
+  standalone: false,
 })
 class TargetDirective implements AsyncValidator {
   public async validate(

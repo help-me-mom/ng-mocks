@@ -10,6 +10,7 @@ class TargetService {}
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ name }}',
   providers: [TargetService],
 })

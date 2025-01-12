@@ -113,21 +113,21 @@ npm run test:debug
 ## How to add a new Angular version
 
 First, you need to install the new Angular version somewhere.
-Below is an example how to add Angular 17 to `ng-mocks`.
+Below is an example how to add Angular 19 to `ng-mocks`.
 
 ### Step #1 - create an empty project
 
-Let's create a fresh project with `@angular/cli` `v17`.
-The name of the project should be `a + version`: `a17`.
+Let's create a fresh project with `@angular/cli` `v19`.
+The name of the project should be `a + version`: `a20`.
 
 ```shell
-npx '@angular/cli@^17' new \
+npx '@angular/cli@^19' new \
   --routing \
   --skip-git=true \
   --skip-tests=true \
   --style=css \
   --ssr=false \
-  a17
+  a20
 ```
 
 Basically, the requirements are:
@@ -142,67 +142,66 @@ Basically, the requirements are:
 
 The next step is:
 
-- move `a17` folder to `ng-mocks/e2e` folder
-- delete `.vscode` folder in `ng-mocks/e2e/a17`
-- delete `.editorconfig` file in `ng-mocks/e2e/a17`
-- change `.gitignore` to be the same as in the prev version: `ng-mocks/e2e/a16/.gitignore`
-- change `angular.json` to be similar as in the prev version: `ng-mocks/e2e/a16/angular.json`
-  - `projects/a17/schematics` should be empty
-  - remove `projects/a17/architect/build/options/assets`
-  - remove `projects/a17/architect/build/options/styles`
-  - remove `projects/a17/architect/build/options/scripts`
-  - change `projects/a17/architect/build/options/tsConfig` to `tsconfig.json`
-  - remove `projects/a17/architect/build/configurations/production/budgets`
-  - remove `projects/a17/architect/extract-i18n`
-  - remove `projects/a17/architect/test/options/assets`
-  - remove `projects/a17/architect/test/options/styles`
-  - remove `projects/a17/architect/test/options/scripts`
-  - change `projects/a17/architect/test/options/tsConfig` to `tsconfig.json`
-  - add `projects/a17/architect/test/options/main` with the value of `src/test.ts`
-  - add `projects/a17/architect/test/options/karmaConfig` with the value of `karma.conf.js`
-  - add `projects/lib` as it is in the prev version: `ng-mocks/e2e/a16/angular.json`
-- change `package.json` to be similar as in the prev version: `ng-mocks/e2e/a16/package.json`
-  - `name` should be `a17`
-  - `description` should be `Angular 17`
+- move `a20` folder to `ng-mocks/e2e` folder
+- delete `.vscode` folder in `ng-mocks/e2e/a20`
+- delete `.editorconfig` file in `ng-mocks/e2e/a20`
+- change `.gitignore` to be the same as in the prev version: `ng-mocks/e2e/a19/.gitignore`
+- change `angular.json` to be similar as in the prev version: `ng-mocks/e2e/a19/angular.json`
+  - `projects/a20/schematics` should be empty
+  - remove `projects/a20/architect/build/options/assets`
+  - remove `projects/a20/architect/build/options/styles`
+  - remove `projects/a20/architect/build/options/scripts`
+  - change `projects/a20/architect/build/options/tsConfig` to `tsconfig.json`
+  - remove `projects/a20/architect/build/configurations/production/budgets`
+  - remove `projects/a20/architect/extract-i18n`
+  - remove `projects/a20/architect/test/options/assets`
+  - remove `projects/a20/architect/test/options/styles`
+  - remove `projects/a20/architect/test/options/scripts`
+  - change `projects/a20/architect/test/options/tsConfig` to `tsconfig.json`
+  - add `projects/a20/architect/test/options/main` with the value of `src/test.ts`
+  - add `projects/a20/architect/test/options/karmaConfig` with the value of `karma.conf.js`
+  - add `projects/lib` as it is in the prev version: `ng-mocks/e2e/a19/angular.json`
+- change `package.json` to be similar as in the prev version: `ng-mocks/e2e/a19/package.json`
+  - `name` should be `a20`
+  - `description` should be `Angular 20`
   - `private` should be `true`
-  - replace `scripts` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
-  - remove flexible versions (`^~`) in `dependencies` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
-  - remove flexible versions (`^~`) in `devDependencies` as it is in the prev version: `ng-mocks/e2e/a16/package.json`
+  - replace `scripts` as it is in the prev version: `ng-mocks/e2e/a19/package.json`
+  - remove flexible versions (`^~`) in `dependencies` as it is in the prev version: `ng-mocks/e2e/a19/package.json`
+  - remove flexible versions (`^~`) in `devDependencies` as it is in the prev version: `ng-mocks/e2e/a19/package.json`
   - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
   - add `engines` with the correct `npm` which supports the desired angular version
 - delete `README.md`
-- merge `tsconfig.app.json` and `tsconfig.spec.json` into `tsconfig.json` as it is in the prev version: `ng-mocks/e2e/a16/tsconfig.json`
+- merge `tsconfig.app.json` and `tsconfig.spec.json` into `tsconfig.json` as it is in the prev version: `ng-mocks/e2e/a19/tsconfig.json`
   - add `compilerOptions/baseUrl`with the value of `./`
-  - add `compilerOptions/types` as it is in the prev version: `ng-mocks/e2e/a16/tsconfig.json`
-  - add `compilerOptions/skipLibCheck` as it is in the prev version: `ng-mocks/e2e/a16/tsconfig.json`
+  - add `compilerOptions/types` as it is in the prev version: `ng-mocks/e2e/a19/tsconfig.json`
+  - add `compilerOptions/skipLibCheck` as it is in the prev version: `ng-mocks/e2e/a19/tsconfig.json`
   - change `compilerOptions/noImplicitOverride` to `false`
-  - add `files` as it is in the prev version: `ng-mocks/e2e/a16/tsconfig.json`
-  - add `include` as it is in the prev version: `ng-mocks/e2e/a16/tsconfig.json`
+  - add `files` as it is in the prev version: `ng-mocks/e2e/a19/tsconfig.json`
+  - add `include` as it is in the prev version: `ng-mocks/e2e/a19/tsconfig.json`
   - delete `tsconfig.app.json`
   - delete `tsconfig.spec.json`
 - add `.nvmrc` which supports the desired angular version
-- add `jest.config.ts` as it is in the prev version: `ng-mocks/e2e/a16/jest.config.ts`
-- add `karma.conf.js` as it is in the prev version: `ng-mocks/e2e/a16/karma.conf.js`
-- add `ng-package.json` as it is in the prev version: `ng-mocks/e2e/a16/ng-package.json`
-- delete `ng-mocks/e2e/a17/src/app`
-- delete `ng-mocks/e2e/a17/src/assets`
-- delete `ng-mocks/e2e/a17/src/favicon.ico`
-- delete `ng-mocks/e2e/a17/src/style.css`
-- remove `<link rel="icon">` from `ng-mocks/e2e/a17/src/index.html`
-- change `ng-mocks/e2e/a17/src/main.ts` as it is in the prev version: `ng-mocks/e2e/a16/src/main.ts`
-- add `ng-mocks/e2e/a17/src/test.ts` as it is in the prev version: `ng-mocks/e2e/a16/src/test.ts`
-- add `ng-mocks/e2e/a17/src/setup-jest.ts` as it is in the prev version: `ng-mocks/e2e/a16/src/setup-jest.ts`
+- add `jest.config.ts` as it is in the prev version: `ng-mocks/e2e/a19/jest.config.ts`
+- add `karma.conf.js` as it is in the prev version: `ng-mocks/e2e/a19/karma.conf.js`
+- add `ng-package.json` as it is in the prev version: `ng-mocks/e2e/a19/ng-package.json`
+- delete `ng-mocks/e2e/a20/public`
+- delete `ng-mocks/e2e/a20/src/app`
+- delete `ng-mocks/e2e/a20/src/style.css`
+- remove `<link rel="icon">` from `ng-mocks/e2e/a20/src/index.html`
+- change `ng-mocks/e2e/a20/src/main.ts` as it is in the prev version: `ng-mocks/e2e/a19/src/main.ts`
+- add `ng-mocks/e2e/a20/src/test.ts` as it is in the prev version: `ng-mocks/e2e/a19/src/test.ts`
+- add `ng-mocks/e2e/a20/src/setup-jest.ts` as it is in the prev version: `ng-mocks/e2e/a19/src/setup-jest.ts`
 
 ### Step #3 - update scripts
 
-- update `ng-mocks/package.json`, search for `a16` and extended scripts to support `a17`
-- update `ng-mocks/compose.yml`, search for `a16` and copy blocks to support `a17` with the right node version
-- update `ng-mocks/compose.sh`, search for `a16` and copy blocks to support `a17` with the right command to install `puppeteer`
-- update `ng-mocks/.dockerignore`, search for `a16` and copy blocks to support `a17`
-- update `ng-mocks/.github/dependabot.yml`, search for `a16` and copy blocks to support `a17`
-- update `ng-mocks/.circleci/config.yml`, search for `a16` and copy blocks to support `a17`
-- update `ng-mocks/.eslintrc.yml`, search for `a16` and copy blocks to support `a17`
-- execute `sh compose.sh a17` in `ng-mocks` to install dependencies for `a17`, it might require `--force` at this moment in `compose.yml` in the command for the new version
+- update `ng-mocks/package.json`, search for `a19` and extended scripts to support `a20`
+- update `ng-mocks/compose.yml`, search for `a19` and copy blocks to support `a20` with the right node version
+- update `ng-mocks/compose.sh`, search for `a19` and copy blocks to support `a20` with the right command to install `puppeteer`
+- update `ng-mocks/.dockerignore`, search for `a19` and copy blocks to support `a20`
+- update `ng-mocks/.github/dependabot.yml`, search for `a19` and copy blocks to support `a20`
+- update `ng-mocks/.circleci/config.yml`, search for `a19` and copy blocks to support `a20`
+- update `ng-mocks/.eslintrc.yml`, search for `a19` and copy blocks to support `a20`
+- execute `sh compose.sh a20` in `ng-mocks` to install dependencies for `a20`, it might require `--force` at this moment in `compose.yml` in the command for the new version
 
 ### Step #4 - update ng-mocks dependencies
 
@@ -211,16 +210,14 @@ The next step is:
 
 ### Step #5 - verify that`ng-mocks` does not fail with the new version
 
-Replace `a16` with the new version below.
-
 - execute `nvm install` in `ng-mocks`
 - execute `nvm use`
 - execute `npm run build`
-- execute `npm run clean:a16`
-- execute `npm run s:a16`
-- execute `npm run s:app:a16`
-- execute `npm run s:test:a16`
-- execute `npm run test:a16`
+- execute `npm run clean:a20`
+- execute `npm run s:a20`
+- execute `npm run s:app:a20`
+- execute `npm run s:test:a20`
+- execute `npm run test:a20`
 - tests should pass successfully without failures
 
 ### Step #6 - update version references
@@ -230,6 +227,9 @@ Replace `a16` with the new version below.
 - update the version table in `ng-mocks/README.md`
 - update `description` in `libs/ng-mocks/package.json`
 - update `peerDependencies` in `libs/ng-mocks/package.json`
+- update this file and replace `a20` with `a21`
+- update this file and replace `Angular 20` with `Angular 21`
+- update this file and replace `a19` with `a20`
 
 ### Step #7 - verify
 

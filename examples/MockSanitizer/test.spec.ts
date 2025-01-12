@@ -10,6 +10,8 @@ import {
 
 @Component({
   selector: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <div
       [innerHTML]="sanitizer.sanitize(1, '<strong>value1</strong>')"

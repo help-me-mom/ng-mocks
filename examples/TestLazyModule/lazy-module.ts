@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'lazy',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'lazy-component',
 })
 export class LazyComponent {}

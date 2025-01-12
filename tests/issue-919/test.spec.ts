@@ -6,6 +6,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-919',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `<ng-container *ngIf="context.data$ | async as data">{{
     data.value
   }}</ng-container>`,

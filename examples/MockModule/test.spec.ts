@@ -13,6 +13,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'child',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: 'dependency',
 })
 class ChildComponent {
@@ -37,6 +39,8 @@ class ChildModule {}
 
 @Component({
   selector: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: `
     <child [someInput]="value" (someOutput)="trigger()"></child>
   `,

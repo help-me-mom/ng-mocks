@@ -26,6 +26,8 @@ class TargetService {
 
 @Directive({
   selector: 'target-ng-mocks-global-mock',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class TargetDirective {
   public constructor(public readonly service: TargetService) {}
@@ -33,6 +35,8 @@ class TargetDirective {
 
 @Directive({
   selector: 'target-ng-mocks-global-mock',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class MockDirective {
   public constructor(public readonly service: TargetService) {}

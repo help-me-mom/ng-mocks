@@ -7,6 +7,7 @@ describe('detect-selectors-from-node', () => {
     it('goes via public providers', () => {
       @Component({
         selector: 'target',
+        standalone: false,
         template: 'target',
       })
       class TargetComponent {

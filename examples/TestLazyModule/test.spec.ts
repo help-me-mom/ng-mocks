@@ -7,6 +7,8 @@ import { LazyComponent, LazyModule } from './lazy-module';
 
 @Component({
   selector: 'app-root',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<router-outlet></router-outlet>',
 })
 class AppComponent {

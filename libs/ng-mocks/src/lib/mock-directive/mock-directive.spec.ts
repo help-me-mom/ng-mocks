@@ -32,6 +32,7 @@ class TargetService {}
 @Directive({
   exportAs: 'foo',
   selector: '[exampleDirective]',
+  standalone: false,
 })
 class ExampleDirective {
   @Input() public exampleDirective = '';
@@ -50,6 +51,7 @@ class ExampleDirective {
 @Directive({
   providers: [TargetService],
   selector: '[exampleStructuralDirective]',
+  standalone: false,
 })
 class ExampleStructuralDirective {
   @Input() public exampleStructuralDirective = true;
@@ -57,6 +59,7 @@ class ExampleStructuralDirective {
 
 @Directive({
   selector: '[getters-and-setters]',
+  standalone: false,
 })
 class GettersAndSettersDirective {
   @Input()
@@ -81,6 +84,7 @@ class GettersAndSettersDirective {
 
 @Component({
   selector: 'example-component-container',
+  standalone: false,
   template: `
     <div
       [exampleDirective]="'bye'"
@@ -261,6 +265,7 @@ describe('MockDirective', () => {
   it('A9 correct mocking of ContentChild, ContentChildren, ViewChild, ViewChildren ISSUE #109', () => {
     @Directive({
       selector: 'never',
+      standalone: false,
     })
     class MyDirective {
       @ContentChild('i1', { read: TemplateRef } as never)

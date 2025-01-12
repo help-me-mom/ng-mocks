@@ -10,6 +10,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
   selector: 'empty-component',
+  standalone: false,
   template: 'some template',
 })
 export class EmptyComponent {}

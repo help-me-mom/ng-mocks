@@ -56,6 +56,8 @@ class OutputDirective {
 
 @Component({
   selector: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [
@@ -75,6 +77,8 @@ class TargetComponent {
 
 @Component({
   selector: 'render',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template:
     '<target [input]="input" (output)="output()" [customInput]="customInput" (customOutput)="customOutput()"></target>',
 })

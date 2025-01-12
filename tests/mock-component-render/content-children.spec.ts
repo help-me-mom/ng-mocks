@@ -13,6 +13,8 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[appCell]',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class CellDirective {
   public constructor(public el?: TemplateRef<any>) {}
@@ -20,6 +22,8 @@ class CellDirective {
 
 @Component({
   selector: 'app-table-mock-component-render-content-children',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: ` <div *ngFor="let item of data">
     <ng-container *ngFor="let cell of cells">
       <ng-container
@@ -52,6 +56,8 @@ class TableComponent {
 
 @Component({
   selector: 'app-root-mock-component-render-content-children',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: ` <app-table-mock-component-render-content-children
     [data]="data"
   >

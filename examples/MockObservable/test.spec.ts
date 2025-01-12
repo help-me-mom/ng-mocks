@@ -22,6 +22,8 @@ class TargetService {
 
 @Component({
   selector: 'target',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ list | json }}',
 })
 class TargetComponent {

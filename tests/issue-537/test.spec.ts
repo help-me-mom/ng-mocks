@@ -10,6 +10,8 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target-537',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ value }}',
 })
 class TargetComponent {

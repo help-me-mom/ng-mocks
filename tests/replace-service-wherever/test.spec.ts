@@ -29,6 +29,8 @@ class ReplacementService {
 
 @Component({
   selector: 'target-replace-server-wherever',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: "{{ service.name }} {{ service.called ? 'called' : '' }}",
 })
 class TargetComponent {

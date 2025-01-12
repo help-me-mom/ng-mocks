@@ -57,18 +57,24 @@ class TargetComponent {}
 
 @Component({
   selector: 'render-standalone-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<standalone></standalone>',
 })
 class RenderStandaloneComponentComponent {}
 
 @Component({
   selector: 'render-standalone-pipe',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ null | standalone }}',
 })
 class RenderStandalonePipeComponent {}
 
 @Component({
   selector: 'render-standalone-service',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '',
 })
 class RenderStandaloneServiceComponent {
@@ -77,6 +83,8 @@ class RenderStandaloneServiceComponent {
 
 @Component({
   selector: 'render-target-component',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '<target-2687-legacy></target-2687-legacy>',
 })
 class RenderTargetComponentComponent {}
@@ -84,7 +92,7 @@ class RenderTargetComponentComponent {}
 describe('issue-2687', () => {
   if (Number.parseInt(VERSION.major, 10) < 14) {
     it('needs a14', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

@@ -10,6 +10,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
   selector: 'custom-form-control',
+  standalone: false,
   template: `
     <span>{{ value }}</span>
     <button (click)="this.onChange('changed')">Change value</button>

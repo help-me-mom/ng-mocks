@@ -33,6 +33,8 @@ class DependencyModule {
 
 @Component({
   selector: 'target-197',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.echo() }}',
 })
 class TargetComponent {

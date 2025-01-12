@@ -25,6 +25,8 @@ class Target1Service {
 
 @Component({
   selector: 'target-1',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.name }}',
 })
 class Target1Component {
@@ -51,6 +53,8 @@ class Target2Service {
 
 @Component({
   selector: 'target-2',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
   template: '{{ service.name }}',
 })
 class Target2Component {
@@ -72,7 +76,7 @@ class CombinedModule {}
 describe('NG_MOCKS_ROOT_PROVIDERS', () => {
   if (Number.parseInt(VERSION.major, 10) <= 5) {
     it('a5', () => {
-      // pending('Need Angular > 5');
+      // TODO pending('Need Angular > 5');
       expect(true).toBeTruthy();
     });
 

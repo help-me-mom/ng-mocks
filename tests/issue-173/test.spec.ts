@@ -4,6 +4,8 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
   selector: 'child-173',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class ChildDirective {}
 
@@ -16,6 +18,8 @@ class ChildDirective {}
     },
   ],
   selector: 'parent-173',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
+    false,
 })
 class ParentDirective {}
 
