@@ -143,7 +143,7 @@ export interface IMockBuilder extends Promise<IMockBuilderResult> {
    *
    * @see https://ng-mocks.sudo.eu/api/MockBuilder#keep
    */
-  keep(def: any, config?: IMockBuilderConfigAll & IMockBuilderConfigModule): this;
+    keep(def: any, config?: IMockBuilderConfigAll & IMockBuilderConfigModule): this;
 
   /**
    * .mock() with a transform function is useful to mock pipes.

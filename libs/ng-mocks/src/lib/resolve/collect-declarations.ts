@@ -457,8 +457,9 @@ const parse = (def: any): any => {
   parseDecorators(def, declaration);
   parsePropDecorators(def, declaration);
   parsePropMetadata(def, declaration);
-  buildDeclaration(declaration.Directive, declaration);
-  buildDeclaration(declaration.Component, declaration);
+  buildDeclaration(declaration['Directive'], declaration);
+  buildDeclaration(declaration['Component'], declaration);
+  buildDeclaration(declaration['Pipe'], declaration);
 
   coreDefineProperty(def, '__ngMocksDeclarations', {
     ...parentDeclarations,

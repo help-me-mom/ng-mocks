@@ -13,6 +13,7 @@ import returnCachedMock from '../mock/return-cached-mock';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import { MockedPipe } from './types';
+import decorateDeclaration from '../mock/decorate-declaration';
 
 /**
  * MockPipes creates an array of mock pipe classes out of pipes passed as parameters.
@@ -36,7 +37,9 @@ const getMockClass = (pipe: Type<any>, transformValue?: PipeTransform['transform
   const config = ngMocksUniverse.config.get(pipe);
   const transform = transformValue ?? config?.defValue?.transform;
   const mock = extendClass(Mock);
-  Pipe(coreReflectPipeResolve(pipe))(mock);
+  const meta = coreReflectPipeResolve(pipe);
+
+  Pipe(decorateDeclaration(pipe, mock, meta, {}) as Pipe)(mock);
   decorateMock(mock, pipe, {
     init: (instance: PipeTransform) => {
       if (transform) {

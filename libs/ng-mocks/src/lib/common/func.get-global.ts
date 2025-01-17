@@ -1,8 +1,23 @@
-export default (): Record<keyof any, any> => {
+export default (): {
+  ngMocksUniverse: any,
+  ngMocksParent: any,
+  ngMocksResult: any,
+  ngMockshelperMockService: any,
+} => {
   // istanbul ignore if
   if (typeof window === 'undefined') {
-    return global;
+    return global as unknown as  {
+      ngMocksUniverse: any,
+      ngMocksParent: any,
+      ngMocksResult: any,
+      ngMockshelperMockService: any,
+    };
   }
 
-  return window;
+  return window as unknown as {
+    ngMocksUniverse: any,
+    ngMocksParent: any,
+    ngMocksResult: any,
+    ngMockshelperMockService: any,
+  };
 };

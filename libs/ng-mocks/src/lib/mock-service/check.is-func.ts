@@ -1,14 +1,14 @@
 const isAngularClass = (value: Record<keyof any, unknown>): boolean => {
-  if (value.ɵprov) {
+  if (value['ɵprov']) {
     return true;
   }
-  if (value.__annotations__) {
+  if (value['__annotations__']) {
     return true;
   }
-  if (value.__parameters__) {
+  if (value['__parameters__']) {
     return true;
   }
-  if (value.parameters) {
+  if (value['__prop__metadata__']) {
     return true;
   }
 

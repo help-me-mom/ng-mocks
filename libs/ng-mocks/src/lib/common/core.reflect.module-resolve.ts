@@ -7,8 +7,8 @@ import coreReflectBodyCatch from './core.reflect.body-catch';
 export default (def: any): NgModule =>
   coreReflectBodyCatch((arg: any) => {
     const declaration = collectDeclarations(arg);
-    if (declaration.NgModule) {
-      return declaration.NgModule;
+    if (declaration['NgModule']) {
+      return declaration['NgModule'];
     }
 
     throw new Error('Cannot resolve declarations');

@@ -19,8 +19,8 @@ export default (
     const meta = collectDeclarations(def);
     const providers = [
       ...(defProviders.get(def) ?? []),
-      ...(meta.Component?.providers ?? []),
-      ...(meta.Directive?.providers ?? []),
+      ...(meta['Component']?.providers ?? []),
+      ...(meta['Directive']?.providers ?? []),
     ];
 
     const deleteTouch = !ngMocksUniverse.touches.has(def);

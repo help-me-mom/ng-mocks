@@ -7,8 +7,8 @@ import coreReflectBodyCatch from './core.reflect.body-catch';
 export default (def: any): Pipe & { standalone?: boolean } =>
   coreReflectBodyCatch((arg: any) => {
     const declaration = collectDeclarations(arg);
-    if (declaration.Pipe) {
-      return declaration.Pipe;
+    if (declaration['Pipe']) {
+      return declaration['Pipe'];
     }
 
     throw new Error('Cannot resolve declarations');

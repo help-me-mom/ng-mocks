@@ -13,7 +13,7 @@ import requiredMetadata from './performance/required-metadata';
 import { IMockBuilderResult } from './types';
 
 export class MockBuilderPerformance extends MockBuilderPromise {
-  public build(): TestModuleMetadata {
+  public override build(): TestModuleMetadata {
     const global = ngMocksUniverse.global;
 
     // avoiding influences on cache when users extend the testing module.
@@ -36,7 +36,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
   }
 
   // eslint-disable-next-line unicorn/no-thenable
-  public async then<TResult1 = IMockBuilderResult>(
+  public override async then<TResult1 = IMockBuilderResult>(
     fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
     reject?: ((reason: any) => PromiseLike<never>) | undefined | null,
   ): Promise<TResult1> {
@@ -64,16 +64,16 @@ export class MockBuilderPerformance extends MockBuilderPromise {
   private cloneConfig() {
     const config = getEmptyConfig();
 
-    mapValues(this.beforeCC, config.beforeCC);
-    mapValues(this.excludeDef, config.excludeDef);
-    mapValues(this.keepDef, config.keepDef);
-    mapValues(this.mockDef, config.mockDef);
-    mapValues(this.replaceDef, config.replaceDef);
+    mapValues(this.beforeCC, config['beforeCC']);
+    mapValues(this.excludeDef, config['excludeDef']);
+    mapValues(this.keepDef, config['keepDef']);
+    mapValues(this.mockDef, config['mockDef']);
+    mapValues(this.replaceDef, config['replaceDef']);
 
-    mapEntries(this.configDef, config.configDef);
-    mapEntries(this.defProviders, config.defProviders);
-    mapEntries(this.defValue, config.defValue);
-    mapEntries(this.providerDef, config.providerDef);
+    mapEntries(this.configDef, config['configDef']);
+    mapEntries(this.defProviders, config['defProviders']);
+    mapEntries(this.defValue, config['defValue']);
+    mapEntries(this.providerDef, config['providerDef']);
 
     return config;
   }
@@ -95,6 +95,6 @@ export class MockBuilderPerformance extends MockBuilderPromise {
       }
     }
 
-    return areEqualMaps(this.configDef, prototype.configDef, areEqualConfigParams);
+    return areEqualMaps(this.configDef, prototype['configDef'], areEqualConfigParams);
   }
 }

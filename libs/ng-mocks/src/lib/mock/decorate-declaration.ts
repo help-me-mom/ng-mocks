@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, ViewChild } from '@angular/core';
+import { Component, Directive, isStandalone, NgModule, Pipe, Type, ViewChild } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
 import { AnyType, DirectiveIo } from '../common/core.types';
@@ -32,11 +32,12 @@ const buildConfig = (
   };
 };
 
-export default <T extends Component & Directive>(
+export default <T extends (Component & Directive & Partial<Pipe>) >(
   source: AnyType<any>,
   mock: AnyType<any>,
   meta: Component &
     Directive &
+    Partial<Pipe> &
     NgModule & {
       hostBindings?: Array<[string, any]>;
       hostListeners?: Array<[string, any, any]>;
@@ -45,7 +46,7 @@ export default <T extends Component & Directive>(
       standalone?: boolean;
     },
   params: T,
-): Component & Directive => {
+): (Component & Directive | Partial<Pipe>) => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
@@ -61,8 +62,14 @@ export default <T extends Component & Directive>(
   if (meta.selector !== undefined) {
     options.selector = meta.selector;
   }
+  if(meta.selector === 'ng-ui-kit-checkbox'){
+    debugger;
+  }
   if (meta.standalone !== undefined) {
     options.standalone = meta.standalone;
+  } else {
+    const standalone = !!isStandalone(source as Type<unknown>);
+    options.standalone = standalone;
   }
 
   if (meta.imports) {

@@ -100,7 +100,7 @@ const handleFixtureError = (e: any) => {
 const flushTestBed = (flags: Record<string, any>): void => {
   const globalFlags = ngMocksUniverse.global.get('flags');
   const testBed: any = getTestBed();
-  if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
+  if (flags['reset'] || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();
   } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._instantiated || testBed._testModuleRef)) {
     if (globalFlags.onTestBedFlushNeed === 'warn') {

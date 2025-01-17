@@ -68,11 +68,11 @@ const handleItem = (
   }
 
   // Removal of resolvers.
-  if (typeof mock.resolve === 'object' && mock.resolve) {
+  if (typeof mock['resolve'] === 'object' && mock['resolve']) {
     const resolve: any = {};
     let resolveUpdated = false;
-    for (const key of Object.keys(mock.resolve)) {
-      const resolver = mock.resolve[key];
+    for (const key of Object.keys(mock['resolve'])) {
+      const resolver = mock['resolve'][key];
       if (!ngMocksUniverse.isProvidedDef(resolver) && ngMocksUniverse.isExcludedDef(NG_MOCKS_RESOLVERS)) {
         resolveUpdated = resolveUpdated || true;
         continue;

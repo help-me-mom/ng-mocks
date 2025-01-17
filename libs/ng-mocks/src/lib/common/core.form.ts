@@ -1,14 +1,14 @@
-import * as module from '@angular/forms';
+import * as m from '@angular/forms';
 
-const AbstractControl = module.AbstractControl;
-const DefaultValueAccessor = module.DefaultValueAccessor;
-const FormControl = module.FormControl;
-const FormControlDirective = module.FormControlDirective;
-const NG_ASYNC_VALIDATORS = module.NG_ASYNC_VALIDATORS;
-const NG_VALIDATORS = module.NG_VALIDATORS;
-const NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
-const NgControl = module.NgControl;
-const NgModel = module.NgModel;
+const AbstractControl = m.AbstractControl;
+const DefaultValueAccessor = m.DefaultValueAccessor;
+const FormControl = m.FormControl;
+const FormControlDirective = m.FormControlDirective;
+const NG_ASYNC_VALIDATORS = m.NG_ASYNC_VALIDATORS;
+const NG_VALIDATORS = m.NG_VALIDATORS;
+const NG_VALUE_ACCESSOR = m.NG_VALUE_ACCESSOR;
+const NgControl = m.NgControl;
+const NgModel = m.NgModel;
 
 export default {
   AbstractControl,

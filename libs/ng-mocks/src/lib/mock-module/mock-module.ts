@@ -139,7 +139,6 @@ const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any
     // the last thing is to apply decorators.
     NgModule(ngModuleDef)(mock);
     decorateMock(mock, ngModule);
-
     return mock;
   }
 
@@ -203,7 +202,6 @@ export function MockModule<T>(ngModule: NgModuleWithProviders<T>): NgModuleWithP
 
 export function MockModule(def: any): any {
   funcImportExists(def, 'MockModule');
-
   const { ngModule, ngModuleProviders } = extractModuleAndProviders(def);
   const flags = preProcessFlags(ngModule);
   try {

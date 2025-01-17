@@ -110,8 +110,8 @@ export default (
   const cacheKey = [
     template,
     ...(bindings ?? [null]),
-    ...(flags.providers ?? [null]),
-    ...(flags.viewProviders ?? [null]),
+    ...(flags['providers'] ?? [null]),
+    ...(flags['viewProviders'] ?? [null]),
   ];
   let ctor = checkCache(caches, cacheKey);
   if (ctor) {
@@ -137,10 +137,10 @@ export default (
 
   const mockTemplate = funcGenerateTemplate(template, { selector: meta.selector, inputs, outputs, bindings });
   const options: Component = {
-    providers: flags.providers,
+    providers: flags['providers'],
     selector: 'mock-render',
     template: mockTemplate,
-    viewProviders: flags.viewProviders,
+    viewProviders: flags['viewProviders'],
     standalone: false,
   };
 

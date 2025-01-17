@@ -100,7 +100,7 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
 
   for (const key of methodName ? [methodName] : keys) {
     if (typeof valueAccessor[key] === 'function') {
-      valueAccessor.writeValue(value);
+      valueAccessor['writeValue'](value);
       valueAccessor[key](value);
 
       return;
