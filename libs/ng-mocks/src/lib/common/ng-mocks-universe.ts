@@ -62,7 +62,6 @@ ngMocksUniverse.global.set('flags', {
   onMockInstanceRestoreNeed: coreConfig.onMockInstanceRestoreNeed,
   // @deprecated and will be changed in A13 to 'throw'
   onTestBedFlushNeed: coreConfig.onTestBedFlushNeed,
-  defaultStandalone: coreConfig.defaultStandalone,
 });
 
 ngMocksUniverse.getOverrides = globalMap('overrides');

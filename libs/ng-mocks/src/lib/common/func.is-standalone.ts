@@ -1,4 +1,3 @@
-import ngMocksUniverse from '../common/ng-mocks-universe';
 import collectDeclarations from '../resolve/collect-declarations';
 
 import { getNgType } from './func.get-ng-type';
@@ -12,6 +11,5 @@ export function isStandalone(declaration: any): boolean {
     return false;
   }
 
-  // istanbul ignore next
-  return collectDeclarations(declaration)[type].standalone ?? ngMocksUniverse.global.get('flags').defaultStandalone;
+  return collectDeclarations(declaration)[type].standalone === true;
 }

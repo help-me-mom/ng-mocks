@@ -1050,6 +1050,5 @@ export const ngMocks: {
     onMockBuilderMissingDependency?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onMockInstanceRestoreNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
     onTestBedFlushNeed?: 'throw' | 'warn' | 'i-know-but-disable' | null;
-    defaultStandalone?: boolean | null;
   }): void;
 } = mockHelperObject;

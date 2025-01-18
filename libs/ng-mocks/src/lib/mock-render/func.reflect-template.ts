@@ -1,13 +1,11 @@
 import { Component, Directive } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import coreDefineProperty from '../common/core.define-property';
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
 import { AnyType } from '../common/core.types';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isStandalone } from '../common/func.is-standalone';
-import ngMocksUniverse from '../common/ng-mocks-universe';
 
 const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
   const child = extendClass(template);
@@ -30,14 +28,12 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
     // nothing to do
   }
 
-  const standalone = (meta as any).__ngMocksStandalone === true;
   (isNgDef(template, 'c') ? Component : Directive)({
     ...meta,
     ...set,
-    ...(standalone === ngMocksUniverse.global.get('flags').defaultStandalone ? {} : { standalone }),
   })(child);
   TestBed.configureTestingModule({
-    [standalone ? 'imports' : 'declarations']: [child],
+    [isStandalone(child) ? 'imports' : 'declarations']: [child],
   });
 };
 
@@ -49,13 +45,8 @@ export default (template: AnyType<any>): Directive => {
   const meta = coreReflectDirectiveResolve(template);
   const override: Directive = {};
   for (const key of Object.keys(meta)) {
-    if (key === 'standalone') {
-      continue;
-    }
-
     override[key as never] = meta[key as never];
   }
-  coreDefineProperty(override, '__ngMocksStandalone', isStandalone(template));
 
   if (override.selector && /[\s,[\]]/.test(override.selector)) {
     override.selector = '';
