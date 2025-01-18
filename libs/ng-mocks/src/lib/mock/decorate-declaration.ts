@@ -1,4 +1,4 @@
-import { Component, Directive, NgModule, ViewChild } from '@angular/core';
+import { Component, Directive, NgModule, Pipe, ViewChild } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
 import { AnyType, DirectiveIo } from '../common/core.types';
@@ -6,6 +6,7 @@ import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
+import { isStandalone } from '../common/func.is-standalone';
 import { ngMocksMockConfig } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockNgDef from '../mock-module/mock-ng-def';
@@ -32,11 +33,12 @@ const buildConfig = (
   };
 };
 
-export default <T extends Component & Directive>(
+export default <T extends Component & Directive & Partial<Pipe>>(
   source: AnyType<any>,
   mock: AnyType<any>,
   meta: Component &
     Directive &
+    Partial<Pipe> &
     NgModule & {
       hostBindings?: Array<[string, any]>;
       hostListeners?: Array<[string, any, any]>;
@@ -45,7 +47,7 @@ export default <T extends Component & Directive>(
       standalone?: boolean;
     },
   params: T,
-): Component & Directive => {
+): (Component & Directive) | Partial<Pipe> => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
@@ -61,8 +63,14 @@ export default <T extends Component & Directive>(
   if (meta.selector !== undefined) {
     options.selector = meta.selector;
   }
-  if (meta.standalone !== undefined) {
-    options.standalone = meta.standalone;
+
+  options.standalone = meta.standalone === undefined ? isStandalone(source) : meta.standalone;
+
+  if (meta.name) {
+    options.name = meta.name;
+  }
+  if (meta.pure) {
+    options.pure = meta.pure;
   }
 
   if (meta.imports) {

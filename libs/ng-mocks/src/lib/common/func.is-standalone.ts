@@ -1,6 +1,3 @@
-import ngMocksUniverse from '../common/ng-mocks-universe';
-import collectDeclarations from '../resolve/collect-declarations';
-
 import { getNgType } from './func.get-ng-type';
 
 /**
@@ -11,6 +8,10 @@ export function isStandalone(declaration: any): boolean {
   if (!type || type === 'Injectable' || type === 'NgModule') {
     return false;
   }
-
-  return collectDeclarations(declaration)[type].standalone ?? ngMocksUniverse.global.get('flags').defaultStandalone;
+  // here we don't use the angular/core isStandalone for backward compatibility
+  // once backward compatibility allows that, following lines can be replaced:
+  // import { isStandalone as isStandaloneAngular } from '@angular/core';
+  // return isStandalone(declaration);
+  const def = declaration.ɵcmp || declaration.ɵdir || declaration.ɵpipe;
+  return def?.standalone;
 }
