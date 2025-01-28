@@ -226,7 +226,7 @@ services:
       - --no-audit
 
   a19:
-    image: satantime/puppeteer-node:22.13.0
+    image: satantime/puppeteer-node:22.13.1
     working_dir: /app
     volumes:
       - ./e2e/a19:/app
