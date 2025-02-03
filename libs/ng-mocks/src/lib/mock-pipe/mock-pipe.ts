@@ -9,6 +9,7 @@ import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { Mock } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
+import decorateDeclaration from '../mock/decorate-declaration';
 import returnCachedMock from '../mock/return-cached-mock';
 import helperMockService from '../mock-service/helper.mock-service';
 
@@ -36,7 +37,9 @@ const getMockClass = (pipe: Type<any>, transformValue?: PipeTransform['transform
   const config = ngMocksUniverse.config.get(pipe);
   const transform = transformValue ?? config?.defValue?.transform;
   const mock = extendClass(Mock);
-  Pipe(coreReflectPipeResolve(pipe))(mock);
+  const meta = coreReflectPipeResolve(pipe);
+
+  Pipe(decorateDeclaration(pipe, mock, meta, {}) as Pipe)(mock);
   decorateMock(mock, pipe, {
     init: (instance: PipeTransform) => {
       if (transform) {
