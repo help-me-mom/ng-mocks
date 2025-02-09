@@ -14,6 +14,7 @@ import {
 
 @Component({
   selector: 'my',
+  standalone: false,
   template: `
     <input
       data-testid="inputControl"

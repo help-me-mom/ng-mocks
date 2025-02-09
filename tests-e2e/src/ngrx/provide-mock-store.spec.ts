@@ -35,6 +35,7 @@ const selectValue = createFeatureSelector<string>(
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ value }}',
 })
 class TargetComponent {

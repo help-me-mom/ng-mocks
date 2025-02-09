@@ -10,6 +10,7 @@ import {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '<label [matBadge]="777">My Label</label>',
 })
 class TargetComponent {

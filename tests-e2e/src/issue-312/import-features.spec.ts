@@ -60,6 +60,7 @@ class MyEffects {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ value$ | async }}',
 })
 class MyComponent implements OnInit {

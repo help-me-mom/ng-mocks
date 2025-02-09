@@ -19,6 +19,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="position">
