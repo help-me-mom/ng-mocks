@@ -27,6 +27,7 @@ const selectValue = createFeatureSelector(myReducer.featureKey);
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ value$ | async }}',
 })
 class MyComponent implements OnInit {

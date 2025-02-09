@@ -25,6 +25,7 @@ const langs = {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <nav *transloco="let t">
       <span>{{ t('core.test') }}</span>

@@ -31,6 +31,7 @@ class TestState {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '{{ value }}',
 })
 class TargetComponent {

@@ -248,6 +248,7 @@ class MockModule {}
 
 @Component({
   selector: 'app',
+  standalone: false,
   template: '<dependency></dependency>',
 })
 class AppComponent {
@@ -256,6 +257,7 @@ class AppComponent {
 
 @Component({
   selector: 'dependency',
+  standalone: false,
   template: 'dependency',
 })
 class DependencyComponent {

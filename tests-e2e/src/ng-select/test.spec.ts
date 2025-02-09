@@ -5,6 +5,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <ng-select
       [items]="cities"

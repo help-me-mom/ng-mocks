@@ -13,6 +13,7 @@ import {
 
 @Component({
   selector: 'dependency',
+  standalone: false,
   template:
     '<cdk-virtual-scroll-viewport [itemSize]="15"></cdk-virtual-scroll-viewport>',
 })
@@ -29,6 +30,7 @@ class DependencyModule {}
 
 @Component({
   selector: 'target',
+  standalone: false,
   template:
     '<dependency></dependency><cdk-virtual-scroll-viewport [itemSize]="15"></cdk-virtual-scroll-viewport>',
 })

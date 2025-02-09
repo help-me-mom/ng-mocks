@@ -9,6 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <input
       type="text"

@@ -24,6 +24,7 @@ class DependencyComponent {
 // A standalone component we are going to test.
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <dependency></dependency>
     <mat-expansion-panel [expanded]="true">

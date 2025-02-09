@@ -5,6 +5,7 @@ import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: `
     <p-calendar [(ngModel)]="dateValue">
       <ng-template pTemplate="header">Header</ng-template>

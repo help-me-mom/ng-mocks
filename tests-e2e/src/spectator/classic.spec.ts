@@ -4,6 +4,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'header',
+  standalone: false,
   template: 'header',
 })
 class HeaderComponent {
@@ -12,6 +13,7 @@ class HeaderComponent {
 
 @Component({
   selector: 'target',
+  standalone: false,
   template: '<header></header>',
 })
 class TargetComponent {
