@@ -18,4 +18,9 @@ export default (mock: AnyType<any>, source: AnyType<any>, configInput: ngMocksMo
       }
     : configInput;
   coreDefineProperty(mock.prototype, '__ngMocksConfig', config);
+  if ((mock as any)?.ɵmod?.declarations) {
+    (mock as any).ɵmod.declarations
+      .filter((x: any) => x?.decorators?.[0]?.args?.[0] && x?.decorators?.[0]?.args?.[0].standalone === undefined)
+      .map((x: any) => (x.decorators[0].args[0].standalone = false));
+  }
 };
