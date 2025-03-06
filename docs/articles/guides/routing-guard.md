@@ -281,8 +281,8 @@ describe('TestRoutingGuard:canActivate', () => {
       tick(); // is needed for rendering of the current route.
     }
 
-    // Because by default we are not logged, the guard should
-    // redirect us /login page.
+    // Because by default we are not logged in, the guard should
+    // redirect us to /login page.
     expect(location.path()).toEqual('/login');
     expect(() => ngMocks.find(LoginComponent)).not.toThrow();
   }));
