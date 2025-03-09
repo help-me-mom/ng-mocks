@@ -1,3 +1,13 @@
+## [14.13.3](https://github.com/help-me-mom/ng-mocks/compare/v14.13.2...v14.13.3) (2025-03-09)
+
+
+### Bug Fixes
+
+* 9666 Performance ([#10825](https://github.com/help-me-mom/ng-mocks/issues/10825)) ([bb695ec](https://github.com/help-me-mom/ng-mocks/commit/bb695ecd9f998803e5439cdf234d7d4993dcf68c))
+* **core:** [#9666](https://github.com/help-me-mom/ng-mocks/issues/9666) Performance ([bf630d7](https://github.com/help-me-mom/ng-mocks/commit/bf630d7b64cb5d7be558b63e89b079ea49bed6df))
+* improves error message [#10020](https://github.com/help-me-mom/ng-mocks/issues/10020) ([ef1cf9d](https://github.com/help-me-mom/ng-mocks/commit/ef1cf9dcd2837ef64e5f12bfaddfcde11c517b5b))
+* respecting standalone flag of obsolete libraries [#10762](https://github.com/help-me-mom/ng-mocks/issues/10762) ([26f2bc3](https://github.com/help-me-mom/ng-mocks/commit/26f2bc3112f72b50314e521a5c0ed245d190de6c))
+
 ## [14.13.2](https://github.com/help-me-mom/ng-mocks/compare/v14.13.1...v14.13.2) (2025-01-12)
 
 
