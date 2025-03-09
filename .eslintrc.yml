@@ -159,6 +159,8 @@ overrides:
       es-roikoren/no-array-prototype-values: error
       es-roikoren/no-array-string-prototype-at: error
 
+      import/no-unresolved: off
+
       no-alert: error
       no-console:
         - error
