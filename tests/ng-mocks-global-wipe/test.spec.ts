@@ -17,6 +17,8 @@ import {
 })
 class TargetComponent {
   public readonly name: string = 'target';
+
+  public targetComponentNgMocksGlobalWipe() {}
 }
 
 @Component({
@@ -27,6 +29,8 @@ class TargetComponent {
 })
 class FakeComponent {
   public readonly name: string = 'fake';
+
+  public fakeComponentNgMocksGlobalWipe() {}
 }
 
 @Component({
@@ -37,6 +41,8 @@ class FakeComponent {
 })
 class ShadowComponent {
   public readonly name: string = 'shadow';
+
+  public shadowComponentNgMocksGlobalWipe() {}
 }
 
 @NgModule({

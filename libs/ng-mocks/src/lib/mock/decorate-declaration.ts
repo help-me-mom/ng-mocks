@@ -61,6 +61,7 @@ export default <T extends Component & Directive>(
   if (meta.selector !== undefined) {
     options.selector = meta.selector;
   }
+  // istanbul ignore else
   if (meta.standalone !== undefined) {
     options.standalone = meta.standalone;
   }

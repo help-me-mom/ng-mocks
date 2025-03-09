@@ -11,6 +11,8 @@ import mockHelperGlobalReplace from './mock-helper.global-replace';
 })
 class TargetComponent {
   public readonly name = 'target';
+
+  public targetComponentMockHelperGlobalExclude() {}
 }
 
 @Component({
@@ -20,6 +22,8 @@ class TargetComponent {
 })
 class FakeComponent {
   public readonly name = 'fake';
+
+  public fakeComponentMockHelperGlobalExclude() {}
 }
 
 describe('mock-helper.default-replace', () => {

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MockComponent, MockDirective, MockPipe, MockModule, MockProvider } from 'ng-mocks';
 
 import { AppComponent } from './app.component';
 import { AppDirective } from './app.directive';
@@ -10,13 +9,16 @@ import { AppService } from './app.service';
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [AppComponent, AppDirective, AppPipe],
+  exports: [AppComponent, AppComponent, AppPipe],
   imports: [BrowserModule],
   providers: [AppService],
 })
-export class AppModule {}
+class AppModule {}
 
-export const AppTestingModule = MockModule(AppModule);
-export const AppTestingComponent = MockComponent(AppComponent);
-export const AppTestingDirective = MockDirective(AppDirective);
-export const AppTestingPipe = MockPipe(AppPipe);
-export const AppTestingService = MockProvider(AppService);
+export { AppModule };
+
+export { AppComponent } from './app.component';
+export { AppPipe } from './app.pipe';
+export { AppDirective } from './app.directive';
+
+export { AppService } from './app.service';

@@ -15,6 +15,7 @@ interface Declaration {
   propDecorators: Record<string, any[]>;
   queries: Record<string, any>;
   decorators: Array<'Injectable' | 'Pipe' | 'Directive' | 'Component' | 'NgModule'>;
+  standalone?: boolean;
   [key: string]: any;
 }
 
@@ -296,6 +297,25 @@ const parsePropMetadata = (
   }
 };
 
+const parseNgDef = (
+  def: {
+    ɵcmp?: any;
+    ɵdir?: any;
+    ɵpipe?: any;
+  },
+  declaration: Declaration,
+): void => {
+  if (declaration.standalone === undefined && def.ɵcmp?.standalone !== undefined) {
+    declaration.standalone = def.ɵcmp.standalone;
+  }
+  if (declaration.standalone === undefined && def.ɵdir?.standalone !== undefined) {
+    declaration.standalone = def.ɵdir.standalone;
+  }
+  if (declaration.standalone === undefined && def.ɵpipe?.standalone !== undefined) {
+    declaration.standalone = def.ɵpipe.standalone;
+  }
+};
+
 const parsePropDecoratorsParserFactoryProp = (key: 'inputs' | 'outputs') => {
   const callback = parsePropMetadataParserFactoryProp(key);
   return (
@@ -434,6 +454,9 @@ const buildDeclaration = (def: any | undefined, declaration: Declaration): void 
 
     def.hostBindings = declaration.hostBindings;
     def.hostListeners = declaration.hostListeners;
+    if (def.standalone === undefined) {
+      def.standalone = declaration.standalone;
+    }
   }
 };
 
@@ -457,8 +480,10 @@ const parse = (def: any): any => {
   parseDecorators(def, declaration);
   parsePropDecorators(def, declaration);
   parsePropMetadata(def, declaration);
+  parseNgDef(def, declaration);
   buildDeclaration(declaration.Directive, declaration);
   buildDeclaration(declaration.Component, declaration);
+  buildDeclaration(declaration.Pipe, declaration);
 
   coreDefineProperty(def, '__ngMocksDeclarations', {
     ...parentDeclarations,

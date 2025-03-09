@@ -16,6 +16,8 @@ class TargetService {}
 })
 class TargetComponent {
   public readonly name = 'target';
+
+  public targetComponentMockHelperGlobalExclude() {}
 }
 
 describe('mock-helper.default-exclude', () => {
