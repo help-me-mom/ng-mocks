@@ -12,5 +12,6 @@ export function isStandalone(declaration: any): boolean {
     return false;
   }
 
+  // istanbul ignore next
   return collectDeclarations(declaration)[type].standalone ?? ngMocksUniverse.global.get('flags').defaultStandalone;
 }

@@ -17,6 +17,8 @@ import {
 })
 class TargetComponent {
   public readonly name = 'target';
+
+  public targetComponentNgMocksGlobalReplace() {}
 }
 
 @Component({
@@ -27,6 +29,8 @@ class TargetComponent {
 })
 class FakeComponent {
   public readonly name = 'fake';
+
+  public fakeComponentNgMocksGlobalReplace() {}
 }
 
 @NgModule({

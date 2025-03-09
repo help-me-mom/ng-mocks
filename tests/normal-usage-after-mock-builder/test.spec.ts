@@ -20,6 +20,8 @@ class TargetService {
 })
 class TargetComponent {
   public constructor(public readonly service: TargetService) {}
+
+  public targetComponentNormalUsage() {}
 }
 
 @Component({
@@ -28,7 +30,9 @@ class TargetComponent {
     false,
   template: 'real',
 })
-class RealComponent {}
+class RealComponent {
+  public realComponentNormalUsage() {}
+}
 
 @Component({
   selector: 'internal-normal-usage-after-mock-builder',
@@ -36,7 +40,9 @@ class RealComponent {}
     false,
   template: 'fake',
 })
-class FakeComponent {}
+class FakeComponent {
+  public fakeComponentNormalUsage() {}
+}
 
 @NgModule({
   declarations: [TargetComponent, RealComponent],
