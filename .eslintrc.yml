@@ -6,7 +6,7 @@ plugins:
   - 'unused-imports'
   - 'prefer-arrow'
   - 'unicorn'
-  - 'es-roikoren'
+  - 'es-x'
 
 settings:
   import/resolver:
@@ -35,7 +35,7 @@ settings:
         - ./e2e/min/tsconfig.json
         - ./e2e/nx/tsconfig.json
         - ./e2e/nx/tsconfig.spec.json
-  es-roikoren:
+  es-x:
     aggressive: true
 
 overrides:
@@ -136,28 +136,28 @@ overrides:
       unicorn/prefer-type-error: off
       unicorn/prevent-abbreviations: off
 
-      es-roikoren/no-array-from: error
-      es-roikoren/no-array-isarray: off
-      es-roikoren/no-array-of: error
-      es-roikoren/no-array-prototype-copywithin: error
-      es-roikoren/no-array-prototype-entries: error
-      es-roikoren/no-array-prototype-every: error
-      es-roikoren/no-array-prototype-fill: off
-      es-roikoren/no-array-prototype-filter: off
-      es-roikoren/no-array-prototype-find: error
-      es-roikoren/no-array-prototype-findindex: error
-      es-roikoren/no-array-prototype-flat: error
-      es-roikoren/no-array-prototype-foreach: error
-      es-roikoren/no-array-prototype-includes: error
-      es-roikoren/no-array-prototype-indexof: off
-      es-roikoren/no-array-prototype-keys: error
-      es-roikoren/no-array-prototype-lastindexof: error
-      es-roikoren/no-array-prototype-map: off
-      es-roikoren/no-array-prototype-reduce: error
-      es-roikoren/no-array-prototype-reduceright: error
-      es-roikoren/no-array-prototype-some: off
-      es-roikoren/no-array-prototype-values: error
-      es-roikoren/no-array-string-prototype-at: error
+      es-x/no-array-from: error
+      es-x/no-array-isarray: off
+      es-x/no-array-of: error
+      es-x/no-array-prototype-copywithin: error
+      es-x/no-array-prototype-entries: error
+      es-x/no-array-prototype-every: error
+      es-x/no-array-prototype-fill: off
+      es-x/no-array-prototype-filter: off
+      es-x/no-array-prototype-find: error
+      es-x/no-array-prototype-findindex: error
+      es-x/no-array-prototype-flat: error
+      es-x/no-array-prototype-foreach: error
+      es-x/no-array-prototype-includes: error
+      es-x/no-array-prototype-indexof: off
+      es-x/no-array-prototype-keys: error
+      es-x/no-array-prototype-lastindexof: error
+      es-x/no-array-prototype-map: off
+      es-x/no-array-prototype-reduce: error
+      es-x/no-array-prototype-reduceright: error
+      es-x/no-array-prototype-some: off
+      es-x/no-array-prototype-values: error
+      es-x/no-array-string-prototype-at: error
 
       import/no-unresolved: off
 
