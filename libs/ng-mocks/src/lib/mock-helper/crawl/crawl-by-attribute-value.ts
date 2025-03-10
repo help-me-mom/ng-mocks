@@ -35,12 +35,17 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
     if (attr !== attribute || !(node.injector as any)._tNode.inputs?.[attr]) {
       continue;
     }
-    const [attrIndex, attrProp] = (node.injector as any)._tNode.inputs[attr];
-    const lViewValue = (node.injector as any)._lView?.[attrIndex][attrProp];
-    const attributeValue = mockHelperAttributes('', 'inputs', node, attrProp, lViewValue);
+    for (const attrIndex of (node.injector as any)._tNode.inputs[attr]) {
+      if (typeof attrIndex !== 'number') {
+        continue;
+      }
 
-    if (value === attributeValue) {
-      return true;
+      const lViewValue = (node.injector as any)._lView?.[attrIndex][attr];
+      const attributeValue = mockHelperAttributes('', 'inputs', node, attr, lViewValue);
+
+      if (value === attributeValue) {
+        return true;
+      }
     }
   }
 
