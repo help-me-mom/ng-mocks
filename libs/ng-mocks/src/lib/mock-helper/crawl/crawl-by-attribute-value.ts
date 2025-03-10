@@ -1,5 +1,6 @@
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { MockedDebugNode } from '../../mock-render/types';
+import mockHelperAttributes from '../mock-helper.attributes';
 
 import funcGetPublicProviderKeys from './func.get-public-provider-keys';
 import funcParseInputsAndRequiresAttributes from './func.parse-inputs-and-requires-attributes';
@@ -35,8 +36,10 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
       continue;
     }
     const [attrIndex, attrProp] = (node.injector as any)._tNode.inputs[attr];
+    const lViewValue = (node.injector as any)._lView?.[attrIndex][attrProp];
+    const attributeValue = mockHelperAttributes('', 'inputs', node, attrProp, lViewValue);
 
-    if (value === (node.injector as any)._lView?.[attrIndex][attrProp]) {
+    if (value === attributeValue) {
       return true;
     }
   }
