@@ -31,7 +31,7 @@ describe('issue-5047', () => {
     selector: 'target-5047',
     ['standalone' as never /* TODO: remove after upgrade to a14 */]:
       false,
-    template: `<dependency *ngIf="name != null">target</dependency>`,
+    template: `<dependency *ngIf="name !== null">target</dependency>`,
   })
   class TargetComponent {
     @Input() public readonly name: string | null = null;
