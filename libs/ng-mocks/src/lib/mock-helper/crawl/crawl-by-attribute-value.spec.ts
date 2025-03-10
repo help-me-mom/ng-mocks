@@ -168,13 +168,13 @@ describe('crawl-by-attribute-value', () => {
         injector: {
           _lView: {
             5: {
-              prop: value,
+              [attribute]: value,
             },
           },
           _tNode: {
             attrs: ['1', '2', 3, attribute],
             inputs: {
-              [attribute]: [5, 'prop'],
+              [attribute]: [5, attribute],
             },
           },
         },
@@ -213,13 +213,13 @@ describe('crawl-by-attribute-value', () => {
         injector: {
           _lView: {
             5: {
-              prop: value,
+              [attribute]: value,
             },
           },
           _tNode: {
             attrs: [attribute, value],
             inputs: {
-              [attribute]: [5, 'prop'],
+              [attribute]: [5, attribute],
             },
           },
         },
