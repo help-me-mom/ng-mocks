@@ -57,7 +57,7 @@ describe('auto-spy', () => {
       expect(called).toBeUndefined();
 
       service.echo();
-      expect(called).toEqual('TargetService.echo');
+      expect(called).toEqual(`${TargetService.name}.echo`);
     });
   });
 });

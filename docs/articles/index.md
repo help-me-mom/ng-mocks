@@ -27,7 +27,8 @@ keeping interfaces as they are, but suppressing their implementation.
 The current version of `ng-mocks` has been tested and **can be used** with:
 
 | angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
-| ------: | :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
+|--------:| :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
+|      20 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
 |      19 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
 |      18 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
 |      17 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |

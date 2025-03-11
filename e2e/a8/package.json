@@ -2,7 +2,6 @@
   "name": "a8",
   "description": "Angular 8",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "npm": "npm",
     "ng": "ng",
@@ -20,6 +19,7 @@
     "test:jest:es2015": "jest --config ./jest.es2015.js",
     "test:jest:debug": "jest -i --watch"
   },
+  "private": true,
   "dependencies": {
     "@angular/animations": "8.2.14",
     "@angular/common": "8.2.14",

@@ -21,9 +21,7 @@ describe('issue-10306', () => {
     beforeEach(() => MockBuilder(null, TargetComponent));
 
     it('does not throw forgot to flush TestBed', () => {
-      expect(() => MockRender(TargetComponent)).not.toThrowError(
-        /Forgot to flush TestBed/,
-      );
+      expect(() => MockRender(TargetComponent)).not.toThrow();
     });
   });
 });

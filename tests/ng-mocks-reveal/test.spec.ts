@@ -439,7 +439,7 @@ describe('ng-mocks-reveal:test', () => {
     expect(() =>
       ngMocks.reveal(block3El, BlockDirective),
     ).toThrowError(
-      'Cannot find a DebugElement via ngMocks.reveal(BlockDirective)',
+      `Cannot find a DebugElement via ngMocks.reveal(${BlockDirective.name})`,
     );
 
     {

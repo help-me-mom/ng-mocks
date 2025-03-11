@@ -2,7 +2,6 @@
   "name": "a12",
   "description": "Angular 12",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "npm": "npm",
     "ng": "ng",
@@ -19,6 +18,7 @@
     "test:jest:es2015:ivy": "jest --config jest.es2015ivy.js",
     "test:jest:debug": "npm run test:jest:es2015:ivy -- -i --watch"
   },
+  "private": true,
   "dependencies": {
     "@angular/animations": "12.2.17",
     "@angular/common": "12.2.17",

@@ -57,7 +57,7 @@ describe('double-decorator-ivy:without-selector', () => {
 
     it('fails', () => {
       expect(() => MockRender(MyComponent)).toThrowError(
-        /Directive BaseClass has no selector/,
+        `Directive ${BaseClass.name} has no selector, please add it!`,
       );
     });
   });
@@ -84,7 +84,7 @@ describe('double-decorator-ivy:without-selector', () => {
 
     it('fails', () => {
       expect(() => MockRender(MyComponent)).toThrowError(
-        /Directive MockOfBaseClass has no selector/,
+        `Directive MockOf${BaseClass.name} has no selector, please add it!`,
       );
     });
   });
@@ -96,7 +96,7 @@ describe('double-decorator-ivy:without-selector', () => {
 
     it('fails', () => {
       expect(() => MockRender(MyComponent)).toThrowError(
-        /Directive MockOfBaseClass has no selector/,
+        `Directive MockOf${BaseClass.name} has no selector, please add it!`,
       );
     });
   });

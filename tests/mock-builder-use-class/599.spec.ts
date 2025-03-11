@@ -83,7 +83,7 @@ describe('MockBuilder:599', () => {
     expect(() =>
       MockBuilder().mock(TargetDirective, MockTargetDirective),
     ).toThrowError(
-      'MockBuilder.mock(TargetDirective) received a class when its shape is expected. Please try ngMocks.defaultMock instead.',
+      `MockBuilder.mock(${TargetDirective.name}) received a class when its shape is expected. Please try ngMocks.defaultMock instead.`,
     );
   });
 
@@ -91,7 +91,7 @@ describe('MockBuilder:599', () => {
     expect(() =>
       MockBuilder().mock(AuthService, MockAuthService),
     ).toThrowError(
-      'MockBuilder.mock(AuthService) received a class when its shape is expected. Please try ngMocks.defaultMock instead.',
+      `MockBuilder.mock(${AuthService.name}) received a class when its shape is expected. Please try ngMocks.defaultMock instead.`,
     );
   });
 });

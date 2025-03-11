@@ -2,19 +2,19 @@
   "name": "a15",
   "description": "Angular 15",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "npm": "npm",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine && npm run test:jest",
-    "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
-    "test:jasmine": "ng test --ts-config ./tsconfig.json --progress=false",
-    "test:jasmine:debug": "ng test -- --watch --browsers Chrome",
+    "test:debug": "npm run test:jasmine:debug",
+    "test:jasmine": "ng test --ts-config ./tsconfig.json --progress=false --no-watch",
+    "test:jasmine:debug": "npm run test:jasmine -- --watch --browsers Chrome",
     "test:jest": "jest --config jest.config.ts",
     "test:jest:debug": "jest -i --watch"
   },
+  "private": true,
   "dependencies": {
     "@angular/animations": "15.2.10",
     "@angular/common": "15.2.10",

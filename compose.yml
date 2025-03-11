@@ -256,6 +256,19 @@ services:
       - install
       - --no-audit
 
+  a20:
+    image: satantime/puppeteer-node:22.14.0
+    working_dir: /app
+    volumes:
+      - ./e2e/a20:/app
+      - cache:/root/.cache
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+
   jasmine:
     image: satantime/puppeteer-node:20.18.3
     working_dir: /app

@@ -1,4 +1,6 @@
-import 'jest-preset-angular/setup-jest';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'; // eslint-disable-line import/order
+
+setupZoneTestEnv();
 
 import { MockService, ngMocks } from 'ng-mocks'; // eslint-disable-line import/order
 

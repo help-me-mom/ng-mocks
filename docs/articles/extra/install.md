@@ -106,7 +106,9 @@ The file doesn't exist, because `@angular-builders/jest` provides default config
 To restore `src/setup-jest.ts` you need to recreate this file with the next content:
 
 ```ts title="src/setup-jest.ts"
-import 'jest-preset-angular/setup-jest';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+
+setupZoneTestEnv();
 ```
 
 Then, open `angular.json`, and at the `test` section of `"builder": "@angular-builders/jest:run"`, add the next option:

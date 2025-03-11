@@ -118,7 +118,7 @@ describe('issue-2687', () => {
       );
       fixture.detectChanges();
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<standalone>service:StandaloneService</standalone>',
+        `<standalone>service:${StandaloneService.name}</standalone>`,
       );
 
       expect(() =>
@@ -142,7 +142,7 @@ describe('issue-2687', () => {
       fixture.detectChanges();
       expect(
         fixture.componentInstance.service.constructor.name,
-      ).toEqual('StandaloneService');
+      ).toEqual(StandaloneService.name);
     });
 
     it('renders TargetComponent', () => {
@@ -151,7 +151,7 @@ describe('issue-2687', () => {
       );
       fixture.detectChanges();
       expect(ngMocks.formatHtml(fixture)).toEqual(
-        '<target-2687-legacy><standalone>service:StandaloneService</standalone> pipe:StandalonePipe</target-2687-legacy>',
+        `<target-2687-legacy><standalone>service:${StandaloneService.name}</standalone> pipe:${StandalonePipe.name}</target-2687-legacy>`,
       );
 
       expect(() =>
@@ -215,7 +215,7 @@ describe('issue-2687', () => {
       fixture.detectChanges();
       expect(
         fixture.componentInstance.service.constructor.name,
-      ).toEqual('StandaloneService');
+      ).toEqual(StandaloneService.name);
     });
 
     it('renders TargetComponent', () => {
@@ -233,10 +233,10 @@ describe('issue-2687', () => {
       expect(() =>
         ngMocks.findInstance(StandaloneComponent),
       ).toThrowError(
-        'Cannot find an instance via ngMocks.findInstance(StandaloneComponent)',
+        `Cannot find an instance via ngMocks.findInstance(${StandaloneComponent.name})`,
       );
       expect(() => ngMocks.findInstance(StandalonePipe)).toThrowError(
-        'Cannot find an instance via ngMocks.findInstance(StandalonePipe)',
+        `Cannot find an instance via ngMocks.findInstance(${StandalonePipe.name})`,
       );
       expect(() =>
         ngMocks.findInstance(StandaloneService),

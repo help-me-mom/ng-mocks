@@ -4,7 +4,7 @@ module.exports = {
   maxWorkers: 1,
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testURL: 'http://localhost',
-  testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.es2015ivy.spec.json',

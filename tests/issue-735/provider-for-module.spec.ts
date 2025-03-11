@@ -89,7 +89,7 @@ describe('issue-735:provider-for-module', () => {
 
       it('throws on unprovided global mock', () => {
         expect(() => MockRender(TargetUnusedService)).toThrowError(
-          /No provider for TargetUnusedService/,
+          new RegExp(`No provider for ${TargetUnusedService.name}`),
         );
       });
     });

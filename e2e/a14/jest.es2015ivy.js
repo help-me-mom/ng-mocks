@@ -6,7 +6,7 @@ module.exports = {
   testEnvironmentOptions: {
     url: 'http://localhost',
   },
-  testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.es2015ivy.spec.json',

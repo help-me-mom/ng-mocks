@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Starting"
-
 export NVM_DIR="$HOME/.nvm" && \. "$NVM_DIR/nvm.sh"
 
 if [ "$1" = "" ] || [ "$1" = "root" ]; then
@@ -191,6 +189,16 @@ if [ "$1" = "" ] || [ "$1" = "a19" ]; then
   docker compose up --build -- a19 && \
     docker compose run --rm a19 node ./node_modules/puppeteer/install.mjs && \
     cd ./e2e/a19 && \
+    nvm install && \
+    nvm use && \
+    node ./node_modules/puppeteer/install.mjs && \
+    cd ../..
+fi
+
+if [ "$1" = "" ] || [ "$1" = "a20" ]; then
+  docker compose up --build -- a20 && \
+    docker compose run --rm a20 node ./node_modules/puppeteer/install.mjs && \
+    cd ./e2e/a20 && \
     nvm install && \
     nvm use && \
     node ./node_modules/puppeteer/install.mjs && \

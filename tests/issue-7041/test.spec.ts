@@ -78,7 +78,9 @@ describe('issue-7041', () => {
 
     it('throws the original error in ServiceC', () => {
       expect(() => TestBed.get(ServiceC)).toThrowError(
-        /NullInjectorError: No provider for ServiceC/,
+        new RegExp(
+          `NullInjectorError: No provider for ${ServiceC.name}`,
+        ),
       );
     });
   });

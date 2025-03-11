@@ -3,9 +3,18 @@ export default {
   workerIdleMemoryLimit: '1024MB',
   maxWorkers: 1,
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
-  testURL: 'http://localhost',
-  testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
+  testEnvironmentOptions: {
+    url: 'http://localhost',
+  },
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(ts|js|html|svg)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
+      { useESM: true },
+    ],
   },
 };
