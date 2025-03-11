@@ -1,5 +1,3 @@
-import { VERSION } from '@angular/core';
-
 export default {
   flags: ['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports'],
   mockRenderCacheSize: 25,
@@ -58,7 +56,6 @@ export default {
   onMockBuilderMissingDependency: 'throw',
   onMockInstanceRestoreNeed: 'warn',
   onTestBedFlushNeed: 'warn',
-  defaultStandalone: Number.parseInt(VERSION.major, 10) >= 19,
 
   dependencies: [
     'declarations',

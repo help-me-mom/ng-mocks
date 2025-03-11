@@ -28,6 +28,7 @@
     "@ngrx/effects": "19.0.1",
     "@ngrx/store": "19.0.1",
     "@ngrx/store-devtools": "19.0.1",
+    "@ngx-translate/core": "16.0.4",
     "@ngxs/store": "19.0.0",
     "ngx-file-drop": "16.0.0",
     "primeng": "19.0.9",
