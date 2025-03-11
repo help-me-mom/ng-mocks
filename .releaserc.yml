@@ -1,3 +1,7 @@
+repositoryUrl: git@github.com:help-me-mom/ng-mocks.git
+dryRun: true
+ci: false
+debug: true
 plugins:
   - - '@semantic-release/commit-analyzer'
     - releaseRules:

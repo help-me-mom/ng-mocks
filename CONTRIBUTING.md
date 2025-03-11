@@ -106,7 +106,8 @@ npm run test:debug
   GIT_COMMITTER_EMAIL=best@coder.com
   ```
 
-- execute `npm run release -- --no-ci` - to generate a release and publish it on [github.com](https://github.com/help-me-mom/ng-mocks/releases)
+- execute `npm run release` - to ensure everything is fine
+- execute `npm run release -- -d false` - to generate a release and publish it on [github.com](https://github.com/help-me-mom/ng-mocks/releases)
 - execute `npm publish ./tmp/ng-mocks-N.N.N.tgz` - to publish it on [npmjs.com](https://www.npmjs.com/package/ng-mocks)
 - profit
 
