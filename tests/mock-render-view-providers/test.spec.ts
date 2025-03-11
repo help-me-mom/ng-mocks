@@ -22,7 +22,7 @@ describe('MockRender.viewProviders', () => {
 
   it('throws without the service', () => {
     expect(() => MockRender(TargetComponent)).toThrowError(
-      /No provider for TargetService/,
+      new RegExp(`No provider for ${TargetService.name}`),
     );
   });
 

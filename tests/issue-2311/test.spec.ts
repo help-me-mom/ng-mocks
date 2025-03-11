@@ -26,14 +26,14 @@ describe('issue-2311', () => {
 
   it('finds instance', () => {
     const instance = ngMocks.findInstance(TargetService);
-    expect(instance.echo()).toEqual('TargetService');
+    expect(instance.echo()).toEqual(TargetService.name);
   });
 
   it('finds instances', () => {
     const instances = ngMocks.findInstances(TargetService);
     const [instance] = instances;
     expect(instances.length).toEqual(1);
-    expect(instance.echo()).toEqual('TargetService');
+    expect(instance.echo()).toEqual(TargetService.name);
   });
 
   it('fails to find instance', () => {

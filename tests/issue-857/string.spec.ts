@@ -16,7 +16,7 @@ class Target857Component {}
 })
 class TargetModule {}
 
-ngMocks.globalExclude('@Target857Component' as never);
+ngMocks.globalExclude(`@${Target857Component.name}` as never);
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/857
 describe('issue-857:string', () => {

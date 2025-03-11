@@ -77,19 +77,19 @@ describe('issue-1168', () => {
 
     it('fails on TargetDirective', () => {
       expect(() => MockPipe(TargetDirective as any)).toThrowError(
-        'MockPipe accepts pipes, whereas TargetDirective is a directive.',
+        `MockPipe accepts pipes, whereas ${TargetDirective.name} is a directive.`,
       );
     });
 
     it('fails on TargetComponent', () => {
       expect(() => MockPipe(TargetComponent as any)).toThrowError(
-        'MockPipe accepts pipes, whereas TargetComponent is a component.',
+        `MockPipe accepts pipes, whereas ${TargetComponent.name} is a component.`,
       );
     });
 
     it('fails on TargetService', () => {
       expect(() => MockPipe(TargetService as any)).toThrowError(
-        'MockPipe accepts pipes, whereas TargetService is a service.',
+        `MockPipe accepts pipes, whereas ${TargetService.name} is a service.`,
       );
     });
 
@@ -101,7 +101,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetModule', () => {
       expect(() => MockPipe(TargetModule as any)).toThrowError(
-        'MockPipe accepts pipes, whereas TargetModule is a module.',
+        `MockPipe accepts pipes, whereas ${TargetModule.name} is a module.`,
       );
     });
   });
@@ -115,7 +115,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetPipe', () => {
       expect(() => MockDirective(TargetPipe as any)).toThrowError(
-        'MockDirective accepts directives, whereas TargetPipe is a pipe.',
+        `MockDirective accepts directives, whereas ${TargetPipe.name} is a pipe.`,
       );
     });
 
@@ -129,13 +129,13 @@ describe('issue-1168', () => {
       expect(() =>
         MockDirective(TargetComponent as any),
       ).toThrowError(
-        'MockDirective accepts directives, whereas TargetComponent is a component.',
+        `MockDirective accepts directives, whereas ${TargetComponent.name} is a component.`,
       );
     });
 
     it('fails on TargetService', () => {
       expect(() => MockDirective(TargetService as any)).toThrowError(
-        'MockDirective accepts directives, whereas TargetService is a service.',
+        `MockDirective accepts directives, whereas ${TargetService.name} is a service.`,
       );
     });
 
@@ -147,7 +147,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetModule', () => {
       expect(() => MockDirective(TargetModule as any)).toThrowError(
-        'MockDirective accepts directives, whereas TargetModule is a module.',
+        `MockDirective accepts directives, whereas ${TargetModule.name} is a module.`,
       );
     });
   });
@@ -161,7 +161,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetPipe', () => {
       expect(() => MockComponent(TargetPipe as any)).toThrowError(
-        'MockComponent accepts components, whereas TargetPipe is a pipe.',
+        `MockComponent accepts components, whereas ${TargetPipe.name} is a pipe.`,
       );
     });
 
@@ -169,7 +169,7 @@ describe('issue-1168', () => {
       expect(() =>
         MockComponent(TargetDirective as any),
       ).toThrowError(
-        'MockComponent accepts components, whereas TargetDirective is a directive.',
+        `MockComponent accepts components, whereas ${TargetDirective.name} is a directive.`,
       );
     });
 
@@ -181,7 +181,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetService', () => {
       expect(() => MockComponent(TargetService as any)).toThrowError(
-        'MockComponent accepts components, whereas TargetService is a service.',
+        `MockComponent accepts components, whereas ${TargetService.name} is a service.`,
       );
     });
 
@@ -193,7 +193,7 @@ describe('issue-1168', () => {
 
     it('fails on TargetModule', () => {
       expect(() => MockComponent(TargetModule as any)).toThrowError(
-        'MockComponent accepts components, whereas TargetModule is a module.',
+        `MockComponent accepts components, whereas ${TargetModule.name} is a module.`,
       );
     });
   });
@@ -207,25 +207,25 @@ describe('issue-1168', () => {
 
     it('fails on TargetPipe', () => {
       expect(() => MockModule(TargetPipe as any)).toThrowError(
-        'MockModule accepts modules, whereas TargetPipe is a pipe.',
+        `MockModule accepts modules, whereas ${TargetPipe.name} is a pipe.`,
       );
     });
 
     it('fails on TargetDirective', () => {
       expect(() => MockModule(TargetDirective as any)).toThrowError(
-        'MockModule accepts modules, whereas TargetDirective is a directive.',
+        `MockModule accepts modules, whereas ${TargetDirective.name} is a directive.`,
       );
     });
 
     it('fails on TargetComponent', () => {
       expect(() => MockModule(TargetComponent as any)).toThrowError(
-        'MockModule accepts modules, whereas TargetComponent is a component.',
+        `MockModule accepts modules, whereas ${TargetComponent.name} is a component.`,
       );
     });
 
     it('fails on TargetService', () => {
       expect(() => MockModule(TargetService as any)).toThrowError(
-        'MockModule accepts modules, whereas TargetService is a service.',
+        `MockModule accepts modules, whereas ${TargetService.name} is a service.`,
       );
     });
 

@@ -60,7 +60,7 @@ describe('issue-3161:keep', () => {
     });
 
     expect(ngMocks.formatText(fixture)).toEqual(
-      'TranslatePipe:real:sandbox',
+      `${TranslatePipe.name}:real:sandbox`,
     );
   });
 });

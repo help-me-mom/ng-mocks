@@ -148,7 +148,7 @@ describe('ng-mocks-find-template-ref', () => {
     expect(() =>
       ngMocks.findTemplateRef(UnusedDirective),
     ).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(UnusedDirective)',
+      `Cannot find a TemplateRef via ngMocks.findTemplateRef(${UnusedDirective.name})`,
     );
   });
 

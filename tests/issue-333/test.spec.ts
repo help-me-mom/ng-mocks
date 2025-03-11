@@ -115,7 +115,7 @@ describe('issue-333', () => {
         const fixture = MockRender(DynamicOverlayComponent);
         fixture.point.componentInstance.attachComponent(DepComponent);
         expect(() => fixture.detectChanges()).toThrowError(
-          /DepComponent/,
+          new RegExp(DepComponent.name),
         );
       });
     }
@@ -142,7 +142,7 @@ describe('issue-333', () => {
       const fixture = MockRender(DynamicOverlayComponent);
       fixture.point.componentInstance.attachComponent(MockComponent);
       expect(() => fixture.detectChanges()).toThrowError(
-        /MockComponent/,
+        new RegExp(MockComponent.name),
       );
     });
   });

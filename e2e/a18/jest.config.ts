@@ -6,7 +6,7 @@ export default {
   testEnvironmentOptions: {
     url: 'http://localhost',
   },
-  testPathIgnorePatterns: ['<rootDir>/src/test.ts'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
   },

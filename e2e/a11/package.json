@@ -2,7 +2,6 @@
   "name": "a11",
   "description": "Angular 11",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "npm": "npm",
     "ng": "ng",
@@ -23,6 +22,7 @@
     "test:jest:es2015:no-ivy": "jest --config jest.es2015noivy.js",
     "test:jest:debug": "jest -i --watch"
   },
+  "private": true,
   "dependencies": {
     "@angular/animations": "11.2.14",
     "@angular/common": "11.2.14",

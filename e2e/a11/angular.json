@@ -70,5 +70,8 @@
       }
     }
   },
+  "cli": {
+    "analytics": false
+  },
   "defaultProject": "a11"
 }

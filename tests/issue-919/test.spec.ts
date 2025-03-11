@@ -42,6 +42,8 @@ describe('issue-919', () => {
   });
 
   it('fails on render', () => {
-    expect(() => MockRender(TargetComponent)).toThrowError(/data\$/);
+    expect(() => MockRender(TargetComponent)).toThrowError(
+      /'data\$'/,
+    );
   });
 });

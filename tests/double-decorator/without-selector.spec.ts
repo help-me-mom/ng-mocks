@@ -58,7 +58,7 @@ describe('double-decorator:without-selector', () => {
       } catch (error) {
         if (error instanceof Error) {
           expect(error.message).toMatch(
-            /Directive BaseClass has no selector/,
+            new RegExp(`Directive ${BaseClass.name} has no selector`),
           );
         } else {
           fail('should fail');
@@ -93,7 +93,9 @@ describe('double-decorator:without-selector', () => {
       } catch (error) {
         if (error instanceof Error) {
           expect(error.message).toMatch(
-            /Directive MockOfBaseClass has no selector/,
+            new RegExp(
+              `Directive MockOf${BaseClass.name} has no selector`,
+            ),
           );
         } else {
           fail('should fail');
@@ -112,7 +114,9 @@ describe('double-decorator:without-selector', () => {
       } catch (error) {
         if (error instanceof Error) {
           expect(error.message).toMatch(
-            /Directive MockOfBaseClass has no selector/,
+            new RegExp(
+              `Directive MockOf${BaseClass.name} has no selector`,
+            ),
           );
         } else {
           fail('should fail');

@@ -77,7 +77,7 @@ describe('issue-3161', () => {
     });
 
     expect(ngMocks.formatText(fixture)).toEqual(
-      'MockTranslatePipe:mock:sandbox',
+      `${MockTranslatePipe.name}:mock:sandbox`,
     );
   });
 });

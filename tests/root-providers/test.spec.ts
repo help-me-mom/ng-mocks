@@ -154,7 +154,7 @@ describe('root-providers', () => {
     it('fails', () => {
       expect(() =>
         TestBed.createComponent(ModuleComponent),
-      ).toThrowError(/-> ModuleService/);
+      ).toThrowError(new RegExp(`-> ${ModuleService.name}`));
     });
   });
 
@@ -182,7 +182,7 @@ describe('root-providers', () => {
 
     it('fails', () => {
       expect(() => MockRender(ModuleComponent)).toThrowError(
-        /-> ModuleService/,
+        new RegExp(`-> ${ModuleService.name}`),
       );
     });
   });
