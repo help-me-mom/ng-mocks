@@ -1,3 +1,13 @@
+## [14.13.4](https://github.com/help-me-mom/ng-mocks/compare/v14.13.3...v14.13.4) (2025-03-11)
+
+
+### Bug Fixes
+
+* **core:** standalone optimization and ngx-translate e2e integration [#10752](https://github.com/help-me-mom/ng-mocks/issues/10752) ([eda80eb](https://github.com/help-me-mom/ng-mocks/commit/eda80ebbcc5d34ca0da4e65875e51ecbf3993156))
+* **core:** standalone optimization and ngx-translate e2e integration [#10752](https://github.com/help-me-mom/ng-mocks/issues/10752) ([#11186](https://github.com/help-me-mom/ng-mocks/issues/11186)) ([b090d40](https://github.com/help-me-mom/ng-mocks/commit/b090d4054fe319e654409046b1dc32aaa79b1d8c))
+* **ngMocks.findTemplateRef:** detects NgTemplates correctly [#11179](https://github.com/help-me-mom/ng-mocks/issues/11179) ([a88afb8](https://github.com/help-me-mom/ng-mocks/commit/a88afb8ffeec630ab545a7d1f4d0a09043876a53))
+* **ngMocks.reveal:** detects nodes correctly [#11182](https://github.com/help-me-mom/ng-mocks/issues/11182) ([0b7af2d](https://github.com/help-me-mom/ng-mocks/commit/0b7af2d34a2456b0bd3339c9ac416aef20ba10dc))
+
 ## [14.13.3](https://github.com/help-me-mom/ng-mocks/compare/v14.13.2...v14.13.3) (2025-03-09)
 
 
