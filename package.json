@@ -270,7 +270,7 @@
     "dts-bundle-generator": "9.5.1",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.1",
-    "eslint-import-resolver-typescript": "3.9.1",
+    "eslint-import-resolver-typescript": "4.1.0",
     "eslint-plugin-es-x": "8.5.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-json": "4.0.1",
