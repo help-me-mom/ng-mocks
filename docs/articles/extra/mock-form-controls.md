@@ -80,7 +80,7 @@ export class MyControl implements ControlValueAccessor {
 ## Caution about ngModel
 
 It's important to call `fixture.whenStable()` in addition to `fixture.detectChanges()`
-if `FormsModule` is kept in a test to let `ngModel` udpate its values correctly.
+if `FormsModule` is kept in a test to let `ngModel` update its values correctly.
 
 Because `fixture.whenStable()` returns a promise, the whole test should be `async`.
 

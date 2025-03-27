@@ -92,7 +92,7 @@ class DashboardComponent {
 class TargetModule {}
 
 describe('TestRoutingGuard:canDeactivate', () => {
-  // Because we want to test a canDeactive guard, it means that we want to
+  // Because we want to test a canDeactivate guard, it means that we want to
   // test its integration with RouterModule.
   // Therefore, RouterModule and the guard should be kept,
   // and the rest of the module which defines the route can be mocked.

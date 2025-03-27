@@ -73,7 +73,7 @@ const block2 = ngMocks.reveal(div, ['block2']);
 
 ngMocks.formatHtml(div, true);
 // returns
-// <div> headaer 1 body 2 footer </div>
+// <div> header 1 body 2 footer </div>
 
 ngMocks.formatHtml(block1);
 // returns

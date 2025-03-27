@@ -326,7 +326,7 @@
 
 ### Bug Fixes
 
-* **MockBuilder:** respect extention of classes with different decorators [#2646](https://github.com/help-me-mom/ng-mocks/issues/2646) ([d069a90](https://github.com/help-me-mom/ng-mocks/commit/d069a9047cc3188bea384632ffa1d3a0a62a09da))
+* **MockBuilder:** respect extension of classes with different decorators [#2646](https://github.com/help-me-mom/ng-mocks/issues/2646) ([d069a90](https://github.com/help-me-mom/ng-mocks/commit/d069a9047cc3188bea384632ffa1d3a0a62a09da))
 
 
 ### Features
@@ -694,7 +694,7 @@
 ### Bug Fixes
 
 * **core:** properly handling Sanitizer and DomSanitizer [#538](https://github.com/help-me-mom/ng-mocks/issues/538) ([fb51bb4](https://github.com/help-me-mom/ng-mocks/commit/fb51bb478593c22ed436c896980244d45fd796ed))
-* **mock-render:** detectChanges flag has to be provided to supress render ([8195eeb](https://github.com/help-me-mom/ng-mocks/commit/8195eeb7e4dbeeac71061a9ac94b1436f7cfdb0c))
+* **mock-render:** detectChanges flag has to be provided to suppress render ([8195eeb](https://github.com/help-me-mom/ng-mocks/commit/8195eeb7e4dbeeac71061a9ac94b1436f7cfdb0c))
 
 ## [11.11.1](https://github.com/help-me-mom/ng-mocks/compare/v11.11.0...v11.11.1) (2021-05-09)
 
@@ -1082,7 +1082,7 @@
 * mocking private service in component ([ab43a43](https://github.com/help-me-mom/ng-mocks/commit/ab43a438902dc01a75a16b82a6cbd2ef50b8c252)), closes [#198](https://github.com/help-me-mom/ng-mocks/issues/198)
 * more intelligent overrides ([b17ff7f](https://github.com/help-me-mom/ng-mocks/commit/b17ff7ffedbda0867e7c6d7cdd06ffb70ea19e2a))
 * more restricted stub signature ([fc179db](https://github.com/help-me-mom/ng-mocks/commit/fc179dbb5402aef4b915d20e8cb09bccf28bacdd))
-* performance degration caused by .exclude feature ([3bf29ad](https://github.com/help-me-mom/ng-mocks/commit/3bf29ad9199169a33be6ba94f44a2d52176122a3))
+* performance degradation caused by .exclude feature ([3bf29ad](https://github.com/help-me-mom/ng-mocks/commit/3bf29ad9199169a33be6ba94f44a2d52176122a3))
 * support of modules with providers in MockBuilder ([e0250e0](https://github.com/help-me-mom/ng-mocks/commit/e0250e04028e781a6ebb6c43f5d138b1660c8569)), closes [#197](https://github.com/help-me-mom/ng-mocks/issues/197)
 
 ## [10.2.0](https://github.com/help-me-mom/ng-mocks/compare/v10.1.3...v10.2.0) (2020-10-03)
@@ -1265,7 +1265,7 @@
 * correct mocking of xxxChild(ren) decorators ([de7b8c3](https://github.com/help-me-mom/ng-mocks/commit/de7b8c3)), closes [#109](https://github.com/help-me-mom/ng-mocks/issues/109)
 * improved helpers and documentation ([9ef24a0](https://github.com/help-me-mom/ng-mocks/commit/9ef24a0))
 * more friendly return type of mock-render ([f4a3b79](https://github.com/help-me-mom/ng-mocks/commit/f4a3b79))
-* remove usage of uknown ([26dfdb8](https://github.com/help-me-mom/ng-mocks/commit/26dfdb8))
+* remove usage of unknown ([26dfdb8](https://github.com/help-me-mom/ng-mocks/commit/26dfdb8))
 
 
 ### Features
@@ -1570,7 +1570,7 @@
 ### Bug Fixes
 
 * integrate mock-pipe ([d747517](https://github.com/help-me-mom/ng-mocks/commit/d747517))
-* mock_direcive integration ([7f02f7b](https://github.com/help-me-mom/ng-mocks/commit/7f02f7b))
+* mock_directive integration ([7f02f7b](https://github.com/help-me-mom/ng-mocks/commit/7f02f7b))
 
 
 ### Features

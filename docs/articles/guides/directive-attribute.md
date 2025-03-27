@@ -96,7 +96,7 @@ describe('TestAttributeDirective', () => {
       'style="background-color: yellow;"',
     );
 
-    // Now let's simulate the mouse mouse leave event.
+    // Now let's simulate the mouse leave event.
     fixture.point.triggerEventHandler('mouseleave', null);
 
     // And assert that the background color is gone now.

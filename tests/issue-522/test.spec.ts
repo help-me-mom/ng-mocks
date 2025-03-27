@@ -30,7 +30,7 @@ describe('issue-522', () => {
     }).compileComponents(),
   );
 
-  // with out params the template has inputs and therefore change detection works
+  // without params the template has inputs and therefore change detection works
   describe('without params', () => {
     beforeEach(() => {
       fixture = MockRender(ErrorCountDisplayComponent);

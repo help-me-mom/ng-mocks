@@ -67,7 +67,7 @@ const fixture = MockRender(Component, params);
 
 // fixture.componentInstance.i2 = 2;
 // The value is take via a proxy from point,
-// because params don't have i2, and Componet has.
+// because params don't have i2, and Component has.
 
 params.i1 = 6;
 // Now fixture.componentInstance.i1 = 6.

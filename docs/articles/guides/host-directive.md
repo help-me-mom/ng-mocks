@@ -50,7 +50,7 @@ beforeEach(() => MockBuilder(HostDirective, TargetComponent));
 
 Profit!
 
-To access the directive in a test, [`ngMocks.findInstnace`](../api/ngMocks/findInstance.md) can be used.
+To access the directive in a test, [`ngMocks.findInstance`](../api/ngMocks/findInstance.md) can be used.
 
 ```ts
 it('keeps host directives', () => {
