@@ -1,6 +1,7 @@
 services:
   ng-mocks:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - .:/app
@@ -14,6 +15,7 @@ services:
 
   docs:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./docs:/app
@@ -27,6 +29,7 @@ services:
 
   e2e:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./tests-e2e:/app
@@ -40,6 +43,7 @@ services:
 
   a5es5:
     image: satantime/puppeteer-node:8.17.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a5es5:/app
@@ -54,6 +58,7 @@ services:
 
   a5es2015:
     image: satantime/puppeteer-node:8.17.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a5es2015:/app
@@ -82,6 +87,7 @@ services:
 
   a7:
     image: satantime/puppeteer-node:8.17.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a7:/app
@@ -96,6 +102,7 @@ services:
 
   a8:
     image: satantime/puppeteer-node:10.24.1
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a8:/app
@@ -110,6 +117,7 @@ services:
 
   a9:
     image: satantime/puppeteer-node:12.22.12
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a9:/app
@@ -124,6 +132,7 @@ services:
 
   a10:
     image: satantime/puppeteer-node:12.22.12
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a10:/app
@@ -138,6 +147,7 @@ services:
 
   a11:
     image: satantime/puppeteer-node:12.22.12
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a11:/app
@@ -152,6 +162,7 @@ services:
 
   a12:
     image: satantime/puppeteer-node:12.22.12
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a12:/app
@@ -166,6 +177,7 @@ services:
 
   a13:
     image: satantime/puppeteer-node:12.22.12
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a13:/app
@@ -180,6 +192,7 @@ services:
 
   a14:
     image: satantime/puppeteer-node:16.20.2
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a14:/app
@@ -193,6 +206,7 @@ services:
 
   a15:
     image: satantime/puppeteer-node:16.20.2
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a15:/app
@@ -206,6 +220,7 @@ services:
 
   a16:
     image: satantime/puppeteer-node:18.20.7
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a16:/app
@@ -219,6 +234,7 @@ services:
 
   a17:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a17:/app
@@ -232,6 +248,7 @@ services:
 
   a18:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a18:/app
@@ -245,6 +262,7 @@ services:
 
   a19:
     image: satantime/puppeteer-node:22.14.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a19:/app
@@ -258,6 +276,7 @@ services:
 
   a20:
     image: satantime/puppeteer-node:22.14.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/a20:/app
@@ -271,6 +290,7 @@ services:
 
   jasmine:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/jasmine:/app
@@ -284,6 +304,7 @@ services:
 
   jest:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/jest:/app
@@ -297,6 +318,7 @@ services:
 
   min:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/min:/app
@@ -310,6 +332,7 @@ services:
 
   nx:
     image: satantime/puppeteer-node:20.19.0
+    platform: linux/amd64
     working_dir: /app
     volumes:
       - ./e2e/nx:/app
