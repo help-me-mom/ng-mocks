@@ -12,10 +12,10 @@ ngMocks.stubMember(service, method, customCallback);
 // overriding the property's value
 ngMocks.stubMember(service, property, customValue);
 
-// overrding the getter, does not touch the existing setter
+// overriding the getter, does not touch the existing setter
 ngMocks.stubMember(service, property, customGetter, 'get');
 
-// overrding the setter, does not touch the existing getter
+// overriding the setter, does not touch the existing getter
 ngMocks.stubMember(service, property, customSetter, 'set');
 ```
 
