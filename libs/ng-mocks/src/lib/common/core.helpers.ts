@@ -33,7 +33,7 @@ export const getInjection = <I>(token: AnyDeclaration<I>): I => {
   const testBed: any = getTestBed();
 
   // istanbul ignore next
-  return testBed.inject ? testBed.inject(token) : testBed.get(token);
+  return testBed.inject ? testBed.inject(token) : (testBed as any).get(token);
 };
 
 export const flatten = <T>(values: T | T[] | { ɵproviders: T[] }, result: T[] = []): T[] => {

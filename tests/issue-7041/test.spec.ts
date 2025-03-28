@@ -62,22 +62,37 @@ describe('issue-7041', () => {
   );
 
   describe('TestBed', () => {
+    const anyTestBed: any = TestBed;
     it('throws the original error in ENVIRONMENT_NAME', () => {
-      expect(() => TestBed.get(ENVIRONMENT_NAME)).toThrowError(
-        'SHOW ME',
-      );
+      expect(() =>
+        anyTestBed.get
+          ? anyTestBed.get(ENVIRONMENT_NAME)
+          : anyTestBed.inject(ENVIRONMENT_NAME),
+      ).toThrowError('SHOW ME');
     });
 
     it('throws the original error in ServiceA', () => {
-      expect(() => TestBed.get(ServiceA)).toThrowError('SHOW ME');
+      expect(() =>
+        anyTestBed.get
+          ? anyTestBed.get(ServiceA)
+          : anyTestBed.inject(ServiceA),
+      ).toThrowError('SHOW ME');
     });
 
     it('throws the original error in ServiceB', () => {
-      expect(() => TestBed.get(ServiceB)).toThrowError('SHOW ME');
+      expect(() =>
+        anyTestBed.get
+          ? anyTestBed.get(ServiceB)
+          : anyTestBed.inject(ServiceB),
+      ).toThrowError('SHOW ME');
     });
 
     it('throws the original error in ServiceC', () => {
-      expect(() => TestBed.get(ServiceC)).toThrowError(
+      expect(() =>
+        anyTestBed.get
+          ? anyTestBed.get(ServiceC)
+          : anyTestBed.inject(ServiceC),
+      ).toThrowError(
         new RegExp(
           `NullInjectorError: No provider for ${ServiceC.name}`,
         ),
