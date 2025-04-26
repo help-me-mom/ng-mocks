@@ -22,7 +22,7 @@
   "additionalBranchPrefix": "{{#if (equals packageFileDir '')}}root{{else}}{{{packageFileDir}}}{{/if}}/",
   "branchTopic": "{{{depNameSanitized}}}-{{{newMajor}}}.{{{newMinor}}}.x",
   "vulnerabilityAlerts": {
-    "enabled": false
+    "enabled": true
   },
   "packageRules": [
     {
