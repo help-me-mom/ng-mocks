@@ -83,6 +83,12 @@
         "nodejs/node",
         "npm"
       ],
+      "patch": {
+        "enabled": false
+      },
+      "minor": {
+        "enabled": false
+      },
       "major": {
         "enabled": false
       }
