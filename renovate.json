@@ -62,8 +62,7 @@
         ".circleci/config.yml"
       ],
       "semanticCommitScope": "root",
-      "additionalBranchPrefix": "root/",
-      "branchTopic": "node-18.20.x"
+      "additionalBranchPrefix": "root/"
     },
     {
       "matchFileNames": [
