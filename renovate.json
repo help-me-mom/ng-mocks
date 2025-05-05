@@ -62,8 +62,7 @@
         ".circleci/config.yml"
       ],
       "semanticCommitScope": "root",
-      "additionalBranchPrefix": "root/",
-      "branchTopic": "node-18.20.x"
+      "additionalBranchPrefix": "root/"
     },
     {
       "matchFileNames": [
@@ -209,6 +208,10 @@
       "matchFileNames": ["e2e/a14/*"],
       "matchPackageNames": ["ng-packagr"],
       "allowedVersions": "<14.3.0"
+    },
+    {
+      "matchFileNames": ["e2e/a20/*"],
+      "branchTopic": "node-18.20.x"
     }
   ]
 }
