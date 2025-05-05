@@ -12,6 +12,7 @@
   "rebaseWhen": "conflicted",
   "autoApprove": true,
   "automerge": true,
+  "automergeStrategy": "squash",
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "separateMultipleMajor": true,
@@ -62,8 +63,7 @@
         ".circleci/config.yml"
       ],
       "semanticCommitScope": "root",
-      "additionalBranchPrefix": "root/",
-      "branchTopic": "node-18.20.x"
+      "additionalBranchPrefix": "root/"
     },
     {
       "matchFileNames": [
