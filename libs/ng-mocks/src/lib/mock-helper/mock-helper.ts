@@ -268,6 +268,19 @@ export const ngMocks: {
   input<T = any>(elSelector: DebugNodeSelector, input: string): T;
 
   /**
+   * To ensure a type-safe approach to the new input API, this function performs
+   * a check for input and model signals and wraps `fixture.componentRef.setInput`.
+   *
+   * Extracts all input properties that are of type `InputSignal` or `ModelSignal`
+   * from the component type and allows setting their values in a type-safe manner.
+   *
+   * @param fixture the component fixture
+   * @param inputProperty the input property name
+   * @param value the value to set for the property
+   */
+  setInput: typeof mockHelperObject.setInput;
+
+  /**
    * ngMocks.input allows to get an input value without knowing
    * which component / directive it belongs to, otherwise the notFoundValue.
    *

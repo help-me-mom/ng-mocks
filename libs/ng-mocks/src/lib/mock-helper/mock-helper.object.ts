@@ -15,6 +15,7 @@ import mockHelperFindInstance from './find-instance/mock-helper.find-instance';
 import mockHelperFindInstances from './find-instance/mock-helper.find-instances';
 import mockHelperFormatHtml from './format/mock-helper.format-html';
 import mockHelperFormatText from './format/mock-helper.format-text';
+import mockHelperSetInput from './func.set-input';
 import mockHelperAutoSpy from './mock-helper.auto-spy';
 import mockHelperConsoleIgnore from './mock-helper.console-ignore';
 import mockHelperConsoleThrow from './mock-helper.console-throw';
@@ -94,6 +95,7 @@ export default {
   reset: mockHelperReset,
   reveal: mockHelperReveal,
   revealAll: mockHelperRevealAll,
+  setInput: mockHelperSetInput,
   stub: mockHelperStub,
   stubMember: mockHelperStubMember,
   throwOnConsole: mockHelperConsoleThrow,
