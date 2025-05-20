@@ -1,5 +1,5 @@
 import { DebugElement, Directive, InjectionToken } from '@angular/core';
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import { getInjection } from '../common/core.helpers';
@@ -118,6 +118,7 @@ const generateFactoryInstall =
       };
       _declarations?: Array<AnyType<any>>;
       declarations?: Array<AnyType<any>>;
+      _instanceTeardownOptions?: ModuleTeardownOptions | undefined;
     } = getTestBed();
     // istanbul ignore next
     const existing = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
@@ -129,9 +130,11 @@ const generateFactoryInstall =
           declarations.push(ctor.providers);
         }
         declarations.push(ctor);
-        TestBed.configureTestingModule({
+        const moduleDef: TestModuleMetadata = {
           declarations,
-        });
+        };
+        (moduleDef as any).teardown = testBed._instanceTeardownOptions;
+        TestBed.configureTestingModule(moduleDef);
       } catch (error) {
         handleFixtureError(error);
       }
