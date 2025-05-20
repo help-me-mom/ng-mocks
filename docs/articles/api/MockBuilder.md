@@ -486,7 +486,7 @@ beforeEach(() => {
       [RouterModule, RouterTestingModule.withRoutes([])],
       ModuleWithRoutes,
     )
-    .exclude(NG_MOCKS_GUARDS) // <- remotes all guards
+    .exclude(NG_MOCKS_GUARDS) // <- removes all guards
     .keep(GuardUnderTest) // <- but keeps GuardUnderTest
   ;
 });
