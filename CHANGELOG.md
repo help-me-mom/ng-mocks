@@ -1,3 +1,11 @@
+## [14.13.5](https://github.com/help-me-mom/ng-mocks/compare/v14.13.4...v14.13.5) (2025-05-22)
+
+
+### Bug Fixes
+
+* **a20:** support of Angular 20 [#11187](https://github.com/help-me-mom/ng-mocks/issues/11187) ([1f30e86](https://github.com/help-me-mom/ng-mocks/commit/1f30e8687ad0d0e1bee809f35e79321b7e65c3ad))
+* respect TestBed teardown [#11324](https://github.com/help-me-mom/ng-mocks/issues/11324) ([934edcc](https://github.com/help-me-mom/ng-mocks/commit/934edcc30ac931d82dbb91316be9a9010e10c6f5))
+
 ## [14.13.4](https://github.com/help-me-mom/ng-mocks/compare/v14.13.3...v14.13.4) (2025-03-11)
 
 
