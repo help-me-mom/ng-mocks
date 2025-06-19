@@ -274,7 +274,7 @@
     "eslint-plugin-es-x": "8.6.2",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-json": "4.0.1",
-    "eslint-plugin-mdx": "3.4.2",
+    "eslint-plugin-mdx": "3.5.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "5.4.0",
     "eslint-plugin-unicorn": "56.0.1",
