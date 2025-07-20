@@ -1,4 +1,6 @@
-import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
+/* eslint-disable max-lines */
+
+import { ɵReflectionCapabilities as ReflectionCapabilities, reflectComponentType } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
 import { AnyDeclaration, DirectiveIo } from '../common/core.types';
@@ -133,6 +135,29 @@ const parseDecorators = (
   }
 };
 
+const addUniqueDirectiveIo = (
+  declaration: Declaration,
+  key: 'inputs' | 'outputs',
+  name: string,
+  alias: string | undefined,
+  required: boolean | undefined,
+): void => {
+  const normalizedDef = funcDirectiveIoBuild({ name, alias, required });
+
+  for (const def of declaration[key]) {
+    if (def === normalizedDef) {
+      return;
+    }
+
+    const { name: defName, alias: defAlias } = funcDirectiveIoParse(def);
+    if (defName === name && defAlias === alias) {
+      return;
+    }
+  }
+
+  declaration[key].unshift(normalizedDef);
+};
+
 const parsePropMetadataParserFactoryProp =
   (key: 'inputs' | 'outputs') =>
   (
@@ -151,25 +176,7 @@ const parsePropMetadataParserFactoryProp =
       required: decorator.required,
     });
 
-    const normalizedDef = funcDirectiveIoBuild({ name, alias, required });
-
-    let add = true;
-    for (const def of declaration[key]) {
-      if (def === normalizedDef) {
-        add = false;
-        break;
-      }
-
-      const { name: defName, alias: defAlias, required: defRequired } = funcDirectiveIoParse(def);
-      if (defName === name && defAlias === alias && defRequired === required) {
-        add = false;
-        break;
-      }
-    }
-
-    if (add) {
-      declaration[key].unshift(normalizedDef);
-    }
+    addUniqueDirectiveIo(declaration, key, name, alias, required);
   };
 const parsePropMetadataParserInput = parsePropMetadataParserFactoryProp('inputs');
 const parsePropMetadataParserOutput = parsePropMetadataParserFactoryProp('outputs');
@@ -313,6 +320,42 @@ const parseNgDef = (
   }
   if (declaration.standalone === undefined && def.ɵpipe?.standalone !== undefined) {
     declaration.standalone = def.ɵpipe.standalone;
+  }
+};
+
+/**
+ * Note: This does not seem to work in every environment (e.g. the tests)
+ *       and is therefore a supplementary support for signals.
+ */
+const parseReflectComponentType = (def: any, declaration: Declaration): void => {
+  if (typeof def === 'function') {
+    try {
+      const mirror = reflectComponentType(def);
+      if (mirror?.inputs) {
+        for (const input of mirror.inputs) {
+          const { name, alias, required } = funcDirectiveIoParse({
+            name: input.propName,
+            alias: input.templateName === input.propName ? undefined : input.templateName,
+            required: undefined, // reflectComponentType doesn't provide required info for signal inputs
+          });
+
+          addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
+        }
+      }
+
+      if (mirror?.outputs) {
+        for (const output of mirror.outputs) {
+          const { name, alias, required } = funcDirectiveIoParse({
+            name: output.propName,
+            alias: output.templateName === output.propName ? undefined : output.templateName,
+          });
+
+          addUniqueDirectiveIo(declaration, 'outputs', name, alias, required);
+        }
+      }
+    } catch {
+      // reflectComponentType may fail for non-components or incompatible types
+    }
   }
 };
 
@@ -481,6 +524,7 @@ const parse = (def: any): any => {
   parsePropDecorators(def, declaration);
   parsePropMetadata(def, declaration);
   parseNgDef(def, declaration);
+  parseReflectComponentType(def, declaration);
   buildDeclaration(declaration.Directive, declaration);
   buildDeclaration(declaration.Component, declaration);
   buildDeclaration(declaration.Pipe, declaration);
