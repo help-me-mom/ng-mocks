@@ -1,10 +1,6 @@
 {
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    ":semanticCommitTypeAll(chore)"
-  ],
-  "baseBranches": ["master"],
+  "extends": ["config:recommended", ":semanticCommits", ":semanticCommitTypeAll(chore)"],
+  "baseBranchPatterns": ["master"],
   "dependencyDashboard": false,
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
@@ -35,71 +31,43 @@
       "enabled": false
     },
     {
-      "matchPackageNames": [
-        "satantime/puppeteer-node",
-        "@types/node",
-        "nodejs/node"
-      ],
+      "matchPackageNames": ["satantime/puppeteer-node", "@types/node", "nodejs/node"],
       "allowedVersions": "/^[^0-9]*\\d*[02468]\\./",
       "branchTopic": "node-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
-      "matchPackageNames": [
-        "@types/jest",
-        "jest",
-        "ts-jest"
-      ],
+      "matchPackageNames": ["@types/jest", "jest", "ts-jest"],
       "branchTopic": "jest-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
-      "matchPackageNames": [
-        "@types/jasmine",
-        "jasmine-core"
-      ],
+      "matchPackageNames": ["@types/jasmine", "jasmine-core"],
       "branchTopic": "jasmine-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
-      "matchFileNames": [
-        ".circleci/config.yml"
-      ],
+      "matchFileNames": [".circleci/config.yml"],
       "semanticCommitScope": "root",
       "additionalBranchPrefix": "root/"
     },
     {
-      "matchFileNames": [
-        "e2e/a5es5/*",
-        "e2e/a5es2015/*"
-      ],
+      "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "semanticCommitScope": "e2e/a5",
       "additionalBranchPrefix": "e2e/a5/"
     },
     {
-      "matchFileNames": [
-        ".circleci/config.yml",
-        "compose.yml"
-      ],
-      "matchPackageNames": [
-        "satantime/puppeteer-node",
-        "@types/node",
-        "nodejs/node",
-        "npm"
-      ],
+      "matchFileNames": [".circleci/config.yml", "compose.yml"],
+      "matchPackageNames": ["satantime/puppeteer-node", "@types/node", "nodejs/node", "npm"],
       "major": {
         "enabled": false
       }
     },
     {
-      "matchFileNames": [
-        "e2e/a*/**"
-      ],
+      "matchFileNames": ["e2e/a*/**"],
       "major": {
         "enabled": false
       }
     },
     {
-      "matchFileNames": [
-        "e2e/a*/**"
-      ],
+      "matchFileNames": ["e2e/a*/**"],
       "matchPackageNames": [
         "@types/jasmine",
         "core-js",
@@ -124,10 +92,7 @@
     },
     {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
-      "matchPackageNames": [
-        "satantime/puppeteer-node",
-        "nodejs/node"
-      ],
+      "matchPackageNames": ["satantime/puppeteer-node", "nodejs/node"],
       "allowedVersions": "<9.0.0"
     },
     {
@@ -147,11 +112,7 @@
     },
     {
       "matchFileNames": ["e2e/a6/*"],
-      "matchPackageNames": [
-        "satantime/puppeteer-node",
-        "@types/node",
-        "nodejs/node"
-      ],
+      "matchPackageNames": ["satantime/puppeteer-node", "@types/node", "nodejs/node"],
       "allowedVersions": "<8.10.0"
     },
     {
