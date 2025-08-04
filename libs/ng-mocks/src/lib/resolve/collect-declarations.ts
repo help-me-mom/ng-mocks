@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 
-import { ɵReflectionCapabilities as ReflectionCapabilities, reflectComponentType } from '@angular/core';
+import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
+import * as angularCore from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
 import { AnyDeclaration, DirectiveIo } from '../common/core.types';
@@ -328,33 +329,33 @@ const parseNgDef = (
  *       and is therefore a supplementary support for signals.
  */
 const parseReflectComponentType = (def: any, declaration: Declaration): void => {
-  if (typeof def === 'function') {
-    try {
-      const mirror = reflectComponentType(def);
-      if (mirror?.inputs) {
-        for (const input of mirror.inputs) {
-          const { name, alias, required } = funcDirectiveIoParse({
-            name: input.propName,
-            alias: input.templateName === input.propName ? undefined : input.templateName,
-            required: undefined, // reflectComponentType doesn't provide required info for signal inputs
-          });
+  // Only available in NG 14+
+  if (!(angularCore as any).reflectComponentType) {
+    return;
+  }
 
-          addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
-        }
-      }
+  const mirror = (angularCore as any).reflectComponentType(def);
 
-      if (mirror?.outputs) {
-        for (const output of mirror.outputs) {
-          const { name, alias, required } = funcDirectiveIoParse({
-            name: output.propName,
-            alias: output.templateName === output.propName ? undefined : output.templateName,
-          });
+  if (mirror?.inputs) {
+    for (const input of mirror.inputs) {
+      const { name, alias, required } = funcDirectiveIoParse({
+        name: input.propName,
+        alias: input.templateName === input.propName ? undefined : input.templateName,
+        required: undefined, // reflectComponentType doesn't provide required info for signal inputs
+      });
 
-          addUniqueDirectiveIo(declaration, 'outputs', name, alias, required);
-        }
-      }
-    } catch {
-      // reflectComponentType may fail for non-components or incompatible types
+      addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
+    }
+  }
+
+  if (mirror?.outputs) {
+    for (const output of mirror.outputs) {
+      const { name, alias, required } = funcDirectiveIoParse({
+        name: output.propName,
+        alias: output.templateName === output.propName ? undefined : output.templateName,
+      });
+
+      addUniqueDirectiveIo(declaration, 'outputs', name, alias, required);
     }
   }
 };
