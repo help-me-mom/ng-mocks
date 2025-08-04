@@ -330,11 +330,10 @@ const parseNgDef = (
  */
 const parseReflectComponentType = (def: any, declaration: Declaration): void => {
   // Only available in NG 14+
-  if (!(angularCore as any).reflectComponentType) {
+  const mirror = (angularCore as any)['reflectComponentType']?.(def);
+  if (!mirror) {
     return;
   }
-
-  const mirror = (angularCore as any).reflectComponentType(def);
 
   if (mirror?.inputs) {
     for (const input of mirror.inputs) {
