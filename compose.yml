@@ -233,7 +233,7 @@ services:
       - --no-audit
 
   a17:
-    image: satantime/puppeteer-node:20.19.4
+    image: satantime/puppeteer-node:20.19.5
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -247,7 +247,7 @@ services:
       - --no-audit
 
   a18:
-    image: satantime/puppeteer-node:20.19.4
+    image: satantime/puppeteer-node:20.19.5
     platform: linux/amd64
     working_dir: /app
     volumes:
