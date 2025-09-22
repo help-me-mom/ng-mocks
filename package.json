@@ -291,7 +291,7 @@
     "karma-junit-reporter": "2.0.1",
     "karma-sourcemap-loader": "0.4.0",
     "karma-webpack": "5.0.1",
-    "lint-staged": "16.1.6",
+    "lint-staged": "16.2.0",
     "npm": "11.6.0",
     "prettier": "3.5.3",
     "puppeteer": "24.22.0",
