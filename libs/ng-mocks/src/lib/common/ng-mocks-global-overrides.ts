@@ -305,8 +305,8 @@ const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
 
 const createComponent =
   (original: TestBedStatic['createComponent'], instance: TestBedStatic): TestBedStatic['createComponent'] =>
-  component => {
-    const fixture = original.call(instance, component);
+  (...args) => {
+    const fixture = original.call(instance, ...args);
     try {
       const vcr = fixture.debugElement.injector.get(ViewContainerRef);
       patchVcrInstance(vcr);
