@@ -1,3 +1,10 @@
+# [14.14.0](https://github.com/help-me-mom/ng-mocks/compare/v14.13.5...v14.14.0) (2025-10-11)
+
+
+### Features
+
+* respect multiple args for creation of component [#12293](https://github.com/help-me-mom/ng-mocks/issues/12293) ([#12307](https://github.com/help-me-mom/ng-mocks/issues/12307)) ([c90738f](https://github.com/help-me-mom/ng-mocks/commit/c90738fdaa0de1563e8e8857425cb34cb54ac3a8))
+
 ## [14.13.5](https://github.com/help-me-mom/ng-mocks/compare/v14.13.4...v14.13.5) (2025-05-22)
 
 
