@@ -260,7 +260,7 @@
     "@types/karma-jasmine": "4.0.5",
     "@types/karma-junit-reporter": "2.0.4",
     "@types/karma-webpack": "4.0.0",
-    "@types/node": "22.18.10",
+    "@types/node": "22.18.11",
     "@typescript-eslint/eslint-plugin": "8.46.1",
     "@typescript-eslint/parser": "8.46.1",
     "codecov": "3.8.3",
