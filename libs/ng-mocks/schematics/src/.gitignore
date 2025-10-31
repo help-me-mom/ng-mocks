@@ -1,0 +1,10 @@
+
+# Outputs
+**/*.js
+**/*.js.map
+**/*.d.ts
+package-lock.json
+
+# Misc
+node_modules/
+
