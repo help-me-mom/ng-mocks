@@ -1,12 +1,12 @@
 /* eslint-disable max-lines */
 
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
-import * as angularCore from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
 import { AnyDeclaration, DirectiveIo } from '../common/core.types';
 import funcDirectiveIoBuild from '../common/func.directive-io-build';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
+import funcReflectComponentType from '../common/func.reflect-component-type';
 
 interface Declaration {
   host: Record<string, string | undefined>;
@@ -330,7 +330,7 @@ const parseNgDef = (
  */
 const parseReflectComponentType = (def: any, declaration: Declaration): void => {
   // Only available in NG 14+
-  const mirror = (angularCore as any)['reflectComponentType']?.(def);
+  const mirror = funcReflectComponentType(def);
   if (!mirror) {
     return;
   }
