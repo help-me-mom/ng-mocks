@@ -335,27 +335,23 @@ const parseReflectComponentType = (def: any, declaration: Declaration): void => 
     return;
   }
 
-  if (mirror?.inputs) {
-    for (const input of mirror.inputs) {
-      const { name, alias, required } = funcDirectiveIoParse({
-        name: input.propName,
-        alias: input.templateName === input.propName ? undefined : input.templateName,
-        required: undefined, // reflectComponentType doesn't provide required info for signal inputs
-      });
+  for (const input of mirror.inputs) {
+    const { name, alias, required } = funcDirectiveIoParse({
+      name: input.propName,
+      alias: input.templateName === input.propName ? undefined : input.templateName,
+      required: undefined, // reflectComponentType doesn't provide required info for signal inputs
+    });
 
-      addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
-    }
+    addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
   }
 
-  if (mirror?.outputs) {
-    for (const output of mirror.outputs) {
-      const { name, alias, required } = funcDirectiveIoParse({
-        name: output.propName,
-        alias: output.templateName === output.propName ? undefined : output.templateName,
-      });
+  for (const output of mirror.outputs) {
+    const { name, alias, required } = funcDirectiveIoParse({
+      name: output.propName,
+      alias: output.templateName === output.propName ? undefined : output.templateName,
+    });
 
-      addUniqueDirectiveIo(declaration, 'outputs', name, alias, required);
-    }
+    addUniqueDirectiveIo(declaration, 'outputs', name, alias, required);
   }
 };
 
