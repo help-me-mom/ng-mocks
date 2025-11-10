@@ -11,7 +11,8 @@ export default (def: any): any => {
   const global = funcGetGlobal();
 
   // Use test override if present, otherwise use real API
-  const reflectComponentType = global.__ngMocksReflectComponentType ?? (angularCore as any)['reflectComponentType'];
+  const reflectApi = 'reflect' + 'ComponentType'; // Avoid build tool processing
+  const reflectComponentType = global.__ngMocksReflectComponentType ?? (angularCore as any)[reflectApi];
 
   if (!reflectComponentType) {
     return undefined;
