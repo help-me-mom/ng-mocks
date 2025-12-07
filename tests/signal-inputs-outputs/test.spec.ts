@@ -1,6 +1,12 @@
 import { Component, VERSION } from '@angular/core';
 
-import { isMockOf, MockBuilder, MockComponent, MockRender, ngMocks } from 'ng-mocks';
+import {
+  isMockOf,
+  MockBuilder,
+  MockComponent,
+  MockRender,
+  ngMocks,
+} from 'ng-mocks';
 
 // Check if signal inputs/outputs are supported (Angular 17.1+)
 const hasSignalSupport = (): boolean => {
@@ -105,7 +111,9 @@ describe('signal-inputs-outputs', () => {
   });
 
   describe('signal inputs in tests', () => {
-    beforeEach(() => MockBuilder(ParentComponent, SignalChildComponent));
+    beforeEach(() =>
+      MockBuilder(ParentComponent, SignalChildComponent),
+    );
 
     it('passes signal input values to mock component', () => {
       const fixture = MockRender(ParentComponent);
@@ -135,7 +143,10 @@ describe('signal-inputs-outputs', () => {
       expect(signalOutputRef).toBeDefined();
 
       // Emit from the mock's output
-      if (signalOutputRef && typeof signalOutputRef.emit === 'function') {
+      if (
+        signalOutputRef &&
+        typeof signalOutputRef.emit === 'function'
+      ) {
         signalOutputRef.emit('test output');
         expect(parent.outputValue).toBe('test output');
       }
@@ -143,7 +154,9 @@ describe('signal-inputs-outputs', () => {
   });
 
   describe('real component with signal inputs', () => {
-    beforeEach(() => MockBuilder(ParentComponent).keep(SignalChildComponent));
+    beforeEach(() =>
+      MockBuilder(ParentComponent).keep(SignalChildComponent),
+    );
 
     it('works with real signal component', () => {
       const fixture = MockRender(ParentComponent);
