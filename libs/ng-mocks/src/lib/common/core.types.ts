@@ -47,6 +47,31 @@ export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T> | string;
 export type DirectiveIoParsed = { name: string; alias?: string; required?: boolean };
 
 /**
+ * Normalized Signal Input / Output type.
+ * For Angular 17+ signal-based inputs/outputs.
+ *
+ * @internal
+ */
+export type SignalInputDef = {
+  name: string;
+  alias?: string;
+  required?: boolean;
+  isSignal: true;
+};
+
+/**
+ * Normalized Signal Output type.
+ * For Angular 17+ signal-based outputs.
+ *
+ * @internal
+ */
+export type SignalOutputDef = {
+  name: string;
+  alias?: string;
+  isSignal: true;
+};
+
+/**
  * Possible Input / Output type.
  *
  * @internal
