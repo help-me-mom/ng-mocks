@@ -52,12 +52,12 @@
     "karma-chrome-launcher": "3.2.0",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
-    "npm": "11.6.4",
+    "npm": "11.7.0",
     "puppeteer": "24.32.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
   },
   "engines": {
-    "npm": "11.6.4"
+    "npm": "11.7.0"
   }
 }
