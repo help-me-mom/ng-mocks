@@ -625,7 +625,6 @@ workflows:
                 - a19
                 - a20
                 - a21
-                - a21
 
       # testing a5 (exceptional)
       - E2E Test:
