@@ -48,22 +48,22 @@ describe('TestStructuralDirectiveWithContext', () => {
   it('renders passed values', () => {
     const fixture = MockRender(
       `
-        <div *target="values; let value; let index = myIndex">
+        <div *target="items; let value; let index = myIndex">
         {{index}}: {{ value }}
         </div>
       `,
       {
-        values: ['hello', 'world'],
+        items: ['hello', 'world'],
       },
     );
 
-    // Let's assert that the 'values' have been rendered as expected
+    // Let's assert that the items have been rendered as expected
     expect(fixture.nativeElement.innerHTML).toContain('0: hello');
     expect(fixture.nativeElement.innerHTML).toContain('1: world');
 
-    // Let's change the 'values' and assert that the new render
+    // Let's change the items and assert that the new render
     // has done everything as expected.
-    fixture.componentInstance.values = ['ngMocks'];
+    fixture.componentInstance.items = ['ngMocks'];
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toContain('0: ngMocks');
     expect(fixture.nativeElement.innerHTML).not.toContain('0: hello');
