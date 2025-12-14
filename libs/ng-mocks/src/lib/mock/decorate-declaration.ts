@@ -1,13 +1,11 @@
 import { Component, Directive, NgModule, ViewChild } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
-import { AnyType, DirectiveIo, SignalInputDef, SignalOutputDef } from '../common/core.types';
+import { AnyType, DirectiveIo } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
-import decorateSignalInputs from '../common/decorate.signal-inputs';
-import decorateSignalOutputs from '../common/decorate.signal-outputs';
 import { ngMocksMockConfig } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockNgDef from '../mock-module/mock-ng-def';
@@ -21,8 +19,6 @@ const buildConfig = (
   meta: {
     inputs?: Array<DirectiveIo>;
     outputs?: Array<DirectiveIo>;
-    signalInputs?: Array<SignalInputDef>;
-    signalOutputs?: Array<SignalOutputDef>;
     providers?: NgModule['providers'];
     queries?: Record<string, ViewChild>;
   },
@@ -31,7 +27,6 @@ const buildConfig = (
   return {
     config: ngMocksUniverse.config.get(source),
     outputs: meta.outputs,
-    signalOutputs: meta.signalOutputs,
     queryScanKeys: [],
     setControlValueAccessor: setControlValueAccessor,
   };
@@ -48,8 +43,6 @@ export default <T extends Component & Directive>(
       hostDirectives?: Array<AnyType<any> | { directive: AnyType<any> }>;
       imports?: any[];
       standalone?: boolean;
-      signalInputs?: Array<SignalInputDef>;
-      signalOutputs?: Array<SignalOutputDef>;
     },
   params: T,
 ): Component & Directive => {
@@ -119,11 +112,6 @@ export default <T extends Component & Directive>(
     decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
   }
   decorateOutputs(mock, meta.outputs);
-
-  // Decorate signal inputs and outputs (Angular 17.1+)
-  decorateSignalInputs(mock, meta.signalInputs);
-  decorateSignalOutputs(mock, meta.signalOutputs);
-
   config.queryScanKeys = decorateQueries(mock, meta.queries);
 
   config.hostBindings = [];
