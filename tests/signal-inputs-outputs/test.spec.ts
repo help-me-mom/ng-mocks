@@ -159,8 +159,7 @@ describe('signal-inputs-outputs', () => {
     );
 
     it('works with real signal component', () => {
-      const fixture = MockRender(ParentComponent);
-      const parent = fixture.point.componentInstance;
+      MockRender(ParentComponent);
 
       const child = ngMocks.findInstance(SignalChildComponent);
       expect(isMockOf(child, SignalChildComponent)).toBe(false);

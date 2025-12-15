@@ -53,10 +53,10 @@ export default (cls: AnyType<any>, signalInputs?: SignalInputDef[]): void => {
         },
         set(value: any) {
           // When Angular sets the input, update the signal
-          if (!this[`__ngMocksSignal_${name}`]) {
-            this[`__ngMocksSignal_${name}`] = signalFn(value);
-          } else {
+          if (this[`__ngMocksSignal_${name}`]) {
             this[`__ngMocksSignal_${name}`].set(value);
+          } else {
+            this[`__ngMocksSignal_${name}`] = signalFn(value);
           }
         },
         enumerable: true,
