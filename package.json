@@ -239,7 +239,7 @@
     "@angular-eslint/eslint-plugin-template": "19.8.1",
     "@angular-eslint/template-parser": "19.8.1",
     "@angular/animations": "20.1.8",
-    "@angular/common": "20.1.8",
+    "@angular/common": "20.3.14",
     "@angular/core": "20.1.8",
     "@angular/forms": "20.1.8",
     "@angular/platform-browser": "20.1.8",
