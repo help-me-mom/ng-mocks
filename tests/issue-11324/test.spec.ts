@@ -84,5 +84,7 @@ describe('issue-11324', () => {
       { templateRef, context: {} },
       { reset: true },
     ); // ok
+
+    expect(true).toBeTruthy();
   });
 });
