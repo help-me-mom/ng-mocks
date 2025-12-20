@@ -16,7 +16,7 @@
     "test:jest:debug": "npm run test:jest -- -i --watch"
   },
   "dependencies": {
-    "@angular/common": "20.1.8",
+    "@angular/common": "20.3.14",
     "@angular/compiler": "20.1.8",
     "@angular/core": "20.1.8",
     "@angular/forms": "20.1.8",
