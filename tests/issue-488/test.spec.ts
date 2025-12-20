@@ -61,9 +61,14 @@ describe('issue-488', () => {
       );
 
       if (testBed._instantiated || testBed._testModuleRef) {
-        expect(() => MockRender(TargetComponent)).toThrowError(
-          /Forgot to flush TestBed/,
-        );
+        try {
+          MockRender(TargetComponent);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            'Forgot to flush TestBed',
+          );
+        }
       } else {
         MockRender(TargetComponent);
         expect(service.method).toHaveBeenCalled();

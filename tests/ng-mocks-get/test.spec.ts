@@ -29,8 +29,13 @@ describe('ng-mocks-get', () => {
   it('gets services', () => {
     MockRender(TargetComponent);
     expect(() => ngMocks.get(RootService)).not.toThrow();
-    expect(() => ngMocks.get(ComponentService)).toThrowError(
-      `Cannot find an instance via ngMocks.get(${ComponentService.name})`,
-    );
+    try {
+      ngMocks.get(ComponentService);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `Cannot find an instance via ngMocks.get(${ComponentService.name})`,
+      );
+    }
   });
 });

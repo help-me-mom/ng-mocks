@@ -57,27 +57,42 @@ describe('ng-mocks-change:3341', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.change(cvaEl, 123)).toThrowError(
-      /please ensure it has 'onChange' method/,
-    );
+    try {
+      ngMocks.change(cvaEl, 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `please ensure it has 'onChange' method`,
+      );
+    }
   });
 
   it('throws error with suggestions', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.change(cvaEl, 123)).toThrowError(
-      /customChangeClb, customTouchedClb/,
-    );
+    try {
+      ngMocks.change(cvaEl, 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `customChangeClb, customTouchedClb`,
+      );
+    }
   });
 
   it('throws error about the wrongly provided method', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() =>
-      ngMocks.change(cvaEl, 123, 'triggerChange'),
-    ).toThrowError(/please ensure it has 'triggerChange' method/);
+    try {
+      ngMocks.change(cvaEl, 123, 'triggerChange');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `please ensure it has 'triggerChange' method`,
+      );
+    }
   });
 
   it('triggers change correctly', () => {

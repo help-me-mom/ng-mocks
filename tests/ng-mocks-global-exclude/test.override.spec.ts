@@ -53,13 +53,16 @@ describe('ng-mocks-global-exclude:override', () => {
         ),
       ).not.toThrow();
       ngMocks.flushTestBed();
-      expect(() =>
+      try {
         MockRender(
           '<target1-ng-mocks-global-exclude></target1-ng-mocks-global-exclude>',
-        ),
-      ).toThrowError(
-        /'target1-ng-mocks-global-exclude' is not a known element/,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `'target1-ng-mocks-global-exclude' is not a known element`,
+        );
+      }
     });
   });
 
@@ -73,13 +76,16 @@ describe('ng-mocks-global-exclude:override', () => {
     });
 
     it('cannot find Target2Component too', () => {
-      expect(() =>
+      try {
         MockRender(
           '<target2-ng-mocks-global-exclude></target2-ng-mocks-global-exclude>',
-        ),
-      ).toThrowError(
-        /'target2-ng-mocks-global-exclude' is not a known element/,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `'target2-ng-mocks-global-exclude' is not a known element`,
+        );
+      }
     });
   });
 });

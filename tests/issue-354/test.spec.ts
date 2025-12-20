@@ -11,65 +11,135 @@ import {
 // @see https://github.com/help-me-mom/ng-mocks/issues/354
 describe('issue-354', () => {
   it('does not accept an empty module', () => {
-    expect(() => MockModule(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockModule. Please check that its import is correct.',
-    );
-    expect(() => MockModule(null as any)).toThrowError(
-      'null / undefined has been passed into MockModule. Please check that its import is correct.',
-    );
+    try {
+      MockModule(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockModule. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockModule(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockModule. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty component', () => {
-    expect(() => MockComponent(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockComponent. Please check that its import is correct.',
-    );
-    expect(() => MockComponent(null as any)).toThrowError(
-      'null / undefined has been passed into MockComponent. Please check that its import is correct.',
-    );
+    try {
+      MockComponent(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockComponent. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockComponent(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockComponent. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty directive', () => {
-    expect(() => MockDirective(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockDirective. Please check that its import is correct.',
-    );
-    expect(() => MockDirective(null as any)).toThrowError(
-      'null / undefined has been passed into MockDirective. Please check that its import is correct.',
-    );
+    try {
+      MockDirective(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockDirective. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockDirective(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockDirective. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty pipe', () => {
-    expect(() => MockPipe(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockPipe. Please check that its import is correct.',
-    );
-    expect(() => MockPipe(null as any)).toThrowError(
-      'null / undefined has been passed into MockPipe. Please check that its import is correct.',
-    );
+    try {
+      MockPipe(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockPipe. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockPipe(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockPipe. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty provider', () => {
-    expect(() => MockProvider(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockProvider. Please check that its import is correct.',
-    );
-    expect(() => MockProvider(null as any)).toThrowError(
-      'null / undefined has been passed into MockProvider. Please check that its import is correct.',
-    );
+    try {
+      MockProvider(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockProvider. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockProvider(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockProvider. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty render', () => {
-    expect(() => MockRender(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockRender. Please check that its import is correct.',
-    );
-    expect(() => MockRender(null as any)).toThrowError(
-      'null / undefined has been passed into MockRender. Please check that its import is correct.',
-    );
+    try {
+      MockRender(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockRender. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockRender(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockRender. Please check that its import is correct.',
+      );
+    }
   });
 
   it('does not accept an empty instance', () => {
-    expect(() => MockInstance(undefined as any)).toThrowError(
-      'null / undefined has been passed into MockInstance. Please check that its import is correct.',
-    );
-    expect(() => MockInstance(null as any)).toThrowError(
-      'null / undefined has been passed into MockInstance. Please check that its import is correct.',
-    );
+    try {
+      MockInstance(undefined as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockInstance. Please check that its import is correct.',
+      );
+    }
+    try {
+      MockInstance(null as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'null / undefined has been passed into MockInstance. Please check that its import is correct.',
+      );
+    }
   });
 });

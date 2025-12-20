@@ -152,9 +152,14 @@ describe('root-providers', () => {
     });
 
     it('fails', () => {
-      expect(() =>
-        TestBed.createComponent(ModuleComponent),
-      ).toThrowError(new RegExp(`-> ${ModuleService.name}`));
+      try {
+        TestBed.createComponent(ModuleComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `-> ${ModuleService.name}`,
+        );
+      }
     });
   });
 
@@ -181,9 +186,14 @@ describe('root-providers', () => {
     });
 
     it('fails', () => {
-      expect(() => MockRender(ModuleComponent)).toThrowError(
-        new RegExp(`-> ${ModuleService.name}`),
-      );
+      try {
+        MockRender(ModuleComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `-> ${ModuleService.name}`,
+        );
+      }
     });
   });
 

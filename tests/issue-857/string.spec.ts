@@ -24,8 +24,13 @@ describe('issue-857:string', () => {
   beforeEach(() => MockBuilder(null, TargetModule));
 
   it('excludes by string', () => {
-    expect(() => MockRender(Target857Component)).toThrowError(
-      /'target-857' is not a known element/,
-    );
+    try {
+      MockRender(Target857Component);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `'target-857' is not a known element`,
+      );
+    }
   });
 });

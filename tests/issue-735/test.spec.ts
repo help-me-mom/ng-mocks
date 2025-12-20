@@ -107,7 +107,7 @@ describe('issue-735', () => {
 
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
-        expect(() => {
+        try {
           ngMocks.stubMember(
             console,
             'log',
@@ -123,7 +123,12 @@ describe('issue-735', () => {
             SecurityContext.HTML,
             '<script></script><div>test</div>',
           );
-        }).toThrowError(/sanitizing HTML stripped some content/);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            'sanitizing HTML stripped some content',
+          );
+        }
       });
     });
 
@@ -136,7 +141,7 @@ describe('issue-735', () => {
 
       it('uses default keep correctly', () => {
         const { point } = MockRender(TargetComponent);
-        expect(() => {
+        try {
           ngMocks.stubMember(
             console,
             'log',
@@ -152,7 +157,12 @@ describe('issue-735', () => {
             SecurityContext.HTML,
             '<script></script><div>test</div>',
           );
-        }).toThrowError(/sanitizing HTML stripped some content/);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            'sanitizing HTML stripped some content',
+          );
+        }
       });
     });
   });

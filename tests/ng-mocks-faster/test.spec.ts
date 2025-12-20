@@ -33,9 +33,14 @@ describe('ngMocks.faster', () => {
       ngMocks.faster();
 
       it('works in clear reset', () => {
-        expect(() => ngMocks.get(TOKEN)).toThrowError(
-          'Cannot find an instance via ngMocks.get(TOKEN)',
-        );
+        try {
+          ngMocks.get(TOKEN);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            'Cannot find an instance via ngMocks.get(TOKEN)',
+          );
+        }
       });
     });
   });

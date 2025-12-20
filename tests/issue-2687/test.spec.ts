@@ -199,9 +199,14 @@ describe('issue-2687', () => {
     );
 
     it('renders TargetComponent', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        /The pipe 'standalone' could not be found/,
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `The pipe 'standalone' could not be found`,
+        );
+      }
     });
   });
 });

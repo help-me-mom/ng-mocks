@@ -61,7 +61,7 @@ describe('issue-572', () => {
     try {
       ngMocks.findInstance(Injector);
       MockRender(TargetComponent);
-      fail('should throw');
+      fail('an error expected');
     } catch (error) {
       expect(console.warn).not.toHaveBeenCalled();
       expect(error).not.toEqual(

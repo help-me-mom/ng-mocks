@@ -74,13 +74,23 @@ describe('ng-mocks-trigger:test', () => {
     MockRender(TargetComponent);
 
     const debugElement = ngMocks.find('div', undefined);
-    expect(() => ngMocks.trigger(debugElement, 'focus')).toThrowError(
-      'Cannot trigger focus event undefined element',
-    );
+    try {
+      ngMocks.trigger(debugElement, 'focus');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot trigger focus event undefined element',
+      );
+    }
 
-    expect(() =>
-      ngMocks.trigger(debugElement, ngMocks.event('click')),
-    ).toThrowError('Cannot trigger click event undefined element');
+    try {
+      ngMocks.trigger(debugElement, ngMocks.event('click'));
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot trigger click event undefined element',
+      );
+    }
   });
 
   it('skips on disabled elements', () => {

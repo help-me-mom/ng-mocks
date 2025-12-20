@@ -84,11 +84,11 @@ describe('export-all', () => {
         fail('an error expected');
       } catch (error) {
         if (error instanceof Error) {
-          expect(error.message).toMatch(
+          expect((error as Error).message).toMatch(
             /Multiple components match node with tagname target|The pipe 'target' could not be found/,
           );
         } else {
-          fail('should fail');
+          fail('an error expected');
         }
       }
     });
@@ -110,11 +110,16 @@ describe('export-all', () => {
     });
 
     it('fails on no exclude due to a conflict in declarations', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        new RegExp(
-          `Multiple components match node with tagname target|Conflicting components: MockOf${TargetComponent.name},${TargetComponent.name}`,
-        ),
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `Multiple components match node with tagname target|Conflicting components: MockOf${TargetComponent.name},${TargetComponent.name}`,
+          ),
+        );
+      }
     });
   });
 });

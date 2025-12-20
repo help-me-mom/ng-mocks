@@ -21,9 +21,14 @@ describe('MockRender.viewProviders', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('throws without the service', () => {
-    expect(() => MockRender(TargetComponent)).toThrowError(
-      new RegExp(`No provider for ${TargetService.name}`),
-    );
+    try {
+      MockRender(TargetComponent);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `No provider for ${TargetService.name}`,
+      );
+    }
   });
 
   it('providers services via viewProviders', () => {

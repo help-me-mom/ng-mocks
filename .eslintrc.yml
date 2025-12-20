@@ -11,6 +11,7 @@ plugins:
 settings:
   import/resolver:
     typescript:
+      noWarnOnMultipleProjects: true
       project:
         - ./tsconfig.json
         - ./tests-e2e/tsconfig.json

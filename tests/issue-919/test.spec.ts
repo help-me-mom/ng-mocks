@@ -42,8 +42,11 @@ describe('issue-919', () => {
   });
 
   it('fails on render', () => {
-    expect(() => MockRender(TargetComponent)).toThrowError(
-      /'data\$'/,
-    );
+    try {
+      MockRender(TargetComponent);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('data$');
+    }
   });
 });

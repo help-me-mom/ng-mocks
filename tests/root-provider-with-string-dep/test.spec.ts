@@ -37,9 +37,14 @@ describe('root-provider-with-string-dep', () => {
     );
 
     it('finds tokens', () => {
-      expect(() =>
-        TestBed.createComponent(TargetComponent),
-      ).toThrowError(/No provider for name!/);
+      try {
+        TestBed.createComponent(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'No provider for name!',
+        );
+      }
     });
   });
 
@@ -47,9 +52,14 @@ describe('root-provider-with-string-dep', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
     it('mocks service', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        /No provider for name!/,
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'No provider for name!',
+        );
+      }
     });
   });
 });

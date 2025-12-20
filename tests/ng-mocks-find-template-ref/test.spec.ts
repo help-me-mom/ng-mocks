@@ -129,27 +129,41 @@ describe('ng-mocks-find-template-ref', () => {
   it('throws on missed directives', () => {
     const fixture = MockRender(TestComponent);
 
-    expect(() => ngMocks.findTemplateRef('unknownId')).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownId)',
-    );
-    expect(() =>
-      ngMocks.findTemplateRef(fixture, ['unknownAttribute1']),
-    ).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownAttribute1)',
-    );
-    expect(() =>
+    try {
+      ngMocks.findTemplateRef('unknownId');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownId)',
+      );
+    }
+    try {
+      ngMocks.findTemplateRef(fixture, ['unknownAttribute1']);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownAttribute1)',
+      );
+    }
+    try {
       ngMocks.findTemplateRef(fixture.debugElement, [
         'unknownAttribute2',
         'value',
-      ]),
-    ).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownAttribute2)',
-    );
-    expect(() =>
-      ngMocks.findTemplateRef(UnusedDirective),
-    ).toThrowError(
-      `Cannot find a TemplateRef via ngMocks.findTemplateRef(${UnusedDirective.name})`,
-    );
+      ]);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a TemplateRef via ngMocks.findTemplateRef(unknownAttribute2)',
+      );
+    }
+    try {
+      ngMocks.findTemplateRef(UnusedDirective);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `Cannot find a TemplateRef via ngMocks.findTemplateRef(${UnusedDirective.name})`,
+      );
+    }
   });
 
   it('returns default value on missed directives', () => {
@@ -192,14 +206,22 @@ describe('ng-mocks-find-template-ref', () => {
 
   it('fails on wrong selector type', () => {
     MockRender(TestComponent);
-    expect(() => ngMocks.findTemplateRef(123 as any)).toThrowError(
-      'Unknown selector',
-    );
+    try {
+      ngMocks.findTemplateRef(123 as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('Unknown selector');
+    }
   });
 
   it('fails on unknown fixture', () => {
-    expect(() => ngMocks.findTemplateRef('id1')).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(id1)',
-    );
+    try {
+      ngMocks.findTemplateRef('id1');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a TemplateRef via ngMocks.findTemplateRef(id1)',
+      );
+    }
   });
 });

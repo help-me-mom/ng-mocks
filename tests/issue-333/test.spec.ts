@@ -114,9 +114,14 @@ describe('issue-333', () => {
       it('fails on unknown', () => {
         const fixture = MockRender(DynamicOverlayComponent);
         fixture.point.componentInstance.attachComponent(DepComponent);
-        expect(() => fixture.detectChanges()).toThrowError(
-          new RegExp(DepComponent.name),
-        );
+        try {
+          fixture.detectChanges();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            DepComponent.name,
+          );
+        }
       });
     }
   });
@@ -141,9 +146,14 @@ describe('issue-333', () => {
     it('fails on unknown', () => {
       const fixture = MockRender(DynamicOverlayComponent);
       fixture.point.componentInstance.attachComponent(MockComponent);
-      expect(() => fixture.detectChanges()).toThrowError(
-        new RegExp(MockComponent.name),
-      );
+      try {
+        fixture.detectChanges();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          MockComponent.name,
+        );
+      }
     });
   });
 

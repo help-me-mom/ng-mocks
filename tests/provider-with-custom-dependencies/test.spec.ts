@@ -115,9 +115,14 @@ describe('provider-with-custom-dependencies', () => {
         '"optional:missed"',
       );
       // The dependency should not be provided in TestBed.
-      expect(() => ngMocks.findInstance(Dep3Service)).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
-      );
+      try {
+        ngMocks.findInstance(Dep3Service);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
+        );
+      }
     });
   });
 
@@ -135,9 +140,14 @@ describe('provider-with-custom-dependencies', () => {
         '"optional:missed"',
       );
       // The dependency should not be provided in TestBed.
-      expect(() => ngMocks.findInstance(Dep3Service)).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
-      );
+      try {
+        ngMocks.findInstance(Dep3Service);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
+        );
+      }
     });
   });
 
@@ -159,9 +169,14 @@ describe('provider-with-custom-dependencies', () => {
         '"optional:missed"',
       );
       // The dependency should not be provided in TestBed.
-      expect(() => ngMocks.findInstance(Dep3Service)).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
-      );
+      try {
+        ngMocks.findInstance(Dep3Service);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${Dep3Service.name})`,
+        );
+      }
     });
   });
 });

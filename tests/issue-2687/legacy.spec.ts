@@ -130,9 +130,14 @@ describe('issue-2687', () => {
     });
 
     it('renders StandalonePipe', () => {
-      expect(() =>
-        TestBed.createComponent(RenderStandalonePipeComponent),
-      ).toThrowError(/The pipe 'standalone' could not be found/);
+      try {
+        TestBed.createComponent(RenderStandalonePipeComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `The pipe 'standalone' could not be found`,
+        );
+      }
     });
 
     it('renders StandaloneService', () => {
@@ -203,9 +208,14 @@ describe('issue-2687', () => {
     });
 
     it('renders StandalonePipe', () => {
-      expect(() =>
-        TestBed.createComponent(RenderStandalonePipeComponent),
-      ).toThrowError(/The pipe 'standalone' could not be found/);
+      try {
+        TestBed.createComponent(RenderStandalonePipeComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `The pipe 'standalone' could not be found`,
+        );
+      }
     });
 
     it('renders StandaloneService', () => {
@@ -230,14 +240,22 @@ describe('issue-2687', () => {
       expect(() =>
         ngMocks.findInstance(TargetComponent),
       ).not.toThrow();
-      expect(() =>
-        ngMocks.findInstance(StandaloneComponent),
-      ).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${StandaloneComponent.name})`,
-      );
-      expect(() => ngMocks.findInstance(StandalonePipe)).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${StandalonePipe.name})`,
-      );
+      try {
+        ngMocks.findInstance(StandaloneComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${StandaloneComponent.name})`,
+        );
+      }
+      try {
+        ngMocks.findInstance(StandalonePipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${StandalonePipe.name})`,
+        );
+      }
       expect(() =>
         ngMocks.findInstance(StandaloneService),
       ).not.toThrow();

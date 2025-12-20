@@ -91,15 +91,21 @@ describe('ng-mocks-render:debug-node', () => {
       '<target-ng-mocks-render-debug-node><mock-ng-mocks-render-debug-node></mock-ng-mocks-render-debug-node></target-ng-mocks-render-debug-node>',
     );
 
-    expect(() =>
-      ngMocks.render(component, fixture.debugElement),
-    ).toThrowError(
-      'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
-    );
-    expect(() =>
-      ngMocks.hide(component, fixture.debugElement),
-    ).toThrowError(
-      'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
-    );
+    try {
+      ngMocks.render(component, fixture.debugElement);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
+      );
+    }
+    try {
+      ngMocks.hide(component, fixture.debugElement);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
+      );
+    }
   });
 });

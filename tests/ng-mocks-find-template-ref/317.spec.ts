@@ -38,8 +38,13 @@ describe('ng-mocks-find-template-ref:317', () => {
       ngMocks.findTemplateRef(['data-id', 'div'], 'tpl'),
     ).toEqual(tpl);
 
-    expect(() => ngMocks.findTemplateRef('span', 'tpl')).toThrowError(
-      'Cannot find a TemplateRef via ngMocks.findTemplateRef(tpl)',
-    );
+    try {
+      ngMocks.findTemplateRef('span', 'tpl');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a TemplateRef via ngMocks.findTemplateRef(tpl)',
+      );
+    }
   });
 });

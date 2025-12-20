@@ -117,11 +117,14 @@ describe('issue-2647:errors', () => {
         const builder = MockBuilder(TargetService, TargetModule).keep(
           MissingService,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingService.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('succeeds on root service', () => {
@@ -142,11 +145,14 @@ describe('issue-2647:errors', () => {
         const builder = MockBuilder(TargetPipe, TargetModule).keep(
           MissingPipe,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingPipe.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing directive', () => {
@@ -154,11 +160,14 @@ describe('issue-2647:errors', () => {
           TargetDirective,
           TargetModule,
         ).keep(MissingDirective);
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingDirective.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing component', () => {
@@ -166,22 +175,28 @@ describe('issue-2647:errors', () => {
           TargetComponent,
           TargetModule,
         ).keep(MissingComponent);
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingComponent.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing module', () => {
         const builder = MockBuilder(TargetModule, []).keep(
           MissingModule,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingModule.name}`,
-          ),
-        );
+          );
+        }
       });
     });
 
@@ -190,11 +205,14 @@ describe('issue-2647:errors', () => {
         const builder = MockBuilder(TargetService, TargetModule).mock(
           MissingService,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingService.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('succeeds on root service', () => {
@@ -215,11 +233,14 @@ describe('issue-2647:errors', () => {
         const builder = MockBuilder(TargetPipe, TargetModule).mock(
           MissingPipe,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingPipe.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing directive', () => {
@@ -227,11 +248,14 @@ describe('issue-2647:errors', () => {
           TargetDirective,
           TargetModule,
         ).mock(MissingDirective);
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingDirective.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing component', () => {
@@ -239,22 +263,28 @@ describe('issue-2647:errors', () => {
           TargetComponent,
           TargetModule,
         ).mock(MissingComponent);
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingComponent.name}`,
-          ),
-        );
+          );
+        }
       });
 
       it('throws on missing module', () => {
         const builder = MockBuilder(TargetModule, []).mock(
           MissingModule,
         );
-        expect(() => builder.build()).toThrowError(
-          new RegExp(
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
             `MockBuilder has found a missing dependency: ${MissingModule.name}`,
-          ),
-        );
+          );
+        }
       });
     });
 

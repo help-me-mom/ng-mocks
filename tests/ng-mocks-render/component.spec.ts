@@ -342,9 +342,14 @@ describe('ng-mocks-render:component:mock', () => {
     MockRender(TargetComponent);
 
     const tpl = ngMocks.findTemplateRef('header');
-    expect(() => ngMocks.render({}, tpl)).toThrowError(
-      'Only instances of mock declarations are accepted',
-    );
+    try {
+      ngMocks.render({}, tpl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Only instances of mock declarations are accepted',
+      );
+    }
   });
 
   it('throws if TemplateRef cannot be found on render request', () => {
@@ -352,20 +357,28 @@ describe('ng-mocks-render:component:mock', () => {
 
     const directive = ngMocks.findInstance(Mock3Directive);
     const tpl = ngMocks.findTemplateRef('header');
-    expect(() => ngMocks.render(directive, tpl)).toThrowError(
-      'Cannot find path to the TemplateRef',
-    );
+    try {
+      ngMocks.render(directive, tpl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find path to the TemplateRef',
+      );
+    }
   });
 
   it('throws if no template has been passed on render request', () => {
     MockRender(TargetComponent);
 
     const directive = ngMocks.findInstance(Mock3Directive);
-    expect(() =>
-      ngMocks.render(directive, undefined as never),
-    ).toThrowError(
-      'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
-    );
+    try {
+      ngMocks.render(directive, undefined as never);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Unknown template has been passed, only TemplateRef or a mock structural directive are supported',
+      );
+    }
   });
 
   it('throws if TemplateRef cannot be found on hide request', () => {
@@ -373,8 +386,13 @@ describe('ng-mocks-render:component:mock', () => {
 
     const directive = ngMocks.findInstance(Mock3Directive);
     const tpl = ngMocks.findTemplateRef('header');
-    expect(() => ngMocks.hide(directive, tpl)).toThrowError(
-      'Cannot find path to the TemplateRef',
-    );
+    try {
+      ngMocks.hide(directive, tpl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find path to the TemplateRef',
+      );
+    }
   });
 });

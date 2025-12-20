@@ -132,9 +132,9 @@ describe('issue-735:provider', () => {
   //       try {
   //         await MockBuilder(TargetComponent);
   //         MockRender(TargetComponent);
-  //         fail('should not be here');
+  //         fail('an error expected');
   //       } catch (e) {
-  //         expect(e.message).toMatch(/test/);
+  //         expect(e.message).toContain('test');
   //       }
   //     });
   //   });
@@ -150,9 +150,9 @@ describe('issue-735:provider', () => {
   //       try {
   //         await TestBed.compileComponents();
   //         TestBed.createComponent(TargetComponent).detectChanges();
-  //         fail('should not be here');
+  //         fail('an error expected');
   //       } catch (e) {
-  //         expect(e.message).toMatch(/test/);
+  //         expect(e.message).toContain('test');
   //       }
   //     });
   //   });

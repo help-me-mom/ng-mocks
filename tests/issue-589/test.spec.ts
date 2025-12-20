@@ -34,9 +34,14 @@ describe('issue-589', () => {
     beforeEach(() => MockBuilder(null, MyModule));
 
     it('excludes StoreDevtoolsModule', () => {
-      expect(() => MockRender(TOKEN)).toThrowError(
-        /No provider for InjectionToken TOKEN/,
-      );
+      try {
+        MockRender(TOKEN);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'No provider for InjectionToken TOKEN',
+        );
+      }
     });
   });
 

@@ -45,11 +45,14 @@ describe('ng-mocks-touch:317', () => {
     expect(control.touched).toEqual(true);
     control.markAsUntouched();
     expect(control.touched).toEqual(false);
-    expect(() =>
-      ngMocks.touch(['data-label', 'input1']),
-    ).toThrowError(
-      'Cannot find an element via ngMocks.touch(data-label)',
-    );
+    try {
+      ngMocks.touch(['data-label', 'input1']);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find an element via ngMocks.touch(data-label)',
+      );
+    }
     expect(control.touched).toEqual(false);
   });
 });

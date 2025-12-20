@@ -42,11 +42,16 @@ describe('issue-3635', () => {
   });
 
   it('throws because ApplicationModule is not imported anywhere', () => {
-    expect(() =>
+    try {
       MockBuilder(MyComponent, ActivatedRoute)
         .mock(ApplicationModule)
-        .build(),
-    ).toThrowError(/MockBuilder has found a missing dependency/);
+        .build();
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'MockBuilder has found a missing dependency',
+      );
+    }
   });
 
   it('does not throw because NgIf is a part of CommonModule from MyComponent', () => {

@@ -10,7 +10,7 @@ describe('ng-mocks-throw-on-console', () => {
   it('throws on warn', () => {
     try {
       console.warn('warn message');
-      fail('should have failed');
+      fail('an error expected');
     } catch (error) {
       expect(error).toEqual(
         assertion.objectContaining({
@@ -24,7 +24,7 @@ describe('ng-mocks-throw-on-console', () => {
   it('throws on error', () => {
     try {
       console.error('error message');
-      fail('should have failed');
+      fail('an error expected');
     } catch (error) {
       expect(error).toEqual(
         assertion.objectContaining({
