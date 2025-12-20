@@ -63,8 +63,10 @@ describe('issue-175', () => {
         MockRender(Target1Component);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -97,8 +99,10 @@ describe('issue-175', () => {
         MockRender('<dir-1></dir-1>');
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -129,8 +133,10 @@ describe('issue-175', () => {
         MockRender(Target2Component);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target2Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target2Service.name}\`?`,
+          ),
         );
       }
     });
@@ -146,8 +152,10 @@ describe('issue-175', () => {
         MockRender(Target1Component);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -163,8 +171,10 @@ describe('issue-175', () => {
         MockRender('<dir-1></dir-1>');
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -187,8 +197,10 @@ describe('issue-175', () => {
         TestBed.createComponent(Target1Component);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -198,8 +210,10 @@ describe('issue-175', () => {
         TestBed.createComponent(Target1Component);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -224,8 +238,10 @@ describe('issue-175', () => {
           TestBed.createComponent(Target1Component);
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${Target1Service.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${Target1Service.name}\`?`,
+            ),
           );
         }
       });
@@ -235,8 +251,10 @@ describe('issue-175', () => {
           TestBed.createComponent(Target1Component);
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${Target1Service.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${Target1Service.name}\`?`,
+            ),
           );
         }
       });
@@ -274,8 +292,10 @@ describe('issue-175', () => {
         MockRender('<dir-1></dir-1>');
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });
@@ -285,8 +305,10 @@ describe('issue-175', () => {
         MockRender('<dir-1></dir-1>');
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${Target1Service.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${Target1Service.name}\`?`,
+          ),
         );
       }
     });

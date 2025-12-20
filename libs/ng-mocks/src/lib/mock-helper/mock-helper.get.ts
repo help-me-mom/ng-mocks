@@ -32,7 +32,7 @@ export default <T>(...args: any[]) => {
       return TestBed.inject ? TestBed.inject(args[0]) : /* istanbul ignore next */ (TestBed as any).get(args[0]);
     } catch (error) {
       // forwarding unexpected errors: https://github.com/help-me-mom/ng-mocks/issues/7041
-      if (!error || typeof error !== 'object' || (error as any).ngTempTokenPath === undefined) {
+      if (!error || typeof error !== 'object' || (error as any).ngTokenPath === undefined) {
         throw error;
       }
       throw new Error(`Cannot find an instance via ngMocks.get(${funcParseFindArgsName(args[0])})`);

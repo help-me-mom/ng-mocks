@@ -78,8 +78,10 @@ describe('issue-4613', () => {
         MockRender(TargetComponent);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `No provider for ${ProviderService.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${ProviderService.name}\`?`,
+          ),
         );
       }
     });

@@ -41,8 +41,8 @@ describe('root-provider-with-string-dep', () => {
         TestBed.createComponent(TargetComponent);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          'No provider for name!',
+        expect((error as Error).message).toMatch(
+          new RegExp(`No provider( found)? for \`?name\`?`),
         );
       }
     });
@@ -56,8 +56,8 @@ describe('root-provider-with-string-dep', () => {
         MockRender(TargetComponent);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          'No provider for name!',
+        expect((error as Error).message).toMatch(
+          new RegExp(`No provider( found)? for \`?name\`?`),
         );
       }
     });

@@ -24,8 +24,10 @@ describe('issue-762:token', () => {
         MockRender(TOKEN);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          'No provider for InjectionToken TOKEN',
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${(TOKEN as any).ngMetadataName} ${(TOKEN as any)._desc}\`?`,
+          ),
         );
       }
     });

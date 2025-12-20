@@ -68,8 +68,10 @@ describe('issue-623', () => {
           withoutDirective();
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${TargetService.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${TargetService.name}\`?`,
+            ),
           );
         }
       });
@@ -147,8 +149,10 @@ describe('issue-623', () => {
           withoutDirective();
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${TargetService.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${TargetService.name}\`?`,
+            ),
           );
         }
       });
@@ -176,8 +180,10 @@ describe('issue-623', () => {
           withoutDirective();
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${TargetService.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${TargetService.name}\`?`,
+            ),
           );
         }
       });
@@ -227,8 +233,10 @@ describe('issue-623', () => {
           withoutDirective();
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${TargetService.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider( found)? for \`?${TargetService.name}\`?`,
+            ),
           );
         }
       });

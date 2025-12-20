@@ -111,8 +111,10 @@ describe('issue-7041', () => {
         }
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `NullInjectorError: No provider for ${ServiceC.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${ServiceC.name}\`?`,
+          ),
         );
       }
     });
