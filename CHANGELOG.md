@@ -1,3 +1,10 @@
+# [14.15.0](https://github.com/help-me-mom/ng-mocks/compare/v14.14.0...v14.15.0) (2025-12-20)
+
+
+### Features
+
+* support signal input from angular ([5618d0a](https://github.com/help-me-mom/ng-mocks/commit/5618d0a0d4b5e3e4c298f14502d3e864d96543f2)), closes [#9698](https://github.com/help-me-mom/ng-mocks/issues/9698) [#8818](https://github.com/help-me-mom/ng-mocks/issues/8818)
+
 # [14.14.0](https://github.com/help-me-mom/ng-mocks/compare/v14.13.5...v14.14.0) (2025-10-11)
 
 
