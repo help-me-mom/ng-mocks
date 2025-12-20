@@ -40,7 +40,7 @@ export default <T>(...args: any[]): T => {
       result.push(getInjection(declaration));
     } catch (error) {
       // forwarding unexpected errors: https://github.com/help-me-mom/ng-mocks/issues/7041
-      if (!error || typeof error !== 'object' || (error as any).ngTempTokenPath === undefined) {
+      if (!error || typeof error !== 'object' || (error as any).ngTokenPath === undefined) {
         throw error;
       }
     }

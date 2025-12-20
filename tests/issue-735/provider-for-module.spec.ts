@@ -92,8 +92,10 @@ describe('issue-735:provider-for-module', () => {
           MockRender(TargetUnusedService);
           fail('an error expected');
         } catch (error) {
-          expect((error as Error).message).toContain(
-            `No provider for ${TargetUnusedService.name}`,
+          expect((error as Error).message).toMatch(
+            new RegExp(
+              `No provider for ${TargetUnusedService.name}|No provider found for \`${TargetUnusedService.name}\``,
+            ),
           );
         }
       });

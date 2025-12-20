@@ -156,8 +156,10 @@ describe('root-providers', () => {
         TestBed.createComponent(ModuleComponent);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `-> ${ModuleService.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${ModuleService.name}\`?`,
+          ),
         );
       }
     });
@@ -190,8 +192,10 @@ describe('root-providers', () => {
         MockRender(ModuleComponent);
         fail('an error expected');
       } catch (error) {
-        expect((error as Error).message).toContain(
-          `-> ${ModuleService.name}`,
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider( found)? for \`?${ModuleService.name}\`?`,
+          ),
         );
       }
     });
