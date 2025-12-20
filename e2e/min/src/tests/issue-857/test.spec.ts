@@ -52,7 +52,7 @@ describe('issue-857', () => {
     it('default override', () => {
       expect(console.warn).toHaveBeenCalledWith(
         [
-          'MockInstance: side effects have been detected (TargetComponent).',
+          `MockInstance: side effects have been detected (${TargetComponent.name}).`,
           'Forgot to add MockInstance.scope() or to call MockInstance.restore()?',
         ].join(' '),
       );
