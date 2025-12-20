@@ -57,27 +57,42 @@ describe('ng-mocks-touch:3341', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.touch(cvaEl)).toThrowError(
-      /please ensure it has 'onTouched' method/,
-    );
+    try {
+      ngMocks.touch(cvaEl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `please ensure it has 'onTouched' method`,
+      );
+    }
   });
 
   it('throws error with suggestions', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.touch(cvaEl)).toThrowError(
-      /customChangeClb, customTouchedClb/,
-    );
+    try {
+      ngMocks.touch(cvaEl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `customChangeClb, customTouchedClb`,
+      );
+    }
   });
 
   it('throws error about the wrongly provided method', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.touch(cvaEl, 'triggerTouch')).toThrowError(
-      /please ensure it has 'triggerTouch' method/,
-    );
+    try {
+      ngMocks.touch(cvaEl, 'triggerTouch');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `please ensure it has 'triggerTouch' method`,
+      );
+    }
   });
 
   it('triggers touch correctly', () => {

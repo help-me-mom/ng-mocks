@@ -38,9 +38,14 @@ describe('InternalOnlyNested:real', () => {
   beforeEach(() => MockBuilder(TargetModule));
 
   it('should render', () => {
-    expect(() => MockRender(InternalComponent)).toThrowError(
-      /'internal-only-nested' is not a known element/,
-    );
+    try {
+      MockRender(InternalComponent);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `'internal-only-nested' is not a known element`,
+      );
+    }
   });
 });
 

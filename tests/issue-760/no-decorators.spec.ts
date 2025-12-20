@@ -29,11 +29,14 @@ class TargetPipe implements PipeTransform {
 describe('issue-760:no-decorators', () => {
   describe('unknown module', () => {
     it('throws on MockModule', () => {
-      expect(() => MockModule(TargetModule)).toThrowError(
-        new RegExp(
+      try {
+        MockModule(TargetModule);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetModule.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('does nothing on MockBuilder.keep', () => {
@@ -51,31 +54,47 @@ describe('issue-760:no-decorators', () => {
 
   describe('unknown component', () => {
     it('throws on MockComponent', () => {
-      expect(() => MockComponent(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockComponent(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetComponent.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockComponents', () => {
-      expect(() => MockComponents(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockComponents(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetComponent.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetComponent)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetComponent.name}`,
-      );
+      try {
+        MockDeclaration(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetComponent.name}`,
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetComponent)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetComponent.name}`,
-      );
+      try {
+        MockDeclarations(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetComponent.name}`,
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
@@ -95,31 +114,47 @@ describe('issue-760:no-decorators', () => {
 
   describe('unknown directive', () => {
     it('throws on TargetDirective', () => {
-      expect(() => MockDirective(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDirective(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetDirective.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDirectives', () => {
-      expect(() => MockDirectives(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDirectives(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetDirective.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetDirective)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetDirective.name}`,
-      );
+      try {
+        MockDeclaration(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetDirective.name}`,
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetDirective)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetDirective.name}`,
-      );
+      try {
+        MockDeclarations(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetDirective.name}`,
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
@@ -139,31 +174,47 @@ describe('issue-760:no-decorators', () => {
 
   describe('unknown pipe', () => {
     it('throws on MockPipe', () => {
-      expect(() => MockPipe(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockPipe(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetPipe.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockPipes', () => {
-      expect(() => MockPipes(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockPipes(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `${TargetPipe.name} declaration has been passed into ng-mocks without Angular decorators`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetPipe)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetPipe.name}`,
-      );
+      try {
+        MockDeclaration(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetPipe.name}`,
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetPipe)).toThrowError(
-        `MockDeclaration does not know how to mock ${TargetPipe.name}`,
-      );
+      try {
+        MockDeclarations(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDeclaration does not know how to mock ${TargetPipe.name}`,
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {

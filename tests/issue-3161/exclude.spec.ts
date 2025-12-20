@@ -55,10 +55,15 @@ describe('issue-3161:exclude', () => {
   beforeEach(() => MockBuilder(StandaloneComponent));
 
   it('fails because of excluded module', () => {
-    expect(() =>
+    try {
       MockRender(StandaloneComponent, {
         name: 'sandbox',
-      }),
-    ).toThrowError(/The pipe 'translate' could not be found/);
+      });
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `The pipe 'translate' could not be found`,
+      );
+    }
   });
 });

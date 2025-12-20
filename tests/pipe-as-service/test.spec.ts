@@ -217,9 +217,14 @@ describe('pipe-as-service', () => {
     );
 
     it('fails because of the missed function', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        /\.echo is not a function|Object doesn't support property or method 'echo'/,
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toMatch(
+          /\.echo is not a function|Object doesn't support property or method 'echo'/,
+        );
+      }
     });
   });
 

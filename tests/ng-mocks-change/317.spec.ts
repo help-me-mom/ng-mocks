@@ -50,15 +50,25 @@ describe('ng-mocks-change:317', () => {
 
   it('throws on undefined', () => {
     MockRender(TargetComponent);
-    expect(() => ngMocks.change(undefined, 123)).toThrowError(
-      'Cannot find an element via ngMocks.change(<EMPTY>)',
-    );
+    try {
+      ngMocks.change(undefined, 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find an element via ngMocks.change(<EMPTY>)',
+      );
+    }
   });
 
   it('throws on unknown', () => {
     MockRender(TargetComponent);
-    expect(() => ngMocks.change('span', 123)).toThrowError(
-      /Cannot find ControlValueAccessor on the element/,
-    );
+    try {
+      ngMocks.change('span', 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find ControlValueAccessor on the element',
+      );
+    }
   });
 });

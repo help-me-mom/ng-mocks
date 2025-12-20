@@ -393,18 +393,29 @@ describe('ng-mocks-reveal:test', () => {
   });
 
   it('throws on unknown selectors', () => {
-    expect(() => ngMocks.reveal(5 as never)).toThrowError(
-      'Unknown selector',
-    );
-    expect(() => ngMocks.revealAll({} as never)).toThrowError(
-      'Unknown selector',
-    );
+    try {
+      ngMocks.reveal(5 as never);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('Unknown selector');
+    }
+    try {
+      ngMocks.revealAll({} as never);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('Unknown selector');
+    }
   });
 
   it('throws on unknown elements', () => {
-    expect(() => ngMocks.reveal('unknown')).toThrowError(
-      'Cannot find a DebugElement via ngMocks.reveal(unknown)',
-    );
+    try {
+      ngMocks.reveal('unknown');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a DebugElement via ngMocks.reveal(unknown)',
+      );
+    }
   });
 
   it('returns default value on missed values selectors', () => {
@@ -436,11 +447,14 @@ describe('ng-mocks-reveal:test', () => {
     const block3 = ngMocks.get(block3El, BlockDirective);
     expect(block3.name).toEqual('3');
 
-    expect(() =>
-      ngMocks.reveal(block3El, BlockDirective),
-    ).toThrowError(
-      `Cannot find a DebugElement via ngMocks.reveal(${BlockDirective.name})`,
-    );
+    try {
+      ngMocks.reveal(block3El, BlockDirective);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `Cannot find a DebugElement via ngMocks.reveal(${BlockDirective.name})`,
+      );
+    }
 
     {
       const blocks = ngMocks.revealAll(loFixture, BlockDirective);

@@ -66,9 +66,14 @@ class TargetModule {}
 describe('issue-1168', () => {
   describe('MockPipe', () => {
     it('fails on TargetClass', () => {
-      expect(() => MockPipe(TargetClass as any)).toThrowError(
-        /ng-mocks is imported in production code/,
-      );
+      try {
+        MockPipe(TargetClass as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'ng-mocks is imported in production code',
+        );
+      }
     });
 
     it('passes on TargetPipe', () => {
@@ -76,47 +81,82 @@ describe('issue-1168', () => {
     });
 
     it('fails on TargetDirective', () => {
-      expect(() => MockPipe(TargetDirective as any)).toThrowError(
-        `MockPipe accepts pipes, whereas ${TargetDirective.name} is a directive.`,
-      );
+      try {
+        MockPipe(TargetDirective as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockPipe accepts pipes, whereas ${TargetDirective.name} is a directive.`,
+        );
+      }
     });
 
     it('fails on TargetComponent', () => {
-      expect(() => MockPipe(TargetComponent as any)).toThrowError(
-        `MockPipe accepts pipes, whereas ${TargetComponent.name} is a component.`,
-      );
+      try {
+        MockPipe(TargetComponent as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockPipe accepts pipes, whereas ${TargetComponent.name} is a component.`,
+        );
+      }
     });
 
     it('fails on TargetService', () => {
-      expect(() => MockPipe(TargetService as any)).toThrowError(
-        `MockPipe accepts pipes, whereas ${TargetService.name} is a service.`,
-      );
+      try {
+        MockPipe(TargetService as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockPipe accepts pipes, whereas ${TargetService.name} is a service.`,
+        );
+      }
     });
 
     it('fails on TOKEN', () => {
-      expect(() => MockPipe(TOKEN as any)).toThrowError(
-        'MockPipe accepts pipes, whereas TOKEN is a token.',
-      );
+      try {
+        MockPipe(TOKEN as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'MockPipe accepts pipes, whereas TOKEN is a token.',
+        );
+      }
     });
 
     it('fails on TargetModule', () => {
-      expect(() => MockPipe(TargetModule as any)).toThrowError(
-        `MockPipe accepts pipes, whereas ${TargetModule.name} is a module.`,
-      );
+      try {
+        MockPipe(TargetModule as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockPipe accepts pipes, whereas ${TargetModule.name} is a module.`,
+        );
+      }
     });
   });
 
   describe('MockDirective', () => {
     it('fails on TargetClass', () => {
-      expect(() => MockDirective(TargetClass as any)).toThrowError(
-        /ng-mocks is imported in production code/,
-      );
+      try {
+        MockDirective(TargetClass as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'ng-mocks is imported in production code',
+        );
+      }
     });
 
     it('fails on TargetPipe', () => {
-      expect(() => MockDirective(TargetPipe as any)).toThrowError(
-        `MockDirective accepts directives, whereas ${TargetPipe.name} is a pipe.`,
-      );
+      try {
+        MockDirective(TargetPipe as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDirective accepts directives, whereas ${TargetPipe.name} is a pipe.`,
+        );
+      }
     });
 
     it('passes on TargetDirective', () => {
@@ -126,51 +166,82 @@ describe('issue-1168', () => {
     });
 
     it('fails on TargetComponent', () => {
-      expect(() =>
-        MockDirective(TargetComponent as any),
-      ).toThrowError(
-        `MockDirective accepts directives, whereas ${TargetComponent.name} is a component.`,
-      );
+      try {
+        MockDirective(TargetComponent as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDirective accepts directives, whereas ${TargetComponent.name} is a component.`,
+        );
+      }
     });
 
     it('fails on TargetService', () => {
-      expect(() => MockDirective(TargetService as any)).toThrowError(
-        `MockDirective accepts directives, whereas ${TargetService.name} is a service.`,
-      );
+      try {
+        MockDirective(TargetService as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDirective accepts directives, whereas ${TargetService.name} is a service.`,
+        );
+      }
     });
 
     it('fails on TOKEN', () => {
-      expect(() => MockDirective(TOKEN as any)).toThrowError(
-        'MockDirective accepts directives, whereas TOKEN is a token.',
-      );
+      try {
+        MockDirective(TOKEN as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'MockDirective accepts directives, whereas TOKEN is a token.',
+        );
+      }
     });
 
     it('fails on TargetModule', () => {
-      expect(() => MockDirective(TargetModule as any)).toThrowError(
-        `MockDirective accepts directives, whereas ${TargetModule.name} is a module.`,
-      );
+      try {
+        MockDirective(TargetModule as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockDirective accepts directives, whereas ${TargetModule.name} is a module.`,
+        );
+      }
     });
   });
 
   describe('MockComponent', () => {
     it('fails on TargetClass', () => {
-      expect(() => MockComponent(TargetClass as any)).toThrowError(
-        /ng-mocks is imported in production code/,
-      );
+      try {
+        MockComponent(TargetClass as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'ng-mocks is imported in production code',
+        );
+      }
     });
 
     it('fails on TargetPipe', () => {
-      expect(() => MockComponent(TargetPipe as any)).toThrowError(
-        `MockComponent accepts components, whereas ${TargetPipe.name} is a pipe.`,
-      );
+      try {
+        MockComponent(TargetPipe as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockComponent accepts components, whereas ${TargetPipe.name} is a pipe.`,
+        );
+      }
     });
 
     it('fails on TargetDirective', () => {
-      expect(() =>
-        MockComponent(TargetDirective as any),
-      ).toThrowError(
-        `MockComponent accepts components, whereas ${TargetDirective.name} is a directive.`,
-      );
+      try {
+        MockComponent(TargetDirective as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockComponent accepts components, whereas ${TargetDirective.name} is a directive.`,
+        );
+      }
     });
 
     it('passes on TargetComponent', () => {
@@ -180,59 +251,104 @@ describe('issue-1168', () => {
     });
 
     it('fails on TargetService', () => {
-      expect(() => MockComponent(TargetService as any)).toThrowError(
-        `MockComponent accepts components, whereas ${TargetService.name} is a service.`,
-      );
+      try {
+        MockComponent(TargetService as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockComponent accepts components, whereas ${TargetService.name} is a service.`,
+        );
+      }
     });
 
     it('fails on TOKEN', () => {
-      expect(() => MockComponent(TOKEN as any)).toThrowError(
-        'MockComponent accepts components, whereas TOKEN is a token.',
-      );
+      try {
+        MockComponent(TOKEN as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'MockComponent accepts components, whereas TOKEN is a token.',
+        );
+      }
     });
 
     it('fails on TargetModule', () => {
-      expect(() => MockComponent(TargetModule as any)).toThrowError(
-        `MockComponent accepts components, whereas ${TargetModule.name} is a module.`,
-      );
+      try {
+        MockComponent(TargetModule as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockComponent accepts components, whereas ${TargetModule.name} is a module.`,
+        );
+      }
     });
   });
 
   describe('MockModule', () => {
     it('fails on TargetClass', () => {
-      expect(() => MockModule(TargetClass as any)).toThrowError(
-        /ng-mocks is imported in production code/,
-      );
+      try {
+        MockModule(TargetClass as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'ng-mocks is imported in production code',
+        );
+      }
     });
 
     it('fails on TargetPipe', () => {
-      expect(() => MockModule(TargetPipe as any)).toThrowError(
-        `MockModule accepts modules, whereas ${TargetPipe.name} is a pipe.`,
-      );
+      try {
+        MockModule(TargetPipe as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockModule accepts modules, whereas ${TargetPipe.name} is a pipe.`,
+        );
+      }
     });
 
     it('fails on TargetDirective', () => {
-      expect(() => MockModule(TargetDirective as any)).toThrowError(
-        `MockModule accepts modules, whereas ${TargetDirective.name} is a directive.`,
-      );
+      try {
+        MockModule(TargetDirective as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockModule accepts modules, whereas ${TargetDirective.name} is a directive.`,
+        );
+      }
     });
 
     it('fails on TargetComponent', () => {
-      expect(() => MockModule(TargetComponent as any)).toThrowError(
-        `MockModule accepts modules, whereas ${TargetComponent.name} is a component.`,
-      );
+      try {
+        MockModule(TargetComponent as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockModule accepts modules, whereas ${TargetComponent.name} is a component.`,
+        );
+      }
     });
 
     it('fails on TargetService', () => {
-      expect(() => MockModule(TargetService as any)).toThrowError(
-        `MockModule accepts modules, whereas ${TargetService.name} is a service.`,
-      );
+      try {
+        MockModule(TargetService as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `MockModule accepts modules, whereas ${TargetService.name} is a service.`,
+        );
+      }
     });
 
     it('fails on TOKEN', () => {
-      expect(() => MockModule(TOKEN as any)).toThrowError(
-        'MockModule accepts modules, whereas TOKEN is a token.',
-      );
+      try {
+        MockModule(TOKEN as any);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'MockModule accepts modules, whereas TOKEN is a token.',
+        );
+      }
     });
 
     it('passes on TargetModule', () => {

@@ -105,17 +105,27 @@ describe('ng-mocks-change:reactive-forms:mock', () => {
 
   it('throws on bad element', () => {
     const element = MockRender(TargetComponent).point;
-    expect(() => ngMocks.change(element, 123)).toThrowError(
-      /Cannot find ControlValueAccessor on the element/,
-    );
+    try {
+      ngMocks.change(element, 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `Cannot find ControlValueAccessor on the element`,
+      );
+    }
   });
 
   it('throws on unknown CVA', () => {
     MockRender(TargetComponent);
     const valueAccessorEl = ngMocks.find('custom');
 
-    expect(() => ngMocks.change(valueAccessorEl, 123)).toThrowError(
-      /Unsupported type of ControlValueAccessor/,
-    );
+    try {
+      ngMocks.change(valueAccessorEl, 123);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        `Unsupported type of ControlValueAccessor`,
+      );
+    }
   });
 });

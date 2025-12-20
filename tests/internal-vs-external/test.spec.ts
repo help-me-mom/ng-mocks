@@ -40,11 +40,14 @@ describe('InternalVsExternal:real', () => {
       'external <internal-internal-vs-external>internal</internal-internal-vs-external>',
     );
 
-    expect(() =>
-      MockRender(InternalComponent, null, { reset: true }),
-    ).toThrowError(
-      /'(?:internal-){2}vs-external' is not a known element/,
-    );
+    try {
+      MockRender(InternalComponent, null, { reset: true });
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toMatch(
+        /'(?:internal-){2}vs-external' is not a known element/,
+      );
+    }
   });
 });
 
@@ -62,11 +65,13 @@ describe('InternalVsExternal:mock', () => {
       '<external-internal-vs-external></external-internal-vs-external>',
     );
 
-    expect(() =>
-      MockRender(InternalComponent, null, { reset: true }),
-    ).toThrowError(
-      /'(?:internal-){2}vs-external' is not a known element/,
-    );
+    try {
+      MockRender(InternalComponent, null, { reset: true });
+    } catch (error) {
+      expect((error as Error).message).toMatch(
+        /'(?:internal-){2}vs-external' is not a known element/,
+      );
+    }
   });
 });
 
@@ -84,7 +89,7 @@ describe('InternalVsExternal:legacy', () => {
     // the code below will fail because the MockModule outside the MockBuilder exports everything.
     // try {
     //   MockRender(InternalComponent);
-    //   fail('should fail on the internal component');
+    //   fail('an error expected');
     // } catch (e) {
     //   expect(e).toEqual(jasmine.objectContaining({ngSyntaxError: true}));
     // }

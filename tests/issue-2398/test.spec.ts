@@ -76,9 +76,14 @@ describe('issue-2398', () => {
     });
 
     it('fails on not provided pipes', () => {
-      expect(() => MockRender(PhonePipe)).toThrowError(
-        /Did you forget to set \$implicit param/,
-      );
+      try {
+        MockRender(PhonePipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'Did you forget to set $implicit param',
+        );
+      }
     });
   });
 });

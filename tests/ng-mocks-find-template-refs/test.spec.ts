@@ -199,9 +199,12 @@ describe('ng-mocks-find-template-refs', () => {
 
   it('fails on wrong selector type', () => {
     MockRender(TestComponent);
-    expect(() => ngMocks.findTemplateRefs(123 as any)).toThrowError(
-      'Unknown selector',
-    );
+    try {
+      ngMocks.findTemplateRefs(123 as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('Unknown selector');
+    }
   });
 
   it('returns nothing on unknown fixture', () => {

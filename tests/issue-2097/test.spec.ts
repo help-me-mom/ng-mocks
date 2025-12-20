@@ -183,10 +183,13 @@ describe('issue-2097', () => {
 
   it('fails on unknown tokens', () => {
     MockRender();
-    expect(() =>
-      ngMocks.findInstance(new InjectionToken('TOKEN')),
-    ).toThrowError(
-      'Cannot find an instance via ngMocks.findInstance(TOKEN)',
-    );
+    try {
+      ngMocks.findInstance(new InjectionToken('TOKEN'));
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find an instance via ngMocks.findInstance(TOKEN)',
+      );
+    }
   });
 });

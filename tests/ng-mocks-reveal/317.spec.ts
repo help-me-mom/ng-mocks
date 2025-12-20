@@ -38,10 +38,13 @@ describe('ng-mocks-reveal:317', () => {
       ngMocks.formatText(ngMocks.reveal(['data-label', 2], 'span')),
     ).toEqual('20');
 
-    expect(() =>
-      ngMocks.reveal(['data-label', 3], 'span'),
-    ).toThrowError(
-      'Cannot find a DebugElement via ngMocks.reveal(span)',
-    );
+    try {
+      ngMocks.reveal(['data-label', 3], 'span');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find a DebugElement via ngMocks.reveal(span)',
+      );
+    }
   });
 });

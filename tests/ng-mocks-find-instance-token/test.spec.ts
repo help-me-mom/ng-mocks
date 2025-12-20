@@ -25,8 +25,13 @@ describe('ng-mocks-find-instance-token', () => {
     MockRender(TargetComponent);
     const targetEl = ngMocks.find(TargetComponent);
 
-    expect(() => ngMocks.input(targetEl, 'fail')).toThrowError(
-      'Cannot find fail input via ngMocks.input',
-    );
+    try {
+      ngMocks.input(targetEl, 'fail');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find fail input via ngMocks.input',
+      );
+    }
   });
 });

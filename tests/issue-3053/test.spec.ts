@@ -46,11 +46,16 @@ describe('issue-3053', () => {
     beforeEach(() => MockBuilder(TargetDirective, TargetService));
 
     it('throws because of missing service', () => {
-      expect(() => MockRender(TargetDirective)).toThrowError(
-        new RegExp(
-          `No provider for ${TargetService.name}|NOT_FOUND \\[${TargetService.name}\\]`,
-        ),
-      );
+      try {
+        MockRender(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider for ${TargetService.name}|NOT_FOUND \\[${TargetService.name}\\]`,
+          ),
+        );
+      }
     });
   });
 
@@ -79,11 +84,16 @@ describe('issue-3053', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetService));
 
     it('throws because of missing service', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        new RegExp(
-          `No provider for ${TargetService.name}|NOT_FOUND \\[${TargetService.name}\\]`,
-        ),
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toMatch(
+          new RegExp(
+            `No provider for ${TargetService.name}|NOT_FOUND \\[${TargetService.name}\\]`,
+          ),
+        );
+      }
     });
   });
 

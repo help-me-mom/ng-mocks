@@ -124,9 +124,14 @@ describe('issue-641', () => {
     );
 
     it('fails due to missing BrowserAnimationsModule', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        /BrowserAnimationsModule/,
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'BrowserAnimationsModule',
+        );
+      }
     });
   });
 

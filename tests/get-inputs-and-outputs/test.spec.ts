@@ -96,11 +96,14 @@ describe('get-inputs-and-outputs', () => {
     expect(ngMocks.input(componentElement, 'inputUnused')).toEqual(
       undefined,
     );
-    expect(() =>
-      ngMocks.input(componentElement, 'inputUndefined'),
-    ).toThrowError(
-      'Cannot find inputUndefined input via ngMocks.input',
-    );
+    try {
+      ngMocks.input(componentElement, 'inputUndefined');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find inputUndefined input via ngMocks.input',
+      );
+    }
     expect(ngMocks.input(componentElement, 'input3')).toEqual('3');
     if ((params.output1 as any).mockReset) {
       (params.output1 as jest.Mock).mockReset();
@@ -129,10 +132,13 @@ describe('get-inputs-and-outputs', () => {
     // (params.output3 as jest.Mock).mockReset();
     ngMocks.output(componentElement, 'output3').emit();
     expect(params.output3).toHaveBeenCalled();
-    expect(() =>
-      ngMocks.output(componentElement, 'outputUndefined'),
-    ).toThrowError(
-      'Cannot find outputUndefined output via ngMocks.output',
-    );
+    try {
+      ngMocks.output(componentElement, 'outputUndefined');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toEqual(
+        'Cannot find outputUndefined output via ngMocks.output',
+      );
+    }
   });
 });

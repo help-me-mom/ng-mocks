@@ -25,9 +25,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(Target2Component)).toThrowError(
-        /'com-2' is not a known element/,
-      );
+      try {
+        MockRender(Target2Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `'com-2' is not a known element`,
+        );
+      }
     });
   });
 
@@ -37,9 +42,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(Target1Component)).toThrowError(
-        /'com-1' is not a known element/,
-      );
+      try {
+        MockRender(Target1Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `'com-1' is not a known element`,
+        );
+      }
     });
   });
 
@@ -49,9 +59,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(Target1Component)).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender(Target1Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 
@@ -61,9 +76,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender('<dir-2></dir-2>')).toThrowError(
-        /'dir-2' is not a known element/,
-      );
+      try {
+        MockRender('<dir-2></dir-2>');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `'dir-2' is not a known element`,
+        );
+      }
     });
   });
 
@@ -73,9 +93,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender('<dir-1></dir-1>');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 
@@ -83,9 +108,14 @@ describe('issue-175', () => {
     beforeEach(() => MockBuilder(TargetModule).exclude(Target1Pipe));
 
     it('fails', () => {
-      expect(() => MockRender("{{ 'test' | pip1 }}")).toThrowError(
-        /The pipe 'pip1' could not be found/,
-      );
+      try {
+        MockRender("{{ 'test' | pip1 }}");
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `The pipe 'pip1' could not be found`,
+        );
+      }
     });
   });
 
@@ -95,9 +125,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(Target2Component)).toThrowError(
-        new RegExp(`No provider for ${Target2Service.name}`),
-      );
+      try {
+        MockRender(Target2Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target2Service.name}`,
+        );
+      }
     });
   });
 
@@ -107,9 +142,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender(Target1Component)).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender(Target1Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 
@@ -119,9 +159,14 @@ describe('issue-175', () => {
     );
 
     it('fails', () => {
-      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender('<dir-1></dir-1>');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 
@@ -138,19 +183,25 @@ describe('issue-175', () => {
     });
 
     it('fails first time via TestBed.createComponent', () => {
-      expect(() =>
-        TestBed.createComponent(Target1Component),
-      ).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        TestBed.createComponent(Target1Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
 
     it('fails second time via TestBed.createComponent', () => {
-      expect(() =>
-        TestBed.createComponent(Target1Component),
-      ).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        TestBed.createComponent(Target1Component);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 
@@ -169,19 +220,25 @@ describe('issue-175', () => {
       );
 
       it('fails first time via TestBed.createComponent', () => {
-        expect(() =>
-          TestBed.createComponent(Target1Component),
-        ).toThrowError(
-          new RegExp(`No provider for ${Target1Service.name}`),
-        );
+        try {
+          TestBed.createComponent(Target1Component);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${Target1Service.name}`,
+          );
+        }
       });
 
       it('fails second time via TestBed.createComponent', () => {
-        expect(() =>
-          TestBed.createComponent(Target1Component),
-        ).toThrowError(
-          new RegExp(`No provider for ${Target1Service.name}`),
-        );
+        try {
+          TestBed.createComponent(Target1Component);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${Target1Service.name}`,
+          );
+        }
       });
     });
 
@@ -213,15 +270,25 @@ describe('issue-175', () => {
     );
 
     it('fails first time via MockRender', () => {
-      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender('<dir-1></dir-1>');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
 
     it('fails second time via MockRender', () => {
-      expect(() => MockRender('<dir-1></dir-1>')).toThrowError(
-        new RegExp(`No provider for ${Target1Service.name}`),
-      );
+      try {
+        MockRender('<dir-1></dir-1>');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${Target1Service.name}`,
+        );
+      }
     });
   });
 });

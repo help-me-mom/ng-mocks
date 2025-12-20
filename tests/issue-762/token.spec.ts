@@ -20,9 +20,14 @@ describe('issue-762:token', () => {
     beforeEach(() => MockBuilder(TOKEN));
 
     it('works correctly', () => {
-      expect(() => MockRender(TOKEN)).toThrowError(
-        /No provider for InjectionToken TOKEN/,
-      );
+      try {
+        MockRender(TOKEN);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'No provider for InjectionToken TOKEN',
+        );
+      }
     });
   });
 

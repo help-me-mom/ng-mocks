@@ -56,9 +56,14 @@ describe('ng-mocks-trigger:keyup', () => {
     ngMocks.trigger(debugElement, 'keydown.shift.control.z');
     expect(component.control.value).toEqual(null);
 
-    expect(() =>
-      ngMocks.trigger(debugElement, 'keydown.shift.magic.control.z'),
-    ).toThrowError('Unknown event part magic');
+    try {
+      ngMocks.trigger(debugElement, 'keydown.shift.magic.control.z');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Unknown event part magic',
+      );
+    }
   });
 
   it('provides correct codes', () => {

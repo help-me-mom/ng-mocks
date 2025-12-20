@@ -123,11 +123,16 @@ describe('mock-component-render:content-child:mock', () => {
     );
 
     // checking by id of ElementRef
-    expect(() => {
+    try {
       if (isMockOf(table, TableComponent, 'c')) {
         table.__render('div', { data: 3 });
       }
-    }).toThrowError('Cannot find TemplateRef');
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find TemplateRef',
+      );
+    }
 
     // checking by a selector via declaration with read
     if (isMockOf(table, TableComponent, 'c')) {

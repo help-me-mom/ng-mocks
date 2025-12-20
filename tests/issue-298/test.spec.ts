@@ -37,14 +37,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2')),
         MyDirective,
       );
-      expect(() =>
+      try {
         ngMocks.find(
           fixture.debugElement.query(By.css('.p3')),
           MyDirective,
-        ),
-      ).toThrowError(
-        `Cannot find an element via ngMocks.find(${MyDirective.name})`,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an element via ngMocks.find(${MyDirective.name})`,
+        );
+      }
       const instance3 = ngMocks.find(
         fixture.debugElement.query(By.css('.p3')),
         MyDirective,
@@ -99,14 +102,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2')),
         MyDirective,
       );
-      expect(() =>
+      try {
         ngMocks.findInstance(
           fixture.debugElement.query(By.css('.p3')),
           MyDirective,
-        ),
-      ).toThrowError(
-        `Cannot find an instance via ngMocks.findInstance(${MyDirective.name})`,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find an instance via ngMocks.findInstance(${MyDirective.name})`,
+        );
+      }
       const instance3 = ngMocks.findInstance(
         fixture.debugElement.query(By.css('.p3')),
         MyDirective,
@@ -163,14 +169,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2')),
         MyDirective,
       );
-      expect(() =>
+      try {
         ngMocks.findTemplateRef(
           fixture.debugElement.query(By.css('.p3')),
           MyDirective,
-        ),
-      ).toThrowError(
-        `Cannot find a TemplateRef via ngMocks.findTemplateRef(${MyDirective.name})`,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find a TemplateRef via ngMocks.findTemplateRef(${MyDirective.name})`,
+        );
+      }
       const instance3 = ngMocks.findTemplateRef(
         fixture.debugElement.query(By.css('.p3')),
         MyDirective,
@@ -225,14 +234,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2 span')),
         MyDirective,
       );
-      expect(() =>
+      try {
         ngMocks.get(
           fixture.debugElement.query(By.css('.p3 span')),
           MyDirective,
-        ),
-      ).toThrowError(
-        `Cannot find ${MyDirective.name} instance via ngMocks.get`,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find ${MyDirective.name} instance via ngMocks.get`,
+        );
+      }
       const instance3 = ngMocks.get(
         fixture.debugElement.query(By.css('.p3 span')),
         MyDirective,
@@ -261,12 +273,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2 span')),
         'value',
       );
-      expect(() =>
+      try {
         ngMocks.input(
           fixture.debugElement.query(By.css('.p3 span')),
           'value',
-        ),
-      ).toThrowError('Cannot find value input via ngMocks.input');
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'Cannot find value input via ngMocks.input',
+        );
+      }
       const value3 = ngMocks.input(
         fixture.debugElement.query(By.css('.p3 span')),
         'value',
@@ -294,14 +311,17 @@ describe('issue-298', () => {
         fixture.debugElement.query(By.css('.p2 span')),
         'valueChange',
       );
-      expect(() =>
+      try {
         ngMocks.output(
           fixture.debugElement.query(By.css('.p3 span')),
           'valueChange',
-        ),
-      ).toThrowError(
-        `Cannot find valueChange output via ngMocks.output`,
-      );
+        );
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `Cannot find valueChange output via ngMocks.output`,
+        );
+      }
       const value3 = ngMocks.output(
         fixture.debugElement.query(By.css('.p3 span')),
         'valueChange',

@@ -36,7 +36,7 @@
       "branchTopic": "node-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {
-      "matchPackageNames": ["@types/jest", "jest", "ts-jest"],
+      "matchPackageNames": ["@types/jest", "jest", "ts-jest", "jest-environment-jsdom"],
       "branchTopic": "jest-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}"
     },
     {

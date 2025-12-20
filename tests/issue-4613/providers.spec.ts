@@ -74,9 +74,14 @@ describe('issue-4613', () => {
     beforeEach(() => MockBuilder(TargetComponent, DependencyModule));
 
     it('fails because no provider for ProviderService', () => {
-      expect(() => MockRender(TargetComponent)).toThrowError(
-        new RegExp(`No provider for ${ProviderService.name}`),
-      );
+      try {
+        MockRender(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          `No provider for ${ProviderService.name}`,
+        );
+      }
     });
   });
 

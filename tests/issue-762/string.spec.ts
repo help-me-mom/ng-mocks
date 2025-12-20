@@ -18,9 +18,14 @@ describe('issue-762:string', () => {
     beforeEach(() => MockBuilder('STRING'));
 
     it('works correctly', () => {
-      expect(() => ngMocks.findInstance('STRING')).toThrowError(
-        'Cannot find an instance via ngMocks.findInstance(STRING)',
-      );
+      try {
+        ngMocks.findInstance('STRING');
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'Cannot find an instance via ngMocks.findInstance(STRING)',
+        );
+      }
     });
   });
 

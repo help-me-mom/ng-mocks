@@ -53,9 +53,14 @@ describe('issue-10020:errors', () => {
           TargetComponent,
           TargetModule,
         ).keep(mockProviderValue);
-        expect(() => builder.build()).toThrowError(
-          expectedMessagePattern,
-        );
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toMatch(
+            expectedMessagePattern,
+          );
+        }
       });
 
       it('throws on using provider class mock with keep', () => {
@@ -63,9 +68,14 @@ describe('issue-10020:errors', () => {
           TargetComponent,
           TargetModule,
         ).keep(mockProviderClass);
-        expect(() => builder.build()).toThrowError(
-          expectedMessagePattern,
-        );
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toMatch(
+            expectedMessagePattern,
+          );
+        }
       });
 
       it('throws on using provider value mock with mock', () => {
@@ -73,9 +83,14 @@ describe('issue-10020:errors', () => {
           TargetComponent,
           TargetModule,
         ).mock(mockProviderValue);
-        expect(() => builder.build()).toThrowError(
-          expectedMessagePattern,
-        );
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toMatch(
+            expectedMessagePattern,
+          );
+        }
       });
 
       it('throws on using provider class mock with mock', () => {
@@ -83,9 +98,14 @@ describe('issue-10020:errors', () => {
           TargetComponent,
           TargetModule,
         ).mock(mockProviderClass);
-        expect(() => builder.build()).toThrowError(
-          expectedMessagePattern,
-        );
+        try {
+          builder.build();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toMatch(
+            expectedMessagePattern,
+          );
+        }
       });
 
       it('succeeds on using provider value mock with provide', () => {

@@ -64,9 +64,14 @@ describe('issue-623', () => {
       beforeAll(() => withDirective.configureTestBed());
 
       it('fails without the directive', () => {
-        expect(withoutDirective).toThrowError(
-          new RegExp(`No provider for ${TargetService.name}`),
-        );
+        try {
+          withoutDirective();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${TargetService.name}`,
+          );
+        }
       });
 
       it('succeeds with the directive', () => {
@@ -138,9 +143,14 @@ describe('issue-623', () => {
       beforeAll(() => withDirective.configureTestBed());
 
       it('fails without the directive', () => {
-        expect(withoutDirective).toThrowError(
-          new RegExp(`No provider for ${TargetService.name}`),
-        );
+        try {
+          withoutDirective();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${TargetService.name}`,
+          );
+        }
       });
 
       it('succeeds with the directive', () => {
@@ -162,9 +172,14 @@ describe('issue-623', () => {
       beforeEach(() => withoutDirective.configureTestBed());
 
       it('fails without export', () => {
-        expect(withoutDirective).toThrowError(
-          new RegExp(`No provider for ${TargetService.name}`),
-        );
+        try {
+          withoutDirective();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${TargetService.name}`,
+          );
+        }
       });
     });
 
@@ -208,9 +223,14 @@ describe('issue-623', () => {
       beforeEach(() => withoutDirective.configureTestBed());
 
       it('fails with dependency flag', () => {
-        expect(withoutDirective).toThrowError(
-          new RegExp(`No provider for ${TargetService.name}`),
-        );
+        try {
+          withoutDirective();
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain(
+            `No provider for ${TargetService.name}`,
+          );
+        }
       });
     });
   });

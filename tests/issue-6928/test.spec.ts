@@ -76,8 +76,8 @@ describe('issue-6928', () => {
   class AppModule {}
 
   describe('missing module import', () => {
-    it('throws on 2 declarations w/o ng-mocks', () =>
-      expect(() => {
+    it('throws on 2 declarations w/o ng-mocks', () => {
+      try {
         TestBed.configureTestingModule({
           imports: [
             StandaloneComponent as never /* TODO: remove after upgrade to a14 */,
@@ -85,9 +85,13 @@ describe('issue-6928', () => {
           declarations: [MyComponent, Shared2Component],
         }).compileComponents();
         TestBed.createComponent(MyComponent).detectChanges();
-      }).toThrowError(
-        /is part of the declarations of 2 modules: DynamicTestModule/,
-      ));
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
+          'is part of the declarations of 2 modules: DynamicTestModule',
+        );
+      }
+    });
 
     it('handles TestBed correctly w/ ng-mocks', () => {
       expect(() => {

@@ -45,185 +45,240 @@ class TargetPipe implements PipeTransform {
 describe('issue-760:jest', () => {
   describe('unknown module', () => {
     it('throws on MockModule', () => {
-      expect(() => MockModule(TargetModule)).toThrowError(
-        new RegExp(
+      try {
+        MockModule(TargetModule);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetModule.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
-      expect(() => MockBuilder(TargetModule).build()).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(TargetModule).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetModule.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.mock', () => {
-      expect(() =>
-        MockBuilder(null, TargetModule).build(),
-      ).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(null, TargetModule).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetModule.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
   });
 
   describe('unknown component', () => {
     it('throws on MockComponent', () => {
-      expect(() => MockComponent(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockComponent(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockComponents', () => {
-      expect(() => MockComponents(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockComponents(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclaration(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetComponent)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclarations(TargetComponent);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
-      expect(() => MockBuilder(TargetComponent).build()).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(TargetComponent).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.mock', () => {
-      expect(() =>
-        MockBuilder(null, TargetComponent).build(),
-      ).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(null, TargetComponent).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetComponent.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
   });
 
   describe('unknown directive', () => {
     it('throws on TargetDirective', () => {
-      expect(() => MockDirective(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDirective(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDirectives', () => {
-      expect(() => MockDirectives(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDirectives(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclaration(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetDirective)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclarations(TargetDirective);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
-      expect(() => MockBuilder(TargetDirective).build()).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(TargetDirective).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.mock', () => {
-      expect(() =>
-        MockBuilder(null, TargetDirective).build(),
-      ).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(null, TargetDirective).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetDirective.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
   });
 
   describe('unknown pipe', () => {
     it('throws on MockPipe', () => {
-      expect(() => MockPipe(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockPipe(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockPipes', () => {
-      expect(() => MockPipes(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockPipes(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclaration', () => {
-      expect(() => MockDeclaration(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclaration(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockDeclarations', () => {
-      expect(() => MockDeclarations(TargetPipe)).toThrowError(
-        new RegExp(
+      try {
+        MockDeclarations(TargetPipe);
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.keep', () => {
-      expect(() => MockBuilder(TargetPipe).build()).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(TargetPipe).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
 
     it('throws on MockBuilder.mock', () => {
-      expect(() =>
-        MockBuilder(null, TargetPipe).build(),
-      ).toThrowError(
-        new RegExp(
+      try {
+        MockBuilder(null, TargetPipe).build();
+        fail('an error expected');
+      } catch (error) {
+        expect((error as Error).message).toContain(
           `ng-mocks got ${TargetPipe.name} which has been already mocked by jest.mock`,
-        ),
-      );
+        );
+      }
     });
   });
 });

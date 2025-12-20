@@ -28,8 +28,13 @@ describe('ng-mocks-find', () => {
       '<div data-1="1" data-2="test" data-3></div>',
     );
 
-    expect(() => ngMocks.find(fixture, {} as any)).toThrowError(
-      'Cannot find an element via ngMocks.find(<UNKNOWN>)',
-    );
+    try {
+      ngMocks.find(fixture, {} as any);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find an element via ngMocks.find(<UNKNOWN>)',
+      );
+    }
   });
 });

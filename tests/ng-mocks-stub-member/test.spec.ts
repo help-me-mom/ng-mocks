@@ -102,13 +102,16 @@ describe('ng-mocks-stub-member', () => {
       typeof jest === 'undefined'
         ? jasmine.createSpy().and.throwError('spy')
         : jest.fn(() => {
-            throw 'spy';
+            throw new Error('spy');
           }),
       'set',
     );
-    expect(() => ((service as any).name = 'target')).toThrowError(
-      'spy',
-    );
+    try {
+      (service as any).name = 'target';
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain('spy');
+    }
 
     // checking real prop
     expect(service.norm).toEqual('normal');

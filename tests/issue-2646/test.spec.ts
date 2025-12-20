@@ -73,9 +73,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ServiceToDirective),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
 
@@ -94,9 +97,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ServiceToDirective),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
   });
@@ -131,9 +137,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ServiceToComponent),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
 
@@ -152,9 +161,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ServiceToComponent),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
   });
@@ -194,9 +206,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(PipeFromService),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
 
@@ -215,9 +230,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(PipeFromService),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
   });
@@ -250,9 +268,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ModuleFromService),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
 
@@ -268,9 +289,12 @@ describe('issue-2646', () => {
         expect(() =>
           fixture.debugElement.injector.get(ModuleFromService),
         ).not.toThrow();
-        expect(() =>
-          fixture.debugElement.injector.get(TargetService),
-        ).toThrowError(/No provider/);
+        try {
+          fixture.debugElement.injector.get(TargetService);
+          fail('an error expected');
+        } catch (error) {
+          expect((error as Error).message).toContain('No provider');
+        }
       });
     });
   });
