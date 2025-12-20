@@ -23,22 +23,45 @@ import { TargetPipe } from './2.fixtures';
 
 describe('issue-760', () => {
   it('shows right warning', () => {
-    expect(() => MockModule(TargetModule)).toThrowError(
-      /ng-mocks got TargetModule which has been already mocked by jest.mock/,
-    );
-    expect(() => MockComponent(TargetComponent)).toThrowError(
-      /ng-mocks got TargetComponent which has been already mocked by jest.mock/,
-    );
-    expect(() => MockDirective(TargetDirective)).toThrowError(
-      /ng-mocks got TargetDirective which has been already mocked by jest.mock/,
-    );
-    expect(() => MockComponent(TargetPipe)).toThrowError(
-      /TargetPipeMock declaration has been passed into ng-mocks without Angular decorators/,
-    );
-    expect(() =>
-      MockBuilder(null, TargetModule).build(),
-    ).toThrowError(
-      /ng-mocks got TargetModule which has been already mocked by jest.mock/,
-    );
+    try {
+      MockModule(TargetModule);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'ng-mocks got TargetModule which has been already mocked by jest.mock',
+      );
+    }
+    try {
+      MockComponent(TargetComponent);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'ng-mocks got TargetComponent which has been already mocked by jest.mock',
+      );
+    }
+    try {
+      MockDirective(TargetDirective);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'ng-mocks got TargetDirective which has been already mocked by jest.mock',
+      );
+    }
+    try {
+      MockComponent(TargetPipe);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'TargetPipeMock declaration has been passed into ng-mocks without Angular decorators',
+      );
+    }
+    try {
+      MockBuilder(null, TargetModule).build();
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'ng-mocks got TargetModule which has been already mocked by jest.mock',
+      );
+    }
   });
 });
