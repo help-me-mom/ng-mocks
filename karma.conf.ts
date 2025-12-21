@@ -3,10 +3,10 @@
 import path from 'node:path';
 
 import { Config } from 'karma';
-import puppeteer from 'puppeteer';
+import { executablePath } from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
-process.env.CHROME_BIN = puppeteer.executablePath();
+process.env.CHROME_BIN = executablePath();
 
 const suite: any[] = [];
 if (!process.env.KARMA_SUITE) {
