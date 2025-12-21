@@ -37,7 +37,7 @@
     "ng-packagr": "20.3.2",
     "npm": "11.7.0",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   },
   "engines": {
     "npm": "11.7.0"
