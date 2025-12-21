@@ -10,8 +10,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MockBuilder } from 'ng-mocks';
 
 @Component({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     CommonModule,
     RouterModule,

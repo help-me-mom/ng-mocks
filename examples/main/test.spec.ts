@@ -17,8 +17,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'translate',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TranslatePipe implements PipeTransform {
   public transform(value: string): string {
@@ -31,8 +30,7 @@ class TranslatePipe implements PipeTransform {
 // Our main component that we want to test.
 @Component({
   selector: 'app-root',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <app-header
       [showLogo]="true"
@@ -64,8 +62,7 @@ class AppComponent {
 // component with a respect of its inputs, outputs and ContentChild.
 @Component({
   selector: 'app-header',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <a (click)="logo.emit()">
       <img src="assets/logo.png" *ngIf="showLogo" />

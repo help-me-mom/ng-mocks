@@ -24,8 +24,7 @@ class PrefixService {
 
 @Pipe({
   name: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetPipe implements PipeTransform {
   protected prefix: string;
@@ -41,8 +40,7 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target-218',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ value | target }} - {{ piped }}',
 })
 class TargetComponent implements OnInit {

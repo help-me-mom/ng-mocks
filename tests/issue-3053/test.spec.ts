@@ -22,8 +22,7 @@ class TargetService {
 
 @Directive({
   selector: 'target-3053',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {
   constructor(@Self() public service: TargetService) {}
@@ -31,8 +30,7 @@ class TargetDirective {
 
 @Component({
   selector: 'target-3053',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: ``,
 })
 class TargetComponent {

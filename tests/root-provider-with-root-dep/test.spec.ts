@@ -33,8 +33,7 @@ class TargetService {
 
 @Component({
   selector: 'target-root-provider-with-root-dep',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: ' "name:{{ service ? service.name : \'\' }}" ',
 })
 class TargetComponent {

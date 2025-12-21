@@ -11,8 +11,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'output',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class OutputDirective {
   @Output() public readonly output = new EventEmitter<void>();
@@ -22,8 +21,7 @@ class OutputDirective {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [

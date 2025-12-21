@@ -5,8 +5,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'input',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class InputDirective {
   @Input() public readonly input: string | undefined = undefined;
@@ -16,8 +15,7 @@ class InputDirective {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [

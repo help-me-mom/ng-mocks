@@ -11,8 +11,7 @@ import {
 
 @Component({
   selector: 'target-ng-mocks-global-keep',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ name }}',
 })
 class TargetComponent {
@@ -23,8 +22,7 @@ class TargetComponent {
 
 @Component({
   selector: 'target-ng-mocks-global-keep',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ name }}',
 })
 class FakeComponent {

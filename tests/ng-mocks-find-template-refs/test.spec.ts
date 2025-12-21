@@ -17,14 +17,12 @@ class NoSelectorService {}
 
 @Directive({
   selector: 'target-ng-mocks-find-template-refs',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class NoAttributeSelectorDirective {}
 
 @Directive({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 } as never)
 class NoSelectorDirective {}
 
@@ -45,8 +43,7 @@ class NoSelectorDirective {}
     NoSelectorService,
   ],
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {
   @Input() public readonly target: string | null = null;
@@ -56,8 +53,7 @@ class TargetDirective {
 
 @Directive({
   selector: '[target2]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class Target2Directive {
   public constructor(public readonly tpl: TemplateRef<any>) {}
@@ -65,8 +61,7 @@ class Target2Directive {
 
 @Directive({
   selector: 'ng-template',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class NgTemplateDirective {
   public constructor(public readonly tpl: TemplateRef<any>) {}
@@ -74,8 +69,7 @@ class NgTemplateDirective {
 
 @Directive({
   selector: '[unused]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class UnusedDirective {
   public constructor(public readonly tpl: TemplateRef<any>) {}
@@ -83,16 +77,14 @@ class UnusedDirective {
 
 @Component({
   selector: 'target-ng-mocks-find-template-refs',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class TargetComponent {}
 
 @Component({
   selector: 'test',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <target-ng-mocks-find-template-refs>
       1

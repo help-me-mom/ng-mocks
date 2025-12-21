@@ -12,8 +12,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[appCell]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class CellDirective {
   public constructor(public el?: TemplateRef<any>) {}
@@ -21,8 +20,7 @@ class CellDirective {
 
 @Component({
   selector: 'app-table-mock-component-render-content-children-groups',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <ng-container *ngFor="let tpl of templates">
       <ng-container
@@ -40,8 +38,7 @@ class TableComponent {
 
 @Component({
   selector: 'app-root-mock-component-render-content-children-groups',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: ` <app-table-mock-component-render-content-children-groups>
     <ng-template appCell let-item>
       <div class="custom-data-1">1: {{ item }}</div>

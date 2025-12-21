@@ -5,8 +5,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 @Component({
   selector: 'header',
   template: 'header',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class HeaderComponent {
   public headerComponentSpectatorStandalone() {}
@@ -15,8 +14,7 @@ class HeaderComponent {
 @Component({
   selector: 'target',
   template: '<header></header>',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     HeaderComponent,
   ],

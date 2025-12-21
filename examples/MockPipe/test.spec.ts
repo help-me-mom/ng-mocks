@@ -9,8 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'dependency',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class DependencyPipe implements PipeTransform {
   public transform(name: string): string {
@@ -20,8 +19,7 @@ class DependencyPipe implements PipeTransform {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ "foo" | dependency }}',
 })
 class TargetComponent {

@@ -17,8 +17,7 @@ import {
 
 @Directive({
   selector: '[show]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class ShowDirective {
   public constructor(
@@ -37,8 +36,7 @@ class ShowDirective {
 
 @Directive({
   selector: '[hide]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class HideDirective {
   public constructor(
@@ -57,8 +55,7 @@ class HideDirective {
 
 @Component({
   selector: 'target-971',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <ng-container *show="flag">:show:{{ content }}:</ng-container>
     <ng-container *hide="flag">:hide:{{ content }}:</ng-container>

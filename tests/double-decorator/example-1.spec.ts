@@ -9,8 +9,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Directive({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 } as never)
 class TargetDirective {
   public name = 'directive';
@@ -24,8 +23,7 @@ class TargetProvider extends TargetDirective {
 @Component({
   providers: [TargetProvider],
   selector: 'target-double-decorator-1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.name }}',
 })
 class TargetComponent {

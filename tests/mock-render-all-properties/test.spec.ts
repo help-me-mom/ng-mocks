@@ -57,8 +57,7 @@ class ParentClass {
 
 @Component({
   selector: 'target-mock-render-all-properties',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     'pubChildProp:{{ pubChildProp }}' 'pubChildPropGet:{{
       pubChildPropGet

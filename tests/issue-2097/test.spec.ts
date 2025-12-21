@@ -26,8 +26,7 @@ abstract class AbstractService {
     },
   ],
   selector: 'target1-2097',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: ' 1 ',
 })
 class Target1Component {}
@@ -44,8 +43,7 @@ class Target1Component {}
     },
   ],
   selector: 'target2-2097',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: ' 2 ',
 })
 class Target2Component {}

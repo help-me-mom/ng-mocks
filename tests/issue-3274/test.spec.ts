@@ -4,8 +4,7 @@ import { MockComponent } from 'ng-mocks';
 
 @Component({
   selector: 'target-3274',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class TargetComponent {}

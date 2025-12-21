@@ -8,8 +8,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 @Component({
   selector: 'my-test-one',
   template: `<a [routerLink]="['test']">Test</a>`,
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     CommonModule,
     RouterModule,
@@ -18,8 +17,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TestOneComponent {}
 
 @Component({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     CommonModule,
     RouterModule,

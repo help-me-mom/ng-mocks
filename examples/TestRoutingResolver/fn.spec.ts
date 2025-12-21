@@ -51,8 +51,7 @@ const sideEffectResolver: ResolveFn<
 // It will be replaced with a mock copy.
 @Component({
   selector: 'route',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'route',
 })
 class RouteComponent {

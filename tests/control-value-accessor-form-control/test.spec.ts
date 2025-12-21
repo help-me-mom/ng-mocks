@@ -16,8 +16,7 @@ import {
 
 @Component({
   selector: 'target-cva-form-control',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template:
     '<control-cva-form-control [formControl]="control"></control-cva-form-control>',
 })
@@ -34,8 +33,7 @@ class TargetComponent {
     },
   ],
   selector: 'control-cva-form-control',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class ControlComponent implements ControlValueAccessor {

@@ -12,8 +12,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 // A simple standalone pipe we are going to mock.
 @Pipe({
   name: 'standalone',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class StandalonePipe implements PipeTransform {
   transform(value: string | null): string {
@@ -24,8 +23,7 @@ class StandalonePipe implements PipeTransform {
 // A simple dependency component we are going to mock.
 @Component({
   selector: 'dependency-standalone-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<ng-content></ng-content>',
 })
 class DependencyComponent {
@@ -45,8 +43,7 @@ class DependencyModule {}
   template: `<dependency-standalone-component [name]="name">{{
     name | standalone
   }}</dependency-standalone-component>`,
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     DependencyModule,
     StandalonePipe,

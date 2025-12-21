@@ -9,8 +9,7 @@ import {
 
 @Component({
   selector: 'internal-mock-builder-by-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'internal',
 })
 class InternalComponent {}

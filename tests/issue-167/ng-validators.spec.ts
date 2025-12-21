@@ -24,8 +24,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     },
   ],
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective implements Validator {
   public pubRegisterOnValidatorChange: any;
@@ -46,8 +45,7 @@ class TargetDirective implements Validator {
 
 @Component({
   selector: 'app-root-167-ng-validators',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<input [formControl]="control" target>',
 })
 class RealComponent {

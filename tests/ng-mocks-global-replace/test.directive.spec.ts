@@ -11,8 +11,7 @@ import {
 
 @Directive({
   selector: 'target-ng-mocks-global-replace-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {
   @HostBinding('attr.name')
@@ -21,8 +20,7 @@ class TargetDirective {
 
 @Directive({
   selector: 'target-ng-mocks-global-replace-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class FakeDirective {
   @HostBinding('attr.name')

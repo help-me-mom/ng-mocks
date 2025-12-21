@@ -52,8 +52,7 @@ class TargetService {
 
 @Component({
   selector: 'target-provider-with-custom-dependencies',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     "service:{{ service.service ? service.service.name : 'missed' }}"
     "optional:{{

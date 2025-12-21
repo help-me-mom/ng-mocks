@@ -14,8 +14,7 @@ class TargetService {
 
 @Component({
   selector: 'target-performance',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.count }}',
 })
 class TargetComponent {
