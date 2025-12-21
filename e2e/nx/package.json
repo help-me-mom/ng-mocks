@@ -41,7 +41,7 @@
     "nx": "22.3.3",
     "ts-jest": "29.4.6",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   },
   "engines": {
     "npm": "11.7.0"
