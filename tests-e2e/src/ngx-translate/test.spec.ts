@@ -38,7 +38,7 @@ class NgMocksTranslateLoader extends TranslateLoader {
         provide: TranslateLoader,
         useClass: NgMocksTranslateLoader,
       },
-      defaultLanguage: 'ng-mocks',
+      fallbackLang: 'ng-mocks',
     }),
   ],
   declarations: [TargetComponent],

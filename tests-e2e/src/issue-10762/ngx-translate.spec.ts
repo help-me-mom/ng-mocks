@@ -73,7 +73,7 @@ describe('issue-10762 - ngx-translate', () => {
           TestBed.configureTestingModule({
             imports: [
               TargetStandaloneComponent,
-              TranslateModule.forRoot({ defaultLanguage: 'en' }),
+              TranslateModule.forRoot({ fallbackLang: 'en' }),
             ],
           }).compileComponents(),
         );
@@ -119,9 +119,7 @@ describe('issue-10762 - ngx-translate', () => {
       beforeEach(() =>
         TestBed.configureTestingModule({
           declarations: [TargetComponent],
-          imports: [
-            TranslateModule.forRoot({ defaultLanguage: 'en' }),
-          ],
+          imports: [TranslateModule.forRoot({ fallbackLang: 'en' })],
         }).compileComponents(),
       );
 

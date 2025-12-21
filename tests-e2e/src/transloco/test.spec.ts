@@ -57,7 +57,7 @@ const getTranslocoModule = () =>
     langs,
     translocoConfig: {
       availableLangs: ['en', 'fr'],
-      defaultLang: 'en',
+      fallbackLang: 'en',
     },
   });
 
