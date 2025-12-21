@@ -235,9 +235,9 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "20.7.0",
-    "@angular-eslint/eslint-plugin-template": "20.7.0",
-    "@angular-eslint/template-parser": "20.7.0",
+    "@angular-eslint/eslint-plugin": "21.1.0",
+    "@angular-eslint/eslint-plugin-template": "21.1.0",
+    "@angular-eslint/template-parser": "21.1.0",
     "@angular/animations": "20.3.15",
     "@angular/common": "20.3.15",
     "@angular/core": "20.3.15",
