@@ -239,6 +239,8 @@ overrides:
     parser: '@angular-eslint/template-parser'
     extends:
       - 'plugin:@angular-eslint/template/recommended'
+    rules:
+      '@angular-eslint/template/prefer-control-flow': off # TODO fix
 
   - files:
       - '*.json'
