@@ -238,13 +238,13 @@
     "@angular-eslint/eslint-plugin": "19.8.1",
     "@angular-eslint/eslint-plugin-template": "19.8.1",
     "@angular-eslint/template-parser": "19.8.1",
-    "@angular/animations": "20.1.8",
-    "@angular/common": "20.1.8",
-    "@angular/core": "20.1.8",
-    "@angular/forms": "20.1.8",
-    "@angular/platform-browser": "20.1.8",
-    "@angular/platform-browser-dynamic": "20.1.8",
-    "@angular/router": "20.1.8",
+    "@angular/animations": "20.3.15",
+    "@angular/common": "20.3.15",
+    "@angular/core": "20.3.15",
+    "@angular/forms": "20.3.15",
+    "@angular/platform-browser": "20.3.15",
+    "@angular/platform-browser-dynamic": "20.3.15",
+    "@angular/router": "20.3.15",
     "@commitlint/cli": "20.2.0",
     "@commitlint/config-conventional": "20.2.0",
     "@semantic-release/changelog": "6.0.3",
@@ -303,7 +303,7 @@
     "typescript": "5.9.3",
     "webpack": "5.104.1",
     "webpack-cli": "6.0.1",
-    "zone.js": "0.15.1"
+    "zone.js": "0.16.0"
   },
   "engines": {
     "npm": "11.7.0"
