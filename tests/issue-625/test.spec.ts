@@ -58,8 +58,7 @@ class SomeModule {
  */
 @Component({
   selector: 'my-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class MyComponent implements OnInit {

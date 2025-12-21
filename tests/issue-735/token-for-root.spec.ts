@@ -17,8 +17,7 @@ const TOKEN = new (InjectionToken as any)('TOKEN-FOR-ROOT', {
 
 @Component({
   selector: 'target-735-token-for-root',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ token }}',
 })
 class TargetComponent {

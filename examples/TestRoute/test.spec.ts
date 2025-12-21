@@ -14,8 +14,7 @@ import {
 // A layout component that renders the current route.
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <a routerLink="/1">1</a>
     <a routerLink="/2">2</a>
@@ -29,8 +28,7 @@ class TargetComponent {
 // A simple component for the first route.
 @Component({
   selector: 'route1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'route1',
 })
 class Route1Component {
@@ -40,8 +38,7 @@ class Route1Component {
 // A simple component for the second route.
 @Component({
   selector: 'route2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'route2',
 })
 class Route2Component {

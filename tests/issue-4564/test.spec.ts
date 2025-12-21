@@ -29,8 +29,7 @@ class TargetService {
 
 @Pipe({
   name: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetPipe implements PipeTransform {
   transform() {
@@ -40,8 +39,7 @@ class TargetPipe implements PipeTransform {
 
 @Pipe({
   name: 'standard',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class StandardPipe implements PipeTransform {
   transform() {
@@ -64,8 +62,7 @@ class PipeModule {}
 
 @Component({
   selector: 'target-4564',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ null | target }}:{{ token }}:{{ service.func() }}',
 })
 class TargetComponent {
@@ -84,8 +81,7 @@ class ComponentModule {}
 
 @Component({
   selector: 'sut',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template:
     '<custom-component><target-4564></target-4564></custom-component>',
 })

@@ -10,8 +10,7 @@ class TargetService {
 
 @Component({
   selector: 'target-726',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.name }}',
 })
 class TargetComponent {
@@ -20,8 +19,7 @@ class TargetComponent {
 
 @Component({
   selector: 'view',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<ng-content></ng-content>',
   viewProviders: [TargetService],
 })
@@ -30,8 +28,7 @@ class ViewComponent {}
 @Component({
   providers: [TargetService],
   selector: 'provider',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<ng-content></ng-content>',
 })
 class ProviderComponent {}

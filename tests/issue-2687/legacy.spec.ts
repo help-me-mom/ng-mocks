@@ -20,8 +20,7 @@ class StandaloneModule {}
 
 @Pipe({
   name: 'standalone',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class StandalonePipe implements PipeTransform {
   transform(): string {
@@ -32,8 +31,7 @@ class StandalonePipe implements PipeTransform {
 @Component({
   selector: 'standalone',
   template: 'service:{{ service.constructor.name }}',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     StandaloneModule,
     StandalonePipe,
@@ -46,8 +44,7 @@ class StandaloneComponent {
 @Component({
   selector: 'target-2687-legacy',
   template: '<standalone></standalone> pipe:{{ null | standalone }}',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     StandaloneComponent,
     StandalonePipe,
@@ -57,24 +54,21 @@ class TargetComponent {}
 
 @Component({
   selector: 'render-standalone-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<standalone></standalone>',
 })
 class RenderStandaloneComponentComponent {}
 
 @Component({
   selector: 'render-standalone-pipe',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ null | standalone }}',
 })
 class RenderStandalonePipeComponent {}
 
 @Component({
   selector: 'render-standalone-service',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class RenderStandaloneServiceComponent {
@@ -83,8 +77,7 @@ class RenderStandaloneServiceComponent {
 
 @Component({
   selector: 'render-target-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '<target-2687-legacy></target-2687-legacy>',
 })
 class RenderTargetComponentComponent {}

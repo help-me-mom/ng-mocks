@@ -10,8 +10,7 @@ import { MockRender, ngMocks } from 'ng-mocks';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-error-count-display',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ count }} / {{ max }} errors',
 })
 class ErrorCountDisplayComponent {

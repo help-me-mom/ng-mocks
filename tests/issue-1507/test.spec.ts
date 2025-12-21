@@ -21,8 +21,7 @@ class ViewProviderService {
 @Component({
   providers: [ProviderService],
   selector: 'hello',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <h1 class="name">{{ name }}</h1>
     <div class="provider">{{ provider.description }}</div>

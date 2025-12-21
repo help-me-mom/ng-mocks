@@ -13,8 +13,7 @@ const TOKEN = new InjectionToken('TOKEN');
     },
   ],
   selector: 'target-mock-directive-with-multi-token',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {}
 

@@ -5,8 +5,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'pipe',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   pure: false,
 })
 class MyPipe implements PipeTransform {
@@ -21,8 +20,7 @@ class MyPipe implements PipeTransform {
 
 @Component({
   selector: 'app',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div class="p1">{{ 'd1' | pipe }}</div>
     <div class="p2">{{ 'd2' | pipe }}</div>

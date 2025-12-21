@@ -3,8 +3,7 @@ import { Component, VERSION } from '@angular/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   template: ``,
 })
 class MyComponent {}

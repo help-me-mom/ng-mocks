@@ -11,8 +11,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {
   @Input() public readonly target: string | null = null;
@@ -22,8 +21,7 @@ class TargetDirective {
 
 @Directive({
   selector: '[unused]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class UnusedDirective {
   public constructor(public readonly tpl: TemplateRef<any>) {}
@@ -31,16 +29,14 @@ class UnusedDirective {
 
 @Component({
   selector: 'target-ng-mocks-find-template-of',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
 })
 class TargetComponent {}
 
 @Component({
   selector: 'test',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <target-ng-mocks-find-template-of>
       1

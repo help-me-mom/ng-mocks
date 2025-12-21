@@ -67,8 +67,7 @@ class ProvidedService {
 
 @Component({
   selector: 'target-root-providers',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     "service:{{ service.name }}" "fake:{{ fake.name }}" "injected:{{
       injected.name
@@ -98,8 +97,7 @@ class TargetComponent {
 
 @Component({
   selector: 'module',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ moduleService.name }}',
 })
 class ModuleComponent {

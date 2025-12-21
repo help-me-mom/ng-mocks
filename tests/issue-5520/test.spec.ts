@@ -15,8 +15,7 @@ describe('issue-5520', () => {
 
   @Component({
     selector: 'dependency',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      false,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
     template: '',
   })
   class DependencyComponent {
@@ -31,8 +30,7 @@ describe('issue-5520', () => {
 
   @Component({
     selector: 'standalone',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      true,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
     template: '<dependency></dependency>',
     ['imports' as never /* TODO: remove after upgrade to a14 */]: [
       DependencyModule,

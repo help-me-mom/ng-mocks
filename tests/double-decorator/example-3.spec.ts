@@ -15,8 +15,7 @@ import {
 } from 'ng-mocks';
 
 @Directive({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 } as never)
 @Injectable()
 class BaseClass {
@@ -26,8 +25,7 @@ class BaseClass {
 @Component({
   providers: [BaseClass],
   selector: 'target-double-decorator-3',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.name }}',
 })
 class MyComponent {

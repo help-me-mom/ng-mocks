@@ -4,8 +4,7 @@ import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-mock-render-factory-tpl',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ i1 }}:{{ i2 }}:{{ i3 }}',
 })
 class TargetComponent {

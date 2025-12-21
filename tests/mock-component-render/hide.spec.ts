@@ -4,8 +4,7 @@ import { isMockOf, MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target-mock-component-render-hide',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'target',
 })
 class TargetComponent {}

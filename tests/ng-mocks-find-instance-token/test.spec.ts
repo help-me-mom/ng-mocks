@@ -12,8 +12,7 @@ const TOKEN = new InjectionToken('TOKEN');
     },
   ],
   selector: 'target-ng-mocks-find-instance-token',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'target',
 })
 class TargetComponent {}

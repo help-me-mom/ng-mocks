@@ -11,8 +11,7 @@ import {
 // A component we want to mock.
 @Component({
   selector: 'child-mock-view-child',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'child',
 })
 class ChildComponent {
@@ -24,8 +23,7 @@ class ChildComponent {
 // A component we want to test.
 @Component({
   selector: 'parent-mock-view-child',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <child-mock-view-child #child></child-mock-view-child>
     "Issue: {{ child.form.valid }}"

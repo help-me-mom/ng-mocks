@@ -18,8 +18,7 @@ describe('issue-5047', () => {
 
   @Component({
     selector: 'dependency',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      false,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
     template: '<ng-content></ng-content>',
   })
   class DependencyComponent {
@@ -29,8 +28,7 @@ describe('issue-5047', () => {
   // A standalone component we are going to test.
   @Component({
     selector: 'target-5047',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      false,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
     template: `<dependency *ngIf="name !== null">target</dependency>`,
   })
   class TargetComponent {

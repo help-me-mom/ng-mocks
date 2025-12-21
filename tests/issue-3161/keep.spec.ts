@@ -11,8 +11,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'translate',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TranslatePipe implements PipeTransform {
   transform(value: string) {
@@ -31,8 +30,7 @@ ngMocks.globalKeep(TranslateModule);
 @Component({
   selector: 'standalone',
   template: `{{ name | translate }}`,
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['imports' as never /* TODO: remove after upgrade to a14 */]: [
     TranslateModule,
   ],

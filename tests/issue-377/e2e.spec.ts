@@ -36,8 +36,7 @@ const TOKEN = new (InjectionToken as any)('TOKEN', {
 
 @Component({
   selector: 'target-377',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'service:{{ service.echo() }} token:{{ token }}',
 })
 class TargetComponent {

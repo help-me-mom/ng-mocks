@@ -19,8 +19,7 @@ import {
 
 @Component({
   selector: 'target-mock-render-mirrors-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div data-role="input1">{{ input1 || 'input1' }}</div>
     <div data-role="input2">{{ input2 || 'input2' }}</div>

@@ -20,8 +20,7 @@ class TargetService {
 
 @Component({
   selector: 'target-ng-mocks-faster',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'target',
 })
 class TargetComponent {

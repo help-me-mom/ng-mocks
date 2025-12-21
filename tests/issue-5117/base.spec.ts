@@ -12,8 +12,7 @@ import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'base',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class BaseDirective {
   @Input() public readonly input: string | undefined = undefined;
@@ -24,8 +23,7 @@ class BaseDirective {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [BaseDirective],

@@ -50,8 +50,7 @@ class StorageService {
 
 @Component({
   selector: 'profile',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `<form [formGroup]="form">
     <input type="text" name="email" formControlName="email" />
     <input type="text" name="firstName" formControlName="firstName" />

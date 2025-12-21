@@ -14,8 +14,7 @@ import {
 
 @Component({
   selector: 'target-305-reactive-forms',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <input data-testid="inputControl" [formControl]="myControl" />
   `,

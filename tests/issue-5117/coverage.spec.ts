@@ -12,8 +12,7 @@ import { isMockOf, MockDirectives, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: 'base',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class BaseDirective {
   @Input() public readonly input: string | undefined = undefined;
@@ -24,8 +23,7 @@ class BaseDirective {
 
 @Directive({
   selector: 'input',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [BaseDirective],
 })
@@ -37,8 +35,7 @@ class InputDirective {
 
 @Directive({
   selector: 'output',
-  ['standalone' as never /* TODO: remove after upgrade to a15 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a15 */]: true,
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [
       {
@@ -56,8 +53,7 @@ class OutputDirective {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '',
   ['hostDirectives' as never /* TODO: remove after upgrade to a15 */]:
     [
@@ -77,8 +73,7 @@ class TargetComponent {
 
 @Component({
   selector: 'render',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template:
     '<target [input]="input" (output)="output()" [customInput]="customInput" (customOutput)="customOutput()"></target>',
 })

@@ -25,16 +25,14 @@ describe('issue-11324', () => {
   @Component({
     selector: 'app-baz',
     template: `Hello World!`,
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      true,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   })
   class BazComponent {}
 
   @Component({
     selector: 'app-foo',
     template: `<ng-template #foo><app-baz></app-baz></ng-template>`,
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      true,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
     ['imports' as never]: [CommonModule, BazComponent],
   })
   class FooComponent {
@@ -45,8 +43,7 @@ describe('issue-11324', () => {
   @Component({
     selector: 'app-bar',
     template: ``,
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      true,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
   })
   class BarComponent implements AfterViewInit {
     constructor(private vcf: ViewContainerRef) {}

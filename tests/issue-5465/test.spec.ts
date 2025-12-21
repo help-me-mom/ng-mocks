@@ -17,8 +17,7 @@ describe('issue-5465', () => {
 
   @Component({
     selector: 'app-ng-for',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      false,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
     template: `
       <span *ngFor="let letter of this.test">{{ letter }}</span>
     `,
@@ -40,8 +39,7 @@ describe('issue-5465', () => {
 
   @Component({
     selector: 'app-root',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-      false,
+    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
     template: ` <app-ng-for></app-ng-for> `,
   })
   class AppRootComponent {

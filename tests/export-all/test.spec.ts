@@ -12,8 +12,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetPipe implements PipeTransform {
   protected readonly name = 'pipe';
@@ -24,8 +23,7 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target-export-all',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `<ng-container *ngIf="!value">{{
     value | target
   }}</ng-container>`,

@@ -7,8 +7,7 @@ import { ngMocks } from 'ng-mocks';
 
 @Pipe({
   name: 'nothing',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   pure: false,
 })
 class NothingPipe implements PipeTransform {
@@ -19,8 +18,7 @@ class NothingPipe implements PipeTransform {
 
 @Component({
   selector: 'target-2314',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div
       class="array"

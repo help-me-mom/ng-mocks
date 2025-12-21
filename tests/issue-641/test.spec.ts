@@ -35,8 +35,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target-641',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `<div @state (@state.done)="show = true">
     <span *ngIf="show">target</span>
   </div>`,

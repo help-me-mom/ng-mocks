@@ -12,8 +12,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 // By default the color is yellow.
 @Directive({
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
 class TargetDirective {
   @Input() public color = 'yellow';

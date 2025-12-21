@@ -6,8 +6,7 @@ import { MockBuilder } from 'ng-mocks';
 
 @Component({
   selector: 'app-reproduction',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    false,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
     <div>
       <input type="text" [formControl]="control" />

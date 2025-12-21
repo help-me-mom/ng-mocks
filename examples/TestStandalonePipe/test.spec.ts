@@ -32,8 +32,7 @@ class RootService {
 // A standalone pipe we are going to test.
 @Pipe({
   name: 'standalone',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]:
-    true,
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: true,
 })
 class StandalonePipe implements PipeTransform {
   constructor(public readonly rootService: RootService) {}
