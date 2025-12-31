@@ -27,16 +27,19 @@ class TargetModule {}
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
     beforeEach(() =>
-      MockBuilder(TargetService, TargetModule).replace(
-        HttpClientModule,
-        HttpClientTestingModule,
-      ),
+      // Angular 21 compatibility: Explicitly keep HttpClient to ensure it's not mocked
+      MockBuilder(TargetService, TargetModule)
+        .keep(HttpClient)
+        .replace(HttpClientModule, HttpClientTestingModule),
     );
 
     it('sends /api/config request', () => {
-      MockRender(TargetService);
-      const service = ngMocks.get(TargetService);
-      const controller = ngMocks.get(HttpTestingController);
+      // Angular 21 compatibility: Use MockRender() + ngMocks.findInstance() pattern
+      // instead of MockRender(TargetService) + ngMocks.get() to ensure the real
+      // service is used with HttpClientTestingModule
+      MockRender();
+      const service = ngMocks.findInstance(TargetService);
+      const controller = ngMocks.findInstance(HttpTestingController);
 
       service.getConfig().subscribe();
 
@@ -54,13 +57,16 @@ describe('issue-6402', () => {
         HttpClientTestingModule,
       ),
     );
-    beforeEach(() => MockBuilder(TargetService, TargetModule));
+    // Angular 21 compatibility: Explicitly keep HttpClient to ensure it's not mocked
+    beforeEach(() =>
+      MockBuilder(TargetService, TargetModule).keep(HttpClient),
+    );
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
-      MockRender(TargetService);
-      const service = ngMocks.get(TargetService);
-      const controller = ngMocks.get(HttpTestingController);
+      MockRender();
+      const service = ngMocks.findInstance(TargetService);
+      const controller = ngMocks.findInstance(HttpTestingController);
 
       service.getConfig().subscribe();
 
