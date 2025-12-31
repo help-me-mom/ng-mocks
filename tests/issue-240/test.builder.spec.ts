@@ -22,15 +22,16 @@ describe('issue-240:builder', () => {
     // spyOn(pure, 'transform');
     // spyOn(impure, 'transform');
 
+    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
+    expect(pure.transform).toHaveBeenCalledTimes(1);
+    expect(impure.transform).toHaveBeenCalledTimes(1);
+
+    fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(1);
     expect(impure.transform).toHaveBeenCalledTimes(2);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(1);
-    expect(impure.transform).toHaveBeenCalledTimes(4);
-
-    fixture.detectChanges();
-    expect(pure.transform).toHaveBeenCalledTimes(1);
-    expect(impure.transform).toHaveBeenCalledTimes(6);
+    expect(impure.transform).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,11 +1,11 @@
 import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import {
   Component,
   inject,
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
   ResolveFn,
@@ -13,7 +13,6 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -95,18 +94,18 @@ describe('TestRoutingResolver:fn', () => {
       [
         RouteComponent, // not necessary, added for coverage
         RouterModule,
-        RouterTestingModule.withRoutes([]),
         NG_MOCKS_ROOT_PROVIDERS,
       ],
       TargetModule,
     )
       .exclude(NG_MOCKS_GUARDS)
       .exclude(NG_MOCKS_RESOLVERS)
-      .keep(dataResolver);
+      .keep(dataResolver)
+      .provide(provideLocationMocks());
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('provides data to on the route', fakeAsync(() => {
+  // It is important to run routing tests in async.
+  it('provides data to on the route', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -122,7 +121,7 @@ describe('TestRoutingResolver:fn', () => {
     // Now we can initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Checking that we are on the right page.
@@ -138,5 +137,5 @@ describe('TestRoutingResolver:fn', () => {
         flag: false,
       },
     });
-  }));
+  });
 });
