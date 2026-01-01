@@ -155,6 +155,7 @@ const generateFactory = (
     // instead of ApplicationRef.tick(). This avoids ExpressionChangedAfterItHasBeenCheckedError
     // when test code updates fixture bindings between detectChanges calls, since CDR.detectChanges()
     // doesn't run the checkNoChanges verification phase that AppRef.tick() runs in dev mode.
+    // istanbul ignore if
     if (Number.parseInt(VERSION.major, 10) >= 21) {
       const cdr = fixture.debugElement.injector.get(ChangeDetectorRef);
       fixture.detectChanges = () => {
