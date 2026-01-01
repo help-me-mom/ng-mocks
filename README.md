@@ -42,12 +42,30 @@ If you are upgrading to **Angular 21**, routing tests require migration:
 
 ```ts
 // Before (Angular 20 and earlier)
-beforeEach(() => MockBuilder([RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS], TargetModule));
-it('test', fakeAsync(() => { /* ... */ tick(); }));
+beforeEach(() =>
+  MockBuilder(
+    [
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
+    ],
+    TargetModule,
+  ),
+);
+it('test', fakeAsync(() => {
+  /* ... */ tick();
+}));
 
 // After (Angular 21+)
-beforeEach(() => MockBuilder([RouterModule, NG_MOCKS_ROOT_PROVIDERS], TargetModule).provide(provideLocationMocks()));
-it('test', async () => { /* ... */ await fixture.whenStable(); });
+beforeEach(() =>
+  MockBuilder(
+    [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+    TargetModule,
+  ).provide(provideLocationMocks()),
+);
+it('test', async () => {
+  /* ... */ await fixture.whenStable();
+});
 ```
 
 See the [Route testing guide](https://ng-mocks.sudo.eu/guides/route) for full details.
