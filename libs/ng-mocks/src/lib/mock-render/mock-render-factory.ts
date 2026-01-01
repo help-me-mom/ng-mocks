@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, DebugElement, Directive, InjectionToken } from '@angular/core';
+import { ChangeDetectorRef, DebugElement, Directive, InjectionToken, VERSION } from '@angular/core';
 import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -151,14 +151,16 @@ const generateFactory = (
     result.configureTestBed();
     const fixture: any = TestBed.createComponent(componentCtor);
 
-    // Angular 21 compatibility: Override detectChanges to use ChangeDetectorRef.detectChanges()
+    // Angular 21+ compatibility: Override detectChanges to use ChangeDetectorRef.detectChanges()
     // instead of ApplicationRef.tick(). This avoids ExpressionChangedAfterItHasBeenCheckedError
     // when test code updates fixture bindings between detectChanges calls, since CDR.detectChanges()
     // doesn't run the checkNoChanges verification phase that AppRef.tick() runs in dev mode.
-    const cdr = fixture.debugElement.injector.get(ChangeDetectorRef);
-    fixture.detectChanges = () => {
-      cdr.detectChanges();
-    };
+    if (Number.parseInt(VERSION.major, 10) >= 21) {
+      const cdr = fixture.debugElement.injector.get(ChangeDetectorRef);
+      fixture.detectChanges = () => {
+        cdr.detectChanges();
+      };
+    }
 
     funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
