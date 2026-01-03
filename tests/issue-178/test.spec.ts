@@ -1,6 +1,6 @@
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -44,12 +44,10 @@ class HelloModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/178
 describe('issue-178', () => {
-  beforeEach(
-    () =>
-      MockBuilder(HelloComponent, HelloModule).replace(
-        RouterModule,
-        RouterTestingModule,
-      ), // <- causes the issue
+  beforeEach(() =>
+    MockBuilder(HelloComponent, HelloModule)
+      .keep(RouterModule)
+      .provide(provideLocationMocks()),
   );
 
   it('should create the component', () => {

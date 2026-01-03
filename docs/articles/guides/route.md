@@ -13,8 +13,8 @@ However, to test that, we need to configure `TestBed` a bit differently:
 
 - it is fine to mock all components and declarations
 - `RouterModule` should be kept as it is, so it can do its job
-- `RouterTestingModule` should be added with empty routes
-- [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept, 
+- `provideLocationMocks()` should be added to provide testing utilities for location
+- [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept,
   because `RouterModule` depends on many root services which cannot be mocked.
 
 This guarantees that the application's routes will be used,
@@ -26,28 +26,27 @@ beforeEach(() =>
     // Things to keep and export.
     [
       RouterModule,
-      RouterTestingModule.withRoutes([]),
       NG_MOCKS_ROOT_PROVIDERS,
-    ], 
+    ],
     // Things to mock.
     TargetModule,
-  )
+  ).provide(provideLocationMocks())
 );
 ```
 
-The next and very important step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
-We need this, because `RouterModule` relies on async zones.
+The next and very important step is to make the test callback in `it` async and to render `RouterOutlet`.
+We need this, because `RouterModule` relies on async operations.
 Also, please note an empty object as the second parameter, it's needed to leave inputs of `RouterOutlet` untouched.
 
 ```ts
-// fakeAsync --------------------------|||||||||
-it('renders /1 with Target1Component', fakeAsync(() => {
+// async test --------------------------vvvvv
+it('renders /1 with Target1Component', async () => {
   const fixture = MockRender(RouterOutlet, {});
-}));
+});
 ```
 
 After we have rendered `RouterOutlet` we should initialize the router, also we can set the default url here.
-As mentioned above, we should use zones and `fakeAsync` for that.
+We use `await fixture.whenStable()` to wait for async operations to complete.
 
 ```ts
 const router = TestBed.get(Router);
@@ -56,7 +55,7 @@ const location = TestBed.get(Location);
 location.go('/1');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick();
+  await fixture.whenStable();
 }
 ```
 
@@ -80,19 +79,18 @@ beforeEach(() =>
     [
       TargetComponent,
       RouterModule,
-      RouterTestingModule.withRoutes([]),
       NG_MOCKS_ROOT_PROVIDERS,
-    ], 
+    ],
     // Things to mock.
     TargetModule,
-  )
+  ).provide(provideLocationMocks())
 );
 ```
 
 ```ts
-it('navigates between pages', fakeAsync(() => {
+it('navigates between pages', async () => {
   const fixture = MockRender(TargetComponent);
-}));
+});
 ```
 
 The next step is to find the link we want to click. The click event should be inside of zones, because it triggers navigation.
@@ -106,7 +104,7 @@ if (fixture.ngZone) {
       button: 0, // <- simulating the left button click, not right one.
     });
   });
-  tick();
+  await fixture.whenStable();
 }
 ```
 
@@ -125,10 +123,9 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoute/test.spec.ts"
 import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, NgModule } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
@@ -192,16 +189,12 @@ class TargetModule {}
 describe('TestRoute:Route', () => {
   beforeEach(() => {
     return MockBuilder(
-      [
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       TargetModule,
-    );
+    ).provide(provideLocationMocks());
   });
 
-  it('renders /1 with Route1Component', fakeAsync(() => {
+  it('renders /1 with Route1Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -210,15 +203,15 @@ describe('TestRoute:Route', () => {
     location.go('/1');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
     expect(() => ngMocks.find(Route1Component)).not.toThrow();
-  }));
+  });
 
-  it('renders /2 with Route2Component', fakeAsync(() => {
+  it('renders /2 with Route2Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -227,13 +220,13 @@ describe('TestRoute:Route', () => {
     location.go('/2');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 
 describe('TestRoute:Component', () => {
@@ -244,21 +237,15 @@ describe('TestRoute:Component', () => {
   // initialization, we need to pass its module as the second
   // parameter. And, the last but not the least, we need keep
   // RouterModule to have its routes, and to add
-  // RouterTestingModule.withRoutes([]), yes yes, with empty routes
-  // to have tools for testing.
+  // provideLocationMocks() to have tools for testing.
   beforeEach(() => {
     return MockBuilder(
-      [
-        TargetComponent,
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [TargetComponent, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       TargetModule,
-    );
+    ).provide(provideLocationMocks());
   });
 
-  it('navigates between pages', fakeAsync(() => {
+  it('navigates between pages', async () => {
     const fixture = MockRender(TargetComponent);
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -266,7 +253,7 @@ describe('TestRoute:Component', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // By default, our routes do not have a component.
@@ -288,7 +275,7 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
@@ -302,11 +289,64 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 ```
+
+## Migration from Angular 20 and earlier
+
+If you are migrating from Angular 20 or earlier, you may need to update your routing tests.
+
+### Key changes
+
+1. **`RouterTestingModule` is deprecated** - Use `provideLocationMocks()` from `@angular/common/testing` instead.
+
+2. **`fakeAsync` + `tick()` → `async` + `await fixture.whenStable()`** - Angular 21 changed how `ApplicationRef.tick()` works in dev mode, which can cause `ExpressionChangedAfterItHasBeenCheckedError` when test code updates fixture bindings between `detectChanges` calls. Using `async`/`await` with `fixture.whenStable()` avoids this issue.
+
+### Before (Angular 20 and earlier)
+
+```ts
+import { fakeAsync, tick } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+beforeEach(() =>
+  MockBuilder(
+    [RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS],
+    TargetModule,
+  )
+);
+
+it('test', fakeAsync(() => {
+  const fixture = MockRender(RouterOutlet, {});
+  // ...
+  tick();
+}));
+```
+
+### After (Angular 21+)
+
+```ts
+import { provideLocationMocks } from '@angular/common/testing';
+
+beforeEach(() =>
+  MockBuilder(
+    [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+    TargetModule,
+  ).provide(provideLocationMocks())
+);
+
+it('test', async () => {
+  const fixture = MockRender(RouterOutlet, {});
+  // ...
+  await fixture.whenStable();
+});
+```
+
+:::warning
+The `fakeAsync` + `tick()` pattern **may not work reliably** with Angular 21 routing tests. Due to changes in how Angular 21 handles async operations in the router, you should migrate to the `async`/`await` with `fixture.whenStable()` pattern for routing tests.
+:::

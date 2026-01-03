@@ -1,4 +1,5 @@
 import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import {
   Component,
   inject,
@@ -12,12 +13,12 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { from } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 import {
   MockBuilder,
+  MockInstance,
   MockRender,
   NG_MOCKS_GUARDS,
   NG_MOCKS_ROOT_PROVIDERS,
@@ -115,15 +116,12 @@ describe('TestRoutingGuard:canLoad', () => {
   // and canLoadGuard should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
-      [
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       [TargetModule],
     )
       .exclude(NG_MOCKS_GUARDS)
-      .keep(canLoadGuard);
+      .keep(canLoadGuard)
+      .provide(provideLocationMocks());
   });
 
   it('redirects to login', async () => {
@@ -151,13 +149,12 @@ describe('TestRoutingGuard:canLoad', () => {
   });
 
   it('loads dashboard', async () => {
+    // Set up the LoginService to be logged in BEFORE rendering
+    MockInstance(LoginService, 'isLoggedIn', true);
+
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
-    const loginService = ngMocks.get(LoginService);
-
-    // Letting the guard know we have been logged in.
-    loginService.isLoggedIn = true;
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {

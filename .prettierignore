@@ -1,4 +1,5 @@
 .browserslistrc
+.claude/
 .dockerignore
 .eslintignore
 .gitignore
