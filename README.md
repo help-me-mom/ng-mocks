@@ -15,6 +15,7 @@ The current version of the library **has been tested** and **can be used** with:
 
 | angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
 | ------: | :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
+|      21 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
 |      20 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
 |      19 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
 |      18 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
@@ -31,6 +32,43 @@ The current version of the library **has been tested** and **can be used** with:
 |       7 |  latest  |   yes   | yes  |     |            |         |       |
 |       6 |  latest  |   yes   | yes  |     |            |         |       |
 |       5 |  latest  |   yes   | yes  |     |            |         |       |
+
+### ⚠️ Angular 21 Migration Notice
+
+If you are upgrading to **Angular 21**, routing tests require migration:
+
+- **`RouterTestingModule` is deprecated** - Use `provideLocationMocks()` from `@angular/common/testing`
+- **`fakeAsync` + `tick()` may not work** for routing tests - Use `async` + `await fixture.whenStable()`
+
+```ts
+// Before (Angular 20 and earlier)
+beforeEach(() =>
+  MockBuilder(
+    [
+      RouterModule,
+      RouterTestingModule.withRoutes([]),
+      NG_MOCKS_ROOT_PROVIDERS,
+    ],
+    TargetModule,
+  ),
+);
+it('test', fakeAsync(() => {
+  /* ... */ tick();
+}));
+
+// After (Angular 21+)
+beforeEach(() =>
+  MockBuilder(
+    [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+    TargetModule,
+  ).provide(provideLocationMocks()),
+);
+it('test', async () => {
+  /* ... */ await fixture.whenStable();
+});
+```
+
+See the [Route testing guide](https://ng-mocks.sudo.eu/guides/route) for full details.
 
 ## Important links
 

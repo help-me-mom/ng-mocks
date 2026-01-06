@@ -32,10 +32,11 @@ describe('TestHttpRequest', () => {
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
   beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule).replace(
-      HttpClientModule,
-      HttpClientTestingModule,
-    );
+    // Angular 21 compatibility: Explicitly keep HttpClient to ensure it's not mocked
+    // when using a service that depends on it
+    return MockBuilder(TargetService, TargetModule)
+      .keep(HttpClient)
+      .replace(HttpClientModule, HttpClientTestingModule);
   });
 
   it('sends a request', () => {
