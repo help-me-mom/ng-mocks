@@ -29,7 +29,7 @@
     "@angular/build": "20.3.14",
     "@angular/cli": "20.3.14",
     "@angular/compiler-cli": "20.3.16",
-    "@types/jasmine": "5.1.13",
+    "@types/jasmine": "5.1.14",
     "@types/node": "24.10.5",
     "jasmine-core": "5.13.0",
     "karma": "6.4.4",
