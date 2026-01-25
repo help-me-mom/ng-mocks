@@ -1,6 +1,6 @@
 services:
   ng-mocks:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -14,7 +14,7 @@ services:
       - --no-audit
 
   docs:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -28,7 +28,7 @@ services:
       - --no-audit
 
   e2e:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -261,7 +261,7 @@ services:
       - --no-audit
 
   a19:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -275,7 +275,7 @@ services:
       - --no-audit
 
   a20:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -289,7 +289,7 @@ services:
       - --no-audit
 
   jasmine:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -303,7 +303,7 @@ services:
       - --no-audit
 
   jest:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -317,7 +317,7 @@ services:
       - --no-audit
 
   min:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
@@ -331,7 +331,7 @@ services:
       - --no-audit
 
   nx:
-    image: satantime/puppeteer-node:22.21.1
+    image: satantime/puppeteer-node:22.22.0
     platform: linux/amd64
     working_dir: /app
     volumes:
