@@ -6,7 +6,6 @@ import {
   Component,
   FactoryProvider,
   InjectionToken,
-  Injector,
   NgModule,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -241,7 +240,7 @@ describe('mockProvider', () => {
     const def = coreReflectModuleResolve(mock);
     expect(def.providers).toEqual([
       {
-        deps: [Injector],
+        deps: jasmine.any(Array),
         provide: CUSTOM_TOKEN,
         useFactory: jasmine.anything(),
       },
@@ -250,25 +249,25 @@ describe('mockProvider', () => {
     const provider: any = Array.isArray(def.providers?.[0])
       ? undefined
       : def.providers?.[0];
-    expect(provider?.useFactory()).toEqual('');
+    expect(provider?.useFactory(undefined, undefined)).toEqual('');
   });
 
   it('should return undefined on any token', () => {
     const p1: any = mockProvider(CUSTOM_TOKEN, true);
     expect(p1).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p1.useFactory()).toEqual(undefined);
+    expect(p1.useFactory(undefined, undefined)).toEqual(undefined);
 
     const p2: any = mockProvider(HTTP_INTERCEPTORS, true);
     expect(p2).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: HTTP_INTERCEPTORS,
       useFactory: jasmine.anything(),
     });
-    expect(p2.useFactory()).toEqual(undefined);
+    expect(p2.useFactory(undefined, undefined)).toEqual(undefined);
 
     expect(mockProvider(APP_INITIALIZER)).toBeUndefined();
   });
@@ -279,55 +278,55 @@ describe('mockProvider', () => {
       useValue: undefined,
     });
     expect(p1).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p1.useFactory()).toEqual(undefined);
+    expect(p1.useFactory(undefined, undefined)).toEqual(undefined);
 
     const p2: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: 123,
     });
     expect(p2).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p2.useFactory()).toEqual(0);
+    expect(p2.useFactory(undefined, undefined)).toEqual(0);
 
     const p3: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: true,
     });
     expect(p3).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p3.useFactory()).toEqual(false);
+    expect(p3.useFactory(undefined, undefined)).toEqual(false);
 
     const p4: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: 'true',
     });
     expect(p4).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p4.useFactory()).toEqual('');
+    expect(p4.useFactory(undefined, undefined)).toEqual('');
 
     const p5: any = mockProvider({
       provide: CUSTOM_TOKEN,
       useValue: null,
     });
     expect(p5).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(p5.useFactory()).toEqual(null);
+    expect(p5.useFactory(undefined, undefined)).toEqual(null);
 
     const mock: FactoryProvider = mockProvider({
       provide: CUSTOM_TOKEN,
@@ -337,11 +336,11 @@ describe('mockProvider', () => {
       },
     }) as any;
     expect(mock).toEqual({
-      deps: [Injector],
+      deps: jasmine.any(Array),
       provide: CUSTOM_TOKEN,
       useFactory: jasmine.anything(),
     });
-    expect(mock.useFactory(null)).toEqual({
+    expect(mock.useFactory(null, null)).toEqual({
       func: jasmine.anything(),
     });
   });

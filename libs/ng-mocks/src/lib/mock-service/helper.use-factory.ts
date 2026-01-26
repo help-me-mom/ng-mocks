@@ -1,5 +1,5 @@
 import * as core from '@angular/core';
-import { FactoryProvider, Injector } from '@angular/core';
+import { EnvironmentInjector, FactoryProvider, Injector, Optional } from '@angular/core';
 
 import { mapValues } from '../common/core.helpers';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
@@ -10,7 +10,8 @@ import mockInstanceApply from '../mock-instance/mock-instance-apply';
 import { MockService } from './mock-service';
 
 // Helper to run code in injection context when available (Angular 16+)
-const tryRunInInjectionContext = <T>(injector: Injector | undefined, fn: () => T): T => {
+// Prefers EnvironmentInjector for more reliable injection context establishment in Angular 21+
+const tryRunInInjectionContext = <T>(injector: EnvironmentInjector | Injector | undefined, fn: () => T): T => {
   // runInInjectionContext is available from Angular 16+
   // Using it ensures inject() calls work inside factory functions
   // We access it dynamically to avoid breaking older Angular versions
@@ -59,13 +60,21 @@ export default <D, I>(
   init?: () => I,
   overrides?: (instance: I, injector: Injector) => I | Partial<I>,
 ): FactoryProvider => ({
-  deps: [Injector],
+  // Use both EnvironmentInjector (preferred for Angular 21+) and Injector as fallback.
+  // Both are optional to ensure backward compatibility with older Angular versions.
+  deps: [
+    [new Optional(), EnvironmentInjector],
+    [new Optional(), Injector],
+  ],
   provide: def,
-  useFactory: (injector?: Injector) => {
+  useFactory: (environmentInjector?: EnvironmentInjector, injector?: Injector) => {
     // Run the entire factory body within an injection context (Angular 16+)
     // This ensures that any inject() calls inside init(), MockService(),
     // or callbacks will work correctly and not throw NG0203 errors.
-    return tryRunInInjectionContext(injector, () => {
+    // Prefer EnvironmentInjector for more reliable context in Angular 21+.
+    const contextInjector = environmentInjector || injector;
+
+    return tryRunInInjectionContext(contextInjector, () => {
       const instance = init ? init() : MockService(def as any);
 
       const configGlobal: Set<any> | undefined = ngMocksUniverse.getOverrides().get(def);
