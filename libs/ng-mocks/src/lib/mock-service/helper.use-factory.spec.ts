@@ -38,9 +38,9 @@ describe('helper.use-factory', () => {
       // Destroy the injector to make runInInjectionContext throw
       childInjector.destroy();
 
-      // Invoke the factory with the destroyed injector
+      // Invoke the factory with the destroyed injector as the EnvironmentInjector
       // This should trigger the catch block and fall back to direct execution
-      const result = provider.useFactory(childInjector);
+      const result = provider.useFactory(childInjector, undefined);
 
       // Verify the mock was created successfully despite the error
       expect(result).toBeDefined();
@@ -72,15 +72,18 @@ describe('helper.use-factory', () => {
         },
       } as unknown as Injector;
 
-      // Invoke the factory with the fake injector
+      // Invoke the factory with the fake injector as the EnvironmentInjector
       // This should trigger the catch block and fall back to direct execution
-      const result = provider.useFactory(fakeInjector);
+      const result = provider.useFactory(
+        fakeInjector as unknown as EnvironmentInjector,
+        undefined,
+      );
 
       // Verify the mock was created successfully despite the error
       expect(result).toBeDefined();
     });
 
-    it('executes directly when injector is undefined', () => {
+    it('executes directly when both injectors are undefined', () => {
       // Create a test service class
       class TestService {
         public value = 'test';
@@ -89,24 +92,38 @@ describe('helper.use-factory', () => {
       // Create a factory provider using helperUseFactory
       const provider = helperUseFactory(TestService);
 
-      // Invoke the factory without an injector
-      const result = provider.useFactory(undefined);
+      // Invoke the factory without any injectors
+      const result = provider.useFactory(undefined, undefined);
 
       // Verify the mock was created successfully
       expect(result).toBeDefined();
     });
 
-    it('executes directly when runInInjectionContext is not available', () => {
-      // This test covers the case when runInInjectionContext doesn't exist
-      // (Angular < 16). Since we can't easily simulate this in Angular 16+,
-      // we just verify the factory works with a valid injector.
+    it('uses EnvironmentInjector when available', () => {
+      // This test verifies that EnvironmentInjector is preferred
+      class TestService {
+        public value = 'test';
+      }
+
+      const provider = helperUseFactory(TestService);
+      const environmentInjector = TestBed.inject(EnvironmentInjector);
+      const result = provider.useFactory(
+        environmentInjector,
+        undefined,
+      );
+
+      expect(result).toBeDefined();
+    });
+
+    it('falls back to Injector when EnvironmentInjector is not available', () => {
+      // This test covers the fallback to Injector
       class TestService {
         public value = 'test';
       }
 
       const provider = helperUseFactory(TestService);
       const injector = TestBed.inject(Injector);
-      const result = provider.useFactory(injector);
+      const result = provider.useFactory(undefined, injector);
 
       expect(result).toBeDefined();
     });
