@@ -23,3 +23,4 @@ tmp/
 **/*.snap
 **/.nvmrc
 **/.browserslistrc
+**/schematics/
