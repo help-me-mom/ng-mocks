@@ -1,4 +1,4 @@
-import { extendClass } from './core.helpers';
+import { extendClass, extractDependency } from './core.helpers';
 import decorateMock from './decorate.mock';
 
 describe('DebuggableMock', () => {
@@ -16,5 +16,13 @@ describe('DebuggableMock', () => {
     decorateMock(mock, Bar);
 
     expect((mock as any).mockOf).toBe(Bar);
+  });
+});
+
+describe('extractDependency', () => {
+  it('handles undefined set gracefully', () => {
+    expect(() =>
+      extractDependency(['dep1', 'dep2'], undefined),
+    ).not.toThrow();
   });
 });

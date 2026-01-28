@@ -1,6 +1,6 @@
+import { provideLocationMocks } from '@angular/common/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
@@ -20,14 +20,11 @@ describe('issue-151', () => {
     beforeEach(() =>
       TestBed.configureTestingModule(
         MockBuilder(
-          [
-            AppComponent,
-            RouterModule,
-            RouterTestingModule,
-            NG_MOCKS_ROOT_PROVIDERS,
-          ],
+          [AppComponent, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
           AppModule,
-        ).build(),
+        )
+          .provide(provideLocationMocks())
+          .build(),
       ),
     );
 

@@ -1,6 +1,8 @@
 {
   "extends": "./libs/ng-mocks/tsconfig.json",
   "compilerOptions": {
+    "module": "ES2022",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

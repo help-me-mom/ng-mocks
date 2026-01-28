@@ -39,8 +39,9 @@ describe('issue-240:classic', () => {
     expect(fixture.nativeElement.innerHTML).toContain(
       '"impure:impure"',
     );
+    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(2);
+    expect(countImpure).toEqual(1);
 
     const pure = ngMocks.findInstance(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
@@ -63,14 +64,15 @@ describe('issue-240:classic', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
+    expect(impure.transform).toHaveBeenCalledTimes(1);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(4);
+    expect(impure.transform).toHaveBeenCalledTimes(2);
 
     // No changes because of spies.
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(2);
+    expect(countImpure).toEqual(1);
   });
 });

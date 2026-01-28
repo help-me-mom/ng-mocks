@@ -39,10 +39,11 @@ describe('issue-240:real', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
+    expect(impure.transform).toHaveBeenCalledTimes(1);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(4);
+    expect(impure.transform).toHaveBeenCalledTimes(2);
   });
 });

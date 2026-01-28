@@ -51,24 +51,24 @@ beforeEach(() =>
   MockBuilder(
     // first parameter
     // providing RouterModule and its dependencies
-    [
-      RouterModule,
-      RouterTestingModule.withRoutes([]),
-      NG_MOCKS_ROOT_PROVIDERS,
-    ],
-    
+    [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+
     // second parameter
     // Mocking definition of TargetModule
     TargetModule,
   )
-  
-  // chain
-  // excluding all guards to avoid side effects
-  .exclude(NG_MOCKS_GUARDS)
-  
-  // chain
-  // keeping loginGuard for testing
-  .keep(loginGuard)
+
+    // chain
+    // excluding all guards to avoid side effects
+    .exclude(NG_MOCKS_GUARDS)
+
+    // chain
+    // keeping loginGuard for testing
+    .keep(loginGuard)
+
+    // chain
+    // providing location mocks for testing
+    .provide(provideLocationMocks())
 );
 ```
 
@@ -97,12 +97,12 @@ const location = ngMocks.get(Location);
 ```
 
 To initialize navigation, you need to call `router.initialNavigation`,
-and then `tick` to ensure that the route has been initialized and rendered. 
+and then `await fixture.whenStable()` to ensure that the route has been initialized and rendered.
 
 ```ts
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick(); // is needed for rendering of the current route.
+  await fixture.whenStable(); // is needed for rendering of the current route.
 }
 ```
 
@@ -128,24 +128,24 @@ beforeEach(() =>
   MockBuilder(
     // first parameter
     // providing RouterModule and its dependencies
-    [
-      RouterModule,
-      RouterTestingModule.withRoutes([]),
-      NG_MOCKS_ROOT_PROVIDERS,
-    ],
-    
+    [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+
     // second parameter
     // Mocking definition of TargetModule
     TargetModule,
   )
-  
-  // chain
-  // excluding all guards to avoid side effects
-  .exclude(NG_MOCKS_GUARDS)
-  
-  // chain
-  // keeping LoginGuard for testing
-  .keep(LoginGuard)
+
+    // chain
+    // excluding all guards to avoid side effects
+    .exclude(NG_MOCKS_GUARDS)
+
+    // chain
+    // keeping LoginGuard for testing
+    .keep(LoginGuard)
+
+    // chain
+    // providing location mocks for testing
+    .provide(provideLocationMocks())
 );
 ```
 
@@ -158,25 +158,25 @@ Profit.
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestRoutingGuard/can-activate.spec.ts"
 import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import {
   Component,
   inject,
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import {
   CanActivateFn,
   Router,
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { from } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 import {
   MockBuilder,
+  MockInstance,
   MockRender,
   NG_MOCKS_GUARDS,
   NG_MOCKS_ROOT_PROVIDERS,
@@ -209,9 +209,7 @@ const sideEffectGuard: CanActivateFn = () => false;
   selector: 'login',
   template: 'login',
 })
-class LoginComponent {
-  public loginTestRoutingGuardCanActivate() {}
-}
+class LoginComponent {}
 
 // A simple component pretending a protected dashboard.
 // It will be replaced with a mock copy.
@@ -219,9 +217,7 @@ class LoginComponent {
   selector: 'dashboard',
   template: 'dashboard',
 })
-class DashboardComponent {
-  public dashboardTestRoutingGuardCanActivate() {}
-}
+class DashboardComponent {}
 
 // Definition of the routing module.
 @NgModule({
@@ -250,27 +246,24 @@ describe('TestRoutingGuard:canActivate', () => {
   // Therefore, RouterModule and the guard should be kept,
   // and the rest of the module which defines the route can be mocked.
   // To configure RouterModule for the test,
-  // RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS
-  // should be specified as the first parameter of MockBuilder (yes, with empty routes).
+  // RouterModule and NG_MOCKS_ROOT_PROVIDERS should be specified as
+  // the first parameter of MockBuilder.
   // The module with routes and the guard should be specified
   // as the second parameter of MockBuilder.
   // Then `NG_MOCKS_GUARDS` should be excluded to remove all guards,
   // and `canActivateGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
-      [
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       TargetModule,
     )
       .exclude(NG_MOCKS_GUARDS)
-      .keep(canActivateGuard);
+      .keep(canActivateGuard)
+      .provide(provideLocationMocks());
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('redirects to login', fakeAsync(() => {
+  // It is important to run routing tests in async.
+  it('redirects to login', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -278,34 +271,45 @@ describe('TestRoutingGuard:canActivate', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Because by default we are not logged in, the guard should
     // redirect us to /login page.
     expect(location.path()).toEqual('/login');
     expect(() => ngMocks.find(LoginComponent)).not.toThrow();
-  }));
+  });
 
-  it('loads dashboard', fakeAsync(() => {
+  it('loads dashboard', async () => {
+    // Set up the LoginService to be logged in BEFORE rendering
+    MockInstance(LoginService, 'isLoggedIn', true);
+
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
-    const loginService = ngMocks.get(LoginService);
-
-    // Letting the guard know we have been logged in.
-    loginService.isLoggedIn = true;
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Because now we are logged in, the guard should let us land on
     // the dashboard.
     expect(location.path()).toEqual('/');
     expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
-  }));
+  });
 });
 ```
+
+## Migration from Angular 20 and earlier
+
+If you are migrating from Angular 20 or earlier, you **must** update your routing guard tests.
+See the [migration guide in the Route documentation](route.md#migration-from-angular-20-and-earlier) for details on:
+
+- Replacing `RouterTestingModule.withRoutes([])` with `provideLocationMocks()`
+- Migrating from `fakeAsync` + `tick()` to `async` + `await fixture.whenStable()`
+
+:::warning
+The `fakeAsync` + `tick()` pattern may not work reliably with Angular 21 routing tests.
+:::
