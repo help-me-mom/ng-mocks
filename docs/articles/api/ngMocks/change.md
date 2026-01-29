@@ -49,4 +49,4 @@ Profit!
 It supports both `FormsModule` and `ReactiveFormsModule`.
 
 Calling `ngMocks.change` also simulates that the user removes focus from the element by triggering a **blur** event. 
-If testing form changes in combination with blue events, it is therefore not necessary to call [`ngMocks.trigger`](trigger.md) after `ngMocks.change`.
+If testing form changes in combination with blur events, it is therefore not necessary to call [`ngMocks.trigger`](trigger.md) after `ngMocks.change`.
