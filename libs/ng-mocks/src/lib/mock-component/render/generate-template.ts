@@ -38,6 +38,7 @@ export default (queries?: Record<keyof any, any>): string => {
     if (!isTemplateRefQuery(query)) {
       continue;
     }
+    // istanbul ignore if @see tests-e2e/src/issue-8634
     if (query.isSignal) {
       continue;
     }
