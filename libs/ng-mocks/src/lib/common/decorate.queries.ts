@@ -26,10 +26,15 @@ const generateFinalQueries = (queries: {
   const scanKeys: string[] = [];
 
   for (const key of Object.keys(queries)) {
-    const query: Query & { ngMetadataName?: string } = queries[key];
-    final.push([key, query]);
+    const query: Query & { ngMetadataName?: string; isSignal?: boolean } = queries[key];
 
-    if (!query.isViewQuery && !isInternalKey(key)) {
+    // istanbul ignore else @see tests-e2e/src/issue-8634
+    if (!query.isSignal) {
+      final.push([key, query]);
+    }
+
+    // istanbul ignore next @see tests-e2e/src/issue-8634
+    if (!query.isViewQuery && !query.isSignal && !isInternalKey(key)) {
       scanKeys.push(key);
       final.push([`__ngMocksVcr_${key}`, cloneVcrQuery(query)]);
     }
