@@ -1,3 +1,10 @@
+## [14.15.1](https://github.com/help-me-mom/ng-mocks/compare/v14.15.0...v14.15.1) (2026-02-04)
+
+
+### Bug Fixes
+
+* new `viewChild` Symbol(SIGNAL) [#8634](https://github.com/help-me-mom/ng-mocks/issues/8634) ([d47c0b6](https://github.com/help-me-mom/ng-mocks/commit/d47c0b67b6fecb3920a6fff3e6a84da5ef367af5))
+
 # [14.15.0](https://github.com/help-me-mom/ng-mocks/compare/v14.14.0...v14.15.0) (2025-12-20)
 
 
