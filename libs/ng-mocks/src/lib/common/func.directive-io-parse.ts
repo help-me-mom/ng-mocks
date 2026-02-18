@@ -8,6 +8,10 @@ export default function (param: DirectiveIo): DirectiveIoParsed {
       return { name };
     }
 
+    if (name + 'Change' === alias) {
+      return { name: alias }; // model output
+    }
+
     return { name, alias };
   }
 
