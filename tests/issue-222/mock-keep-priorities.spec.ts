@@ -9,7 +9,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 // and is replaced with a mock copy in another one.
 @Component({
   selector: 'shared',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'shared',
 })
 class SharedComponent {}
@@ -34,7 +34,7 @@ class KeepModule {}
 
 @Component({
   selector: 'target-222-mock-keep-priorities',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}

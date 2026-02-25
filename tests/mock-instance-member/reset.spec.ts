@@ -10,7 +10,7 @@ import {
 
 @Component({
   selector: 'target-mock-instance-member-reset',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class TargetComponent {

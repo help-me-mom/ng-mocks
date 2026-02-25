@@ -20,14 +20,14 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'actual-empty',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class ActualEmptyComponent {}
 
 @Component({
   selector: 'actual-injection',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class ActualInjectionComponent implements ControlValueAccessor {
@@ -64,7 +64,7 @@ class ActualInjectionComponent implements ControlValueAccessor {
     },
   ],
   selector: 'actual-token',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class ActualTokenComponent implements ControlValueAccessor {
@@ -95,7 +95,7 @@ class ActualTokenComponent implements ControlValueAccessor {
     },
   ],
   selector: '[actualToken]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class ActualTokenDirective implements ControlValueAccessor {
   protected value: any;

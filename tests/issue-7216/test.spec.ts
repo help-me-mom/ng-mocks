@@ -15,7 +15,7 @@ describe('issue-7216', () => {
 
   @Component({
     selector: 'target',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+    standalone: false,
     template: `
       @if (hasChild) {
         <child></child>
@@ -28,7 +28,7 @@ describe('issue-7216', () => {
 
   @Component({
     selector: 'child',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+    standalone: false,
     template: '',
   })
   class ChildComponent {}

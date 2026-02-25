@@ -21,7 +21,7 @@ class TargetService {
 @Directive({
   providers: [TargetService],
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective implements OnInit {
   public constructor(

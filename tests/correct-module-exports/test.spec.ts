@@ -10,14 +10,14 @@ import {
 
 @Component({
   selector: 'internal-correct-module-exports',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'internal',
 })
 class InternalComponent {}
 
 @Component({
   selector: 'external',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'external',
 })
 class ExternalComponent {}

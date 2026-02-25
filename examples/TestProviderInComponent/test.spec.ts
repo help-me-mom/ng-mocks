@@ -12,7 +12,7 @@ class TargetService {
 @Component({
   providers: [TargetService],
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ service.value }}',
 })
 class TargetComponent {

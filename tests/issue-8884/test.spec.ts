@@ -74,7 +74,7 @@ describe('issue-8884', () => {
   describe('classic component without NgIf import in its module', () => {
     @Component({
       selector: 'target-8884',
-      ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+      standalone: false,
       template: `<ng-template [ngTemplateOutlet]="content" />`,
     })
     class Target8884Component {

@@ -10,7 +10,7 @@ import {
 
 @Component({
   selector: 'app-form',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <form [formGroup]="form">
       <input type="text" formGroupName="name" />

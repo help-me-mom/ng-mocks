@@ -24,7 +24,7 @@ class TargetService {}
 
 @Component({
   selector: 'target-4344-with-providers-explicit',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ 1 | number }}',
 })
 class TargetComponent {

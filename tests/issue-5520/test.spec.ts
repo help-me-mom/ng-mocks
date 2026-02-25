@@ -15,7 +15,7 @@ describe('issue-5520', () => {
 
   @Component({
     selector: 'dependency',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+    standalone: false,
     template: '',
   })
   class DependencyComponent {

@@ -14,7 +14,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[tpl]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TplDirective {
   @Input('tpl') public readonly name: string | null = null;
@@ -24,7 +24,7 @@ class TplDirective {
 
 @Directive({
   selector: '[mock]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class MockDirective {
   @ContentChild(TplDirective, {} as never)
@@ -33,7 +33,7 @@ class MockDirective {
 
 @Component({
   selector: 'mock-ng-mocks-render-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class MockComponent {
@@ -48,7 +48,7 @@ class MockComponent {
 
 @Component({
   selector: 'target-ng-mocks-render-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <mock-ng-mocks-render-directive>
       :step:1:

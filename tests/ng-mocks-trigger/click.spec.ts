@@ -22,7 +22,7 @@ try {
 
 @Component({
   selector: 'target-ng-mocks-trigger-click',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: ' <div (click)="clickTag = $event" #element></div> ',
 })
 class TargetComponent implements OnDestroy {

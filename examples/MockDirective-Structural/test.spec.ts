@@ -11,7 +11,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[dependency]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class DependencyDirective {
   @Input('dependency')
@@ -25,7 +25,7 @@ class DependencyDirective {
 
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<span *dependency="value">content</span>',
 })
 class TargetComponent {

@@ -13,7 +13,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[xdTpl]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class XdTplDirective {
   @Input() public readonly xdTpl: 'header' | 'footer' | null = null;
@@ -23,7 +23,7 @@ class XdTplDirective {
 
 @Component({
   selector: 'xd-card-template-ref-by-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'xd-card',
 })
 class XdCardComponent {
@@ -33,7 +33,7 @@ class XdCardComponent {
 
 @Component({
   selector: 'target-template-ref-by-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <xd-card-template-ref-by-directive>
       <ng-template xdTpl="header">My Header</ng-template>

@@ -5,7 +5,7 @@ import { MockModule, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target1-ng-mocks-global-keep-modules',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ name }}',
 })
 class Target1Component {
@@ -18,7 +18,7 @@ class Target1Component {
 
 @Component({
   selector: 'target1-ng-mocks-global-keep-modules',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ name }}',
 })
 class Fake1Component {
@@ -37,7 +37,7 @@ class Target1Module {}
 
 @Component({
   selector: 'target2-ng-mocks-global-keep-modules',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ name }}',
 })
 class Target2Component {
@@ -46,7 +46,7 @@ class Target2Component {
 
 @Component({
   selector: 'normal2-ng-mocks-global-keep-modules',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ name }}',
 })
 class Normal2Component {

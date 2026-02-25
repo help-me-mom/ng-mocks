@@ -54,7 +54,7 @@ export class TargetService {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target-lifecycle-hooks',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 export class TargetComponent

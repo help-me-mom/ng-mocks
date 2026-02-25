@@ -14,7 +14,7 @@ const MY_TOKEN_MULTI = new InjectionToken('MY_TOKEN_MULTI');
 
 @Component({
   selector: 'internal-module-with-tokens',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ tokenSingle | json }} {{ tokenMulti | json }}',
 })
 class TargetComponent {

@@ -13,43 +13,43 @@ import {
 
 @Directive({
   selector: 'base1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Base1Directive {}
 
 @Directive({
   selector: 'base2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Base2Directive {}
 
 @Directive({
   selector: 'base3',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Base3Directive {}
 
 @Directive({
   selector: 'override1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Override1Directive {}
 
 @Directive({
   selector: 'override2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Override2Directive {}
 
 @Directive({
   selector: 'override3',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class Override3Directive {}
 
 @Directive({
   selector: 'div',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class DivDirective {
   @Input() public prop: number | null = null;
@@ -57,11 +57,11 @@ export class DivDirective {
 
 @Directive({
   selector: 'base1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 @Directive({
   selector: 'base2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class BaseDirective {
   @ContentChild(DivDirective, {} as never) public contentChildBase?: DivDirective;
@@ -89,12 +89,12 @@ export class BaseDirective {
 
 @Component({
   selector: 'override1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'override1<ng-content></ng-content>',
 })
 @Component({
   selector: 'override2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'override2<ng-content></ng-content>',
 })
 export class OverrideComponent extends BaseDirective {

@@ -9,7 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[dxTemplate]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class DxTemplateDirective {
   @Input() public readonly dxTemplateOf: string | null = null;

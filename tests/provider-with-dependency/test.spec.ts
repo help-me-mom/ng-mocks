@@ -24,7 +24,7 @@ class ServiceChild {
 
 @Component({
   selector: 'internal-provider-with-dependency',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ child.parent.echo() }}',
 })
 class InternalComponent {

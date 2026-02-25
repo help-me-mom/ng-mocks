@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'pure',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   pure: true,
 })
 export class PurePipe implements PipeTransform {
@@ -18,7 +18,7 @@ export class PurePipe implements PipeTransform {
 
 @Pipe({
   name: 'impure',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   pure: false,
 })
 export class ImpurePipe implements PipeTransform {

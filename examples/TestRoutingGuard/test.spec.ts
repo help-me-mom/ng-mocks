@@ -63,7 +63,7 @@ class MockGuard implements CanActivate {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'login',
 })
 class LoginComponent {
@@ -74,7 +74,7 @@ class LoginComponent {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'dashboard',
 })
 class DashboardComponent {

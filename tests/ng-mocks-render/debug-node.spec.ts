@@ -12,7 +12,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[tpl]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TplDirective {
   @Input('tpl') public readonly name: string | null = null;
@@ -28,7 +28,7 @@ class TplDirective {
     },
   ],
   selector: '[mock]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class MockDirective {
   public constructor(public readonly tpl: TemplateRef<any>) {}
@@ -36,7 +36,7 @@ class MockDirective {
 
 @Component({
   selector: 'target-ng-mocks-render-debug-node',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `<mock-ng-mocks-render-debug-node
     ><ng-template mock
       >rendered-mock</ng-template
@@ -47,7 +47,7 @@ class TargetComponent {}
 
 @Component({
   selector: 'mock-ng-mocks-render-debug-node',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class MockComponent {

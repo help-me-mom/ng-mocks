@@ -31,7 +31,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
     },
   ],
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective implements ControlValueAccessor, Validator {
   public valRegisterOnChange: any;
@@ -72,7 +72,7 @@ class TargetDirective implements ControlValueAccessor, Validator {
 
 @Component({
   selector: 'app-root-167-directive',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<div [formControl]="control" target></div>',
 })
 class RealComponent {
