@@ -181,4 +181,3 @@ describe('TestRoute:Component', () => {
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
   });
 });
-

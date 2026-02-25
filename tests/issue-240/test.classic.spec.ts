@@ -73,7 +73,9 @@ describe('issue-240:classic', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection * 2);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      callsPerDetection * 2,
+    );
 
     // No changes because of spies.
     expect(countPure).toEqual(1);
