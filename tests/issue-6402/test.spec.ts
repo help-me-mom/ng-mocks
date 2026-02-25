@@ -4,8 +4,9 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -27,17 +28,15 @@ class TargetModule {}
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
     beforeEach(() =>
-      // Angular 21 compatibility: Explicitly keep HttpClient to ensure it's not mocked
-      MockBuilder(TargetService, TargetModule)
-        .keep(HttpClient)
-        .replace(HttpClientModule, HttpClientTestingModule),
+      MockBuilder(TargetService, TargetModule).replace(
+        HttpClientModule,
+        HttpClientTestingModule,
+      ),
     );
 
     it('sends /api/config request', () => {
-      // Angular 21 compatibility: Use MockRender() + ngMocks.findInstance() pattern
-      MockRender();
-      const service = ngMocks.findInstance(TargetService);
-      const controller = ngMocks.findInstance(HttpTestingController);
+      const service = TestBed.inject(TargetService);
+      const controller = TestBed.inject(HttpTestingController);
 
       service.getConfig().subscribe();
 
@@ -55,16 +54,12 @@ describe('issue-6402', () => {
         HttpClientTestingModule,
       ),
     );
-    // Angular 21 compatibility: Explicitly keep HttpClient to ensure it's not mocked
-    beforeEach(() =>
-      MockBuilder(TargetService, TargetModule).keep(HttpClient),
-    );
+    beforeEach(() => MockBuilder(TargetService, TargetModule));
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
-      MockRender();
-      const service = ngMocks.findInstance(TargetService);
-      const controller = ngMocks.findInstance(HttpTestingController);
+      const service = TestBed.inject(TargetService);
+      const controller = TestBed.inject(HttpTestingController);
 
       service.getConfig().subscribe();
 
