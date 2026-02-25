@@ -39,9 +39,10 @@ describe('issue-6402', () => {
     });
 
     it('sends /api/config request', () => {
-      MockRender(TargetService);
-      const service = ngMocks.get(TargetService);
-      const controller = ngMocks.get(HttpTestingController);
+      // Angular 21 compatibility: Use MockRender() + ngMocks.findInstance() pattern
+      MockRender();
+      const service = ngMocks.findInstance(TargetService);
+      const controller = ngMocks.findInstance(HttpTestingController);
 
       service.getConfig().subscribe();
 
@@ -70,9 +71,9 @@ describe('issue-6402', () => {
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
-      MockRender(TargetService);
-      const service = ngMocks.get(TargetService);
-      const controller = ngMocks.get(HttpTestingController);
+      MockRender();
+      const service = ngMocks.findInstance(TargetService);
+      const controller = ngMocks.findInstance(HttpTestingController);
 
       service.getConfig().subscribe();
 
