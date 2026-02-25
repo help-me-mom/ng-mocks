@@ -49,6 +49,8 @@ describe('issue-240:real', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection * 2);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      callsPerDetection * 2,
+    );
   });
 });

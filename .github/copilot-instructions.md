@@ -48,20 +48,20 @@ npm run build
 
 Each top-level folder maps to a public API surface:
 
-| Folder | Purpose |
-|---|---|
-| `mock-builder/` | `MockBuilder` — fluent API for `TestBed` configuration with mocking |
-| `mock-component/` | `MockComponent` — auto-generates mock components |
-| `mock-directive/` | `MockDirective` |
-| `mock-pipe/` | `MockPipe` |
-| `mock-module/` | `MockModule` |
-| `mock-service/` | `MockService` |
-| `mock-provider/` | `MockProvider` |
-| `mock-render/` | `MockRender` / `MockRenderFactory` — renders components with minimal setup |
-| `mock-instance/` | `MockInstance` — sets up spy return values / custom implementations per test |
-| `mock-helper/` | `ngMocks.*` helper API (find, input, output, trigger, click, crawl, etc.) |
-| `common/` | Shared internals: reflection, Angular metadata, tokens, type guards |
-| `resolve/` | Dependency resolution logic used by MockBuilder |
+| Folder            | Purpose                                                                      |
+| ----------------- | ---------------------------------------------------------------------------- |
+| `mock-builder/`   | `MockBuilder` — fluent API for `TestBed` configuration with mocking          |
+| `mock-component/` | `MockComponent` — auto-generates mock components                             |
+| `mock-directive/` | `MockDirective`                                                              |
+| `mock-pipe/`      | `MockPipe`                                                                   |
+| `mock-module/`    | `MockModule`                                                                 |
+| `mock-service/`   | `MockService`                                                                |
+| `mock-provider/`  | `MockProvider`                                                               |
+| `mock-render/`    | `MockRender` / `MockRenderFactory` — renders components with minimal setup   |
+| `mock-instance/`  | `MockInstance` — sets up spy return values / custom implementations per test |
+| `mock-helper/`    | `ngMocks.*` helper API (find, input, output, trigger, click, crawl, etc.)    |
+| `common/`         | Shared internals: reflection, Angular metadata, tokens, type guards          |
+| `resolve/`        | Dependency resolution logic used by MockBuilder                              |
 
 ### File naming conventions inside `lib/`
 

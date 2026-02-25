@@ -1,4 +1,5 @@
 import { VERSION } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { ImpurePipe, PurePipe } from './fixtures';
