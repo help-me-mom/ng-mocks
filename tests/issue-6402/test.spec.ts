@@ -1,7 +1,8 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -28,10 +29,10 @@ class TargetModule {}
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
     beforeEach(() =>
-      MockBuilder(TargetService, TargetModule).replace(
-        HttpClientModule,
-        HttpClientTestingModule,
-      ),
+      MockBuilder(TargetService, TargetModule)
+        .replace(HttpClientModule, HttpClientTestingModule)
+        .provide(provideHttpClient())
+        .provide(provideHttpClientTesting()),
     );
 
     it('sends /api/config request', () => {
@@ -54,7 +55,11 @@ describe('issue-6402', () => {
         HttpClientTestingModule,
       ),
     );
-    beforeEach(() => MockBuilder(TargetService, TargetModule));
+    beforeEach(() =>
+      MockBuilder(TargetService, TargetModule)
+        .provide(provideHttpClient())
+        .provide(provideHttpClientTesting()),
+    );
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
