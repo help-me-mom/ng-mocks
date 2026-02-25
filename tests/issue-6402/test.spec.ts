@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { Injectable, NgModule, VERSION } from '@angular/core';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -39,10 +39,8 @@ describe('issue-6402', () => {
     });
 
     it('sends /api/config request', () => {
-      // Angular 21 compatibility: Use MockRender() + ngMocks.findInstance() pattern
-      MockRender();
-      const service = ngMocks.findInstance(TargetService);
-      const controller = ngMocks.findInstance(HttpTestingController);
+      const service = TestBed.inject(TargetService);
+      const controller = TestBed.inject(HttpTestingController);
 
       service.getConfig().subscribe();
 
@@ -71,9 +69,8 @@ describe('issue-6402', () => {
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
-      MockRender();
-      const service = ngMocks.findInstance(TargetService);
-      const controller = ngMocks.findInstance(HttpTestingController);
+      const service = TestBed.inject(TargetService);
+      const controller = TestBed.inject(HttpTestingController);
 
       service.getConfig().subscribe();
 
