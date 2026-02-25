@@ -1,3 +1,4 @@
+import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockPipe, MockRender, ngMocks } from 'ng-mocks';
@@ -27,6 +28,11 @@ describe('issue-240:classic', () => {
   );
 
   it('mocks impure pipes correctly', () => {
+    // In Angular 21+, fixture.detectChanges() uses ChangeDetectorRef.detectChanges()
+    // which triggers impure pipes once per call instead of twice.
+    const isA21Plus = Number.parseInt(VERSION.major, 10) >= 21;
+    const callsPerDetection = isA21Plus ? 1 : 2;
+
     const fixture = MockRender(
       `
         "pure:{{ "str" | pure }}"
@@ -40,7 +46,7 @@ describe('issue-240:classic', () => {
       '"impure:impure"',
     );
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(2);
+    expect(countImpure).toEqual(isA21Plus ? 1 : 2);
 
     const pure = ngMocks.findInstance(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
@@ -63,14 +69,14 @@ describe('issue-240:classic', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(4);
+    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection * 2);
 
     // No changes because of spies.
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(2);
+    expect(countImpure).toEqual(isA21Plus ? 1 : 2);
   });
 });

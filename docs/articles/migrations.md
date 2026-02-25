@@ -4,11 +4,43 @@ description: Critical changes to consider during an updating process to the late
 sidebar_label: Updating to the latest
 ---
 
-Usually, you can use the latest version of `ng-mocks` with any [Angular 5+ application](index.md).
+Usually, you can use the latest version of `ng-mocks` with any [Angular 17+ application](index.md).
 
 Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
+
+## From 20 to 21
+
+### Routing tests
+
+`RouterTestingModule` is deprecated in Angular 21. Use `provideLocationMocks()` from `@angular/common/testing` instead,
+and replace `fakeAsync` + `tick()` with `async` + `await fixture.whenStable()`.
+
+```ts
+// Before (Angular 20 and earlier)
+beforeEach(() =>
+  MockBuilder(
+    [RouterModule, RouterTestingModule.withRoutes([]), NG_MOCKS_ROOT_PROVIDERS],
+    TargetModule,
+  ),
+);
+it('test', fakeAsync(() => {
+  /* ... */
+  tick();
+}));
+
+// After (Angular 21+)
+beforeEach(() =>
+  MockBuilder([RouterModule, NG_MOCKS_ROOT_PROVIDERS], TargetModule).provide(
+    provideLocationMocks(),
+  ),
+);
+it('test', async () => {
+  /* ... */
+  await fixture.whenStable();
+});
+```
 
 ## From 19 to 20
 

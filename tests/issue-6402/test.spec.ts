@@ -1,7 +1,8 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { Injectable, NgModule, VERSION } from '@angular/core';
 

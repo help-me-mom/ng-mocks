@@ -1,3 +1,4 @@
+import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockRender, ngMocks } from 'ng-mocks';
@@ -13,6 +14,11 @@ describe('issue-240:real', () => {
   );
 
   it('calls pipes differently', () => {
+    // In Angular 21+, fixture.detectChanges() uses ChangeDetectorRef.detectChanges()
+    // which triggers impure pipes once per call instead of twice.
+    const callsPerDetection =
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2;
+
     const fixture = MockRender(
       `
         "pure:{{ "str" | pure }}"
@@ -39,10 +45,10 @@ describe('issue-240:real', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(4);
+    expect(impure.transform).toHaveBeenCalledTimes(callsPerDetection * 2);
   });
 });
