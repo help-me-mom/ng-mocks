@@ -5,7 +5,7 @@ import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
 @Directive({
   selector: 'target-2087',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class MockDirective {
   public readonly boolean = false;
@@ -15,7 +15,7 @@ class MockDirective {
 
 @Component({
   selector: 'target-2087',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class TargetComponent {

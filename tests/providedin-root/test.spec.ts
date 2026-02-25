@@ -29,7 +29,7 @@ class Service {
 
 @Component({
   selector: 'target-providedin-root',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: ':{{ service.value }}:{{ token }}:{{localeId}}:',
 })
 class TargetComponent {

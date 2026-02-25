@@ -13,14 +13,14 @@ import {
 
 @Component({
   selector: 'modal',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'modal',
 })
 class ModalComponent {}
 
 @Component({
   selector: 'target-736',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent implements OnInit {

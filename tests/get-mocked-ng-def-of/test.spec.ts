@@ -18,7 +18,7 @@ import {
 
 @Pipe({
   name: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetPipe implements PipeTransform {
   protected name = 'pipe:';
@@ -30,26 +30,26 @@ class TargetPipe implements PipeTransform {
 
 @Component({
   selector: 'target-get-mocked-ng-def-of',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}
 
 @Directive({
   selector: 'target-get-mocked-ng-def-of',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective {}
 
 @Directive({
   selector: 'real',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class RealDirective {}
 
 @Directive({
   selector: 'side',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class SideDirective {}
 

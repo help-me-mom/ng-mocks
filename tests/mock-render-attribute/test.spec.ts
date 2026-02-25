@@ -9,7 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[test]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective {
   constructor(@Attribute('test') public readonly test: string) {}
@@ -17,7 +17,7 @@ class TargetDirective {
 
 @Component({
   selector: 'target-mock-render-attribute',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `{{ test }}`,
 })
 class TargetComponent extends TargetDirective {

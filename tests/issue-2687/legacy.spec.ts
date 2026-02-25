@@ -54,21 +54,21 @@ class TargetComponent {}
 
 @Component({
   selector: 'render-standalone-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<standalone></standalone>',
 })
 class RenderStandaloneComponentComponent {}
 
 @Component({
   selector: 'render-standalone-pipe',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ null | standalone }}',
 })
 class RenderStandalonePipeComponent {}
 
 @Component({
   selector: 'render-standalone-service',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class RenderStandaloneServiceComponent {
@@ -77,7 +77,7 @@ class RenderStandaloneServiceComponent {
 
 @Component({
   selector: 'render-target-component',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<target-2687-legacy></target-2687-legacy>',
 })
 class RenderTargetComponentComponent {}

@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "target": "ES2019"
-  },
-  "angularCompilerOptions": {
-    "enableIvy": false
-  }
-}

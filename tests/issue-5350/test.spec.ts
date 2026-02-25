@@ -21,7 +21,7 @@ describe('issue-5350', () => {
   }
 
   @Directive({
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+    standalone: false,
   } as never)
   class TargetBase {
     @Input({
@@ -34,7 +34,7 @@ describe('issue-5350', () => {
 
   @Component({
     selector: 'target',
-    ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+    standalone: false,
     template: '{{ input1 }}{{ input2 }}',
   })
   class TargetComponent extends TargetBase {

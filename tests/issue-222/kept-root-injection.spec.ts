@@ -43,7 +43,7 @@ class KeepModule {
 
 @Component({
   selector: 'target-222-kept-root-injection',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}

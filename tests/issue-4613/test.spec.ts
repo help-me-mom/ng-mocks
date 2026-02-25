@@ -8,7 +8,7 @@ class TargetService {}
 
 @Component({
   selector: 'target-4613',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ service.constructor.name }}',
 })
 class TargetComponent {

@@ -19,7 +19,7 @@ class TargetClass {}
 
 @Pipe({
   name: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetPipe implements PipeTransform {
   public transform(value: number): string {
@@ -29,14 +29,14 @@ class TargetPipe implements PipeTransform {
 
 @Directive({
   selector: 'target-1168',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective {}
 
 @Component({
   selector: 'target-1168',
   template: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetComponent {}
 

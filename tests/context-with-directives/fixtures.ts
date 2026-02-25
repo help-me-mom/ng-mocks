@@ -2,7 +2,7 @@ import { AfterContentInit, Component, ContentChildren, Directive, Input, QueryLi
 
 @Directive({
   selector: '[type]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class CustomTypeDirective {
   @Input() public type = '';
@@ -12,7 +12,7 @@ export class CustomTypeDirective {
 
 @Component({
   selector: 'custom-root',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <div *ngIf="template1" class="template">
       <ng-container *ngTemplateOutlet="template; context: { $implicit: context }"></ng-container>

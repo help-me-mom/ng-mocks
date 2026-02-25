@@ -32,7 +32,7 @@ class TargetModule {
 
 @Component({
   selector: 'target-142',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}

@@ -16,7 +16,7 @@ interface ITargetContext {
 // it renders every item as a new row.
 @Directive({
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective {
   public constructor(

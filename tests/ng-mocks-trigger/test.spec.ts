@@ -21,7 +21,7 @@ try {
 
 @Component({
   selector: 'target-ng-mocks-trigger',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <input
       [formControl]="control"

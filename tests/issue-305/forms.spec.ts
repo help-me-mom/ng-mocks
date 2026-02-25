@@ -10,7 +10,7 @@ import {
 
 @Component({
   selector: 'target-305-forms',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <input data-testid="inputControl" [(ngModel)]="value" />
   `,

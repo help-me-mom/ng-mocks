@@ -10,7 +10,7 @@ class ComponentService {}
 
 @Component({
   selector: 'target-ng-mocks-get',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
   providers: [ComponentService],
 })
