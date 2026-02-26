@@ -1,6 +1,9 @@
 /* eslint-disable max-lines-per-function */
 
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 import { Config } from 'karma';
 import { executablePath } from 'puppeteer';
