@@ -217,9 +217,10 @@ jobs:
           root: dist
           paths:
             - .
-      - run:
-          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
-          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
+      # TODO fix this one day
+      #      - run:
+      #          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
+      #          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
       - run:
           name: Collecting https://codecov.io/gh/help-me-mom/ng-mocks
           command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
