@@ -1,26 +1,4 @@
-// ...existing code...
-    reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage-istanbul'])],
-    singleRun: true,
-    webpack: {
-      devtool: process.env.WITH_COVERAGE === undefined ? 'eval-source-map' : 'inline-source-map',
-      module: {
-        rules: [
-          ...(process.env.WITH_COVERAGE === undefined
-            ? []
-            : [
-                {
-                  enforce: 'post',
-                  exclude: [/\.spec\.ts$/, /\.fixtures\.ts$/],
-                  include: path.join(__dirname, 'libs/ng-mocks/src'),
-                  test: /\.tsx?$/,
-                  use: {
-                    loader: 'coverage-istanbul-loader',
-                  },
-                },
-              ]),
-          {
-            test: /\.tsx?$/,
-// ...existing code...{
+{
   "name": "ng-mocks",
   "version": "0.0.0",
   "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests. It provides shallow rendering, precise stubs to fake child dependencies. ng-mocks works with Angular 17 18 19 20 21, jasmine and jest.",

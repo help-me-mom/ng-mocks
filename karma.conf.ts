@@ -97,15 +97,16 @@ export default (config: Config) => {
     reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage-istanbul'])],
     singleRun: true,
     webpack: {
-      devtool: 'eval-source-map',
+      devtool: process.env.WITH_COVERAGE === undefined ? 'eval-source-map' : 'inline-source-map',
       module: {
         rules: [
           ...(process.env.WITH_COVERAGE === undefined
             ? []
             : [
                 {
+                  enforce: 'post' as const,
                   exclude: [/\.spec\.ts$/, /\.fixtures\.ts$/],
-                  include: /\/libs\/ng-mocks\/src\//,
+                  include: path.join(__dirname, 'libs/ng-mocks/src'),
                   test: /\.tsx?$/,
                   use: {
                     loader: 'coverage-istanbul-loader',
