@@ -8,6 +8,12 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import {
+  clearMock,
+  createMock,
+  mockReturnValue,
+} from '../../tests/mock-helpers';
+
 @Injectable()
 class TargetService {
   public prop = 0;
@@ -46,12 +52,13 @@ describe('examples:performance', () => {
     beforeAll(() => {
       MockInstance(TargetService, {
         init: instance => {
-          instance.method =
-            typeof jest === 'undefined'
-              ? jasmine.createSpy().and.returnValue(5)
-              : jest.fn().mockReturnValue(5);
+          instance.method = mockReturnValue(createMock(), 5);
+          // in case of jasmine
+          // instance.method = jasmine.createSpy().and.returnValue(5);
           // in case of jest
           // instance.method = jest.fn().mockReturnValue(5);
+          // in case of vitest
+          // instance.method = vi.fn().mockReturnValue(5);
           instance.prop = 123;
         },
       });
@@ -90,24 +97,25 @@ describe('examples:performance', () => {
     // allows its pointer being the same between tests
     // and this let ngMocks.faster do its job.
     const mock = {
-      method:
-        typeof jest === 'undefined'
-          ? jasmine.createSpy().and.returnValue(5)
-          : jest.fn().mockReturnValue(5),
+      method: mockReturnValue(createMock(), 5),
+      // in case of jasmine
+      // method: jasmine.createSpy().and.returnValue(5),
       // in case of jest
       // method: jest.fn().mockReturnValue(5),
+      // in case of vitest
+      // method: vi.fn().mockReturnValue(5),
       prop: 123,
     };
 
     // Do not forget to reset the spy between runs.
     beforeEach(() => {
-      if (typeof jest === 'undefined') {
-        (mock.method as jasmine.Spy).calls.reset();
-      } else {
-        mock.method = jest.fn().mockReturnValue(5);
-      }
+      clearMock(mock.method);
+      // in case of jasmine
+      // method: mock.method.and.reset()
       // in case of jest
-      // mock.method = jest.fn().mockReturnValue(5);
+      // method: mock.method.mockClear(),
+      // in case of vitest
+      // method: mock.method.mockClear(),
       mock.prop = 123;
     });
 

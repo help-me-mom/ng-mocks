@@ -23,6 +23,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock } from '../../tests/mock-helpers';
+
 // remove with A5
 const EMPTY = new Subject<any>();
 EMPTY.complete();
@@ -155,7 +157,7 @@ describe('profile:classic', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      createMock(),
     );
 
     // Renders <profile [profile]="params.profile">

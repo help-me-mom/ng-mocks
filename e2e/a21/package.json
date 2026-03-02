@@ -7,12 +7,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "npm run test:jasmine && npm run test:jest",
+    "test": "npm run test:jasmine && npm run test:jest && npm run test:vitest",
     "test:debug": "npm run test:jasmine:debug",
     "test:jasmine": "ng test --ts-config ./tsconfig.json --progress=false --no-watch",
     "test:jasmine:debug": "npm run test:jasmine -- --watch --browsers Chrome",
     "test:jest": "jest --config jest.config.ts",
-    "test:jest:debug": "jest -i --watch"
+    "test:jest:debug": "jest -i --watch",
+    "test:vitest": "ng run a21:vitest --progress=false --no-watch",
+    "test:vitest:debug": "npm run test:vitest -- --watch"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +40,7 @@
     "jest": "30.2.0",
     "jest-environment-jsdom": "30.2.0",
     "jest-preset-angular": "16.1.1",
+    "jsdom": "28.1.0",
     "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
     "karma-coverage": "2.2.1",
@@ -47,7 +50,8 @@
     "npm": "11.11.0",
     "puppeteer": "24.37.5",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
   },
   "engines": {
     "npm": "11.11.0"

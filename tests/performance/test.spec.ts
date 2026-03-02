@@ -4,6 +4,8 @@ import { Component, Injectable, NgModule } from '@angular/core';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Injectable()
 class TargetService {
   public count = 0;
@@ -36,10 +38,7 @@ describe('performance:correct', () => {
 
   beforeAll(() => {
     backupWarn = console.warn;
-    console.warn =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(console.log)
-        : jest.fn(console.log);
+    console.warn = createMock(console.log);
   });
 
   afterAll(() => {
@@ -67,8 +66,7 @@ describe('performance:wrong', () => {
 
   beforeAll(() => {
     backupWarn = console.warn;
-    console.warn =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    console.warn = createMock();
   });
 
   afterAll(() => {

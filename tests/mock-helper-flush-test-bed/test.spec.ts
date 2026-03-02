@@ -2,6 +2,8 @@ import { getTestBed } from '@angular/core/testing';
 
 import { ngMocks } from 'ng-mocks';
 
+import { createMock, mockReturnValue } from '../mock-helpers';
+
 describe('mock-helper-flush-test-bed', () => {
   let originalShouldTearDownTestingModule: any;
   let originalTearDownTestingModule: any;
@@ -23,15 +25,12 @@ describe('mock-helper-flush-test-bed', () => {
   it('should execute tearDownTestingModule', () => {
     const testBed: any = getTestBed();
 
-    testBed.shouldTearDownTestingModule =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy('spyShouldTearDown').and.returnValue(true)
-        : jest.fn().mockReturnValue(true);
+    testBed.shouldTearDownTestingModule = mockReturnValue(
+      createMock('spyShouldTearDown'),
+      true,
+    );
 
-    testBed.tearDownTestingModule =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy('spyTearDown')
-        : jest.fn();
+    testBed.tearDownTestingModule = createMock('spyTearDown');
 
     ngMocks.flushTestBed();
     expect(testBed.tearDownTestingModule).toHaveBeenCalledTimes(1);
@@ -40,17 +39,12 @@ describe('mock-helper-flush-test-bed', () => {
   it('should not execute tearDownTestingModule', () => {
     const testBed: any = getTestBed();
 
-    testBed.shouldTearDownTestingModule =
-      typeof jest === 'undefined'
-        ? jasmine
-            .createSpy('spyShouldTearDown')
-            .and.returnValue(false)
-        : jest.fn().mockReturnValue(false);
+    testBed.shouldTearDownTestingModule = mockReturnValue(
+      createMock('spyShouldTearDown'),
+      false,
+    );
 
-    testBed.tearDownTestingModule =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy('spyTearDown')
-        : jest.fn();
+    testBed.tearDownTestingModule = createMock('spyTearDown');
 
     ngMocks.flushTestBed();
     expect(testBed.tearDownTestingModule).not.toHaveBeenCalled();

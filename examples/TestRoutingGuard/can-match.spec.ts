@@ -25,6 +25,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import funcHasVitest from '../../tests/func.has-vitest';
+
 // A simple service simulating login check.
 // It will be replaced with its mock copy.
 @Injectable()
@@ -118,48 +120,96 @@ describe('TestRoutingGuard:canMatch', () => {
       .keep(canMatchGuard);
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('redirects to login', fakeAsync(() => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+'); // TODO pending
+  if (funcHasVitest()) {
+    // Since Angular has dropped support for fakeAsync when using
+    // vitest, we need to test using async tests as intended.
+    it('redirects to login', async () => {
+      if (Number.parseInt(VERSION.major, 10) < 7) {
+        pending('Need Angular 7+'); // TODO pending
 
-      return;
-    }
+        return;
+      }
 
-    const fixture = MockRender(RouterOutlet, {});
-    const router = ngMocks.get(Router);
-    const location = ngMocks.get(Location);
+      const fixture = MockRender(RouterOutlet, {});
+      const router = ngMocks.get(Router);
+      const location = ngMocks.get(Location);
 
-    // First we need to initialize navigation.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // Because by default we are not logged, the guard should
-    // redirect us /login page.
-    expect(location.path()).toEqual('/login');
-    expect(() => ngMocks.find(LoginComponent)).not.toThrow();
-  }));
+      // Because by default we are not logged, the guard should
+      // redirect us /login page.
+      expect(location.path()).toEqual('/login');
+      expect(() => ngMocks.find(LoginComponent)).not.toThrow();
+    });
 
-  it('loads dashboard', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet, {});
-    const router = ngMocks.get(Router);
-    const location = ngMocks.get(Location);
-    const loginService = ngMocks.get(LoginService);
+    it('loads dashboard', async () => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router = ngMocks.get(Router);
+      const location = ngMocks.get(Location);
+      const loginService = ngMocks.get(LoginService);
 
-    // Letting the guard know we have been logged in.
-    loginService.isLoggedIn = true;
+      // Letting the guard know we have been logged in.
+      loginService.isLoggedIn = true;
 
-    // First we need to initialize navigation.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // Because now we are logged in, the guard should let us land on
-    // the dashboard.
-    expect(location.path()).toEqual('/');
-    expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
-  }));
+      // Because now we are logged in, the guard should let us land on
+      // the dashboard.
+      expect(location.path()).toEqual('/');
+      expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
+    });
+  } else {
+    // It is important to run routing tests in fakeAsync.
+    it('redirects to login', fakeAsync(() => {
+      if (Number.parseInt(VERSION.major, 10) < 7) {
+        pending('Need Angular 7+'); // TODO pending
+
+        return;
+      }
+
+      const fixture = MockRender(RouterOutlet, {});
+      const router = ngMocks.get(Router);
+      const location = ngMocks.get(Location);
+
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // Because by default we are not logged, the guard should
+      // redirect us /login page.
+      expect(location.path()).toEqual('/login');
+      expect(() => ngMocks.find(LoginComponent)).not.toThrow();
+    }));
+
+    it('loads dashboard', fakeAsync(() => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router = ngMocks.get(Router);
+      const location = ngMocks.get(Location);
+      const loginService = ngMocks.get(LoginService);
+
+      // Letting the guard know we have been logged in.
+      loginService.isLoggedIn = true;
+
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // Because now we are logged in, the guard should let us land on
+      // the dashboard.
+      expect(location.path()).toEqual('/');
+      expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
+    }));
+  }
 });

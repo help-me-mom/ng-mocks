@@ -9,6 +9,8 @@ import { fakeAsync, tick } from '@angular/core/testing';
 
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
+import funcHasVitest from '../func.has-vitest';
+
 @Component({
   selector: 'target-fake-async',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -38,6 +40,16 @@ class TargetComponent implements OnInit, OnDestroy {
 
 // The goal is to ensure that nothing is broken with fakeAsync.
 describe('fake-async', () => {
+  if (funcHasVitest()) {
+    // Angular has completely dropped support for fakeAsync when
+    // using vitest. So we have to skip all tests in this case.
+    it('skips tests because of vitest', () => {
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   let calls = 0;
 
   const factory = MockRenderFactory(TargetComponent, ['value']);

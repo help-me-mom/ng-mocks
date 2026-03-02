@@ -15,6 +15,8 @@ import { RouterModule } from '@angular/router';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../../tests/mock-helpers';
+
 @Pipe({
   name: 'translate',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -152,10 +154,13 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const logoClickSpy = createMock();
+    // in case of jasmine
+    // const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
+    // in case of vitest
+    // const logoClickSpy = vi.fn();
 
     // Instead of TestBed.createComponent(AppComponent) in beforeEach
     // MockRender might be used directly in tests.

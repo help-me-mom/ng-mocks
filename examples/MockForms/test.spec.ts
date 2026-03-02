@@ -12,6 +12,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock } from '../../tests/mock-helpers';
+
 @Component({
   providers: [
     {
@@ -67,12 +69,13 @@ describe('MockForms', () => {
   it('sends the correct value to the mock form component', async () => {
     // That is our spy on writeValue calls.
     // With auto spy this code is not needed.
-    const writeValue =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy('writeValue')
-        : jest.fn();
+    const writeValue = createMock('writeValue');
+    // in case of jasmine
+    // const writeValue = jasmine.createSpy('writeValue');
     // in case of jest
-    // const writeValue = jest.fn();
+    // const writeValue = jest.fn().mockName('writeValue');
+    // in case of vitest
+    // const writeValue = vi.fn().mockName('writeValue');
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.

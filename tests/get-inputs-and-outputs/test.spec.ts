@@ -1,5 +1,7 @@
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 import {
   Target2Directive,
   Target3Directive,
@@ -14,22 +16,13 @@ describe('get-inputs-and-outputs', () => {
     const params = {
       input1: '1',
       input2: '2',
-      output1:
-        typeof jest === 'undefined'
-          ? jasmine.createSpy('output1')
-          : jest.fn().mockName('output1'),
+      output1: createMock('output1'),
       // in case of jest
       // output1: jest.fn().mockName('output1'),
-      output2:
-        typeof jest === 'undefined'
-          ? jasmine.createSpy('output2')
-          : jest.fn().mockName('output2'),
+      output2: createMock('output2'),
       // in case of jest
       // output2: jest.fn().mockName('output2'),
-      output3:
-        typeof jest === 'undefined'
-          ? jasmine.createSpy('output3')
-          : jest.fn().mockName('output3'),
+      output3: createMock('output3'),
       // in case of jest
       // output3: jest.fn().mockName('output3'),
     };

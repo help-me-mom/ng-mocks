@@ -3,6 +3,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
+import {
+  createMock,
+  mockReturnValue,
+} from '../../tests/mock-helpers';
+
 @Component({
   selector: 'route',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -42,26 +47,16 @@ describe('MockActivatedRoute', () => {
 
   it('uses paramId from ActivatedRoute', () => {
     // Let's set the params of the snapshot.
-    if (typeof jest === 'undefined') {
-      MockInstance(
-        ActivatedRoute,
-        'snapshot',
-        jasmine.createSpy(),
-        'get',
-      ).and.returnValue({
-        paramMap: new Map([['paramId', 'paramValue']]),
-      });
-    } else {
-      // in case of jest.
-      MockInstance(
-        ActivatedRoute,
-        'snapshot',
-        jest.fn(),
-        'get',
-      ).mockReturnValue({
-        paramMap: new Map([['paramId', 'paramValue']]),
-      });
-    }
+    mockReturnValue(
+      MockInstance(ActivatedRoute, 'snapshot', createMock(), 'get'),
+      { paramMap: new Map([['paramId', 'paramValue']]) },
+    );
+    // in case of jasmine
+    // MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get').and.returnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
+    // in case of jest
+    // MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get').mockReturnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
+    // in case of vitest
+    // MockInstance(ActivatedRoute, 'snapshot', vi.fn(), 'get').mockReturnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
 
     // Rendering RouteComponent.
     const fixture = MockRender(RouteComponent);

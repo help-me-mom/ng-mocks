@@ -10,6 +10,8 @@ import {
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 // @TODO remove with A5 support
 const injectableRootServiceArgs = [
   {
@@ -115,8 +117,7 @@ describe('issue-2647:ignore', () => {
   beforeAll(() => (consoleWarn = console.warn));
 
   beforeEach(() => {
-    console.warn =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    console.warn = createMock();
   });
 
   afterAll(() => {

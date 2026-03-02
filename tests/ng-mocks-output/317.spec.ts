@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-ng-mocks-output-317',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -15,8 +17,7 @@ describe('ng-mocks-output:317', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('finds by css selector', () => {
-    const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spy = createMock();
     MockRender(
       '<div data-label="div">1</div><target-ng-mocks-output-317 data-target="target" (update)="spy($event)"></target-ng-mocks-output-317>',
       { spy },
