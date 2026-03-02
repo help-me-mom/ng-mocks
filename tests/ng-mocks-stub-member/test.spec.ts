@@ -2,6 +2,12 @@ import { Injectable, NgModule } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import {
+  createMock,
+  mockReturnValue,
+  mockThrowError,
+} from '../mock-helpers';
+
 @Injectable()
 class TargetService {
   public readonly name = 'target';
@@ -38,12 +44,8 @@ describe('ng-mocks-stub-member', () => {
     expect(service.echo()).toEqual('mockEcho');
 
     // checking getters and setters
-    const getSpy =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue('spy')
-        : jest.fn().mockReturnValue('spy');
-    const setSpy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const getSpy = mockReturnValue(createMock(), 'spy');
+    const setSpy = createMock();
     ngMocks.stubMember(service, 'name', getSpy, 'get');
     ngMocks.stubMember(service, 'name', setSpy, 'set');
 
@@ -77,9 +79,7 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(
       service,
       'echo',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue('spy')
-        : jest.fn().mockReturnValue('spy'),
+      mockReturnValue(createMock(), 'spy'),
     );
     expect(service.echo()).toEqual('spy');
 
@@ -88,9 +88,7 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(
       service,
       'name',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue('spy')
-        : jest.fn().mockReturnValue('spy'),
+      mockReturnValue(createMock(), 'spy'),
       'get',
     );
     expect(service.name).toEqual('spy');
@@ -99,11 +97,7 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(
       service,
       'name',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.throwError('spy')
-        : jest.fn(() => {
-            throw new Error('spy');
-          }),
+      mockThrowError(createMock(), 'spy'),
       'set',
     );
     try {
@@ -118,9 +112,7 @@ describe('ng-mocks-stub-member', () => {
     ngMocks.stubMember(
       service,
       'norm',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue('spy')
-        : jest.fn().mockReturnValue('spy'),
+      mockReturnValue(createMock(), 'spy'),
       'get',
     );
     expect(service.norm).toEqual('spy');

@@ -7,6 +7,8 @@ import {
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-mock-render-param-ref',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -34,8 +36,7 @@ describe('mock-render-param-ref', () => {
   it('keeps refs w/ params', () => {
     const params = {
       input: 'v1',
-      output:
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      output: createMock(),
     };
 
     // By default params are set to the render component.
@@ -62,8 +63,7 @@ describe('mock-render-param-ref', () => {
 
     // Let's assert that spies have the same behavior.
     const currentSpy = params.output;
-    const newSpy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const newSpy = createMock();
     params.output = newSpy;
     fixture.point.componentInstance.emit();
     expect(currentSpy).not.toHaveBeenCalledWith('v3');
@@ -78,16 +78,14 @@ describe('mock-render-param-ref', () => {
       fixture.componentInstance,
     );
 
-    const spyOutput =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spyOutput = createMock();
     fixture.componentInstance.output.subscribe(spyOutput);
     fixture.componentInstance.input = 'v1';
     fixture.detectChanges();
     fixture.componentInstance.emit();
     expect(spyOutput).toHaveBeenCalledWith('v1');
 
-    const spyThis =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spyThis = createMock();
     fixture.componentInstance.outputThis.subscribe(spyThis);
     fixture.componentInstance.emitThis();
     expect(spyThis).toHaveBeenCalledWith(

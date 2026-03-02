@@ -55,9 +55,17 @@ describe('MockRender', () => {
 
   it('renders template', () => {
     const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
+    // in case of jasmine
+    // const spy = jasmine.createSpy();
     // in case of jest
     // const spy = jest.fn();
+    // in case of vitest
+    // const spy = vi.fn();
 
     const fixture = MockRender(
       `
@@ -92,9 +100,17 @@ describe('MockRender', () => {
 
   it('renders inputs and outputs automatically', () => {
     const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
+    // in case of jasmine
+    // const spy = jasmine.createSpy();
     // in case of jest
-    // const logoClickSpy = jest.fn();
+    // const spy = jest.fn();
+    // in case of vitest
+    // const spy = vi.fn();
 
     // Generates a template like:
     // <target [value1]="value1" [value2]="value2"

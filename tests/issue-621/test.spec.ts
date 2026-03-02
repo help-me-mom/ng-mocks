@@ -23,18 +23,14 @@ class TargetComponent {
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/621
 describe('issue-621', () => {
+  const factory = MockRenderFactory(TargetComponent, [
+    'update',
+    'value',
+  ]);
+
   ngMocks.faster();
-
   beforeAll(() => MockBuilder(TargetComponent));
-
-  let factory: MockRenderFactory<TargetComponent, 'update' | 'value'>;
-  beforeAll(
-    () =>
-      (factory = MockRenderFactory(TargetComponent, [
-        'update',
-        'value',
-      ])),
-  );
+  beforeAll(() => factory.configureTestBed());
 
   it('does not proxy update inout', () => {
     const fixture = factory();

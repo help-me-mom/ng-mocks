@@ -16,7 +16,7 @@
     "target": "ES2022",
     "module": "preserve",
     "useDefineForClassFields": false,
-    "types": ["jasmine", "jest", "node"]
+    "types": ["jasmine", "jest", "vitest/globals", "node"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -24,6 +24,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts", "src/setup-vitest.ts"],
+  "include": ["jest.config.ts", "vitest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }

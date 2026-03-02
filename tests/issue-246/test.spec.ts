@@ -20,6 +20,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock, mockReturnValue } from '../mock-helpers';
+
 @Component({
   providers: [
     {
@@ -148,9 +150,7 @@ describe('issue-246:real', () => {
     ngMocks.stubMember(
       ngMocks.findInstance(TargetDirective),
       'validate',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue(null)
-        : jest.fn().mockReturnValue(null),
+      mockReturnValue(createMock(), null),
     );
     control.updateValueAndValidity();
     await fixture.whenStable();
@@ -219,17 +219,12 @@ describe('issue-246:mock', () => {
       ngMocks.stubMember(
         directiveAsync,
         'validate',
-        typeof jest === 'undefined'
-          ? jasmine.createSpy().and.returnValue(
-              Promise.resolve({
-                targetAsync: true,
-              }),
-            )
-          : jest.fn().mockReturnValue(
-              Promise.resolve({
-                targetAsync: true,
-              }),
-            ),
+        mockReturnValue(
+          createMock(),
+          Promise.resolve({
+            targetAsync: true,
+          }),
+        ),
       );
       directiveAsync.__simulateValidatorChange();
     }
@@ -243,13 +238,7 @@ describe('issue-246:mock', () => {
       ngMocks.stubMember(
         directive,
         'validate',
-        typeof jest === 'undefined'
-          ? jasmine.createSpy().and.returnValue({
-              test: true,
-            })
-          : jest.fn().mockReturnValue({
-              test: true,
-            }),
+        mockReturnValue(createMock(), { test: true }),
       );
       directive.__simulateValidatorChange();
     }

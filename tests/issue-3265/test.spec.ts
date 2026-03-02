@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Injectable()
 class SomeService {
   someMethod(x: string) {
@@ -22,11 +24,7 @@ class ServiceToTest {
 describe('issue-3265', () => {
   beforeEach(() =>
     MockBuilder(ServiceToTest, SomeService).mock(SomeService, {
-      someMethod:
-        typeof jest === 'undefined'
-          ? jasmine.createSpy().and.callFake((x: string) => x)
-          : // in case of jest
-            jest.fn((x: string) => x),
+      someMethod: createMock((x: string) => x),
     }),
   );
 

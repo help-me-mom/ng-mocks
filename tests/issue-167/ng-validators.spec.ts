@@ -15,6 +15,8 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock, mockReturnValue } from '../mock-helpers';
+
 @Directive({
   providers: [
     {
@@ -95,13 +97,7 @@ describe('issue-167:NG_VALIDATORS:mock', () => {
     ngMocks.stubMember(
       mock,
       'validate',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue({
-            mock: true,
-          })
-        : jest.fn().mockReturnValue({
-            mock: true,
-          }),
+      mockReturnValue(createMock(), { mock: true }),
     );
 
     fixture.point.componentInstance.control.setValue('updated');

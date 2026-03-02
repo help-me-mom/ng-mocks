@@ -68,10 +68,16 @@ describe('MockReactiveForms', () => {
     // With auto spy this code is not needed.
     const writeValue =
       typeof jest === 'undefined'
-        ? jasmine.createSpy('writeValue')
-        : jest.fn();
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn().mockName('writeValue')
+          : jasmine.createSpy('writeValue')
+        : jest.fn().mockName('writeValue');
+    // in case of jasmine
+    // const writeValue = jasmine.createSpy('writeValue');
     // in case of jest
-    // const writeValue = jest.fn();
+    // const writeValue = jest.fn().mockName('writeValue');
+    // in case of vitest
+    // const writeValue = vi.fn().mockName('writeValue');
 
     // Because of early calls of writeValue, we need to install
     // the spy via MockInstance before the render.
