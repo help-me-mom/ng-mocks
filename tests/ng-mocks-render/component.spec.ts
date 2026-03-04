@@ -362,6 +362,45 @@ describe('ng-mocks-render:component:mock', () => {
     }
   });
 
+  it('renders when query values are exposed as functions', () => {
+    const fixture = MockRender(TargetComponent);
+
+    const component = ngMocks.findInstance(MockComponent);
+    const tpl = ngMocks.findTemplateRef('header');
+
+    ngMocks.stubMember(
+      component as any,
+      'header',
+      (() => tpl) as any,
+    );
+
+    ngMocks.render(component, tpl);
+
+    expect(ngMocks.formatHtml(fixture.nativeElement)).toContain(
+      ':step:1: rendered-header :step:2:',
+    );
+  });
+
+  it('ignores query functions throwing errors and fails gracefully', () => {
+    MockRender(TargetComponent);
+
+    const component = ngMocks.findInstance(MockComponent);
+    const tpl = ngMocks.findTemplateRef('header');
+
+    ngMocks.stubMember(component as any, 'header', (() => {
+      throw new Error('signal lookup failed');
+    }) as any);
+
+    try {
+      ngMocks.render(component, tpl);
+      fail('an error expected');
+    } catch (error) {
+      expect((error as Error).message).toContain(
+        'Cannot find path to the TemplateRef',
+      );
+    }
+  });
+
   it('throws if no template has been passed on render request', () => {
     MockRender(TargetComponent);
 

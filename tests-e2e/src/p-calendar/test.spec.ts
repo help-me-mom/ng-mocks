@@ -1,16 +1,16 @@
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'target',
   standalone: false,
   template: `
-    <p-calendar [(ngModel)]="dateValue">
+    <p-datepicker [(ngModel)]="dateValue">
       <ng-template pTemplate="header">Header</ng-template>
       <ng-template pTemplate="footer">Footer</ng-template>
-    </p-calendar>
+    </p-datepicker>
   `,
 })
 class TargetComponent {
@@ -21,11 +21,11 @@ class TargetComponent {
 
 @NgModule({
   declarations: [TargetComponent],
-  imports: [CalendarModule, FormsModule],
+  imports: [DatePickerModule, FormsModule],
 })
 class TargetModule {}
 
-describe('p-calendar:directives', () => {
+describe('p-datepicker:directives', () => {
   ngMocks.faster();
 
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
@@ -35,8 +35,8 @@ describe('p-calendar:directives', () => {
     const targetComponent =
       MockRender(TargetComponent).point.componentInstance;
 
-    // Looking for a debug element of `p-calendar`.
-    const calendarEl = ngMocks.find('p-calendar');
+    // Looking for a debug element of `p-datepicker`.
+    const calendarEl = ngMocks.find('p-datepicker');
 
     // Asserting bound properties.
     const actual = ngMocks.input(calendarEl, 'ngModel');
@@ -48,8 +48,8 @@ describe('p-calendar:directives', () => {
     const targetComponent =
       MockRender(TargetComponent).point.componentInstance;
 
-    // Looking for a debug element of `p-calendar`.
-    const calendarEl = ngMocks.find('p-calendar');
+    // Looking for a debug element of `p-datepicker`.
+    const calendarEl = ngMocks.find('p-datepicker');
 
     // Simulating an emit.
     const expected = new Date();
@@ -63,8 +63,8 @@ describe('p-calendar:directives', () => {
     // Rendering TargetComponent.
     MockRender(TargetComponent);
 
-    // Looking for a debug element of `p-calendar`.
-    const calendarEl = ngMocks.find('p-calendar');
+    // Looking for a debug element of `p-datepicker`.
+    const calendarEl = ngMocks.find('p-datepicker');
 
     // Looking for the template of 'header'.
     const header = ngMocks.findTemplateRef(calendarEl, [
@@ -84,8 +84,8 @@ describe('p-calendar:directives', () => {
     // Rendering TargetComponent.
     MockRender(TargetComponent);
 
-    // Looking for a debug element of `p-calendar`.
-    const calendarEl = ngMocks.find('p-calendar');
+    // Looking for a debug element of `p-datepicker`.
+    const calendarEl = ngMocks.find('p-datepicker');
 
     // Looking for the template of 'footer'.
     const footer = ngMocks.findTemplateRef(calendarEl, [

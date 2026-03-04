@@ -7,6 +7,7 @@ module.exports = {
 
   testURL: 'http://localhost',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.es5.spec.json',

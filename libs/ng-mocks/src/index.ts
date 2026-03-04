@@ -18,15 +18,12 @@ export { isNgDef } from './lib/common/func.is-ng-def';
 export { isNgInjectionToken } from './lib/common/func.is-ng-injection-token';
 
 export { Mock } from './lib/common/mock';
-export {
-  MockControlValueAccessor,
-  MockValidator,
-  LegacyControlValueAccessor,
-} from './lib/common/mock-control-value-accessor';
+export { LegacyControlValueAccessor } from './lib/common/mock-control-value-accessor';
+export type { MockControlValueAccessor, MockValidator } from './lib/common/mock-control-value-accessor';
 export { MockInstance, MockReset } from './lib/mock-instance/mock-instance';
 
 export { MockBuilder } from './lib/mock-builder/mock-builder';
-export {
+export type {
   IMockBuilder,
   IMockBuilderExtended,
   IMockBuilderConfig,
@@ -39,16 +36,16 @@ export {
 } from './lib/mock-builder/types';
 
 export { MockModule } from './lib/mock-module/mock-module';
-export { MockedModule } from './lib/mock-module/types';
+export type { MockedModule } from './lib/mock-module/types';
 
 export { MockComponent, MockComponents } from './lib/mock-component/mock-component';
-export { MockedComponent } from './lib/mock-component/types';
+export type { MockedComponent } from './lib/mock-component/types';
 
 export { MockDirective, MockDirectives } from './lib/mock-directive/mock-directive';
-export { MockedDirective } from './lib/mock-directive/types';
+export type { MockedDirective } from './lib/mock-directive/types';
 
 export { MockPipe, MockPipes } from './lib/mock-pipe/mock-pipe';
-export { MockedPipe } from './lib/mock-pipe/types';
+export type { MockedPipe } from './lib/mock-pipe/types';
 
 export { MockDeclaration, MockDeclarations } from './lib/mock-declaration/mock-declaration';
 
