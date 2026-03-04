@@ -40,7 +40,7 @@
     "@angular-devkit/build-angular": "20.3.18",
     "@angular/cli": "20.3.18",
     "@angular/compiler-cli": "20.3.17",
-    "@ngneat/spectator": "21.0.1",
+    "@ngneat/spectator": "22.1.0",
     "@testing-library/angular": "18.1.1",
     "@types/jasmine": "6.0.0",
     "@types/jest": "30.0.0",
