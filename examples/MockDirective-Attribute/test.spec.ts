@@ -9,8 +9,6 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Directive({
   selector: '[dependency]',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -95,7 +93,15 @@ describe('MockDirective:Attribute', () => {
     // 'someOutput'. MyComponent listens on the output via
     // `(someOutput)="trigger()"`.
     // Let's install a spy and trigger the output.
-    ngMocks.stubMember(component, 'trigger', createMock());
+    ngMocks.stubMember(
+      component,
+      'trigger',
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn(),
+    );
     mockDirective.someOutput.emit();
 
     // Assert on the effect.

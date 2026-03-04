@@ -11,8 +11,6 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Component({
   selector: 'child',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -56,7 +54,12 @@ describe('MockRender', () => {
   beforeEach(() => MockBuilder(TargetComponent, ChildModule));
 
   it('renders template', () => {
-    const spy = createMock();
+    const spy =
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
     // in case of jasmine
     // const spy = jasmine.createSpy();
     // in case of jest
@@ -96,13 +99,18 @@ describe('MockRender', () => {
   });
 
   it('renders inputs and outputs automatically', () => {
-    const spy = createMock();
+    const spy =
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
     // in case of jasmine
     // const spy = jasmine.createSpy();
     // in case of jest
-    // const logoClickSpy = jest.fn();
+    // const spy = jest.fn();
     // in case of vitest
-    // const logoClickSpy = vi.fn();
+    // const spy = vi.fn();
 
     // Generates a template like:
     // <target [value1]="value1" [value2]="value2"

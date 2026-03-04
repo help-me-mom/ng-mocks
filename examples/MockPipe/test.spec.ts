@@ -7,8 +7,6 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Pipe({
   name: 'dependency',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -39,7 +37,12 @@ const fakeTransform = (...args: string[]) => JSON.stringify(args);
 describe('MockPipe', () => {
   // A spy, just in case if we want to verify
   // how the pipe has been called.
-  const spy = createMock(fakeTransform);
+  const spy =
+    typeof jest === 'undefined'
+      ? 'vi' in (window as any)
+        ? (window as any).vi.fn(fakeTransform)
+        : jasmine.createSpy().and.callFake(fakeTransform)
+      : jest.fn(fakeTransform);
   // in case of jasmine
   // const spy = jasmine.createSpy().and.callFake(fakeTransform);
   // in case of jest

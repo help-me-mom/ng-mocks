@@ -3,11 +3,6 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
-import {
-  createMock,
-  mockReturnValue,
-} from '../../tests/mock-helpers';
-
 @Component({
   selector: 'route',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -47,10 +42,36 @@ describe('MockActivatedRoute', () => {
 
   it('uses paramId from ActivatedRoute', () => {
     // Let's set the params of the snapshot.
-    mockReturnValue(
-      MockInstance(ActivatedRoute, 'snapshot', createMock(), 'get'),
-      { paramMap: new Map([['paramId', 'paramValue']]) },
-    );
+    if (typeof jest === 'undefined') {
+      if ('vi' in (window as any)) {
+        MockInstance(
+          ActivatedRoute,
+          'snapshot',
+          (window as any).vi.fn(),
+          'get',
+        ).mockReturnValue({
+          paramMap: new Map([['paramId', 'paramValue']]),
+        });
+      } else {
+        MockInstance(
+          ActivatedRoute,
+          'snapshot',
+          jasmine.createSpy(),
+          'get',
+        ).and.returnValue({
+          paramMap: new Map([['paramId', 'paramValue']]),
+        });
+      }
+    } else {
+      MockInstance(
+        ActivatedRoute,
+        'snapshot',
+        jest.fn(),
+        'get',
+      ).mockReturnValue({
+        paramMap: new Map([['paramId', 'paramValue']]),
+      });
+    }
     // in case of jasmine
     // MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get').and.returnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
     // in case of jest

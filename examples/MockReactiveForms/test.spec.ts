@@ -13,8 +13,6 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Component({
   providers: [
     {
@@ -68,7 +66,12 @@ describe('MockReactiveForms', () => {
   it('sends the correct value to the mock form component', () => {
     // That is our spy on writeValue calls.
     // With auto spy this code is not needed.
-    const writeValue = createMock('writeValue');
+    const writeValue =
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn().mockName('writeValue')
+          : jasmine.createSpy('writeValue')
+        : jest.fn().mockName('writeValue');
     // in case of jasmine
     // const writeValue = jasmine.createSpy('writeValue');
     // in case of jest

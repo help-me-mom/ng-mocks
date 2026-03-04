@@ -11,8 +11,6 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Component({
   selector: 'child',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -92,7 +90,15 @@ describe('MockComponent', () => {
     // called 'someOutput'. MyComponent listens on the output via
     // `(someOutput)="trigger($event)"`.
     // Let's install a spy and trigger the output.
-    ngMocks.stubMember(component, 'trigger', createMock());
+    ngMocks.stubMember(
+      component,
+      'trigger',
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn(),
+    );
     mockComponent.someOutput.emit({
       payload: 'foo',
     });

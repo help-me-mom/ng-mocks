@@ -8,12 +8,6 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import {
-  clearMock,
-  createMock,
-  mockReturnValue,
-} from '../../tests/mock-helpers';
-
 @Injectable()
 class TargetService {
   public prop = 0;
@@ -52,7 +46,12 @@ describe('examples:performance', () => {
     beforeAll(() => {
       MockInstance(TargetService, {
         init: instance => {
-          instance.method = mockReturnValue(createMock(), 5);
+          instance.method =
+            typeof jest === 'undefined'
+              ? 'vi' in (window as any)
+                ? (window as any).vi.fn().mockReturnValue(5)
+                : jasmine.createSpy().and.returnValue(5)
+              : jest.fn().mockReturnValue(5);
           // in case of jasmine
           // instance.method = jasmine.createSpy().and.returnValue(5);
           // in case of jest
@@ -97,7 +96,12 @@ describe('examples:performance', () => {
     // allows its pointer being the same between tests
     // and this let ngMocks.faster do its job.
     const mock = {
-      method: mockReturnValue(createMock(), 5),
+      method:
+        typeof jest === 'undefined'
+          ? 'vi' in (window as any)
+            ? (window as any).vi.fn().mockReturnValue(5)
+            : jasmine.createSpy().and.returnValue(5)
+          : jest.fn().mockReturnValue(5),
       // in case of jasmine
       // method: jasmine.createSpy().and.returnValue(5),
       // in case of jest
@@ -109,9 +113,13 @@ describe('examples:performance', () => {
 
     // Do not forget to reset the spy between runs.
     beforeEach(() => {
-      clearMock(mock.method);
+      if (typeof jest === 'undefined' && !('vi' in (window as any))) {
+        mock.method.calls.reset();
+      } else {
+        mock.method.mockClear();
+      }
       // in case of jasmine
-      // method: mock.method.and.reset()
+      // method: mock.method.calls.reset()
       // in case of jest
       // method: mock.method.mockClear(),
       // in case of vitest

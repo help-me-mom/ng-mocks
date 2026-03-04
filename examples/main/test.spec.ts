@@ -15,8 +15,6 @@ import { RouterModule } from '@angular/router';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { createMock } from '../../tests/mock-helpers';
-
 @Pipe({
   name: 'translate',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -154,7 +152,12 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy = createMock();
+    const logoClickSpy =
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
     // in case of jasmine
     // const logoClickSpy = jasmine.createSpy();
     // in case of jest

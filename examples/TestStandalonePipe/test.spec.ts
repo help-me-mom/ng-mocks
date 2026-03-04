@@ -12,11 +12,6 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
-import {
-  createMock,
-  mockReturnValue,
-} from '../../tests/mock-helpers';
-
 // @TODO remove with A5 support
 const injectableRootServiceArgs = [
   {
@@ -69,7 +64,11 @@ describe('TestStandalonePipe', () => {
     MockInstance(
       RootService,
       'trigger',
-      mockReturnValue(createMock(), 'mock'),
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn().mockReturnValue('mock')
+          : jasmine.createSpy().and.returnValue('mock')
+        : jest.fn().mockReturnValue('mock'),
     );
 
     // Rendering the pipe.
