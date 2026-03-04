@@ -3,12 +3,24 @@ import { QueryList, TemplateRef, ViewContainerRef } from '@angular/core';
 import funcIsMock from '../../common/func.is-mock';
 import { MockConfig } from '../../common/mock';
 
+const unwrapQueryValue = (value: any): any => {
+  if (typeof value !== 'function') {
+    return value;
+  }
+
+  try {
+    return value();
+  } catch {
+    return value;
+  }
+};
+
 const getValVcr = (entryPoint: MockConfig): Array<[any, ViewContainerRef]> => {
   const result: Array<[any, ViewContainerRef]> = [];
 
   for (const key of entryPoint.__ngMocksConfig.queryScanKeys || /* istanbul ignore next */ []) {
-    const value = (entryPoint as any)[key];
-    const vcr = (entryPoint as any)[`__ngMocksVcr_${key}`];
+    const value = unwrapQueryValue((entryPoint as any)[key]);
+    const vcr = unwrapQueryValue((entryPoint as any)[`__ngMocksVcr_${key}`]);
 
     const scanValue = value instanceof QueryList ? value.toArray() : [value];
     const scanVcr = vcr instanceof QueryList ? vcr.toArray() : [vcr];

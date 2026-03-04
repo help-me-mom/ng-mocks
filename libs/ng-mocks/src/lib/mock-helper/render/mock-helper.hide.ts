@@ -1,5 +1,6 @@
 import funcFindDeep from './func.find-deep';
 import funcParseTemplate from './func.parse-template';
+import { fallbackHide, FallbackInstance } from './func.render-fallback';
 
 export default (instance: object, param?: object) => {
   const template = param ? funcParseTemplate(param) : undefined;
@@ -21,6 +22,10 @@ export default (instance: object, param?: object) => {
       return false;
     },
   );
+
+  if (!result) {
+    result = fallbackHide(instance as FallbackInstance, template);
+  }
 
   if (!result) {
     throw new Error('Cannot find path to the TemplateRef');

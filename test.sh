@@ -13,6 +13,10 @@ if [ "$1" = "coverage" ]; then
   docker compose run --rm -e WITH_COVERAGE=1 ng-mocks npm run test
 fi
 
+if [ "$1" = "" ] || [ "$1" = "e2e" ]; then
+  docker compose run --rm ng-mocks npm run e2e
+fi
+
 if [ "$1" = "" ] || [ "$1" = "a5" ] || [ "$1" = "a5es5" ]; then
   docker compose run --rm ng-mocks npm run s:a5es5 && \
     docker compose run --rm ng-mocks npm run s:test:a5es5 && \
