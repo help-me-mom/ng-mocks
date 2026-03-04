@@ -23,6 +23,28 @@ This file documents practical rules for contributors/agents working on `ng-mocks
   - Revert `compose.yml` back to `npm install`.
   - Run `sh compose.sh e2e` again to normalize lockfile resolution.
 
+## Node Version Upgrade Workflow
+
+When asked to "update node version in all projects", use this sequence:
+
+1. Identify target Node:
+   - Use latest **even** stable Node release from `https://nodejs.org/dist/index.json`.
+   - For Docker image tags, use the latest available `satantime/puppeteer-node` tag.
+2. Keep version alignment:
+   - `nvm` major must match Docker major.
+   - `nvm` minor/patch may be higher than Docker minor/patch, but never lower.
+   - In corresponding `package.json` files, `@types/node` major must match Node/Docker major.
+   - Check that `npm` version works with the chosen `node` version, update `npm` version if needed.
+3. Update Node runtime declarations:
+   - In `e2e` directory, major version change is possible on projects which don't belong to particular angular version.
+   - Search for `.nvmrc`, `compose.yml`, `package.json`, `.circleci/config.yml` and other possible files.
+4. Validation:
+   - Run bootstrap via Docker wrappers for changed targets (`sh compose.sh <target>`).
+   - Run required test wrappers (`sh test.sh root`, `sh test.sh e2e`, and targeted suites).
+   - Ensure that in all projects in all files major versions match each other: `docker`, `nvm`, `@types/node`, `npm`.
+5. Commit:
+   - When all checks are successful commit the changes with the message `chore(docker): updating node images`.
+
 ## Test Intent Constraints
 
 - `ng-mocks` tests verify ng-mocks behavior; do not remove or dilute `ngMocks` API usage in tests.
