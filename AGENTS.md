@@ -3,17 +3,24 @@
 ## Scope
 
 This file documents practical rules for contributors/agents working on `ng-mocks`, especially Angular/e2e integration updates.
+The library has many projects for integrational testing, the projects are in `e2e` and in `tests-e2e` directories.
+The library a project with documentation in `docs`.
 
 ## Required Test Execution
 
 - Use Docker wrappers from repo root:
   - `sh compose.sh <target>` for dependency/bootstrap setup.
   - `sh test.sh <target>` for tests.
-- For `tests-e2e`, always run tests via Docker:
-  - `sh test.sh e2e`
-- Do **not** run e2e via local `npm run test`.
+- **NEVER** run tests via local `npm`.
 
-## e2e / Angular Major Upgrade Workflow
+## Update all package-lock.json
+
+- Temporarily change `compose.yml` line from `npm install` to `npm update`.
+- Run `sh compose.sh` to update dependencies to fresh possible versions.
+- Restore `compose.yml` to have `npm install` back.
+- Run `sh compose.sh` to sync lock file for CI/CD.
+
+## Angular Major Version Upgrade Workflow
 
 - Update versions explicitly in `tests-e2e/package.json` (Angular + third-party libs).
 - Keep lock files; do **not** delete them.
