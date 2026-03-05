@@ -53,6 +53,16 @@ To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Win
 
 - it will take a while, but afterwards you have all dependencies installed
 
+### Docker compose namespace for parallel worktrees
+
+To avoid collisions when multiple worktrees run docker compose in parallel, set `COMPOSE_PROJECT_NAME`.
+Use your own unique string for each task/worktree.
+
+```shell
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
+```
+
 ## How to run unit tests locally
 
 ```shell
