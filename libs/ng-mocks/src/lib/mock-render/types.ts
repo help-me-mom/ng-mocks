@@ -66,6 +66,9 @@ export interface IMockRenderFactoryOptions extends IMockRenderOptions {
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
 export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> extends ComponentFixture<F> {
+  componentInstance: ComponentFixture<F>['componentInstance'];
+  debugElement: ComponentFixture<F>['debugElement'] & MockedDebugElement<F>;
+  nativeElement: ComponentFixture<F>['nativeElement'];
   point: MockedDebugElement<C>;
 }
 
