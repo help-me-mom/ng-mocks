@@ -140,6 +140,17 @@ ngMocksUniverse.isProvidedDef = (def: any): boolean => hasBuildDeclaration(def) 
 
 // excluding StoreDevtoolsModule by default
 ngMocksUniverse.getDefaults().set('@StoreDevtoolsModule', ['exclude']);
+// HttpClient must stay real in HttpClientTestingModule replacement flows.
+ngMocksUniverse.getDefaults().set('@HttpClient', ['keep']);
+ngMocksUniverse.getDefaults().set('@_HttpClient', ['keep']);
+ngMocksUniverse.getConfigMock().set('@HttpClient', {
+  dependency: true,
+  export: true,
+});
+ngMocksUniverse.getConfigMock().set('@_HttpClient', {
+  dependency: true,
+  export: true,
+});
 
 ngMocksUniverse.indexValue = 0;
 ngMocksUniverse.index = () => {

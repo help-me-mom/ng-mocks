@@ -10,10 +10,8 @@ with `HttpClientTestingModule` so we can use `HttpTestingController` for faking 
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetService, TargetModule).replace(
-    HttpClientModule,
-    HttpClientTestingModule
-  )
+  MockBuilder(TargetService, TargetModule)
+    .replace(HttpClientModule, HttpClientTestingModule)
 );
 ```
 

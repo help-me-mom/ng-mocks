@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
@@ -46,6 +46,9 @@ describe('MockBuilder:ngMocks', () => {
       .keep(KeepPipe)
       .keep(ServiceKeep)
       .keep(TOKEN_KEEP)
+      .keep(HttpClient, {
+        export: true,
+      })
 
       .replace(HttpClientModule, HttpClientTestingModule)
 

@@ -136,6 +136,7 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
       handleDef(meta, def, defProviders);
     } else if (
       cnfDef.dependency &&
+      !cnfDef.export &&
       configDefault.dependency &&
       coreReflectProvidedIn(def) !== 'root' &&
       (typeof def !== 'object' || !(def as any).__ngMocksSkip)

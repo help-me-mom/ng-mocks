@@ -257,6 +257,11 @@ beforeEach(() => {
 
 In case of `HttpClientTestingModule` we can use `.replace` too.
 
+:::warning Angular 21 and newer
+When replacing `HttpClientModule` with `HttpClientTestingModule` in `MockBuilder(Thing, Module)`,
+`ng-mocks` keeps `HttpClient` internally as a dependency to avoid accidental mocking.
+:::
+
 ```ts
 beforeEach(() => {
   return MockBuilder(MyComponent, MyModule)

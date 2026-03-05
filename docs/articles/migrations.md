@@ -10,6 +10,16 @@ Below you can find critical changes. They happen on major releases.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
 
+## From 20 to 21
+
+If your tests replace `HttpClientModule` with `HttpClientTestingModule` in `MockBuilder(Thing, Module)`,
+`ng-mocks` now keeps `HttpClient` internally as dependency+export.
+
+:::warning
+If you have added manual workarounds like `.keep(HttpClient, { dependency: true, export: true })`,
+you can safely remove them.
+:::
+
 ## From 19 to 20
 
 There are no special cases.
