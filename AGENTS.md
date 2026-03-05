@@ -12,6 +12,9 @@ The library a project with documentation in `docs`.
   - `sh compose.sh <target>` for dependency/bootstrap setup.
   - `sh test.sh <target>` for tests.
 - **NEVER** run tests via local `npm`.
+- For parallel runs in multiple worktrees, set a unique namespace:
+  - `COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh compose.sh <target>`
+  - `COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh test.sh <target>`
 
 ## Update all package-lock.json
 
