@@ -2,8 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
-    "module": "commonjs",
-    "target": "es2016"
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022"
   },
   "files": ["src/test-setup.ts"],
   "include": ["jest.config.ts", "src/**/*.spec.ts"]

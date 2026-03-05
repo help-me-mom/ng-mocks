@@ -15,12 +15,14 @@ The issue here is that if there are more interceptors, then their mocked copies 
 with "You provided 'undefined' where a stream was expected." error.
 And, the last important step is to replace `HttpClientModule` with `HttpClientTestingModule`,
 so we can use `HttpTestingController` for faking requests.
+Also keep `HttpClient` with `export: true`, otherwise requests might not reach `HttpTestingController`.
 
 ```ts
 beforeEach(() =>
   MockBuilder(TargetInterceptor, TargetModule)
     .exclude(NG_MOCKS_INTERCEPTORS)
     .keep(HTTP_INTERCEPTORS)
+    .keep(HttpClient, { export: true })
     .replace(HttpClientModule, HttpClientTestingModule)
 );
 ```
@@ -148,6 +150,7 @@ describe('TestHttpInterceptor', () => {
     return MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
+      .keep(HttpClient, { export: true })
       .replace(HttpClientModule, HttpClientTestingModule);
   });
 

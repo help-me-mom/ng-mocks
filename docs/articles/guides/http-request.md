@@ -7,13 +7,13 @@ sidebar_label: HTTP request
 Testing a http request means that we want to cover a service or a declaration sending it. For that we need to keep the
 thing as it is and to mock all its dependencies. The last important step is to replace `HttpClientModule`
 with `HttpClientTestingModule` so we can use `HttpTestingController` for faking requests.
+Also keep `HttpClient` with `export: true`, otherwise requests might not reach `HttpTestingController`.
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetService, TargetModule).replace(
-    HttpClientModule,
-    HttpClientTestingModule
-  )
+  MockBuilder(TargetService, TargetModule)
+    .keep(HttpClient, { export: true })
+    .replace(HttpClientModule, HttpClientTestingModule)
 );
 ```
 
@@ -82,10 +82,9 @@ describe('TestHttpRequest', () => {
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
   beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule).replace(
-      HttpClientModule,
-      HttpClientTestingModule,
-    );
+    return MockBuilder(TargetService, TargetModule)
+      .keep(HttpClient, { export: true })
+      .replace(HttpClientModule, HttpClientTestingModule);
   });
 
   it('sends a request', () => {

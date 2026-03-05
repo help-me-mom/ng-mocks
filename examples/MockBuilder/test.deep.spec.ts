@@ -1,4 +1,8 @@
-import { HttpBackend, HttpClientModule } from '@angular/common/http';
+import {
+  HttpBackend,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 
@@ -75,6 +79,9 @@ describe('MockBuilder:deep', () => {
       })
       .keep(ServiceKeep)
       .keep(TOKEN_KEEP)
+      .keep(HttpClient, {
+        export: true,
+      })
 
       // The same can be done with Components, Directives and Pipes.
       // For Providers use .provider() or .mock().

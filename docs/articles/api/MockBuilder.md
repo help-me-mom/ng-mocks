@@ -256,10 +256,12 @@ beforeEach(() => {
 ```
 
 In case of `HttpClientTestingModule` we can use `.replace` too.
+When replacing `HttpClientModule` with `HttpClientTestingModule`, keep `HttpClient` with `export: true`.
 
 ```ts
 beforeEach(() => {
   return MockBuilder(MyComponent, MyModule)
+    .keep(HttpClient, { export: true })
     .replace(HttpClientModule, HttpClientTestingModule);
 });
 ```

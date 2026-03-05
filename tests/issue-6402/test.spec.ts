@@ -27,10 +27,9 @@ class TargetModule {}
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
     beforeEach(() =>
-      MockBuilder(TargetService, TargetModule).replace(
-        HttpClientModule,
-        HttpClientTestingModule,
-      ),
+      MockBuilder(TargetService, TargetModule)
+        .keep(HttpClient, { export: true })
+        .replace(HttpClientModule, HttpClientTestingModule),
     );
 
     it('sends /api/config request', () => {
@@ -54,7 +53,11 @@ describe('issue-6402', () => {
         HttpClientTestingModule,
       ),
     );
-    beforeEach(() => MockBuilder(TargetService, TargetModule));
+    beforeEach(() =>
+      MockBuilder(TargetService, TargetModule).keep(HttpClient, {
+        export: true,
+      }),
+    );
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
