@@ -89,6 +89,7 @@ describe('TestHttpInterceptor', () => {
     return MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
+      .keep(HttpClient, { export: true })
       .replace(HttpClientModule, HttpClientTestingModule);
   });
 

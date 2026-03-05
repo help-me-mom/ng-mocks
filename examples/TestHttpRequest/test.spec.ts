@@ -32,10 +32,9 @@ describe('TestHttpRequest', () => {
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
   beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule).replace(
-      HttpClientModule,
-      HttpClientTestingModule,
-    );
+    return MockBuilder(TargetService, TargetModule)
+      .keep(HttpClient, { export: true })
+      .replace(HttpClientModule, HttpClientTestingModule);
   });
 
   it('sends a request', () => {

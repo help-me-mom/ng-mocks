@@ -12,6 +12,8 @@ export default {
     '_BrowserModule',
   ],
   neverMockProvidedFunction: [
+    'HttpClient',
+
     'DomRendererFactory2',
     'EventManager',
     'Injector', // ivy only
@@ -36,6 +38,7 @@ export default {
     '_Sanitizer',
     '_DomSanitizer',
     '_DomSanitizerImpl',
+    '_HttpClient',
     '_ApplicationInitStatus',
     '_ApplicationRef',
     '_Compiler',
