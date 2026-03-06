@@ -2,6 +2,8 @@ import { Observable, Subject } from 'rxjs';
 
 import { MockService, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 class MyService {
   public readonly onErrorSet$?: Observable<string>;
   public readonly onSuccessSet$?: Observable<string>;
@@ -21,8 +23,7 @@ class MyService {
 // @see https://github.com/help-me-mom/ng-mocks/issues/166
 describe('issue-166', () => {
   it('accepts spies', () => {
-    const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spy = createMock();
     // in case of jest
     // const spy = jest.fn();
     const stub = ngMocks.stub(MockService(MyService), {

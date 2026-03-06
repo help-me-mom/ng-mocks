@@ -1,0 +1,95 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "a21": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/a21",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "polyfills": ["zone.js", "zone.js/testing"]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "a21:build:production"
+            },
+            "development": {
+              "buildTarget": "a21:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "tsconfig.json",
+            "karmaConfig": "karma.conf.js",
+            "watch": false
+          }
+        },
+        "vitest": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "vitest",
+            "tsConfig": "tsconfig.json",
+            "providersFile": "src/setup-vitest.ts",
+            "buildTarget": "a21:build:testing",
+            "runnerConfig": "vitest.config.ts",
+            "watch": false
+          }
+        }
+      }
+    },
+    "lib": {
+      "projectType": "library",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "ng-package.json",
+            "tsConfig": "tsconfig.json"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

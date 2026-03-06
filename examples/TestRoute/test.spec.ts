@@ -11,6 +11,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import funcHasVitest from '../../tests/func.has-vitest';
+
 // A layout component that renders the current route.
 @Component({
   selector: 'target',
@@ -84,39 +86,77 @@ describe('TestRoute:Route', () => {
     );
   });
 
-  it('renders /1 with Route1Component', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
+  if (funcHasVitest()) {
+    // Since Angular has dropped support for fakeAsync when using
+    // vitest, we need to test using async tests as intended.
+    it('renders /1 with Route1Component', async () => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
 
-    // First we need to initialize navigation.
-    location.go('/1');
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // First we need to initialize navigation.
+      location.go('/1');
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // We should see Route1Component component on /1 page.
-    expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(Route1Component)).not.toThrow();
-  }));
+      // We should see Route1Component component on /1 page.
+      expect(location.path()).toEqual('/1');
+      expect(() => ngMocks.find(Route1Component)).not.toThrow();
+    });
 
-  it('renders /2 with Route2Component', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
+    it('renders /2 with Route2Component', async () => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
 
-    // First we need to initialize navigation.
-    location.go('/2');
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // First we need to initialize navigation.
+      location.go('/2');
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // We should see Route2Component component on /2 page.
-    expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+      // We should see Route2Component component on /2 page.
+      expect(location.path()).toEqual('/2');
+      expect(() => ngMocks.find(Route2Component)).not.toThrow();
+    });
+  } else {
+    it('renders /1 with Route1Component', fakeAsync(() => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
+
+      // First we need to initialize navigation.
+      location.go('/1');
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // We should see Route1Component component on /1 page.
+      expect(location.path()).toEqual('/1');
+      expect(() => ngMocks.find(Route1Component)).not.toThrow();
+    }));
+
+    it('renders /2 with Route2Component', fakeAsync(() => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
+
+      // First we need to initialize navigation.
+      location.go('/2');
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // We should see Route2Component component on /2 page.
+      expect(location.path()).toEqual('/2');
+      expect(() => ngMocks.find(Route2Component)).not.toThrow();
+    }));
+  }
 });
 
 describe('TestRoute:Component', () => {
@@ -141,54 +181,107 @@ describe('TestRoute:Component', () => {
     );
   });
 
-  it('navigates between pages', fakeAsync(() => {
-    const fixture = MockRender(TargetComponent);
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
+  if (funcHasVitest()) {
+    it('navigates between pages', async () => {
+      const fixture = MockRender(TargetComponent);
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
 
-    // First we need to initialize navigation.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // By default, our routes do not have a component.
-    // Therefore, none of them should be rendered.
-    expect(location.path()).toEqual('/');
-    expect(() => ngMocks.find(Route1Component)).toThrow();
-    expect(() => ngMocks.find(Route2Component)).toThrow();
+      // By default, our routes do not have a component.
+      // Therefore, none of them should be rendered.
+      expect(location.path()).toEqual('/');
+      expect(() => ngMocks.find(Route1Component)).toThrow();
+      expect(() => ngMocks.find(Route2Component)).toThrow();
 
-    // Let's extract our navigation links.
-    const links = ngMocks.findAll('a');
+      // Let's extract our navigation links.
+      const links = ngMocks.findAll('a');
 
-    // Checking where we land if we click the first link.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => {
-        // To simulate a correct click we need to let the router know
-        // that it is the left mouse button via setting its parameter
-        // to 0 (not undefined, null or anything else).
-        links[0].triggerEventHandler('click', {
-          button: 0,
+      // Checking where we land if we click the first link.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => {
+          // To simulate a correct click we need to let the router know
+          // that it is the left mouse button via setting its parameter
+          // to 0 (not undefined, null or anything else).
+          links[0].triggerEventHandler('click', {
+            button: 0,
+          });
         });
-      });
-      tick(); // is needed for rendering of the current route.
-    }
-    // We should see Route1Component component on /1 page.
-    expect(location.path()).toEqual('/1');
-    expect(() => ngMocks.find(Route1Component)).not.toThrow();
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
+      // We should see Route1Component component on /1 page.
+      expect(location.path()).toEqual('/1');
+      expect(() => ngMocks.find(Route1Component)).not.toThrow();
 
-    // Checking where we land if we click the second link.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => {
-        // A click of the left mouse button.
-        links[1].triggerEventHandler('click', {
-          button: 0,
+      // Checking where we land if we click the second link.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => {
+          // A click of the left mouse button.
+          links[1].triggerEventHandler('click', {
+            button: 0,
+          });
         });
-      });
-      tick(); // is needed for rendering of the current route.
-    }
-    // We should see Route2Component component on /2 page.
-    expect(location.path()).toEqual('/2');
-    expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
+      // We should see Route2Component component on /2 page.
+      expect(location.path()).toEqual('/2');
+      expect(() => ngMocks.find(Route2Component)).not.toThrow();
+    });
+  } else {
+    it('navigates between pages', fakeAsync(() => {
+      const fixture = MockRender(TargetComponent);
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
+
+      // First we need to initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // By default, our routes do not have a component.
+      // Therefore, none of them should be rendered.
+      expect(location.path()).toEqual('/');
+      expect(() => ngMocks.find(Route1Component)).toThrow();
+      expect(() => ngMocks.find(Route2Component)).toThrow();
+
+      // Let's extract our navigation links.
+      const links = ngMocks.findAll('a');
+
+      // Checking where we land if we click the first link.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => {
+          // To simulate a correct click we need to let the router know
+          // that it is the left mouse button via setting its parameter
+          // to 0 (not undefined, null or anything else).
+          links[0].triggerEventHandler('click', {
+            button: 0,
+          });
+        });
+        tick(); // is needed for rendering of the current route.
+      }
+      // We should see Route1Component component on /1 page.
+      expect(location.path()).toEqual('/1');
+      expect(() => ngMocks.find(Route1Component)).not.toThrow();
+
+      // Checking where we land if we click the second link.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => {
+          // A click of the left mouse button.
+          links[1].triggerEventHandler('click', {
+            button: 0,
+          });
+        });
+        tick(); // is needed for rendering of the current route.
+      }
+      // We should see Route2Component component on /2 page.
+      expect(location.path()).toEqual('/2');
+      expect(() => ngMocks.find(Route2Component)).not.toThrow();
+    }));
+  }
 });

@@ -14,6 +14,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock, handleMockProcessor } from '../mock-helpers';
+
 @Component({
   selector: 'target-cva-form-control',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -88,16 +90,12 @@ describe('control-value-accessor-form-control:real', () => {
     ngMocks.stubMember(
       mock,
       'writeValue',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.writeValue)
-        : jest.fn(mock.writeValue),
+      createMock(mock.writeValue),
     );
     ngMocks.stubMember(
       mock,
       'setDisabledState',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.setDisabledState)
-        : jest.fn(mock.setDisabledState),
+      createMock(mock.setDisabledState),
     );
     fixture.detectChanges();
 
@@ -168,30 +166,22 @@ describe('control-value-accessor-form-control:mock', () => {
     ngMocks.stubMember(
       mock,
       'writeValue',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.writeValue)
-        : jest.fn(mock.writeValue),
+      createMock(mock.writeValue),
     );
     ngMocks.stubMember(
       mock,
       'setDisabledState',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.setDisabledState)
-        : jest.fn(mock.setDisabledState),
+      createMock(mock.setDisabledState),
     );
     ngMocks.stubMember(
       mock,
       'registerOnChange',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.registerOnChange)
-        : jest.fn(mock.registerOnChange),
+      createMock(mock.registerOnChange),
     );
     ngMocks.stubMember(
       mock,
       'registerOnTouched',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.callFake(mock.registerOnTouched)
-        : jest.fn(mock.registerOnTouched),
+      createMock(mock.registerOnTouched),
     );
     fixture.detectChanges();
 
@@ -223,14 +213,21 @@ describe('control-value-accessor-form-control:mock', () => {
       fixture.point.componentInstance.control.touched,
     ).toBeFalsy();
     // a way through a spy
-    if (typeof jest === 'undefined') {
-      ngMocks
-        .stub<any>(mock, 'registerOnTouched')
-        .calls.first()
-        .args[0]();
-    } else {
-      ngMocks.stub<any>(mock, 'registerOnTouched').mock.calls[0][0]();
-    }
+    handleMockProcessor({
+      jasmine: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnTouched')
+          .calls.first()
+          .args[0](),
+      jest: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnTouched')
+          .mock.calls[0][0](),
+      vitest: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnTouched')
+          .mock.calls[0][0](),
+    });
     expect(
       fixture.point.componentInstance.control.touched,
     ).toBeTruthy();
@@ -254,16 +251,21 @@ describe('control-value-accessor-form-control:mock', () => {
       'test3',
     );
     // a way through a spy
-    if (typeof jest === 'undefined') {
-      ngMocks
-        .stub<any>(mock, 'registerOnChange')
-        .calls.first()
-        .args[0]('test4');
-    } else {
-      ngMocks
-        .stub<any>(mock, 'registerOnChange')
-        .mock.calls[0][0]('test4');
-    }
+    handleMockProcessor({
+      jasmine: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnChange')
+          .calls.first()
+          .args[0]('test4'),
+      jest: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnChange')
+          .mock.calls[0][0]('test4'),
+      vitest: () =>
+        ngMocks
+          .stub<any>(mock, 'registerOnChange')
+          .mock.calls[0][0]('test4'),
+    });
     expect(mock.writeValue).not.toHaveBeenCalledWith('test4');
     expect(
       fixture.point.componentInstance.control.touched,

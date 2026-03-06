@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-ng-mocks-trigger-317',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -15,8 +17,7 @@ describe('ng-mocks-trigger:317', () => {
   beforeEach(() => MockBuilder(TargetComponent));
 
   it('finds by css selector', () => {
-    const trigger =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const trigger = createMock();
     MockRender(TargetComponent, { trigger });
     expect(trigger).not.toHaveBeenCalled();
     ngMocks.trigger('input', 'focus');

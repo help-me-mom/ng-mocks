@@ -65,7 +65,9 @@ describe('TestStandalonePipe', () => {
       RootService,
       'trigger',
       typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue('mock')
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn().mockReturnValue('mock')
+          : jasmine.createSpy().and.returnValue('mock')
         : jest.fn().mockReturnValue('mock'),
     );
 

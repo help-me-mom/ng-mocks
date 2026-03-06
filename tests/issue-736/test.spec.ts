@@ -11,6 +11,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'modal',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -43,16 +45,9 @@ describe('issue-736', () => {
       .provide({
         provide: ComponentFactoryResolver,
         useValue: {
-          resolveComponentFactory:
-            typeof jest === 'undefined'
-              ? jasmine.createSpy(
-                  'ComponentFactoryResolver.resolveComponentFactory',
-                )
-              : jest
-                  .fn()
-                  .mockName(
-                    'ComponentFactoryResolver.resolveComponentFactory',
-                  ),
+          resolveComponentFactory: createMock(
+            'ComponentFactoryResolver.resolveComponentFactory',
+          ),
         },
       }),
   );

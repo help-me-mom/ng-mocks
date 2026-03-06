@@ -12,6 +12,8 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock, mockReturnValue } from '../mock-helpers';
+
 @Component({
   providers: [
     {
@@ -103,19 +105,9 @@ describe('issue-167:component:real', () => {
     ngMocks.stubMember(
       mock,
       'validate',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue({
-            updated: true,
-          })
-        : jest.fn().mockReturnValue({
-            updated: true,
-          }),
+      mockReturnValue(createMock(), { updated: true }),
     );
-    ngMocks.stubMember(
-      mock,
-      'writeValue',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-    );
+    ngMocks.stubMember(mock, 'writeValue', createMock());
 
     fixture.point.componentInstance.control.setValue('updated');
     expect(mock.validate).toHaveBeenCalled();
@@ -144,19 +136,9 @@ describe('issue-167:component:mock', () => {
     ngMocks.stubMember(
       mock,
       'validate',
-      typeof jest === 'undefined'
-        ? jasmine.createSpy().and.returnValue({
-            updated: true,
-          })
-        : jest.fn().mockReturnValue({
-            updated: true,
-          }),
+      mockReturnValue(createMock(), { updated: true }),
     );
-    ngMocks.stubMember(
-      mock,
-      'writeValue',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-    );
+    ngMocks.stubMember(mock, 'writeValue', createMock());
 
     fixture.point.componentInstance.control.setValue('updated');
     expect(mock.validate).toHaveBeenCalled();

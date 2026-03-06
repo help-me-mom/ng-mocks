@@ -20,6 +20,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import funcHasVitest from '../../tests/func.has-vitest';
+
 // A simple service simulating a data request.
 @Injectable()
 class DataService {
@@ -104,39 +106,78 @@ describe('TestRoutingResolver:test', () => {
     ).exclude(NG_MOCKS_RESOLVERS);
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('provides data to on the route', fakeAsync(() => {
-    const fixture = MockRender(RouterOutlet, {});
-    const router: Router = fixture.point.injector.get(Router);
-    const location: Location = fixture.point.injector.get(Location);
-    const dataService: DataService =
-      fixture.point.injector.get(DataService);
+  if (funcHasVitest()) {
+    // Since Angular has dropped support for fakeAsync when using
+    // vitest, we need to test using async tests as intended.
+    it('provides data to on the route', async () => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
+      const dataService: DataService =
+        fixture.point.injector.get(DataService);
 
-    // DataService has been replaced with a mock copy,
-    // let's set a custom value we will assert later on.
-    dataService.data = () => from([false]);
+      // DataService has been replaced with a mock copy,
+      // let's set a custom value we will assert later on.
+      dataService.data = () => from([false]);
 
-    // Let's switch to the route with the resolver.
-    location.go('/route');
+      // Let's switch to the route with the resolver.
+      location.go('/route');
 
-    // Now we can initialize navigation.
-    if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
-    }
+      // Now we can initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        await fixture.whenStable(); // is needed for rendering of the current route.
+      }
 
-    // Checking that we are on the right page.
-    expect(location.path()).toEqual('/route');
+      // Checking that we are on the right page.
+      expect(location.path()).toEqual('/route');
 
-    // Let's extract ActivatedRoute of the current component.
-    const el = ngMocks.find(RouteComponent);
-    const route: ActivatedRoute = el.injector.get(ActivatedRoute);
+      // Let's extract ActivatedRoute of the current component.
+      const el = ngMocks.find(RouteComponent);
+      const route: ActivatedRoute = el.injector.get(ActivatedRoute);
 
-    // Now we can assert that it has expected data.
-    expect(route.snapshot.data).toEqual({
-      data: {
-        flag: false,
-      },
+      // Now we can assert that it has expected data.
+      expect(route.snapshot.data).toEqual({
+        data: {
+          flag: false,
+        },
+      });
     });
-  }));
+  } else {
+    // It is important to run routing tests in fakeAsync.
+    it('provides data to on the route', fakeAsync(() => {
+      const fixture = MockRender(RouterOutlet, {});
+      const router: Router = fixture.point.injector.get(Router);
+      const location: Location = fixture.point.injector.get(Location);
+      const dataService: DataService =
+        fixture.point.injector.get(DataService);
+
+      // DataService has been replaced with a mock copy,
+      // let's set a custom value we will assert later on.
+      dataService.data = () => from([false]);
+
+      // Let's switch to the route with the resolver.
+      location.go('/route');
+
+      // Now we can initialize navigation.
+      if (fixture.ngZone) {
+        fixture.ngZone.run(() => router.initialNavigation());
+        tick(); // is needed for rendering of the current route.
+      }
+
+      // Checking that we are on the right page.
+      expect(location.path()).toEqual('/route');
+
+      // Let's extract ActivatedRoute of the current component.
+      const el = ngMocks.find(RouteComponent);
+      const route: ActivatedRoute = el.injector.get(ActivatedRoute);
+
+      // Now we can assert that it has expected data.
+      expect(route.snapshot.data).toEqual({
+        data: {
+          flag: false,
+        },
+      });
+    }));
+  }
 });

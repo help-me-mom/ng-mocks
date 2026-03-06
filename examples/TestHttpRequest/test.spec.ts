@@ -3,7 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, VERSION } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
@@ -32,10 +32,19 @@ describe('TestHttpRequest', () => {
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
   beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule).replace(
+    const builder = MockBuilder(TargetService, TargetModule).replace(
       HttpClientModule,
       HttpClientTestingModule,
     );
+
+    if (Number.parseInt(VERSION.major, 10) >= 21) {
+      // NOTE: Instruct to always keep the HTTP client since it was marked
+      //       as provided in root starting in Angular 21.
+      //       (https://github.com/angular/angular/pull/56212)
+      builder.keep(HttpClient);
+    }
+
+    return builder;
   });
 
   it('sends a request', () => {

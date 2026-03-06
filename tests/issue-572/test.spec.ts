@@ -2,6 +2,8 @@ import { Component, Injector } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-572',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -23,8 +25,7 @@ describe('issue-572', () => {
   beforeAll(() => (consoleWarn = console.warn));
 
   beforeEach(() => {
-    console.warn =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    console.warn = createMock();
   });
 
   afterAll(() => {

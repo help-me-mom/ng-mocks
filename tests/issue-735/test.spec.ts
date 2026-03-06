@@ -6,6 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-735',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -96,10 +98,7 @@ describe('issue-735', () => {
       afterAll(() => (console.log = consoleLog));
 
       beforeEach(() => {
-        console.log =
-          typeof jest === 'undefined'
-            ? jasmine.createSpy()
-            : jest.fn();
+        console.log = createMock();
       });
 
       beforeEach(() => MockBuilder(TargetComponent, TargetModule));
@@ -110,13 +109,9 @@ describe('issue-735', () => {
           ngMocks.stubMember(
             console,
             'log',
-            typeof jest === 'undefined'
-              ? jasmine.createSpy().and.callFake(message => {
-                  throw new Error(message);
-                })
-              : jest.fn(message => {
-                  throw new Error(message);
-                }),
+            createMock(message => {
+              throw new Error(message);
+            }),
           );
           point.componentInstance.service.sanitize(
             SecurityContext.HTML,
@@ -144,13 +139,9 @@ describe('issue-735', () => {
           ngMocks.stubMember(
             console,
             'log',
-            typeof jest === 'undefined'
-              ? jasmine.createSpy().and.callFake(message => {
-                  throw new Error(message);
-                })
-              : jest.fn(message => {
-                  throw new Error(message);
-                }),
+            createMock(message => {
+              throw new Error(message);
+            }),
           );
           point.componentInstance.service.sanitize(
             SecurityContext.HTML,

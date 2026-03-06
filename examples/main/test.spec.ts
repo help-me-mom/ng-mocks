@@ -153,9 +153,17 @@ describe('main', () => {
 
   it('asserts behavior of AppComponent', () => {
     const logoClickSpy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn();
+    // in case of jasmine
+    // const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
+    // in case of vitest
+    // const logoClickSpy = vi.fn();
 
     // Instead of TestBed.createComponent(AppComponent) in beforeEach
     // MockRender might be used directly in tests.

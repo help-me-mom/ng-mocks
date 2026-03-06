@@ -12,6 +12,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 /*
  * As you can see, SomeService provided in forRoot() function.
  * I did so to reproduce the situation with NgxsModule and Store provider.
@@ -87,11 +89,7 @@ describe('issue-625', () => {
   });
 
   beforeEach(() => {
-    spy = MockInstance(
-      SomeService,
-      'method',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-    );
+    spy = MockInstance(SomeService, 'method', createMock());
   });
   afterEach(() => MockInstance(SomeService));
 

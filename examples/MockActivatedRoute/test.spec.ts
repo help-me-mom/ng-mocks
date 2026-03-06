@@ -43,16 +43,26 @@ describe('MockActivatedRoute', () => {
   it('uses paramId from ActivatedRoute', () => {
     // Let's set the params of the snapshot.
     if (typeof jest === 'undefined') {
-      MockInstance(
-        ActivatedRoute,
-        'snapshot',
-        jasmine.createSpy(),
-        'get',
-      ).and.returnValue({
-        paramMap: new Map([['paramId', 'paramValue']]),
-      });
+      if ('vi' in (window as any)) {
+        MockInstance(
+          ActivatedRoute,
+          'snapshot',
+          (window as any).vi.fn(),
+          'get',
+        ).mockReturnValue({
+          paramMap: new Map([['paramId', 'paramValue']]),
+        });
+      } else {
+        MockInstance(
+          ActivatedRoute,
+          'snapshot',
+          jasmine.createSpy(),
+          'get',
+        ).and.returnValue({
+          paramMap: new Map([['paramId', 'paramValue']]),
+        });
+      }
     } else {
-      // in case of jest.
       MockInstance(
         ActivatedRoute,
         'snapshot',
@@ -62,6 +72,12 @@ describe('MockActivatedRoute', () => {
         paramMap: new Map([['paramId', 'paramValue']]),
       });
     }
+    // in case of jasmine
+    // MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get').and.returnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
+    // in case of jest
+    // MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get').mockReturnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
+    // in case of vitest
+    // MockInstance(ActivatedRoute, 'snapshot', vi.fn(), 'get').mockReturnValue({ paramMap: new Map([['paramId', 'paramValue']]) });
 
     // Rendering RouteComponent.
     const fixture = MockRender(RouteComponent);

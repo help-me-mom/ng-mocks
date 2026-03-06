@@ -13,6 +13,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { mockReturnValue, createMock } from '../mock-helpers';
+
 interface InjectedAbstraction {
   (): string;
   hello: () => number;
@@ -21,10 +23,8 @@ interface InjectedAbstraction {
 const TOKEN: InjectionToken<InjectedAbstraction> =
   new (InjectionToken as any)('InjectedFn', {
     factory: () => {
-      const fn: any =
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-      fn.hello =
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+      const fn: any = createMock();
+      fn.hello = createMock();
 
       return fn;
     },
@@ -55,10 +55,7 @@ class TestWithDecoratorComponent {
 
 ngMocks.defaultMock(
   TOKEN,
-  () =>
-    (typeof jest === 'undefined'
-      ? jasmine.createSpy().and.returnValue('FOO')
-      : jest.fn().mockReturnValue('FOO')) as any,
+  () => mockReturnValue(createMock(), 'FOO') as any,
 );
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/455
@@ -107,12 +104,7 @@ describe('issue-455:token', () => {
       describe('without `precise` flag', () => {
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent)
-            .mock(
-              TOKEN,
-              (typeof jest === 'undefined'
-                ? jasmine.createSpy().and.returnValue('BAR')
-                : jest.fn().mockReturnValue('BAR')) as any,
-            )
+            .mock(TOKEN, mockReturnValue(createMock(), 'BAR') as any)
             .keep(NG_MOCKS_ROOT_PROVIDERS),
         );
 
@@ -132,9 +124,7 @@ describe('issue-455:token', () => {
           MockBuilder(TestWithoutDecoratorComponent)
             .mock(
               TOKEN as any,
-              (typeof jest === 'undefined'
-                ? jasmine.createSpy().and.returnValue('BAR')
-                : jest.fn().mockReturnValue('BAR')) as any,
+              mockReturnValue(createMock(), 'BAR') as any,
               { precise: true },
             )
             .keep(NG_MOCKS_ROOT_PROVIDERS),
@@ -158,10 +148,7 @@ describe('issue-455:token', () => {
       beforeEach(() =>
         MockBuilder(TestWithDecoratorComponent).provide({
           provide: TOKEN,
-          useFactory: () =>
-            typeof jest === 'undefined'
-              ? jasmine.createSpy().and.returnValue('QUX')
-              : jest.fn().mockReturnValue('QUX'),
+          useFactory: () => mockReturnValue(createMock(), 'QUX'),
         }),
       );
 

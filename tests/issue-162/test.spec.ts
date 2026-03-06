@@ -7,6 +7,9 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import funcGetVitest from '../func.get-vitest';
+import { handleMockProcessor } from '../mock-helpers';
+
 @Component({
   selector: 'app-root-162',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -70,43 +73,47 @@ describe('issue-162', () => {
     let setSpy: any;
 
     // creating spies
-    if (typeof jest === 'undefined') {
-      getSpy = spyOnProperty(
-        fixture.point.componentInstance,
-        'title',
-        'get',
-      );
-      setSpy = spyOnProperty(
-        fixture.point.componentInstance,
-        'title',
-        'set',
-      );
-      getSpy.and.returnValue('spy');
-    } else {
-      getSpy = jest.spyOn(
-        fixture.point.componentInstance,
-        'title',
-        'get',
-      );
-      setSpy = jest.spyOn(
-        fixture.point.componentInstance,
-        'title',
-        'set',
-      );
-      getSpy.mockReturnValue('spy');
-    }
-    // in case of jest
-    // getSpy = jest.spyOn(
-    //   fixture.point.componentInstance,
-    //   'title',
-    //   'get',
-    // );
-    // setSpy = jest.spyOn(
-    //   fixture.point.componentInstance,
-    //   'title',
-    //   'set',
-    // );
-    // getSpy.mockReturnValue('spy');
+    handleMockProcessor({
+      jasmine: () => {
+        getSpy = spyOnProperty(
+          fixture.point.componentInstance,
+          'title',
+          'get',
+        );
+        setSpy = spyOnProperty(
+          fixture.point.componentInstance,
+          'title',
+          'set',
+        );
+        getSpy.and.returnValue('spy');
+      },
+      jest: () => {
+        getSpy = jest.spyOn(
+          fixture.point.componentInstance,
+          'title',
+          'get',
+        );
+        setSpy = jest.spyOn(
+          fixture.point.componentInstance,
+          'title',
+          'set',
+        );
+        getSpy.mockReturnValue('spy');
+      },
+      vitest: () => {
+        getSpy = funcGetVitest().spyOn(
+          fixture.point.componentInstance,
+          'title',
+          'get',
+        );
+        setSpy = funcGetVitest().spyOn(
+          fixture.point.componentInstance,
+          'title',
+          'set',
+        );
+        getSpy.mockReturnValue('spy');
+      },
+    });
 
     expect(fixture.point.componentInstance.title).toEqual('spy');
     fixture.point.componentInstance.title = 'updated';

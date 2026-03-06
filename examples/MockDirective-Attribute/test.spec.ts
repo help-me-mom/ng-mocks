@@ -96,7 +96,11 @@ describe('MockDirective:Attribute', () => {
     ngMocks.stubMember(
       component,
       'trigger',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn(),
     );
     mockDirective.someOutput.emit();
 
