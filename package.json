@@ -247,7 +247,6 @@
     "@angular/router": "20.3.17",
     "@commitlint/cli": "20.4.3",
     "@commitlint/config-conventional": "20.4.3",
-    "@eslint/eslintrc": "3.3.1",
     "@eslint/js": "9.39.3",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "7.1.0",
