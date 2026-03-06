@@ -7,10 +7,8 @@ class RootService {}
 
 @Injectable()
 class TargetService {
-  someAttribute = '';
-  constructor(public readonly root: RootService) {
-    this.someAttribute = 'some value';
-  }
+  someAttribute = 'some value';
+  constructor(public readonly root: RootService) {}
 }
 
 @Component({
