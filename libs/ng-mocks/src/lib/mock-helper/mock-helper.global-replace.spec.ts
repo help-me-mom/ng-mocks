@@ -38,8 +38,7 @@ describe('mock-helper.default-replace', () => {
   });
 
   it('resets ngMocksDepsSkip', () => {
-    const config = new Set();
-    config.add(TargetComponent);
+    const config = new Set([TargetComponent]);
     ngMocksUniverse.config.set('ngMocksDepsSkip', config);
     mockHelperGlobalReplace(TargetComponent, FakeComponent);
     expect(
