@@ -37,8 +37,7 @@ describe('mock-helper.default-wipe', () => {
   });
 
   it('resets ngMocksDepsSkip', () => {
-    const config = new Set();
-    config.add(TargetComponent);
+    const config = new Set([TargetComponent]);
     ngMocksUniverse.config.set('ngMocksDepsSkip', config);
     mockHelperGlobalWipe(TargetComponent);
     expect(
