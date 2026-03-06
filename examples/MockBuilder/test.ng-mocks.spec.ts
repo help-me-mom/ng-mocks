@@ -46,6 +46,7 @@ describe('MockBuilder:ngMocks', () => {
       .keep(KeepPipe)
       .keep(ServiceKeep)
       .keep(TOKEN_KEEP)
+      // On Angular 21, replacing HttpClientModule can mock HttpClient unless it is kept.
       .keep(HttpClient, {
         export: true,
       })

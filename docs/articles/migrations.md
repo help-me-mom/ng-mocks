@@ -20,6 +20,18 @@ If you have added manual workarounds like `.keep(HttpClient, { dependency: true,
 you can safely remove them.
 :::
 
+Typical place for such workaround is a `beforeEach` in a `*.spec.ts` file:
+
+```ts
+beforeEach(() => {
+  return MockBuilder(Thing, Module)
+    .keep(HttpClient, { dependency: true, export: true })
+    .replace(HttpClientModule, HttpClientTestingModule);
+});
+```
+
+On Angular 21 + `ng-mocks` 21 this manual `.keep(HttpClient, ...)` line is no longer needed.
+
 ## From 19 to 20
 
 There are no special cases.
