@@ -16,7 +16,6 @@ import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 import ymlPlugin from 'eslint-plugin-yml';
 import globals from 'globals';
 import * as espree from 'espree';
-import ymlParser from 'yaml-eslint-parser';
 
 const projects = [
   './tsconfig.json',
@@ -44,18 +43,6 @@ const projects = [
   './e2e/nx/tsconfig.json',
   './e2e/nx/tsconfig.spec.json',
 ];
-
-const withFiles = (configs, files) =>
-  configs.map(config => {
-    if (!config.files) {
-      return config;
-    }
-
-    return {
-      ...config,
-      files,
-    };
-  });
 
 const prettierRules = prettierRecommended.rules;
 
@@ -325,12 +312,9 @@ export default [
       ...prettierRules,
     },
   },
-  ...withFiles(ymlPlugin.configs['flat/prettier'], ['**/*.yaml', '**/*.yml']),
+  ...ymlPlugin.configs.prettier,
   {
     files: ['**/*.yaml', '**/*.yml'],
-    languageOptions: {
-      parser: ymlParser,
-    },
     plugins: {
       prettier: prettierPlugin,
     },
