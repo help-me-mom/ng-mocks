@@ -153,7 +153,7 @@ module.exports = {
         showLastUpdateTime: true,
         editUrl: params =>
           [
-            'https://github.com/help-me-mom/ng-mocks/edit/master/docs/',
+            'https://github.com/help-me-mom/ng-mocks/edit/main/docs/',
             params.versionDocsDirPath,
             '/',
             params.docPath,

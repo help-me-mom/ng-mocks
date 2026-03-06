@@ -68,7 +68,7 @@ beforeEach(() => {
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestStandaloneDirective/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneDirective)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/tree/master/examples/TestStandaloneDirective/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/tree/main/examples/TestStandaloneDirective/test.spec.ts"
 import {
   Directive,
   Injectable,

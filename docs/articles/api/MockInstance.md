@@ -275,7 +275,7 @@ Please, pay attention to comments in the code.
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/test.spec.ts&initialpath=%3Fspec%3DMockInstance)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockInstance/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/MockInstance/test.spec.ts"
 describe('MockInstance', () => {
   // Creates a scope to reset customizations automatically after this test.
   MockInstance.scope();
@@ -312,7 +312,7 @@ Please, pay attention to comments in the code.
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockInstance/component.spec.ts&initialpath=%3Fspec%3DMockInstance%3Acomponent)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/component.spec.ts&initialpath=%3Fspec%3DMockInstance%3Acomponent)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockInstance/component.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/MockInstance/component.spec.ts"
 describe('MockInstance:component', () => {
   // Creates a scope to reset customizations automatically after this test.
   MockInstance.scope();

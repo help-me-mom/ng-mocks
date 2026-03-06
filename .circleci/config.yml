@@ -183,7 +183,7 @@ jobs:
           command: npm run prettier:check
       - run:
           name: Lint commits
-          command: npx commitlint -V --from=origin/master
+          command: npx commitlint -V --from=origin/main
       - run:
           name: Lint code style
           command: npm run lint -- --ignore-pattern e2e/ --ignore-pattern tests-e2e/
@@ -343,7 +343,7 @@ jobs:
                         pattern: 'e2e/.*'
                         value: << pipeline.git.branch >>
                     - matches:
-                        pattern: 'master|alpha|beta|next|rc'
+                        pattern: 'main|alpha|beta|next|rc'
                         value: << pipeline.git.branch >>
               - matches:
                   pattern: 'renovate/e2e/a5/.*'
@@ -541,7 +541,7 @@ workflows:
       #          filters:
       #            branches:
       #              ignore:
-      #                - master
+      #                - main
       #                - alpha
       #                - beta
       #                - next

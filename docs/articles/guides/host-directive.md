@@ -67,7 +67,7 @@ it('keeps host directives', () => {
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestHostDirective/test.spec.ts&initialpath=%3Fspec%3DTestHostDirective)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestHostDirective/test.spec.ts&initialpath=%3Fspec%3DTestHostDirective)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestHostDirective/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestHostDirective/test.spec.ts"
 import {
   Component,
   Directive,

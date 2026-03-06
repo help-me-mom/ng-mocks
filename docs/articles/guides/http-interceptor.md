@@ -56,7 +56,7 @@ expect(req.request.headers.get('My-Custom')).toEqual(
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestHttpInterceptor/test.spec.ts&initialpath=%3Fspec%3DTestHttpInterceptor)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestHttpInterceptor/test.spec.ts&initialpath=%3Fspec%3DTestHttpInterceptor)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestHttpInterceptor/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestHttpInterceptor/test.spec.ts"
 import {
   HTTP_INTERCEPTORS,
   HttpClient,

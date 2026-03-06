@@ -54,7 +54,7 @@ expect(fixture.nativeElement.innerHTML).toContain('content');
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestStructuralDirective/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithoutContext)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestStructuralDirective/test.spec.ts&initialpath=%3Fspec%3DTestStructuralDirectiveWithoutContext)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestStructuralDirective/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestStructuralDirective/test.spec.ts"
 import {
   Directive,
   Input,

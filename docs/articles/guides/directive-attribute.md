@@ -37,7 +37,7 @@ const instance = ngMocks.get(fixture.point, TargetDirective);
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestAttributeDirective/test.spec.ts&initialpath=%3Fspec%3DTestAttributeDirective)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestAttributeDirective/test.spec.ts&initialpath=%3Fspec%3DTestAttributeDirective)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/TestAttributeDirective/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestAttributeDirective/test.spec.ts"
 import {
   Directive,
   ElementRef,

@@ -1,7 +1,7 @@
 [<img src="https://img.shields.io/gitter/room/help-me-mom/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
 [<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
-[<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/master" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=master)
-[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/master" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=master)
+[<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/main" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=main)
+[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=main)
 
 # Mock components, services and more out of annoying dependencies for simplification of Angular testing
 
@@ -35,7 +35,7 @@ The current version of the library **has been tested** and **can be used** with:
 ## Important links
 
 - **[Documentation with examples of Angular testing](https://ng-mocks.sudo.eu)**
-- [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/master/CHANGELOG.md)
+- [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/main/CHANGELOG.md)
 - [GitHub repo](https://github.com/help-me-mom/ng-mocks)
 - [NPM package](https://www.npmjs.com/package/ng-mocks)
 

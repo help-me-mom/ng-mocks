@@ -1,6 +1,6 @@
 {
   "extends": ["config:recommended", ":semanticCommits", ":semanticCommitTypeAll(chore)"],
-  "baseBranchPatterns": ["master"],
+  "baseBranchPatterns": ["main"],
   "dependencyDashboard": false,
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,

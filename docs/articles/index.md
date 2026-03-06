@@ -9,8 +9,8 @@ slug: /
 
 [<img src="https://img.shields.io/gitter/room/help-me-mom/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
 [<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
-[<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/master" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=master)
-[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/master" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=master)
+[<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/main" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=main)
+[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=main)
 
 `ng-mocks` is a testing library which helps with
 **mocking [services](api/MockService.md),
@@ -48,7 +48,7 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
-Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/master/CHANGELOG.md).
+Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/main/CHANGELOG.md).
 
 ## Quick Navigation
 

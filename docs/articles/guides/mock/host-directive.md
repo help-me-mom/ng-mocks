@@ -62,7 +62,7 @@ Profit! Under the hood `TargetComponent` will be redefined to use a mock of `Hos
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockHostDirective/test.spec.ts&initialpath=%3Fspec%3DMockHostDirective)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockHostDirective/test.spec.ts&initialpath=%3Fspec%3DMockHostDirective)
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/master/examples/MockHostDirective/test.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/MockHostDirective/test.spec.ts"
 import {
   Component,
   Directive,
