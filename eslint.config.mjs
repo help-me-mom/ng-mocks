@@ -82,6 +82,7 @@ const tsJsRules = {
   'unicorn/expiring-todo-comments': 'off',
   'unicorn/no-anonymous-default-export': 'off',
   'unicorn/no-array-callback-reference': 'off',
+  'unicorn/no-array-reverse': 'off',
   'unicorn/no-array-method-this-argument': 'off',
   'unicorn/no-for-loop': 'off',
   'unicorn/no-null': 'off',
