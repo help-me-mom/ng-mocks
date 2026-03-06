@@ -26,6 +26,6 @@ export default (defaultMethods: Array<keyof typeof console>, factory: (name: str
       for (const method of backup) {
         console[method] = (console as any)[`__ngMocksBackup_${method}`].pop();
       }
-      backup.splice(0, backup.length);
+      backup.splice(0);
     });
   };
