@@ -46,7 +46,7 @@ const projects = [
 ];
 
 const withFiles = (configs, files) =>
-  configs.map((config) => {
+  configs.map(config => {
     if (!config.files) {
       return config;
     }
