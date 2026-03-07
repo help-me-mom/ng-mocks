@@ -27,9 +27,6 @@ class EntryComponentsModule {
 }
 coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [ComponentFactoryResolver, new Optional()]]);
 
-class IvyModule {}
-NgModule()(IvyModule);
-
 export default (ngModule: NgMeta): void => {
   const entryComponents: any[] = [];
   for (const declaration of ngModule.declarations) {
@@ -40,10 +37,9 @@ export default (ngModule: NgMeta): void => {
   // the way to cause entryComponents to do its work
   const entryModule = extendClass(EntryComponentsModule);
   NgModule({
-    // Ivy knows how to make any component an entry point,
-    // but we still would like to patch resolveComponentFactory in order to provide mocks.
-    // ɵmod is added only if Ivy has been enabled.
-    entryComponents: (IvyModule as any).ɵmod ? [] : /* istanbul ignore next */ entryComponents,
+    // Angular 17+ always uses Ivy; entryComponents is a no-op but kept for the
+    // resolveComponentFactory patching done in EntryComponentsModule constructor.
+    entryComponents: [],
   } as never)(entryModule);
   ngModule.imports.push(entryModule);
 };

@@ -38,7 +38,7 @@ const injectableArgs = [
 abstract class InjectedAbstraction {}
 
 @Component({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class TestWithoutDecoratorComponent {
@@ -48,7 +48,7 @@ class TestWithoutDecoratorComponent {
 }
 
 @Component({
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class TestWithDecoratorComponent {

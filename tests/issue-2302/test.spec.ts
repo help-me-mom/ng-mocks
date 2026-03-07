@@ -16,7 +16,7 @@ class ItemService {
 
 @Component({
   selector: 'app-item-container',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'ItemContainerComponent',
 })
 class ItemContainerComponent implements OnInit {
@@ -30,7 +30,7 @@ class ItemContainerComponent implements OnInit {
 
 @Component({
   selector: 'app-cake-item-container',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'CakeItemContainerComponent',
 })
 class CakeItemContainerComponent

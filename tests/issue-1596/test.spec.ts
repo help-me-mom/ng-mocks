@@ -13,7 +13,7 @@ import { MockBuilder, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'parent',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<div #parent>parent</div>',
 })
 class ParentComponent implements OnDestroy {
@@ -43,7 +43,7 @@ class ParentComponent implements OnDestroy {
 
 @Component({
   selector: 'child-1596',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<span #child>child</span>',
 })
 class ChildComponent {}

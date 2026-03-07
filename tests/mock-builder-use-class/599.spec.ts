@@ -48,7 +48,7 @@ class MockAuthService {
  */
 @Directive({
   selector: 'button',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective {
   @Output() readonly triggerToggle = new EventEmitter<void>();
@@ -65,7 +65,7 @@ class TargetDirective {
  */
 @Directive({
   selector: 'button',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class MockTargetDirective {
   @Output() readonly triggerToggle = new EventEmitter<void>();

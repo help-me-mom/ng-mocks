@@ -17,7 +17,7 @@ EMPTY.complete();
 // A child component that contains update$ the parent component wants to listen to.
 @Component({
   selector: 'child',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ update$ | async }}',
 })
 class ChildComponent {
@@ -31,7 +31,7 @@ class ChildComponent {
 // A parent component that uses @ViewChild to listen to update$ of its child component.
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<child></child>',
 })
 class TargetComponent implements AfterViewInit {

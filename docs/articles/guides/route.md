@@ -13,8 +13,8 @@ However, to test that, we need to configure `TestBed` a bit differently:
 
 - it is fine to mock all components and declarations
 - `RouterModule` should be kept as it is, so it can do its job
-- `RouterTestingModule` should be added with empty routes
-- [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept, 
+- `provideLocationMocks()` should be added to provide testing utilities for location
+- [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token) should be kept,
   because `RouterModule` depends on many root services which cannot be mocked.
 
 This guarantees that the application's routes will be used,
@@ -26,37 +26,36 @@ beforeEach(() =>
     // Things to keep and export.
     [
       RouterModule,
-      RouterTestingModule.withRoutes([]),
       NG_MOCKS_ROOT_PROVIDERS,
-    ], 
+    ],
     // Things to mock.
     TargetModule,
-  )
+  ).provide(provideLocationMocks())
 );
 ```
 
-The next and very important step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
-We need this, because `RouterModule` relies on async zones.
+The next and very important step is to make the test callback in `it` async and to render `RouterOutlet`.
+We need this, because `RouterModule` relies on async operations.
 Also, please note an empty object as the second parameter, it's needed to leave inputs of `RouterOutlet` untouched.
 
 ```ts
-// fakeAsync --------------------------|||||||||
-it('renders /1 with Target1Component', fakeAsync(() => {
+// async --------------------------------|||||
+it('renders /1 with Target1Component', async () => {
   const fixture = MockRender(RouterOutlet, {});
 }));
 ```
 
 After we have rendered `RouterOutlet` we should initialize the router, also we can set the default url here.
-As mentioned above, we should use zones and `fakeAsync` for that.
+As mentioned above, we should use `async/await` for that.
 
 ```ts
-const router = TestBed.get(Router);
-const location = TestBed.get(Location);
+const router = fixture.point.injector.get(Router);
+const location = fixture.point.injector.get(Location);
 
 location.go('/1');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick();
+  await fixture.whenStable();
 }
 ```
 

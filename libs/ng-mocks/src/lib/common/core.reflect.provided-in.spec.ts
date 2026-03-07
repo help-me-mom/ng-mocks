@@ -1,17 +1,11 @@
 import coreReflectProvidedIn from './core.reflect.provided-in';
 
 describe('core.reflect.provided-in', () => {
-  it('covers ngInjectableDef', () => {
+  it('covers ɵprov', () => {
+    expect(coreReflectProvidedIn({})).toEqual(undefined);
     expect(
       coreReflectProvidedIn({
-        ngInjectableDef: {},
-      }),
-    ).toEqual(undefined);
-    expect(
-      coreReflectProvidedIn({
-        ngInjectableDef: {
-          providedIn: 'root',
-        },
+        ɵprov: { providedIn: 'root' },
       }),
     ).toEqual('root');
   });

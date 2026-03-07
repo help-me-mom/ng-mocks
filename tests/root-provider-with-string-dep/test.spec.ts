@@ -5,7 +5,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target-root-provider-with-string-dep',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: ' "name:{{ name }}" ',
 })
 class TargetComponent {

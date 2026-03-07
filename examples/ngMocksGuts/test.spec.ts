@@ -37,7 +37,7 @@ class Target1Service {
 
 @Pipe({
   name: 'target1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class Target1Pipe implements PipeTransform {
   protected readonly name = 'pipe1';
@@ -48,14 +48,14 @@ class Target1Pipe implements PipeTransform {
 
 @Component({
   selector: 'target2-ng-mocks-guts',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '<ng-content></ng-content>',
 })
 class Target2Component {}
 
 @Component({
   selector: 'target1-ng-mocks-guts',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `<div (target1)="update.emit()">
     {{ greeting }} {{ greeting | target1 }}
     <target2-ng-mocks-guts>{{ target }}</target2-ng-mocks-guts>
@@ -73,7 +73,7 @@ class Target1Component {
 
 @Directive({
   selector: '[target1]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class Target1Directive implements OnDestroy {
   @Output()

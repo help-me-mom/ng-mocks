@@ -6,7 +6,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-735-date-pipe',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ stamp | date }}',
 })
 class TargetComponent {

@@ -2,7 +2,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[customNgIf]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 export class CustomNgIfDirective {
   public constructor(

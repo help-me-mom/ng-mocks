@@ -14,7 +14,7 @@ class HelloService {
 
 @Component({
   providers: [HelloService],
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '',
 })
 class HelloComponent {
@@ -27,7 +27,7 @@ class HelloComponent {
 
 @Directive({
   providers: [HelloService],
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   selector: 'hello',
 })
 class HelloDirective {

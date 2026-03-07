@@ -5,5 +5,5 @@ export default (declaration: any): undefined | AnyType<any> | string => {
     return undefined;
   }
 
-  return declaration.ɵprov?.providedIn ?? declaration.ngInjectableDef?.providedIn;
+  return declaration.ɵprov?.providedIn;
 };

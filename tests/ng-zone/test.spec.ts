@@ -16,7 +16,7 @@ import {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'target-ng-zone',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ v }}',
 })
 class TargetComponent {

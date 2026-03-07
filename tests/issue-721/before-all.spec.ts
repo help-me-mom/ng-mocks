@@ -7,7 +7,7 @@ const TOKEN = new InjectionToken('TOKEN');
 
 @Component({
   selector: 'target-721-before-all',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ value }}',
 })
 class TargetComponent {

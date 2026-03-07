@@ -29,7 +29,7 @@ import {
     },
   ],
   selector: 'target-246',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ providedValue }}',
 })
 class TargetComponent implements ControlValueAccessor {
@@ -64,7 +64,7 @@ class TargetComponent implements ControlValueAccessor {
     },
   ],
   selector: '[target]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetDirective implements Validator {
   public provideChange: any;
@@ -92,7 +92,7 @@ class TargetDirective implements Validator {
     },
   ],
   selector: '[targetAsync]',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
 })
 class TargetAsyncDirective implements Validator {
   public provideChange: any;

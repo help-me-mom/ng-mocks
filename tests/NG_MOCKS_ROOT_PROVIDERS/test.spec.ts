@@ -25,7 +25,7 @@ class Target1Service {
 
 @Component({
   selector: 'target-1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ service.name }}',
 })
 class Target1Component {
@@ -52,7 +52,7 @@ class Target2Service {
 
 @Component({
   selector: 'target-2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ service.name }}',
 })
 class Target2Component {

@@ -35,7 +35,7 @@ class KeepModule {
 
 @Component({
   selector: 'target-222-injector-scope',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'target',
 })
 class TargetComponent {}

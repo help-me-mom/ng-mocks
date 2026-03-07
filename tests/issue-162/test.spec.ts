@@ -9,7 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'app-root-162',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `<a (click)="title = 'test'">click</a>`,
 })
 class AppComponent {
@@ -18,7 +18,7 @@ class AppComponent {
 
 @Component({
   selector: 'app-mock-162',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `<a (click)="title = 'test'">click</a>`,
 })
 class MockComponent {

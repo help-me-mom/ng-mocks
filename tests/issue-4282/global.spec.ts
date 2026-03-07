@@ -23,7 +23,7 @@ class TargetService {
 
 @Component({
   selector: 'target-4282-global',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `{{ service.name }}`,
 })
 class TargetComponent {

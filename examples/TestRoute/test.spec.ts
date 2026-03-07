@@ -1,8 +1,7 @@
 import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import { Component, NgModule } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
@@ -14,7 +13,7 @@ import {
 // A layout component that renders the current route.
 @Component({
   selector: 'target',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: `
     <a routerLink="/1">1</a>
     <a routerLink="/2">2</a>
@@ -28,7 +27,7 @@ class TargetComponent {
 // A simple component for the first route.
 @Component({
   selector: 'route1',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'route1',
 })
 class Route1Component {
@@ -38,7 +37,7 @@ class Route1Component {
 // A simple component for the second route.
 @Component({
   selector: 'route2',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: 'route2',
 })
 class Route2Component {
@@ -75,16 +74,12 @@ class TargetModule {}
 describe('TestRoute:Route', () => {
   beforeEach(() => {
     return MockBuilder(
-      [
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       TargetModule,
-    );
+    ).provide(provideLocationMocks());
   });
 
-  it('renders /1 with Route1Component', fakeAsync(() => {
+  it('renders /1 with Route1Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -93,15 +88,15 @@ describe('TestRoute:Route', () => {
     location.go('/1');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
     expect(() => ngMocks.find(Route1Component)).not.toThrow();
-  }));
+  });
 
-  it('renders /2 with Route2Component', fakeAsync(() => {
+  it('renders /2 with Route2Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -110,13 +105,13 @@ describe('TestRoute:Route', () => {
     location.go('/2');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 
 describe('TestRoute:Component', () => {
@@ -127,21 +122,15 @@ describe('TestRoute:Component', () => {
   // initialization, we need to pass its module as the second
   // parameter. And, the last but not the least, we need keep
   // RouterModule to have its routes, and to add
-  // RouterTestingModule.withRoutes([]), yes yes, with empty routes
-  // to have tools for testing.
+  // provideLocationMocks() to have tools for testing.
   beforeEach(() => {
     return MockBuilder(
-      [
-        TargetComponent,
-        RouterModule,
-        RouterTestingModule.withRoutes([]),
-        NG_MOCKS_ROOT_PROVIDERS,
-      ],
+      [TargetComponent, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
       TargetModule,
-    );
+    ).provide(provideLocationMocks());
   });
 
-  it('navigates between pages', fakeAsync(() => {
+  it('navigates between pages', async () => {
     const fixture = MockRender(TargetComponent);
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -149,7 +138,7 @@ describe('TestRoute:Component', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // By default, our routes do not have a component.
@@ -171,7 +160,7 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
@@ -185,10 +174,10 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });

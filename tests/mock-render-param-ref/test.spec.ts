@@ -9,7 +9,7 @@ import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
   selector: 'target-mock-render-param-ref',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '="{{ input }}"=',
 })
 class TargetComponent {

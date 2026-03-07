@@ -9,7 +9,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
   selector: 'target-434',
-  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+  standalone: false,
   template: '{{ prop1 }}:{{ prop2 }}',
 })
 class TargetComponent {
