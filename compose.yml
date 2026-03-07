@@ -3,6 +3,8 @@ services:
     image: satantime/puppeteer-node:24.13.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=8192
     volumes:
       - .:/app
       - cache:/root/.cache
