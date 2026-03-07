@@ -1,3 +1,3 @@
-npx lint-staged
-npm run lint
-npm run ts:check
+docker compose run --rm ng-mocks npx lint-staged
+docker compose run --rm ng-mocks npm run lint
+docker compose run --rm ng-mocks npm run ts:check

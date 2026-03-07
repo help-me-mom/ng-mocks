@@ -1,1 +1,1 @@
-npm run test
+docker compose run --rm ng-mocks npm run test
