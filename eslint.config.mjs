@@ -5,7 +5,7 @@ import js from '@eslint/js';
 import tsEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsEslintParser from '@typescript-eslint/parser';
 import esXPlugin from 'eslint-plugin-es-x';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import jsonPlugin from 'eslint-plugin-json';
 import * as mdxPlugin from 'eslint-plugin-mdx';
 import preferArrowPlugin from 'eslint-plugin-prefer-arrow';
@@ -129,7 +129,7 @@ const tsJsRules = {
   'es-x/no-array-prototype-values': 'error',
   'es-x/no-array-string-prototype-at': 'error',
 
-  'import/no-unresolved': 'off',
+  'import-x/no-unresolved': 'off',
 
   'no-alert': 'error',
   'no-console': ['error', { allow: ['error', 'warn'] }],
@@ -137,7 +137,7 @@ const tsJsRules = {
   'no-restricted-globals': ['error', 'fit', 'fdescribe', 'xit', 'xdescribe'],
   semi: ['error', 'always'],
   quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
-  'import/order': [
+  'import-x/order': [
     'error',
     {
       'newlines-between': 'always',
@@ -202,7 +202,7 @@ export default [
       '@angular-eslint': angularEslintPlugin,
       '@angular-eslint/template': angularEslintTemplatePlugin,
       unicorn: unicornPlugin,
-      import: importPlugin,
+      'import-x': importPlugin,
       prettier: prettierPlugin,
       'unused-imports': unusedImportsPlugin,
       'prefer-arrow': preferArrowPlugin,
@@ -210,8 +210,8 @@ export default [
     },
     processor: angularEslintTemplatePlugin.processors['extract-inline-html'],
     settings: {
-      ...importPlugin.configs.typescript.settings,
-      'import/resolver': {
+      ...importPlugin.configs['flat/typescript'].settings,
+      'import-x/resolver': {
         typescript: {
           noWarnOnMultipleProjects: true,
           project: projects,

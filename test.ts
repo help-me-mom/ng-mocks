@@ -1,4 +1,4 @@
-/* eslint-disable import/order */
+/* eslint-disable import-x/order */
 
 Error.stackTraceLimit = Number.POSITIVE_INFINITY;
 
