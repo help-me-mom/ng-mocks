@@ -1,87 +1,100 @@
 # ng-mocks Agent Runbook
 
-## Scope
+## Source of Truth
 
-This file documents practical rules for contributors/agents working on `ng-mocks`, especially Angular/e2e integration updates.
-The library has many projects for integrational testing, the projects are in `e2e` and in `tests-e2e` directories.
-The library a project with documentation in `docs`.
+- Keep agent guidance aligned with the current repository files:
+  - `README.md`
+  - `CONTRIBUTING.md`
+  - `compose.sh`
+  - `test.sh`
+  - `compose.yml`
+  - `package.json`
+- If docs and executable files disagree, trust the current scripts and config first, then update the docs.
 
-## Required Test Execution
+## AI Agents Compatibility
 
-- Use Docker wrappers from repo root:
-  - `sh compose.sh <target>` for dependency/bootstrap setup.
-  - `sh test.sh <target>` for tests.
-- **NEVER** run tests via local `npm`.
-- For parallel runs in multiple worktrees, set a unique namespace:
-  - `COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh compose.sh <target>`
-  - `COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh test.sh <target>`
+- This repository should work cleanly with both Codex and OpenCode.
+- When a repo skill applies, translate its workflow into a plain Markdown task list before doing substantial work.
+- Use simple checkboxes or numbered items that render anywhere. Avoid agent-specific planning syntax in repo guidance.
+- A good default task list is:
 
-## Update all package-lock.json
+  ```md
+  - [ ] Inspect the current repo state and source-of-truth docs
+  - [ ] Apply the focused changes
+  - [ ] Run the required validation
+  - [ ] Summarize results, risks, and follow-ups
+  ```
 
-- Temporarily change `compose.yml` line from `npm install` to `npm update`.
-- Run `sh compose.sh` to update dependencies to fresh possible versions.
-- Restore `compose.yml` to have `npm install` back.
-- Run `sh compose.sh` to sync lock file for CI/CD.
+- Keep the task list updated as work progresses. If scope changes, rewrite the list so it still matches the real task.
 
-## Angular Major Version Upgrade Workflow
+## Wrapper-First Workflow
 
-- Update versions explicitly in `tests-e2e/package.json` (Angular + third-party libs).
-- Keep lock files; do **not** delete them.
-- If major-version install fails in compose flow:
-  - Temporarily change the relevant `compose.yml` line from `npm install` to `npm update`.
-  - Run `sh compose.sh e2e`.
-  - Revert `compose.yml` back to `npm install`.
-  - Run `sh compose.sh e2e` again to normalize lockfile resolution.
+- For dependency bootstrap, lockfile refreshes, and test execution, use the repo wrappers instead of ad-hoc local installs:
+  - `sh compose.sh <target>`
+  - `sh test.sh <target>`
+- If multiple worktrees or agent sessions run in parallel, set a unique compose namespace:
+  - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
+  - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
 
-## Node Version Upgrade Workflow
+## Local npm / nvm Flows
 
-When asked to "update node version in all projects", use this sequence:
+- `CONTRIBUTING.md` still documents local `nvm use`, `npm run test`, and `npm run test:debug` flows.
+- Treat those as human debugging or fallback instructions, not the default automation path for agents.
+- Release steps and IE/manual debugging remain local/manual workflows.
 
-1. Identify target Node:
-   - Use latest **even** stable Node release from `https://nodejs.org/dist/index.json`.
-   - For Docker image tags, use the latest available `satantime/puppeteer-node` tag.
-2. Keep version alignment:
-   - `nvm` major must match Docker major.
-   - `nvm` minor/patch may be higher than Docker minor/patch, but never lower.
-   - In corresponding `package.json` files, `@types/node` major must match Node/Docker major.
-   - Check that `npm` version works with the chosen `node` version, update `npm` version if needed.
-3. Update Node runtime declarations:
-   - In `e2e` directory, major version change is possible on projects which don't belong to particular angular version.
-   - Search for `.nvmrc`, `compose.yml`, `package.json`, `.circleci/config.yml` and other possible files.
-4. Validation:
-   - Run bootstrap via Docker wrappers for changed targets (`sh compose.sh <target>`).
-   - Run required test wrappers (`sh test.sh root`, `sh test.sh e2e`, and targeted suites).
-   - Ensure that in all projects in all files major versions match each other: `docker`, `nvm`, `@types/node`, `npm`.
-5. Commit:
-   - When all checks are successful commit the changes with the message `chore(docker): updating node images`.
+## Compatibility Guidance
 
-## Test Intent Constraints
-
-- `ng-mocks` tests verify ng-mocks behavior; do not remove or dilute `ngMocks` API usage in tests.
-- Preserve existing use-cases in `tests-e2e`; fix compatibility while keeping semantic intent unchanged.
-- Follow test style/patterns from `libs`, `tests`, and `examples`.
-- Avoid direct testing of private internals when public behavior can cover the scenario.
-
-## Library-Specific Notes
-
-- PrimeNG regressions: check prior fixes in git history for that test and apply the same adaptation pattern.
-- Angular 20 fallback handling exists for render/hide query scanning edge cases; keep type contracts explicit (avoid defensive optional chains where contract guarantees presence).
-
-## Parallel Execution Rule
-
-- Parallelization is allowed for speed, but run only one command per unique Docker service at a time.
-- Never queue overlapping commands for the same service name, or earlier runs may be superseded.
-
-## Minimum Validation Checklist
-
-After non-trivial e2e/framework changes:
-
-1. `sh test.sh root`
-2. `sh test.sh e2e`
-3. Targeted version suites affected by the change (and broader matrix if requested).
-4. `sh test.sh coverage` when coverage impact is expected.
+- `ng-mocks` currently documents support for Angular 5 through Angular 20.
+- Angular 5-8 are pre-Ivy.
+- Angular 9-11 have both View Engine and Ivy coverage in the repo scripts.
+- Angular 12-20 are Ivy-only in the current repo setup.
+- Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
+- Do not claim support beyond those tables unless you update the tables and the implementation together.
 
 ## Code Quality Commands
 
-- Format: `npm run prettier:repo`
-- Lint: `npm run lint`
+- Run root quality checks through the main service container:
+  - `docker compose run --rm ng-mocks npm run prettier:repo`
+  - `docker compose run --rm ng-mocks npm run prettier:check`
+  - `docker compose run --rm ng-mocks npm run lint`
+  - `docker compose run --rm ng-mocks npm run ts:check`
+- Run Prettier before `git commit`.
+
+## Lockfiles and Dependency Refresh
+
+- Keep this section short on purpose. The step-by-step workflow belongs in the repo skill `skills/update-package-locks/SKILL.md`.
+- The runbook only needs the guardrail:
+  - never delete `package-lock.json` files to regenerate them
+  - use the lockfile skill when a refresh is actually required
+  - if multiple worktrees are active, use a unique `COMPOSE_PROJECT_NAME`
+
+## Angular Major and E2E Maintenance
+
+- Start with `CONTRIBUTING.md` for Angular major and e2e maintenance tasks.
+- If `CONTRIBUTING.md` and the current repo layout disagree, trust the current files and update the docs as part of the work.
+
+## Validation Expectations
+
+- Minimum validation after code, dependency, or workflow changes:
+  1. `sh test.sh root`
+  2. `sh test.sh e2e`
+  3. `sh test.sh a5es5`
+  4. Affected target suites such as `sh test.sh a17` or `sh test.sh a20`
+  5. `sh test.sh coverage` when core behavior or coverage-sensitive code changes
+- For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
+
+## Git Safety
+
+- Do not use destructive git commands such as `git reset --hard` or force-push unless the user explicitly asked for history rewriting.
+- For rebases or conflict-heavy work, inspect branch state first and prefer recoverable steps.
+- If rewrite work is necessary, create a safety branch before destructive operations whenever possible.
+
+## Expectations for Repo Skills
+
+- Keep `skills/*/SKILL.md` synchronized with this runbook and the actual scripts.
+- Every repo skill should include:
+  1. When to use it
+  2. A plain Markdown task list template
+  3. Exact repo commands
+  4. Required validation
+  5. Safety guardrails
