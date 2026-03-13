@@ -62,9 +62,10 @@
 
 ## Lockfiles and Dependency Refresh
 
-- Keep this section short on purpose. The step-by-step workflow belongs in the repo skill `skills/update-package-locks/SKILL.md`.
+- Keep this section short on purpose. The step-by-step workflow belongs in the repo skill `.agents/skills/update-package-locks/SKILL.md`.
 - The runbook only needs the guardrail:
   - never delete `package-lock.json` files to regenerate them
+  - for lockfile conflicts, do not hand-merge the conflict block; reject the remote lockfile side for the affected project, then run the wrapper-based update flow and the normal wrapper-based install flow for that same target
   - use the lockfile skill when a refresh is actually required
   - if multiple worktrees are active, use a unique `COMPOSE_PROJECT_NAME`
 
@@ -76,11 +77,10 @@
 ## Validation Expectations
 
 - Minimum validation after code, dependency, or workflow changes:
-  1. `sh test.sh root`
-  2. `sh test.sh e2e`
-  3. `sh test.sh a5es5`
-  4. Affected target suites such as `sh test.sh a17` or `sh test.sh a20`
-  5. `sh test.sh coverage` when core behavior or coverage-sensitive code changes
+  1. Run `sh test.sh <target>` for each project or suite whose files changed
+  2. Run `sh test.sh root` only when root files changed
+  3. Run `sh test.sh e2e` only when `tests-e2e` or shared e2e files changed
+  4. Run `sh test.sh coverage` when core behavior or coverage-sensitive code changes
 - For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
 
 ## Git Safety
@@ -91,7 +91,7 @@
 
 ## Expectations for Repo Skills
 
-- Keep `skills/*/SKILL.md` synchronized with this runbook and the actual scripts.
+- Keep `.agents/skills/*/SKILL.md` synchronized with this runbook and the actual scripts.
 - Every repo skill should include:
   1. When to use it
   2. A plain Markdown task list template
