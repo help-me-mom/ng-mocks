@@ -12,19 +12,15 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
-import { from } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
-  MockInstance,
   MockRender,
   NG_MOCKS_GUARDS,
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating login check.
 // It will be replaced with its mock copy.
@@ -35,11 +31,7 @@ class LoginService {
 
 // A guard we want to test.
 const canMatchGuard: CanMatchFn = (route, segments) => {
-  if (route && segments && inject(LoginService).isLoggedIn) {
-    return true;
-  }
-
-  return from(inject(Router).navigate(['/login'])).pipe(mapTo(false));
+  return !!(route && segments && inject(LoginService).isLoggedIn);
 };
 
 // Another guard like in a real world example,
@@ -80,13 +72,12 @@ class DashboardComponent {
       },
       {
         canMatch: [canMatchGuard, sideEffectGuard],
-        path: '',
-        children: [
-          {
-            component: DashboardComponent,
-            path: '**',
-          },
-        ],
+        component: DashboardComponent,
+        path: 'dashboard',
+      },
+      {
+        path: '**',
+        redirectTo: 'login',
       },
     ]),
   ],
@@ -108,15 +99,18 @@ describe('TestRoutingGuard:canMatch', () => {
   // and `canActivateGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
-      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       [TargetModule],
     )
       .exclude(NG_MOCKS_GUARDS)
-      .keep(canMatchGuard)
-      .provide(provideLocationMocksCompat());
+      .keep(canMatchGuard);
   });
 
-  // It is important to run routing tests in async.
+  // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
     if (Number.parseInt(VERSION.major, 10) < 7) {
       pending('Need Angular 7+'); // TODO pending
@@ -130,7 +124,9 @@ describe('TestRoutingGuard:canMatch', () => {
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
+      await fixture.ngZone.run(() =>
+        router.navigateByUrl('/dashboard'),
+      );
       await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
@@ -141,22 +137,25 @@ describe('TestRoutingGuard:canMatch', () => {
   });
 
   it('loads dashboard', async () => {
-    // Set up the LoginService to be logged in BEFORE rendering
-    MockInstance(LoginService, 'isLoggedIn', true);
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
+    const loginService = ngMocks.get(LoginService);
+
+    // Letting the guard know we have been logged in.
+    loginService.isLoggedIn = true;
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
+      await fixture.ngZone.run(() =>
+        router.navigateByUrl('/dashboard'),
+      );
       await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Because now we are logged in, the guard should let us land on
     // the dashboard.
-    expect(location.path()).toEqual('/');
+    expect(location.path()).toEqual('/dashboard');
     expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
   });
 });

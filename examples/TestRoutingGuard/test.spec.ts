@@ -11,19 +11,17 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 import {
   MockBuilder,
-  MockInstance,
   MockRender,
   NG_MOCKS_GUARDS,
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating login check.
 // It will be replaced with its mock copy.
@@ -124,14 +122,17 @@ describe('TestRoutingGuard:test', () => {
   // `NG_MOCKS_GUARDS` to remove all other guards.
   beforeEach(() => {
     return MockBuilder(
-      [LoginGuard, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        LoginGuard,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       TargetModule,
-    )
-      .exclude(NG_MOCKS_GUARDS)
-      .provide(provideLocationMocksCompat());
+    ).exclude(NG_MOCKS_GUARDS);
   });
 
-  // It is important to run routing tests in async.
+  // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
     if (Number.parseInt(VERSION.major, 10) <= 6) {
       pending('Need Angular > 6'); // TODO pending
@@ -156,12 +157,14 @@ describe('TestRoutingGuard:test', () => {
   });
 
   it('loads dashboard', async () => {
-    // Set up the LoginService to be logged in BEFORE rendering
-    MockInstance(LoginService, 'isLoggedIn', true);
-
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
+    const loginService: LoginService =
+      fixture.point.injector.get(LoginService);
+
+    // Letting the guard know we have been logged in.
+    loginService.isLoggedIn = true;
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
