@@ -8,7 +8,12 @@ import {
 } from '@ngneat/transloco';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
-import { TestComponent } from '../../../tests/ng-mocks-search-with-no-fixture/fixtures';
+@Component({
+  selector: 'test',
+  standalone: false,
+  template: '',
+})
+export class TestComponent {}
 
 const langs = {
   en: {

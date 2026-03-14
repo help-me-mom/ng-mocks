@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "node_modules",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -14,7 +13,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
@@ -22,10 +21,7 @@
     "types": ["node", "jasmine", "jest", "mocha"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "useDefineForClassFields": false,
-    "paths": {
-      "ng-mocks": ["../../libs/ng-mocks/src/index.ts"]
-    }
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

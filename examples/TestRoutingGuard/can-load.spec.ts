@@ -13,8 +13,6 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { from } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
 
 import {
   MockBuilder,
@@ -33,11 +31,7 @@ class LoginService {
 
 // The canLoad guard we want to test.
 const canLoadGuard: CanLoadFn = (route, segments) => {
-  if (route && segments && inject(LoginService).isLoggedIn) {
-    return true;
-  }
-
-  return from(inject(Router).navigate(['/login'])).pipe(mapTo(false));
+  return !!(route && segments && inject(LoginService).isLoggedIn);
 };
 
 // Another canLoad guard like in a real world example,
@@ -126,7 +120,7 @@ describe('TestRoutingGuard:canLoad', () => {
       .keep(canLoadGuard);
   });
 
-  it('redirects to login', async () => {
+  it('blocks dashboard and opens login', async () => {
     if (Number.parseInt(VERSION.major, 10) < 7) {
       pending('Need Angular  7+'); // TODO pending
 
@@ -139,15 +133,23 @@ describe('TestRoutingGuard:canLoad', () => {
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
+      const result = await fixture.ngZone.run(() =>
+        router.navigateByUrl('/dashboard'),
+      );
       // is needed to wait until routing is finished.
+      await fixture.whenStable();
+
+      expect(result).toEqual(false);
+
+      await fixture.ngZone.run(() => router.navigateByUrl('/login'));
       await fixture.whenStable();
     }
 
     // Because by default we are not logged, the guard should
-    // redirect us /login page.
+    // prevent loading the dashboard module, but still let us open /login.
     expect(location.path()).toEqual('/login');
     expect(() => ngMocks.find(LoginComponent)).not.toThrow();
+    expect(() => ngMocks.find(DashboardComponent)).toThrow();
   });
 
   it('loads dashboard', async () => {
@@ -161,9 +163,13 @@ describe('TestRoutingGuard:canLoad', () => {
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.initialNavigation());
+      const result = await fixture.ngZone.run(() =>
+        router.navigateByUrl('/dashboard'),
+      );
       // is needed to wait until routing is finished.
       await fixture.whenStable();
+
+      expect(result).toEqual(true);
     }
 
     // Because now we are logged in, the guard should let us land on

@@ -1,5 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { DebugElement, DebugNode, EventEmitter } from '@angular/core';
+import {
+  DebugElement,
+  DebugNode,
+  EventEmitter,
+  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
@@ -115,6 +121,71 @@ describe('MockRender', () => {
       'injected content',
     );
     fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain(
+      'injected content',
+    );
+  });
+
+  describe('zoneless', () => {
+    ngMocks.ignoreOnConsole('warn');
+
+    it('supports zoneless detectChanges without checkNoChanges', () => {
+      TestBed.configureTestingModule({
+        declarations: [
+          RenderRealComponent,
+          WithoutSelectorComponent,
+          EmptyComponent,
+        ],
+        providers: [provideZonelessChangeDetection()],
+      });
+
+      const fixture = MockRender(
+        `
+          <render-real-component [content]="mockContent"></render-real-component>
+        `,
+        {
+          mockContent: 'injected content',
+        },
+        false,
+      );
+      const checkNoChanges = spyOn(
+        fixture,
+        'checkNoChanges',
+      ).and.callThrough();
+
+      expect((fixture as any).zonelessEnabled).toEqual(true);
+      fixture.detectChanges(false);
+
+      expect(checkNoChanges).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.textContent).toContain(
+        'injected content',
+      );
+    });
+  });
+
+  it('supports zoneful detectChanges when zoneless is disabled', () => {
+    TestBed.configureTestingModule({
+      declarations: [
+        RenderRealComponent,
+        WithoutSelectorComponent,
+        EmptyComponent,
+      ],
+      providers: [provideZoneChangeDetection()],
+    });
+
+    const fixture = MockRender(
+      `
+        <render-real-component [content]="mockContent"></render-real-component>
+      `,
+      {
+        mockContent: 'injected content',
+      },
+      false,
+    );
+
+    expect((fixture as any).zonelessEnabled).toBeFalsy();
+    fixture.detectChanges(false);
+
     expect(fixture.nativeElement.textContent).toContain(
       'injected content',
     );

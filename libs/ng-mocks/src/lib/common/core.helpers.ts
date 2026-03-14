@@ -108,6 +108,7 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
   if (!set) {
     return;
   }
+
   for (const dep of deps) {
     if (!Array.isArray(dep)) {
       set.add(dep);

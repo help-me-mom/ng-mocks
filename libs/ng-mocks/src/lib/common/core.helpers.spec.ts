@@ -1,4 +1,4 @@
-import { extendClass } from './core.helpers';
+import { extendClass, extractDependency } from './core.helpers';
 import decorateMock from './decorate.mock';
 
 describe('DebuggableMock', () => {
@@ -16,5 +16,34 @@ describe('DebuggableMock', () => {
     decorateMock(mock, Bar);
 
     expect((mock as any).mockOf).toBe(Bar);
+  });
+});
+
+describe('extractDependency', () => {
+  it('skips extraction when no destination set is passed', () => {
+    expect(() =>
+      extractDependency([
+        'token',
+        [{ ngMetadataName: 'Optional' }, 'optional'],
+      ]),
+    ).not.toThrow();
+  });
+
+  it('collects dependencies and skips injection flags', () => {
+    const actual = new Set<any>();
+    const values: any[] = [];
+
+    extractDependency(
+      [
+        'token',
+        [{ ngMetadataName: 'Optional' }, 'optional'],
+        [{ ngMetadataName: 'Self' }, 'self'],
+        ['nested'],
+      ],
+      actual,
+    );
+    for (const value of actual) values.push(value);
+
+    expect(values).toEqual(['token', 'optional', 'self', 'nested']);
   });
 });

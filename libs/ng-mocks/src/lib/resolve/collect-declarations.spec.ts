@@ -273,6 +273,24 @@ describe('collect-declarations', () => {
       expect(actual.hostBindings).toEqual([['prop'], ['prop']]);
     });
 
+    it('handles host bindings with args in propDecorators', () => {
+      const actual = collectDeclarations({
+        propDecorators: {
+          prop: [
+            {
+              args: ['attr.name'],
+              type: { prototype: { ngMetadataName: 'HostBinding' } },
+            },
+          ],
+        },
+      });
+
+      expect(actual.host).toEqual({
+        '[attr.name]': 'prop',
+      });
+      expect(actual.hostBindings).toEqual([['prop', 'attr.name']]);
+    });
+
     it('handles host listeners without args and with duplicates', () => {
       const actual = collectDeclarations({
         propDecorators: {
