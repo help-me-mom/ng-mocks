@@ -260,6 +260,8 @@ In case of `HttpClientTestingModule` we can use `.replace` too.
 ```ts
 beforeEach(() => {
   return MockBuilder(MyComponent, MyModule)
+    // .keep should be added since Angular 21
+    .keep(HttpClient)
     .replace(HttpClientModule, HttpClientTestingModule);
 });
 ```

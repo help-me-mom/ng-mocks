@@ -1,5 +1,10 @@
-import { HttpBackend, HttpClientModule } from '@angular/common/http';
+import {
+  HttpBackend,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { VERSION } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -51,7 +56,7 @@ import {
 
 describe('MockBuilder:deep', () => {
   beforeEach(async () => {
-    const ngModule = MockBuilder(MyComponent, MyModule)
+    const builder = MockBuilder(MyComponent, MyModule)
       .mock(ContentChildComponent, {
         render: {
           block: {
@@ -131,10 +136,13 @@ describe('MockBuilder:deep', () => {
 
       // Even it belongs to the module that is marked as kept,
       // the component will be replaced with its mock copy.
-      .mock(My3Component)
+      .mock(My3Component);
 
-      // and now we want to build our NgModule.
-      .build();
+    // and now we want to build our NgModule.
+    if (Number.parseInt(VERSION.major, 10) >= 21) {
+      builder.keep(HttpClient);
+    }
+    const ngModule = builder.build();
     TestBed.configureTestingModule(ngModule);
 
     // Extra configuration

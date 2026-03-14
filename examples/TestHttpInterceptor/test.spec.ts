@@ -11,7 +11,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, VERSION } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import {
@@ -86,10 +86,14 @@ describe('TestHttpInterceptor', () => {
   // should to pass HTTP_INTERCEPTORS into `.mock` and replace
   // HttpClientModule with HttpClientTestingModule.
   beforeEach(() => {
-    return MockBuilder(TargetInterceptor, TargetModule)
+    const builder = MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)
-      .keep(HTTP_INTERCEPTORS)
-      .replace(HttpClientModule, HttpClientTestingModule);
+      .keep(HTTP_INTERCEPTORS);
+    if (Number.parseInt(VERSION.major, 10) >= 21) {
+      builder.keep(HttpClient);
+    }
+
+    return builder.replace(HttpClientModule, HttpClientTestingModule);
   });
 
   it('triggers interceptor', () => {

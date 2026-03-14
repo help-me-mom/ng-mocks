@@ -21,6 +21,8 @@ beforeEach(() =>
   MockBuilder(TargetInterceptor, TargetModule)
     .exclude(NG_MOCKS_INTERCEPTORS)
     .keep(HTTP_INTERCEPTORS)
+    // .keep should be added since Angular 21
+    .keep(HttpClient)
     .replace(HttpClientModule, HttpClientTestingModule)
 );
 ```
@@ -148,6 +150,8 @@ describe('TestHttpInterceptor', () => {
     return MockBuilder(TargetInterceptor, TargetModule)
       .exclude(NG_MOCKS_INTERCEPTORS)
       .keep(HTTP_INTERCEPTORS)
+      // .keep should be added since Angular 21
+      .keep(HttpClient)
       .replace(HttpClientModule, HttpClientTestingModule);
   });
 

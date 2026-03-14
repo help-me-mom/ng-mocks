@@ -1,5 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { VERSION } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { isMockedNgDefOf, MockBuilder, NG_MOCKS } from 'ng-mocks';
@@ -39,7 +40,7 @@ import {
 
 describe('MockBuilder:ngMocks', () => {
   beforeEach(async () => {
-    const ngModule = MockBuilder(MyComponent, MyModule)
+    const builder = MockBuilder(MyComponent, MyModule)
       .keep(ModuleKeep)
       .keep(KeepComponent)
       .keep(KeepDirective)
@@ -66,10 +67,13 @@ describe('MockBuilder:ngMocks', () => {
 
       // Even it belongs to the module we want to keep,
       // it will be still replaced with a mock copy.
-      .mock(My3Component)
+      .mock(My3Component);
 
-      // and now we want to build our NgModule.
-      .build();
+    // and now we want to build our NgModule.
+    if (Number.parseInt(VERSION.major, 10) >= 21) {
+      builder.keep(HttpClient);
+    }
+    const ngModule = builder.build();
     TestBed.configureTestingModule(ngModule);
 
     // Extra configuration
