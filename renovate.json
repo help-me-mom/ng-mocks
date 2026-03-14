@@ -49,6 +49,11 @@
       "additionalBranchPrefix": "root/"
     },
     {
+      "matchFileNames": ["tests-e2e/**"],
+      "semanticCommitScope": "root",
+      "additionalBranchPrefix": "root/"
+    },
+    {
       "matchFileNames": ["e2e/a5es5/*", "e2e/a5es2015/*"],
       "semanticCommitScope": "e2e/a5",
       "additionalBranchPrefix": "e2e/a5/"
