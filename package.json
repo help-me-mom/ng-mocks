@@ -304,7 +304,7 @@
     "typescript": "5.9.3",
     "webpack": "5.105.4",
     "webpack-cli": "7.0.0",
-    "zone.js": "0.15.1"
+    "zone.js": "0.16.1"
   },
   "engines": {
     "npm": "11.11.1"
