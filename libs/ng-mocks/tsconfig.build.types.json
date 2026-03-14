@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.build.cjs.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ES2022",
     "moduleResolution": "bundler"

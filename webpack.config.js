@@ -23,7 +23,7 @@ module.exports = [
             {
               loader: 'ts-loader',
               options: {
-                configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.build.cjs.json'),
+                configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 transpileOnly: true,
               },
             },
