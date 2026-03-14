@@ -111,6 +111,11 @@ class DashboardComponent {
 class TargetModule {}
 
 describe('TestRoutingGuard:test', () => {
+  const itNeedsAngular7 =
+    Number.parseInt(VERSION.major, 10) <= 6
+      ? ((it as any).skip as typeof it)
+      : it;
+
   // Because we want to test the guard, it means that we want to
   // test its integration with RouterModule. Therefore, we pass
   // the guard as the first parameter of MockBuilder. Then, to
@@ -133,13 +138,7 @@ describe('TestRoutingGuard:test', () => {
   });
 
   // It is important to wait for routing to become stable.
-  it('redirects to login', async () => {
-    if (Number.parseInt(VERSION.major, 10) <= 6) {
-      pending('Need Angular > 6'); // TODO pending
-
-      return;
-    }
-
+  itNeedsAngular7('redirects to login', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
