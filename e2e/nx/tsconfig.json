@@ -4,14 +4,15 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2022",
-    "module": "esnext",
+    "module": "preserve",
     "lib": ["es2020", "dom"],
     "types": ["jasmine", "jest", "node"],
+    "isolatedModules": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -24,6 +25,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
