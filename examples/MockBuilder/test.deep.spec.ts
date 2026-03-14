@@ -1,10 +1,5 @@
-import {
-  HttpBackend,
-  HttpClient,
-  HttpClientModule,
-} from '@angular/common/http';
+import { HttpBackend, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { VERSION } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
@@ -139,9 +134,6 @@ describe('MockBuilder:deep', () => {
       .mock(My3Component);
 
     // and now we want to build our NgModule.
-    if (Number.parseInt(VERSION.major, 10) >= 21) {
-      builder.keep(HttpClient);
-    }
     const ngModule = builder.build();
     TestBed.configureTestingModule(ngModule);
 

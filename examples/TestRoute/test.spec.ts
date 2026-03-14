@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -84,7 +83,7 @@ describe('TestRoute:Route', () => {
     );
   });
 
-  it('renders /1 with Route1Component', fakeAsync(() => {
+  it('renders /1 with Route1Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -93,15 +92,15 @@ describe('TestRoute:Route', () => {
     location.go('/1');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
     expect(() => ngMocks.find(Route1Component)).not.toThrow();
-  }));
+  });
 
-  it('renders /2 with Route2Component', fakeAsync(() => {
+  it('renders /2 with Route2Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -110,13 +109,13 @@ describe('TestRoute:Route', () => {
     location.go('/2');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 
 describe('TestRoute:Component', () => {
@@ -141,7 +140,7 @@ describe('TestRoute:Component', () => {
     );
   });
 
-  it('navigates between pages', fakeAsync(() => {
+  it('navigates between pages', async () => {
     const fixture = MockRender(TargetComponent);
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -149,7 +148,7 @@ describe('TestRoute:Component', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // By default, our routes do not have a component.
@@ -171,7 +170,7 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
@@ -185,10 +184,10 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });

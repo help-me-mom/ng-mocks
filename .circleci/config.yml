@@ -240,6 +240,8 @@ jobs:
                     value: << pipeline.git.branch >>
           steps:
             - checkout
+            - attach_workspace:
+                at: dist
             - restore_cache:
                 key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package.json" }}-{{ checksum "tests-e2e/package-lock.json" }}
             - run:
@@ -256,6 +258,9 @@ jobs:
                 paths:
                   - ./tests-e2e/node_modules
                   - ~/.cache/puppeteer
+            - run:
+                name: Spreading Build
+                command: npm run s:tests-e2e
             - run:
                 name: E2E
                 command: npm run e2e

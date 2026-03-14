@@ -5,7 +5,6 @@ import {
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
   ResolveFn,
@@ -105,8 +104,8 @@ describe('TestRoutingResolver:fn', () => {
       .keep(dataResolver);
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('provides data to on the route', fakeAsync(() => {
+  // It is important to run routing tests in async.
+  it('provides data to on the route', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -122,7 +121,7 @@ describe('TestRoutingResolver:fn', () => {
     // Now we can initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Checking that we are on the right page.
@@ -138,5 +137,5 @@ describe('TestRoutingResolver:fn', () => {
         flag: false,
       },
     });
-  }));
+  });
 });
