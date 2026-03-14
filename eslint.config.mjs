@@ -37,6 +37,7 @@ const projects = [
   './e2e/a18/tsconfig.json',
   './e2e/a19/tsconfig.json',
   './e2e/a20/tsconfig.json',
+  './e2e/a21/tsconfig.json',
   './e2e/jasmine/tsconfig.json',
   './e2e/jest/tsconfig.json',
   './e2e/min/tsconfig.json',
