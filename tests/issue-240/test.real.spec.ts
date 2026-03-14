@@ -1,4 +1,3 @@
-import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockRender, ngMocks } from 'ng-mocks';
@@ -40,14 +39,10 @@ describe('issue-240:real', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(
-      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
-    );
+    expect(impure.transform).toHaveBeenCalledTimes(2);
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(
-      Number.parseInt(VERSION.major, 10) >= 21 ? 2 : 4,
-    );
+    expect(impure.transform).toHaveBeenCalledTimes(4);
   });
 });
