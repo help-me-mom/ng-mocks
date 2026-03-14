@@ -1,9 +1,8 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 @Component({
   selector: 'app-hello-178',
@@ -45,10 +44,12 @@ class HelloModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/178
 describe('issue-178', () => {
-  beforeEach(() =>
-    MockBuilder(HelloComponent, HelloModule)
-      .keep(RouterModule)
-      .provide(provideLocationMocksCompat()),
+  beforeEach(
+    () =>
+      MockBuilder(HelloComponent, HelloModule).replace(
+        RouterModule,
+        RouterTestingModule,
+      ), // <- causes the issue
   );
 
   it('should create the component', () => {
