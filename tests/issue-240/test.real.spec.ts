@@ -1,3 +1,4 @@
+import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockRender, ngMocks } from 'ng-mocks';
@@ -39,11 +40,14 @@ describe('issue-240:real', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
-    expect(impure.transform).toHaveBeenCalledTimes(1);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
+    );
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 2 : 4,
+    );
   });
 });

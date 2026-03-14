@@ -1,3 +1,5 @@
+import { VERSION } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 import { ImpurePipe, PurePipe } from './fixtures';
@@ -22,16 +24,21 @@ describe('issue-240:builder', () => {
     // spyOn(pure, 'transform');
     // spyOn(impure, 'transform');
 
-    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
     expect(pure.transform).toHaveBeenCalledTimes(1);
-    expect(impure.transform).toHaveBeenCalledTimes(1);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
+    );
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(1);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 2 : 4,
+    );
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(1);
-    expect(impure.transform).toHaveBeenCalledTimes(3);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 3 : 6,
+    );
   });
 });

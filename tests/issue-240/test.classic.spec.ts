@@ -1,3 +1,4 @@
+import { VERSION } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockPipe, MockRender, ngMocks } from 'ng-mocks';
@@ -39,9 +40,10 @@ describe('issue-240:classic', () => {
     expect(fixture.nativeElement.innerHTML).toContain(
       '"impure:impure"',
     );
-    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(1);
+    expect(countImpure).toEqual(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
+    );
 
     const pure = ngMocks.findInstance(fixture.point, PurePipe);
     const impure = ngMocks.findInstance(ImpurePipe);
@@ -64,15 +66,20 @@ describe('issue-240:classic', () => {
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    // Angular 21 compatibility: CDR.detectChanges() runs CD once (not twice like AppRef.tick())
-    expect(impure.transform).toHaveBeenCalledTimes(1);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
+    );
 
     fixture.detectChanges();
     expect(pure.transform).toHaveBeenCalledTimes(0);
-    expect(impure.transform).toHaveBeenCalledTimes(2);
+    expect(impure.transform).toHaveBeenCalledTimes(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 2 : 4,
+    );
 
     // No changes because of spies.
     expect(countPure).toEqual(1);
-    expect(countImpure).toEqual(1);
+    expect(countImpure).toEqual(
+      Number.parseInt(VERSION.major, 10) >= 21 ? 1 : 2,
+    );
   });
 });
