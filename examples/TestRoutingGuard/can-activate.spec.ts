@@ -1,5 +1,4 @@
 import { Location } from '@angular/common';
-import { provideLocationMocks } from '@angular/common/testing';
 import {
   Component,
   inject,
@@ -24,6 +23,8 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
+
+import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating login check.
 // It will be replaced with its mock copy.
@@ -107,7 +108,7 @@ describe('TestRoutingGuard:canActivate', () => {
     )
       .exclude(NG_MOCKS_GUARDS)
       .keep(canActivateGuard)
-      .provide(provideLocationMocks());
+      .provide(provideLocationMocksCompat());
   });
 
   // It is important to run routing tests in fakeAsync.

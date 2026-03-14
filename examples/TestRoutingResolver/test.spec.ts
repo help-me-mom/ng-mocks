@@ -1,5 +1,4 @@
 import { Location } from '@angular/common';
-import { provideLocationMocks } from '@angular/common/testing';
 import { Component, Injectable, NgModule } from '@angular/core';
 import {
   ActivatedRoute,
@@ -18,6 +17,8 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
+
+import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating a data request.
 @Injectable()
@@ -97,7 +98,7 @@ describe('TestRoutingResolver:test', () => {
       TargetModule,
     )
       .exclude(NG_MOCKS_RESOLVERS)
-      .provide(provideLocationMocks());
+      .provide(provideLocationMocksCompat());
   });
 
   // It is important to run routing tests in async.

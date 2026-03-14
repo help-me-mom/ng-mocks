@@ -1,8 +1,9 @@
-import { provideLocationMocks } from '@angular/common/testing';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
+
+import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 @Component({
   selector: 'app-hello-178',
@@ -47,7 +48,7 @@ describe('issue-178', () => {
   beforeEach(() =>
     MockBuilder(HelloComponent, HelloModule)
       .keep(RouterModule)
-      .provide(provideLocationMocks()),
+      .provide(provideLocationMocksCompat()),
   );
 
   it('should create the component', () => {
