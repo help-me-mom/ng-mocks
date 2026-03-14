@@ -60,7 +60,11 @@ module.exports = [
             {
               loader: 'ts-loader',
               options: {
-                configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.build.mjs.json'),
+                configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
+                compilerOptions: {
+                  module: 'ES2015',
+                  target: 'ES2015',
+                },
                 transpileOnly: true,
               },
             },
