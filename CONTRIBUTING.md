@@ -63,7 +63,7 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 ```
 
-`compose.sh e2e` mirrors the CI `tests-e2e` install flow and uses `npm ci` inside the `ng-mocks` container.
+`compose.sh e2e` uses an isolated `e2e` container that hides root `node_modules`, installs only `tests-e2e/node_modules`, and refreshes the local Puppeteer browser cache so fresh docker namespaces reproduce the same dependency-resolution failures as CI.
 
 ## How to run unit tests locally
 
