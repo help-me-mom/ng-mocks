@@ -20,13 +20,7 @@ if [ "$1" = "" ] || [ "$1" = "docs" ]; then
 fi
 
 if [ "$1" = "" ] || [ "$1" = "e2e" ]; then
-  docker compose up --build -- e2e && \
-    docker compose run --rm e2e node ./node_modules/puppeteer/install.mjs && \
-    cd ./tests-e2e && \
-    nvm install && \
-    nvm use && \
-    node ./node_modules/puppeteer/install.mjs && \
-    cd ..
+  docker compose run --rm ng-mocks npm run i:tests-e2e
 fi
 
 if [ "$1" = "" ] || [ "$1" = "a5" ] || [ "$1" = "a5es5" ]; then

@@ -63,6 +63,8 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 ```
 
+`compose.sh e2e` mirrors the CI `tests-e2e` install flow and uses `npm ci` inside the `ng-mocks` container.
+
 ## How to run unit tests locally
 
 ```shell

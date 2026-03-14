@@ -29,20 +29,6 @@ services:
       - install
       - --no-audit
 
-  e2e:
-    image: satantime/puppeteer-node:24.14.0
-    platform: linux/amd64
-    working_dir: /app
-    volumes:
-      - ./tests-e2e:/app
-      - cache:/root/.cache
-      - gyp:/root/.node-gyp
-      - npm:/root/.npm
-    command:
-      - npm
-      - install
-      - --no-audit
-
   a5es5:
     image: satantime/puppeteer-node:8.17.0
     platform: linux/amd64
