@@ -1,5 +1,6 @@
 import { mapEntries, mapValues } from '../../common/core.helpers';
 import { funcExtractDeps } from '../../common/func.extract-deps';
+import { getNgType } from '../../common/func.get-ng-type';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import initExcludeDef from './init-exclude-def';
@@ -30,6 +31,24 @@ export default ({
   ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
 
   const dependencies = initKeepDef(keepDef, configDef);
+  const resolutions = ngMocksUniverse.config.get('ngMocksDepsResolution');
+  const handleReplaceDependencies = (source: any, destination: any) => {
+    for (const replacement of [source, destination]) {
+      if (!replacement) {
+        continue;
+      }
+
+      const replaceDependencies = funcExtractDeps(replacement, new Set(), true);
+      for (const replaceDependency of mapValues(replaceDependencies)) {
+        dependencies.add(replaceDependency);
+
+        const ngType = getNgType(replaceDependency);
+        if ((ngType === undefined || ngType === 'Injectable') && !resolutions.has(replaceDependency)) {
+          resolutions.set(replaceDependency, 'keep');
+        }
+      }
+    }
+  };
   for (const dependency of mapValues(dependencies)) {
     ngMocksUniverse.touches.add(dependency);
   }
@@ -43,7 +62,12 @@ export default ({
   }
   for (const dependency of mapValues(replaceDef)) {
     dependencies.add(dependency);
-    funcExtractDeps(dependency, dependencies, true);
+    handleReplaceDependencies(dependency, defValue.get(dependency));
+  }
+  for (const dependency of mapValues(dependencies)) {
+    if (ngMocksUniverse.getResolution(dependency) === 'replace') {
+      handleReplaceDependencies(dependency, ngMocksUniverse.getBuildDeclaration(dependency));
+    }
   }
   for (const dependency of mapValues(dependencies)) {
     if (configDef.has(dependency)) {
@@ -55,6 +79,7 @@ export default ({
     if (resolution === 'replace') {
       replaceDef.add(dependency);
       defValue.set(dependency, ngMocksUniverse.getBuildDeclaration(dependency));
+      handleReplaceDependencies(dependency, defValue.get(dependency));
     } else if (resolution === 'keep') {
       keepDef.add(dependency);
     } else if (resolution === 'exclude') {
