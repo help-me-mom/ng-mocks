@@ -3,7 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { Injectable, NgModule, VERSION } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
@@ -26,17 +26,12 @@ class TargetModule {}
 // @see https://github.com/help-me-mom/ng-mocks/issues/6402
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
-    beforeEach(() => {
-      const builder = MockBuilder(TargetService, TargetModule);
-      if (Number.parseInt(VERSION.major, 10) >= 21) {
-        builder.keep(HttpClient);
-      }
-
-      return builder.replace(
+    beforeEach(() =>
+      MockBuilder(TargetService, TargetModule).replace(
         HttpClientModule,
         HttpClientTestingModule,
-      );
-    });
+      ),
+    );
 
     it('sends /api/config request', () => {
       MockRender(TargetService);
@@ -59,14 +54,7 @@ describe('issue-6402', () => {
         HttpClientTestingModule,
       ),
     );
-    beforeEach(() => {
-      const builder = MockBuilder(TargetService, TargetModule);
-      if (Number.parseInt(VERSION.major, 10) >= 21) {
-        builder.keep(HttpClient);
-      }
-
-      return builder;
-    });
+    beforeEach(() => MockBuilder(TargetService, TargetModule));
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {

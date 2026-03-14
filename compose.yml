@@ -33,15 +33,18 @@ services:
     image: satantime/puppeteer-node:24.14.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=8192
     volumes:
-      - ./tests-e2e:/app
+      - .:/app
+      - /app/node_modules
       - cache:/root/.cache
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
       - npm
-      - install
-      - --no-audit
+      - run
+      - i:tests-e2e
 
   a5es5:
     image: satantime/puppeteer-node:8.17.0

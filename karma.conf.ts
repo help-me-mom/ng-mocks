@@ -1,7 +1,5 @@
 /* eslint-disable max-lines-per-function */
 
-import path from 'node:path';
-
 import { Config } from 'karma';
 import { executablePath } from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
@@ -85,7 +83,7 @@ export default (config: Config) => {
     ],
     frameworks: ['jasmine', 'webpack'],
     junitReporter: {
-      outputDir: path.join(__dirname, './test-reports'),
+      outputDir: './test-reports',
       outputFile: 'specs-junit.xml',
       useBrowserName: false,
     },

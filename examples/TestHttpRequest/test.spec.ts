@@ -3,7 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { Injectable, NgModule, VERSION } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
@@ -31,14 +31,12 @@ describe('TestHttpRequest', () => {
   // initialization, we need to pass its module as the second
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
-  beforeEach(() => {
-    const builder = MockBuilder(TargetService, TargetModule);
-    if (Number.parseInt(VERSION.major, 10) >= 21) {
-      builder.keep(HttpClient);
-    }
-
-    return builder.replace(HttpClientModule, HttpClientTestingModule);
-  });
+  beforeEach(() =>
+    MockBuilder(TargetService, TargetModule).replace(
+      HttpClientModule,
+      HttpClientTestingModule,
+    ),
+  );
 
   it('sends a request', () => {
     MockRender();

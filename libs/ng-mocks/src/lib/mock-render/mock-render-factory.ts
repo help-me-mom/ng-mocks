@@ -1,4 +1,4 @@
-import { DebugElement, Directive, InjectionToken } from '@angular/core';
+import { ChangeDetectorRef, DebugElement, Directive, InjectionToken } from '@angular/core';
 import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -150,6 +150,16 @@ const generateFactory = (
   const result = (params: any, detectChanges?: boolean) => {
     result.configureTestBed();
     const fixture: any = TestBed.createComponent(componentCtor);
+
+    if (fixture.zonelessEnabled) {
+      const cdr = fixture.debugElement.injector.get(ChangeDetectorRef);
+      fixture.detectChanges = (checkNoChanges = true) => {
+        cdr.detectChanges();
+        if (checkNoChanges) {
+          fixture.checkNoChanges();
+        }
+      };
+    }
 
     funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));

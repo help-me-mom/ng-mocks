@@ -14,7 +14,7 @@ if [ "$1" = "coverage" ]; then
 fi
 
 if [ "$1" = "" ] || [ "$1" = "e2e" ]; then
-  docker compose run --rm ng-mocks npm run e2e
+  docker compose run --rm e2e npm run e2e
 fi
 
 if [ "$1" = "" ] || [ "$1" = "a5" ] || [ "$1" = "a5es5" ]; then

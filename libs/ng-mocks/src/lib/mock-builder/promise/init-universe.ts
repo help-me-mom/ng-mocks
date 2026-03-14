@@ -1,5 +1,6 @@
 import { mapEntries, mapValues } from '../../common/core.helpers';
 import { funcExtractDeps } from '../../common/func.extract-deps';
+import { getNgType } from '../../common/func.get-ng-type';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import initExcludeDef from './init-exclude-def';
@@ -8,6 +9,86 @@ import initMockDeclarations from './init-mock-declarations';
 import initModules from './init-modules';
 import initReplaceDef from './init-replace-def';
 import { BuilderData } from './types';
+
+type DependencyDefs = Array<any> | Set<any>;
+
+const addDependencies = (
+  dependencies: Set<any>,
+  defs: DependencyDefs,
+  onDependency?: (dependency: any) => void,
+): void => {
+  for (const def of defs) {
+    if (!def) {
+      continue;
+    }
+
+    const extractedDependencies = funcExtractDeps(def, new Set(), true);
+    for (const dependency of mapValues(extractedDependencies)) {
+      dependencies.add(dependency);
+      onDependency?.(dependency);
+    }
+  }
+};
+
+const shouldKeepReplacementDependency = (dependency: any): boolean => {
+  const ngType = getNgType(dependency);
+
+  return ngType === undefined || ngType === 'Injectable';
+};
+
+const keepReplacementDependency = (resolutions: Map<any, string>, replacementDependency: any): void => {
+  if (shouldKeepReplacementDependency(replacementDependency) && !resolutions.has(replacementDependency)) {
+    resolutions.set(replacementDependency, 'keep');
+  }
+};
+
+const addDefinitionsAndDependencies = (dependencies: Set<any>, defs: DependencyDefs): void => {
+  for (const dependency of mapValues(defs)) {
+    dependencies.add(dependency);
+  }
+
+  addDependencies(dependencies, defs);
+};
+
+const applyResolution = (
+  dependency: any,
+  configDef: Map<any, any>,
+  defValue: Map<any, any>,
+  excludeDef: Set<any>,
+  keepDef: Set<any>,
+  mockDef: Set<any>,
+  replaceDef: Set<any>,
+  dependencies: Set<any>,
+  resolutions: Map<any, string>,
+): void => {
+  const resolution = ngMocksUniverse.getResolution(dependency);
+  if (resolution === 'replace') {
+    const replacement = ngMocksUniverse.getBuildDeclaration(dependency);
+    replaceDef.add(dependency);
+    defValue.set(dependency, replacement);
+    addDependencies(dependencies, [dependency, replacement], replacementDependency =>
+      keepReplacementDependency(resolutions, replacementDependency),
+    );
+  } else if (resolution === 'keep') {
+    keepDef.add(dependency);
+  } else if (resolution === 'exclude') {
+    excludeDef.add(dependency);
+  } else if (resolution === 'mock') {
+    mockDef.add(dependency);
+  } else if (ngMocksUniverse.touches.has(dependency)) {
+    mockDef.add(dependency);
+  }
+
+  configDef.set(
+    dependency,
+    ngMocksUniverse.touches.has(dependency)
+      ? {
+          dependency: true,
+          __internal: true,
+        }
+      : {},
+  );
+};
 
 export default ({
   configDef,
@@ -30,49 +111,51 @@ export default ({
   ngMocksUniverse.config.set('ngMocksDepsResolution', new Map());
 
   const dependencies = initKeepDef(keepDef, configDef);
+  const resolutions: Map<any, string> = ngMocksUniverse.config.get('ngMocksDepsResolution');
+
   for (const dependency of mapValues(dependencies)) {
     ngMocksUniverse.touches.add(dependency);
   }
-  for (const dependency of mapValues(keepDef)) {
-    dependencies.add(dependency);
-    funcExtractDeps(dependency, dependencies, true);
+
+  // Keep/mock definitions should contribute themselves and their nested declarations.
+  for (const defs of [keepDef, mockDef]) {
+    addDefinitionsAndDependencies(dependencies, defs);
   }
-  for (const dependency of mapValues(mockDef)) {
-    dependencies.add(dependency);
-    funcExtractDeps(dependency, dependencies, true);
-  }
+
+  // Replacements are special: their provider-like dependencies must stay real.
   for (const dependency of mapValues(replaceDef)) {
     dependencies.add(dependency);
-    funcExtractDeps(dependency, dependencies, true);
+    addDependencies(dependencies, [dependency, defValue.get(dependency)], replacementDependency =>
+      keepReplacementDependency(resolutions, replacementDependency),
+    );
   }
+
+  // Global replace rules are discovered lazily, therefore we need a second pass over the graph.
+  for (const dependency of mapValues(dependencies)) {
+    if (ngMocksUniverse.getResolution(dependency) === 'replace') {
+      addDependencies(
+        dependencies,
+        [dependency, ngMocksUniverse.getBuildDeclaration(dependency)],
+        replacementDependency => keepReplacementDependency(resolutions, replacementDependency),
+      );
+    }
+  }
+
   for (const dependency of mapValues(dependencies)) {
     if (configDef.has(dependency)) {
       continue;
     }
 
-    // Checking global configuration for the dependency.
-    const resolution = ngMocksUniverse.getResolution(dependency);
-    if (resolution === 'replace') {
-      replaceDef.add(dependency);
-      defValue.set(dependency, ngMocksUniverse.getBuildDeclaration(dependency));
-    } else if (resolution === 'keep') {
-      keepDef.add(dependency);
-    } else if (resolution === 'exclude') {
-      excludeDef.add(dependency);
-    } else if (resolution === 'mock') {
-      mockDef.add(dependency);
-    } else if (ngMocksUniverse.touches.has(dependency)) {
-      mockDef.add(dependency);
-    }
-
-    configDef.set(
+    applyResolution(
       dependency,
-      ngMocksUniverse.touches.has(dependency)
-        ? {
-            dependency: true,
-            __internal: true,
-          }
-        : {},
+      configDef,
+      defValue,
+      excludeDef,
+      keepDef,
+      mockDef,
+      replaceDef,
+      dependencies,
+      resolutions,
     );
   }
 
