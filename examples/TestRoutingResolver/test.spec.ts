@@ -7,6 +7,7 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -17,8 +18,6 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating a data request.
 @Injectable()
@@ -94,11 +93,14 @@ describe('TestRoutingResolver:test', () => {
   // routes to have tools for testing.
   beforeEach(() => {
     return MockBuilder(
-      [DataResolver, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        DataResolver,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       TargetModule,
-    )
-      .exclude(NG_MOCKS_RESOLVERS)
-      .provide(provideLocationMocksCompat());
+    ).exclude(NG_MOCKS_RESOLVERS);
   });
 
   // It is important to run routing tests in async.

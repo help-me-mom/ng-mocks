@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
@@ -8,8 +9,6 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A layout component that renders the current route.
 @Component({
@@ -75,9 +74,13 @@ class TargetModule {}
 describe('TestRoute:Route', () => {
   beforeEach(() => {
     return MockBuilder(
-      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       TargetModule,
-    ).provide(provideLocationMocksCompat());
+    );
   });
 
   it('renders /1 with Route1Component', async () => {
@@ -127,9 +130,14 @@ describe('TestRoute:Component', () => {
   // to have tools for testing.
   beforeEach(() => {
     return MockBuilder(
-      [TargetComponent, RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        TargetComponent,
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       TargetModule,
-    ).provide(provideLocationMocksCompat());
+    );
   });
 
   it('navigates between pages', async () => {

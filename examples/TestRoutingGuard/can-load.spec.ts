@@ -12,6 +12,7 @@ import {
   RouterModule,
   RouterOutlet,
 } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   MockBuilder,
@@ -20,8 +21,6 @@ import {
   NG_MOCKS_ROOT_PROVIDERS,
   ngMocks,
 } from 'ng-mocks';
-
-import { provideLocationMocksCompat } from '../helpers/provide-location-mocks';
 
 // A simple service simulating login check.
 // It will be replaced with it's mock copy.
@@ -110,12 +109,15 @@ describe('TestRoutingGuard:canLoad', () => {
   // and canLoadGuard should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
-      [RouterModule, NG_MOCKS_ROOT_PROVIDERS],
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       [TargetModule],
     )
       .exclude(NG_MOCKS_GUARDS)
-      .keep(canLoadGuard)
-      .provide(provideLocationMocksCompat());
+      .keep(canLoadGuard);
   });
 
   it('blocks dashboard and opens login', async () => {
