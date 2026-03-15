@@ -7,6 +7,7 @@ import { AnyDeclaration, AnyType, Type } from '../common/core.types';
 import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
+import { patchDebugInjectors } from '../common/ng-mocks-global-overrides';
 import ngMocksStack from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -32,6 +33,7 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
     fixture.debugElement.children[0].nativeElement.nodeName !== '#comment'
       ? fixture.debugElement.children[0]
       : fixture.debugElement;
+  patchDebugInjectors(fixture.point);
   if (isNgDef(template, 'd')) {
     helperDefinePropertyDescriptor(fixture.point, 'componentInstance', {
       get: () => ngMocks.get(fixture.point, template),
@@ -100,6 +102,8 @@ const handleFixtureError = (e: any) => {
 const flushTestBed = (flags: Record<string, any>): void => {
   const globalFlags = ngMocksUniverse.global.get('flags');
   const testBed: any = getTestBed();
+  // TestBed.get / inject can now intentionally seed mocked declaration instances, so MockRender keeps
+  // warning about stale TestBed state when a previous render or manual createComponent already exists.
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();
   } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._instantiated || testBed._testModuleRef)) {
