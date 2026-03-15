@@ -31,6 +31,27 @@ interface MockInstanceArgs {
   value?: any;
 }
 
+type MockInstanceTokenInit<T> = (
+  instance: T | undefined,
+  injector: Injector | undefined,
+) => Partial<T> | Array<Partial<T>>;
+
+interface MockInstanceTokenConfig<T> {
+  /**
+   * @deprecated please pass the callback directly instead of config.
+   */
+  init?: MockInstanceTokenInit<T>;
+}
+
+type MockInstanceClassInit<T> = (instance: T, injector: Injector | undefined) => void | Partial<T> | Array<Partial<T>>;
+
+interface MockInstanceClassConfig<T> {
+  /**
+   * @deprecated please pass the callback directly instead of config.
+   */
+  init?: MockInstanceClassInit<T>;
+}
+
 const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
   const set: MockInstanceArgs = {};
 
@@ -146,15 +167,11 @@ export function MockInstance<T extends object, K extends keyof T, S extends T[K]
  * MockInstance(webSocketToken, () => mockWebSocket);
  * ```
  */
-export function MockInstance<T>(
-  declaration: InjectionToken<T>,
-  init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T> | Array<Partial<T>>,
-): void;
+export function MockInstance<T>(declaration: InjectionToken<T>, init?: MockInstanceTokenInit<T>): void;
 
 /**
  * This signature of MockInstance lets customize tokens with a callback.
  *
- * @deprecated please pass the callback directly instead of config.
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
  * ```ts
@@ -163,12 +180,7 @@ export function MockInstance<T>(
  * });
  * ```
  */
-export function MockInstance<T>(
-  declaration: InjectionToken<T>,
-  config?: {
-    init?: (instance: T | undefined, injector: Injector | undefined) => Partial<T> | Array<Partial<T>>;
-  },
-): void;
+export function MockInstance<T>(declaration: InjectionToken<T>, config?: MockInstanceTokenConfig<T>): void;
 
 /**
  * This signature of MockInstance lets customize the instances of mock classes with a callback.
@@ -188,16 +200,12 @@ export function MockInstance<T>(
  * });
  * ```
  */
-export function MockInstance<T>(
-  declaration: AnyType<T>,
-  init?: (instance: T, injector: Injector | undefined) => void | Partial<T> | Array<Partial<T>>,
-): void;
+export function MockInstance<T>(declaration: AnyType<T>, init?: MockInstanceClassInit<T>): void;
 
 /**
  * This signature of MockInstance lets customize the instances of mock classes with a callback.
  * You can return a shape or change the instance.
  *
- * @deprecated please pass the callback directly instead of config.
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
  * ```ts
@@ -216,12 +224,7 @@ export function MockInstance<T>(
  * });
  * ```
  */
-export function MockInstance<T>(
-  declaration: AnyType<T>,
-  config?: {
-    init?: (instance: T, injector: Injector | undefined) => void | Partial<T> | Array<Partial<T>>;
-  },
-): void;
+export function MockInstance<T>(declaration: AnyType<T>, config?: MockInstanceClassConfig<T>): void;
 
 export function MockInstance<T>(declaration: AnyDeclaration<T>, ...args: any[]) {
   funcImportExists(declaration, 'MockInstance');
