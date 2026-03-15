@@ -28,7 +28,11 @@ class TranslatePipe implements PipeTransform {
 @Component({
   selector: 'app-root',
   template: `
-    <app-header [showLogo]="true" [title]="title" (logo)="logoClick.emit()">
+    <app-header
+      [showLogo]="true"
+      [title]="title"
+      (logo)="logoClick.emit()"
+    >
       <ng-template #menu>
         <ul>
           <li>
@@ -62,7 +66,8 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-  @ContentChild('menu') public menu?: TemplateRef<ElementRef>;
+  @ContentChild('menu')
+  public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
 }
@@ -138,7 +143,7 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy = jasmine.createSpy(); // or jest.fn();
+    const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
 

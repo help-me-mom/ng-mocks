@@ -167,7 +167,7 @@ describe('MockActivatedRoute', () => {
     ).and.returnValue({
       paramMap: new Map([['paramId', 'paramValue']]),
     });
-    // // in case of jest.
+    // in case of jest
     // MockInstance(
     //   ActivatedRoute,
     //   'snapshot',

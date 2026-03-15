@@ -44,16 +44,19 @@ import { LazyComponent, LazyModule } from './lazy-module';
   selector: 'app-root',
   template: '<router-outlet></router-outlet>',
 })
-class AppComponent {}
+class AppComponent {
+}
 
 @NgModule({
   exports: [RouterModule],
-  imports: [RouterModule.forRoot([
-    {
-      loadChildren: () => import('./lazy-module').then(module => module.LazyModule),
-      path: '',
-    },
-  ])],
+  imports: [
+    RouterModule.forRoot([
+      {
+        loadChildren: () => LazyModule,
+        path: '',
+      },
+    ]),
+  ],
 })
 class AppModuleRouting {}
 

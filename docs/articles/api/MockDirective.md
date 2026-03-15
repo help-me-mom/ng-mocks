@@ -182,7 +182,9 @@ describe('MockDirective:Attribute', () => {
     ngMocks.stubMember(
       component,
       'trigger',
-      jasmine.createSpy(), // or jest.fn()
+      jasmine.createSpy(),
+      // in case of jest
+      // jest.fn(),
     );
     mockDirective.someOutput.emit();
 
@@ -226,7 +228,9 @@ describe('MockDirective:Structural', () => {
 
     // Let's assert that nothing has been rendered inside
     // the structural directive by default.
-    expect(fixture.nativeElement.innerHTML).not.toContain('>content<');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      '>content<',
+    );
 
     // And let's render it manually now.
     const mockDirective = ngMocks.findInstance(DependencyDirective);

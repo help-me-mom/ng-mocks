@@ -321,7 +321,7 @@ describe('TestProviderWithUseValue', () => {
         .componentInstance;
 
     // Let's assert received data.
-    expect(service as any).toEqual({
+    expect(service).toEqual({
       service: null,
     });
   });

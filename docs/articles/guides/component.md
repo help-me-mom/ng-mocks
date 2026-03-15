@@ -87,7 +87,8 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-  @ContentChild('menu') public menu?: TemplateRef<ElementRef>;
+  @ContentChild('menu')
+  public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
 }
@@ -163,8 +164,7 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
 

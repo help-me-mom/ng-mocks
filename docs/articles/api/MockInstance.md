@@ -339,7 +339,9 @@ describe('MockInstance:component', () => {
   it('should render', () => {
     // Without the custom initialization rendering would fail here
     // with "Cannot read property 'subscribe' of undefined".
-    expect(() => TestBed.createComponent(TargetComponent).detectChanges()).not.toThrow();
+    expect(() =>
+      TestBed.createComponent(TargetComponent).detectChanges(),
+    ).not.toThrow();
   });
 });
 ```

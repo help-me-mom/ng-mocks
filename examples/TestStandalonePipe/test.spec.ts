@@ -67,6 +67,8 @@ describe('TestStandalonePipe', () => {
       typeof jest === 'undefined'
         ? jasmine.createSpy().and.returnValue('mock')
         : jest.fn().mockReturnValue('mock'),
+      // or in case of jest
+      // jest.fn().mockReturnValue('mock'),
     );
 
     // Rendering the pipe.

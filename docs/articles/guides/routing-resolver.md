@@ -69,20 +69,20 @@ The next step is to go to the route where the resolver is, and to trigger initia
 const location = ngMocks.get(Location);
 const router = ngMocks.get(Router);
 
-location.go('/target');
+location.go('/route');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick();
+  await fixture.whenStable();
 }
 ```
 
 Because data is provided to a particular route, we need to find its component in the `fixture` and
 to extract `ActivatedRoute` from its injector.
-Let's pretend that `/target` renders `TargetComponent`.
+Let's pretend that `/route` renders `RouteComponent`.
 
 ```ts
-const el = ngMocks.find(fixture, TargetComponent);
-const route = ngMocks.get(el, ActivatedRoute);
+const el = ngMocks.find(RouteComponent);
+const route = ngMocks.findInstance(el, ActivatedRoute);
 ```
 
 Profit, now we can assert the data the resolver has provided.
@@ -141,14 +141,13 @@ Profit.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/fn.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver%3Afn)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingResolver/fn.spec.ts"
-import { Location } from 'import { Location } from '@angular/common';
+import { Location } from '@angular/common';
 import {
   Component,
   inject,
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import {
   ActivatedRoute,
   ResolveFn,
@@ -197,7 +196,6 @@ const sideEffectResolver: ResolveFn<
   template: 'route',
 })
 class RouteComponent {
-  public routeTestRoutingFnResolver() {}
 }
 
 // Definition of the routing module.
@@ -246,8 +244,8 @@ describe('TestRoutingResolver:fn', () => {
       .keep(dataResolver);
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('provides data to on the route', fakeAsync(() => {
+  // It is important to run routing tests in async.
+  it('provides data to on the route', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -263,7 +261,7 @@ describe('TestRoutingResolver:fn', () => {
     // Now we can initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Checking that we are on the right page.
@@ -279,6 +277,6 @@ describe('TestRoutingResolver:fn', () => {
         flag: false,
       },
     });
-  }));
+  });
 });
 ```

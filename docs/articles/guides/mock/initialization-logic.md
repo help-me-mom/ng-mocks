@@ -179,13 +179,14 @@ import {
   InjectionToken,
   NgModule,
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
 import {
   MockBuilder,
   MockInstance,
   MockProvider,
   MockRender,
 } from 'ng-mocks';
-import { TestBed } from '@angular/core/testing';
 
 interface ConfigInterface {
   displayName: 'first' | 'last';
@@ -213,14 +214,10 @@ class TargetComponent {
     user: CurrentUserService,
   ) {
     // Business logic in the constructor to calculate the name.
-    if (config.displayName === 'first') {
-      this.name = user.firstName;
-    } else {
-      this.name = user.lastName;
-    }
+    this.name =
+      config.displayName === 'first' ? user.firstName : user.lastName;
   }
 
-  TargetComponentMockInitializationLogic() {}
 }
 
 @NgModule({
@@ -245,7 +242,7 @@ describe('MockInitializationLogic', () => {
     MockInstance.scope();
 
     beforeEach(() => {
-      // Mocks for dependencies of TargetComponent.
+      // Mocks for dependencies of TargetDeclaration.
       return TestBed.configureTestingModule({
         declarations: [TargetComponent],
         providers: [

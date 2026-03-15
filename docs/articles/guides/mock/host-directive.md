@@ -86,23 +86,21 @@ import {
 class HostDirective {
   @Input() input?: string;
   @Output() output = new EventEmitter<void>();
-
-  public hostMockHostDirective() {}
 }
 
 @Component({
   selector: 'target',
-  hostDirectives: [
-    {
-      directive: HostDirective,
-      inputs: ['input'],
-      outputs: ['output'],
-    },
-  ],
+  hostDirectives:
+    [
+      {
+        directive: HostDirective,
+        inputs: ['input'],
+        outputs: ['output'],
+      },
+    ],
   template: 'target',
 })
 class TargetComponent {
-  public targetMockHostDirective() {}
 }
 
 describe('MockHostDirective', () => {
@@ -111,7 +109,7 @@ describe('MockHostDirective', () => {
       TestBed.configureTestingModule({
         imports: [MockDirective(HostDirective)],
         declarations: [TargetComponent],
-      }),
+      }).compileComponents(),
     );
 
     it('mocks host directives', () => {

@@ -94,6 +94,8 @@ describe('MockComponent', () => {
       component,
       'trigger',
       typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      // in case of jest
+      // jest.fn(),
     );
     mockComponent.someOutput.emit({
       payload: 'foo',

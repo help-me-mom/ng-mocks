@@ -57,6 +57,7 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
+
 import {
   MockBuilder,
   MockInstance,
@@ -102,8 +103,10 @@ describe('TestStandalonePipe', () => {
     MockInstance(
       RootService,
       'trigger',
-      jasmine.createSpy(),
-    ).and.returnValue('mock');
+      jasmine.createSpy().and.returnValue('mock'),
+      // or in case of jest
+      // jest.fn().mockReturnValue('mock'),
+    );
 
     // Rendering the pipe.
     const fixture = MockRender(StandalonePipe, {

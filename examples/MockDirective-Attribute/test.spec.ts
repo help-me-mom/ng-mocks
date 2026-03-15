@@ -97,6 +97,8 @@ describe('MockDirective:Attribute', () => {
       component,
       'trigger',
       typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      // in case of jest
+      // jest.fn(),
     );
     mockDirective.someOutput.emit();
 

@@ -72,6 +72,7 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
+
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // A simple standalone pipe we are going to mock.
@@ -87,7 +88,7 @@ class StandalonePipe implements PipeTransform {
 
 // A simple dependency component we are going to mock.
 @Component({
-  selector: 'dependency',
+  selector: 'dependency-standalone-component',
   template: '<ng-content></ng-content>',
 })
 class DependencyComponent {
@@ -104,11 +105,14 @@ class DependencyModule {}
 // A standalone component we are going to test.
 @Component({
   selector: 'standalone',
-  template: `<dependency [name]="name">{{
+  template: `<dependency-standalone-component [name]="name">{{
     name | standalone
-  }}</dependency>`,
+  }}</dependency-standalone-component>`,
   standalone: true,
-  imports: [DependencyModule, StandalonePipe],
+  imports: [
+    DependencyModule,
+    StandalonePipe,
+  ],
 })
 class StandaloneComponent {
   @Input() public readonly name: string | null = null;
@@ -135,10 +139,13 @@ describe('TestStandaloneComponent', () => {
     // it's possible because of autoSpy.
     expect(standalonePipe.transform).toHaveBeenCalledWith('test');
 
-    // or asserting the generated html
-    expect(ngMocks.formatHtml(fixture)).toEqual(
-      '<standalone ng-reflect-name="test"><dependency ng-reflect-name="test"></dependency></standalone>',
-    );
+    // or asserting virtual DOM
+    expect(
+      ngMocks.input(
+        ngMocks.find(fixture, DependencyComponent),
+        'name',
+      ),
+    ).toEqual('test');
   });
 });
 ```

@@ -72,7 +72,7 @@ beforeEach(() =>
 );
 ```
 
-Let's assume that the guard redirects all routes to `/login` if a user is not logged in.
+Let's assume that the guard redirects a protected route to `/login` if a user is not logged in.
 It means when the app has been initialized, the router should end up on `/login`.
 
 Let's assert that:
@@ -97,14 +97,17 @@ const location = ngMocks.get(Location);
 ```
 
 To initialize navigation, you need to call `router.initialNavigation`,
-and then `tick` to ensure that the route has been initialized and rendered. 
+and then wait for the fixture to become stable so the route has been initialized and rendered.
 
 ```ts
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick(); // is needed for rendering of the current route.
+  await fixture.whenStable(); // is needed for rendering of the current route.
 }
 ```
+
+For lazy-route guards such as `canLoad` and `canMatch`, it is often more useful to call `router.navigateByUrl(...)`
+for the protected URL and assert its boolean result before checking the rendered route.
 
 Now, the location can be asserted.
 
@@ -164,7 +167,6 @@ import {
   Injectable,
   NgModule,
 } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import {
   CanActivateFn,
   Router,
@@ -210,7 +212,6 @@ const sideEffectGuard: CanActivateFn = () => false;
   template: 'login',
 })
 class LoginComponent {
-  public loginTestRoutingGuardCanActivate() {}
 }
 
 // A simple component pretending a protected dashboard.
@@ -220,7 +221,6 @@ class LoginComponent {
   template: 'dashboard',
 })
 class DashboardComponent {
-  public dashboardTestRoutingGuardCanActivate() {}
 }
 
 // Definition of the routing module.
@@ -269,8 +269,9 @@ describe('TestRoutingGuard:canActivate', () => {
       .keep(canActivateGuard);
   });
 
-  // It is important to run routing tests in fakeAsync.
-  it('redirects to login', fakeAsync(() => {
+  // It is important to wait for routing to become stable.
+  it('redirects to login', async () => {
+
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -278,16 +279,16 @@ describe('TestRoutingGuard:canActivate', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
-    // Because by default we are not logged in, the guard should
-    // redirect us to /login page.
+    // Because by default we are not logged, the guard should
+    // redirect us /login page.
     expect(location.path()).toEqual('/login');
     expect(() => ngMocks.find(LoginComponent)).not.toThrow();
-  }));
+  });
 
-  it('loads dashboard', fakeAsync(() => {
+  it('loads dashboard', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -299,13 +300,13 @@ describe('TestRoutingGuard:canActivate', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // Because now we are logged in, the guard should let us land on
     // the dashboard.
     expect(location.path()).toEqual('/');
     expect(() => ngMocks.find(DashboardComponent)).not.toThrow();
-  }));
+  });
 });
 ```

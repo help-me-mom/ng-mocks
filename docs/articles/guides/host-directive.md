@@ -83,22 +83,20 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class HostDirective {
   @HostBinding('attr.name') @Input() input?: string;
-
-  public hostTestHostDirective() {}
 }
 
 @Component({
   selector: 'target',
-  hostDirectives: [
-    {
-      directive: HostDirective,
-      inputs: ['input'],
-    },
-  ],
+  hostDirectives:
+    [
+      {
+        directive: HostDirective,
+        inputs: ['input'],
+      },
+    ],
   template: 'target',
 })
 class TargetComponent {
-  public targetTestHostDirective() {}
 }
 
 describe('TestHostDirective', () => {

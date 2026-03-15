@@ -10,10 +10,10 @@ with `HttpClientTestingModule` so we can use `HttpTestingController` for faking 
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetService, TargetModule)
-    // .keep should be added since Angular 21
-    .keep(HttpClient)
-    .replace(HttpClientModule, HttpClientTestingModule)
+  MockBuilder(TargetService, TargetModule).replace(
+    HttpClientModule,
+    HttpClientTestingModule,
+  )
 );
 ```
 
@@ -81,12 +81,12 @@ describe('TestHttpRequest', () => {
   // initialization, we need to pass its module as the second
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
-  beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule)
-      // .keep should be added since Angular 21
-      .keep(HttpClient)
-      .replace(HttpClientModule, HttpClientTestingModule);
-  });
+  beforeEach(() =>
+    MockBuilder(TargetService, TargetModule).replace(
+      HttpClientModule,
+      HttpClientTestingModule,
+    ),
+  );
 
   it('sends a request', () => {
     MockRender();

@@ -128,7 +128,7 @@ describe('profile:builder', () => {
 
     expect(
       fixture.point.componentInstance,
-    ).toEqual(assertion.any(ProfileComponent));
+    ).toEqual(jasmine.any(ProfileComponent));
   });
 
   // A test to ensure that the component listens

@@ -69,7 +69,8 @@ In case of jest `src/setup-jest.ts` / `src/test-setup.ts` should be used.
 // All methods in mock declarations and providers
 // will be automatically spied on their creation.
 // https://ng-mocks.sudo.eu/extra/auto-spy
-ngMocks.autoSpy('jasmine'); // or jest
+ngMocks.autoSpy('jasmine');
+// in case of jest: ngMocks.autoSpy('jest')
 
 // ngMocks.defaultMock helps to customize mocks
 // globally. Therefore, we can avoid copy-pasting
@@ -136,7 +137,7 @@ describe('profile:builder', () => {
     const fixture = MockRender(ProfileComponent);
 
     expect(fixture.point.componentInstance).toEqual(
-      assertion.any(ProfileComponent),
+      jasmine.any(ProfileComponent),
     );
   });
 
@@ -158,7 +159,9 @@ describe('profile:builder', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy(), // or jest.fn()
+      jasmine.createSpy(),
+      // or in case of jest
+      // jest.fn(),
     );
 
     // Renders <profile [profile]="params.profile">
