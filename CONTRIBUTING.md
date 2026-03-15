@@ -41,14 +41,6 @@ and click on the "Edit this page" link at the bottom of the page.
 
 To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Windows.
 
-### Signed commits for pull requests
-
-Pull requests need signed commits. Unsigned commits can be blocked by the repository settings,
-so please configure commit signing before you open or update a PR.
-
-- GitHub docs: https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
-- Any GitHub-supported signing method is fine as long as GitHub marks the commit as `Verified`
-
 ### How to install dependencies
 
 - start `docker` and ensure it's running
@@ -65,13 +57,10 @@ so please configure commit signing before you open or update a PR.
 
 To avoid collisions when multiple worktrees run docker compose in parallel, set `COMPOSE_PROJECT_NAME`.
 Use your own unique string for each task/worktree.
-Reuse the same value for every `docker compose`, `sh ./compose.sh`, and `sh ./test.sh` command you run in that worktree.
-With a unique project name, Compose keeps the worktree resources separate, including the default network and the named `cache`, `gyp`, and `npm` volumes.
 
 ```shell
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
-COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
 ## How to run unit tests locally
