@@ -1,5 +1,5 @@
 ---
-title: How to test a provider in Angular application
+title: How to test a provider in Angular
 description: Covering an Angular provider with tests
 sidebar_label: Provider
 ---

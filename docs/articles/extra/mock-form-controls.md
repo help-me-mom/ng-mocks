@@ -1,6 +1,6 @@
 ---
 title: How to mock form controls in Angular tests
-description: Information how to use ng-mocks in order to interact with mock form controls in Angular tests
+description: Information on how to use ng-mocks to interact with mock form controls in Angular tests
 sidebar_label: Form Controls
 ---
 

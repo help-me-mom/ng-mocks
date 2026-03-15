@@ -1,5 +1,5 @@
 ---
-title: How to test a routing resolver in Angular application
+title: How to test a routing resolver in Angular
 description: Covering an Angular routing resolver with tests
 sidebar_label: Routing resolver
 ---

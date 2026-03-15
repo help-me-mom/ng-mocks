@@ -1,15 +1,15 @@
 [<img src="https://img.shields.io/gitter/room/help-me-mom/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
 [<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
 [<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/main" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=main)
-[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=main)
+[<img src="https://img.shields.io/codecov/c/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://codecov.io/gh/help-me-mom/ng-mocks)
 
-# Mock components, services and more out of annoying dependencies for simplification of Angular testing
+# Mock components, services, and more to simplify Angular testing
 
-`ng-mocks` facilitates **Angular testing** and helps to:
+`ng-mocks` simplifies **Angular testing** and helps you:
 
 - **mock Components**, Directives, Pipes, Modules, Services and Tokens
 - reduce boilerplate in tests
-- access declarations via simple interface
+- access declarations through a simple interface
 
 The current version of the library **has been tested** and **can be used** with:
 
@@ -51,8 +51,8 @@ The current version of the library **has been tested** and **can be used** with:
 
 ## Very short introduction
 
-Global configuration for mocks in `src/test.ts`.
-In case of jest, `src/setup-jest.ts` / `src/test-setup.ts` should be used.
+Put the global configuration for mocks in `src/test.ts`.
+For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
@@ -77,7 +77,7 @@ An example of a spec for a profile edit component.
 // and it has 3 text fields: email, firstName,
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
-// cover behavior of the component.
+// cover the behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
   // Alternatively, you can enable
@@ -95,7 +95,7 @@ describe('profile:builder', () => {
       ProfileComponent,
       ProfileModule,
     ).keep(ReactiveFormsModule);
-    // // or old fashion way
+    // // or the old-fashioned way
     // return TestBed.configureTestingModule({
     //   imports: [
     //     MockModule(SharedModule), // mock
@@ -142,7 +142,7 @@ describe('profile:builder', () => {
     };
 
     // A spy to track save calls.
-    // MockInstance helps to configure mock
+    // MockInstance helps configure mock
     // providers, declarations and modules
     // before their initialization and usage.
     // https://ng-mocks.sudo.eu/api/MockInstance
@@ -181,7 +181,7 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
-    // The spy should be called with the user
+    // The spy should be called with the profile
     // and the random email address.
     expect(spySave).toHaveBeenCalledWith({
       email: 'test3@em.ail',

@@ -1,5 +1,5 @@
 ---
-title: How to test a host directive in Angular application
+title: How to test a host directive in Angular
 description: Covering an Angular host directive with tests
 sidebar_label: Host Directive
 ---
@@ -36,7 +36,7 @@ class TargetComponent {
 }
 ```
 
-The component can be heavy, and, in an ideal test, the logic of the component should be ignored,
+The component can be heavy, and in an ideal test, the logic of the component should be ignored,
 so the focus would stay on the directive and how it behaves.
 
 [`MockBuilder`](../api/MockBuilder.md) knows how to mock the component

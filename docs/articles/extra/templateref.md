@@ -1,6 +1,6 @@
 ---
 title: How to render TemplateRef of a mock declaration
-description: Information how to render ng-templates and structural directives which belong to a mock component or directive
+description: Information on how to render ng-templates and structural directives that belong to a mock component or directive
 sidebar_label: Testing TemplateRef
 ---
 

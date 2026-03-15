@@ -1,6 +1,6 @@
 ---
 title: Motivation and quick start
-description: Quick explanation how to simplify mocking in Angular tests with help of ng-mocks
+description: A quick explanation of how to simplify mocking in Angular tests with ng-mocks
 sidebar_label: Quick start
 ---
 
@@ -20,7 +20,7 @@ or with pro tools such as
 [`MockBuilder`](/api/MockBuilder.md) with
 [`MockRender`](/api/MockRender.md).
 
-Let's suppose that in our Angular application you have a component, called `AppBaseComponent`,
+Let's suppose that in your Angular application you have a component called `AppBaseComponent`,
 and its template looks like that:
 
 ```html
@@ -255,7 +255,7 @@ TestBed.configureTestingModule(
 );
 ```
 
-Profit. That should be enough for the start.
+Profit. That should be enough to get started.
 
 ## MockBuilder
 

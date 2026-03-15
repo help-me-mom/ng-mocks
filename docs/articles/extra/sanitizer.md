@@ -1,6 +1,6 @@
 ---
 title: Mocking DomSanitizer
-description: Information how to test usage of DomSanitizer in Angular 
+description: Information on how to test `DomSanitizer` usage in Angular
 sidebar_label: DomSanitizer 
 ---
 

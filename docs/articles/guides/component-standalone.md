@@ -10,7 +10,7 @@ Usually, developers want to mock all dependencies.
 For a standalone component, it means all its imports.
 This behavior is possible to achieve with [`MockBuilder`](/api/MockBuilder.md#shallow-flag).
 
-Let's image we have the next standalone component:
+Let's imagine we have the following standalone component:
 
 ```ts
 @Component({
@@ -24,8 +24,8 @@ class StandaloneComponent {
 }
 ```
 
-As we can see, it imports `DependencyModule`, which provides `DependencyComponent`, and StandalonePipe,
-and, ideally, they should be mocked.
+It imports `DependencyModule`, which provides `DependencyComponent`,
+and `StandalonePipe`, and ideally both should be mocked.
 
 The answer is:
 
@@ -51,7 +51,7 @@ That's it. Now all imports of `StandaloneComponent` are mocks,
 and its properties, methods, injections and template are available for testing. 
 
 If you need to keep an import, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
-For example, if we wanted to keep `StandalonePipe` then the code would look like:
+For example, if we wanted to keep `StandalonePipe`, the code would look like this:
 
 ```ts
 beforeEach(() => {

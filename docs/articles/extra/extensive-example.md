@@ -4,8 +4,8 @@ description: How to use mocks in Angular tests
 sidebar_label: Extensive example
 ---
 
-There is an extensive example how to use mocks in Angular tests below,
-please pay attention to comments in the code, they explain purposes and intentions.
+Below is an extensive example of how to use mocks in Angular tests.
+Please pay attention to the comments in the code; they explain the purpose and intent.
 
 Also, you can play with the test in sandboxes:
 

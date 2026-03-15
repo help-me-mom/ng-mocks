@@ -1,14 +1,14 @@
 ---
-title: How to test a token in Angular application
+title: How to test a token in Angular
 description: Covering an Angular token with tests
 sidebar_label: Token
 ---
 
-For proper testing of tokens in Angular application, we need extra declarations compare to their usage in the application.
+To test tokens properly in Angular, we need extra declarations compared to how they are used in the application.
 
-Because a token might have a factory function, it is not always necessary to list the token in providers for successful execution of its application.
-Unfortunately, for testing it is not like that, and in this case `ng-mocks` cannot detect the token.
-Please make sure, that the token and its dependencies are listed in providers of a related module, then `ng-mocks` can mock them properly.
+Because a token might have a factory function, it is not always necessary to list the token in providers for the application to run successfully.
+Unfortunately, that is not the case in tests, and in this situation `ng-mocks` cannot detect the token.
+Please make sure that the token and its dependencies are listed in the providers of the related module so `ng-mocks` can mock them properly.
 
 Configuration of `TestBed` should be done via [`MockBuilder`](https://www.npmjs.com/package/ng-mocks#mockbuilder) where its first parameter is the token we want to test, and
 the second parameter is its module.

@@ -1,5 +1,5 @@
 ---
-title: How to test a provider of a directive in Angular application
+title: How to test a provider of a directive in Angular
 description: Covering a provider of an Angular directive with tests
 sidebar_label: Provider of directive
 ---

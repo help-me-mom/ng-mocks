@@ -1,6 +1,6 @@
 ---
 title: MockInstance - flexibility of mocks in Angular tests
-description: Information how to customize mock components, directives, services and tokens in Angular tests with help of ng-mocks
+description: Information on how to customize mock components, directives, services, and tokens in Angular tests with ng-mocks
 sidebar_label: MockInstance
 ---
 

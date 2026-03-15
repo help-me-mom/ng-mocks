@@ -1,5 +1,5 @@
 ---
-title: How to test a structural directive in Angular application
+title: How to test a structural directive in Angular
 description: Covering an Angular structural directive with tests
 sidebar_label: Directive (structural) 
 ---

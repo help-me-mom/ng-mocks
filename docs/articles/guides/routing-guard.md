@@ -1,5 +1,5 @@
 ---
-title: How to test a routing guard in Angular application
+title: How to test a routing guard in Angular
 description: Covering an Angular routing guard with tests
 sidebar_label: Routing guard
 ---
@@ -8,7 +8,7 @@ If you have not read ["How to test a route"](route.md), please do it first.
 
 To test a guard means that we need to mock everything except the guard and `RouterModule`.
 But, what if we have several guards? If we mocked them they would block routes due to falsy returns of their mocked methods.
-**To remove guards in angular tests `ng-mocks` provides `NG_MOCKS_GUARDS` token**, we should pass it into `.exclude`, then all other guards will be
+**To remove guards in Angular tests, `ng-mocks` provides the `NG_MOCKS_GUARDS` token**. We should pass it into `.exclude`, then all other guards will be
 excluded from `TestBed`, and we can be sure that we are **testing only the guard we want**.
 
 The example below is applicable for all types of guards:

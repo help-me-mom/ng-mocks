@@ -1,6 +1,6 @@
 ---
 title: Auto Spy
-description: Information how to enable Auto Spy in tests for Angular applications with help of ng-mocks
+description: Information on how to enable Auto Spy in tests for Angular applications with ng-mocks
 ---
 
 `ngMocks.autoSpy` is useful when you want all mock methods to be spies.
@@ -58,7 +58,7 @@ ngMocks.autoSpy('jasmine');
 // jasmine.getEnv().allowRespy(true);
 ```
 
-In case of jest add it to `src/setup-jest.ts` / `src/test-setup.ts`.
+For Jest, add it to `src/setup-jest.ts` / `src/test-setup.ts`.
 
 ```ts title="src/setup-jest.ts / src/test-setup.ts"
 import { ngMocks } from 'ng-mocks';

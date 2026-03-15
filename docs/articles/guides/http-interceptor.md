@@ -1,6 +1,6 @@
 ---
-title: How to test a http interceptor in Angular application
-description: Covering an Angular http interceptor with tests
+title: How to test an HTTP interceptor in Angular
+description: Covering an Angular HTTP interceptor with tests
 sidebar_label: HTTP interceptor
 ---
 
@@ -10,7 +10,7 @@ The problem of `useValue` and `useFactory` is that it is quite hard to distingui
 in `TestBed`.
 
 We need to keep `HTTP_INTERCEPTORS` token, because the interceptor is defined by it.
-But, this cause that all other interceptors will be kept too, therefore, we need to get rid of them via excluding `NG_MOCKS_INTERCEPTORS` token.
+But this causes all other interceptors to be kept too, so we need to get rid of them by excluding the `NG_MOCKS_INTERCEPTORS` token.
 The issue here is that if there are more interceptors, then their mocked copies will fail
 with "You provided 'undefined' where a stream was expected." error.
 And, the last important step is to replace `HttpClientModule` with `HttpClientTestingModule`,

@@ -1,5 +1,5 @@
 ---
-title: How to test a route in Angular application
+title: How to test a route in Angular
 description: Covering an Angular route with tests
 sidebar_label: Route
 ---

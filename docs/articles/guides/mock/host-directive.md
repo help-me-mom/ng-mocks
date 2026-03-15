@@ -4,9 +4,9 @@ description: Mocking an Angular host directive
 sidebar_label: Host Directive
 ---
 
-It can happen that a component hast a host directive which should be mocked in a test.
+It can happen that a component has a host directive which should be mocked in a test.
 
-There are several ways how `ng-mocks` can mock host directives:
+There are several ways `ng-mocks` can mock host directives:
 
 - [`MockBuilder`](../../api/MockBuilder.md#shallow-flag) and its [`shallow`](../../api/MockBuilder.md#shallow-flag) flag
 - [`MockBuilder`](../../api/MockBuilder.md) constructor

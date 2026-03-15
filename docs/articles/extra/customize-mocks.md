@@ -1,6 +1,6 @@
 ---
 title: How to customize mocks in Angular tests
-description: Information how to customize behavior of mocks produced by ng-mocks in Angular tests
+description: Information on how to customize the behavior of mocks produced by ng-mocks in Angular tests
 sidebar_label: Customize mocks
 ---
 

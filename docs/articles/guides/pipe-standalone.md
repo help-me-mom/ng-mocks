@@ -1,14 +1,14 @@
 ---
-title: How to test a standalone pipe in Angular application
+title: How to test a standalone pipe in Angular
 description: Covering an Angular standalone pipe with tests
 sidebar_label: Standalone Pipe
 ---
 
-A standalone pipe doesn't have many differences comparing to a regular pipe.
+A standalone pipe is not very different from a regular pipe.
 It cannot import any dependencies, it can only inject root providers.
 In order to mock root providers, [`MockBuilder`](/api/MockBuilder.md#shallow-flag) can be used.
 
-Let's image we have the next standalone pipe:
+Let's imagine we have the following standalone pipe:
 
 ```ts
 @Pipe({
@@ -24,9 +24,9 @@ class StandalonePipe implements PipeTransform {
 }
 ```
 
-As we see, it injects `RootService`, which should be mocked in unit tests.
+It injects `RootService`, which should be mocked in unit tests.
 
-It's possible to configure with the next code:
+You can configure it like this:
 
 ```ts
 beforeEach(() => {
@@ -38,7 +38,7 @@ Now all root dependencies of `StandalonePipe` are mocks,
 and the properties, methods, injections of the pipe are available for testing.
 
 If you need to keep a dependency, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
-For example, if we wanted to keep `RootService` then the code would look like:
+For example, if we wanted to keep `RootService`, the code would look like this:
 
 ```ts
 beforeEach(() => {

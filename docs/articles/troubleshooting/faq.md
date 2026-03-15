@@ -1,6 +1,6 @@
 ---
 title: Angular mocking troubleshooting FAQ
-description: Frequently Asked Questions about Angular mocks troubleshooting 
+description: Frequently asked questions about Angular mocks troubleshooting
 sidebar_label: FAQ
 ---
 
@@ -13,8 +13,8 @@ Therefore, if you keep `RouterModule` in your tests, you might face
 `TypeError: this.titleStrategy?.updateTitle is not a function` because `ng-mocks` mocks `TitleStrategy` and
 it doesn't know anything about `DefaultTitleStrategy`.
 
-To fix it error you need to set a default mock for `TitleStrategy`
-in `src/test.ts` or `src/setup-jest.ts` / `src/test-setup.ts` in case of jest:
+To fix the error, set a default mock for `TitleStrategy`
+in `src/test.ts` or, for Jest, `src/setup-jest.ts` / `src/test-setup.ts`:
 
 ```ts title="src/test.ts"
 import { DefaultTitleStrategy, TitleStrategy } from "@angular/router";

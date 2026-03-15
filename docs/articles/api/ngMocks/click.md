@@ -3,7 +3,7 @@ title: ngMocks.click
 description: Documentation about `ngMocks.click`, a simple tool to click any element in unit tests
 ---
 
-There are several ways how to click an element in Angular unit tests.
+There are several ways to click an element in Angular unit tests.
 However, `.triggerEventHandler` does not respect `disabled` state and does not call a native `click` event.
 And `.click` on a `nativeElement` does not allow customizing event properties.
 

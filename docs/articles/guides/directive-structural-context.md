@@ -1,5 +1,5 @@
 ---
-title: How to test a structural directive with a context in Angular application
+title: How to test a structural directive with a context in Angular
 description: Covering an Angular structural directive with a context with tests
 sidebar_label: Structural directive with context
 ---

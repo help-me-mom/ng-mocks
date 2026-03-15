@@ -1,5 +1,5 @@
 ---
-title: How to test a pipe in Angular application
+title: How to test a pipe in Angular
 description: Covering an Angular pipe with tests
 sidebar_label: Pipe
 ---

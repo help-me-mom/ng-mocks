@@ -1,5 +1,5 @@
 ---
-title: How to test a provider of a component in Angular application
+title: How to test a provider of a component in Angular
 description: Covering a provider of an Angular component with tests
 sidebar_label: Provider of component
 ---

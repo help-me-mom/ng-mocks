@@ -1,5 +1,5 @@
 ---
-title: How to test a component in Angular application
+title: How to test a component in Angular
 description: Covering an Angular component with tests
 sidebar_label: Component
 ---

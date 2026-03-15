@@ -16,7 +16,7 @@ or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 ## Directive
 
-Assume, that a template has the next code.
+Assume that a template has the following code.
 
 ```html
 <ng-template my-directive-1></ng-template>
@@ -32,7 +32,7 @@ const tpl2 = ngMocks.findTemplateRef(MyDirective2);
 
 ## Id
 
-Assume, that a template has the next code.
+Assume that a template has the following code.
 
 ```html
 <ng-template #header></ng-template>
@@ -48,7 +48,7 @@ const tplFooter = ngMocks.findTemplateRef('footer');
 
 ## Attribute selector
 
-Assume, that a template has the next code.
+Assume that a template has the following code.
 
 ```html
 <ng-template mat-row></ng-template>
@@ -68,7 +68,7 @@ Pay attention that a tuple is used, otherwise it will be id look up.
 
 ## Input with value
 
-Assume, that a template has the next code.
+Assume that a template has the following code.
 
 ```html
 <ng-template myTpl="header"></ng-template>
