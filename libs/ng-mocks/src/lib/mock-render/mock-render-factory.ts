@@ -172,6 +172,8 @@ const patchPointDetectChanges = (fixture: any): void => {
 const flushTestBed = (flags: Record<string, any>): void => {
   const globalFlags = ngMocksUniverse.global.get('flags');
   const testBed: any = getTestBed();
+  // TestBed.get / inject can now intentionally seed mocked declaration instances, so MockRender keeps
+  // warning about stale TestBed state when a previous render or manual createComponent already exists.
   if (flags.reset || (!testBed._instantiated && !testBed._testModuleRef)) {
     ngMocks.flushTestBed();
   } else if (globalFlags.onTestBedFlushNeed !== 'throw' && (testBed._instantiated || testBed._testModuleRef)) {
