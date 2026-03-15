@@ -65,10 +65,13 @@ so please configure commit signing before you open or update a PR.
 
 To avoid collisions when multiple worktrees run docker compose in parallel, set `COMPOSE_PROJECT_NAME`.
 Use your own unique string for each task/worktree.
+Reuse the same value for every `docker compose`, `sh ./compose.sh`, and `sh ./test.sh` command you run in that worktree.
+With a unique project name, Compose keeps the worktree resources separate, including the default network and the named `cache`, `gyp`, and `npm` volumes.
 
 ```shell
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
 ## How to run unit tests locally
