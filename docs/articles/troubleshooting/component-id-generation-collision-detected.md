@@ -73,7 +73,6 @@ export class Target1Component {}
   template: 'empty-template',
 })
 export class MockTarget1Component {
-  public avoidCollisionMockTarget1() {}
 }
 ```
 

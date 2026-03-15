@@ -1,6 +1,6 @@
 ---
 title: How to mock components in Angular tests
-description: Information how to mock components in Angular tests with help of ng-mocks
+description: Information on how to mock components in Angular tests with ng-mocks
 sidebar_label: MockComponent
 ---
 
@@ -143,9 +143,8 @@ describe('MockComponent', () => {
     //   By.css('child')
     // ).componentInstance
     // but properly typed.
-    const mockComponent = ngMocks.find<ChildComponent>(
-      'child',
-    ).componentInstance;
+    const mockComponent =
+      ngMocks.find<ChildComponent>('child').componentInstance;
 
     // Let's pretend that DependencyComponent has 'someInput' as
     // an input. MyComponent sets its value via
@@ -176,7 +175,9 @@ describe('MockComponent', () => {
     ngMocks.stubMember(
       component,
       'trigger',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      jasmine.createSpy(),
+      // in case of jest
+      // jest.fn(),
     );
     mockComponent.someOutput.emit({
       payload: 'foo',

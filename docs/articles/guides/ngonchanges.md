@@ -1,5 +1,5 @@
 ---
-title: How to test ngOnChanges lifecycle hook in Angular application
+title: How to test the ngOnChanges lifecycle hook in Angular
 description: Covering an Angular ngOnChanges lifecycle hook with tests
 sidebar_label: ngOnChanges lifecycle hook
 ---

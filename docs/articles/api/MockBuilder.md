@@ -515,7 +515,7 @@ beforeEach(() => {
 ### `NG_MOCKS_INTERCEPTORS` token
 
 Usually, when we want to test an interceptor, we want to avoid influences of other interceptors.
-To **remove all interceptors in an angular test** we need to exclude `NG_MOCKS_INTERCEPTORS` token,
+To **remove all interceptors in an Angular test** we need to exclude `NG_MOCKS_INTERCEPTORS` token,
 then all interceptors will be excluded except the explicitly configured ones.
 
 ```ts
@@ -527,10 +527,10 @@ beforeEach(() => {
 
 ### `NG_MOCKS_ROOT_PROVIDERS` token
 
-There are root services and tokens apart from provided ones in Angular applications.
+Angular applications also have root services and tokens besides provided ones.
 It might happen that in a test we want these providers to be replaced with their mocks or to be kept.
 
-If we want to replace all root providers with their mocks in an angular test,
+If we want to replace all root providers with their mocks in an Angular test,
 we need to pass `NG_MOCKS_ROOT_PROVIDERS` token into [`.mock`](#mock).
 
 ```ts

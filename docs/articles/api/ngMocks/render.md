@@ -47,7 +47,7 @@ To render a `TemplateRef` / `ng-template` we need to have 2 things:
 The first task can be solved by [`ngMocks.find`](find.md) or [`ngMocks.findInstance`](findInstance.md),
 the second task can be solved by [`ngMocks.findTemplateRef`](findTemplateRef.md).
 
-Let's assume, that we have the next template:
+Let's assume that we have the following template:
 
 ```html
 <xd-card>

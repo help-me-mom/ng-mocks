@@ -4,8 +4,8 @@ description: How to use mocks in Angular tests
 sidebar_label: Extensive example
 ---
 
-There is an extensive example how to use mocks in Angular tests below,
-please pay attention to comments in the code, they explain purposes and intentions.
+Below is an extensive example of how to use mocks in Angular tests.
+Please pay attention to the comments in the code; they explain the purpose and intent.
 
 Also, you can play with the test in sandboxes:
 
@@ -28,7 +28,11 @@ class TranslatePipe implements PipeTransform {
 @Component({
   selector: 'app-root',
   template: `
-    <app-header [showLogo]="true" [title]="title" (logo)="logoClick.emit()">
+    <app-header
+      [showLogo]="true"
+      [title]="title"
+      (logo)="logoClick.emit()"
+    >
       <ng-template #menu>
         <ul>
           <li>
@@ -62,7 +66,8 @@ class AppComponent {
 })
 class AppHeaderComponent {
   @Output() public readonly logo = new EventEmitter<void>();
-  @ContentChild('menu') public menu?: TemplateRef<ElementRef>;
+  @ContentChild('menu')
+  public menu?: TemplateRef<ElementRef>;
   @Input() public showLogo = false;
   @Input() public title = '';
 }
@@ -138,7 +143,7 @@ describe('main', () => {
   });
 
   it('asserts behavior of AppComponent', () => {
-    const logoClickSpy = jasmine.createSpy(); // or jest.fn();
+    const logoClickSpy = jasmine.createSpy();
     // in case of jest
     // const logoClickSpy = jest.fn();
 

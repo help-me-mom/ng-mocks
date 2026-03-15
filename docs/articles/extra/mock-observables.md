@@ -1,6 +1,6 @@
 ---
 title: How to mock observable streams in Angular tests
-description: Information how to mock observables in Angular tests
+description: Information on how to mock observables in Angular tests
 sidebar_label: Observables
 ---
 

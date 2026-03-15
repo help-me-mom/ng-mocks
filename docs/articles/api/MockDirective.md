@@ -1,6 +1,6 @@
 ---
 title: How to mock directives in Angular tests
-description: Information how to mock attribute and structural directives in Angular tests with help of ng-mocks
+description: Information on how to mock attribute and structural directives in Angular tests with ng-mocks
 sidebar_label: MockDirective
 ---
 
@@ -182,7 +182,9 @@ describe('MockDirective:Attribute', () => {
     ngMocks.stubMember(
       component,
       'trigger',
-      jasmine.createSpy(), // or jest.fn()
+      jasmine.createSpy(),
+      // in case of jest
+      // jest.fn(),
     );
     mockDirective.someOutput.emit();
 
@@ -226,7 +228,9 @@ describe('MockDirective:Structural', () => {
 
     // Let's assert that nothing has been rendered inside
     // the structural directive by default.
-    expect(fixture.nativeElement.innerHTML).not.toContain('>content<');
+    expect(fixture.nativeElement.innerHTML).not.toContain(
+      '>content<',
+    );
 
     // And let's render it manually now.
     const mockDirective = ngMocks.findInstance(DependencyDirective);

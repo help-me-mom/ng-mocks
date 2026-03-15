@@ -1,9 +1,9 @@
 ---
-title: How to test usage of ngrx in Angular applications
+title: How to test NgRx usage in Angular applications
 sidebar_label: NGRX
 ---
 
-`ng-mocks` perfectly mocks `NGRX` modules. However, there are might be issues if some of them should be kept.
+`ng-mocks` perfectly mocks `NGRX` modules. However, there might be issues if some of them should be kept.
 
 `StoreModule` and `EffectsModule` are entry point factory modules to configure reducers and effects.
 Under the hood, `NGRX` uses four modules, and these modules should be configured in `MockBuilder`:

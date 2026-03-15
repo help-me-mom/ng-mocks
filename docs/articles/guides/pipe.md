@@ -1,5 +1,5 @@
 ---
-title: How to test a pipe in Angular application
+title: How to test a pipe in Angular
 description: Covering an Angular pipe with tests
 sidebar_label: Pipe
 ---
@@ -42,9 +42,9 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class TargetPipe implements PipeTransform {
   public transform(value: string[], asc = true): string {
-    let result = [...(value || [])].sort();
+    const result = [...(value || [])].sort();
     if (!asc) {
-      result = result.reverse();
+      result.reverse();
     }
 
     return result.join(', ');

@@ -1,6 +1,6 @@
 ---
 title: How to get a mock instance of any class in Angular tests
-description: Information how to mock classes and objects in Angular tests with help of ng-mocks
+description: Information on how to mock classes and objects in Angular tests with ng-mocks
 sidebar_label: MockService (classes)
 ---
 

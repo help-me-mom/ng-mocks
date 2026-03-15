@@ -1,5 +1,5 @@
 ---
-title: How to test a route in Angular application
+title: How to test a route in Angular
 description: Covering an Angular route with tests
 sidebar_label: Route
 ---
@@ -35,19 +35,18 @@ beforeEach(() =>
 );
 ```
 
-The next and very important step is to wrap a test callback in `it` with `fakeAsync` function and to render `RouterOutlet`.
-We need this, because `RouterModule` relies on async zones.
+The next and very important step is to render `RouterOutlet` in an `async` test callback.
+We need this, because `RouterModule` relies on async zones and the routed view should settle after navigation.
 Also, please note an empty object as the second parameter, it's needed to leave inputs of `RouterOutlet` untouched.
 
 ```ts
-// fakeAsync --------------------------|||||||||
-it('renders /1 with Target1Component', fakeAsync(() => {
+it('renders /1 with Target1Component', async () => {
   const fixture = MockRender(RouterOutlet, {});
-}));
+});
 ```
 
 After we have rendered `RouterOutlet` we should initialize the router, also we can set the default url here.
-As mentioned above, we should use zones and `fakeAsync` for that.
+As mentioned above, we should use zones and then wait until the fixture becomes stable.
 
 ```ts
 const router = TestBed.get(Router);
@@ -56,7 +55,7 @@ const location = TestBed.get(Location);
 location.go('/1');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => router.initialNavigation());
-  tick();
+  await fixture.whenStable();
 }
 ```
 
@@ -90,23 +89,23 @@ beforeEach(() =>
 ```
 
 ```ts
-it('navigates between pages', fakeAsync(() => {
+it('navigates between pages', async () => {
   const fixture = MockRender(TargetComponent);
-}));
+});
 ```
 
 The next step is to find the link we want to click. The click event should be inside of zones, because it triggers navigation.
 Please notice, that `button: 0` should be sent with the event to simulate the left button click.
 
 ```ts
-const links = ngMocks.findAll(fixture, 'a');
+const links = ngMocks.findAll('a');
 if (fixture.ngZone) {
   fixture.ngZone.run(() => {
     links[0].triggerEventHandler('click', {
       button: 0, // <- simulating the left button click, not right one.
     });
   });
-  tick();
+  await fixture.whenStable();
 }
 ```
 
@@ -126,7 +125,6 @@ expect(() => ngMocks.find(fixture, Target1Component)).not.toThrow();
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoute/test.spec.ts"
 import { Location } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -146,21 +144,24 @@ import {
     <router-outlet></router-outlet>
   `,
 })
-class TargetComponent {}
+class TargetComponent {
+}
 
 // A simple component for the first route.
 @Component({
   selector: 'route1',
   template: 'route1',
 })
-class Route1Component {}
+class Route1Component {
+}
 
 // A simple component for the second route.
 @Component({
   selector: 'route2',
   template: 'route2',
 })
-class Route2Component {}
+class Route2Component {
+}
 
 // Definition of the routing module.
 @NgModule({
@@ -201,7 +202,7 @@ describe('TestRoute:Route', () => {
     );
   });
 
-  it('renders /1 with Route1Component', fakeAsync(() => {
+  it('renders /1 with Route1Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -210,15 +211,15 @@ describe('TestRoute:Route', () => {
     location.go('/1');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
     expect(() => ngMocks.find(Route1Component)).not.toThrow();
-  }));
+  });
 
-  it('renders /2 with Route2Component', fakeAsync(() => {
+  it('renders /2 with Route2Component', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -227,13 +228,13 @@ describe('TestRoute:Route', () => {
     location.go('/2');
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 
 describe('TestRoute:Component', () => {
@@ -258,7 +259,7 @@ describe('TestRoute:Component', () => {
     );
   });
 
-  it('navigates between pages', fakeAsync(() => {
+  it('navigates between pages', async () => {
     const fixture = MockRender(TargetComponent);
     const router: Router = fixture.point.injector.get(Router);
     const location: Location = fixture.point.injector.get(Location);
@@ -266,7 +267,7 @@ describe('TestRoute:Component', () => {
     // First we need to initialize navigation.
     if (fixture.ngZone) {
       fixture.ngZone.run(() => router.initialNavigation());
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
     // By default, our routes do not have a component.
@@ -288,7 +289,7 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route1Component component on /1 page.
     expect(location.path()).toEqual('/1');
@@ -302,11 +303,11 @@ describe('TestRoute:Component', () => {
           button: 0,
         });
       });
-      tick(); // is needed for rendering of the current route.
+      await fixture.whenStable(); // is needed for rendering of the current route.
     }
     // We should see Route2Component component on /2 page.
     expect(location.path()).toEqual('/2');
     expect(() => ngMocks.find(Route2Component)).not.toThrow();
-  }));
+  });
 });
 ```

@@ -1,6 +1,6 @@
 ---
 title: How to mock form controls in Angular tests
-description: Information how to use ng-mocks in order to interact with mock form controls in Angular tests
+description: Information on how to use ng-mocks to interact with mock form controls in Angular tests
 sidebar_label: Form Controls
 ---
 
@@ -129,7 +129,7 @@ describe('MockReactiveForms', () => {
   it('sends the correct value to the mock form component', () => {
     // That is our spy on writeValue calls.
     // With auto spy this code is not needed.
-    const writeValue = jasmine.createSpy('writeValue'); // or jest.fn();
+    const writeValue = jasmine.createSpy('writeValue');
     // in case of jest
     // const writeValue = jest.fn();
 
@@ -182,7 +182,7 @@ describe('MockForms', () => {
   it('sends the correct value to the mock form component', async () => {
     // That is our spy on writeValue calls.
     // With auto spy this code is not needed.
-    const writeValue = jasmine.createSpy('writeValue'); // or jest.fn();
+    const writeValue = jasmine.createSpy('writeValue');
     // in case of jest
     // const writeValue = jest.fn();
 

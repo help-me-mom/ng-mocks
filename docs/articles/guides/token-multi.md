@@ -1,5 +1,5 @@
 ---
-title: How to test a multi token in Angular application
+title: How to test a multi token in Angular
 description: Covering an Angular multi token with tests
 sidebar_label: Multi token
 ---

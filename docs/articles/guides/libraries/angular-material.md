@@ -1,13 +1,13 @@
 ---
-title: How to test usage of @angular/material (Angular Material) in Angular applications
+title: How to test the usage of @angular/material (Angular Material) in Angular applications
 sidebar_label: Angular Material
 ---
 
 `Angular Material` is a UI library with a lot of UI components.
-Below you can find information how to test a component which uses `Angular Material`.
+Below you can find information on how to test a component that uses `Angular Material`.
 
 The next example will be based on usage of `mat-table`.
-Let's assume, that a component uses `mat-table` like that:
+Let's assume that a component uses `mat-table` like this:
 
 ```html
 <table mat-table [dataSource]="dataSource">

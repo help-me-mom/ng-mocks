@@ -1,5 +1,5 @@
 ---
-title: How to test a standalone directive in Angular application
+title: How to test a standalone directive in Angular
 description: Covering an Angular standalone directive with tests
 sidebar_label: Standalone Directive
 ---
@@ -7,11 +7,11 @@ sidebar_label: Standalone Directive
 Here you can find how to test a standalone directive.
 
 A standalone directive has the same feature set as a regular directive.
-The only possible dependencies for a standalone directive are root services and tokens. 
+The only possible dependencies for a standalone directive are root services and tokens.
 In a unit test, developers prefer to mock such dependencies.
-[`MockBuilder`](/api/MockBuilder.md#shallow-flag) helps to configure `TestBed` in such the way.
+[`MockBuilder`](/api/MockBuilder.md#shallow-flag) helps configure `TestBed` that way.
 
-Let's image we have the next standalone directive:
+Let's imagine we have the following standalone directive:
 
 ```ts
 @Directive({
@@ -29,9 +29,9 @@ class StandaloneDirective implements OnInit {
 }
 ```
 
-As we can see, the standalone directive injects `RootService`, and, ideally, the service should be mocked.
+The standalone directive injects `RootService`, and ideally the service should be mocked.
 
-To configure `TestBed` for that you need to use the next code:
+To configure `TestBed` for that, use:
 
 ```ts
 beforeEach(() => {
@@ -55,7 +55,7 @@ Now all dependencies of `StandaloneDirective` are mocks,
 and the properties, methods, injections of the directive are available for testing.
 
 If you need to keep a dependency, simply call [`.keep`](/api/MockBuilder.md#keep) with it.
-For example, if we wanted to keep `RootService` then the code would look like:
+For example, if we wanted to keep `RootService`, the code would look like this:
 
 ```ts
 beforeEach(() => {

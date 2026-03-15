@@ -1,10 +1,10 @@
 ---
-title: How to test usage of ng-select in Angular applications
+title: How to test ng-select usage in Angular applications
 sidebar_label: ng-select
 ---
 
-In order to test `ng-select`, we need to ensure that we are passing right
-`inputs` / `outputs` into it.
+To test `ng-select`, we need to ensure that we are passing the right
+inputs and outputs into it.
 Apart from that, we need to verify `ng-templates` if we are customizing `ng-select`.
 
 Let's imagine that the template of a component uses `ng-select` in the next way:

@@ -1,8 +1,8 @@
 ---
-title: Mock components, services and more out of annoying dependencies in Angular tests
+title: Mock components, services, and more to simplify Angular testing
 description: An Angular testing library for creating mock services, components, directives,
-  pipes and modules in unit tests, which includes shallow rendering
-  and supports jasmine and jest.
+  pipes, and modules in unit tests. It includes shallow rendering
+  and supports Jasmine and Jest.
 sidebar_label: Get started
 slug: /
 ---
@@ -10,16 +10,16 @@ slug: /
 [<img src="https://img.shields.io/gitter/room/help-me-mom/ng-mocks" alt="chat on gitter" width="90" height="20" />](https://gitter.im/ng-mocks/community)
 [<img src="https://img.shields.io/npm/v/ng-mocks" alt="npm version" width="88" height="20" />](https://www.npmjs.com/package/ng-mocks)
 [<img src="https://img.shields.io/circleci/build/github/help-me-mom/ng-mocks/main" alt="build status" width="88" height="20" />](https://app.circleci.com/pipelines/github/help-me-mom/ng-mocks?branch=main)
-[<img src="https://img.shields.io/coveralls/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://coveralls.io/github/help-me-mom/ng-mocks?branch=main)
+[<img src="https://img.shields.io/codecov/c/github/help-me-mom/ng-mocks/main" alt="coverage status" width="104" height="20" />](https://codecov.io/gh/help-me-mom/ng-mocks)
 
-`ng-mocks` is a testing library which helps with
+`ng-mocks` is a testing library that helps with
 **mocking [services](api/MockService.md),
 [components](api/MockComponent.md)**,
 [directives](api/MockDirective.md),
 [pipes](api/MockPipe.md) and
 [modules](api/MockModule.md)
 in tests for Angular applications.
-When we have a **noisy child component**,
+When you have a **noisy child component**,
 or any other **annoying dependency**,
 `ng-mocks` has tools to turn these declarations into their mocks,
 keeping interfaces as they are, but suppressing their implementation.
@@ -47,10 +47,10 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 |       6 |  latest  |   yes   | yes  |     |            |         |       |
 |       5 |  latest  |   yes   | yes  |     |            |         |       |
 
-In the header menu we can find **preconfigured sandboxes**, where we could **check all the features**.
+The header menu contains **preconfigured sandboxes**, where you can explore the features.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
 
-Also, there is a brief summary with **the latest changes** in [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/main/CHANGELOG.md).
+There is also a brief summary of **the latest changes** in [CHANGELOG](https://github.com/help-me-mom/ng-mocks/blob/main/CHANGELOG.md).
 
 ## Quick Navigation
 
@@ -62,14 +62,15 @@ Also, there is a brief summary with **the latest changes** in [CHANGELOG](https:
 
 ## Very short introduction
 
-Global configuration for mocks in `src/test.ts`.
-In case of jest `src/setup-jest.ts` / `src/test-setup.ts` should be used.
+Put the global configuration for mocks in `src/test.ts`.
+For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
 // will be automatically spied on their creation.
 // https://ng-mocks.sudo.eu/extra/auto-spy
-ngMocks.autoSpy('jasmine'); // or jest
+ngMocks.autoSpy('jasmine');
+// for Jest: ngMocks.autoSpy('jest')
 
 // ngMocks.defaultMock helps to customize mocks
 // globally. Therefore, we can avoid copy-pasting
@@ -88,7 +89,7 @@ An example of a spec for a profile edit component.
 // and it has 3 text fields: email, firstName,
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
-// cover behavior of the component.
+// cover the behavior of the component.
 describe('profile:builder', () => {
   // Helps to reset customizations after each test.
   // Alternatively, you can enable
@@ -104,7 +105,7 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/MockBuilder
     return MockBuilder(ProfileComponent, ProfileModule)
       .keep(ReactiveFormsModule);
-    // // or old fashion way
+    // // or the old-fashioned way
     // return TestBed.configureTestingModule({
     //   imports: [
     //     MockModule(SharedModule), // mock
@@ -136,7 +137,7 @@ describe('profile:builder', () => {
     const fixture = MockRender(ProfileComponent);
 
     expect(fixture.point.componentInstance).toEqual(
-      assertion.any(ProfileComponent),
+      jasmine.any(ProfileComponent),
     );
   });
 
@@ -151,14 +152,16 @@ describe('profile:builder', () => {
     };
 
     // A spy to track save calls.
-    // MockInstance helps to configure mock
+    // MockInstance helps configure mock
     // providers, declarations and modules
     // before their initialization and usage.
     // https://ng-mocks.sudo.eu/api/MockInstance
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy(), // or jest.fn()
+      jasmine.createSpy(),
+      // or, for Jest
+      // jest.fn(),
     );
 
     // Renders <profile [profile]="params.profile">
@@ -190,7 +193,7 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
-    // The spy should be called with the user
+    // The spy should be called with the profile
     // and the random email address.
     expect(spySave).toHaveBeenCalledWith({
       email: 'test3@em.ail',

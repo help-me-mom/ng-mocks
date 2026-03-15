@@ -1,5 +1,5 @@
 ---
-title: How to test an attribute directive in Angular application
+title: How to test an attribute directive in Angular
 description: Covering an Angular attribute directive with tests
 sidebar_label: Directive (attribute)
 ---

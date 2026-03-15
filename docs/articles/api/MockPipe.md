@@ -1,6 +1,6 @@
 ---
 title: How to mock pipes in Angular tests
-description: Information how to mock pipes in Angular tests with help of ng-mocks
+description: Information on how to mock pipes in Angular tests with ng-mocks
 sidebar_label: MockPipe
 ---
 

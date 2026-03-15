@@ -14,7 +14,7 @@ or simply with selectors which are supported by [`ngMocks.find`](find.md).
 
 - `ngMocks.findTemplateRefs( cssSelector?, [attribute, value?] )`
 
-Assume, that a template has the next code.
+Assume that a template has the following code.
 
 ```html
 <ng-template myTpl="header"></ng-template>

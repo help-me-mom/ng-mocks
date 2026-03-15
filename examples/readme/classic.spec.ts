@@ -98,7 +98,7 @@ const assertion: any =
 // and it has 3 text fields: email, firstName,
 // lastName, and a user can edit them.
 // In the following test suite, we would like to
-// cover behavior of the component.
+// cover the behavior of the component.
 describe('profile:classic', () => {
   // Helps to reset customizations after each test.
   // Alternatively, you can enable
@@ -148,7 +148,7 @@ describe('profile:classic', () => {
     };
 
     // A spy to track save calls.
-    // MockInstance helps to configure mock
+    // MockInstance helps configure mock
     // providers, declarations and modules
     // before their initialization and usage.
     // https://ng-mocks.sudo.eu/api/MockInstance
@@ -187,7 +187,7 @@ describe('profile:classic', () => {
     // https://ng-mocks.sudo.eu/api/ngMocks/trigger
     ngMocks.trigger(point, 'keyup.control.s');
 
-    // The spy should be called with the user
+    // The spy should be called with the profile
     // and the random email address.
     expect(spySave).toHaveBeenCalledWith({
       email: 'test3@em.ail',

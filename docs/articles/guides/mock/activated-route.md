@@ -1,17 +1,16 @@
 ---
-title: How to mock ActivatedRoute in Angular tests 
-description: Mocking ActivatedRoute and its params in snapshot
+title: How to mock ActivatedRoute in Angular tests
+description: Mocking ActivatedRoute snapshots and params in Angular tests
 sidebar_label: ActivatedRoute
 ---
 
-When we are talking about mocking `ActivatedRoute`,
-we mean a solution to provide stub params in the snapshot of `ActivatedRoute`
-which are used in the component under test.
+When mocking `ActivatedRoute`, the goal is usually to provide stub route data
+for the component under test.
 
-## activatedRoute.snapshot
+## ActivatedRoute.snapshot
 
-Let's assume we have the next `TargetComponent` component,
-which relies on the `paramId` of the `ActivatedRoute` snapshot. 
+Let's assume we have a `TargetComponent` which relies on the `paramId`
+from `ActivatedRoute.snapshot`.
 
 ```ts
 @Component({
@@ -29,54 +28,42 @@ class TargetComponent {
 }
 ```
 
-In our test as a mock `ActivatedRoute`, we would like to provide `paramValue` as `paramId`.
+In the test, we want `ActivatedRoute` to provide `paramValue` as `paramId`.
 To do so, we can use [`MockInstance`](/api/MockInstance.md).
 
-The first step is to call a spy when someone wants to access `snapshot`,
-and the second step is to return stub params:
+The idea is to mock the `snapshot` getter and return stub params from it:
 
 ```ts
 it('works with snapshot from ActivatedRoute', () => {
-  // for jasmine
-  // mocking the getter of ActivatedRoute.snapshot
   MockInstance(ActivatedRoute, 'snapshot', jasmine.createSpy(), 'get')
-    // using jasmine.spy.and.returnValue to customize what the getter returns.
     .and.returnValue({
       paramMap: new Map([['paramId', 'paramValue']]),
     });
-  // for jest
-  // mocking the getter of ActivatedRoute.snapshot
-  MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get')
-    // using jest.fn.mockReturnValue to customize what the getter returns.
-    .mockReturnValue({
-      paramMap: new Map([['paramId', 'paramValue']]),
-    });
+  // in case of jest
+  // MockInstance(ActivatedRoute, 'snapshot', jest.fn(), 'get')
+  //   .mockReturnValue({
+  //     paramMap: new Map([['paramId', 'paramValue']]),
+  //   });
 
   // the rest of the test
   // ...
 });
 ```
 
-Profit. Now, when someone accesses `snapshot` of `ActivatedRoute`, the spy will be called,
-which returns a stub `paramMap` with the params we wanted.
+Now any access to `ActivatedRoute.snapshot` returns a stub `paramMap`
+with the params we need.
 
-## activatedRoute.params
+## ActivatedRoute.params
 
-If a component relies on `ActivatedRoute.params` and they should be mocked,
-then the approach is very similar to be [above one](#activatedroutesnapshot): 
+If a component relies on `ActivatedRoute.params`, the setup is very similar:
 
 ```ts
 it('works with params from ActivatedRoute', () => {
-  // for jasmine
-  // mocking the getter of ActivatedRoute.snapshot
   MockInstance(ActivatedRoute, 'params', jasmine.createSpy(), 'get')
-    // using jasmine.spy.and.returnValue to customize what the getter returns.
-    .and.returnValue(of({paramId: 'paramValue'});
-  // for jest
-  // mocking the getter of ActivatedRoute.snapshot
-  MockInstance(ActivatedRoute, 'params', jest.fn(), 'get')
-    // using jest.fn.mockReturnValue to customize what the getter returns.
-    .mockReturnValue(of({paramId: 'paramValue'});
+    .and.returnValue(of({ paramId: 'paramValue' }));
+  // in case of jest
+  // MockInstance(ActivatedRoute, 'params', jest.fn(), 'get')
+  //   .mockReturnValue(of({ paramId: 'paramValue' }));
 
   // the rest of the test
   // ...
@@ -85,9 +72,8 @@ it('works with params from ActivatedRoute', () => {
 
 ## RouterModule.forRoot
 
-In situation when you want to mock a module which imports `RouterModule.forRoot`.
-
-In this case, only the component under test should be kept:
+If you want to mock a module which imports `RouterModule.forRoot`,
+keep only the component under test:
 
 ```ts
 // TargetModule and RouterModule.forRoot will be mocks
@@ -99,10 +85,10 @@ beforeEach(() => MockBuilder(
 
 ## RouterModule.forChild
 
-In situation when you want to mock a module which imports `RouterModule.forChild`,
-you have to add `RouterModule.forRoot` to mocks too.
+If you want to mock a module which imports `RouterModule.forChild`,
+you also need to add `RouterModule.forRoot` to the mocks.
 
-Otherwise, `ActivatedRoute` and other dependencies won't be available: 
+Otherwise, `ActivatedRoute` and other router dependencies will not be available:
 
 ```ts
 // TargetModule, RouterModule.forChild and RouterModule.forRoot will be mocks
@@ -167,7 +153,7 @@ describe('MockActivatedRoute', () => {
     ).and.returnValue({
       paramMap: new Map([['paramId', 'paramValue']]),
     });
-    // // in case of jest.
+    // in case of jest
     // MockInstance(
     //   ActivatedRoute,
     //   'snapshot',

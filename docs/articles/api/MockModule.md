@@ -1,6 +1,6 @@
 ---
 title: How to mock modules in Angular tests
-description: Information how to mock modules with their imports, declarations and providers in Angular tests with help of ng-mocks
+description: Information on how to mock modules with their imports, declarations, and providers in Angular tests with ng-mocks
 sidebar_label: MockModule
 ---
 

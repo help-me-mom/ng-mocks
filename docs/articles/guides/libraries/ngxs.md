@@ -3,7 +3,7 @@ title: How to test NGXS in Angular applications
 sidebar_label: NGXS
 ---
 
-If you need to avoid mocking of `NGXS` in your modules, you need to use [`.keep`](/api/MockBuilder.md#keep).
+If you need to avoid mocking `NGXS` in your modules, use [`.keep`](/api/MockBuilder.md#keep).
 
 ```ts
 beforeEach(() =>
@@ -21,7 +21,7 @@ beforeEach(() =>
  );
 ```
 
-if your module imports `NgxsModule.forFeature` only, you need to add `NgxsModule.forRoot()` and `Store` manually:
+If your module imports only `NgxsModule.forFeature`, you need to add `NgxsModule.forRoot()` and `Store` manually:
 
 ```ts
 beforeEach(() =>

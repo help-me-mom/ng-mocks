@@ -1,24 +1,25 @@
 ---
-title: How to test a http request in Angular application
-description: Covering an Angular http request with tests
+title: How to test an HTTP request in Angular
+description: Covering an Angular HTTP request with tests
 sidebar_label: HTTP request
 ---
 
-Testing a http request means that we want to cover a service or a declaration sending it. For that we need to keep the
-thing as it is and to mock all its dependencies. The last important step is to replace `HttpClientModule`
-with `HttpClientTestingModule` so we can use `HttpTestingController` for faking requests.
+Testing an HTTP request means covering a service or declaration that sends it.
+For that, we need to keep the service or declaration as it is and mock all its dependencies.
+The last important step is to replace `HttpClientModule` with `HttpClientTestingModule`
+so we can use `HttpTestingController` to fake requests.
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetService, TargetModule)
-    // .keep should be added since Angular 21
-    .keep(HttpClient)
-    .replace(HttpClientModule, HttpClientTestingModule)
+  MockBuilder(TargetService, TargetModule).replace(
+    HttpClientModule,
+    HttpClientTestingModule,
+  )
 );
 ```
 
-Let's pretend that `TargetService` sends a simple GET request to `/data` and returns its result. To test it we need to
-subscribe to the service and to write an expectation of the request.
+Let's pretend that `TargetService` sends a simple GET request to `/data` and returns its result.
+To test it, we need to subscribe to the service and write an expectation for the request.
 
 ```ts
 const service = TestBed.get(TargetService);
@@ -81,12 +82,12 @@ describe('TestHttpRequest', () => {
   // initialization, we need to pass its module as the second
   // parameter. And, the last but not the least, we need to replace
   // HttpClientModule with HttpClientTestingModule.
-  beforeEach(() => {
-    return MockBuilder(TargetService, TargetModule)
-      // .keep should be added since Angular 21
-      .keep(HttpClient)
-      .replace(HttpClientModule, HttpClientTestingModule);
-  });
+  beforeEach(() =>
+    MockBuilder(TargetService, TargetModule).replace(
+      HttpClientModule,
+      HttpClientTestingModule,
+    ),
+  );
 
   it('sends a request', () => {
     MockRender();

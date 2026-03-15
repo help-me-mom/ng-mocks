@@ -1,6 +1,6 @@
 ---
 title: How to mock providers in Angular tests
-description: Information how to mock services and tokens in Angular tests with help of ng-mocks
+description: Information on how to mock services and tokens in Angular tests with ng-mocks
 sidebar_label: MockProvider
 ---
 
@@ -272,7 +272,7 @@ describe('MockProvider', () => {
       fixture.point.injector.get(Dependency2Service).echo(),
     ).toBeUndefined();
     expect(fixture.point.injector.get(OBJ_TOKEN)).toBe(
-      mockObj as any,
+      mockObj,
     );
     expect(fixture.nativeElement.innerHTML).not.toContain('"target"');
     expect(fixture.nativeElement.innerHTML).toContain('"d2:mock"');

@@ -133,10 +133,7 @@ class ChildDirective {
 @Component({
   selector: 'target',
   template: `
-    <child
-      [child]="0"
-      (trigger)="value = $event"
-    ></child>
+    <child [child]="0" (trigger)="value = $event"></child>
     <div>
       <span [child]="1" (trigger)="value = $event">1</span>
       <span [child]="2" (trigger)="value = $event">2</span>
@@ -166,11 +163,7 @@ class TargetComponent {
 }
 
 @NgModule({
-  declarations: [
-    ChildComponent,
-    ChildDirective,
-    TargetComponent,
-  ],
+  declarations: [ChildComponent, ChildDirective, TargetComponent],
   exports: [TargetComponent],
 })
 class TargetModule {}
@@ -186,17 +179,17 @@ describe('TestViewChild', () => {
     expect(component.component).toEqual(
       jasmine.any(ChildComponent),
     );
-    expect(
-      component.component && component.component.child,
-    ).toEqual(0);
+    expect(component.component && component.component.child).toEqual(
+      0,
+    );
 
     // checking its read: ChildDirective
     expect(component.directive).toEqual(
       jasmine.any(ChildDirective),
     );
-    expect(
-      component.directive && component.directive.child,
-    ).toEqual(0);
+    expect(component.directive && component.directive.child).toEqual(
+      0,
+    );
 
     // checking TemplateRef
     expect(component.tpl).toEqual(jasmine.any(TemplateRef));
@@ -214,30 +207,20 @@ describe('TestViewChild', () => {
 
     // asserting outputs of ChildComponent
     expect(component.value).toEqual('');
-    ngMocks
-      .findInstance(ChildComponent)
-      .trigger.emit('component');
+    ngMocks.findInstance(ChildComponent).trigger.emit('component');
     expect(component.value).toEqual('component');
 
     // asserting outputs ChildDirective
-    ngMocks
-      .findInstances(ChildDirective)[0]
-      .trigger.emit('dir0');
+    ngMocks.findInstances(ChildDirective)[0].trigger.emit('dir0');
     expect(component.value).toEqual('dir0');
 
-    ngMocks
-      .findInstances(ChildDirective)[1]
-      .trigger.emit('dir1');
+    ngMocks.findInstances(ChildDirective)[1].trigger.emit('dir1');
     expect(component.value).toEqual('dir1');
 
-    ngMocks
-      .findInstances(ChildDirective)[2]
-      .trigger.emit('dir2');
+    ngMocks.findInstances(ChildDirective)[2].trigger.emit('dir2');
     expect(component.value).toEqual('dir2');
 
-    ngMocks
-      .findInstances(ChildDirective)[3]
-      .trigger.emit('dir3');
+    ngMocks.findInstances(ChildDirective)[3].trigger.emit('dir3');
     expect(component.value).toEqual('dir3');
   });
 });
