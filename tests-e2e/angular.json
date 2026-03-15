@@ -38,10 +38,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular:build:production"
+              "buildTarget": "angular:build:production"
             },
             "development": {
-              "browserTarget": "angular:build:development"
+              "buildTarget": "angular:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -52,13 +52,15 @@
             "main": "src/test.ts",
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.json",
-            "karmaConfig": "karma.conf.js"
+            "karmaConfig": "karma.conf.js",
+            "watch": false
           }
         }
       }
     }
   },
   "cli": {
+    "packageManager": "npm",
     "analytics": false
   }
 }

@@ -13,10 +13,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/a21",
-            "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.json"
           },
           "configurations": {
@@ -72,6 +69,7 @@
     }
   },
   "cli": {
+    "packageManager": "npm",
     "analytics": false
   }
 }

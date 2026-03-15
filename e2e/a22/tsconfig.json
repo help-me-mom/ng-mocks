@@ -1,0 +1,29 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "useDefineForClassFields": false,
+    "types": ["jasmine", "jest", "node"]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
+  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+}

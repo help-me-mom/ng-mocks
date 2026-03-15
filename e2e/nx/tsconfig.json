@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
@@ -22,7 +23,8 @@
     "noImplicitOverride": false,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -30,6 +32,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/polyfills.ts", "src/test.ts", "src/setup-jest.ts"],
+  "files": ["src/main.ts", "src/test-setup.ts"],
   "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }

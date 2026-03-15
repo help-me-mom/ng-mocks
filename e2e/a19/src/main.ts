@@ -1,8 +1,16 @@
+import { ApplicationConfig, Component, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 
-import { AppComponent } from './app/app.component';
+const appConfig: ApplicationConfig = {
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+};
 
-bootstrapApplication(AppComponent, {
-  providers: [provideRouter([])],
-}).catch(error => console.error(error));
+@Component({
+  selector: 'app-root',
+  template: '<h1>Welcome to {{ title }}!</h1>',
+})
+class AppComponent {
+  public readonly title = 'a19';
+}
+
+bootstrapApplication(AppComponent, appConfig).catch(error => console.error(error));

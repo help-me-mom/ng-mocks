@@ -56,5 +56,8 @@
       }
     }
   },
+  "cli": {
+    "packageManager": "npm"
+  },
   "defaultProject": "a6"
 }

@@ -1,7 +1,14 @@
-// tslint:disable no-import-side-effect ordered-imports
-
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+@NgModule({
+  providers: [provideZoneChangeDetection()],
+})
+export class TestModule {}
+
+// Initialize the Angular testing environment.
+getTestBed().initTestEnvironment([BrowserTestingModule, TestModule], platformBrowserTesting(), {
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});

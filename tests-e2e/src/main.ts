@@ -1,9 +1,16 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ApplicationConfig, Component, provideBrowserGlobalErrorListeners, signal } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 
-import { AppModule } from './app/app.module';
-enableProdMode();
+const appConfig: ApplicationConfig = {
+  providers: [provideBrowserGlobalErrorListeners()],
+};
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(error => console.error(error));
+@Component({
+  selector: 'app-root',
+  template: '<h1>Hello, {{ title() }}</h1>',
+})
+class App {
+  protected readonly title = signal('tests-e2e');
+}
+
+bootstrapApplication(App, appConfig).catch(error => console.error(error));

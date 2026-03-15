@@ -144,6 +144,13 @@ if [ "$1" = "" ] || [ "$1" = "a21" ]; then
     docker compose run --rm a21 npm run test
 fi
 
+if [ "$1" = "" ] || [ "$1" = "a22" ]; then
+  docker compose run --rm ng-mocks npm run s:a22 && \
+    docker compose run --rm ng-mocks npm run s:test:a22 && \
+    docker compose run --rm ng-mocks npm run s:app:a22 && \
+    docker compose run --rm a22 npm run test
+fi
+
 if [ "$1" = "" ] || [ "$1" = "jasmine" ]; then
   docker compose run --rm ng-mocks npm run s:jasmine && \
     docker compose run --rm ng-mocks npm run s:app:jasmine && \

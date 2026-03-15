@@ -1,10 +1,10 @@
-import { Component, enableProdMode, NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 @Component({
   selector: 'app-root',
-  template: '{{ title }}',
+  template: '<h1>Welcome to {{ title }}!</h1>',
 })
 class AppComponent {
   public readonly title: string = 'Hello World';
@@ -16,8 +16,6 @@ class AppComponent {
   bootstrap: [AppComponent],
 })
 class AppModule {}
-
-enableProdMode();
 
 platformBrowserDynamic()
   .bootstrapModule(AppModule)

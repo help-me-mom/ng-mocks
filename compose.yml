@@ -306,6 +306,20 @@ services:
       - install
       - --no-audit
 
+  a22:
+    image: satantime/puppeteer-node:24.14.0
+    platform: linux/amd64
+    working_dir: /app
+    volumes:
+      - ./e2e/a22:/app
+      - cache:/root/.cache
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+
   jasmine:
     image: satantime/puppeteer-node:24.14.0
     platform: linux/amd64
@@ -353,6 +367,7 @@ services:
     platform: linux/amd64
     working_dir: /app
     environment:
+      - NX_DAEMON=false
       - NX_SKIP_NX_CACHE=true
     volumes:
       - ./e2e/nx:/app

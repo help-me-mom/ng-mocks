@@ -1,24 +1,16 @@
-import { Component, enableProdMode, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ApplicationConfig, Component, provideBrowserGlobalErrorListeners, signal } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
+const appConfig: ApplicationConfig = {
+  providers: [provideBrowserGlobalErrorListeners()],
+};
 
 @Component({
   selector: 'app-root',
-  template: '{{ title }}',
+  template: '<h1>Hello, {{ title() }}</h1>',
 })
-class AppComponent {
-  public readonly title: string = 'Hello World';
+class App {
+  protected readonly title = signal('jasmine');
 }
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule],
-  bootstrap: [AppComponent],
-})
-class AppModule {}
-
-enableProdMode();
-
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(error => console.error(error));
+bootstrapApplication(App, appConfig).catch(error => console.error(error));
