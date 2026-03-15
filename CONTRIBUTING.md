@@ -41,6 +41,14 @@ and click on the "Edit this page" link at the bottom of the page.
 
 To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Windows.
 
+### Signed commits for pull requests
+
+Pull requests need signed commits. Unsigned commits can be blocked by the repository settings,
+so please configure commit signing before you open or update a PR.
+
+- GitHub docs: https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits
+- Any GitHub-supported signing method is fine as long as GitHub marks the commit as `Verified`
+
 ### How to install dependencies
 
 - start `docker` and ensure it's running
