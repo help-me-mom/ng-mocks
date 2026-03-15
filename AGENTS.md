@@ -58,6 +58,7 @@
   - `docker compose run --rm ng-mocks npm run prettier:check`
   - `docker compose run --rm ng-mocks npm run lint`
   - `docker compose run --rm ng-mocks npm run ts:check`
+- If multiple worktrees are active, prefix direct `docker compose` commands with the same `COMPOSE_PROJECT_NAME` you use for wrappers so the checks stay inside that worktree's compose project.
 - Run Prettier before `git commit`.
 
 ## Lockfiles and Dependency Refresh
