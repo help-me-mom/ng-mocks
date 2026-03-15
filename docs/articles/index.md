@@ -28,11 +28,12 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 
 | angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
 |--------:| :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
-|      20 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
-|      19 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
-|      18 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
-|      17 |  latest  |   yes   | yes  | yes |    yes     |   no    |  no   |
-|      16 |  latest  |   yes   | yes  | yes |    yes     |   no    |       |
+|      21 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
+|      20 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
+|      19 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
+|      18 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
+|      17 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  no   |
+|      16 |  latest  |   yes   | yes  | yes |    yes     |   yes   |       |
 |      15 |  latest  |   yes   | yes  | yes |    yes     |         |       |
 |      14 |  latest  |   yes   | yes  | yes |    yes     |         |       |
 |      13 |  latest  |   yes   | yes  | yes |            |         |       |
