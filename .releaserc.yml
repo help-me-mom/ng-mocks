@@ -9,7 +9,11 @@ plugins:
           scope: README
           release: patch
   - - '@semantic-release/exec'
-    - prepareCmd: npx npm install --force && npx npm run lint && npx npm run ts:check && npx npm run build
+    - prepareCmd: |
+        sh compose.sh root
+        docker compose run --rm ng-mocks npm run lint
+        docker compose run --rm ng-mocks npm run ts:check
+        docker compose run --rm ng-mocks npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md

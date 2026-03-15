@@ -1,3 +1,15 @@
+## [14.15.2](https://github.com/help-me-mom/ng-mocks/compare/v14.15.1...v14.15.2) (2026-03-15)
+
+
+### Bug Fixes
+
+* **a20:** adding support of angular 20 ([#13127](https://github.com/help-me-mom/ng-mocks/issues/13127)) ([340585e](https://github.com/help-me-mom/ng-mocks/commit/340585eab40e7d76a3f942c8e91eb9ff2d5887f3))
+* **a21:** official Angular 21 support ([#13295](https://github.com/help-me-mom/ng-mocks/issues/13295)) ([1885657](https://github.com/help-me-mom/ng-mocks/commit/1885657cf00fe0f476af2a4e37c09e7bebc7198d))
+* **a22:** official Angular 22 support ([#13298](https://github.com/help-me-mom/ng-mocks/issues/13298)) ([1d0d039](https://github.com/help-me-mom/ng-mocks/commit/1d0d039b16c19c645161dd46650c53f737b38576))
+* allow MockBuilder.replace on components with injectable bases [#8201](https://github.com/help-me-mom/ng-mocks/issues/8201) ([0c99c20](https://github.com/help-me-mom/ng-mocks/commit/0c99c206ec0b01bcfe668339e96074ad46acbd03))
+* avoid MockInstance false no-deprecated warnings [#10217](https://github.com/help-me-mom/ng-mocks/issues/10217) ([#13306](https://github.com/help-me-mom/ng-mocks/issues/13306)) ([dd917e0](https://github.com/help-me-mom/ng-mocks/commit/dd917e0ee2124290b0cabb19506d9e31f6dcb14b))
+* keep useExisting providers for kept standalone CVAs [#10960](https://github.com/help-me-mom/ng-mocks/issues/10960) ([#13305](https://github.com/help-me-mom/ng-mocks/issues/13305)) ([db1f4c8](https://github.com/help-me-mom/ng-mocks/commit/db1f4c8b3afddaec8d2dee0652fe77e340aa964c))
+
 ## [14.15.1](https://github.com/help-me-mom/ng-mocks/compare/v14.15.0...v14.15.1) (2026-02-04)
 
 
