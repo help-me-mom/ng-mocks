@@ -176,7 +176,14 @@ const isPreconfiguredUseExisting = (provider: any, provide: any): boolean => {
     return false;
   }
 
-  return ngMocksUniverse.getResolution(funcExtractForwardRef(provider.useExisting)) === 'keep';
+  if (ngMocksUniverse.getResolution(funcExtractForwardRef(provider.useExisting)) === 'keep') {
+    return true;
+  }
+
+  return (
+    ngMocksUniverse.flags.has('skipMock') &&
+    ngMocksUniverse.getResolution(funcExtractForwardRef(provider.useExisting)) !== 'mock'
+  );
 };
 
 // tries to resolve a provider based on current universe state.
