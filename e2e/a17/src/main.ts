@@ -1,8 +1,19 @@
+import { CommonModule } from '@angular/common';
+import { ApplicationConfig, Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 
-import { AppComponent } from './app/app.component';
+const appConfig: ApplicationConfig = {
+  providers: [],
+};
 
-bootstrapApplication(AppComponent, {
-  providers: [provideRouter([])],
-}).catch(error => console.error(error));
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule],
+  template: '<h1>Welcome to {{ title }}!</h1>',
+})
+class AppComponent {
+  public readonly title = 'a17';
+}
+
+bootstrapApplication(AppComponent, appConfig).catch(error => console.error(error));

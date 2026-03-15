@@ -1,22 +1,19 @@
-import { Component, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { CommonModule } from '@angular/common';
+import { ApplicationConfig, Component } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+
+const appConfig: ApplicationConfig = {
+  providers: [],
+};
 
 @Component({
   selector: 'app-root',
-  template: '{{ title }}',
+  standalone: true,
+  imports: [CommonModule],
+  template: '<h1>Welcome to {{ title }}!</h1>',
 })
 class AppComponent {
-  public readonly title: string = 'Hello World';
+  public readonly title = 'a16';
 }
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule],
-  bootstrap: [AppComponent],
-})
-class AppModule {}
-
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(error => console.error(error));
+bootstrapApplication(AppComponent, appConfig).catch(error => console.error(error));

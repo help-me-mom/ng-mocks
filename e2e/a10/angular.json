@@ -72,6 +72,7 @@
     }
   },
   "cli": {
+    "packageManager": "npm",
     "analytics": false
   },
   "defaultProject": "a10"

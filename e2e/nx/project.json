@@ -1,49 +1,50 @@
 {
   "name": "nx",
-  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "nx",
-  "sourceRoot": "./src",
-  "tags": [],
+  "root": ".",
+  "sourceRoot": "src",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nx/angular:application",
       "options": {
         "outputPath": "dist/nx",
-        "index": "./src/index.html",
-        "main": "./src/main.ts",
+        "index": "src/index.html",
+        "browser": "src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "./tsconfig.json"
+        "tsConfig": "tsconfig.json"
       },
       "configurations": {
+        "production": {
+          "outputHashing": "all"
+        },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "development"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
       "configurations": {
+        "production": {
+          "buildTarget": "nx:build:production"
+        },
         "development": {
-          "browserTarget": "nx:build:development"
+          "buildTarget": "nx:build:development"
         }
       },
       "defaultConfiguration": "development"
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
         "jestConfig": "jest.config.ts",
         "passWithNoTests": true
-      }
+      },
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"]
     }
   }
 }

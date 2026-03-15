@@ -215,6 +215,16 @@ if [ "$1" = "" ] || [ "$1" = "a21" ]; then
     cd ../..
 fi
 
+if [ "$1" = "" ] || [ "$1" = "a22" ]; then
+  docker compose up --build -- a22 && \
+    docker compose run --rm a22 node ./node_modules/puppeteer/install.mjs && \
+    cd ./e2e/a22 && \
+    nvm install && \
+    nvm use && \
+    node ./node_modules/puppeteer/install.mjs && \
+    cd ../..
+fi
+
 if [ "$1" = "" ] || [ "$1" = "jasmine" ]; then
   docker compose up --build -- jasmine && \
     docker compose run --rm jasmine node ./node_modules/puppeteer/install.mjs && \

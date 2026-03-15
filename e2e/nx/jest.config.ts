@@ -4,11 +4,12 @@ export default {
   maxWorkers: 1,
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
       {
-        tsconfig: '<rootDir>/tsconfig.spec.json',
+        tsconfig: '<rootDir>/tsconfig.json',
         stringifyContentPathRegex: '\\.(html|svg)$',
       },
     ],

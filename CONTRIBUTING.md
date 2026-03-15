@@ -124,21 +124,24 @@ npm run test:debug
 ## How to add a new Angular version
 
 First, you need to install the new Angular version somewhere.
-Below is an example how to add Angular 21 to `ng-mocks`.
+Below is an example how to add Angular 23 to `ng-mocks`.
+
+Always create a fresh project with the Angular CLI for the new Angular major first,
+and only then reshape it to match the repo layout.
 
 ### Step #1 - create an empty project
 
-Let's create a fresh project with `@angular/cli` `v22`.
-The name of the project should be `a + version`: `a22`.
+Let's create a fresh project with `@angular/cli` `v23`.
+The name of the project should be `a + version`: `a23`.
 
 ```shell
-npx '@angular/cli@^22.0.0-alpha' new \
+npx '@angular/cli@^23.0.0-alpha' new \
   --routing \
   --skip-git=true \
   --skip-tests=true \
   --style=css \
   --ssr=false \
-  a22
+  a23
 ```
 
 Basically, the requirements are:
@@ -153,84 +156,105 @@ Basically, the requirements are:
 
 The next step is:
 
-- move `a22` folder to `ng-mocks/e2e` folder
-- delete `.vscode` folder in `ng-mocks/e2e/a22`
-- delete `.editorconfig` file in `ng-mocks/e2e/a22`
-- change `.gitignore` to be the same as in the prev version: `ng-mocks/e2e/a21/.gitignore`
-- change `angular.json` to be similar as in the prev version: `ng-mocks/e2e/a21/angular.json`
-  - `projects/a22/schematics` should be empty
-  - remove `projects/a22/architect/build/options/assets`
-  - remove `projects/a22/architect/build/options/styles`
-  - remove `projects/a22/architect/build/options/scripts`
-  - change `projects/a22/architect/build/options/tsConfig` to `tsconfig.json`
-  - remove `projects/a22/architect/build/configurations/production/budgets`
-  - remove `projects/a22/architect/extract-i18n`
-  - remove `projects/a22/architect/test/options/assets`
-  - remove `projects/a22/architect/test/options/styles`
-  - remove `projects/a22/architect/test/options/scripts`
-  - change `projects/a22/architect/test/options/tsConfig` to `tsconfig.json`
-  - add `projects/a22/architect/test/options/main` with the value of `src/test.ts`
-  - add `projects/a22/architect/test/options/karmaConfig` with the value of `karma.conf.js`
-  - add `projects/lib` as it is in the prev version: `ng-mocks/e2e/a21/angular.json`
-  - add `cli/analytics` as it is in the prev version: `ng-mocks/e2e/a21/angular.json`
-- change `package.json` to be similar as in the prev version: `ng-mocks/e2e/a21/package.json`
-  - `name` should be `a22`
-  - `description` should be `Angular 22`
+- move `a23` folder to `ng-mocks/e2e` folder
+- delete `.vscode` folder in `ng-mocks/e2e/a23`
+- delete `.editorconfig` file in `ng-mocks/e2e/a23`
+- change `.gitignore` to be the same as in the prev version: `ng-mocks/e2e/a22/.gitignore`
+- update `angular.json` from the generated file
+  - set `schematics` to `{}`
+  - in `architect/build/options`
+    - remove `assets`
+    - remove `styles`
+    - remove `scripts`
+    - set `tsConfig` to `tsconfig.json`
+  - remove `architect/build/configurations/production/budgets`
+  - remove `architect/extract-i18n` if present
+  - if `architect/test` does not exist, copy the whole block from the previous version
+    - make sure the final block contains:
+      - `builder` = `@angular/build:karma`
+      - `options/main` = `src/test.ts`
+      - `options/polyfills` = `["zone.js", "zone.js/testing"]`
+      - `options/tsConfig` = `tsconfig.json`
+      - `options/karmaConfig` = `karma.conf.js`
+      - `options/watch` = `false`
+  - if `lib` does not exist, copy the whole block from the previous version
+    - make sure the final block contains:
+      - `architect/build/options/project` = `ng-package.json`
+      - `architect/build/options/tsConfig` = `tsconfig.json`
+  - set / add `cli/packageManager` to `npm`
+  - set / add `cli/analytics` to `false`
+- update `package.json` to be similar as in the prev version
+  - `name` should be `a23`
+  - `description` should be `Angular 23`
   - `private` should be `true`
-  - replace `scripts` as it is in the prev version: `ng-mocks/e2e/a21/package.json`
-  - remove flexible versions (`^~`) in `dependencies` as it is in the prev version: `ng-mocks/e2e/a21/package.json`
-  - remove flexible versions (`^~`) in `devDependencies` as it is in the prev version: `ng-mocks/e2e/a21/package.json`
+  - replace `scripts` as it is in the prev version
+  - remove flexible versions (`^~`) in `dependencies`
+  - remove flexible versions (`^~`) in `devDependencies`
   - in `dependencies`, add `@angular/animations` which supports the desired angular version
   - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
   - add `engines` with the correct `npm` which supports the desired angular version
 - delete `README.md`
-- merge `tsconfig.app.json` and `tsconfig.spec.json` into `tsconfig.json` as it is in the prev version: `ng-mocks/e2e/a21/tsconfig.json`
-  - add `compilerOptions/baseUrl`with the value of `./`
-  - add `compilerOptions/types` as it is in the prev version: `ng-mocks/e2e/a21/tsconfig.json`
-  - add `compilerOptions/skipLibCheck` as it is in the prev version: `ng-mocks/e2e/a21/tsconfig.json`
-  - change `compilerOptions/noImplicitOverride` to `false`
-  - add `files` as it is in the prev version: `ng-mocks/e2e/a21/tsconfig.json`
-  - add `include` as it is in the prev version: `ng-mocks/e2e/a21/tsconfig.json`
+- update `tsconfig.json` by merging the generated `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.spec.json`
+  - first merge `tsconfig.app.json` into `tsconfig.spec.json`
+    - add missing fields from `tsconfig.app.json/compilerOptions` to `tsconfig.spec.json/compilerOptions`
+    - extend `tsconfig.spec.json/include` with entries from `tsconfig.app.json/include` if exist
+    - remove `tsconfig.spec.json/exclude`
+  - then merge `tsconfig.spec.json` into `tsconfig.json`
+    - add missing fields from `tsconfig.spec.json/compilerOptions` to `tsconfig.json/compilerOptions`
+    - extend `tsconfig.json/include` with entries from `tsconfig.spec.json/include` if exist
+    - remove `tsconfig.json/references`
+    - remove `tsconfig.json/exclude`
   - delete `tsconfig.app.json`
   - delete `tsconfig.spec.json`
+  - in `tsconfig.json`
+    - set / add `compilerOptions/useDefineForClassFields` to `false`
+    - set / add `compilerOptions/noImplicitOverride` to `false`
+    - set / add `compilerOptions/esModuleInterop` to `true`
+    - merge `compilerOptions/types` with `["jasmine", "jest", "node"]`
+    - set / add `files` to `["src/main.ts", "src/test.ts", "src/setup-jest.ts"]`
+    - set / add `include` to `["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]`
 - add `.nvmrc` which supports the desired angular version
-- add `jest.config.ts` as it is in the prev version: `ng-mocks/e2e/a21/jest.config.ts`
-- add `karma.conf.js` as it is in the prev version: `ng-mocks/e2e/a21/karma.conf.js`
-- add `ng-package.json` as it is in the prev version: `ng-mocks/e2e/a21/ng-package.json`
-- delete `ng-mocks/e2e/a22/public`
-- delete `ng-mocks/e2e/a22/src/app`
-- delete `ng-mocks/e2e/a22/src/styles.css`
-- remove `<link rel="icon">` from `ng-mocks/e2e/a22/src/index.html`
-- change `ng-mocks/e2e/a22/src/main.ts` as it is in the prev version: `ng-mocks/e2e/a21/src/main.ts`
-- add `ng-mocks/e2e/a22/src/test.ts` as it is in the prev version: `ng-mocks/e2e/a21/src/test.ts`
-- add `ng-mocks/e2e/a22/src/setup-jest.ts` as it is in the prev version: `ng-mocks/e2e/a21/src/setup-jest.ts`
+- add `jest.config.ts` as it is in the prev version
+- add `karma.conf.js` as it is in the prev version
+- add `ng-package.json` as it is in the prev version
+- delete `/public`
+- delete `/src/app`
+- delete `/src/styles.css`
+- remove `<link rel="icon">` from `/src/index.html`
+- update `/src/main.ts` to a single-file bootstrap by merging the generated scaffold files
+  - start from the generated `/src/main.ts`
+  - include into it all imported objects: configs, modules, components, etc, to get one file with all required configuration
+  - remove routing from `/src/main.ts`
+  - delete other files which aren't imported anymore
+- add `/src/test.ts` as it is in the prev version
+- add `/src/setup-jest.ts` as it is in the prev version
 
 ### Step #3 - update scripts
 
-- update `ng-mocks/package.json`, search for `a21` and extended scripts to support `a22`
-- update `ng-mocks/compose.yml`, search for `a21` and copy blocks to support `a22` with the right node version
-- update `ng-mocks/compose.sh`, search for `a21` and copy blocks to support `a22` with the right command to install `puppeteer`
-- update `ng-mocks/test.sh`, search for `a21` and copy blocks to support `a22`
-- update `ng-mocks/.dockerignore`, search for `a21` and copy blocks to support `a22`
-- update `ng-mocks/.github/dependabot.yml`, search for `a21` and copy blocks to support `a22`
-- update `ng-mocks/.circleci/config.yml`, search for `a21` and copy blocks to support `a22`
-- update `ng-mocks/eslint.config.mjs`, search for `a21` and copy blocks to support `a22`
-- execute `sh compose.sh a22` in `ng-mocks` to install dependencies for `a22`, it might require `--force` at this moment in `compose.yml` in the command for the new version
+- update `ng-mocks/package.json`, search for `a22` and extended scripts to support `a23`
+- update `ng-mocks/compose.yml`, search for `a22` and copy blocks to support `a23` with the right node version
+- update `ng-mocks/compose.sh`, search for `a22` and copy blocks to support `a23` with the right command to install `puppeteer`
+- update `ng-mocks/test.sh`, search for `a22` and copy blocks to support `a23`
+- update `ng-mocks/.dockerignore`, search for `a22` and copy blocks to support `a23`
+- update `ng-mocks/.github/dependabot.yml`, search for `a22` and copy blocks to support `a23`
+- update `ng-mocks/.circleci/config.yml`, search for `a22` and copy blocks to support `a23`
+- update `ng-mocks/eslint.config.mjs`, search for `a22` and copy blocks to support `a23`
+- if the new Angular version is still prerelease and `npm install` / `npm ci` set `force=true` in `ng-mocks/e2e/a23/.npmrc`
 
 ### Step #4 - update ng-mocks dependencies
 
-- update `ng-mocks/package.json` to point to the version `^22` in dependencies
+- update `ng-mocks/package.json` to point to the version `^23` in dependencies
 - execute `sh compose.sh root` in `ng-mocks` to install the dependencies
 
 ### Step #5 - verify that`ng-mocks` does not fail with the new version
 
 - execute `sh test.sh root` in `ng-mocks` to ensure nothing fails
-- execute `sh test.sh a22` in `ng-mocks` to ensure nothing fails
+- execute `sh test.sh a23` in `ng-mocks` to ensure nothing fails
 - tests should pass successfully without failures
 
 if tests are failing
 
-- execute `cd e2e/a22` in `ng-mocks`
+- execute `cd e2e/a23` in `ng-mocks`
 - execute `nvm install`
 - execute `nvm use`
 - execute `npm run test:debug`
@@ -242,11 +266,11 @@ if tests are failing
 - update the version table in `ng-mocks/README.md`
 - update `description` in `libs/ng-mocks/package.json`
 - update `peerDependencies` in `libs/ng-mocks/package.json`
-- update this file and replace `a22` with `a23`
-- update this file and replace `v22` with `v23`
-- update this file and replace `^22` with `^23`
-- update this file and replace `Angular 22` with `Angular 23`
-- update this file and replace `a21` with `a` + `22`
+- update this file and replace `a23` with `a24`
+- update this file and replace `v23` with `v24`
+- update this file and replace `^23` with `^24`
+- update this file and replace `Angular 23` with `Angular 24`
+- update this file and replace `a22` with `a` + `23`
 - fix the previous expression manually
 
 ### Step #7 - verify

@@ -57,5 +57,8 @@
       }
     }
   },
+  "cli": {
+    "packageManager": "npm"
+  },
   "defaultProject": "a7"
 }

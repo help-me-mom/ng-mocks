@@ -7,6 +7,7 @@ export default {
     url: 'http://localhost',
   },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   transform: {
     '^.+\\.(ts|js|html|svg)$': [
       'jest-preset-angular',

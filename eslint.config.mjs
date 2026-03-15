@@ -38,11 +38,11 @@ const projects = [
   './e2e/a19/tsconfig.json',
   './e2e/a20/tsconfig.json',
   './e2e/a21/tsconfig.json',
+  './e2e/a22/tsconfig.json',
   './e2e/jasmine/tsconfig.json',
   './e2e/jest/tsconfig.json',
   './e2e/min/tsconfig.json',
   './e2e/nx/tsconfig.json',
-  './e2e/nx/tsconfig.spec.json',
 ];
 
 const prettierRules = prettierRecommended.rules;
@@ -174,12 +174,14 @@ export default [
       'docs/.docusaurus/**',
       'docs/articles/**/*.md',
       'docs/src/css/**',
+      'e2e/*/dist/**',
       'e2e/*/.angular/**',
       'e2e/*/src/app/**',
       'e2e/*/src/test/**',
       'node_modules/**',
       'test-reports/**',
       'tests-e2e/.angular/**',
+      'tests-e2e/dist/**',
       'tests-failures/**',
       'tmp/**',
       '**/*.sh',
