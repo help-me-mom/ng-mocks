@@ -179,7 +179,18 @@ export class MockBuilderPromise implements IMockBuilder {
   }
 
   public replace(source: Type<any>, destination: Type<any>, config?: IMockBuilderConfig): this {
-    if (!isNgDef(destination) || !isNgDef(source) || isNgDef(destination, 'i') || isNgDef(source, 'i')) {
+    let fail = true;
+    if (isNgDef(source, 'm') && isNgDef(destination, 'm')) {
+      fail = false;
+    } else if (isNgDef(source, 'c') && isNgDef(destination, 'c')) {
+      fail = false;
+    } else if (isNgDef(source, 'd') && isNgDef(destination, 'd')) {
+      fail = false;
+    } else if (isNgDef(source, 'p') && isNgDef(destination, 'p')) {
+      fail = false;
+    }
+
+    if (fail) {
       throw new Error(
         'Cannot replace the declaration, both have to be a Module, a Component, a Directive or a Pipe, for Providers use `.mock` or `.provide`',
       );

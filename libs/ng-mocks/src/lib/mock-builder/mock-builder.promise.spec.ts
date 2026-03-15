@@ -25,6 +25,8 @@ const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
 class TargetPipe implements PipeTransform {
   protected name = 'pipe:';
 
+  public targetPipeMockBuilderPromise() {}
+
   public transform(value: string): any {
     return `${this.name}${value}`;
   }
@@ -35,18 +37,60 @@ class TargetPipe implements PipeTransform {
   standalone: false,
   template: 'target',
 })
-class TargetComponent {}
+class TargetComponent {
+  public targetComponentMockBuilderPromise() {}
+}
 
 @Directive({
   selector: 'target',
   standalone: false,
 })
-class TargetDirective {}
+class TargetDirective {
+  public targetDirectiveMockBuilderPromise() {}
+}
 
 @NgModule({
   declarations: [TargetComponent, TargetDirective, TargetPipe],
 })
-class TargetModule {}
+class TargetModule {
+  public targetModuleMockBuilderPromise() {}
+}
+
+@Pipe({
+  name: 'fake',
+  standalone: false,
+})
+class FakePipe implements PipeTransform {
+  public fakePipeMockBuilderPromise() {}
+
+  public transform(value: string): any {
+    return value;
+  }
+}
+
+@Component({
+  selector: 'fake',
+  standalone: false,
+  template: 'fake',
+})
+class FakeComponent {
+  public fakeComponentMockBuilderPromise() {}
+}
+
+@Directive({
+  selector: 'fake',
+  standalone: false,
+})
+class FakeDirective {
+  public fakeDirectiveMockBuilderPromise() {}
+}
+
+@NgModule({
+  declarations: [FakeComponent, FakeDirective, FakePipe],
+})
+class FakeModule {
+  public fakeModuleMockBuilderPromise() {}
+}
 
 describe('MockBuilderPromise', () => {
   mockHelperConsoleThrow();
@@ -136,5 +180,29 @@ describe('MockBuilderPromise', () => {
     expect(() =>
       MockBuilder().replace(TargetService, TargetModule),
     ).toThrowError(/Cannot replace the declaration/);
+  });
+
+  it('allows a module replacement', () => {
+    expect(() =>
+      MockBuilder().replace(TargetModule, FakeModule),
+    ).not.toThrow();
+  });
+
+  it('allows a component replacement', () => {
+    expect(() =>
+      MockBuilder().replace(TargetComponent, FakeComponent),
+    ).not.toThrow();
+  });
+
+  it('allows a directive replacement', () => {
+    expect(() =>
+      MockBuilder().replace(TargetDirective, FakeDirective),
+    ).not.toThrow();
+  });
+
+  it('allows a pipe replacement', () => {
+    expect(() =>
+      MockBuilder().replace(TargetPipe, FakePipe),
+    ).not.toThrow();
   });
 });
