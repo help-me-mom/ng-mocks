@@ -313,14 +313,47 @@ const parseNgDef = (
   },
   declaration: Declaration,
 ): void => {
-  if (declaration.standalone === undefined && def.ɵcmp?.standalone !== undefined) {
-    declaration.standalone = def.ɵcmp.standalone;
-  }
-  if (declaration.standalone === undefined && def.ɵdir?.standalone !== undefined) {
-    declaration.standalone = def.ɵdir.standalone;
+  const ngDef = def.ɵcmp ?? def.ɵdir;
+
+  if (declaration.standalone === undefined && ngDef?.standalone !== undefined) {
+    declaration.standalone = ngDef.standalone;
   }
   if (declaration.standalone === undefined && def.ɵpipe?.standalone !== undefined) {
     declaration.standalone = def.ɵpipe.standalone;
+  }
+
+  if (!ngDef) {
+    return;
+  }
+
+  for (const alias of Object.keys(ngDef.inputs || {})) {
+    const input = ngDef.inputs[alias];
+    const minifiedName = Array.isArray(input) ? input[0] : input;
+    const {
+      name,
+      alias: normalizedAlias,
+      required,
+    } = funcDirectiveIoParse({
+      name: ngDef.declaredInputs?.[alias] ?? minifiedName,
+      alias,
+      required: undefined,
+    });
+
+    addUniqueDirectiveIo(declaration, 'inputs', name, normalizedAlias, required);
+  }
+
+  for (const alias of Object.keys(ngDef.outputs || {})) {
+    const {
+      name,
+      alias: normalizedAlias,
+      required,
+    } = funcDirectiveIoParse({
+      name: ngDef.outputs[alias],
+      alias,
+      required: undefined,
+    });
+
+    addUniqueDirectiveIo(declaration, 'outputs', name, normalizedAlias, required);
   }
 };
 
