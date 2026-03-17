@@ -11,6 +11,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   providers: [
     {
@@ -89,10 +91,7 @@ describe('ng-mocks-change:cdr-change', () => {
       it('correctly changes CVA', () => {
         const fixture = MockRender(TargetComponent);
         const component = fixture.point.componentInstance;
-        const spy =
-          typeof jest === 'undefined'
-            ? jasmine.createSpy()
-            : jest.fn();
+        const spy = createMock();
         component.control.valueChanges
           .pipe(takeUntil(destroy$))
           .subscribe(spy);
@@ -158,8 +157,7 @@ describe('ng-mocks-change:cdr-change:full-mock', () => {
   it('correctly changes CVA', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spy = createMock();
     component.control.valueChanges
       .pipe(takeUntil(destroy$))
       .subscribe(spy);

@@ -3,6 +3,8 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Injectable()
 class TargetService {
   public method() {
@@ -34,11 +36,7 @@ describe('issue-488', () => {
   describe('classic', () => {
     beforeEach(() => {
       service = ngMocks.findInstance(TargetService);
-      ngMocks.stubMember(
-        service,
-        'method',
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-      );
+      ngMocks.stubMember(service, 'method', createMock());
 
       TestBed.createComponent(TargetComponent);
     });
@@ -53,11 +51,7 @@ describe('issue-488', () => {
       const testBed: any = getTestBed();
 
       service = ngMocks.findInstance(TargetService);
-      ngMocks.stubMember(
-        service,
-        'method',
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-      );
+      ngMocks.stubMember(service, 'method', createMock());
 
       if (testBed._instantiated || testBed._testModuleRef) {
         try {

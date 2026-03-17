@@ -48,10 +48,16 @@ describe('examples:performance', () => {
         init: instance => {
           instance.method =
             typeof jest === 'undefined'
-              ? jasmine.createSpy().and.returnValue(5)
+              ? 'vi' in (window as any)
+                ? (window as any).vi.fn().mockReturnValue(5)
+                : jasmine.createSpy().and.returnValue(5)
               : jest.fn().mockReturnValue(5);
+          // in case of jasmine
+          // instance.method = jasmine.createSpy().and.returnValue(5);
           // in case of jest
           // instance.method = jest.fn().mockReturnValue(5);
+          // in case of vitest
+          // instance.method = vi.fn().mockReturnValue(5);
           instance.prop = 123;
         },
       });
@@ -92,22 +98,32 @@ describe('examples:performance', () => {
     const mock = {
       method:
         typeof jest === 'undefined'
-          ? jasmine.createSpy().and.returnValue(5)
+          ? 'vi' in (window as any)
+            ? (window as any).vi.fn().mockReturnValue(5)
+            : jasmine.createSpy().and.returnValue(5)
           : jest.fn().mockReturnValue(5),
+      // in case of jasmine
+      // method: jasmine.createSpy().and.returnValue(5),
       // in case of jest
       // method: jest.fn().mockReturnValue(5),
+      // in case of vitest
+      // method: vi.fn().mockReturnValue(5),
       prop: 123,
     };
 
     // Do not forget to reset the spy between runs.
     beforeEach(() => {
-      if (typeof jest === 'undefined') {
-        (mock.method as jasmine.Spy).calls.reset();
+      if (typeof jest === 'undefined' && !('vi' in (window as any))) {
+        mock.method.calls.reset();
       } else {
-        mock.method = jest.fn().mockReturnValue(5);
+        mock.method.mockClear();
       }
+      // in case of jasmine
+      // method: mock.method.calls.reset()
       // in case of jest
-      // mock.method = jest.fn().mockReturnValue(5);
+      // method: mock.method.mockClear(),
+      // in case of vitest
+      // method: mock.method.mockClear(),
       mock.prop = 123;
     });
 

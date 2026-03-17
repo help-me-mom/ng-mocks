@@ -7,6 +7,8 @@ import {
 
 import { MockBuilder, MockInstance, MockRender } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-305-overrides',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -36,14 +38,10 @@ describe('issue-305:overrides', () => {
   );
 
   it('correctly overrides CVA', () => {
-    const registerOnChange =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-    const registerOnTouched =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-    const setDisabledState =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-    const writeValue =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const registerOnChange = createMock();
+    const registerOnTouched = createMock();
+    const setDisabledState = createMock();
+    const writeValue = createMock();
 
     MockInstance(DefaultValueAccessor, () => ({
       registerOnChange,

@@ -39,10 +39,16 @@ describe('MockPipe', () => {
   // how the pipe has been called.
   const spy =
     typeof jest === 'undefined'
-      ? jasmine.createSpy().and.callFake(fakeTransform)
+      ? 'vi' in (window as any)
+        ? (window as any).vi.fn(fakeTransform)
+        : jasmine.createSpy().and.callFake(fakeTransform)
       : jest.fn(fakeTransform);
+  // in case of jasmine
+  // const spy = jasmine.createSpy().and.callFake(fakeTransform);
   // in case of jest
-  // const spy = jest.fn().mockImplementation(fakeTransform);
+  // const spy = jest.fn(fakeTransform);
+  // in case of vitest
+  // const spy = vi.fn(fakeTransform);
 
   beforeEach(() => {
     return (

@@ -13,6 +13,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock, mockReturnValue } from '../mock-helpers';
+
 interface InjectedAbstraction {
   (): string;
   hello: () => number;
@@ -23,11 +25,9 @@ const injectableArgs = [
   {
     providedIn: 'root',
     useFactory: () => {
-      const fn: InjectedAbstraction = (typeof jest === 'undefined'
-        ? jasmine.createSpy()
-        : jest.fn()) as any as InjectedAbstraction;
-      fn.hello =
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+      const fn: InjectedAbstraction =
+        createMock() as any as InjectedAbstraction;
+      fn.hello = createMock();
 
       return fn;
     },
@@ -59,9 +59,10 @@ class TestWithDecoratorComponent {
 }
 
 ngMocks.defaultMock(InjectedAbstraction, () => {
-  return (typeof jest === 'undefined'
-    ? jasmine.createSpy().and.returnValue('FOO')
-    : jest.fn().mockReturnValue('FOO')) as any as InjectedAbstraction;
+  return mockReturnValue(
+    createMock(),
+    'FOO',
+  ) as any as InjectedAbstraction;
 });
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/455
@@ -110,12 +111,10 @@ describe('issue-455:abstract', () => {
 
     describe('using explicit mock', () => {
       describe('without `precise` flag', () => {
-        const spy =
-          typeof jest === 'undefined'
-            ? jasmine
-                .createSpy('InjectedAbstraction')
-                .and.returnValue('BAR')
-            : jest.fn().mockReturnValue('BAR');
+        const spy = mockReturnValue(
+          createMock('InjectedAbstraction'),
+          'BAR',
+        );
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent).mock(
             InjectedAbstraction,
@@ -154,11 +153,7 @@ describe('issue-455:abstract', () => {
         beforeEach(() =>
           MockBuilder(TestWithoutDecoratorComponent).mock(
             InjectedAbstraction,
-            typeof jest === 'undefined'
-              ? jasmine
-                  .createSpy('InjectedAbstraction')
-                  .and.returnValue('BAR')
-              : jest.fn().mockReturnValue('BAR'),
+            mockReturnValue(createMock('InjectedAbstraction'), 'BAR'),
             { precise: true },
           ),
         );
@@ -182,11 +177,7 @@ describe('issue-455:abstract', () => {
         MockBuilder(TestWithDecoratorComponent).provide({
           provide: InjectedAbstraction,
           useFactory: () =>
-            typeof jest === 'undefined'
-              ? jasmine
-                  .createSpy('InjectedAbstraction')
-                  .and.returnValue('QUX')
-              : jest.fn().mockReturnValue('QUX'),
+            mockReturnValue(createMock('InjectedAbstraction'), 'QUX'),
         }),
       );
 

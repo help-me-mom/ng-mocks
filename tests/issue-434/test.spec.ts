@@ -7,6 +7,8 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 @Component({
   selector: 'target-434',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -46,8 +48,7 @@ describe('issue-434', () => {
   it('sets the prop to a value', () => {
     const fixture = MockRender(TargetComponent, {
       prop1: 'mock',
-      update:
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
+      update: createMock(),
     });
     expect(ngMocks.formatText(fixture)).toEqual('mock:default2');
   });
@@ -64,20 +65,13 @@ describe('issue-434', () => {
     );
 
     // let's set cross spies
-    fixture.componentInstance.echo1 =
-      typeof jest === 'undefined'
-        ? jasmine
-            .createSpy()
-            .and.callFake(fixture.componentInstance.echo1)
-        : jest.fn(fixture.componentInstance.echo1);
+    fixture.componentInstance.echo1 = createMock(
+      fixture.componentInstance.echo1,
+    );
     ngMocks.stubMember(
       fixture.point.componentInstance,
       'echo2',
-      typeof jest === 'undefined'
-        ? jasmine
-            .createSpy()
-            .and.callFake(fixture.point.componentInstance.echo2)
-        : jest.fn(fixture.point.componentInstance.echo2),
+      createMock(fixture.point.componentInstance.echo2),
     );
 
     // a call on the pointer should be reflected in the wrapper

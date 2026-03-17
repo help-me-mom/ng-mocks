@@ -16,7 +16,8 @@
       "karma-jasmine",
       "karma-junit-reporter",
       "karma-webpack",
-      "node"
+      "node",
+      "vitest/globals"
     ]
   },
   "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "test.ts", "karma.conf.ts"],

@@ -93,9 +93,11 @@ describe('MockComponent', () => {
     ngMocks.stubMember(
       component,
       'trigger',
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn(),
-      // in case of jest
-      // jest.fn(),
+      typeof jest === 'undefined'
+        ? 'vi' in (window as any)
+          ? (window as any).vi.fn()
+          : jasmine.createSpy()
+        : jest.fn(),
     );
     mockComponent.someOutput.emit({
       payload: 'foo',

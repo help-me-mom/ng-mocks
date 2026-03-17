@@ -14,6 +14,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 // This standalone CVA is the minimal reproduction of the reported issue:
 // - it imports ReactiveFormsModule by itself
 // - it provides NG_VALUE_ACCESSOR via useExisting + forwardRef to itself
@@ -104,10 +106,7 @@ describe('issue-10960', () => {
   );
 
   it('keeps the standalone value accessor intact', () => {
-    const writeValue =
-      typeof jest === 'undefined'
-        ? jasmine.createSpy('writeValue')
-        : jest.fn();
+    const writeValue = createMock('writeValue');
 
     // We spy on writeValue instead of asserting DOM details so that the test
     // stays focused on the value-accessor handshake:

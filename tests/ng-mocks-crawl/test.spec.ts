@@ -1,5 +1,7 @@
 import { MockRender, ngMocks } from 'ng-mocks';
 
+import { createMock } from '../mock-helpers';
+
 describe('ng-mocks-crawl', () => {
   it('finds all elements including ng-container', () => {
     const fixture = MockRender(
@@ -106,8 +108,7 @@ describe('ng-mocks-crawl', () => {
   });
 
   it('skips text nodes', () => {
-    const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spy = createMock();
     // in case of jest
     // const spy = jest.fn();
     const node: any = {
@@ -126,8 +127,7 @@ describe('ng-mocks-crawl', () => {
   });
 
   it('handles missing fixture', () => {
-    const spy =
-      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    const spy = createMock();
     ngMocks.crawl('div', spy);
     ngMocks.crawl(['attr'], spy);
     expect(spy).not.toHaveBeenCalled();

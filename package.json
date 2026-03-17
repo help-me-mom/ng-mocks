@@ -218,8 +218,8 @@
     "test:a18": "cd e2e/a18 && npm run test:jasmine && npm run test:jest",
     "test:a19": "cd e2e/a19 && npm run test:jasmine && npm run test:jest",
     "test:a20": "cd e2e/a20 && npm run test:jasmine && npm run test:jest",
-    "test:a21": "cd e2e/a21 && npm run test:jasmine && npm run test:jest",
-    "test:a22": "cd e2e/a22 && npm run test:jasmine && npm run test:jest",
+    "test:a21": "cd e2e/a21 && npm run test:jasmine && npm run test:jest && npm run test:vitest",
+    "test:a22": "cd e2e/a22 && npm run test:jasmine && npm run test:jest && npm run test:vitest",
     "test:jasmine": "cd e2e/jasmine && npm run test:jasmine",
     "test:jest": "cd e2e/jest && npm run test:jest",
     "test:min": "cd e2e/min && npm run test:jasmine",
@@ -321,7 +321,8 @@
     "typescript": "5.9.3",
     "webpack": "5.105.4",
     "webpack-cli": "7.0.1",
-    "zone.js": "0.16.1"
+    "zone.js": "0.16.1",
+    "vitest": "4.1.0"
   },
   "engines": {
     "npm": "11.11.1"
