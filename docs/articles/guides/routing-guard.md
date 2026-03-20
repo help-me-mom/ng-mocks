@@ -28,6 +28,9 @@ The example below is applicable for all types of guards:
 - `canLoad` -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad)
+- standalone applications (Angular 14+) -
+  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone),
+  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
 - class guards (legacy) -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest)
@@ -118,6 +121,50 @@ expect(location.path()).toEqual('/login');
 
 Profit, [an example of a test for a functional guard](#live-example).
 
+## Functional Guards In Standalone Applications
+
+If your app uses `bootstrapApplication()` with `provideRouter(...)`, then you can provide the standalone router setup directly in the test.
+This keeps the example aligned with standalone routing without introducing an extra `NgModule` only for testing.
+
+```ts
+beforeEach(() => {
+  return MockBuilder(TargetComponent)
+    .keep(NG_MOCKS_ROOT_PROVIDERS)
+    .provide(provideLocationMocks())
+    .provide(
+      provideRouter([
+        {
+          component: LoginComponent,
+          path: 'login',
+        },
+        {
+          canActivate: [canActivateGuard],
+          component: DashboardComponent,
+          path: '**',
+        },
+      ]),
+    )
+    .mock(LoginComponent)
+    .mock(DashboardComponent);
+});
+```
+
+Now render a standalone component with a router outlet, initialize navigation, and assert the redirected route:
+
+```ts
+const fixture = MockRender(TargetComponent);
+const router = ngMocks.get(Router);
+
+if (fixture.ngZone) {
+  fixture.ngZone.run(() => router.initialNavigation());
+  await fixture.whenStable();
+}
+
+expect(router.url).toEqual('/login');
+```
+
+The full runnable example is available in [the standalone routing guard example](#live-example).
+
 ## Class Guards (legacy)
 
 If your code has guards which a classes and angular services,
@@ -158,6 +205,8 @@ Profit.
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
+- [Try the standalone example on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
+- [Try the standalone example on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
 import { Location } from '@angular/common';
