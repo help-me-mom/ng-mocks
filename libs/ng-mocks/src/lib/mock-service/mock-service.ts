@@ -5,6 +5,7 @@ import mockHelperStub from '../mock-helper/mock-helper.stub';
 import checkIsClass from './check.is-class';
 import checkIsFunc from './check.is-func';
 import checkIsInst from './check.is-inst';
+import applyMockProperty from './helper.mock-property';
 import helperMockService from './helper.mock-service';
 
 type MockServiceHandler = (cache: Map<any, any>, service: any, prefix?: string, overrides?: any) => any;
@@ -33,6 +34,9 @@ const createMockFromClass = (
   return value;
 };
 
+const applyInstancePropertyMock = (value: Record<keyof any, any>, property: string, mock: any, prefix: string): void =>
+  applyMockProperty(value, property, mock, prefix);
+
 const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
   [checkIsClass, (cache, service, prefix, callback) => createMockFromClass(cache, service, prefix, callback)],
   [
@@ -50,10 +54,11 @@ const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
     (cache, service, prefix, callback) => {
       const value = helperMockService.createMockFromPrototype(service.constructor.prototype);
       cache.set(service, value);
+      const mockName = prefix || 'instance';
       for (const property of Object.keys(service)) {
         const mock: any = callback(cache, service[property], `${prefix || 'instance'}.${property}`);
         if (mock !== undefined) {
-          value[property] = mock;
+          applyInstancePropertyMock(value, property, mock, mockName);
         }
       }
       Object.setPrototypeOf(value, Object.getPrototypeOf(service));

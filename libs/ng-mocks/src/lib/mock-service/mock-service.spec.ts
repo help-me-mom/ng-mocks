@@ -86,6 +86,26 @@ class ThrowingClass {
   }
 }
 
+const lookupPropertyDescriptor = (
+  instance: any,
+  property: string,
+): PropertyDescriptor | undefined => {
+  let current = instance;
+
+  while (current) {
+    const descriptor = Object.getOwnPropertyDescriptor(
+      current,
+      property,
+    );
+    if (descriptor) {
+      return descriptor;
+    }
+    current = Object.getPrototypeOf(current);
+  }
+
+  return undefined;
+};
+
 describe('MockService', () => {
   it('should convert boolean, number, string, null and undefined to undefined', () => {
     expect(MockService(true)).toBeUndefined();
@@ -184,11 +204,24 @@ describe('MockService', () => {
 
   it('should mock own object properties of classes without constructor parameters', () => {
     const mockService = MockService(OwnObjectPropertiesClass);
+    const infoGetSpy = lookupPropertyDescriptor(mockService, 'info')
+      ?.get as jasmine.Spy;
+    const info = mockService.info;
+    expect(infoGetSpy).toBeDefined();
 
-    expect(mockService.info).toEqual({
+    expect(info).toEqual({
       request: jasmine.any(Function),
     });
+    if (!infoGetSpy) {
+      return;
+    }
+    const requestSpy = info.request as jasmine.Spy;
+    infoGetSpy.calls.reset();
+    requestSpy.calls.reset();
+
     expect(mockService.info.request()).toBeUndefined();
+    expect(infoGetSpy).toHaveBeenCalledTimes(1);
+    expect(requestSpy).toHaveBeenCalledTimes(1);
     expect(
       (mockService.info.request as jasmine.Spy).and.identity,
     ).toBe('func:OwnObjectPropertiesClass.info.request');
