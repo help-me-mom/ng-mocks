@@ -17,6 +17,9 @@ import ngMocksUniverse from './ng-mocks-universe';
 const setValueAccessor = (instance: any, ngControl?: any) => {
   if (ngControl && !ngControl.valueAccessor && instance.__ngMocksConfig.setControlValueAccessor) {
     try {
+      // This is the long-standing path for declarations that do not provide their own
+      // NG_VALUE_ACCESSOR. In that case ng-mocks still creates the proxy eagerly and assigns
+      // it to ngControl.valueAccessor, which matches Angular's older behavior.
       ngControl.valueAccessor = new MockControlValueAccessorProxy(instance.__ngMocksCtor);
     } catch {
       // nothing to do.
@@ -24,10 +27,73 @@ const setValueAccessor = (instance: any, ngControl?: any) => {
   }
 };
 
+const normalizeProxies = (value: any): any[] => (Array.isArray(value) ? value : value ? [value] : []);
+
+const extractInjectableProxies = (injector: Injector | null | undefined, token: any): any[] => {
+  if (!injector || !token) {
+    return [];
+  }
+
+  try {
+    return normalizeProxies(injector.get(token, []));
+  } catch {
+    return [];
+  }
+};
+
+const extractUniqueProxies = (proxies: any[]): any[] => {
+  const result: any[] = [];
+  const known = new Set<any>();
+
+  for (const proxy of proxies) {
+    if (!proxy || known.has(proxy)) {
+      continue;
+    }
+    known.add(proxy);
+    result.push(proxy);
+  }
+
+  return result;
+};
+
+// Angular <= 22.0.0-next.3 selected the final value accessor eagerly in forms directives and
+// exposed it on ngControl.valueAccessor before the mock constructor ran. Angular >= 22.0.0-next.4
+// keeps the candidates around lazily and can expose them through rawValueAccessors and later DI
+// lookups before finally assigning valueAccessor during control setup. ng-mocks has to inspect all
+// of these sources so the same mock still receives registerOnChange / writeValue calls on both the
+// old and the new Angular implementations.
+const extractValueAccessors = (ngControl: any, injector: Injector | null | undefined): any[] =>
+  extractUniqueProxies([
+    ...normalizeProxies(ngControl?.valueAccessor),
+    ...normalizeProxies(ngControl?.rawValueAccessors),
+    ...extractInjectableProxies(injector, coreForm.NG_VALUE_ACCESSOR),
+  ]);
+
+// Validators and async validators were affected by the same Angular change in practice: older
+// versions exposed the selected validators directly on the control, while newer versions can defer
+// resolution and re-read them from DI. Collecting both locations keeps the ng-mocks hookup logic
+// compatible with previous Angular versions and the new lazy resolution model.
+const extractValidators = (
+  ngControl: any,
+  injector: Injector | null | undefined,
+  property: string,
+  token: any,
+): any[] =>
+  extractUniqueProxies([
+    ...normalizeProxies(ngControl?.[property]),
+    ...extractInjectableProxies(injector, token),
+  ]);
+
 // connecting to NG_VALUE_ACCESSOR
-const installValueAccessor = (ngControl: any, instance: any) => {
-  if (!ngControl.valueAccessor.instance && ngControl.valueAccessor.target === instance.__ngMocksCtor) {
-    ngControl.valueAccessor.instance = instance;
+const installValueAccessor = (ngControl: any, instance: any, injector?: Injector | null) => {
+  for (const valueAccessor of extractValueAccessors(ngControl, injector)) {
+    // Angular can surface multiple candidates here, including duplicates and proxies that belong
+    // to the original declaration instead of the generated mock class. Only the proxy created for
+    // the current mock ctor should be wired, and already-wired proxies must stay untouched.
+    if (valueAccessor.instance || valueAccessor.target !== instance.__ngMocksCtor) {
+      continue;
+    }
+    valueAccessor.instance = instance;
     helperMockService.mock(instance, 'registerOnChange');
     helperMockService.mock(instance, 'registerOnTouched');
     helperMockService.mock(instance, 'setDisabledState');
@@ -40,6 +106,8 @@ const installValueAccessor = (ngControl: any, instance: any) => {
 // connecting to NG_ASYNC_VALIDATORS
 const installValidator = (validators: any[], instance: any) => {
   for (const validator of validators) {
+    // The same target check is required for validators so that lazy Angular resolution cannot bind
+    // the mock instance to a proxy that was created for a different declaration or bind twice.
     if (!validator.instance && validator.target === instance.__ngMocksCtor) {
       validator.instance = instance;
       helperMockService.mock(instance, 'registerOnValidatorChange');
@@ -49,15 +117,24 @@ const installValidator = (validators: any[], instance: any) => {
   }
 };
 
-const applyNgValueAccessor = (instance: any, ngControl: any) => {
+const applyNgValueAccessor = (instance: any, ngControl: any, injector?: Injector | null) => {
   setValueAccessor(instance, ngControl);
 
   try {
-    // istanbul ignore else
-    if (ngControl) {
-      installValueAccessor(ngControl, instance);
-      installValidator(ngControl._rawValidators, instance);
-      installValidator(ngControl._rawAsyncValidators, instance);
+    if (ngControl || injector) {
+      // New Angular forms versions can defer the final accessor / validator selection until later
+      // control setup, but tests interact with mocks immediately after creation. Discovering and
+      // wiring every compatible proxy shape here preserves the previous observable behavior without
+      // requiring version-specific test changes.
+      installValueAccessor(ngControl, instance, injector);
+      installValidator(
+        extractValidators(ngControl, injector, '_rawValidators', coreForm.NG_VALIDATORS),
+        instance,
+      );
+      installValidator(
+        extractValidators(ngControl, injector, '_rawAsyncValidators', coreForm.NG_ASYNC_VALIDATORS),
+        instance,
+      );
     }
   } catch {
     // nothing to do.
@@ -169,7 +246,7 @@ export class Mock {
 
     // istanbul ignore else
     if (funcIsMock(this)) {
-      applyNgValueAccessor(this, ngControl);
+      applyNgValueAccessor(this, ngControl, injector);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
       applyMethods(this, mockOf.prototype);

@@ -6,7 +6,12 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_ASYNC_VALIDATORS,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
@@ -126,6 +131,10 @@ class ChildPipe extends ParentClass implements PipeTransform {
 }
 
 describe('Mock', () => {
+  const changeDetectorRef = {
+    detectChanges: () => undefined,
+  };
+
   it('should affect as MockModule', () => {
     const instance = new (MockModule(ChildModule))();
     expect(instance).toEqual(jasmine.any(ChildModule));
@@ -168,6 +177,134 @@ describe('Mock', () => {
 
     expect(instance.parentMethod()).toBeUndefined();
     expect(instance.childMethod()).toBeUndefined();
+  });
+
+  // Before the Angular 22 forms change, ng-mocks could rely on ngControl.valueAccessor already
+  // containing the selected proxy by the time a mock component was instantiated. After the change,
+  // Angular can keep the accessor candidates in rawValueAccessors first and select the final one
+  // later. This regression test emulates that new lazy shape and verifies that ng-mocks now scans
+  // rawValueAccessors, ignores proxies for other targets, and still wires the correct mock proxy.
+  it('attaches a lazy value accessor from rawValueAccessors', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockControlValueAccessorProxy(mockDef);
+    const skippedProxy = new MockControlValueAccessorProxy(ChildComponent);
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [skippedProxy, proxy],
+      valueAccessor: proxy,
+    };
+    const instance = new mockDef(null as never, ngControl as never, changeDetectorRef as never);
+
+    expect(proxy.instance).toBe(instance);
+    expect(skippedProxy.instance).toBeUndefined();
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnChange(spy);
+    instance.__simulateChange('test');
+    expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  // Some Angular forms paths now recover the accessor from DI instead of exposing it eagerly on the
+  // control instance. Prior to the fix, ng-mocks only looked at ngControl.valueAccessor, so these
+  // proxies stayed unattached and registerOnTouched / registerOnChange never reached the mock.
+  // The expectation here documents the new compatibility path through NG_VALUE_ACCESSOR.
+  it('attaches a lazy value accessor from NG_VALUE_ACCESSOR', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockControlValueAccessorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_VALUE_ACCESSOR ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(injector as never, ngControl as never, changeDetectorRef as never);
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnTouched(spy);
+    instance.__simulateTouch();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  // Validators broke for the same reason as CVAs: Angular can defer resolution and keep validator
+  // proxies in DI rather than exposing them eagerly on the control. This verifies that ng-mocks
+  // now attaches the generated mock instance to validator proxies discovered through NG_VALIDATORS.
+  it('attaches a lazy validator from NG_VALIDATORS', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockValidatorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_VALIDATORS ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(injector as never, ngControl as never, changeDetectorRef as never);
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnValidatorChange(spy);
+    instance.__simulateValidatorChange();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  // Async validators follow the same lazy-resolution path. The regression here matters because a22
+  // failures showed that simply fixing sync validators was not enough; ng-mocks also has to keep
+  // async validator hooks working and preserve the historical null result contract.
+  it('attaches a lazy async validator from NG_ASYNC_VALIDATORS', async () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockAsyncValidatorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_ASYNC_VALIDATORS ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(injector as never, ngControl as never, changeDetectorRef as never);
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnValidatorChange(spy);
+    instance.__simulateValidatorChange();
+    expect(spy).toHaveBeenCalled();
+    await expectAsync(proxy.validate({})).toBeResolvedTo(null);
+  });
+
+  // The new implementation inspects more optional Angular internals than before. That makes it
+  // important to preserve the old "best effort" behavior: if a DI lookup fails, mock creation
+  // should still succeed instead of throwing and breaking unrelated tests.
+  it('ignores failing injector lookups for lazy form proxies', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const injector = {
+      get: () => {
+        throw new Error('fail');
+      },
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+
+    expect(
+      () => new mockDef(injector as never, ngControl as never, changeDetectorRef as never),
+    ).not.toThrow();
   });
 
   it('should affect as MockPipe', () => {
