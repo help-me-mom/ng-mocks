@@ -9,16 +9,32 @@ import helperMockService from './helper.mock-service';
 
 type MockServiceHandler = (cache: Map<any, any>, service: any, prefix?: string, overrides?: any) => any;
 
-const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
-  [
-    checkIsClass,
-    (cache, service) => {
-      const value = helperMockService.createMockFromPrototype(service.prototype);
+const createMockFromClass = (
+  cache: Map<any, any>,
+  service: any,
+  prefix: string | undefined,
+  callback: MockServiceHandler,
+) => {
+  if (service.length === 0) {
+    try {
+      const value = callback(cache, new service(), prefix || funcGetName(service));
       cache.set(service, value);
 
       return value;
-    },
-  ],
+    } catch {
+      // Falling back to the prototype-only mock keeps classes with
+      // unsupported constructors safe, for example DOM types.
+    }
+  }
+
+  const value = helperMockService.createMockFromPrototype(service.prototype);
+  cache.set(service, value);
+
+  return value;
+};
+
+const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
+  [checkIsClass, (cache, service, prefix, callback) => createMockFromClass(cache, service, prefix, callback)],
   [
     checkIsFunc,
     (cache, service, prefix) => {

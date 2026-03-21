@@ -70,6 +70,22 @@ class GetterSetterMethodHuetod {
   }
 }
 
+class OwnObjectPropertiesClass {
+  public readonly info = {
+    request: () => 'request',
+  };
+}
+
+class ThrowingClass {
+  public constructor() {
+    throw new Error('constructor side effect');
+  }
+
+  public echo(): string {
+    return 'echo';
+  }
+}
+
 describe('MockService', () => {
   it('should convert boolean, number, string, null and undefined to undefined', () => {
     expect(MockService(true)).toBeUndefined();
@@ -164,6 +180,28 @@ describe('MockService', () => {
     expect(
       ngMocks.stub<any>(mockService, 'childMethod').and.identity,
     ).toBe('ChildClass.childMethod');
+  });
+
+  it('should mock own object properties of classes without constructor parameters', () => {
+    const mockService = MockService(OwnObjectPropertiesClass);
+
+    expect(mockService.info).toEqual({
+      request: jasmine.any(Function),
+    });
+    expect(mockService.info.request()).toBeUndefined();
+    expect(
+      (mockService.info.request as jasmine.Spy).and.identity,
+    ).toBe('func:OwnObjectPropertiesClass.info.request');
+  });
+
+  it('falls back to a prototype-only mock when a zero-arg constructor throws', () => {
+    const mockService = MockService(ThrowingClass);
+
+    expect(mockService.echo).toEqual(jasmine.any(Function));
+    expect(mockService.echo()).toBeUndefined();
+    expect((mockService.echo as jasmine.Spy).and.identity).toBe(
+      'ThrowingClass.echo',
+    );
   });
 
   it('should mock an instance of a class as an object', () => {
