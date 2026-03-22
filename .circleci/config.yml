@@ -136,11 +136,8 @@ commands:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
       - run:
-          name: Spreading App
-          command: npm run s:app:<< parameters.dir >>
-      - run:
-          name: Spreading Tests
-          command: npm run s:test:<< parameters.dir >>
+          name: Spreading Files
+          command: npm run s:files:<< parameters.dir >>
       - run:
           name: Unit Tests
           command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >>
@@ -159,8 +156,8 @@ commands:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
       - run:
-          name: Spreading App
-          command: npm run s:app:<< parameters.dir >>
+          name: Spreading Files
+          command: npm run s:files:<< parameters.dir >>
       - run:
           name: Building Lib
           command: npm run lib:<< parameters.dir >>

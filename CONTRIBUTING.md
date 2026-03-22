@@ -250,6 +250,8 @@ The next step is:
 - update `ng-mocks/.github/dependabot.yml`, search for `a22` and copy blocks to support `a23`
 - update `ng-mocks/.circleci/config.yml`, search for `a22` and copy blocks to support `a23`
 - update `ng-mocks/eslint.config.mjs`, search for `a22` and copy blocks to support `a23`
+- update `ng-mocks/test-spread.conf`, search for `a22` and copy config to support `a23`
+- update `ng-mocks/test-spread-app.conf`, search for `a22` and copy config to support `a23`
 - if the new Angular version is still prerelease and `npm install` / `npm ci` set `force=true` in `ng-mocks/e2e/a23/.npmrc`
 
 ### Step #4 - update ng-mocks dependencies
