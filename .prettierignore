@@ -6,6 +6,8 @@
 CHANGELOG.md
 CODEOWNERS
 renovate.json
+test-spread.conf
+test-spread-app.conf
 
 .husky/
 dist/
