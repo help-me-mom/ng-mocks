@@ -286,7 +286,7 @@
     "karma-sourcemap-loader": "0.4.0",
     "karma-webpack": "5.0.1",
     "lint-staged": "16.4.0",
-    "npm": "11.12.0",
+    "npm": "11.12.1",
     "prettier": "3.8.1",
     "puppeteer": "24.40.0",
     "rxjs": "7.8.2",
@@ -300,7 +300,7 @@
     "zone.js": "0.16.1"
   },
   "engines": {
-    "npm": "11.12.0"
+    "npm": "11.12.1"
   },
   "repository": {
     "type": "git",
