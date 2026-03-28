@@ -76,6 +76,7 @@ When adding a spread test:
 - Match nearby compatibility style, including `VERSION.major` guards and metadata casts such as `['standalone' as never]` when older TypeScript or Angular targets still parse the file.
 - If a file imports APIs unavailable in older Angular targets, gate it in `test-spread.conf` with `versions=` or `features=` instead of relying only on runtime guards.
 - Prefer one `describe('issue-<number>')` suite with assertions that prove the reported failure and the expected behavior.
+- Add an in-file `// @see https://github.com/help-me-mom/ng-mocks/issues/<issue-number>` link near the regression suite. For subtle regressions, add a short comment block that explains the reported failure, the root cause, and the fix so future readers do not need to reconstruct the issue from the PR.
 
 ## Validation
 
