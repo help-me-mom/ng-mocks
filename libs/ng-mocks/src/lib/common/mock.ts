@@ -12,6 +12,7 @@ import { AnyType, DirectiveIo } from './core.types';
 import funcDirectiveIoParse from './func.directive-io-parse';
 import funcIsMock from './func.is-mock';
 import { MockControlValueAccessorProxy } from './mock-control-value-accessor-proxy';
+import { resolveMockDeclaration } from './ng-mocks-injected-declarations';
 import ngMocksUniverse from './ng-mocks-universe';
 
 const setValueAccessor = (instance: any, ngControl?: any) => {
@@ -180,6 +181,9 @@ export class Mock {
     Object.setPrototypeOf(this, mockOf.prototype);
 
     applyOverrides(this, mockOf, injector ?? undefined);
+    // Declaration providers are created lazily by Angular during render. Register the fully prepared
+    // mock instance here so a previous TestBed.inject seed can replay its overrides onto it.
+    resolveMockDeclaration(mockOf, this);
   }
 }
 
