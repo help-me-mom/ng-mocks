@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
+import funcGetGlobal from '../common/func.get-global';
+
 import collectDeclarations from './collect-declarations';
 
 describe('collect-declarations', () => {
@@ -323,5 +325,61 @@ describe('collect-declarations', () => {
 
     const actual = collectDeclarations(TargetComponent);
     expect(actual.outputs).toEqual(['output']);
+  });
+
+  it('reads signal model bindings from ng defs', () => {
+    const global = funcGetGlobal();
+    global.__ngMocksReflectComponentType = false;
+    const actual = collectDeclarations({
+      ɵcmp: {
+        declaredInputs: {
+          value: 'value',
+        },
+        inputs: {
+          value: ['value', 1, null],
+        },
+        outputs: {
+          valueChange: 'value',
+        },
+        standalone: true,
+      },
+    });
+
+    expect(actual.inputs).toEqual(['value']);
+    expect(actual.outputs).toEqual(['valueChange']);
+    expect(actual.standalone).toBe(true);
+    delete global.__ngMocksReflectComponentType;
+  });
+
+  it('reads string-form ng def inputs without declaredInputs', () => {
+    const global = funcGetGlobal();
+    global.__ngMocksReflectComponentType = false;
+    const actual = collectDeclarations({
+      ɵcmp: {
+        inputs: {
+          alias: 'prop',
+        },
+      },
+    });
+
+    expect(actual.inputs).toEqual(['prop:alias']);
+    expect(actual.outputs).toEqual([]);
+    delete global.__ngMocksReflectComponentType;
+  });
+
+  it('reads ng def outputs without inputs', () => {
+    const global = funcGetGlobal();
+    global.__ngMocksReflectComponentType = false;
+    const actual = collectDeclarations({
+      ɵcmp: {
+        outputs: {
+          valueChange: 'value',
+        },
+      },
+    });
+
+    expect(actual.inputs).toEqual([]);
+    expect(actual.outputs).toEqual(['valueChange']);
+    delete global.__ngMocksReflectComponentType;
   });
 });
