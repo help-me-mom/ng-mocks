@@ -6,6 +6,7 @@ import ngMocksUniverse from '../../common/ng-mocks-universe';
 import helperResolveProvider from '../../mock-service/helper.resolve-provider';
 import helperUseFactory from '../../mock-service/helper.use-factory';
 
+import getRootProviderKeepProvider from './get-root-provider-keep-provider';
 import getRootProviderParameters from './get-root-provider-parameters';
 import { BuilderData, NgMeta } from './types';
 
@@ -17,7 +18,7 @@ export default (ngModule: NgMeta, { keepDef, mockDef }: BuilderData, resolutions
     for (const parameter of mapValues(parameters)) {
       const mock = helperResolveProvider(parameter, resolutions);
       if (mock) {
-        ngModule.providers.push(mock);
+        ngModule.providers.push(mock === parameter ? (getRootProviderKeepProvider(parameter) ?? mock) : mock);
       } else if (isNgInjectionToken(parameter)) {
         const multi =
           ngMocksUniverse.config.has('ngMocksMulti') && ngMocksUniverse.config.get('ngMocksMulti').has(parameter);
