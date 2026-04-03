@@ -3,14 +3,20 @@ import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '
 
 import coreDefineProperty from '../common/core.define-property';
 import { getInjection } from '../common/core.helpers';
+import coreReflectParametersResolve from '../common/core.reflect.parameters-resolve';
+import coreReflectProvidedIn from '../common/core.reflect.provided-in';
 import { AnyDeclaration, AnyType, Type } from '../common/core.types';
 import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
+import { isStandalone } from '../common/func.is-standalone';
 import ngMocksStack from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
+import extractDep from '../mock-builder/promise/extract-dep';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
+import helperExtractMethodsFromPrototype from '../mock-service/helper.extract-methods-from-prototype';
+import helperMockService from '../mock-service/helper.mock-service';
 import { MockService } from '../mock-service/mock-service';
 
 import funcCreateWrapper from './func.create-wrapper';
@@ -70,6 +76,53 @@ const renderInjection = (fixture: any, template: any, params: any): void => {
     nativeElement: MockService(HTMLElement),
   });
   funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, [], true);
+};
+
+const extractCtorTokens = (template: any): Set<any> => {
+  const tokens = new Set<any>();
+
+  for (const decorators of coreReflectParametersResolve(template)) {
+    tokens.add(extractDep(decorators));
+  }
+  tokens.delete(undefined);
+
+  return tokens;
+};
+
+const autoSpyStandaloneInjectProperties = (template: any, instance: any): void => {
+  if (
+    !instance ||
+    !isNgDef(template, 'c') ||
+    !isStandalone(template) ||
+    !helperMockService.mockFunction.customMockFunction
+  ) {
+    return;
+  }
+
+  const ctorTokens = extractCtorTokens(template);
+
+  for (const key of Object.keys(instance)) {
+    const value = instance[key];
+    const provide = value ? value.constructor : undefined;
+
+    if (!value || typeof value !== 'object' || !provide || ctorTokens.has(provide) || !coreReflectProvidedIn(provide)) {
+      continue;
+    }
+
+    let injected: any;
+    try {
+      injected = getInjection(provide);
+    } catch {
+      continue;
+    }
+    if (injected !== value) {
+      continue;
+    }
+
+    for (const method of helperExtractMethodsFromPrototype(provide.prototype)) {
+      helperMockService.mock(value, method);
+    }
+  }
 };
 
 const tryWhen = (flag: boolean, callback: () => void) => {
@@ -179,6 +232,7 @@ const generateFactory = (
       (componentCtor.tpl && isNgDef(template, 'p'))
     ) {
       renderDeclaration(fixture, template, params);
+      autoSpyStandaloneInjectProperties(template, fixture.point.componentInstance);
     } else {
       renderInjection(fixture, template, params);
     }
