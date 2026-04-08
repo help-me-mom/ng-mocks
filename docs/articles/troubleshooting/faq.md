@@ -26,11 +26,11 @@ ngMocks.defaultMock(TitleStrategy, () => MockService(DefaultTitleStrategy));
 
 ## Error: NG01052: formGroup expects a FormGroup instance. Please pass one in.
 
-Usually, that happens when you are using `FormBuilder` in your code,
+Usually, that happens when you are using `FormBuilder` or `NonNullableFormBuilder` in your code,
 and [`MockBuilder`](../api/MockBuilder.md) in your test,
 with intentions to keep `FormsModule` or `ReactiveFormsModule` and to mock the rest.
 
-Since Angular `15.1.0`, `FormBuilder` is a `root` provider,
+Since Angular `15.1.0`, `FormBuilder` and `NonNullableFormBuilder` are `root` providers,
 and, therefore, should be explicitly kept along with `FormsModule` or `ReactiveFormsModule`.
 
 ```ts
@@ -38,6 +38,7 @@ beforeEach(() =>
   MockBuilder(FormComponent)
     .keep(FormsModule)
     .keep(FormBuilder) // <-- add that
+    // or .keep(NonNullableFormBuilder)
 );
 ```
 

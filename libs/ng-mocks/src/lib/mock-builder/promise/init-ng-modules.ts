@@ -11,6 +11,7 @@ import ngMocksUniverse from '../../common/ng-mocks-universe';
 import markExported from '../../mock/mark-exported';
 import markProviders from '../../mock-module/mark-providers';
 
+import getRootProviderKeepProvider from './get-root-provider-keep-provider';
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
 
@@ -45,7 +46,7 @@ const handleDef = ({ imports, declarations, providers }: NgMeta, def: any, defPr
   if (isNgDef(def, 'i') || !isNgDef(def)) {
     const mock = ngMocksUniverse.builtProviders.get(def);
     if (mock && typeof mock !== 'string' && isNgDef(mock, 't') === false) {
-      providers.push(mock);
+      providers.push(mock === def ? (getRootProviderKeepProvider(def) ?? mock) : mock);
       touched = true;
     }
   }
