@@ -35,7 +35,7 @@
     "@types/node": "24.12.2",
     "jest": "30.3.0",
     "jest-environment-jsdom": "30.3.0",
-    "jest-preset-angular": "16.1.2",
+    "jest-preset-angular": "16.1.4",
     "ng-packagr": "21.2.2",
     "npm": "11.12.1",
     "nx": "22.6.4",
