@@ -38,7 +38,7 @@
     "jest-preset-angular": "16.1.4",
     "ng-packagr": "21.2.3",
     "npm": "11.13.0",
-    "nx": "22.6.5",
+    "nx": "22.7.0",
     "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
