@@ -36,7 +36,7 @@
     "@types/jest": "30.0.0",
     "@types/node": "24.12.3",
     "jasmine-core": "6.1.0",
-    "jest": "30.4.1",
+    "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "jest-preset-angular": "16.1.5",
     "karma": "6.4.4",
@@ -45,12 +45,12 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.2.0",
     "ng-packagr": "21.2.3",
-    "npm": "11.14.0",
+    "npm": "11.14.1",
     "puppeteer": "24.43.0",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
   "engines": {
-    "npm": "11.14.0"
+    "npm": "11.14.1"
   }
 }

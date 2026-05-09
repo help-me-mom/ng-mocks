@@ -33,17 +33,17 @@
     "@types/jasmine": "6.0.0",
     "@types/jest": "30.0.0",
     "@types/node": "24.12.3",
-    "jest": "30.4.1",
+    "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "jest-preset-angular": "16.1.5",
     "ng-packagr": "21.2.3",
-    "npm": "11.14.0",
+    "npm": "11.14.1",
     "nx": "22.7.1",
     "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
   "engines": {
-    "npm": "11.14.0"
+    "npm": "11.14.1"
   }
 }
