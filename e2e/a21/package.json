@@ -36,7 +36,7 @@
     "@types/jest": "30.0.0",
     "@types/node": "24.12.3",
     "jasmine-core": "6.1.0",
-    "jest": "30.4.1",
+    "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "jest-preset-angular": "16.1.5",
     "karma": "6.4.4",
