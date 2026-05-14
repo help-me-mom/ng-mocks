@@ -228,9 +228,9 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "21.3.1",
-    "@angular-eslint/eslint-plugin-template": "21.3.1",
-    "@angular-eslint/template-parser": "21.3.1",
+    "@angular-eslint/eslint-plugin": "21.4.0",
+    "@angular-eslint/eslint-plugin-template": "21.4.0",
+    "@angular-eslint/template-parser": "21.4.0",
     "@angular/animations": "21.2.13",
     "@angular/common": "21.2.13",
     "@angular/core": "21.2.13",
