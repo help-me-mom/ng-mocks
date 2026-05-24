@@ -1,4 +1,4 @@
-import { Component, Directive } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { extendClass } from '../common/core.helpers';
@@ -28,10 +28,20 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
     // nothing to do
   }
 
-  (isNgDef(template, 'c') ? Component : Directive)({
-    ...meta,
-    ...set,
-  })(child);
+  if (isNgDef(template, 'c')) {
+    Component({
+      // Selector-less components are cloned under a synthetic selector. Default
+      // keeps that clone checkable; real metadata and TestBed overrides still win.
+      changeDetection: ChangeDetectionStrategy.Default,
+      ...meta,
+      ...set,
+    })(child);
+  } else {
+    Directive({
+      ...meta,
+      ...set,
+    })(child);
+  }
   TestBed.configureTestingModule({
     [isStandalone(child) ? 'imports' : 'declarations']: [child],
   });

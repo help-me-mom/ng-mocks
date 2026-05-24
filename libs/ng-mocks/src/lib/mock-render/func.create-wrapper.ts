@@ -1,4 +1,4 @@
-import { Component, Directive } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive } from '@angular/core';
 
 import coreConfig from '../common/core.config';
 import coreDefineProperty from '../common/core.define-property';
@@ -137,6 +137,9 @@ export default (
 
   const mockTemplate = funcGenerateTemplate(template, { selector: meta.selector, inputs, outputs, bindings });
   const options: Component = {
+    // The MockRender wrapper is driven by fixture.detectChanges(), so it must stay
+    // checkable even when the rendered declaration itself uses OnPush.
+    changeDetection: ChangeDetectionStrategy.Default,
     providers: flags.providers,
     selector: 'mock-render',
     template: mockTemplate,

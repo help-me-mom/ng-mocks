@@ -6,7 +6,12 @@ import {
   Pipe,
   PipeTransform,
 } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_ASYNC_VALIDATORS,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 
 import { MockComponent } from '../mock-component/mock-component';
 import { MockDirective } from '../mock-directive/mock-directive';
@@ -126,6 +131,10 @@ class ChildPipe extends ParentClass implements PipeTransform {
 }
 
 describe('Mock', () => {
+  const changeDetectorRef = {
+    detectChanges: () => undefined,
+  };
+
   it('should affect as MockModule', () => {
     const instance = new (MockModule(ChildModule))();
     expect(instance).toEqual(jasmine.any(ChildModule));
@@ -168,6 +177,139 @@ describe('Mock', () => {
 
     expect(instance.parentMethod()).toBeUndefined();
     expect(instance.childMethod()).toBeUndefined();
+  });
+
+  it('attaches a lazy value accessor from rawValueAccessors', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockControlValueAccessorProxy(mockDef);
+    const skippedProxy = new MockControlValueAccessorProxy(
+      ChildComponent,
+    );
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [skippedProxy, proxy],
+      valueAccessor: proxy,
+    };
+    const instance = new mockDef(
+      null as never,
+      ngControl as never,
+      changeDetectorRef as never,
+    );
+
+    expect(proxy.instance).toBe(instance);
+    expect(skippedProxy.instance).toBeUndefined();
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnChange(spy);
+    instance.__simulateChange('test');
+    expect(spy).toHaveBeenCalledWith('test');
+  });
+
+  it('attaches a lazy value accessor from NG_VALUE_ACCESSOR', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockControlValueAccessorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_VALUE_ACCESSOR ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(
+      injector as never,
+      ngControl as never,
+      changeDetectorRef as never,
+    );
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnTouched(spy);
+    instance.__simulateTouch();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('attaches a lazy validator from NG_VALIDATORS', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockValidatorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_VALIDATORS ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(
+      injector as never,
+      ngControl as never,
+      changeDetectorRef as never,
+    );
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnValidatorChange(spy);
+    instance.__simulateValidatorChange();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('attaches a lazy async validator from NG_ASYNC_VALIDATORS', async () => {
+    const mockDef = MockComponent(ChildComponent);
+    const proxy = new MockAsyncValidatorProxy(mockDef);
+    const injector = {
+      get: (token: any, fallback: any) =>
+        token === NG_ASYNC_VALIDATORS ? [proxy] : fallback,
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+    const instance = new mockDef(
+      injector as never,
+      ngControl as never,
+      changeDetectorRef as never,
+    );
+
+    expect(proxy.instance).toBe(instance);
+
+    const spy = jasmine.createSpy('spy');
+    proxy.registerOnValidatorChange(spy);
+    instance.__simulateValidatorChange();
+    expect(spy).toHaveBeenCalled();
+    await expectAsync(proxy.validate({})).toBeResolvedTo(null);
+  });
+
+  it('ignores failing injector lookups for lazy form proxies', () => {
+    const mockDef = MockComponent(ChildComponent);
+    const injector = {
+      get: () => {
+        throw new Error('fail');
+      },
+    };
+    const ngControl = {
+      _rawAsyncValidators: [],
+      _rawValidators: [],
+      rawValueAccessors: [],
+      valueAccessor: null,
+    };
+
+    expect(
+      () =>
+        new mockDef(
+          injector as never,
+          ngControl as never,
+          changeDetectorRef as never,
+        ),
+    ).not.toThrow();
   });
 
   it('should affect as MockPipe', () => {

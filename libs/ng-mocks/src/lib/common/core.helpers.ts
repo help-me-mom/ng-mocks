@@ -152,6 +152,13 @@ export const extendClassicClass = <I>(base: AnyType<I>): Type<I> => {
 export const extendClass = <I>(base: AnyType<I>): Type<I> => {
   const child: Type<I> = extendClassicClass(base);
   coreDefineProperty(child, 'name', `MockMiddleware${funcGetName(base)}`, true);
+  // Cloned declarations are decorated again. Shadow inherited Ivy defs first so
+  // Angular does not read the original declaration metadata from the subclass.
+  for (const prop of ['ɵcmp', 'ɵdir', 'ɵfac', 'ɵinj', 'ɵmod', 'ɵpipe']) {
+    if (prop in child && !Object.prototype.hasOwnProperty.call(child, prop)) {
+      coreDefineProperty(child, prop, undefined);
+    }
+  }
 
   const parameters = coreReflectParametersResolve(base);
   if (parameters.length > 0) {

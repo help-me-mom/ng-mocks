@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, DebugElement, Directive, InjectionToken } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  DebugElement,
+  Directive,
+  InjectionToken,
+  VERSION,
+} from '@angular/core';
 import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -97,6 +104,71 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
+// Angular 22 changed how wrapper fixture checks reach the rendered point, so only
+// patch new versions and leave older Angular behavior untouched.
+const shouldPatchPointDetectChanges = (): boolean => Number.parseInt(VERSION.major, 10) >= 22;
+
+// Respect explicit OnPush declarations; forcing their point CDR would hide the
+// very change-detection behavior a test might be asserting.
+// Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
+/* istanbul ignore next */
+const isExplicitlyOnPush = (fixture: any): boolean => {
+  const annotation = fixture.point?.componentInstance?.constructor?.__annotations__?.[0];
+
+  return (
+    annotation &&
+    Object.prototype.hasOwnProperty.call(annotation, 'changeDetection') &&
+    annotation.changeDetection === ChangeDetectionStrategy.OnPush
+  );
+};
+
+// Token and plain-text renders do not have a child component CDR. The lookup is
+// intentionally best-effort so MockRender keeps supporting every render shape.
+// Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
+/* istanbul ignore next */
+const getFixturePointChangeDetectorRef = (fixture: any): undefined | ChangeDetectorRef => {
+  if (!shouldPatchPointDetectChanges() || !fixture.point || fixture.point === fixture.debugElement) {
+    return undefined;
+  }
+  if (isExplicitlyOnPush(fixture)) {
+    return undefined;
+  }
+  try {
+    return fixture.point.injector.get(ChangeDetectorRef);
+  } catch {
+    return undefined;
+  }
+};
+
+// After the wrapper has checked its bound params, Angular 22 needs the rendered
+// point checked as well so the new values reach nested CVA and component views.
+// Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
+/* istanbul ignore next */
+const patchFixtureDetectChanges = (fixture: any): void => {
+  const detectChanges = fixture.detectChanges.bind(fixture);
+  fixture.detectChanges = (checkNoChanges = true) => {
+    detectChanges(checkNoChanges);
+
+    const pointCdr = getFixturePointChangeDetectorRef(fixture);
+    if (pointCdr) {
+      pointCdr.detectChanges();
+      if (checkNoChanges) {
+        pointCdr.checkNoChanges();
+      }
+    }
+  };
+};
+
+const patchPointDetectChanges = (fixture: any): void => {
+  /* istanbul ignore else */
+  if (!shouldPatchPointDetectChanges()) {
+    return;
+  }
+  // Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
+  /* istanbul ignore next */
+  patchFixtureDetectChanges(fixture);
+};
+
 const flushTestBed = (flags: Record<string, any>): void => {
   const globalFlags = ngMocksUniverse.global.get('flags');
   const testBed: any = getTestBed();
@@ -182,6 +254,8 @@ const generateFactory = (
     } else {
       renderInjection(fixture, template, params);
     }
+
+    patchPointDetectChanges(fixture);
 
     return fixture;
   };

@@ -1,4 +1,5 @@
-import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
+import { NgModule, Optional } from '@angular/core';
+import * as angularCore from '@angular/core';
 
 import coreDefineProperty from '../../common/core.define-property';
 import { extendClass } from '../../common/core.helpers';
@@ -8,30 +9,61 @@ import helperCreateClone from '../../mock-service/helper.create-clone';
 
 import { NgMeta } from './types';
 
+type EntryComponent = angularCore.Type<unknown>;
+type EntryComponentMap = Map<EntryComponent, EntryComponent>;
+
+type ComponentFactoryResolver = {
+  resolveComponentFactory: (component: EntryComponent) => unknown;
+};
+
+type ComponentFactoryResolverToken = Function & {
+  prototype: ComponentFactoryResolver;
+};
+
+type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
+  ComponentFactoryResolver?: ComponentFactoryResolverToken;
+};
+
+// Angular 22 removes ComponentFactoryResolver as a value export, so avoid a named
+// import that would fail before ng-mocks can finish loading.
+const angularCoreWithComponentFactoryResolver: AngularCoreWithComponentFactoryResolver = angularCore;
+const ComponentFactoryResolver = angularCoreWithComponentFactoryResolver.ComponentFactoryResolver;
+
 class EntryComponentsModule {
-  public constructor(map: Map<any, any>, componentFactoryResolver?: ComponentFactoryResolver) {
+  public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
     // istanbul ignore if
     if (!componentFactoryResolver) {
       return;
     }
 
     const originCFR = componentFactoryResolver.resolveComponentFactory;
+    const patchedResolveComponentFactory: ComponentFactoryResolver['resolveComponentFactory'] = component =>
+      originCFR.call(componentFactoryResolver, map.get(component) ?? component);
     componentFactoryResolver.resolveComponentFactory = helperCreateClone(
       originCFR,
       undefined,
       undefined,
-      (component: any, ...args: any[]) =>
-        originCFR.apply(componentFactoryResolver, [map.get(component) ?? component, ...args] as any),
+      patchedResolveComponentFactory,
     );
   }
 }
-coreDefineProperty(EntryComponentsModule, 'parameters', [[NG_MOCKS], [ComponentFactoryResolver, new Optional()]]);
+type EntryComponentsModuleParameter = [typeof NG_MOCKS] | [ComponentFactoryResolverToken, Optional];
+
+const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
+// Older Angular versions still need the optional resolver parameter to patch
+// entryComponents; root coverage runs on Angular 21 where the branch is present.
+/* istanbul ignore else */
+if (ComponentFactoryResolver) {
+  parameters.push([ComponentFactoryResolver, new Optional()]);
+}
+coreDefineProperty(EntryComponentsModule, 'parameters', parameters);
 
 class IvyModule {}
 NgModule()(IvyModule);
+const ivyModule: typeof IvyModule & { ɵmod?: unknown } = IvyModule;
 
 export default (ngModule: NgMeta): void => {
-  const entryComponents: any[] = [];
+  const entryComponents: EntryComponent[] = [];
   for (const declaration of ngModule.declarations) {
     if (isNgDef(declaration, 'c')) {
       entryComponents.push(declaration);
@@ -43,7 +75,7 @@ export default (ngModule: NgMeta): void => {
     // Ivy knows how to make any component an entry point,
     // but we still would like to patch resolveComponentFactory in order to provide mocks.
     // ɵmod is added only if Ivy has been enabled.
-    entryComponents: (IvyModule as any).ɵmod ? [] : /* istanbul ignore next */ entryComponents,
+    entryComponents: ivyModule.ɵmod ? [] : /* istanbul ignore next */ entryComponents,
   } as never)(entryModule);
   ngModule.imports.push(entryModule);
 };
