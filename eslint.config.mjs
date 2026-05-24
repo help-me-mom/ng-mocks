@@ -6,7 +6,7 @@ import tsEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsEslintParser from '@typescript-eslint/parser';
 import esXPlugin from 'eslint-plugin-es-x';
 import importPlugin from 'eslint-plugin-import-x';
-import jsonPlugin from 'eslint-plugin-json';
+import jsonPlugin from '@eslint/json';
 import * as mdxPlugin from 'eslint-plugin-mdx';
 import preferArrowPlugin from 'eslint-plugin-prefer-arrow';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -135,6 +135,8 @@ const tsJsRules = {
   'no-alert': 'error',
   'no-console': ['error', { allow: ['error', 'warn'] }],
   'no-debugger': 'error',
+  // The library targets ES5, where ErrorOptions cause is not part of the public type/runtime contract.
+  'preserve-caught-error': 'off',
   'no-restricted-globals': ['error', 'fit', 'fdescribe', 'xit', 'xdescribe'],
   semi: ['error', 'always'],
   quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
@@ -282,26 +284,30 @@ export default [
     },
   },
   {
-    ...jsonPlugin.configs.recommended,
     files: ['**/*.json'],
+    ignores: ['**/tsconfig.json', '**/tsconfig.*.json'],
     plugins: {
       ...jsonPlugin.configs.recommended.plugins,
       prettier: prettierPlugin,
     },
+    language: 'json/json',
     rules: {
-      ...jsonPlugin.configs.recommended.rules,
+      'json/no-duplicate-keys': 'error',
       ...prettierRules,
     },
   },
   {
-    ...jsonPlugin.configs['recommended-with-comments'],
     files: ['**/tsconfig.json', '**/tsconfig.*.json'],
     plugins: {
-      ...jsonPlugin.configs['recommended-with-comments'].plugins,
+      ...jsonPlugin.configs.recommended.plugins,
       prettier: prettierPlugin,
     },
+    language: 'json/jsonc',
+    languageOptions: {
+      allowTrailingCommas: true,
+    },
     rules: {
-      ...jsonPlugin.configs['recommended-with-comments'].rules,
+      'json/no-duplicate-keys': 'error',
       ...prettierRules,
     },
   },

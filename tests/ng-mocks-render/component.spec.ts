@@ -165,7 +165,7 @@ describe('ng-mocks-render:component:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('renders directives on their positions', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
 
     html = ngMocks.formatHtml(fixture.nativeElement);
@@ -182,7 +182,7 @@ describe('ng-mocks-render:component:mock', () => {
   });
 
   it('renders queries of components in the end', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
 
     html = ngMocks.formatHtml(fixture.nativeElement);
@@ -207,7 +207,7 @@ describe('ng-mocks-render:component:mock', () => {
   });
 
   it('renders all desired templates', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
 
     const tplHeader = ngMocks.findTemplateRef('header');

@@ -80,7 +80,7 @@ describe('ng-mocks-render:directive', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('renders directives in components', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
     const component = ngMocks.findInstance(MockComponent);
 
@@ -115,7 +115,7 @@ describe('ng-mocks-render:directive', () => {
   });
 
   it('renders directives in directives', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
     const directive = ngMocks.findInstance(MockDirective);
 
@@ -134,7 +134,7 @@ describe('ng-mocks-render:directive', () => {
   });
 
   it('renders self directives', () => {
-    let html = '';
+    let html: string;
     const fixture = MockRender(TargetComponent);
     const [directiveHeader, directiveBody] =
       ngMocks.findInstances(TplDirective);
