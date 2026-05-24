@@ -1,4 +1,4 @@
-import { DebugElement } from '@angular/core';
+import { ChangeDetectorRef, DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
 import { DebugNodeSelector } from '../../common/core.types';
@@ -54,6 +54,16 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
 const hasListener = (el: DebugElement): boolean =>
   el.listeners.some(listener => listener.name === 'input' || listener.name === 'change');
 
+// ngMocks.change can update a CVA without Angular's normal input event path.
+// Mark the changed element so OnPush views render on the next fixture check.
+const markForNextCheck = (el: DebugElement): void => {
+  try {
+    el.injector.get(ChangeDetectorRef).markForCheck();
+  } catch {
+    // not all debug nodes expose ChangeDetectorRef
+  }
+};
+
 const keys = [
   'onChange',
   'onChangeCallback',
@@ -94,6 +104,7 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
   const valueAccessor = funcGetVca(el);
   if (handleKnown(valueAccessor, value) || hasListener(el)) {
     triggerInput(el, value);
+    markForNextCheck(el);
 
     return;
   }
@@ -102,6 +113,7 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
     if (typeof valueAccessor[key] === 'function') {
       valueAccessor.writeValue(value);
       valueAccessor[key](value);
+      markForNextCheck(el);
 
       return;
     }

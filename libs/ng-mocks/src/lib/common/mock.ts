@@ -24,10 +24,59 @@ const setValueAccessor = (instance: any, ngControl?: any) => {
   }
 };
 
+const normalizeProxies = (value: any): any[] => (Array.isArray(value) ? value : value ? [value] : []);
+
+const extractInjectableProxies = (injector: Injector | null | undefined, token: any): any[] => {
+  if (!injector || !token) {
+    return [];
+  }
+
+  try {
+    return normalizeProxies(injector.get(token, []));
+  } catch {
+    return [];
+  }
+};
+
+const extractUniqueProxies = (proxies: any[]): any[] => {
+  const result: any[] = [];
+  const known = new Set<any>();
+
+  for (const proxy of proxies) {
+    if (!proxy || known.has(proxy)) {
+      continue;
+    }
+    known.add(proxy);
+    result.push(proxy);
+  }
+
+  return result;
+};
+
+// Angular forms expose lazy CVA and validator proxies in different places across
+// versions, so collect both NgControl internals and injectable multi-token values.
+const extractValueAccessors = (ngControl: any, injector: Injector | null | undefined): any[] =>
+  extractUniqueProxies([
+    ...normalizeProxies(ngControl?.valueAccessor),
+    ...normalizeProxies(ngControl?.rawValueAccessors),
+    ...extractInjectableProxies(injector, coreForm.NG_VALUE_ACCESSOR),
+  ]);
+
+const extractValidators = (
+  ngControl: any,
+  injector: Injector | null | undefined,
+  property: string,
+  token: any,
+): any[] =>
+  extractUniqueProxies([...normalizeProxies(ngControl?.[property]), ...extractInjectableProxies(injector, token)]);
+
 // connecting to NG_VALUE_ACCESSOR
-const installValueAccessor = (ngControl: any, instance: any) => {
-  if (!ngControl.valueAccessor.instance && ngControl.valueAccessor.target === instance.__ngMocksCtor) {
-    ngControl.valueAccessor.instance = instance;
+const installValueAccessor = (ngControl: any, instance: any, injector?: Injector | null) => {
+  for (const valueAccessor of extractValueAccessors(ngControl, injector)) {
+    if (valueAccessor.instance || valueAccessor.target !== instance.__ngMocksCtor) {
+      continue;
+    }
+    valueAccessor.instance = instance;
     helperMockService.mock(instance, 'registerOnChange');
     helperMockService.mock(instance, 'registerOnTouched');
     helperMockService.mock(instance, 'setDisabledState');
@@ -49,15 +98,17 @@ const installValidator = (validators: any[], instance: any) => {
   }
 };
 
-const applyNgValueAccessor = (instance: any, ngControl: any) => {
+const applyNgValueAccessor = (instance: any, ngControl: any, injector?: Injector | null) => {
   setValueAccessor(instance, ngControl);
 
   try {
-    // istanbul ignore else
-    if (ngControl) {
-      installValueAccessor(ngControl, instance);
-      installValidator(ngControl._rawValidators, instance);
-      installValidator(ngControl._rawAsyncValidators, instance);
+    if (ngControl || injector) {
+      installValueAccessor(ngControl, instance, injector);
+      installValidator(extractValidators(ngControl, injector, '_rawValidators', coreForm.NG_VALIDATORS), instance);
+      installValidator(
+        extractValidators(ngControl, injector, '_rawAsyncValidators', coreForm.NG_ASYNC_VALIDATORS),
+        instance,
+      );
     }
   } catch {
     // nothing to do.
@@ -169,7 +220,7 @@ export class Mock {
 
     // istanbul ignore else
     if (funcIsMock(this)) {
-      applyNgValueAccessor(this, ngControl);
+      applyNgValueAccessor(this, ngControl, injector);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
       applyMethods(this, mockOf.prototype);

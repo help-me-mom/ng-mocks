@@ -1,8 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
+  Component,
   DebugElement,
   DebugNode,
   EventEmitter,
+  Input,
   provideZoneChangeDetection,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -26,6 +29,15 @@ import {
   MockedDebugNode,
 } from './types';
 
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
+  template: '{{ content }}',
+})
+class OnPushWithoutSelectorComponent {
+  @Input() public content = '';
+}
+
 describe('MockRender', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,6 +45,7 @@ describe('MockRender', () => {
         RenderRealComponent,
         WithoutSelectorComponent,
         EmptyComponent,
+        OnPushWithoutSelectorComponent,
       ],
     });
   });
@@ -188,6 +201,27 @@ describe('MockRender', () => {
 
     expect(fixture.nativeElement.textContent).toContain(
       'injected content',
+    );
+  });
+
+  it('respects explicit change detection component metadata', () => {
+    const fixture = MockRender(OnPushWithoutSelectorComponent);
+
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(OnPushWithoutSelectorComponent),
+    );
+  });
+
+  it('respects explicit change detection component overrides', () => {
+    TestBed.overrideComponent(WithoutSelectorComponent, {
+      set: {
+        changeDetection: ChangeDetectionStrategy.OnPush,
+      },
+    });
+    const fixture = MockRender(WithoutSelectorComponent);
+
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(WithoutSelectorComponent),
     );
   });
 
