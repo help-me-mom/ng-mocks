@@ -16,7 +16,9 @@ type ComponentFactoryResolver = {
   resolveComponentFactory: (component: EntryComponent) => unknown;
 };
 
-type ComponentFactoryResolverToken = Function & {
+// The resolver token is only passed to Angular DI metadata, so its prototype is
+// enough to match Angular's abstract class value without using the broad Function type.
+type ComponentFactoryResolverToken = {
   prototype: ComponentFactoryResolver;
 };
 
