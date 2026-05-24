@@ -242,6 +242,7 @@ export default [
     rules: {
       'max-lines': 'off',
       'max-lines-per-function': 'off',
+      'no-useless-assignment': 'off',
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/prefer-logical-operator-over-ternary': 'off',
       '@typescript-eslint/no-empty-function': 'off',
