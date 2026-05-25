@@ -1,9 +1,11 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/6.4/config/configuration-file.html
 
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+const { executablePath } = require('puppeteer');
 
-module.exports = function (config) {
+module.exports = async function (config) {
+  process.env.CHROME_BIN = await executablePath();
+
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
