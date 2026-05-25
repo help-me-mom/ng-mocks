@@ -13,7 +13,8 @@
 
 ## AI Agents Compatibility
 
-- This repository should work cleanly with both Codex and OpenCode.
+- This repository should work cleanly with as many LLMs and coding agents as practical, including OpenAI/Codex, Claude, and OpenCode.
+- Keep LLM-related repo guidance and config LLM-agnostic by default. Avoid vendor-specific metadata, planning syntax, tool names, or assumptions unless a file is explicitly scoped to one platform.
 - When a repo skill applies, translate its workflow into a plain Markdown task list before doing substantial work.
 - Use simple checkboxes or numbered items that render anywhere. Avoid agent-specific planning syntax in repo guidance.
 - A good default task list is:
