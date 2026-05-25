@@ -22,8 +22,10 @@ class TargetService {
 })
 class TargetModule {}
 
-// The issue was that MockBuilder didn't apply global rules to mocked declarations.
+// Issue #10347 reports the same HttpClientModule replacement path, so this
+// regression keeps both local and global replacement behavior covered.
 // @see https://github.com/help-me-mom/ng-mocks/issues/6402
+// @see https://github.com/help-me-mom/ng-mocks/issues/10347
 describe('issue-6402', () => {
   describe('MockBuilder:replace', () => {
     beforeEach(() =>
@@ -34,8 +36,13 @@ describe('issue-6402', () => {
     );
 
     it('sends /api/config request', () => {
+      // TargetModule is mocked via MockBuilder, so this request only works if
+      // the local HttpClientTestingModule replacement keeps its real providers.
       MockRender(TargetService);
+
       const service = ngMocks.get(TargetService);
+      // HttpTestingController exists only on the replacement module, which makes
+      // it a good canary for replacement behavior across all Angular apps.
       const controller = ngMocks.get(HttpTestingController);
 
       service.getConfig().subscribe();
@@ -58,8 +65,13 @@ describe('issue-6402', () => {
     afterAll(() => ngMocks.globalWipe(HttpClientModule));
 
     it('sends /api/config request', () => {
+      // TargetModule is mocked via MockBuilder, so this request only works if
+      // the global HttpClientTestingModule replacement keeps its real providers.
       MockRender(TargetService);
+
       const service = ngMocks.get(TargetService);
+      // HttpTestingController exists only on the replacement module, which makes
+      // it a good canary for replacement behavior across all Angular apps.
       const controller = ngMocks.get(HttpTestingController);
 
       service.getConfig().subscribe();
