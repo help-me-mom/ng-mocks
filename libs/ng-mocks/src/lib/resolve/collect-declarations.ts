@@ -3,7 +3,7 @@
 import { ɵReflectionCapabilities as ReflectionCapabilities } from '@angular/core';
 
 import coreDefineProperty from '../common/core.define-property';
-import { AnyDeclaration, DirectiveIo } from '../common/core.types';
+import { AnyDeclaration, DirectiveIo, SignalInputDef, SignalOutputDef } from '../common/core.types';
 import funcDirectiveIoBuild from '../common/func.directive-io-build';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import funcReflectComponentType from '../common/func.reflect-component-type';
@@ -15,6 +15,8 @@ interface Declaration {
   attributes: string[];
   inputs: Array<DirectiveIo>;
   outputs: Array<DirectiveIo>;
+  signalInputs: Array<SignalInputDef>;
+  signalOutputs: Array<SignalOutputDef>;
   propDecorators: Record<string, any[]>;
   queries: Record<string, any>;
   decorators: Array<'Injectable' | 'Pipe' | 'Directive' | 'Component' | 'NgModule'>;
@@ -54,6 +56,8 @@ const createDeclarations = (parent: Partial<Declaration>): Declaration => ({
   attributes: parent.attributes ? [...parent.attributes] : [],
   inputs: parent.inputs ? [...parent.inputs] : [],
   outputs: parent.outputs ? [...parent.outputs] : [],
+  signalInputs: parent.signalInputs ? [...parent.signalInputs] : [],
+  signalOutputs: parent.signalOutputs ? [...parent.signalOutputs] : [],
   propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
   queries: parent.queries ? { ...parent.queries } : {},
   decorators: parent.decorators ? [...parent.decorators] : [],
@@ -305,6 +309,70 @@ const parsePropMetadata = (
   }
 };
 
+const parseSignalInputsFromNgDef = (ngDef: any, declaration: Declaration): void => {
+  // Angular 17+ stores signal input metadata in ɵcmp/ɵdir.inputs as an object
+  // where each key is the property name and the value contains isSignal flag
+  if (!ngDef?.inputs) {
+    return;
+  }
+
+  const inputs = ngDef.inputs;
+  // In Angular 17+, inputs can be an object with metadata including isSignal
+  if (typeof inputs === 'object' && !Array.isArray(inputs)) {
+    for (const [propName, inputDef] of Object.entries(inputs)) {
+      // inputDef can be a string (alias) or an object with { alias, required, isSignal }
+      if (typeof inputDef === 'object' && inputDef !== null && (inputDef as any).isSignal) {
+        const def = inputDef as { alias?: string; required?: boolean; isSignal?: boolean };
+        const signalInput: SignalInputDef = {
+          name: propName,
+          alias: def.alias && def.alias !== propName ? def.alias : undefined,
+          required: def.required,
+          isSignal: true,
+        };
+
+        // Check if already exists
+        const exists = declaration.signalInputs.some(
+          si => si.name === signalInput.name && si.alias === signalInput.alias,
+        );
+        if (!exists) {
+          declaration.signalInputs.push(signalInput);
+        }
+      }
+    }
+  }
+};
+
+const parseSignalOutputsFromNgDef = (ngDef: any, declaration: Declaration): void => {
+  // Angular 17+ stores signal output metadata in ɵcmp/ɵdir.outputs as an object
+  if (!ngDef?.outputs) {
+    return;
+  }
+
+  const outputs = ngDef.outputs;
+  // In Angular 17+, outputs can be an object with metadata including isSignal
+  if (typeof outputs === 'object' && !Array.isArray(outputs)) {
+    for (const [propName, outputDef] of Object.entries(outputs)) {
+      // outputDef can be a string (alias) or an object with { alias, isSignal }
+      if (typeof outputDef === 'object' && outputDef !== null && (outputDef as any).isSignal) {
+        const def = outputDef as { alias?: string; isSignal?: boolean };
+        const signalOutput: SignalOutputDef = {
+          name: propName,
+          alias: def.alias && def.alias !== propName ? def.alias : undefined,
+          isSignal: true,
+        };
+
+        // Check if already exists
+        const exists = declaration.signalOutputs.some(
+          so => so.name === signalOutput.name && so.alias === signalOutput.alias,
+        );
+        if (!exists) {
+          declaration.signalOutputs.push(signalOutput);
+        }
+      }
+    }
+  }
+};
+
 const parseNgDef = (
   def: {
     ɵcmp?: any;
@@ -322,6 +390,12 @@ const parseNgDef = (
   if (declaration.standalone === undefined && def.ɵpipe?.standalone !== undefined) {
     declaration.standalone = def.ɵpipe.standalone;
   }
+
+  // Parse signal inputs and outputs from Angular 17+ internal definitions
+  parseSignalInputsFromNgDef(def.ɵcmp, declaration);
+  parseSignalInputsFromNgDef(def.ɵdir, declaration);
+  parseSignalOutputsFromNgDef(def.ɵcmp, declaration);
+  parseSignalOutputsFromNgDef(def.ɵdir, declaration);
 };
 
 /**
@@ -483,6 +557,27 @@ const buildDeclaration = (def: any | undefined, declaration: Declaration): void 
     for (const output of declaration.outputs) {
       if (def.outputs.indexOf(output) === -1) {
         def.outputs.push(output);
+      }
+    }
+
+    // Add signal inputs and outputs
+    def.signalInputs = def.signalInputs || [];
+    for (const signalInput of declaration.signalInputs) {
+      const exists = def.signalInputs.some(
+        (si: SignalInputDef) => si.name === signalInput.name && si.alias === signalInput.alias,
+      );
+      if (!exists) {
+        def.signalInputs.push(signalInput);
+      }
+    }
+
+    def.signalOutputs = def.signalOutputs || [];
+    for (const signalOutput of declaration.signalOutputs) {
+      const exists = def.signalOutputs.some(
+        (so: SignalOutputDef) => so.name === signalOutput.name && so.alias === signalOutput.alias,
+      );
+      if (!exists) {
+        def.signalOutputs.push(signalOutput);
       }
     }
 
