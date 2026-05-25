@@ -4,8 +4,6 @@ import { Config } from 'karma';
 import { executablePath } from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
-process.env.CHROME_BIN = executablePath();
-
 const suite: any[] = [];
 if (!process.env.KARMA_SUITE) {
   suite.push(
@@ -34,7 +32,9 @@ if (!process.env.KARMA_SUITE) {
   });
 }
 
-export default (config: Config) => {
+export default async (config: Config) => {
+  process.env.CHROME_BIN = await executablePath();
+
   config.set({
     autoWatch: false,
     browsers: ['ChromeCi'],
