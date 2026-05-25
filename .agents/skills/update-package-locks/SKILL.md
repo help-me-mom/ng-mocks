@@ -15,7 +15,8 @@ Create a plain Markdown checklist that AI Agent can follow:
 - [ ] Identify which lockfiles and compose services need to change
 - [ ] Run `npm update` wrapper to update dependencies
 - [ ] Run `npm install` wrapper flow to normalize lockfiles
-- [ ] Run the required validation and summarize the results
+- [ ] Confirm the update and install wrapper passes completed
+- [ ] Summarize results, risks, and follow-ups
 ```
 
 ## Workflow
@@ -26,29 +27,27 @@ Create a plain Markdown checklist that AI Agent can follow:
 4. Run `sh compose.sh <target>` to refresh dependencies.
 5. Restore `compose.yml` back to `npm install`.
 6. Run `sh compose.sh <target>` again so the resulting lockfile matches the normal CI install flow.
-7. Run the affected tests with `sh test.sh <target>`.
+7. Do not run `sh test.sh <target>` for this pure lockfile refresh workflow unless the user explicitly asks for tests or the task includes non-lockfile code changes that need test coverage.
 
 ## Commands
 
 ```bash
 # Root lockfile
 sh compose.sh root
-sh test.sh root
 
 # tests-e2e lockfile
 sh compose.sh e2e
-sh test.sh e2e
 
 # Specific target lockfile
 sh compose.sh <target>
-sh test.sh <target>
 ```
 
 ## Validation
 
-- `sh test.sh root` for root lockfile changes
-- `sh test.sh e2e` for `tests-e2e` lockfile changes
-- `sh test.sh <target>` for each versioned or special target that changed
+- The required validation for this skill is a successful wrapper-based update pass followed by a successful wrapper-based install pass.
+- For a single target, that means `sh compose.sh <target>` once while the service command is temporarily `npm update`, then `sh compose.sh <target>` again after restoring `npm install`.
+- For a repo-wide lock refresh, that means running `sh compose.sh` once with all relevant service commands temporarily set to `npm update`, then running `sh compose.sh` again after restoring all service commands to `npm install`.
+- Do not run `sh test.sh` as part of this skill's default validation.
 
 ## Guardrails
 
