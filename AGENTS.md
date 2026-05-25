@@ -52,6 +52,10 @@
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 
+## Test Style
+
+- Never add helper functions in tests. Keep the relevant setup, action, and assertion flow inline in each spec, even when that means duplicating a short block, so regressions stay obvious across Angular spread targets.
+
 ## Code Quality Commands
 
 - Run root quality checks through the main service container:

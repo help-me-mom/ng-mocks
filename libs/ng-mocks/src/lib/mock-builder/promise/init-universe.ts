@@ -32,6 +32,9 @@ const addDependencies = (
 const shouldKeepReplacementDependency = (dependency: any): boolean => {
   const ngType = getNgType(dependency);
 
+  // Replacement modules mostly contribute providers / tokens. Angular metadata
+  // exposes them either as plain values (undefined type) or Injectables, and
+  // both forms need to stay real after the replacement is applied.
   return ngType === undefined || ngType === 'Injectable';
 };
 
