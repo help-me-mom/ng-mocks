@@ -2,6 +2,8 @@ import { mapValues } from '../../common/core.helpers';
 import { funcExtractDeps } from '../../common/func.extract-deps';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
+import getRootProviderKeepProvider from './get-root-provider-keep-provider';
+
 export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
   const dependencies = new Set<any>();
   const builtDeclarations = ngMocksUniverse.builtDeclarations;
@@ -9,7 +11,7 @@ export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
   const resolutions = ngMocksUniverse.config.get('ngMocksDepsResolution');
   for (const def of mapValues(keepDef)) {
     builtDeclarations.set(def, def);
-    builtProviders.set(def, def);
+    builtProviders.set(def, getRootProviderKeepProvider(def) ?? def);
     resolutions.set(def, 'keep');
 
     const config = configDef.get(def);
