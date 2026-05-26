@@ -8,6 +8,8 @@ sidebar_label: MockProvider
 The function supports services and tokens.
 Also, it accepts a shape of its service, in order to provide own properties,
 and values for tokens, otherwise the token's value will be `undefined`.
+When a mocked service can be created without constructor arguments,
+own object properties are kept and their methods are mocked too.
 
 ```ts
 TestBed.configureTestingModule({
@@ -28,6 +30,26 @@ TestBed.configureTestingModule({
     MockProvider(TOKEN, 'value'),
   ],
 });
+```
+
+```ts
+class Service {
+  public readonly info = {
+    request: () => 'real',
+  };
+}
+
+ngMocks.autoSpy('jasmine');
+
+TestBed.configureTestingModule({
+  providers: [MockProvider(Service)],
+});
+
+const service = TestBed.inject(Service);
+
+service.info.request();
+
+expect(service.info.request).toHaveBeenCalledTimes(1);
 ```
 
 ## useValue

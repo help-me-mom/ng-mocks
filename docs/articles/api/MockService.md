@@ -31,6 +31,30 @@ const i2 = MockService(MyClass, {
 
 It is useful, when a class has dozens of methods, whereas we want to change behavior of a few of them.
 
+## Own properties
+
+`MockService` also preserves own object properties of classes which can be created without constructor arguments.
+This is useful for services that expose an object with methods as a public field.
+
+```ts
+class TargetService {
+  public readonly info = {
+    request: () => 'real',
+  };
+}
+
+ngMocks.autoSpy('jasmine');
+
+const service = MockService(TargetService);
+
+service.info.request();
+
+expect(service.info.request).toHaveBeenCalledTimes(1);
+```
+
+In this case, `info` stays available on the mock instance, and `info.request` becomes a mock method.
+If the constructor needs arguments, or if calling it without arguments throws, `MockService` falls back to mocking the prototype.
+
 ## Simple example
 
 Let's suppose that a service has a method which returns `HTMLInputElement`, but we would like to mock the service
