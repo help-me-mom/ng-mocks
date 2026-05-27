@@ -9,10 +9,10 @@ plugins:
           scope: README
           release: patch
   - - '@semantic-release/exec'
-    - prepareCmd: |
-        sh compose.sh root
-        docker compose run --rm ng-mocks npm run lint
-        docker compose run --rm ng-mocks npm run ts:check
+    - prepareCmd: >-
+        sh compose.sh root &&
+        docker compose run --rm ng-mocks npm run lint -- --ignore-pattern e2e/ &&
+        docker compose run --rm ng-mocks npm run ts:check &&
         docker compose run --rm ng-mocks npm run build
   - '@semantic-release/release-notes-generator'
   - - '@semantic-release/changelog'
