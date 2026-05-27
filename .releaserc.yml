@@ -1,4 +1,6 @@
 repositoryUrl: git@github.com:help-me-mom/ng-mocks.git
+branches:
+  - main
 dryRun: true
 ci: false
 debug: true
