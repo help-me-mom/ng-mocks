@@ -297,7 +297,7 @@
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
     "webpack": "5.107.2",
-    "webpack-cli": "7.0.2",
+    "webpack-cli": "7.0.3",
     "zone.js": "0.16.2"
   },
   "engines": {
