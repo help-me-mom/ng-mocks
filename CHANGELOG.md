@@ -1,3 +1,12 @@
+## [14.15.3](https://github.com/help-me-mom/ng-mocks/compare/v14.15.2...v14.15.3) (2026-05-27)
+
+
+### Bug Fixes
+
+* **a22:** update angular monorepo ([#13921](https://github.com/help-me-mom/ng-mocks/issues/13921)) ([26ee2b0](https://github.com/help-me-mom/ng-mocks/commit/26ee2b073bc119b16fb12a3f16b932525753f637))
+* **injector:** keep useFactory root providers for kept injectables ([#7938](https://github.com/help-me-mom/ng-mocks/issues/7938)) ([86cb0e9](https://github.com/help-me-mom/ng-mocks/commit/86cb0e962ee9dcd9e67633cc8c13f437de82997a))
+* support signal model mock bindings [#10942](https://github.com/help-me-mom/ng-mocks/issues/10942) ([32e3418](https://github.com/help-me-mom/ng-mocks/commit/32e3418fbaba545c288028456968608dc6ccb13f))
+
 ## [14.15.2](https://github.com/help-me-mom/ng-mocks/compare/v14.15.1...v14.15.2) (2026-03-15)
 
 
