@@ -49,6 +49,7 @@ describe('issue-305', () => {
 
     // MatInput does not implement ControlValueAccessor
     const matInput = ngMocks.get(
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       ngMocks.find(['data-testid', 'inputControl']),
       MatInput,
     );
@@ -56,6 +57,7 @@ describe('issue-305', () => {
 
     // DefaultValueAccessor does implement ControlValueAccessor
     const valueAccessor = ngMocks.get(
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       ngMocks.find(['data-testid', 'inputControl']),
       DefaultValueAccessor,
     );

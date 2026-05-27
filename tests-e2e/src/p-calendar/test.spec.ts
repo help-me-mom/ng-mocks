@@ -36,6 +36,7 @@ describe('p-datepicker:directives', () => {
       MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of `p-datepicker`.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const calendarEl = ngMocks.find('p-datepicker');
 
     // Asserting bound properties.
@@ -49,6 +50,7 @@ describe('p-datepicker:directives', () => {
       MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of `p-datepicker`.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const calendarEl = ngMocks.find('p-datepicker');
 
     // Simulating an emit.
@@ -64,6 +66,7 @@ describe('p-datepicker:directives', () => {
     MockRender(TargetComponent);
 
     // Looking for a debug element of `p-datepicker`.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const calendarEl = ngMocks.find('p-datepicker');
 
     // Looking for the template of 'header'.
@@ -85,6 +88,7 @@ describe('p-datepicker:directives', () => {
     MockRender(TargetComponent);
 
     // Looking for a debug element of `p-datepicker`.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const calendarEl = ngMocks.find('p-datepicker');
 
     // Looking for the template of 'footer'.
