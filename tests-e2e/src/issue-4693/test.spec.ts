@@ -25,6 +25,7 @@ describe('issue-4693', () => {
     it('loads lazy component', async () => {
       const fixture = MockRender(TargetComponent);
       await fixture.whenStable();
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       const el = ngMocks.find(ChildComponent);
       expect(ngMocks.formatText(el)).toEqual('child');
       expect(isMockOf(el.componentInstance, ChildComponent)).toEqual(
@@ -39,6 +40,7 @@ describe('issue-4693', () => {
     it('loads lazy component as a mock', async () => {
       const fixture = MockRender(TargetComponent);
       await fixture.whenStable();
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       const el = ngMocks.find(ChildComponent);
       expect(ngMocks.formatText(el)).toEqual('');
       expect(isMockOf(el.componentInstance, ChildComponent)).toEqual(

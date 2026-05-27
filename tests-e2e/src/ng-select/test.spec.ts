@@ -65,6 +65,7 @@ describe('ng-select:props', () => {
       MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of the ng-select.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const ngSelectEl = ngMocks.find('ng-select');
 
     // Asserting bound properties.
@@ -87,6 +88,7 @@ describe('ng-select:props', () => {
       MockRender(TargetComponent).point.componentInstance;
 
     // Looking for a debug element of the ng-select.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const ngSelectEl = ngMocks.find('ng-select');
 
     // Simulating an emit.
@@ -101,6 +103,7 @@ describe('ng-select:props', () => {
     MockRender(TargetComponent);
 
     // Looking for a debug element of the ng-select.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const ngSelectEl = ngMocks.find('ng-select');
 
     // Looking for the ng-label-tmp template
@@ -131,6 +134,7 @@ describe('ng-select:props', () => {
     MockRender(TargetComponent);
 
     // Looking for a debug element of the ng-select.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const ngSelectEl = ngMocks.find('ng-select');
 
     // Looking for the ng-optgroup-tmp template
@@ -167,6 +171,7 @@ describe('ng-select:props', () => {
     MockRender(TargetComponent);
 
     // Looking for a debug element of the ng-select.
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const ngSelectEl = ngMocks.find('ng-select');
 
     // Looking for the ng-option-tmp template

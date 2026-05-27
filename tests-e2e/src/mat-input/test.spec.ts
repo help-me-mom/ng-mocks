@@ -39,7 +39,9 @@ describe('mat-input', () => {
     it('changes values', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       const input1 = ngMocks.find(['name', 'form-control']);
+      // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
       const input2 = ngMocks.find(['name', 'ng-model']);
 
       ngMocks.change(input1, 'input1');

@@ -54,6 +54,7 @@ describe('mat-table:e2e', () => {
   it('has access to child nodes', () => {
     MockRender(TargetComponent);
     // looking for the table and container
+    // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const tableEl = ngMocks.find('[mat-table]');
     const containerEl = ngMocks.reveal(['matColumnDef', 'position']);
 
