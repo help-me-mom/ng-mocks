@@ -1,4 +1,4 @@
-import { Injector, ViewContainerRef } from '@angular/core';
+import { ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
@@ -23,8 +23,35 @@ import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
+import {
+  rememberInjectedDeclaration,
+  rememberMockDeclarations,
+  resetInjectedDeclarations,
+} from './ng-mocks-injected-declarations';
 import ngMocksUniverse from './ng-mocks-universe';
-
+type NgMocksTestBed = TestBedStatic & {
+  get?: (token: any, ...args: any[]) => any;
+  inject?: (token: any, ...args: any[]) => any;
+  ngMocksGetInstalled?: boolean;
+  ngMocksInjectInstalled?: boolean;
+};
+const createTestBedInjection = (original: (token: any, ...args: any[]) => any, instance: NgMocksTestBed) =>
+  helperCreateClone(original, undefined, undefined, (token: any, ...args: any[]) => {
+    // Tests often mutate the object returned by TestBed.inject before Angular constructs the
+    // declaration instance used inside the render tree, so remember that seed for later replay.
+    return rememberInjectedDeclaration(token, original.call(instance, token, ...args));
+  });
+const installTestBedInjection = (instance: NgMocksTestBed): void => {
+  if (instance.inject && !instance.ngMocksInjectInstalled) {
+    coreDefineProperty(instance, 'inject', createTestBedInjection(instance.inject, instance), true);
+    coreDefineProperty(instance, 'ngMocksInjectInstalled', true);
+  }
+  // istanbul ignore next: TestBed.get exists only on legacy Angular targets, but it must share the same seed registry.
+  if (instance.get && !instance.ngMocksGetInstalled) {
+    coreDefineProperty(instance, 'get', createTestBedInjection(instance.get, instance), true);
+    coreDefineProperty(instance, 'ngMocksGetInstalled', true);
+  }
+};
 const applyOverride = (def: any, override: any) => {
   if (isNgDef(def, 'c')) {
     TestBed.overrideComponent(def, override);
@@ -62,6 +89,8 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map
 };
 
 const initTestBed = () => {
+  installTestBedInjection(TestBed as never);
+  installTestBedInjection(getTestBed() as never);
   if (!(TestBed as any).ngMocksSelectors) {
     coreDefineProperty(TestBed, 'ngMocksSelectors', new Map());
   }
@@ -116,6 +145,21 @@ const defineTouches = (testBed: TestBed, moduleDef: TestModuleMetadata, knownTou
   }
 
   return touches;
+};
+
+const collectMockDeclarations = (moduleDef: TestModuleMetadata, mocks?: Map<any, any>): Map<any, any> | undefined => {
+  const result = new Map(mocks);
+
+  for (const key of ['imports', 'declarations'] as const) {
+    for (const declaration of flatten(moduleDef[key] || [])) {
+      const def = funcGetType(declaration);
+      if (isMockNgDef(def, 'c') || isMockNgDef(def, 'd') || isMockNgDef(def, 'p')) {
+        result.set(getSourceOfMock(def), def);
+      }
+    }
+  }
+
+  return result.size > 0 ? result : undefined;
 };
 
 const applyPlatformOverrideDef = (def: any) => {
@@ -243,13 +287,16 @@ const configureTestingModule =
 
     const providers = funcExtractTokens(finalModuleDef.providers);
     const { mocks, overrides } = providers;
-    // touches are important,
-    // therefore we are trying to fetch them from the known providers.
+    // touches are important, therefore we are trying to fetch them from the known providers.
     const touches = defineTouches(testBed, finalModuleDef, providers.touches);
 
     if (mocks) {
       ngMocks.flushTestBed();
     }
+
+    // Track mocked source declarations so TestBed.inject / get only replays overrides for mocked
+    // components, directives, and pipes in the current TestBed.
+    rememberMockDeclarations(collectMockDeclarations(finalModuleDef, mocks));
 
     // istanbul ignore else
     if (overrides) {
@@ -270,6 +317,7 @@ const resetTestingModule =
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
     (TestBed as any).ngMocksSelectors = undefined;
+    resetInjectedDeclarations();
     applyNgMocksOverrides(TestBed);
 
     return original.call(instance);
@@ -344,54 +392,12 @@ const viewContainerInstall = () => {
   }
 };
 
-// this function monkey-patches Angular injectors.
-const installInjector = (injector: Injector & { __ngMocksInjector?: any }): Injector => {
-  // skipping the matched injector
-  if (injector.constructor.prototype.__ngMocksInjector || !injector.constructor.prototype.get) {
-    return injector;
-  }
-
-  // marking the injector as patched
-  coreDefineProperty(injector.constructor.prototype, '__ngMocksInjector', true);
-  const injectorGet = injector.constructor.prototype.get;
-
-  // patch
-  injector.constructor.prototype.get = helperCreateClone(
-    injectorGet,
-    undefined,
-    undefined,
-    function (token: any, ...argsGet: any) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const binding: any = this;
-
-      // Here we can implement custom logic how to inject token,
-      // for example, replace with a provider def we need.
-
-      const result = injectorGet.call(binding, token, ...argsGet);
-      // If the result is an injector, we should patch it too.
-      if (
-        result &&
-        typeof result === 'object' &&
-        typeof result.constructor === 'function' &&
-        typeof result.constructor.name === 'string' &&
-        result.constructor.name.slice(-8) === 'Injector'
-      ) {
-        installInjector(result);
-      }
-
-      return result;
-    },
-  );
-
-  return injector;
-};
-
 const install = () => {
   // istanbul ignore else
   if (!(TestBed as any).ngMocksOverridesInstalled) {
     const hooks = mockHelperFasterInstall();
     viewContainerInstall();
+    initTestBed();
 
     // istanbul ignore else
     if (hooks.before.indexOf(configureTestingModule) === -1) {
@@ -403,16 +409,6 @@ const install = () => {
     }
 
     coreDefineProperty(TestBed, 'ngMocksOverridesInstalled', true);
-    const injectorCreate = Injector.create;
-    Injector.create = helperCreateClone(injectorCreate, undefined, undefined, (...argsCreate: any) =>
-      installInjector(injectorCreate.apply(Injector, argsCreate)),
-    );
-    try {
-      // force install of our injector.
-      Injector.create({ length: 0, providers: [] } as never);
-    } catch {
-      // nothing to do.
-    }
   }
 };
 
