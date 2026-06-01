@@ -21,8 +21,8 @@
     "@mdx-js/react": "3.1.1",
     "clsx": "2.1.1",
     "npm": "11.16.0",
-    "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "engines": {
     "npm": "11.16.0"
