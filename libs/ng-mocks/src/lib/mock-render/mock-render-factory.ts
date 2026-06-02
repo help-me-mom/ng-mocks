@@ -8,8 +8,6 @@ import {
 } from '@angular/core';
 import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
-import type { IMockRenderFactoryOptions, MockedComponentFixture } from 'ng-mocks/internal/mock-render/types';
-
 import coreDefineProperty from '../common/core.define-property';
 import { getInjection } from '../common/core.helpers';
 import { AnyDeclaration, AnyType, Type } from '../common/core.types';
@@ -25,6 +23,7 @@ import { MockService } from '../mock-service/mock-service';
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
 import funcReflectTemplate from './func.reflect-template';
+import { IMockRenderFactoryOptions, MockedComponentFixture } from './types';
 
 export interface MockRenderFactory<C = any, F extends keyof any = keyof C> {
   bindings: keyof F;

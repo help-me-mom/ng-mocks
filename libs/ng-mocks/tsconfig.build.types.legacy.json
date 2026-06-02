@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.build.types.json",
-  "compilerOptions": {
-    "paths": {
-      "ng-mocks/internal/mock-render/types": ["./src/lib/mock-render/types.legacy.ts"]
-    }
-  }
-}

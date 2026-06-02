@@ -7,8 +7,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "ng-mocks": ["./src/index.ts"],
-      "ng-mocks/internal/mock-render/types": ["./src/lib/mock-render/types.ts"]
+      "ng-mocks": ["./src/index.ts"]
     },
     "types": [
       "jasmine",
@@ -20,7 +19,13 @@
       "node"
     ]
   },
-  "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "test.ts", "karma.conf.ts"],
+  "files": [
+    "libs/ng-mocks/src/index.ts",
+    "libs/ng-mocks/src/index.legacy.d.ts",
+    "empty.ts",
+    "test.ts",
+    "karma.conf.ts"
+  ],
   "exclude": ["e2e", "node_modules"],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",
