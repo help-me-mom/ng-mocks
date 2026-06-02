@@ -51,6 +51,13 @@
   "homepage": "https://ng-mocks.sudo.eu",
   "license": "MIT",
   "types": "./index.d.ts",
+  "typesVersions": {
+    ">=2.8": {
+      "*": [
+        "modern/index.d.ts"
+      ]
+    }
+  },
   "main": "./index.js",
   "type": "commonjs",
   "files": [
@@ -60,11 +67,12 @@
     "index.js.map",
     "index.mjs",
     "index.mjs.map",
+    "modern/index.d.ts",
     "migrations.json"
   ],
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./modern/index.d.ts",
       "require": "./index.js",
       "import": "./index.mjs",
       "default": "./index.js"
