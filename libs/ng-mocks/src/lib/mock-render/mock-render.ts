@@ -32,7 +32,7 @@ export function MockRender<MComponent>(
   template: AnyType<MComponent>,
   params: undefined | null,
   detectChangesOrOptions?: boolean | IMockRenderOptions,
-): MockedComponentFixture<MComponent, MComponent>;
+): MockedComponentFixture<MComponent>;
 
 /**
  * This signature of MockRender lets create a fixture with parameters to access a component.
@@ -61,7 +61,7 @@ export function MockRender<MComponent, TComponent extends object = Record<keyof 
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
-export function MockRender<MComponent>(template: AnyType<MComponent>): MockedComponentFixture<MComponent, MComponent>;
+export function MockRender<MComponent>(template: AnyType<MComponent>): MockedComponentFixture<MComponent>;
 
 /**
  * This signature of MockRender without params should not autocomplete any keys of any types.
