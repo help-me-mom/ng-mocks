@@ -1,4 +1,4 @@
-import { MockedDebugNode } from '../../mock-render/types';
+import type { MockedDebugNode } from '../../mock-render/types.common';
 
 import detectTextNode from './detect-text-node';
 import elDefCompare from './el-def-compare';

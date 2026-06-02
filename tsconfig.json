@@ -7,7 +7,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "ng-mocks": ["./src/index.ts"]
+      "ng-mocks": ["./src/index.ts"],
+      "ng-mocks/internal/mock-render/types": ["./src/lib/mock-render/types.ts"]
     },
     "types": [
       "jasmine",

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { MockedDebugNode } from '../../mock-render/types';
+import type { MockedDebugNode } from '../../mock-render/types.common';
 
 import crawlByAttributeValue from './crawl-by-attribute-value';
 

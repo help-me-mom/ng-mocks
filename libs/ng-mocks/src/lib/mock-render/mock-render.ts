@@ -1,9 +1,10 @@
 import { InjectionToken } from '@angular/core';
 
+import type { IMockRenderOptions, MockedComponentFixture } from 'ng-mocks/internal/mock-render/types';
+
 import { AnyDeclaration, AnyType } from '../common/core.types';
 
 import { MockRenderFactory } from './mock-render-factory';
-import { IMockRenderOptions, MockedComponentFixture } from './types';
 
 /**
  * This signature of MockRender lets create an empty fixture.

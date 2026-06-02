@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { Type } from '../common/core.types';
 import funcGetName from '../common/func.get-name';
 import { getSourceOfMock } from '../common/func.get-source-of-mock';
-import { MockedDebugElement } from '../mock-render/types';
+import type { MockedDebugElement } from '../mock-render/types.common';
 
 import nestedCheckParent from './crawl/nested-check-parent';
 import mockHelperFind from './find/mock-helper.find';

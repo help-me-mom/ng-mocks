@@ -57,6 +57,13 @@ export { ngMocks } from './lib/mock-helper/mock-helper';
 
 export { MockRender } from './lib/mock-render/mock-render';
 export { MockRenderFactory } from './lib/mock-render/mock-render-factory';
-export * from './lib/mock-render/types';
+export type {
+  DefaultRenderComponent,
+  IMockRenderFactoryOptions,
+  IMockRenderOptions,
+  MockedComponentFixture,
+  MockedDebugElement,
+  MockedDebugNode,
+} from 'ng-mocks/internal/mock-render/types';
 
 export * from './lib/mock-service/types';

@@ -12,6 +12,9 @@
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
     "baseUrl": ".",
+    "paths": {
+      "ng-mocks/internal/mock-render/types": ["./src/lib/mock-render/types.ts"]
+    },
     "sourceMap": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,

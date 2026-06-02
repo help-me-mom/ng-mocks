@@ -1,6 +1,6 @@
 import { DirectiveIo } from '../common/core.types';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
-import { MockedDebugElement } from '../mock-render/types';
+import type { MockedDebugElement } from '../mock-render/types.common';
 
 import mockHelperFind from './find/mock-helper.find';
 import funcGetLastFixture from './func.get-last-fixture';

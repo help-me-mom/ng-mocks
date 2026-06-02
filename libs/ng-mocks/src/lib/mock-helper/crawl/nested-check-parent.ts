@@ -1,4 +1,4 @@
-import { MockedDebugNode } from '../../mock-render/types';
+import type { MockedDebugNode } from '../../mock-render/types.common';
 
 import elDefCompare from './el-def-compare';
 import elDefGetNode from './el-def-get-node';

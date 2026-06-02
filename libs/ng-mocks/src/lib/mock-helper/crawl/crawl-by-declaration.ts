@@ -1,7 +1,7 @@
 import coreInjector from '../../common/core.injector';
 import { AnyType } from '../../common/core.types';
 import { getSourceOfMock } from '../../common/func.get-source-of-mock';
-import { MockedDebugNode } from '../../mock-render/types';
+import type { MockedDebugNode } from '../../mock-render/types.common';
 
 export default (declaration: AnyType<any>): ((node: MockedDebugNode) => boolean) => {
   const source = getSourceOfMock(declaration);
