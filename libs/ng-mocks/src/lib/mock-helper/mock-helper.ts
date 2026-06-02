@@ -6,7 +6,7 @@ import { ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
 import { AnyDeclaration, AnyType, DebugNodeSelector, Type } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { IMockBuilderConfig } from '../mock-builder/types';
-import type { MockedDebugElement, MockedDebugNode } from '../mock-render/types.common';
+import { MockedDebugElement, MockedDebugNode } from '../mock-render/types';
 import { CustomMockFunction, MockedFunction } from '../mock-service/types';
 
 import { FORMAT_SET, FORMAT_SINGLE } from './format/types';

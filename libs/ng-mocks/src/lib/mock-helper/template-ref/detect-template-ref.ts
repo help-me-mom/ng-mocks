@@ -1,7 +1,7 @@
 import { TemplateRef } from '@angular/core';
 
 import coreInjector from '../../common/core.injector';
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 import detectTextNode from '../crawl/detect-text-node';
 
 export default (

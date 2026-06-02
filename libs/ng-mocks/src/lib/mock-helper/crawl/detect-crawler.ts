@@ -1,5 +1,5 @@
 import { AnyType } from '../../common/core.types';
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 
 import crawlByAttribute from './crawl-by-attribute';
 import crawlByAttributeValue from './crawl-by-attribute-value';

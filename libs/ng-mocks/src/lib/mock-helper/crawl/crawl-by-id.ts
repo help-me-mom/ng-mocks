@@ -1,4 +1,4 @@
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 
 export default (id: string): ((node: MockedDebugNode) => boolean) =>
   node => {

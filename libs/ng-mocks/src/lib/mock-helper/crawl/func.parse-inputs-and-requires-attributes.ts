@@ -1,5 +1,5 @@
 import { DirectiveIo } from '../../common/core.types';
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 import funcParseProviderTokensDirectives from '../func.parse-provider-tokens-directives';
 
 export default (node: MockedDebugNode, key: string): [Array<DirectiveIo>, string[], number] => {

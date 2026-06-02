@@ -1,4 +1,4 @@
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 
 import detectTextNode from './detect-text-node';
 import nestedCheckChildren from './nested-check-children';

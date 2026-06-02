@@ -1,5 +1,5 @@
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 import funcParseProviderTokensDirectives from '../func.parse-provider-tokens-directives';
 
 import funcGetPublicProviderKeys from './func.get-public-provider-keys';

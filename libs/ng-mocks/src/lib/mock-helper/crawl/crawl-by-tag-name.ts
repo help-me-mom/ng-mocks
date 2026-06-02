@@ -1,4 +1,4 @@
-import type { MockedDebugNode } from '../../mock-render/types.common';
+import { MockedDebugNode } from '../../mock-render/types';
 
 import detectSelectorsFromNode from './detect-selectors-from-node';
 import detectTagNameInSelectors from './detect-tag-name-in-selectors';
