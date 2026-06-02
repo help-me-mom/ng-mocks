@@ -28,6 +28,6 @@
     "strictPropertyInitialization": true,
     "strictNullChecks": true
   },
-  "files": ["./src/index.ts", "./src/index.legacy.d.ts"],
+  "files": ["./src/index.ts", "./src/index.d.ts", "./src/index.modern.ts"],
   "include": ["./src/lib/**/*.ts"]
 }

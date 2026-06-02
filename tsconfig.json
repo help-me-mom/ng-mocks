@@ -21,7 +21,8 @@
   },
   "files": [
     "libs/ng-mocks/src/index.ts",
-    "libs/ng-mocks/src/index.legacy.d.ts",
+    "libs/ng-mocks/src/index.d.ts",
+    "libs/ng-mocks/src/index.modern.ts",
     "empty.ts",
     "test.ts",
     "karma.conf.ts"

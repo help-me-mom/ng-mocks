@@ -54,7 +54,7 @@
   "typesVersions": {
     ">=2.8": {
       "*": [
-        "modern/index.d.ts"
+        "index.modern.d.ts"
       ]
     }
   },
@@ -65,14 +65,14 @@
     "index.d.ts",
     "index.js",
     "index.js.map",
+    "index.modern.d.ts",
     "index.mjs",
     "index.mjs.map",
-    "modern/index.d.ts",
     "migrations.json"
   ],
   "exports": {
     ".": {
-      "types": "./modern/index.d.ts",
+      "types": "./index.modern.d.ts",
       "require": "./index.js",
       "import": "./index.mjs",
       "default": "./index.js"
