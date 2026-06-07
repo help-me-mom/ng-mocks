@@ -105,6 +105,18 @@ commands:
             fi
             md5sum -c package.md5
             rm package.md5
+      - run:
+          name: Fix Puppeteer browser cache
+          command: |
+            if [ -d "$HOME/.cache/puppeteer" ]; then
+              find "$HOME/.cache/puppeteer" -type f -name '*.zip' | while IFS= read -r zip; do
+                cache_dir="${zip%/*}"
+                browser_name="${cache_dir##*/}"
+                archive_name="${zip##*/}"
+                build_id="${archive_name%-${browser_name}-linux64.zip}"
+                unzip -qo "$zip" -d "$cache_dir/linux-${build_id}" && rm -f "$zip"
+              done
+            fi
       - save_cache:
           key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
           paths:
@@ -132,18 +144,6 @@ commands:
           at: dist
       - restore_cache:
           key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
-      - run:
-          name: Fix Puppeteer browser cache
-          command: |
-            if [ -d "$HOME/.cache/puppeteer" ]; then
-              find "$HOME/.cache/puppeteer" -type f -name '*.zip' | while IFS= read -r zip; do
-                cache_dir="${zip%/*}"
-                browser_name="${cache_dir##*/}"
-                archive_name="${zip##*/}"
-                build_id="${archive_name%-${browser_name}-linux64.zip}"
-                unzip -qo "$zip" -d "$cache_dir/linux-${build_id}" && rm -f "$zip"
-              done
-            fi
       - run:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
