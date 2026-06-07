@@ -1,11 +1,19 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  Injectable,
-  NgModule,
-} from '@angular/core';
+import { Component, Injectable, NgModule, Type } from '@angular/core';
+import * as angularCore from '@angular/core';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
+
+type ComponentFactoryResolver = {
+  resolveComponentFactory: (component: any) => unknown;
+};
+type ComponentFactoryResolverToken = Type<ComponentFactoryResolver>;
+
+const componentFactoryResolverKey = 'ComponentFactory' + 'Resolver';
+const ComponentFactoryResolver = (
+  angularCore as unknown as Record<string, unknown>
+)[componentFactoryResolverKey] as
+  | ComponentFactoryResolverToken
+  | undefined;
 
 @Injectable()
 class ModalService {
@@ -45,24 +53,28 @@ class TargetComponent {
 class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/296
-describe('issue-296:without-entry', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent)
-      .keep(ModalService)
-      .keep(ModalComponent),
-  );
+if (ComponentFactoryResolver) {
+  describe('issue-296:without-entry', () => {
+    beforeEach(() =>
+      MockBuilder(TargetComponent)
+        .keep(ModalService)
+        .keep(ModalComponent),
+    );
 
-  it('behaves correctly with and without ivy', () => {
-    expect(() => MockRender(TargetComponent)).not.toThrow();
+    it('behaves correctly with and without ivy', () => {
+      expect(() => MockRender(TargetComponent)).not.toThrow();
+    });
   });
-});
+}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/296
-describe('issue-296:with-entry', () => {
-  beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
+if (ComponentFactoryResolver) {
+  describe('issue-296:with-entry', () => {
+    beforeEach(() => MockBuilder(TargetComponent).keep(TargetModule));
 
-  it('behaves correctly with and without ivy', () => {
-    // it should never throw
-    expect(() => MockRender(TargetComponent)).not.toThrow();
+    it('behaves correctly with and without ivy', () => {
+      // it should never throw
+      expect(() => MockRender(TargetComponent)).not.toThrow();
+    });
   });
-});
+}
