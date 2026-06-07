@@ -26,6 +26,8 @@ export default (node: MockedDebugNode): MockedDebugNode[] => {
     children.push(childNode);
   }
 
+  // Covered by pre-Angular 22 e2e suites for their projected BODY child layout.
+  /* istanbul ignore next */
   if ((node as any).parent?.name === 'BODY') {
     const childNodes: any[] = (node as any).parent.childNodes;
     let start = childNodes.length;
