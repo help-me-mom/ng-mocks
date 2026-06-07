@@ -202,7 +202,9 @@ The next step is:
   - remove flexible versions (`^~`) in `dependencies`
   - remove flexible versions (`^~`) in `devDependencies`
   - in `dependencies`, add `@angular/animations` which supports the desired angular version
-  - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
+  - in `devDependencies`, add `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
+  - add `@types/jest` when shared specs still reference Jest globals
+  - add `jest` and `jest-preset-angular` only when a stable `jest-preset-angular` release supports the desired Angular version without npm peer overrides
   - add `engines` with the correct `npm` which supports the desired angular version
 - delete `README.md`
 - update `tsconfig.json` by merging the generated `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.spec.json`
@@ -221,11 +223,11 @@ The next step is:
     - set / add `compilerOptions/useDefineForClassFields` to `false`
     - set / add `compilerOptions/noImplicitOverride` to `false`
     - set / add `compilerOptions/esModuleInterop` to `true`
-    - merge `compilerOptions/types` with `["jasmine", "jest", "node"]`
-    - set / add `files` to `["src/main.ts", "src/test.ts", "src/setup-jest.ts"]`
-    - set / add `include` to `["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]`
+    - merge `compilerOptions/types` with `["jasmine", "node"]`; add `"jest"` when shared specs still reference Jest globals
+    - set / add `files` to `["src/main.ts", "src/test.ts"]`; add `"src/setup-jest.ts"` only when stable Jest support is available
+    - set / add `include` to `["src/**/*.spec.ts", "src/**/*.d.ts"]`; add `"jest.config.ts"` only when stable Jest support is available
 - add `.nvmrc` which supports the desired angular version
-- add `jest.config.ts` as it is in the prev version
+- add `jest.config.ts` as it is in the prev version only when stable Jest support is available
 - add `karma.conf.js` as it is in the prev version
 - add `ng-package.json` as it is in the prev version
 - delete `/public`
@@ -238,7 +240,7 @@ The next step is:
   - remove routing from `/src/main.ts`
   - delete other files which aren't imported anymore
 - add `/src/test.ts` as it is in the prev version
-- add `/src/setup-jest.ts` as it is in the prev version
+- add `/src/setup-jest.ts` as it is in the prev version only when stable Jest support is available
 
 ### Step #3 - update scripts
 
@@ -252,7 +254,7 @@ The next step is:
 - update `ng-mocks/eslint.config.mjs`, search for `a22` and copy blocks to support `a23`
 - update `ng-mocks/test-spread.conf`, search for `a22` and copy config to support `a23`
 - update `ng-mocks/test-spread-app.conf`, search for `a22` and copy config to support `a23`
-- if the new Angular version is still prerelease and `npm install` / `npm ci` set `force=true` in `ng-mocks/e2e/a23/.npmrc`
+- do not add npm peer override settings for prerelease support
 
 ### Step #4 - update ng-mocks dependencies
 

@@ -14,6 +14,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "ignoreDeprecations": "6.0",
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
@@ -30,6 +31,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["src/main.ts", "src/test.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

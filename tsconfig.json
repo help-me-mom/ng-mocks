@@ -4,8 +4,10 @@
     "module": "ES2022",
     "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
+    "ignoreDeprecations": "6.0",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "rootDir": ".",
     "paths": {
       "ng-mocks": ["./src/index.ts"]
     },
