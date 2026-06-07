@@ -164,7 +164,7 @@ const patchFixtureDetectChanges = (fixture: any): void => {
 };
 
 const patchPointDetectChanges = (fixture: any): void => {
-  /* istanbul ignore else */
+  /* istanbul ignore if */
   if (!shouldPatchPointDetectChanges()) {
     return;
   }
