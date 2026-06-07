@@ -33,28 +33,27 @@ const ComponentFactoryResolver = angularCoreWithComponentFactoryResolver.Compone
 
 class EntryComponentsModule {
   public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
-    // istanbul ignore if
-    if (!componentFactoryResolver) {
-      return;
+    // Covered by pre-Angular 22 e2e suites; root coverage runs on Angular 22.
+    /* istanbul ignore if */
+    if (componentFactoryResolver) {
+      const originCFR = componentFactoryResolver.resolveComponentFactory;
+      const patchedResolveComponentFactory: ComponentFactoryResolver['resolveComponentFactory'] = component =>
+        originCFR.call(componentFactoryResolver, map.get(component) ?? component);
+      componentFactoryResolver.resolveComponentFactory = helperCreateClone(
+        originCFR,
+        undefined,
+        undefined,
+        patchedResolveComponentFactory,
+      );
     }
-
-    const originCFR = componentFactoryResolver.resolveComponentFactory;
-    const patchedResolveComponentFactory: ComponentFactoryResolver['resolveComponentFactory'] = component =>
-      originCFR.call(componentFactoryResolver, map.get(component) ?? component);
-    componentFactoryResolver.resolveComponentFactory = helperCreateClone(
-      originCFR,
-      undefined,
-      undefined,
-      patchedResolveComponentFactory,
-    );
   }
 }
 type EntryComponentsModuleParameter = [typeof NG_MOCKS] | [ComponentFactoryResolverToken, Optional];
 
 const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
 // Older Angular versions still need the optional resolver parameter to patch
-// entryComponents; root coverage runs on Angular 21 where the branch is present.
-/* istanbul ignore else */
+// entryComponents; root coverage runs on Angular 22 where the token is gone.
+/* istanbul ignore if */
 if (ComponentFactoryResolver) {
   parameters.push([ComponentFactoryResolver, new Optional()]);
 }
