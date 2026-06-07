@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   lockindex:
     type: string
-    default: '1'
+    default: '2'
 
 orbs:
   windows: circleci/windows@5.1.1
@@ -132,6 +132,18 @@ commands:
           at: dist
       - restore_cache:
           key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+      - run:
+          name: Fix Puppeteer browser cache
+          command: |
+            if [ -d "$HOME/.cache/puppeteer" ]; then
+              find "$HOME/.cache/puppeteer" -type f -name '*.zip' | while IFS= read -r zip; do
+                cache_dir="${zip%/*}"
+                browser_name="${cache_dir##*/}"
+                archive_name="${zip##*/}"
+                build_id="${archive_name%-${browser_name}-linux64.zip}"
+                unzip -qo "$zip" -d "$cache_dir/linux-${build_id}" && rm -f "$zip"
+              done
+            fi
       - run:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
