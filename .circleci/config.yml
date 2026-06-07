@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   lockindex:
     type: string
-    default: '2'
+    default: '3'
 
 orbs:
   windows: circleci/windows@5.1.1
