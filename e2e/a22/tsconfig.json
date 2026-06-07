@@ -13,6 +13,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "target": "ES2022",
     "module": "preserve",
     "useDefineForClassFields": false,
@@ -24,6 +25,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["src/main.ts", "src/test.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
