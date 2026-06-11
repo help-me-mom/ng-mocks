@@ -28,7 +28,7 @@
     "@ngrx/effects": "21.1.1",
     "@ngrx/store": "21.1.1",
     "@ngrx/store-devtools": "21.1.1",
-    "@ngx-translate/core": "17.0.0",
+    "@ngx-translate/core": "18.0.0",
     "@ngxs/store": "21.0.0",
     "ngx-file-drop": "16.0.0",
     "primeng": "21.1.9",
