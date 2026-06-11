@@ -20,12 +20,12 @@
     "@docusaurus/theme-classic": "3.10.1",
     "@mdx-js/react": "3.1.1",
     "clsx": "2.1.1",
-    "npm": "11.16.0",
+    "npm": "11.17.0",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
   "engines": {
-    "npm": "11.16.0"
+    "npm": "11.17.0"
   },
   "browserslist": {
     "production": [
