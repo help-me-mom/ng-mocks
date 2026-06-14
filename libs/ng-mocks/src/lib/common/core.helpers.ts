@@ -55,7 +55,7 @@ export const flatten = <T>(values: T | T[] | { ɵproviders: T[] }, result: T[] =
 
 export const mapKeys = <T>(set: Map<T, any>): T[] => {
   const result: T[] = [];
-  // eslint-disable-next-line unicorn/no-array-for-each
+  // eslint-disable-next-line unicorn/no-for-each
   set.forEach((_, value: T) => result.push(value));
 
   return result;
@@ -64,12 +64,12 @@ export const mapKeys = <T>(set: Map<T, any>): T[] => {
 export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }, destination?: Set<T>): T[] => {
   const result: T[] = [];
   if (destination) {
-    // eslint-disable-next-line unicorn/no-array-for-each
+    // eslint-disable-next-line unicorn/no-for-each
     set.forEach((value: T) => {
       destination.add(value);
     });
   } else {
-    // eslint-disable-next-line unicorn/no-array-for-each
+    // eslint-disable-next-line unicorn/no-for-each
     set.forEach((value: T) => {
       result.push(value);
     });
@@ -82,10 +82,10 @@ export const mapEntries = <K, T>(set: Map<K, T>, destination?: Map<K, T>): Array
   const result: Array<[K, T]> = [];
 
   if (destination) {
-    // eslint-disable-next-line unicorn/no-array-for-each
+    // eslint-disable-next-line unicorn/no-for-each
     set.forEach((value: T, key: K) => destination.set(key, value));
   } else {
-    // eslint-disable-next-line unicorn/no-array-for-each
+    // eslint-disable-next-line unicorn/no-for-each
     set.forEach((value: T, key: K) => result.push([key, value]));
   }
 
