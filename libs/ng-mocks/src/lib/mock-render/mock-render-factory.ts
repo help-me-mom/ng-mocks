@@ -108,18 +108,25 @@ const handleFixtureError = (e: any) => {
 // patch new versions and leave older Angular behavior untouched.
 const shouldPatchPointDetectChanges = (): boolean => Number.parseInt(VERSION.major, 10) >= 22;
 
-// Respect explicit OnPush declarations; forcing their point CDR would hide the
+// Respect explicit OnPush declarations or no explicit ChangeDetectionStrategy with Angular >= 22; forcing their point CDR would hide the
 // very change-detection behavior a test might be asserting.
 // Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
 /* istanbul ignore next */
-const isExplicitlyOnPush = (fixture: any): boolean => {
+const isOnPush = (fixture: any): boolean => {
   const annotation = fixture.point?.componentInstance?.constructor?.__annotations__?.[0];
 
-  return (
-    annotation &&
-    Object.prototype.hasOwnProperty.call(annotation, 'changeDetection') &&
-    annotation.changeDetection === ChangeDetectionStrategy.OnPush
-  );
+  if (!annotation) {
+    return false;
+  }
+
+  const hasExplicitChangeDetection = Object.prototype.hasOwnProperty.call(annotation, 'changeDetection');
+
+  if (!hasExplicitChangeDetection) {
+    // If no ChangeDetectionStrategy is specified, OnPush is default starting with Angular 22
+    return Number.parseInt(VERSION.major, 10) >= 22;
+  }
+
+  return annotation.changeDetection === ChangeDetectionStrategy.OnPush;
 };
 
 // Token and plain-text renders do not have a child component CDR. The lookup is
@@ -130,7 +137,7 @@ const getFixturePointChangeDetectorRef = (fixture: any): undefined | ChangeDetec
   if (!shouldPatchPointDetectChanges() || !fixture.point || fixture.point === fixture.debugElement) {
     return undefined;
   }
-  if (isExplicitlyOnPush(fixture)) {
+  if (isOnPush(fixture)) {
     return undefined;
   }
   try {
