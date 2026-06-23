@@ -39,7 +39,7 @@ Do not reuse the current worktree or an existing topic branch for a lockfile ref
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
-For repo-wide refreshes, do not rely on bare `sh compose.sh` to walk every target one by one. Read the current wrapper/config, choose the active wrapper targets from there, and run each target exactly once per pass. Run two to four targets at a time. Give each concurrent target a unique `COMPOSE_PROJECT_NAME`; otherwise Docker networks, volumes, and containers can collide. After each batch, clean up the batch's compose projects with `docker compose down -v` before starting more batches so Docker does not exhaust its predefined address pools.
+For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
 
 If a wrapper target fails because Docker reports exhausted address pools or Puppeteer reports a corrupt cache folder, clean up that target's compose project and rerun the same wrapper target with a fresh `COMPOSE_PROJECT_NAME`. Do not switch to local npm commands.
 
@@ -57,10 +57,7 @@ git fetch upstream main
 git worktree add -b codex/<lockfile-branch> ../<lockfile-worktree> upstream/main
 
 # Repo-wide lockfile refresh.
-# First edit compose.yml so service commands use npm update.
-# Run the current wrapper targets in batches of 2-4, with one unique compose namespace per concurrent target.
-# Clean completed compose projects between batches.
-# Then restore compose.yml so service commands use npm install and run the same target batches again.
+# Edit compose.yml to npm update, run current wrapper targets in batches of 2-4, then restore npm install and repeat the same batches.
 
 # Specific target lockfile refresh, only when the user named a target.
 # First edit that target's compose.yml service command to npm update.
