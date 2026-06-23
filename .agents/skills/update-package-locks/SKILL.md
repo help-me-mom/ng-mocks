@@ -16,9 +16,9 @@ Create a plain Markdown checklist that any AI agent can follow:
 ```md
 - [ ] Create a new branch and worktree from `upstream/main`
 - [ ] Temporarily change the relevant `compose.yml` service command line(s) from `npm install` to `npm update`
-- [ ] Run the update wrapper pass with `sh compose.sh`
+- [ ] Run the update wrapper pass with wrapper targets in batches of 2-4
 - [ ] Restore `compose.yml` back to `npm install`
-- [ ] Run the install wrapper pass with `sh compose.sh`
+- [ ] Run the install wrapper pass with wrapper targets in batches of 2-4
 - [ ] Commit only the refreshed lockfiles, plus this skill if it was intentionally edited
 - [ ] Push the branch and create a PR if the user asked for one
 - [ ] Summarize the two wrapper passes and any npm warnings
@@ -29,9 +29,9 @@ Create a plain Markdown checklist that any AI agent can follow:
 1. Fetch the current base and create a fresh branch in a fresh worktree from `upstream/main`.
 2. In that new worktree, inspect `compose.yml`.
 3. Temporarily change only the affected `compose.yml` service command line(s) from `npm install` to `npm update`.
-4. Run `sh compose.sh` for a repo-wide refresh, or `sh compose.sh <target>` only when the user explicitly named one target.
+4. For a repo-wide refresh, run all named wrapper targets in batches of 2-4 concurrent commands. If the user explicitly named one target, run only that target.
 5. Restore the same service command line(s) back to `npm install`.
-6. Run the same wrapper command again so the resulting lockfile matches the normal CI install flow.
+6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit only the refreshed `package-lock.json` files, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
 8. If the user requested a PR, push the branch and create a PR after the commit succeeds.
 
@@ -39,10 +39,19 @@ Do not reuse the current worktree or an existing topic branch for a lockfile ref
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
-If several worktrees or agent sessions are active, use a unique compose namespace for both wrapper passes:
+For repo-wide refreshes, do not rely on bare `sh compose.sh` to walk every target one by one. Use the targets from `compose.sh` and `compose.yml`, usually:
+
+```text
+root docs e2e a5es5 a5es2015 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 a16 a17 a18 a19 a20 a21 a22 jasmine jest min nx
+```
+
+Run two to four targets at a time. Give each concurrent target a unique `COMPOSE_PROJECT_NAME`; otherwise Docker networks, volumes, and containers can collide. After each batch, clean up the batch's compose projects with `docker compose down -v` before starting more batches so Docker does not exhaust its predefined address pools.
+
+If a wrapper target fails before changing lockfiles because Docker reports exhausted address pools or Puppeteer reports a corrupt cache folder, clean up that target's compose project and rerun the same wrapper target with a fresh `COMPOSE_PROJECT_NAME`. Do not switch to local npm commands.
+
+If several worktrees or agent sessions are active, use a unique compose namespace for every wrapper command:
 
 ```bash
-COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh
 COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>
 ```
 
@@ -55,9 +64,19 @@ git worktree add -b codex/<lockfile-branch> ../<lockfile-worktree> upstream/main
 
 # Repo-wide lockfile refresh.
 # First edit compose.yml so service commands use npm update.
-COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh
-# Then restore compose.yml so service commands use npm install.
-COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh
+# Start 2-4 target commands concurrently, then repeat for every target above.
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_root sh compose.sh root
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_docs sh compose.sh docs
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_e2e sh compose.sh e2e
+# Clean completed batch compose projects before starting the next batch.
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_root docker compose down -v
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_docs docker compose down -v
+COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_e2e docker compose down -v
+
+# Then restore compose.yml so service commands use npm install and run the same target batches again.
+COMPOSE_PROJECT_NAME=ngmocks_install_<unique>_root sh compose.sh root
+COMPOSE_PROJECT_NAME=ngmocks_install_<unique>_docs sh compose.sh docs
+COMPOSE_PROJECT_NAME=ngmocks_install_<unique>_e2e sh compose.sh e2e
 
 # Specific target lockfile refresh, only when the user named a target.
 # First edit that target's compose.yml service command to npm update.
@@ -77,7 +96,8 @@ git push -u upstream codex/<lockfile-branch>
 
 - The required validation for this skill is a successful wrapper-based update pass followed by a successful wrapper-based install pass.
 - For a single target, run `sh compose.sh <target>` once while the service command is temporarily `npm update`, then run `sh compose.sh <target>` again after restoring `npm install`.
-- For a repo-wide lock refresh, run `sh compose.sh` once with all relevant service commands temporarily set to `npm update`, then run `sh compose.sh` again after restoring all service commands to `npm install`.
+- For a repo-wide lock refresh, run every relevant wrapper target once with all relevant service commands temporarily set to `npm update`, then run every same target again after restoring all service commands to `npm install`.
+- Repo-wide target runs may be concurrent in batches of 2-4. A batch is successful only when every target command exits successfully.
 - Do not run `sh test.sh`, `npm test`, lint, or TypeScript checks as part of this skill's default validation.
 
 ## Guardrails
@@ -86,6 +106,7 @@ git push -u upstream codex/<lockfile-branch>
 - Never delete lockfiles.
 - Never leave `compose.yml` in an `npm update` state after finishing.
 - Never use local `npm install`, `npm update`, or ad-hoc `node` commands when the wrapper flow covers the task.
-- If multiple worktrees are active, set a unique `COMPOSE_PROJECT_NAME`.
+- If multiple worktrees, agent sessions, or concurrent wrapper targets are active, set a unique `COMPOSE_PROJECT_NAME` for each wrapper command.
+- Clean up temporary compose projects with `docker compose down -v` after successful batches or failed transient Docker/Puppeteer setup runs.
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
 - Do not manually invoke extra validation beyond this skill; automated git hooks are the exception and should do their normal job.
