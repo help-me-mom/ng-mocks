@@ -20,7 +20,7 @@ Create a plain Markdown checklist that any AI agent can follow:
 - [ ] Restore `compose.yml` back to `npm install`
 - [ ] Run the install wrapper pass with wrapper targets in batches of 2-4
 - [ ] Commit only the refreshed lockfiles, plus this skill if it was intentionally edited
-- [ ] Push the branch and create a PR if the user asked for one
+- [ ] Push the branch and create a PR after the commit succeeds
 - [ ] Summarize the two wrapper passes and any npm warnings
 ```
 
@@ -33,7 +33,7 @@ Create a plain Markdown checklist that any AI agent can follow:
 5. Restore the same service command line(s) back to `npm install`.
 6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit only the refreshed `package-lock.json` files, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
-8. If the user requested a PR, push the branch and create a PR after the commit succeeds.
+8. Push the branch and create a PR after the commit succeeds.
 
 Do not reuse the current worktree or an existing topic branch for a lockfile refresh. Do not manually run `sh test.sh`, root tests, lint, TypeScript checks, local `npm install`, local `npm update`, or ad-hoc dependency commands as part of this workflow unless the user explicitly asks for them.
 
@@ -70,7 +70,7 @@ git add package-lock.json docs/package-lock.json tests-e2e/package-lock.json e2e
 git add .agents/skills/update-package-locks/SKILL.md # only if intentionally edited
 git commit -m "chore: refresh package lockfiles"
 git push -u upstream codex/<lockfile-branch>
-# If the user requested a PR, create it against upstream/main after the push succeeds.
+# Create a PR against upstream/main after the push succeeds.
 ```
 
 ## Validation
