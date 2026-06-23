@@ -29,9 +29,9 @@ Create a plain Markdown checklist that any AI agent can follow:
 1. Fetch the current base and create a fresh branch in a fresh worktree from `upstream/main`.
 2. In that new worktree, inspect `compose.yml`.
 3. Temporarily change only the affected `compose.yml` service command line(s) from `npm install` to `npm update`.
-4. For a repo-wide refresh, discover the current wrapper targets and run them in batches of 2-4 concurrent commands. If the user explicitly named one target, run only that target.
+4. For a repo-wide refresh, derive the current wrapper targets from `compose.sh` and `compose.yml`, then run them in batches of 2-4 concurrent commands. If the user explicitly named one target, run only that target.
 5. Restore the same service command line(s) back to `npm install`.
-6. Run the same discovered target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
+6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit only the refreshed `package-lock.json` files, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
 8. If the user requested a PR, push the branch and create a PR after the commit succeeds.
 
@@ -39,13 +39,7 @@ Do not reuse the current worktree or an existing topic branch for a lockfile ref
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
-For repo-wide refreshes, do not rely on bare `sh compose.sh` to walk every target one by one. Discover targets from the current wrapper instead of maintaining a fixed list:
-
-```bash
-TARGETS=$(sed -n 's/.*docker compose up --build -- \([^ ]*\).*/\1/p' compose.sh | sed 's/^ng-mocks$/root/' | awk '!seen[$0]++')
-```
-
-Run each target in `$TARGETS` exactly once per pass, two to four targets at a time. Give each concurrent target a unique `COMPOSE_PROJECT_NAME`; otherwise Docker networks, volumes, and containers can collide. After each batch, clean up the batch's compose projects with `docker compose down -v` before starting more batches so Docker does not exhaust its predefined address pools.
+For repo-wide refreshes, do not rely on bare `sh compose.sh` to walk every target one by one. Read the current wrapper/config, choose the active wrapper targets from there, and run each target exactly once per pass. Run two to four targets at a time. Give each concurrent target a unique `COMPOSE_PROJECT_NAME`; otherwise Docker networks, volumes, and containers can collide. After each batch, clean up the batch's compose projects with `docker compose down -v` before starting more batches so Docker does not exhaust its predefined address pools.
 
 If a wrapper target fails because Docker reports exhausted address pools or Puppeteer reports a corrupt cache folder, clean up that target's compose project and rerun the same wrapper target with a fresh `COMPOSE_PROJECT_NAME`. Do not switch to local npm commands.
 
@@ -64,14 +58,9 @@ git worktree add -b codex/<lockfile-branch> ../<lockfile-worktree> upstream/main
 
 # Repo-wide lockfile refresh.
 # First edit compose.yml so service commands use npm update.
-TARGETS=$(sed -n 's/.*docker compose up --build -- \([^ ]*\).*/\1/p' compose.sh | sed 's/^ng-mocks$/root/' | awk '!seen[$0]++')
-# Start 2-4 target commands from $TARGETS concurrently.
-COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_<target> sh compose.sh <target>
-# Clean each completed batch before starting the next one.
-COMPOSE_PROJECT_NAME=ngmocks_update_<unique>_<target> docker compose down -v
-
-# Then restore compose.yml so service commands use npm install and run the same target batches.
-COMPOSE_PROJECT_NAME=ngmocks_install_<unique>_<target> sh compose.sh <target>
+# Run the current wrapper targets in batches of 2-4, with one unique compose namespace per concurrent target.
+# Clean completed compose projects between batches.
+# Then restore compose.yml so service commands use npm install and run the same target batches again.
 
 # Specific target lockfile refresh, only when the user named a target.
 # First edit that target's compose.yml service command to npm update.
