@@ -23,7 +23,7 @@ import {
   RenderRealComponent,
   WithoutSelectorComponent,
 } from './mock-render.spec.fixtures';
-import {
+import type {
   MockedComponentFixture,
   MockedDebugElement,
   MockedDebugNode,
