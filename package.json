@@ -289,7 +289,7 @@
     "lint-staged": "17.0.8",
     "npm": "11.18.0",
     "prettier": "3.8.5",
-    "puppeteer": "25.2.1",
+    "puppeteer": "25.3.0",
     "rxjs": "7.8.2",
     "semantic-release": "25.0.5",
     "ts-loader": "9.6.2",
