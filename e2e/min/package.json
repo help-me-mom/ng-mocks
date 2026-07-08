@@ -33,7 +33,7 @@
     "@angular/compiler-cli": "21.2.17",
     "@types/jasmine": "6.0.0",
     "@types/jest": "30.0.0",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "jasmine-core": "6.3.0",
     "jasmine-spec-reporter": "7.0.0",
     "jest": "30.4.2",
