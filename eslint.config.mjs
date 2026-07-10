@@ -88,6 +88,7 @@ const tsJsRules = {
   'unicorn/max-nested-calls': 'off',
   'unicorn/no-anonymous-default-export': 'off',
   'unicorn/no-array-callback-reference': 'off',
+  'unicorn/no-array-for-each': 'off',
   'unicorn/no-array-sort': 'off',
   'unicorn/no-array-reverse': 'off',
   'unicorn/no-array-method-this-argument': 'off',

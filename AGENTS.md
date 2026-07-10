@@ -5,10 +5,13 @@
 - Keep agent guidance aligned with the current repository files:
   - `README.md`
   - `CONTRIBUTING.md`
+  - `docs/articles/index.md`
   - `compose.sh`
   - `test.sh`
   - `compose.yml`
   - `package.json`
+  - `test-spread.conf`
+  - `test-spread-app.conf`
 - If docs and executable files disagree, trust the current scripts and config first, then update the docs.
 
 ## AI Agents Compatibility
@@ -45,10 +48,10 @@
 
 ## Compatibility Guidance
 
-- `ng-mocks` currently documents support for Angular 5 through Angular 20.
+- `ng-mocks` currently documents support for Angular 5 through Angular 22.
 - Angular 5-8 are pre-Ivy.
 - Angular 9-11 have both View Engine and Ivy coverage in the repo scripts.
-- Angular 12-20 are Ivy-only in the current repo setup.
+- Angular 12-22 are Ivy-only in the current repo setup.
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 
@@ -89,6 +92,11 @@
   3. Run `sh test.sh e2e` only when `tests-e2e` or shared e2e files changed
   4. Run `sh test.sh coverage` when core behavior or coverage-sensitive code changes
 - For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
+
+## GitHub Artifact Text
+
+- Keep issue comments, pull request descriptions, and non-trivial commit bodies focused on the problem and how it was fixed.
+- Do not include validation blocks, exact validation commands, logs, or local test results in PR descriptions or commit bodies. Treat those details as internal agent run notes unless the user asks to publish them.
 
 ## Git Safety
 

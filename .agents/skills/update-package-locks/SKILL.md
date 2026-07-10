@@ -33,7 +33,7 @@ Create a plain Markdown checklist that any AI agent can follow:
 5. Restore the same service command line(s) back to `npm install`.
 6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit only the refreshed `package-lock.json` files, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
-8. Push the branch and create a PR after the commit succeeds.
+8. Push the branch to a writable remote, normally `origin` for a fork checkout, and create a PR against `upstream/main` after the commit succeeds.
 
 Do not reuse the current worktree or an existing topic branch for a lockfile refresh. Do not manually run `sh test.sh`, root tests, lint, TypeScript checks, local `npm install`, local `npm update`, or ad-hoc dependency commands as part of this workflow unless the user explicitly asks for them.
 
@@ -69,7 +69,8 @@ COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>
 git add package-lock.json docs/package-lock.json tests-e2e/package-lock.json e2e/*/package-lock.json
 git add .agents/skills/update-package-locks/SKILL.md # only if intentionally edited
 git commit -m "chore: refresh package lockfiles"
-git push -u upstream codex/<lockfile-branch>
+git remote -v
+git push -u origin codex/<lockfile-branch>
 # Create a PR against upstream/main after the push succeeds.
 ```
 
@@ -91,3 +92,4 @@ git push -u upstream codex/<lockfile-branch>
 - Clean up temporary compose projects with `docker compose down -v` after successful batches or failed transient Docker/Puppeteer setup runs.
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
 - Do not manually invoke extra validation beyond this skill; automated git hooks are the exception and should do their normal job.
+- Push to a configured writable remote; never assume `upstream` accepts contributor branches.
