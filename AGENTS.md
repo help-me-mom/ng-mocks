@@ -5,10 +5,13 @@
 - Keep agent guidance aligned with the current repository files:
   - `README.md`
   - `CONTRIBUTING.md`
+  - `docs/articles/index.md`
   - `compose.sh`
   - `test.sh`
   - `compose.yml`
   - `package.json`
+  - `test-spread.conf`
+  - `test-spread-app.conf`
 - If docs and executable files disagree, trust the current scripts and config first, then update the docs.
 
 ## AI Agents Compatibility
@@ -45,10 +48,10 @@
 
 ## Compatibility Guidance
 
-- `ng-mocks` currently documents support for Angular 5 through Angular 20.
+- `ng-mocks` currently documents support for Angular 5 through Angular 22.
 - Angular 5-8 are pre-Ivy.
 - Angular 9-11 have both View Engine and Ivy coverage in the repo scripts.
-- Angular 12-20 are Ivy-only in the current repo setup.
+- Angular 12-22 are Ivy-only in the current repo setup.
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 

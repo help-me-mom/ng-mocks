@@ -13,7 +13,8 @@ Use this skill when the current local branch should be replayed onto `upstream/m
 
 ```md
 - [ ] Inspect the current branch, target branch, and local changes
-- [ ] Stash local changes if needed and create a backup branch
+- [ ] Stash local changes if needed
+- [ ] Create a backup branch before resetting
 - [ ] Reset the current branch to the target ref (e.g., upstream/main)
 - [ ] Cherry-pick missing commits from the backup branch one by one
   - For each commit with conflicts: resolve source, then manifests, then lockfiles
@@ -39,7 +40,7 @@ git status --short
 git log --oneline --decorate --graph --max-count=20
 ```
 
-### 2. Stash and Backup (if needed)
+### 2. Stash if Needed, Then Create a Backup
 
 Only stash if there are actual local changes:
 
@@ -47,10 +48,10 @@ Only stash if there are actual local changes:
 # Check for changes first
 git status --short
 
-# Only stash if output is not empty
+# Only if the output is not empty
 git stash push -u -m "rebase-to-upstream: $CURRENT_BRANCH"
 
-# Create backup branch before any destructive operations
+# Always create a backup branch before any destructive operation.
 git branch "$BACKUP_BRANCH"
 ```
 
@@ -64,7 +65,7 @@ git reset --hard "$TARGET_REF"
 
 ```bash
 git cherry -v "$TARGET_REF" "$BACKUP_BRANCH"
-git log --reverse --format=%H "$TARGET_REF".."$BACKUP_BRANCH"
+git log --reverse --cherry-pick --right-only --format=%H "$TARGET_REF...$BACKUP_BRANCH"
 ```
 
 ### 5. Cherry-Pick Commits One by One
@@ -103,14 +104,14 @@ If conflicts occur, resolve them in this order:
 - **Regenerate immediately via wrapper before committing:**
 
   ```bash
-  # Standard flow: just run npm install via wrapper for affected project
-  sh compose.sh <affected-target>
+  # Standard flow: just run npm install via wrapper for affected project.
+  COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
 
   # Only if npm install fails, use the update workaround:
   # 1) Edit compose.yml: change service command from "npm install" to "npm update"
-  # 2) Run: sh compose.sh <affected-target>
+  # 2) Run: COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
   # 3) Restore compose.yml back to "npm install --no-audit"
-  # 4) Run: sh compose.sh <affected-target>
+  # 4) Run: COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
   ```
 
 - Stage the regenerated lockfile: `git add path/to/package-lock.json`
@@ -135,6 +136,10 @@ git stash apply <stash-ref>
 ### 7. Cleanup
 
 ```bash
+git branch -d "$BACKUP_BRANCH"
+# If rebased commit hashes make the safe delete fail, inspect the output first:
+git cherry -v HEAD "$BACKUP_BRANCH"
+# Delete forcibly only after every listed commit is marked `-`.
 git branch -D "$BACKUP_BRANCH"
 ```
 
@@ -143,9 +148,9 @@ git branch -D "$BACKUP_BRANCH"
 Run validation for affected targets:
 
 ```bash
-sh test.sh <affected-target>   # For specific project/suite changes
-sh test.sh root                # Only when root files changed
-sh test.sh e2e                 # Only when tests-e2e or shared e2e files changed
+COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh test.sh <affected-target> # For specific project/suite changes
+COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh test.sh root # Only when root files changed
+COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh test.sh e2e # Only when tests-e2e or shared e2e files changed
 ```
 
 ## Conflict Resolution Quick Reference
@@ -163,4 +168,5 @@ When conflicts occur during cherry-pick, resolve in this order:
 - Always create backup branch before `git reset --hard`
 - Only stash when local changes actually exist (check with `git status --short`)
 - Use repo wrappers (`sh compose.sh`, `sh test.sh`) for all npm operations; never run ad-hoc local `npm install` or `npm update`
+- Use a unique `COMPOSE_PROJECT_NAME` whenever another worktree or agent session may be active.
 - **Regenerate lockfiles immediately after resolving conflicts, before committing each cherry-pick** - this keeps each commit atomic and correct
