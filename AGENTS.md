@@ -90,6 +90,11 @@
   4. Run `sh test.sh coverage` when core behavior or coverage-sensitive code changes
 - For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
 
+## GitHub Artifact Text
+
+- Keep issue comments, pull request descriptions, and non-trivial commit bodies focused on the problem and how it was fixed.
+- Do not include validation blocks, exact validation commands, logs, or local test results in PR descriptions or commit bodies. Treat those details as internal agent run notes unless the user asks to publish them.
+
 ## Git Safety
 
 - Do not use destructive git commands such as `git reset --hard` or force-push unless the user explicitly asked for history rewriting.

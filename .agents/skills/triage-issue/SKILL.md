@@ -121,7 +121,7 @@ Coverage expectations:
 
 ## Comments, Commit, PR
 
-Use the same concise structure for issue comments, PR descriptions, and non-trivial commit bodies:
+Use the same concise structure for issue comments, PR descriptions, and non-trivial commit bodies. Keep validation details internal to the agent run and final user summary; do not put validation commands, logs, or results in GitHub comments, commit bodies, or PR descriptions.
 
 ```md
 Why:
@@ -137,12 +137,6 @@ Where:
 
 - `tests/issue-<issue-number>/test.spec.ts`
 - `libs/ng-mocks/src/lib/...`
-
-Validation:
-
-- `COMPOSE_PROJECT_NAME=... sh test.sh root`
-- `COMPOSE_PROJECT_NAME=... sh test.sh coverage`
-- `COMPOSE_PROJECT_NAME=... sh test.sh <target>`
 ```
 
 Commit message rules:
@@ -157,7 +151,7 @@ PR rules:
 - Open the PR against `help-me-mom/ng-mocks` base `main`, from the pushed issue branch.
 - Confirm the PR branch was created in the dedicated worktree from `upstream/main`.
 - Include `Closes #<issue-number>` or `Fixes #<issue-number>` in the PR body.
-- Put exact validation commands and results in the PR body.
+- Describe the problem and how it was fixed; omit validation commands and results.
 - Link related issues, duplicate reports, and previous PRs when they influenced the fix.
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 
