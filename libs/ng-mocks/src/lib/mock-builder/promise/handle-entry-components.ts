@@ -31,7 +31,7 @@ type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
 const angularCoreWithComponentFactoryResolver: AngularCoreWithComponentFactoryResolver = angularCore;
 const ComponentFactoryResolver = angularCoreWithComponentFactoryResolver.ComponentFactoryResolver;
 
-class EntryComponentsModule {
+export class EntryComponentsModule {
   public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
     // istanbul ignore if
     if (!componentFactoryResolver) {
@@ -51,13 +51,18 @@ class EntryComponentsModule {
 }
 type EntryComponentsModuleParameter = [typeof NG_MOCKS] | [ComponentFactoryResolverToken, Optional];
 
-const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
-// Older Angular versions still need the optional resolver parameter to patch
-// entryComponents; root coverage runs on Angular 21 where the branch is present.
-/* istanbul ignore else */
-if (ComponentFactoryResolver) {
-  parameters.push([ComponentFactoryResolver, new Optional()]);
-}
+export const createEntryComponentsModuleParameters = (
+  componentFactoryResolver: ComponentFactoryResolverToken | undefined,
+): EntryComponentsModuleParameter[] => {
+  const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
+  if (componentFactoryResolver) {
+    parameters.push([componentFactoryResolver, new Optional()]);
+  }
+
+  return parameters;
+};
+
+const parameters = createEntryComponentsModuleParameters(ComponentFactoryResolver);
 coreDefineProperty(EntryComponentsModule, 'parameters', parameters);
 
 class IvyModule {}

@@ -15,7 +15,7 @@ const isAngularClass = (value: Record<keyof any, unknown>): boolean => {
   return false;
 };
 
-const guessClass = (name: string, proto: string, value: any): boolean => {
+export const guessClass = (name: string, proto: string, value: any): boolean => {
   // unnamed classes can be class_N
   if (name.match(/^class/) !== null) {
     return true;
@@ -46,11 +46,11 @@ export default (value: any): boolean => {
   if (typeof value !== 'function') {
     return false;
   }
-  if (!value.prototype) {
-    return true;
-  }
   if (isAngularClass(value)) {
     return false;
+  }
+  if (!value.prototype) {
+    return true;
   }
 
   const proto = value.toString();

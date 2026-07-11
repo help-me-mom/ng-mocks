@@ -1,5 +1,11 @@
 const path = require('node:path');
 
+const performance = {
+  hints: 'error',
+  maxAssetSize: 800 * 1024,
+  maxEntrypointSize: 800 * 1024,
+};
+
 module.exports = [
   {
     mode: process.env.MODE || 'production',
@@ -15,6 +21,7 @@ module.exports = [
       globalObject: 'this',
     },
     externals: /^@angular\//,
+    performance,
     module: {
       rules: [
         {
@@ -23,6 +30,10 @@ module.exports = [
             {
               loader: 'ts-loader',
               options: {
+                compiler: 'typescript5',
+                compilerOptions: {
+                  downlevelIteration: true,
+                },
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 transpileOnly: true,
               },
@@ -52,6 +63,7 @@ module.exports = [
       globalObject: 'this',
     },
     externals: /^@angular\//,
+    performance,
     module: {
       rules: [
         {
@@ -63,6 +75,7 @@ module.exports = [
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 compilerOptions: {
                   module: 'ES2015',
+                  moduleResolution: 'bundler',
                   target: 'ES2015',
                 },
                 transpileOnly: true,

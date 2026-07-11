@@ -18,6 +18,7 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
 import { MockRender } from './mock-render';
+import { patchPointDetectChanges } from './mock-render-factory';
 import {
   EmptyComponent,
   RenderRealComponent,
@@ -48,6 +49,15 @@ describe('MockRender', () => {
         OnPushWithoutSelectorComponent,
       ],
     });
+  });
+
+  it('keeps the original fixture change detection before Angular 22', () => {
+    const detectChanges = jasmine.createSpy('detectChanges');
+    const fixture = { detectChanges };
+
+    patchPointDetectChanges(fixture, '21');
+
+    expect(fixture.detectChanges).toBe(detectChanges);
   });
 
   it('respects no inputs and outputs', () => {

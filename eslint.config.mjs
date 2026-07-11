@@ -18,7 +18,7 @@ import globals from 'globals';
 import * as espree from 'espree';
 
 const projects = [
-  './tsconfig.json',
+  './tsconfig.eslint.json',
   './tests-e2e/tsconfig.json',
   './e2e/a5es5/tsconfig.json',
   './e2e/a5es2015/tsconfig.json',

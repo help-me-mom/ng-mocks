@@ -37,14 +37,6 @@
         }
       },
       "defaultConfiguration": "development"
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "options": {
-        "jestConfig": "jest.config.ts",
-        "passWithNoTests": true
-      },
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"]
     }
   }
 }

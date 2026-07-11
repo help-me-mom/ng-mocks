@@ -5,12 +5,16 @@ module.exports = {
   url: 'https://ng-mocks.sudo.eu',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
   onDuplicateRoutes: 'throw',
   baseUrlIssueBanner: false,
   favicon: 'img/favicon.ico',
   organizationName: 'help-me-mom',
   projectName: 'ng-mocks',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
   themeConfig: {
     announcementBar: {
       id: 'give-a-start',

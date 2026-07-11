@@ -239,8 +239,19 @@ jobs:
       #          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
       #          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
       - run:
+          name: Installing Codecov CLI
+          command: |
+            curl -fsSLO https://cli.codecov.io/v11.3.1/linux/codecov
+            curl -fsSLO https://cli.codecov.io/v11.3.1/linux/codecov.SHA256SUM
+            curl -fsSLO https://cli.codecov.io/v11.3.1/linux/codecov.SHA256SUM.sig
+            curl -fsSLo codecov.asc https://keybase.io/codecovsecops/pgp_keys.asc
+            gpg --batch --no-default-keyring --keyring ./codecov-trustedkeys.gpg --import codecov.asc
+            gpgv --keyring ./codecov-trustedkeys.gpg codecov.SHA256SUM.sig codecov.SHA256SUM
+            sha256sum -c codecov.SHA256SUM
+            chmod +x codecov
+      - run:
           name: Collecting https://codecov.io/gh/help-me-mom/ng-mocks
-          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
+          command: ./codecov upload-process -C "$CIRCLE_SHA1" -f test-reports/coverage/lcov.info --disable-search -Z
   E2E:
     executor: core
     steps:

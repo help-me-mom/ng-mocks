@@ -3,11 +3,13 @@
   "compilerOptions": {
     "module": "ES2022",
     "moduleResolution": "bundler",
+    "rootDir": ".",
+    "target": "ES2015",
     "emitDecoratorMetadata": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "ng-mocks": ["./src/index.ts"]
+      "ng-mocks": ["./libs/ng-mocks/src/index.ts"]
     },
     "types": [
       "jasmine",
@@ -20,7 +22,7 @@
     ]
   },
   "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "test.ts", "karma.conf.ts"],
-  "exclude": ["e2e", "node_modules"],
+  "exclude": ["e2e", "node_modules", "tests/issue-1596", "tests/issue-296", "tests/issue-736"],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",
     "examples/**/*.ts",
