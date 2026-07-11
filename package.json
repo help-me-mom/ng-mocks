@@ -295,7 +295,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "6.0.3",
-    "typescript5": "npm:typescript@5.9.3",
+    "typescript5": "npm:typescript@6.0.3",
     "webpack": "5.107.2",
     "webpack-cli": "7.2.1",
     "zone.js": "0.16.2"
