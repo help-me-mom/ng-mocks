@@ -30,9 +30,9 @@ module.exports = [
             {
               loader: 'ts-loader',
               options: {
-                compiler: 'typescript5',
                 compilerOptions: {
                   downlevelIteration: true,
+                  ignoreDeprecations: '6.0',
                 },
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 transpileOnly: true,
