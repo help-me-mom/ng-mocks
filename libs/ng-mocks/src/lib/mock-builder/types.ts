@@ -103,10 +103,7 @@ export interface IMockBuilderConfigMock {
  * @see https://ng-mocks.sudo.eu/api/MockBuilder#config
  */
 export type IMockBuilderConfig =
-  | IMockBuilderConfigAll
-  | IMockBuilderConfigModule
-  | IMockBuilderConfigComponent
-  | IMockBuilderConfigDirective;
+  IMockBuilderConfigAll | IMockBuilderConfigModule | IMockBuilderConfigComponent | IMockBuilderConfigDirective;
 
 /**
  * IMockBuilder describes chain functions of MockBuilder.
