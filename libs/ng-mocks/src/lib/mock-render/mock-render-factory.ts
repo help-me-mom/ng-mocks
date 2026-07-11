@@ -106,7 +106,7 @@ const handleFixtureError = (e: any) => {
 
 // Angular 22 changed how wrapper fixture checks reach the rendered point, so only
 // patch new versions and leave older Angular behavior untouched.
-const shouldPatchPointDetectChanges = (): boolean => Number.parseInt(VERSION.major, 10) >= 22;
+const shouldPatchPointDetectChanges = (major = VERSION.major): boolean => Number.parseInt(major, 10) >= 22;
 
 // Respect explicit OnPush declarations; forcing their point CDR would hide the
 // very change-detection behavior a test might be asserting.
@@ -159,9 +159,8 @@ const patchFixtureDetectChanges = (fixture: any): void => {
   };
 };
 
-const patchPointDetectChanges = (fixture: any): void => {
-  /* istanbul ignore else */
-  if (!shouldPatchPointDetectChanges()) {
+export const patchPointDetectChanges = (fixture: any, major = VERSION.major): void => {
+  if (!shouldPatchPointDetectChanges(major)) {
     return;
   }
   // Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.

@@ -1,5 +1,11 @@
 const path = require('node:path');
 
+const performance = {
+  hints: 'error',
+  maxAssetSize: 800 * 1024,
+  maxEntrypointSize: 800 * 1024,
+};
+
 module.exports = [
   {
     mode: process.env.MODE || 'production',
@@ -15,6 +21,7 @@ module.exports = [
       globalObject: 'this',
     },
     externals: /^@angular\//,
+    performance,
     module: {
       rules: [
         {
@@ -56,6 +63,7 @@ module.exports = [
       globalObject: 'this',
     },
     externals: /^@angular\//,
+    performance,
     module: {
       rules: [
         {

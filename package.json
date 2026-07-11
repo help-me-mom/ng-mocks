@@ -258,7 +258,6 @@
     "@types/node": "24.13.3",
     "@typescript-eslint/eslint-plugin": "8.63.0",
     "@typescript-eslint/parser": "8.63.0",
-    "codecov": "3.8.3",
     "core-js": "3.49.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",

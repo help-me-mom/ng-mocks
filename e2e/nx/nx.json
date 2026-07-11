@@ -1,6 +1,14 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "nx",
+  "plugins": [
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test-unit"
+      }
+    }
+  ],
   "affected": {
     "defaultBase": "main"
   },
@@ -8,7 +16,7 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "test"]
+        "cacheableOperations": ["build", "test-unit"]
       }
     }
   },
@@ -17,7 +25,7 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "test": {
+    "test-unit": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     }
   },

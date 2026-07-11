@@ -6,6 +6,7 @@ parameters:
     default: '3'
 
 orbs:
+  codecov: codecov/codecov@6.0.0
   windows: circleci/windows@5.1.1
 
 executors:
@@ -238,9 +239,10 @@ jobs:
       #      - run:
       #          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
       #          command: ./node_modules/.bin/coveralls < test-reports/coverage/lcov.info
-      - run:
-          name: Collecting https://codecov.io/gh/help-me-mom/ng-mocks
-          command: ./node_modules/.bin/codecov -f test-reports/coverage/lcov.info --disable=gcov
+      - codecov/upload:
+          disable_search: true
+          fail_on_error: true
+          files: test-reports/coverage/lcov.info
   E2E:
     executor: core
     steps:

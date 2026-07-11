@@ -15,7 +15,7 @@ const isAngularClass = (value: Record<keyof any, unknown>): boolean => {
   return false;
 };
 
-const guessClass = (name: string, proto: string, value: any): boolean => {
+export const guessClass = (name: string, proto: string, value: any): boolean => {
   // unnamed classes can be class_N
   if (name.match(/^class/) !== null) {
     return true;

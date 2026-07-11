@@ -58,6 +58,7 @@ class DashboardComponent {}
 
 @Component({
   imports: [RouterOutlet],
+  selector: 'ng-mocks-routing-guard',
   standalone: true,
   template: '<router-outlet></router-outlet>',
 })

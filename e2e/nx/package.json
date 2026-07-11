@@ -7,7 +7,7 @@
     "npm": "npm",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test-unit"
   },
   "dependencies": {
     "@angular/animations": "22.0.6",
@@ -45,5 +45,16 @@
   },
   "engines": {
     "npm": "11.18.0"
+  },
+  "allowScripts": {
+    "less@4.5.1": true,
+    "less@4.6.7": true,
+    "@parcel/watcher@2.5.6": true,
+    "esbuild@0.28.1": true,
+    "esbuild@0.27.7": true,
+    "lmdb@3.5.4": true,
+    "msgpackr-extract@3.0.4": true,
+    "nx@23.1.0-rc.2": true,
+    "unrs-resolver@1.12.2": true
   }
 }
