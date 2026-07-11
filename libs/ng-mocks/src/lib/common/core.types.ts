@@ -60,13 +60,7 @@ export type DirectiveIo = string | DirectiveIoParsed;
  * @internal
  */
 export type DebugNodeSelector =
-  | DebugNode
-  | ComponentFixture<any>
-  | string
-  | [string]
-  | [string, string | number]
-  | null
-  | undefined;
+  DebugNode | ComponentFixture<any> | string | [string] | [string, string | number] | null | undefined;
 
 /**
  * @internal
