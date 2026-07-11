@@ -1,6 +1,5 @@
 export default {
   displayName: 'nx',
-  passWithNoTests: true,
   workerIdleMemoryLimit: '1024MB',
   maxWorkers: 1,
   preset: './jest.preset.js',
