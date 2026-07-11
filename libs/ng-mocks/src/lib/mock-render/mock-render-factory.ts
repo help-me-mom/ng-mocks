@@ -153,7 +153,7 @@ const patchFixtureDetectChanges = (fixture: any): void => {
     if (pointCdr) {
       pointCdr.detectChanges();
       if (checkNoChanges) {
-        pointCdr.checkNoChanges();
+        fixture.checkNoChanges();
       }
     }
   };

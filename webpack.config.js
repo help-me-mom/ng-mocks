@@ -23,6 +23,10 @@ module.exports = [
             {
               loader: 'ts-loader',
               options: {
+                compiler: 'typescript5',
+                compilerOptions: {
+                  downlevelIteration: true,
+                },
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 transpileOnly: true,
               },
@@ -63,6 +67,7 @@ module.exports = [
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 compilerOptions: {
                   module: 'ES2015',
+                  moduleResolution: 'bundler',
                   target: 'ES2015',
                 },
                 transpileOnly: true,

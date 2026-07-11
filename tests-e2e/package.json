@@ -13,23 +13,23 @@
     "test:jasmine": "ng test"
   },
   "dependencies": {
-    "@angular/animations": "22.0.6",
-    "@angular/cdk": "22.0.4",
-    "@angular/common": "22.0.6",
-    "@angular/compiler": "22.0.6",
-    "@angular/core": "22.0.6",
-    "@angular/forms": "22.0.6",
-    "@angular/material": "22.0.4",
-    "@angular/platform-browser": "22.0.6",
-    "@angular/platform-browser-dynamic": "22.0.6",
-    "@angular/router": "22.0.6",
-    "@ng-select/ng-select": "23.2.0",
+    "@angular/animations": "21.2.18",
+    "@angular/cdk": "21.2.14",
+    "@angular/common": "21.2.18",
+    "@angular/compiler": "21.2.18",
+    "@angular/core": "21.2.18",
+    "@angular/forms": "21.2.18",
+    "@angular/material": "21.2.14",
+    "@angular/platform-browser": "21.2.18",
+    "@angular/platform-browser-dynamic": "21.2.18",
+    "@angular/router": "21.2.18",
+    "@ng-select/ng-select": "23.0.0",
     "@ngneat/transloco": "6.0.4",
     "@ngrx/effects": "21.1.1",
     "@ngrx/store": "21.1.1",
     "@ngrx/store-devtools": "21.1.1",
     "@ngx-translate/core": "17.0.0",
-    "@ngxs/store": "22.0.0",
+    "@ngxs/store": "21.0.0",
     "ngx-file-drop": "16.0.0",
     "primeng": "21.1.9",
     "rxjs": "7.8.2",
@@ -37,9 +37,9 @@
     "zone.js": "0.16.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "22.0.6",
-    "@angular/cli": "22.0.6",
-    "@angular/compiler-cli": "22.0.6",
+    "@angular-devkit/build-angular": "21.2.19",
+    "@angular/cli": "21.2.19",
+    "@angular/compiler-cli": "21.2.18",
     "@ngneat/spectator": "22.1.0",
     "@testing-library/angular": "19.4.1",
     "@types/jasmine": "6.0.0",
@@ -55,7 +55,7 @@
     "npm": "11.18.0",
     "puppeteer": "25.3.0",
     "ts-node": "10.9.2",
-    "typescript": "6.0.3"
+    "typescript": "5.9.3"
   },
   "engines": {
     "npm": "11.18.0"

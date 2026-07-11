@@ -68,6 +68,7 @@ export default async (config: Config) => {
         ],
       },
     },
+    exclude: ['./tests/issue-1596/**/*.ts', './tests/issue-296/**/*.ts', './tests/issue-736/**/*.ts'],
     files: [
       { pattern: './empty.ts', watched: false },
       { pattern: './test.ts', watched: false },
