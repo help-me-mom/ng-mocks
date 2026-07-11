@@ -117,6 +117,7 @@ commands:
                 unzip -qo "$zip" -d "$cache_dir/linux-${build_id}" && rm -f "$zip"
               done
             fi
+            mkdir -p "$HOME/.cache/puppeteer"
       - save_cache:
           key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
           paths:
@@ -251,7 +252,7 @@ jobs:
             chmod +x codecov
       - run:
           name: Collecting https://codecov.io/gh/help-me-mom/ng-mocks
-          command: ./codecov upload-process -C "$CIRCLE_SHA1" -f test-reports/coverage/lcov.info --disable-search -Z
+          command: ./codecov upload-process -C "$CIRCLE_SHA1" -f test-reports/coverage/lcov.info --disable-search --plugin noop -Z
   E2E:
     executor: core
     steps:
