@@ -1,9 +1,8 @@
-import angularEslintPlugin from '@angular-eslint/eslint-plugin';
-import angularEslintTemplatePlugin from '@angular-eslint/eslint-plugin-template';
-import angularEslintTemplateParser from '@angular-eslint/template-parser';
 import js from '@eslint/js';
 import tsEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsEslintParser from '@typescript-eslint/parser';
+import angularEslint from 'angular-eslint';
+import { defineConfig } from 'eslint/config';
 import esXPlugin from 'eslint-plugin-es-x';
 import importPlugin from 'eslint-plugin-import-x';
 import jsonPlugin from '@eslint/json';
@@ -50,7 +49,6 @@ const prettierRules = prettierRecommended.rules;
 const tsJsRules = {
   ...js.configs.recommended.rules,
   ...tsEslintPlugin.configs.recommended.rules,
-  ...angularEslintPlugin.configs.recommended.rules,
   ...unicornPlugin.configs.recommended.rules,
   ...importPlugin.configs.recommended.rules,
   ...importPlugin.configs.typescript.rules,
@@ -197,7 +195,7 @@ const tsJsRules = {
   'prefer-arrow/prefer-arrow-functions': ['error', { allowStandaloneDeclarations: true }],
 };
 
-export default [
+export default defineConfig([
   {
     ignores: [
       '.*',
@@ -235,13 +233,12 @@ export default [
   },
   {
     files: ['**/*.ts', '**/*.js'],
+    extends: [...angularEslint.configs.tsRecommended],
     languageOptions: {
       parser: tsEslintParser,
     },
     plugins: {
       '@typescript-eslint': tsEslintPlugin,
-      '@angular-eslint': angularEslintPlugin,
-      '@angular-eslint/template': angularEslintTemplatePlugin,
       unicorn: unicornPlugin,
       'import-x': importPlugin,
       prettier: prettierPlugin,
@@ -249,7 +246,7 @@ export default [
       'prefer-arrow': preferArrowPlugin,
       'es-x': esXPlugin,
     },
-    processor: angularEslintTemplatePlugin.processors['extract-inline-html'],
+    processor: angularEslint.processInlineTemplates,
     settings: {
       ...importPlugin.configs['flat/typescript'].settings,
       'import-x/resolver': {
@@ -309,14 +306,8 @@ export default [
   },
   {
     files: ['**/*.html'],
-    languageOptions: {
-      parser: angularEslintTemplateParser,
-    },
-    plugins: {
-      '@angular-eslint/template': angularEslintTemplatePlugin,
-    },
+    extends: [...angularEslint.configs.templateRecommended],
     rules: {
-      ...angularEslintTemplatePlugin.configs.recommended.rules,
       '@angular-eslint/template/prefer-control-flow': 'off',
     },
   },
@@ -370,4 +361,4 @@ export default [
       ...prettierRules,
     },
   },
-];
+]);

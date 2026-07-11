@@ -228,9 +228,6 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@angular-eslint/eslint-plugin": "22.0.0",
-    "@angular-eslint/eslint-plugin-template": "22.0.0",
-    "@angular-eslint/template-parser": "22.0.0",
     "@angular/animations": "22.0.6",
     "@angular/common": "22.0.6",
     "@angular/core": "22.0.6",
@@ -258,6 +255,7 @@
     "@types/node": "24.13.3",
     "@typescript-eslint/eslint-plugin": "8.63.0",
     "@typescript-eslint/parser": "8.63.0",
+    "angular-eslint": "22.0.0",
     "core-js": "3.49.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
