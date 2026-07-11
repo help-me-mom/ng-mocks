@@ -54,6 +54,7 @@
 - Angular 12-22 are Ivy-only in the current repo setup.
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
+- When enabling new recommended lint rules, keep fixes that remain compatible with the supported Angular, Node.js, and ES targets. Disable rules that require newer framework APIs or runtime features, and leave a short reason beside the override.
 
 ## Test Style
 
@@ -69,13 +70,15 @@
   - `docker compose run --rm ng-mocks npm run ts:check`
 - If multiple worktrees are active, prefix direct `docker compose` commands with the same `COMPOSE_PROJECT_NAME` you use for wrappers so the checks stay inside that worktree's compose project.
 - Run Prettier before `git commit`.
+- For tooling migrations, use official packages and their exported presets. Remove direct subpackages only when the official umbrella package replaces them and the repository no longer imports them.
 
 ## Lockfiles and Dependency Refresh
 
 - Keep this section short on purpose. The step-by-step workflow belongs in the repo skill `.agents/skills/update-package-locks/SKILL.md`.
 - The runbook only needs the guardrail:
   - never delete `package-lock.json` files to regenerate them
-  - for lockfile conflicts, do not hand-merge the conflict block; reject the remote lockfile side for the affected project, then run the wrapper-based update flow and the normal wrapper-based install flow for that same target
+  - for lockfile conflicts, do not hand-merge the conflict block; keep the dependency PR's lockfile side as the regeneration base, then run the wrapper-based update and install passes for that target
+  - resolve an existing dependency PR in an isolated worktree on that PR branch and push the result back to the same PR without rewriting history
   - use the lockfile skill when a refresh is actually required
   - if multiple worktrees are active, use a unique `COMPOSE_PROJECT_NAME`
 
