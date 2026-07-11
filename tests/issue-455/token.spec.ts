@@ -18,18 +18,19 @@ interface InjectedAbstraction {
   hello: () => number;
 }
 
-const TOKEN: InjectionToken<InjectedAbstraction> =
-  new (InjectionToken as any)('InjectedFn', {
-    factory: () => {
-      const fn: any =
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
-      fn.hello =
-        typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+const TOKEN: InjectionToken<InjectedAbstraction> = new (
+  InjectionToken as any
+)('InjectedFn', {
+  factory: () => {
+    const fn: any =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
+    fn.hello =
+      typeof jest === 'undefined' ? jasmine.createSpy() : jest.fn();
 
-      return fn;
-    },
-    providedIn: 'root',
-  });
+    return fn;
+  },
+  providedIn: 'root',
+});
 
 @Component({
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,

@@ -85,12 +85,9 @@ describe('MockInitializationLogic', () => {
 
     it('covers first name', () => {
       // Customization for the use case.
-      MockInstance(
-        CONFIG,
-        (): ConfigInterface => ({
-          displayName: 'first',
-        }),
-      );
+      MockInstance(CONFIG, (): ConfigInterface => ({
+        displayName: 'first',
+      }));
 
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
@@ -100,12 +97,9 @@ describe('MockInitializationLogic', () => {
 
     it('covers last name', () => {
       // Customization for the use case.
-      MockInstance(
-        CONFIG,
-        (): ConfigInterface => ({
-          displayName: 'last',
-        }),
-      );
+      MockInstance(CONFIG, (): ConfigInterface => ({
+        displayName: 'last',
+      }));
 
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
@@ -129,12 +123,9 @@ describe('MockInitializationLogic', () => {
 
     it('covers first name', () => {
       // Customization for the use case.
-      MockInstance(
-        CONFIG,
-        (): ConfigInterface => ({
-          displayName: 'first',
-        }),
-      );
+      MockInstance(CONFIG, (): ConfigInterface => ({
+        displayName: 'first',
+      }));
 
       const fixture = MockRender(TargetComponent);
       expect(fixture.point.componentInstance.name).toEqual(
@@ -144,12 +135,9 @@ describe('MockInitializationLogic', () => {
 
     it('covers last name', () => {
       // Customization for the use case.
-      MockInstance(
-        CONFIG,
-        (): ConfigInterface => ({
-          displayName: 'last',
-        }),
-      );
+      MockInstance(CONFIG, (): ConfigInterface => ({
+        displayName: 'last',
+      }));
 
       const fixture = MockRender(TargetComponent);
       expect(fixture.point.componentInstance.name).toEqual(

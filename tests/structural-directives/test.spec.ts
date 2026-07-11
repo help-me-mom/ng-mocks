@@ -313,8 +313,7 @@ describe('structural-directive-as-ng-for:mock', () => {
 
   it('searches for related directive', () => {
     let mockDirective:
-      | MockedDirective<CustomNgForWithoutOfDirective>
-      | undefined;
+      MockedDirective<CustomNgForWithoutOfDirective> | undefined;
 
     const fixture = MockRender(
       `
