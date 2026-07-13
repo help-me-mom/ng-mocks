@@ -255,7 +255,7 @@
     "@types/node": "24.13.3",
     "@typescript-eslint/eslint-plugin": "8.63.0",
     "@typescript-eslint/parser": "8.63.0",
-    "angular-eslint": "22.0.0",
+    "angular-eslint": "22.1.0",
     "core-js": "3.49.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
