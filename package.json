@@ -288,7 +288,7 @@
     "prettier": "3.9.5",
     "puppeteer": "25.3.0",
     "rxjs": "7.8.2",
-    "semantic-release": "25.0.7",
+    "semantic-release": "25.0.8",
     "ts-loader": "9.6.2",
     "ts-node": "10.9.2",
     "tsconfig-paths-webpack-plugin": "4.2.0",
