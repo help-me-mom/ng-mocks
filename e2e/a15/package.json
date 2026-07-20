@@ -29,8 +29,8 @@
     "zone.js": "0.11.8"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "15.2.11",
-    "@angular/cli": "15.2.11",
+    "@angular-devkit/build-angular": "21.2.19",
+    "@angular/cli": "22.0.7",
     "@angular/compiler-cli": "15.2.10",
     "@types/jasmine": "4.3.6",
     "@types/jest": "29.5.14",
@@ -41,8 +41,8 @@
     "karma-chrome-launcher": "3.1.1",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.0.0",
-    "ng-packagr": "15.2.2",
-    "npm": "8.19.4",
+    "ng-packagr": "22.0.1",
+    "npm": "12.0.1",
     "puppeteer": "13.7.0",
     "ts-node": "10.9.2",
     "typescript": "4.8.4"
