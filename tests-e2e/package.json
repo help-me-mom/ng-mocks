@@ -23,7 +23,7 @@
     "@angular/platform-browser": "21.2.18",
     "@angular/platform-browser-dynamic": "21.2.18",
     "@angular/router": "21.2.18",
-    "@ng-select/ng-select": "23.0.0",
+    "@ng-select/ng-select": "23.4.0",
     "@ngneat/transloco": "6.0.4",
     "@ngrx/effects": "21.1.1",
     "@ngrx/store": "21.1.1",
