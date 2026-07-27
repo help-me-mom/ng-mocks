@@ -8,6 +8,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /docs/
@@ -16,6 +20,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /tests-e2e/
@@ -24,6 +32,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a5es5/
@@ -32,6 +44,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a5es2015/
@@ -40,6 +56,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a6/
@@ -48,6 +68,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a7/
@@ -56,6 +80,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a8/
@@ -64,6 +92,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a9/
@@ -72,6 +104,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a10/
@@ -80,6 +116,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a11/
@@ -88,6 +128,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a12/
@@ -96,6 +140,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a13/
@@ -104,6 +152,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a14/
@@ -112,6 +164,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a15/
@@ -120,6 +176,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a16/
@@ -128,6 +188,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a17/
@@ -136,6 +200,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a18/
@@ -144,6 +212,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a19/
@@ -152,6 +224,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a20/
@@ -160,6 +236,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a21/
@@ -168,6 +248,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/a22/
@@ -176,6 +260,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/jasmine/
@@ -184,6 +272,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/jest/
@@ -192,6 +284,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/min/
@@ -200,6 +296,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
     directory: /e2e/nx/
@@ -208,6 +308,10 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'docker'
     directory: /
