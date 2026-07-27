@@ -29,7 +29,7 @@
     "zone.js": "0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "16.2.16",
+    "@angular-devkit/build-angular": "21.2.19",
     "@angular/cli": "16.2.16",
     "@angular/compiler-cli": "16.2.12",
     "@types/jasmine": "4.3.6",
@@ -44,7 +44,7 @@
     "karma-jasmine-html-reporter": "2.0.0",
     "ng-packagr": "16.2.3",
     "npm": "9.9.4",
-    "puppeteer": "19.11.1",
+    "puppeteer": "25.3.0",
     "ts-node": "10.9.2",
     "typescript": "5.0.4"
   },
