@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@angular/build": "20.3.32",
-    "@angular/cli": "21.2.19",
+    "@angular/cli": "20.3.32",
     "@angular/compiler-cli": "20.3.26",
     "@types/jasmine": "5.1.15",
     "@types/jest": "29.5.14",
@@ -44,7 +44,7 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
     "ng-packagr": "20.3.2",
-    "npm": "12.0.1",
+    "npm": "10.9.8",
     "puppeteer": "24.43.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
