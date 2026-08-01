@@ -28,7 +28,7 @@
     "@ngrx/effects": "22.0.0-beta.0",
     "@ngrx/store": "22.0.0-beta.0",
     "@ngrx/store-devtools": "22.0.0-beta.0",
-    "@ngx-translate/core": "17.0.0",
+    "@ngx-translate/core": "18.0.0",
     "@ngxs/store": "22.0.0",
     "ngx-file-drop": "16.0.0",
     "primeng": "22.0.0",
