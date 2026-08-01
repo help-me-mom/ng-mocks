@@ -2,49 +2,61 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  VERSION,
 } from '@angular/core';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Component({
-  selector: 'target-default-14157',
-  standalone: false,
+  selector: 'target-implicit-14157',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })
-class DefaultOnPushComponent {
+class ImplicitStrategyComponent {
   @Input() public items: string[] = [];
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
-  selector: 'target-eager-14157',
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.Default,
+  selector: 'target-default-14157',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })
-class EagerComponent {
+class ExplicitDefaultComponent {
   @Input() public items: string[] = [];
 }
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14157
-// Angular 22 uses OnPush when changeDetection is omitted. MockRender should
-// preserve that compiled strategy instead of forcing the rendered point.
+// Before Angular 22, an omitted strategy is Default. Angular 22 uses OnPush.
+// MockRender should preserve the compiled strategy instead of forcing the
+// rendered point.
 describe('issue-14157', () => {
-  describe('default OnPush', () => {
-    beforeEach(() => MockBuilder(DefaultOnPushComponent));
+  describe('implicit strategy', () => {
+    beforeEach(() => MockBuilder(ImplicitStrategyComponent));
 
-    it('does not update for an unchanged input reference', () => {
+    it('uses the framework default for an unchanged input reference', () => {
       const parameters: { items: string[] } = { items: [] };
-      const fixture = MockRender(DefaultOnPushComponent, parameters);
+      const fixture = MockRender(
+        ImplicitStrategyComponent,
+        parameters,
+      );
 
       fixture.componentInstance.items.push('demo');
       fixture.detectChanges();
 
-      expect(fixture.point.nativeElement.textContent).toEqual('0');
+      if (Number.parseInt(VERSION.major, 10) >= 22) {
+        expect(fixture.point.nativeElement.textContent).toEqual('0');
+      } else {
+        expect(fixture.point.nativeElement.textContent).toEqual('1');
+      }
     });
 
     it('updates for a new input reference', () => {
       const parameters: { items: string[] } = { items: [] };
-      const fixture = MockRender(DefaultOnPushComponent, parameters);
+      const fixture = MockRender(
+        ImplicitStrategyComponent,
+        parameters,
+      );
 
       fixture.componentInstance.items = ['demo'];
       fixture.detectChanges();
@@ -53,12 +65,15 @@ describe('issue-14157', () => {
     });
   });
 
-  describe('explicit Eager', () => {
-    beforeEach(() => MockBuilder(EagerComponent));
+  describe('explicit Default', () => {
+    beforeEach(() => MockBuilder(ExplicitDefaultComponent));
 
     it('updates for an unchanged input reference', () => {
       const parameters: { items: string[] } = { items: [] };
-      const fixture = MockRender(EagerComponent, parameters);
+      const fixture = MockRender(
+        ExplicitDefaultComponent,
+        parameters,
+      );
 
       fixture.componentInstance.items.push('demo');
       fixture.detectChanges();
