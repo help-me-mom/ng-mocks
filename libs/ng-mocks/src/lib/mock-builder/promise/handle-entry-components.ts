@@ -26,10 +26,12 @@ type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
   ComponentFactoryResolver?: ComponentFactoryResolverToken;
 };
 
-// Angular 22 removes ComponentFactoryResolver as a value export, so avoid a named
-// import that would fail before ng-mocks can finish loading.
-const angularCoreWithComponentFactoryResolver: AngularCoreWithComponentFactoryResolver = angularCore;
-const ComponentFactoryResolver = angularCoreWithComponentFactoryResolver.ComponentFactoryResolver;
+// Angular 22 removes ComponentFactoryResolver as a value export. The presence guard
+// keeps the legacy binding available to bundlers without warning on newer Angular.
+const ComponentFactoryResolver =
+  'ComponentFactoryResolver' in angularCore
+    ? (angularCore as AngularCoreWithComponentFactoryResolver).ComponentFactoryResolver
+    : undefined;
 
 export class EntryComponentsModule {
   public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
