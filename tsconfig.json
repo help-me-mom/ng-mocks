@@ -21,7 +21,14 @@
       "node"
     ]
   },
-  "files": ["libs/ng-mocks/src/index.ts", "empty.ts", "test.ts", "karma.conf.ts"],
+  "files": [
+    "libs/ng-mocks/src/index.ts",
+    "libs/ng-mocks/src/index.d.ts",
+    "libs/ng-mocks/src/index.modern.d.ts",
+    "empty.ts",
+    "test.ts",
+    "karma.conf.ts"
+  ],
   "exclude": ["e2e", "node_modules", "tests/issue-1596", "tests/issue-296", "tests/issue-736"],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",

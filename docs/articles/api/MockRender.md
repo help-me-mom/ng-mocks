@@ -45,7 +45,8 @@ When `MockRender(Component, params)` is used then `fixture.componentInstance` is
 therefore, changing `fixture.componentInstance` is the same as changing `params` and vise-versa.
 
 When `MockRender(Component)` is used without params then `fixture.componentInstance` controls `@Inputs` and `@Outputs`
-of the component. That lets it trigger the correct lifecycle hooks. 
+of the component. That lets it trigger the correct lifecycle hooks. Signal inputs expose their binding/write type instead
+of the signal instance type.
 
 An example:
 
