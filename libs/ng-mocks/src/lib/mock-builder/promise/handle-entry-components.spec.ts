@@ -62,4 +62,13 @@ describe('handle-entry-components', () => {
       [NG_MOCKS],
     ]);
   });
+
+  it('ignores an undefined synthetic legacy resolver export', () => {
+    expect(
+      createEntryComponentsModuleParameters(
+        { ComponentFactoryResolver: undefined },
+        true,
+      ),
+    ).toEqual([[NG_MOCKS]]);
+  });
 });

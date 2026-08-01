@@ -23,7 +23,7 @@ type ComponentFactoryResolverToken = {
 };
 
 type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
-  ComponentFactoryResolver: ComponentFactoryResolverToken;
+  ComponentFactoryResolver?: ComponentFactoryResolverToken;
 };
 
 export class EntryComponentsModule {
@@ -53,7 +53,10 @@ export const createEntryComponentsModuleParameters = (
   const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
   if (componentFactoryResolverAvailable) {
     const componentFactoryResolver = (core as AngularCoreWithComponentFactoryResolver).ComponentFactoryResolver;
-    parameters.push([componentFactoryResolver, new Optional()]);
+    // A synthetic namespace can expose a getter for a missing external export.
+    if (componentFactoryResolver) {
+      parameters.push([componentFactoryResolver, new Optional()]);
+    }
   }
 
   return parameters;
