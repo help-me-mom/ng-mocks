@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   NgZone,
@@ -10,6 +11,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'target-fake-async',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ counter }}',

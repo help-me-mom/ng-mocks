@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, NgModule } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  NgModule,
+} from '@angular/core';
 import {
   NgModel,
   ControlValueAccessor,
@@ -15,6 +20,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'target-cva-ng-model',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template:

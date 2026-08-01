@@ -288,6 +288,8 @@ export default defineConfig([
   {
     files: ['**/*.spec.ts'],
     rules: {
+      // Test fixtures may intentionally exercise eager change detection.
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
       'max-lines': 'off',
       'max-lines-per-function': 'off',
       'no-useless-assignment': 'off',

@@ -1,10 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, Type } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  Type,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'dynamic-overlay',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template:
