@@ -23,15 +23,8 @@ type ComponentFactoryResolverToken = {
 };
 
 type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
-  ComponentFactoryResolver?: ComponentFactoryResolverToken;
+  ComponentFactoryResolver: ComponentFactoryResolverToken;
 };
-
-// Angular 22 removes ComponentFactoryResolver as a value export. The presence guard
-// keeps the legacy binding available to bundlers without warning on newer Angular.
-const ComponentFactoryResolver =
-  'ComponentFactoryResolver' in angularCore
-    ? (angularCore as AngularCoreWithComponentFactoryResolver).ComponentFactoryResolver
-    : undefined;
 
 export class EntryComponentsModule {
   public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
@@ -54,17 +47,21 @@ export class EntryComponentsModule {
 type EntryComponentsModuleParameter = [typeof NG_MOCKS] | [ComponentFactoryResolverToken, Optional];
 
 export const createEntryComponentsModuleParameters = (
-  componentFactoryResolver: ComponentFactoryResolverToken | undefined,
+  core: object,
+  componentFactoryResolverAvailable: boolean,
 ): EntryComponentsModuleParameter[] => {
   const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
-  if (componentFactoryResolver) {
+  if (componentFactoryResolverAvailable) {
+    const componentFactoryResolver = (core as AngularCoreWithComponentFactoryResolver).ComponentFactoryResolver;
     parameters.push([componentFactoryResolver, new Optional()]);
   }
 
   return parameters;
 };
 
-const parameters = createEntryComponentsModuleParameters(ComponentFactoryResolver);
+// Angular 22 removes ComponentFactoryResolver as a value export. Keep the presence
+// check directly on the namespace so bundlers retain the legacy binding when it exists.
+const parameters = createEntryComponentsModuleParameters(angularCore, 'ComponentFactoryResolver' in angularCore);
 coreDefineProperty(EntryComponentsModule, 'parameters', parameters);
 
 class IvyModule {}
