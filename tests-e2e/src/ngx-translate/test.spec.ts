@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   TranslateLoader,
-  TranslateModule,
   TranslatePipe,
+  provideTranslateLoader,
+  provideTranslateService,
 } from '@ngx-translate/core';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { of } from 'rxjs';
@@ -31,13 +32,10 @@ class NgMocksTranslateLoader extends TranslateLoader {
 }
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: NgMocksTranslateLoader,
-      },
+  imports: [BrowserModule, TranslatePipe],
+  providers: [
+    provideTranslateService({
+      loader: provideTranslateLoader(NgMocksTranslateLoader),
       fallbackLang: 'ng-mocks',
     }),
   ],

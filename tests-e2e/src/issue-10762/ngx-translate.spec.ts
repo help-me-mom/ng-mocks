@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
-  TranslateModule,
+  TranslatePipe,
   TranslateService,
+  provideTranslateService,
 } from '@ngx-translate/core';
 import {
   MockBuilder,
-  MockModule,
+  MockPipe,
   MockProvider,
   MockRender,
 } from 'ng-mocks';
@@ -15,7 +16,7 @@ import {
   selector: 'app-target',
   template: `<h1>{{ 'TITLE' | translate }}</h1>`,
   standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
 })
 class TargetStandaloneComponent {
   constructor(private translateService: TranslateService) {
@@ -34,12 +35,12 @@ class TargetComponent {}
 
 describe('issue-10762 - ngx-translate', () => {
   describe('standalone component', () => {
-    describe('ng-mocks:MockModule', () => {
+    describe('ng-mocks:MockPipe', () => {
       beforeEach(() =>
         TestBed.configureTestingModule({
           imports: [
             TargetStandaloneComponent,
-            MockModule(TranslateModule),
+            MockPipe(TranslatePipe),
           ],
           providers: [MockProvider(TranslateService)],
         }).compileComponents(),
@@ -57,7 +58,7 @@ describe('issue-10762 - ngx-translate', () => {
     describe('ng-mocks:MockBuilder', () => {
       beforeEach(() => {
         return MockBuilder(TargetStandaloneComponent, [
-          TranslateModule,
+          TranslatePipe,
           TranslateService,
         ]);
       });
@@ -71,9 +72,9 @@ describe('issue-10762 - ngx-translate', () => {
       describe('real', () => {
         beforeEach(() =>
           TestBed.configureTestingModule({
-            imports: [
-              TargetStandaloneComponent,
-              TranslateModule.forRoot({ fallbackLang: 'en' }),
+            imports: [TargetStandaloneComponent],
+            providers: [
+              provideTranslateService({ fallbackLang: 'en' }),
             ],
           }).compileComponents(),
         );
@@ -90,11 +91,11 @@ describe('issue-10762 - ngx-translate', () => {
   });
 
   describe('not standalone component', () => {
-    describe('ng-mocks:MockModule', () => {
+    describe('ng-mocks:MockPipe', () => {
       beforeEach(() =>
         TestBed.configureTestingModule({
           declarations: [TargetComponent],
-          imports: [MockModule(TranslateModule)],
+          imports: [MockPipe(TranslatePipe)],
         }).compileComponents(),
       );
 
@@ -107,7 +108,7 @@ describe('issue-10762 - ngx-translate', () => {
 
     describe('ng-mocks:MockBuilder', () => {
       beforeEach(() => {
-        return MockBuilder(TargetComponent, TranslateModule);
+        return MockBuilder(TargetComponent, TranslatePipe);
       });
 
       it('creates component', () => {
@@ -119,7 +120,10 @@ describe('issue-10762 - ngx-translate', () => {
       beforeEach(() =>
         TestBed.configureTestingModule({
           declarations: [TargetComponent],
-          imports: [TranslateModule.forRoot({ fallbackLang: 'en' })],
+          imports: [TranslatePipe],
+          providers: [
+            provideTranslateService({ fallbackLang: 'en' }),
+          ],
         }).compileComponents(),
       );
 
