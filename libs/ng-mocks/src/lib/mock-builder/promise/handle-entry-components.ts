@@ -26,11 +26,6 @@ type AngularCoreWithComponentFactoryResolver = typeof angularCore & {
   ComponentFactoryResolver?: ComponentFactoryResolverToken;
 };
 
-// Angular 22 removes ComponentFactoryResolver as a value export, so avoid a named
-// import that would fail before ng-mocks can finish loading.
-const angularCoreWithComponentFactoryResolver: AngularCoreWithComponentFactoryResolver = angularCore;
-const ComponentFactoryResolver = angularCoreWithComponentFactoryResolver.ComponentFactoryResolver;
-
 export class EntryComponentsModule {
   public constructor(map: EntryComponentMap, componentFactoryResolver?: ComponentFactoryResolver) {
     // istanbul ignore if
@@ -52,17 +47,24 @@ export class EntryComponentsModule {
 type EntryComponentsModuleParameter = [typeof NG_MOCKS] | [ComponentFactoryResolverToken, Optional];
 
 export const createEntryComponentsModuleParameters = (
-  componentFactoryResolver: ComponentFactoryResolverToken | undefined,
+  core: object,
+  componentFactoryResolverAvailable: boolean,
 ): EntryComponentsModuleParameter[] => {
   const parameters: EntryComponentsModuleParameter[] = [[NG_MOCKS]];
-  if (componentFactoryResolver) {
-    parameters.push([componentFactoryResolver, new Optional()]);
+  if (componentFactoryResolverAvailable) {
+    const componentFactoryResolver = (core as AngularCoreWithComponentFactoryResolver).ComponentFactoryResolver;
+    // A synthetic namespace can expose a getter for a missing external export.
+    if (componentFactoryResolver) {
+      parameters.push([componentFactoryResolver, new Optional()]);
+    }
   }
 
   return parameters;
 };
 
-const parameters = createEntryComponentsModuleParameters(ComponentFactoryResolver);
+// Angular 22 removes ComponentFactoryResolver as a value export. Keep the presence
+// check directly on the namespace so bundlers retain the legacy binding when it exists.
+const parameters = createEntryComponentsModuleParameters(angularCore, 'ComponentFactoryResolver' in angularCore);
 coreDefineProperty(EntryComponentsModule, 'parameters', parameters);
 
 class IvyModule {}

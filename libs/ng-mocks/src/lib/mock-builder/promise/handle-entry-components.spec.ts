@@ -48,7 +48,8 @@ describe('handle-entry-components', () => {
     }
 
     const parameters = createEntryComponentsModuleParameters(
-      ComponentFactoryResolver,
+      { ComponentFactoryResolver },
+      true,
     );
 
     expect(parameters[0]).toEqual([NG_MOCKS]);
@@ -57,8 +58,17 @@ describe('handle-entry-components', () => {
   });
 
   it('builds dependency metadata without a removed legacy resolver', () => {
-    expect(createEntryComponentsModuleParameters(undefined)).toEqual([
+    expect(createEntryComponentsModuleParameters({}, false)).toEqual([
       [NG_MOCKS],
     ]);
+  });
+
+  it('ignores an undefined synthetic legacy resolver export', () => {
+    expect(
+      createEntryComponentsModuleParameters(
+        { ComponentFactoryResolver: undefined },
+        true,
+      ),
+    ).toEqual([[NG_MOCKS]]);
   });
 });
