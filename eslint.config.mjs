@@ -127,7 +127,6 @@ const tsJsRules = {
   'unicorn/prefer-await': 'off',
   'unicorn/prefer-boolean-return': 'off',
   'unicorn/prefer-continue': 'off',
-  // Keep DOM HTML access compatible with the legacy browser targets still supported by ng-mocks.
   'unicorn/prefer-dom-node-html-methods': 'off',
   'unicorn/prefer-early-return': 'off',
   'unicorn/prefer-event-target': 'off',
