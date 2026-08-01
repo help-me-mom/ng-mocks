@@ -1,5 +1,7 @@
 /* eslint-disable max-lines-per-function */
 
+import path from 'node:path';
+
 import { Config } from 'karma';
 import { executablePath } from 'puppeteer';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
@@ -117,7 +119,7 @@ export default async (config: Config) => {
               {
                 loader: 'ts-loader',
                 options: {
-                  configFile: './tsconfig.json',
+                  configFile: path.resolve('./tsconfig.json'),
                   transpileOnly: true,
                 },
               },
@@ -129,7 +131,7 @@ export default async (config: Config) => {
         extensions: ['.js', '.cjs', '.mjs', '.ts', '.json'],
         plugins: [
           new TsconfigPathsPlugin({
-            configFile: './tsconfig.json',
+            configFile: path.resolve('./tsconfig.json'),
           }),
         ],
       },

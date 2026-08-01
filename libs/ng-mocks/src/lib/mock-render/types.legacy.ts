@@ -31,22 +31,6 @@ export interface MockedComponentFixture<C = any, F = DefaultRenderComponent<C>> 
  *
  * @see https://ng-mocks.sudo.eu/api/MockRender
  */
-// Detect signal inputs structurally, so older Angular packages do not need
-// to export signal input types for ng-mocks declarations to compile.
-type MockRenderInputSignalNode<T> = T extends (...args: any[]) => any
-  ? Extract<T[keyof T], { transformFn: ((value: any) => any) | undefined }>
-  : never;
-
-type MockRenderInputBinding<T> = 0 extends 1 & T
-  ? T
-  : [MockRenderInputSignalNode<T>] extends [never]
-    ? T
-    : MockRenderInputSignalNode<T> extends {
-          transformFn: ((value: infer WriteT) => any) | undefined;
-        }
-      ? WriteT
-      : T;
-
 export type DefaultRenderComponent<MComponent> = {
-  [K in keyof MComponent]: MockRenderInputBinding<MComponent[K]>;
+  [K in keyof MComponent]: MComponent[K];
 };
