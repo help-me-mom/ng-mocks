@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injectable, NgModule } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injectable,
+  NgModule,
+} from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import {
@@ -21,6 +26,7 @@ class TargetService {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ list | json }}',

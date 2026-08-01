@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  DebugElement,
-  Directive,
-  InjectionToken,
-  VERSION,
-} from '@angular/core';
+import { ChangeDetectorRef, DebugElement, Directive, InjectionToken, VERSION } from '@angular/core';
 import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
@@ -108,19 +101,11 @@ const handleFixtureError = (e: any) => {
 // patch new versions and leave older Angular behavior untouched.
 const shouldPatchPointDetectChanges = (major = VERSION.major): boolean => Number.parseInt(major, 10) >= 22;
 
-// Respect explicit OnPush declarations; forcing their point CDR would hide the
-// very change-detection behavior a test might be asserting.
-// Covered by the Angular 22 e2e suite; root coverage runs on Angular 21.
+// Angular 22 reports both implicit OnPush and explicit Eager as Eager in
+// decorator annotations. The compiled definition contains the effective
+// strategy that MockRender must preserve.
 /* istanbul ignore next */
-const isExplicitlyOnPush = (fixture: any): boolean => {
-  const annotation = fixture.point?.componentInstance?.constructor?.__annotations__?.[0];
-
-  return (
-    annotation &&
-    Object.prototype.hasOwnProperty.call(annotation, 'changeDetection') &&
-    annotation.changeDetection === ChangeDetectionStrategy.OnPush
-  );
-};
+const isOnPush = (fixture: any): boolean => fixture.point?.componentInstance?.constructor?.ɵcmp?.onPush === true;
 
 // Token and plain-text renders do not have a child component CDR. The lookup is
 // intentionally best-effort so MockRender keeps supporting every render shape.
@@ -130,7 +115,7 @@ const getFixturePointChangeDetectorRef = (fixture: any): undefined | ChangeDetec
   if (!shouldPatchPointDetectChanges() || !fixture.point || fixture.point === fixture.debugElement) {
     return undefined;
   }
-  if (isExplicitlyOnPush(fixture)) {
+  if (isOnPush(fixture)) {
     return undefined;
   }
   try {

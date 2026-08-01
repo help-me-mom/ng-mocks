@@ -1,4 +1,9 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  OnInit,
+} from '@angular/core';
 
 import {
   MockBuilder,
@@ -8,6 +13,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ value }}',

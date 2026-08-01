@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   EventEmitter,
@@ -30,6 +31,7 @@ class ChildComponent {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'target-mock-component',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
