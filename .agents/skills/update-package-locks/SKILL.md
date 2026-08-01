@@ -1,6 +1,6 @@
 ---
 name: update-package-locks
-description: Use when refreshing package-lock.json files in ng-mocks.
+description: Use when refreshing package-lock.json files in ng-mocks, resolving lockfile conflicts in an existing dependency PR, or ensuring a lockfile PR is conflict-free after creation.
 ---
 
 # Update Package Locks
@@ -23,6 +23,8 @@ Create a plain Markdown checklist that any AI agent can follow:
 - [ ] Run the install wrapper pass with wrapper targets in batches of 2-4
 - [ ] Commit the refreshed lockfiles with only the dependency or merge changes already in scope
 - [ ] Push a fresh branch and create a PR, or push the existing PR branch
+- [ ] Check the remote PR mergeability after every push
+- [ ] If conflicts exist, merge current `upstream/main`, preserve both sides' intended changes, regenerate affected lockfiles, push, and recheck
 - [ ] Summarize the two wrapper passes and any npm warnings
 ```
 
@@ -38,6 +40,13 @@ Create a plain Markdown checklist that any AI agent can follow:
 6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit the refreshed `package-lock.json` files with only the dependency or merge changes already in scope, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
 8. For a fresh refresh, push the branch to a writable remote and create a PR against `upstream/main`. For an existing dependency PR, push back to that PR branch.
+9. After creating the PR or pushing its branch, query the hosting provider for the PR's current mergeability. If the result is indeterminate, wait and query again. Do not treat pending or failed CI checks as merge conflicts.
+10. If the provider reports conflicts:
+    - Fetch current `upstream/main` and merge it into the PR branch in the same isolated worktree without rebasing or rewriting history.
+    - Inspect every conflicted file. Resolve non-lockfile conflicts semantically so both sides' intended changes remain; never choose an entire side without checking what it would discard.
+    - When merging `upstream/main` into the PR branch, keep the PR side of each conflicted `package-lock.json` only as the regeneration base, then run the update and install wrapper passes for every affected target against the combined manifests. Never hand-merge lockfile conflict blocks.
+    - Verify there are no unmerged paths, restore every affected `compose.yml` command to `npm install`, commit with normal hooks, push, and query remote mergeability again.
+    - Repeat the check if the base advances. Finish only when the provider returns a definitive conflict-free state.
 
 Do not use the current active worktree. A fresh refresh needs a new branch; an existing dependency PR conflict stays on its PR branch in an isolated worktree. Do not manually run `sh test.sh`, root tests, lint, TypeScript checks, local `npm install`, local `npm update`, or ad-hoc dependency commands as part of this workflow unless the user explicitly asks for them.
 
@@ -82,6 +91,18 @@ git commit -m "chore: refresh package lockfiles"
 git remote -v
 git push -u origin codex/<lockfile-branch>
 # Create a PR against upstream/main after the push succeeds.
+
+# If the remote PR reports conflicts, merge current main without rewriting history.
+git fetch upstream main
+git merge --no-edit upstream/main
+git diff --name-only --diff-filter=U
+git checkout --ours path/to/package-lock.json # PR side is only the regeneration base
+# Resolve non-lockfile conflicts semantically, rerun both wrapper passes for affected targets,
+# restore compose.yml to npm install, and then finish the merge.
+git diff --check
+git commit --no-edit
+git push
+# Query the remote PR mergeability again; repeat if the base advanced and conflicts remain.
 ```
 
 ## Validation
@@ -90,6 +111,7 @@ git push -u origin codex/<lockfile-branch>
 - For a single target, run `sh compose.sh <target>` once while the service command is temporarily `npm update`, then run `sh compose.sh <target>` again after restoring `npm install`.
 - For a repo-wide lock refresh, run every relevant wrapper target once with all relevant service commands temporarily set to `npm update`, then run every same target again after restoring all service commands to `npm install`.
 - Repo-wide target runs may be concurrent in batches of 2-4. A batch is successful only when every target command exits successfully.
+- After the final push, the hosting provider must report a definitive conflict-free PR state. A local clean merge is not sufficient, and CI status is a separate signal.
 - Do not run `sh test.sh`, `npm test`, lint, or TypeScript checks as part of this skill's default validation.
 
 ## Guardrails
@@ -97,6 +119,7 @@ git push -u origin codex/<lockfile-branch>
 - Always use an isolated worktree: a new branch from current `upstream/main` for fresh work, or the existing PR branch for conflict resolution.
 - Never delete lockfiles.
 - Never hand-merge lockfile conflict blocks or rewrite dependency PR history.
+- Never discard either side of a non-lockfile conflict without inspecting and preserving its intended behavior.
 - Never leave `compose.yml` in an `npm update` state after finishing.
 - Never use local `npm install`, `npm update`, or ad-hoc `node` commands when the wrapper flow covers the task.
 - If multiple worktrees, agent sessions, or concurrent wrapper targets are active, set a unique `COMPOSE_PROJECT_NAME` for each wrapper command.
@@ -104,3 +127,4 @@ git push -u origin codex/<lockfile-branch>
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
 - Do not manually invoke extra validation beyond this skill; automated git hooks are the exception and should do their normal job.
 - Push to a configured writable remote; never assume `upstream` accepts contributor branches.
+- Never declare the PR conflict-free from local Git state alone; query its remote mergeability after the final push.
