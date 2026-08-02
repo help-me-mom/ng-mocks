@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, DebugElement, Directive, InjectionToken, VERSION } from '@angular/core';
-import { getTestBed, ModuleTeardownOptions, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { getTestBed, TestBed, TestModuleMetadata } from '@angular/core/testing';
 
 import coreDefineProperty from '../common/core.define-property';
 import { getInjection } from '../common/core.helpers';
@@ -8,6 +8,7 @@ import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksStack from '../common/ng-mocks-stack';
+import { getTestModuleOptions } from '../common/ng-mocks-test-module-metadata';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
@@ -176,7 +177,6 @@ const generateFactoryInstall =
       };
       _declarations?: Array<AnyType<any>>;
       declarations?: Array<AnyType<any>>;
-      _instanceTeardownOptions?: ModuleTeardownOptions | undefined;
     } = getTestBed();
     // istanbul ignore next
     const existing = testBed._compiler?.declarations || testBed.declarations || testBed._declarations;
@@ -189,9 +189,9 @@ const generateFactoryInstall =
         }
         declarations.push(ctor);
         const moduleDef: TestModuleMetadata = {
+          ...getTestModuleOptions(),
           declarations,
         };
-        (moduleDef as any).teardown = testBed._instanceTeardownOptions;
         TestBed.configureTestingModule(moduleDef);
       } catch (error) {
         handleFixtureError(error);

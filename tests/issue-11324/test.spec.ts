@@ -61,10 +61,9 @@ describe('issue-11324', () => {
   }
 
   beforeEach(async () => {
-    const built = MockBuilder([FooComponent, BarComponent]).build();
-    (built as any).teardown = { destroyAfterEach: false };
     TestBed.configureTestingModule({
-      ...built,
+      ...MockBuilder([FooComponent, BarComponent]).build(),
+      teardown: { destroyAfterEach: false },
     });
     return await TestBed.compileComponents();
   });

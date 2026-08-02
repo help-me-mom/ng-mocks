@@ -27,6 +27,7 @@ import {
   rememberMockDeclarations,
   resetInjectedDeclarations,
 } from './ng-mocks-injected-declarations';
+import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
 type NgMocksTestBed = TestBedStatic & {
   get?: (token: any, ...args: any[]) => any;
@@ -310,7 +311,10 @@ const configureTestingModule =
       applyPlatformOverrides(testBed, touches);
     }
 
-    return original.call(instance, finalModuleDef);
+    const result = original.call(instance, finalModuleDef);
+    rememberTestModuleOptions(finalModuleDef);
+
+    return result;
   };
 
 const resetTestingModule =
@@ -318,6 +322,7 @@ const resetTestingModule =
   () => {
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
+    resetTestModuleOptions();
     (TestBed as any).ngMocksSelectors = undefined;
     resetInjectedDeclarations();
     applyNgMocksOverrides(TestBed);
