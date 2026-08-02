@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Directive } from '@angular/core';
 
 import coreConfig from '../common/core.config';
 import coreDefineProperty from '../common/core.define-property';
-import { Type } from '../common/core.types';
+import { DirectiveIo, Type } from '../common/core.types';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 
@@ -98,6 +99,16 @@ const checkCache = (caches: Array<Type<any> & Record<'cacheKey', any[]>>, cacheK
   return undefined;
 };
 
+const getInputBindings = (inputs: DirectiveIo[]): string[] => {
+  const result: string[] = [];
+  for (const definition of inputs) {
+    const { name, alias } = funcDirectiveIoParse(definition);
+    result.push(alias || name);
+  }
+
+  return result;
+};
+
 export default (
   template: any,
   meta: Directive,
@@ -149,6 +160,7 @@ export default (
 
   ctor = generateWrapperComponent({ ...meta, bindings, options });
   coreDefineProperty(ctor, 'cacheKey', cacheKey);
+  coreDefineProperty(ctor, 'inputBindings', getInputBindings(inputs));
   coreDefineProperty(ctor, 'tpl', mockTemplate);
 
   if (meta.selector && options.providers) {
