@@ -4,7 +4,6 @@ import {
   Component,
   Input,
   TemplateRef,
-  VERSION,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -14,14 +13,6 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/11324
 describe('issue-11324', () => {
-  if (Number.parseInt(VERSION.major, 10) < 15) {
-    it('needs a15+', () => {
-      expect(true).toBeTruthy();
-    });
-
-    return;
-  }
-
   @Component({
     selector: 'app-baz',
     template: `Hello World!`,
