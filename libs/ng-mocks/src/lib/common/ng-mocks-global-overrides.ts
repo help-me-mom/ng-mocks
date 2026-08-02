@@ -14,7 +14,6 @@ import coreDefineProperty from './core.define-property';
 import { flatten, mapEntries, mapValues } from './core.helpers';
 import coreInjector from './core.injector';
 import coreReflectMeta from './core.reflect.meta';
-import coreReflectModuleResolve from './core.reflect.module-resolve';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
 import { AnyType, dependencyKeys } from './core.types';
@@ -168,7 +167,10 @@ const applyPlatformOverrideDef = (def: any) => {
     return;
   }
 
-  const original = coreReflectModuleResolve(ngModule);
+  const original = coreReflectMeta(ngModule);
+  if (!original) {
+    return;
+  }
   const set = getOverrideDef(original);
   if (set) {
     (TestBed as any).ngMocksOverrides.set(ngModule, { set: original });
