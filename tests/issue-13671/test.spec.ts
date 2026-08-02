@@ -44,6 +44,7 @@ class MockedComponent {
 })
 class TargetComponent {}
 
+// @see https://github.com/help-me-mom/ng-mocks/issues/9684
 // @see https://github.com/help-me-mom/ng-mocks/issues/13671
 describe('issue-13671', () => {
   if (
