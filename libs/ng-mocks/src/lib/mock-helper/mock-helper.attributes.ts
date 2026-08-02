@@ -1,4 +1,4 @@
-import { DirectiveIo } from '../common/core.types';
+import { DirectiveIo, DirectiveIoParsed } from '../common/core.types';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { MockedDebugElement } from '../mock-render/types';
 
@@ -15,11 +15,12 @@ const parseArgs = (args: any[]): [MockedDebugElement | null | undefined, string,
   args.length === 3 ? args[2] : defaultNotFoundValue,
 ];
 
-const attrMatches = (attribute: DirectiveIo, selector: string): string | undefined => {
-  const { name, alias = '' } = funcDirectiveIoParse(attribute);
+const attrMatches = (attribute: DirectiveIo, selector: string): DirectiveIoParsed | undefined => {
+  const parsed = funcDirectiveIoParse(attribute);
+  const { name, alias = '' } = parsed;
 
   if ((!alias && name === selector) || (!!alias && alias === selector)) {
-    return name;
+    return parsed;
   }
 
   return undefined;
@@ -33,9 +34,11 @@ const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'input
     }
 
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
-      const prop = attrMatches(attrDef, sel);
-      if (prop) {
-        return mockHelperGet(el, token)[prop];
+      const parsed = attrMatches(attrDef, sel);
+      if (parsed) {
+        const value = mockHelperGet(el, token)[parsed.name];
+
+        return attr === 'inputs' && parsed.isSignal && typeof value === 'function' ? value() : value;
       }
     }
   }
