@@ -10,8 +10,8 @@ export const funcExtractDeps = (
   def: any,
   result: Set<AnyDeclaration<any>>,
   recursive = false,
+  visited = new Set<AnyDeclaration<any>>(),
 ): Set<AnyDeclaration<any>> => {
-  const visited = new Set<AnyDeclaration<any>>();
   const visit = (current: any): void => {
     if (visited.has(current)) {
       return;

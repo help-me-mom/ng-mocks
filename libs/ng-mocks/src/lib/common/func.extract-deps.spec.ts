@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { AnyDeclaration } from './core.types';
 import { funcExtractDeps } from './func.extract-deps';
 
 @NgModule({})
@@ -44,5 +45,20 @@ describe('funcExtractDeps', () => {
     expect(result.size).toBe(3);
     expect(result.has(Issue7490Level3Module)).toBe(true);
     expect(result.has(Issue7490Level4Module)).toBe(true);
+  });
+
+  it('shares traversal state across dependency roots', () => {
+    const visited = new Set<AnyDeclaration<any>>();
+    const result = funcExtractDeps(
+      Issue7490Level1Module,
+      new Set(),
+      true,
+      visited,
+    );
+
+    funcExtractDeps(Issue7490Level1Module, result, true, visited);
+
+    expect(result.size).toBe(3);
+    expect(visited.size).toBe(4);
   });
 });

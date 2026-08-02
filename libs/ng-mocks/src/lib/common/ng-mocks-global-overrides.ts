@@ -265,9 +265,10 @@ const configureTestingModule =
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
 
       const realDependencies = new Set<AnyType<any>>();
+      const visitedDependencies = new Set<AnyType<any>>();
       for (const [source, , isMock] of mockBuilder) {
         if (!isMock) {
-          funcExtractDeps(funcGetType(source), realDependencies, true);
+          funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies);
         }
       }
       for (const dependency of mapValues(realDependencies)) {
