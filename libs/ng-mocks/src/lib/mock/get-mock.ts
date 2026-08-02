@@ -22,16 +22,30 @@ export default (def: any, type: any, func: string, cacheFlag: string, base: any,
   }
 
   const mock = extendClass(base);
-  decorator(def, mock);
-
-  // istanbul ignore else
-  if (ngMocksUniverse.flags.has(cacheFlag)) {
-    ngMocksUniverse.cacheDeclarations.set(def, mock);
+  const hasMockNgDefConstruction = ngMocksUniverse.config.has('mockNgDefConstruction');
+  if (!hasMockNgDefConstruction) {
+    ngMocksUniverse.config.set('mockNgDefConstruction', new Set());
   }
+  // Keep the active construction path separate from completed mock caches.
+  ngMocksUniverse.config.get('mockNgDefConstruction').add(def);
 
-  if (!hasNgMocksDepsResolution) {
-    ngMocksUniverse.config.delete('ngMocksDepsResolution');
+  try {
+    decorator(def, mock);
+
+    // istanbul ignore else
+    if (ngMocksUniverse.flags.has(cacheFlag)) {
+      ngMocksUniverse.cacheDeclarations.set(def, mock);
+    }
+
+    return mock as any;
+  } finally {
+    ngMocksUniverse.config.get('mockNgDefConstruction').delete(def);
+    if (!hasMockNgDefConstruction) {
+      ngMocksUniverse.config.delete('mockNgDefConstruction');
+    }
+
+    if (!hasNgMocksDepsResolution) {
+      ngMocksUniverse.config.delete('ngMocksDepsResolution');
+    }
   }
-
-  return mock as any;
 };

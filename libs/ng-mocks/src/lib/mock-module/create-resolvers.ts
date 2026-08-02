@@ -73,6 +73,14 @@ const createResolve =
     if (resolutions.has(def)) {
       return createResolveExisting(def, resolutions, change);
     }
+    if (ngMocksUniverse.config.get('mockNgDefConstruction')?.has(def)) {
+      // Mock templates do not need an import which points back into their current
+      // construction path. Do not cache the omission: the outer resolver will
+      // publish the completed mock after its decorator returns.
+      change();
+
+      return undefined;
+    }
 
     const detectedDef = funcGetType(def);
     if (ngMocksUniverse.isExcludedDef(detectedDef)) {
