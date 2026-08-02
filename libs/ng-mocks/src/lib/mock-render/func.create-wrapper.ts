@@ -41,7 +41,7 @@ const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
       });
 
       if (!bindings) {
-        for (const input of inputs || []) {
+        for (const input of inputs) {
           let value: any = null;
           helperDefinePropertyDescriptor(this, input, {
             get: () => value,
