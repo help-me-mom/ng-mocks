@@ -109,6 +109,14 @@ const getInputBindings = (inputs: DirectiveIo[]): string[] => {
   return result;
 };
 
+const getWrapperInputs = (inputBindings: string[], bindings: undefined | null | any[]): string[] => {
+  if (!bindings) {
+    return inputBindings;
+  }
+
+  return inputBindings.filter(input => bindings.indexOf(input) !== -1);
+};
+
 export default (
   template: any,
   meta: Directive,
@@ -146,11 +154,17 @@ export default (
     }
   }
 
+  const inputBindings = getInputBindings(inputs);
+  const wrapperInputs = getWrapperInputs(inputBindings, bindings);
   const mockTemplate = funcGenerateTemplate(template, { selector: meta.selector, inputs, outputs, bindings });
   const options: Component = {
     // The MockRender wrapper is driven by fixture.detectChanges(), so it must stay
     // checkable even when the rendered declaration itself uses OnPush.
     changeDetection: ChangeDetectionStrategy.Default,
+    // The wrapper owns binding values, while the rendered declaration owns
+    // signal metadata and transforms. Keeping these inputs ordinary lets
+    // ComponentRef.setInput feed the generated template without transforming twice.
+    inputs: wrapperInputs,
     providers: flags.providers,
     selector: 'mock-render',
     template: mockTemplate,
@@ -158,9 +172,9 @@ export default (
     standalone: false,
   };
 
-  ctor = generateWrapperComponent({ ...meta, bindings, options });
+  ctor = generateWrapperComponent({ bindings, inputs: wrapperInputs, options });
   coreDefineProperty(ctor, 'cacheKey', cacheKey);
-  coreDefineProperty(ctor, 'inputBindings', getInputBindings(inputs));
+  coreDefineProperty(ctor, 'inputBindings', inputBindings);
   coreDefineProperty(ctor, 'tpl', mockTemplate);
 
   if (meta.selector && options.providers) {
