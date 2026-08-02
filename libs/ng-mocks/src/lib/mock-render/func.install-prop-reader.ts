@@ -2,9 +2,14 @@ import coreDefineProperty from '../common/core.define-property';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 import helperMockService from '../mock-service/helper.mock-service';
 
-const createPropertyGet = (key: keyof any & string, reader: Record<keyof any, any>, source: Record<keyof any, any>) => {
+const createPropertyGet = (
+  key: keyof any & string,
+  reader: Record<keyof any, any>,
+  source: Record<keyof any, any>,
+  valueKeys: string[],
+) => {
   const handler = () => {
-    if (typeof source[key] === 'function') {
+    if (typeof source[key] === 'function' && valueKeys.indexOf(key) === -1) {
       if (reader[`__ngMocks_${key}__origin`] !== source[key]) {
         const clone = helperMockService.createClone(source[key], reader, source);
         coreDefineProperty(reader, `__ngMocks_${key}`, clone);
@@ -49,6 +54,7 @@ export default (
   source: Record<keyof any, any> | undefined,
   extra: string[],
   force = false,
+  valueKeys: string[] = [],
 ): void => {
   if (!source) {
     return;
@@ -61,7 +67,7 @@ export default (
       continue;
     }
     helperDefinePropertyDescriptor(reader, key, {
-      get: createPropertyGet(key, reader, source),
+      get: createPropertyGet(key, reader, source, valueKeys),
       set: createPropertySet(key, reader, source),
     });
     exists.push(key);

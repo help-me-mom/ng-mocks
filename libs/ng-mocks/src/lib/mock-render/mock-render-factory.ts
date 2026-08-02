@@ -200,7 +200,7 @@ const generateFactoryInstall =
   };
 
 const generateFactory = (
-  componentCtor: Type<any> & { tpl?: string },
+  componentCtor: Type<any> & { inputBindings: string[]; tpl?: string },
   bindings: undefined | null | string[],
   template: any,
   options: IMockRenderFactoryOptions,
@@ -223,7 +223,7 @@ const generateFactory = (
       };
     }
 
-    funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? []);
+    funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? [], false, componentCtor.inputBindings);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
 
     if (detectChanges === undefined || detectChanges) {
