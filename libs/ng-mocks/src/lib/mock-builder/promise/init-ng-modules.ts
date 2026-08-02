@@ -62,7 +62,7 @@ const isExportedOnRoot = (
   configDef: Map<any, any>,
 ): undefined | Type<any> => {
   const cnfInstance = configInstance.get(def);
-  const cnfDef = configDef.get(def) || /* istanbul ignore next */ {};
+  const cnfDef = configDef.get(def);
 
   if (isNgDef(def, 'm') && cnfDef.onRoot) {
     return def;
@@ -116,14 +116,9 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
     if (!def || processed.indexOf(def) !== -1) {
       continue;
     }
-    const cnfDef = ngMocksUniverse.config.get(def) || /* istanbul ignore next */ { __set: true };
+    const cnfDef = ngMocksUniverse.config.get(def);
     processed.push(def);
     cnfDef.onRoot = cnfDef.onRoot || !cnfDef.dependency;
-    // istanbul ignore if
-    if (cnfDef.__set) {
-      cnfDef.__set = undefined;
-      ngMocksUniverse.config.set(def, cnfDef);
-    }
 
     if (isNgDef(def, 'm') && cnfDef.onRoot) {
       handleDef(meta, def, defProviders);

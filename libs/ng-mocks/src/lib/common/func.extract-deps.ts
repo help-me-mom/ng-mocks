@@ -10,31 +10,39 @@ export const funcExtractDeps = (
   def: any,
   result: Set<AnyDeclaration<any>>,
   recursive = false,
+  visited = new Set<AnyDeclaration<any>>(),
 ): Set<AnyDeclaration<any>> => {
-  const meta = collectDeclarations(def);
-  const type = getNgType(def);
-  // istanbul ignore if
-  if (!type || type === 'Injectable') {
-    return result;
-  }
+  const visit = (current: any): void => {
+    if (visited.has(current)) {
+      return;
+    }
+    visited.add(current);
 
-  const decorator = meta[type];
-  for (const field of coreConfig.dependencies) {
-    if (!decorator[field]) {
-      continue;
+    const meta = collectDeclarations(current);
+    const type = getNgType(current);
+    // istanbul ignore if
+    if (!type || type === 'Injectable') {
+      return;
     }
 
-    for (const item of flatten(decorator[field])) {
-      // istanbul ignore if: it is here for standalone things, however they don't support modules with providers.
-      const itemType = funcGetType(item);
-      if (!result.has(itemType)) {
+    const decorator = meta[type];
+    for (const field of coreConfig.dependencies) {
+      if (!decorator[field]) {
+        continue;
+      }
+
+      for (const item of flatten(decorator[field])) {
+        // istanbul ignore if: it is here for standalone things, however they don't support modules with providers.
+        const itemType = funcGetType(item);
         result.add(itemType);
         if (recursive) {
-          funcExtractDeps(itemType, result);
+          visit(itemType);
         }
       }
     }
-  }
+  };
+
+  visit(def);
 
   return result;
 };
