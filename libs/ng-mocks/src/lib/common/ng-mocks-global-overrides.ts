@@ -17,6 +17,7 @@ import coreReflectMeta from './core.reflect.meta';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
 import { AnyType, dependencyKeys } from './core.types';
+import { funcExtractDeps } from './func.extract-deps';
 import { getSourceOfMock } from './func.get-source-of-mock';
 import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
@@ -262,6 +263,20 @@ const configureTestingModule =
     let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
     if (!finalModuleDef) {
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
+
+      const realDependencies = new Set<AnyType<any>>();
+      for (const [source, , isMock] of mockBuilder) {
+        if (!isMock) {
+          funcExtractDeps(funcGetType(source), realDependencies, true);
+        }
+      }
+      for (const dependency of mapValues(realDependencies)) {
+        // Explicit TestBed entries are applied below and take precedence.
+        // Global resolutions keep their existing MockBuilder semantics.
+        if (!ngMocksUniverse.getResolution(dependency)) {
+          builder = builder.keep(dependency, { dependency: true });
+        }
+      }
 
       for (const [source, def, isMock] of mockBuilder) {
         const transform = def.prototype.__ngMocksConfig?.transform;
