@@ -1,15 +1,21 @@
 import { DirectiveIo, DirectiveIoParsed } from './core.types';
 
-const normalize = ({ name, alias, required }: DirectiveIoParsed): DirectiveIoParsed => {
+const normalize = ({ name, alias, required, isSignal, transform }: DirectiveIoParsed): DirectiveIoParsed => {
+  const metadata = {
+    ...(required === undefined ? {} : { required }),
+    ...(isSignal === undefined ? {} : { isSignal }),
+    ...(transform === undefined ? {} : { transform }),
+  };
+
   if (name === alias || !alias) {
-    return required === undefined ? { name } : { name, required };
+    return { name, ...metadata };
   }
 
   if (name + 'Change' === alias) {
-    return required === undefined ? { name: alias } : { name: alias, required };
+    return { name: alias, ...metadata };
   }
 
-  return required === undefined ? { name, alias } : { name, alias, required };
+  return { name, alias, ...metadata };
 };
 
 export default function (param: DirectiveIo): DirectiveIoParsed {

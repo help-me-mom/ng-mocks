@@ -1,4 +1,5 @@
 import { EventEmitter, Injector, Optional, PipeTransform, Self } from '@angular/core';
+import * as angularCore from '@angular/core';
 
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
@@ -130,6 +131,28 @@ const applyOutputs = (instance: MockConfig & Record<keyof any, any>) => {
   }
 };
 
+const applyInputs = (instance: MockConfig & Record<keyof any, any>) => {
+  const inputFactory = (angularCore as any).input;
+  // Older Angular versions do not expose the signal input factory.
+  /* istanbul ignore if */
+  if (typeof inputFactory !== 'function') {
+    return;
+  }
+
+  for (const input of instance.__ngMocksConfig.inputs || []) {
+    const { name, required, isSignal, transform } = funcDirectiveIoParse(input);
+    if (!isSignal || Object.getOwnPropertyDescriptor(instance, name)) {
+      continue;
+    }
+
+    const options = transform === undefined ? undefined : { transform };
+    instance[name] =
+      required && typeof inputFactory.required === 'function'
+        ? inputFactory.required(options)
+        : inputFactory(undefined, options);
+  }
+};
+
 const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
   for (const prop of [
     ...helperMockService.extractMethodsFromPrototype(prototype),
@@ -166,6 +189,7 @@ export type ngMocksMockConfig = {
   init?: (instance: any) => void;
   isControlValueAccessor?: boolean;
   isValidator?: boolean;
+  inputs?: Array<DirectiveIo>;
   outputs?: Array<DirectiveIo>;
   queryScanKeys?: string[];
   setControlValueAccessor?: boolean;
@@ -222,6 +246,7 @@ export class Mock {
     // istanbul ignore else
     if (funcIsMock(this)) {
       applyNgValueAccessor(this, ngControl, injector);
+      applyInputs(this);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
       applyMethods(this, mockOf.prototype);

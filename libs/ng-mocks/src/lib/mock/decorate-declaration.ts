@@ -26,6 +26,7 @@ const buildConfig = (
 ) => {
   return {
     config: ngMocksUniverse.config.get(source),
+    inputs: meta.inputs,
     outputs: meta.outputs,
     queryScanKeys: [],
     setControlValueAccessor: setControlValueAccessor,
