@@ -16,6 +16,8 @@ import { MockBuilder } from './mock-builder';
 @Injectable()
 class TargetService {}
 
+class TargetClass {}
+
 const TARGET_TOKEN = new InjectionToken('TARGET_TOKEN');
 
 @Pipe({
@@ -105,6 +107,21 @@ describe('MockBuilderPromise', () => {
   it('adds non dependencies in kept providers', async () => {
     await MockBuilder().keep(TargetService);
     expect(mockHelperGet(TargetService)).toBeTruthy();
+  });
+
+  it('adds kept classes as providers', async () => {
+    await MockBuilder().keep(TargetClass);
+    expect(mockHelperGet(TargetClass)).toBeTruthy();
+  });
+
+  it('does not add kept functions as providers', async () => {
+    const target = (route: unknown, state: unknown) =>
+      route === state;
+
+    await MockBuilder().keep(target);
+    expect(() => mockHelperGet(target)).toThrowError(
+      /Cannot find an instance/,
+    );
   });
 
   it('skips dependencies in mock providers', async () => {
