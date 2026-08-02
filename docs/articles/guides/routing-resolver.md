@@ -10,11 +10,32 @@ When you want to test a resolver, you need to remove all other resolves and guar
 to mock declarations to test the resolver in isolation,
 and to keep `RouterModule` and its dependencies to assert results on `Location` and `ActivatedRoute`.
 
-## Functional resolvers
+## Angular version compatibility
 
-A functional resolver is a simple function which uses `inject` to get another services and to fetch data for its route.
+The latest `ng-mocks` supports Angular 5 through Angular 22, but Angular's resolver APIs differ by version.
+
+| Angular | Supported resolver style | Router configuration |
+| ------: | ------------------------ | -------------------- |
+|    5-13 | Class implementing `Resolve<T>` | `RouterModule` |
+|   14-22 | Class implementing `Resolve<T>` or `ResolveFn<T>` | `RouterModule` |
+|   14-22 | Class implementing `Resolve<T>` or `ResolveFn<T>` | Standalone components with `provideRouter` |
+
+Use a [class resolver](#class-resolvers-angular-5-22) for code which has to run on Angular 5-13.
+For Angular 14-22, use the style already used by the application.
+
+Angular creates `ActivatedRouteSnapshot` and `RouterStateSnapshot` for every navigation.
+Do not provide or mock them in the testing module.
+Instead, mock the services which the resolver obtains through its constructor or `inject`.
+
+## Functional resolvers (Angular 14-22)
+
+A functional resolver is a function which can use `inject` to get services and fetch data for its route.
 It's important to note that a functional resolver isn't defined as a service or a token,
-and, therefore, it exists only in the definition of a route.   
+and, therefore, it exists only in the definition of a route.
+
+The setup depends on where the routes are declared.
+
+### Routes declared by an NgModule
 
 Let's assume, the resolver is called `dataResolver` and the module with its route `TargetModule`.
 
@@ -49,6 +70,38 @@ beforeEach(() =>
   .keep(dataResolver)
 );
 ```
+
+`.exclude(NG_MOCKS_RESOLVERS)` removes every resolver from the mocked route definitions.
+Consequently, `.keep(dataResolver)` is required here to restore the resolver under test.
+
+### Standalone routes with provideRouter
+
+When a standalone test supplies its routes directly with `provideRouter`, the route definition already contains the real resolver.
+Do not add the resolver as a root provider and do not call `.keep(dataResolver)`.
+
+```ts
+beforeEach(() =>
+  MockBuilder(TargetComponent)
+    .keep(NG_MOCKS_ROOT_PROVIDERS)
+    .keep(RouterOutlet)
+    .provide(
+      provideRouter([
+        {
+          component: RouteComponent,
+          path: 'route',
+          resolve: {
+            data: dataResolver,
+          },
+        },
+      ]),
+    )
+    .mock(RouteComponent)
+    .mock(DataService),
+);
+```
+
+`ResolveFn` receives `ActivatedRouteSnapshot` and `RouterStateSnapshot` as invocation arguments.
+They are not constructor dependencies, so a functional resolver must never be registered as a class provider.
 
 To test the resolver we need to render `RouterOutlet`.
 
@@ -91,17 +144,37 @@ Profit, now we can assert the data the resolver has provided.
 expect(route.snapshot.data).toEqual({
   data: {
     flag: false,
+    path: 'route',
+    url: '/route',
   },
 });
 ```
 
-## Class Resolver (legacy)
+## Class resolvers (Angular 5-22)
 
-If your code has resolvers which a classes and angular services,
-the process is exactly the same as for [functional resolvers](#functional-resolvers).
+Class resolvers are the available pattern on Angular 5-13 and remain supported on Angular 14-22.
+If your code has resolver classes registered as Angular services,
+the NgModule process is the same as for [functional resolvers](#routes-declared-by-an-ngmodule).
 
 For example, if the class of the resolver is called `DataResolver`,
 the configuration of `TestBed` should be the next:
+
+```ts
+@Injectable()
+class DataResolver implements Resolve<Data> {
+  constructor(private readonly dataService: DataService) {}
+
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ) {
+    return this.dataService.data(route, state);
+  }
+}
+```
+
+The snapshots are method arguments supplied by the router.
+Only `DataService` is a constructor dependency supplied by dependency injection.
 
 ```ts
 beforeEach(() =>
@@ -137,6 +210,9 @@ Profit.
 
 ## Live example
 
+- [NgModule functional resolver source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingResolver/fn.spec.ts) (Angular 14-22)
+- [Standalone functional resolver source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingResolver/standalone.spec.ts) (Angular 14-22)
+- [Class resolver source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingResolver/test.spec.ts) (Angular 5-22)
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingResolver/fn.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver%3Afn)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingResolver/fn.spec.ts&initialpath=%3Fspec%3DTestRoutingResolver%3Afn)
 
@@ -179,9 +255,19 @@ class DataService {
 }
 
 // A resolver we want to test.
-const dataResolver: ResolveFn<Observable<{ flag: boolean }>> = () =>
+const dataResolver: ResolveFn<
+  Observable<{
+    flag: boolean;
+    path: string | undefined;
+    url: string;
+  }>
+> = (route, state) =>
   combineLatest([inject(DataService).data()]).pipe(
-    map(([flag]) => ({ flag })),
+    map(([flag]) => ({
+      flag,
+      path: route.routeConfig?.path,
+      url: state.url,
+    })),
   );
 
 // A resolver we want to ignore.
@@ -275,6 +361,8 @@ describe('TestRoutingResolver:fn', () => {
     expect(route.snapshot.data).toEqual({
       data: {
         flag: false,
+        path: 'route',
+        url: '/route',
       },
     });
   });

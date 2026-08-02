@@ -2,13 +2,15 @@ import { Location } from '@angular/common';
 import { Component, Injectable, NgModule } from '@angular/core';
 import {
   ActivatedRoute,
+  ActivatedRouteSnapshot,
   Resolve,
   Router,
   RouterModule,
   RouterOutlet,
+  RouterStateSnapshot,
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { combineLatest, from, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -25,18 +27,32 @@ class DataService {
   protected flag = true;
 
   public data(): Observable<boolean> {
-    return from([this.flag]);
+    return new Observable<boolean>(observer => {
+      observer.next(this.flag);
+      observer.complete();
+    });
   }
 }
 
 // A resolver we want to test.
 @Injectable()
-class DataResolver implements Resolve<{ flag: boolean }> {
+class DataResolver implements Resolve<{
+  flag: boolean;
+  path: string | undefined;
+  url: string;
+}> {
   public constructor(protected service: DataService) {}
 
-  public resolve() {
-    return combineLatest([this.service.data()]).pipe(
-      map(([flag]) => ({ flag })),
+  public resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ) {
+    return this.service.data().pipe(
+      map(flag => ({
+        flag,
+        path: route.routeConfig ? route.routeConfig.path : undefined,
+        url: state.url,
+      })),
     );
   }
 }
@@ -46,8 +62,11 @@ class DataResolver implements Resolve<{ flag: boolean }> {
 class MockResolver implements Resolve<{ mock: boolean }> {
   protected mock = true;
 
-  public resolve() {
-    return of({ mock: this.mock });
+  public resolve(): Observable<{ mock: boolean }> {
+    return new Observable<{ mock: boolean }>(observer => {
+      observer.next({ mock: this.mock });
+      observer.complete();
+    });
   }
 }
 
@@ -113,7 +132,11 @@ describe('TestRoutingResolver:test', () => {
 
     // DataService has been replaced with a mock copy,
     // let's set a custom value we will assert later on.
-    dataService.data = () => from([false]);
+    dataService.data = () =>
+      new Observable<boolean>(observer => {
+        observer.next(false);
+        observer.complete();
+      });
 
     // Let's switch to the route with the resolver.
     location.go('/route');
@@ -135,6 +158,8 @@ describe('TestRoutingResolver:test', () => {
     expect(route.snapshot.data).toEqual({
       data: {
         flag: false,
+        path: 'route',
+        url: '/route',
       },
     });
   });

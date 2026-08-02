@@ -36,9 +36,19 @@ class DataService {
 }
 
 // A resolver we want to test.
-const dataResolver: ResolveFn<Observable<{ flag: boolean }>> = () =>
+const dataResolver: ResolveFn<
+  Observable<{
+    flag: boolean;
+    path: string | undefined;
+    url: string;
+  }>
+> = (route, state) =>
   combineLatest([inject(DataService).data()]).pipe(
-    map(([flag]) => ({ flag })),
+    map(([flag]) => ({
+      flag,
+      path: route.routeConfig?.path,
+      url: state.url,
+    })),
   );
 
 // A resolver we want to ignore.
@@ -135,6 +145,8 @@ describe('TestRoutingResolver:fn', () => {
     expect(route.snapshot.data).toEqual({
       data: {
         flag: false,
+        path: 'route',
+        url: '/route',
       },
     });
   });
