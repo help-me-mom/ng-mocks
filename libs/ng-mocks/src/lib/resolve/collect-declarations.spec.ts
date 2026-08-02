@@ -336,7 +336,7 @@ describe('collect-declarations', () => {
           value: 'value',
         },
         inputs: {
-          value: ['value', 1, null],
+          value: ['value', 1, String],
         },
         outputs: {
           valueChange: 'value',
@@ -345,9 +345,40 @@ describe('collect-declarations', () => {
       },
     });
 
-    expect(actual.inputs).toEqual(['value']);
+    expect(actual.inputs).toEqual([
+      { name: 'value', isSignal: true, transform: String },
+    ]);
     expect(actual.outputs).toEqual(['valueChange']);
     expect(actual.standalone).toBe(true);
+    delete global.__ngMocksReflectComponentType;
+  });
+
+  it('enriches ng def inputs with reflected signal metadata', () => {
+    const global = funcGetGlobal();
+    global.__ngMocksReflectComponentType = () => ({
+      inputs: [
+        {
+          isSignal: true,
+          propName: 'value',
+          templateName: 'alias',
+        },
+      ],
+      outputs: [],
+    });
+    const actual = collectDeclarations({
+      ɵcmp: {
+        declaredInputs: {
+          alias: 'value',
+        },
+        inputs: {
+          alias: ['value', 0, null],
+        },
+      },
+    });
+
+    expect(actual.inputs).toEqual([
+      { name: 'value', alias: 'alias', isSignal: true },
+    ]);
     delete global.__ngMocksReflectComponentType;
   });
 

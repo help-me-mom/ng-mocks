@@ -44,7 +44,13 @@ export type AnyDeclaration<T> = AnyType<T> | InjectionToken<T> | string;
  *
  * @internal
  */
-export type DirectiveIoParsed = { name: string; alias?: string; required?: boolean };
+export type DirectiveIoParsed = {
+  name: string;
+  alias?: string;
+  required?: boolean;
+  isSignal?: boolean;
+  transform?: (value: any) => any;
+};
 
 /**
  * Possible Input / Output type.

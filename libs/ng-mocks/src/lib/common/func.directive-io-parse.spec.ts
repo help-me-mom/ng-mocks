@@ -37,4 +37,20 @@ describe('funcDirectiveIoParse', () => {
       required: true,
     });
   });
+
+  it('keeps signal input metadata', () => {
+    expect(
+      funcDirectiveIoParse({
+        alias: 'alias',
+        isSignal: true,
+        name: 'value',
+        transform: String,
+      }),
+    ).toEqual({
+      alias: 'alias',
+      isSignal: true,
+      name: 'value',
+      transform: String,
+    });
+  });
 });

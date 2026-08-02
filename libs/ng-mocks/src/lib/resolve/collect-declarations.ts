@@ -142,16 +142,32 @@ const addUniqueDirectiveIo = (
   name: string,
   alias: string | undefined,
   required: boolean | undefined,
+  isSignal?: boolean,
+  transform?: (value: any) => any,
 ): void => {
-  const normalizedDef = funcDirectiveIoBuild({ name, alias, required });
+  const normalizedDef = funcDirectiveIoBuild({ name, alias, required, isSignal, transform });
 
-  for (const def of declaration[key]) {
+  for (let index = 0; index < declaration[key].length; index += 1) {
+    const def = declaration[key][index];
     if (def === normalizedDef) {
       return;
     }
 
-    const { name: defName, alias: defAlias } = funcDirectiveIoParse(def);
+    const {
+      name: defName,
+      alias: defAlias,
+      required: defRequired,
+      isSignal: defIsSignal,
+      transform: defTransform,
+    } = funcDirectiveIoParse(def);
     if (defName === name && defAlias === alias) {
+      declaration[key][index] = funcDirectiveIoBuild({
+        name,
+        alias,
+        required: defRequired ?? required,
+        isSignal: defIsSignal ?? isSignal,
+        transform: defTransform ?? transform,
+      });
       return;
     }
   }
@@ -168,16 +184,20 @@ const parsePropMetadataParserFactoryProp =
       alias?: string;
       required?: boolean;
       bindingPropertyName?: string;
+      isSignal?: boolean;
+      transform?: (value: any) => any;
     },
     declaration: Declaration,
   ): void => {
-    const { alias, required } = funcDirectiveIoParse({
+    const { alias, required, isSignal, transform } = funcDirectiveIoParse({
       name,
       alias: decorator.alias ?? decorator.bindingPropertyName,
       required: decorator.required,
+      isSignal: decorator.isSignal || undefined,
+      transform: decorator.transform,
     });
 
-    addUniqueDirectiveIo(declaration, key, name, alias, required);
+    addUniqueDirectiveIo(declaration, key, name, alias, required, isSignal, transform);
   };
 const parsePropMetadataParserInput = parsePropMetadataParserFactoryProp('inputs');
 const parsePropMetadataParserOutput = parsePropMetadataParserFactoryProp('outputs');
@@ -305,6 +325,9 @@ const parsePropMetadata = (
   }
 };
 
+// Angular's compiled InputFlags.SignalBased value, introduced with signal inputs.
+const INPUT_FLAG_SIGNAL_BASED = 1;
+
 const parseNgDef = (
   def: {
     ɵcmp?: any;
@@ -329,6 +352,8 @@ const parseNgDef = (
   for (const alias of Object.keys(ngDef.inputs || {})) {
     const input = ngDef.inputs[alias];
     const minifiedName = Array.isArray(input) ? input[0] : input;
+    const flags = Array.isArray(input) && typeof input[1] === 'number' ? input[1] : 0;
+    const transform = Array.isArray(input) ? input[2] : undefined;
     const {
       name,
       alias: normalizedAlias,
@@ -339,7 +364,15 @@ const parseNgDef = (
       required: undefined,
     });
 
-    addUniqueDirectiveIo(declaration, 'inputs', name, normalizedAlias, required);
+    addUniqueDirectiveIo(
+      declaration,
+      'inputs',
+      name,
+      normalizedAlias,
+      required,
+      flags & INPUT_FLAG_SIGNAL_BASED ? true : undefined,
+      transform ?? undefined,
+    );
   }
 
   for (const alias of Object.keys(ngDef.outputs || {})) {
@@ -369,13 +402,15 @@ const parseReflectComponentType = (def: any, declaration: Declaration): void => 
   }
 
   for (const input of mirror.inputs) {
-    const { name, alias, required } = funcDirectiveIoParse({
+    const { name, alias, required, isSignal, transform } = funcDirectiveIoParse({
       name: input.propName,
       alias: input.templateName === input.propName ? undefined : input.templateName,
       required: undefined, // reflectComponentType doesn't provide required info for signal inputs
+      isSignal: input.isSignal || undefined,
+      transform: input.transform,
     });
 
-    addUniqueDirectiveIo(declaration, 'inputs', name, alias, required);
+    addUniqueDirectiveIo(declaration, 'inputs', name, alias, required, isSignal, transform);
   }
 
   for (const output of mirror.outputs) {

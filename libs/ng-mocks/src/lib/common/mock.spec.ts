@@ -2,10 +2,12 @@ import {
   Component,
   Directive,
   EventEmitter,
+  isSignal,
   NgModule,
   Pipe,
   PipeTransform,
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import {
   ControlValueAccessor,
   NG_ASYNC_VALIDATORS,
@@ -386,6 +388,39 @@ describe('Mock prototype', () => {
 });
 
 describe('definitions', () => {
+  it('initializes signal inputs on mock instances', () => {
+    class TargetComponent {}
+
+    const testComponent = extendClass(Mock);
+    decorateMock(testComponent, TargetComponent, {
+      inputs: [
+        'regular',
+        {
+          isSignal: true,
+          name: 'value',
+          transform: String,
+        },
+        {
+          isSignal: true,
+          name: 'required',
+          required: true,
+        },
+        {
+          isSignal: true,
+          name: '__ngMocks',
+        },
+      ],
+    });
+
+    const instance: any = TestBed.runInInjectionContext(
+      () => new testComponent(),
+    );
+    expect(instance.regular).toBeUndefined();
+    expect(isSignal(instance.value)).toBe(true);
+    expect(isSignal(instance.required)).toBe(true);
+    expect(instance.__ngMocks).toBe(true);
+  });
+
   it('skips output properties from config', () => {
     class TargetComponent {}
 

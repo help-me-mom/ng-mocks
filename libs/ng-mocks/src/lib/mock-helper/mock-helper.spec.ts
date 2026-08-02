@@ -2,6 +2,7 @@ import {
   Component,
   Directive,
   EventEmitter,
+  input,
   Input,
   Output,
 } from '@angular/core';
@@ -21,6 +22,8 @@ import { ngMocks } from './mock-helper';
 })
 export class ExampleDirective {
   @Input() public exampleDirective = '';
+  @Input({ isSignal: true } as never)
+  public readonly signalInput = input('');
   @Output() public someOutput = new EventEmitter<boolean>();
   @Input('bah') public something = '';
 
@@ -280,6 +283,19 @@ describe('MockHelper:getDirective', () => {
     const node = ngMocks.find(fixture.debugElement, 'div');
     const input = ngMocks.input(node, 'exampleDirective');
     expect(input).toEqual('5');
+  });
+
+  it('input returns a signal input value', () => {
+    const fixture = MockRender(
+      '<div exampleDirective [signalInput]="value"></div>',
+      {
+        value: 'signal',
+      },
+    );
+
+    const node = ngMocks.find(fixture.debugElement, 'div');
+    const actual = ngMocks.input(node, 'signalInput');
+    expect(actual).toEqual('signal');
   });
 
   it('input returns default value', () => {

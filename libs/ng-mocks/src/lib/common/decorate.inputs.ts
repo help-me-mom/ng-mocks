@@ -13,11 +13,12 @@ export default (cls: AnyType<any>, inputs?: Array<DirectiveIo>, exclude?: string
   // istanbul ignore else
   if (inputs) {
     for (const input of inputs) {
-      const { name, alias, required } = funcDirectiveIoParse(input);
+      const { name, alias, required, isSignal, transform } = funcDirectiveIoParse(input);
       if (exclude && exclude.indexOf(name) !== -1) {
         continue;
       }
-      Input(funcDirectiveIoBuild({ name, alias, required }, true) as never)(cls.prototype, name);
+      // Angular's JIT facade consumes isSignal when it builds the mock definition.
+      Input(funcDirectiveIoBuild({ name, alias, required, isSignal, transform }, true) as never)(cls.prototype, name);
     }
   }
 };
