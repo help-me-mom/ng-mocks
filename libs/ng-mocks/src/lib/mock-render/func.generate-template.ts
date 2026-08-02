@@ -20,11 +20,12 @@ const generateTemplateAttr = (bindings: null | undefined | any[], attr: Array<Di
   }
 
   let mockTemplate = '';
-  const keys = bindings ?? attr;
   for (const definition of attr) {
     const { name, alias } = funcDirectiveIoParse(definition);
+    const publicName = alias || name;
 
-    mockTemplate += keys.indexOf(alias || name) === -1 ? '' : generateTemplateAttrWithParams(alias || name, type);
+    mockTemplate +=
+      bindings && bindings.indexOf(publicName) === -1 ? '' : generateTemplateAttrWithParams(publicName, type);
   }
 
   return mockTemplate;
