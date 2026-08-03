@@ -57,6 +57,12 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, './dist/libs/ng-mocks/'),
       filename: 'index.mjs',
+      environment: {
+        // Angular 14 can concatenate ESM package sources into one scope.
+        // Generated lexical bindings would collide when the bundle is included more than once.
+        const: false,
+        let: false,
+      },
       library: {
         type: 'module',
       },
