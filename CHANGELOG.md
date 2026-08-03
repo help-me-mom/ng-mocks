@@ -1,3 +1,35 @@
+# [14.16.0](https://github.com/help-me-mom/ng-mocks/compare/v14.15.3...v14.16.0) (2026-08-03)
+
+
+### Bug Fixes
+
+* **TestBed:** allow TestBed.inject overrides for mocked declarations [#7937](https://github.com/help-me-mom/ng-mocks/issues/7937) [#13312](https://github.com/help-me-mom/ng-mocks/issues/13312) ([d0743f6](https://github.com/help-me-mom/ng-mocks/commit/d0743f6369d17f5c8c7255ee25a1880ad4bf9553))
+* **ci:** use verified Codecov CLI ([4e2b495](https://github.com/help-me-mom/ng-mocks/commit/4e2b4955868299135898b7d6cd40367dec701006))
+* **core:** preserve defer blocks with mocks [#7742](https://github.com/help-me-mom/ng-mocks/issues/7742) ([#14515](https://github.com/help-me-mom/ng-mocks/issues/14515)) ([9706b52](https://github.com/help-me-mom/ng-mocks/commit/9706b527430c6e9eb6fe0d609d2945150c353e81))
+* **e2e/a17:** compile signal inputs [#7976](https://github.com/help-me-mom/ng-mocks/issues/7976) ([#14511](https://github.com/help-me-mom/ng-mocks/issues/14511)) ([1908a20](https://github.com/help-me-mom/ng-mocks/commit/1908a20b744db05172636eab7cd11cc78dedd20d))
+* **e2e/jest:** align TypeScript 6 config ([91afc59](https://github.com/help-me-mom/ng-mocks/commit/91afc59dfddea36942b2ff70fbc634f68c0ef2b4))
+* **MockBuilder:** mock global runtime tokens [#10760](https://github.com/help-me-mom/ng-mocks/issues/10760) ([#14512](https://github.com/help-me-mom/ng-mocks/issues/14512)) ([0f1718f](https://github.com/help-me-mom/ng-mocks/commit/0f1718fbdac809f9a9d2a1d137b4d675c1f7395f))
+* **MockBuilder:** mock standalone inject services [#9397](https://github.com/help-me-mom/ng-mocks/issues/9397) ([#14508](https://github.com/help-me-mom/ng-mocks/issues/14508)) ([03d1223](https://github.com/help-me-mom/ng-mocks/commit/03d12234a867ad302d583a7fe80861231f4ea051))
+* **MockBuilder:** support deep module re-exports [#7490](https://github.com/help-me-mom/ng-mocks/issues/7490) ([#14503](https://github.com/help-me-mom/ng-mocks/issues/14503)) ([54df8fb](https://github.com/help-me-mom/ng-mocks/commit/54df8fb84fc07a0ad3ab6e74f0ccd0f25fb4c61f))
+* **MockBuilder:** support kept functional resolvers [#7495](https://github.com/help-me-mom/ng-mocks/issues/7495) ([#14504](https://github.com/help-me-mom/ng-mocks/issues/14504)) ([817ff27](https://github.com/help-me-mom/ng-mocks/commit/817ff2703834a21273c6c7127c1be59bad8d96d3))
+* **MockComponent:** handle circular standalone imports [#8627](https://github.com/help-me-mom/ng-mocks/issues/8627) ([#14507](https://github.com/help-me-mom/ng-mocks/issues/14507)) ([851538a](https://github.com/help-me-mom/ng-mocks/commit/851538adf3e2f4f2d40693eed3ca78f0c04260dc))
+* **MockComponent:** preserve signal input behavior [#13671](https://github.com/help-me-mom/ng-mocks/issues/13671) ([#14490](https://github.com/help-me-mom/ng-mocks/issues/14490)) ([b8f0b71](https://github.com/help-me-mom/ng-mocks/commit/b8f0b71ce0b427772c8d8f500a9342bf8fec8ae5))
+* **MockRender:** preserve callable input values [#13089](https://github.com/help-me-mom/ng-mocks/issues/13089) ([#14491](https://github.com/help-me-mom/ng-mocks/issues/14491)) ([450873f](https://github.com/help-me-mom/ng-mocks/commit/450873f92c1b293ded6248786e9e9b77a86d17c6))
+* **MockRender:** preserve TestBed module options [#11324](https://github.com/help-me-mom/ng-mocks/issues/11324) ([#14494](https://github.com/help-me-mom/ng-mocks/issues/14494)) ([158d872](https://github.com/help-me-mom/ng-mocks/commit/158d87206ce4712f4b26835a614e0015ba332ae1))
+* **MockRender:** respect implicit OnPush strategy [#14157](https://github.com/help-me-mom/ng-mocks/issues/14157) ([#14489](https://github.com/help-me-mom/ng-mocks/issues/14489)) ([41e982c](https://github.com/help-me-mom/ng-mocks/commit/41e982c334a1425d06f6c9910facb98bfdec6dc5))
+* **MockRender:** support setInput for signal inputs [#11001](https://github.com/help-me-mom/ng-mocks/issues/11001) ([#14496](https://github.com/help-me-mom/ng-mocks/issues/14496)) ([6d1a832](https://github.com/help-me-mom/ng-mocks/commit/6d1a83216a107e66fc5bd63211cc0b07cf24f8b4))
+* **MockRender:** type signal input bindings [#14003](https://github.com/help-me-mom/ng-mocks/issues/14003) ([#14004](https://github.com/help-me-mom/ng-mocks/issues/14004)) ([bd3aa82](https://github.com/help-me-mom/ng-mocks/commit/bd3aa822f3cc1aef9888d86fe3007dc2bc3dab58))
+* **MockService:** harden function detection ([#14514](https://github.com/help-me-mom/ng-mocks/issues/14514)) ([708451d](https://github.com/help-me-mom/ng-mocks/commit/708451d6388843e4619b18fbfe5d6d908f523778))
+* **nx:** require discovered tests ([3f34dab](https://github.com/help-me-mom/ng-mocks/commit/3f34dab22f395750ef580a8240d15fbf5649045f))
+* **TestBed:** preserve unmocked standalone imports [#8649](https://github.com/help-me-mom/ng-mocks/issues/8649) ([#14501](https://github.com/help-me-mom/ng-mocks/issues/14501)) ([8109ab0](https://github.com/help-me-mom/ng-mocks/commit/8109ab047aa9ca2407bea2579a9a28ada0532507))
+* **TestBed:** support compiled platform modules [#12725](https://github.com/help-me-mom/ng-mocks/issues/12725) ([#14493](https://github.com/help-me-mom/ng-mocks/issues/14493)) ([ad72ab5](https://github.com/help-me-mom/ng-mocks/commit/ad72ab5bdf098d9f7d141844343d51ae4e0ba5c7))
+
+
+### Features
+
+* **MockService:** mock own object properties [#10919](https://github.com/help-me-mom/ng-mocks/issues/10919) ([220c71f](https://github.com/help-me-mom/ng-mocks/commit/220c71f20eba01e1017d4421a8cf8f6863de8a77))
+
+
 ## [14.15.3](https://github.com/help-me-mom/ng-mocks/compare/v14.15.2...v14.15.3) (2026-05-27)
 
 
