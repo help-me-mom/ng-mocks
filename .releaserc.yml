@@ -16,7 +16,7 @@ plugins:
         docker compose run --rm ng-mocks npm run lint -- --ignore-pattern e2e/ &&
         docker compose run --rm ng-mocks npm run ts:check &&
         docker compose run --rm ng-mocks npm run build
-  - '@semantic-release/release-notes-generator'
+  - './semantic-release-release-notes.mjs'
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG.md
   - - '@semantic-release/npm'

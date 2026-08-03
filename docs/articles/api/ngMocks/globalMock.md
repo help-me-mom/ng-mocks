@@ -39,8 +39,7 @@ ngMocks.defaultMock(BASE_PATH, () => '/api/test-path');
 
 The configured value is then available whenever `MockBuilder` keeps a component, directive, or pipe that injects the token:
 
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/ngMocksGlobalMock/test.spec.ts&initialpath=%3Fspec%3DngMocks.globalMock%3Ainject)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/ngMocksGlobalMock/test.spec.ts&initialpath=%3Fspec%3DngMocks.globalMock%3Ainject)
+- [View the tested source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/ngMocksGlobalMock/test.spec.ts)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/ngMocksGlobalMock/test.spec.ts"
 import { Component, inject, InjectionToken } from '@angular/core';

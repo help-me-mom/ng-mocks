@@ -7,9 +7,9 @@ The best way would be to discuss an issue or an improvement first:
 - [chat on gitter](https://gitter.im/ng-mocks/community)
 
 * [update docs](#update-docs)
-* [Requirements on Mac](#requiements-on-mac)
-* [Requirements on Linux](#requiements-on-linux)
-* [Requirements on Windows](#requiements-on-windows)
+* [Requirements on Mac](#requirements-on-mac)
+* [Requirements on Linux](#requirements-on-linux)
+* [Requirements on Windows](#requirements-on-windows)
 
 ## Update docs
 

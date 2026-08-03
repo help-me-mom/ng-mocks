@@ -17,8 +17,8 @@ The example below is applicable for all types of guards:
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - `canActivateChild` -
-  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activateChild.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivateChild),
-  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activateChild.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivateChild)
+  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate-child.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivateChild),
+  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate-child.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivateChild)
 - `canDeactivate` -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-deactivate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanDeactivate),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-deactivate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanDeactivate)
@@ -29,8 +29,7 @@ The example below is applicable for all types of guards:
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad)
 - standalone applications (Angular 14+) -
-  [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone),
-  [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
+  [tested source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 - class guards (legacy) -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest)
@@ -224,8 +223,7 @@ Profit.
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
-- [Try the standalone example on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
-- [Try the standalone example on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/standalone.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Astandalone)
+- [View the standalone example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
 import { Location } from '@angular/common';
