@@ -135,6 +135,42 @@ describe('issue-9397', () => {
     });
   });
 
+  describe('global keep', () => {
+    beforeEach(() => {
+      ngMocks.globalKeep(TargetService);
+
+      return MockBuilder(TargetComponent);
+    });
+    afterEach(() => ngMocks.globalWipe(TargetService));
+
+    it('preserves globally kept runtime dependencies', () => {
+      const fixture = MockRender(TargetComponent);
+      const service = TestBed.inject(TargetService);
+
+      expect(fixture.point.componentInstance.service).toBe(service);
+      expect(service.echo()).toBe('real');
+      expect(TargetService.constructed).toBe(1);
+    });
+  });
+
+  describe('global exclude', () => {
+    beforeEach(() => {
+      ngMocks.globalExclude(TargetService);
+
+      return MockBuilder(TargetComponent);
+    });
+    afterEach(() => ngMocks.globalWipe(TargetService));
+
+    it('preserves globally excluded runtime dependencies', () => {
+      const fixture = MockRender(TargetComponent);
+      const service = TestBed.inject(TargetService);
+
+      expect(fixture.point.componentInstance.service).toBe(service);
+      expect(service.echo()).toBe('real');
+      expect(TargetService.constructed).toBe(1);
+    });
+  });
+
   describe('kept standalone declarations', () => {
     beforeEach(() =>
       MockBuilder(HostComponent)

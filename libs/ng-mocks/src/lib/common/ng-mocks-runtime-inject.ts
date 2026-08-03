@@ -36,10 +36,8 @@ const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
 };
 
 const getMock = (provide: any, config: RuntimeInjectConfig): any => {
-  if (!config.mocks.has(provide)) {
-    const provider = helperUseFactory(provide);
-    config.mocks.set(provide, provider.useFactory(config.injector));
-  }
+  const provider = helperUseFactory(provide);
+  config.mocks.set(provide, provider.useFactory(config.injector));
 
   return config.mocks.get(provide);
 };
@@ -87,12 +85,8 @@ const installInjector = (config: RuntimeInjectConfig, restorers: Array<() => voi
 
 const installDeclaration = (declaration: any, config: RuntimeInjectConfig, restorers: Array<() => void>): void => {
   const definition = declaration.ɵcmp ?? declaration.ɵdir ?? declaration.ɵpipe;
-  const factoryDescriptor = definition && Object.getOwnPropertyDescriptor(definition, 'factory');
-  const definitionFactory = definition?.factory;
-  const factory = definitionFactory ?? declaration.ɵfac ?? declaration.ngFactoryDef;
-  if (!definition || !factory) {
-    return;
-  }
+  const factoryDescriptor = Object.getOwnPropertyDescriptor(definition, 'factory') as PropertyDescriptor;
+  const factory = declaration.ɵfac;
 
   definition.factory = function (this: any, ...args: any[]): any {
     active.push(config);
@@ -104,11 +98,7 @@ const installDeclaration = (declaration: any, config: RuntimeInjectConfig, resto
   };
 
   restorers.push(() => {
-    if (factoryDescriptor) {
-      Object.defineProperty(definition, 'factory', factoryDescriptor);
-    } else {
-      delete definition.factory;
-    }
+    Object.defineProperty(definition, 'factory', factoryDescriptor);
   });
 };
 
@@ -119,12 +109,7 @@ export const installRuntimeInject = (injector: any, declarations: Set<any>, touc
     mocks: new Map(),
     restore: () => {
       while (restorers.length > 0) {
-        restorers.pop()?.();
-      }
-      for (let index = active.length - 1; index >= 0; index -= 1) {
-        if (active[index] === config) {
-          active.splice(index, 1);
-        }
+        restorers.pop()!();
       }
       installed.delete(config);
     },
@@ -137,7 +122,7 @@ export const installRuntimeInject = (injector: any, declarations: Set<any>, touc
   }
 
   installed.add(config);
-  injector.onDestroy?.(config.restore);
+  injector.onDestroy(config.restore);
 };
 
 export const resetRuntimeInject = (): void => {
