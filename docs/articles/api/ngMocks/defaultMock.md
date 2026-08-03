@@ -12,6 +12,9 @@ Sets default values for mocks in the whole testing environment.
 
 The best place to do that is in `src/test.ts` for jasmine or in `src/setup-jest.ts` / `src/test-setup.ts` for `jest`.
 
+To provide a default for a token that is only discovered at runtime through Angular's `inject()` function,
+combine `ngMocks.defaultMock` with [`ngMocks.globalMock`](globalMock.md#runtime-inject-dependencies).
+
 For example, if a service or component has a property that should be an `Observable`.
 Then, we can configure it to be an `EMPTY` stream in the whole test suite.
 
