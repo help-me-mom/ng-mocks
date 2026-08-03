@@ -28,6 +28,7 @@ import {
   rememberMockDeclarations,
   resetInjectedDeclarations,
 } from './ng-mocks-injected-declarations';
+import { resetRuntimeInject } from './ng-mocks-runtime-inject';
 import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
 type NgMocksTestBed = TestBedStatic & {
@@ -336,6 +337,7 @@ const configureTestingModule =
 const resetTestingModule =
   (original: TestBedStatic['resetTestingModule'], instance: TestBedStatic): TestBedStatic['resetTestingModule'] =>
   () => {
+    resetRuntimeInject();
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
     resetTestModuleOptions();
