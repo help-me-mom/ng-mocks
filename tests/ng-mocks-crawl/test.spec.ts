@@ -24,7 +24,7 @@ describe('ng-mocks-crawl', () => {
         <div>11</div>
         <div>12</div>
       </ng-container>
-    `.replace(new RegExp('s+', 'gm'), ''),
+    `.replace(/\s+/g, ''),
     );
 
     // in total, we have 30 nodes
