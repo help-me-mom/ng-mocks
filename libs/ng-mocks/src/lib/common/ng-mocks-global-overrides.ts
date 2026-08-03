@@ -376,8 +376,10 @@ const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
   }
 };
 
+// istanbul ignore next: legacy Angular lacks __NG_ELEMENT_ID__; covered by the compatibility matrix.
 const createComponent =
   (original: TestBedStatic['createComponent'], instance: TestBedStatic): TestBedStatic['createComponent'] =>
+  // istanbul ignore next: legacy Angular lacks __NG_ELEMENT_ID__; covered by the compatibility matrix.
   (...args) => {
     const fixture = original.call(instance, ...args);
     try {
@@ -410,8 +412,13 @@ const viewContainerInstall = () => {
         }),
         true,
       );
+    } else {
+      coreDefineProperty(
+        TestBed,
+        'createComponent',
+        createComponent(TestBed.createComponent as never, TestBed as never),
+      );
     }
-    coreDefineProperty(TestBed, 'createComponent', createComponent(TestBed.createComponent as never, TestBed as never));
 
     coreDefineProperty(ViewContainerRef, 'ngMocksOverridesInstalled', true);
   }
