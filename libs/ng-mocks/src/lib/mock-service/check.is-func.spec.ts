@@ -27,10 +27,18 @@ describe('check.is-func', () => {
 
   it('detects downleveled unnamed classes', () => {
     expect(
-      guessClass('classTarget', 'function classTarget() {}', {
+      guessClass('class_1', 'function class_1() {}', {
         prototype: {},
       }),
     ).toEqual(true);
+  });
+
+  it('detects functions with a class prefix', () => {
+    const classify = () => undefined;
+    (classify as any).prototype = {};
+    classify.toString = () => 'function classify() {}';
+
+    expect(checkIsFunc(classify)).toEqual(true);
   });
 
   it('detects downleveled named classes using this', () => {
@@ -50,5 +58,14 @@ describe('check.is-func', () => {
     (test as any).prototype = {};
 
     expect(checkIsFunc(test)).toEqual(true);
+  });
+
+  it('detects downleveled classes with regexp characters', () => {
+    const target$ = () => undefined;
+    (target$ as any).prototype = {};
+    target$.toString = () =>
+      'function target$() { classCallCheck(this, target$); }';
+
+    expect(checkIsFunc(target$)).toEqual(false);
   });
 });

@@ -27,4 +27,21 @@ describe('mock-service', () => {
     );
     expect(instance.echo1()).toBeUndefined();
   });
+
+  it('mocks functions with a class prefix as functions', () => {
+    const classify = () => undefined;
+    (classify as any).prototype = {};
+    classify.toString = () => 'function classify() {}';
+
+    expect(typeof MockService(classify)).toEqual('function');
+  });
+
+  it('mocks downleveled classes with regexp characters as classes', () => {
+    const target$ = () => undefined;
+    (target$ as any).prototype = {};
+    target$.toString = () =>
+      'function target$() { classCallCheck(this, target$); }';
+
+    expect(typeof MockService(target$)).toEqual('object');
+  });
 });

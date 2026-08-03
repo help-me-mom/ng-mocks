@@ -15,9 +15,11 @@ const isAngularClass = (value: Record<keyof any, unknown>): boolean => {
   return false;
 };
 
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 export const guessClass = (name: string, proto: string, value: any): boolean => {
   // unnamed classes can be class_N
-  if (name.match(/^class/) !== null) {
+  if (/^class_\d+$/.test(name)) {
     return true;
   }
 
@@ -28,14 +30,14 @@ export const guessClass = (name: string, proto: string, value: any): boolean => 
 
   // let's consider a capital name and 'this' usage as a class
   const clsCode = name.codePointAt(0);
-  if (clsCode && clsCode >= 65 && clsCode <= 90 && proto.match(/\bthis\./gm) !== null) {
+  if (clsCode && clsCode >= 65 && clsCode <= 90 && /\bthis\./.test(proto)) {
     return true;
   }
 
   // webpack es5 class
-  const regEx = new RegExp(`\\(this,\\s*${name}\\)`, 'mg');
+  const regEx = new RegExp(`\\(this,\\s*${escapeRegExp(name)}\\)`);
   // istanbul ignore if
-  if (proto.match(regEx) !== null) {
+  if (regEx.test(proto)) {
     return true;
   }
 
