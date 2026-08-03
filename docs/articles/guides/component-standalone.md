@@ -59,6 +59,31 @@ beforeEach(() => {
 });
 ```
 
+## Circular standalone imports on Angular 15
+
+Angular `15.0.0` through `15.2.3` cannot configure `TestBed` when standalone components form a circular import graph.
+For example, the error occurs when a child imports its parent with `forwardRef`, while the parent imports the child directly:
+
+```ts
+@Component({
+  standalone: true,
+  imports: [forwardRef(() => ParentComponent)],
+})
+class ChildComponent {}
+
+@Component({
+  standalone: true,
+  imports: [ChildComponent],
+})
+class ParentComponent {}
+```
+
+In those Angular versions, `TestBed` traverses the imports recursively before `ng-mocks` overrides can be applied and throws `RangeError: Maximum call stack size exceeded`.
+Angular fixed the traversal in [`15.2.4`](https://github.com/angular/angular/commit/bae6b5ceb16bd87c8146aa29564a8d29135a6f95).
+
+Upgrade all `@angular/*` packages to `15.2.4` or a newer matching patch version before testing circular standalone imports.
+See [Angular issue #49469](https://github.com/angular/angular/issues/49469) and [ng-mocks issue #6143](https://github.com/help-me-mom/ng-mocks/issues/6143) for the original reports.
+
 ## Live example
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestStandaloneComponent/test.spec.ts&initialpath=%3Fspec%3DTestStandaloneComponent)

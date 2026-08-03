@@ -3,13 +3,14 @@ import { Component, forwardRef } from '@angular/core';
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+// @see https://github.com/help-me-mom/ng-mocks/issues/6143
 // Regression coverage for #6143:
 // - this standalone child imports its standalone parent via forwardRef
 // - the parent imports the child directly
 //
-// The same setup fails with a recursive stack overflow on v14.7.1 for the
-// Angular 15 line reported in the issue, but current main should keep rendering
-// both sides of the standalone graph correctly.
+// Angular 15.0.0 through 15.2.3 recursively traverse this graph before TestBed
+// applies ng-mocks overrides. Angular 15.2.4 fixed that upstream traversal, and
+// this spec protects the same graph on the fixed Angular matrix.
 @Component({
   selector: 'issue-6143-child',
   template: 'ChildComponent',
