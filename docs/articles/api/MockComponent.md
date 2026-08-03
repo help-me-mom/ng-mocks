@@ -25,7 +25,8 @@ TestBed.configureTestingModule({
 The class of a mock component has:
 
 - the same `selector`
-- the same `@Inputs` and `@Outputs` with alias support
+- the same inputs and outputs with alias support
+- signal inputs which stay callable and keep their required and transform metadata
 - templates with pure `<ng-content>` tags to allow transclusion
 - support for `@ContentChild` and `@ContentChildren`
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
@@ -95,6 +96,47 @@ describe('Test', () => {
   });
 });
 ```
+
+## Signal inputs
+
+Starting with Angular 17, inputs can be declared with `input()` and
+`input.required()`. `MockComponent` preserves them as signals instead of
+replacing them with ordinary properties. Angular can therefore bind aliases
+and run input transforms in the same way as it does for the real component.
+
+```ts
+@Component({
+  selector: 'child',
+  standalone: true,
+  template: '',
+})
+class ChildComponent {
+  public readonly name = input.required<string>({
+    alias: 'displayName',
+  });
+}
+
+@Component({
+  imports: [ChildComponent],
+  standalone: true,
+  template: '<child [displayName]="name" />',
+})
+class TargetComponent {
+  public readonly name = 'test';
+}
+
+beforeEach(() => MockBuilder(TargetComponent));
+
+const fixture = MockRender(TargetComponent);
+const child = ngMocks.findInstance(ChildComponent);
+
+expect(child.name()).toEqual(fixture.point.componentInstance.name);
+```
+
+The template uses the input alias, while the mock instance is read through the
+original property name. Required signal inputs remain required in Angular's
+metadata. For details about binding signal inputs on the component rendered by
+`MockRender`, see [ComponentRef.setInput and signal inputs](MockRender.md#componentrefsetinput-and-signal-inputs).
 
 ## Standalone components
 
