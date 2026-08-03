@@ -16,6 +16,7 @@ import applyPlatformModules from './promise/apply-platform-modules';
 import createNgMocksOverridesToken from './promise/create-ng-mocks-overrides-token';
 import createNgMocksToken from './promise/create-ng-mocks-token';
 import createNgMocksTouchesToken from './promise/create-ng-mocks-touches-token';
+import createRuntimeInjectProvider from './promise/create-runtime-inject-provider';
 import handleEntryComponents from './promise/handle-entry-components';
 import handleRootProviders from './promise/handle-root-providers';
 import initNgModules from './promise/init-ng-modules';
@@ -89,6 +90,11 @@ export class MockBuilderPromise implements IMockBuilder {
       handleRootProviders(ngModule, params, defStack);
       handleEntryComponents(ngModule);
       applyPlatformModules();
+
+      const runtimeInjectProvider = createRuntimeInjectProvider(this.keepDef);
+      if (runtimeInjectProvider) {
+        ngModule.providers.push(runtimeInjectProvider);
+      }
 
       ngModule.providers.push(
         createNgMocksToken(),
