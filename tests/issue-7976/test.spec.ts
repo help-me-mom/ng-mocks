@@ -51,15 +51,35 @@ describe('issue-7976', () => {
     return;
   }
 
-  beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+  describe('direct component', () => {
+    beforeEach(() =>
+      MockBuilder(UserProfileCardComponent, TargetModule),
+    );
 
-  it('binds required signal inputs on mocked components', () => {
-    const fixture = MockRender(TargetComponent);
-    const mocked = ngMocks.find(
-      UserProfileCardComponent,
-    ).componentInstance;
+    it('binds required signal inputs from params', () => {
+      const fixture = MockRender(UserProfileCardComponent, {
+        user: {
+          name: 'test',
+        },
+      });
 
-    expect(isSignal(mocked.user)).toBe(true);
-    expect(mocked.user()).toBe(fixture.point.componentInstance.user);
+      expect(fixture.nativeElement.textContent).toContain('test');
+    });
+  });
+
+  describe('mocked component', () => {
+    beforeEach(() => MockBuilder(TargetComponent, TargetModule));
+
+    it('binds required signal inputs on mocked components', () => {
+      const fixture = MockRender(TargetComponent);
+      const mocked = ngMocks.find(
+        UserProfileCardComponent,
+      ).componentInstance;
+
+      expect(isSignal(mocked.user)).toBe(true);
+      expect(mocked.user()).toBe(
+        fixture.point.componentInstance.user,
+      );
+    });
   });
 });
