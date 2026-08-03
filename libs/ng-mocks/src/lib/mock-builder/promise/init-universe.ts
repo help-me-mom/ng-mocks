@@ -1,6 +1,7 @@
 import { mapEntries, mapValues } from '../../common/core.helpers';
 import { funcExtractDeps } from '../../common/func.extract-deps';
 import { getNgType } from '../../common/func.get-ng-type';
+import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 import initExcludeDef from './init-exclude-def';
@@ -122,6 +123,12 @@ export default ({
 
   for (const dependency of mapValues(dependencies)) {
     ngMocksUniverse.touches.add(dependency);
+  }
+
+  for (const [dependency, [resolution]] of mapEntries(ngMocksUniverse.getDefaults())) {
+    if (resolution === 'mock' && isNgInjectionToken(dependency)) {
+      dependencies.add(dependency);
+    }
   }
 
   // Seed the graph from explicit keep/mock inputs and everything they pull in.
