@@ -70,10 +70,26 @@ class GetterSetterMethodHuetod {
   }
 }
 
+let constructorCalls = 0;
+
 class OwnObjectPropertiesClass {
   public readonly info = {
     request: () => 'request',
   };
+
+  public constructor() {
+    constructorCalls += 1;
+  }
+}
+
+class DefaultParameterConstructorClass {
+  public constructor(public readonly value = 'default') {
+    constructorCalls += 1;
+  }
+
+  public echo(): string {
+    return 'echo';
+  }
 }
 
 class ThrowingClass {
@@ -182,19 +198,26 @@ describe('MockService', () => {
     ).toBe('ChildClass.childMethod');
   });
 
-  it('should mock own object properties of classes without constructor parameters', () => {
+  it('does not run a constructor to discover own properties', () => {
+    constructorCalls = 0;
+
     const mockService = MockService(OwnObjectPropertiesClass);
 
-    expect(mockService.info).toEqual({
-      request: jasmine.any(Function),
-    });
-    expect(mockService.info.request()).toBeUndefined();
-    expect(
-      (mockService.info.request as jasmine.Spy).and.identity,
-    ).toBe('func:OwnObjectPropertiesClass.info.request');
+    expect(constructorCalls).toBe(0);
+    expect(mockService.info).toBeUndefined();
   });
 
-  it('falls back to a prototype-only mock when a zero-arg constructor throws', () => {
+  it('does not rely on reported constructor arity', () => {
+    constructorCalls = 0;
+
+    const mockService = MockService(DefaultParameterConstructorClass);
+
+    expect(constructorCalls).toBe(0);
+    expect(mockService.echo).toEqual(jasmine.any(Function));
+    expect(mockService.echo()).toBeUndefined();
+  });
+
+  it('mocks a class without invoking a throwing constructor', () => {
     const mockService = MockService(ThrowingClass);
 
     expect(mockService.echo).toEqual(jasmine.any(Function));

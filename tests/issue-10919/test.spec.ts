@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockProvider, ngMocks } from 'ng-mocks';
+import { MockProvider, MockService, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -31,28 +31,26 @@ describe('issue-10919', () => {
   beforeEach(() => {
     TestBed.resetTestingModule();
 
-    // The reported case is a service with an own object property.
-    // The app calls `service.info.request()`, therefore the mock has to keep the
-    // object shape and replace `request` with a callable spy.
-    //
-    // Before this behavior, mocked provider setup relied on
-    // MockService(TargetService), which only mocked the prototype of the class.
-    // Because `info` is created as an own property, it was dropped from the
-    // mock and `service.info.request()` crashed with:
-    // "Cannot read properties of undefined (reading 'request')".
+    // Own properties do not exist until the real constructor runs. Declare the
+    // required shape explicitly and mock that plain object recursively instead
+    // of constructing TargetService to discover it.
     TestBed.configureTestingModule({
-      providers: [MockProvider(TargetService)],
+      providers: [
+        MockProvider(TargetService, {
+          info: MockService({
+            request: () => 'target',
+          }),
+        }),
+      ],
     });
   });
 
-  it('keeps own object properties of a mocked service', () => {
+  it('keeps explicitly defined own object properties of a mocked service', () => {
     const service = anyTestBed.get
       ? anyTestBed.get(TargetService)
       : anyTestBed.inject(TargetService);
 
-    // We want the nested object to stay available and its method to be turned
-    // into a callable spy, so a provider mock can safely call
-    // `service.info.request()` without extra setup.
+    // The explicit nested shape stays available and its method is an auto-spy.
     expect(service.info).toBeDefined();
     expect(typeof service.info.request).toEqual('function');
     resetSpy(service.info.request);
