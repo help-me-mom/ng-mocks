@@ -72,8 +72,17 @@ class GetterSetterMethodHuetod {
 
 class OwnObjectPropertiesClass {
   public readonly info = {
+    nested: {
+      values: [1, 2, 3],
+      work: () => 'work',
+    },
     request: () => 'request',
   };
+  public readonly refresh = () => 'refresh';
+
+  public constructor() {
+    throw new Error('the constructor must never run');
+  }
 }
 
 class ThrowingClass {
@@ -182,19 +191,26 @@ describe('MockService', () => {
     ).toBe('ChildClass.childMethod');
   });
 
-  it('should mock own object properties of classes without constructor parameters', () => {
+  it('should mock inline own properties without invoking the constructor', () => {
     const mockService = MockService(OwnObjectPropertiesClass);
 
     expect(mockService.info).toEqual({
+      nested: {
+        values: [],
+        work: jasmine.any(Function),
+      },
       request: jasmine.any(Function),
     });
     expect(mockService.info.request()).toBeUndefined();
     expect(
       (mockService.info.request as jasmine.Spy).and.identity,
     ).toBe('func:OwnObjectPropertiesClass.info.request');
+    expect(mockService.info.nested.work()).toBeUndefined();
+    expect(mockService.info.nested.values).toEqual([]);
+    expect(mockService.refresh()).toBeUndefined();
   });
 
-  it('falls back to a prototype-only mock when a zero-arg constructor throws', () => {
+  it('mocks a class without invoking a throwing constructor', () => {
     const mockService = MockService(ThrowingClass);
 
     expect(mockService.echo).toEqual(jasmine.any(Function));

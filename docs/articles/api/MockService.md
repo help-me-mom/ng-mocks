@@ -33,8 +33,8 @@ It is useful, when a class has dozens of methods, whereas we want to change beha
 
 ## Own properties
 
-`MockService` also preserves own object properties of classes which can be created without constructor arguments.
-This is useful for services that expose an object with methods as a public field.
+`MockService` also preserves inline own object, array, and function properties without running the class constructor.
+This is useful for services that expose an object with methods as a public field while keeping constructor side effects suppressed.
 
 ```ts
 class TargetService {
@@ -53,7 +53,7 @@ expect(service.info.request).toHaveBeenCalledTimes(1);
 ```
 
 In this case, `info` stays available on the mock instance, and `info.request` becomes a mock method.
-If the constructor needs arguments, or if calling it without arguments throws, `MockService` falls back to mocking the prototype.
+The real constructor is never called; inline field shapes are recovered from the compiled class definition instead.
 
 ## Simple example
 

@@ -8,8 +8,8 @@ sidebar_label: MockProvider
 The function supports services and tokens.
 Also, it accepts a shape of its service, in order to provide own properties,
 and values for tokens, otherwise the token's value will be `undefined`.
-When a mocked service can be created without constructor arguments,
-own object properties are kept and their methods are mocked too.
+Inline own object, array, and function properties are kept and their methods are mocked too.
+The real service constructor is never called.
 
 ```ts
 TestBed.configureTestingModule({

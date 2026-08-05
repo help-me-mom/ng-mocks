@@ -5,6 +5,7 @@ import mockHelperStub from '../mock-helper/mock-helper.stub';
 import checkIsClass from './check.is-class';
 import checkIsFunc from './check.is-func';
 import checkIsInst from './check.is-inst';
+import helperExtractClassProperties from './helper.extract-class-properties';
 import helperMockService from './helper.mock-service';
 
 type MockServiceHandler = (cache: Map<any, any>, service: any, prefix?: string, overrides?: any) => any;
@@ -15,19 +16,17 @@ const createMockFromClass = (
   prefix: string | undefined,
   callback: MockServiceHandler,
 ) => {
-  if (service.length === 0) {
-    try {
-      const value = callback(cache, new service(), prefix || funcGetName(service));
-      cache.set(service, value);
-
-      return value;
-    } catch {
-      // Falling back to the prototype-only mock keeps unsafe constructors supported.
-    }
-  }
-
   const value = helperMockService.createMockFromPrototype(service.prototype);
   cache.set(service, value);
+
+  const className = prefix || funcGetName(service);
+  const properties = helperExtractClassProperties(service);
+  for (const property of Object.keys(properties)) {
+    const mock: any = callback(cache, properties[property], `${className}.${property}`);
+    if (mock !== undefined) {
+      value[property] = mock;
+    }
+  }
 
   return value;
 };
