@@ -33,8 +33,8 @@ It is useful, when a class has dozens of methods, whereas we want to change beha
 
 ## Own properties
 
-`MockService` also preserves inline own object, array, and function properties without running the class constructor.
-This is useful for services that expose an object with methods as a public field while keeping constructor side effects suppressed.
+Own properties do not exist until a class has been constructed.
+`MockService` never runs a class constructor, so their shape has to be provided explicitly.
 
 ```ts
 class TargetService {
@@ -45,15 +45,20 @@ class TargetService {
 
 ngMocks.autoSpy('jasmine');
 
-const service = MockService(TargetService);
+const service = MockService(TargetService, {
+  info: MockService({
+    request: () => 'real',
+  }),
+});
 
 service.info.request();
 
 expect(service.info.request).toHaveBeenCalledTimes(1);
 ```
 
-In this case, `info` stays available on the mock instance, and `info.request` becomes a mock method.
-The real constructor is never called; inline field shapes are recovered from the compiled class definition instead.
+In this case, the explicit `info` shape is added to the mock instance, and the nested `MockService` call turns
+`info.request` into a mock method. An already constructed instance can also be passed to `MockService` when running
+its constructor is intentional.
 
 ## Simple example
 

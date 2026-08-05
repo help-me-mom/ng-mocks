@@ -5,34 +5,20 @@ import mockHelperStub from '../mock-helper/mock-helper.stub';
 import checkIsClass from './check.is-class';
 import checkIsFunc from './check.is-func';
 import checkIsInst from './check.is-inst';
-import helperExtractClassProperties from './helper.extract-class-properties';
 import helperMockService from './helper.mock-service';
 
 type MockServiceHandler = (cache: Map<any, any>, service: any, prefix?: string, overrides?: any) => any;
 
-const createMockFromClass = (
-  cache: Map<any, any>,
-  service: any,
-  prefix: string | undefined,
-  callback: MockServiceHandler,
-) => {
-  const value = helperMockService.createMockFromPrototype(service.prototype);
-  cache.set(service, value);
-
-  const className = prefix || funcGetName(service);
-  const properties = helperExtractClassProperties(service);
-  for (const property of Object.keys(properties)) {
-    const mock: any = callback(cache, properties[property], `${className}.${property}`);
-    if (mock !== undefined) {
-      value[property] = mock;
-    }
-  }
-
-  return value;
-};
-
 const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
-  [checkIsClass, (cache, service, prefix, callback) => createMockFromClass(cache, service, prefix, callback)],
+  [
+    checkIsClass,
+    (cache, service) => {
+      const value = helperMockService.createMockFromPrototype(service.prototype);
+      cache.set(service, value);
+
+      return value;
+    },
+  ],
   [
     checkIsFunc,
     (cache, service, prefix) => {

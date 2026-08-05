@@ -8,8 +8,8 @@ sidebar_label: MockProvider
 The function supports services and tokens.
 Also, it accepts a shape of its service, in order to provide own properties,
 and values for tokens, otherwise the token's value will be `undefined`.
-Inline own object, array, and function properties are kept and their methods are mocked too.
 The real service constructor is never called.
+Because own properties only exist after construction, include their shape explicitly when they are needed.
 
 ```ts
 TestBed.configureTestingModule({
@@ -42,7 +42,13 @@ class Service {
 ngMocks.autoSpy('jasmine');
 
 TestBed.configureTestingModule({
-  providers: [MockProvider(Service)],
+  providers: [
+    MockProvider(Service, {
+      info: MockService({
+        request: () => 'real',
+      }),
+    }),
+  ],
 });
 
 const service = TestBed.inject(Service);
