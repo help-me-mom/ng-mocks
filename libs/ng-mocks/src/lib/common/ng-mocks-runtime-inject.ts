@@ -15,6 +15,7 @@ interface RuntimeInjectConfig {
 
 const active: RuntimeInjectConfig[] = [];
 const installed = new Set<RuntimeInjectConfig>();
+const injectors = new Map<any, RuntimeInjectConfig>();
 
 const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
   if (
@@ -103,6 +104,10 @@ const installDeclaration = (declaration: any, config: RuntimeInjectConfig, resto
 };
 
 export const installRuntimeInject = (injector: any, declarations: Set<any>, touches: Set<any>): void => {
+  if (injectors.has(injector)) {
+    return;
+  }
+
   const restorers: Array<() => void> = [];
   const config: RuntimeInjectConfig = {
     injector,
@@ -111,11 +116,13 @@ export const installRuntimeInject = (injector: any, declarations: Set<any>, touc
       while (restorers.length > 0) {
         restorers.pop()!();
       }
+      injectors.delete(injector);
       installed.delete(config);
     },
     touches,
   };
 
+  injectors.set(injector, config);
   installInjector(config, restorers);
   for (const declaration of declarations) {
     installDeclaration(declaration, config, restorers);
@@ -123,6 +130,17 @@ export const installRuntimeInject = (injector: any, declarations: Set<any>, touc
 
   installed.add(config);
   injector.onDestroy(config.restore);
+};
+
+export const runRuntimeInject = (injector: any, factory: () => any): any => {
+  const config = injectors.get(injector) as RuntimeInjectConfig;
+
+  active.push(config);
+  try {
+    return factory();
+  } finally {
+    active.pop();
+  }
 };
 
 export const resetRuntimeInject = (): void => {

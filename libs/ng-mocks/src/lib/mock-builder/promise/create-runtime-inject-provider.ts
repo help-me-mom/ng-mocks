@@ -4,21 +4,44 @@ import * as angularCore from '@angular/core';
 import { NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from '../../common/core.tokens';
 import { isNgDef } from '../../common/func.is-ng-def';
 import { isStandalone } from '../../common/func.is-standalone';
-import { installRuntimeInject } from '../../common/ng-mocks-runtime-inject';
+import { installRuntimeInject, runRuntimeInject } from '../../common/ng-mocks-runtime-inject';
+import ngMocksUniverse from '../../common/ng-mocks-universe';
 
-export default (keepDef: Set<any>): Provider | undefined => {
+export default (keepDef: Set<any>, configDef: Map<any, any>, providers: any[]): Provider | undefined => {
   const environmentInitializer = (angularCore as any).ENVIRONMENT_INITIALIZER;
   if (!environmentInitializer || keepDef.has(NG_MOCKS_ROOT_PROVIDERS)) {
     return undefined;
   }
 
   const declarations = new Set<any>();
+  const services = new Set<any>();
   for (const def of keepDef) {
-    if (isStandalone(def) && (isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p'))) {
+    const isDeclaration = isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p');
+    if (isStandalone(def) && isDeclaration) {
       declarations.add(def);
     }
+    if (!isDeclaration && configDef.get(def).shallow === false && typeof def === 'function' && def.ɵprov?.factory) {
+      const provider = ngMocksUniverse.builtProviders.get(def);
+      const providerIndex = providers.indexOf(provider);
+      if (providerIndex === -1) {
+        continue;
+      }
+
+      const useFactory = provider === def ? def.ɵfac : provider.useFactory;
+      const dependencies = provider === def ? [] : (provider.deps ?? []);
+      providers[providerIndex] = {
+        deps: [Injector, NG_MOCKS_TOUCHES, ...dependencies],
+        provide: def,
+        useFactory: (injector: Injector, touches: Set<any>, ...args: any[]) => {
+          installRuntimeInject(injector, declarations, touches);
+
+          return runRuntimeInject(injector, () => useFactory(...args));
+        },
+      };
+      services.add(def);
+    }
   }
-  if (declarations.size === 0) {
+  if (declarations.size === 0 && services.size === 0) {
     return undefined;
   }
 
