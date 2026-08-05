@@ -70,13 +70,25 @@ class GetterSetterMethodHuetod {
   }
 }
 
+let constructorCalls = 0;
+
 class OwnObjectPropertiesClass {
   public readonly info = {
     request: () => 'request',
   };
 
   public constructor() {
-    throw new Error('the constructor must never run');
+    constructorCalls += 1;
+  }
+}
+
+class DefaultParameterConstructorClass {
+  public constructor(public readonly value = 'default') {
+    constructorCalls += 1;
+  }
+
+  public echo(): string {
+    return 'echo';
   }
 }
 
@@ -187,9 +199,22 @@ describe('MockService', () => {
   });
 
   it('does not run a constructor to discover own properties', () => {
+    constructorCalls = 0;
+
     const mockService = MockService(OwnObjectPropertiesClass);
 
+    expect(constructorCalls).toBe(0);
     expect(mockService.info).toBeUndefined();
+  });
+
+  it('does not rely on reported constructor arity', () => {
+    constructorCalls = 0;
+
+    const mockService = MockService(DefaultParameterConstructorClass);
+
+    expect(constructorCalls).toBe(0);
+    expect(mockService.echo).toEqual(jasmine.any(Function));
+    expect(mockService.echo()).toBeUndefined();
   });
 
   it('mocks a class without invoking a throwing constructor', () => {

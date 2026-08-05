@@ -30,6 +30,8 @@ describe('issue-14528', () => {
   });
 
   it('does not run a mocked service constructor when applying overrides', () => {
+    expect(constructorCalls).toEqual(0);
+
     const anyTestBed: any = TestBed;
     const service = anyTestBed.inject
       ? anyTestBed.inject(SideEffectService)
