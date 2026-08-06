@@ -99,6 +99,8 @@
 ## GitHub Artifact Text
 
 - Keep issue comments, pull request descriptions, and non-trivial commit bodies focused on the problem and how it was fixed.
+- Pull request descriptions may be detailed. Include enough `Why`, `What`, and `Impact` or `Where` context for reviewers to understand the complete change.
+- Keep every commit-message line, including body and footer lines, at 100 characters or fewer so it satisfies commitlint. Wrap longer prose instead of removing required context.
 - Do not include validation blocks, exact validation commands, logs, or local test results in PR descriptions or commit bodies. Treat those details as internal agent run notes unless the user asks to publish them.
 
 ## Git Safety
