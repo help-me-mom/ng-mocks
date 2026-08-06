@@ -14,7 +14,6 @@ export default (keepDef: Set<any>, configDef: Map<any, any>, providers: any[]): 
   }
 
   const declarations = new Set<any>();
-  const services = new Set<any>();
   for (const def of keepDef) {
     const isDeclaration = isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p');
     if (isStandalone(def) && isDeclaration) {
@@ -38,10 +37,9 @@ export default (keepDef: Set<any>, configDef: Map<any, any>, providers: any[]): 
           return runRuntimeInject(injector, () => useFactory(...args));
         },
       };
-      services.add(def);
     }
   }
-  if (declarations.size === 0 && services.size === 0) {
+  if (declarations.size === 0) {
     return undefined;
   }
 
