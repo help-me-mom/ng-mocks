@@ -1,3 +1,12 @@
+## [14.16.1](https://github.com/help-me-mom/ng-mocks/compare/v14.16.0...v14.16.1) (2026-08-06)
+
+
+### Bug Fixes
+
+* **build:** restore CommonJS Angular initialization order ([#14558](https://github.com/help-me-mom/ng-mocks/issues/14558)) ([555d940](https://github.com/help-me-mom/ng-mocks/commit/555d940575fadd84255c0fdf488ac54f0bf5e58e))
+* **MockBuilder:** mock inject dependencies in kept services [#14544](https://github.com/help-me-mom/ng-mocks/issues/14544) ([#14557](https://github.com/help-me-mom/ng-mocks/issues/14557)) ([9e4a72e](https://github.com/help-me-mom/ng-mocks/commit/9e4a72ebe4d8d68690ca1d9fea41bf2f29e5fcb8))
+* **MockService:** suppress class constructors [#14528](https://github.com/help-me-mom/ng-mocks/issues/14528) ([#14554](https://github.com/help-me-mom/ng-mocks/issues/14554)) ([e0f09b0](https://github.com/help-me-mom/ng-mocks/commit/e0f09b066c48dd00129e1d8de1c8c41c322cbd5b))
+
 # [14.16.0](https://github.com/help-me-mom/ng-mocks/compare/v14.15.3...v14.16.0) (2026-08-03)
 
 
