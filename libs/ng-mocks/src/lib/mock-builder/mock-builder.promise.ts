@@ -91,7 +91,7 @@ export class MockBuilderPromise implements IMockBuilder {
       handleEntryComponents(ngModule);
       applyPlatformModules();
 
-      const runtimeInjectProvider = createRuntimeInjectProvider(this.keepDef);
+      const runtimeInjectProvider = createRuntimeInjectProvider(this.keepDef, this.configDef, ngModule.providers);
       if (runtimeInjectProvider) {
         ngModule.providers.push(runtimeInjectProvider);
       }
