@@ -82,6 +82,7 @@ const tsJsRules = {
   'unicorn/better-dom-traversing': 'off',
   'unicorn/class-reference-in-static-methods': 'off',
   'unicorn/comment-content': 'off',
+  'unicorn/single-line-block-comment-style': 'off',
   'unicorn/consistent-boolean-name': 'off',
   'unicorn/consistent-conditional-object-spread': 'off',
   'unicorn/consistent-class-member-order': 'off',
