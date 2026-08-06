@@ -16,7 +16,7 @@ Create and maintain a plain Markdown checklist:
 - [ ] Create a dedicated issue worktree from `upstream/main`
 - [ ] Reproduce the bug with a local `issue-*` regression test
 - [ ] Fix the implementation without changing the reproducer test
-- [ ] Run coverage and affected e2e validation
+- [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Prepare comments, commit message, and PR against `upstream/main`
 ```
 
@@ -104,6 +104,21 @@ Run affected e2e targets:
 - If `tests-e2e/src` changed, run `sh test.sh e2e`.
 - If files under a specific `e2e/<target>` project changed, run `sh compose.sh <target>` when dependencies changed and `sh test.sh <target>` afterward.
 
+Modern versioned Angular projects retain `.angular/cache` in the bind-mounted `e2e/a<major>` workspace across
+containers. For each affected target whose CLI supports `ng cache`, clear the cache inside Docker before its final
+run after source changes. Run `compose.sh` first when the target dependencies have not been prepared:
+
+```bash
+COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh compose.sh a<major>
+COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> \
+  docker compose run --rm a<major> npx ng cache clean
+COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh test.sh a<major>
+```
+
+Do not infer a source regression from output that may have reused an older compiled bundle. If a result contradicts
+the current source or the focused reproducer, inspect `e2e/a<major>/node_modules/ng-mocks`, clear the target cache,
+and rerun the wrapper before changing implementation or test code.
+
 Before committing:
 
 ```bash
@@ -161,6 +176,8 @@ PR rules:
 - Do not triage issue fixes in the original checkout; create or reuse a dedicated worktree based on `upstream/main` first.
 - Do not change the reproducer after fixing source behavior, except for mechanical compatibility edits that preserve the original failure.
 - Do not delete or regenerate lockfiles for ordinary issue fixes. If dependency refresh is required, use the `update-package-locks` skill.
+- Do not replace required Docker wrapper validation with local npm commands because of transient network, daemon,
+  or cache failures. Restore the Docker workflow and rerun it; local commands are diagnostic only.
 - Do not claim full matrix validation unless every affected target was run. State skipped targets and why.
 - Trust current scripts and config over stale docs, then update docs if the issue changes documented compatibility.
 - Keep the final patch scoped to the issue. Avoid unrelated refactors, formatting churn, and dependency changes.

@@ -271,7 +271,8 @@ It is essential to know how `MockRender` handles `params` in order to understand
 
 If `MockRender` has been called with no `params` or `null` or `undefined` as `params`,
 then it automatically binds all `inputs` and ignores all `outputs`.
-Therefore, no default values will be used in the tested component, all `inputs` will receive `null`.
+Signal inputs declared with `input(initialValue)` keep their initial value until their wrapper input is changed.
+Their transforms are not reapplied to the initial value. All other inputs receive `null`.
 
 :::tip
 Why `null`?
@@ -326,7 +327,7 @@ fixture.detectChanges();
 expect(fixture.point.componentInstance.input1).toEqual(1);
 ```
 
-Please proceed to the next section, if you want to use / test default values. 
+Please proceed to the next section, if you want to use / test ordinary input default values.
 
 ### Empty params
 
