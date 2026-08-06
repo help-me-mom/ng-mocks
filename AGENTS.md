@@ -36,9 +36,29 @@
 - For dependency bootstrap, lockfile refreshes, and test execution, use the repo wrappers instead of ad-hoc local installs:
   - `sh compose.sh <target>`
   - `sh test.sh <target>`
+- Do not replace required wrapper validation with local npm commands because Docker has a transient network,
+  daemon, or cache problem. Fix or retry the Docker workflow; use local commands only for explicitly identified
+  human debugging, and never report them as the required validation.
 - If multiple worktrees or agent sessions run in parallel, set a unique compose namespace:
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
+
+## Angular CLI Cache
+
+- Modern versioned Angular projects retain `.angular/cache` in the bind-mounted `e2e/a<major>` workspace across
+  containers. Rebuilding and copying `ng-mocks` does not guarantee that the Angular CLI invalidates previously
+  compiled test bundles.
+- For each affected target whose CLI supports `ng cache`, clear the cache inside Docker before the final
+  `sh test.sh a<major>` validation. Use the same `COMPOSE_PROJECT_NAME` for both commands:
+
+  ```bash
+  COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose run --rm a<major> npx ng cache clean
+  COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh a<major>
+  ```
+
+- If a compatibility result contradicts the current source or a focused reproducer, inspect the package copied to
+  `e2e/a<major>/node_modules/ng-mocks`, clear the target cache, and rerun the wrapper before changing the source or
+  weakening the test.
 
 ## Local npm / nvm Flows
 

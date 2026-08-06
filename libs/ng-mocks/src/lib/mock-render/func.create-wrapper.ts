@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Directive } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewChild } from '@angular/core';
+import * as angularCore from '@angular/core';
 
 import coreConfig from '../common/core.config';
 import coreDefineProperty from '../common/core.define-property';
@@ -25,8 +26,26 @@ const generateWrapperOutput =
     instance[prop] = event;
   };
 
-const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
+const getInputSignalNode = (value: any): any => {
+  for (const symbol of Object.getOwnPropertySymbols(value)) {
+    const node = value[symbol];
+    if (
+      node &&
+      typeof node === 'object' &&
+      'transformFn' in node &&
+      typeof node.applyValueToInputSignal === 'function'
+    ) {
+      return node;
+    }
+  }
+
+  return undefined;
+};
+
+const generateWrapperComponent = ({ bindings, options, inputs, signalInputs, template }: any) => {
   class MockRenderComponent {
+    private __ngMocksPoint?: any;
+
     public constructor() {
       coreDefineProperty(this, '__ngMocksOutput', generateWrapperOutput(this));
 
@@ -42,14 +61,50 @@ const generateWrapperComponent = ({ bindings, options, inputs }: any) => {
 
       if (!bindings) {
         for (const input of inputs) {
+          let initialized = !signalInputs[input];
           let value: any = null;
           helperDefinePropertyDescriptor(this, input, {
-            get: () => value,
-            set: (newValue: any) => (value = newValue),
+            get: () => {
+              if (!initialized) {
+                const targetInput = this.__ngMocksPoint?.[signalInputs[input]];
+                const signalNode = typeof targetInput === 'function' ? getInputSignalNode(targetInput) : undefined;
+
+                if (!signalNode) {
+                  return value;
+                }
+
+                try {
+                  value = (angularCore as any).untracked(targetInput);
+                  const transform = signalNode.transformFn;
+                  // Angular applies input transforms to bound values, but not
+                  // to the signal's own initializer. Bypass only the initial
+                  // wrapper write, then restore the original transform.
+                  signalNode.transformFn = (newValue: any) => {
+                    signalNode.transformFn = transform;
+
+                    return newValue;
+                  };
+                  initialized = true;
+                } catch {
+                  // Required signal inputs do not have an initial value.
+                  initialized = true;
+                }
+              }
+
+              return value;
+            },
+            set: (newValue: any) => {
+              initialized = true;
+              value = newValue;
+            },
           });
         }
       }
     }
+  }
+
+  if (Object.keys(signalInputs).length > 0) {
+    ViewChild(template, { static: true })(MockRenderComponent.prototype, '__ngMocksPoint');
   }
 
   // A16: adding unique property.
@@ -109,6 +164,18 @@ const getInputBindings = (inputs: DirectiveIo[]): string[] => {
   return result;
 };
 
+const getSignalInputBindings = (inputs: DirectiveIo[]): Record<string, string> => {
+  const result: Record<string, string> = {};
+  for (const definition of inputs) {
+    const { name, alias, isSignal } = funcDirectiveIoParse(definition);
+    if (isSignal) {
+      result[alias || name] = name;
+    }
+  }
+
+  return result;
+};
+
 const getWrapperInputs = (inputBindings: string[], bindings: undefined | null | any[]): string[] => {
   if (!bindings) {
     return inputBindings;
@@ -155,6 +222,7 @@ export default (
   }
 
   const inputBindings = getInputBindings(inputs);
+  const signalInputs = getSignalInputBindings(inputs);
   const wrapperInputs = getWrapperInputs(inputBindings, bindings);
   const mockTemplate = funcGenerateTemplate(template, { selector: meta.selector, inputs, outputs, bindings });
   const options: Component = {
@@ -172,7 +240,13 @@ export default (
     standalone: false,
   };
 
-  ctor = generateWrapperComponent({ bindings, inputs: wrapperInputs, options });
+  ctor = generateWrapperComponent({
+    bindings,
+    inputs: wrapperInputs,
+    options,
+    signalInputs,
+    template,
+  });
   coreDefineProperty(ctor, 'cacheKey', cacheKey);
   coreDefineProperty(ctor, 'inputBindings', inputBindings);
   coreDefineProperty(ctor, 'tpl', mockTemplate);
