@@ -48,6 +48,49 @@ describe('issue-12061', () => {
     expect(fixture.point.componentInstance.value).toEqual('updated');
   });
 
+  it('preserves inherited input accessors', async () => {
+    let value = 'initial';
+    const writes: string[] = [];
+    const prototype = Object.defineProperty({}, 'value', {
+      configurable: true,
+      enumerable: true,
+      get: () => value,
+      set: (newValue: string) => {
+        writes.push(newValue);
+        value = `set:${newValue}`;
+      },
+    });
+    const props = Object.create(prototype) as {
+      value: string;
+    };
+    const factory = MockRenderFactory(TargetComponent, ['value']);
+    factory.configureTestBed();
+    const fixture = factory(props);
+
+    props.value = 'updated';
+    if ((fixture as any).zonelessEnabled) {
+      await fixture.whenStable();
+    } else {
+      fixture.detectChanges();
+    }
+
+    expect(writes).toEqual(['updated']);
+    expect(value).toEqual('set:updated');
+    expect(fixture.point.componentInstance.value).toEqual(
+      'set:updated',
+    );
+  });
+
+  it('supports nonextensible partial input params', () => {
+    const factory = MockRenderFactory(TargetComponent, ['value']);
+    factory.configureTestBed();
+    const props = Object.freeze({}) as {
+      value?: string;
+    };
+
+    expect(factory(props)).toBeTruthy();
+  });
+
   it('schedules MockRender prop updates in zoneless tests', async () => {
     const props = {
       value: 'initial',
@@ -64,6 +107,34 @@ describe('issue-12061', () => {
     }
 
     expect(fixture.point.componentInstance.value).toEqual('updated');
+  });
+
+  it('reschedules repeated params after fixture proxy updates', async () => {
+    const props = {
+      value: 'initial',
+    };
+    const fixture = MockRender(TargetComponent, props);
+
+    props.value = 'first';
+    if ((fixture as any).zonelessEnabled) {
+      await fixture.whenStable();
+    } else {
+      fixture.detectChanges();
+    }
+
+    fixture.componentInstance.value = 'second';
+    fixture.detectChanges();
+    expect(fixture.point.componentInstance.value).toEqual('second');
+
+    props.value = 'first';
+    if ((fixture as any).zonelessEnabled) {
+      await fixture.whenStable();
+    } else {
+      fixture.detectChanges();
+    }
+
+    expect(fixture.point.componentInstance.value).toEqual('first');
+    expect(fixture.nativeElement.textContent).toContain('first');
   });
 
   it('schedules signal input prop updates in zoneless tests', async () => {

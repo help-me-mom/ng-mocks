@@ -12,6 +12,7 @@ import { getTestModuleOptions } from '../common/ng-mocks-test-module-metadata';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { ngMocks } from '../mock-helper/mock-helper';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
+import helperExtractPropertyDescriptor from '../mock-service/helper.extract-property-descriptor';
 import { MockService } from '../mock-service/mock-service';
 
 import funcCreateWrapper from './func.create-wrapper';
@@ -103,11 +104,13 @@ const installZonelessInputScheduler = (
   source: Record<string, any>,
   inputs: string[],
 ): ((key: string, value: any) => boolean) => {
-  const writers = new Map<string, { scheduling: boolean; write: (value: any) => void }>();
+  const writers = new Map<string, (value: any) => void>();
 
   for (const input of inputs) {
-    const descriptor = Object.getOwnPropertyDescriptor(source, input);
+    const ownDescriptor = Object.getOwnPropertyDescriptor(source, input);
+    const descriptor = ownDescriptor ?? helperExtractPropertyDescriptor(source, input);
     if (
+      (!ownDescriptor && !Object.isExtensible(source)) ||
       descriptor?.configurable === false ||
       (descriptor && 'value' in descriptor && descriptor.writable === false) ||
       (descriptor && !('value' in descriptor) && !descriptor.set)
@@ -117,33 +120,27 @@ const installZonelessInputScheduler = (
 
     let value = descriptor && 'value' in descriptor ? descriptor.value : source[input];
     const write = descriptor?.set ? descriptor.set.bind(source) : (newValue: any) => (value = newValue);
-    const state = { scheduling: false, write };
     const installed = helperDefinePropertyDescriptor(source, input, {
       enumerable: descriptor?.enumerable ?? true,
       get: descriptor?.get ? descriptor.get.bind(source) : () => value,
       set: (newValue: any) => {
         write(newValue);
-        state.scheduling = true;
-        try {
-          fixture.componentRef.setInput(input, newValue);
-        } finally {
-          state.scheduling = false;
-        }
+        // setInput caches values and can skip scheduling after a direct proxy write.
+        // The wrapper already reads from source, so marking it preserves the proxy behavior.
+        fixture.changeDetectorRef.markForCheck();
       },
     });
     if (installed) {
-      writers.set(input, state);
+      writers.set(input, write);
     }
   }
 
   return (key: string, value: any): boolean => {
-    const state = writers.get(key);
-    if (!state) {
+    const write = writers.get(key);
+    if (!write) {
       return false;
     }
-    if (!state.scheduling) {
-      state.write(value);
-    }
+    write(value);
 
     return true;
   };
