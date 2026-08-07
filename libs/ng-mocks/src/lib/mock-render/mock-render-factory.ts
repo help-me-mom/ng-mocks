@@ -98,6 +98,57 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
+const installZonelessInputScheduler = (
+  fixture: any,
+  source: Record<string, any>,
+  inputs: string[],
+): ((key: string, value: any) => boolean) => {
+  const writers = new Map<string, { scheduling: boolean; write: (value: any) => void }>();
+
+  for (const input of inputs) {
+    const descriptor = Object.getOwnPropertyDescriptor(source, input);
+    if (
+      descriptor?.configurable === false ||
+      (descriptor && 'value' in descriptor && descriptor.writable === false) ||
+      (descriptor && !('value' in descriptor) && !descriptor.set)
+    ) {
+      continue;
+    }
+
+    let value = descriptor && 'value' in descriptor ? descriptor.value : source[input];
+    const write = descriptor?.set ? descriptor.set.bind(source) : (newValue: any) => (value = newValue);
+    const state = { scheduling: false, write };
+    const installed = helperDefinePropertyDescriptor(source, input, {
+      enumerable: descriptor?.enumerable ?? true,
+      get: descriptor?.get ? descriptor.get.bind(source) : () => value,
+      set: (newValue: any) => {
+        write(newValue);
+        state.scheduling = true;
+        try {
+          fixture.componentRef.setInput(input, newValue);
+        } finally {
+          state.scheduling = false;
+        }
+      },
+    });
+    if (installed) {
+      writers.set(input, state);
+    }
+  }
+
+  return (key: string, value: any): boolean => {
+    const state = writers.get(key);
+    if (!state) {
+      return false;
+    }
+    if (!state.scheduling) {
+      state.write(value);
+    }
+
+    return true;
+  };
+};
+
 // Angular 22 changed how wrapper fixture checks reach the rendered point, so only
 // patch new versions and leave older Angular behavior untouched.
 const shouldPatchPointDetectChanges = (major = VERSION.major): boolean => Number.parseInt(major, 10) >= 22;
@@ -223,7 +274,22 @@ const generateFactory = (
       };
     }
 
-    funcInstallPropReader(fixture.componentInstance, params ?? {}, bindings ?? [], false, componentCtor.inputBindings);
+    const source = params ?? {};
+    const inputBindings =
+      bindings === undefined || bindings === null
+        ? componentCtor.inputBindings
+        : componentCtor.inputBindings.filter(input => bindings.indexOf(input) !== -1);
+    const writeSource = fixture.zonelessEnabled
+      ? installZonelessInputScheduler(fixture, source, inputBindings)
+      : undefined;
+    funcInstallPropReader(
+      fixture.componentInstance,
+      source,
+      bindings ?? [],
+      false,
+      componentCtor.inputBindings,
+      writeSource,
+    );
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
 
     if (detectChanges === undefined || detectChanges) {

@@ -48,6 +48,14 @@
             "tsConfig": "tsconfig.json",
             "karmaConfig": "karma.conf.js",
             "watch": false
+          },
+          "configurations": {
+            "zoneless": {
+              "main": "src/test.zoneless.ts",
+              "polyfills": [],
+              "tsConfig": "tsconfig.zoneless.json",
+              "exclude": ["src/test/tests/fake-async/**/*.spec.ts", "src/test/tests/issue-641/**/*.spec.ts"]
+            }
           }
         }
       }

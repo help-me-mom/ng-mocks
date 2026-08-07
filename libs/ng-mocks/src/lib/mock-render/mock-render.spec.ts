@@ -152,6 +152,33 @@ describe('MockRender', () => {
   describe('zoneless', () => {
     ngMocks.ignoreOnConsole('warn');
 
+    it('schedules input changes made through params', async () => {
+      TestBed.configureTestingModule({
+        declarations: [OnPushWithoutSelectorComponent],
+        providers: [provideZonelessChangeDetection()],
+      });
+      const params = { content: 'initial' };
+      const fixture = MockRender(
+        OnPushWithoutSelectorComponent,
+        params,
+      );
+
+      params.content = 'updated';
+      await fixture.whenStable();
+
+      expect(fixture.point.componentInstance.content).toEqual(
+        'updated',
+      );
+
+      fixture.componentRef.setInput('content', 'from setInput');
+      await fixture.whenStable();
+
+      expect(params.content).toEqual('from setInput');
+      expect(fixture.point.componentInstance.content).toEqual(
+        'from setInput',
+      );
+    });
+
     it('supports zoneless detectChanges without checkNoChanges', () => {
       TestBed.configureTestingModule({
         declarations: [

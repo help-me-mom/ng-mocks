@@ -74,6 +74,17 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
+### Zoned and zoneless Angular tests
+
+Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by default. The `a20`, `a21`, and
+`a22` version projects therefore run their spread corpus with both zoned and zoneless Jasmine and Jest environments.
+The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
+`setupZonelessTestEnv()` entry point from `jest-preset-angular`.
+
+The zoneless configurations exclude `tests/fake-async` and `tests/issue-641`. Those suites intentionally exercise
+`fakeAsync`, `tick`, and `flush`, which require the Zone.js testing utilities and cannot run without Zone.js. Their
+ordinary zoned coverage remains unchanged.
+
 ## How to run unit tests locally
 
 ```shell
