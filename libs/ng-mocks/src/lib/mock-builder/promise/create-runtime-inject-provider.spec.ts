@@ -49,6 +49,7 @@ describe('create-runtime-inject-provider', () => {
         [TargetWithoutDependencies, { shallow: false }],
       ]),
       providers,
+      false,
     );
 
     const destroyCallbacks: Array<() => void> = [];
