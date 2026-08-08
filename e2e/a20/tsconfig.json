@@ -26,5 +26,5 @@
     "strictTemplates": true
   },
   "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
-  "include": ["jest.config.ts", "src/app/**/*.spec.ts", "src/test/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["jest.config.ivy-zoned.ts", "src/app/**/*.spec.ts", "src/test/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -2,11 +2,13 @@ module.exports = {
   preset: 'jest-preset-angular',
   maxWorkers: 1,
   setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
-  testURL: 'http://localhost',
+  testEnvironmentOptions: {
+    url: 'http://localhost',
+  },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.es5ivy.spec.json',
+      tsconfig: 'tsconfig.es2015.ivy-zoned.spec.json',
     },
   },
 };

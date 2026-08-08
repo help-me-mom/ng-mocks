@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "files": ["src/main.ts", "src/test.zoneless.ts", "src/setup-jest.zoneless.ts"],
-  "include": ["jest.config.zoneless.ts", "src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts", "src/**/*.d.ts"]
-}

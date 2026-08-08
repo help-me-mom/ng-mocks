@@ -43,21 +43,24 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.json",
             "karmaConfig": "karma.conf.js",
-            "watch": false,
-            "include": ["src/app/**/*.spec.ts", "src/test/**/*.spec.ts"]
+            "watch": false
           },
           "configurations": {
-            "zoneless": {
+            "ivy-zoned": {
+              "main": "src/test.ts",
+              "polyfills": ["zone.js", "zone.js/testing"],
+              "tsConfig": "tsconfig.ivy-zoned.spec.json",
+              "include": ["src/app/**/*.spec.ts", "src/test/**/*.spec.ts"]
+            },
+            "ivy-zoneless": {
               "main": "src/test.zoneless.ts",
               "polyfills": [],
-              "tsConfig": "tsconfig.zoneless.json",
+              "tsConfig": "tsconfig.ivy-zoneless.spec.json",
               "include": ["src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts"]
             }
-          }
+          },
+          "defaultConfiguration": "ivy-zoned"
         }
       }
     },

@@ -9,6 +9,6 @@ export default {
   testMatch: ['<rootDir>/src/app/**/*.spec.ts', '<rootDir>/src/test/**/*.spec.ts'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.ivy-zoned.spec.json' }],
   },
 };

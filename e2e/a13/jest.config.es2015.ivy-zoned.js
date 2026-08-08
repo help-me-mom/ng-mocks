@@ -6,7 +6,7 @@ module.exports = {
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.es2015ivy.spec.json',
+      tsconfig: 'tsconfig.es2015.ivy-zoned.spec.json',
     },
   },
 };

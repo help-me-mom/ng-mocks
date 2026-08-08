@@ -81,10 +81,16 @@ Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by
 The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
 `setupZonelessTestEnv()` entry point from `jest-preset-angular`.
 
-`test-spread.conf` treats the environment as another compatibility-matrix dimension. It spreads the zoned corpus to
-`src/test` and the zoneless corpus to `src/test-zoneless`, and CircleCI runs those profiles independently. The
-zoneless corpus omits `tests/fake-async` and `tests/issue-641`: those suites intentionally exercise `fakeAsync`,
-`tick`, and `flush`, which require the Zone.js testing utilities. Their ordinary zoned coverage remains unchanged.
+CircleCI represents the supported engine and environment combinations with one compatibility profile:
+`view-engine-zoned`, `ivy-zoned`, or `ivy-zoneless`. `test-spread.conf` still owns environment-specific file
+selection because that decision is independent of the Angular rendering engine. It spreads the zoned corpus to
+`src/test` and the zoneless corpus to `src/test-zoneless`. The zoneless corpus omits `tests/fake-async` and
+`tests/issue-641`: those suites intentionally exercise `fakeAsync`, `tick`, and `flush`, which require the Zone.js
+testing utilities. Their ordinary zoned coverage remains unchanged.
+
+When e2e config filenames encode compatibility dimensions, name them consistently as
+`jest.config.<es>.<profile>.*` and `tsconfig.<es>.<profile>.spec.json` when the ES target varies, or omit the ES
+segment when it does not. Configs without dimension-specific variants retain the tool's conventional default name.
 
 ## How to run unit tests locally
 
