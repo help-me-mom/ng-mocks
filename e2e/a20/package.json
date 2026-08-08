@@ -9,14 +9,15 @@
     "build": "ng build",
     "test": "npm run test:ivy-zoned && npm run test:ivy-zoneless",
     "test:ivy-zoned": "npm run test:jasmine:ivy-zoned && npm run test:jest:ivy-zoned",
-    "test:ivy-zoneless": "npm run test:jasmine:ivy-zoneless && npm run test:jest:ivy-zoneless",
+    "test:ivy-zoneless": "npm run test:jasmine:ivy-zoneless && npm run test:jest:ivy-zoneless && npm run test:vitest:ivy-zoneless",
     "test:debug": "npm run test:jasmine:debug",
     "test:jasmine:ivy-zoned": "ng test --configuration ivy-zoned --progress=false --no-watch",
     "test:jasmine:ivy-zoneless": "ng test --configuration ivy-zoneless --progress=false --no-watch",
     "test:jasmine:debug": "npm run test:jasmine:ivy-zoned -- --watch --browsers Chrome",
     "test:jest:ivy-zoned": "jest --config jest.config.ivy-zoned.ts",
     "test:jest:ivy-zoneless": "jest --config jest.config.ivy-zoneless.ts",
-    "test:jest:debug": "jest -i --watch"
+    "test:jest:debug": "jest -i --watch",
+    "test:vitest:ivy-zoneless": "ng run a20:test-vitest:ivy-zoneless"
   },
   "private": true,
   "dependencies": {
@@ -39,6 +40,7 @@
     "@types/jasmine": "5.1.15",
     "@types/jest": "29.5.14",
     "jasmine-core": "5.6.0",
+    "jsdom": "26.1.0",
     "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "jest-preset-angular": "15.0.3",
@@ -51,7 +53,8 @@
     "npm": "10.9.9",
     "puppeteer": "24.43.1",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "vitest": "3.2.4"
   },
   "engines": {
     "npm": "10.9.9"

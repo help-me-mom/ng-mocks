@@ -66,6 +66,19 @@ import { ngMocks } from 'ng-mocks';
 ngMocks.autoSpy('jest');
 ```
 
+For Vitest, use Angular's [native Vitest setup](install.md#angular-native-vitest-setup)
+and add the following optional configuration to its setup file:
+
+```ts title="src/setup-vitest.ts"
+import { ngMocks } from 'ng-mocks';
+
+ngMocks.autoSpy('vitest');
+```
+
+With Angular 21 and 22, register this file through the unit-test target's `setupFiles`.
+With Angular 20, import it from the zoneless `providersFile` instead, as shown in the
+installation guide.
+
 ## Custom spy
 
 It might happen that you want to install your own spies for each method.

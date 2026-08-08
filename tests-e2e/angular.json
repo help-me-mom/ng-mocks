@@ -27,6 +27,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "vitest": {
+              "aot": false,
+              "polyfills": ["zone.js", "zone.js/testing", "zone.js/plugins/vitest-patch"]
             }
           },
           "defaultConfiguration": "production"
@@ -50,6 +54,16 @@
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.json",
             "karmaConfig": "karma.conf.js",
+            "watch": false
+          }
+        },
+        "test-vitest": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "angular:build:development,vitest",
+            "runner": "vitest",
+            "setupFiles": ["src/setup-vitest.ts"],
+            "tsConfig": "tsconfig.vitest.json",
             "watch": false
           }
         }

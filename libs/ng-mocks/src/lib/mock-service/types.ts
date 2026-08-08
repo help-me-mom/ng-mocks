@@ -1,6 +1,6 @@
 /**
  * MockedFunction describes the interface of a function which can be used as a spy.
- * For example, jasmine.createSpy() and jest.fn() are MockedFunction.
+ * For example, jasmine.createSpy(), jest.fn(), and vi.fn() are MockedFunction.
  *
  * @see https://ng-mocks.sudo.eu/extra/auto-spy
  */

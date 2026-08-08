@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Service()
 class TargetDependency {
@@ -24,11 +24,6 @@ class TargetService {
 // Injectable, but it has distinct decorator metadata.
 // @see https://github.com/help-me-mom/ng-mocks/issues/14544
 describe('issue-14544:Service', () => {
-  beforeEach(() =>
-    ngMocks.autoSpy(typeof jest === 'undefined' ? 'jasmine' : 'jest'),
-  );
-  afterEach(() => ngMocks.autoSpy('reset'));
-
   beforeEach(() => {
     TargetDependency.constructed = 0;
   });

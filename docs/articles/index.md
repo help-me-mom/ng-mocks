@@ -2,7 +2,7 @@
 title: Mock components, services, and more to simplify Angular testing
 description: An Angular testing library for creating mock services, components, directives,
   pipes, and modules in unit tests. It includes shallow rendering
-  and supports Jasmine and Jest.
+  and supports Jasmine, Jest, and Angular's native Vitest runner on Angular 20-22.
 sidebar_label: Get started
 slug: /
 ---
@@ -26,26 +26,28 @@ keeping interfaces as they are, but suppressing their implementation.
 
 The current version of `ng-mocks` has been tested and **can be used** with:
 
-| angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
-|--------:| :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
-|      22 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      21 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      20 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      19 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      18 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      17 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      16 |  latest  |   yes   | yes  | yes |    yes     |   yes   |       |
-|      15 |  latest  |   yes   | yes  | yes |    yes     |         |       |
-|      14 |  latest  |   yes   | yes  | yes |    yes     |         |       |
-|      13 |  latest  |   yes   | yes  | yes |            |         |       |
-|      12 |  latest  |   yes   | yes  | yes |            |         |       |
-|      11 |  latest  |   yes   | yes  | yes |            |         |       |
-|      10 |  latest  |   yes   | yes  | yes |            |         |       |
-|       9 |  latest  |   yes   | yes  | yes |            |         |       |
-|       8 |  latest  |   yes   | yes  |     |            |         |       |
-|       7 |  latest  |   yes   | yes  |     |            |         |       |
-|       6 |  latest  |   yes   | yes  |     |            |         |       |
-|       5 |  latest  |   yes   | yes  |     |            |         |       |
+| angular | ng-mocks | jasmine | jest | vitest | ivy | standalone | signals | defer |
+|--------:| :------: | :-----: | :--: | :----: | :-: | :--------: | :-----: | :---: |
+|      22 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
+|      21 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
+|      20 |  latest  |   yes   | yes  | zoneless | yes |    yes     |   yes   |  yes  |
+|      19 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      18 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      17 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      16 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |       |
+|      15 |  latest  |   yes   | yes  |        | yes |    yes     |         |       |
+|      14 |  latest  |   yes   | yes  |        | yes |    yes     |         |       |
+|      13 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      12 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      11 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      10 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|       9 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|       8 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       7 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       6 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       5 |  latest  |   yes   | yes  |        |     |            |         |       |
+
+Angular 20's native Vitest support is zoneless-only because its supported Zone.js version has no Vitest patch.
 
 The header menu contains **preconfigured sandboxes**, where you can explore the features.
 To focus on a particular one, simply prefix it with `fdescribe` or `fit`.
@@ -64,13 +66,15 @@ There is also a brief summary of **the latest changes** in [CHANGELOG](https://g
 
 Put the global configuration for mocks in `src/test.ts`.
 For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
+For Vitest, follow the [native Angular setup](extra/install.md#angular-native-vitest-setup).
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
 // will be automatically spied on their creation.
 // https://ng-mocks.sudo.eu/extra/auto-spy
 ngMocks.autoSpy('jasmine');
-// for Jest: ngMocks.autoSpy('jest')
+// In setup-jest.ts: ngMocks.autoSpy('jest');
+// In setup-vitest.ts: ngMocks.autoSpy('vitest');
 
 // ngMocks.defaultMock helps to customize mocks
 // globally. Therefore, we can avoid copy-pasting
@@ -136,8 +140,8 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
-    expect(fixture.point.componentInstance).toEqual(
-      jasmine.any(ProfileComponent),
+    expect(fixture.point.componentInstance).toBeInstanceOf(
+      ProfileComponent,
     );
   });
 
@@ -159,9 +163,7 @@ describe('profile:builder', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy(),
-      // or, for Jest
-      // jest.fn(),
+      ngMocks.stub(),
     );
 
     // Renders <profile [profile]="params.profile">

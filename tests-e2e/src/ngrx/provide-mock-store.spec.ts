@@ -97,7 +97,7 @@ describe('provideMockStore:MockBuilder', () => {
 
   it('selects the value', () => {
     const store = TestBed.inject(Store);
-    const dispatchSpy = spyOn(store, 'dispatch');
+    const dispatchSpy = ngMocks.stub(store, 'dispatch');
 
     const fixture = factory();
 

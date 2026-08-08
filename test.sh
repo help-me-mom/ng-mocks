@@ -144,6 +144,12 @@ if [ "$1" = "" ] || [ "$1" = "jest" ]; then
     docker compose run --rm jest npm run test
 fi
 
+if [ "$1" = "" ] || [ "$1" = "vitest" ]; then
+  docker compose run --rm ng-mocks npm run s:vitest && \
+    docker compose run --rm ng-mocks npm run s:files:vitest && \
+    docker compose run --rm vitest npm run test
+fi
+
 if [ "$1" = "" ] || [ "$1" = "min" ]; then
   docker compose run --rm ng-mocks npm run s:min && \
     docker compose run --rm ng-mocks npm run s:files:min && \

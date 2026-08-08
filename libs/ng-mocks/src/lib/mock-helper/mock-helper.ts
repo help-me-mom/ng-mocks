@@ -23,7 +23,7 @@ export const ngMocks: {
    *
    * @see https://ng-mocks.sudo.eu/extra/auto-spy
    */
-  autoSpy(type: 'jasmine' | 'jest' | 'default' | 'reset'): void;
+  autoSpy(type: 'jasmine' | 'jest' | 'vitest' | 'default' | 'reset'): void;
 
   /**
    * ngMocks.autoSpy installs proper spies instead of empty functions.

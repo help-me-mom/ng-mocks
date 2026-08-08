@@ -160,6 +160,9 @@ commands:
             npm run "$spread_script"
       - run:
           name: Unit Tests
+          environment:
+            VITEST_MAX_FORKS: '1'
+            VITEST_MAX_WORKERS: '1'
           command: |
             test_script="test:<< parameters.dir >>"
             if [ -n "<< parameters.es >>" ]; then
@@ -304,6 +307,9 @@ jobs:
                 command: npm run s:tests-e2e
             - run:
                 name: E2E
+                environment:
+                  VITEST_MAX_FORKS: '1'
+                  VITEST_MAX_WORKERS: '1'
                 command: npm run e2e
   Docs:
     executor: core
@@ -612,6 +618,7 @@ workflows:
               dir:
                 - jasmine
                 - jest
+                - vitest
                 - min
                 - nx
 
@@ -629,6 +636,7 @@ workflows:
               dir:
                 - jasmine
                 - jest
+                - vitest
                 - min
                 - nx
 
@@ -817,5 +825,6 @@ workflows:
               dir:
                 - jasmine
                 - jest
+                - vitest
                 - min
                 - nx
