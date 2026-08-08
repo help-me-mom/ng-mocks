@@ -7,7 +7,7 @@ module.exports = {
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.es2015.spec.json',
+      tsConfig: 'tsconfig.es5.view-engine-zoned.spec.json',
     },
   },
 };

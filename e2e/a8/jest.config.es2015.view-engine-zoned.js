@@ -1,16 +1,13 @@
 module.exports = {
   preset: 'jest-preset-angular',
-  setupTestFrameworkScriptFile: '<rootDir>/src/setup-jest.ts',
-  transform: {
-    '^.+\\.(ts|js|html)$': 'ts-jest',
-  },
-
+  maxWorkers: 1,
+  setupFilesAfterEnv: ['<rootDir>/src/setup-jest.ts'],
   testURL: 'http://localhost',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.es2015.spec.json',
+      tsConfig: 'tsconfig.es2015.view-engine-zoned.spec.json',
     },
   },
 };

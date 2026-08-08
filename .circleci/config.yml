@@ -150,10 +150,22 @@ commands:
           command: npm run s:<< parameters.dir >>
       - run:
           name: Spreading Files
-          command: bash libs/compat-spread/profile.sh files "<< parameters.dir >>" "<< parameters.profile >>"
+          command: |
+            spread_script="s:files:<< parameters.dir >>"
+            case "<< parameters.dir >>" in
+              a20|a21|a22)
+                spread_script="$spread_script:<< parameters.profile >>"
+                ;;
+            esac
+            npm run "$spread_script"
       - run:
           name: Unit Tests
-          command: bash libs/compat-spread/profile.sh test "<< parameters.dir >>" "<< parameters.es >>" "<< parameters.profile >>"
+          command: |
+            test_script="test:<< parameters.dir >>"
+            if [ -n "<< parameters.es >>" ]; then
+              test_script="$test_script:<< parameters.es >>"
+            fi
+            npm run "$test_script:<< parameters.profile >>"
   lib:
     parameters:
       dir:
