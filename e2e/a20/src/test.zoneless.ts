@@ -1,12 +1,12 @@
 // This file initializes the Karma test environment without Zone.js.
 
-import { CommonModule } from '@angular/common'; // eslint-disable-line import-x/order
-import { ApplicationModule, NgModule, provideZonelessChangeDetection } from '@angular/core'; // eslint-disable-line import-x/order
+import { CommonModule } from '@angular/common';
+import { ApplicationModule, NgModule, provideZonelessChangeDetection } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser'; // eslint-disable-line import-x/order
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
-import { DefaultTitleStrategy, TitleStrategy } from '@angular/router'; // eslint-disable-line import-x/order
-import { MockService, ngMocks } from 'ng-mocks'; // eslint-disable-line import-x/order
+import { DefaultTitleStrategy, TitleStrategy } from '@angular/router';
+import { MockService, ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jasmine');
 
