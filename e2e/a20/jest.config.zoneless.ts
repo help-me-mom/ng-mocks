@@ -6,9 +6,8 @@ export default {
   testEnvironmentOptions: {
     url: 'http://localhost',
   },
-  testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  testMatch: ['<rootDir>/src/app/**/*.spec.ts', '<rootDir>/src/test-zoneless/**/*.spec.ts'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  testPathIgnorePatterns: ['<rootDir>/src/test/tests/fake-async/', '<rootDir>/src/test/tests/issue-641/'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', { tsconfig: './tsconfig.zoneless.json' }],
   },

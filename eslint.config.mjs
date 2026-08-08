@@ -233,6 +233,7 @@ export default defineConfig([
       'e2e/*/.angular/**',
       'e2e/*/src/app/**',
       'e2e/*/src/test/**',
+      'e2e/*/src/test-zoneless/**',
       'node_modules/**',
       'test-reports/**',
       'tests-e2e/.angular/**',

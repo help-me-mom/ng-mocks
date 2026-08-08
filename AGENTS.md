@@ -80,6 +80,8 @@
 
 - Never add helper functions in tests. Keep the relevant setup, action, and assertion flow inline in each spec, even when that means duplicating a short block, so regressions stay obvious across Angular spread targets.
 - Prefer static ES imports in source and tests. Do not use `require` or dynamic module access unless there is a concrete technical reason; if an Angular API is unavailable in older spread targets, gate that file in `test-spread.conf` with `versions=` or `features=` instead of bypassing TypeScript compatibility.
+- When a spread test depends on Zone.js, gate it with `environments=zoned` in `test-spread.conf` so the zoned and
+  zoneless corpora remain isolated without project-specific exclusions.
 
 ## Code Quality Commands
 

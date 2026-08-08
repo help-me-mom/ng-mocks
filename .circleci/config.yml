@@ -139,6 +139,14 @@ commands:
           - ''
           - ivy
         default: ''
+      environment:
+        description: Angular test environment
+        type: enum
+        enum:
+          - ''
+          - zoned
+          - zoneless
+        default: ''
     steps:
       - checkout
       - attach_workspace:
@@ -150,10 +158,10 @@ commands:
           command: npm run s:<< parameters.dir >>
       - run:
           name: Spreading Files
-          command: npm run s:files:<< parameters.dir >>
+          command: npm run s:files:<< parameters.dir >><< parameters.environment >>
       - run:
           name: Unit Tests
-          command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >>
+          command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >><< parameters.environment >>
   lib:
     parameters:
       dir:
@@ -497,6 +505,13 @@ jobs:
           - ''
           - ivy
         default: ''
+      environment:
+        type: enum
+        enum:
+          - ''
+          - zoned
+          - zoneless
+        default: ''
     executor: << parameters.node >>
     steps:
       - run: date
@@ -522,6 +537,7 @@ jobs:
                 dir: << parameters.dir >>
                 es: << parameters.es >>
                 engine: << parameters.engine >>
+                environment: << parameters.environment >>
   Lib Build:
     parameters:
       node:
@@ -720,7 +736,7 @@ workflows:
                 - es5
                 - es2015
 
-      # testing ivy view engine
+      # testing ivy view engine in the zoned environment
       - E2E Test:
           name: << matrix.dir >>:test
           node: << matrix.dir >>
@@ -737,9 +753,26 @@ workflows:
                 - a17
                 - a18
                 - a19
+
+      # testing zoned and zoneless environments
+      - E2E Test:
+          name: << matrix.dir >>:test:<< matrix.environment >>
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          environment: << matrix.environment >>
+          requires:
+            - << matrix.dir >>:install
+            - core
+          matrix:
+            parameters:
+              dir:
                 - a20
                 - a21
                 - a22
+              environment:
+                - zoned
+                - zoneless
 
       # testing lib build
       - Lib Build:

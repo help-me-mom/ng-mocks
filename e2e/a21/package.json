@@ -8,6 +8,8 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "npm run test:jasmine && npm run test:jasmine:zoneless && npm run test:jest && npm run test:jest:zoneless",
+    "test:zoned": "npm run test:jasmine && npm run test:jest",
+    "test:zoneless": "npm run test:jasmine:zoneless && npm run test:jest:zoneless",
     "test:debug": "npm run test:jasmine:debug",
     "test:jasmine": "ng test --ts-config ./tsconfig.json --progress=false --no-watch",
     "test:jasmine:zoneless": "ng test --configuration zoneless --progress=false --no-watch",

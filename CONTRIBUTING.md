@@ -81,9 +81,10 @@ Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by
 The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
 `setupZonelessTestEnv()` entry point from `jest-preset-angular`.
 
-The zoneless configurations exclude `tests/fake-async` and `tests/issue-641`. Those suites intentionally exercise
-`fakeAsync`, `tick`, and `flush`, which require the Zone.js testing utilities and cannot run without Zone.js. Their
-ordinary zoned coverage remains unchanged.
+`test-spread.conf` treats the environment as another compatibility-matrix dimension. It spreads the zoned corpus to
+`src/test` and the zoneless corpus to `src/test-zoneless`, and CircleCI runs those profiles independently. The
+zoneless corpus omits `tests/fake-async` and `tests/issue-641`: those suites intentionally exercise `fakeAsync`,
+`tick`, and `flush`, which require the Zone.js testing utilities. Their ordinary zoned coverage remains unchanged.
 
 ## How to run unit tests locally
 
