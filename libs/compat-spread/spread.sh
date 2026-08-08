@@ -68,6 +68,36 @@ validate_selector() {
   done
 }
 
+validate_environment() {
+  local environment="$1"
+  local label="$2"
+
+  case "$environment" in
+    zoned|zoneless)
+      ;;
+    *)
+      fail "$label has an invalid environment: $environment"
+      ;;
+  esac
+}
+
+environment_selector_matches() {
+  local environment="$1"
+  local selector="$2"
+  local token
+  local tokens
+
+  IFS=',' read -r -a tokens <<< "$selector"
+
+  for token in "${tokens[@]}"; do
+    if [ "$environment" = "$token" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 selector_matches() {
   local selector="$1"
   local major="$2"
@@ -170,12 +200,13 @@ contains_in_array() {
   return 1
 }
 
-if [ "$#" -gt 2 ]; then
-  fail "compat-spread accepts an optional config path and an optional versions mask"
+if [ "$#" -gt 3 ]; then
+  fail "compat-spread accepts an optional config path, versions mask, and environment mask"
 fi
 
 CONFIG_PATH="$DEFAULT_CONFIG_PATH"
 VERSION_MASK=""
+ENVIRONMENT_MASK=""
 
 if [ "$#" -eq 1 ]; then
   if [ -f "$1" ]; then
@@ -186,6 +217,11 @@ if [ "$#" -eq 1 ]; then
 elif [ "$#" -eq 2 ]; then
   CONFIG_PATH="$1"
   VERSION_MASK="$2"
+elif [ "$#" -eq 3 ]; then
+  CONFIG_PATH="$1"
+  VERSION_MASK="$2"
+  ENVIRONMENT_MASK="$(trim "$3")"
+  validate_environment "$ENVIRONMENT_MASK" "Environment mask"
 fi
 
 VERSION_MASK="$(normalize_path "$VERSION_MASK")"
@@ -194,11 +230,13 @@ VERSION_MASK="$(normalize_path "$VERSION_MASK")"
 
 VERSION_DESTS=()
 VERSION_MAJORS=()
+VERSION_ENVIRONMENTS=()
 FEATURE_NAMES=()
 FEATURE_SELECTORS=()
 FILE_GLOBS=()
 FILE_VERSION_SELECTORS=()
 FILE_FEATURE_NAMES=()
+FILE_ENVIRONMENT_SELECTORS=()
 FILE_STRIP_PREFIXES=()
 FILE_CACHE_CONTENTS=()
 
@@ -218,16 +256,34 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
 
   case "$kind" in
     version)
-      [ "${#parts[@]}" -eq 3 ] || fail "Config line $line_number must be: version|<dest>|<major>"
+      [ "${#parts[@]}" -ge 3 ] && [ "${#parts[@]}" -le 4 ] || \
+        fail "Config line $line_number must be: version|<dest>|<major>|environment=<zoned-or-zoneless>"
 
       dest="$(normalize_path "${parts[1]}")"
       major="$(trim "${parts[2]}")"
+      environment="zoned"
 
       [ -n "$dest" ] || fail "Config line $line_number has an empty version destination"
       [[ $major =~ ^[0-9]+$ ]] || fail "Config line $line_number has an invalid major version: $major"
 
+      if [ "${#parts[@]}" -eq 4 ]; then
+        environment_field="$(trim "${parts[3]}")"
+
+        case "$environment_field" in
+          environment=*)
+            environment="$(trim "${environment_field#environment=}")"
+            ;;
+          *)
+            fail "Config line $line_number must define environment with environment=<zoned-or-zoneless>"
+            ;;
+        esac
+
+        validate_environment "$environment" "Config line $line_number"
+      fi
+
       VERSION_DESTS+=("$dest")
       VERSION_MAJORS+=("$major")
+      VERSION_ENVIRONMENTS+=("$environment")
       ;;
     feature)
       [ "${#parts[@]}" -eq 3 ] || fail "Config line $line_number must be: feature|<name>|versions=<selector>"
@@ -255,11 +311,13 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
       FEATURE_SELECTORS+=("${feature_selector//[[:space:]]/}")
       ;;
     file)
-      [ "${#parts[@]}" -ge 2 ] || fail "Config line $line_number must be: file|<glob>|versions=<selector>|features=<a,b>|strip=<prefix>"
+      [ "${#parts[@]}" -ge 2 ] || \
+        fail "Config line $line_number must be: file|<glob>|versions=<selector>|features=<a,b>|environments=<zoned,zoneless>|strip=<prefix>"
 
       file_glob="$(normalize_path "${parts[1]}")"
       file_selector=""
       file_features=""
+      file_environments=""
       file_strip=""
       part_index=2
 
@@ -281,6 +339,18 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
             file_features="${file_features//[[:space:]]/}"
             [ -n "$file_features" ] || fail "Config line $line_number has an empty features list"
             ;;
+          environments=*)
+            [ -z "$file_environments" ] || fail "Config line $line_number duplicates environments=<...>"
+            file_environments="$(trim "${file_field#environments=}")"
+            file_environments="${file_environments//[[:space:]]/}"
+            [ -n "$file_environments" ] || fail "Config line $line_number has an empty environments list"
+
+            IFS=',' read -r -a environments <<< "$file_environments"
+            for environment in "${environments[@]}"; do
+              [ -n "$environment" ] || fail "Config line $line_number has an empty environment"
+              validate_environment "$environment" "Config line $line_number"
+            done
+            ;;
           strip=*)
             [ -z "$file_strip" ] || fail "Config line $line_number duplicates strip=<prefix>"
             file_strip="$(normalize_path "${file_field#strip=}")"
@@ -297,6 +367,7 @@ while IFS= read -r raw_line || [ -n "$raw_line" ]; do
       FILE_GLOBS+=("$file_glob")
       FILE_VERSION_SELECTORS+=("$file_selector")
       FILE_FEATURE_NAMES+=("$file_features")
+      FILE_ENVIRONMENT_SELECTORS+=("$file_environments")
       FILE_STRIP_PREFIXES+=("$file_strip")
       ;;
     *)
@@ -365,6 +436,7 @@ version_index=0
 while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
   dest="${VERSION_DESTS[$version_index]}"
   major="${VERSION_MAJORS[$version_index]}"
+  environment="${VERSION_ENVIRONMENTS[$version_index]}"
 
   if [ -n "$VERSION_MASK" ]; then
     case "$dest" in
@@ -377,10 +449,16 @@ while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
     esac
   fi
 
+  if [ -n "$ENVIRONMENT_MASK" ] && [ "$environment" != "$ENVIRONMENT_MASK" ]; then
+    version_index=$((version_index + 1))
+    continue
+  fi
+
   matched_versions=$((matched_versions + 1))
   copied=0
   skipped_version=0
   skipped_feature=0
+  skipped_environment=0
   seen_paths=()
 
   mkdir -p "$dest"
@@ -390,6 +468,7 @@ while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
     decision="copy"
     file_selector="${FILE_VERSION_SELECTORS[$file_index]}"
     file_features="${FILE_FEATURE_NAMES[$file_index]}"
+    file_environments="${FILE_ENVIRONMENT_SELECTORS[$file_index]}"
 
     if [ -n "$file_selector" ] && ! selector_matches "$file_selector" "$major"; then
       decision="version"
@@ -406,6 +485,11 @@ while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
           break
         fi
       done
+    fi
+
+    if [ "$decision" = "copy" ] && [ -n "$file_environments" ] && \
+      ! environment_selector_matches "$environment" "$file_environments"; then
+      decision="environment"
     fi
 
     # The first matching rule owns a file for this destination, even if it skips the copy.
@@ -427,6 +511,10 @@ while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
           skipped_feature=$((skipped_feature + 1))
           continue
           ;;
+        environment)
+          skipped_environment=$((skipped_environment + 1))
+          continue
+          ;;
       esac
 
       destination_path="$dest/$relative_path"
@@ -439,14 +527,16 @@ while [ "$version_index" -lt "${#VERSION_DESTS[@]}" ]; do
     file_index=$((file_index + 1))
   done
 
-  printf 'spread-files dest=%s version=%s copied=%s skippedVersion=%s skippedFeature=%s\n' \
+  printf 'spread-files dest=%s version=%s environment=%s copied=%s skippedVersion=%s skippedFeature=%s skippedEnvironment=%s\n' \
     "$dest" \
     "$major" \
+    "$environment" \
     "$copied" \
     "$skipped_version" \
-    "$skipped_feature"
+    "$skipped_feature" \
+    "$skipped_environment"
 
   version_index=$((version_index + 1))
 done
 
-[ "$matched_versions" -gt 0 ] || fail "Unknown versions mask: $VERSION_MASK"
+[ "$matched_versions" -gt 0 ] || fail "Unknown versions or environment mask: $VERSION_MASK $ENVIRONMENT_MASK"

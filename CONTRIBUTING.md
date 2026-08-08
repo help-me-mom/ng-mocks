@@ -74,6 +74,38 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
+### Zoned and zoneless Angular tests
+
+Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by default. The `a20`, `a21`, and
+`a22` version projects therefore run their spread corpus with both zoned and zoneless Jasmine and Jest environments.
+The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
+`setupZonelessTestEnv()` entry point from `jest-preset-angular`.
+
+CircleCI represents the supported engine and environment combinations with one compatibility profile:
+`view-engine-zoned`, `ivy-zoned`, or `ivy-zoneless`. The compatibility matrix is:
+
+- Angular 5-8: `view-engine-zoned`
+- Angular 9-11: `view-engine-zoned` and `ivy-zoned`
+- Angular 12-19: `ivy-zoned`
+- Angular 20-22: `ivy-zoned` and `ivy-zoneless`
+
+The root CI-facing scripts follow `test:<project>[:<es>]:<profile>`. Each project keeps a generic `test` script that
+runs all profiles it supports. CircleCI builds the root script name directly from its matrix parameters, so adding a
+profile does not require a separate routing helper.
+
+Projects with separate environment corpora use `s:files:<project>:<profile>` for CI spreading. Their generic
+`s:files:<project>` script still spreads every supported corpus for local and library workflows.
+
+`test-spread.conf` owns environment-specific file selection because that decision is independent of the Angular
+rendering engine. It spreads the zoned corpus to `src/test` and the zoneless corpus to `src/test-zoneless`. The
+zoneless corpus omits `tests/fake-async` and `tests/issue-641`: those suites intentionally exercise `fakeAsync`,
+`tick`, and `flush`, which require the Zone.js testing utilities. Their ordinary zoned coverage remains unchanged.
+
+Profile-specific e2e scripts use the same suffix, for example `test:jest:es5:view-engine-zoned` or
+`test:jasmine:ivy-zoneless`. Name their config files `jest.config.<es>.<profile>.*` and
+`tsconfig.<es>.<profile>.spec.json` when the ES target varies, or omit the ES segment when it does not. Configs
+without profile-specific variants retain the tool's conventional default name.
+
 ## How to run unit tests locally
 
 ```shell

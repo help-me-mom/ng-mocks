@@ -72,6 +72,9 @@
 - Angular 5-8 are pre-Ivy.
 - Angular 9-11 have both View Engine and Ivy coverage in the repo scripts.
 - Angular 12-22 are Ivy-only in the current repo setup.
+- Use `view-engine-zoned`, `ivy-zoned`, and `ivy-zoneless` as the compatibility profile names. Angular 5-8 use
+  `view-engine-zoned`; Angular 9-11 use both zoned engine profiles; Angular 12-19 use `ivy-zoned`; and Angular 20-22
+  use both Ivy profiles.
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 - When enabling new recommended lint rules, keep fixes that remain compatible with the supported Angular, Node.js, and ES targets. Disable rules that require newer framework APIs or runtime features, and leave a short reason beside the override.
@@ -80,6 +83,10 @@
 
 - Never add helper functions in tests. Keep the relevant setup, action, and assertion flow inline in each spec, even when that means duplicating a short block, so regressions stay obvious across Angular spread targets.
 - Prefer static ES imports in source and tests. Do not use `require` or dynamic module access unless there is a concrete technical reason; if an Angular API is unavailable in older spread targets, gate that file in `test-spread.conf` with `versions=` or `features=` instead of bypassing TypeScript compatibility.
+- When a spread test depends on Zone.js, gate it with `environments=zoned` in `test-spread.conf` so the zoned and
+  zoneless corpora remain isolated without project-specific exclusions.
+- Keep CI-facing root test scripts named `test:<project>[:<es>]:<profile>`. Keep project-level profile script and
+  config suffixes aligned with the same profile names; generic `test` scripts should run every supported profile.
 
 ## Code Quality Commands
 

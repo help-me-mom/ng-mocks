@@ -132,13 +132,13 @@ commands:
         description: ES Version
         type: string
         default: ''
-      engine:
-        description: Angular View Engine
+      profile:
+        description: Angular compatibility profile
         type: enum
         enum:
-          - ''
-          - ivy
-        default: ''
+          - view-engine-zoned
+          - ivy-zoned
+          - ivy-zoneless
     steps:
       - checkout
       - attach_workspace:
@@ -150,10 +150,22 @@ commands:
           command: npm run s:<< parameters.dir >>
       - run:
           name: Spreading Files
-          command: npm run s:files:<< parameters.dir >>
+          command: |
+            spread_script="s:files:<< parameters.dir >>"
+            case "<< parameters.dir >>" in
+              a20|a21|a22)
+                spread_script="$spread_script:<< parameters.profile >>"
+                ;;
+            esac
+            npm run "$spread_script"
       - run:
           name: Unit Tests
-          command: npm run test:<< parameters.dir >><< parameters.es >><< parameters.engine >>
+          command: |
+            test_script="test:<< parameters.dir >>"
+            if [ -n "<< parameters.es >>" ]; then
+              test_script="$test_script:<< parameters.es >>"
+            fi
+            npm run "$test_script:<< parameters.profile >>"
   lib:
     parameters:
       dir:
@@ -491,12 +503,12 @@ jobs:
           - es5
           - es2015
         default: ''
-      engine:
+      profile:
         type: enum
         enum:
-          - ''
-          - ivy
-        default: ''
+          - view-engine-zoned
+          - ivy-zoned
+          - ivy-zoneless
     executor: << parameters.node >>
     steps:
       - run: date
@@ -521,7 +533,7 @@ jobs:
             - test:
                 dir: << parameters.dir >>
                 es: << parameters.es >>
-                engine: << parameters.engine >>
+                profile: << parameters.profile >>
   Lib Build:
     parameters:
       node:
@@ -605,9 +617,10 @@ workflows:
 
       # testing latest
       - E2E Test:
-          name: << matrix.dir >>:test
+          name: << matrix.dir >>:test:ivy-zoned
           dir: << matrix.dir >>
           branch: << matrix.dir >>
+          profile: ivy-zoned
           requires:
             - << matrix.dir >>:install
             - core
@@ -660,10 +673,11 @@ workflows:
 
       # testing a5 (exceptional)
       - E2E Test:
-          name: << matrix.dir >>:test
+          name: << matrix.dir >>:test:view-engine-zoned
           node: a5
           dir: << matrix.dir >>
           branch: a5
+          profile: view-engine-zoned
           requires:
             - << matrix.dir >>:install
             - core
@@ -675,11 +689,12 @@ workflows:
 
       # testing classic view engine
       - E2E Test:
-          name: << matrix.dir >>:test:<< matrix.es >>
+          name: << matrix.dir >>:test:<< matrix.es >>:view-engine-zoned
           node: << matrix.dir >>
           dir: << matrix.dir >>
           branch: << matrix.dir >>
           es: << matrix.es >>
+          profile: view-engine-zoned
           requires:
             - << matrix.dir >>:install
             - core
@@ -696,14 +711,14 @@ workflows:
                 - es5
                 - es2015
 
-      # testing ivy view engine
+      # testing Ivy in the zoned environment
       - E2E Test:
-          name: << matrix.dir >>:test:<< matrix.es >>:ivy
+          name: << matrix.dir >>:test:<< matrix.es >>:ivy-zoned
           node: << matrix.dir >>
           dir: << matrix.dir >>
           branch: << matrix.dir >>
           es: << matrix.es >>
-          engine: ivy
+          profile: ivy-zoned
           requires:
             - << matrix.dir >>:install
             - core
@@ -720,12 +735,13 @@ workflows:
                 - es5
                 - es2015
 
-      # testing ivy view engine
+      # testing Ivy in the zoned environment
       - E2E Test:
-          name: << matrix.dir >>:test
+          name: << matrix.dir >>:test:ivy-zoned
           node: << matrix.dir >>
           dir: << matrix.dir >>
           branch: << matrix.dir >>
+          profile: ivy-zoned
           requires:
             - << matrix.dir >>:install
             - core
@@ -737,9 +753,26 @@ workflows:
                 - a17
                 - a18
                 - a19
+
+      # testing Ivy in zoned and zoneless environments
+      - E2E Test:
+          name: << matrix.dir >>:test:<< matrix.profile >>
+          node: << matrix.dir >>
+          dir: << matrix.dir >>
+          branch: << matrix.dir >>
+          profile: << matrix.profile >>
+          requires:
+            - << matrix.dir >>:install
+            - core
+          matrix:
+            parameters:
+              dir:
                 - a20
                 - a21
                 - a22
+              profile:
+                - ivy-zoned
+                - ivy-zoneless
 
       # testing lib build
       - Lib Build:

@@ -18,7 +18,10 @@ import { ngMocks } from '../mock-helper/mock-helper';
 import { MockService } from '../mock-service/mock-service';
 
 import { MockRender } from './mock-render';
-import { patchPointDetectChanges } from './mock-render-factory';
+import {
+  MockRenderFactory,
+  patchPointDetectChanges,
+} from './mock-render-factory';
 import {
   EmptyComponent,
   RenderRealComponent,
@@ -151,6 +154,130 @@ describe('MockRender', () => {
 
   describe('zoneless', () => {
     ngMocks.ignoreOnConsole('warn');
+
+    it('schedules input changes made through params', async () => {
+      TestBed.configureTestingModule({
+        declarations: [OnPushWithoutSelectorComponent],
+        providers: [provideZonelessChangeDetection()],
+      });
+      const params = { content: 'initial' };
+      const fixture = MockRender(
+        OnPushWithoutSelectorComponent,
+        params,
+      );
+
+      params.content = 'updated';
+      await fixture.whenStable();
+
+      expect(fixture.point.componentInstance.content).toEqual(
+        'updated',
+      );
+
+      fixture.componentRef.setInput('content', 'from setInput');
+      await fixture.whenStable();
+
+      expect(params.content).toEqual('from setInput');
+      expect(fixture.point.componentInstance.content).toEqual(
+        'from setInput',
+      );
+    });
+
+    it('schedules input changes through accessor params', async () => {
+      TestBed.configureTestingModule({
+        declarations: [OnPushWithoutSelectorComponent],
+        providers: [provideZonelessChangeDetection()],
+      });
+      let content = 'initial';
+      const params = Object.defineProperty({}, 'content', {
+        configurable: true,
+        enumerable: true,
+        get: () => content,
+        set: (value: string) => (content = value),
+      }) as { content: string };
+      const fixture = MockRender(
+        OnPushWithoutSelectorComponent,
+        params,
+      );
+
+      params.content = 'updated';
+      await fixture.whenStable();
+
+      expect(content).toEqual('updated');
+      expect(fixture.point.componentInstance.content).toEqual(
+        'updated',
+      );
+    });
+
+    it('schedules input params added after factory creation', async () => {
+      TestBed.configureTestingModule({
+        declarations: [OnPushWithoutSelectorComponent],
+        providers: [provideZonelessChangeDetection()],
+      });
+      const factory = MockRenderFactory(
+        OnPushWithoutSelectorComponent,
+        ['content'],
+      );
+      factory.configureTestBed();
+      const params: { content?: string } = {};
+      const fixture = factory(params);
+
+      params.content = 'updated';
+      await fixture.whenStable();
+
+      expect(fixture.point.componentInstance.content).toEqual(
+        'updated',
+      );
+    });
+
+    it('keeps unsupported input param descriptors unchanged', () => {
+      TestBed.configureTestingModule({
+        declarations: [OnPushWithoutSelectorComponent],
+        providers: [provideZonelessChangeDetection()],
+      });
+      const factory = MockRenderFactory(
+        OnPushWithoutSelectorComponent,
+        ['content'],
+      );
+      factory.configureTestBed();
+      const fixed = Object.defineProperty({}, 'content', {
+        configurable: false,
+        enumerable: true,
+        value: 'fixed',
+        writable: true,
+      }) as { content: string };
+      const readonly = Object.defineProperty({}, 'content', {
+        configurable: true,
+        enumerable: true,
+        value: 'readonly',
+        writable: false,
+      }) as { content: string };
+      const getterOnly = Object.defineProperty({}, 'content', {
+        configurable: true,
+        enumerable: true,
+        get: () => 'getter only',
+      }) as { content: string };
+      const prototype = Object.defineProperty({}, 'content', {
+        configurable: false,
+        value: 'inherited',
+        writable: true,
+      });
+      const inherited = Object.create(prototype) as {
+        content: string;
+      };
+
+      expect(factory(fixed).point.componentInstance.content).toEqual(
+        'fixed',
+      );
+      expect(
+        factory(readonly).point.componentInstance.content,
+      ).toEqual('readonly');
+      expect(
+        factory(getterOnly).point.componentInstance.content,
+      ).toEqual('getter only');
+      expect(
+        factory(inherited).point.componentInstance.content,
+      ).toEqual('inherited');
+    });
 
     it('supports zoneless detectChanges without checkNoChanges', () => {
       TestBed.configureTestingModule({
