@@ -78,8 +78,15 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-moc
 
 Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by default. The `a20`, `a21`, and
 `a22` version projects therefore run their spread corpus with both zoned and zoneless Jasmine and Jest environments.
-The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
-`setupZonelessTestEnv()` entry point from `jest-preset-angular`.
+Native Vitest coverage follows the same profiles where the installed Angular and Zone.js versions support it:
+Angular 20 runs Vitest only in `ivy-zoneless`, while Angular 21 and 22 run it in both profiles. The zoneless Jasmine
+configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding `setupZonelessTestEnv()`
+entry point from `jest-preset-angular`. Angular 20's native Vitest target supplies the zoneless provider file;
+Angular 21 and 22 select zoned or zoneless initialization from the configured polyfills.
+
+The `e2e/jasmine`, `e2e/jest`, and `e2e/vitest` projects separately verify the latest Angular setup with only that
+runner's packages and types installed. They share the same small application corpus and use the existing latest-runner
+install, test, and library-build matrices; the Vitest-only fixture uses its ordinary zoned profile.
 
 CircleCI represents the supported engine and environment combinations with one compatibility profile:
 `view-engine-zoned`, `ivy-zoned`, or `ivy-zoneless`. The compatibility matrix is:
@@ -234,7 +241,8 @@ The next step is:
   - remove flexible versions (`^~`) in `dependencies`
   - remove flexible versions (`^~`) in `devDependencies`
   - in `dependencies`, add `@angular/animations` which supports the desired angular version
-  - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
+  - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `jsdom`, `ng-packagr`, `puppeteer`,
+    `ts-node`, and `vitest` versions supported by the desired Angular version
   - add `engines` with the correct `npm` which supports the desired angular version
 - delete `README.md`
 - update `tsconfig.json` by merging the generated `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.spec.json`
@@ -271,6 +279,7 @@ The next step is:
   - delete other files which aren't imported anymore
 - add `/src/test.ts` as it is in the prev version
 - add `/src/setup-jest.ts` as it is in the prev version
+- add `/src/setup-vitest.ts` and `tsconfig.vitest.json` as in the previous version
 
 ### Step #3 - update scripts
 
@@ -285,6 +294,8 @@ The next step is:
 - update `ng-mocks/test-spread.conf`, search for `a22` and copy config to support `a23`
 - update `ng-mocks/test-spread-app.conf`, search for `a22` and copy config to support `a23`
 - if the new Angular version is still prerelease and `npm install` / `npm ci` set `force=true` in `ng-mocks/e2e/a23/.npmrc`
+- keep the new project's default test script and native `test-vitest` target aligned with every profile supported
+  by that Angular version
 
 ### Step #4 - update ng-mocks dependencies
 

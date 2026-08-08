@@ -3,6 +3,9 @@
 import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
+import { ngMocks } from 'ng-mocks';
+
+ngMocks.autoSpy('jasmine');
 
 const zoneWindow = window as Window & { Zone?: unknown };
 

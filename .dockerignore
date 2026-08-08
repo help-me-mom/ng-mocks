@@ -21,6 +21,7 @@
 /e2e/a22/node_modules
 /e2e/jasmine/node_modules
 /e2e/jest/node_modules
+/e2e/vitest/node_modules
 /e2e/min/node_modules
 /e2e/mx/node_modules
 /node_modules

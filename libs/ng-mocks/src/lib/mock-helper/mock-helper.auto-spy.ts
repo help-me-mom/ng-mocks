@@ -1,7 +1,8 @@
+import funcGetGlobal from '../common/func.get-global';
 import { registerMockFunction } from '../mock-service/helper.mock-service';
 import { CustomMockFunction } from '../mock-service/types';
 
-type param = 'jasmine' | 'jest' | 'default' | 'reset' | CustomMockFunction;
+type param = 'jasmine' | 'jest' | 'vitest' | 'default' | 'reset' | CustomMockFunction;
 
 const calls: param[] = [];
 
@@ -19,6 +20,10 @@ export default (type: param) => {
   // istanbul ignore if: because it is run with jasmine
   if (action === 'jest') {
     return registerMockFunction(name => jest.fn().mockName(name));
+  }
+  // istanbul ignore if: because it is run with jasmine
+  if (action === 'vitest') {
+    return registerMockFunction(name => funcGetGlobal().vi.fn().mockName(name));
   }
   if (!action || action === 'default' || action === 'reset') {
     return registerMockFunction();

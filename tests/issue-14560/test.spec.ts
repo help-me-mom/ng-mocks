@@ -1,7 +1,7 @@
 import { Component, inject, Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 @Injectable({ providedIn: 'root' })
 class TargetService {
@@ -43,11 +43,6 @@ class TargetConstructorComponent {
 // mode now wraps both declaration styles while kept modules retain their roots.
 // @see https://github.com/help-me-mom/ng-mocks/issues/14560
 describe('issue-14560', () => {
-  beforeEach(() =>
-    ngMocks.autoSpy(typeof jest === 'undefined' ? 'jasmine' : 'jest'),
-  );
-  afterEach(() => ngMocks.autoSpy('reset'));
-
   beforeEach(() => {
     TargetService.constructed = 0;
   });

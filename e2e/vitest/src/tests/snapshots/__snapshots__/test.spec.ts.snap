@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Vitest snapshots > serializes the first rendered result 1`] = `"<vitest-snapshot-hello><h1>Hello Joe!</h1></vitest-snapshot-hello>"`;
+
+exports[`Vitest snapshots > serializes the next rendered result without Angular context state 1`] = `"<vitest-snapshot-hello><h1>Hello Jane!</h1></vitest-snapshot-hello>"`;

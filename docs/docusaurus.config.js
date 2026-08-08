@@ -1,7 +1,7 @@
 module.exports = {
   title: 'ng-mocks',
   tagline:
-    'An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests, which includes shallow rendering, precise stubs to dump child dependencies, supports Angular 5 6 7 8 9 10 11, jasmine and jest.',
+    "An Angular 5-22 testing library for mocking services, components, directives, pipes, and modules, with shallow rendering and support for Jasmine, Jest, and Angular's native Vitest runner on Angular 20-22.",
   url: 'https://ng-mocks.sudo.eu',
   baseUrl: '/',
   onBrokenLinks: 'throw',

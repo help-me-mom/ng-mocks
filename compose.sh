@@ -239,6 +239,10 @@ if [ "$1" = "" ] || [ "$1" = "jest" ]; then
   docker compose up --build -- jest
 fi
 
+if [ "$1" = "" ] || [ "$1" = "vitest" ]; then
+  docker compose up --build -- vitest
+fi
+
 if [ "$1" = "" ] || [ "$1" = "min" ]; then
   docker compose up --build -- min && \
     docker compose run --rm min node ./node_modules/puppeteer/install.mjs && \

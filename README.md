@@ -13,26 +13,28 @@
 
 The current version of the library **has been tested** and **can be used** with:
 
-| angular | ng-mocks | jasmine | jest | ivy | standalone | signals | defer |
-| ------: | :------: | :-----: | :--: | :-: | :--------: | :-----: | :---: |
-|      22 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      21 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      20 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      19 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      18 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      17 |  latest  |   yes   | yes  | yes |    yes     |   yes   |  yes  |
-|      16 |  latest  |   yes   | yes  | yes |    yes     |   yes   |       |
-|      15 |  latest  |   yes   | yes  | yes |    yes     |         |       |
-|      14 |  latest  |   yes   | yes  | yes |    yes     |         |       |
-|      13 |  latest  |   yes   | yes  | yes |            |         |       |
-|      12 |  latest  |   yes   | yes  | yes |            |         |       |
-|      11 |  latest  |   yes   | yes  | yes |            |         |       |
-|      10 |  latest  |   yes   | yes  | yes |            |         |       |
-|       9 |  latest  |   yes   | yes  | yes |            |         |       |
-|       8 |  latest  |   yes   | yes  |     |            |         |       |
-|       7 |  latest  |   yes   | yes  |     |            |         |       |
-|       6 |  latest  |   yes   | yes  |     |            |         |       |
-|       5 |  latest  |   yes   | yes  |     |            |         |       |
+| angular | ng-mocks | jasmine | jest |  vitest  | ivy | standalone | signals | defer |
+| ------: | :------: | :-----: | :--: | :------: | :-: | :--------: | :-----: | :---: |
+|      22 |  latest  |   yes   | yes  |   yes    | yes |    yes     |   yes   |  yes  |
+|      21 |  latest  |   yes   | yes  |   yes    | yes |    yes     |   yes   |  yes  |
+|      20 |  latest  |   yes   | yes  | zoneless | yes |    yes     |   yes   |  yes  |
+|      19 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
+|      18 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
+|      17 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
+|      16 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |       |
+|      15 |  latest  |   yes   | yes  |          | yes |    yes     |         |       |
+|      14 |  latest  |   yes   | yes  |          | yes |    yes     |         |       |
+|      13 |  latest  |   yes   | yes  |          | yes |            |         |       |
+|      12 |  latest  |   yes   | yes  |          | yes |            |         |       |
+|      11 |  latest  |   yes   | yes  |          | yes |            |         |       |
+|      10 |  latest  |   yes   | yes  |          | yes |            |         |       |
+|       9 |  latest  |   yes   | yes  |          | yes |            |         |       |
+|       8 |  latest  |   yes   | yes  |          |     |            |         |       |
+|       7 |  latest  |   yes   | yes  |          |     |            |         |       |
+|       6 |  latest  |   yes   | yes  |          |     |            |         |       |
+|       5 |  latest  |   yes   | yes  |          |     |            |         |       |
+
+Angular 20's native Vitest support is zoneless-only because its supported Zone.js version has no Vitest patch.
 
 ## Important links
 
@@ -53,12 +55,15 @@ The current version of the library **has been tested** and **can be used** with:
 
 Put the global configuration for mocks in `src/test.ts`.
 For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
+For Vitest, follow the [native Angular setup](https://ng-mocks.sudo.eu/extra/install#angular-native-vitest-setup).
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
 // will be automatically spied on their creation.
 // https://ng-mocks.sudo.eu/extra/auto-spy
-ngMocks.autoSpy('jasmine'); // or jest
+ngMocks.autoSpy('jasmine');
+// In setup-jest.ts: ngMocks.autoSpy('jest');
+// In setup-vitest.ts: ngMocks.autoSpy('vitest');
 
 // ngMocks.defaultMock helps to customize mocks
 // globally. Therefore, we can avoid copy-pasting
@@ -128,7 +133,7 @@ describe('profile:builder', () => {
 
     expect(
       fixture.point.componentInstance,
-    ).toEqual(jasmine.any(ProfileComponent));
+    ).toBeInstanceOf(ProfileComponent);
   });
 
   // A test to ensure that the component listens
@@ -149,7 +154,7 @@ describe('profile:builder', () => {
     const spySave = MockInstance(
       StorageService,
       'save',
-      jasmine.createSpy(), // or jest.fn()
+      ngMocks.stub(),
     );
 
     // Renders <profile [profile]="params.profile">
