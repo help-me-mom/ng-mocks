@@ -4,7 +4,7 @@ description: Critical changes to consider during an updating process to the late
 sidebar_label: Updating to the latest
 ---
 
-Usually, you can use the latest version of `ng-mocks` with an [Angular 5-22 application](index.md).
+Usually, you can use the latest version of `ng-mocks` with any [Angular 5+ application](index.md).
 
 Below you can find critical changes. They happen on major releases.
 

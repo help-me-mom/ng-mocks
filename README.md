@@ -13,26 +13,26 @@
 
 The current version of the library **has been tested** and **can be used** with:
 
-| angular | ng-mocks | jasmine | jest |  vitest  | ivy | standalone | signals | defer |
-| ------: | :------: | :-----: | :--: | :------: | :-: | :--------: | :-----: | :---: |
-|      22 |  latest  |   yes   | yes  |   yes    | yes |    yes     |   yes   |  yes  |
-|      21 |  latest  |   yes   | yes  |   yes    | yes |    yes     |   yes   |  yes  |
-|      20 |  latest  |   yes   | yes  | zoneless | yes |    yes     |   yes   |  yes  |
-|      19 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
-|      18 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
-|      17 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |  yes  |
-|      16 |  latest  |   yes   | yes  |          | yes |    yes     |   yes   |       |
-|      15 |  latest  |   yes   | yes  |          | yes |    yes     |         |       |
-|      14 |  latest  |   yes   | yes  |          | yes |    yes     |         |       |
-|      13 |  latest  |   yes   | yes  |          | yes |            |         |       |
-|      12 |  latest  |   yes   | yes  |          | yes |            |         |       |
-|      11 |  latest  |   yes   | yes  |          | yes |            |         |       |
-|      10 |  latest  |   yes   | yes  |          | yes |            |         |       |
-|       9 |  latest  |   yes   | yes  |          | yes |            |         |       |
-|       8 |  latest  |   yes   | yes  |          |     |            |         |       |
-|       7 |  latest  |   yes   | yes  |          |     |            |         |       |
-|       6 |  latest  |   yes   | yes  |          |     |            |         |       |
-|       5 |  latest  |   yes   | yes  |          |     |            |         |       |
+| angular | ng-mocks | jasmine | jest | vitest | ivy | standalone | signals | defer |
+| ------: | :------: | :-----: | :--: | :----: | :-: | :--------: | :-----: | :---: |
+|      22 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
+|      21 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
+|      20 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
+|      19 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      18 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      17 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
+|      16 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |       |
+|      15 |  latest  |   yes   | yes  |        | yes |    yes     |         |       |
+|      14 |  latest  |   yes   | yes  |        | yes |    yes     |         |       |
+|      13 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      12 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      11 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|      10 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|       9 |  latest  |   yes   | yes  |        | yes |            |         |       |
+|       8 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       7 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       6 |  latest  |   yes   | yes  |        |     |            |         |       |
+|       5 |  latest  |   yes   | yes  |        |     |            |         |       |
 
 Angular 20's native Vitest support is zoneless-only because its supported Zone.js version has no Vitest patch.
 

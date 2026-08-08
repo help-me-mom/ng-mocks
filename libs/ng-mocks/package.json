@@ -1,7 +1,7 @@
 {
   "name": "ng-mocks",
   "version": "0.0.0",
-  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests. It provides shallow rendering, precise stubs to fake child dependencies. ng-mocks works with Angular 5 through 22 using Jasmine or Jest, and with Angular's native Vitest runner in Angular 20 through 22.",
+  "description": "An Angular testing library for creating mock services, components, directives, pipes and modules in unit tests. It provides shallow rendering, precise stubs to fake child dependencies. ng-mocks works with Angular 5+ using Jasmine or Jest, and with Angular's native Vitest runner starting with Angular 20.",
   "keywords": [
     "angular",
     "test",

@@ -4,7 +4,7 @@ description: Installation instructions for ng-mocks
 sidebar_label: Installation
 ---
 
-For Angular 5 through 22, you can use **the latest version** of `ng-mocks`.
+For **any** Angular 5+ **project** you can use **the latest version** of `ng-mocks`.
 Simply install it as a dev dependency.
 
 ```bash npm2yarn
@@ -97,7 +97,7 @@ jasmine.getEnv().addReporter({
 
 ## Angular native Vitest setup
 
-Angular 20 through 22 provide `@angular/build:unit-test` with a native Vitest runner.
+Starting with Angular 20, Angular provides `@angular/build:unit-test` with a native Vitest runner.
 The builder requires the Angular application build system, so the selected build target
 must use `@angular/build:application`. If it does not, follow Angular's
 [application build-system migration](https://angular.dev/tools/cli/build-system-migration)
@@ -112,8 +112,8 @@ The tested combinations are:
 |      20 |   3    | zoneless only |
 
 Angular 20's supported Zone.js version does not contain the Vitest patch.
-Zoned Angular 21 and 22 tests require Zone.js 0.16.2 or newer within the version
-range supported by Angular. Earlier Angular versions do not provide this native builder.
+Starting with Angular 21, zoned tests require Zone.js 0.16.2 or newer within the
+version range supported by Angular. Earlier Angular versions do not provide this native builder.
 
 ### Install the runner
 
@@ -124,12 +124,12 @@ Use these compatible ranges for the setup tested by ng-mocks:
 npm install --save-dev vitest@^3.1.1 jsdom@^26.1.0
 ```
 
-```bash npm2yarn title="Angular 21 and 22"
+```bash npm2yarn title="Angular 21+"
 npm install --save-dev vitest@^4.0.8 jsdom@^28.0.0
 ```
 
-For zoned Angular 21 or 22 tests, install Zone.js if the application does not
-already have version 0.16.2 or newer:
+For zoned tests starting with Angular 21, install Zone.js if the application
+does not already have version 0.16.2 or newer:
 
 ```bash npm2yarn
 npm install --save-dev zone.js@~0.16.2
@@ -169,7 +169,7 @@ The setup file can also contain the same `ngMocks.defaultMock` and `ngMocks.glob
 customizations used with Jasmine or Jest. Angular initializes `TestBed`; do not initialize
 the test environment manually.
 
-### Angular 21 and 22
+### Angular 21+
 
 ng-mocks creates Angular declarations at runtime, so its Vitest build must use JIT
 compilation with `aot: false`. Inside the project's existing `architect` section, merge the

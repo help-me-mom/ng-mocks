@@ -2,7 +2,7 @@
 title: Mock components, services, and more to simplify Angular testing
 description: An Angular testing library for creating mock services, components, directives,
   pipes, and modules in unit tests. It includes shallow rendering
-  and supports Jasmine, Jest, and Angular's native Vitest runner on Angular 20-22.
+  and supports Jasmine, Jest, and Angular's native Vitest runner starting with Angular 20.
 sidebar_label: Get started
 slug: /
 ---
@@ -30,7 +30,7 @@ The current version of `ng-mocks` has been tested and **can be used** with:
 |--------:| :------: | :-----: | :--: | :----: | :-: | :--------: | :-----: | :---: |
 |      22 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
 |      21 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
-|      20 |  latest  |   yes   | yes  | zoneless | yes |    yes     |   yes   |  yes  |
+|      20 |  latest  |   yes   | yes  |  yes   | yes |    yes     |   yes   |  yes  |
 |      19 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
 |      18 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |
 |      17 |  latest  |   yes   | yes  |        | yes |    yes     |   yes   |  yes  |

@@ -75,7 +75,7 @@ import { ngMocks } from 'ng-mocks';
 ngMocks.autoSpy('vitest');
 ```
 
-With Angular 21 and 22, register this file through the unit-test target's `setupFiles`.
+Starting with Angular 21, register this file through the unit-test target's `setupFiles`.
 With Angular 20, import it from the zoneless `providersFile` instead, as shown in the
 installation guide.
 
