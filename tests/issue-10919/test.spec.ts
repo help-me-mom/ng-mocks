@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockProvider, MockService } from 'ng-mocks';
+import { MockProvider, MockService, ngMocks } from 'ng-mocks';
 
 @Injectable()
 class TargetService {
@@ -21,6 +21,18 @@ const resetSpy = (spy: any): void => {
 // @see https://github.com/help-me-mom/ng-mocks/issues/10919
 describe('issue-10919', () => {
   const anyTestBed: any = TestBed;
+
+  beforeEach(() =>
+    ngMocks.autoSpy(
+      typeof jest === 'undefined'
+        ? 'jasmine'
+        : 'requireActual' in jest
+          ? 'jest'
+          : 'vitest',
+    ),
+  );
+
+  afterEach(() => ngMocks.autoSpy('reset'));
 
   beforeEach(() => {
     TestBed.resetTestingModule();

@@ -4,7 +4,7 @@ import {
   Injectable,
 } from '@angular/core';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Injectable({ providedIn: 'root' })
 class TargetDependency {
@@ -43,6 +43,17 @@ class TargetEagerService {
 // services need the same runtime mocking window as standalone declarations.
 // @see https://github.com/help-me-mom/ng-mocks/issues/14544
 describe('issue-14544', () => {
+  beforeEach(() =>
+    ngMocks.autoSpy(
+      typeof jest === 'undefined'
+        ? 'jasmine'
+        : 'requireActual' in jest
+          ? 'jest'
+          : 'vitest',
+    ),
+  );
+  afterEach(() => ngMocks.autoSpy('reset'));
+
   beforeEach(() => {
     TargetDependency.constructed = 0;
   });

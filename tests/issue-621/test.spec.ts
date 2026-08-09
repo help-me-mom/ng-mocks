@@ -27,10 +27,10 @@ describe('issue-621', () => {
 
   beforeAll(() => MockBuilder(TargetComponent));
 
-  const factory = MockRenderFactory(TargetComponent, [
-    'update',
-    'value',
-  ]);
+  let factory: MockRenderFactory<TargetComponent, 'update' | 'value'>;
+  beforeAll(() => {
+    factory = MockRenderFactory(TargetComponent, ['update', 'value']);
+  });
 
   it('does not proxy update inout', () => {
     const fixture = factory();

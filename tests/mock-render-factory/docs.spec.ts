@@ -26,15 +26,20 @@ class TargetComponent {
 class TargetModule {}
 
 describe('Maximum performance', () => {
-  const factory = MockRenderFactory(TargetComponent, [
-    'input1',
-    'input2',
-  ]);
-
   ngMocks.faster();
 
   beforeAll(() => MockBuilder(TargetComponent, TargetModule));
-  beforeAll(() => factory.configureTestBed());
+
+  let factory: MockRenderFactory<
+    TargetComponent,
+    'input1' | 'input2'
+  >;
+  beforeAll(() => {
+    factory = MockRenderFactory(TargetComponent, [
+      'input1',
+      'input2',
+    ]);
+  });
 
   it('covers one case', () => {
     const fixture = factory({ input1: 1 });
