@@ -51,12 +51,6 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/641
 describe('issue-641', () => {
-  // The Zone/Vitest patch invokes describe.skip callbacks.
-  // Use a no-op when xdescribe is absent.
-  const skippedSuite =
-    // eslint-disable-next-line no-restricted-globals
-    typeof xdescribe === 'function' ? xdescribe : () => undefined;
-
   beforeAll(() =>
     ngMocks.globalReplace(
       BrowserAnimationsModule,
@@ -78,7 +72,8 @@ describe('issue-641', () => {
   });
 
   // unfortunately with real animations it is not so easy.
-  skippedSuite('BrowserAnimationsModule:mock', () => {
+  // eslint-disable-next-line no-restricted-globals
+  xdescribe('BrowserAnimationsModule:mock', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule)
         .mock(BrowserAnimationsModule)
@@ -139,7 +134,8 @@ describe('issue-641', () => {
   });
 
   // unfortunately with real animations it is not so easy.
-  skippedSuite('BrowserAnimationsModule:keep', () => {
+  // eslint-disable-next-line no-restricted-globals
+  xdescribe('BrowserAnimationsModule:keep', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).keep(
         BrowserAnimationsModule,

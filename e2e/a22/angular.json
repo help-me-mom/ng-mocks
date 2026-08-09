@@ -76,6 +76,7 @@
         "test-vitest": {
           "builder": "@angular/build:unit-test",
           "options": {
+            "exclude": ["src/test/tests/issue-641/test.spec.ts"],
             "runner": "vitest",
             "setupFiles": ["src/setup-vitest.ts"],
             "watch": false

@@ -5,7 +5,14 @@ import { DefaultTitleStrategy, TitleStrategy } from '@angular/router'; // eslint
 import { MockService, ngMocks } from 'ng-mocks'; // eslint-disable-line import-x/order
 
 ngMocks.autoSpy('vitest');
+
+// In case, if you use @angular/router and Angular 14+.
+// You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
+// A14 fix: making DefaultTitleStrategy to be a default mock for TitleStrategy
 ngMocks.defaultMock(TitleStrategy, () => MockService(DefaultTitleStrategy));
+
+// Usually, *ngIf and other declarations from CommonModule aren't expected to be mocked.
+// The code below keeps them.
 ngMocks.globalKeep(ApplicationModule, true);
 ngMocks.globalKeep(CommonModule, true);
 ngMocks.globalKeep(BrowserModule, true);
