@@ -16,7 +16,7 @@
     "module": "preserve",
     "useDefineForClassFields": false,
     "outDir": "./dist/out-tsc",
-    "types": ["jasmine", "node"]
+    "types": ["jasmine", "node", "vitest/globals"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -24,6 +24,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": ["src/main.ts", "src/test.ts"],
+  "files": ["src/main.ts", "src/test.ts", "src/setup-vitest.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

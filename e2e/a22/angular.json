@@ -78,17 +78,18 @@
           "options": {
             "runner": "vitest",
             "setupFiles": ["src/setup-vitest.ts"],
-            "tsConfig": "tsconfig.vitest.json",
             "watch": false
           },
           "configurations": {
             "ivy-zoned": {
               "buildTarget": "a22:build:development,vitest,vitest-zoned",
-              "include": ["src/app/**/*.spec.ts", "src/test/**/*.spec.ts"]
+              "include": ["src/app/**/*.spec.ts", "src/test/**/*.spec.ts"],
+              "tsConfig": "tsconfig.ivy-zoned.spec.json"
             },
             "ivy-zoneless": {
               "buildTarget": "a22:build:development,vitest",
-              "include": ["src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts"]
+              "include": ["src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts"],
+              "tsConfig": "tsconfig.ivy-zoneless.spec.json"
             }
           },
           "defaultConfiguration": "ivy-zoned"

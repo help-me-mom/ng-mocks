@@ -75,14 +75,14 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "runner": "vitest",
-            "tsConfig": "tsconfig.vitest.json",
             "watch": false
           },
           "configurations": {
             "ivy-zoneless": {
               "buildTarget": "a20:build:development,vitest",
               "include": ["src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts"],
-              "providersFile": "src/providers.zoneless.ts"
+              "providersFile": "src/providers.zoneless.ts",
+              "tsConfig": "tsconfig.ivy-zoneless.spec.json"
             }
           },
           "defaultConfiguration": "ivy-zoneless"

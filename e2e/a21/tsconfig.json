@@ -16,7 +16,7 @@
     "target": "ES2022",
     "module": "preserve",
     "useDefineForClassFields": false,
-    "types": ["jasmine", "jest", "node"]
+    "types": ["jasmine", "jest", "node", "vitest/globals"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

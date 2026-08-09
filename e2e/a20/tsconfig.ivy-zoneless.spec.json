@@ -1,5 +1,14 @@
 {
   "extends": "./tsconfig.json",
-  "files": ["src/main.ts", "src/test.zoneless.ts", "src/setup-jest.zoneless.ts"],
+  "compilerOptions": {
+    "types": ["jasmine", "jest", "node", "vitest/globals"]
+  },
+  "files": [
+    "src/main.ts",
+    "src/test.zoneless.ts",
+    "src/setup-jest.zoneless.ts",
+    "src/setup-vitest.ts",
+    "src/providers.zoneless.ts"
+  ],
   "include": ["jest.config.ivy-zoneless.ts", "src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts", "src/**/*.d.ts"]
 }

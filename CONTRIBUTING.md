@@ -279,7 +279,8 @@ The next step is:
   - delete other files which aren't imported anymore
 - add `/src/test.ts` as it is in the prev version
 - add `/src/setup-jest.ts` as it is in the prev version
-- add `/src/setup-vitest.ts` and `tsconfig.vitest.json` as in the previous version
+- add `/src/setup-vitest.ts` and include it and `vitest/globals` in the shared profile TypeScript
+  configurations as in the previous version
 
 ### Step #3 - update scripts
 

@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["jasmine", "jest", "node", "vitest/globals"]
-  },
-  "files": ["src/providers.zoneless.ts", "src/setup-vitest.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
-}

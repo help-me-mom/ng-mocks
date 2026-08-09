@@ -63,7 +63,7 @@
             "buildTarget": "angular:build:development,vitest",
             "runner": "vitest",
             "setupFiles": ["src/setup-vitest.ts"],
-            "tsConfig": "tsconfig.vitest.json",
+            "tsConfig": "tsconfig.json",
             "watch": false
           }
         }

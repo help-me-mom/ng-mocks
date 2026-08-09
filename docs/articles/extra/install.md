@@ -140,21 +140,24 @@ describes the native runner and alternatives such as `happy-dom`.
 
 ### Configure TypeScript and ng-mocks
 
-Create a runner-scoped TypeScript configuration so Vitest globals have their proper types:
+Use the same test TypeScript configuration as the project's other runners. Add
+`vitest/globals` to its existing types and `src/setup-vitest.ts` to its existing files.
+For example, a project that runs Jasmine, Jest, and Vitest from the same specs can use:
 
-```json title="tsconfig.vitest.json"
+```json title="tsconfig.spec.json"
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["vitest/globals"]
+    "types": ["jasmine", "jest", "vitest/globals"]
   },
-  "files": ["src/setup-vitest.ts"],
+  "files": ["src/test.ts", "src/setup-jest.ts", "src/setup-vitest.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
 ```
 
-Keep any additional types required by the project. Do not add Jasmine or Jest types
-unless the same sources still use them.
+Keep only the runner types and setup files that the project actually uses. TypeScript
+compiles every listed setup file, while each runner still executes only the setup file
+selected by its own configuration.
 
 Auto-spy is optional. If enabled, `ngMocks.autoSpy('vitest')` uses `vi.fn()` for methods
 on mocks created by ng-mocks:
@@ -199,7 +202,7 @@ name and keep the existing build options:
     "options": {
       "runner": "vitest",
       "setupFiles": ["src/setup-vitest.ts"],
-      "tsConfig": "tsconfig.vitest.json"
+      "tsConfig": "tsconfig.spec.json"
     },
     "configurations": {
       "zoned": {
@@ -242,13 +245,20 @@ import './setup-vitest';
 export default [provideZonelessChangeDetection()];
 ```
 
-In the Vitest TypeScript configuration above, replace `files` so both files are included:
+In the shared test TypeScript configuration above, add the provider file as well:
 
-```json title="tsconfig.vitest.json"
+```json title="tsconfig.spec.json"
 {
-  "files": ["src/providers.zoneless.ts", "src/setup-vitest.ts"]
+  "files": [
+    "src/test.zoneless.ts",
+    "src/setup-jest.zoneless.ts",
+    "src/setup-vitest.ts",
+    "src/providers.zoneless.ts"
+  ]
 }
 ```
+
+Keep the existing entries for the runners used by the project.
 
 Then merge this JIT build configuration and target into the project's `architect` section:
 
@@ -269,7 +279,7 @@ Then merge this JIT build configuration and target into the project's `architect
       "runner": "vitest",
       "buildTarget": "my-app:build:development,vitest",
       "providersFile": "src/providers.zoneless.ts",
-      "tsConfig": "tsconfig.vitest.json"
+      "tsConfig": "tsconfig.spec.json"
     }
   }
 }
