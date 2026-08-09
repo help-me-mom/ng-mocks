@@ -6,9 +6,54 @@ sidebar_label: Updating to the latest
 
 Usually, you can use the latest version of `ng-mocks` with any [Angular 5+ application](index.md).
 
-Below you can find critical changes. They happen on major releases.
+Below you can find critical changes. Most of them happen on major releases.
+Bug fixes which can affect tests that relied on the previous behavior are listed too.
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
+
+## From ng-mocks 14.15 to 14.16
+
+### Signal inputs of mocked components
+
+Starting with `14.16.0`, [`MockComponent`](api/MockComponent.md) and component mocks created by
+[`MockBuilder`](api/MockBuilder.md) preserve inputs declared with `input()` or `input.required()` as Angular signals.
+Previously, a bound signal input on a mocked component was incorrectly replaced with its plain value. The change fixes
+[#13671](https://github.com/help-me-mom/ng-mocks/issues/13671) and makes mocked and kept components expose the same
+input interface. Input aliases, required-input metadata and transforms are preserved too.
+
+This is an observable behavior change for Angular 17+ tests which relied on the old mock-only behavior. For example,
+this assertion could pass before `14.16.0` even though `name` is declared as a signal:
+
+```ts
+const child = ngMocks.findInstance(ChildComponent);
+
+expect(child.name).toEqual('test');
+```
+
+Since `14.16.0`, read the signal as you would on the real component:
+
+```ts
+const child = ngMocks.findInstance(ChildComponent);
+
+expect(child.name()).toEqual('test');
+```
+
+Before updating, check tests which access a mocked component through `componentInstance` or `ngMocks.findInstance`.
+If a property is declared with `input()` or `input.required()`, update direct reads to call the signal. Do not assign a
+value directly to the property. Change its parent binding and run change detection, or use Angular's
+[`ComponentRef.setInput`](api/MockRender.md#componentrefsetinput-and-signal-inputs) when the component is rendered
+directly.
+
+For value-oriented assertions which should work both before and after `14.16.0`, use [`ngMocks.input`](api/ngMocks/input.md):
+
+```ts
+const child = ngMocks.find(ChildComponent);
+
+expect(ngMocks.input(child, 'name')).toEqual('test');
+```
+
+No changes are needed for decorator-based `@Input()` properties. Kept components already exposed signal inputs as
+signals, so this migration applies only when the declaration is replaced with a mock.
 
 ## From 21 to 22
 
