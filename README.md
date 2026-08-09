@@ -53,9 +53,11 @@ Angular 20's native Vitest support is zoneless-only because its supported Zone.j
 
 ## Very short introduction
 
-Put the global configuration for mocks in `src/test.ts`.
+Put the global configuration for mocks in the setup file for your test runner.
+For Jasmine, use `src/test.ts`.
 For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
-For Vitest, follow the [native Angular setup](https://ng-mocks.sudo.eu/extra/install#angular-native-vitest-setup).
+For Vitest, use `src/setup-vitest.ts` and follow the
+[native Angular setup](https://ng-mocks.sudo.eu/extra/install#angular-native-vitest-setup).
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
@@ -133,7 +135,7 @@ describe('profile:builder', () => {
 
     expect(
       fixture.point.componentInstance,
-    ).toBeInstanceOf(ProfileComponent);
+    ).toEqual(jasmine.any(ProfileComponent));
   });
 
   // A test to ensure that the component listens

@@ -234,8 +234,8 @@ In such situations, `MockRenderFactory` can be used instead of `MockRender`.
 It accepts `bindings` and `providers`, but instead of an instant render,
 it returns a factory function. The factory function simply creates a new fixture out of its middleware component.
 
-Considering the conditions above, we would create a factory once with `MockRenderFactory` at suite definition,
-configure its test bed in `beforeAll`, and then call the factory in each test to create fixtures.
+Considering the conditions above, we would need to create a factory once with help of `MockRenderFactory` in `beforeAll`,
+and then 5 tests should call the factory in order to create fixtures.
 
 ```ts
 describe('Maximum performance', () => {

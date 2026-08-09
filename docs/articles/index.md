@@ -64,9 +64,11 @@ There is also a brief summary of **the latest changes** in [CHANGELOG](https://g
 
 ## Very short introduction
 
-Put the global configuration for mocks in `src/test.ts`.
+Put the global configuration for mocks in the setup file for your test runner.
+For Jasmine, use `src/test.ts`.
 For Jest, use `src/setup-jest.ts` / `src/test-setup.ts`.
-For Vitest, follow the [native Angular setup](extra/install.md#angular-native-vitest-setup).
+For Vitest, use `src/setup-vitest.ts` and follow the
+[native Angular setup](extra/install.md#angular-native-vitest-setup).
 
 ```ts title="src/test.ts"
 // All methods in mock declarations and providers
@@ -140,8 +142,8 @@ describe('profile:builder', () => {
     // https://ng-mocks.sudo.eu/api/MockRender
     const fixture = MockRender(ProfileComponent);
 
-    expect(fixture.point.componentInstance).toBeInstanceOf(
-      ProfileComponent,
+    expect(fixture.point.componentInstance).toEqual(
+      jasmine.any(ProfileComponent),
     );
   });
 
