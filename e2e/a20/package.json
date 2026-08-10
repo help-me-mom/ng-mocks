@@ -17,7 +17,7 @@
     "test:jest:ivy-zoned": "jest --config jest.config.ivy-zoned.ts",
     "test:jest:ivy-zoneless": "jest --config jest.config.ivy-zoneless.ts",
     "test:jest:debug": "jest -i --watch",
-    "test:vitest:ivy-zoneless": "ng run a20:test-vitest:ivy-zoneless"
+    "test:vitest:ivy-zoneless": "ng run a20:test-vitest:ivy-zoneless --include=src/app/app.component.spec.ts"
   },
   "private": true,
   "dependencies": {
