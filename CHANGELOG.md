@@ -1,3 +1,17 @@
+# [14.17.0](https://github.com/help-me-mom/ng-mocks/compare/v14.16.1...v14.17.0) (2026-08-10)
+
+
+### Bug Fixes
+
+* **MockBuilder:** mock inject dependencies in classic components [#14560](https://github.com/help-me-mom/ng-mocks/issues/14560) ([#14564](https://github.com/help-me-mom/ng-mocks/issues/14564)) ([e65fc36](https://github.com/help-me-mom/ng-mocks/commit/e65fc36c68e4686fb8c96feb431fabba5c4fe650))
+* **MockRender:** schedule zoneless input updates [#12061](https://github.com/help-me-mom/ng-mocks/issues/12061) ([#14563](https://github.com/help-me-mom/ng-mocks/issues/14563)) ([4071490](https://github.com/help-me-mom/ng-mocks/commit/40714906cf07723f2de2e2a187d797b928be0e84))
+
+
+### Features
+
+* **MockRender:** support signal input initial values [#11101](https://github.com/help-me-mom/ng-mocks/issues/11101) ([#14559](https://github.com/help-me-mom/ng-mocks/issues/14559)) ([e4e5df6](https://github.com/help-me-mom/ng-mocks/commit/e4e5df6ef0ab7f3cfd97ee1b0ac6927923c758e2))
+* **vitest:** support Angular's native Vitest runner [#7802](https://github.com/help-me-mom/ng-mocks/issues/7802) ([#14562](https://github.com/help-me-mom/ng-mocks/issues/14562)) ([ac71e8a](https://github.com/help-me-mom/ng-mocks/commit/ac71e8a6da7f8c0ddd4c8967a6caab416dbe7a08))
+
 ## [14.16.1](https://github.com/help-me-mom/ng-mocks/compare/v14.16.0...v14.16.1) (2026-08-06)
 
 
