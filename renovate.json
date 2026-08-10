@@ -169,6 +169,16 @@
       "matchFileNames": ["e2e/a14/*"],
       "matchPackageNames": ["ng-packagr"],
       "allowedVersions": "<14.3.0"
+    },
+    {
+      "matchFileNames": ["e2e/a20/*"],
+      "matchPackageNames": ["jsdom"],
+      "allowedVersions": "<27.0.0"
+    },
+    {
+      "matchFileNames": ["e2e/a21/*", "e2e/a22/*"],
+      "matchPackageNames": ["jsdom"],
+      "allowedVersions": "<29.0.0"
     }
   ]
 }
