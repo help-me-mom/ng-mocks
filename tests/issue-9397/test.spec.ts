@@ -82,7 +82,13 @@ class HostComponent {}
 // @see https://github.com/help-me-mom/ng-mocks/issues/9397
 describe('issue-9397', () => {
   beforeEach(() =>
-    ngMocks.autoSpy(typeof jest === 'undefined' ? 'jasmine' : 'jest'),
+    ngMocks.autoSpy(
+      typeof jest === 'undefined'
+        ? 'jasmine'
+        : typeof (window as any).vi === 'undefined'
+          ? 'jest'
+          : 'vitest',
+    ),
   );
   afterEach(() => ngMocks.autoSpy('reset'));
 

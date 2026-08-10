@@ -43,6 +43,7 @@ const projects = [
   './e2e/a22/tsconfig.ivy-zoneless.spec.json',
   './e2e/jasmine/tsconfig.json',
   './e2e/jest/tsconfig.json',
+  './e2e/vitest/tsconfig.json',
   './e2e/min/tsconfig.json',
   './e2e/nx/tsconfig.json',
 ];

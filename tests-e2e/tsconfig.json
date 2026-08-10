@@ -16,7 +16,7 @@
     "module": "preserve",
     "useDefineForClassFields": false,
     "outDir": "./dist/out-tsc",
-    "types": ["jasmine", "node"]
+    "types": ["jasmine", "node", "vitest/globals"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

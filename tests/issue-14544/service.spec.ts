@@ -25,7 +25,13 @@ class TargetService {
 // @see https://github.com/help-me-mom/ng-mocks/issues/14544
 describe('issue-14544:Service', () => {
   beforeEach(() =>
-    ngMocks.autoSpy(typeof jest === 'undefined' ? 'jasmine' : 'jest'),
+    ngMocks.autoSpy(
+      typeof jest === 'undefined'
+        ? 'jasmine'
+        : typeof (window as any).vi === 'undefined'
+          ? 'jest'
+          : 'vitest',
+    ),
   );
   afterEach(() => ngMocks.autoSpy('reset'));
 

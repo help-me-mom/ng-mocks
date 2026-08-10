@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "files": ["src/main.ts", "src/test.zoneless.ts", "src/setup-jest.zoneless.ts"],
+  "files": ["src/main.ts", "src/test.zoneless.ts", "src/setup-jest.zoneless.ts", "src/setup-vitest.ts"],
   "include": ["jest.config.ivy-zoneless.ts", "src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts", "src/**/*.d.ts"]
 }

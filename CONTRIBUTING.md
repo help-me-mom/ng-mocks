@@ -78,8 +78,15 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-moc
 
 Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by default. The `a20`, `a21`, and
 `a22` version projects therefore run their spread corpus with both zoned and zoneless Jasmine and Jest environments.
-The zoneless Jasmine configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding
-`setupZonelessTestEnv()` entry point from `jest-preset-angular`.
+Native Vitest coverage follows the same profiles where the installed Angular and Zone.js versions support it:
+Angular 20 runs Vitest only in `ivy-zoneless`, while Angular 21 and 22 run it in both profiles. The zoneless Jasmine
+configuration uses `provideZonelessChangeDetection()`, while Jest uses the corresponding `setupZonelessTestEnv()`
+entry point from `jest-preset-angular`. Angular 20's native Vitest target supplies the zoneless provider file;
+Angular 21 and 22 select zoned or zoneless initialization from the configured polyfills.
+
+The `e2e/jasmine`, `e2e/jest`, and `e2e/vitest` projects verify the latest supported Angular version with only the
+selected runner's packages and types. Each receives the same application corpus and participates in the root install,
+test, and library-build matrices. The Vitest-only project runs a single zoned profile.
 
 CircleCI represents the supported engine and environment combinations with one compatibility profile:
 `view-engine-zoned`, `ivy-zoned`, or `ivy-zoneless`. The compatibility matrix is:
@@ -99,7 +106,11 @@ Projects with separate environment corpora use `s:files:<project>:<profile>` for
 `test-spread.conf` owns environment-specific file selection because that decision is independent of the Angular
 rendering engine. It spreads the zoned corpus to `src/test` and the zoneless corpus to `src/test-zoneless`. The
 zoneless corpus omits `tests/fake-async` and `tests/issue-641`: those suites intentionally exercise `fakeAsync`,
-`tick`, and `flush`, which require the Zone.js testing utilities. Their ordinary zoned coverage remains unchanged.
+`tick`, and `flush`, which require the Zone.js testing utilities. Their zoned spread remains available; any
+runner-specific exclusion is configured separately in that runner's target.
+
+Keep environment requirements in `test-spread.conf`. Put unavoidable runner-specific exceptions in that runner
+target's `exclude` list; do not alter regression source or add `xdescribe` solely to satisfy another runner.
 
 Profile-specific e2e scripts use the same suffix, for example `test:jest:es5:view-engine-zoned` or
 `test:jasmine:ivy-zoneless`. Name their config files `jest.config.<es>.<profile>.*` and
@@ -211,15 +222,14 @@ The next step is:
     - remove `scripts`
     - set `tsConfig` to `tsconfig.json`
   - remove `architect/build/configurations/production/budgets`
+  - copy the `architect/build/configurations/vitest` configuration from the previous version
+  - copy `architect/build/configurations/vitest-zoned` when the new Zone.js version supports Vitest
   - remove `architect/extract-i18n` if present
-  - if `architect/test` does not exist, copy the whole block from the previous version
-    - make sure the final block contains:
-      - `builder` = `@angular/build:karma`
-      - `options/main` = `src/test.ts`
-      - `options/polyfills` = `["zone.js", "zone.js/testing"]`
-      - `options/tsConfig` = `tsconfig.json`
-      - `options/karmaConfig` = `karma.conf.js`
-      - `options/watch` = `false`
+  - copy `architect/test` and `architect/test-vitest` from the previous version
+    - update the project name in every `buildTarget`
+    - in the Karma target, retain each profile's `main`, `polyfills`, `include`, and shared `tsConfig`
+    - in the Vitest target, retain each profile's `buildTarget`, `include`, and shared `tsConfig`
+    - keep only the profiles supported by the new Angular and Zone.js versions
   - if `lib` does not exist, copy the whole block from the previous version
     - make sure the final block contains:
       - `architect/build/options/project` = `ng-package.json`
@@ -234,7 +244,9 @@ The next step is:
   - remove flexible versions (`^~`) in `dependencies`
   - remove flexible versions (`^~`) in `devDependencies`
   - in `dependencies`, add `@angular/animations` which supports the desired angular version
-  - in `devDependencies`, add `@types/jest`, `jest`, `jest-preset-angular`, `ng-packagr`, `puppeteer`, `ts-node` which support the desired angular version
+  - in `devDependencies`, add `@types/jest`, `@types/node`, `jest`, `jest-environment-jsdom`,
+    `jest-preset-angular`, `jsdom`, `ng-packagr`, `puppeteer`, `ts-node`, and `vitest` versions supported by the
+    desired Angular version
   - add `engines` with the correct `npm` which supports the desired angular version
 - delete `README.md`
 - update `tsconfig.json` by merging the generated `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.spec.json`
@@ -253,11 +265,11 @@ The next step is:
     - set / add `compilerOptions/useDefineForClassFields` to `false`
     - set / add `compilerOptions/noImplicitOverride` to `false`
     - set / add `compilerOptions/esModuleInterop` to `true`
-    - merge `compilerOptions/types` with `["jasmine", "jest", "node"]`
+    - merge `compilerOptions/types` with `["jasmine", "jest", "node", "vitest/globals"]`
     - set / add `files` to `["src/main.ts", "src/test.ts", "src/setup-jest.ts"]`
-    - set / add `include` to `["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]`
+    - set / add `include` to `["jest.config.ivy-zoned.ts", "src/app/**/*.spec.ts", "src/test/**/*.spec.ts", "src/**/*.d.ts"]`
 - add `.nvmrc` which supports the desired angular version
-- add `jest.config.ts` as it is in the prev version
+- add `jest.config.ivy-zoned.ts` and `jest.config.ivy-zoneless.ts` as in the previous version
 - add `karma.conf.js` as it is in the prev version
 - add `ng-package.json` as it is in the prev version
 - delete `/public`
@@ -271,6 +283,11 @@ The next step is:
   - delete other files which aren't imported anymore
 - add `/src/test.ts` as it is in the prev version
 - add `/src/setup-jest.ts` as it is in the prev version
+- add `/src/setup-vitest.ts` as it is in the previous version
+- copy the shared profile TypeScript configurations from the previous version for every supported profile
+  - each extends `tsconfig.json` and selects the matching Jest config, setup files, and test corpus
+  - add `src/setup-vitest.ts` to `files` in every profile that runs Vitest
+  - do not add a Vitest-only TypeScript configuration
 
 ### Step #3 - update scripts
 
@@ -291,7 +308,7 @@ The next step is:
 - update `ng-mocks/package.json` to point to the version `^23` in dependencies
 - execute `sh compose.sh root` in `ng-mocks` to install the dependencies
 
-### Step #5 - verify that`ng-mocks` does not fail with the new version
+### Step #5 - verify that `ng-mocks` does not fail with the new version
 
 - execute `sh test.sh root` in `ng-mocks` to ensure nothing fails
 - execute `sh test.sh a23` in `ng-mocks` to ensure nothing fails

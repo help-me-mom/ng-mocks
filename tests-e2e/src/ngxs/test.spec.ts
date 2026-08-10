@@ -9,7 +9,7 @@ import {
   Store,
 } from '@ngxs/store';
 import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
-import { first, tap } from 'rxjs';
+import { EMPTY, first, tap } from 'rxjs';
 
 class SetValue {
   static readonly type = 'set-value';
@@ -90,12 +90,18 @@ describe('ngxs:MockBuilder', () => {
 
   it('selects the value', () => {
     const store = TestBed.inject(Store);
-    const dispatchSpy = spyOn(store, 'dispatch');
+    const dispatchedActions: unknown[] = [];
+    ngMocks.stub(store, {
+      dispatch: action => {
+        dispatchedActions.push(action);
+        return EMPTY;
+      },
+    });
 
     const fixture = factory();
 
     // asserting
     expect(ngMocks.formatText(fixture)).toEqual('init');
-    expect(dispatchSpy).toHaveBeenCalledWith(new SetValue('target'));
+    expect(dispatchedActions).toEqual([new SetValue('target')]);
   });
 });

@@ -349,6 +349,20 @@ services:
       - install
       - --no-audit
 
+  vitest:
+    image: satantime/puppeteer-node:24.18.1
+    platform: linux/amd64
+    working_dir: /app
+    volumes:
+      - ./e2e/vitest:/app
+      - cache:/root/.cache
+      - gyp:/root/.node-gyp
+      - npm:/root/.npm
+    command:
+      - npm
+      - install
+      - --no-audit
+
   min:
     image: satantime/puppeteer-node:24.18.1
     platform: linux/amd64

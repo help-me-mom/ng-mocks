@@ -8,9 +8,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "npm run test:jasmine",
+    "test": "npm run test:jasmine && npm run test:vitest",
     "test:debug": "npm run test:jasmine -- --browsers=Chrome --watch",
-    "test:jasmine": "ng test"
+    "test:jasmine": "ng test",
+    "test:vitest": "ng run angular:test-vitest"
   },
   "dependencies": {
     "@angular/animations": "22.1.1",
@@ -48,6 +49,7 @@
     "@types/node": "24.13.3",
     "jasmine-core": "6.3.0",
     "jasmine-spec-reporter": "7.0.0",
+    "jsdom": "28.0.0",
     "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
     "karma-jasmine": "5.1.0",
@@ -55,7 +57,8 @@
     "npm": "11.19.0",
     "puppeteer": "25.5.0",
     "ts-node": "10.9.2",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "4.0.8"
   },
   "engines": {
     "npm": "11.19.0"

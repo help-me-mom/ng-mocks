@@ -13,18 +13,12 @@ npm install ng-mocks --save-dev
 
 ## Default customizations
 
-There are several things you might need to configure globally for all tests:
+Global test setup can define default mocks, enable [auto spy](auto-spy.md) for mock methods,
+and use [MockInstance](/api/MockInstance.md) to reset customizations automatically after tests and suites.
 
-- default mocks should look like for different strategies (abstract classes)
-- adding spy to all mock methods automatically
-
-It may be useful to configure [auto spy](auto-spy.md) for all methods, getters and setters in mock declarations.
-
-Apart from [auto spy](auto-spy.md), we may want to customize mock behavior via [MockInstance](/api/MockInstance.md).
-There is a way to reset all customizations automatically on `afterEach` and `afterAll` levels.
-
-Simply add the following code to `src/test.ts` or, for Jest, `src/setup-jest.ts` / `src/test-setup.ts`,
-and comment / uncomment related blocks:
+The example below uses Jasmine. Put the same `ngMocks.defaultMock` and `ngMocks.globalKeep`
+customizations in the selected runner's setup file. For Jest and Vitest, use `MockInstance.scope()`
+in suites that need automatic cleanup.
 
 ```ts title="src/test.ts"
 import { ngMocks } from 'ng-mocks'; // eslint-disable-line import/order
@@ -33,6 +27,8 @@ import { ngMocks } from 'ng-mocks'; // eslint-disable-line import/order
 ngMocks.autoSpy('jasmine');
 // in case of jest
 // ngMocks.autoSpy('jest');
+// in case of vitest
+// ngMocks.autoSpy('vitest');
 
 // In case, if you use @angular/router and Angular 14+.
 // You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
@@ -59,42 +55,82 @@ jasmine.getEnv().addReporter({
   suiteDone: MockInstance.restore,
   suiteStarted: MockInstance.remember,
 });
-
-// // If you use jest v27+, please add to its config testRunner=jest-jasmine2 for now.
-// // If you don't want to rely on jasmine at all, then, please,
-// // upvote the issue on github: https://github.com/facebook/jest/issues/11483.
-// // Once it has been merged you can use the code below.
-// // Also, please consider usage of MockInstance.scope instead.
-// import { addEventHandler } from 'jest-circus';
-// addEventHandler((event: { name: string }) => {
-//   switch (event.name) {
-//     case 'run_describe_start':
-//     case 'test_start':
-//       MockInstance.remember();
-//       break;
-//     case 'run_describe_finish':
-//     case 'run_finish':
-//       MockInstance.restore();
-//       break;
-//     default:
-//   }
-// });
-
-// // in case of mocha
-// mocha.setup({
-//   rootHooks: {
-//     afterAll: MockInstance.restore,
-//     afterEach: MockInstance.restore,
-//     beforeAll: MockInstance.remember,
-//     beforeEach: MockInstance.remember,
-//   },
-// });
 ```
 
-## Restoring `src/test.ts` in Angular 15+
+## Angular native Vitest setup
+
+Angular 20+ provides a native Vitest runner through `@angular/build:unit-test`.
+Follow Angular's [Vitest migration guide](https://angular.dev/guide/testing/migrating-to-vitest)
+and use an application build target based on `@angular/build:application`.
+
+The combinations currently tested by ng-mocks are:
+
+| Angular | Vitest | jsdom | change detection |
+| ------: | :----: | :---: | :--------------- |
+|      20 |   3    |  26   | zoneless only    |
+|      21 |   4    |  28   | zoned or zoneless |
+|      22 |   4    |  28   | zoned or zoneless |
+
+Install versions accepted by the project's `@angular/build`. For Angular 20:
+
+```bash npm2yarn
+npm install --save-dev vitest@^3.1.1 jsdom@^26.1.0
+```
+
+For `@angular/build` versions that accept Vitest 4:
+
+```bash npm2yarn
+npm install --save-dev vitest@^4.0.8 jsdom@^28.0.0
+```
+
+Zoned tests on Angular 21+ also need Zone.js 0.16.2 or newer within Angular's supported range:
+
+```bash npm2yarn
+npm install zone.js@~0.16.2
+```
+
+### Configuration
+
+Reuse the existing test TypeScript config and add `vitest/globals` to its types. Add
+`src/setup-vitest.ts` to `files` only when it contains global ng-mocks customizations;
+[Auto Spy](auto-spy.md) shows the optional Vitest setup. Angular initializes `TestBed`,
+so do not initialize it in that file. Because ng-mocks creates Angular declarations at
+runtime, the Vitest build must set `aot: false`.
+
+### Angular 21+
+
+Add the optional setup file to the unit-test target's `setupFiles`. Use an empty `polyfills`
+array for zoneless tests. For zoned tests, preserve this order: `zone.js`, `zone.js/testing`,
+then `zone.js/plugins/vitest-patch`.
+
+Keep a `test-vitest` target beside Karma's `test`. In a Vitest-only project, use `test`
+and `ng test`. See the complete [shared multi-runner configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/a21/angular.json)
+and [Vitest-only configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/vitest/angular.json).
+
+### Angular 20
+
+Angular 20 is zoneless-only because Zone.js 0.15 has no Vitest patch. Its builder loads
+`setupFiles` outside the application bundle, so import the optional ng-mocks setup from
+the provider file instead:
+
+```ts title="src/providers.zoneless.ts"
+import { provideZonelessChangeDetection } from '@angular/core';
+
+import './setup-vitest';
+
+export default [provideZonelessChangeDetection()];
+```
+
+Also add `src/providers.zoneless.ts` to the shared test configuration's `files` array.
+Set it as the unit-test target's `providersFile` and add `@angular/compiler` to the
+Vitest build's `polyfills`. Do not register the ng-mocks setup through Angular 20's
+`setupFiles`. See the complete [Angular 20 configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/a20/angular.json).
+
+## Restoring `src/test.ts` for Karma/Jasmine in Angular 15+
 
 If you are using Angular 15+, then you might not find `src/test.ts`.
-However, this file is required to provide global configuration for your tests.
+Restore it if you want global ng-mocks configuration for Karma/Jasmine tests.
+Native Vitest uses its configured `src/setup-vitest.ts` instead.
 
 Please use this [answer on stackoverflow to restore `src/test.ts`](https://stackoverflow.com/a/75323651/13112018).
 

@@ -3,13 +3,12 @@ title: Auto Spy
 description: Information on how to enable Auto Spy in tests for Angular applications with ng-mocks
 ---
 
-`ngMocks.autoSpy` is useful when you want all mock methods to be spies.
+`ngMocks.autoSpy` replaces empty methods on mocks created by ng-mocks with runner-native spies.
+This is useful because the `toHaveBeenCalled()` matcher requires a spy or mock function;
+without auto-spy, every asserted method must be wrapped explicitly.
 
-Imagine the situation when a component calls a method of its dependency, and it should be covered by a test.
-The `expect.toHaveBeenCalled` accepts a spy, therefore, the method should be a spy,
-and that requires you to install the spy at the beginning of the test.
-
-If you have more methods to assert, then you need to install more spies.
+Assume the suite setup already replaces `UserService` with an ng-mocks mock.
+Without auto-spy, a Jasmine test needs explicit `spyOn` calls:
 
 ```ts
 it('calls user.load', () => {
@@ -17,24 +16,21 @@ it('calls user.load', () => {
   spyOn(userService, 'init'); // why?
   spyOn(userService, 'load'); // why?
   spyOn(userService, 'set'); // why?
-  
+
   const fixture = TestBed.createComponent(UserComponent);
   fixture.detectChanges();
-  
+
   expect(userService.init).toHaveBeenCalled();
   expect(userService.load).toHaveBeenCalled();
   expect(userService.set).toHaveBeenCalled();
 });
 ```
 
-The solution here is to use `ngMocks.autoSpy`.
-By default, all mock methods are empty functions which return `undefined`.
-With help of `ngMocks.autoSpy`, the methods will be spies.
-
-So the test can look like:
+By default, mock methods are empty functions which return `undefined`.
+After enabling `ngMocks.autoSpy`, the test can omit the explicit `spyOn` calls:
 
 ```ts
-it('calls user.load', () => {  
+it('calls user.load', () => {
   const fixture = TestBed.createComponent(UserComponent);
   fixture.detectChanges();
 
@@ -47,14 +43,16 @@ it('calls user.load', () => {
 
 ## Installation
 
-If we want **automatically to spy all methods of services, components**, directives and pipes in Angular tests,
-then add the next code to `src/test.ts`.
+Enable auto-spy once in the selected runner's setup file.
+It affects methods on mocked services, components, directives and pipes created by ng-mocks.
+
+For Jasmine, add it to `src/test.ts`.
 
 ```ts title="src/test.ts"
 import { ngMocks } from 'ng-mocks';
 
 ngMocks.autoSpy('jasmine');
-// // uncomment in case if existing tests are with spies already.
+// Uncomment if existing tests also install spies.
 // jasmine.getEnv().allowRespy(true);
 ```
 
@@ -66,12 +64,19 @@ import { ngMocks } from 'ng-mocks';
 ngMocks.autoSpy('jest');
 ```
 
-## Custom spy
+For Vitest, add it to `src/setup-vitest.ts`.
 
-It might happen that you want to install your own spies for each method.
-For example, if you use another library, such as [sinon.js](https://sinonjs.org/).
+```ts title="src/setup-vitest.ts"
+import { ngMocks } from 'ng-mocks';
 
-In this case, you can provide your own callback which creates a spy:
+ngMocks.autoSpy('vitest');
+```
+
+See the [native Vitest setup guide](install.md#angular-native-vitest-setup) for how Angular loads this file.
+
+## Custom spy factory
+
+To use another spy library, such as [sinon.js](https://sinonjs.org/), provide a custom factory:
 
 ```ts
 ngMocks.autoSpy(spyName => {
@@ -79,17 +84,15 @@ ngMocks.autoSpy(spyName => {
 });
 ```
 
-## Change auto spy in a test
+## Temporarily change auto-spy
 
-Pass `default` as the parameter, if we want to get the default behavior.
+Pass `default` to make subsequently created mocks use empty functions instead of spies.
 
 ```ts
 ngMocks.autoSpy('default');
 ```
 
-Also, it remembers the calls, and we can reset to the previous config.
-It might be useful if we need to change **auto spy behavior in a test** via `beforeEach` or `beforeAll`,
-and restore it later in `afterEach` or `afterAll` without caring what it was.
+Every non-reset call is stacked and each reset restores the previous choice:
 
 ```ts
 beforeEach(() => ngMocks.autoSpy('jasmine'));

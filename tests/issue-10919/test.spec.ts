@@ -23,7 +23,13 @@ describe('issue-10919', () => {
   const anyTestBed: any = TestBed;
 
   beforeEach(() =>
-    ngMocks.autoSpy(typeof jest === 'undefined' ? 'jasmine' : 'jest'),
+    ngMocks.autoSpy(
+      typeof jest === 'undefined'
+        ? 'jasmine'
+        : typeof (window as any).vi === 'undefined'
+          ? 'jest'
+          : 'vitest',
+    ),
   );
 
   afterEach(() => ngMocks.autoSpy('reset'));

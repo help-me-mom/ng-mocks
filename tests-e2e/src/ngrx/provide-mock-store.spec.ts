@@ -97,14 +97,19 @@ describe('provideMockStore:MockBuilder', () => {
 
   it('selects the value', () => {
     const store = TestBed.inject(Store);
-    const dispatchSpy = spyOn(store, 'dispatch');
+    const dispatchedActions: unknown[] = [];
+    ngMocks.stub(store, {
+      dispatch: ((action: unknown) => {
+        dispatchedActions.push(action);
+      }) as typeof store.dispatch,
+    });
 
     const fixture = factory();
 
     // asserting
     expect(ngMocks.formatText(fixture)).toEqual('mock');
-    expect(dispatchSpy).toHaveBeenCalledWith(
+    expect(dispatchedActions).toEqual([
       setValue({ value: 'target' }),
-    );
+    ]);
   });
 });

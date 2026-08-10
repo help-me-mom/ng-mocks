@@ -25,6 +25,14 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "vitest": {
+              "aot": false,
+              "define": {
+                "fail": "expect.fail",
+                "jest": "vi"
+              },
+              "polyfills": ["@angular/compiler"]
             }
           },
           "defaultConfiguration": "production"
@@ -62,6 +70,22 @@
             }
           },
           "defaultConfiguration": "ivy-zoned"
+        },
+        "test-vitest": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "vitest",
+            "watch": false
+          },
+          "configurations": {
+            "ivy-zoneless": {
+              "buildTarget": "a20:build:development,vitest",
+              "include": ["src/app/**/*.spec.ts", "src/test-zoneless/**/*.spec.ts"],
+              "providersFile": "src/providers.zoneless.ts",
+              "tsConfig": "tsconfig.ivy-zoneless.spec.json"
+            }
+          },
+          "defaultConfiguration": "ivy-zoneless"
         }
       }
     },

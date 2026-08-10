@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts"],
+  "files": ["src/main.ts", "src/test.ts", "src/setup-jest.ts", "src/setup-vitest.ts"],
   "include": ["jest.config.ivy-zoned.ts", "src/app/**/*.spec.ts", "src/test/**/*.spec.ts", "src/**/*.d.ts"]
 }

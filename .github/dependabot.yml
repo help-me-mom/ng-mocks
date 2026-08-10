@@ -290,6 +290,18 @@ updates:
           - 'version-update:semver-major'
 
   - package-ecosystem: 'npm'
+    directory: /e2e/vitest/
+    open-pull-requests-limit: 0
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
+
+  - package-ecosystem: 'npm'
     directory: /e2e/min/
     open-pull-requests-limit: 0
     schedule:
