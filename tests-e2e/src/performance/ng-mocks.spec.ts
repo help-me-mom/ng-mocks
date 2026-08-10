@@ -286,6 +286,6 @@ describe('performance:ng-mocks', () => {
   }
 
   it('took acceptable time', () => {
-    expect(performance.now() - time).toBeLessThan(75 * 1000);
+    expect(performance.now() - time).toBeLessThan(60 * 1000);
   });
 });

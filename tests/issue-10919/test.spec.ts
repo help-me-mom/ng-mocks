@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { MockProvider, MockService, ngMocks } from 'ng-mocks';
 
+declare const vi: any;
+
 @Injectable()
 class TargetService {
   public readonly info = {
@@ -24,11 +26,11 @@ describe('issue-10919', () => {
 
   beforeEach(() =>
     ngMocks.autoSpy(
-      typeof jest === 'undefined'
-        ? 'jasmine'
-        : 'requireActual' in jest
-          ? 'jest'
-          : 'vitest',
+      typeof vi === 'undefined'
+        ? typeof jest === 'undefined'
+          ? 'jasmine'
+          : 'jest'
+        : 'vitest',
     ),
   );
 

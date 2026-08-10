@@ -6,6 +6,8 @@ import {
 
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
+declare const vi: any;
+
 @Injectable({ providedIn: 'root' })
 class TargetDependency {
   public static constructed = 0;
@@ -45,11 +47,11 @@ class TargetEagerService {
 describe('issue-14544', () => {
   beforeEach(() =>
     ngMocks.autoSpy(
-      typeof jest === 'undefined'
-        ? 'jasmine'
-        : 'requireActual' in jest
-          ? 'jest'
-          : 'vitest',
+      typeof vi === 'undefined'
+        ? typeof jest === 'undefined'
+          ? 'jasmine'
+          : 'jest'
+        : 'vitest',
     ),
   );
   afterEach(() => ngMocks.autoSpy('reset'));

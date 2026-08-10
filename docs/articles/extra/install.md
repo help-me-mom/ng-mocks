@@ -25,6 +25,10 @@ import { ngMocks } from 'ng-mocks'; // eslint-disable-line import/order
 
 // auto spy
 ngMocks.autoSpy('jasmine');
+// in case of jest
+// ngMocks.autoSpy('jest');
+// in case of vitest
+// ngMocks.autoSpy('vitest');
 
 // In case, if you use @angular/router and Angular 14+.
 // You might want to set a mock of DefaultTitleStrategy as TitleStrategy.
@@ -42,7 +46,8 @@ ngMocks.globalKeep(ApplicationModule, true);
 ngMocks.globalKeep(CommonModule, true);
 ngMocks.globalKeep(BrowserModule, true);
 
-// automatic cleanup for jasmine
+// auto restore for jasmine and jest <27
+// declare const jasmine: any;
 import { MockInstance } from 'ng-mocks'; // eslint-disable-line import/order
 jasmine.getEnv().addReporter({
   specDone: MockInstance.restore,
@@ -54,28 +59,19 @@ jasmine.getEnv().addReporter({
 
 ## Angular native Vitest setup
 
-Starting with Angular 20, Angular provides `@angular/build:unit-test` with a native Vitest runner.
-The builder requires the Angular application build system, so the selected build target
-must use `@angular/build:application`. If it does not, follow Angular's
-[application build-system migration](https://angular.dev/tools/cli/build-system-migration)
-before configuring Vitest.
+Angular 20+ provides a native Vitest runner through `@angular/build:unit-test`.
+Follow Angular's [Vitest migration guide](https://angular.dev/guide/testing/migrating-to-vitest)
+and use an application build target based on `@angular/build:application`.
 
-The tested combinations are:
+The combinations currently tested by ng-mocks are:
 
-| Angular | Vitest | change detection |
-| ------: | :----: | :--------------- |
-|      22 |   4    | zoned or zoneless |
-|      21 |   4    | zoned or zoneless |
-|      20 |   3    | zoneless only |
+| Angular | Vitest | jsdom | change detection |
+| ------: | :----: | :---: | :--------------- |
+|      20 |   3    |  26   | zoneless only    |
+|      21 |   4    |  28   | zoned or zoneless |
+|      22 |   4    |  28   | zoned or zoneless |
 
-Angular 20 is zoneless-only because Zone.js 0.15 does not contain the Vitest patch.
-
-### Install the runner
-
-Install Vitest and a DOM emulator using versions accepted by the installed `@angular/build`.
-The following commands match the combinations tested by ng-mocks:
-
-For `@angular/build` versions that accept Vitest 3:
+Install versions accepted by the project's `@angular/build`. For Angular 20:
 
 ```bash npm2yarn
 npm install --save-dev vitest@^3.1.1 jsdom@^26.1.0
@@ -87,106 +83,35 @@ For `@angular/build` versions that accept Vitest 4:
 npm install --save-dev vitest@^4.0.8 jsdom@^28.0.0
 ```
 
-For zoned tests starting with Angular 21, use Zone.js 0.16.2 or newer within the
-version range supported by Angular. For the tested Angular 21 and 22 setup:
+Zoned tests on Angular 21+ also need Zone.js 0.16.2 or newer within Angular's supported range:
 
 ```bash npm2yarn
 npm install zone.js@~0.16.2
 ```
 
-Angular's [Vitest migration guide](https://angular.dev/guide/testing/migrating-to-vitest)
-describes the native runner and alternatives such as `happy-dom`.
+### Configuration
 
-### Configure TypeScript and ng-mocks
-
-Use the same test TypeScript configuration as the project's other runners and add
-`vitest/globals` to its existing types. Create `src/setup-vitest.ts` only when the project
-uses global ng-mocks customizations, and then add it to the configuration's existing files.
-The examples below include this optional setup file. If it is not needed, omit it from
-`files` and `setupFiles`, and omit its side-effect import from the Angular 20 provider file.
-
-For example, a project that runs Jasmine, Jest, and Vitest from the same specs and configures
-ng-mocks globally can use:
-
-```json title="tsconfig.spec.json"
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["jasmine", "jest", "vitest/globals"]
-  },
-  "files": ["src/test.ts", "src/setup-jest.ts", "src/setup-vitest.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
-}
-```
-
-Keep only the runner types and setup files that the project actually uses. TypeScript
-compiles every listed setup file, while each runner still executes only the setup file
-selected by its own configuration.
-
-Auto-spy is optional; see [Auto Spy](auto-spy.md) to enable `vi.fn()` for mock methods.
-Angular initializes `TestBed`; do not initialize the test environment manually.
+Reuse the existing test TypeScript config and add `vitest/globals` to its types. Add
+`src/setup-vitest.ts` to `files` only when it contains global ng-mocks customizations;
+[Auto Spy](auto-spy.md) shows the optional Vitest setup. Angular initializes `TestBed`,
+so do not initialize it in that file. Because ng-mocks creates Angular declarations at
+runtime, the Vitest build must set `aot: false`.
 
 ### Angular 21+
 
-Because ng-mocks creates Angular declarations at runtime, set `aot: false`.
-Merge the `vitest` and `vitest-zoned` configurations into the existing build target,
-add `test-vitest` as a sibling target, replace `my-app` with the project name, and retain
-the existing build options:
+Add the optional setup file to the unit-test target's `setupFiles`. Use an empty `polyfills`
+array for zoneless tests. For zoned tests, preserve this order: `zone.js`, `zone.js/testing`,
+then `zone.js/plugins/vitest-patch`.
 
-```json title="angular.json"
-{
-  "build": {
-    "builder": "@angular/build:application",
-    "configurations": {
-      "vitest": {
-        "aot": false,
-        "polyfills": []
-      },
-      "vitest-zoned": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing",
-          "zone.js/plugins/vitest-patch"
-        ]
-      }
-    }
-  },
-  "test-vitest": {
-    "builder": "@angular/build:unit-test",
-    "options": {
-      "runner": "vitest",
-      "setupFiles": ["src/setup-vitest.ts"],
-      "tsConfig": "tsconfig.spec.json"
-    },
-    "configurations": {
-      "zoned": {
-        "buildTarget": "my-app:build:development,vitest,vitest-zoned"
-      },
-      "zoneless": {
-        "buildTarget": "my-app:build:development,vitest"
-      }
-    },
-    "defaultConfiguration": "zoned"
-  }
-}
-```
-
-The empty `polyfills` array keeps zoneless tests free of Zone.js. Preserve the shown
-polyfill order for zoned tests. Run the desired profile with:
-
-```bash
-npx ng run my-app:test-vitest:zoned
-npx ng run my-app:test-vitest:zoneless
-```
-
-Keep only the profiles the project needs. Use `test-vitest` beside an existing Karma
-`test` target, or name the target `test` and run `ng test` in a Vitest-only project.
+Keep a `test-vitest` target beside Karma's `test`. In a Vitest-only project, use `test`
+and `ng test`. See the complete [shared multi-runner configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/a21/angular.json)
+and [Vitest-only configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/vitest/angular.json).
 
 ### Angular 20
 
-Angular 20 runs `setupFiles` outside the application bundle. Import `setup-vitest.ts`
-from the zoneless provider file instead so Angular, ng-mocks and the specs share one
-module graph:
+Angular 20 is zoneless-only because Zone.js 0.15 has no Vitest patch. Its builder loads
+`setupFiles` outside the application bundle, so import the optional ng-mocks setup from
+the provider file instead:
 
 ```ts title="src/providers.zoneless.ts"
 import { provideZonelessChangeDetection } from '@angular/core';
@@ -197,38 +122,9 @@ export default [provideZonelessChangeDetection()];
 ```
 
 Also add `src/providers.zoneless.ts` to the shared test configuration's `files` array.
-
-Then merge this JIT build configuration and target into the project's `architect` section:
-
-```json title="angular.json"
-{
-  "build": {
-    "builder": "@angular/build:application",
-    "configurations": {
-      "vitest": {
-        "aot": false,
-        "polyfills": ["@angular/compiler"]
-      }
-    }
-  },
-  "test-vitest": {
-    "builder": "@angular/build:unit-test",
-    "options": {
-      "runner": "vitest",
-      "buildTarget": "my-app:build:development,vitest",
-      "providersFile": "src/providers.zoneless.ts",
-      "tsConfig": "tsconfig.spec.json"
-    }
-  }
-}
-```
-
-Do not register the ng-mocks setup through this Angular 20 target's `setupFiles`.
-The `@angular/compiler` polyfill is required when `aot` is disabled. Run it with:
-
-```bash
-npx ng run my-app:test-vitest
-```
+Set it as the unit-test target's `providersFile` and add `@angular/compiler` to the
+Vitest build's `polyfills`. Do not register the ng-mocks setup through Angular 20's
+`setupFiles`. See the complete [Angular 20 configuration](https://github.com/help-me-mom/ng-mocks/blob/main/e2e/a20/angular.json).
 
 ## Restoring `src/test.ts` for Karma/Jasmine in Angular 15+
 

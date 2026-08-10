@@ -61,6 +61,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "buildTarget": "angular:build:development,vitest",
+            "exclude": ["src/performance/ng-mocks.spec.ts"],
             "runner": "vitest",
             "tsConfig": "tsconfig.json",
             "watch": false

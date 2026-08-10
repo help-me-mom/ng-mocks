@@ -18,6 +18,8 @@ import {
   ngMocks,
 } from 'ng-mocks';
 
+declare const vi: any;
+
 @Injectable({ providedIn: 'root' })
 class TargetService {
   public static constructed = 0;
@@ -83,11 +85,11 @@ class HostComponent {}
 describe('issue-9397', () => {
   beforeEach(() =>
     ngMocks.autoSpy(
-      typeof jest === 'undefined'
-        ? 'jasmine'
-        : 'requireActual' in jest
-          ? 'jest'
-          : 'vitest',
+      typeof vi === 'undefined'
+        ? typeof jest === 'undefined'
+          ? 'jasmine'
+          : 'jest'
+        : 'vitest',
     ),
   );
   afterEach(() => ngMocks.autoSpy('reset'));

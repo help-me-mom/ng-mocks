@@ -11,7 +11,7 @@ Assume the suite setup already replaces `UserService` with an ng-mocks mock.
 Without auto-spy, a Jasmine test needs explicit `spyOn` calls:
 
 ```ts
-it('calls UserService methods', () => {
+it('calls user.load', () => {
   const userService = TestBed.inject(UserService);
   spyOn(userService, 'init'); // why?
   spyOn(userService, 'load'); // why?
@@ -30,7 +30,7 @@ By default, mock methods are empty functions which return `undefined`.
 After enabling `ngMocks.autoSpy`, the test can omit the explicit `spyOn` calls:
 
 ```ts
-it('calls UserService methods', () => {
+it('calls user.load', () => {
   const fixture = TestBed.createComponent(UserComponent);
   fixture.detectChanges();
 
@@ -79,7 +79,9 @@ See the [native Vitest setup guide](install.md#angular-native-vitest-setup) for 
 To use another spy library, such as [sinon.js](https://sinonjs.org/), provide a custom factory:
 
 ```ts
-ngMocks.autoSpy(() => sinon.fake());
+ngMocks.autoSpy(spyName => {
+  return sinon.fake();
+});
 ```
 
 ## Temporarily change auto-spy
@@ -90,10 +92,14 @@ Pass `default` to make subsequently created mocks use empty functions instead of
 ngMocks.autoSpy('default');
 ```
 
-Every non-reset call is stacked. Pair a temporary override with one reset to restore
-the setup file's previous choice:
+Every non-reset call is stacked and each reset restores the previous choice:
 
 ```ts
+beforeEach(() => ngMocks.autoSpy('jasmine'));
 beforeEach(() => ngMocks.autoSpy('default'));
+beforeEach(() => ngMocks.autoSpy('jasmine'));
+afterEach(() => ngMocks.autoSpy('reset')); // now it is default
+afterEach(() => ngMocks.autoSpy('reset')); // now it is jasmine
+// out of calls, now it is default
 afterEach(() => ngMocks.autoSpy('reset'));
 ```
