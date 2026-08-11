@@ -22,6 +22,12 @@ export default {
     'DomSanitizer',
     'DomSanitizerImpl',
 
+    // Angular runtime primitives require their concrete root infrastructure.
+    'AfterRenderImpl',
+    'AfterRenderManager',
+    'PendingTasks',
+    'PendingTasksInternal',
+
     // ApplicationModule, A14 made them global at root level
     'ApplicationInitStatus',
     'ApplicationRef',
@@ -30,6 +36,10 @@ export default {
     'KeyValueDiffers',
 
     // Angular 16 adds underscores
+    '_AfterRenderImpl',
+    '_AfterRenderManager',
+    '_PendingTasks',
+    '_PendingTasksInternal',
     '_DomRendererFactory2',
     '_EventManager',
     '_Injector',
