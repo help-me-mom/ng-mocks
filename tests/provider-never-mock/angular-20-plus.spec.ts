@@ -3,7 +3,6 @@ import {
   ApplicationRef,
   Injectable,
   resource,
-  ɵEffectScheduler,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -34,7 +33,7 @@ class ResourceTarget {
 // @see https://github.com/help-me-mom/ng-mocks/issues/14613
 // The EffectScheduler report exposed the same root-mocking problem for other
 // Angular runtime services used by afterNextRender and resource.
-describe('provider-never-mock: Angular 22 runtime services', () => {
+describe('provider-never-mock: Angular 20+ runtime services', () => {
   describe('afterNextRender', () => {
     beforeEach(() => MockBuilder(AfterRenderTarget));
 
@@ -48,10 +47,7 @@ describe('provider-never-mock: Angular 22 runtime services', () => {
   });
 
   describe('resource stability', () => {
-    beforeEach(() =>
-      // The scheduler regression is fixed independently by PR #14614.
-      MockBuilder(ResourceTarget).keep(ɵEffectScheduler),
-    );
+    beforeEach(() => MockBuilder(ResourceTarget));
 
     it('waits for an unresolved resource loader', async () => {
       const target = ngMocks.findInstance(ResourceTarget);
