@@ -29,6 +29,9 @@ export default {
     'IterableDiffers',
     'KeyValueDiffers',
 
+    // Angular 22 effects require the concrete root scheduler implementation.
+    'EffectScheduler',
+
     // Angular 16 adds underscores
     '_DomRendererFactory2',
     '_EventManager',
@@ -41,6 +44,7 @@ export default {
     '_Compiler',
     '_IterableDiffers',
     '_KeyValueDiffers',
+    '_EffectScheduler',
   ],
   neverMockToken: [
     'InjectionToken Set Injector scope.', // INJECTOR_SCOPE // ivy only
