@@ -1,3 +1,12 @@
+## [14.17.1](https://github.com/help-me-mom/ng-mocks/compare/v14.17.0...v14.17.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* **core:** preserve Angular EffectScheduler [#14613](https://github.com/help-me-mom/ng-mocks/issues/14613) ([#14614](https://github.com/help-me-mom/ng-mocks/issues/14614)) ([2464f9c](https://github.com/help-me-mom/ng-mocks/commit/2464f9c4f291d64a48ced1829d0f828c6af0fbbd))
+* **core:** preserve Angular runtime services ([9b8a5e1](https://github.com/help-me-mom/ng-mocks/commit/9b8a5e15ee433bc579264dfdb63fcc69cda3028b)), closes [#14613](https://github.com/help-me-mom/ng-mocks/issues/14613)
+* **core:** preserve Angular runtime services ([#14619](https://github.com/help-me-mom/ng-mocks/issues/14619)) ([cec80f9](https://github.com/help-me-mom/ng-mocks/commit/cec80f9d7f50a810e3d2c2b8d7f8558ab3b76edb))
+
 # [14.17.0](https://github.com/help-me-mom/ng-mocks/compare/v14.16.1...v14.17.0) (2026-08-10)
 
 
