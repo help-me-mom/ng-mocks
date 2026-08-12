@@ -35,7 +35,7 @@ export default {
     'IterableDiffers',
     'KeyValueDiffers',
 
-    // Angular 22 effects require the concrete root scheduler implementation.
+    // Angular root effects require the concrete scheduler implementation.
     'EffectScheduler',
 
     // Angular 16 adds underscores
