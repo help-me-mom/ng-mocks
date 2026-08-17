@@ -16,7 +16,7 @@ import coreInjector from './core.injector';
 import coreReflectMeta from './core.reflect.meta';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
-import { AnyType, dependencyKeys } from './core.types';
+import { AnyDeclaration, AnyType, dependencyKeys } from './core.types';
 import { funcExtractDeps } from './func.extract-deps';
 import { getSourceOfMock } from './func.get-source-of-mock';
 import funcGetType from './func.get-type';
@@ -266,10 +266,23 @@ const configureTestingModule =
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
 
       const realDependencies = new Set<AnyType<any>>();
+      const explicitMockDefinitions = new Set<AnyDeclaration<any>>();
       const visitedDependencies = new Set<AnyType<any>>();
       for (const [source, , isMock] of mockBuilder) {
+        if (isMock) {
+          explicitMockDefinitions.add(funcGetType(source));
+        }
+      }
+      const shouldTraverse = (dependency: AnyDeclaration<any>): boolean => {
+        const resolution = ngMocksUniverse.getResolution(dependency);
+
+        // Explicit mocks and non-keep resolutions stop inferred keeps, but shared
+        // dependencies can still be kept when another real path reaches them.
+        return !explicitMockDefinitions.has(dependency) && (!resolution || resolution === 'keep');
+      };
+      for (const [source, , isMock] of mockBuilder) {
         if (!isMock) {
-          funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies);
+          funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies, shouldTraverse);
         }
       }
       for (const dependency of mapValues(realDependencies)) {

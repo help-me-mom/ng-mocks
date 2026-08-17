@@ -11,6 +11,7 @@ export const funcExtractDeps = (
   result: Set<AnyDeclaration<any>>,
   recursive = false,
   visited = new Set<AnyDeclaration<any>>(),
+  shouldTraverse?: (dependency: AnyDeclaration<any>) => boolean,
 ): Set<AnyDeclaration<any>> => {
   const visit = (current: any): void => {
     if (visited.has(current)) {
@@ -35,7 +36,7 @@ export const funcExtractDeps = (
         // istanbul ignore if: it is here for standalone things, however they don't support modules with providers.
         const itemType = funcGetType(item);
         result.add(itemType);
-        if (recursive) {
+        if (recursive && (!shouldTraverse || shouldTraverse(itemType))) {
           visit(itemType);
         }
       }
