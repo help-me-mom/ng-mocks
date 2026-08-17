@@ -26,11 +26,16 @@ Create and maintain a plain Markdown checklist:
    - `git status --short`
    - `git remote -v`
    - `git fetch upstream --prune`
-   - read `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `compose.sh`, `test.sh`, `compose.yml`, `package.json`, `test-spread.conf`, and `test-spread-app.conf` when they affect the issue
+   - read `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `compose.sh`, `test.sh`, `compose.yml`, `package.json`,
+     `test-spread.conf`, and `test-spread-app.conf` when they affect the issue
+   - read `.commitlintrc.yml`, `.releaserc.yml`, and `semantic-release-release-notes.mjs` when the work changes release
+     behavior or the correct release classification is unclear
 2. Inspect issue context:
    - Use available GitHub access: `gh`, the GitHub web UI, the GitHub API, or any configured connector.
    - Prefer commands that are easy to reproduce, such as `gh issue view <issue-number> --repo help-me-mom/ng-mocks --comments`.
    - Search duplicates and related work with `gh issue list`, `gh pr list --search`, GitHub search, and local `git log --grep`.
+   - If current guidance and nearby code do not settle the pattern, inspect analogous local history or recent merged
+     non-bot PRs. Prefer human-authored examples over generated dependency-update text.
    - Inspect prior fixes with similar symptoms: `git log --no-merges --oneline --all -- 'tests/issue-*' 'tests-e2e/src/issue-*' 'e2e/*/src/tests/issue-*'`.
 3. Create a dedicated worktree before changing files:
    - default branch name: `issues/<issue-number>`
@@ -74,7 +79,9 @@ When adding a spread test:
 
 - Give selectors, classes, and marker methods issue-specific names where collisions are possible.
 - Match nearby compatibility style, including `VERSION.major` guards and metadata casts such as `['standalone' as never]` when older TypeScript or Angular targets still parse the file.
-- If a file imports APIs unavailable in older Angular targets, gate it in `test-spread.conf` with `versions=` or `features=` instead of relying only on runtime guards.
+- If a file imports APIs unavailable in older Angular targets, gate it in `test-spread.conf` at the actual
+  version, feature, and environment boundaries instead of relying only on runtime guards. Split independently testable
+  APIs when their boundaries differ; keep a cohesive regression at the first common boundary when necessary.
 - Prefer one `describe('issue-<number>')` suite with assertions that prove the reported failure and the expected behavior.
 - Add an in-file `// @see https://github.com/help-me-mom/ng-mocks/issues/<issue-number>` link near the regression suite. For subtle regressions, add a short comment block that explains the reported failure, the root cause, and the fix so future readers do not need to reconstruct the issue from the PR.
 
@@ -136,37 +143,44 @@ Coverage expectations:
 
 ## Comments, Commit, PR
 
-Use the same concise structure for issue comments, PR descriptions, and non-trivial commit bodies. Keep validation details internal to the agent run and final user summary; do not put validation commands, logs, or results in GitHub comments, commit bodies, or PR descriptions.
+Use this concise structure for pull request descriptions. Use equivalent prose in issue comments or non-trivial commit
+bodies only when it helps that artifact. Prefer `Impact` for user-visible or maintainer outcomes and `Where` when the
+affected locations are more informative. Keep validation details internal to the agent run and final user summary; do
+not put validation commands, logs, or results in GitHub comments, commit bodies, or PR descriptions.
 
 ```md
-Why:
+## Why
 
 - The reported failure happens when ...
 
-What:
+## What
 
 - Added `tests/issue-<issue-number>/test.spec.ts` to reproduce ...
 - Changed `libs/ng-mocks/...` so ...
 
-Where:
+## Impact
 
-- `tests/issue-<issue-number>/test.spec.ts`
-- `libs/ng-mocks/src/lib/...`
+- Callers now ... while ... remains unchanged.
 ```
 
 Commit message rules:
 
-- Use conventional commits accepted by `.commitlintrc.yml`.
-- Prefer `fix(<scope>): <imperative summary> #<issue-number>` for bug fixes, or `test(<scope>): ...` only for test-only changes.
+- Follow the canonical `Commit and Release Semantics` section in `AGENTS.md`. Make every local commit accurate; make
+  the PR title express the aggregate and highest release effect. Align them on a single-commit branch.
+- Prefer `fix(<scope>): <imperative summary> #<issue-number>` for fixes to published behavior, or
+  `test(<scope>): ...` for test-only changes. Classify release, build, and internal work by the AGENTS.md matrix.
 - Keep the issue number in the subject when it improves traceability.
-- Add a body with `Why`, `What`, and `Where` when the fix is subtle.
+- Add a body with `Why`, `What`, and `Impact` or `Where` when the fix is subtle.
 
 PR rules:
 
 - Open the PR against `help-me-mom/ng-mocks` base `main`, from the pushed issue branch.
 - Confirm the PR branch was created in the dedicated worktree from `upstream/main`.
-- Include `Closes #<issue-number>` or `Fixes #<issue-number>` in the PR body.
-- Describe the problem and how it was fixed; omit validation commands and results.
+- Use a conventional PR title that summarizes the complete change and its highest release effect.
+- Include `Closes #<issue-number>` or `Fixes #<issue-number>` when this PR completes the reported issue. Use
+  `Related to`, `Follow-up to`, or equivalent wording when it should not close the reference.
+- Describe the root cause, focused fix, regression coverage, documentation changes, and impact as applicable; omit
+  validation commands and results.
 - Link related issues, duplicate reports, and previous PRs when they influenced the fix.
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 
