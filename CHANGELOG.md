@@ -1,3 +1,10 @@
+## [14.17.2](https://github.com/help-me-mom/ng-mocks/compare/v14.17.1...v14.17.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* **TestBed:** respect explicit MockModule boundaries [#14653](https://github.com/help-me-mom/ng-mocks/issues/14653) ([#14654](https://github.com/help-me-mom/ng-mocks/issues/14654)) ([8c22ef6](https://github.com/help-me-mom/ng-mocks/commit/8c22ef641541b497c5394a747d1fa4590362b9cf))
+
 ## [14.17.1](https://github.com/help-me-mom/ng-mocks/compare/v14.17.0...v14.17.1) (2026-08-12)
 
 
