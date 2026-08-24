@@ -47,6 +47,30 @@ type MockRenderInputBinding<T> = 0 extends 1 & T
       ? WriteT
       : T;
 
-export type DefaultRenderComponent<MComponent> = {
-  [K in keyof MComponent]: MockRenderInputBinding<MComponent[K]>;
+type MockRenderInputSignalKeys<MComponent> = {
+  [K in keyof MComponent]-?: 0 extends 1 & MComponent[K]
+    ? never
+    : [MockRenderInputSignalNode<MComponent[K]>] extends [never]
+      ? never
+      : K;
+}[keyof MComponent];
+
+type MockRenderInputSignals<MComponent> = Pick<MComponent, MockRenderInputSignalKeys<MComponent>>;
+
+type MockRenderInputBindings<MComponent> = {
+  -readonly [K in keyof MockRenderInputSignals<MComponent>]: MockRenderInputBinding<
+    MockRenderInputSignals<MComponent>[K]
+  >;
 };
+
+type MockRenderComponentBindings<MComponent> = Pick<
+  MComponent,
+  Exclude<keyof MComponent, MockRenderInputSignalKeys<MComponent>>
+> &
+  MockRenderInputBindings<MComponent>;
+
+export type DefaultRenderComponent<MComponent> = 0 extends 1 & MComponent
+  ? MComponent
+  : MComponent extends object
+    ? MockRenderComponentBindings<MComponent>
+    : MComponent;

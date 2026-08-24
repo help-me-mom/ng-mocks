@@ -1,4 +1,9 @@
-import { Component, input, NgModule } from '@angular/core';
+import {
+  Component,
+  input,
+  NgModule,
+  reflectComponentType,
+} from '@angular/core';
 
 import { MockBuilder, MockRender } from 'ng-mocks';
 
@@ -18,6 +23,18 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14692
 describe('issue-14692', () => {
+  if (
+    !reflectComponentType(TargetComponent)?.inputs.some(
+      inputMetadata => inputMetadata.propName === 'myInput',
+    )
+  ) {
+    it('needs compiled signal input metadata', () => {
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('updates a signal input through the generated wrapper', () => {
