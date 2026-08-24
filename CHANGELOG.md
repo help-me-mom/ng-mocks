@@ -1,3 +1,10 @@
+## [14.17.3](https://github.com/help-me-mom/ng-mocks/compare/v14.17.2...v14.17.3) (2026-08-24)
+
+
+### Bug Fixes
+
+* **MockRender:** support readonly signal input bindings [#14692](https://github.com/help-me-mom/ng-mocks/issues/14692) ([#14693](https://github.com/help-me-mom/ng-mocks/issues/14693)) ([092dff9](https://github.com/help-me-mom/ng-mocks/commit/092dff9effbb03f698d32d6d4acd3379028d151e))
+
 ## [14.17.2](https://github.com/help-me-mom/ng-mocks/compare/v14.17.1...v14.17.2) (2026-08-17)
 
 
