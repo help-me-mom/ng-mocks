@@ -54,13 +54,13 @@
     "karma-chrome-launcher": "3.2.0",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.3.0",
-    "npm": "11.19.0",
+    "npm": "11.19.1",
     "puppeteer": "25.9.0",
     "ts-node": "10.9.2",
     "typescript": "6.0.3",
     "vitest": "4.1.11"
   },
   "engines": {
-    "npm": "11.19.0"
+    "npm": "11.19.1"
   }
 }
