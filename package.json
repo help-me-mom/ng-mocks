@@ -288,7 +288,7 @@
     "@types/node": "24.13.3",
     "@typescript-eslint/eslint-plugin": "8.68.0",
     "@typescript-eslint/parser": "8.68.0",
-    "angular-eslint": "22.1.0",
+    "angular-eslint": "22.2.0",
     "core-js": "3.50.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
