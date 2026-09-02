@@ -47,6 +47,8 @@ const generateWrapperComponent = ({ bindings, options, inputs, signalInputs, tem
     private __ngMocksPoint?: any;
 
     public constructor() {
+      // Angular assigns the query result later; keep it out of fixture snapshots.
+      coreDefineProperty(this, '__ngMocksPoint', undefined);
       coreDefineProperty(this, '__ngMocksOutput', generateWrapperOutput(this));
 
       // The getter helps to remove the __ngContext__ attribute from <mock-render> tag.

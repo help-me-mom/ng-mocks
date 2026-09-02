@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`issue-14768 omits internal bookkeeping from fixture snapshots 1`] = `
+<mock-render>
+  <issue-14768-target>
+    <span>
+      test
+    </span>
+  </issue-14768-target>
+</mock-render>
+`;
