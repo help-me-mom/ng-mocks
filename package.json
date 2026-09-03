@@ -261,13 +261,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@angular/animations": "22.1.4",
-    "@angular/common": "22.1.4",
-    "@angular/core": "22.1.4",
-    "@angular/forms": "22.1.4",
-    "@angular/platform-browser": "22.1.4",
-    "@angular/platform-browser-dynamic": "22.1.4",
-    "@angular/router": "22.1.4",
+    "@angular/animations": "22.1.5",
+    "@angular/common": "22.1.5",
+    "@angular/core": "22.1.5",
+    "@angular/forms": "22.1.5",
+    "@angular/platform-browser": "22.1.5",
+    "@angular/platform-browser-dynamic": "22.1.5",
+    "@angular/router": "22.1.5",
     "@commitlint/cli": "21.2.2",
     "@commitlint/config-conventional": "21.2.2",
     "@eslint/js": "10.0.1",
@@ -328,7 +328,7 @@
     "typescript": "6.0.3",
     "webpack": "5.110.3",
     "webpack-cli": "7.2.3",
-    "zone.js": "0.16.2"
+    "zone.js": "0.16.3"
   },
   "engines": {
     "npm": "11.19.1"
