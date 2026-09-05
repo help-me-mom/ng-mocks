@@ -65,6 +65,8 @@ Create a plain Markdown checklist that AI Agent can follow:
 
 ## Guardrails
 
+- Adding a guide does not justify inserting backlinks into existing API pages or guides. Use sidebar navigation
+  unless those edits are explicitly requested or the existing content itself needs correction.
 - Do not edit executable specs just to make docs prettier unless the user explicitly asked to change the tests too.
 - Preserve the setup, observable behavior, and assertion meaning when simplifying published snippets; do not copy
   compatibility scaffolding back from the executable spread tests during a later sync.

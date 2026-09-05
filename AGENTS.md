@@ -122,6 +122,9 @@
 - Before finishing, compare the changes with those references and check documentation snippets against their
   executable specs. If no close example exists, broaden the search to related behavior and local history before
   introducing a new pattern, and note the gap.
+- When adding a guide, use the sidebar for navigation. Do not edit existing API pages or guides merely to add
+  backlinks to the new article unless explicitly requested. Update existing articles when their documented
+  behavior changes or their content needs correction.
 - Write published documentation examples as ordinary code for an Angular version appropriate to the feature,
   not as spread tests that must compile across supported versions. Keep each example's APIs and defaults consistent
   with that version; state the target version briefly when it affects how the example is used.
