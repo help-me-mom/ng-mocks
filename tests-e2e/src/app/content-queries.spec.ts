@@ -73,8 +73,10 @@ describe('TestContentChild:signals', () => {
     // Read the first child, required child, and element.
     expect(target.first()).toBe(items[0]);
     expect(target.required()).toBe(items[0]);
+    // Root-only CI lint cannot resolve ngMocks.find before app dependencies are
+    // installed and mistakes it for Array.find. Keep this DOM identity lookup.
     expect(target.element()?.nativeElement).toBe(
-      ngMocks.find('span').nativeElement,
+      fixture.nativeElement.querySelector('span'),
     );
     // Compare the direct children with the full descendant collection.
     expect(target.direct()).toEqual([items[0]]);

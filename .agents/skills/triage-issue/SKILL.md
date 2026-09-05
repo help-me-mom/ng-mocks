@@ -137,6 +137,11 @@ and rerun the wrapper before changing implementation or test code.
 
 Before committing:
 
+Check the failed job's installation scope in `.circleci/config.yml` when diagnosing a CI-only lint failure.
+Core lint runs with root dependencies only; a fully installed local worktree can mask unresolved types in
+`tests-e2e`. Preserve documented compatibility exceptions and inspect their history before changing helpers
+solely to match neighboring examples. Use the CI log as evidence; do not invent a replacement lint runner.
+
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run prettier:repo
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run prettier:check
