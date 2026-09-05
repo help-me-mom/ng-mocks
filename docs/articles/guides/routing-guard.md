@@ -137,7 +137,8 @@ See Angular's [guard return types](https://angular.dev/guide/routing/route-guard
 ### Testing lazy loading
 
 `canLoad` runs before loading a lazy module. In the [canLoad example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-load.spec.ts),
-the setup keeps `canLoadGuard` and the mocked `LoginService` starts with `isLoggedIn = false`.
+the setup keeps `canLoadGuard`. The test leaves the mocked `LoginService.isLoggedIn` unset,
+so the guard treats the user as logged out. Mock services do not run the original constructor or field initializers.
 Render the outlet, spy on the second route's lazy loader, and assert both navigation and loading:
 
 ```ts
@@ -284,8 +285,8 @@ checks both removal and a retained guard that blocks lazy loading.
 - [View the standalone example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 
 :::note
-The snippet omits compatibility metadata. In Angular 19 and newer, add `standalone: false` to both component decorators
-because these components are declared in `TargetModule`. The executable source includes this metadata.
+The components use `standalone: false` because they are declared in `TargetModule`.
+Keep this metadata when copying the example: Angular 19 and newer make components standalone by default.
 :::
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
@@ -340,6 +341,7 @@ const sideEffectGuard: CanActivateFn = () => {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
+  standalone: false,
   template: 'login',
 })
 class LoginComponent {}
@@ -348,6 +350,7 @@ class LoginComponent {}
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
+  standalone: false,
   template: 'dashboard',
 })
 class DashboardComponent {}
