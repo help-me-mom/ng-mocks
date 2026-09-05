@@ -180,6 +180,7 @@ module.exports = {
       label: 'Testing libraries',
       collapsed: false,
       items: [
+        'guides/libraries/ag-grid',
         'guides/libraries/ng-select',
         'guides/libraries/angular-material',
         'guides/libraries/primeng',
