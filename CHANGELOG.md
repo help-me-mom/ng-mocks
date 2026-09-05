@@ -1,3 +1,10 @@
+## [14.17.4](https://github.com/help-me-mom/ng-mocks/compare/v14.17.3...v14.17.4) (2026-09-05)
+
+
+### Bug Fixes
+
+* **MockRender:** hide internal query state from snapshots [#14768](https://github.com/help-me-mom/ng-mocks/issues/14768) ([#14775](https://github.com/help-me-mom/ng-mocks/issues/14775)) ([e8928e0](https://github.com/help-me-mom/ng-mocks/commit/e8928e0bf90538b42e1c36d0e137d8845d351d7e))
+
 ## [14.17.3](https://github.com/help-me-mom/ng-mocks/compare/v14.17.2...v14.17.3) (2026-08-24)
 
 
