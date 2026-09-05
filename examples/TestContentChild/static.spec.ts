@@ -3,10 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
-  ContentChildren,
   Directive,
   OnInit,
-  QueryList,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -32,9 +30,6 @@ class TargetComponent implements OnInit, AfterContentInit {
 
   @ContentChild(ItemDirective, { static: false })
   public dynamicChild?: ItemDirective;
-
-  @ContentChildren(ItemDirective)
-  public children?: QueryList<ItemDirective>;
 
   public atInit?: ItemDirective;
   public atContentInit?: ItemDirective;
@@ -69,6 +64,8 @@ class HostComponent {
   public extra!: TemplateRef<unknown>;
 }
 
+// Explicit static query options require Angular 8. Ordinary query and collection
+// updates are covered from Angular 5 in updates.spec.ts.
 describe('TestContentChild:static', () => {
   beforeEach(() =>
     MockBuilder()
@@ -88,20 +85,6 @@ describe('TestContentChild:static', () => {
     expect(target.atContentInit).toBe(initial);
     expect(target.staticChild).toBe(initial);
     expect(target.dynamicChild).toBe(initial);
-    expect(target.children && target.children.toArray()).toEqual([
-      initial,
-    ]);
-
-    // Observe collection changes when embedded content is inserted or removed.
-    if (!target.children) {
-      throw new Error('ContentChildren was not initialized');
-    }
-    const changes: number[] = [];
-    const subscription = target.children.changes.subscribe(
-      (children: QueryList<ItemDirective>) => {
-        changes.push(children.length);
-      },
-    );
 
     // Inserting a child updates dynamic queries but preserves the static result.
     host.slot.createEmbeddedView(host.extra);
@@ -110,16 +93,11 @@ describe('TestContentChild:static', () => {
     expect(inserted).not.toBe(initial);
     expect(target.dynamicChild).toBe(inserted);
     expect(target.staticChild).toBe(initial);
-    expect(target.children.toArray()).toEqual([inserted, initial]);
-    expect(changes).toEqual([2]);
 
-    // Removing the view restores the initial dynamic result and collection.
+    // Removing the view restores the dynamic result without changing the static one.
     host.slot.clear();
     fixture.detectChanges();
     expect(target.dynamicChild).toBe(initial);
     expect(target.staticChild).toBe(initial);
-    expect(target.children.toArray()).toEqual([initial]);
-    expect(changes).toEqual([2, 1]);
-    subscription.unsubscribe();
   });
 });

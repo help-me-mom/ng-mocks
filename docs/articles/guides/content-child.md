@@ -108,7 +108,8 @@ Content queries search projected content; they do not enter another component's 
 
 `ContentChild` includes descendants by default; Angular 14+ accepts `descendants: false` for direct children only.
 
-Dynamic queries update when projected content changes and change detection runs.
+Dynamic queries update when projected content changes and change detection runs,
+as shown in the [query updates example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/updates.spec.ts).
 From Angular 8, `ContentChild` with `{ static: true }` resolves before `ngOnInit` and keeps its initial result.
 The [timing example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/static.spec.ts)
 demonstrates both timings.

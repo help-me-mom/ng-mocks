@@ -75,7 +75,7 @@ Queries do not enter another component's private view.
 
 The collection is ready in `ngAfterContentInit` and updates when projected content changes and
 change detection runs. Subscribe to `QueryList.changes` to observe those updates;
-the [timing example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/static.spec.ts)
+the [query updates example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/updates.spec.ts)
 shows a collection changing as an embedded view is added and removed.
 `ContentChildren` has no `static` option.
 
