@@ -149,7 +149,6 @@ module.exports = {
         'guides/pipe-standalone',
         'guides/view-child',
         'guides/ngonchanges',
-        'guides/ng-submit',
         'guides/provider',
         'guides/token',
         'guides/token-multi',
@@ -174,6 +173,7 @@ module.exports = {
         'extra/sanitizer',
         'extra/mock-observables',
         'extra/mock-form-controls',
+        'extra/mock-ng-submit',
       ],
     },
     {

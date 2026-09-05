@@ -55,6 +55,17 @@
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
 
+## Worktree Isolation
+
+- Perform issue edits, dependency installation, builds, tests, checks, and commits in the issue's independent worktree
+  and branch. Do not use the primary project checkout as a working directory or change its working files or branch.
+- Run the existing Docker commands from that worktree so their bind mounts and generated files belong to it.
+- Do not mount the primary checkout or its `.git` directory into a worktree's containers to repair tooling failures.
+  A linked worktree's normal Git metadata sharing does not authorize using the primary checkout as a build workspace
+  or adding it as a Docker mount.
+- If a tool cannot work with the isolated worktree, report the error and discuss a supported solution with the user.
+  Do not move execution to the primary checkout or weaken the isolation to make a check pass.
+
 ## Angular CLI Cache
 
 - Modern versioned Angular projects retain `.angular/cache` in the bind-mounted `e2e/a<major>` workspace across

@@ -44,6 +44,10 @@ Create and maintain a plain Markdown checklist:
    - default compose namespace: `COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp>`
    - do not perform issue triage edits in the original checkout
    - do not discard unrelated local changes in the original checkout; the worktree isolates the issue branch from them
+   - run installs, builds, tests, checks, and commits from the issue worktree; do not use the original checkout as a
+     fallback working directory or change its branch
+   - do not mount the original checkout or its `.git` directory into the worktree's Docker containers; report linked
+     Git metadata failures and discuss a supported solution without weakening worktree isolation
 
    ```bash
    git fetch upstream --prune

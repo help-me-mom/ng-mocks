@@ -58,3 +58,6 @@ Create a plain Markdown checklist that AI Agent can follow:
   validation scripts, including scripts run inside Docker.
 - If an approved command fails or required tooling is missing, report the command, error, and remaining work to the
   user and discuss the solution before trying a workaround.
+- Follow `AGENTS.md`'s worktree isolation rule. If a docs build cannot resolve a linked worktree's Git metadata, do not
+  mount the primary checkout or its `.git` directory into Docker, run the build in that checkout, or change its branch.
+  Report the failure and keep all work in the independent worktree.

@@ -26,18 +26,6 @@ ngMocks.trigger('input[name="address"]', 'focus');
 ngMocks.trigger(['name', 'address'], 'blur');
 ```
 
-## Form submission
-
-Keep `FormsModule` or `ReactiveFormsModule` and dispatch a native `submit`
-event to test Angular's `(ngSubmit)` handler:
-
-```ts
-ngMocks.trigger('form', 'submit');
-```
-
-See [testing Angular forms](/guides/ng-submit.md) for examples
-covering form values, submitted state, and mocked `ngSubmit` outputs.
-
 ## Key combinations
 
 In order to simulate shot keys and test their handlers,
