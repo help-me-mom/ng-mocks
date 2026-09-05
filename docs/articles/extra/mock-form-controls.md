@@ -30,7 +30,6 @@ it supports both `FormsModule` and `ReactiveFormsModule`:
 
 ## Related tools
 
-- [`ngSubmit`](/extra/mock-ng-submit.md)
 - [`ngMocks.change()`](/api/ngMocks/change.md)
 - [`ngMocks.touch()`](/api/ngMocks/touch.md)
 
