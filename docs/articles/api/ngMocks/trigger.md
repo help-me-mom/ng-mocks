@@ -35,7 +35,7 @@ event to test Angular's `(ngSubmit)` handler:
 ngMocks.trigger('form', 'submit');
 ```
 
-See [testing Angular forms](/guides/libraries/angular-forms.md) for examples
+See [testing Angular forms](/guides/ng-submit.md) for examples
 covering form values, submitted state, and mocked `ngSubmit` outputs.
 
 ## Key combinations

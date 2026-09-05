@@ -149,6 +149,7 @@ module.exports = {
         'guides/pipe-standalone',
         'guides/view-child',
         'guides/ngonchanges',
+        'guides/ng-submit',
         'guides/provider',
         'guides/token',
         'guides/token-multi',
@@ -180,7 +181,6 @@ module.exports = {
       label: 'Testing libraries',
       collapsed: false,
       items: [
-        'guides/libraries/angular-forms',
         'guides/libraries/ng-select',
         'guides/libraries/angular-material',
         'guides/libraries/primeng',

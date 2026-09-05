@@ -3,35 +3,27 @@ import {
   Component,
   NgModule,
 } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormGroupDirective,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+
 import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
-  selector: 'target-ng-submit-reactive',
-  standalone: false,
+  selector: 'target-ng-submit-template-driven',
+  ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
-    <form
-      [formGroup]="form"
-      (ngSubmit)="save(form.controls.name.value, $event)"
-    >
-      <input formControlName="name" />
+    <form (ngSubmit)="save(value, $event)">
+      <input
+        name="name"
+        [(ngModel)]="value"
+        [ngModelOptions]="{ updateOn: 'submit' }"
+      />
       <button type="submit" [disabled]="disabled">Save</button>
     </form>
   `,
 })
 class TargetComponent {
   public disabled = false;
-  public readonly form = new FormGroup({
-    name: new FormControl('initial', {
-      nonNullable: true,
-      updateOn: 'submit',
-    }),
-  });
+  public value = 'initial';
   public readonly submissions: Array<{
     value: string;
     event: Event;
@@ -44,30 +36,30 @@ class TargetComponent {
 
 @NgModule({
   declarations: [TargetComponent],
-  imports: [ReactiveFormsModule],
+  imports: [FormsModule],
 })
 class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/756
-describe('ng-submit:reactive', () => {
+describe('TestNgSubmit:template-driven', () => {
   describe('real', () => {
     beforeEach(() =>
-      MockBuilder(TargetComponent, TargetModule).keep(
-        ReactiveFormsModule,
-      ),
+      MockBuilder(TargetComponent, TargetModule).keep(FormsModule),
     );
 
-    it('submits pending values and forwards the submit event', () => {
-      const component =
-        MockRender(TargetComponent).point.componentInstance;
-      const form = ngMocks.findInstance(FormGroupDirective);
+    it('submits pending values and forwards the submit event', async () => {
+      const fixture = MockRender(TargetComponent);
+      await fixture.whenStable();
+      const component = fixture.point.componentInstance;
+      const form = ngMocks.findInstance(NgForm);
 
       expect(form.submitted).toBe(false);
-      expect(component.form.value).toEqual({ name: 'initial' });
+      expect(form.value).toEqual({ name: 'initial' });
       expect(component.submissions).toEqual([]);
 
       ngMocks.change('input', 'updated');
-      expect(component.form.value).toEqual({ name: 'initial' });
+      expect(component.value).toBe('initial');
+      expect(form.value).toEqual({ name: 'initial' });
       expect(component.submissions).toEqual([]);
 
       // A native submit synchronizes updateOn: 'submit' controls
@@ -76,17 +68,19 @@ describe('ng-submit:reactive', () => {
       ngMocks.trigger('form', event);
 
       expect(form.submitted).toBe(true);
-      expect(component.form.value).toEqual({ name: 'updated' });
+      expect(form.value).toEqual({ name: 'updated' });
+      expect(component.value).toBe('updated');
       expect(component.submissions).toEqual([
         { value: 'updated', event },
       ]);
       expect(event.defaultPrevented).toBe(true);
     });
 
-    it('submits through the native submit button', () => {
-      const component =
-        MockRender(TargetComponent).point.componentInstance;
-      const form = ngMocks.findInstance(FormGroupDirective);
+    it('submits through the native submit button', async () => {
+      const fixture = MockRender(TargetComponent);
+      await fixture.whenStable();
+      const component = fixture.point.componentInstance;
+      const form = ngMocks.findInstance(NgForm);
 
       ngMocks.change('input', 'updated');
       // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
@@ -95,7 +89,7 @@ describe('ng-submit:reactive', () => {
       button.click();
 
       expect(form.submitted).toBe(true);
-      expect(component.form.value).toEqual({ name: 'updated' });
+      expect(form.value).toEqual({ name: 'updated' });
       expect(component.submissions.length).toBe(1);
       expect(component.submissions[0].value).toBe('updated');
       expect(component.submissions[0].event.type).toBe('submit');
@@ -104,10 +98,11 @@ describe('ng-submit:reactive', () => {
       );
     });
 
-    it('does not submit through a disabled button', () => {
+    it('does not submit through a disabled button', async () => {
       const fixture = MockRender(TargetComponent);
+      await fixture.whenStable();
       const component = fixture.point.componentInstance;
-      const form = ngMocks.findInstance(FormGroupDirective);
+      const form = ngMocks.findInstance(NgForm);
       component.disabled = true;
       fixture.point.injector.get(ChangeDetectorRef).markForCheck();
       fixture.detectChanges();
@@ -120,14 +115,16 @@ describe('ng-submit:reactive', () => {
       button.click();
 
       expect(component.submissions).toEqual([]);
-      expect(component.form.value).toEqual({ name: 'initial' });
+      expect(component.value).toBe('initial');
+      expect(form.value).toEqual({ name: 'initial' });
       expect(form.submitted).toBe(false);
     });
 
-    it('emits the output without submitting pending values', () => {
-      const component =
-        MockRender(TargetComponent).point.componentInstance;
-      const form = ngMocks.findInstance(FormGroupDirective);
+    it('emits the output without submitting pending values', async () => {
+      const fixture = MockRender(TargetComponent);
+      await fixture.whenStable();
+      const component = fixture.point.componentInstance;
+      const form = ngMocks.findInstance(NgForm);
       ngMocks.change('input', 'updated');
 
       const event = ngMocks.event('submit');
@@ -136,7 +133,8 @@ describe('ng-submit:reactive', () => {
       expect(component.submissions).toEqual([
         { value: 'initial', event },
       ]);
-      expect(component.form.value).toEqual({ name: 'initial' });
+      expect(component.value).toBe('initial');
+      expect(form.value).toEqual({ name: 'initial' });
       expect(form.submitted).toBe(false);
       expect(event.defaultPrevented).toBe(false);
     });
@@ -145,24 +143,20 @@ describe('ng-submit:reactive', () => {
   describe('mock', () => {
     beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-    it('binds formGroup and ngSubmit', () => {
+    it('binds ngModel and ngSubmit', () => {
       const component =
         MockRender(TargetComponent).point.componentInstance;
       expect(
-        isMockOf(
-          ngMocks.findInstance(FormGroupDirective),
-          FormGroupDirective,
-          'd',
-        ),
+        isMockOf(ngMocks.findInstance(NgForm), NgForm, 'd'),
       ).toBe(true);
-      expect(ngMocks.input('form', 'formGroup')).toBe(component.form);
-      expect(ngMocks.input('input', 'formControlName')).toBe('name');
+      expect(ngMocks.input('input', 'ngModel')).toBe('initial');
       expect(component.submissions).toEqual([]);
 
-      component.form.setValue({ name: 'updated' });
+      ngMocks.output('input', 'ngModelChange').emit('updated');
       const event = ngMocks.event('submit');
       ngMocks.output('form', 'ngSubmit').emit(event);
 
+      expect(component.value).toBe('updated');
       expect(component.submissions).toEqual([
         { value: 'updated', event },
       ]);

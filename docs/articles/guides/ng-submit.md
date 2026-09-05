@@ -1,6 +1,6 @@
 ---
 title: How to test ngSubmit with Angular forms
-sidebar_label: Angular forms (ngSubmit)
+sidebar_label: ngSubmit
 ---
 
 `@angular/forms` provides `ngSubmit` through `NgForm` for template-driven forms
@@ -161,7 +161,6 @@ Its `form` property uses `FormControl` and `FormGroup` from `@angular/forms`:
 ```ts
 public readonly form = new FormGroup({
   name: new FormControl('initial', {
-    nonNullable: true,
     updateOn: 'submit',
   }),
 });
@@ -283,12 +282,21 @@ button.click();
 expect(component.submissions).toEqual([]);
 ```
 
-## Complete examples
+## Live examples
 
 Both suites cover mocked bindings, real submission, deferred values, native button clicks,
 disabled buttons, and direct output emission on real forms:
 
-- [Template-driven forms](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ng-submit/template-driven.spec.ts)
-- [Reactive forms](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ng-submit/reactive.spec.ts)
+### Template-driven forms
+
+- [Source code](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestNgSubmit/template-driven.spec.ts)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestNgSubmit/template-driven.spec.ts&initialpath=%3Fspec%3DTestNgSubmit)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestNgSubmit/template-driven.spec.ts&initialpath=%3Fspec%3DTestNgSubmit)
+
+### Reactive forms
+
+- [Source code](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestNgSubmit/reactive.spec.ts)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestNgSubmit/reactive.spec.ts&initialpath=%3Fspec%3DTestNgSubmit)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestNgSubmit/reactive.spec.ts&initialpath=%3Fspec%3DTestNgSubmit)
 
 For custom controls, see [how to mock form controls](/extra/mock-form-controls.md).
