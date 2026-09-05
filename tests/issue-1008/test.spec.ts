@@ -68,10 +68,10 @@ describe('issue-1008', () => {
 
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
-    const loader = spyOn(
-      router.config[0],
-      'loadChildren',
-    ).and.callThrough();
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[0], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[0], 'loadChildren');
 
     expect(router.config[0].canLoad).toEqual([]);
     const result = await (fixture.ngZone
@@ -102,15 +102,20 @@ describe('issue-1008', () => {
 
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
-    const loader = spyOn(
-      router.config[0],
-      'loadChildren',
-    ).and.callThrough();
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[0], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[0], 'loadChildren');
 
-    const guard = spyOn(
-      ngMocks.get(Issue1008Guard),
-      'canLoad',
-    ).and.returnValue(false);
+    const guard =
+      typeof jest === 'undefined'
+        ? spyOn(
+            ngMocks.get(Issue1008Guard),
+            'canLoad',
+          ).and.returnValue(false)
+        : jest
+            .spyOn(ngMocks.get(Issue1008Guard), 'canLoad')
+            .mockReturnValue(false);
 
     expect(router.config[0].canLoad).toEqual([Issue1008Guard]);
     const result = await (fixture.ngZone

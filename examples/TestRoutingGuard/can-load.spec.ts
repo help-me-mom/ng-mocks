@@ -129,10 +129,10 @@ describe('TestRoutingGuard:canLoad', () => {
   it('blocks dashboard and opens login', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
-    const loader = spyOn(
-      router.config[1],
-      'loadChildren',
-    ).and.callThrough();
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[1], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[1], 'loadChildren');
     const location = ngMocks.get(Location);
 
     // First we need to initialize navigation.
@@ -161,10 +161,10 @@ describe('TestRoutingGuard:canLoad', () => {
   it('loads dashboard', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
-    const loader = spyOn(
-      router.config[1],
-      'loadChildren',
-    ).and.callThrough();
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[1], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[1], 'loadChildren');
     const location = ngMocks.get(Location);
     const loginService = ngMocks.get(LoginService);
 
