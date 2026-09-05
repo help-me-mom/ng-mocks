@@ -44,8 +44,12 @@ Create a plain Markdown checklist that AI Agent can follow:
 ## Validation
 
 - For docs-only changes:
-  - search for the targeted cleanup patterns to confirm they are gone
+  - review snippets against their source files and use `rg` to search for the targeted cleanup patterns
   - run `git diff --check -- docs/articles README.md`
+- Run formatting and any required docs build through existing repo npm scripts in Docker:
+  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:repo`
+  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:check`
+  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run build:docs`
 
 ## Guardrails
 
@@ -54,3 +58,10 @@ Create a plain Markdown checklist that AI Agent can follow:
 - Prefer primary repo sources over memory: `examples`, `tests`, `tests-e2e/src`, `README.md`, `docs/articles`, and recent human-authored git history.
 - If docs and executable behavior disagree, trust the current scripts/tests first and update the docs.
 - For docs-only work, say explicitly in the final summary if wrapper tests were skipped.
+- Follow `AGENTS.md`'s Docker-only execution rule. Never use local runtimes or custom snippet, AST, or generated-HTML
+  validation scripts, including scripts run inside Docker.
+- If an approved command fails or required tooling is missing, report the command, error, and remaining work to the
+  user and discuss the solution before trying a workaround.
+- Follow `AGENTS.md`'s worktree isolation rule. If a docs build cannot resolve a linked worktree's Git metadata, do not
+  mount the primary checkout or its `.git` directory into Docker, run the build in that checkout, or change its branch.
+  Report the failure and keep all work in the independent worktree.

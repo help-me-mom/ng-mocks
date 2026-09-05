@@ -49,6 +49,10 @@ Create and maintain a plain Markdown checklist:
    - default compose namespace: `COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp>`
    - do not perform issue triage edits in the original checkout
    - do not discard unrelated local changes in the original checkout; the worktree isolates the issue branch from them
+   - run installs, builds, tests, checks, and commits from the issue worktree; do not use the original checkout as a
+     fallback working directory or change its branch
+   - do not mount the original checkout or its `.git` directory into the worktree's Docker containers; report linked
+     Git metadata failures and discuss a supported solution without weakening worktree isolation
 
    ```bash
    git fetch upstream --prune
@@ -123,7 +127,7 @@ run after source changes. Run `compose.sh` first when the target dependencies ha
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh compose.sh a<major>
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> \
-  docker compose run --rm a<major> npx ng cache clean
+  docker compose run --rm a<major> npm run ng -- cache clean
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh test.sh a<major>
 ```
 
@@ -195,8 +199,11 @@ PR rules:
 - Do not triage issue fixes in the original checkout; create or reuse a dedicated worktree based on `upstream/main` first.
 - Do not change the reproducer after fixing source behavior, except for mechanical compatibility edits that preserve the original failure.
 - Do not delete or regenerate lockfiles for ordinary issue fixes. If dependency refresh is required, use the `update-package-locks` skill.
-- Do not replace required Docker wrapper validation with local npm commands because of transient network, daemon,
-  or cache failures. Restore the Docker workflow and rerun it; local commands are diagnostic only.
+- Follow `AGENTS.md`'s Docker-only execution rule: use the existing wrappers or repo Compose services running existing
+  npm scripts for installs, builds, tests, and checks. Never use local runtimes or custom validation scripts, even for
+  diagnostics or inside Docker.
+- If an approved command fails or required tooling is missing, report the command, error, and remaining work to the
+  user and discuss the solution before trying a workaround. Do not bypass hooks or checks.
 - Do not claim full matrix validation unless every affected target was run. State skipped targets and why.
 - Trust current scripts and config over stale docs, then update docs if the issue changes documented compatibility.
 - Keep the final patch scoped to the issue. Avoid unrelated refactors, formatting churn, and dependency changes.

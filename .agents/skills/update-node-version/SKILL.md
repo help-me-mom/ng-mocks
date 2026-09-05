@@ -68,7 +68,10 @@ COMPOSE_PROJECT_NAME=ngmocks_node_<unique> docker compose run --rm docs npm run 
 ## Guardrails
 
 - Never assume the root Node version should also be used by every legacy Angular fixture.
-- Never use local `npm install`, `npm update`, or ad-hoc `node` commands for validation when wrapper commands exist.
+- Follow `AGENTS.md`'s Docker-only execution rule. Use only existing wrappers or repo Compose services running existing
+  npm scripts; never use local runtimes or custom install, build, test, or check scripts, including inside Docker.
+- If an approved command fails or required tooling is missing, report the command, error, and remaining work to the
+  user and discuss the solution before trying a workaround.
 - Keep npm compatibility aligned with the chosen Node version.
 - Use one unique `COMPOSE_PROJECT_NAME` for all commands in the same worktree.
 - If a commit is requested for a pure Node-image update, use `chore(docker): updating node images`.

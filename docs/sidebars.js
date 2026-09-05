@@ -173,6 +173,7 @@ module.exports = {
         'extra/sanitizer',
         'extra/mock-observables',
         'extra/mock-form-controls',
+        'extra/mock-ng-submit',
       ],
     },
     {
