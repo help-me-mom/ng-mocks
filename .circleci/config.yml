@@ -250,38 +250,6 @@ jobs:
           root: dist
           paths:
             - .
-      - when:
-          condition:
-            not:
-              matches:
-                pattern: '(renovate|dependabot)/.*'
-                value: << pipeline.git.branch >>
-          steps:
-            - restore_cache:
-                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
-            - run:
-                name: Install documentation dependencies
-                command: |
-                  md5sum docs/package-lock.json > package.md5
-                  if [ ! -d "./docs/node_modules/" ]; then
-                    npm run i:docs
-                  fi
-                  md5sum -c package.md5
-                  rm package.md5
-            - save_cache:
-                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
-                paths:
-                  - ./docs/node_modules
-                  - ~/.cache/puppeteer
-            - run:
-                name: Build documentation
-                command: npm run build:docs
-            - run:
-                name: Archive documentation
-                command: tar -czf dist/docs.tar.gz -C dist/docs .
-            - store_artifacts:
-                path: dist/docs.tar.gz
-                destination: docs.tar.gz
       # TODO fix this one day
       #      - run:
       #          name: Collecting https://coveralls.io/github/help-me-mom/ng-mocks
@@ -343,6 +311,44 @@ jobs:
                   VITEST_MAX_FORKS: '1'
                   VITEST_MAX_WORKERS: '1'
                 command: npm run e2e
+  Docs:
+    executor: core
+    steps:
+      - run: date
+      - when:
+          condition:
+            not:
+              or:
+                - matches:
+                    pattern: '(renovate|dependabot/npm_and_yarn)/(tests-e2e|e2e|root)/.*'
+                    value: << pipeline.git.branch >>
+                - matches:
+                    pattern: 'e2e/.*'
+                    value: << pipeline.git.branch >>
+          steps:
+            - checkout
+            - restore_cache:
+                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
+            - run:
+                name: NPM Install
+                command: |
+                  md5sum docs/package-lock.json > package.md5
+                  if [ ! -d "./docs/node_modules/" ]; then
+                    npm run i:docs
+                  fi
+                  md5sum -c package.md5
+                  rm package.md5
+            - save_cache:
+                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
+                paths:
+                  - ./docs/node_modules
+                  - ~/.cache/puppeteer
+            - run:
+                name: Docs
+                command: npm run build:docs
+            - store_artifacts:
+                path: dist/docs
+                destination: docs
   Performance:
     executor: core
     steps:
@@ -598,6 +604,10 @@ workflows:
       #                - /(renovate|dependabot\/npm_and_yarn)\/(tests-e2e|docs)\/.*/
       - Performance:
           name: core:performance
+          requires:
+            - core
+      - Docs:
+          name: core:docs
           requires:
             - core
 

@@ -16,25 +16,6 @@ The best way would be to discuss an issue or an improvement first:
 To update docs, simply go to the page you want to edit on [https://ng-mocks.sudo.eu/](https://ng-mocks.sudo.eu/)
 and click on the "Edit this page" link at the bottom of the page.
 
-### Preview documentation from CI
-
-GitHub Actions and CircleCI build the documentation from `docs/` into `dist/docs` on every branch and tag build,
-including pull requests, except dependency updates on `renovate/*` and `dependabot/*` branches.
-CircleCI builds the documentation in the **core** job and stores it alongside the coverage artifacts.
-After a successful documentation build, download the generated site from the build artifacts:
-
-- GitHub Actions: open the **Documentation** workflow run and download the **docs** artifact.
-- CircleCI: open the **core** job, select **Artifacts**, and download **docs.tar.gz**.
-
-Extract the archive and serve the extracted directory with a local HTTP server, for example:
-
-```shell
-python3 -m http.server 8000 --directory <extracted-directory>
-```
-
-Open `http://localhost:8000` to review the generated site. Serve the directory containing `index.html` at the
-server root so the site's links and assets resolve correctly. Artifacts use each CI provider's configured retention.
-
 ## Prerequisites for development
 
 ### Requirements on Mac
