@@ -4,8 +4,9 @@ description: Information on how to render ng-templates and structural directives
 sidebar_label: Testing TemplateRef
 ---
 
-For query setup, lifecycle timing, and projected mock children, see
-[ContentChild / ContentChildren](../guides/content-child.md).
+For current template rendering and mocked query owners, see
+[How to mock ContentChild](../guides/mock/content-child.md) and
+[How to mock ContentChildren](../guides/mock/content-children.md).
 
 :::warning This functionality has been **deprecated**
 

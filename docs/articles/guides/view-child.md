@@ -8,7 +8,7 @@ When we want to test a `ViewChild` or `ViewChildren`,
 or a logic which depends on them,
 it means, that we have child dependencies which derive from components or directives.
 
-For children projected by a caller, see [ContentChild / ContentChildren](content-child.md).
+For children projected by a caller, see [ContentChild](content-child.md) and [ContentChildren](content-children.md).
 
 Therefore, the best way to write a test is to use their mock objects in the test.
 

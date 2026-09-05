@@ -14,6 +14,7 @@ Create a plain Markdown checklist that AI Agent can follow:
 ```md
 - [ ] Find the closest functional examples and read their specs and docs
 - [ ] Inspect the affected docs, executable specs, and relevant non-bot history
+- [ ] Choose a consistent Angular version and defaults for each published example
 - [ ] Sync embedded docs samples with the current example tests when needed
 - [ ] Simplify docs-only snippets for readability
 - [ ] Run lightweight validation and summarize what changed
@@ -29,15 +30,26 @@ Create a plain Markdown checklist that AI Agent can follow:
    - `git log --no-merges --author='^(?!.*(renovate|dependabot)).*$' --perl-regexp -- examples tests tests-e2e/src docs/articles README.md`
 3. If a docs page embeds or references a spec example, sync the snippet to the current source test before simplifying it for docs-only readability.
 4. Keep the real spec files as the source of truth. Do not rewrite them unless the user explicitly asks.
-5. Apply readability cleanup only in docs snippets:
+5. Treat each published example as ordinary application/test code for an Angular version appropriate to the feature.
+   Do not make docs snippets compile across the repository's entire spread matrix. Keep APIs, dependency syntax, and
+   Angular defaults consistent within each example, and state its target version briefly when that matters to use it.
+   Apply readability cleanup only in docs snippets:
    - remove compatibility-only casts such as `as never` or `as any`
-   - remove `standalone: false`
+   - remove redundant `standalone: true` and `standalone: false`; keep an explicit flag only when necessary for the
+     chosen Angular version or when the flag itself is being taught
    - remove empty uniqueness-only methods such as `public someMarker() {}`
+   - remove declarations and template bindings used solely to align old Angular engines, when they are unnecessary
+     for the chosen version; preserve declarations involved in the behavior being taught
    - remove `TODO` comments and Angular version guards from docs snippets
    - if `ViewChild`, `ViewChildren`, `ContentChild`, or `ContentChildren` use `{}` as the second argument, remove that empty argument
    - remove `const assertion: any` helpers and use `jasmine` directly
    - prefer direct Jasmine examples in visible code; keep Jest alternatives only as comments when helpful
    - inline `@Injectable({ ... })` config instead of `const ...Args = [...]` plus `@Injectable(...args)`
+   - replace old-version syntax and dependency fallbacks with ordinary equivalents supported by the chosen version,
+     such as optional chaining for null guards and RxJS `of(value)` for a synchronous one-value observable
+   - use direct, meaningful Jasmine assertions instead of compatibility or lint-workaround assertion scaffolding
+   - do not replace removed compatibility code with per-version instructions to add or remove options in live examples;
+     keep actual API availability, support boundaries, and migration guidance where relevant
 6. Keep guide prose aligned with the simplified snippet, and compare the final examples and guide structure with the selected references.
 7. For docs-only changes, validate with search-based checks and `git diff --check`. Skip wrapper tests unless the user specifically wants them or non-doc files changed.
 
@@ -54,6 +66,8 @@ Create a plain Markdown checklist that AI Agent can follow:
 ## Guardrails
 
 - Do not edit executable specs just to make docs prettier unless the user explicitly asked to change the tests too.
+- Preserve the setup, observable behavior, and assertion meaning when simplifying published snippets; do not copy
+  compatibility scaffolding back from the executable spread tests during a later sync.
 - Do not claim docs are synced until embedded example blocks or referenced snippets have been checked against their executable specs.
 - Prefer primary repo sources over memory: `examples`, `tests`, `tests-e2e/src`, `README.md`, `docs/articles`, and recent human-authored git history.
 - If docs and executable behavior disagree, trust the current scripts/tests first and update the docs.

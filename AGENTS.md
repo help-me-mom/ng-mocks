@@ -122,6 +122,17 @@
 - Before finishing, compare the changes with those references and check documentation snippets against their
   executable specs. If no close example exists, broaden the search to related behavior and local history before
   introducing a new pattern, and note the gap.
+- Write published documentation examples as ordinary code for an Angular version appropriate to the feature,
+  not as spread tests that must compile across supported versions. Keep each example's APIs and defaults consistent
+  with that version; state the target version briefly when it affects how the example is used.
+- Remove compatibility scaffolding from docs snippets: redundant `standalone: true` or `standalone: false`, metadata
+  casts, version guards, uniqueness-only methods, compatibility-only declarations, and older syntax or dependency
+  fallbacks. Keep metadata that is
+  necessary for the chosen version or is itself being taught. Do not replace removed scaffolding with per-version
+  instructions to patch the live example. Keep actual support boundaries and migration guidance where relevant.
+- Preserve the tested setup, behavior, and meaningful assertions when simplifying docs. Keep compatibility code in
+  the executable specs; a docs cleanup must not weaken their supported-version coverage. Follow
+  `.agents/skills/clean-doc-examples/SKILL.md` for the detailed workflow.
 
 ## Test Style
 
