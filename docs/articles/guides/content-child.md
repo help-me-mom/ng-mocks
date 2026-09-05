@@ -162,6 +162,9 @@ expect(target.required()).toBe(items[1]);
 Signal queries are available from Angular 17.2 and stable from Angular 19.
 An optional query returns a child or `undefined`.
 A required query throws when read without a matching child.
+`contentChild` searches descendants by default; use `descendants: false` to restrict it to direct children.
+Use `read` to retrieve another token, such as `ElementRef`, and `computed` to derive a value from the query signal.
+The live example checks removal and reinsertion, including the derived value and the direct-child boundary.
 For a mocked declaration's signal properties, see
 [How to mock signal content queries](mock/content-child.md#signal-content-queries).
 
@@ -318,6 +321,7 @@ This example uses Angular 19+ standalone defaults and compiler-initialized signa
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
 import {
   Component,
+  computed,
   contentChild,
   Directive,
   ElementRef,
@@ -325,13 +329,7 @@ import {
   signal,
 } from '@angular/core';
 
-import {
-  isMockOf,
-  MockBuilder,
-  MockInstance,
-  MockRender,
-  ngMocks,
-} from 'ng-mocks';
+import { isMockOf, MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Directive({
   selector: '[signalContentItem]',
@@ -347,9 +345,13 @@ class ItemDirective {
 class TargetComponent {
   public readonly first = contentChild(ItemDirective);
   public readonly required = contentChild.required(ItemDirective);
+  public readonly directChild = contentChild(ItemDirective, {
+    descendants: false,
+  });
   public readonly element = contentChild(ItemDirective, {
     read: ElementRef,
   });
+  public readonly firstLabel = computed(() => this.first()?.signalContentItem);
 }
 
 @Component({
@@ -369,9 +371,7 @@ class HostComponent {
 }
 
 describe('TestContentChild:signals', () => {
-  MockInstance.scope();
-
-  it('queries mocked content and updates after projected content changes', async () => {
+  it('updates contentChild signals and computed values when projected content changes', async () => {
     // Keep the host and query owner real; mock the projected directive.
     await MockBuilder(HostComponent).keep(TargetComponent);
     const fixture = MockRender(HostComponent);
@@ -381,6 +381,8 @@ describe('TestContentChild:signals', () => {
     // Read the first child, required child, and element.
     expect(target.first()).toBe(items[0]);
     expect(target.required()).toBe(items[0]);
+    expect(target.directChild()).toBe(items[0]);
+    expect(target.firstLabel()).toBe('first');
     expect(target.element()?.nativeElement).toBe(
       fixture.nativeElement.querySelector('span'),
     );
@@ -395,6 +397,25 @@ describe('TestContentChild:signals', () => {
     fixture.detectChanges();
     expect(target.first()).toBe(items[1]);
     expect(target.required()).toBe(items[1]);
+    expect(target.directChild()).toBeUndefined();
+    expect(target.firstLabel()).toBe('nested');
+    expect(target.element()?.nativeElement).toBe(
+      fixture.nativeElement.querySelector('span'),
+    );
+
+    // Restoring the direct child creates a new instance and updates every query.
+    fixture.point.componentInstance.show.set(true);
+    fixture.detectChanges();
+    const restored = ngMocks.findInstances(ItemDirective);
+    expect(restored[0]).not.toBe(items[0]);
+    expect(restored[1]).toBe(items[1]);
+    expect(target.first()).toBe(restored[0]);
+    expect(target.required()).toBe(restored[0]);
+    expect(target.directChild()).toBe(restored[0]);
+    expect(target.firstLabel()).toBe('first');
+    expect(target.element()?.nativeElement).toBe(
+      fixture.nativeElement.querySelector('span'),
+    );
   });
 
   it('returns no optional results and enforces a required query when content is missing', async () => {
@@ -404,7 +425,9 @@ describe('TestContentChild:signals', () => {
     const target = ngMocks.findInstance(TargetComponent);
 
     expect(target.first()).toBeUndefined();
+    expect(target.directChild()).toBeUndefined();
     expect(target.element()).toBeUndefined();
+    expect(target.firstLabel()).toBeUndefined();
 
     // Reading the required query reports the missing child.
     expect(() => target.required()).toThrowError(/NG0951/);

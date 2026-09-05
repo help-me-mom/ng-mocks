@@ -127,6 +127,8 @@ expect(target.all()).toEqual([items[1]]);
 Signal queries are available from Angular 17.2 and stable from Angular 19.
 `contentChildren` returns a readonly array, including an empty array when no children match.
 It supports `read` and `descendants` and has no required-query variant.
+The live example uses `read: ElementRef` to query elements and `computed` to derive labels from the queried directives.
+It checks both removal and reinsertion, including collection order and the derived values.
 For a mocked declaration's signal collection, see
 [How to mock contentChildren signals](mock/content-children.md#signal-content-queries).
 
@@ -215,8 +217,10 @@ This example uses Angular 19+ standalone defaults and compiler-initialized signa
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
 import {
   Component,
+  computed,
   contentChildren,
   Directive,
+  ElementRef,
   Input,
   signal,
 } from '@angular/core';
@@ -239,6 +243,11 @@ class TargetComponent {
   public readonly all = contentChildren(ItemDirective, {
     descendants: true,
   });
+  public readonly elements = contentChildren(ItemDirective, {
+    descendants: true,
+    read: ElementRef,
+  });
+  public readonly labels = computed(() => this.all().map(item => item.signalContentItem));
 }
 
 @Component({
@@ -258,32 +267,59 @@ class HostComponent {
 }
 
 describe('TestContentChild:signals', () => {
-  it('queries mocked content and updates after projected content changes', async () => {
-    // Keep the host and query owner real; mock the projected directive.
+  it('updates contentChildren signals, read tokens, and computed collections', async () => {
+    // Keep the owner real and query its projected mock directives.
     await MockBuilder(HostComponent).keep(TargetComponent);
     const fixture = MockRender(HostComponent);
     const target = ngMocks.findInstance(TargetComponent);
     const items = ngMocks.findInstances(ItemDirective);
+    const elements = fixture.nativeElement.querySelectorAll('span');
 
+    // Compare direct children, descendants, and the elements read from them.
     expect(target.direct()).toEqual([items[0]]);
     expect(target.all()).toEqual(items);
-    expect(items.map(item => item.signalContentItem)).toEqual(['first', 'nested']);
+    expect(target.labels()).toEqual(['first', 'nested']);
+    expect(target.elements().map(element => element.nativeElement)).toEqual([
+      elements[0],
+      elements[1],
+    ]);
     expect(isMockOf(items[0], ItemDirective)).toBe(true);
+    expect(isMockOf(items[1], ItemDirective)).toBe(true);
 
-    // Remove the direct child and check both updated arrays.
+    // Removing the direct child updates both collections and their computed consumer.
     fixture.point.componentInstance.show.set(false);
     fixture.detectChanges();
     expect(target.direct()).toEqual([]);
     expect(target.all()).toEqual([items[1]]);
+    expect(target.labels()).toEqual(['nested']);
+    expect(target.elements().map(element => element.nativeElement)).toEqual([
+      elements[1],
+    ]);
+
+    // Restoring it restores collection order while preserving the nested child.
+    fixture.point.componentInstance.show.set(true);
+    fixture.detectChanges();
+    const restored = ngMocks.findInstances(ItemDirective);
+    expect(restored[0]).not.toBe(items[0]);
+    expect(restored[1]).toBe(items[1]);
+    expect(target.direct()).toEqual([restored[0]]);
+    expect(target.all()).toEqual(restored);
+    expect(target.labels()).toEqual(['first', 'nested']);
+    expect(target.elements().map(element => element.nativeElement)).toEqual([
+      fixture.nativeElement.querySelector('span'),
+      elements[1],
+    ]);
   });
 
-  it('returns empty arrays when content is missing', async () => {
+  it('returns empty contentChildren signals when content is missing', async () => {
     await MockBuilder(TargetComponent);
     MockRender(TargetComponent);
     const target = ngMocks.findInstance(TargetComponent);
 
     expect(target.direct()).toEqual([]);
     expect(target.all()).toEqual([]);
+    expect(target.elements()).toEqual([]);
+    expect(target.labels()).toEqual([]);
   });
 });
 ```

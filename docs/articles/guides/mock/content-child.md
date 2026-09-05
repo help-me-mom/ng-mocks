@@ -100,7 +100,8 @@ Passing the host to `MockBuilder` mocks both imported declarations:
 beforeEach(() => MockBuilder(HostComponent));
 ```
 
-Before rendering, supply the signal properties that the test uses:
+Before rendering, supply the signal properties that the test uses.
+Give a required query an initial value too:
 
 ```ts
 // In the suite, reset customizations after each test.
@@ -108,10 +109,13 @@ MockInstance.scope();
 
 // In the test, provide ordinary Angular signals before MockRender.
 const first = signal<ItemDirective | undefined>(undefined);
+const fallback = new ItemDirective();
+const required = signal(fallback);
 MockInstance(TargetComponent, 'first', first);
+MockInstance(TargetComponent, 'required', required);
 ```
 
-We can now set the signal to a projected mock and assert the value exposed by `TargetComponent`:
+We can now set both signals to a projected mock and assert the values exposed by `TargetComponent`:
 
 ```ts
 MockRender(HostComponent);
@@ -119,7 +123,9 @@ const target = ngMocks.findInstance(TargetComponent);
 const items = ngMocks.findInstances(ItemDirective);
 
 first.set(items[0]);
+required.set(items[0]);
 expect(target.first()).toBe(items[0]);
+expect(target.required()).toBe(items[0]);
 ```
 
 :::note
@@ -127,7 +133,7 @@ expect(target.first()).toBe(items[0]);
 Signal queries are available from Angular 17.2 and stable from Angular 19.
 ng-mocks does not recreate their initializers on a mocked declaration.
 The signals supplied through `MockInstance` contain values set by the test;
-Angular does not populate them as content queries.
+Angular does not populate them as content queries, including after projected content changes.
 Customize every property that the consumer reads, including a required query if it uses one.
 To test Angular's query resolution and updates, [keep the declaration real](../content-child.md#signal-content-queries).
 
@@ -191,7 +197,6 @@ import {
   Component,
   contentChild,
   Directive,
-  ElementRef,
   Input,
   signal,
 } from '@angular/core';
@@ -218,9 +223,6 @@ class ItemDirective {
 class TargetComponent {
   public readonly first = contentChild(ItemDirective);
   public readonly required = contentChild.required(ItemDirective);
-  public readonly element = contentChild(ItemDirective, {
-    read: ElementRef,
-  });
 }
 
 @Component({
@@ -242,24 +244,42 @@ class HostComponent {
 describe('TestContentChild:signals', () => {
   MockInstance.scope();
 
-  it('customizes a signal property when the query owner itself is mocked', async () => {
+  it('customizes optional and required contentChild signals on a mocked owner', async () => {
     // Keep the host real and mock its imported declarations.
     await MockBuilder(HostComponent);
 
-    // Provide the signal property before creating the mock component.
+    // Provide the signal properties before creating the mock component.
     const first = signal<ItemDirective | undefined>(undefined);
+    const fallback = new ItemDirective();
+    const required = signal(fallback);
     MockInstance(TargetComponent, 'first', first);
-    MockRender(HostComponent);
+    MockInstance(TargetComponent, 'required', required);
+    const fixture = MockRender(HostComponent);
     const target = ngMocks.findInstance(TargetComponent);
     const items = ngMocks.findInstances(ItemDirective);
 
-    // The supplied signal retains its initial value after projection.
+    // The supplied signals retain their initial values after projection.
     expect(isMockOf(target, TargetComponent)).toBe(true);
     expect(target.first()).toBeUndefined();
+    expect(target.required()).toBe(fallback);
 
-    // Set the value explicitly and read it through the mock.
+    // Set the values explicitly and read them through the mock.
     first.set(items[0]);
+    required.set(items[0]);
     expect(target.first()).toBe(items[0]);
+    expect(target.required()).toBe(items[0]);
+
+    // Changing projected content does not update ordinary signals on the mock.
+    fixture.point.componentInstance.show.set(false);
+    fixture.detectChanges();
+    expect(target.first()).toBe(items[0]);
+    expect(target.required()).toBe(items[0]);
+
+    // The test controls missing optional values and replacement required values.
+    first.set(undefined);
+    required.set(items[1]);
+    expect(target.first()).toBeUndefined();
+    expect(target.required()).toBe(items[1]);
   });
 });
 ```

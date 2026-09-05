@@ -128,7 +128,7 @@ expect(target.all()).toEqual(items);
 Signal queries are available from Angular 17.2 and stable from Angular 19.
 ng-mocks does not recreate their initializers on a mocked declaration.
 The array supplied through `MockInstance` contains values set by the test;
-Angular does not populate this ordinary signal as a content query.
+Angular does not populate this ordinary signal as a content query, including after projected content changes.
 Customize each signal property that the consumer reads.
 To test Angular's collection updates, [keep the declaration real](../content-children.md#signal-content-queries).
 
@@ -273,24 +273,41 @@ class HostComponent {
 describe('TestContentChild:signals', () => {
   MockInstance.scope();
 
-  it('customizes a signal property when the query owner itself is mocked', async () => {
+  it('customizes contentChildren signals on a mocked owner', async () => {
     // Keep the host real and mock its imported declarations.
     await MockBuilder(HostComponent);
 
-    // Provide the signal collection before creating the mock component.
+    // Provide each collection signal before creating the mock component.
+    const direct = signal<readonly ItemDirective[]>([]);
     const all = signal<readonly ItemDirective[]>([]);
+    MockInstance(TargetComponent, 'direct', direct);
     MockInstance(TargetComponent, 'all', all);
-    MockRender(HostComponent);
+    const fixture = MockRender(HostComponent);
     const target = ngMocks.findInstance(TargetComponent);
     const items = ngMocks.findInstances(ItemDirective);
 
-    // Projection does not populate the supplied signal.
+    // Projection does not populate the supplied signals.
     expect(isMockOf(target, TargetComponent)).toBe(true);
+    expect(target.direct()).toEqual([]);
     expect(target.all()).toEqual([]);
 
-    // Set the collection explicitly and read it through the mock.
+    // Set the direct and descendant collections independently.
+    direct.set([items[0]]);
     all.set(items);
+    expect(target.direct()).toEqual([items[0]]);
     expect(target.all()).toEqual(items);
+
+    // Projection changes do not populate or clear these ordinary signals.
+    fixture.point.componentInstance.show.set(false);
+    fixture.detectChanges();
+    expect(target.direct()).toEqual([items[0]]);
+    expect(target.all()).toEqual(items);
+
+    // Apply the changed collection values explicitly.
+    direct.set([]);
+    all.set([items[1]]);
+    expect(target.direct()).toEqual([]);
+    expect(target.all()).toEqual([items[1]]);
   });
 });
 ```
