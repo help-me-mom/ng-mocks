@@ -82,6 +82,54 @@ describe('collect-declarations', () => {
       });
     });
 
+    it('preserves ContentChild descendants options and other query metadata', () => {
+      const actual = collectDeclarations({
+        __prop__metadata__: {
+          direct: [
+            {
+              selector: 'child',
+              ngMetadataName: 'ContentChild',
+              descendants: false,
+              read: 'token',
+              static: true,
+            },
+          ],
+          nested: [
+            {
+              selector: 'child',
+              ngMetadataName: 'ContentChild',
+              descendants: true,
+            },
+          ],
+          default: [
+            { selector: 'child', ngMetadataName: 'ContentChild' },
+          ],
+        },
+      });
+
+      expect(actual.queries).toEqual({
+        direct: {
+          isViewQuery: false,
+          ngMetadataName: 'ContentChild',
+          selector: 'child',
+          descendants: false,
+          read: 'token',
+          static: true,
+        },
+        nested: {
+          isViewQuery: false,
+          ngMetadataName: 'ContentChild',
+          selector: 'child',
+          descendants: true,
+        },
+        default: {
+          isViewQuery: false,
+          ngMetadataName: 'ContentChild',
+          selector: 'child',
+        },
+      });
+    });
+
     it('skips view query duplicates', () => {
       const actual = collectDeclarations({
         __prop__metadata__: {

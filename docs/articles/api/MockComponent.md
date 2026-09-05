@@ -28,7 +28,7 @@ The class of a mock component has:
 - the same inputs and outputs with alias support
 - signal inputs which stay callable and keep their required and transform metadata
 - templates with pure `<ng-content>` tags to allow transclusion
-- support for `@ContentChild` and `@ContentChildren`
+- support for [`@ContentChild` and `@ContentChildren`](../guides/content-child.md)
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - support for `exportAs`
 - support for [standalone components](#standalone-components)

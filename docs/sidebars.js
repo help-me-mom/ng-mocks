@@ -148,6 +148,7 @@ module.exports = {
         'guides/pipe',
         'guides/pipe-standalone',
         'guides/view-child',
+        'guides/content-child',
         'guides/ngonchanges',
         'guides/provider',
         'guides/token',
