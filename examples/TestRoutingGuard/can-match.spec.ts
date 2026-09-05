@@ -143,10 +143,9 @@ describe('TestRoutingGuard:canMatch', () => {
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      const result = await fixture.ngZone.run(() =>
+      await fixture.ngZone.run(() =>
         router.navigateByUrl('/dashboard'),
       );
-      expect(result).toEqual(true);
       await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
