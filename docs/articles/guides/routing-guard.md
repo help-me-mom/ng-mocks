@@ -284,9 +284,9 @@ checks both removal and a retained guard that blocks lazy loading.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [View the standalone example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 
-:::note
-The components use `standalone: false` because they are declared in `TargetModule`.
-Keep this metadata when copying the example: Angular 19 and newer make components standalone by default.
+:::note Angular version
+This NgModule snippet uses Angular 14.2–18, where components belong to an NgModule by default.
+For standalone components, follow the [standalone guard setup](#functional-guards-in-standalone-applications).
 :::
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
@@ -341,7 +341,6 @@ const sideEffectGuard: CanActivateFn = () => {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
-  standalone: false,
   template: 'login',
 })
 class LoginComponent {}
@@ -350,7 +349,6 @@ class LoginComponent {}
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
-  standalone: false,
   template: 'dashboard',
 })
 class DashboardComponent {}
