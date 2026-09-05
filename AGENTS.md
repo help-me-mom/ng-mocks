@@ -34,14 +34,23 @@
 
 - Keep the task list updated as work progresses. If scope changes, rewrite the list so it still matches the real task.
 
-## Wrapper-First Workflow
+## Docker-Only Execution
 
-- For dependency bootstrap, lockfile refreshes, and test execution, use the repo wrappers instead of ad-hoc local installs:
+- For dependency installation, lockfile refreshes, library and docs builds, tests, formatting, linting, type checks,
+  and other executable validation, use only the existing repo entry points and Docker images configured in `compose.yml`:
   - `sh compose.sh <target>`
   - `sh test.sh <target>`
-- Do not replace required wrapper validation with local npm commands because Docker has a transient network,
-  daemon, or cache problem. Fix or retry the Docker workflow; use local commands only for explicitly identified
-  human debugging, and never report them as the required validation.
+  - `docker compose run --rm <service> npm run <existing-script>` for a script already in that project's `package.json`
+- Never invoke local Python, Node.js, npm, npx, nvm, or another host runtime to perform these operations, including
+  diagnostics. Invoke the existing wrappers as provided; do not extract or reimplement their steps locally.
+- Do not write custom Python, JavaScript, Bash, or shell logic, temporary scripts, inline probes, or replacement
+  runners to build, test, or check the repo. Running that custom logic inside Docker is also prohibited. Add requested
+  regression tests to the existing suites and execute them through the existing repo commands.
+- Ordinary file inspection and editing, searches with `rg`, and Git/GitHub operations remain available; they do not
+  authorize custom executable validation.
+- If an approved command fails or the available tooling cannot perform a required operation, report the command,
+  error, and remaining work to the user and discuss the solution before trying a workaround. Do not silently switch
+  runtimes or images, bypass hooks or checks, add temporary Compose overrides, or create new validation tooling.
 - If multiple worktrees or agent sessions run in parallel, set a unique compose namespace:
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
@@ -55,7 +64,7 @@
   `sh test.sh a<major>` validation. Use the same `COMPOSE_PROJECT_NAME` for both commands:
 
   ```bash
-  COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose run --rm a<major> npx ng cache clean
+  COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose run --rm a<major> npm run ng -- cache clean
   COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh a<major>
   ```
 
@@ -66,8 +75,9 @@
 ## Local npm / nvm Flows
 
 - `CONTRIBUTING.md` still documents local `nvm use`, `npm run test`, and `npm run test:debug` flows.
-- Treat those as human debugging or fallback instructions, not the default automation path for agents.
-- Release steps and IE/manual debugging remain local/manual workflows.
+- Those are human-only instructions, not an authorized fallback for agents. The Docker-only execution rule also
+  applies to agent diagnostics.
+- Release steps and IE/manual debugging remain human local/manual workflows.
 
 ## Compatibility Guidance
 
@@ -190,9 +200,9 @@
   guidance with affected versions, before/after examples, the safe update path, and explicitly unaffected cases.
 - Update `AGENTS.md` and the relevant repo skill only when current guidance is wrong or missing and the lesson is
   repository-wide, repeated, or exposed by an actual workflow failure.
-- For build, packaging, and release-tooling bugs, validate the final generated artifact or loaded configuration when
-  practical. A deterministic offline assertion or probe is preferable to a check that publishes or mutates external
-  state.
+- For build, packaging, and release-tooling bugs, validate the final generated artifact or loaded configuration with
+  existing repo commands in Docker when available. If the required check is missing, discuss it with the user before
+  adding tooling; do not invent an ad-hoc assertion or probe.
 - Use a conventional PR title that summarizes the complete PR and accurately predicts the squash commit's release
   effect. Keep issue comments, pull request descriptions, and non-trivial commit bodies focused on the problem and how
   it was fixed.

@@ -7,7 +7,7 @@ description: Use when refreshing package-lock.json files in ng-mocks, resolving 
 
 Use this skill for a fresh lockfile refresh or to regenerate a lockfile while resolving an existing dependency PR conflict, without permanently changing the repo's normal install flow.
 
-This workflow is intentionally narrow. Follow the sequence exactly. Do not manually add tests, lint, local npm commands, rebases, or unrelated cleanup unless the user explicitly asks for them.
+This workflow is intentionally narrow. Follow the sequence exactly. Do not manually add tests, lint, rebases, or unrelated cleanup unless the user explicitly asks for them. All execution must follow `AGENTS.md`'s Docker-only rule.
 
 ## Task List
 
@@ -48,13 +48,13 @@ Create a plain Markdown checklist that any AI agent can follow:
     - Verify there are no unmerged paths, restore every affected `compose.yml` command to `npm install`, commit with normal hooks, push, and query remote mergeability again.
     - Repeat the check if the base advances. Finish only when the provider returns a definitive conflict-free state.
 
-Do not use the current active worktree. A fresh refresh needs a new branch; an existing dependency PR conflict stays on its PR branch in an isolated worktree. Do not manually run `sh test.sh`, root tests, lint, TypeScript checks, local `npm install`, local `npm update`, or ad-hoc dependency commands as part of this workflow unless the user explicitly asks for them.
+Do not use the current active worktree. A fresh refresh needs a new branch; an existing dependency PR conflict stays on its PR branch in an isolated worktree. Do not manually run `sh test.sh`, root tests, lint, or TypeScript checks as part of this workflow unless the user explicitly asks for them. Never use local runtimes or ad-hoc dependency commands.
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
 For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
 
-If a wrapper target fails because Docker reports exhausted address pools or Puppeteer reports a corrupt cache folder, clean up that target's compose project and rerun the same wrapper target with a fresh `COMPOSE_PROJECT_NAME`. Do not switch to local npm commands.
+If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
 
 If several worktrees or agent sessions are active, use a unique compose namespace for every wrapper command:
 
@@ -121,10 +121,13 @@ git push
 - Never hand-merge lockfile conflict blocks or rewrite dependency PR history.
 - Never discard either side of a non-lockfile conflict without inspecting and preserving its intended behavior.
 - Never leave `compose.yml` in an `npm update` state after finishing.
-- Never use local `npm install`, `npm update`, or ad-hoc `node` commands when the wrapper flow covers the task.
+- Use only the documented wrapper flow and repo images. Never use local runtimes or custom install, build, test, or
+  check scripts, including inside Docker.
 - If multiple worktrees, agent sessions, or concurrent wrapper targets are active, set a unique `COMPOSE_PROJECT_NAME` for each wrapper command.
-- Clean up temporary compose projects with `docker compose down -v` after successful batches or failed transient Docker/Puppeteer setup runs.
+- Clean up temporary compose projects with `docker compose down -v` after successful batches. Discuss failed setup
+  runs with the user before recovery steps.
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
-- Do not manually invoke extra validation beyond this skill; automated git hooks are the exception and should do their normal job.
+- Do not manually invoke extra validation beyond this skill. If a hook requires local runtime execution or fails,
+  report it and discuss the solution; do not bypass it or use local tooling to make it pass.
 - Push to a configured writable remote; never assume `upstream` accepts contributor branches.
 - Never declare the PR conflict-free from local Git state alone; query its remote mergeability after the final push.

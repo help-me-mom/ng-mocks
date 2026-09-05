@@ -107,20 +107,17 @@ If conflicts occur, resolve them in this order:
   # Standard flow: just run npm install via wrapper for affected project.
   COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
 
-  # Only if npm install fails, use the update workaround:
-  # 1) Edit compose.yml: change service command from "npm install" to "npm update"
-  # 2) Run: COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
-  # 3) Restore compose.yml back to "npm install --no-audit"
-  # 4) Run: COMPOSE_PROJECT_NAME=ngmocks_rebase_<unique> sh compose.sh <affected-target>
   ```
 
+- If the wrapper fails, report the command, error, and remaining work to the user and discuss the solution before
+  trying a workaround. Use the `update-package-locks` skill when a lockfile refresh is agreed as the next step.
 - Stage the regenerated lockfile: `git add path/to/package-lock.json`
 
 #### Step 5d: Complete the Cherry-Pick
 
 ```bash
 git cherry-pick --continue
-# Or if no auto-commit: git commit --no-verify -m "original commit message"
+# Or if no auto-commit: git commit -m "original commit message"
 ```
 
 ### 6. Apply Stash (if one was created)
@@ -167,6 +164,7 @@ When conflicts occur during cherry-pick, resolve in this order:
 - `upstream/main` is only the default target; override when user provides another remote branch
 - Always create backup branch before `git reset --hard`
 - Only stash when local changes actually exist (check with `git status --short`)
-- Use repo wrappers (`sh compose.sh`, `sh test.sh`) for all npm operations; never run ad-hoc local `npm install` or `npm update`
+- Follow `AGENTS.md`'s Docker-only execution rule for all installs, builds, tests, and checks. Never use local runtimes
+  or custom validation scripts, including inside Docker, and never bypass hooks or checks.
 - Use a unique `COMPOSE_PROJECT_NAME` whenever another worktree or agent session may be active.
 - **Regenerate lockfiles immediately after resolving conflicts, before committing each cherry-pick** - this keeps each commit atomic and correct
