@@ -208,6 +208,7 @@ const parsePropMetadataParserFactoryQueryChild =
     ngMetadataName: string,
     prop: string,
     decorator: {
+      descendants?: boolean;
       read?: any;
       selector: string;
       static?: boolean;
@@ -219,6 +220,7 @@ const parsePropMetadataParserFactoryQueryChild =
         isViewQuery,
         ngMetadataName,
         selector: decorator.selector,
+        ...(decorator.descendants === undefined ? {} : { descendants: decorator.descendants }),
         ...(decorator.read === undefined ? {} : { read: decorator.read }),
         ...(decorator.static === undefined ? {} : { static: decorator.static }),
       };
