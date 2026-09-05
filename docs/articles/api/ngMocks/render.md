@@ -3,8 +3,11 @@ title: ngMocks.render
 description: Documentation about `ngMocks.render` from ng-mocks library
 ---
 
-`ngMocks.render` goes through **all queries**, such as `ContentChild` and `ContentChildren`,
+`ngMocks.render` goes through **decorator queries**, such as `@ContentChild` and `@ContentChildren`,
 tries to find related `TemplateRef` or a **structural directive**, and render it with a given context.
+
+For setup and the distinction from signal queries, see the
+[content-query guide](../../guides/content-child.md).
 
 In order to hide them, use [`ngMocks.hide`](hide.md).
 

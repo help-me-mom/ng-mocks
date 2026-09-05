@@ -236,6 +236,9 @@ Or we want to customize a mock declaration which is accessed via:
 - `@ContentChild`
 - `@ContentChildren`
 
+For projected children and `ngAfterContentInit`, see the
+[content-query guide](../guides/content-child.md#customize-a-child-before-content-initialization).
+
 Let's pretend a situation when our component uses `ViewChild` to access a child component instance.
 
 ```ts

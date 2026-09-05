@@ -27,7 +27,7 @@ A mock directive has:
 - support for attribute and structural directives
 - the same `selector`
 - the same `Inputs` and `Outputs` with alias support
-- support for `@ContentChild` and `@ContentChildren`
+- support for [`@ContentChild` and `@ContentChildren`](../guides/content-child.md)
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
 - supports `exportAs`
 - support for [standalone directives](#standalone-directives)
