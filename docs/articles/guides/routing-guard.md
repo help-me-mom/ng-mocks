@@ -8,10 +8,10 @@ If you have not read ["How to test a route"](route.md), please do it first.
 
 To test a guard means that we need to mock everything except the guard and `RouterModule`.
 But, what if we have several guards? If we mocked them they would block routes due to falsy returns of their mocked methods.
-**To remove guards in Angular tests, `ng-mocks` provides the `NG_MOCKS_GUARDS` token**. We should pass it into `.exclude`, then all other guards will be
+**To remove guards in Angular tests, `ng-mocks` provides the [`NG_MOCKS_GUARDS` token](/api/MockBuilder.md#ng_mocks_guards-token)**. We should pass it into `.exclude`, then all other guards will be
 removed from the route configuration processed by `MockBuilder`, and we can be sure that we are **testing only the guard we want**.
 
-The same `MockBuilder` setup applies to all five guard properties, including class and token guards.
+The same [`MockBuilder`](/api/MockBuilder.md) setup applies to all five guard properties, including class and token guards.
 The functional examples require Angular 14.2 or newer:
 
 - `canActivate` -
@@ -42,7 +42,7 @@ A guard resides in the configuration of routes,
 which is defined as an import of `RouterModule.forRoot` or `RouterModule.forChild` in a module.
 
 To test a guard, you need the guard and the module which defines a route with the guard.
-For simplicity, let's call the guard `loginGuard`, and the module `TargetModule`.
+For simplicity, let's call the guard `canActivateGuard`, and the module `TargetModule`, as in the [live example](#live-example).
 
 The guard should be tested in isolation, to avoid side effects of other guards.
 Also, `RouterModule` and its dependencies should be provided in a test
@@ -70,8 +70,8 @@ beforeEach(() =>
   .exclude(NG_MOCKS_GUARDS)
   
   // chain
-  // keeping loginGuard for testing
-  .keep(loginGuard)
+  // keeping canActivateGuard for testing
+  .keep(canActivateGuard)
 );
 ```
 
@@ -84,13 +84,13 @@ Let's assert that:
 1. initialize navigation
 1. assert the location
 
-To render a router outlet, you can use `MockRender` with empty parameters.
+To render a router outlet, use [`MockRender`](/api/MockRender.md) with an empty object as the second parameter to leave the outlet's inputs untouched.
 
 ```ts
 const fixture = MockRender(RouterOutlet, {});
 ```
 
-Now, you can get `Router` and `Location`.
+Now, you can get `Router` and `Location` with [`ngMocks.get`](/api/ngMocks/get.md).
 The first one is needed for the initialization,
 the second one for assertion.
 
@@ -116,7 +116,9 @@ expect(location.path()).toEqual('/login');
 ```
 
 
-Profit, [an example of a test for a functional guard](#live-example).
+The [live example](#live-example) also uses [`ngMocks.find`](/api/ngMocks/find.md) to assert which component the route rendered.
+
+### Choosing the navigation to test
 
 Choose a navigation that actually invokes the guard under test:
 
@@ -134,20 +136,32 @@ See Angular's [guard return types](https://angular.dev/guide/routing/route-guard
 
 ### Testing lazy loading
 
-`canLoad` runs before loading a lazy module. Assert both the navigation result and whether the loader ran:
+`canLoad` runs before loading a lazy module. In the [canLoad example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-load.spec.ts),
+the setup keeps `canLoadGuard` and the mocked `LoginService` starts with `isLoggedIn = false`.
+Render the outlet, spy on the second route's lazy loader, and assert both navigation and loading:
 
 ```ts
-const loader = spyOn(router.config[1], 'loadChildren').and.callThrough();
-const result = await (fixture.ngZone
-  ? fixture.ngZone.run(() => router.navigateByUrl('/dashboard'))
-  : router.navigateByUrl('/dashboard'));
-await fixture.whenStable();
+const fixture = MockRender(RouterOutlet, {});
+const router = ngMocks.get(Router);
 
-expect(result).toEqual(false);
-expect(loader).not.toHaveBeenCalled();
+// Observe loading without replacing the module returned by the callback.
+const loader = spyOn(router.config[1], 'loadChildren').and.callThrough();
+
+// Attempt navigation before the lazy module has been loaded.
+if (fixture.ngZone) {
+  const result = await fixture.ngZone.run(() =>
+    router.navigateByUrl('/dashboard'),
+  );
+  await fixture.whenStable();
+
+  expect(result).toEqual(false);
+  expect(loader).not.toHaveBeenCalled();
+  expect(router.url).toEqual('/');
+}
 ```
 
-Use a fresh test setup for the allowed case, then assert `true`, one loader call, and the dashboard component.
+Use a fresh test setup for the allowed case, set `ngMocks.get(LoginService).isLoggedIn = true`,
+then assert `true`, one loader call, and the dashboard component.
 Once Angular has loaded the module, subsequent navigation does not run `canLoad` again.
 The lazy module in the [canLoad example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-load.spec.ts)
 is loaded as-is: its declarations belong to that module alone.
@@ -269,6 +283,11 @@ checks both removal and a retained guard that blocks lazy loading.
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [View the standalone example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 
+:::note
+The snippet omits compatibility metadata. In Angular 19 and newer, add `standalone: false` to both component decorators
+because these components are declared in `TargetModule`. The executable source includes this metadata.
+:::
+
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
 import { Location } from '@angular/common';
 import {
@@ -321,7 +340,6 @@ const sideEffectGuard: CanActivateFn = () => {
 // It will be replaced with a mock copy.
 @Component({
   selector: 'login',
-  standalone: false,
   template: 'login',
 })
 class LoginComponent {}
@@ -330,7 +348,6 @@ class LoginComponent {}
 // It will be replaced with a mock copy.
 @Component({
   selector: 'dashboard',
-  standalone: false,
   template: 'dashboard',
 })
 class DashboardComponent {}
@@ -357,7 +374,7 @@ class DashboardComponent {}
 class TargetModule {}
 
 describe('TestRoutingGuard:canActivate', () => {
-  // Because we want to test a canActive guard, it means that we want to
+  // Because we want to test a canActivate guard, it means that we want to
   // test its integration with RouterModule.
   // Therefore, RouterModule and the guard should be kept,
   // and the rest of the module which defines the route can be mocked.

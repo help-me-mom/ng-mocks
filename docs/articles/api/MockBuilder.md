@@ -483,11 +483,16 @@ It covers `canActivate`, `canActivateChild`, `canDeactivate`, `canLoad`, and `ca
 with class guards, injection tokens, and functional guards.
 It's useful if you want to test a specific guard. 
 To do so, you need to [`.exclude`](#exclude) `NG_MOCKS_GUARDS` and to [`.keep`](#keep) the guard.
+Keep [`NG_MOCKS_ROOT_PROVIDERS`](#ng_mocks_root_providers-token) as well so the router's root services remain available.
 
 ```ts
 beforeEach(() => {
   return MockBuilder(
-      [RouterModule, RouterTestingModule.withRoutes([])],
+      [
+        RouterModule,
+        RouterTestingModule.withRoutes([]),
+        NG_MOCKS_ROOT_PROVIDERS,
+      ],
       ModuleWithRoutes,
     )
     .exclude(NG_MOCKS_GUARDS) // <- removes all guards
