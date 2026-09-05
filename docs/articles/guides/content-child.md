@@ -381,7 +381,7 @@ describe('TestContentChild:signals', () => {
     expect(target.first()).toBe(items[0]);
     expect(target.required()).toBe(items[0]);
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
     expect(items.map(item => item.signalContentItem)).toEqual([
       'first',

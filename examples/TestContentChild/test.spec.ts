@@ -45,6 +45,8 @@ class ChildDirective {
   @Input() public contentItem = '';
 }
 
+// View Engine needs a directive on the group to establish the same direct-child
+// query boundary as Ivy. The published Ivy example does not need this directive.
 @Directive({
   selector: '[contentGroup]',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
@@ -103,9 +105,11 @@ class TargetComponent implements AfterContentInit {
 class TargetModule {}
 
 describe('TestContentChild', () => {
+  // Reset child customizations after each test.
   MockInstance.scope();
 
   it('queries projected mocks and customizes them before content initialization', async () => {
+    // Keep the query owner real and customize its mock child before rendering.
     await MockBuilder(TargetComponent, TargetModule);
     MockInstance(
       ChildComponent,
@@ -116,6 +120,7 @@ describe('TestContentChild', () => {
       }),
     );
 
+    // Project components, directives, and a template through the host.
     const fixture = MockRender(
       `<target-content>
         <child-content [label]="label" (selected)="selected = $event"></child-content>
@@ -129,10 +134,12 @@ describe('TestContentChild', () => {
     const child = ngMocks.findInstance(ChildComponent);
     const items = ngMocks.findInstances(ChildDirective);
 
+    // Assert the query result, input binding, and initialization behavior.
     expect(target.child).toBe(child);
     expect(isMockOf(child, ChildComponent)).toBe(true);
     expect(child.label).toBe('projected');
     expect(target.value).toBe('mock value');
+    // Check read tokens and the projected template reference.
     expect(target.directive).toBe(items[0]);
     expect(target.element && target.element.nativeElement).toBe(
       ngMocks.find('span').nativeElement,
@@ -140,6 +147,7 @@ describe('TestContentChild', () => {
     expect(target.tpl && target.tpl.elementRef.nativeElement).toBe(
       ngMocks.findTemplateRef('tpl').elementRef.nativeElement,
     );
+    // Compare the direct children with the full descendant collection.
     expect(
       target.directItems && target.directItems.toArray(),
     ).toEqual([items[0]]);
@@ -151,12 +159,14 @@ describe('TestContentChild', () => {
       'nested',
     ]);
 
+    // Emit through the mock child and check the host's output binding.
     child.selected.emit('chosen');
     expect(fixture.componentInstance.selected).toBe('chosen');
     expect(ngMocks.formatText(fixture)).not.toContain('real child');
   });
 
   it('leaves a missing child undefined and a missing collection empty', async () => {
+    // Declaring dependencies does not create projected child instances.
     await MockBuilder(TargetComponent, TargetModule);
     MockRender(TargetComponent);
     const target = ngMocks.findInstance(TargetComponent);
@@ -174,6 +184,7 @@ describe('TestContentChild', () => {
   });
 
   it('renders a projected template when its query owner is mocked', async () => {
+    // Mock the component that receives the caller's template.
     await MockBuilder().mock(TargetComponent);
     const fixture = MockRender(
       '<target-content><ng-template #tpl let-value>value: {{ value }}</ng-template></target-content>',
@@ -181,14 +192,17 @@ describe('TestContentChild', () => {
     const target = ngMocks.findInstance(TargetComponent);
     const template = ngMocks.findTemplateRef('tpl');
 
+    // The query finds the template, which is initially unrendered.
     expect(target.tpl && target.tpl.elementRef.nativeElement).toBe(
       template.elementRef.nativeElement,
     );
     expect(ngMocks.formatText(fixture)).toBe('');
 
+    // Supply the implicit value and check the caller's rendered content.
     ngMocks.render(target, template, 'rendered');
     expect(ngMocks.formatText(fixture)).toBe('value: rendered');
 
+    // Hide the template and check that its content has been removed.
     ngMocks.hide(target, template);
     expect(ngMocks.formatText(fixture)).toBe('');
   });

@@ -83,6 +83,7 @@ describe('TestContentChild:static', () => {
     const target = ngMocks.findInstance(TargetComponent);
     const initial = ngMocks.findInstance(ItemDirective);
 
+    // Static queries are ready at OnInit; dynamic queries at AfterContentInit.
     expect(target.atInit).toBe(initial);
     expect(target.atContentInit).toBe(initial);
     expect(target.staticChild).toBe(initial);
@@ -91,6 +92,7 @@ describe('TestContentChild:static', () => {
       initial,
     ]);
 
+    // Observe collection changes when embedded content is inserted or removed.
     if (!target.children) {
       throw new Error('ContentChildren was not initialized');
     }
@@ -101,6 +103,7 @@ describe('TestContentChild:static', () => {
       },
     );
 
+    // Inserting a child updates dynamic queries but preserves the static result.
     host.slot.createEmbeddedView(host.extra);
     fixture.detectChanges();
     const inserted = ngMocks.findInstances(ItemDirective)[0];
@@ -110,6 +113,7 @@ describe('TestContentChild:static', () => {
     expect(target.children.toArray()).toEqual([inserted, initial]);
     expect(changes).toEqual([2]);
 
+    // Removing the view restores the initial dynamic result and collection.
     host.slot.clear();
     fixture.detectChanges();
     expect(target.dynamicChild).toBe(initial);
