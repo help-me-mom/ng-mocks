@@ -4,8 +4,9 @@ sidebar_label: AG Grid
 description: Examples of testing AG Grid inputs, outputs, Grid API calls, and custom cell renderers with ng-mocks.
 ---
 
-`AG Grid` is a UI library for displaying tabular data.
-Below you can find information on how to test a component that uses `ag-grid-angular`.
+`AG Grid` displays tabular data.
+To test a component that uses `ag-grid-angular`, mock the grid with `ng-mocks`,
+verify its input and output bindings, and test any custom cell renderers separately.
 
 Let's assume that a component uses `ag-grid-angular` like this:
 
@@ -303,22 +304,3 @@ it('refreshes the value without replacing the renderer', () => {
 [`cell-renderer.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/cell-renderer.spec.ts)
 also checks initialization on its own and verifies that a mocked grid preserves
 the renderer configuration without creating cells.
-
-## Testing standalone components
-
-The approach to test a standalone parent is the same as above.
-If `TargetComponent` imports `AgGridAngular` directly, the setup becomes:
-
-```ts
-beforeEach(() => MockBuilder(TargetComponent));
-```
-
-The input and output examples are in
-[`standalone.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/standalone.spec.ts).
-
-:::note
-The examples use AG Grid Community 36.1.0 with Angular 22, as installed in
-[`tests-e2e`](https://github.com/help-me-mom/ng-mocks/tree/main/tests-e2e/src/ag-grid).
-Keep `ag-grid-angular` and `ag-grid-community` on matching versions.
-AG Grid Enterprise is not required for these examples.
-:::
