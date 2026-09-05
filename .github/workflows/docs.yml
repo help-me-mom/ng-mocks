@@ -1,0 +1,42 @@
+name: 'Documentation'
+
+on:
+  push:
+    branches-ignore:
+      - 'renovate/**'
+      - 'dependabot/**'
+    tags:
+      - '**'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    name: Build documentation
+    if: >-
+      ${{ !startsWith(github.head_ref || github.ref_name, 'renovate/') &&
+          !startsWith(github.head_ref || github.ref_name, 'dependabot/') }}
+    runs-on: ubuntu-latest
+    container: satantime/puppeteer-node:24.19.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Install documentation dependencies
+        run: npm ci --prefix docs --no-audit
+
+      - name: Build documentation
+        run: npm run build:docs
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: docs
+          path: dist/docs
+          if-no-files-found: error
