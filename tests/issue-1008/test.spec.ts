@@ -71,7 +71,13 @@ describe('issue-1008', () => {
     const loader =
       typeof jest === 'undefined'
         ? spyOn(router.config[0], 'loadChildren').and.callThrough()
-        : jest.spyOn(router.config[0], 'loadChildren');
+        : jest.spyOn(
+            // Older Angular versions also allow legacy string loaders.
+            router.config[0] as {
+              loadChildren: () => Promise<typeof LazyModule>;
+            },
+            'loadChildren',
+          );
 
     expect(router.config[0].canLoad).toEqual([]);
     const result = await (fixture.ngZone
@@ -105,7 +111,13 @@ describe('issue-1008', () => {
     const loader =
       typeof jest === 'undefined'
         ? spyOn(router.config[0], 'loadChildren').and.callThrough()
-        : jest.spyOn(router.config[0], 'loadChildren');
+        : jest.spyOn(
+            // Older Angular versions also allow legacy string loaders.
+            router.config[0] as {
+              loadChildren: () => Promise<typeof LazyModule>;
+            },
+            'loadChildren',
+          );
 
     const guard =
       typeof jest === 'undefined'
