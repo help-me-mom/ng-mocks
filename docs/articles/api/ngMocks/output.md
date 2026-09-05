@@ -18,3 +18,6 @@ const outputEmitter = ngMocks.output(debugElement, 'update');
 ```ts
 const outputEmitter = ngMocks.output('app-component', 'update');
 ```
+
+For `ngSubmit`, see [testing Angular forms](/guides/libraries/angular-forms.md)
+for examples of emitting the output and triggering a native form submission.
