@@ -254,14 +254,20 @@ public modules = [AllCommunityModule];
 
 This registers modules for that grid without modifying global module registration.
 Keep the application's required feature modules and layout configuration when testing a real grid.
-Wait for initialization before inspecting the API, as explained in
-[AG Grid's Angular testing guide](https://www.ag-grid.com/angular-data-grid/testing/).
+Wait for `gridReady` before inspecting the API, and for `firstDataRendered`
+when inspecting rendered cells. Subscribe immediately after rendering, before
+yielding to the asynchronous event. Waiting for the relevant event also avoids
+depending on unrelated pending browser work through `fixture.whenStable()`.
+See [AG Grid's Angular testing guide](https://www.ag-grid.com/angular-data-grid/testing/)
+for more background.
 
 ```ts
+import { firstValueFrom } from 'rxjs';
+
 it('keeps the real grid', async () => {
   const fixture = MockRender(TargetComponent);
-  await fixture.whenStable();
   const grid = ngMocks.findInstance(AgGridAngular);
+  await firstValueFrom(grid.gridReady);
 
   expect(grid.api.getDisplayedRowCount()).toBe(
     fixture.point.componentInstance.rowData.length,

@@ -19,6 +19,7 @@ import {
   MockRender,
   ngMocks,
 } from 'ng-mocks';
+import { firstValueFrom } from 'rxjs';
 
 interface Row {
   make: string;
@@ -120,8 +121,8 @@ describe('ag-grid:standalone', () => {
     it('initializes the real grid, receives gridReady, and updates rows', async () => {
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
-      await fixture.whenStable();
       const target = fixture.componentInstance;
+      await firstValueFrom(target.grid!.gridReady);
 
       expect(target.api).toBe(target.grid!.api);
       expect(target.api!.getDisplayedRowCount()).toBe(2);
@@ -150,8 +151,8 @@ describe('ag-grid:standalone', () => {
 
     it('keeps the real grid, updates rows, and destroys its API', async () => {
       const fixture = MockRender(TargetComponent);
-      await fixture.whenStable();
       const target = fixture.point.componentInstance;
+      await firstValueFrom(target.grid!.gridReady);
       const api = target.api!;
 
       expect(isMockOf(target.grid, AgGridAngular)).toBe(false);

@@ -15,6 +15,7 @@ import {
   ICellRendererParams,
 } from 'ag-grid-community';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 class PriceService {
@@ -142,8 +143,8 @@ describe('ag-grid:cell-renderer:keep', () => {
 
   it('creates the Angular cell renderer in a kept module-based grid', async () => {
     const fixture = MockRender(TargetComponent);
-    await fixture.whenStable();
     const grid = ngMocks.findInstance(AgGridAngular);
+    await firstValueFrom(grid.firstDataRendered);
 
     expect(grid.api.getDisplayedRowAtIndex(0)!.data).toBe(
       fixture.point.componentInstance.rowData[0],
