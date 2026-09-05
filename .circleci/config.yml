@@ -346,6 +346,9 @@ jobs:
             - run:
                 name: Docs
                 command: npm run build:docs
+            - store_artifacts:
+                path: dist/docs
+                destination: docs
   Performance:
     executor: core
     steps:
