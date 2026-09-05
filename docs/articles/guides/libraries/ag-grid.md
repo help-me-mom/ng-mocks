@@ -1,24 +1,13 @@
 ---
-title: How to test AG Grid in Angular applications
+title: How to test the usage of AG Grid in Angular applications
 sidebar_label: AG Grid
-description: Mock AG Grid inputs, outputs, and Grid API calls, test custom cell renderers, or keep the real Angular grid.
+description: Examples of testing AG Grid inputs, outputs, Grid API calls, and custom cell renderers with ng-mocks.
 ---
 
-To test a component which uses `ag-grid-angular`, mock `AgGridAngular`
-and verify the application's input bindings, output handlers, and Grid API calls.
-For integration tests which need the grid itself, keep `AgGridAngular`.
+`AG Grid` is a UI library for displaying tabular data.
+Below you can find information on how to test a component that uses `ag-grid-angular`.
 
-The examples use AG Grid Community 36.1.0 with Angular 22, as installed in
-[`tests-e2e`](https://github.com/help-me-mom/ng-mocks/tree/main/tests-e2e/src/ag-grid).
-Keep `ag-grid-angular` and `ag-grid-community` on matching versions.
-These examples cover both `AgGridModule` and standalone `AgGridAngular` imports.
-They do not require AG Grid Enterprise.
-
-## Component under test
-
-For example, a component passes rows, columns, default column settings,
-and selection options to AG Grid. It sizes columns when the grid is ready
-and displays the row clicked by the user:
+Let's assume that a component uses `ag-grid-angular` like this:
 
 ```html
 <ag-grid-angular
@@ -32,151 +21,132 @@ and displays the row clicked by the user:
 <span>{{ selectedRow?.make }}</span>
 ```
 
-The relevant properties and handler of `TargetComponent` are:
+A test of such a template requires us to:
+
+- mock `ag-grid-angular`
+- assert passed inputs
+- assert listeners on outputs
+- provide the Grid API methods used by the component
+- assert custom cell renderers if the grid uses them
+
+## Spec file
+
+With [`MockBuilder`](/api/MockBuilder.md), our spec file needs a single line to provide mocks:
 
 ```ts
-import {
-  ColDef,
-  GridOptions,
-  GridReadyEvent,
-} from 'ag-grid-community';
-
-interface Row {
-  make: string;
-  price: number;
-}
-
-// Inside TargetComponent:
-public rowData: Row[] = [{ make: 'Toyota', price: 35_000 }];
-public columnDefs: ColDef<Row>[] = [
-  { field: 'make' },
-  { field: 'price' },
-];
-public defaultColDef: ColDef<Row> = { sortable: true };
-public gridOptions: GridOptions<Row> = {
-  rowSelection: { mode: 'singleRow' },
-};
-public selectedRow?: Row;
-
-public onGridReady(event: GridReadyEvent<Row>): void {
-  event.api.sizeColumnsToFit();
-}
-```
-
-The complete component and module are in
-[`classic.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/classic.spec.ts).
-
-## Mocking AG Grid
-
-If `TargetComponent` belongs to `TargetModule`, which imports `AgGridModule`,
-use [`MockBuilder`](/api/MockBuilder.md) to keep the parent and mock its dependencies:
-
-```ts
-import { ChangeDetectorRef } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-
 beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 ```
 
-For a standalone parent with `imports: [AgGridAngular]`, use:
+Where `TargetComponent` is a component which uses `ag-grid-angular`,
+and `TargetModule` is its module, which imports `AgGridModule`.
+The complete component, its `Row` type, and its module are in
+[`test.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/test.spec.ts).
 
-```ts
-beforeEach(() => MockBuilder(TargetComponent));
-```
+## Testing inputs of ag-grid-angular
 
-With `TestBed`, the module-based equivalent uses [`MockModule`](/api/MockModule.md):
+In this test we need to verify that the grid receives the parent's rows,
+columns, default column settings, and grid options.
+We also check that replacing the rows updates the binding.
 
-```ts
-beforeEach(() =>
-  TestBed.configureTestingModule({
-    declarations: [TargetComponent],
-    imports: [MockModule(AgGridModule)],
-  }).compileComponents(),
-);
-```
+The tools from `ng-mocks` we need:
 
-For a standalone parent, replace its own import using
-[`MockComponent`](/api/MockComponent.md):
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.reveal`](/api/ngMocks/reveal.md): to find a debug element of `AgGridAngular`
+- [`ngMocks.input`](/api/ngMocks/input.md): to get an input's value
 
-```ts
-beforeEach(() =>
-  TestBed.configureTestingModule({
-    imports: [TargetComponent],
-  })
-    .overrideComponent(TargetComponent, {
-      remove: { imports: [AgGridAngular] },
-      add: { imports: [MockComponent(AgGridAngular)] },
-    })
-    .compileComponents(),
-);
-```
-
-A mocked grid preserves Angular bindings and component queries.
-It does not create rows, initialize a Grid API, or emit `gridReady` automatically.
-Grid modules, themes, and browser layout are unnecessary for these mocked tests.
-
-## Testing inputs
-
-Use [`ngMocks.find`](/api/ngMocks/find.md) to locate the grid and
-[`ngMocks.input`](/api/ngMocks/input.md) to inspect its inputs.
-Changes in the parent should reach the mock after change detection.
 After directly assigning a field, mark the parent for checking so the example
-also works with `OnPush` change detection (the default in Angular 22):
+also works with `OnPush` change detection.
 
 ```ts
-it('binds inputs and updates row data', () => {
+it('binds inputs', () => {
+  // Rendering TargetComponent and accessing its instance.
   const fixture = MockRender(TargetComponent);
-  const target = fixture.point.componentInstance;
-  const grid = ngMocks.find(AgGridAngular);
+  const targetComponent = fixture.point.componentInstance;
 
-  expect(ngMocks.input(grid, 'rowData')).toBe(target.rowData);
-  expect(ngMocks.input(grid, 'columnDefs')).toBe(target.columnDefs);
-  expect(ngMocks.input(grid, 'defaultColDef')).toBe(
-    target.defaultColDef,
+  // Looking for a debug element of `AgGridAngular`.
+  const gridEl = ngMocks.reveal<AgGridAngular<Row>>(AgGridAngular);
+
+  // Asserting bound properties.
+  expect(ngMocks.input(gridEl, 'rowData')).toBe(
+    targetComponent.rowData,
   );
-  expect(ngMocks.input(grid, 'gridOptions')).toBe(target.gridOptions);
+  expect(ngMocks.input(gridEl, 'columnDefs')).toBe(
+    targetComponent.columnDefs,
+  );
+  expect(ngMocks.input(gridEl, 'defaultColDef')).toBe(
+    targetComponent.defaultColDef,
+  );
+  expect(ngMocks.input(gridEl, 'gridOptions')).toBe(
+    targetComponent.gridOptions,
+  );
 
-  target.rowData = [{ make: 'Ford', price: 32_000 }];
+  // Checking that the mock is available through ViewChild and has no grid artifacts.
+  expect(isMockOf(gridEl.componentInstance, AgGridAngular)).toBe(
+    true,
+  );
+  expect(targetComponent.grid).toBe(gridEl.componentInstance);
+  expect(targetComponent.grid!.api).toBeUndefined();
+  expect(ngMocks.formatHtml(gridEl)).toEqual('');
+
+  // Updating an input and checking its binding again.
+  targetComponent.rowData = [{ make: 'Ford', price: 32_000 }];
   fixture.point.injector.get(ChangeDetectorRef).markForCheck();
   fixture.detectChanges();
 
-  expect(ngMocks.input(grid, 'rowData')).toBe(target.rowData);
+  expect(ngMocks.input(gridEl, 'rowData')).toBe(
+    targetComponent.rowData,
+  );
 });
 ```
 
-## Testing outputs and Grid API calls
+## Testing outputs of ag-grid-angular
 
-Use [`ngMocks.output`](/api/ngMocks/output.md) to emit events and assert
-what the parent does with their payloads:
+The component listens to `rowClicked` and displays the selected row's make.
+To test the binding, emit a row through the mocked output and assert its effect.
+
+The tools from `ng-mocks` we need:
+
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+- [`ngMocks.reveal`](/api/ngMocks/reveal.md): to find a debug element of `AgGridAngular`
+- [`ngMocks.output`](/api/ngMocks/output.md): to get an output's `EventEmitter`
 
 ```ts
-import { RowClickedEvent } from 'ag-grid-community';
-
-it('handles rowClicked', () => {
+it('binds outputs', () => {
+  // Rendering TargetComponent and accessing its instance.
   const fixture = MockRender(TargetComponent);
-  const target = fixture.point.componentInstance;
-  const data = target.rowData[0];
+  const targetComponent = fixture.point.componentInstance;
+  const gridEl = ngMocks.reveal(AgGridAngular);
 
-  ngMocks.output('ag-grid-angular', 'rowClicked').emit({
-    data,
-  } as RowClickedEvent<Row>);
+  // Simulating an emit.
+  const data = targetComponent.rowData[0];
+  expect(targetComponent.selectedRow).toBeUndefined();
+  ngMocks
+    .output(gridEl, 'rowClicked')
+    .emit({ data } as RowClickedEvent<Row>);
   fixture.detectChanges();
 
-  expect(target.selectedRow).toBe(data);
-  expect(ngMocks.formatText(fixture)).toBe('Toyota');
+  // Asserting the effect of the emit.
+  expect(targetComponent.selectedRow).toBe(data);
+  expect(ngMocks.formatText(fixture)).toEqual('Toyota');
 });
 ```
 
-For `gridReady`, supply the API methods the handler actually uses.
-The type assertion below represents a partial event fixture; it does not create
-an implementation of the full Grid API.
+## Testing gridReady
+
+The approach to test `gridReady` is the same as above.
+In this example, `onGridReady` calls `event.api.sizeColumnsToFit()`.
+Supply that method in the event and assert that the handler calls it.
+
+The `GridApi<Row>` and `GridReadyEvent<Row>` types come from `ag-grid-community`.
+The type assertions describe partial test fixtures; the mock does not create a real Grid API.
 
 ```ts
-import { GridApi, GridReadyEvent } from 'ag-grid-community';
-
-it('sizes columns when the grid is ready', () => {
+it('handles gridReady', () => {
+  // Rendering TargetComponent and looking for the grid.
   MockRender(TargetComponent);
+  const gridEl = ngMocks.reveal(AgGridAngular);
+
+  // Providing the API method used by the gridReady handler.
   let calls = 0;
   const api = {
     sizeColumnsToFit: () => {
@@ -184,20 +154,20 @@ it('sizes columns when the grid is ready', () => {
     },
   } as GridApi<Row>;
 
+  // Simulating an emit.
   expect(calls).toBe(0);
-  ngMocks.output('ag-grid-angular', 'gridReady').emit({
-    api,
-  } as GridReadyEvent<Row>);
+  ngMocks
+    .output(gridEl, 'gridReady')
+    .emit({ api } as GridReadyEvent<Row>);
 
+  // Asserting the effect of the emit.
   expect(calls).toBe(1);
 });
 ```
 
-If the parent reads `api` through `@ViewChild(AgGridAngular)`, initialize
-that property with [`MockInstance`](/api/MockInstance.md) before rendering.
-`MockInstance.scope()` restores the customization after each test.
+## Testing Grid API access through ViewChild
 
-For a parent with these members:
+If the component accesses the grid through `ViewChild`, it might use these members:
 
 ```ts
 @ViewChild(AgGridAngular) public grid?: AgGridAngular<Row>;
@@ -207,97 +177,57 @@ public getSelectedRows(): Row[] {
 }
 ```
 
-The test can supply its own selection:
+The tools from `ng-mocks` we need:
+
+- [`MockInstance`](/api/MockInstance.md): to initialize the mock's `api` property before rendering
+- [`MockRender`](/api/MockRender.md): to render `TargetComponent` and get its instance
+
+Call `MockInstance.scope()` in the suite to restore the customization after each test:
 
 ```ts
-import { MockInstance } from 'ng-mocks';
-
 MockInstance.scope();
+```
 
-it('reads selected rows through ViewChild', () => {
+```ts
+it('provides a Grid API for ViewChild', () => {
+  // Customizing the mock before rendering TargetComponent.
   const selectedRows: Row[] = [{ make: 'Ford', price: 32_000 }];
   const api = {
     getSelectedRows: () => selectedRows,
   } as GridApi<Row>;
   MockInstance(AgGridAngular, 'api', api);
 
-  const target = MockRender(TargetComponent).point.componentInstance;
+  // Rendering TargetComponent and accessing its instance.
+  const targetComponent =
+    MockRender(TargetComponent).point.componentInstance;
 
-  expect(target.grid!.api).toBe(api);
-  expect(target.getSelectedRows()).toBe(selectedRows);
+  // Asserting access to the API through ViewChild.
+  expect(targetComponent.grid!.api).toBe(api);
+  expect(targetComponent.getSelectedRows()).toBe(selectedRows);
 });
 ```
-
-## Keeping the real grid
-
-Use `.keep(AgGridAngular)` when the test needs real grid behavior.
-For a module-based parent, keep `AgGridModule` instead.
-
-```ts
-// Standalone parent:
-beforeEach(() => MockBuilder(TargetComponent).keep(AgGridAngular));
-
-// Module-based parent:
-beforeEach(() =>
-  MockBuilder(TargetComponent, TargetModule).keep(AgGridModule),
-);
-```
-
-The real grid needs its usual AG Grid module setup. For a Community example,
-pass `[modules]="modules"` with the following property on the parent:
-
-```ts
-import { AllCommunityModule } from 'ag-grid-community';
-
-public modules = [AllCommunityModule];
-```
-
-This registers modules for that grid without modifying global module registration.
-Keep the application's required feature modules and layout configuration when testing a real grid.
-Wait for `gridReady` before inspecting the API, and for `firstDataRendered`
-when inspecting rendered cells. Subscribe immediately after rendering, before
-yielding to the asynchronous event. Waiting for the relevant event also avoids
-depending on unrelated pending browser work through `fixture.whenStable()`.
-See [AG Grid's Angular testing guide](https://www.ag-grid.com/angular-data-grid/testing/)
-for more background.
-
-```ts
-import { firstValueFrom } from 'rxjs';
-
-it('keeps the real grid', async () => {
-  const fixture = MockRender(TargetComponent);
-  const grid = ngMocks.findInstance(AgGridAngular);
-  await firstValueFrom(grid.gridReady);
-
-  expect(grid.api.getDisplayedRowCount()).toBe(
-    fixture.point.componentInstance.rowData.length,
-  );
-  expect(grid.api.getDisplayedRowAtIndex(0)!.data).toBe(
-    fixture.point.componentInstance.rowData[0],
-  );
-});
-```
-
-[`standalone.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/standalone.spec.ts)
-compares a real `TestBed` grid with the kept grid and checks row updates and destruction.
-These assertions use the row model API. For layout, scrolling, and virtualization,
-use browser tests: simulated DOM environments such as jsdom do not implement CSS layout.
 
 ## Testing custom cell renderers
 
-AG Grid instantiates Angular cell components referenced by a column's
-`cellRenderer`, for example `{ field: 'price', cellRenderer: PriceCellComponent }`.
-A mocked `AgGridAngular` does not instantiate those components.
-They are not projected `ng-template` content, so test the renderer separately
-with `MockBuilder` and `MockRender`.
-
-A renderer can use an injected service to format the value:
+AG Grid creates Angular cell components referenced by a column's `cellRenderer`.
+For example, a price column can use this definition:
 
 ```ts
-import { ChangeDetectorRef, Component, Injectable } from '@angular/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { ICellRendererParams } from 'ag-grid-community';
+{ field: 'price', cellRenderer: PriceCellComponent }
+```
 
+A mocked grid receives the column definition but does not create the cell component.
+Test the cell component separately, supplying the parameters that AG Grid passes to it.
+
+:::note
+`agInit` and `refresh` are called by AG Grid. Angular does not invoke them as lifecycle hooks.
+Cell components are created dynamically, so use [`MockRender`](/api/MockRender.md)
+to test their templates. The [`ngMocks.render`](/api/ngMocks/render.md) helper is for projected templates.
+:::
+
+For example, `PriceCellComponent` uses `PriceService` to format the supplied value:
+
+```ts
 @Injectable({ providedIn: 'root' })
 class PriceService {
   public format(value: number): string {
@@ -326,8 +256,13 @@ class PriceCellComponent implements ICellRendererAngularComp {
 }
 ```
 
-Call `agInit` explicitly: it is invoked by AG Grid, not by Angular's lifecycle.
-Stub the renderer's dependencies as in any other component test:
+The tools from `ng-mocks` we need:
+
+- [`MockBuilder`](/api/MockBuilder.md): to keep the cell component and mock its service
+- [`MockRender`](/api/MockRender.md): to render the cell component and get its instance
+- [`ngMocks.formatText`](/api/ngMocks/formatText.md): to read the rendered value
+
+The setup provides a predictable result from the formatting service:
 
 ```ts
 beforeEach(() =>
@@ -335,30 +270,118 @@ beforeEach(() =>
     format: value => `price: ${value}`,
   }),
 );
+```
 
-it('renders and refreshes a cell', () => {
+Call `agInit` with the initial value, then `refresh` with a new value,
+and assert the rendered text after each call:
+
+```ts
+it('refreshes the value without replacing the renderer', () => {
+  // Rendering the cell component and accessing its instance.
   const fixture = MockRender(PriceCellComponent);
   const renderer = fixture.point.componentInstance;
 
+  // Initializing the cell as AG Grid would.
   renderer.agInit({ value: 35_000 } as ICellRendererParams);
   fixture.point.injector.get(ChangeDetectorRef).markForCheck();
   fixture.detectChanges();
-  expect(ngMocks.formatText(fixture)).toBe('price: 35000');
+  expect(ngMocks.formatText(fixture)).toEqual('price: 35000');
 
+  // Refreshing the cell with a new value.
   expect(
     renderer.refresh({ value: 32_000 } as ICellRendererParams),
   ).toBe(true);
   fixture.point.injector.get(ChangeDetectorRef).markForCheck();
   fixture.detectChanges();
-  expect(ngMocks.formatText(fixture)).toBe('price: 32000');
+
+  // Asserting that the same renderer displays the new value.
+  expect(fixture.point.componentInstance).toBe(renderer);
+  expect(ngMocks.formatText(fixture)).toEqual('price: 32000');
 });
 ```
 
-See the executable renderer tests in
-[`cell-renderer.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/cell-renderer.spec.ts).
+[`cell-renderer.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/cell-renderer.spec.ts)
+also checks initialization on its own and verifies that a mocked grid preserves
+the renderer configuration without creating cells.
 
-To exercise the renderer inside a real module-based grid, keep the grid module,
-the renderer, and any dependencies which should retain their real behavior:
+## Testing standalone components
+
+The approach to test a standalone parent is the same as above.
+If `TargetComponent` imports `AgGridAngular` directly, the setup becomes:
+
+```ts
+beforeEach(() => MockBuilder(TargetComponent));
+```
+
+The input and output examples are in
+[`standalone.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/standalone.spec.ts).
+
+## Keeping the real grid
+
+Use [`.keep`](/api/MockBuilder.md#keep) when the test needs the real grid.
+For a standalone parent, keep `AgGridAngular`:
+
+```ts
+beforeEach(() => MockBuilder(TargetComponent).keep(AgGridAngular));
+```
+
+The real grid needs its usual module setup. The standalone example passes
+`[modules]="modules"` to the grid and declares this property:
+
+```ts
+import { AllCommunityModule } from 'ag-grid-community';
+
+// Inside TargetComponent:
+public modules = [AllCommunityModule];
+```
+
+This registers the Community modules for that grid.
+The parent stores `event.api` in its `gridReady` handler and exposes the grid through `ViewChild`.
+
+Wait for the grid's `gridReady` event before inspecting its API.
+Import `firstValueFrom` from `rxjs` and subscribe immediately after rendering,
+before yielding to the asynchronous event. This avoids depending on unrelated
+pending browser work through `fixture.whenStable()`.
+
+```ts
+it('keeps the real grid, updates rows, and destroys its API', async () => {
+  // Rendering TargetComponent and accessing its instance.
+  const fixture = MockRender(TargetComponent);
+  const targetComponent = fixture.point.componentInstance;
+
+  // Waiting for the grid API before checking its data.
+  await firstValueFrom(targetComponent.grid!.gridReady);
+  const api = targetComponent.api!;
+
+  expect(isMockOf(targetComponent.grid, AgGridAngular)).toBe(
+    false,
+  );
+  expect(api).toBe(targetComponent.grid!.api);
+  expect(api.getDisplayedRowCount()).toBe(2);
+  expect(api.getDisplayedRowAtIndex(0)!.data).toBe(
+    targetComponent.rowData[0],
+  );
+
+  // Updating the bound rows and checking the real row model.
+  targetComponent.rowData = [{ make: 'Honda' }];
+  fixture.point.injector.get(ChangeDetectorRef).markForCheck();
+  fixture.detectChanges();
+
+  expect(api.getDisplayedRowCount()).toBe(1);
+  expect(api.getDisplayedRowAtIndex(0)!.data).toBe(
+    targetComponent.rowData[0],
+  );
+
+  // Checking that Angular teardown destroys the grid.
+  expect(api.isDestroyed()).toBe(false);
+  fixture.destroy();
+  expect(api.isDestroyed()).toBe(true);
+});
+```
+
+For a module-based parent, keep `AgGridModule` instead.
+To check a custom cell inside that grid, keep the renderer and the dependencies
+which should retain their real behavior:
 
 ```ts
 beforeEach(() =>
@@ -369,8 +392,48 @@ beforeEach(() =>
 );
 ```
 
-Here `TargetModule` imports `AgGridModule` and `PriceCellComponent`, and the parent
-passes `{ field: 'price', cellRenderer: PriceCellComponent }` in `columnDefs`.
-The same spec file verifies that AG Grid creates the renderer and displays the
-formatted value. Its small grid disables column virtualization so this assertion
-also works without browser layout; this does not test virtualization itself.
+Here `TargetModule` imports `AgGridModule` and `PriceCellComponent`.
+The test in `cell-renderer.spec.ts` waits for `firstDataRendered` and verifies
+that the real grid displays the formatted value. It disables column virtualization
+for its small grid so the assertion also works without browser layout.
+
+Use browser tests for layout, scrolling, and virtualization.
+See [AG Grid's Angular testing guide](https://www.ag-grid.com/angular-data-grid/testing/)
+for more background on simulated DOM limitations.
+
+## Using TestBed directly
+
+The module-based setup with [`MockModule`](/api/MockModule.md) is:
+
+```ts
+beforeEach(() =>
+  TestBed.configureTestingModule({
+    declarations: [TargetComponent],
+    imports: [MockModule(AgGridModule)],
+  }).compileComponents(),
+);
+```
+
+For a standalone parent, replace its import with [`MockComponent`](/api/MockComponent.md):
+
+```ts
+beforeEach(() =>
+  TestBed.configureTestingModule({
+    imports: [TargetComponent],
+  })
+    .overrideComponent(TargetComponent, {
+      remove: { imports: [AgGridAngular] },
+      add: { imports: [MockComponent(AgGridAngular)] },
+    })
+    .compileComponents(),
+);
+```
+
+Both alternatives are covered by the corresponding spec files linked above.
+
+:::note
+The examples use AG Grid Community 36.1.0 with Angular 22, as installed in
+[`tests-e2e`](https://github.com/help-me-mom/ng-mocks/tree/main/tests-e2e/src/ag-grid).
+Keep `ag-grid-angular` and `ag-grid-community` on matching versions.
+AG Grid Enterprise is not required for these examples.
+:::

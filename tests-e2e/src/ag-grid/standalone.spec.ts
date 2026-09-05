@@ -61,30 +61,39 @@ describe('ag-grid:standalone', () => {
     beforeEach(() => MockBuilder(TargetComponent));
 
     it('mocks the standalone import and binds its inputs', () => {
-      const target =
+      // Rendering TargetComponent and accessing its instance.
+      const targetComponent =
         MockRender(TargetComponent).point.componentInstance;
-      const grid = ngMocks.findInstance(AgGridAngular);
 
-      expect(isMockOf(grid, AgGridAngular)).toBe(true);
-      expect(grid.rowData).toBe(target.rowData);
-      expect(grid.columnDefs).toBe(target.columnDefs);
-      expect(grid.modules).toBe(target.modules);
-      expect(target.grid).toBe(grid);
-      expect(grid.api).toBeUndefined();
-      expect(target.api).toBeUndefined();
+      // Looking for the `AgGridAngular` instance.
+      const gridComponent = ngMocks.findInstance(AgGridAngular);
+
+      expect(isMockOf(gridComponent, AgGridAngular)).toBe(true);
+      expect(gridComponent.rowData).toBe(targetComponent.rowData);
+      expect(gridComponent.columnDefs).toBe(
+        targetComponent.columnDefs,
+      );
+      expect(gridComponent.modules).toBe(targetComponent.modules);
+      expect(targetComponent.grid).toBe(gridComponent);
+      expect(gridComponent.api).toBeUndefined();
+      expect(targetComponent.api).toBeUndefined();
     });
 
     it('connects the standalone output to the parent', () => {
+      // Rendering TargetComponent and accessing its instance.
       const fixture = MockRender(TargetComponent);
       const data = fixture.point.componentInstance.rowData[1];
 
+      // Looking for the grid and simulating an emit.
+      const gridEl = ngMocks.reveal(AgGridAngular);
       ngMocks
-        .output('ag-grid-angular', 'rowClicked')
+        .output(gridEl, 'rowClicked')
         .emit({ data } as RowClickedEvent<Row>);
       fixture.detectChanges();
 
+      // Asserting the effect of the emit.
       expect(fixture.point.componentInstance.selectedRow).toBe(data);
-      expect(ngMocks.formatText(fixture)).toBe('Ford');
+      expect(ngMocks.formatText(fixture)).toEqual('Ford');
     });
   });
 
@@ -101,13 +110,17 @@ describe('ag-grid:standalone', () => {
     );
 
     it('replaces the standalone import with TestBed', () => {
+      // Rendering TargetComponent with TestBed.
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
 
-      const grid = ngMocks.findInstance(AgGridAngular);
-      expect(isMockOf(grid, AgGridAngular)).toBe(true);
-      expect(grid.rowData).toBe(fixture.componentInstance.rowData);
-      expect(grid.api).toBeUndefined();
+      // Looking for the `AgGridAngular` instance.
+      const gridComponent = ngMocks.findInstance(AgGridAngular);
+      expect(isMockOf(gridComponent, AgGridAngular)).toBe(true);
+      expect(gridComponent.rowData).toBe(
+        fixture.componentInstance.rowData,
+      );
+      expect(gridComponent.api).toBeUndefined();
     });
   });
 
@@ -119,28 +132,32 @@ describe('ag-grid:standalone', () => {
     );
 
     it('initializes the real grid, receives gridReady, and updates rows', async () => {
+      // Rendering TargetComponent with TestBed.
       const fixture = TestBed.createComponent(TargetComponent);
       fixture.detectChanges();
-      const target = fixture.componentInstance;
-      await firstValueFrom(target.grid!.gridReady);
+      const targetComponent = fixture.componentInstance;
 
-      expect(target.api).toBe(target.grid!.api);
-      expect(target.api!.getDisplayedRowCount()).toBe(2);
-      expect(target.api!.getDisplayedRowAtIndex(0)!.data).toBe(
-        target.rowData[0],
-      );
-      expect(target.api!.getDisplayedRowAtIndex(1)!.data).toBe(
-        target.rowData[1],
-      );
+      // Waiting for the grid API before checking its data.
+      await firstValueFrom(targetComponent.grid!.gridReady);
 
-      target.rowData = [{ make: 'Honda' }];
+      expect(targetComponent.api).toBe(targetComponent.grid!.api);
+      expect(targetComponent.api!.getDisplayedRowCount()).toBe(2);
+      expect(
+        targetComponent.api!.getDisplayedRowAtIndex(0)!.data,
+      ).toBe(targetComponent.rowData[0]);
+      expect(
+        targetComponent.api!.getDisplayedRowAtIndex(1)!.data,
+      ).toBe(targetComponent.rowData[1]);
+
+      // Updating the bound rows and checking the real row model.
+      targetComponent.rowData = [{ make: 'Honda' }];
       fixture.changeDetectorRef.markForCheck();
       fixture.detectChanges();
 
-      expect(target.api!.getDisplayedRowCount()).toBe(1);
-      expect(target.api!.getDisplayedRowAtIndex(0)!.data).toBe(
-        target.rowData[0],
-      );
+      expect(targetComponent.api!.getDisplayedRowCount()).toBe(1);
+      expect(
+        targetComponent.api!.getDisplayedRowAtIndex(0)!.data,
+      ).toBe(targetComponent.rowData[0]);
     });
   });
 
@@ -150,26 +167,34 @@ describe('ag-grid:standalone', () => {
     );
 
     it('keeps the real grid, updates rows, and destroys its API', async () => {
+      // Rendering TargetComponent and accessing its instance.
       const fixture = MockRender(TargetComponent);
-      const target = fixture.point.componentInstance;
-      await firstValueFrom(target.grid!.gridReady);
-      const api = target.api!;
+      const targetComponent = fixture.point.componentInstance;
 
-      expect(isMockOf(target.grid, AgGridAngular)).toBe(false);
-      expect(api).toBe(target.grid!.api);
+      // Waiting for the grid API before checking its data.
+      await firstValueFrom(targetComponent.grid!.gridReady);
+      const api = targetComponent.api!;
+
+      expect(isMockOf(targetComponent.grid, AgGridAngular)).toBe(
+        false,
+      );
+      expect(api).toBe(targetComponent.grid!.api);
       expect(api.getDisplayedRowCount()).toBe(2);
       expect(api.getDisplayedRowAtIndex(0)!.data).toBe(
-        target.rowData[0],
+        targetComponent.rowData[0],
       );
 
-      target.rowData = [{ make: 'Honda' }];
+      // Updating the bound rows and checking the real row model.
+      targetComponent.rowData = [{ make: 'Honda' }];
       fixture.point.injector.get(ChangeDetectorRef).markForCheck();
       fixture.detectChanges();
 
       expect(api.getDisplayedRowCount()).toBe(1);
       expect(api.getDisplayedRowAtIndex(0)!.data).toBe(
-        target.rowData[0],
+        targetComponent.rowData[0],
       );
+
+      // Checking that Angular teardown destroys the grid.
       expect(api.isDestroyed()).toBe(false);
       fixture.destroy();
       expect(api.isDestroyed()).toBe(true);

@@ -53,37 +53,44 @@ describe('ag-grid:cell-renderer', () => {
   );
 
   it('renders the value supplied through agInit', () => {
+    // Rendering the cell component and accessing its instance.
     const fixture = MockRender(PriceCellComponent);
 
     // AG Grid calls agInit; Angular does not treat it as a lifecycle hook or an input.
-    expect(ngMocks.formatText(fixture)).toBe('');
+    expect(ngMocks.formatText(fixture)).toEqual('');
     fixture.point.componentInstance.agInit({
       value: 35_000,
     } as ICellRendererParams);
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();
 
+    // Asserting the rendered cell.
     expect(ngMocks.formatHtml(fixture)).toContain(
       '<strong>price: 35000</strong>',
     );
   });
 
   it('refreshes the value without replacing the renderer', () => {
+    // Rendering the cell component and accessing its instance.
     const fixture = MockRender(PriceCellComponent);
     const renderer = fixture.point.componentInstance;
+
+    // Initializing the cell as AG Grid would.
     renderer.agInit({ value: 35_000 } as ICellRendererParams);
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();
-    expect(ngMocks.formatText(fixture)).toBe('price: 35000');
+    expect(ngMocks.formatText(fixture)).toEqual('price: 35000');
 
+    // Refreshing the cell with a new value.
     expect(
       renderer.refresh({ value: 32_000 } as ICellRendererParams),
     ).toBe(true);
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();
 
+    // Asserting that the same renderer displays the new value.
     expect(fixture.point.componentInstance).toBe(renderer);
-    expect(ngMocks.formatText(fixture)).toBe('price: 32000');
+    expect(ngMocks.formatText(fixture)).toEqual('price: 32000');
   });
 });
 
@@ -119,16 +126,18 @@ describe('ag-grid:cell-renderer:mock', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('passes the renderer configuration without creating cells', () => {
+    // Rendering TargetComponent.
     const fixture = MockRender(TargetComponent);
-    const target = fixture.point.componentInstance;
-    const grid = ngMocks.findInstance(AgGridAngular);
+    const targetComponent = fixture.point.componentInstance;
+    const gridComponent = ngMocks.findInstance(AgGridAngular);
 
-    expect(grid.columnDefs).toBe(target.columnDefs);
-    expect(target.columnDefs[0].cellRenderer).toBe(
+    // Checking the configuration and the absence of rendered cells.
+    expect(gridComponent.columnDefs).toBe(targetComponent.columnDefs);
+    expect(targetComponent.columnDefs[0].cellRenderer).toBe(
       PriceCellComponent,
     );
     expect(ngMocks.findInstances(PriceCellComponent)).toEqual([]);
-    expect(ngMocks.formatText(fixture)).toBe('');
+    expect(ngMocks.formatText(fixture)).toEqual('');
   });
 });
 
@@ -142,14 +151,20 @@ describe('ag-grid:cell-renderer:keep', () => {
   );
 
   it('creates the Angular cell renderer in a kept module-based grid', async () => {
+    // Rendering TargetComponent.
     const fixture = MockRender(TargetComponent);
-    const grid = ngMocks.findInstance(AgGridAngular);
-    await firstValueFrom(grid.firstDataRendered);
+    const gridComponent = ngMocks.findInstance(AgGridAngular);
 
-    expect(grid.api.getDisplayedRowAtIndex(0)!.data).toBe(
+    // Waiting until AG Grid has rendered its first cells.
+    await firstValueFrom(gridComponent.firstDataRendered);
+
+    // Asserting the real row, renderer, and formatted value.
+    expect(gridComponent.api.getDisplayedRowAtIndex(0)!.data).toBe(
       fixture.point.componentInstance.rowData[0],
     );
-    expect(grid.api.getCellRendererInstances().length).toBe(1);
+    expect(gridComponent.api.getCellRendererInstances().length).toBe(
+      1,
+    );
     expect(ngMocks.formatText(fixture)).toContain('€35000');
   });
 });
