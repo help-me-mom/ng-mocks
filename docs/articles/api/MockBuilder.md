@@ -478,7 +478,9 @@ even if it has been imported or declared in nested modules.
 
 ### `NG_MOCKS_GUARDS` token
 
-`NG_MOCKS_GUARDS` helps to **remove guards from all routes** in a test.
+`NG_MOCKS_GUARDS` helps to **remove guards from routes processed by `MockBuilder`**, including nested `children`.
+It covers `canActivate`, `canActivateChild`, `canDeactivate`, `canLoad`, and `canMatch`,
+with class guards, injection tokens, and functional guards.
 It's useful if you want to test a specific guard. 
 To do so, you need to [`.exclude`](#exclude) `NG_MOCKS_GUARDS` and to [`.keep`](#keep) the guard.
 
@@ -493,6 +495,14 @@ beforeEach(() => {
   ;
 });
 ```
+
+Mocked guards are removed from route arrays even when customized with `.mock(...)`; their mock providers remain available.
+A guard kept with `.keep(...)` remains in those arrays. Pair `.keep(...)` with `.provide(...)` if you also want to override its provider.
+Without `.exclude(NG_MOCKS_GUARDS)`, guards remain in the route configuration unless individually excluded.
+The original route arrays are not modified.
+
+Routes supplied directly through `.provide(provideRouter(...))` are used as supplied, and lazy-loading callbacks are not executed to discover more routes.
+See [testing routing guards](../guides/routing-guard.md) for navigation assertions and lazy-module setup.
 
 ### `NG_MOCKS_RESOLVERS` token
 
