@@ -82,6 +82,26 @@
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 - When enabling new recommended lint rules, keep fixes that remain compatible with the supported Angular, Node.js, and ES targets. Disable rules that require newer framework APIs or runtime features, and leave a short reason beside the override.
 
+## Spec and Documentation Examples
+
+- Before adding or editing any spec or documentation, find and read the closest existing examples in the
+  repository. This is required even when the requested library or feature has no examples of its own.
+- Choose references by component purpose and tested behavior, across library boundaries. For example, a widget
+  that displays rows and columns should lead to existing table examples; form controls should lead to other form
+  controls. Compare input bindings, output events, rendered content, and mocked or kept dependencies. A shared
+  framework, adjacent directory, or recent addition alone does not make an example the closest match.
+- For library integrations, inspect both the analogous specs in `tests-e2e/src` and their guide in
+  `docs/articles/guides/libraries`. For other work, inspect the matching examples, feature specs, and API or guide
+  pages. Search with functional terms and synonyms, not only the package or API name; for tabular components, a
+  starting search is `rg -n -i 'table|grid|row|column' tests-e2e/src docs/articles/guides/libraries`.
+- Before implementation, record the chosen reference paths and why their behavior is similar in the task notes.
+  Follow their file and suite structure, naming, setup, ng-mocks helpers, comments, and assertion flow. Match the
+  guide's teaching order, tool links, and annotated snippets. Adapt API and runtime differences as needed, and
+  explain material departures from the chosen pattern.
+- Before finishing, compare the changes with those references and check documentation snippets against their
+  executable specs. If no close example exists, broaden the search to related behavior and local history before
+  introducing a new pattern, and note the gap.
+
 ## Test Style
 
 - Never add helper functions in tests. Keep the relevant setup, action, and assertion flow inline in each spec, even when that means duplicating a short block, so regressions stay obvious across Angular spread targets.
@@ -180,8 +200,8 @@
 
 ## Pull Request Quality
 
-- If current guidance and nearby code do not settle an implementation or documentation pattern, inspect analogous
-  local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
+- Follow `Spec and Documentation Examples` before changing specs or docs. If current guidance and the selected
+  examples still leave a pattern unclear, inspect analogous local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
 - Keep implementation narrow and follow `Test Style` for issue reproducers, compatibility gates, layered coverage,
   and preservation assertions.
 - Update API docs, compatibility tables, or migration guidance in the same PR when the documented public contract,

@@ -14,6 +14,7 @@ Create and maintain a plain Markdown checklist:
 ```md
 - [ ] Inspect repo state, source-of-truth docs, and the GitHub issue
 - [ ] Create a dedicated issue worktree from `upstream/main`
+- [ ] Find the closest functional examples and read their specs and docs before implementing
 - [ ] Reproduce the bug with a local `issue-*` regression test
 - [ ] Fix the implementation without changing the reproducer test
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
@@ -34,8 +35,12 @@ Create and maintain a plain Markdown checklist:
    - Use available GitHub access: `gh`, the GitHub web UI, the GitHub API, or any configured connector.
    - Prefer commands that are easy to reproduce, such as `gh issue view <issue-number> --repo help-me-mom/ng-mocks --comments`.
    - Search duplicates and related work with `gh issue list`, `gh pr list --search`, GitHub search, and local `git log --grep`.
-   - If current guidance and nearby code do not settle the pattern, inspect analogous local history or recent merged
-     non-bot PRs. Prefer human-authored examples over generated dependency-update text.
+   - Before adding or editing specs or docs, follow
+     [Spec and Documentation Examples](../../../AGENTS.md#spec-and-documentation-examples). Choose references by
+     component purpose and tested behavior across libraries, inspect both their specs and paired guides, and
+     record the reference paths before implementing. Follow those patterns in the new specs and documentation.
+   - If current guidance and the selected examples still leave a pattern unclear, inspect analogous local history
+     or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
    - Inspect prior fixes with similar symptoms: `git log --no-merges --oneline --all -- 'tests/issue-*' 'tests-e2e/src/issue-*' 'e2e/*/src/tests/issue-*'`.
 3. Create a dedicated worktree before changing files:
    - default branch name: `issues/<issue-number>`
