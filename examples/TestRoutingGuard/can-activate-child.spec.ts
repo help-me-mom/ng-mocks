@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   NgModule,
-  VERSION,
 } from '@angular/core';
 import {
   CanActivateChildFn,
@@ -42,7 +41,9 @@ const canActivateChildGuard: CanActivateChildFn = (route, state) => {
 
 // Another guard like in a real world example.
 // The guard should be removed from testing to avoid side effects on the route.
-const sideEffectGuard: CanActivateChildFn = () => false;
+const sideEffectGuard: CanActivateChildFn = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -103,7 +104,7 @@ describe('TestRoutingGuard:canActivateChild', () => {
   // The module with routes and the guard should be specified
   // as the second parameter of MockBuilder.
   // Then `NG_MOCKS_GUARDS` should be excluded to remove all guards,
-  // and `canActivateGuard` should be kept to let you test it.
+  // and `canActivateChildGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
@@ -119,12 +120,6 @@ describe('TestRoutingGuard:canActivateChild', () => {
 
   // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+'); // TODO pending
-
-      return;
-    }
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);

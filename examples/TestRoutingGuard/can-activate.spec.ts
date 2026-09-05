@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   NgModule,
-  VERSION,
 } from '@angular/core';
 import {
   CanActivateFn,
@@ -42,7 +41,9 @@ const canActivateGuard: CanActivateFn = (route, state) => {
 
 // Another guard like in a real world example.
 // The guard should be removed from testing to avoid side effects on the route.
-const sideEffectGuard: CanActivateFn = () => false;
+const sideEffectGuard: CanActivateFn = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -114,12 +115,6 @@ describe('TestRoutingGuard:canActivate', () => {
 
   // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+'); // TODO pending
-
-      return;
-    }
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);

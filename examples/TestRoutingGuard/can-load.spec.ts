@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   NgModule,
-  VERSION,
 } from '@angular/core';
 import {
   CanLoadFn,
@@ -23,7 +22,7 @@ import {
 } from 'ng-mocks';
 
 // A simple service simulating login check.
-// It will be replaced with it's mock copy.
+// It will be replaced with its mock copy.
 @Injectable()
 class LoginService {
   public isLoggedIn = false;
@@ -36,7 +35,9 @@ const canLoadGuard: CanLoadFn = (route, segments) => {
 
 // Another canLoad guard like in a real world example,
 // which should be removed from testing to avoid side effects on the route.
-const sideEffectCanLoadGuard: CanLoadFn = () => false;
+const sideEffectCanLoadGuard: CanLoadFn = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending to be a login form.
 // It will be replaced with a mock copy.
@@ -45,16 +46,20 @@ const sideEffectCanLoadGuard: CanLoadFn = () => false;
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'login',
 })
-class LoginComponent {}
+class LoginComponent {
+  public loginTestRoutingGuardCanLoad() {}
+}
 
 // A simple component pretending to be a protected dashboard.
-// It will be replaced with a mock copy.
+// Angular loads it from the lazy module.
 @Component({
   selector: 'dashboard',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: 'dashboard',
 })
-class DashboardComponent {}
+class DashboardComponent {
+  public dashboardTestRoutingGuardCanLoad() {}
+}
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -70,13 +75,14 @@ class DashboardComponent {}
       },
     ]),
   ],
-  exports: [],
 })
 class DashboardModule {}
 
+// The lazy module is loaded as-is by Angular. Its component is declared only
+// in DashboardModule; it is not part of the mocked root module.
 // Definition of the routing module.
 @NgModule({
-  declarations: [LoginComponent, DashboardComponent],
+  declarations: [LoginComponent],
   exports: [RouterModule],
   imports: [
     RouterModule.forRoot([
@@ -97,7 +103,7 @@ class TargetModule {}
 
 describe('TestRoutingGuard:canLoad', () => {
   // Because we want to test a canLoad guard, it means that we want to
-  // test it's integration with RouterModule.
+  // test its integration with RouterModule.
   // Therefore, RouterModule and guard should be kept,
   // and the rest of the module which defines the route can be mocked.
   // To configure the RouterModule for the test,
@@ -121,14 +127,12 @@ describe('TestRoutingGuard:canLoad', () => {
   });
 
   it('blocks dashboard and opens login', async () => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular  7+'); // TODO pending
-
-      return;
-    }
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[1], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[1], 'loadChildren');
     const location = ngMocks.get(Location);
 
     // First we need to initialize navigation.
@@ -140,6 +144,8 @@ describe('TestRoutingGuard:canLoad', () => {
       await fixture.whenStable();
 
       expect(result).toEqual(false);
+      expect(loader).not.toHaveBeenCalled();
+      expect(router.url).toEqual('/');
 
       await fixture.ngZone.run(() => router.navigateByUrl('/login'));
       await fixture.whenStable();
@@ -155,6 +161,10 @@ describe('TestRoutingGuard:canLoad', () => {
   it('loads dashboard', async () => {
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
+    const loader =
+      typeof jest === 'undefined'
+        ? spyOn(router.config[1], 'loadChildren').and.callThrough()
+        : jest.spyOn(router.config[1], 'loadChildren');
     const location = ngMocks.get(Location);
     const loginService = ngMocks.get(LoginService);
 
@@ -170,6 +180,7 @@ describe('TestRoutingGuard:canLoad', () => {
       await fixture.whenStable();
 
       expect(result).toEqual(true);
+      expect(loader).toHaveBeenCalledTimes(1);
     }
 
     // Because now we are logged in, the guard should let us land on

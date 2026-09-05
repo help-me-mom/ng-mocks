@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   NgModule,
-  VERSION,
 } from '@angular/core';
 import {
   CanMatchFn,
@@ -36,7 +35,9 @@ const canMatchGuard: CanMatchFn = (route, segments) => {
 
 // Another guard like in a real world example,
 // which should be removed from testing to avoid side effects on the route.
-const sideEffectGuard: CanMatchFn = () => false;
+const sideEffectGuard: CanMatchFn = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -96,7 +97,7 @@ describe('TestRoutingGuard:canMatch', () => {
   // The module with routes and the guard should be specified
   // as the second parameter of MockBuilder.
   // Then `NG_MOCKS_GUARDS` should be excluded to remove all guards,
-  // and `canActivateGuard` should be kept to let you test it.
+  // and `canMatchGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
@@ -112,28 +113,23 @@ describe('TestRoutingGuard:canMatch', () => {
 
   // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+'); // TODO pending
-
-      return;
-    }
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      await fixture.ngZone.run(() =>
+      const result = await fixture.ngZone.run(() =>
         router.navigateByUrl('/dashboard'),
       );
+      expect(result).toEqual(true);
       await fixture.whenStable(); // is needed for rendering of the current route.
     }
 
-    // Because by default we are not logged, the guard should
-    // redirect us /login page.
+    // Returning false skips the guarded route. The wildcard route redirects to login.
     expect(location.path()).toEqual('/login');
     expect(() => ngMocks.find(LoginComponent)).not.toThrow();
+    expect(ngMocks.find(DashboardComponent, null)).toBeNull();
   });
 
   it('loads dashboard', async () => {
@@ -147,9 +143,10 @@ describe('TestRoutingGuard:canMatch', () => {
 
     // First we need to initialize navigation.
     if (fixture.ngZone) {
-      await fixture.ngZone.run(() =>
+      const result = await fixture.ngZone.run(() =>
         router.navigateByUrl('/dashboard'),
       );
+      expect(result).toEqual(true);
       await fixture.whenStable(); // is needed for rendering of the current route.
     }
 

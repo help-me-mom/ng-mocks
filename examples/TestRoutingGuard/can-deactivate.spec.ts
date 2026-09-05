@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   NgModule,
-  VERSION,
 } from '@angular/core';
 import {
   CanDeactivateFn,
@@ -31,19 +30,21 @@ class LoginService {
 
 // A guard we want to test.
 const canDeactivateGuard: CanDeactivateFn<LoginComponent> = (
-  route,
-  state,
+  component,
+  currentRoute,
 ) => {
   return (
-    (route && state && inject(LoginService).isLoggedIn) ||
-    state.url.length === 0 ||
-    state.url[0].path !== 'login'
+    (component && currentRoute && inject(LoginService).isLoggedIn) ||
+    currentRoute.url.length === 0 ||
+    currentRoute.url[0].path !== 'login'
   );
 };
 
 // Another guard like in a real world example,
 // which should be removed from testing to avoid side effects on the route.
-const sideEffectGuard: CanDeactivateFn<LoginComponent> = () => false;
+const sideEffectGuard: CanDeactivateFn<LoginComponent> = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -99,7 +100,7 @@ describe('TestRoutingGuard:canDeactivate', () => {
   // The module with routes and the guard should be specified
   // as the second parameter of MockBuilder.
   // Then `NG_MOCKS_GUARDS` should be excluded to remove all guards,
-  // and `canActivateGuard` should be kept to let you test it.
+  // and `canDeactivateGuard` should be kept to let you test it.
   beforeEach(() => {
     return MockBuilder(
       [
@@ -115,12 +116,6 @@ describe('TestRoutingGuard:canDeactivate', () => {
 
   // It is important to wait for routing to become stable.
   it('cannot leave login', async () => {
-    if (Number.parseInt(VERSION.major, 10) < 7) {
-      pending('Need Angular 7+'); // TODO pending
-
-      return;
-    }
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
@@ -140,9 +135,14 @@ describe('TestRoutingGuard:canDeactivate', () => {
 
     // Trying to leave /login page.
     if (fixture.ngZone) {
-      fixture.ngZone.run(() => router.navigate(['/dashboard']));
+      const result = await fixture.ngZone.run(() =>
+        router.navigate(['/dashboard']),
+      );
       await fixture.whenStable();
+      expect(result).toEqual(false);
     }
+
+    expect(ngMocks.find(DashboardComponent, null)).toBeNull();
 
     // We are still at /login page due to the guard.
     expect(location.path()).toEqual('/login');

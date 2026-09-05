@@ -8,10 +8,11 @@ If you have not read ["How to test a route"](route.md), please do it first.
 
 To test a guard means that we need to mock everything except the guard and `RouterModule`.
 But, what if we have several guards? If we mocked them they would block routes due to falsy returns of their mocked methods.
-**To remove guards in Angular tests, `ng-mocks` provides the `NG_MOCKS_GUARDS` token**. We should pass it into `.exclude`, then all other guards will be
-excluded from `TestBed`, and we can be sure that we are **testing only the guard we want**.
+**To remove guards in Angular tests, `ng-mocks` provides the [`NG_MOCKS_GUARDS` token](/api/MockBuilder.md#ng_mocks_guards-token)**. We should pass it into `.exclude`, then all other guards will be
+removed from the route configuration processed by `MockBuilder`, and we can be sure that we are **testing only the guard we want**.
 
-The example below is applicable for all types of guards:
+The same [`MockBuilder`](/api/MockBuilder.md) setup applies to all five guard properties, including class and token guards.
+The functional examples require Angular 14.2 or newer:
 
 - `canActivate` -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate),
@@ -28,7 +29,7 @@ The example below is applicable for all types of guards:
 - `canLoad` -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad),
   [StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-load.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanLoad)
-- standalone applications (Angular 14+) -
+- standalone applications (Angular 14.2+) -
   [tested source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
 - class guards (legacy) -
   [CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/test.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3Atest),
@@ -36,12 +37,12 @@ The example below is applicable for all types of guards:
 
 ## Functional Guards
 
-A functional guard is a simple function, and not a service or a token how it was before Angular 14.
+A functional guard is a function used directly in a route configuration. Angular 14.2 introduced the functional guard APIs.
 A guard resides in the configuration of routes,
 which is defined as an import of `RouterModule.forRoot` or `RouterModule.forChild` in a module.
 
 To test a guard, you need the guard and the module which defines a route with the guard.
-For simplicity, let's call the guard `loginGuard`, and the module `TargetModule`.
+For simplicity, let's call the guard `canActivateGuard`, and the module `TargetModule`, as in the [live example](#live-example).
 
 The guard should be tested in isolation, to avoid side effects of other guards.
 Also, `RouterModule` and its dependencies should be provided in a test
@@ -69,8 +70,8 @@ beforeEach(() =>
   .exclude(NG_MOCKS_GUARDS)
   
   // chain
-  // keeping loginGuard for testing
-  .keep(loginGuard)
+  // keeping canActivateGuard for testing
+  .keep(canActivateGuard)
 );
 ```
 
@@ -83,13 +84,13 @@ Let's assert that:
 1. initialize navigation
 1. assert the location
 
-To render a router outlet, you can use `MockRender` with empty parameters.
+To render a router outlet, use [`MockRender`](/api/MockRender.md) with an empty object as the second parameter to leave the outlet's inputs untouched.
 
 ```ts
 const fixture = MockRender(RouterOutlet, {});
 ```
 
-Now, you can get `Router` and `Location`.
+Now, you can get `Router` and `Location` with [`ngMocks.get`](/api/ngMocks/get.md).
 The first one is needed for the initialization,
 the second one for assertion.
 
@@ -108,9 +109,6 @@ if (fixture.ngZone) {
 }
 ```
 
-For lazy-route guards such as `canLoad` and `canMatch`, it is often more useful to call `router.navigateByUrl(...)`
-for the protected URL and assert its boolean result before checking the rendered route.
-
 Now, the location can be asserted.
 
 ```ts
@@ -118,7 +116,62 @@ expect(location.path()).toEqual('/login');
 ```
 
 
-Profit, [an example of a test for a functional guard](#live-example).
+The [live example](#live-example) also uses [`ngMocks.find`](/api/ngMocks/find.md) to assert which component the route rendered.
+
+### Choosing the navigation to test
+
+Choose a navigation that actually invokes the guard under test:
+
+| Guard | Navigation to test | When the guard returns `false` |
+| --- | --- | --- |
+| `canActivate` | Enter the guarded route. | Navigation is cancelled. |
+| `canActivateChild` | Enter a child of the guarded route. | Navigation to the child is cancelled. |
+| `canDeactivate` | Enter the component's route first, then navigate away. | The current route and component remain active. |
+| `canMatch` | Navigate to a URL matching the guarded route. | Angular tries the next matching route; a fallback can still make navigation succeed. |
+| `canLoad` | Navigate to an unloaded route with `loadChildren`. | Navigation is cancelled and the lazy loader is not called. |
+
+A `false` result does not redirect by itself. The activation examples explicitly navigate to `/login`;
+the `canMatch` example reaches `/login` through its wildcard fallback.
+See Angular's [guard return types](https://angular.dev/guide/routing/route-guards#route-guard-return-types).
+
+### Testing lazy loading
+
+`canLoad` runs before loading a lazy module. In the [canLoad example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-load.spec.ts),
+the setup keeps `canLoadGuard`. The test leaves the mocked `LoginService.isLoggedIn` unset,
+so the guard treats the user as logged out. Mock services do not run the original constructor or field initializers.
+Render the outlet, spy on the second route's lazy loader, and assert both navigation and loading:
+
+```ts
+const fixture = MockRender(RouterOutlet, {});
+const router = ngMocks.get(Router);
+
+// Observe loading without replacing the module returned by the callback.
+const loader = spyOn(router.config[1], 'loadChildren').and.callThrough();
+
+// Attempt navigation before the lazy module has been loaded.
+if (fixture.ngZone) {
+  const result = await fixture.ngZone.run(() =>
+    router.navigateByUrl('/dashboard'),
+  );
+  await fixture.whenStable();
+
+  expect(result).toEqual(false);
+  expect(loader).not.toHaveBeenCalled();
+  expect(router.url).toEqual('/');
+}
+```
+
+Use a fresh test setup for the allowed case, set `ngMocks.get(LoginService).isLoggedIn = true`,
+then assert `true`, one loader call, and the dashboard component.
+Once Angular has loaded the module, subsequent navigation does not run `canLoad` again.
+The lazy module in the [canLoad example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-load.spec.ts)
+is loaded as-is: its declarations belong to that module alone.
+`MockBuilder` does not execute `loadChildren` to discover and mock its returned module.
+To isolate routes inside a lazy module, pass that module to `MockBuilder` as the module under test.
+
+Angular [deprecates `canLoad` in favor of `canMatch`](https://angular.dev/api/router/CanLoad).
+`canMatch` also works on eager routes; its `false` result skips a route instead of cancelling the whole navigation.
+
 
 ## Functional Guards In Standalone Applications
 
@@ -143,7 +196,9 @@ bootstrapApplication(TargetComponent, {
 });
 ```
 
-The test can pass the same standalone router providers to `MockBuilder` without introducing an extra `NgModule`.
+The test can pass standalone router providers to `MockBuilder` without introducing an extra `NgModule`.
+Providers passed through `.provide(...)` are used as supplied. Include only the guards under test in those routes;
+`.exclude(NG_MOCKS_GUARDS)` does not filter a route configuration supplied directly through `.provide(...)`.
 
 ```ts
 beforeEach(() => {
@@ -185,7 +240,7 @@ The full runnable example is available in [the standalone routing guard example]
 
 ## Class Guards (legacy)
 
-If your code has guards which a classes and angular services,
+If your guards are classes provided as Angular services,
 the process is exactly the same as for [functional guards](#functional-guards).
 
 For example, if the class of the guard is called `LoginGuard`,
@@ -217,13 +272,22 @@ beforeEach(() =>
 );
 ```
 
-Profit.
+For a guard referenced by an injection token, keep the token used in the route, for example `.keep(LOGIN_GUARD)`.
+Calling `.mock(LoginGuard)` still creates a mock provider, but `.exclude(NG_MOCKS_GUARDS)` removes that mocked guard from routes.
+To retain a guard with a controlled implementation, use `.keep(LoginGuard)` and spy on its method. You can also pair `.keep(LoginGuard)` with `.provide(...)` to override its provider.
+The [class canLoad regression](https://github.com/help-me-mom/ng-mocks/blob/main/tests/issue-1008/test.spec.ts)
+checks both removal and a retained guard that blocks lazy loading.
 
 ## Live example
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestRoutingGuard/can-activate.spec.ts&initialpath=%3Fspec%3DTestRoutingGuard%3AcanActivate)
 - [View the standalone example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/standalone.spec.ts)
+
+:::note Angular version
+This NgModule snippet uses Angular 14.2–18, where components belong to an NgModule by default.
+For standalone components, follow the [standalone guard setup](#functional-guards-in-standalone-applications).
+:::
 
 ```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestRoutingGuard/can-activate.spec.ts"
 import { Location } from '@angular/common';
@@ -269,7 +333,9 @@ const canActivateGuard: CanActivateFn = (route, state) => {
 
 // Another guard like in a real world example.
 // The guard should be removed from testing to avoid side effects on the route.
-const sideEffectGuard: CanActivateFn = () => false;
+const sideEffectGuard: CanActivateFn = () => {
+  throw new Error('An excluded guard must not run');
+};
 
 // A simple component pretending a login form.
 // It will be replaced with a mock copy.
@@ -277,8 +343,7 @@ const sideEffectGuard: CanActivateFn = () => false;
   selector: 'login',
   template: 'login',
 })
-class LoginComponent {
-}
+class LoginComponent {}
 
 // A simple component pretending a protected dashboard.
 // It will be replaced with a mock copy.
@@ -286,8 +351,7 @@ class LoginComponent {
   selector: 'dashboard',
   template: 'dashboard',
 })
-class DashboardComponent {
-}
+class DashboardComponent {}
 
 // Definition of the routing module.
 @NgModule({
@@ -311,7 +375,7 @@ class DashboardComponent {
 class TargetModule {}
 
 describe('TestRoutingGuard:canActivate', () => {
-  // Because we want to test a canActive guard, it means that we want to
+  // Because we want to test a canActivate guard, it means that we want to
   // test its integration with RouterModule.
   // Therefore, RouterModule and the guard should be kept,
   // and the rest of the module which defines the route can be mocked.
@@ -337,7 +401,6 @@ describe('TestRoutingGuard:canActivate', () => {
 
   // It is important to wait for routing to become stable.
   it('redirects to login', async () => {
-
     const fixture = MockRender(RouterOutlet, {});
     const router = ngMocks.get(Router);
     const location = ngMocks.get(Location);
