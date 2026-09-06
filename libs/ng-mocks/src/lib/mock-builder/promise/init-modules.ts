@@ -41,8 +41,7 @@ export default (
       ngMocksUniverse.touches.delete(def);
     }
   }
-  const mocks = [...mockDef];
-  for (const def of mocks) {
+  for (const def of [...mockDef]) {
     tryMockDeclaration(def);
   }
 

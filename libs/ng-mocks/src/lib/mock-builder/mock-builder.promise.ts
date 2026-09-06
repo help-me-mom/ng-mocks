@@ -223,8 +223,7 @@ export class MockBuilderPromise implements IMockBuilder {
     const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
       const testBed: TestBedStatic = TestBed.configureTestingModule(this.build()) as never;
       // Callbacks added during compilation belong to the next run.
-      const callbacks = [...this.beforeCC];
-      for (const callback of callbacks) {
+      for (const callback of [...this.beforeCC]) {
         callback(testBed);
       }
       const testBedPromise = testBed.compileComponents();

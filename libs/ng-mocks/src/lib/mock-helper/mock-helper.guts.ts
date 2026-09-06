@@ -181,8 +181,7 @@ const resolve = (data: Data, proto: any, skipDestruction = true): void => {
 const generateDataWithUniverse = (keep: Set<any>, mock: Set<any>, exclude: Set<any>, optional: Map<any, any>): void => {
   // Iterator.toArray requires a newer runtime than our ES2015 target.
   // eslint-disable-next-line unicorn/prefer-iterator-to-array
-  const defaults = [...ngMocksUniverse.getDefaults().keys()];
-  for (const k of defaults) {
+  for (const k of [...ngMocksUniverse.getDefaults().keys()]) {
     const v = ngMocksUniverse.getBuildDeclaration(k);
     if (keep.has(k) || mock.has(k) || exclude.has(k)) {
       continue;
@@ -231,8 +230,7 @@ export default (keep: any, mock: any = null, exclude: any = null): TestModuleMet
   }
 
   ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
-  const mocks = [...data.mock];
-  for (const def of mocks) {
+  for (const def of [...data.mock]) {
     resolutions.set(def, 'mock');
     if (data.optional.has(def)) {
       continue;

@@ -61,11 +61,11 @@ const configureTestingModule = (
     const final = applyHooks();
 
     try {
-      (TestBed as any).ngMocksFasterLock = true;
+      coreDefineProperty(TestBed, 'ngMocksFasterLock', true);
 
       return final.call(instance, moduleDef);
     } finally {
-      (TestBed as any).ngMocksFasterLock = undefined;
+      coreDefineProperty(TestBed, 'ngMocksFasterLock', undefined);
     }
   };
 };
@@ -94,18 +94,17 @@ const resetTestingModule = (
     const final = applyHooks();
 
     try {
-      (TestBed as any).ngMocksFasterLock = true;
+      coreDefineProperty(TestBed, 'ngMocksFasterLock', true);
 
       return final.call(instance);
     } finally {
-      (TestBed as any).ngMocksFasterLock = undefined;
+      coreDefineProperty(TestBed, 'ngMocksFasterLock', undefined);
     }
   };
 };
 
 export default () => {
   if (!(TestBed as any).ngMocksFasterInstalled) {
-    coreDefineProperty(TestBed, 'ngMocksFasterLock', undefined);
     TestBed.configureTestingModule = configureTestingModule(TestBed.configureTestingModule as never, TestBed as never);
     TestBed.resetTestingModule = resetTestingModule(TestBed.resetTestingModule as never, TestBed as never);
     coreDefineProperty(TestBed, 'ngMocksFasterInstalled', true);

@@ -70,8 +70,7 @@ const applyOverride = (def: any, override: any) => {
 };
 
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
-  const entries = [...overrides];
-  for (const [def, [override, original]] of entries) {
+  for (const [def, [override, original]] of [...overrides]) {
     (TestBed as any).ngMocksOverrides.set(def, {
       ...original,
       override,
@@ -84,8 +83,7 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map<any, any> }): void => {
   if (testBed.ngMocksOverrides?.size) {
     ngMocks.flushTestBed();
-    const overrides = [...testBed.ngMocksOverrides];
-    for (const [def, original] of overrides) {
+    for (const [def, original] of [...testBed.ngMocksOverrides]) {
       applyOverride(def, original);
     }
   }
@@ -207,8 +205,7 @@ const applyPlatformOverridesBasedOnProvidedIn = (provide: any, touches: Set<any>
 };
 
 const applyPlatformOverridesBasedOnDefaults = (touches: Set<any>) => {
-  const defaults = [...ngMocksUniverse.getDefaults()];
-  for (const [provide, [config]] of defaults) {
+  for (const [provide, [config]] of [...ngMocksUniverse.getDefaults()]) {
     if (config !== 'mock') {
       continue;
     }
@@ -301,8 +298,7 @@ const configureTestingModule =
           funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies, shouldTraverse);
         }
       }
-      const keptDependencies = [...realDependencies];
-      for (const dependency of keptDependencies) {
+      for (const dependency of [...realDependencies]) {
         // Explicit TestBed entries are applied below and take precedence.
         // Global resolutions keep their existing MockBuilder semantics.
         if (!ngMocksUniverse.getResolution(dependency)) {

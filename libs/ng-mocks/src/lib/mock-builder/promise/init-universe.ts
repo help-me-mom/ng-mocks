@@ -125,8 +125,7 @@ export default ({
     ngMocksUniverse.touches.add(dependency);
   }
 
-  const defaults = [...ngMocksUniverse.getDefaults()];
-  for (const [dependency, [resolution]] of defaults) {
+  for (const [dependency, [resolution]] of [...ngMocksUniverse.getDefaults()]) {
     if (resolution === 'mock' && isNgInjectionToken(dependency)) {
       dependencies.add(dependency);
     }
@@ -139,8 +138,7 @@ export default ({
 
   // Replacement dependencies need a dedicated pass because the replacement side
   // contributes the real providers / tokens we actually want to keep.
-  const replacements = [...replaceDef];
-  for (const dependency of replacements) {
+  for (const dependency of [...replaceDef]) {
     dependencies.add(dependency);
     addDependencies(dependencies, [dependency, defValue.get(dependency)], replacementDependency =>
       keepReplacementDependency(resolutions, replacementDependency),
@@ -150,8 +148,7 @@ export default ({
   // Global replace rules are discovered while traversing dependencies, so we need
   // one more pass to pull replacement dependencies for entries that were not part
   // of the initial explicit replace set.
-  const replacementDependencies = [...dependencies];
-  for (const dependency of replacementDependencies) {
+  for (const dependency of [...dependencies]) {
     if (ngMocksUniverse.getResolution(dependency) === 'replace') {
       addDependencies(
         dependencies,
@@ -163,8 +160,7 @@ export default ({
 
   // Once the dependency graph is complete, assign the final keep/mock/exclude/replace
   // behavior for each discovered dependency and persist it into ngMocksUniverse config.
-  const resolutionDependencies = [...dependencies];
-  for (const dependency of resolutionDependencies) {
+  for (const dependency of [...dependencies]) {
     if (configDef.has(dependency)) {
       continue;
     }
@@ -182,8 +178,7 @@ export default ({
     );
   }
 
-  const configurations = [...configDef];
-  for (const [k, v] of configurations) {
+  for (const [k, v] of [...configDef]) {
     ngMocksUniverse.config.set(k, {
       ...ngMocksUniverse.getConfigMock().get(k),
       ...v,

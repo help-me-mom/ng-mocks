@@ -6,8 +6,7 @@ import ngMocksUniverse from '../../common/ng-mocks-universe';
 export default (): ValueProvider => {
   // Redefining providers for kept declarations.
   const touches = new Set();
-  const declarations = [...ngMocksUniverse.touches];
-  for (const proto of declarations) {
+  for (const proto of [...ngMocksUniverse.touches]) {
     const source: any = proto;
     let value = ngMocksUniverse.getBuildDeclaration(source);
 

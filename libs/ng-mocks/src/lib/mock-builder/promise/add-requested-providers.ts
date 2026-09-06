@@ -23,8 +23,7 @@ export default (ngModule: NgMeta, { providerDef, mockDef }: BuilderData, resolut
     }
   }
 
-  const mocks = [...mockDef];
-  for (const def of mocks) {
+  for (const def of [...mockDef]) {
     if (ngMocksUniverse.touches.has(def) || coreReflectProvidedIn(def) !== 'root') {
       continue;
     }

@@ -77,25 +77,17 @@ export const rememberMockDeclarations = (mocks?: Map<any, any>): void => {
     return;
   }
 
-  const testBed = getNgMocksTestBed();
-  let next = testBed.ngMocksMockDeclarations;
-  if (!next) {
-    next = new Map();
-    coreDefineProperty(TestBed, 'ngMocksMockDeclarations', next);
-  }
+  const next = getNgMocksTestBed().ngMocksMockDeclarations || new Map();
   for (const [key, value] of mocks) {
     next.set(key, value);
   }
+
+  coreDefineProperty(TestBed, 'ngMocksMockDeclarations', next);
 };
 
 export const resetInjectedDeclarations = (): void => {
-  const testBed = getNgMocksTestBed();
-  if (testBed.ngMocksInjectedDeclarations) {
-    testBed.ngMocksInjectedDeclarations = undefined;
-  }
-  if (testBed.ngMocksMockDeclarations) {
-    testBed.ngMocksMockDeclarations = undefined;
-  }
+  coreDefineProperty(TestBed, 'ngMocksInjectedDeclarations', undefined);
+  coreDefineProperty(TestBed, 'ngMocksMockDeclarations', undefined);
 };
 
 export const rememberInjectedDeclaration = (token: any, result: any): any => {

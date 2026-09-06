@@ -11,8 +11,7 @@ import skipOverride from './skip-override';
 
 export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider => {
   const overrides: Map<Type<any>, [MetadataOverride<any>, MetadataOverride<any>]> = new Map();
-  const touches = [...ngMocksUniverse.touches];
-  for (const proto of touches) {
+  for (const proto of [...ngMocksUniverse.touches]) {
     const source: any = proto;
     const value = ngMocksUniverse.getBuildDeclaration(source) || source;
     if (skipOverride(replaceDef, defValue, source, value)) {

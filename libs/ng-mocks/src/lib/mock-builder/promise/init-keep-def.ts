@@ -9,8 +9,7 @@ export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
   const builtDeclarations = ngMocksUniverse.builtDeclarations;
   const builtProviders = ngMocksUniverse.builtProviders;
   const resolutions = ngMocksUniverse.config.get('ngMocksDepsResolution');
-  const declarations = [...keepDef];
-  for (const def of declarations) {
+  for (const def of [...keepDef]) {
     const provider = getRootProviderKeepProvider(def);
     builtDeclarations.set(def, def);
     // Functional router callbacks are definitions, but they are not class
