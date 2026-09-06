@@ -4,6 +4,7 @@ import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import mockInstanceApply from '../mock-instance/mock-instance-apply';
+import { rememberMockInstance } from '../mock-instance/mock-instance-tracker';
 
 import { MockService } from './mock-service';
 
@@ -52,6 +53,9 @@ export default <D, I>(
     }
     callbacks.push(...mockInstanceApply(def));
 
-    return applyCallback(def, instance, callbacks, injector, overrides);
+    const result = applyCallback(def, instance, callbacks, injector, overrides);
+    rememberMockInstance(def, result, injector);
+
+    return result;
   },
 });

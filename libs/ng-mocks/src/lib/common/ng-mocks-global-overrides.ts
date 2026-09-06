@@ -6,6 +6,7 @@ import { MockBuilder } from '../mock-builder/mock-builder';
 import getOverrideDef from '../mock-builder/promise/get-override-def';
 import { ngMocks } from '../mock-helper/mock-helper';
 import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
+import { resetMockInstances } from '../mock-instance/mock-instance-tracker';
 import { MockProvider } from '../mock-provider/mock-provider';
 import helperCreateClone from '../mock-service/helper.create-clone';
 
@@ -373,6 +374,7 @@ const resetTestingModule =
     resetTestModuleOptions();
     (TestBed as any).ngMocksSelectors = undefined;
     resetInjectedDeclarations();
+    resetMockInstances();
     applyNgMocksOverrides(TestBed);
 
     return original.call(instance);

@@ -4,6 +4,7 @@ import * as angularCore from '@angular/core';
 import { IMockBuilderConfig } from '../mock-builder/types';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
 import mockInstanceApply from '../mock-instance/mock-instance-apply';
+import { rememberMockInstance } from '../mock-instance/mock-instance-tracker';
 import helperMockService from '../mock-service/helper.mock-service';
 
 import coreDefineProperty from './core.define-property';
@@ -260,6 +261,7 @@ export class Mock {
     // Declaration providers are created lazily by Angular during render. Register the fully prepared
     // mock instance here so a previous TestBed.inject seed can replay its overrides onto it.
     resolveMockDeclaration(mockOf, this);
+    rememberMockInstance(mockOf, this, injector ?? undefined);
   }
 }
 

@@ -66,6 +66,20 @@ Create and maintain a plain Markdown checklist:
 
    If `issues/<issue-number>` or the default worktree path already exists, inspect it with `git worktree list`, `git status --short`, and `git log --oneline --decorate --max-count=10`. Reuse it only when it is already the dedicated worktree for this issue. Otherwise create a timestamped branch and path from `upstream/main`, for example `issues/<issue-number>-<timestamp>` and `../ng-mocks-issue-<issue-number>-<timestamp>`.
 
+   If Git hooks fail because Docker cannot access a linked worktree's external Git metadata, report the failure
+   and discuss using a self-contained clone as the independent issue worktree. For that solution, clone into a new
+   issue directory, configure `upstream`, and create the issue branch there. Preserve the original worktree, stage
+   the intended patch, and transfer it with `git diff --cached --binary` and `git apply --index`. Run `sh compose.sh root`
+   in the new checkout to install its dependencies and hooks. Do not mount the primary checkout's Git metadata or
+   disable hooks; the root `lint:staged` and `commitlint` scripts let those checks run inside Docker.
+
+   ```bash
+   git clone --origin upstream --branch main https://github.com/help-me-mom/ng-mocks.git ../ng-mocks-issue-<issue-number>-pr
+   cd ../ng-mocks-issue-<issue-number>-pr
+   git switch -c issues/<issue-number> upstream/main
+   COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh compose.sh root
+   ```
+
 4. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

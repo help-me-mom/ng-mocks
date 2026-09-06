@@ -6,6 +6,7 @@ import ngMocksStack, { NgMocksStack } from '../common/ng-mocks-stack';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import mockInstanceForgotReset from './mock-instance-forgot-reset';
+import { updateMockInstances } from './mock-instance-tracker';
 
 let currentStack: NgMocksStack;
 ngMocksStack.subscribePush(state => {
@@ -100,11 +101,14 @@ const mockInstanceConfig = <T>(
     checkReset.push([declaration, ngMocksUniverse.configInstance.get(declaration), currentStack]);
   }
 
+  updateMockInstances(declaration, name, stub, encapsulation);
+
   return stub;
 };
 
 /**
  * This signature of MockInstance lets customize the getter of a property.
+ * It updates existing live mocks immediately and configures future mocks.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -122,6 +126,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends () =
 
 /**
  * This signature of MockInstance lets customize the setters of a property.
+ * It updates existing live mocks immediately and configures future mocks.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -142,6 +147,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends (val
 
 /**
  * This signature of MockInstance lets customize the properties and methods.
+ * It updates existing live mocks immediately and configures future mocks.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -160,6 +166,7 @@ export function MockInstance<T extends object, K extends keyof T, S extends T[K]
 
 /**
  * This signature of MockInstance lets customize tokens with a callback.
+ * Configure tokens before resolution; already injected values are not replaced.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -171,6 +178,7 @@ export function MockInstance<T>(declaration: InjectionToken<T>, init?: MockInsta
 
 /**
  * This signature of MockInstance lets customize tokens with a callback.
+ * Configure tokens before resolution; already injected values are not replaced.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -185,6 +193,7 @@ export function MockInstance<T>(declaration: InjectionToken<T>, config?: MockIns
 /**
  * This signature of MockInstance lets customize the instances of mock classes with a callback.
  * You can return a shape or change the instance.
+ * The callback runs immediately for existing live mocks and at creation for future mocks.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *
@@ -205,6 +214,7 @@ export function MockInstance<T>(declaration: AnyType<T>, init?: MockInstanceClas
 /**
  * This signature of MockInstance lets customize the instances of mock classes with a callback.
  * You can return a shape or change the instance.
+ * The callback runs immediately for existing live mocks and at creation for future mocks.
  *
  * @see https://ng-mocks.sudo.eu/api/MockInstance
  *

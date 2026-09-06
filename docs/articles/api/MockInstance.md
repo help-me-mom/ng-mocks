@@ -4,8 +4,8 @@ description: Information on how to customize mock components, directives, servic
 sidebar_label: MockInstance
 ---
 
-**MockInstance** helps to define **customizations for mock declarations** and mock providers in test suites
-before the desired instance have been created.
+**MockInstance** defines **customizations for mock declarations** and mock providers in test suites.
+For class-based mocks, it updates all existing live instances immediately and configures future instances too.
 
 It is useful, when we want to configure spies before their usage.
 It supports: modules, components, directives, pipes, services and tokens.
@@ -16,6 +16,98 @@ The mocks should be created by:
 - [`MockComponent`](/api/MockComponent.md)
 - [`MockDirective`](/api/MockDirective.md)
 - [`MockProvider`](/api/MockProvider.md)
+
+Direct [`MockService`](/api/MockService.md) results and explicit `useValue` providers are not tracked.
+Use [`ngMocks.stubMember`](/api/ngMocks/stubMember.md) to customize one particular object.
+
+## Before and after creation
+
+Existing-instance customization is supported starting with Angular 5.
+You can customize a mock before or after Angular creates and injects it. Existing references keep their identity,
+and each callback receives the instance's own injector. A new customization does not rerun earlier callbacks
+on existing instances or create unused providers. Destroyed instances stop receiving updates.
+
+**Customize before the behavior you want to change executes.** A late customization cannot undo constructors,
+field initializers, or completed lifecycle hooks. It also cannot replace values, function references, or subscriptions
+that a consumer already captured. `MockInstance` does not run change detection or repeat `ngOnInit`.
+In particular, `MockRender` runs initial change detection by default.
+
+This example tests a real component with a mocked service. The Angular 22 version below explicitly uses a
+non-standalone component because the test declares it in a testing module.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockInstance/existing.spec.ts&initialpath=%3Fspec%3DMockInstance%3Aexisting)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockInstance/existing.spec.ts&initialpath=%3Fspec%3DMockInstance%3Aexisting)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/MockInstance/existing.spec.ts"
+import { Component, Injectable, OnInit } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockInstance, MockProvider, ngMocks } from 'ng-mocks';
+
+@Injectable()
+class UserService {
+  getName(): string {
+    return 'real';
+  }
+}
+
+@Component({
+  selector: 'user-profile',
+  standalone: false,
+  template: '{{ name }}',
+})
+class ProfileComponent implements OnInit {
+  name = '';
+
+  constructor(public readonly user: UserService) {}
+
+  ngOnInit(): void {
+    this.name = this.user.getName();
+  }
+}
+
+describe('MockInstance:existing', () => {
+  MockInstance.scope();
+
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      declarations: [ProfileComponent],
+      providers: [MockProvider(UserService, { getName: () => 'default' })],
+    }).compileComponents(),
+  );
+
+  it('customizes an injected mock before ngOnInit uses it', () => {
+    // Creating the real component also creates its mocked dependency.
+    const fixture = TestBed.createComponent(ProfileComponent);
+    const user = fixture.componentInstance.user;
+
+    const getName = MockInstance(UserService, 'getName', jasmine.createSpy())
+      .and.returnValue('Alice');
+
+    // The component still holds the same service instance.
+    expect(fixture.componentInstance.user).toBe(user);
+    expect(user.getName).toBe(getName);
+    expect(getName).not.toHaveBeenCalled();
+
+    fixture.detectChanges();
+
+    expect(ngMocks.formatText(fixture)).toEqual('Alice');
+    expect(getName).toHaveBeenCalledTimes(1);
+  });
+
+  it('changes future calls without repeating initialization', () => {
+    const fixture = TestBed.createComponent(ProfileComponent);
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('default');
+
+    MockInstance(UserService, 'getName', () => 'Alice');
+    expect(fixture.componentInstance.user.getName()).toEqual('Alice');
+
+    // ngOnInit already copied the earlier value into the component.
+    fixture.detectChanges();
+    expect(ngMocks.formatText(fixture)).toEqual('default');
+  });
+});
+```
 
 ## Define customizations
 
@@ -89,6 +181,8 @@ MockInstance(Service, () => ({
 ### Customizing tokens
 
 In case of tokens, a callback should return the token value.
+Configure tokens before their provider is resolved. Token customizations do not replace values or references
+already returned by an injector; the immediate-update behavior applies to class-based mocks.
 
 ```ts
 MockInstance(TOKEN, (instance, injector) => {
@@ -117,6 +211,10 @@ In such a case, [`MockInstance.remember()`](#remember) and [`MockInstance.restor
 
 `MockInstance.restore()` discards mock customizations starting from the last known checkpoint.
 The operation can be repeated unless there is a checkpoint.
+
+Restoring a scope affects the configuration for future instances. It does not undo mutations or callback side
+effects on existing instances. Those live instances continue receiving later `MockInstance` customizations.
+The same applies when `ngMocks.faster()` preserves an instance between tests: explicitly set the state each test needs.
 
 ### Example
 
@@ -177,6 +275,9 @@ describe('suite', () => {
 In order to reset the provided callback, `MockInstance` should be called without it.
 Usually, it's used in `afterEach` or `afterAll`, but better to use [scopes](#scope).
 
+`MockInstance(Service)` and `MockReset()` clear customization configuration. They do not revert existing objects
+or stop tracking live class-based mocks.
+
 ```ts
 afterEach(() => MockInstance(Service)); // resets customizations of Service
 afterEach(() => MockInstance(TOKEN)); // resets customizations of TOKEN
@@ -188,11 +289,11 @@ afterEach(() => MockReset());
 
 ## Overriding customization
 
-Every call of `MockInstance` overrides the previous callback.
-`MockInstance` can be called anywhere,
-whereas the **suggested usage** is to use [`MockInstance.scope`](#scope)
-and to call `MockInstance` in `beforeEach` or in `it`,
-then the callback has its effect only during the current spec.
+Customizations accumulate in registration order; later assignments to the same member take precedence.
+Each new customization is applied once to each existing live class-based mock, and future instances receive the
+active configuration in order. Earlier callbacks are not replayed on existing instances.
+The **suggested usage** is to use [`MockInstance.scope`](#scope) and call `MockInstance` in `beforeEach` or `it`.
+Scopes control which customizations future instances receive; they do not roll back mutations on shared instances.
 
 ```ts
 // Defining the scope for this suite.

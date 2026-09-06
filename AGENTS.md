@@ -65,6 +65,9 @@
   or adding it as a Docker mount.
 - If a tool cannot work with the isolated worktree, report the error and discuss a supported solution with the user.
   Do not move execution to the primary checkout or weaken the isolation to make a check pass.
+- For Git hooks that need Git metadata inside Docker, a self-contained clone can provide the independent issue
+  worktree after the tooling failure and solution have been discussed. Its own `.git` directory stays inside the
+  issue checkout's normal bind mount. Keep all hook checks enabled and run them through the root npm scripts in Docker.
 
 ## Angular CLI Cache
 

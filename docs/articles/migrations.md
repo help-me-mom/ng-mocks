@@ -11,6 +11,47 @@ Bug fixes which can affect tests that relied on the previous behavior are listed
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
 
+## Next ng-mocks release: existing mock instances
+
+In `ng-mocks` 14.17.5 and earlier, [`MockInstance`](api/MockInstance.md) only configured mocks before their creation.
+With the implementation of [#2713](https://github.com/help-me-mom/ng-mocks/issues/2713), class-based customizations
+also update existing live mocks immediately, preserving their identity.
+
+Previously, a late registration left this existing mock unchanged:
+
+```ts
+const fixture = TestBed.createComponent(ProfileComponent);
+const user = fixture.componentInstance.user;
+MockInstance(UserService, 'getName', () => 'Alice');
+// user.getName still used its previous implementation.
+```
+
+After updating, the same registration changes the existing mock:
+
+```ts
+const fixture = TestBed.createComponent(ProfileComponent);
+const user = fixture.componentInstance.user;
+MockInstance(UserService, 'getName', () => 'Alice');
+expect(user.getName()).toEqual('Alice');
+```
+
+Review registrations made after injecting a mock or creating a component. Callbacks now execute immediately for
+each existing instance as well as once for future instances. If a callback references test data, initialize that
+data before registering the callback. If an existing instance must retain its behavior, register the customization
+after destroying that instance or put the scenarios in separate tests with normal TestBed teardown.
+Use `ngMocks.stubMember(instance, ...)` when only one particular object should change.
+
+Customizations still need to precede the behavior under test. Constructors and field initializers have already
+run when `TestBed.createComponent` returns. The first change-detection pass runs `ngOnInit`; a later customization
+does not rerun it or update values it already copied. Existing subscriptions are unaffected.
+
+`MockInstance.restore()`, `MockInstance(Class)`, and `MockReset()` continue to reset configuration for future
+instances without undoing mutations on existing objects. Tests using `ngMocks.faster()` to preserve instances
+must explicitly set the state needed by each test.
+
+Existing before-creation usage remains supported. Injection-token replacement, real/kept instances, direct
+`MockService` results, and explicit `useValue` providers are unaffected by live-instance tracking.
+
 ## From ng-mocks 14.15 to 14.16
 
 ### Signal inputs of mocked components

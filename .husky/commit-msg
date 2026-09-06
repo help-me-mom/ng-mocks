@@ -1,1 +1,1 @@
-npx commitlint --edit $1
+docker compose run --rm ng-mocks npm run commitlint -- --edit "$1"
