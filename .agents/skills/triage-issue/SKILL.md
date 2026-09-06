@@ -23,6 +23,7 @@ Create and maintain a plain Markdown checklist:
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Update the matching docs and review them against the executable examples
 - [ ] Prepare the commit and PR against `upstream/main`
+- [ ] Verify the requested CI status on the current PR commit
 ```
 
 ## Workflow
@@ -204,6 +205,8 @@ PR rules:
   validation commands and results.
 - Link related issues, duplicate reports, and previous PRs when they influenced the fix.
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
+- Follow [Validation Expectations](../../../AGENTS.md#validation-expectations) when reporting CI status.
+  If green CI is requested, verify all required checks on the pushed commit before handing back the PR.
 
 ## Guardrails
 

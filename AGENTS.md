@@ -197,6 +197,9 @@
   3. Run `sh test.sh e2e` only when `tests-e2e` or shared e2e files changed
   4. Run `sh test.sh coverage` when core behavior or coverage-sensitive code changes
 - For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
+- Report CI status for the current PR head. When the task requires green CI, wait for all required jobs and
+  resolve failures within scope, or report the specific blocker. Do not infer success from local checks or a
+  previous green commit.
 
 ## Commit and Release Semantics
 
