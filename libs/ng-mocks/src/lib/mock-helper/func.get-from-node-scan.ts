@@ -3,34 +3,30 @@ import { DebugNode } from '@angular/core';
 import { AnyType } from '../common/core.types';
 
 const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boolean => {
-  // LContainer for structural directives can be a trigger for pipes.
-  if (
-    el &&
-    el.nativeNode &&
-    el.nativeNode.nodeName === '#comment' &&
-    Array.isArray(node) &&
-    node[0] === el.nativeNode
-  ) {
-    return true;
-  }
-
-  // LContainer should stop the scan.
+  // A container can select pipes only when it belongs to this comment node.
+  // Check the array first to avoid reading the DOM for every scanned value.
   if (Array.isArray(node)) {
-    return false;
+    const nativeNode = el?.nativeNode;
+
+    return !!nativeNode && node[0] === nativeNode && nativeNode.nodeName === '#comment';
   }
 
-  if (!el || !node.nodeName) {
+  if (!el) {
+    return gather;
+  }
+  const nodeName = node.nodeName;
+  if (!nodeName) {
     return gather;
   }
 
   // checking if a commentNode belongs to the current element.
   // it comes from structural directives.
-  if (node.nodeName === '#comment') {
+  if (nodeName === '#comment') {
     return node === el.nativeNode;
   }
 
   // checking if a textNode belongs to the current element.
-  if (node.nodeName === '#text') {
+  if (nodeName === '#text') {
     return node.parentNode === el.nativeNode;
   }
 
@@ -39,7 +35,7 @@ const detectGatherFlag = (gather: boolean, el: DebugNode | null, node: any): boo
 
 const isNotObject = <T>(node: T): boolean => !node || typeof node !== 'object';
 
-const shouldBeScanned = (scanned: any[], node: any): boolean => scanned.indexOf(node) === -1 && Array.isArray(node);
+const shouldBeScanned = (scanned: Set<any>, node: any): node is any[] => Array.isArray(node) && !scanned.has(node);
 
 const scan = <T>(
   {
@@ -56,9 +52,9 @@ const scan = <T>(
     result: T[];
   },
   gatherDefault: boolean,
-  scanned: any[] = [],
+  scanned: Set<any> = new Set(),
 ): void => {
-  scanned.push(nodes);
+  scanned.add(nodes);
   let gather = gatherDefault;
 
   let nodesLength = nodes.length;
@@ -72,7 +68,7 @@ const scan = <T>(
       continue;
     }
 
-    if (shouldBeScanned(scanned, node) && Array.isArray(node)) {
+    if (shouldBeScanned(scanned, node)) {
       scan({ result, el, nodes: node, normalize, proto }, gather, scanned);
     }
 

@@ -1,10 +1,10 @@
-import { mapKeys } from '../../common/core.helpers';
+const equal = (a: any, b: any) => a === b;
 
-export default (source: Map<any, any>, destination: Map<any, any>, compare = (a: any, b: any) => a === b): boolean => {
+export default (source: Map<any, any>, destination: Map<any, any>, compare = equal): boolean => {
   if (!destination || destination.size !== source.size) {
     return false;
   }
-  for (const value of mapKeys(source)) {
+  for (const value of source.keys()) {
     if (!destination.has(value)) {
       return false;
     }

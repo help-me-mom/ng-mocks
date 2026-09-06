@@ -9,12 +9,12 @@ export default (service: any): { [key in keyof any]: MockedFunction } => {
   const value: any = {};
   coreDefineProperty(value, '__ngMocks', true);
 
-  const methods = helperMockService.extractMethodsFromPrototype(service);
+  const properties: string[] = [];
+  const methods = helperMockService.extractMethodsFromPrototype(service, properties);
   for (const method of methods) {
     helperMockService.mock(value, method, mockName);
   }
 
-  const properties = helperMockService.extractPropertiesFromPrototype(service);
   for (const property of properties) {
     helperMockService.mock(value, property, 'get', mockName);
     helperMockService.mock(value, property, 'set', mockName);

@@ -21,9 +21,10 @@ const addDependencies = (
   defs: DependencyDefs,
   onDependency?: (dependency: any) => void,
 ): void => {
+  const visited = new Set<any>();
   for (const def of defs) {
-    const extractedDependencies = funcExtractDeps(def, new Set(), true);
-    for (const dependency of mapValues(extractedDependencies)) {
+    const extractedDependencies = funcExtractDeps(def, new Set(), true, visited);
+    for (const dependency of extractedDependencies) {
       dependencies.add(dependency);
       onDependency?.(dependency);
     }

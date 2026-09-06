@@ -6,7 +6,7 @@ export default (declaration: any) => {
   let result: any;
 
   try {
-    result = funcGetLastFixture().debugElement.injector.get(NG_MOCKS).get(declaration);
+    result = funcGetLastFixture()?.debugElement.injector.get(NG_MOCKS, null)?.get(declaration);
   } catch {
     // nothing to do.
   }

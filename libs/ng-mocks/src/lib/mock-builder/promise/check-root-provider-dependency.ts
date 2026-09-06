@@ -1,6 +1,6 @@
-export default (provide: any, bucket: any[], touched: any[]): void => {
-  if (typeof provide === 'function' && touched.indexOf(provide) === -1) {
-    touched.push(provide);
+export default (provide: any, bucket: any[], touched: Set<any>): void => {
+  if (typeof provide === 'function' && !touched.has(provide)) {
+    touched.add(provide);
     bucket.push(provide);
   }
 };

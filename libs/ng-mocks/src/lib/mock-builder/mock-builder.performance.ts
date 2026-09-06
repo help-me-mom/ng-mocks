@@ -22,9 +22,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     }
 
     // removal of cached promise in case of mismatch
-    if (global.has('builder:module')) {
-      global.delete(global.get('builder:module'));
-    }
+    global.delete('builder:promise');
 
     const clone = this.cloneConfig();
     const ngModule = super.build();
@@ -44,7 +42,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
 
     const flags = global.has('bullet') && global.has('builder:module') && global.has('builder:config');
     if (flags && this.equalsTo(global.get('builder:config'))) {
-      return global.get(global.get('builder:module')).then(fulfill, reject);
+      return global.get('builder:promise').then(fulfill, reject);
     }
 
     // we need to reset testing module in case if we are in bullet mode but current module does not match.
@@ -56,7 +54,7 @@ export class MockBuilderPerformance extends MockBuilderPromise {
     }
 
     const promise = super.then(fulfill, reject);
-    global.set(global.get('builder:module'), promise);
+    global.set('builder:promise', promise);
 
     return promise;
   }

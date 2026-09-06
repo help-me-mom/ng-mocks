@@ -9,7 +9,9 @@ export default (declaration: any, injector: Injector = defaultInjector): any => 
     return getTestBedInjection(declaration);
   }
   try {
-    return injector.get(declaration);
+    const result = injector.get(declaration, defaultInjector);
+
+    return result === defaultInjector ? undefined : result;
   } catch {
     return undefined;
   }

@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import helperReplayInstance from '../mock-service/helper.replay-instance';
 
 import coreDefineProperty from './core.define-property';
-import { mapEntries } from './core.helpers';
 import { getSourceOfMock } from './func.get-source-of-mock';
 import { isMockNgDef } from './func.is-mock-ng-def';
 
@@ -78,17 +77,25 @@ export const rememberMockDeclarations = (mocks?: Map<any, any>): void => {
     return;
   }
 
-  const next = new Map(getNgMocksTestBed().ngMocksMockDeclarations);
-  for (const [key, value] of mapEntries(mocks)) {
+  const testBed = getNgMocksTestBed();
+  let next = testBed.ngMocksMockDeclarations;
+  if (!next) {
+    next = new Map();
+    coreDefineProperty(TestBed, 'ngMocksMockDeclarations', next);
+  }
+  for (const [key, value] of mocks) {
     next.set(key, value);
   }
-
-  coreDefineProperty(TestBed, 'ngMocksMockDeclarations', next);
 };
 
 export const resetInjectedDeclarations = (): void => {
-  coreDefineProperty(TestBed, 'ngMocksInjectedDeclarations', undefined);
-  coreDefineProperty(TestBed, 'ngMocksMockDeclarations', undefined);
+  const testBed = getNgMocksTestBed();
+  if (testBed.ngMocksInjectedDeclarations) {
+    testBed.ngMocksInjectedDeclarations = undefined;
+  }
+  if (testBed.ngMocksMockDeclarations) {
+    testBed.ngMocksMockDeclarations = undefined;
+  }
 };
 
 export const rememberInjectedDeclaration = (token: any, result: any): any => {

@@ -12,9 +12,11 @@ import { BuilderData } from './types';
 
 export default (mockDef: BuilderData['mockDef']): Set<any> => {
   const parameters = new Set();
-  const { buckets, touched } = getRootProvidersData();
+  const { buckets } = getRootProvidersData();
 
   for (const bucket of buckets) {
+    // A dependency still needs processing in each bucket that reaches it, in priority order.
+    const touched = new Set(bucket);
     for (const def of bucket) {
       addDefToRootProviderParameters(parameters, mockDef, def);
 
@@ -24,7 +26,7 @@ export default (mockDef: BuilderData['mockDef']): Set<any> => {
         if (skipRootProviderDependency(provide)) {
           continue;
         }
-        checkRootProviderDependency(provide, touched, bucket);
+        checkRootProviderDependency(provide, bucket, touched);
         if (mockDef.has(NG_MOCKS_ROOT_PROVIDERS) || !ngMocksUniverse.config.get('ngMocksDepsSkip').has(def)) {
           parameters.add(provide);
         } else {

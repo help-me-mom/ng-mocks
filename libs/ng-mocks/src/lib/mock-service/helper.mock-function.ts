@@ -6,17 +6,23 @@ const mockFunction: {
   (mockName: string, original?: boolean): MockedFunction;
   customMockFunction?: CustomMockFunction;
 } = (mockName: string, original = false): MockedFunction => {
-  // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
-  const func =
-    mockFunction.customMockFunction && !original
+  // Ordinary methods need independent spies, but no getter/setter replay state.
+  if (!original) {
+    const func = mockFunction.customMockFunction
       ? mockFunction.customMockFunction(mockName)
-      : (val: any) => {
-          if (setValue) {
-            setValue(val);
-          }
+      : (value: any) => void value;
+    coreDefineProperty(func, '__ngMocks', true);
 
-          return value;
-        };
+    return func;
+  }
+
+  const func = (val: any) => {
+    if (setValue) {
+      setValue(val);
+    }
+
+    return value;
+  };
 
   // magic to make getters / setters working
 

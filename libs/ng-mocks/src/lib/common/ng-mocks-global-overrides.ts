@@ -150,18 +150,25 @@ const defineTouches = (testBed: TestBed, moduleDef: TestModuleMetadata, knownTou
 };
 
 const collectMockDeclarations = (moduleDef: TestModuleMetadata, mocks?: Map<any, any>): Map<any, any> | undefined => {
-  const result = new Map(mocks);
+  let result = mocks;
 
   for (const key of ['imports', 'declarations'] as const) {
     for (const declaration of flatten(moduleDef[key] || [])) {
       const def = funcGetType(declaration);
       if (isMockNgDef(def, 'c') || isMockNgDef(def, 'd') || isMockNgDef(def, 'p')) {
-        result.set(getSourceOfMock(def), def);
+        const source = getSourceOfMock(def);
+        if (result?.get(source) === def) {
+          continue;
+        }
+        if (result === mocks) {
+          result = new Map(mocks);
+        }
+        result!.set(source, def);
       }
     }
   }
 
-  return result.size > 0 ? result : undefined;
+  return result?.size ? result : undefined;
 };
 
 const applyPlatformOverrideDef = (def: any) => {
@@ -241,12 +248,21 @@ const configureTestingModule =
     // 0b10 - mock exist
     // 0b01 - real exist
     let hasMocks = 0;
-    const mockBuilder: Array<[any, any, boolean]> = [];
+    const declarations: any[] = [];
     for (const key of useMockBuilder ? ['imports', 'declarations'] : []) {
       for (const declaration of flatten(moduleDef[key as never]) as any[]) {
         if (!declaration) {
           continue;
         }
+        declarations.push(declaration);
+        hasMocks |= isMockNgDef(funcGetType(declaration)) ? 0b10 : 0b01;
+      }
+    }
+    // We should do magic only then both mock and real exist.
+    let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
+    if (!finalModuleDef) {
+      const mockBuilder: Array<[any, any, boolean]> = [];
+      for (const declaration of declarations) {
         mockBuilder.push([
           isNgModuleDefWithProviders(declaration)
             ? {
@@ -257,12 +273,7 @@ const configureTestingModule =
           isNgModuleDefWithProviders(declaration) ? declaration.ngModule : declaration,
           isMockNgDef(funcGetType(declaration)),
         ]);
-        hasMocks |= mockBuilder[mockBuilder.length - 1][2] ? 0b10 : 0b01;
       }
-    }
-    // We should do magic only then both mock and real exist.
-    let finalModuleDef = hasMocks === 0b11 ? undefined : moduleDef;
-    if (!finalModuleDef) {
       let builder = MockBuilder(NG_MOCKS_ROOT_PROVIDERS);
 
       const realDependencies = new Set<AnyType<any>>();
@@ -353,6 +364,7 @@ const resetTestingModule =
     resetRuntimeInject();
     ngMocksUniverse.global.delete('builder:config');
     ngMocksUniverse.global.delete('builder:module');
+    ngMocksUniverse.global.delete('builder:promise');
     resetTestModuleOptions();
     (TestBed as any).ngMocksSelectors = undefined;
     resetInjectedDeclarations();

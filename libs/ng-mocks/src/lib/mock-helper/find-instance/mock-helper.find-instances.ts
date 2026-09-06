@@ -18,7 +18,7 @@ export default <T>(...args: any[]): T[] => {
 
   const declaration: Type<T> = getSourceOfMock(sel);
   const result: T[] = [];
-  const scanned: any[] = [];
+  const scanned = new Set<any>();
   const fixture = funcGetLastFixture();
   if (fixture) {
     const elements = mockHelperFindAll(fixture, el, undefined);
@@ -26,13 +26,13 @@ export default <T>(...args: any[]): T[] => {
       mockHelperCrawl(
         element,
         (node, parent) => {
-          if (scanned.indexOf(node) === -1) {
+          if (!scanned.has(node)) {
             funcGetFromNode(result, node, declaration);
-            scanned.push(node);
+            scanned.add(node);
           }
-          if (parent && parent.nativeNode.nodeName === '#comment' && scanned.indexOf(parent) === -1) {
+          if (parent && parent.nativeNode.nodeName === '#comment' && !scanned.has(parent)) {
             funcGetFromNode(result, parent, declaration);
-            scanned.push(parent);
+            scanned.add(parent);
           }
         },
         true,

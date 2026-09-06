@@ -48,13 +48,14 @@ const createPropertySet = (
   return handler;
 };
 
-const extractAllKeys = (instance: object) => [
-  ...helperMockService.extractPropertiesFromPrototype(Object.getPrototypeOf(instance)),
-  ...helperMockService.extractMethodsFromPrototype(Object.getPrototypeOf(instance)),
-  ...Object.keys(instance),
-];
+const extractAllKeys = (instance: object) => {
+  const properties: string[] = [];
+  const methods = helperMockService.extractMethodsFromPrototype(Object.getPrototypeOf(instance), properties);
 
-const extractOwnKeys = (instance: object) => [...Object.getOwnPropertyNames(instance), ...Object.keys(instance)];
+  return [...properties, ...methods, ...Object.keys(instance)];
+};
+
+const extractOwnKeys = (instance: object) => new Set(Object.getOwnPropertyNames(instance));
 
 export default (
   reader: Record<keyof any, any>,
@@ -71,13 +72,13 @@ export default (
   const exists = extractOwnKeys(reader);
   const fields = [...extractAllKeys(source), ...extra];
   for (const key of fields) {
-    if (!force && exists.indexOf(key) !== -1) {
+    if (!force && exists.has(key)) {
       continue;
     }
     helperDefinePropertyDescriptor(reader, key, {
       get: createPropertyGet(key, reader, source, valueKeys),
       set: createPropertySet(key, reader, source, writeSource),
     });
-    exists.push(key);
+    exists.add(key);
   }
 };

@@ -154,17 +154,16 @@ const applyInputs = (instance: MockConfig & Record<keyof any, any>) => {
 };
 
 const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
-  for (const prop of [
-    ...helperMockService.extractMethodsFromPrototype(prototype),
-    ...helperMockService.extractPropertiesFromPrototype(prototype),
-  ]) {
+  const properties: string[] = [];
+  const methods = helperMockService.extractMethodsFromPrototype(prototype, properties);
+  for (const prop of [...methods, ...properties]) {
     const descriptor = helperMockService.extractPropertyDescriptor(prototype, prop);
     helperMockService.definePropertyDescriptor(instance, prop, descriptor);
   }
 };
 
-const applyMethods = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
-  for (const method of helperMockService.extractMethodsFromPrototype(prototype)) {
+const applyMethods = (instance: Mock & Record<keyof any, any>, methods: string[]) => {
+  for (const method of methods) {
     if (instance[method] || Object.getOwnPropertyDescriptor(instance, method)) {
       continue;
     }
@@ -172,8 +171,8 @@ const applyMethods = (instance: Mock & Record<keyof any, any>, prototype: AnyTyp
   }
 };
 
-const applyProps = (instance: Mock & Record<keyof any, any>, prototype: AnyType<any>) => {
-  for (const prop of helperMockService.extractPropertiesFromPrototype(prototype)) {
+const applyProps = (instance: Mock & Record<keyof any, any>, properties: string[]) => {
+  for (const prop of properties) {
     if (instance[prop] || Object.getOwnPropertyDescriptor(instance, prop)) {
       continue;
     }
@@ -249,8 +248,10 @@ export class Mock {
       applyInputs(this);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
-      applyMethods(this, mockOf.prototype);
-      applyProps(this, mockOf.prototype);
+      const properties: string[] = [];
+      const methods = helperMockService.extractMethodsFromPrototype(mockOf.prototype, properties);
+      applyMethods(this, methods);
+      applyProps(this, properties);
     }
 
     // and faking prototype

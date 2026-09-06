@@ -23,8 +23,11 @@ const getOwnPropertyNames = (prototype: any): string[] => {
   return result;
 };
 
-export default <T>(service: T): string[] => {
+// Callers that need accessors too can collect both in the same prototype walk.
+export default <T>(service: T, properties?: string[]): string[] => {
   const result: string[] = [];
+  const methods = new Set<string>();
+  const accessors = properties ? new Set(properties) : undefined;
 
   let prototype = service;
   while (prototype && Object.getPrototypeOf(prototype) !== null) {
@@ -35,9 +38,17 @@ export default <T>(service: T): string[] => {
 
       const descriptor = Object.getOwnPropertyDescriptor(prototype, method);
       const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
-      if (isGetterSetter || result.indexOf(method) !== -1) {
+      if (isGetterSetter) {
+        if (properties && accessors && !accessors.has(method)) {
+          accessors.add(method);
+          properties.push(method);
+        }
         continue;
       }
+      if (methods.has(method)) {
+        continue;
+      }
+      methods.add(method);
       result.push(method);
     }
     prototype = Object.getPrototypeOf(prototype);

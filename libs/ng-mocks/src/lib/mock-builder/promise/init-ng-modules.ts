@@ -101,7 +101,7 @@ const moveModulesUp = <T>(a: T, b: T) => {
 export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, defProviders: Map<any, any>): NgMeta => {
   const meta: NgMeta = { imports: [], declarations: [], providers: [] };
 
-  const processed: AnyDeclaration<any>[] = [];
+  const processed = new Set<AnyDeclaration<any>>();
   const forgotten: AnyDeclaration<any>[] = [];
 
   const defs = [...mapValues(mockDef), ...mapValues(keepDef), ...mapValues(replaceDef)];
@@ -113,11 +113,11 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
       isNgDef(originalDef, 'm') && defProviders.has(originalDef)
         ? originalDef
         : isExportedOnRoot(originalDef, ngMocksUniverse.configInstance, ngMocksUniverse.config);
-    if (!def || processed.indexOf(def) !== -1) {
+    if (!def || processed.has(def)) {
       continue;
     }
     const cnfDef = ngMocksUniverse.config.get(def);
-    processed.push(def);
+    processed.add(def);
     cnfDef.onRoot = cnfDef.onRoot || !cnfDef.dependency;
 
     if (isNgDef(def, 'm') && cnfDef.onRoot) {
