@@ -70,6 +70,7 @@ const applyOverride = (def: any, override: any) => {
 };
 
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
+  // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
   for (const [def, [override, original]] of [...overrides]) {
     (TestBed as any).ngMocksOverrides.set(def, {
       ...original,
@@ -83,6 +84,7 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map<any, any> }): void => {
   if (testBed.ngMocksOverrides?.size) {
     ngMocks.flushTestBed();
+    // eslint-disable-next-line unicorn/no-useless-spread -- TestBed override calls can update the shared registry.
     for (const [def, original] of [...testBed.ngMocksOverrides]) {
       applyOverride(def, original);
     }
@@ -205,6 +207,7 @@ const applyPlatformOverridesBasedOnProvidedIn = (provide: any, touches: Set<any>
 };
 
 const applyPlatformOverridesBasedOnDefaults = (touches: Set<any>) => {
+  // eslint-disable-next-line unicorn/no-useless-spread -- Default rules may change while TestBed overrides are applied.
   for (const [provide, [config]] of [...ngMocksUniverse.getDefaults()]) {
     if (config !== 'mock') {
       continue;
@@ -298,7 +301,7 @@ const configureTestingModule =
           funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies, shouldTraverse);
         }
       }
-      for (const dependency of [...realDependencies]) {
+      for (const dependency of realDependencies) {
         // Explicit TestBed entries are applied below and take precedence.
         // Global resolutions keep their existing MockBuilder semantics.
         if (!ngMocksUniverse.getResolution(dependency)) {

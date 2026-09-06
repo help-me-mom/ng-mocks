@@ -125,7 +125,7 @@ export default ({
     ngMocksUniverse.touches.add(dependency);
   }
 
-  for (const [dependency, [resolution]] of [...ngMocksUniverse.getDefaults()]) {
+  for (const [dependency, [resolution]] of ngMocksUniverse.getDefaults()) {
     if (resolution === 'mock' && isNgInjectionToken(dependency)) {
       dependencies.add(dependency);
     }
@@ -138,7 +138,7 @@ export default ({
 
   // Replacement dependencies need a dedicated pass because the replacement side
   // contributes the real providers / tokens we actually want to keep.
-  for (const dependency of [...replaceDef]) {
+  for (const dependency of replaceDef) {
     dependencies.add(dependency);
     addDependencies(dependencies, [dependency, defValue.get(dependency)], replacementDependency =>
       keepReplacementDependency(resolutions, replacementDependency),
@@ -148,6 +148,7 @@ export default ({
   // Global replace rules are discovered while traversing dependencies, so we need
   // one more pass to pull replacement dependencies for entries that were not part
   // of the initial explicit replace set.
+  // eslint-disable-next-line unicorn/no-useless-spread -- addDependencies expands this set during the pass.
   for (const dependency of [...dependencies]) {
     if (ngMocksUniverse.getResolution(dependency) === 'replace') {
       addDependencies(
@@ -160,6 +161,7 @@ export default ({
 
   // Once the dependency graph is complete, assign the final keep/mock/exclude/replace
   // behavior for each discovered dependency and persist it into ngMocksUniverse config.
+  // eslint-disable-next-line unicorn/no-useless-spread -- applyResolution can add replacement dependencies to this set.
   for (const dependency of [...dependencies]) {
     if (configDef.has(dependency)) {
       continue;
@@ -178,6 +180,7 @@ export default ({
     );
   }
 
+  // eslint-disable-next-line unicorn/no-useless-spread -- User config getters can change builder definitions during copying.
   for (const [k, v] of [...configDef]) {
     ngMocksUniverse.config.set(k, {
       ...ngMocksUniverse.getConfigMock().get(k),

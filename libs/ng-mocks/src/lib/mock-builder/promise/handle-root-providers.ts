@@ -13,7 +13,7 @@ export default (ngModule: NgMeta, { keepDef, mockDef }: BuilderData, resolutions
   // Adding missed providers.
   const parameters = keepDef.has(NG_MOCKS_ROOT_PROVIDERS) ? new Set() : getRootProviderParameters(mockDef);
   if (parameters.size > 0) {
-    for (const parameter of [...parameters]) {
+    for (const parameter of parameters) {
       const mock = helperResolveProvider(parameter, resolutions);
       if (mock) {
         ngModule.providers.push(mock);

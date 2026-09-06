@@ -11,6 +11,7 @@ import skipOverride from './skip-override';
 
 export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider => {
   const overrides: Map<Type<any>, [MetadataOverride<any>, MetadataOverride<any>]> = new Map();
+  // eslint-disable-next-line unicorn/no-useless-spread -- getOverrideDef can add dependencies to the touches set.
   for (const proto of [...ngMocksUniverse.touches]) {
     const source: any = proto;
     const value = ngMocksUniverse.getBuildDeclaration(source) || source;

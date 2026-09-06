@@ -292,14 +292,6 @@ export default defineConfig([
     rules: tsEslintPlugin.configs['eslint-recommended'].overrides[0].rules,
   },
   {
-    files: ['libs/ng-mocks/src/lib/**/*.ts'],
-    ignores: ['**/*.spec.ts'],
-    rules: {
-      // Inline spreads snapshot collections before callbacks or dependency traversal can mutate them.
-      'unicorn/no-useless-spread': 'off',
-    },
-  },
-  {
     files: ['**/*.spec.ts'],
     rules: {
       // Test fixtures may intentionally exercise eager change detection.

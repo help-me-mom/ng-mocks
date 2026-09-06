@@ -222,7 +222,7 @@ export class MockBuilderPromise implements IMockBuilder {
   ): Promise<TResult1> {
     const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
       const testBed: TestBedStatic = TestBed.configureTestingModule(this.build()) as never;
-      // Callbacks added during compilation belong to the next run.
+      // eslint-disable-next-line unicorn/no-useless-spread -- Callbacks added during compilation belong to the next run.
       for (const callback of [...this.beforeCC]) {
         callback(testBed);
       }

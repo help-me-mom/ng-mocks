@@ -42,7 +42,7 @@ export default class<K, V> {
   }
 
   public merge(resolutions: Map<K, V>): this {
-    for (const [key, value] of [...resolutions]) {
+    for (const [key, value] of resolutions) {
       this.set(key, value);
     }
 

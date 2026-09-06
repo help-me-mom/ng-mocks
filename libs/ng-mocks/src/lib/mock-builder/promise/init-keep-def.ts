@@ -9,6 +9,7 @@ export default (keepDef: Set<any>, configDef: Map<any, any>): Set<any> => {
   const builtDeclarations = ngMocksUniverse.builtDeclarations;
   const builtProviders = ngMocksUniverse.builtProviders;
   const resolutions = ngMocksUniverse.config.get('ngMocksDepsResolution');
+  // eslint-disable-next-line unicorn/no-useless-spread -- A user config's shallow getter can change kept definitions.
   for (const def of [...keepDef]) {
     const provider = getRootProviderKeepProvider(def);
     builtDeclarations.set(def, def);
