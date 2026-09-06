@@ -1,21 +1,22 @@
 import { ValueProvider } from '@angular/core';
 
-import { mapEntries } from '../../common/core.helpers';
 import { NG_MOCKS } from '../../common/core.tokens';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
 export default (): ValueProvider => {
   const mocks = new Map();
-  for (const [key, value] of [
-    ...mapEntries(ngMocksUniverse.builtProviders),
-    ...mapEntries(ngMocksUniverse.builtDeclarations),
-    ...mapEntries(ngMocksUniverse.cacheDeclarations),
-    ...mapEntries(ngMocksUniverse.cacheProviders),
+  for (const declarations of [
+    ngMocksUniverse.builtProviders,
+    ngMocksUniverse.builtDeclarations,
+    ngMocksUniverse.cacheDeclarations,
+    ngMocksUniverse.cacheProviders,
   ]) {
-    if (mocks.has(key)) {
-      continue;
+    for (const [key, value] of declarations) {
+      if (mocks.has(key)) {
+        continue;
+      }
+      mocks.set(key, value);
     }
-    mocks.set(key, value);
   }
 
   return {

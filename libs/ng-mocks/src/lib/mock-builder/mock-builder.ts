@@ -1,5 +1,5 @@
 import coreDefineProperty from '../common/core.define-property';
-import { flatten, mapKeys } from '../common/core.helpers';
+import { flatten } from '../common/core.helpers';
 import { AnyDeclaration } from '../common/core.types';
 import { NgModuleWithProviders } from '../common/func.is-ng-module-def-with-providers';
 import { isStandalone } from '../common/func.is-standalone';
@@ -27,7 +27,7 @@ export function MockBuilder(...args: Array<MockBuilderParam | MockBuilderParam[]
 
   const instance = new MockBuilderPerformance(args.length < 2 ? { export: true } : { dependency: true });
   const extensions: Map<any, any> = ngMocksUniverse.config.get('MockBuilderExtensions');
-  for (const func of extensions ? mapKeys(extensions) : []) {
+  for (const func of extensions ? extensions.keys() : []) {
     if (helperExtractPropertyDescriptor(instance, func)) {
       throw new Error(`MockBuilder.${func} is a base method and cannot be customized, please use a different name.`);
     }

@@ -53,40 +53,6 @@ export const flatten = <T>(values: T | T[] | { ɵproviders: T[] }, result: T[] =
   return result;
 };
 
-export const mapKeys = <T>(set: Map<T, any>): T[] => {
-  const result: T[] = [];
-  set.forEach((_, value: T) => result.push(value));
-
-  return result;
-};
-
-export const mapValues = <T>(set: { forEach(a1: (value: T) => void): void }, destination?: Set<T>): T[] => {
-  const result: T[] = [];
-  if (destination) {
-    set.forEach((value: T) => {
-      destination.add(value);
-    });
-  } else {
-    set.forEach((value: T) => {
-      result.push(value);
-    });
-  }
-
-  return result;
-};
-
-export const mapEntries = <K, T>(set: Map<K, T>, destination?: Map<K, T>): Array<[K, T]> => {
-  const result: Array<[K, T]> = [];
-
-  if (destination) {
-    set.forEach((value: T, key: K) => destination.set(key, value));
-  } else {
-    set.forEach((value: T, key: K) => result.push([key, value]));
-  }
-
-  return result;
-};
-
 const extractDependencyArray = (deps: any[], set: Set<any>): void => {
   for (const flag of deps) {
     const name = flag && typeof flag === 'object' ? flag.ngMetadataName : undefined;

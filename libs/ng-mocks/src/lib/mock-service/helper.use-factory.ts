@@ -1,6 +1,5 @@
 import { FactoryProvider, Injector } from '@angular/core';
 
-import { mapValues } from '../common/core.helpers';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockHelperStub from '../mock-helper/mock-helper.stub';
@@ -47,7 +46,7 @@ export default <D, I>(
     const instance = init ? init() : MockService(def as any);
 
     const configGlobal: Set<any> | undefined = ngMocksUniverse.getOverrides().get(def);
-    const callbacks = configGlobal ? mapValues(configGlobal) : [];
+    const callbacks = configGlobal ? [...configGlobal] : [];
     if (overrides) {
       callbacks.push(overrides);
     }

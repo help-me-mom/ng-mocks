@@ -1,4 +1,3 @@
-import { mapValues } from '../../common/core.helpers';
 import { isNgDef } from '../../common/func.is-ng-def';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import { MockModule } from '../../mock-module/mock-module';
@@ -15,7 +14,7 @@ export default (
 ): Map<any, any> => {
   const loProviders = new Map();
 
-  for (const def of [...mapValues(keepDef), ...mapValues(mockDef), ...mapValues(replaceDef)]) {
+  for (const def of [...keepDef, ...mockDef, ...replaceDef]) {
     const meta = collectDeclarations(def);
     const providers = [
       ...(defProviders.get(def) ?? []),
@@ -42,7 +41,8 @@ export default (
       ngMocksUniverse.touches.delete(def);
     }
   }
-  for (const def of mapValues(mockDef)) {
+  const mocks = [...mockDef];
+  for (const def of mocks) {
     tryMockDeclaration(def);
   }
 

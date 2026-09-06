@@ -8,7 +8,6 @@ import helperMockService from '../mock-service/helper.mock-service';
 
 import coreDefineProperty from './core.define-property';
 import coreForm from './core.form';
-import { mapValues } from './core.helpers';
 import { AnyType, DirectiveIo } from './core.types';
 import funcDirectiveIoParse from './func.directive-io-parse';
 import funcIsMock from './func.is-mock';
@@ -197,7 +196,7 @@ export type ngMocksMockConfig = {
 
 const applyOverrides = (instance: any, mockOf: any, injector?: Injector): void => {
   const configGlobal: Set<any> | undefined = ngMocksUniverse.getOverrides().get(mockOf);
-  const callbacks = configGlobal ? mapValues(configGlobal) : [];
+  const callbacks = configGlobal ? [...configGlobal] : [];
   if (instance.__ngMocksConfig.init) {
     callbacks.push(instance.__ngMocksConfig.init);
   }

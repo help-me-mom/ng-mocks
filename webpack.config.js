@@ -30,6 +30,26 @@ const performance = {
   maxEntrypointSize: 800 * 1024,
 };
 
+const optimization = {
+  // core.helpers uses direct eval. Separate scopes let the minifier remove unused
+  // tslib helpers instead of retaining them in an enclosing concatenated scope.
+  concatenateModules: false,
+  // Avoid repeating full module paths in development UMD imports too.
+  moduleIds: 'deterministic',
+  usedExports: true,
+  // Development builds still discard unused helpers, while keeping names and formatting.
+  minimize:
+    process.env.MODE === 'development'
+      ? {
+          javascript: {
+            compress: { defaults: false, dead_code: true, unused: true, side_effects: true },
+            mangle: false,
+            format: { beautify: true, comments: false, indent_level: 2 },
+          },
+        }
+      : true,
+};
+
 module.exports = [
   {
     mode: process.env.MODE || 'production',
@@ -46,6 +66,7 @@ module.exports = [
     },
     externals: /^@angular\//,
     performance,
+    optimization,
     plugins: [
       // The UMD external order is not stable across webpack versions. In CommonJS,
       // core/testing must register Angular's JIT facade before common is evaluated.
@@ -66,6 +87,9 @@ module.exports = [
                 compilerOptions: {
                   downlevelIteration: true,
                   ignoreDeprecations: '6.0',
+                  // Keep helper imports static so webpack can discard unused tslib exports.
+                  module: 'ES2015',
+                  moduleResolution: 'bundler',
                 },
                 configFile: path.resolve(__dirname, './libs/ng-mocks/tsconfig.json'),
                 transpileOnly: true,
@@ -103,6 +127,7 @@ module.exports = [
     },
     externals: /^@angular\//,
     performance,
+    optimization,
     module: {
       rules: [
         {

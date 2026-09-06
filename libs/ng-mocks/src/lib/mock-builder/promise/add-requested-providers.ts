@@ -1,5 +1,5 @@
 import CoreDefStack from '../../common/core.def-stack';
-import { extractDependency, flatten, mapValues } from '../../common/core.helpers';
+import { extractDependency, flatten } from '../../common/core.helpers';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 import funcGetType from '../../common/func.get-type';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
@@ -9,7 +9,7 @@ import { BuilderData, NgMeta } from './types';
 
 export default (ngModule: NgMeta, { providerDef, mockDef }: BuilderData, resolutions: CoreDefStack<any, any>): void => {
   // Adding requested providers to test bed.
-  for (const provider of mapValues(providerDef)) {
+  for (const provider of providerDef.values()) {
     ngModule.providers.push(provider);
   }
 
@@ -23,7 +23,8 @@ export default (ngModule: NgMeta, { providerDef, mockDef }: BuilderData, resolut
     }
   }
 
-  for (const def of mapValues(mockDef)) {
+  const mocks = [...mockDef];
+  for (const def of mocks) {
     if (ngMocksUniverse.touches.has(def) || coreReflectProvidedIn(def) !== 'root') {
       continue;
     }

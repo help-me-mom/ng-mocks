@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": false,
+    "importHelpers": true,
     "outDir": "../../dist/libs/ng-mocks",
     "rootDir": "./src",
     "allowSyntheticDefaultImports": true,

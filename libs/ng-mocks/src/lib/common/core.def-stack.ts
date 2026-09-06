@@ -1,5 +1,3 @@
-import { mapEntries } from './core.helpers';
-
 export default class<K, V> {
   protected stack: Array<Map<K, V>> = [];
 
@@ -44,7 +42,8 @@ export default class<K, V> {
   }
 
   public merge(resolutions: Map<K, V>): this {
-    for (const [key, value] of mapEntries(resolutions)) {
+    const entries = [...resolutions];
+    for (const [key, value] of entries) {
       this.set(key, value);
     }
 

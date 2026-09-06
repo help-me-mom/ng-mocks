@@ -11,7 +11,7 @@ import helperCreateClone from '../mock-service/helper.create-clone';
 
 import coreConfig from './core.config';
 import coreDefineProperty from './core.define-property';
-import { flatten, mapEntries, mapValues } from './core.helpers';
+import { flatten } from './core.helpers';
 import coreInjector from './core.injector';
 import coreReflectMeta from './core.reflect.meta';
 import coreReflectProvidedIn from './core.reflect.provided-in';
@@ -70,7 +70,8 @@ const applyOverride = (def: any, override: any) => {
 };
 
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
-  for (const [def, [override, original]] of mapEntries(overrides)) {
+  const entries = [...overrides];
+  for (const [def, [override, original]] of entries) {
     (TestBed as any).ngMocksOverrides.set(def, {
       ...original,
       override,
@@ -83,7 +84,8 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map<any, any> }): void => {
   if (testBed.ngMocksOverrides?.size) {
     ngMocks.flushTestBed();
-    for (const [def, original] of mapEntries(testBed.ngMocksOverrides)) {
+    const overrides = [...testBed.ngMocksOverrides];
+    for (const [def, original] of overrides) {
       applyOverride(def, original);
     }
   }
@@ -126,7 +128,9 @@ const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touche
         }
       }
 
-      mapValues(def.__ngMocksTouches, touches);
+      for (const value of def.__ngMocksTouches) {
+        touches.add(value);
+      }
     }
   }
 };
@@ -203,7 +207,8 @@ const applyPlatformOverridesBasedOnProvidedIn = (provide: any, touches: Set<any>
 };
 
 const applyPlatformOverridesBasedOnDefaults = (touches: Set<any>) => {
-  for (const [provide, [config]] of mapEntries(ngMocksUniverse.getDefaults())) {
+  const defaults = [...ngMocksUniverse.getDefaults()];
+  for (const [provide, [config]] of defaults) {
     if (config !== 'mock') {
       continue;
     }
@@ -296,7 +301,8 @@ const configureTestingModule =
           funcExtractDeps(funcGetType(source), realDependencies, true, visitedDependencies, shouldTraverse);
         }
       }
-      for (const dependency of mapValues(realDependencies)) {
+      const keptDependencies = [...realDependencies];
+      for (const dependency of keptDependencies) {
         // Explicit TestBed entries are applied below and take precedence.
         // Global resolutions keep their existing MockBuilder semantics.
         if (!ngMocksUniverse.getResolution(dependency)) {

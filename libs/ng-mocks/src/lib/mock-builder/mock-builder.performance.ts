@@ -1,6 +1,5 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 
-import { mapEntries, mapValues } from '../common/core.helpers';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import { MockBuilderPromise } from './mock-builder.promise';
@@ -8,7 +7,6 @@ import areEqualConfigParams from './performance/are-equal-config-params';
 import areEqualMaps from './performance/are-equal-maps';
 import areEqualProviders from './performance/are-equal-providers';
 import areEqualSets from './performance/are-equal-sets';
-import getEmptyConfig from './performance/get-empty-config';
 import requiredMetadata from './performance/required-metadata';
 import { IMockBuilderResult } from './types';
 
@@ -60,20 +58,17 @@ export class MockBuilderPerformance extends MockBuilderPromise {
   }
 
   private cloneConfig() {
-    const config = getEmptyConfig();
-
-    mapValues(this.beforeCC, config.beforeCC);
-    mapValues(this.excludeDef, config.excludeDef);
-    mapValues(this.keepDef, config.keepDef);
-    mapValues(this.mockDef, config.mockDef);
-    mapValues(this.replaceDef, config.replaceDef);
-
-    mapEntries(this.configDef, config.configDef);
-    mapEntries(this.defProviders, config.defProviders);
-    mapEntries(this.defValue, config.defValue);
-    mapEntries(this.providerDef, config.providerDef);
-
-    return config;
+    return {
+      beforeCC: new Set(this.beforeCC),
+      configDef: new Map(this.configDef),
+      defProviders: new Map(this.defProviders),
+      defValue: new Map(this.defValue),
+      excludeDef: new Set(this.excludeDef),
+      keepDef: new Set(this.keepDef),
+      mockDef: new Set(this.mockDef),
+      providerDef: new Map(this.providerDef),
+      replaceDef: new Set(this.replaceDef),
+    };
   }
 
   private equalsTo(prototype: Record<keyof any, any>): boolean {

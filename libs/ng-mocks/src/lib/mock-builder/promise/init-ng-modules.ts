@@ -1,4 +1,4 @@
-import { flatten, mapValues } from '../../common/core.helpers';
+import { flatten } from '../../common/core.helpers';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
 import { AnyDeclaration, Type } from '../../common/core.types';
 import errorJestMock from '../../common/error.jest-mock';
@@ -72,7 +72,7 @@ const isExportedOnRoot = (
     return def;
   }
 
-  for (const parent of mapValues(cnfInstance.exported)) {
+  for (const parent of cnfInstance.exported) {
     const returnModule = isExportedOnRoot(parent, configInstance, configDef);
     // istanbul ignore else
     if (returnModule) {
@@ -104,7 +104,7 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
   const processed = new Set<AnyDeclaration<any>>();
   const forgotten: AnyDeclaration<any>[] = [];
 
-  const defs = [...mapValues(mockDef), ...mapValues(keepDef), ...mapValues(replaceDef)];
+  const defs = [...mockDef, ...keepDef, ...replaceDef];
   defs.sort(moveModulesUp);
 
   // Adding suitable leftovers.
