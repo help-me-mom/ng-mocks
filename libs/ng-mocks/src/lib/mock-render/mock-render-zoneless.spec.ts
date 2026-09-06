@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { ngMocks } from '../mock-helper/mock-helper';
+
 import { MockRenderFactory } from './mock-render-factory';
 
 @Component({
@@ -18,6 +20,9 @@ class ZonelessInputComponent {
 }
 
 describe('MockRender zoneless input params', () => {
+  // Core also loads Zone.js, so zoneless setup emits the expected NG0914 notice.
+  ngMocks.ignoreOnConsole('warn');
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ZonelessInputComponent],
