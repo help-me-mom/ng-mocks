@@ -21,6 +21,7 @@ Use this skill when the current local branch should be replayed onto `upstream/m
   - For package.json conflicts: compare each dependency individually and keep the highest semantic version (e.g., 11.11.1 > 11.11.0, 21.2.0 > 20.3.2)
   - After resolving lockfile conflicts: regenerate via wrapper before committing
 - [ ] Re-apply any stash and resolve conflicts with the same rules
+- [ ] Read the updated repo guidance and apply it to the replayed changes
 - [ ] Delete the backup branch
 - [ ] Run validation and summarize the final branch state
 ```
@@ -141,6 +142,10 @@ git branch -D "$BACKUP_BRANCH"
 ```
 
 ### 8. Validation
+
+Read `AGENTS.md` and the relevant repo skills from the updated branch, even when replaying commits produced
+no conflicts. Review the branch's implementation, specs, and docs against those instructions and the closest
+current examples. Apply required style or workflow changes before running validation or updating the PR.
 
 Run validation for affected targets:
 

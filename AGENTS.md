@@ -105,45 +105,51 @@
 
 ## Spec and Documentation Examples
 
-- Before adding or editing any spec or documentation, find and read the closest existing examples in the
-  repository. This is required even when the requested library or feature has no examples of its own.
-- Choose references by component purpose and tested behavior, across library boundaries. For example, a widget
-  that displays rows and columns should lead to existing table examples; form controls should lead to other form
-  controls. Compare input bindings, output events, rendered content, and mocked or kept dependencies. A shared
-  framework, adjacent directory, or recent addition alone does not make an example the closest match.
-- For library integrations, inspect both the analogous specs in `tests-e2e/src` and their guide in
-  `docs/articles/guides/libraries`. For other work, inspect the matching examples, feature specs, and API or guide
-  pages. Search with functional terms and synonyms, not only the package or API name; for tabular components, a
-  starting search is `rg -n -i 'table|grid|row|column' tests-e2e/src docs/articles/guides/libraries`.
-- Before implementation, record the chosen reference paths and why their behavior is similar in the task notes.
-  Follow their file and suite structure, naming, setup, ng-mocks helpers, comments, and assertion flow. Match the
-  guide's teaching order, tool links, and annotated snippets. Adapt API and runtime differences as needed, and
-  explain material departures from the chosen pattern.
-- Put documented core use cases in `examples/<ExampleName>`, with the classic case in `test.spec.ts` and
-  variants such as signal queries in `signals.spec.ts` beside it. Follow existing example and suite names and
-  gate version-specific files in `test-spread.conf`; do not put these examples in `tests-e2e/src/app`.
-- Before finishing, compare the changes with those references and check documentation snippets against their
-  executable specs. If no close example exists, broaden the search to related behavior and local history before
-  introducing a new pattern, and note the gap.
-- When adding a guide, use the sidebar for navigation. Do not edit existing API pages or guides merely to add
-  backlinks to the new article unless explicitly requested. Update existing articles when their documented
-  behavior changes or their content needs correction.
-- Write published documentation examples as ordinary code for an Angular version appropriate to the feature,
-  not as spread tests that must compile across supported versions. Keep each example's APIs and defaults consistent
-  with that version; state the target version briefly when it affects how the example is used.
-- Remove compatibility scaffolding from docs snippets: redundant `standalone: true` or `standalone: false`, metadata
-  casts, version guards, uniqueness-only methods, compatibility-only declarations, and older syntax or dependency
-  fallbacks. Keep metadata that is
-  necessary for the chosen version or is itself being taught. Do not replace removed scaffolding with per-version
-  instructions to patch the live example. Keep actual support boundaries and migration guidance where relevant.
-- Preserve the tested setup, behavior, and meaningful assertions when simplifying docs. Keep compatibility code in
-  the executable specs; a docs cleanup must not weaken their supported-version coverage. Follow
-  `.agents/skills/clean-doc-examples/SKILL.md` for the detailed workflow.
+### Learn from existing examples
+
+- Before editing specs or docs, read the closest functional specs and their matching articles. Choose by behavior:
+  tables for rows and columns, form controls for input and validation, query examples for projected dependencies.
+  Search across library boundaries when the feature has no direct example; a nearby file alone is not a reference.
+  Compare bindings, rendered content, and kept or mocked dependencies.
+- Start in `examples` and `tests` for core behavior, or `tests-e2e/src` and
+  `docs/articles/guides/libraries` for integrations. Search by behavior as well as API names.
+- Record the reference paths and why they apply. Follow their filenames, suite names, setup, ng-mocks helpers,
+  inline assertions, and comments. Follow the articles' teaching order, tool links, and annotated examples.
+- If those references do not settle a pattern, inspect analogous local history or merged non-bot PRs. Explain
+  necessary departures, and compare the finished changes with the references before reporting completion.
+
+### Place and name executable specs
+
+- Put documented core use cases in `examples/<ExampleName>`. Use `test.spec.ts` for the classic case and a named
+  variant such as `signals.spec.ts` beside it. Match existing suite names, such as `ExampleName:signals`.
+- Put focused library regressions in `tests/issue-<number>` and integration cases in the appropriate
+  `tests-e2e/src` suite. Do not put core example specs in `tests-e2e/src/app`.
+- Follow `Test Style` for per-file version, feature, environment, and compiler constraints.
+
+### Write the articles
+
+- Distinguish testing a real declaration from mocking it as a dependency. Give independent API use cases separate
+  articles and clearly identify decorator and signal examples. For content queries, keep separate testing and
+  mocking articles for both `ContentChild` and `ContentChildren`, with both approaches in each article.
+- Write each published example as ordinary code for one appropriate Angular version. Keep APIs, syntax, and
+  defaults consistent, and state the version briefly when readers need it to use the example.
+- Preserve the tested setup, behavior, and meaningful assertions. Remove compatibility-only flags, casts, guards,
+  marker methods, and fallback syntax from the article. Keep options required by the example's Angular version
+  or taught by the article. Keep compatibility machinery in executable specs, without per-version patch
+  instructions in the live example. Use the [docs-example skill](.agents/skills/clean-doc-examples/SKILL.md).
+- Check embedded snippets and source links against the executable specs before finishing.
+- Use the sidebar to introduce guides. Do not add backlinks to existing articles unless requested; edit existing
+  articles when their documented behavior changes or their content needs correction.
 
 ## Test Style
 
-- Never add helper functions in tests. Keep the relevant setup, action, and assertion flow inline in each spec, even when that means duplicating a short block, so regressions stay obvious across Angular spread targets.
-- Prefer static ES imports in source and tests. Do not use `require` or dynamic module access unless there is a concrete technical reason; if an Angular API is unavailable in older spread targets, gate that file in `test-spread.conf` with `versions=` or `features=` instead of bypassing TypeScript compatibility.
+- Never add helper functions in tests. Keep setup, actions, and assertions inline, even when a short block is
+  repeated, so the regression remains clear across spread targets.
+- Prefer static ES imports. For APIs unavailable in older Angular targets, gate the file in `test-spread.conf`
+  with `versions=` or `features=`. Do not bypass TypeScript compatibility with dynamic imports or runtime skips.
+- Some root tests only transpile TypeScript. When an API requires Angular's compiler transform, follow the
+  existing compiler-metadata check pattern and verify that compiled spread targets execute the real cases.
+  This runner check does not replace the file's Angular version or feature gate.
 - Keep the direct reproducer for an issue in `tests/issue-<number>` when that is the appropriate runtime surface. Add
   an in-file `@see` issue link near the suite and a concise root-cause comment when the failure is subtle. Put broader
   adjacent-policy audits in the relevant feature suite instead of expanding the issue test indefinitely.

@@ -7,6 +7,9 @@ description: Use when triaging or fixing ng-mocks GitHub issues and bug reports 
 
 Use this workflow to turn a reported ng-mocks issue into a reproducible local test, a minimal fix, validated coverage, and publish-ready GitHub artifacts. Keep these instructions tool-neutral: prefer repo scripts, shell commands, and plain Markdown that any LLM, agent, or human contributor can follow.
 
+For a docs-only issue, follow the example and documentation steps. Add runtime changes only for a demonstrated
+behavior gap; a request for documentation does not require inventing a source fix.
+
 ## Task List
 
 Create and maintain a plain Markdown checklist:
@@ -18,7 +21,8 @@ Create and maintain a plain Markdown checklist:
 - [ ] Reproduce the bug with a local `issue-*` regression test
 - [ ] Fix the implementation without changing the reproducer test
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
-- [ ] Prepare comments, commit message, and PR against `upstream/main`
+- [ ] Update the matching docs and review them against the executable examples
+- [ ] Prepare the commit and PR against `upstream/main`
 ```
 
 ## Workflow
@@ -35,12 +39,9 @@ Create and maintain a plain Markdown checklist:
    - Use available GitHub access: `gh`, the GitHub web UI, the GitHub API, or any configured connector.
    - Prefer commands that are easy to reproduce, such as `gh issue view <issue-number> --repo help-me-mom/ng-mocks --comments`.
    - Search duplicates and related work with `gh issue list`, `gh pr list --search`, GitHub search, and local `git log --grep`.
-   - Before adding or editing specs or docs, follow
-     [Spec and Documentation Examples](../../../AGENTS.md#spec-and-documentation-examples). Choose references by
-     component purpose and tested behavior across libraries, inspect both their specs and paired guides, and
-     record the reference paths before implementing. Follow those patterns in the new specs and documentation.
-   - If current guidance and the selected examples still leave a pattern unclear, inspect analogous local history
-     or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
+   - Follow [Spec and Documentation Examples](../../../AGENTS.md#spec-and-documentation-examples): read the
+     closest functional specs and their articles, record the reference paths, and use their structure and style.
+     Consult analogous human-authored history when the pattern remains unclear.
    - Inspect prior fixes with similar symptoms: `git log --no-merges --oneline --all -- 'tests/issue-*' 'tests-e2e/src/issue-*' 'e2e/*/src/tests/issue-*'`.
 3. Create a dedicated worktree before changing files:
    - default branch name: `issues/<issue-number>`
@@ -73,33 +74,41 @@ Create and maintain a plain Markdown checklist:
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
+6. Update and review documentation:
+   - Keep testing a real declaration and mocking a dependency clear, with separate articles for independent APIs.
+     Identify decorator and signal variants where both exist.
+   - Follow the [docs-example skill](../clean-doc-examples/SKILL.md) when syncing published snippets. Keep them
+     readable for the stated Angular version and preserve the executable specs' coverage.
+   - Use sidebar navigation for new guides; do not add incidental backlinks to existing articles.
 
 ## Test Placement
 
-Choose the location by runtime surface:
+| Purpose                        | Location                                                         |
+| ------------------------------ | ---------------------------------------------------------------- |
+| Documented core use case       | `examples/<ExampleName>/test.spec.ts`                            |
+| Variant of that example        | A file such as `examples/<ExampleName>/signals.spec.ts`          |
+| Focused library regression     | `tests/issue-<number>/test.spec.ts`                              |
+| External integration           | The matching suite under `tests-e2e/src`                         |
+| Runner or packaging regression | The matching suite under `e2e/jest`, `e2e/jasmine`, or `e2e/min` |
 
-- `examples/<ExampleName>/test.spec.ts`: documented core use cases. Keep variants such as `signals.spec.ts`
-  in the same example folder and gate them in `test-spread.conf`. Follow neighboring example and suite names;
-  do not place these examples in `tests-e2e/src/app`.
-- `tests/issue-<issue-number>/test.spec.ts`: default for core library regressions. These files are spread into versioned Angular e2e projects through `test-spread.conf`.
-- `tests-e2e/src/issue-<issue-number>/test.spec.ts`: use for external library integration, Angular features that cannot compile across the spread matrix, or app-level behavior covered by `tests-e2e`.
-- `e2e/jest/src/tests/issue-<issue-number>/test.spec.ts`: use for Jest-only behavior, Jest snapshots, or `jest.mock` interactions.
-- `e2e/jasmine/src/tests/issue-<issue-number>/test.spec.ts`: use for Jasmine-only behavior.
-- `e2e/min/src/tests/issue-<issue-number>/test.spec.ts`: use for package/minified consumer behavior.
+Core examples belong in `examples`, including compiler-dependent variants; do not put them in
+`tests-e2e/src/app`. Follow neighboring filenames and suite names. Keep issue reproducers under
+`describe('issue-<number>')`, with an `@see` issue link and a short root-cause comment when needed.
 
-When adding a spread test:
+Follow [Test Style](../../../AGENTS.md#test-style): static imports, inline setup and assertions, and no test helpers.
+Use `test-spread.conf` for actual API, version, and environment boundaries. Keep classic and modern APIs in
+separate files when their boundaries differ. For APIs that need Angular compilation, follow the existing
+compiler-metadata check pattern and confirm the compiled spread runners execute the cases.
 
-- Give selectors, classes, and marker methods issue-specific names where collisions are possible.
-- Match nearby compatibility style, including `VERSION.major` guards and metadata casts such as `['standalone' as never]` when older TypeScript or Angular targets still parse the file.
-- If a file imports APIs unavailable in older Angular targets, gate it in `test-spread.conf` at the actual
-  version, feature, and environment boundaries instead of relying only on runtime guards. Split independently testable
-  APIs when their boundaries differ; keep a cohesive regression at the first common boundary when necessary.
-- Prefer one `describe('issue-<number>')` suite with assertions that prove the reported failure and the expected behavior.
-- Add an in-file `// @see https://github.com/help-me-mom/ng-mocks/issues/<issue-number>` link near the regression suite. For subtle regressions, add a short comment block that explains the reported failure, the root cause, and the fix so future readers do not need to reconstruct the issue from the PR.
+Retain compatibility syntax only where an included target needs it. Do not copy legacy runtime version skips
+or add marker methods without a concrete need.
 
 ## Validation
 
 Run validation from the dedicated issue worktree. Use repo wrappers for required validation. Use a unique `COMPOSE_PROJECT_NAME` when another worktree or automation session might be active.
+
+Choose checks using [Validation Expectations](../../../AGENTS.md#validation-expectations). The commands below
+apply to source fixes; docs-only or guidance-only edits may skip wrapper tests with an explicit final summary.
 
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh compose.sh root

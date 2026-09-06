@@ -1,83 +1,86 @@
 ---
 name: clean-doc-examples
-description: Use when syncing or simplifying example code in docs/articles or README.md so embedded docs samples stay aligned with executable specs while removing compatibility noise from the published snippets.
+description: Sync Angular examples in docs/articles or README.md with executable specs and remove compatibility-only code from published snippets.
 ---
 
 # Clean Doc Examples
 
-Use this skill when the task is to refresh and simplify documentation code examples without changing the real test sources unless explicitly requested.
+Use this skill when writing or updating published Angular examples. Keep the examples aligned with executable
+specs while making the article readable for its intended Angular version.
 
 ## Task List
 
-Create a plain Markdown checklist that AI Agent can follow:
+Create and maintain a plain Markdown checklist:
 
 ```md
 - [ ] Find the closest functional examples and read their specs and docs
-- [ ] Inspect the affected docs, executable specs, and relevant non-bot history
+- [ ] Identify the source spec and the article's testing or mocking purpose
 - [ ] Choose a consistent Angular version and defaults for each published example
-- [ ] Sync embedded docs samples with the current example tests when needed
-- [ ] Simplify docs-only snippets for readability
+- [ ] Sync the snippets and remove compatibility-only code
 - [ ] Run lightweight validation and summarize what changed
 ```
 
 ## Workflow
 
-1. Before editing, follow [Spec and Documentation Examples](../../../AGENTS.md#spec-and-documentation-examples).
-   Select references by component purpose and tested behavior across libraries, then read their specs and paired
-   guides. Inspect `docs/articles`, `README.md`, and the matching executable specs under `examples`, `tests`, or
-   `tests-e2e/src`. Record the reference paths and follow their structure, teaching order, and annotated examples.
-2. If the task mentions history or doc drift, inspect recent non-bot commits that touched `examples` or docs:
-   - `git log --no-merges --author='^(?!.*(renovate|dependabot)).*$' --perl-regexp -- examples tests tests-e2e/src docs/articles README.md`
-3. If a docs page embeds or references a spec example, sync the snippet to the current source test before simplifying it for docs-only readability.
-4. Keep the real spec files as the source of truth. Do not rewrite them unless the user explicitly asks.
-5. Treat each published example as ordinary application/test code for an Angular version appropriate to the feature.
-   Do not make docs snippets compile across the repository's entire spread matrix. Keep APIs, dependency syntax, and
-   Angular defaults consistent within each example, and state its target version briefly when that matters to use it.
-   Apply readability cleanup only in docs snippets:
-   - remove compatibility-only casts such as `as never` or `as any`
-   - remove redundant `standalone: true` and `standalone: false`; keep an explicit flag only when necessary for the
-     chosen Angular version or when the flag itself is being taught
-   - remove empty uniqueness-only methods such as `public someMarker() {}`
-   - remove declarations and template bindings used solely to align old Angular engines, when they are unnecessary
-     for the chosen version; preserve declarations involved in the behavior being taught
-   - remove `TODO` comments and Angular version guards from docs snippets
-   - if `ViewChild`, `ViewChildren`, `ContentChild`, or `ContentChildren` use `{}` as the second argument, remove that empty argument
-   - remove `const assertion: any` helpers and use `jasmine` directly
-   - prefer direct Jasmine examples in visible code; keep Jest alternatives only as comments when helpful
-   - inline `@Injectable({ ... })` config instead of `const ...Args = [...]` plus `@Injectable(...args)`
-   - replace old-version syntax and dependency fallbacks with ordinary equivalents supported by the chosen version,
-     such as optional chaining for null guards and RxJS `of(value)` for a synchronous one-value observable
-   - use direct, meaningful Jasmine assertions instead of compatibility or lint-workaround assertion scaffolding
-   - do not replace removed compatibility code with per-version instructions to add or remove options in live examples;
-     keep actual API availability, support boundaries, and migration guidance where relevant
-6. Keep guide prose aligned with the simplified snippet, and compare the final examples and guide structure with the selected references.
-7. For docs-only changes, validate with search-based checks and `git diff --check`. Skip wrapper tests unless the user specifically wants them or non-doc files changed.
+1. Read the closest functional specs and their articles, following
+   [Spec and Documentation Examples](../../../AGENTS.md#spec-and-documentation-examples). Record why those
+   references apply and follow their teaching order, tool links, comments, and assertion flow. If the pattern
+   remains unclear, inspect human-authored history with `git log --no-merges --oneline -- <relevant-paths>`.
+2. Identify the article's purpose and source spec. Keep testing a real declaration distinct from mocking a
+   dependency, and use separate articles for independent API use cases. Clearly identify classic and signal
+   variants. Core examples belong in `examples/<ExampleName>/test.spec.ts`, with files such as `signals.spec.ts`
+   beside them; integration examples belong in the relevant `tests-e2e/src` suite.
+3. Choose one appropriate Angular version for each published example. Keep APIs, syntax, dependencies, and
+   defaults consistent. State the version when it affects how readers use the example.
+4. Sync each snippet with its current executable spec, then apply the cleanup below. Preserve setup, observable
+   behavior, and meaningful assertions. If the task is docs-only, do not change the executable spec to simplify
+   the article.
+5. Compare the finished article with its references and source spec. Check source links after moving or renaming
+   specs, and add new guides to the sidebar. Do not add backlinks to existing articles unless requested or their
+   content needs correction.
+
+## Published Snippet Cleanup
+
+- Remove redundant `standalone: true` or `standalone: false`. Keep the flag when the chosen Angular version
+  requires it or the article teaches it.
+- Remove compatibility casts, Angular version or compiler guards, and compatibility `TODO` comments.
+- Remove marker methods, declarations, and template bindings used only to accommodate the spread matrix.
+  Preserve declarations and bindings involved in the behavior being taught.
+- Remove empty query options such as the second argument in `@ContentChild(Child, {})`.
+- Use ordinary syntax available in the chosen version, such as optional chaining and RxJS `of(value)`, instead
+  of older-version fallbacks. Write decorator metadata directly, such as `@Injectable({ ... })`.
+- Use direct Jasmine assertions. Remove assertion aliases such as `const assertion: any` and lint workarounds;
+  include a Jest alternative only as a comment when useful.
+- Keep actual API availability and migration guidance, but do not replace removed compatibility code with
+  per-version instructions to patch the live example.
 
 ## Validation
 
-- For docs-only changes:
-  - review snippets against their source files and use `rg` to search for the targeted cleanup patterns
-  - run `git diff --check -- docs/articles README.md`
-- Run formatting and any required docs build through existing repo npm scripts in Docker:
-  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:repo`
-  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:check`
-  - `COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run build:docs`
+Review snippets and source links manually, use `rg` for targeted cleanup checks, and run:
+
+```bash
+git diff --check -- docs/articles README.md
+COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:repo
+COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:check
+```
+
+When a docs build is needed, use the existing Docker command:
+
+```bash
+COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run build:docs
+```
+
+For docs-only changes, wrapper tests may be skipped; say so in the final summary. If executable files also
+changed, follow the runbook's validation requirements for those files.
 
 ## Guardrails
 
-- Adding a guide does not justify inserting backlinks into existing API pages or guides. Use sidebar navigation
-  unless those edits are explicitly requested or the existing content itself needs correction.
-- Do not edit executable specs just to make docs prettier unless the user explicitly asked to change the tests too.
-- Preserve the setup, observable behavior, and assertion meaning when simplifying published snippets; do not copy
-  compatibility scaffolding back from the executable spread tests during a later sync.
-- Do not claim docs are synced until embedded example blocks or referenced snippets have been checked against their executable specs.
-- Prefer primary repo sources over memory: `examples`, `tests`, `tests-e2e/src`, `README.md`, `docs/articles`, and recent human-authored git history.
-- If docs and executable behavior disagree, trust the current scripts/tests first and update the docs.
-- For docs-only work, say explicitly in the final summary if wrapper tests were skipped.
-- Follow `AGENTS.md`'s Docker-only execution rule. Never use local runtimes or custom snippet, AST, or generated-HTML
+- Keep necessary compatibility machinery in executable specs. A later docs sync must not copy it back into the
+  article or weaken version coverage.
+- Trust current scripts and tests when prose disagrees with executable behavior; correct the prose.
+- Follow [Docker-Only Execution](../../../AGENTS.md#docker-only-execution). Do not invent snippet or generated-HTML
   validation scripts, including scripts run inside Docker.
-- If an approved command fails or required tooling is missing, report the command, error, and remaining work to the
-  user and discuss the solution before trying a workaround.
-- Follow `AGENTS.md`'s worktree isolation rule. If a docs build cannot resolve a linked worktree's Git metadata, do not
-  mount the primary checkout or its `.git` directory into Docker, run the build in that checkout, or change its branch.
-  Report the failure and keep all work in the independent worktree.
+- Follow [Worktree Isolation](../../../AGENTS.md#worktree-isolation). A docs build failure does not justify
+  mounting the primary checkout or its Git metadata, running the build there, or changing its branch.
+- Report a failed command, its error, and remaining work before discussing a workaround. Do not claim validation
+  passed or snippets were synced without completing the relevant checks.
