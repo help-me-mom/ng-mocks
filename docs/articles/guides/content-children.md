@@ -8,6 +8,9 @@ When we test a component or directive that uses `ContentChildren`,
 we need to project the children that belong in its query results.
 We can mock those children while keeping the declaration with the query real.
 
+The first examples use the `@ContentChildren` decorator. For the `contentChildren()` signal API,
+see [Signal content queries](#signal-content-queries).
+
 To replace the declaration with a mock, see [How to mock ContentChildren](mock/content-children.md).
 For a query that returns one child, see [How to test ContentChild](content-child.md).
 
@@ -134,7 +137,7 @@ For a mocked declaration's signal collection, see
 
 ## Live example
 
-This Angular 18 NgModule example focuses on the collection cases from `TestContentChild`.
+This decorator example uses Angular 18 NgModules and focuses on the collection cases from `TestContentChild`.
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestContentChild/test.spec.ts&initialpath=%3Fspec%3DTestContentChild)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestContentChild/test.spec.ts&initialpath=%3Fspec%3DTestContentChild)
@@ -214,7 +217,7 @@ describe('TestContentChild', () => {
 
 This example uses Angular 19+ standalone defaults and compiler-initialized signal queries.
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/signals.spec.ts"
 import {
   Component,
   computed,
@@ -273,7 +276,7 @@ describe('TestContentChild:signals', () => {
     const fixture = MockRender(HostComponent);
     const target = ngMocks.findInstance(TargetComponent);
     const items = ngMocks.findInstances(ItemDirective);
-    const elements = fixture.nativeElement.querySelectorAll('span');
+    const elements = ngMocks.findAll('span').map(element => element.nativeElement);
 
     // Compare direct children, descendants, and the elements read from them.
     expect(target.direct()).toEqual([items[0]]);
@@ -306,7 +309,7 @@ describe('TestContentChild:signals', () => {
     expect(target.all()).toEqual(restored);
     expect(target.labels()).toEqual(['first', 'nested']);
     expect(target.elements().map(element => element.nativeElement)).toEqual([
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
       elements[1],
     ]);
   });

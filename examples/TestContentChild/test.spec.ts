@@ -104,6 +104,8 @@ class TargetComponent implements AfterContentInit {
 })
 class TargetModule {}
 
+// Classic @ContentChild and @ContentChildren queries. See signals.spec.ts for
+// the contentChild() and contentChildren() APIs.
 describe('TestContentChild', () => {
   // Reset child customizations after each test.
   MockInstance.scope();

@@ -7,6 +7,9 @@ sidebar_label: ContentChild
 When a component or directive with `ContentChild` is a dependency of the declaration under test,
 we can replace it with a mock and test its caller's bindings and projected content.
 
+The first examples use the `@ContentChild` decorator. For the `contentChild()` signal API,
+see [Signal content queries](#signal-content-queries).
+
 For tests of the declaration's own query results and lifecycle, see
 [How to test ContentChild](../content-child.md).
 For collections of projected children, see [How to mock ContentChildren](content-children.md).
@@ -141,7 +144,7 @@ To test Angular's query resolution and updates, [keep the declaration real](../c
 
 ## Live example
 
-This example shows the template query and rendering case from `TestContentChild`.
+This Angular 18 decorator example shows the template query and rendering case from `TestContentChild`.
 The source file also contains the child queries covered in the [testing guide](../content-child.md).
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestContentChild/test.spec.ts&initialpath=%3Fspec%3DTestContentChild)
@@ -192,7 +195,7 @@ describe('TestContentChild', () => {
 
 This example uses Angular 19+ standalone defaults.
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/signals.spec.ts"
 import {
   Component,
   contentChild,

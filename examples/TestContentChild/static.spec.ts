@@ -32,10 +32,12 @@ class TargetComponent implements OnInit, AfterContentInit {
   public dynamicChild?: ItemDirective;
 
   public atInit?: ItemDirective;
+  public dynamicAtInit?: ItemDirective;
   public atContentInit?: ItemDirective;
 
   public ngOnInit(): void {
     this.atInit = this.staticChild;
+    this.dynamicAtInit = this.dynamicChild;
   }
 
   public ngAfterContentInit(): void {
@@ -82,6 +84,7 @@ describe('TestContentChild:static', () => {
 
     // Static queries are ready at OnInit; dynamic queries at AfterContentInit.
     expect(target.atInit).toBe(initial);
+    expect(target.dynamicAtInit).toBeUndefined();
     expect(target.atContentInit).toBe(initial);
     expect(target.staticChild).toBe(initial);
     expect(target.dynamicChild).toBe(initial);

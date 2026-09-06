@@ -78,6 +78,9 @@ Create and maintain a plain Markdown checklist:
 
 Choose the location by runtime surface:
 
+- `examples/<ExampleName>/test.spec.ts`: documented core use cases. Keep variants such as `signals.spec.ts`
+  in the same example folder and gate them in `test-spread.conf`. Follow neighboring example and suite names;
+  do not place these examples in `tests-e2e/src/app`.
 - `tests/issue-<issue-number>/test.spec.ts`: default for core library regressions. These files are spread into versioned Angular e2e projects through `test-spread.conf`.
 - `tests-e2e/src/issue-<issue-number>/test.spec.ts`: use for external library integration, Angular features that cannot compile across the spread matrix, or app-level behavior covered by `tests-e2e`.
 - `e2e/jest/src/tests/issue-<issue-number>/test.spec.ts`: use for Jest-only behavior, Jest snapshots, or `jest.mock` interactions.
@@ -136,11 +139,6 @@ the current source or the focused reproducer, inspect `e2e/a<major>/node_modules
 and rerun the wrapper before changing implementation or test code.
 
 Before committing:
-
-Check the failed job's installation scope in `.circleci/config.yml` when diagnosing a CI-only lint failure.
-Core lint runs with root dependencies only; a fully installed local worktree can mask unresolved types in
-`tests-e2e`. Preserve documented compatibility exceptions and inspect their history before changing helpers
-solely to match neighboring examples. Use the CI log as evidence; do not invent a replacement lint runner.
 
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run prettier:repo

@@ -8,6 +8,9 @@ When we test a component or directive that uses `ContentChild`,
 we need to provide the child that its caller projects into it.
 We can replace that child with a mock and test how the real declaration uses it.
 
+The first examples use the `@ContentChild` decorator. For the `contentChild()` signal API,
+see [Signal content queries](#signal-content-queries).
+
 To replace a component or directive that owns content queries with a mock, see
 [How to mock ContentChild](mock/content-child.md).
 For collections of projected children, see [How to test ContentChildren](content-children.md).
@@ -170,7 +173,7 @@ For a mocked declaration's signal properties, see
 
 ## Live example
 
-This Angular 18 NgModule example keeps the singular-query cases from the source example.
+This decorator example uses Angular 18 NgModules and keeps the singular-query cases from the source example.
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestContentChild/test.spec.ts&initialpath=%3Fspec%3DTestContentChild)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestContentChild/test.spec.ts&initialpath=%3Fspec%3DTestContentChild)
@@ -318,7 +321,7 @@ describe('TestContentChild', () => {
 
 This example uses Angular 19+ standalone defaults and compiler-initialized signal queries.
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/signals.spec.ts"
 import {
   Component,
   computed,
@@ -384,7 +387,7 @@ describe('TestContentChild:signals', () => {
     expect(target.directChild()).toBe(items[0]);
     expect(target.firstLabel()).toBe('first');
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
     expect(items.map(item => item.signalContentItem)).toEqual([
       'first',
@@ -400,7 +403,7 @@ describe('TestContentChild:signals', () => {
     expect(target.directChild()).toBeUndefined();
     expect(target.firstLabel()).toBe('nested');
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
 
     // Restoring the direct child creates a new instance and updates every query.
@@ -414,7 +417,7 @@ describe('TestContentChild:signals', () => {
     expect(target.directChild()).toBe(restored[0]);
     expect(target.firstLabel()).toBe('first');
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
   });
 

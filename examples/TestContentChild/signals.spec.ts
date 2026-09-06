@@ -8,6 +8,7 @@ import {
   Input,
   signal,
 } from '@angular/core';
+
 import {
   isMockOf,
   MockBuilder,
@@ -71,9 +72,17 @@ class HostComponent {
   public readonly show = signal(true);
 }
 
-// Signal queries need Angular's compiler transform, so this example lives in
-// the compiled application corpus and is spread starting with Angular 17.2.
 describe('TestContentChild:signals', () => {
+  // The root TypeScript-only runner does not transform signal queries.
+  // Angular-compiled spread targets execute these cases from Angular 17.2.
+  if (!(TargetComponent as any).ɵcmp.contentQueries) {
+    it('needs compiled signal query metadata', () => {
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
   // Reset signal customizations after each test.
   MockInstance.scope();
 
@@ -89,10 +98,8 @@ describe('TestContentChild:signals', () => {
     expect(target.required()).toBe(items[0]);
     expect(target.directChild()).toBe(items[0]);
     expect(target.firstLabel()).toBe('first');
-    // Root-only CI lint cannot resolve ngMocks.find before app dependencies are
-    // installed and mistakes it for Array.find. Keep this DOM identity lookup.
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
     expect(items.map(item => item.signalContentItem)).toEqual([
       'first',
@@ -108,7 +115,7 @@ describe('TestContentChild:signals', () => {
     expect(target.directChild()).toBeUndefined();
     expect(target.firstLabel()).toBe('nested');
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
 
     // Restoring the direct child creates a new instance and updates every query.
@@ -122,7 +129,7 @@ describe('TestContentChild:signals', () => {
     expect(target.directChild()).toBe(restored[0]);
     expect(target.firstLabel()).toBe('first');
     expect(target.element()?.nativeElement).toBe(
-      fixture.nativeElement.querySelector('span'),
+      ngMocks.find('span').nativeElement,
     );
   });
 
@@ -132,7 +139,9 @@ describe('TestContentChild:signals', () => {
     const fixture = MockRender(HostComponent);
     const target = ngMocks.findInstance(TargetComponent);
     const items = ngMocks.findInstances(ItemDirective);
-    const elements = fixture.nativeElement.querySelectorAll('span');
+    const elements = ngMocks
+      .findAll('span')
+      .map(element => element.nativeElement);
 
     // Compare direct children, descendants, and the elements read from them.
     expect(target.direct()).toEqual([items[0]]);
@@ -165,10 +174,7 @@ describe('TestContentChild:signals', () => {
     expect(target.labels()).toEqual(['first', 'nested']);
     expect(
       target.elements().map(element => element.nativeElement),
-    ).toEqual([
-      fixture.nativeElement.querySelector('span'),
-      elements[1],
-    ]);
+    ).toEqual([ngMocks.find('span').nativeElement, elements[1]]);
   });
 
   it('returns no optional results and enforces a required query when content is missing', async () => {

@@ -119,6 +119,9 @@
   Follow their file and suite structure, naming, setup, ng-mocks helpers, comments, and assertion flow. Match the
   guide's teaching order, tool links, and annotated snippets. Adapt API and runtime differences as needed, and
   explain material departures from the chosen pattern.
+- Put documented core use cases in `examples/<ExampleName>`, with the classic case in `test.spec.ts` and
+  variants such as signal queries in `signals.spec.ts` beside it. Follow existing example and suite names and
+  gate version-specific files in `test-spread.conf`; do not put these examples in `tests-e2e/src/app`.
 - Before finishing, compare the changes with those references and check documentation snippets against their
   executable specs. If no close example exists, broaden the search to related behavior and local history before
   introducing a new pattern, and note the gap.
@@ -163,10 +166,6 @@
   - `docker compose run --rm ng-mocks npm run ts:check`
 - If multiple worktrees are active, prefix direct `docker compose` commands with the same `COMPOSE_PROJECT_NAME` you use for wrappers so the checks stay inside that worktree's compose project.
 - Run Prettier before `git commit`.
-- The core CI lint job installs only root dependencies. Local lint with every project installed can hide
-  dependency-resolution failures in `tests-e2e` and versioned projects. Inspect `.circleci/config.yml` and the
-  failing job's installation scope when local lint passes but CI fails. Preserve documented CI compatibility
-  exceptions when aligning examples with neighboring code; check their history before replacing them.
 - For tooling migrations, use official packages and their exported presets. Remove direct subpackages only when the official umbrella package replaces them and the repository no longer imports them.
 
 ## Lockfiles and Dependency Refresh

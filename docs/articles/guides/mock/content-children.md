@@ -7,6 +7,9 @@ sidebar_label: ContentChildren
 When a component or directive with `ContentChildren` is a dependency of the declaration under test,
 we can replace it with a mock and test the content that its caller projects into it.
 
+The first examples use the `@ContentChildren` decorator. For the `contentChildren()` signal API,
+see [Signal content queries](#signal-content-queries).
+
 For tests of the declaration's own collection and updates, see
 [How to test ContentChildren](../content-children.md).
 For a query that returns one child, see [How to mock ContentChild](content-child.md).
@@ -136,7 +139,7 @@ To test Angular's collection updates, [keep the declaration real](../content-chi
 
 ## Live example
 
-This Angular 18 NgModule example keeps the collection and its header/footer rendering case from `TestTemplateRefByRender`.
+This decorator example uses Angular 18 NgModules and keeps the collection and its header/footer rendering case from `TestTemplateRefByRender`.
 
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestTemplateRefByRender/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefByRender)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestTemplateRefByRender/test.spec.ts&initialpath=%3Fspec%3DTestTemplateRefByRender)
@@ -219,7 +222,7 @@ describe('TestTemplateRefByRender', () => {
 
 This example uses Angular 19+ standalone defaults.
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/app/content-queries.spec.ts"
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestContentChild/signals.spec.ts"
 import {
   Component,
   contentChildren,
