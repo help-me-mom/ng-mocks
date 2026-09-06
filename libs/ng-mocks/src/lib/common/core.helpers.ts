@@ -3,7 +3,6 @@ import { getTestBed } from '@angular/core/testing';
 import coreDefineProperty from './core.define-property';
 import coreReflectParametersResolve from './core.reflect.parameters-resolve';
 import { AnyDeclaration, AnyType, Type } from './core.types';
-import funcGetGlobal from './func.get-global';
 import funcGetName from './func.get-name';
 import ngMocksUniverse from './ng-mocks-universe';
 
@@ -114,28 +113,30 @@ export const extractDependency = (deps: any[], set?: Set<any>): void => {
 };
 
 export const extendClassicClass = <I>(base: AnyType<I>): Type<I> => {
-  let child: any;
   const index = ngMocksUniverse.index();
+  const construct = typeof Reflect !== 'undefined' && typeof Reflect.construct === 'function' && Reflect.construct;
 
-  const glb = funcGetGlobal();
-  glb.ngMocksParent = base;
+  class MockMiddleware extends (base as any) {
+    public constructor(...args: any[]) {
+      // The ES5 bundle must construct native Angular classes instead of calling apply.
+      if (construct) {
+        return construct(base, args, new.target);
+      }
+      super(...args);
+    }
+  }
 
-  // First we try to eval es2015 style and if it fails to use es5 transpilation in the catch block.
-  // The next step is to respect constructor parameters as the parent class via jitReflector.
-  // istanbul ignore next
-  try {
-    eval(`
-      var glb = typeof window === 'undefined' ? global : window;
-      class MockMiddleware${index} extends glb.ngMocksParent {};
-      glb.ngMocksResult = MockMiddleware${index};
-    `);
-    child = glb.ngMocksResult;
-  } catch {
-    class MockMiddleware extends glb.ngMocksParent {}
-    child = MockMiddleware;
-  } finally {
-    glb.ngMocksResult = undefined;
-    glb.ngMocksParent = undefined;
+  let child: any = MockMiddleware;
+  if (construct && typeof Proxy === 'function') {
+    // ES5 lowers new.target to this.constructor, which a derived prototype can override.
+    child = new Proxy(MockMiddleware, {
+      construct: (_target, args, newTarget) => construct(base, args, newTarget),
+    });
+    coreDefineProperty(child.prototype, 'constructor', child);
+    // Angular 5 reads toString, but Node 8 cannot stringify a callable Proxy.
+    if (MockMiddleware.toString === Function.prototype.toString) {
+      coreDefineProperty(child, 'toString', MockMiddleware.toString.bind(MockMiddleware));
+    }
   }
 
   // A16: adding unique property.
