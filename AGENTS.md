@@ -103,6 +103,13 @@
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
 - When enabling new recommended lint rules, keep fixes that remain compatible with the supported Angular, Node.js, and ES targets. Disable rules that require newer framework APIs or runtime features, and leave a short reason beside the override.
 
+## Package Metadata
+
+- Keep the `description` value in `libs/ng-mocks/package.json` at 255 characters or fewer, including spaces and
+  punctuation. Preserve this limit whenever updating the description.
+- List Angular major versions individually in the description for search visibility; do not compress them into
+  ranges. If space is needed, omit older versions from the description without changing the documented support.
+
 ## Spec and Documentation Examples
 
 ### Learn from existing examples
