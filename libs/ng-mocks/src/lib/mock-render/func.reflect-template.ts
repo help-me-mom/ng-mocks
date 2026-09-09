@@ -3,7 +3,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
-import { AnyType } from '../common/core.types';
+import { AnyType, DirectiveIo } from '../common/core.types';
+import decorateInputs from '../common/decorate.inputs';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isStandalone } from '../common/func.is-standalone';
 
@@ -27,6 +29,15 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
   } catch {
     // nothing to do
   }
+
+  // Reflecting the clone can append inputs, so keep its array separate from
+  // the metadata used to generate the wrapper's bindings.
+  set.inputs = [...({ ...meta, ...set }.inputs || [])];
+  // Angular JIT only preserves signal flags through property decorators.
+  decorateInputs(
+    child,
+    set.inputs.filter((input: DirectiveIo) => funcDirectiveIoParse(input).isSignal),
+  );
 
   if (isNgDef(template, 'c')) {
     Component({
