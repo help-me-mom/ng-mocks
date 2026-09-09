@@ -285,7 +285,7 @@
     "@types/karma-jasmine": "4.0.5",
     "@types/karma-junit-reporter": "2.0.4",
     "@types/karma-webpack": "4.0.1",
-    "@types/node": "24.13.3",
+    "@types/node": "24.13.4",
     "@typescript-eslint/eslint-plugin": "8.69.0",
     "@typescript-eslint/parser": "8.69.0",
     "angular-eslint": "22.5.0",
