@@ -172,13 +172,18 @@
 
 ## Code Quality Commands
 
+- Run formatting/Prettier, ESLint, and TypeScript checks only after the solution and functional validation are
+  complete, as the final checks immediately before committing. During investigation and implementation, use
+  functional tests; do not run these quality checks or fix their findings yet.
 - Run root quality checks through the main service container:
   - `docker compose run --rm ng-mocks npm run prettier:repo`
   - `docker compose run --rm ng-mocks npm run prettier:check`
   - `docker compose run --rm ng-mocks npm run lint`
   - `docker compose run --rm ng-mocks npm run ts:check`
 - If multiple worktrees are active, prefix direct `docker compose` commands with the same `COMPOSE_PROJECT_NAME` you use for wrappers so the checks stay inside that worktree's compose project.
-- Run Prettier before `git commit`.
+- Keep normal commit hooks enabled. Let them satisfy the required checks they already cover instead of running
+  those checks separately first. Run any remaining required checks through Docker at this final stage, and resolve
+  all findings before the commit succeeds.
 - For tooling migrations, use official packages and their exported presets. Remove direct subpackages only when the official umbrella package replaces them and the repository no longer imports them.
 
 ## Lockfiles and Dependency Refresh

@@ -22,7 +22,7 @@ Create and maintain a plain Markdown checklist:
 - [ ] Fix the implementation without changing the reproducer test
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Update the matching docs and review them against the executable examples
-- [ ] Prepare the commit and PR against `upstream/main`
+- [ ] Complete final formatting, ESLint, and TypeScript checks, then commit and prepare the PR against `upstream/main`
 - [ ] Verify the requested CI status on the current PR commit
 ```
 
@@ -75,6 +75,8 @@ Create and maintain a plain Markdown checklist:
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
+   - Use functional tests during investigation and implementation. Do not run formatting/Prettier, ESLint, or
+     TypeScript checks or fix their findings until the solution is ready to commit.
 6. Update and review documentation:
    - Keep testing a real declaration and mocking a dependency clear, with separate articles for independent APIs.
      Identify decorator and signal variants where both exist.
@@ -148,7 +150,17 @@ Do not infer a source regression from output that may have reused an older compi
 the current source or the focused reproducer, inspect `e2e/a<major>/node_modules/ng-mocks`, clear the target cache,
 and rerun the wrapper before changing implementation or test code.
 
-Before committing:
+Coverage expectations:
+
+- Treat `sh test.sh coverage` as required for source fixes.
+- Inspect changed source files in `test-reports/coverage/lcov.info` or the generated HTML report if coverage is uncertain.
+- The PR should keep project and patch coverage at 100%. If Codecov later reports uncovered patch lines, add assertions before updating the PR.
+
+Once the solution and functional validation are complete, run formatting/Prettier, ESLint, and TypeScript checks
+as the final checks immediately before committing. Keep normal commit hooks enabled and let them satisfy the
+required checks they already cover instead of running those checks separately first. Run any remaining required
+checks through Docker at this final stage, using the commands below, and resolve all findings before the commit
+succeeds:
 
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run prettier:repo
@@ -156,12 +168,6 @@ COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run 
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run lint
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose run --rm ng-mocks npm run ts:check
 ```
-
-Coverage expectations:
-
-- Treat `sh test.sh coverage` as required for source fixes.
-- Inspect changed source files in `test-reports/coverage/lcov.info` or the generated HTML report if coverage is uncertain.
-- The PR should keep project and patch coverage at 100%. If Codecov later reports uncovered patch lines, add assertions before updating the PR.
 
 ## Comments, Commit, PR
 
