@@ -95,7 +95,7 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
       - run:
           name: NPM Install
           command: |
@@ -119,7 +119,7 @@ commands:
             fi
             mkdir -p "$HOME/.cache/puppeteer"
       - save_cache:
-          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
           paths:
             - ./e2e/<< parameters.dir >>/node_modules
             - ~/.cache/puppeteer
@@ -144,7 +144,7 @@ commands:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
@@ -179,7 +179,7 @@ commands:
       - attach_workspace:
           at: dist
       - restore_cache:
-          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
+          key: << parameters.dir >>-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/<< parameters.dir >>/package.json" }}-{{ checksum "e2e/<< parameters.dir >>/package-lock.json" }}
       - run:
           name: Spreading Build
           command: npm run s:<< parameters.dir >>
@@ -196,7 +196,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: root-<< pipeline.parameters.lockindex >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: NPM Install
           command: |
@@ -207,7 +207,7 @@ jobs:
             md5sum -c package.md5
             rm package.md5
       - save_cache:
-          key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: root-<< pipeline.parameters.lockindex >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ~/.cache/puppeteer
@@ -287,7 +287,7 @@ jobs:
             - attach_workspace:
                 at: dist
             - restore_cache:
-                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package.json" }}-{{ checksum "tests-e2e/package-lock.json" }}
+                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ checksum "tests-e2e/package.json" }}-{{ checksum "tests-e2e/package-lock.json" }}
             - run:
                 name: NPM Install
                 command: |
@@ -298,7 +298,7 @@ jobs:
                   md5sum -c package.md5
                   rm package.md5
             - save_cache:
-                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "tests-e2e/package.json" }}-{{ checksum "tests-e2e/package-lock.json" }}
+                key: tests-e2e-<< pipeline.parameters.lockindex >>-{{ checksum "tests-e2e/package.json" }}-{{ checksum "tests-e2e/package-lock.json" }}
                 paths:
                   - ./tests-e2e/node_modules
                   - ~/.cache/puppeteer
@@ -328,7 +328,7 @@ jobs:
           steps:
             - checkout
             - restore_cache:
-                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
+                key: docs-<< pipeline.parameters.lockindex >>-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
             - run:
                 name: NPM Install
                 command: |
@@ -339,7 +339,7 @@ jobs:
                   md5sum -c package.md5
                   rm package.md5
             - save_cache:
-                key: docs-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
+                key: docs-<< pipeline.parameters.lockindex >>-{{ checksum "docs/package.json" }}-{{ checksum "docs/package-lock.json" }}
                 paths:
                   - ./docs/node_modules
                   - ~/.cache/puppeteer
@@ -366,7 +366,7 @@ jobs:
           steps:
             - checkout
             - restore_cache:
-                key: root-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+                key: root-<< pipeline.parameters.lockindex >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
             - run:
                 name: Default
                 command: KARMA_SUITE=tests-performance/test.spec.ts npm run test
@@ -414,7 +414,7 @@ jobs:
             - attach_workspace:
                 at: dist
             - restore_cache:
-                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+                key: a5es5-windows-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
             - run: nvm install $(cat e2e/a5es5/.nvmrc)
             - run: nvm use $(cat e2e/a5es5/.nvmrc)
             - run:
@@ -430,7 +430,7 @@ jobs:
                   md5sum -c package.md5
                   rm package.md5
             - save_cache:
-                key: a5es5-<< pipeline.parameters.lockindex >>-{{ arch }}-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
+                key: a5es5-windows-<< pipeline.parameters.lockindex >>-{{ checksum "e2e/a5es5/package.json" }}-{{ checksum "e2e/a5es5/package-lock.json" }}
                 paths:
                   - ./e2e/a5es5/node_modules
                   - ~/.cache/puppeteer

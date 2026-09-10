@@ -50,7 +50,8 @@
   authorize custom executable validation.
 - If an approved command fails or the available tooling cannot perform a required operation, report the command,
   error, and remaining work to the user and discuss the solution before trying a workaround. Do not silently switch
-  runtimes or images, bypass hooks or checks, add temporary Compose overrides, or create new validation tooling.
+  runtimes or images, bypass hooks or checks, add temporary Compose overrides outside the commit-hook exception
+  below, or create new validation tooling.
 - If multiple worktrees or agent sessions run in parallel, set a unique compose namespace:
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
@@ -60,9 +61,15 @@
 - Perform issue edits, dependency installation, builds, tests, checks, and commits in the issue's independent worktree
   and branch. Do not use the primary project checkout as a working directory or change its working files or branch.
 - Run the existing Docker commands from that worktree so their bind mounts and generated files belong to it.
-- Do not mount the primary checkout or its `.git` directory into a worktree's containers to repair tooling failures.
-  A linked worktree's normal Git metadata sharing does not authorize using the primary checkout as a build workspace
-  or adding it as a Docker mount.
+- Do not mount the primary checkout into a worktree's containers or use it as a build workspace.
+- For commit-hook setup and execution only, a temporary Compose override may mount the shared `.git` directory
+  and the current worktree at their original absolute host paths so linked Git metadata resolves inside Docker.
+  Set the container's working directory to the current worktree and keep all file edits there.
+- Scope that override to hook setup and `git commit`. Do not use it for dependency installation, ordinary builds,
+  tests, checks, or pushes. Keep the normal commit hooks enabled and use the existing Docker image and commands.
+- Keep hook configuration local to the commit operation. When installing Husky, direct its Git configuration write
+  to a temporary container file with `GIT_CONFIG`, then select `.husky/_` through `git -c core.hooksPath=.husky/_`
+  for the commit. Do not persist changes to the shared repository's hook configuration.
 - If a tool cannot work with the isolated worktree, report the error and discuss a supported solution with the user.
   Do not move execution to the primary checkout or weaken the isolation to make a check pass.
 
