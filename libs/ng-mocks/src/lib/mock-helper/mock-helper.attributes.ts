@@ -1,5 +1,6 @@
 import { DirectiveIo, DirectiveIoParsed } from '../common/core.types';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
+import funcIsMock from '../common/func.is-mock';
 import { MockedDebugElement } from '../mock-render/types';
 
 import mockHelperFind from './find/mock-helper.find';
@@ -36,7 +37,19 @@ const detectAttribute = (el: MockedDebugElement | null | undefined, attr: 'input
     for (const attrDef of meta[attr] || /* istanbul ignore next */ []) {
       const parsed = attrMatches(attrDef, sel);
       if (parsed) {
-        const value = mockHelperGet(el, token)[parsed.name];
+        const instance = mockHelperGet(el, token);
+        // Mock models keep their emitters separate from the original signal property.
+        let mockOutput: DirectiveIo | undefined;
+        if (attr === 'outputs' && funcIsMock(instance)) {
+          for (const output of instance.__ngMocksConfig.outputs || []) {
+            if (attrMatches(output, sel)) {
+              mockOutput = output;
+              break;
+            }
+          }
+        }
+        const name = mockOutput ? funcDirectiveIoParse(mockOutput).name : parsed.name;
+        const value = instance[name];
 
         return attr === 'inputs' && parsed.isSignal && typeof value === 'function' ? value() : value;
       }

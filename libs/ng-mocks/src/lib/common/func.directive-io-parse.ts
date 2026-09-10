@@ -11,10 +11,6 @@ const normalize = ({ name, alias, required, isSignal, transform }: DirectiveIoPa
     return { name, ...metadata };
   }
 
-  if (name + 'Change' === alias) {
-    return { name: alias, ...metadata };
-  }
-
   return { name, alias, ...metadata };
 };
 

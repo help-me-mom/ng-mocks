@@ -8,24 +8,26 @@ describe('funcDirectiveIoParse', () => {
     });
   });
 
-  it('normalizes signal model outputs from strings', () => {
+  it('preserves Change aliases from strings', () => {
     expect(funcDirectiveIoParse('value:valueChange')).toEqual({
-      name: 'valueChange',
+      alias: 'valueChange',
+      name: 'value',
     });
   });
 
-  it('normalizes signal model outputs from objects', () => {
+  it('preserves Change aliases from objects', () => {
     expect(
       funcDirectiveIoParse({
         alias: 'valueChange',
         name: 'value',
       }),
     ).toEqual({
-      name: 'valueChange',
+      alias: 'valueChange',
+      name: 'value',
     });
   });
 
-  it('keeps required metadata for signal model outputs', () => {
+  it('keeps required input metadata with Change aliases', () => {
     expect(
       funcDirectiveIoParse({
         alias: 'valueChange',
@@ -33,7 +35,8 @@ describe('funcDirectiveIoParse', () => {
         required: true,
       }),
     ).toEqual({
-      name: 'valueChange',
+      alias: 'valueChange',
+      name: 'value',
       required: true,
     });
   });
