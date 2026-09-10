@@ -34,7 +34,7 @@
     "zone.js": "0.15.1"
   },
   "devDependencies": {
-    "@angular/build": "20.3.36",
+    "@angular/build": "22.1.7",
     "@angular/cli": "20.3.36",
     "@angular/compiler-cli": "20.3.31",
     "@types/jasmine": "5.1.15",
@@ -54,7 +54,7 @@
     "puppeteer": "24.43.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3",
-    "vitest": "3.2.7"
+    "vitest": "5.0.0"
   },
   "engines": {
     "npm": "10.9.9"
