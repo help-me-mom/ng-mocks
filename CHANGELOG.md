@@ -1,3 +1,10 @@
+## [14.17.6](https://github.com/help-me-mom/ng-mocks/compare/v14.17.5...v14.17.6) (2026-09-10)
+
+
+### Bug Fixes
+
+* **MockRender:** preserve middleware signal inputs [#14839](https://github.com/help-me-mom/ng-mocks/issues/14839) ([#14853](https://github.com/help-me-mom/ng-mocks/issues/14853)) ([bb7f376](https://github.com/help-me-mom/ng-mocks/commit/bb7f376545800b05e69b9f3a9bf1ad3b36cbec6f))
+
 ## [14.17.5](https://github.com/help-me-mom/ng-mocks/compare/v14.17.4...v14.17.5) (2026-09-06)
 
 
