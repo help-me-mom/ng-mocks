@@ -53,8 +53,8 @@ Create and maintain a plain Markdown checklist:
    - do not discard unrelated local changes in the original checkout; the worktree isolates the issue branch from them
    - run installs, builds, tests, checks, and commits from the issue worktree; do not use the original checkout as a
      fallback working directory or change its branch
-   - do not mount the original checkout or its `.git` directory into the worktree's Docker containers; report linked
-     Git metadata failures and discuss a supported solution without weakening worktree isolation
+   - do not mount the original checkout into the worktree's Docker containers; shared Git metadata may be mounted
+     only for commit-hook setup and execution as described in `AGENTS.md`, never for ordinary validation
 
    ```bash
    git fetch upstream --prune
