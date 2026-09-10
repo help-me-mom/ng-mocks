@@ -9,6 +9,8 @@ import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isStandalone } from '../common/func.is-standalone';
 
+import funcInheritDefinition from './func.inherit-definition';
+
 const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
   const child = extendClass(template);
 
@@ -53,6 +55,7 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
       ...set,
     })(child);
   }
+  funcInheritDefinition(child, template);
   TestBed.configureTestingModule({
     [isStandalone(child) ? 'imports' : 'declarations']: [child],
   });

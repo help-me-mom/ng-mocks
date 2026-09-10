@@ -6,6 +6,8 @@ import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
 import decorateQueries from '../common/decorate.queries';
+import funcDirectiveIoBuild from '../common/func.directive-io-build';
+import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { ngMocksMockConfig } from '../common/mock';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import mockNgDef from '../mock-module/mock-ng-def';
@@ -31,6 +33,34 @@ const buildConfig = (
     queryScanKeys: [],
     setControlValueAccessor: setControlValueAccessor,
   };
+};
+
+const getMockOutputs = (inputs: DirectiveIo[] = [], outputs: DirectiveIo[] = [], reserved: string[]): DirectiveIo[] => {
+  const properties = new Set([...reserved, ...[...inputs, ...outputs].map(value => funcDirectiveIoParse(value).name)]);
+
+  return outputs.map(output => {
+    const { name, alias } = funcDirectiveIoParse(output);
+    const publicName = alias || name;
+    const model = inputs.some(input => {
+      const parsed = funcDirectiveIoParse(input);
+
+      return parsed.isSignal && parsed.name === name && `${parsed.alias || parsed.name}Change` === publicName;
+    });
+
+    if (!model) {
+      return output;
+    }
+
+    // A real model stores its input and output on one signal. Mock inputs use
+    // input signals, so only the mock needs a separate Change EventEmitter.
+    let property = publicName;
+    while (properties.has(property)) {
+      property = `__ngMocksOutput_${property}`;
+    }
+    properties.add(property);
+
+    return funcDirectiveIoBuild({ name: property, alias: publicName });
+  });
 };
 
 export default <T extends Component & Directive>(
@@ -100,11 +130,17 @@ export default <T extends Component & Directive>(
     options.viewProviders = viewProviders;
   }
 
+  const properties = [
+    ...Object.keys(meta.queries || {}),
+    ...(meta.hostBindings || []).map(([name]) => name),
+    ...(meta.hostListeners || []).map(([name]) => name),
+  ];
+  const methods = helperMockService.extractMethodsFromPrototype(source.prototype, properties);
+  const outputs = getMockOutputs(meta.inputs, meta.outputs, [...properties, ...methods]);
   const config: ngMocksMockConfig = buildConfig(
     source,
-    meta,
-    setControlValueAccessor ??
-      helperMockService.extractMethodsFromPrototype(source.prototype).indexOf('writeValue') !== -1,
+    { ...meta, outputs },
+    setControlValueAccessor ?? methods.indexOf('writeValue') !== -1,
   );
   decorateMock(mock, source, config);
 
@@ -112,7 +148,7 @@ export default <T extends Component & Directive>(
   if (meta.queries) {
     decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
   }
-  decorateOutputs(mock, meta.outputs);
+  decorateOutputs(mock, outputs);
   config.queryScanKeys = decorateQueries(mock, meta.queries);
 
   config.hostBindings = [];

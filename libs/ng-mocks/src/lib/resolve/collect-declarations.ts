@@ -353,15 +353,31 @@ const parseNgDef = (
 
   for (const alias of Object.keys(ngDef.inputs || {})) {
     const input = ngDef.inputs[alias];
+    let annotatedInput: DirectiveIo | undefined;
+    for (const value of declaration.Component?.inputs ?? declaration.Directive?.inputs ?? []) {
+      const parsed = funcDirectiveIoParse(value);
+      if ((parsed.alias || parsed.name) === alias) {
+        annotatedInput = value;
+        break;
+      }
+    }
     const minifiedName = Array.isArray(input) ? input[0] : input;
     const flags = Array.isArray(input) && typeof input[1] === 'number' ? input[1] : 0;
-    const transform = Array.isArray(input) ? input[2] : undefined;
+    const transform = (Array.isArray(input) ? input[2] : undefined) ?? ngDef.inputTransforms?.[minifiedName];
     const {
       name,
       alias: normalizedAlias,
       required,
     } = funcDirectiveIoParse({
-      name: ngDef.declaredInputs?.[alias] ?? minifiedName,
+      // Older JIT compilers use the public alias as declaredInputs for class
+      // metadata arrays. Recover the field only when its annotation still
+      // matches the compiled binding, preserving effective TestBed overrides.
+      name:
+        annotatedInput &&
+        ngDef.declaredInputs?.[alias] === alias &&
+        funcDirectiveIoParse(annotatedInput).name === minifiedName
+          ? minifiedName
+          : (ngDef.declaredInputs?.[alias] ?? minifiedName),
       alias,
       required: undefined,
     });
@@ -542,16 +558,48 @@ const parsePropDecorators = (
 
 const buildDeclaration = (def: any | undefined, declaration: Declaration): void => {
   if (def) {
-    def.inputs = def.inputs || [];
+    def.inputs = [...(def.inputs || [])];
     for (const input of declaration.inputs) {
-      if (def.inputs.indexOf(input) === -1) {
+      const parsed = funcDirectiveIoParse(input);
+      let index = -1;
+      for (let position = 0; position < def.inputs.length; position += 1) {
+        const existing = funcDirectiveIoParse(def.inputs[position]);
+        if (existing.name === parsed.name && existing.alias === parsed.alias) {
+          index = position;
+          break;
+        }
+      }
+      if (index === -1) {
         def.inputs.push(input);
+      } else if (
+        parsed.required !== undefined ||
+        parsed.isSignal !== undefined ||
+        parsed.transform !== undefined ||
+        funcDirectiveIoParse(def.inputs[index]).transform !== undefined
+      ) {
+        const existing = funcDirectiveIoParse(def.inputs[index]);
+        def.inputs[index] = funcDirectiveIoBuild({
+          ...existing,
+          required: existing.required ?? parsed.required,
+          isSignal: existing.isSignal ?? parsed.isSignal,
+          // Reflected bindings follow property decorator precedence, including
+          // decorators that remove a transform declared in the class metadata.
+          transform: parsed.transform,
+        });
       }
     }
 
-    def.outputs = def.outputs || [];
+    // Reflection adds normalized aliases; keep the original annotation array
+    // isolated and compare bindings semantically so formatting cannot duplicate them.
+    def.outputs = [...(def.outputs || [])];
     for (const output of declaration.outputs) {
-      if (def.outputs.indexOf(output) === -1) {
+      const { name, alias } = funcDirectiveIoParse(output);
+      const existing = def.outputs.some((value: DirectiveIo) => {
+        const parsed = funcDirectiveIoParse(value);
+
+        return parsed.name === name && parsed.alias === alias;
+      });
+      if (!existing) {
         def.outputs.push(output);
       }
     }

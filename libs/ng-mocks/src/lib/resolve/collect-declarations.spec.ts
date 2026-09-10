@@ -396,7 +396,7 @@ describe('collect-declarations', () => {
     expect(actual.inputs).toEqual([
       { name: 'value', isSignal: true, transform: String },
     ]);
-    expect(actual.outputs).toEqual(['valueChange']);
+    expect(actual.outputs).toEqual(['value:valueChange']);
     expect(actual.standalone).toBe(true);
     delete global.__ngMocksReflectComponentType;
   });
@@ -458,7 +458,7 @@ describe('collect-declarations', () => {
     });
 
     expect(actual.inputs).toEqual([]);
-    expect(actual.outputs).toEqual(['valueChange']);
+    expect(actual.outputs).toEqual(['value:valueChange']);
     delete global.__ngMocksReflectComponentType;
   });
 });
