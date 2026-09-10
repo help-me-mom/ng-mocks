@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+docker volume create ngmocks-puppeteer-cache > /dev/null
+docker volume create ngmocks-chromium-686378-cache > /dev/null
+docker volume create ngmocks-chromium-722234-cache > /dev/null
+
 export NVM_DIR="$HOME/.nvm" && \. "$NVM_DIR/nvm.sh"
 
 if [ "$1" = "" ] || [ "$1" = "root" ]; then
@@ -31,7 +35,9 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "a5" ] || [ "$1" = "a5es5" ]; then
   docker compose up --build -- a5es5 && \
-    docker compose run --rm a5es5 node ./node_modules/puppeteer/install.js && \
+    docker compose run --rm -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD= \
+      --volume ngmocks-chromium-686378-cache:/app/node_modules/puppeteer/.local-chromium \
+      a5es5 node ./node_modules/puppeteer/install.js && \
     docker compose run --rm a5es5 node ./node_modules/node-sass/scripts/install.js && \
     cd ./e2e/a5es5 && \
     nvm install && \
@@ -43,7 +49,9 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "a5" ] || [ "$1" = "a5es2015" ]; then
   docker compose up --build -- a5es2015 && \
-    docker compose run --rm a5es2015 node ./node_modules/puppeteer/install.js && \
+    docker compose run --rm -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD= \
+      --volume ngmocks-chromium-686378-cache:/app/node_modules/puppeteer/.local-chromium \
+      a5es2015 node ./node_modules/puppeteer/install.js && \
     docker compose run --rm a5es2015 node ./node_modules/node-sass/scripts/install.js && \
     cd ./e2e/a5es2015 && \
     nvm install && \
@@ -55,7 +63,9 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "a6" ]; then
   docker compose up --build -- a6 && \
-    docker compose run --rm a6 node ./node_modules/puppeteer/install.js && \
+    docker compose run --rm -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD= \
+      --volume ngmocks-chromium-722234-cache:/app/node_modules/puppeteer/.local-chromium \
+      a6 node ./node_modules/puppeteer/install.js && \
     docker compose run --rm a6 node ./node_modules/node-sass/scripts/install.js && \
     cd ./e2e/a6 && \
     nvm install && \
@@ -67,7 +77,9 @@ fi
 
 if [ "$1" = "" ] || [ "$1" = "a7" ]; then
   docker compose up --build -- a7 && \
-    docker compose run --rm a7 node ./node_modules/puppeteer/install.js && \
+    docker compose run --rm -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD= \
+      --volume ngmocks-chromium-722234-cache:/app/node_modules/puppeteer/.local-chromium \
+      a7 node ./node_modules/puppeteer/install.js && \
     cd ./e2e/a7 && \
     nvm install && \
     nvm use && \
