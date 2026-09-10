@@ -74,6 +74,12 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
+### Automated dependency updates
+
+Renovate handles regular dependency updates, and Dependabot handles security updates. Keep Renovate's
+`vulnerabilityAlerts.enabled` set to `false` so it does not create security-fix PRs alongside Dependabot.
+Regular Renovate updates still follow the compatibility restrictions in `renovate.json`.
+
 ### Zoned and zoneless Angular tests
 
 Angular 20.2 made zoneless change detection stable, and Angular 21 enables it by default. The `a20`, `a21`, and
