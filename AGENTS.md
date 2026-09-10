@@ -55,7 +55,7 @@
 - If multiple worktrees or agent sessions run in parallel, set a unique compose namespace:
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
-- Browser downloads use external volumes shared across compose namespaces. Follow `CONTRIBUTING.md` for
+- Services with configurable browser caches use one external volume shared across compose namespaces. Follow `CONTRIBUTING.md` for
   first-time volume creation and legacy revision mappings. Serialize cold installs of the same browser build;
   populated browser caches may serve concurrent test containers. Keep build caches and dependencies isolated.
 

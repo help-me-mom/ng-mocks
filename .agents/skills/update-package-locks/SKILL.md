@@ -54,11 +54,11 @@ For a repo-wide refresh, the affected command lines are all service command entr
 
 For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
 
-Browser volumes are external and shared across these namespaces. Before placing targets that use the same
+The browser volume is external and shared across these namespaces. Before placing targets that use the same
 browser build in a parallel batch, complete one target's wrapper run to populate that build. If cache state
 or the build selected by an update is uncertain, run those targets sequentially. Apply this rule in both
-passes and coordinate with other worktrees. Batch cleanup retains the external browser volumes; do not
-remove them while another worktree may be using them. See `CONTRIBUTING.md` for cache revision mappings.
+passes and coordinate with other worktrees. Batch cleanup retains the external browser volume; do not
+remove it while another worktree may be using it. See `CONTRIBUTING.md` for cache revision mappings.
 
 If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
 

@@ -24,6 +24,7 @@ services:
     volumes:
       - ./docs:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -53,14 +54,9 @@ services:
     image: satantime/puppeteer-node:8.17.0
     platform: linux/amd64
     working_dir: /app
-    environment:
-      # Keep the Chromium revision aligned with Puppeteer 1.20.0.
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      - PUPPETEER_EXECUTABLE_PATH=/root/.cache/puppeteer/linux-686378/chrome-linux/chrome
     volumes:
       - ./e2e/a5es5:/app
       - cache:/root/.cache
-      - chromium-686378:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -73,14 +69,9 @@ services:
     image: satantime/puppeteer-node:8.17.0
     platform: linux/amd64
     working_dir: /app
-    environment:
-      # Keep the Chromium revision aligned with Puppeteer 1.20.0.
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      - PUPPETEER_EXECUTABLE_PATH=/root/.cache/puppeteer/linux-686378/chrome-linux/chrome
     volumes:
       - ./e2e/a5es2015:/app
       - cache:/root/.cache
-      - chromium-686378:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -93,14 +84,9 @@ services:
     image: satantime/puppeteer-node:8.17.0
     platform: linux/amd64
     working_dir: /app
-    environment:
-      # Keep the Chromium revision aligned with Puppeteer 2.1.1.
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      - PUPPETEER_EXECUTABLE_PATH=/root/.cache/puppeteer/linux-722234/chrome-linux/chrome
     volumes:
       - ./e2e/a6:/app
       - cache:/root/.cache
-      - chromium-722234:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -113,14 +99,9 @@ services:
     image: satantime/puppeteer-node:8.17.0
     platform: linux/amd64
     working_dir: /app
-    environment:
-      # Keep the Chromium revision aligned with Puppeteer 2.1.1.
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      - PUPPETEER_EXECUTABLE_PATH=/root/.cache/puppeteer/linux-722234/chrome-linux/chrome
     volumes:
       - ./e2e/a7:/app
       - cache:/root/.cache
-      - chromium-722234:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -422,6 +403,7 @@ services:
     volumes:
       - ./e2e/jest:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -436,6 +418,7 @@ services:
     volumes:
       - ./e2e/vitest:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -470,6 +453,7 @@ services:
     volumes:
       - ./e2e/nx:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -484,10 +468,4 @@ volumes:
   # Shared across Compose projects and retained when a worktree's volumes are removed.
   puppeteer:
     name: ngmocks-puppeteer-cache
-    external: true
-  chromium-686378:
-    name: ngmocks-chromium-686378-cache
-    external: true
-  chromium-722234:
-    name: ngmocks-chromium-722234-cache
     external: true

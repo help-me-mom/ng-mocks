@@ -67,7 +67,7 @@ To avoid collisions when multiple worktrees run docker compose in parallel, set 
 Use your own unique string for each task/worktree.
 Reuse the same value for every `docker compose`, `sh ./compose.sh`, and `sh ./test.sh` command you run in that worktree.
 With a unique project name, Compose keeps the worktree resources separate, including the default network and the named `cache`, `gyp`, and `npm` volumes.
-Browser downloads use separate external volumes shared by all worktrees on the same Docker engine.
+Services with configurable browser caches mount one external volume shared by all worktrees on the same Docker engine.
 
 ```shell
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./compose.sh e2e
@@ -77,32 +77,30 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-moc
 
 ### Shared browser downloads
 
-`compose.sh` creates the browser volumes automatically. They have fixed names so the browser targets reuse
-downloads across services and `COMPOSE_PROJECT_NAME` values. For direct Compose commands on a fresh Docker
-engine, create them first:
+`compose.sh` creates the single `ngmocks-puppeteer-cache` volume automatically. Its fixed name lets supported
+services reuse downloads across `COMPOSE_PROJECT_NAME` values. For direct Compose commands on a fresh Docker
+engine, create it first:
 
 ```shell
 docker volume create ngmocks-puppeteer-cache
-docker volume create ngmocks-chromium-686378-cache
-docker volume create ngmocks-chromium-722234-cache
 ```
 
-Root, `tests-e2e`, Angular 16 and newer, Jasmine, and min share Puppeteer's browser cache at
-`/root/.cache/puppeteer`. Each browser build keeps its own directory. Angular 8 through 15 use revision-specific
-directories under that volume because their older installers remove other revisions from the download directory.
-Angular 5 through 7 use dedicated revision volumes: Puppeteer 1.20.0 needs Chromium 686378, and Puppeteer 2.1.1
-needs Chromium 722234. For these targets, `compose.sh` mounts the cache into `node_modules` only while running
-the browser installer. Package installation skips Chromium, and tests select the executable from the normal
-cache mount outside `node_modules`.
+Supported services mount that volume at `/root/.cache/puppeteer`. Modern Puppeteer keeps each browser build in its
+own directory. Angular 8 through 15 use revision-specific directories inside the same volume because their
+older installers remove other revisions from the download directory.
 
-When updating a legacy Puppeteer dependency, keep its cache revision and executable path in `compose.yml`,
-the volume creation and installer mounts in `compose.sh`, and this section aligned with its default Chromium
-revision. Do not force a different revision to keep an old cache path working.
+Angular 5 through 7 retain their existing local browser installation because Puppeteer 1.20.0 and 2.1.1 do
+not support a configurable download directory. Normal npm lifecycle scripts and the explicit browser
+installation in `compose.sh` remain enabled for every target.
+
+When updating a legacy Puppeteer dependency with a configured download path, keep its cache revision in
+`compose.yml` aligned with its default Chromium revision. Do not force a different revision to keep an old
+cache path working.
 
 Finish the first installation of each browser build before starting another installation of that build in a
-parallel worktree. Once populated, the cache can serve concurrent test containers. External browser volumes
-survive `docker compose down --volumes`; remove them explicitly only when no worktree is using them.
-Existing project-scoped caches are left in place; the shared volumes populate on their first use.
+parallel worktree. Once populated, the cache can serve concurrent test containers. The external browser volume
+survives `docker compose down --volumes`; remove it explicitly only when no worktree is using it.
+Existing project-scoped caches are left in place; the shared volume populates on its first use.
 
 The host installation in `compose.sh` remains separate: macOS and Linux need different browser binaries.
 The Jest-only project uses jsdom and does not download Chrome. Angular build caches and `node_modules` stay
