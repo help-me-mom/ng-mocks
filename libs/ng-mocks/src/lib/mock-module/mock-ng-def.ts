@@ -60,21 +60,23 @@ const processMeta = <
   if (!cachePipe) {
     ngMocksUniverse.flags.add('cachePipe');
   }
-  for (const [key, callback] of keys) {
-    if (ngModule[key]?.length) {
-      mockModuleDef[key] = flatToExisting(ngModule[key], callback);
+  try {
+    for (const [key, callback] of keys) {
+      if (ngModule[key]?.length) {
+        mockModuleDef[key] = flatToExisting(ngModule[key], callback);
+      }
+    }
+    if (!ngModule.skipMarkProviders) {
+      markProviders(mockModuleDef.providers);
+      markProviders(mockModuleDef.viewProviders);
+    }
+
+    return mockModuleDef;
+  } finally {
+    if (!cachePipe) {
+      ngMocksUniverse.flags.delete('cachePipe');
     }
   }
-  if (!ngModule.skipMarkProviders) {
-    markProviders(mockModuleDef.providers);
-    markProviders(mockModuleDef.viewProviders);
-  }
-
-  if (!cachePipe) {
-    ngMocksUniverse.flags.delete('cachePipe');
-  }
-
-  return mockModuleDef;
 };
 
 const resolveDefForExport = (
@@ -147,24 +149,29 @@ export default <
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
   }
-  ngMocksUniverse.config.get('mockNgDefResolver').push();
+  const resolver: CoreDefStack<any, any> = ngMocksUniverse.config.get('mockNgDefResolver');
+  resolver.push();
 
   let changed = !ngMocksUniverse.flags.has('skipMock');
   const change = (flag = true) => {
     changed = changed || flag;
   };
-  const { resolve, resolveProvider } = createResolvers(change, ngMocksUniverse.config.get('mockNgDefResolver'));
-  const mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
-  if (!ngModuleDef.skipExports) {
-    addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
-  }
-  for (const def of ngModule && mockModuleDef.exports ? (flatten(mockModuleDef.exports) as Array<any>) : []) {
-    markExported(def, ngModule);
-  }
-
-  const resolutions = ngMocksUniverse.config.get('mockNgDefResolver').pop();
-  if (!hasResolver) {
-    ngMocksUniverse.config.delete('mockNgDefResolver');
+  let mockModuleDef: Partial<T>;
+  let resolutions: Map<any, any>;
+  try {
+    const { resolve, resolveProvider } = createResolvers(change, resolver);
+    mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
+    if (!ngModuleDef.skipExports) {
+      addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+    }
+    for (const def of ngModule && mockModuleDef.exports ? (flatten(mockModuleDef.exports) as Array<any>) : []) {
+      markExported(def, ngModule);
+    }
+  } finally {
+    resolutions = resolver.pop();
+    if (!hasResolver) {
+      ngMocksUniverse.config.delete('mockNgDefResolver');
+    }
   }
 
   return [changed, mockModuleDef, resolutions];
