@@ -1,6 +1,7 @@
 import {
   installRuntimeInject,
   resetRuntimeInject,
+  runRuntimeInject,
 } from './ng-mocks-runtime-inject';
 
 class TargetService {
@@ -13,6 +14,88 @@ class TargetService {
 
 describe('ng-mocks-runtime-inject', () => {
   afterEach(() => resetRuntimeInject());
+
+  // @see https://github.com/help-me-mom/ng-mocks/issues/14896
+  for (const name of [
+    'EffectManager',
+    '_EffectManager',
+    'AfterRenderEventManager',
+    '_AfterRenderEventManager',
+  ]) {
+    it(`preserves ${name} while mocking an application dependency`, () => {
+      let managerConstructorCalls = 0;
+      let dependencyConstructorCalls = 0;
+
+      class RuntimeManager {
+        public constructor() {
+          managerConstructorCalls += 1;
+        }
+
+        public echo(): string {
+          return 'real manager';
+        }
+      }
+
+      class ApplicationDependency {
+        public constructor() {
+          dependencyConstructorCalls += 1;
+        }
+
+        public echo(): string {
+          return 'real dependency';
+        }
+      }
+
+      Object.defineProperty(RuntimeManager, 'name', { value: name });
+      (RuntimeManager as any).ɵprov = { providedIn: 'root' };
+      (ApplicationDependency as any).ɵprov = { providedIn: 'root' };
+
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+
+      installRuntimeInject(injector, new Set(), new Set());
+
+      const { manager, dependency } = runRuntimeInject(
+        injector,
+        () => ({
+          manager: injector.get(RuntimeManager),
+          dependency: injector.get(ApplicationDependency),
+        }),
+      );
+
+      expect(manager instanceof RuntimeManager).toBe(true);
+      expect(manager.echo()).toBe('real manager');
+      expect(dependency.echo()).toBeUndefined();
+      expect(dependency.echo).toHaveBeenCalled();
+      expect(managerConstructorCalls).toBe(1);
+      expect(dependencyConstructorCalls).toBe(0);
+      expect(originalGet).toHaveBeenCalledWith(RuntimeManager);
+      expect(originalGet).toHaveBeenCalledTimes(1);
+
+      const configuredManager = { echo: () => 'configured manager' };
+      originalGet.and.returnValue(configuredManager);
+
+      const overriddenManager = runRuntimeInject(injector, () =>
+        injector.get(RuntimeManager),
+      );
+
+      expect(overriddenManager).toBe(configuredManager);
+      expect(overriddenManager.echo()).toBe('configured manager');
+      expect(injector.get(ApplicationDependency)).toBe(dependency);
+      expect(originalGet).toHaveBeenCalledTimes(2);
+      expect(managerConstructorCalls).toBe(1);
+      expect(dependencyConstructorCalls).toBe(0);
+
+      destroyCallbacks[0]();
+    });
+  }
 
   it('restores existing injector and declaration factory descriptors', () => {
     const destroyCallbacks: Array<() => void> = [];
