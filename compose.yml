@@ -5,9 +5,11 @@ services:
     working_dir: /app
     environment:
       - NODE_OPTIONS=--max-old-space-size=8192
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - .:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -22,6 +24,7 @@ services:
     volumes:
       - ./docs:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -35,9 +38,11 @@ services:
     working_dir: /app
     environment:
       - NODE_OPTIONS=--max-old-space-size=8192
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./tests-e2e:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -109,9 +114,13 @@ services:
     image: satantime/puppeteer-node:10.24.1
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 5.5.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-818858
     volumes:
       - ./e2e/a8:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -124,9 +133,13 @@ services:
     image: satantime/puppeteer-node:12.22.12
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 10.4.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-901912
     volumes:
       - ./e2e/a9:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -139,9 +152,13 @@ services:
     image: satantime/puppeteer-node:12.22.12
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 10.4.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-901912
     volumes:
       - ./e2e/a10:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -154,9 +171,13 @@ services:
     image: satantime/puppeteer-node:12.22.12
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 10.4.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-901912
     volumes:
       - ./e2e/a11:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -169,9 +190,13 @@ services:
     image: satantime/puppeteer-node:12.22.12
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 10.4.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-901912
     volumes:
       - ./e2e/a12:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -184,9 +209,13 @@ services:
     image: satantime/puppeteer-node:12.22.12
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 10.4.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-901912
     volumes:
       - ./e2e/a13:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -199,9 +228,13 @@ services:
     image: satantime/puppeteer-node:16.20.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 13.7.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-982053
     volumes:
       - ./e2e/a14:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -213,9 +246,13 @@ services:
     image: satantime/puppeteer-node:16.20.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      # Isolate the revision expected by Puppeteer 13.7.0 from legacy installer cleanup.
+      - PUPPETEER_DOWNLOAD_PATH=/root/.cache/puppeteer/legacy-982053
     volumes:
       - ./e2e/a15:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -227,9 +264,12 @@ services:
     image: satantime/puppeteer-node:18.20.8
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a16:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -241,9 +281,12 @@ services:
     image: satantime/puppeteer-node:20.20.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a17:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -255,9 +298,12 @@ services:
     image: satantime/puppeteer-node:20.20.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a18:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -269,9 +315,12 @@ services:
     image: satantime/puppeteer-node:22.23.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a19:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -283,9 +332,12 @@ services:
     image: satantime/puppeteer-node:22.23.2
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a20:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -297,9 +349,12 @@ services:
     image: satantime/puppeteer-node:24.19.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a21:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -311,9 +366,12 @@ services:
     image: satantime/puppeteer-node:24.19.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/a22:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -325,9 +383,12 @@ services:
     image: satantime/puppeteer-node:24.19.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/jasmine:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -342,6 +403,7 @@ services:
     volumes:
       - ./e2e/jest:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -356,6 +418,7 @@ services:
     volumes:
       - ./e2e/vitest:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -367,9 +430,12 @@ services:
     image: satantime/puppeteer-node:24.19.0
     platform: linux/amd64
     working_dir: /app
+    environment:
+      - PUPPETEER_CACHE_DIR=/root/.cache/puppeteer
     volumes:
       - ./e2e/min:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -387,6 +453,7 @@ services:
     volumes:
       - ./e2e/nx:/app
       - cache:/root/.cache
+      - puppeteer:/root/.cache/puppeteer
       - gyp:/root/.node-gyp
       - npm:/root/.npm
     command:
@@ -398,3 +465,7 @@ volumes:
   cache:
   gyp:
   npm:
+  # Shared across Compose projects and retained when a worktree's volumes are removed.
+  puppeteer:
+    name: ngmocks-puppeteer-cache
+    external: true

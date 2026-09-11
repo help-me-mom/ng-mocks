@@ -18,7 +18,7 @@ Create a plain Markdown checklist that any AI agent can follow:
 - [ ] Create an isolated worktree from `upstream/main` or the existing PR branch
 - [ ] For a PR conflict, merge `upstream/main` and keep the dependency PR's lockfile side as the regeneration base
 - [ ] Temporarily change the relevant `compose.yml` service command line(s) from `npm install` to `npm update`
-- [ ] Run the update wrapper pass with wrapper targets in batches of 2-4
+- [ ] Run the update wrapper pass, serializing cold browser installs before batches of 2-4
 - [ ] Restore `compose.yml` back to `npm install`
 - [ ] Run the install wrapper pass with wrapper targets in batches of 2-4
 - [ ] Commit the refreshed lockfiles with only the dependency or merge changes already in scope
@@ -35,7 +35,7 @@ Create a plain Markdown checklist that any AI agent can follow:
    - For an existing dependency PR conflict, fetch that PR branch into an isolated worktree, merge `upstream/main` without rewriting history, and keep the dependency PR's lockfile side as the regeneration base.
 2. In that new worktree, inspect `compose.yml`.
 3. Temporarily change only the affected `compose.yml` service command line(s) from `npm install` to `npm update`.
-4. For a repo-wide refresh, derive the current wrapper targets from `compose.sh` and `compose.yml`, then run them in batches of 2-4 concurrent commands. If the user explicitly named one target, run only that target.
+4. For a repo-wide refresh, derive the current wrapper targets from `compose.sh` and `compose.yml`, then run them in batches of 2-4 concurrent commands. Serialize targets that may download the same uncached browser build, as described below. If the user explicitly named one target, run only that target.
 5. Restore the same service command line(s) back to `npm install`.
 6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
 7. Commit the refreshed `package-lock.json` files with only the dependency or merge changes already in scope, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
@@ -53,6 +53,12 @@ Do not use the current active worktree. A fresh refresh needs a new branch; an e
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
 For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
+
+The browser volume is external and shared across these namespaces. Before placing targets that use the same
+browser build in a parallel batch, complete one target's wrapper run to populate that build. If cache state
+or the build selected by an update is uncertain, run those targets sequentially. Apply this rule in both
+passes and coordinate with other worktrees. Batch cleanup retains the external browser volume; do not
+remove it while another worktree may be using it. See `CONTRIBUTING.md` for cache revision mappings.
 
 If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
 
@@ -110,7 +116,7 @@ git push
 - The required validation for this skill is a successful wrapper-based update pass followed by a successful wrapper-based install pass.
 - For a single target, run `sh compose.sh <target>` once while the service command is temporarily `npm update`, then run `sh compose.sh <target>` again after restoring `npm install`.
 - For a repo-wide lock refresh, run every relevant wrapper target once with all relevant service commands temporarily set to `npm update`, then run every same target again after restoring all service commands to `npm install`.
-- Repo-wide target runs may be concurrent in batches of 2-4. A batch is successful only when every target command exits successfully.
+- Repo-wide target runs may be concurrent in batches of 2-4 after shared browser builds are populated; serialize uncertain or cold installs of the same build. A batch is successful only when every target command exits successfully.
 - After the final push, the hosting provider must report a definitive conflict-free PR state. A local clean merge is not sufficient, and CI status is a separate signal.
 - Do not run `sh test.sh`, `npm test`, lint, or TypeScript checks as part of this skill's default validation.
 

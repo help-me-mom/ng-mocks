@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+docker volume create ngmocks-puppeteer-cache > /dev/null
+
 export NVM_DIR="$HOME/.nvm" && \. "$NVM_DIR/nvm.sh"
 
 if [ "$1" = "" ] || [ "$1" = "root" ]; then
