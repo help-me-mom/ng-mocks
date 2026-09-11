@@ -73,7 +73,7 @@ export default (sel: DebugElement | DebugNodeSelector, methodName?: string): voi
     throw new Error(`Cannot find an element via ngMocks.touch(${funcParseFindArgsName(sel)})`);
   }
 
-  const valueAccessor = funcGetVca(el);
+  const valueAccessor = funcGetVca(el, hasListener(el)) || {};
   if (handleKnown(valueAccessor) || hasListener(el)) {
     triggerTouch(el);
 

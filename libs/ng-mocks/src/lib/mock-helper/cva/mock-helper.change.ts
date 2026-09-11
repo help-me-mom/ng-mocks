@@ -101,7 +101,7 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
   }
 
-  const valueAccessor = funcGetVca(el);
+  const valueAccessor = funcGetVca(el, hasListener(el)) || {};
   if (handleKnown(valueAccessor, value) || hasListener(el)) {
     triggerInput(el, value);
     markForNextCheck(el);
