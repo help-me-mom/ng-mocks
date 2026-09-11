@@ -23,6 +23,7 @@ export default {
     'DomSanitizerImpl',
 
     // Angular runtime primitives require their concrete root infrastructure.
+    'AfterRenderEventManager',
     'AfterRenderImpl',
     'AfterRenderManager',
     'PendingTasks',
@@ -35,10 +36,12 @@ export default {
     'IterableDiffers',
     'KeyValueDiffers',
 
-    // Angular root effects require the concrete scheduler implementation.
+    // Angular effects require the concrete manager or scheduler implementation.
+    'EffectManager',
     'EffectScheduler',
 
     // Angular 16 adds underscores
+    '_AfterRenderEventManager',
     '_AfterRenderImpl',
     '_AfterRenderManager',
     '_PendingTasks',
@@ -54,6 +57,7 @@ export default {
     '_Compiler',
     '_IterableDiffers',
     '_KeyValueDiffers',
+    '_EffectManager',
     '_EffectScheduler',
   ],
   neverMockToken: [

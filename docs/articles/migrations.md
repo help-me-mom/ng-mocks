@@ -13,13 +13,14 @@ If you are facing an issue, despite the instructions, please, feel free to [cont
 
 ## From ng-mocks 14.15 to 14.16
 
-### Signal inputs of mocked components
+### Signal inputs of mocked components and directives {#signal-inputs-of-mocked-components}
 
-Starting with `14.16.0`, [`MockComponent`](api/MockComponent.md) and component mocks created by
-[`MockBuilder`](api/MockBuilder.md) preserve inputs declared with `input()` or `input.required()` as Angular signals.
-Previously, a bound signal input on a mocked component was incorrectly replaced with its plain value. The change fixes
-[#13671](https://github.com/help-me-mom/ng-mocks/issues/13671) and makes mocked and kept components expose the same
-input interface. Input aliases, required-input metadata and transforms are preserved too.
+Starting with `14.16.0`, [`MockComponent`](api/MockComponent.md) and [`MockDirective`](api/MockDirective.md) preserve
+inputs declared with `input()` or `input.required()` as Angular signals. This also applies to components and directives
+mocked by [`MockBuilder`](api/MockBuilder.md), including dependencies mocked indirectly through their modules.
+Previously, a bound signal input on a mocked declaration was incorrectly replaced with its plain value. The change
+fixes [#13671](https://github.com/help-me-mom/ng-mocks/issues/13671) and makes mocked and kept declarations expose the
+same input interface. Input aliases are preserved too.
 
 This is an observable behavior change for Angular 17+ tests which relied on the old mock-only behavior. For example,
 this assertion could pass before `14.16.0` even though `name` is declared as a signal:
@@ -30,7 +31,7 @@ const child = ngMocks.findInstance(ChildComponent);
 expect(child.name).toEqual('test');
 ```
 
-Since `14.16.0`, read the signal as you would on the real component:
+Since `14.16.0`, read the signal as you would on the real component or directive:
 
 ```ts
 const child = ngMocks.findInstance(ChildComponent);
@@ -38,13 +39,43 @@ const child = ngMocks.findInstance(ChildComponent);
 expect(child.name()).toEqual('test');
 ```
 
-Before updating, check tests which access a mocked component through `componentInstance` or `ngMocks.findInstance`.
-If a property is declared with `input()` or `input.required()`, update direct reads to call the signal. Do not assign a
-value directly to the property. Change its parent binding and run change detection, or use Angular's
-[`ComponentRef.setInput`](api/MockRender.md#componentrefsetinput-and-signal-inputs) when the component is rendered
-directly.
+Before updating, check tests which access mocked components through `componentInstance` and mocked components or
+directives through `ngMocks.findInstance` or `ngMocks.get`. If a property is declared with `input()` or
+`input.required()`, update direct reads to call the signal. Do not assign a value directly to the signal property.
+Change the value bound by the parent or host template and run change detection.
 
-For value-oriented assertions which should work both before and after `14.16.0`, use [`ngMocks.input`](api/ngMocks/input.md):
+For example, suppose `HostModule` imports a module declaring `DependencyDirective`, and the host's `span` binds
+`[publicLabel]="label"` to the directive's aliased `label` signal. `MockBuilder` mocks that directive as a dependency:
+
+```ts
+beforeEach(() => MockBuilder(HostComponent, HostModule));
+
+it('updates the mocked directive input through the host binding', () => {
+  const fixture = MockRender(HostComponent);
+  const host = fixture.point.componentInstance;
+  const element = ngMocks.find('span');
+  const directive = ngMocks.get(element, DependencyDirective);
+
+  host.label = 'label-second';
+  fixture.detectChanges();
+
+  expect(directive.label()).toEqual('label-second');
+  expect(ngMocks.input(element, 'publicLabel')).toEqual('label-second');
+});
+```
+
+The same reads and host-binding updates work with a directive created directly by `MockDirective`.
+For a host created with `TestBed.createComponent` in a zoneless test, call
+`fixture.changeDetectorRef.markForCheck()` after direct property writes and before `fixture.detectChanges()`.
+See Angular's [zoneless testing guidance](https://angular.dev/guide/zoneless#using-zoneless-in-testbed).
+
+For components rendered directly, Angular's
+[`ComponentRef.setInput`](api/MockRender.md#componentrefsetinput-and-signal-inputs) is another way to update an input;
+run change detection afterwards. Directives do not have a `ComponentRef`, so update their host bindings instead.
+
+For value-oriented assertions which should work both before and after `14.16.0`, use
+[`ngMocks.input`](api/ngMocks/input.md). It returns the input's value for both components and directives. Use the
+public binding alias when an input has one, as with `publicLabel` above:
 
 ```ts
 const child = ngMocks.find(ChildComponent);
@@ -52,8 +83,28 @@ const child = ngMocks.find(ChildComponent);
 expect(ngMocks.input(child, 'name')).toEqual('test');
 ```
 
-No changes are needed for decorator-based `@Input()` properties. Kept components already exposed signal inputs as
-signals, so this migration applies only when the declaration is replaced with a mock.
+No changes are needed for decorator-based `@Input()` properties; they remain ordinary properties. Kept components
+and directives already exposed signal inputs as signals, so this migration applies only when the declaration is
+replaced with a mock.
+
+Preserving the signal interface does not preserve the original constructor or field initializers. For example,
+do not expect a mocked `input('default')` to retain that initial value. Supply the values needed by the test through
+its bindings.
+
+This also affects transforms defined in an `input()` or `input.required()` initializer. Angular does not expose
+those transform functions in reflected input metadata, so ng-mocks cannot recover them without running the original
+initialization. A mocked component or directive therefore receives the raw bound value: a bound string such as
+`'2'` remains a string, even if the original signal input transforms strings into numbers.
+Decorator-based `@Input({ transform: ... })` transforms are preserved through their reflected metadata.
+
+When a test needs the original signal-input transform or initialization, keep that component or directive.
+For the directive example above, replace the setup with:
+
+```ts
+beforeEach(() =>
+  MockBuilder(HostComponent, HostModule).keep(DependencyDirective),
+);
+```
 
 ## From 21 to 22
 

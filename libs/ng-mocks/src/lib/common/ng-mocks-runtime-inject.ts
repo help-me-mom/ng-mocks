@@ -16,17 +16,16 @@ const active: RuntimeInjectConfig[] = [];
 const installed = new Map<any, RuntimeInjectConfig>();
 
 const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
-  if (
-    active.indexOf(config) === -1 ||
-    typeof provide !== 'function' ||
-    config.touches.has(provide) ||
-    coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1
-  ) {
+  if (active.indexOf(config) === -1 || typeof provide !== 'function' || config.touches.has(provide)) {
     return false;
   }
 
   const resolution = ngMocksUniverse.getResolution(provide);
   if (resolution === 'keep' || resolution === 'exclude') {
+    return false;
+  }
+
+  if (resolution !== 'mock' && coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1) {
     return false;
   }
 

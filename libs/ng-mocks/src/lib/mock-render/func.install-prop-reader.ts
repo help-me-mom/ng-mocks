@@ -26,12 +26,7 @@ const createPropertyGet = (
   return handler;
 };
 
-const createPropertySet = (
-  key: keyof any & string,
-  reader: Record<keyof any, any>,
-  source: Record<keyof any, any>,
-  writeSource?: (key: string, value: any) => boolean,
-) => {
+const createPropertySet = (key: keyof any & string, reader: Record<keyof any, any>, source: Record<keyof any, any>) => {
   const handler = (newValue: any) => {
     if (reader[`__ngMocks_${key}`]) {
       reader[`__ngMocks_${key}`] = undefined;
@@ -39,9 +34,8 @@ const createPropertySet = (
     if (reader[`__ngMocks_${key}__origin`]) {
       reader[`__ngMocks_${key}__origin`] = undefined;
     }
-    if (!writeSource || !writeSource(key, newValue)) {
-      source[key] = newValue;
-    }
+    // Use the current setter so every fixture sharing params receives its notification.
+    source[key] = newValue;
   };
   coreDefineProperty(handler, '__ngMocksProxy', true);
 
@@ -63,7 +57,6 @@ export default (
   extra: string[],
   force = false,
   valueKeys: string[] = [],
-  writeSource?: (key: string, value: any) => boolean,
 ): void => {
   if (!source) {
     return;
@@ -77,7 +70,7 @@ export default (
     }
     helperDefinePropertyDescriptor(reader, key, {
       get: createPropertyGet(key, reader, source, valueKeys),
-      set: createPropertySet(key, reader, source, writeSource),
+      set: createPropertySet(key, reader, source),
     });
     exists.add(key);
   }

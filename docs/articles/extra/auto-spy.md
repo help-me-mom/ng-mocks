@@ -87,7 +87,6 @@ ngMocks.autoSpy(spyName => {
 ## Temporarily change auto-spy
 
 Pass `default` to make subsequently created mocks use empty functions instead of spies.
-This changes mock methods only; dependency selection still follows your `MockBuilder` setup.
 
 ```ts
 ngMocks.autoSpy('default');
@@ -104,54 +103,3 @@ afterEach(() => ngMocks.autoSpy('reset')); // now it is jasmine
 // out of calls, now it is default
 afterEach(() => ngMocks.autoSpy('reset'));
 ```
-
-### Updating tests affected by #14899
-
-The runtime `inject()` mocking hook in ng-mocks 14.16.0–14.17.6 incorrectly required auto-spy.
-Where that hook applied, disabling auto-spy could resolve real root dependencies during construction.
-The correction for [#14899](https://github.com/help-me-mom/ng-mocks/issues/14899) makes those dependencies
-follow the existing `MockBuilder` mocking policy in default mode too.
-
-For example, on Angular 14+, suppose `InjectComponent` uses `inject(TargetDependency)` in a field initializer
-and its constructor body, and saves the results of `echo()` as `fieldValue` and `bodyValue`.
-The real root dependency's `echo()` returns `'real'`. With one-argument `MockBuilder`, update expectations
-that relied on that real implementation:
-
-```ts
-beforeEach(() => ngMocks.autoSpy('default'));
-afterEach(() => ngMocks.autoSpy('reset'));
-beforeEach(() => MockBuilder(InjectComponent));
-
-it('uses empty mock methods during construction', () => {
-  const component = MockRender(InjectComponent).point.componentInstance;
-
-  // Previously: expect(component.fieldValue).toBe('real');
-  expect(component.fieldValue).toBeUndefined();
-  expect(component.bodyValue).toBeUndefined();
-});
-```
-
-If the test needs the real root dependency, use this builder setup instead:
-
-```ts
-beforeEach(() => MockBuilder(InjectComponent).keep(TargetDependency));
-
-it('uses the explicitly kept dependency', () => {
-  const component = MockRender(InjectComponent).point.componentInstance;
-
-  expect(component.fieldValue).toBe('real');
-  expect(component.bodyValue).toBe('real');
-});
-```
-
-The same correction applies to runtime dependencies of directly kept services. Existing constructor-parameter
-dependency mocking, automatic mocks created with auto-spy enabled, and explicit mock choices retain their behavior.
-
-Explicit `.keep(TargetDependency)` is respected in both one-argument and two-argument builder setups, including
-root dependencies that Angular resolves without a testing-module provider. Previously, the runtime hook could lose
-that keep decision in two-argument setups and create a mock even with auto-spy enabled.
-
-Explicit `.exclude(TargetDependency)` also reaches the runtime hook in both auto-spy modes. It removes the dependency
-from the testing module's providers while preserving Angular's root fallback, so a root-provided dependency resolves
-to its real implementation instead of an automatic mock. Use `.keep(TargetDependency)` when the test needs to state
-that dependency's real behavior explicitly.

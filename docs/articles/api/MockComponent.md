@@ -26,7 +26,7 @@ The class of a mock component has:
 
 - the same `selector`
 - the same inputs and outputs with alias support
-- signal inputs which stay callable and keep their required and transform metadata
+- signal inputs which stay callable when declared with `input()` or `input.required()`
 - templates with pure `<ng-content>` tags to allow transclusion
 - support for `@ContentChild` and `@ContentChildren`
 - support for `ControlValueAccessor`, `Validator` and `AsyncValidator`
@@ -101,8 +101,8 @@ describe('Test', () => {
 
 Starting with Angular 17, inputs can be declared with `input()` and
 `input.required()`. `MockComponent` preserves them as signals instead of
-replacing them with ordinary properties. Angular can therefore bind aliases
-and run input transforms in the same way as it does for the real component.
+replacing them with ordinary properties. Angular updates their values through
+template bindings, including bindings that use input aliases.
 
 ```ts
 @Component({
@@ -134,9 +134,15 @@ expect(child.name()).toEqual(fixture.point.componentInstance.name);
 ```
 
 The template uses the input alias, while the mock instance is read through the
-original property name. Required signal inputs remain required in Angular's
-metadata. For details about binding signal inputs on the component rendered by
+original property name. For details about binding signal inputs on the component rendered by
 `MockRender`, see [ComponentRef.setInput and signal inputs](MockRender.md#componentrefsetinput-and-signal-inputs).
+
+Mocks do not run the original component's constructor or field initializers.
+Angular stores transforms supplied to `input()` or `input.required()` on the initialized signal,
+without exposing them in reflected input metadata. A mock therefore receives the raw bound value
+without running that transform; for example, a bound string `'2'` remains a string.
+Decorator-based `@Input({ transform: ... })` transforms are preserved through their reflected metadata.
+Use `.keep(ChildComponent)` when the test needs the real component's initialization or signal-input transform.
 
 ## Standalone components
 
