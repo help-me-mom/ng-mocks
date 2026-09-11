@@ -120,6 +120,26 @@
 - List Angular major versions individually in the description for search visibility; do not compress them into
   ranges. If space is needed, omit older versions from the description without changing the documented support.
 
+## Fix Scope Review
+
+- Before implementing a fix, check whether the reported failure is one instance of a wider defect. Trace the
+  root cause through shared helpers, assumptions, and callers, and inspect similar code paths and prior fixes.
+- Compare related use cases where they share that mechanism. For metadata, consider inputs, outputs, view and
+  content queries, and host metadata; aliases and unaliased properties; inheritance; and decorator and signal
+  forms. Check the relevant component, directive, pipe, service, or module paths and supported Angular profiles.
+  Use the root cause to select meaningful cases; this is not a requirement to test every unrelated combination.
+- Identify which related cases already have meaningful coverage. Add regression tests for uncovered cases that
+  could share the defect, including cases that already work, and assert preserved behavior and relevant side
+  effects. Follow `Test Style` for test placement, source-unit and real-Angular coverage, and compatibility gates.
+- Capture failing reproducers before changing source. Fix other confirmed instances of the same defect within
+  the task's scope, retaining the original and adjacent regression assertions. Passing adjacent cases need
+  coverage where missing, not speculative source changes.
+- Keep the implementation focused on the confirmed cause. Record separate root causes or work outside the
+  requested scope as follow-ups, and state any unverified areas instead of claiming the whole area is covered.
+- Record the inspected areas, existing coverage, added cases, and scope decisions in work notes. Summarize the
+  affected behavior and regression scope in the PR description, keeping validation commands and results in the
+  work notes as required by `Pull Request Quality`.
+
 ## Spec and Documentation Examples
 
 ### Learn from existing examples
