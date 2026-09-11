@@ -187,8 +187,9 @@
   following the existing sandbox URL and suite-filter patterns. Live examples are required.
   `ng-mocks-sandbox` is updated after release; do not omit links because its current branch does not yet
   contain a new example or the Angular version it needs.
-- Use the sidebar to introduce guides. Do not add backlinks to existing articles unless requested; edit existing
-  articles when their documented behavior changes or their content needs correction.
+- Use the sidebar to introduce guides, placing related articles beside each other in `docs/sidebars.js`.
+  Do not add backlinks to existing articles unless requested; edit existing articles when their documented
+  behavior changes or their content needs correction.
 
 ## Test Style
 

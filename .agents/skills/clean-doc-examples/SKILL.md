@@ -36,7 +36,8 @@ Create and maintain a plain Markdown checklist:
    behavior, and meaningful assertions. If the task is docs-only, do not change the executable spec to simplify
    the article.
 5. Compare the finished article with its references and source spec. Check source links after moving or renaming
-   specs, and add new guides to the sidebar. Include both `Try it on CodeSandbox` and `Try it on StackBlitz`
+   specs, and add new guides beside related articles in `docs/sidebars.js`.
+   Include both `Try it on CodeSandbox` and `Try it on StackBlitz`
    links for each executable example, following the existing file-path and suite-filter URL patterns.
    Live examples are required: `ng-mocks-sandbox` is updated after release, so its current contents or Angular
    version must not block links to new examples. Do not add backlinks to existing articles unless requested
