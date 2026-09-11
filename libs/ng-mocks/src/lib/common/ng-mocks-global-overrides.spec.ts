@@ -1,5 +1,6 @@
 import { QueryList, ViewContainerRef } from '@angular/core';
 
+import coreDefineProperty from './core.define-property';
 import { NG_MOCKS } from './core.tokens';
 import './ng-mocks-global-overrides';
 
@@ -11,18 +12,14 @@ describe('ng-mocks-global-overrides:query containers', () => {
 
     // Use an isolated concrete prototype so another suite cannot warm this path.
     const prototype = Object.create(ViewContainerRef.prototype);
-    Object.defineProperty(prototype, 'constructor', {
-      value: { prototype },
-    });
+    coreDefineProperty(prototype, 'constructor', { prototype });
     const createComponent = jasmine.createSpy('createComponent');
     prototype.createComponent = createComponent;
     const container = Object.create(prototype);
     const get = jasmine
       .createSpy('get')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(container, 'injector', {
-      value: { get },
-    });
+    coreDefineProperty(container, 'injector', { get });
     const query = new QueryList<any>();
     const normalResult = {};
 
@@ -56,8 +53,8 @@ describe('ng-mocks-global-overrides:query containers', () => {
     }
 
     const firstPrototype = Object.create(ViewContainerRef.prototype);
-    Object.defineProperty(firstPrototype, 'constructor', {
-      value: { prototype: firstPrototype },
+    coreDefineProperty(firstPrototype, 'constructor', {
+      prototype: firstPrototype,
     });
     const firstCreateComponent = jasmine.createSpy(
       'firstCreateComponent',
@@ -67,14 +64,12 @@ describe('ng-mocks-global-overrides:query containers', () => {
     const firstGet = jasmine
       .createSpy('firstGet')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(firstContainer, 'injector', {
-      value: { get: firstGet },
-    });
+    coreDefineProperty(firstContainer, 'injector', { get: firstGet });
 
     // A subclass can provide a different implementation of createComponent.
     const secondPrototype = Object.create(firstPrototype);
-    Object.defineProperty(secondPrototype, 'constructor', {
-      value: { prototype: secondPrototype },
+    coreDefineProperty(secondPrototype, 'constructor', {
+      prototype: secondPrototype,
     });
     const secondCreateComponent = jasmine.createSpy(
       'secondCreateComponent',
@@ -84,8 +79,8 @@ describe('ng-mocks-global-overrides:query containers', () => {
     const secondGet = jasmine
       .createSpy('secondGet')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(secondContainer, 'injector', {
-      value: { get: secondGet },
+    coreDefineProperty(secondContainer, 'injector', {
+      get: secondGet,
     });
     const query = new CustomQueryList();
 
@@ -143,22 +138,20 @@ describe('ng-mocks-global-overrides:query containers', () => {
     const abstractContainer = Object.create(
       ViewContainerRef.prototype,
     );
-    Object.defineProperty(abstractContainer, 'createComponent', {
-      value: undefined,
-    });
+    coreDefineProperty(
+      abstractContainer,
+      'createComponent',
+      undefined,
+    );
     const prototype = Object.create(ViewContainerRef.prototype);
-    Object.defineProperty(prototype, 'constructor', {
-      value: { prototype },
-    });
+    coreDefineProperty(prototype, 'constructor', { prototype });
     const createComponent = jasmine.createSpy('createComponent');
     prototype.createComponent = createComponent;
     const container = Object.create(prototype);
     const get = jasmine
       .createSpy('get')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(container, 'injector', {
-      value: { get },
-    });
+    coreDefineProperty(container, 'injector', { get });
     const query = new QueryList<any>();
 
     query.reset([abstractContainer]);
@@ -218,9 +211,7 @@ describe('ng-mocks-global-overrides:query containers', () => {
       .createSpy('createComponent')
       .and.returnValue(originalResult);
     const prototype = Object.create(ViewContainerRef.prototype);
-    Object.defineProperty(prototype, 'constructor', {
-      value: { prototype },
-    });
+    coreDefineProperty(prototype, 'constructor', { prototype });
     // Keep the implementation plain so Jasmine can spy on the installed wrapper.
     prototype.createComponent = function (
       this: ViewContainerRef,
@@ -232,9 +223,7 @@ describe('ng-mocks-global-overrides:query containers', () => {
     const get = jasmine
       .createSpy('get')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(container, 'injector', {
-      value: { get },
-    });
+    coreDefineProperty(container, 'injector', { get });
     const query = new QueryList<any>();
     query.reset([container]);
     const patched = container.createComponent;
@@ -257,9 +246,7 @@ describe('ng-mocks-global-overrides:query containers', () => {
     expect(createComponent).not.toHaveBeenCalled();
 
     const sibling = Object.create(prototype);
-    Object.defineProperty(sibling, 'injector', {
-      value: { get },
-    });
+    coreDefineProperty(sibling, 'injector', { get });
 
     expect(sibling.createComponent(RealComponent, options)).toBe(
       originalResult,
@@ -280,9 +267,7 @@ describe('ng-mocks-global-overrides:query containers', () => {
     class MockComponent {}
 
     const prototype = Object.create(ViewContainerRef.prototype);
-    Object.defineProperty(prototype, 'constructor', {
-      value: { prototype },
-    });
+    coreDefineProperty(prototype, 'constructor', { prototype });
     const createComponent = jasmine.createSpy('createComponent');
     prototype.createComponent = createComponent;
     const container = Object.create(prototype);
@@ -291,16 +276,14 @@ describe('ng-mocks-global-overrides:query containers', () => {
     const patched = prototype.createComponent;
 
     const childPrototype = Object.create(prototype);
-    Object.defineProperty(childPrototype, 'constructor', {
-      value: { prototype: childPrototype },
+    coreDefineProperty(childPrototype, 'constructor', {
+      prototype: childPrototype,
     });
     const child = Object.create(childPrototype);
     const get = jasmine
       .createSpy('get')
       .and.returnValue(new Map([[RealComponent, MockComponent]]));
-    Object.defineProperty(child, 'injector', {
-      value: { get },
-    });
+    coreDefineProperty(child, 'injector', { get });
 
     query.reset([child]);
     query.reset([[child], container]);
