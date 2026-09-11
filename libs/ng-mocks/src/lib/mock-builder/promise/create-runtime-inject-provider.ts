@@ -12,12 +12,17 @@ export default (
   configDef: Map<any, any>,
   providers: any[],
   autoMockRootProviders: boolean,
+  excludeDef: Set<any>,
 ): Provider | undefined => {
   const environmentInitializer = (angularCore as any).ENVIRONMENT_INITIALIZER;
   if (!environmentInitializer || keepDef.has(NG_MOCKS_ROOT_PROVIDERS)) {
     return undefined;
   }
 
+  // Builder resolutions are restored before runtime injection. Kept root
+  // fallbacks and exclusions may have no provider or shared touches entry.
+  // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
+  const preserved = new Set([...keepDef, ...excludeDef]);
   const declarations = new Set<any>();
   // Kept modules preserve their root providers, but one-argument MockBuilder
   // calls auto-mock root dependencies for classic declarations too.
@@ -46,7 +51,8 @@ export default (
         deps: [Injector, NG_MOCKS_TOUCHES, ...dependencies],
         provide: def,
         useFactory: (injector: Injector, touches: Set<any>, ...args: any[]) => {
-          installRuntimeInject(injector, declarations, touches);
+          // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
+          installRuntimeInject(injector, declarations, new Set([...touches, ...preserved]));
 
           return runRuntimeInject(injector, () => useFactory(...args));
         },
@@ -61,6 +67,8 @@ export default (
     deps: [Injector, NG_MOCKS_TOUCHES],
     multi: true,
     provide: environmentInitializer,
-    useFactory: (injector: Injector, touches: Set<any>) => () => installRuntimeInject(injector, declarations, touches),
+    useFactory: (injector: Injector, touches: Set<any>) => () =>
+      // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
+      installRuntimeInject(injector, declarations, new Set([...touches, ...preserved])),
   };
 };

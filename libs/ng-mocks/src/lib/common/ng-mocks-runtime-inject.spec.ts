@@ -1,3 +1,5 @@
+import { ngMocks } from '../mock-helper/mock-helper';
+
 import {
   installRuntimeInject,
   resetRuntimeInject,
@@ -15,6 +17,50 @@ class TargetService {
 
 describe('ng-mocks-runtime-inject', () => {
   afterEach(() => resetRuntimeInject());
+
+  describe('default auto-spy mode', () => {
+    beforeEach(() => ngMocks.autoSpy('default'));
+    afterEach(() => ngMocks.autoSpy('reset'));
+
+    // @see https://github.com/help-me-mom/ng-mocks/issues/14899
+    it('keeps runtime dependencies mocked without a custom spy factory', () => {
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      const definition = {
+        factory: null as null | (() => TargetService),
+      };
+      const declaration = {
+        ɵcmp: definition,
+        ɵfac: () => injector.get(TargetService),
+      };
+
+      installRuntimeInject(
+        injector,
+        new Set([declaration]),
+        new Set(),
+      );
+
+      const service = definition.factory!();
+
+      // Auto-spy selects method implementations, not whether dependencies are mocked.
+      expect(service.echo()).toBeUndefined();
+      expect(jasmine.isSpy(service.echo)).toBe(false);
+      expect(injector.get(TargetService)).toBe(service);
+      expect(originalGet).not.toHaveBeenCalled();
+
+      destroyCallbacks[0]();
+
+      expect(injector.get(TargetService).echo()).toEqual('real');
+      expect(originalGet).toHaveBeenCalledTimes(1);
+    });
+  });
 
   // @see https://github.com/help-me-mom/ng-mocks/issues/14896
   for (const name of [

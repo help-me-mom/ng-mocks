@@ -1,4 +1,3 @@
-import helperMockService from '../mock-service/helper.mock-service';
 import helperUseFactory from '../mock-service/helper.use-factory';
 
 import coreConfig from './core.config';
@@ -17,12 +16,7 @@ const active: RuntimeInjectConfig[] = [];
 const installed = new Map<any, RuntimeInjectConfig>();
 
 const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
-  if (
-    active.indexOf(config) === -1 ||
-    !helperMockService.mockFunction.customMockFunction ||
-    typeof provide !== 'function' ||
-    config.touches.has(provide)
-  ) {
+  if (active.indexOf(config) === -1 || typeof provide !== 'function' || config.touches.has(provide)) {
     return false;
   }
 
