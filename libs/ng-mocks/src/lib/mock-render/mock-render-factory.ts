@@ -99,13 +99,7 @@ const handleFixtureError = (e: any) => {
   throw error;
 };
 
-const installZonelessInputScheduler = (
-  fixture: any,
-  source: Record<string, any>,
-  inputs: string[],
-): ((key: string, value: any) => boolean) => {
-  const writers = new Map<string, (value: any) => void>();
-
+const installZonelessInputScheduler = (fixture: any, source: Record<string, any>, inputs: string[]): void => {
   for (const input of inputs) {
     const ownDescriptor = Object.getOwnPropertyDescriptor(source, input);
     const descriptor = ownDescriptor ?? helperExtractPropertyDescriptor(source, input);
@@ -120,30 +114,20 @@ const installZonelessInputScheduler = (
 
     let value = descriptor && 'value' in descriptor ? descriptor.value : source[input];
     const write = descriptor?.set ? descriptor.set.bind(source) : (newValue: any) => (value = newValue);
-    const installed = helperDefinePropertyDescriptor(source, input, {
+    helperDefinePropertyDescriptor(source, input, {
       enumerable: descriptor?.enumerable ?? true,
       get: descriptor?.get ? descriptor.get.bind(source) : () => value,
       set: (newValue: any) => {
         write(newValue);
         // setInput caches values and can skip scheduling after a direct proxy write.
         // The wrapper already reads from source, so marking it preserves the proxy behavior.
-        fixture.changeDetectorRef.markForCheck();
+        // Shared params can outlive one of the fixtures using them.
+        if (!fixture.componentRef.hostView.destroyed) {
+          fixture.changeDetectorRef.markForCheck();
+        }
       },
     });
-    if (installed) {
-      writers.set(input, write);
-    }
   }
-
-  return (key: string, value: any): boolean => {
-    const write = writers.get(key);
-    if (!write) {
-      return false;
-    }
-    write(value);
-
-    return true;
-  };
 };
 
 // Angular 22 changed how wrapper fixture checks reach the rendered point, so only
@@ -272,21 +256,17 @@ const generateFactory = (
     }
 
     const source = params ?? {};
-    const inputBindings =
-      bindings === undefined || bindings === null
-        ? componentCtor.inputBindings
-        : componentCtor.inputBindings.filter(input => bindings.indexOf(input) !== -1);
-    const writeSource = fixture.zonelessEnabled
-      ? installZonelessInputScheduler(fixture, source, inputBindings)
-      : undefined;
-    funcInstallPropReader(
-      fixture.componentInstance,
-      source,
-      bindings ?? [],
-      false,
-      componentCtor.inputBindings,
-      writeSource,
-    );
+    let inputBindings = componentCtor.inputBindings;
+    if (typeof template === 'string') {
+      // Custom templates have no declaration metadata; their params are the binding context.
+      inputBindings = bindings ?? Object.keys(source);
+    } else if (bindings) {
+      inputBindings = inputBindings.filter(input => bindings.indexOf(input) !== -1);
+    }
+    if (fixture.zonelessEnabled) {
+      installZonelessInputScheduler(fixture, params ?? fixture.componentInstance, inputBindings);
+    }
+    funcInstallPropReader(fixture.componentInstance, source, bindings ?? [], false, componentCtor.inputBindings);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
 
     if (detectChanges === undefined || detectChanges) {
