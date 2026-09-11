@@ -418,6 +418,8 @@ describe('definitions', () => {
     expect(instance.regular).toBeUndefined();
     expect(isSignal(instance.value)).toBe(true);
     expect(isSignal(instance.required)).toBe(true);
+    expect(instance.value()).toBeUndefined();
+    expect(() => instance.required()).toThrowError(/NG0950/);
     expect(instance.__ngMocks).toBe(true);
   });
 
