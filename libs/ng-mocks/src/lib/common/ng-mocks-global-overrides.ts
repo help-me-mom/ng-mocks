@@ -23,6 +23,7 @@ import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
+import { rememberDeclarationFactory, resetDeclarationFactories } from './ng-mocks-declaration-factories';
 import {
   rememberInjectedDeclaration,
   rememberMockDeclarations,
@@ -56,8 +57,10 @@ const installTestBedInjection = (instance: NgMocksTestBed): void => {
 };
 const applyOverride = (def: any, override: any) => {
   if (isNgDef(def, 'c')) {
+    rememberDeclarationFactory(def);
     TestBed.overrideComponent(def, override);
   } else if (isNgDef(def, 'd')) {
+    rememberDeclarationFactory(def);
     TestBed.overrideDirective(def, override);
   } else if (isNgDef(def, 'm')) {
     TestBed.overrideModule(def, override);
@@ -375,7 +378,12 @@ const resetTestingModule =
     resetInjectedDeclarations();
     applyNgMocksOverrides(TestBed);
 
-    return original.call(instance);
+    try {
+      return original.call(instance);
+    } finally {
+      // Older Ivy TestBed versions restore directive definitions but leave recompiled factories behind.
+      resetDeclarationFactories();
+    }
   };
 
 // Monkey-patching ViewContainerRef.createComponent to replace dynamic imports with mocked declarations.

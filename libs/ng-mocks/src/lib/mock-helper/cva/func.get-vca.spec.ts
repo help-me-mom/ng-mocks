@@ -244,6 +244,36 @@ describe('func.get-vca', () => {
     expect(funcGetVca(node, true)).toBeUndefined();
   });
 
+  it('does not bind an unbound child accessor through an ancestor NgControl', () => {
+    const parentAccessor = new MockControlValueAccessorProxy();
+    const childAccessor = new MockControlValueAccessorProxy();
+    const parent = Injector.create({
+      providers: [
+        {
+          provide: NgControl,
+          useValue: { valueAccessor: parentAccessor },
+        },
+      ],
+    });
+    const node: any = {
+      injector: Injector.create({
+        parent,
+        providers: [
+          { provide: NG_VALUE_ACCESSOR, useValue: [childAccessor] },
+        ],
+      }),
+      providerTokens: [NG_VALUE_ACCESSOR],
+    };
+
+    expect(node.injector.get(NgControl).valueAccessor).toBe(
+      parentAccessor,
+    );
+    expect(() => funcGetVca(node)).toThrowError(
+      /Cannot find ControlValueAccessor on the element/,
+    );
+    expect(funcGetVca(node, true)).toBeUndefined();
+  });
+
   it('does not resolve a local signal field through an ancestor legacy control', () => {
     const accessor = new MockControlValueAccessorProxy();
     const control = new FormControl('parent');
