@@ -118,14 +118,7 @@ export const extendClass = <I>(base: AnyType<I>): Type<I> => {
   // Angular does not read the original declaration metadata from the subclass.
   for (const prop of ['ɵcmp', 'ɵdir', 'ɵfac', 'ɵinj', 'ɵmod', 'ɵpipe']) {
     if (prop in child && !Object.prototype.hasOwnProperty.call(child, prop)) {
-      // coreDefineProperty rejects nonconfigurable ancestor descriptors. An own
-      // property can shadow them without changing the original definition.
-      Object.defineProperty(child, prop, {
-        configurable: true,
-        enumerable: false,
-        value: undefined,
-        writable: true,
-      });
+      coreDefineProperty(child, prop, undefined);
     }
   }
 
