@@ -18,7 +18,8 @@ Create and maintain a plain Markdown checklist:
 - [ ] Inspect repo state, source-of-truth docs, and the GitHub issue
 - [ ] Create a dedicated issue worktree from `upstream/main`
 - [ ] Find the closest functional examples and read their specs and docs before implementing
-- [ ] Reproduce the bug with a local `issue-*` regression test
+- [ ] Trace the root cause and review related use cases for a wider defect and missing coverage
+- [ ] Reproduce the reported and related failures, and add missing preservation tests
 - [ ] Fix the implementation without changing the reproducer test
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Update the matching docs and review them against the executable examples
@@ -66,18 +67,33 @@ Create and maintain a plain Markdown checklist:
 
    If `issues/<issue-number>` or the default worktree path already exists, inspect it with `git worktree list`, `git status --short`, and `git log --oneline --decorate --max-count=10`. Reuse it only when it is already the dedicated worktree for this issue. Otherwise create a timestamped branch and path from `upstream/main`, for example `issues/<issue-number>-<timestamp>` and `../ng-mocks-issue-<issue-number>-<timestamp>`.
 
-4. Reproduce before fixing:
+4. Review the wider scope before fixing:
+   - Follow [Fix Scope Review](../../../AGENTS.md#fix-scope-review). Trace the failing mechanism through shared
+     helpers and their callers, analogous implementations, and related previous fixes.
+   - Select adjacent cases based on the cause: for example, an input metadata defect may also affect outputs,
+     view/content queries, aliases, inheritance, or other declaration types. Consider decorator/signal forms,
+     provider policies, lookup order, cache state, and Angular profiles when the same mechanism uses them.
+   - Read the existing tests for those cases and identify coverage gaps. Add meaningful regressions for plausible
+     affected paths even when they already work, including preserved behavior and absence of unwanted side effects.
+   - Record the inspected areas, evidence, and scope decisions in work notes. Include confirmed instances of the
+     same defect within the task's scope; record distinct causes or out-of-scope work as follow-ups. State any
+     unverified areas and avoid claiming exhaustive coverage from a single reproducer.
+5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.
    - After the failing repro is captured, do not weaken or rewrite it to fit the fix. Mechanical compile fixes are acceptable only when they preserve the same failure.
-5. Fix narrowly:
+   - Capture failing cases for confirmed adjacent instances too. Keep the direct issue reproducer focused and
+     place broader policy coverage in the relevant feature suite, following `Test Style` in `AGENTS.md`.
+6. Fix narrowly:
    - Change source code after the reproducer exists.
+   - Correct the confirmed shared cause and its affected paths. Preserve adjacent cases that already work and
+     avoid speculative source changes for cases that only need regression coverage.
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
    - Use functional tests during investigation and implementation. Do not run formatting/Prettier, ESLint, or
      TypeScript checks or fix their findings until the solution is ready to commit.
-6. Update and review documentation:
+7. Update and review documentation:
    - Keep testing a real declaration and mocking a dependency clear, with separate articles for independent APIs.
      Identify decorator and signal variants where both exist.
    - Follow the [docs-example skill](../clean-doc-examples/SKILL.md) when syncing published snippets. Keep them
@@ -209,6 +225,7 @@ PR rules:
   `Related to`, `Follow-up to`, or equivalent wording when it should not close the reference.
 - Describe the root cause, focused fix, regression coverage, documentation changes, and impact as applicable; omit
   validation commands and results.
+- Summarize the confirmed wider scope and adjacent regression coverage when they extend beyond the original report.
 - Link related issues, duplicate reports, and previous PRs when they influenced the fix.
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 - Follow [Validation Expectations](../../../AGENTS.md#validation-expectations) when reporting CI status.
@@ -217,6 +234,8 @@ PR rules:
 ## Guardrails
 
 - Do not start with a source fix before a failing local reproduction exists unless the bug is already covered by an existing failing test.
+- Do not consider a fix complete solely because the reported reproducer passes; review related paths that share
+  its cause and cover the relevant gaps before concluding the investigation.
 - Do not triage issue fixes in the original checkout; create or reuse a dedicated worktree based on `upstream/main` first.
 - Do not change the reproducer after fixing source behavior, except for mechanical compatibility edits that preserve the original failure.
 - Do not delete or regenerate lockfiles for ordinary issue fixes. If dependency refresh is required, use the `update-package-locks` skill.
