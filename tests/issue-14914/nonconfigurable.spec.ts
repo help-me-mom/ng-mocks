@@ -29,12 +29,22 @@ class BaseDeclaration {
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.label }}',
 })
-class TargetComponent extends BaseDeclaration {}
+class TargetComponent extends BaseDeclaration {
+  // Keep fixture DI explicit for Angular 14 ES5 JIT; the generated middleware
+  // inherits this constructor while shadowing the locked Ivy definitions.
+  public constructor(service: TargetService) {
+    super(service);
+  }
+}
 
 @Directive({
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 } as never)
-class TargetDirective extends BaseDeclaration {}
+class TargetDirective extends BaseDeclaration {
+  public constructor(service: TargetService) {
+    super(service);
+  }
+}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14914
 describe('issue-14914:nonconfigurable', () => {

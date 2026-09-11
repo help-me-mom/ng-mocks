@@ -46,20 +46,43 @@ class BaseDeclaration {
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ service.label }}:{{ value.label }}',
 })
-class TargetComponent extends BaseDeclaration {}
+class TargetComponent extends BaseDeclaration {
+  // Angular 14 ES5 JIT cannot reflect Babel's implicit constructor. The
+  // generated middleware still inherits this declaration's constructor.
+  public constructor(
+    service: TargetService,
+    @Inject(TOKEN) value: Dependency,
+  ) {
+    super(service, value);
+  }
+}
 
 @Directive({
   providers: [{ provide: TOKEN, useValue: directiveValue }],
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 } as never)
-class TargetDirective extends BaseDeclaration {}
+class TargetDirective extends BaseDeclaration {
+  public constructor(
+    service: TargetService,
+    @Inject(TOKEN) value: Dependency,
+  ) {
+    super(service, value);
+  }
+}
 
 @Directive({
   providers: [{ provide: TOKEN, useValue: originalValue }],
   selector: '[original14914]',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
 })
-class OriginalDirective extends TargetDirective {}
+class OriginalDirective extends TargetDirective {
+  public constructor(
+    service: TargetService,
+    @Inject(TOKEN) value: Dependency,
+  ) {
+    super(service, value);
+  }
+}
 
 @Component({
   selector: 'host-14914',
@@ -70,6 +93,27 @@ class HostComponent {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14914
 describe('issue-14914', () => {
+  it('injects constructor dependencies when Angular renders the original declaration directly', () => {
+    const service = new TargetService();
+    service.label = 'direct service';
+    TestBed.configureTestingModule({
+      declarations: [TargetComponent],
+      providers: [{ provide: TargetService, useValue: service }],
+    });
+    const fixture = TestBed.createComponent(TargetComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.constructor).toBe(
+      TargetComponent,
+    );
+    expect(fixture.componentInstance.service).toBe(service);
+    expect(fixture.componentInstance.value).toBe(componentValue);
+    expect(ngMocks.formatText(fixture)).toEqual(
+      'direct service:component',
+    );
+    expect(fixture.nativeElement.dataset.value).toEqual('component');
+  });
+
   it('isolates selectorless component metadata and inherits constructor dependencies', async () => {
     const service = new TargetService();
     service.label = 'provided service';
