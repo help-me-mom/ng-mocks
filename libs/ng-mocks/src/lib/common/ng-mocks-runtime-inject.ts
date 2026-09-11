@@ -48,11 +48,14 @@ const installInjector = (config: RuntimeInjectConfig, restorers: Array<() => voi
     injector,
     'get',
     function (this: any, provide: any, ...args: any[]): any {
-      if (config.mocks.has(provide)) {
+      const flags = args[1];
+      // SkipSelf uses bit 4 in Angular's numeric injector flags.
+      const skipSelf = typeof flags === 'number' ? (flags & 4) !== 0 : flags?.skipSelf;
+      if (!skipSelf && config.mocks.has(provide)) {
         return config.mocks.get(provide);
       }
 
-      const mock = shouldMock(provide, config);
+      const mock = !skipSelf && shouldMock(provide, config);
       let activeIndex = active.length - 1;
       while (activeIndex >= 0 && active[activeIndex] !== config) {
         activeIndex -= 1;
