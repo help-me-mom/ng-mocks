@@ -35,7 +35,8 @@
     "tests/issue-1596",
     "tests/issue-296",
     "tests/issue-736",
-    "tests/issue-14898/experimental.spec.ts"
+    "tests/issue-14898/experimental.spec.ts",
+    "tests/issue-14900/numeric.spec.ts"
   ],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",
