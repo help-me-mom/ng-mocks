@@ -84,6 +84,150 @@ describe('create-runtime-inject-provider', () => {
     destroyCallbacks[0]();
   });
 
+  describe('explicit keeps in default auto-spy mode', () => {
+    beforeEach(() => ngMocks.autoSpy('default'));
+    afterEach(() => ngMocks.autoSpy('reset'));
+
+    it('preserves a keep snapshot when a kept service installs runtime injection', () => {
+      class KeptDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      class MockedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      (KeptDependency as any).ɵprov = { providedIn: 'root' };
+      (MockedDependency as any).ɵprov = { providedIn: 'root' };
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      const provider = {
+        provide: TargetWithDependencies,
+        useFactory: () => ({
+          kept: injector.get(KeptDependency),
+          mocked: injector.get(MockedDependency),
+        }),
+      };
+      ngMocksUniverse.builtProviders.set(
+        TargetWithDependencies,
+        provider,
+      );
+      const providers: Provider[] = [provider];
+      const keepDef = new Set<any>([
+        TargetWithDependencies,
+        KeptDependency,
+      ]);
+
+      createRuntimeInjectProvider(
+        keepDef,
+        new Map<any, any>([
+          [TargetWithDependencies, { shallow: false }],
+          [KeptDependency, { dependency: true }],
+        ]),
+        providers,
+        false,
+        new Set(),
+      );
+
+      // A root dependency can be kept without a generated provider or touches entry.
+      keepDef.clear();
+      keepDef.add(MockedDependency);
+      const touches = new Set([TargetWithDependencies]);
+      const service = (providers[0] as any).useFactory(
+        injector,
+        touches,
+      );
+
+      expect(providers.length).toBe(1);
+      expect(service.kept.echo()).toEqual('real');
+      expect(service.mocked.echo()).toBeUndefined();
+      expect(injector.get(MockedDependency)).toBe(service.mocked);
+      expect(originalGet).toHaveBeenCalledTimes(1);
+      expect(originalGet).toHaveBeenCalledWith(KeptDependency);
+      expect(touches).toEqual(new Set([TargetWithDependencies]));
+
+      destroyCallbacks[0]();
+    });
+
+    it('preserves a keep snapshot when a declaration initializer installs runtime injection', () => {
+      class KeptDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      class MockedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      (KeptDependency as any).ɵprov = { providedIn: 'root' };
+      (MockedDependency as any).ɵprov = { providedIn: 'root' };
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      const definition = {
+        factory: null as
+          | null
+          | (() => {
+              kept: KeptDependency;
+              mocked: MockedDependency;
+            }),
+      };
+      class TargetDirective {}
+      (TargetDirective as any).__annotations__ = [
+        { ngMetadataName: 'Directive', standalone: false },
+      ];
+      (TargetDirective as any).ɵdir = definition;
+      (TargetDirective as any).ɵfac = () => ({
+        kept: injector.get(KeptDependency),
+        mocked: injector.get(MockedDependency),
+      });
+      const keepDef = new Set<any>([TargetDirective, KeptDependency]);
+      const providers: Provider[] = [];
+      const provider = createRuntimeInjectProvider(
+        keepDef,
+        new Map<any, any>([
+          [TargetDirective, { shallow: false }],
+          [KeptDependency, { dependency: true }],
+        ]),
+        providers,
+        true,
+        new Set(),
+      ) as any;
+
+      keepDef.clear();
+      keepDef.add(MockedDependency);
+      const touches = new Set([TargetDirective]);
+      provider.useFactory(injector, touches)();
+      const directive = definition.factory!();
+
+      expect(providers).toEqual([]);
+      expect(directive.kept.echo()).toEqual('real');
+      expect(directive.mocked.echo()).toBeUndefined();
+      expect(injector.get(MockedDependency)).toBe(directive.mocked);
+      expect(originalGet).toHaveBeenCalledTimes(1);
+      expect(originalGet).toHaveBeenCalledWith(KeptDependency);
+      expect(touches).toEqual(new Set([TargetDirective]));
+
+      destroyCallbacks[0]();
+    });
+  });
+
   describe('explicit exclusions in default auto-spy mode', () => {
     beforeEach(() => ngMocks.autoSpy('default'));
     afterEach(() => ngMocks.autoSpy('reset'));

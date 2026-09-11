@@ -19,9 +19,10 @@ export default (
     return undefined;
   }
 
-  // Builder resolutions are restored before runtime injection, so retain its
-  // exclusions without changing the shared NG_MOCKS_TOUCHES provider.
-  const excluded = new Set(excludeDef);
+  // Builder resolutions are restored before runtime injection. Kept root
+  // fallbacks and exclusions may have no provider or shared touches entry.
+  // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
+  const preserved = new Set([...keepDef, ...excludeDef]);
   const declarations = new Set<any>();
   // Kept modules preserve their root providers, but one-argument MockBuilder
   // calls auto-mock root dependencies for classic declarations too.
@@ -51,7 +52,7 @@ export default (
         provide: def,
         useFactory: (injector: Injector, touches: Set<any>, ...args: any[]) => {
           // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
-          installRuntimeInject(injector, declarations, new Set([...touches, ...excluded]));
+          installRuntimeInject(injector, declarations, new Set([...touches, ...preserved]));
 
           return runRuntimeInject(injector, () => useFactory(...args));
         },
@@ -68,6 +69,6 @@ export default (
     provide: environmentInitializer,
     useFactory: (injector: Injector, touches: Set<any>) => () =>
       // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
-      installRuntimeInject(injector, declarations, new Set([...touches, ...excluded])),
+      installRuntimeInject(injector, declarations, new Set([...touches, ...preserved])),
   };
 };

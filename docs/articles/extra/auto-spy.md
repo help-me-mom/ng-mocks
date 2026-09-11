@@ -145,7 +145,11 @@ it('uses the explicitly kept dependency', () => {
 ```
 
 The same correction applies to runtime dependencies of directly kept services. Existing constructor-parameter
-dependency mocking, automatic mocks created with auto-spy enabled, and explicit keep/mock choices retain their behavior.
+dependency mocking, automatic mocks created with auto-spy enabled, and explicit mock choices retain their behavior.
+
+Explicit `.keep(TargetDependency)` is respected in both one-argument and two-argument builder setups, including
+root dependencies that Angular resolves without a testing-module provider. Previously, the runtime hook could lose
+that keep decision in two-argument setups and create a mock even with auto-spy enabled.
 
 Explicit `.exclude(TargetDependency)` also reaches the runtime hook in both auto-spy modes. It removes the dependency
 from the testing module's providers while preserving Angular's root fallback, so a root-provided dependency resolves
