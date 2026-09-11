@@ -22,7 +22,7 @@ Create and maintain a plain Markdown checklist:
 - [ ] Reproduce the reported and related failures, and add missing preservation tests
 - [ ] Fix the implementation without changing the reproducer test
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
-- [ ] Update the matching docs and review them against the executable examples
+- [ ] Assess whether docs add useful reader guidance; update and verify examples only when needed
 - [ ] Complete final formatting, ESLint, and TypeScript checks, then commit and prepare the PR against `upstream/main`
 - [ ] Verify the requested CI status on the current PR commit
 ```
@@ -93,7 +93,10 @@ Create and maintain a plain Markdown checklist:
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
    - Use functional tests during investigation and implementation. Do not run formatting/Prettier, ESLint, or
      TypeScript checks or fix their findings until the solution is ready to commit.
-7. Update and review documentation:
+7. Assess documentation value before editing:
+   - Follow [Write the articles](../../../AGENTS.md#write-the-articles). Leave docs unchanged when a fix restores
+     expected behavior and there is nothing useful to teach. Do not add obvious capability statements or
+     restate the API contract merely to accompany a fix.
    - Keep testing a real declaration and mocking a dependency clear, with separate articles for independent APIs.
      Identify decorator and signal variants where both exist.
    - Follow the [docs-example skill](../clean-doc-examples/SKILL.md) when syncing published snippets. Keep them

@@ -160,6 +160,7 @@ module.exports = {
         'guides/routing-resolver',
         'guides/http-request',
         'guides/http-interceptor',
+        'guides/signal-forms',
       ],
     },
     {

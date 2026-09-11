@@ -9,7 +9,8 @@ const NG_VALIDATORS = module.NG_VALIDATORS;
 const NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
 const NgControl = module.NgControl;
 const NgModel = module.NgModel;
-const selectValueAccessor = (module as any).ɵselectValueAccessor;
+// Copy the namespace so bundlers do not require this Angular 22-only export.
+const selectValueAccessor = ({ ...module } as any).ɵselectValueAccessor;
 
 export default {
   AbstractControl,

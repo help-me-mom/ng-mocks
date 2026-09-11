@@ -38,7 +38,3 @@ ngMocks.touch('[data-testid="inputControl"]');
 ```
 
 Profit!
-
-For signal forms, it also supports native text inputs, `<textarea>` and single-selection `<select>`
-elements bound with `[formField]`, and real or mocked `ControlValueAccessor` controls bound the same way.
-Keep `FormField` when using `MockBuilder` to mock their surrounding dependencies.

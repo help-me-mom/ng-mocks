@@ -73,6 +73,10 @@
 - Keep hook configuration local to the commit operation. When installing Husky, direct its Git configuration write
   to a temporary container file with `GIT_CONFIG`, then select `.husky/_` through `git -c core.hooksPath=.husky/_`
   for the commit. Do not persist changes to the shared repository's hook configuration.
+- Build docs with `sh test.sh docs`. Its `docs-build` service mounts the current worktree at `/app` and the
+  shared Git metadata read-only at its original absolute path. The wrapper selects the current worktree's Git
+  directory and `/app` as its working tree so Docusaurus can retain last-update authors and dates. This exception
+  permits read-only metadata access for docs builds, not primary working files or Git configuration changes.
 - If a tool cannot work with the isolated worktree, report the error and discuss a supported solution with the user.
   Do not move execution to the primary checkout or weaken the isolation to make a check pass.
 
@@ -165,6 +169,10 @@
 
 ### Write the articles
 
+- Edit public docs only when they add useful information readers need, such as a non-obvious constraint,
+  a meaningful example, or a necessary usage or migration change. Do not add obvious capability statements,
+  restate the API contract, or edit docs merely to accompany a fix. Leave docs unchanged when there is
+  nothing useful to teach.
 - Distinguish testing a real declaration from mocking it as a dependency. Give independent API use cases separate
   articles and clearly identify decorator and signal examples. For content queries, keep separate testing and
   mocking articles for both `ContentChild` and `ContentChildren`, with both approaches in each article.
@@ -175,6 +183,10 @@
   or taught by the article. Keep compatibility machinery in executable specs, without per-version patch
   instructions in the live example. Use the [docs-example skill](.agents/skills/clean-doc-examples/SKILL.md).
 - Check embedded snippets and source links against the executable specs before finishing.
+- Include both `Try it on CodeSandbox` and `Try it on StackBlitz` links for documented executable examples,
+  following the existing sandbox URL and suite-filter patterns. Live examples are required.
+  `ng-mocks-sandbox` is updated after release; do not omit links because its current branch does not yet
+  contain a new example or the Angular version it needs.
 - Use the sidebar to introduce guides. Do not add backlinks to existing articles unless requested; edit existing
   articles when their documented behavior changes or their content needs correction.
 
@@ -293,9 +305,10 @@
   examples still leave a pattern unclear, inspect analogous local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
 - Keep implementation narrow and follow `Test Style` for issue reproducers, compatibility gates, layered coverage,
   and preservation assertions.
-- Update API docs, compatibility tables, or migration guidance in the same PR when the documented public contract,
-  tested support claim, or a material upgrade path changes. Internal fixes that restore the documented contract do not
-  require public docs. For a shipped behavior change likely to require user code or test updates, add migration
+- Apply the documentation-value rule in `Write the articles`: update API docs, compatibility tables, or migration
+  guidance when readers need new or corrected guidance about the public contract, supported versions, or an
+  upgrade path. Fixes that restore expected behavior do not by themselves require public docs.
+  For a shipped behavior change likely to require user code or test updates, add migration
   guidance with affected versions, before/after examples, the safe update path, and explicitly unaffected cases.
 - Update `AGENTS.md` and the relevant repo skill only when current guidance is wrong or missing and the lesson is
   repository-wide, repeated, or exposed by an actual workflow failure.

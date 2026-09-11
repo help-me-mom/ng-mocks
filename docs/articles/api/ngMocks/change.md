@@ -48,9 +48,5 @@ Profit!
 
 It supports both `FormsModule` and `ReactiveFormsModule`.
 
-For signal forms, it also supports native text inputs, `<textarea>` and single-selection `<select>`
-elements bound with `[formField]`, and real or mocked `ControlValueAccessor` controls bound the same way.
-Keep `FormField` when using `MockBuilder` to mock their surrounding dependencies.
-
 Calling `ngMocks.change` also simulates that the user removes focus from the element by triggering a **blur** event. 
 If testing form changes in combination with blur events, it is therefore not necessary to call [`ngMocks.trigger`](trigger.md) after `ngMocks.change`.
