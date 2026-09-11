@@ -101,6 +101,19 @@ const generateWrapperComponent = ({ bindings, options, inputs, signalInputs, tem
             },
           });
         }
+
+        // Original signal names share the public binding so the component
+        // mirror cannot replace the rendered signal with a binding value.
+        for (const input of Object.keys(signalInputs)) {
+          const name = signalInputs[input];
+          if (Object.getOwnPropertyDescriptor(this, name)) {
+            continue;
+          }
+          helperDefinePropertyDescriptor(this, name, {
+            get: () => (this as any)[input],
+            set: (value: any) => ((this as any)[input] = value),
+          });
+        }
       }
     }
   }
