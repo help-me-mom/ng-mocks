@@ -96,6 +96,7 @@ export class MockBuilderPromise implements IMockBuilder {
         this.configDef,
         ngModule.providers,
         this.configDefault.dependency !== true,
+        this.excludeDef,
       );
       if (runtimeInjectProvider) {
         ngModule.providers.push(runtimeInjectProvider);

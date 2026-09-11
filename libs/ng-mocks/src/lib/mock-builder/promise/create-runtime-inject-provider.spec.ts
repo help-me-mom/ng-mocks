@@ -1,7 +1,9 @@
 import { Injector, Provider } from '@angular/core';
 
 import { NG_MOCKS_TOUCHES } from '../../common/core.tokens';
+import { resetRuntimeInject } from '../../common/ng-mocks-runtime-inject';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
+import { ngMocks } from '../../mock-helper/mock-helper';
 
 import createRuntimeInjectProvider from './create-runtime-inject-provider';
 
@@ -15,6 +17,7 @@ class TargetWithoutDependencies {}
 
 describe('create-runtime-inject-provider', () => {
   afterEach(() => {
+    resetRuntimeInject();
     ngMocksUniverse.builtProviders.delete(TargetWithDependencies);
     ngMocksUniverse.builtProviders.delete(TargetWithoutDependencies);
   });
@@ -50,6 +53,7 @@ describe('create-runtime-inject-provider', () => {
       ]),
       providers,
       false,
+      new Set(),
     );
 
     const destroyCallbacks: Array<() => void> = [];
@@ -78,5 +82,137 @@ describe('create-runtime-inject-provider', () => {
     );
 
     destroyCallbacks[0]();
+  });
+
+  describe('explicit exclusions in default auto-spy mode', () => {
+    beforeEach(() => ngMocks.autoSpy('default'));
+    afterEach(() => ngMocks.autoSpy('reset'));
+
+    it('preserves an exclusion snapshot when a kept service installs runtime injection', () => {
+      class ExcludedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      class MockedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      (ExcludedDependency as any).ɵprov = { providedIn: 'root' };
+      (MockedDependency as any).ɵprov = { providedIn: 'root' };
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      const provider = {
+        provide: TargetWithDependencies,
+        useFactory: () => ({
+          excluded: injector.get(ExcludedDependency),
+          mocked: injector.get(MockedDependency),
+        }),
+      };
+      ngMocksUniverse.builtProviders.set(
+        TargetWithDependencies,
+        provider,
+      );
+      const providers: Provider[] = [provider];
+      const excludeDef = new Set<any>([ExcludedDependency]);
+
+      createRuntimeInjectProvider(
+        new Set([TargetWithDependencies]),
+        new Map([[TargetWithDependencies, { shallow: false }]]),
+        providers,
+        false,
+        excludeDef,
+      );
+
+      // Later builder changes must not change the already-created runtime provider.
+      excludeDef.clear();
+      excludeDef.add(MockedDependency);
+      const touches = new Set([TargetWithDependencies]);
+      const service = (providers[0] as any).useFactory(
+        injector,
+        touches,
+      );
+
+      expect(service.excluded.echo()).toEqual('real');
+      expect(service.mocked.echo()).toBeUndefined();
+      expect(injector.get(MockedDependency)).toBe(service.mocked);
+      expect(originalGet).toHaveBeenCalledTimes(1);
+      expect(originalGet).toHaveBeenCalledWith(ExcludedDependency);
+      expect(touches).toEqual(new Set([TargetWithDependencies]));
+
+      destroyCallbacks[0]();
+    });
+
+    it('preserves an exclusion snapshot when a declaration initializer installs runtime injection', () => {
+      class ExcludedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      class MockedDependency {
+        public echo(): string {
+          return 'real';
+        }
+      }
+      (ExcludedDependency as any).ɵprov = { providedIn: 'root' };
+      (MockedDependency as any).ɵprov = { providedIn: 'root' };
+      const destroyCallbacks: Array<() => void> = [];
+      const originalGet = jasmine
+        .createSpy('get')
+        .and.callFake((provide: any) => new provide());
+      const injector = {
+        get: originalGet,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      const definition = {
+        factory: null as
+          | null
+          | (() => {
+              excluded: ExcludedDependency;
+              mocked: MockedDependency;
+            }),
+      };
+      class TargetDirective {}
+      (TargetDirective as any).__annotations__ = [
+        { ngMetadataName: 'Directive', standalone: false },
+      ];
+      (TargetDirective as any).ɵdir = definition;
+      (TargetDirective as any).ɵfac = () => ({
+        excluded: injector.get(ExcludedDependency),
+        mocked: injector.get(MockedDependency),
+      });
+      const excludeDef = new Set<any>([ExcludedDependency]);
+      const provider = createRuntimeInjectProvider(
+        new Set([TargetDirective]),
+        new Map([[TargetDirective, { shallow: false }]]),
+        [],
+        true,
+        excludeDef,
+      ) as any;
+
+      excludeDef.clear();
+      excludeDef.add(MockedDependency);
+      const touches = new Set([TargetDirective]);
+      provider.useFactory(injector, touches)();
+      const directive = definition.factory!();
+
+      expect(directive.excluded.echo()).toEqual('real');
+      expect(directive.mocked.echo()).toBeUndefined();
+      expect(injector.get(MockedDependency)).toBe(directive.mocked);
+      expect(originalGet).toHaveBeenCalledTimes(1);
+      expect(originalGet).toHaveBeenCalledWith(ExcludedDependency);
+      expect(touches).toEqual(new Set([TargetDirective]));
+
+      destroyCallbacks[0]();
+    });
   });
 });
