@@ -177,6 +177,7 @@ module.exports = {
         'extra/sanitizer',
         'extra/mock-observables',
         'extra/mock-form-controls',
+        'guides/signal-forms',
         'extra/mock-ng-submit',
       ],
     },

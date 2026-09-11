@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+if [ "$1" = "docs" ]; then
+  NG_MOCKS_DOCS_GIT_DIR=$(git rev-parse --absolute-git-dir)
+  NG_MOCKS_DOCS_GIT_COMMON_DIR=$(git rev-parse --path-format=absolute --git-common-dir)
+  export NG_MOCKS_DOCS_GIT_DIR NG_MOCKS_DOCS_GIT_COMMON_DIR
+  docker compose run --rm docs-build
+  exit 0
+fi
+
 if [ "$1" != "coverage" ] && [ "$1" != "root" ]; then
   docker compose run --rm ng-mocks npm run build:dev
 fi

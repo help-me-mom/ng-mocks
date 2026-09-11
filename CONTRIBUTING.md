@@ -61,6 +61,17 @@ so please configure commit signing before you open or update a PR.
 
 - it will take a while, but afterwards you have all dependencies installed
 
+### How to build documentation
+
+After installing the root and docs dependencies, run from the checkout or worktree root:
+
+```shell
+sh ./test.sh docs
+```
+
+The Docker build writes the site to `dist/docs`. The wrapper exposes the current worktree's Git history
+read-only so article last-update authors and dates remain available, including in linked worktrees.
+
 ### Docker compose namespace for parallel worktrees
 
 To avoid collisions when multiple worktrees run docker compose in parallel, set `COMPOSE_PROJECT_NAME`.

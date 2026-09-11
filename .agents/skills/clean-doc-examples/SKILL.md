@@ -16,7 +16,7 @@ Create and maintain a plain Markdown checklist:
 - [ ] Find the closest functional examples and read their specs and docs
 - [ ] Identify the source spec and the article's testing or mocking purpose
 - [ ] Choose a consistent Angular version and defaults for each published example
-- [ ] Sync the snippets and remove compatibility-only code
+- [ ] Sync snippets and live-example links, and remove compatibility-only code
 - [ ] Run lightweight validation and summarize what changed
 ```
 
@@ -36,8 +36,12 @@ Create and maintain a plain Markdown checklist:
    behavior, and meaningful assertions. If the task is docs-only, do not change the executable spec to simplify
    the article.
 5. Compare the finished article with its references and source spec. Check source links after moving or renaming
-   specs, and add new guides to the sidebar. Do not add backlinks to existing articles unless requested or their
-   content needs correction.
+   specs, and add new guides beside related articles in `docs/sidebars.js`.
+   Include both `Try it on CodeSandbox` and `Try it on StackBlitz`
+   links for each executable example, following the existing file-path and suite-filter URL patterns.
+   Live examples are required: `ng-mocks-sandbox` is updated after release, so its current contents or Angular
+   version must not block links to new examples. Do not add backlinks to existing articles unless requested
+   or their content needs correction.
 
 ## Published Snippet Cleanup
 
@@ -64,11 +68,14 @@ COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm 
 COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run prettier:check
 ```
 
-When a docs build is needed, use the existing Docker command:
+When a docs build is needed, use the Docker wrapper from the worktree root:
 
 ```bash
-COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> docker compose run --rm ng-mocks npm run build:docs
+COMPOSE_PROJECT_NAME=ngmocks_docs_<unique> sh test.sh docs
 ```
+
+The wrapper gives Docusaurus read-only access to the current worktree's Git history so last-update authors
+and dates remain available. It builds into `dist/docs` without rebuilding the library.
 
 For docs-only changes, wrapper tests may be skipped; say so in the final summary. If executable files also
 changed, follow the runbook's validation requirements for those files.
@@ -81,6 +88,7 @@ changed, follow the runbook's validation requirements for those files.
 - Follow [Docker-Only Execution](../../../AGENTS.md#docker-only-execution). Do not invent snippet or generated-HTML
   validation scripts, including scripts run inside Docker.
 - Follow [Worktree Isolation](../../../AGENTS.md#worktree-isolation). A docs build failure does not justify
-  mounting the primary checkout or its Git metadata, running the build there, or changing its branch.
+  mounting primary working files, running the build there, or changing its branch. Use `sh test.sh docs` for
+  the supported read-only Git metadata mount; do not disable last-update metadata to work around a Git error.
 - Report a failed command, its error, and remaining work before discussing a workaround. Do not claim validation
   passed or snippets were synced without completing the relevant checks.

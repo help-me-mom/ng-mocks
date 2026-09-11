@@ -17,6 +17,26 @@ services:
       - install
       - --no-audit
 
+  docs-build:
+    extends:
+      service: ng-mocks
+    profiles:
+      - docs
+    environment:
+      - GIT_DIR=${NG_MOCKS_DOCS_GIT_DIR:-/app/.git}
+      - GIT_WORK_TREE=/app
+    volumes:
+      - type: bind
+        source: ${NG_MOCKS_DOCS_GIT_COMMON_DIR:-./.git}
+        target: ${NG_MOCKS_DOCS_GIT_COMMON_DIR:-/app/.git}
+        read_only: true
+        bind:
+          create_host_path: false
+    command:
+      - npm
+      - run
+      - build:docs
+
   docs:
     image: satantime/puppeteer-node:24.19.0
     platform: linux/amd64
