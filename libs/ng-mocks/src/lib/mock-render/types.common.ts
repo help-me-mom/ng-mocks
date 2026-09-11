@@ -41,6 +41,12 @@ export interface IMockRenderOptions {
   reset?: boolean;
 
   /**
+   * Params keys whose callable values retain their identity instead of being bound as callbacks.
+   * Declaration input names are preserved automatically.
+   */
+  valueKeys?: string[];
+
+  /**
    * Extra providers for the testing environment.
    */
   viewProviders?: NgModule['providers'];

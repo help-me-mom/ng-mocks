@@ -108,6 +108,73 @@ const fixture = MockRender(Component, { ...params });
 ```
 :::
 
+### Callable values in params
+
+Use `valueKeys` when a function in `params` is data, such as a callable input passed through a custom template.
+The selected values retain their original function identity. Names refer to **params keys**: for
+`[labelFactory]="read"`, select `read`.
+
+Inputs in automatically generated component templates already preserve callable values.
+Other callback params retain their `params` receiver. `valueKeys` does not add template bindings or change
+change-detection scheduling. [`MockRenderFactory`](#factory) accepts the same option in its third argument.
+
+This example keeps the callable input unchanged while the output callback updates `params`:
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockRender/value-keys.spec.ts&initialpath=%3Fspec%3DMockRender%3Avalue-keys)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockRender/value-keys.spec.ts&initialpath=%3Fspec%3DMockRender%3Avalue-keys)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/MockRender/value-keys.spec.ts"
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+
+@Component({
+  selector: 'target-value-keys',
+  standalone: false,
+  template: '{{ label && label() }}',
+})
+class TargetComponent {
+  @Input('labelFactory') public label?: () => string;
+  @Output() public readonly selected = new EventEmitter<string>();
+}
+
+describe('MockRender:value-keys', () => {
+  beforeEach(() => MockBuilder(TargetComponent));
+
+  it('preserves callable data and binds output callbacks to params', () => {
+    const callable = () => 'callable value';
+    let receiver: object | undefined;
+    const params = {
+      read: callable,
+      selectedValue: '',
+      onSelected(value: string) {
+        receiver = this;
+        this.selectedValue = value;
+      },
+    };
+    const fixture = MockRender<TargetComponent, typeof params>(
+      `
+        <target-value-keys
+          [labelFactory]="read"
+          (selected)="onSelected($event)"
+        ></target-value-keys>
+      `,
+      params,
+      // Select the params key used by the input binding.
+      { valueKeys: ['read'] },
+    );
+
+    expect(fixture.componentInstance.read).toBe(callable);
+    expect(fixture.point.componentInstance.label).toBe(callable);
+    expect(ngMocks.formatText(fixture)).toEqual('callable value');
+
+    fixture.point.componentInstance.selected.emit('chosen');
+
+    expect(receiver).toBe(params);
+    expect(params.selectedValue).toEqual('chosen');
+  });
+});
+```
+
 ### Updating bindings in zoneless tests
 
 In zoneless tests, assigning an input through `params` or `fixture.componentInstance` schedules change detection.

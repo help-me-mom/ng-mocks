@@ -46,7 +46,7 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
   tryWhen(!params, () => funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, []));
 };
 
-const renderInjection = (fixture: any, template: any, params: any): void => {
+const renderInjection = (fixture: any, template: any, params: any, valueKeys: string[]): void => {
   let instance: any;
   try {
     instance = getInjection(template);
@@ -71,7 +71,7 @@ const renderInjection = (fixture: any, template: any, params: any): void => {
     componentInstance: instance,
     nativeElement: MockService(HTMLElement),
   });
-  funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, [], true);
+  funcInstallPropReader(fixture.componentInstance, fixture.point.componentInstance, [], true, valueKeys);
 };
 
 const tryWhen = (flag: boolean, callback: () => void) => {
@@ -266,7 +266,10 @@ const generateFactory = (
     if (fixture.zonelessEnabled) {
       installZonelessInputScheduler(fixture, params ?? fixture.componentInstance, inputBindings);
     }
-    funcInstallPropReader(fixture.componentInstance, source, bindings ?? [], false, componentCtor.inputBindings);
+    funcInstallPropReader(fixture.componentInstance, source, bindings ?? [], false, [
+      ...componentCtor.inputBindings,
+      ...(options.valueKeys ?? []),
+    ]);
     coreDefineProperty(fixture, 'ngMocksStackId', ngMocksUniverse.global.get('bullet:stack:id'));
 
     if (detectChanges === undefined || detectChanges) {
@@ -281,7 +284,7 @@ const generateFactory = (
     ) {
       renderDeclaration(fixture, template, params);
     } else {
-      renderInjection(fixture, template, params);
+      renderInjection(fixture, template, params, options.valueKeys ?? []);
     }
 
     patchPointDetectChanges(fixture);
