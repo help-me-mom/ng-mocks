@@ -21,14 +21,17 @@ const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
     active.indexOf(config) === -1 ||
     !helperMockService.mockFunction.customMockFunction ||
     typeof provide !== 'function' ||
-    config.touches.has(provide) ||
-    coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1
+    config.touches.has(provide)
   ) {
     return false;
   }
 
   const resolution = ngMocksUniverse.getResolution(provide);
   if (resolution === 'keep' || resolution === 'exclude') {
+    return false;
+  }
+
+  if (resolution !== 'mock' && coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1) {
     return false;
   }
 

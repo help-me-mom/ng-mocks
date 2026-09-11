@@ -3,6 +3,7 @@ import {
   resetRuntimeInject,
   runRuntimeInject,
 } from './ng-mocks-runtime-inject';
+import ngMocksUniverse from './ng-mocks-universe';
 
 class TargetService {
   public echo(): string {
@@ -96,6 +97,52 @@ describe('ng-mocks-runtime-inject', () => {
       destroyCallbacks[0]();
     });
   }
+
+  it('honors an explicit mock resolution for untouched runtime infrastructure', () => {
+    let constructorCalls = 0;
+    let methodCalls = 0;
+
+    class EffectManager {
+      public constructor() {
+        constructorCalls += 1;
+      }
+
+      public echo(): string {
+        methodCalls += 1;
+
+        return 'real manager';
+      }
+    }
+
+    (EffectManager as any).ɵprov = { providedIn: 'root' };
+    spyOn(ngMocksUniverse, 'getResolution').and.returnValue('mock');
+
+    const destroyCallbacks: Array<() => void> = [];
+    const originalGet = jasmine
+      .createSpy('get')
+      .and.callFake((provide: any) => new provide());
+    const injector = {
+      get: originalGet,
+      onDestroy: (callback: () => void) =>
+        destroyCallbacks.push(callback),
+    };
+
+    // No registered provider or touch protects the explicit mock resolution.
+    installRuntimeInject(injector, new Set(), new Set());
+
+    const manager = runRuntimeInject(injector, () =>
+      injector.get(EffectManager),
+    );
+
+    expect(manager instanceof EffectManager).toBe(true);
+    expect(originalGet).not.toHaveBeenCalled();
+    expect(constructorCalls).toBe(0);
+    expect(manager.echo()).toBeUndefined();
+    expect(methodCalls).toBe(0);
+    expect(manager.echo).toHaveBeenCalledTimes(1);
+
+    destroyCallbacks[0]();
+  });
 
   it('restores existing injector and declaration factory descriptors', () => {
     const destroyCallbacks: Array<() => void> = [];
