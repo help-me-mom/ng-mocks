@@ -79,33 +79,22 @@
   permits read-only metadata access for docs builds, not primary working files or Git configuration changes.
 - If a tool cannot work with the isolated worktree, report the error and discuss a supported solution with the user.
   Do not move execution to the primary checkout or weaken the isolation to make a check pass.
-- After all local commands for a completed issue have stopped, release its Compose containers and network from
-  that worktree with the same project name:
-  `COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose down --remove-orphans`.
-  Keep named caches and the shared browser volume: do not add `--volumes`. Clean up completed projects to avoid
-  exhausting Docker's network address pool; do not use blanket network pruning or stop active worktree projects.
 
 ## Angular CLI Cache
 
 - Modern versioned Angular projects retain `.angular/cache` in the bind-mounted `e2e/a<major>` workspace across
   containers. Rebuilding and copying `ng-mocks` does not guarantee that the Angular CLI invalidates previously
   compiled test bundles.
-- `sh test.sh <target>` clears the applicable Angular CLI cache automatically before testing. For `a13`, the
-  existing `s:files:a13` spread step removes the verified default `e2e/a13/.angular/cache` directory. For Angular
-  14+ version projects and `e2e`, `jasmine`, `vitest`, and `min`, the wrapper runs `npm run ng -- cache clean`
-  inside the target service after copying the library and spreading tests. No extra manual clean is needed
-  before a normal wrapper run.
-- Angular 13 and older do not expose the `ng cache` command. The Jest-only and Nx test paths do not use this
-  Angular CLI build cache, so the wrapper does not run that command for them.
-- For targeted direct Compose diagnostics on Angular 14+ CLI targets, clear the cache manually after changing
-  source or spread files. For example, use the same project name as the subsequent diagnostic command:
+- For each affected target whose CLI supports `ng cache`, clear the cache inside Docker before the final
+  `sh test.sh a<major>` validation. Use the same `COMPOSE_PROJECT_NAME` for both commands:
 
   ```bash
-  COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose run --rm a17 npm run ng -- cache clean
+  COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose run --rm a<major> npm run ng -- cache clean
+  COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh a<major>
   ```
 
 - If a compatibility result contradicts the current source or a focused reproducer, inspect the package copied to
-  `e2e/a<major>/node_modules/ng-mocks` and rerun the wrapper before changing the source or
+  `e2e/a<major>/node_modules/ng-mocks`, clear the target cache, and rerun the wrapper before changing the source or
   weakening the test.
 
 ## Local npm / nvm Flows
@@ -263,14 +252,9 @@
   3. Run `sh test.sh e2e` only when `tests-e2e` or shared e2e files changed
   4. Run `sh test.sh coverage` when core behavior or coverage-sensitive code changes
 - For docs-only or agent-guidance-only changes, tests may be skipped, but say so explicitly in the final summary.
-- The wrappers stop and return a failure when a requested setup, build, spread, cache-clean, or test step fails,
-  including dependency installation inside a Compose container. Report the failing step and resolve it before
-  treating the target as validated; a later successful command does not complete the failed wrapper run.
 - Report CI status for the current PR head. When the task requires green CI, wait for all required jobs and
   resolve failures within scope, or report the specific blocker. Do not infer success from local checks or a
   previous green commit.
-- When the user requests sequential issues, finish the current issue and verify its requested CI status before
-  starting the next. Opening a PR and waiting for green CI does not authorize merging it.
 
 ## Commit and Release Semantics
 

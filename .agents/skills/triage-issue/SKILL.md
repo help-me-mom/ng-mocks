@@ -21,11 +21,10 @@ Create and maintain a plain Markdown checklist:
 - [ ] Trace the root cause and review related use cases for a wider defect and missing coverage
 - [ ] Reproduce the reported and related failures, and add missing preservation tests
 - [ ] Fix the implementation without changing the reproducer test
-- [ ] Run coverage and e2e validation through the wrappers with their automatic cache cleanup
+- [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Assess whether docs add useful reader guidance; update and verify examples only when needed
 - [ ] Complete final formatting, ESLint, and TypeScript checks, then commit and prepare the PR against `upstream/main`
 - [ ] Verify the requested CI status on the current PR commit
-- [ ] Release the completed issue's Compose containers and network while preserving caches
 ```
 
 ## Workflow
@@ -155,34 +154,20 @@ Run affected e2e targets:
 - If `tests-e2e/src` changed, run `sh test.sh e2e`.
 - If files under a specific `e2e/<target>` project changed, run `sh compose.sh <target>` when dependencies changed and `sh test.sh <target>` afterward.
 
-Run `compose.sh` first when the target dependencies have not been prepared, then use `test.sh` without a
-redundant manual cache-clean step:
+Modern versioned Angular projects retain `.angular/cache` in the bind-mounted `e2e/a<major>` workspace across
+containers. For each affected target whose CLI supports `ng cache`, clear the cache inside Docker before its final
+run after source changes. Run `compose.sh` first when the target dependencies have not been prepared:
 
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh compose.sh a<major>
+COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> \
+  docker compose run --rm a<major> npm run ng -- cache clean
 COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> sh test.sh a<major>
 ```
 
-The test wrapper clears Angular 13's default `e2e/a13/.angular/cache` through the existing `s:files:a13` step.
-For Angular 14+ version projects and `e2e`, `jasmine`, `vitest`, and `min`, it runs the CLI cache-clean command
-inside the target service after copying the library and spreading tests. Angular 13 and older do not expose
-`ng cache`; Jest-only and Nx tests do not use this Angular CLI build-cache path.
-
-For targeted direct Compose diagnostics on Angular 14+ CLI targets, clear the cache manually after changing
-source or spread files, using the same project name as the diagnostic run:
-
-```bash
-COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> \
-  docker compose run --rm a17 npm run ng -- cache clean
-```
-
 Do not infer a source regression from output that may have reused an older compiled bundle. If a result contradicts
-the current source or the focused reproducer, inspect `e2e/a<major>/node_modules/ng-mocks`
+the current source or the focused reproducer, inspect `e2e/a<major>/node_modules/ng-mocks`, clear the target cache,
 and rerun the wrapper before changing implementation or test code.
-
-Both wrappers propagate failures and stop the requested flow, including dependency installation failures inside
-Compose containers. Report and resolve a failed setup, build, spread, cache-clean, or test step before treating
-the target as validated. A later successful command does not complete the failed wrapper run.
 
 Coverage expectations:
 
@@ -248,21 +233,6 @@ PR rules:
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 - Follow [Validation Expectations](../../../AGENTS.md#validation-expectations) when reporting CI status.
   If green CI is requested, verify all required checks on the pushed commit before handing back the PR.
-- When the user requests sequential issues, finish the current issue and its requested CI checks before starting
-  the next. Opening a PR and waiting for green CI does not authorize merging it.
-
-## Completed Issue Cleanup
-
-After all local commands for a completed issue have stopped, run this from its worktree with the same Compose
-project name used for setup and validation:
-
-```bash
-COMPOSE_PROJECT_NAME=ngmocks_issue<issue-number>_<timestamp> docker compose down --remove-orphans
-```
-
-This releases the project's containers and network while retaining named caches and the shared browser volume.
-Do not add `--volumes`, use blanket network pruning, or stop active worktree projects. Clean up completed projects
-to prevent their unused networks from exhausting Docker's address pool.
 
 ## Guardrails
 

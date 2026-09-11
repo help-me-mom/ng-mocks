@@ -52,7 +52,7 @@ Do not use the current active worktree. A fresh refresh needs a new branch; an e
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
-For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. After all commands in a successful batch have stopped, release each completed project from its worktree with `COMPOSE_PROJECT_NAME=ngmocks_<unique> docker compose down --remove-orphans`, preserving its named caches for the next pass.
+For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
 
 The browser volume is external and shared across these namespaces. Before placing targets that use the same
 browser build in a parallel batch, complete one target's wrapper run to populate that build. If cache state
@@ -130,8 +130,7 @@ git push
 - Use only the documented wrapper flow and repo images. Never use local runtimes or custom install, build, test, or
   check scripts, including inside Docker.
 - If multiple worktrees, agent sessions, or concurrent wrapper targets are active, set a unique `COMPOSE_PROJECT_NAME` for each wrapper command.
-- Clean up completed Compose projects with the same namespace and `docker compose down --remove-orphans`
-  after successful batches. Do not add `--volumes`; retain named caches and the shared browser volume. Discuss failed setup
+- Clean up temporary compose projects with `docker compose down -v` after successful batches. Discuss failed setup
   runs with the user before recovery steps.
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
 - Do not manually invoke extra validation beyond this skill. If a hook requires local runtime execution or fails,

@@ -144,7 +144,7 @@
     "s:files:a10": "P=e2e/a10/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
     "s:files:a11": "P=e2e/a11/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
     "s:files:a12": "P=e2e/a12/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
-    "s:files:a13": "P=e2e/a13/src && rm -Rf $P/test $P/app e2e/a13/.angular/cache && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
+    "s:files:a13": "P=e2e/a13/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
     "s:files:a14": "P=e2e/a14/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
     "s:files:a15": "P=e2e/a15/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
     "s:files:a16": "P=e2e/a16/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
