@@ -29,7 +29,14 @@
     "test.ts",
     "karma.conf.ts"
   ],
-  "exclude": ["e2e", "node_modules", "tests/issue-1596", "tests/issue-296", "tests/issue-736"],
+  "exclude": [
+    "e2e",
+    "node_modules",
+    "tests/issue-1596",
+    "tests/issue-296",
+    "tests/issue-736",
+    "tests/issue-14898/experimental.spec.ts"
+  ],
   "include": [
     "libs/ng-mocks/src/lib/**/*.ts",
     "examples/**/*.ts",
