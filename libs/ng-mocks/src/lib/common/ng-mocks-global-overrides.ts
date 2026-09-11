@@ -1,4 +1,4 @@
-import { ViewContainerRef } from '@angular/core';
+import { QueryList, ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
@@ -380,12 +380,11 @@ const resetTestingModule =
 
 // Monkey-patching ViewContainerRef.createComponent to replace dynamic imports with mocked declarations.
 const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
-  if (!(ViewContainerRef as any).ngMocksOverridesPatched) {
-    coreDefineProperty(ViewContainerRef, 'ngMocksOverridesPatched', true);
-
-    // istanbul ignore else
-    if (vcrInstance.createComponent) {
-      const createComponent = vcrInstance.createComponent;
+  const prototype = vcrInstance.constructor.prototype;
+  const createComponent = vcrInstance.createComponent;
+  if (createComponent && !Object.prototype.hasOwnProperty.call(prototype, 'ngMocksOverridesPatched')) {
+    // Inheriting a patched method needs no second wrapper; an overriding implementation does.
+    if (!(createComponent as any).ngMocksOverridesPatched) {
       const patchedCreateComponent = helperCreateClone(
         createComponent,
         undefined,
@@ -400,11 +399,33 @@ const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
         },
       );
 
-      coreDefineProperty(vcrInstance.constructor.prototype, 'createComponent', patchedCreateComponent, true);
+      coreDefineProperty(patchedCreateComponent, 'ngMocksOverridesPatched', true);
+      coreDefineProperty(prototype, 'createComponent', patchedCreateComponent, true);
       coreDefineProperty(vcrInstance, 'createComponent', patchedCreateComponent, true);
     }
+
+    // Keep later instance spies local instead of copying them onto the shared prototype.
+    coreDefineProperty(prototype, 'ngMocksOverridesPatched', true);
   }
 };
+
+const queryListReset = (original: QueryList<any>['reset']): QueryList<any>['reset'] =>
+  helperCreateClone(original, undefined, undefined, function (...args: any[]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const thisQueryList: QueryList<any> = this;
+    const result = original.apply(thisQueryList, args as any);
+
+    // Both decorator and signal queries can create containers without invoking __NG_ELEMENT_ID__.
+    // Inspect Angular's retained results before setters or query consumers receive them.
+    QueryList.prototype.forEach.call(thisQueryList, (value: any) => {
+      if (value instanceof ViewContainerRef) {
+        patchVcrInstance(value);
+      }
+    });
+
+    return result;
+  });
 
 // istanbul ignore next: legacy Angular lacks __NG_ELEMENT_ID__; covered by the compatibility matrix.
 const createComponent =
@@ -427,6 +448,7 @@ const viewContainerInstall = () => {
 
   // istanbul ignore else
   if (!vcr.ngMocksOverridesInstalled) {
+    coreDefineProperty(QueryList.prototype, 'reset', queryListReset(QueryList.prototype.reset), true);
     const ngElementId = vcr.__NG_ELEMENT_ID__;
 
     // istanbul ignore else

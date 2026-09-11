@@ -61,6 +61,10 @@ so please configure commit signing before you open or update a PR.
 
 - it will take a while, but afterwards you have all dependencies installed
 
+`compose.sh` stops if a requested installation step fails. It uses Compose's `--exit-code-from` option to
+propagate the dependency installation container's exit status. Resolve the reported failure and rerun the
+wrapper before continuing with tests.
+
 ### How to build documentation
 
 After installing the root and docs dependencies, run from the checkout or worktree root:
@@ -86,6 +90,17 @@ COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh e2e
 COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm ng-mocks npm run lint
 ```
 
+After all local commands for a completed issue have stopped, release its containers and network from that
+worktree using the same project name:
+
+```shell
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose down --remove-orphans
+```
+
+This keeps the named caches and shared browser volume. Do not add `--volumes`. Cleaning up completed projects
+prevents unused networks from exhausting Docker's address pool. Use this project-specific cleanup instead of
+blanket network pruning, and leave active worktree projects running.
+
 ### Shared browser downloads
 
 `compose.sh` creates the single `ngmocks-puppeteer-cache` volume automatically. Its fixed name lets supported
@@ -109,13 +124,38 @@ When updating a legacy Puppeteer dependency with a configured download path, kee
 cache path working.
 
 Finish the first installation of each browser build before starting another installation of that build in a
-parallel worktree. Once populated, the cache can serve concurrent test containers. The external browser volume
-survives `docker compose down --volumes`; remove it explicitly only when no worktree is using it.
+parallel worktree. Once populated, the cache can serve concurrent test containers. Normal completed-project
+cleanup preserves the shared browser volume along with the project's named caches.
 Existing project-scoped caches are left in place; the shared volume populates on its first use.
 
 The host installation in `compose.sh` remains separate: macOS and Linux need different browser binaries.
 The Jest-only project uses jsdom and does not download Chrome. Angular build caches and `node_modules` stay
 inside each worktree.
+
+### Running tests through Docker
+
+Run the existing test wrapper from the worktree after installing its dependencies:
+
+```shell
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> sh ./test.sh a17
+```
+
+The wrapper builds and copies the library, spreads the selected tests, and clears the applicable Angular CLI
+cache before testing. Angular 13's existing `s:files:a13` step removes its default `e2e/a13/.angular/cache`
+directory. Angular 14+ version projects and `e2e`, `jasmine`, `vitest`, and `min` use `npm run ng -- cache clean`
+inside their target service. A normal wrapper run does not need a separate manual cache-clean command.
+
+Angular 13 and older do not expose `ng cache`. The Jest-only and Nx test paths do not use this Angular CLI build
+cache. For targeted direct Compose diagnostics on Angular 14+ CLI targets, clean the cache manually after
+changing source or spread files:
+
+```shell
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm a17 npm run ng -- cache clean
+```
+
+If a result contradicts the current source, inspect the copied package in the target's `node_modules/ng-mocks`
+and rerun the wrapper before changing the test or implementation. The wrapper stops on a failed build, copy,
+spread, cache-clean, or test step; resolve that failure before considering the target validated.
 
 ### Automated dependency updates
 
