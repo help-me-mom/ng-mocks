@@ -1,3 +1,4 @@
+import coreDefineProperty from './core.define-property';
 import {
   extendClass,
   extendClassicClass,
@@ -134,7 +135,7 @@ describe('extendClass', () => {
       firstDefinitions.set(field, first);
       secondDefinitions.set(field, second);
       First[field] = first;
-      Object.defineProperty(Second, field, { value: second });
+      coreDefineProperty(Second, field, second);
     }
 
     const Grandchild: any = extendClass(First);
@@ -146,9 +147,7 @@ describe('extendClass', () => {
         outputs: {},
         selectors: [['grandchild']],
       };
-      Object.defineProperty(Grandchild, field, {
-        value: definition,
-      });
+      coreDefineProperty(Grandchild, field, definition);
 
       expect(Grandchild[field]).toBe(definition);
       expect(First[field]).toBe(firstDefinitions.get(field));

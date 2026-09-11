@@ -302,6 +302,8 @@
 
 ## Pull Request Quality
 
+- Prefer existing library helpers when their semantics fit the task, including in tests; for example, use
+  `coreDefineProperty` for compatible property definitions.
 - Follow `Spec and Documentation Examples` before changing specs or docs. If current guidance and the selected
   examples still leave a pattern unclear, inspect analogous local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
 - Keep implementation narrow and follow `Test Style` for issue reproducers, compatibility gates, layered coverage,
