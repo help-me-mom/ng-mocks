@@ -17,6 +17,7 @@ import coreReflectMeta from './core.reflect.meta';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
 import { AnyDeclaration, AnyType, dependencyKeys } from './core.types';
+import funcApplyTestBedOverride from './func.apply-test-bed-override';
 import { funcExtractDeps } from './func.extract-deps';
 import { getSourceOfMock } from './func.get-source-of-mock';
 import funcGetType from './func.get-type';
@@ -54,21 +55,6 @@ const installTestBedInjection = (instance: NgMocksTestBed): void => {
     coreDefineProperty(instance, 'ngMocksGetInstalled', true);
   }
 };
-const applyOverride = (def: any, override: any) => {
-  if (isNgDef(def, 'c')) {
-    TestBed.overrideComponent(def, override);
-  } else if (isNgDef(def, 'd')) {
-    TestBed.overrideDirective(def, override);
-  } else if (isNgDef(def, 'm')) {
-    TestBed.overrideModule(def, override);
-  }
-  if (isNgDef(def, 't')) {
-    TestBed.overrideProvider(def, override);
-  } else if (isNgDef(def, 'i')) {
-    TestBed.overrideProvider(def, override);
-  }
-};
-
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
   for (const [def, [override, original]] of [...overrides]) {
@@ -76,20 +62,35 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
       ...original,
       override,
     });
-    applyOverride(def, override);
+    funcApplyTestBedOverride(def, override);
   }
 };
 
 // Thanks Ivy and its TestBed.override - it does not clean up leftovers.
 const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map<any, any> }): void => {
-  if (testBed.ngMocksOverrides?.size) {
-    ngMocks.flushTestBed();
-    // eslint-disable-next-line unicorn/no-useless-spread -- TestBed override calls can update the shared registry.
-    for (const [def, original] of [...testBed.ngMocksOverrides]) {
-      applyOverride(def, original);
+  const errors: unknown[] = [];
+  try {
+    if (testBed.ngMocksOverrides?.size) {
+      try {
+        ngMocks.flushTestBed();
+      } catch (error) {
+        errors.push(error);
+      }
+      // eslint-disable-next-line unicorn/no-useless-spread -- TestBed override calls can update the shared registry.
+      for (const [def, original] of [...testBed.ngMocksOverrides]) {
+        try {
+          funcApplyTestBedOverride(def, original);
+        } catch (error) {
+          errors.push(error);
+        }
+      }
     }
+  } finally {
+    testBed.ngMocksOverrides = undefined;
   }
-  testBed.ngMocksOverrides = undefined;
+  if (errors.length > 0) {
+    throw errors[0];
+  }
 };
 
 const initTestBed = () => {
@@ -373,9 +374,24 @@ const resetTestingModule =
     resetTestModuleOptions();
     (TestBed as any).ngMocksSelectors = undefined;
     resetInjectedDeclarations();
-    applyNgMocksOverrides(TestBed);
+    const errors: unknown[] = [];
+    try {
+      applyNgMocksOverrides(TestBed);
+    } catch (error) {
+      errors.push(error);
+    }
 
-    return original.call(instance);
+    let result: ReturnType<TestBedStatic['resetTestingModule']> = instance;
+    try {
+      result = original.call(instance);
+    } catch (error) {
+      errors.push(error);
+    }
+    if (errors.length > 0) {
+      throw errors[0];
+    }
+
+    return result;
   };
 
 // Monkey-patching ViewContainerRef.createComponent to replace dynamic imports with mocked declarations.
