@@ -5,6 +5,11 @@ const inheritDefinition = (definition: any, original: any): void => {
     return;
   }
 
+  // Reflected annotations can lose Angular 22's implicit OnPush strategy.
+  if (original.onPush !== undefined) {
+    definition.onPush = original.onPush;
+  }
+
   definition.hostBindings = original.hostBindings;
   definition.hostVars = original.hostVars;
   definition.hostAttrs = original.hostAttrs && [...original.hostAttrs];

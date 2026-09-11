@@ -43,8 +43,8 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
 
   if (isNgDef(template, 'c')) {
     Component({
-      // Selector-less components are cloned under a synthetic selector. Default
-      // keeps that clone checkable; real metadata and TestBed overrides still win.
+      // The compiled definition restores the effective strategy after reflection,
+      // while this default preserves behavior without compiled metadata.
       changeDetection: ChangeDetectionStrategy.Default,
       ...meta,
       ...set,
