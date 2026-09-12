@@ -138,6 +138,9 @@
 - Capture failing reproducers before changing source. Fix other confirmed instances of the same defect within
   the task's scope, retaining the original and adjacent regression assertions. Passing adjacent cases need
   coverage where missing, not speculative source changes.
+- Fix reported and confirmed related defects through existing behavior and interfaces where possible. Add
+  entry points, parameters, options, abstractions, or public docs only for a demonstrated requirement, and
+  explain why the addition is necessary. Do not add configurability for hypothetical future callers.
 - Keep the implementation focused on the confirmed cause. Record separate root causes or work outside the
   requested scope as follow-ups, and state any unverified areas instead of claiming the whole area is covered.
 - Record the inspected areas, existing coverage, added cases, and scope decisions in work notes. Summarize the

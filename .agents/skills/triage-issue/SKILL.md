@@ -89,6 +89,8 @@ Create and maintain a plain Markdown checklist:
    - Correct the confirmed shared cause and its affected paths. Preserve adjacent cases that already work and
      avoid speculative source changes for cases that only need regression coverage.
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
+   - Avoid expanding functionality while fixing wider defects; use existing entry points and defaults unless
+     a demonstrated requirement needs an addition, following `Fix Scope Review` in `AGENTS.md`.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
    - Use functional tests during investigation and implementation. Do not run formatting/Prettier, ESLint, or

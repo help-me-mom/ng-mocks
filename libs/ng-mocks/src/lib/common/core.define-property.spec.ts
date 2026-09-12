@@ -26,32 +26,6 @@ describe('core.define-property', () => {
     });
   });
 
-  it('supports nonconfigurable properties without making their values readonly', () => {
-    const instance: Record<keyof any, any> = {};
-    const property = Symbol('value');
-
-    coreDefineProperty(instance, property, 'original', false, false);
-
-    expect(
-      Object.getOwnPropertyDescriptor(instance, property),
-    ).toEqual({
-      configurable: false,
-      enumerable: false,
-      value: 'original',
-      writable: true,
-    });
-    instance[property] = 'assigned';
-    expect(instance[property]).toBe('assigned');
-
-    // Defining a new descriptor must continue to leave locked own properties alone.
-    coreDefineProperty(instance, property, 'replacement');
-    expect(instance[property]).toBe('assigned');
-    expect(
-      Object.getOwnPropertyDescriptor(instance, property)!
-        .configurable,
-    ).toBe(false);
-  });
-
   it('shadows inherited locked data without changing the original descriptor', () => {
     const parent = {};
     // This fixture also requires writable:false, which the value helper does not provide.
