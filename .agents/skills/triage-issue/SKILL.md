@@ -89,6 +89,7 @@ Create and maintain a plain Markdown checklist:
    - Correct the confirmed shared cause and its affected paths. Preserve adjacent cases that already work and
      avoid speculative source changes for cases that only need regression coverage.
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
+   - Follow `AGENTS.md`'s typing guidance: avoid `any` where practical, including in regression tests.
    - Avoid expanding functionality while fixing wider defects; use existing entry points and defaults unless
      a demonstrated requirement needs an addition, following `Fix Scope Review` in `AGENTS.md`.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
