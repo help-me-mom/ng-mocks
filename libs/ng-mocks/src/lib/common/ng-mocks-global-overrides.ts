@@ -1,22 +1,14 @@
-import { QueryList, ViewContainerRef } from '@angular/core';
 import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
 import funcExtractTokens from '../mock-builder/func.extract-tokens';
 import { MockBuilder } from '../mock-builder/mock-builder';
-import getOverrideDef from '../mock-builder/promise/get-override-def';
 import { ngMocks } from '../mock-helper/mock-helper';
 import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
-import { MockProvider } from '../mock-provider/mock-provider';
-import helperCreateClone from '../mock-service/helper.create-clone';
 
-import coreConfig from './core.config';
 import coreDefineProperty from './core.define-property';
 import { flatten } from './core.helpers';
-import coreInjector from './core.injector';
-import coreReflectMeta from './core.reflect.meta';
-import coreReflectProvidedIn from './core.reflect.provided-in';
-import { NG_MOCKS, NG_MOCKS_ROOT_PROVIDERS, NG_MOCKS_TOUCHES } from './core.tokens';
-import { AnyDeclaration, AnyType, dependencyKeys } from './core.types';
+import { NG_MOCKS_ROOT_PROVIDERS } from './core.tokens';
+import { AnyDeclaration, AnyType } from './core.types';
 import funcApplyTestBedOverride from './func.apply-test-bed-override';
 import { funcExtractDeps } from './func.extract-deps';
 import { getSourceOfMock } from './func.get-source-of-mock';
@@ -25,10 +17,12 @@ import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
 import { rememberMockDeclarations, resetInjectedDeclarations } from './ng-mocks-injected-declarations';
+import { applyPlatformOverrides, defineTouches } from './ng-mocks-platform-overrides';
 import { resetRuntimeInject } from './ng-mocks-runtime-inject';
 import { installTestBedInjection } from './ng-mocks-test-bed-injection';
 import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
+import { installViewContainer } from './ng-mocks-view-container';
 
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
@@ -80,55 +74,6 @@ const initTestBed = () => {
   }
 };
 
-const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touches: Set<any>): void => {
-  for (const key of coreConfig.dependencies) {
-    for (const item of moduleDef[key] ? flatten(moduleDef[key]) : []) {
-      const def = funcGetType(item);
-      if (isNgModuleDefWithProviders(item)) {
-        generateTouches(item, touches);
-      }
-      if (touches.has(def)) {
-        continue;
-      }
-      touches.add(def);
-      if (typeof def !== 'function') {
-        continue;
-      }
-
-      if (!Object.prototype.hasOwnProperty.call(def, '__ngMocksTouches')) {
-        const local = new Set<any>();
-        const meta = coreReflectMeta(def);
-        coreDefineProperty(def, '__ngMocksTouches', local, false);
-        if (meta) {
-          generateTouches(meta, local);
-        }
-      }
-
-      for (const value of def.__ngMocksTouches) {
-        touches.add(value);
-      }
-    }
-  }
-};
-
-const defineTouches = (testBed: TestBed, moduleDef: TestModuleMetadata, knownTouches?: Set<any>) => {
-  let touches = knownTouches;
-
-  if (!touches && ngMocksUniverse.getDefaults().size > 0) {
-    touches = funcExtractTokens(
-      (testBed as any)._providers || /* istanbul ignore next Ivy part */ (testBed as any)._compiler?.providers,
-    ).touches;
-    if (!touches) {
-      touches = new Set();
-      moduleDef.providers = moduleDef.providers || [];
-      moduleDef.providers.push({ provide: NG_MOCKS_TOUCHES, useValue: touches });
-    }
-    generateTouches(moduleDef, touches);
-  }
-
-  return touches;
-};
-
 const collectMockDeclarations = (moduleDef: TestModuleMetadata, mocks?: Map<any, any>): Map<any, any> | undefined => {
   let result = mocks;
 
@@ -149,69 +94,6 @@ const collectMockDeclarations = (moduleDef: TestModuleMetadata, mocks?: Map<any,
   }
 
   return result?.size ? result : undefined;
-};
-
-const applyPlatformOverrideDef = (def: any) => {
-  const ngModule = funcGetType(def);
-  if ((TestBed as any).ngMocksOverrides.has(ngModule)) {
-    return;
-  }
-
-  const original = coreReflectMeta(ngModule);
-  if (!original) {
-    return;
-  }
-  const set = getOverrideDef(original);
-  if (set) {
-    (TestBed as any).ngMocksOverrides.set(ngModule, { set: original });
-    TestBed.overrideModule(ngModule, { set });
-  }
-};
-
-const applyPlatformOverridesBasedOnProvidedIn = (provide: any, touches: Set<any>) => {
-  const providedIn = coreReflectProvidedIn(provide);
-  if (!providedIn) {
-    return;
-  }
-  // knownTouches present from MockBuilder and we can rely on it,
-  // otherwise we have to override the provider always.
-  if (typeof providedIn !== 'string' && !touches.has(providedIn)) {
-    return;
-  }
-  (TestBed as any).ngMocksOverrides.set(provide, {});
-  TestBed.overrideProvider(provide, MockProvider(provide as never));
-};
-
-const applyPlatformOverridesBasedOnDefaults = (touches: Set<any>) => {
-  // eslint-disable-next-line unicorn/no-useless-spread -- Default rules may change while TestBed overrides are applied.
-  for (const [provide, [config]] of [...ngMocksUniverse.getDefaults()]) {
-    if (config !== 'mock') {
-      continue;
-    }
-    if (!isNgDef(provide, 'i') && !isNgDef(provide, 't')) {
-      continue;
-    }
-    if (touches.has(provide)) {
-      continue;
-    }
-    if ((TestBed as any).ngMocksOverrides.has(provide)) {
-      continue;
-    }
-    applyPlatformOverridesBasedOnProvidedIn(provide, touches);
-  }
-};
-
-const applyPlatformOverrides = (testBed: TestBed, touches: Set<any>) => {
-  // istanbul ignore else
-  if ((TestBed as any).ngMocksOverrides) {
-    const backup = ngMocksUniverse.touches;
-    ngMocksUniverse.touches = touches;
-    for (const def of flatten(testBed.ngModule || /* istanbul ignore next */ [])) {
-      applyPlatformOverrideDef(def);
-    }
-    applyPlatformOverridesBasedOnDefaults(touches);
-    ngMocksUniverse.touches = backup;
-  }
 };
 
 const configureTestingModule =
@@ -369,109 +251,11 @@ const resetTestingModule =
     return result;
   };
 
-// Monkey-patching ViewContainerRef.createComponent to replace dynamic imports with mocked declarations.
-const patchVcrInstance = (vcrInstance: ViewContainerRef) => {
-  const prototype = vcrInstance.constructor.prototype;
-  const createComponent = vcrInstance.createComponent;
-  if (createComponent && !Object.prototype.hasOwnProperty.call(prototype, 'ngMocksOverridesPatched')) {
-    // Inheriting a patched method needs no second wrapper; an overriding implementation does.
-    if (!(createComponent as any).ngMocksOverridesPatched) {
-      const patchedCreateComponent = helperCreateClone(
-        createComponent,
-        undefined,
-        undefined,
-        function (component: any, ...createComponentArgs: any[]) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          const thisVrc: ViewContainerRef = this;
-          const map = coreInjector(NG_MOCKS, thisVrc.injector);
-
-          return createComponent.apply(thisVrc, [map?.get(component) ?? component, ...createComponentArgs] as any);
-        },
-      );
-
-      coreDefineProperty(patchedCreateComponent, 'ngMocksOverridesPatched', true);
-      coreDefineProperty(prototype, 'createComponent', patchedCreateComponent, true);
-      coreDefineProperty(vcrInstance, 'createComponent', patchedCreateComponent, true);
-    }
-
-    // Keep later instance spies local instead of copying them onto the shared prototype.
-    coreDefineProperty(prototype, 'ngMocksOverridesPatched', true);
-  }
-};
-
-const queryListReset = (original: QueryList<any>['reset']): QueryList<any>['reset'] =>
-  helperCreateClone(original, undefined, undefined, function (...args: any[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const thisQueryList: QueryList<any> = this;
-    const result = original.apply(thisQueryList, args as any);
-
-    // Both decorator and signal queries can create containers without invoking __NG_ELEMENT_ID__.
-    // Inspect Angular's retained results before setters or query consumers receive them.
-    QueryList.prototype.forEach.call(thisQueryList, (value: any) => {
-      if (value instanceof ViewContainerRef) {
-        patchVcrInstance(value);
-      }
-    });
-
-    return result;
-  });
-
-// istanbul ignore next: legacy Angular lacks __NG_ELEMENT_ID__; covered by the compatibility matrix.
-const createComponent =
-  (original: TestBedStatic['createComponent'], instance: TestBedStatic): TestBedStatic['createComponent'] =>
-  // istanbul ignore next: legacy Angular lacks __NG_ELEMENT_ID__; covered by the compatibility matrix.
-  (...args) => {
-    const fixture = original.call(instance, ...args);
-    try {
-      const vcr = fixture.debugElement.injector.get(ViewContainerRef);
-      patchVcrInstance(vcr);
-    } catch {
-      // nothing to do
-    }
-
-    return fixture as never;
-  };
-
-const viewContainerInstall = () => {
-  const vcr: any = ViewContainerRef;
-
-  // istanbul ignore else
-  if (!vcr.ngMocksOverridesInstalled) {
-    coreDefineProperty(QueryList.prototype, 'reset', queryListReset(QueryList.prototype.reset), true);
-    const ngElementId = vcr.__NG_ELEMENT_ID__;
-
-    // istanbul ignore else
-    if (ngElementId) {
-      coreDefineProperty(
-        vcr,
-        '__NG_ELEMENT_ID__',
-        helperCreateClone(ngElementId, undefined, undefined, (...ngElementIdArgs: any[]) => {
-          const vcrInstance = ngElementId.apply(ngElementId, ngElementIdArgs);
-          patchVcrInstance(vcrInstance);
-
-          return vcrInstance;
-        }),
-        true,
-      );
-    } else {
-      coreDefineProperty(
-        TestBed,
-        'createComponent',
-        createComponent(TestBed.createComponent as never, TestBed as never),
-      );
-    }
-
-    coreDefineProperty(ViewContainerRef, 'ngMocksOverridesInstalled', true);
-  }
-};
-
 const install = () => {
   // istanbul ignore else
   if (!(TestBed as any).ngMocksOverridesInstalled) {
     const hooks = mockHelperFasterInstall();
-    viewContainerInstall();
+    installViewContainer();
     initTestBed();
 
     // istanbul ignore else
