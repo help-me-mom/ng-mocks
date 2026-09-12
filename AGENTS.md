@@ -138,6 +138,9 @@
 - Capture failing reproducers before changing source. Fix other confirmed instances of the same defect within
   the task's scope, retaining the original and adjacent regression assertions. Passing adjacent cases need
   coverage where missing, not speculative source changes.
+- Fix reported and confirmed related defects through existing behavior and interfaces where possible. Add
+  entry points, parameters, options, abstractions, or public docs only for a demonstrated requirement, and
+  explain why the addition is necessary. Do not add configurability for hypothetical future callers.
 - Keep the implementation focused on the confirmed cause. Record separate root causes or work outside the
   requested scope as follow-ups, and state any unverified areas instead of claiming the whole area is covered.
 - Record the inspected areas, existing coverage, added cases, and scope decisions in work notes. Summarize the
@@ -255,6 +258,10 @@
 - Report CI status for the current PR head. When the task requires green CI, wait for all required jobs and
   resolve failures within scope, or report the specific blocker. Do not infer success from local checks or a
   previous green commit.
+- While CI runs, review repository security-tool findings, including `Code scanning results / CodeQL`,
+  and comments from the verified GitHub Advanced Security app (`github-advanced-security[bot]`). Fix valid
+  findings and confirm their resolution on the current PR head; green check statuses alone do not mean
+  these findings are resolved.
 
 ## Commit and Release Semantics
 
@@ -302,6 +309,8 @@
 
 ## Pull Request Quality
 
+- Prefer existing library helpers when their semantics fit the task, including in tests; for example, use
+  `coreDefineProperty` for compatible property definitions.
 - Follow `Spec and Documentation Examples` before changing specs or docs. If current guidance and the selected
   examples still leave a pattern unclear, inspect analogous local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
 - Keep implementation narrow and follow `Test Style` for issue reproducers, compatibility gates, layered coverage,

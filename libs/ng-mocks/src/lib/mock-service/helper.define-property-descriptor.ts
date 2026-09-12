@@ -1,5 +1,3 @@
-import helperExtractPropertyDescriptor from './helper.extract-property-descriptor';
-
 export default (instance: any, prop: keyof any, desc?: PropertyDescriptor): boolean => {
   if (!desc || !instance) {
     return false;
@@ -7,7 +5,8 @@ export default (instance: any, prop: keyof any, desc?: PropertyDescriptor): bool
 
   // istanbul ignore else
   if (Object.defineProperty) {
-    const sourceDesc = helperExtractPropertyDescriptor(instance, prop);
+    // An own property can shadow a locked ancestor without changing it.
+    const sourceDesc = Object.getOwnPropertyDescriptor(instance, prop);
     if (sourceDesc?.configurable === false) {
       return false;
     }

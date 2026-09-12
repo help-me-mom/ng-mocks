@@ -89,6 +89,8 @@ Create and maintain a plain Markdown checklist:
    - Correct the confirmed shared cause and its affected paths. Preserve adjacent cases that already work and
      avoid speculative source changes for cases that only need regression coverage.
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
+   - Avoid expanding functionality while fixing wider defects; use existing entry points and defaults unless
+     a demonstrated requirement needs an addition, following `Fix Scope Review` in `AGENTS.md`.
    - Add code comments only for non-obvious Angular behavior, compatibility constraints, or private API handling.
    - Do not hide failures with skips, broad version exclusions, relaxed assertions, or coverage ignores unless the issue truly cannot be represented otherwise.
    - Use functional tests during investigation and implementation. Do not run formatting/Prettier, ESLint, or
@@ -233,6 +235,8 @@ PR rules:
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 - Follow [Validation Expectations](../../../AGENTS.md#validation-expectations) when reporting CI status.
   If green CI is requested, verify all required checks on the pushed commit before handing back the PR.
+- Review repository security-tool findings and verified GitHub Advanced Security comments while CI runs,
+  and confirm valid findings are fixed on the current PR head as required by `AGENTS.md`.
 
 ## Guardrails
 
