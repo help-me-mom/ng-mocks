@@ -8,23 +8,14 @@ import {
 } from '@angular/forms';
 
 import {
+  isMockOf,
   MockBuilder,
   MockInstance,
   MockRender,
   ngMocks,
 } from 'ng-mocks';
 
-// This standalone CVA is the minimal reproduction of the reported issue:
-// - it imports ReactiveFormsModule by itself
-// - it provides NG_VALUE_ACCESSOR via useExisting + forwardRef to itself
-//
-// Before the fix, MockBuilder kept this declaration in skipMock mode, but the
-// provider override logic still rewrote the useExisting target. That broke
-// Angular's value-accessor lookup and rendering the host form crashed with:
-// "Cannot read properties of undefined (reading 'constructor')".
-//
-// After the fix, a kept standalone declaration keeps its own useExisting
-// provider, so Angular receives the real accessor and forms work normally.
+// The reported standalone CVA imports forms and provides itself as the accessor.
 @Component({
   selector: 'standalone-cva',
   template: '<input [formControl]="control" />',
@@ -62,10 +53,6 @@ class StandaloneCVAComponent implements ControlValueAccessor {
   }
 }
 
-// The host renders the standalone CVA through formControlName.
-// This is the path that failed before the fix: ng-mocks kept the real
-// standalone component, but its aliased NG_VALUE_ACCESSOR provider got
-// rewritten as if the declaration had been mocked.
 @Component({
   selector: 'target',
   template:
@@ -82,6 +69,7 @@ class TargetComponent {
   });
 }
 
+// @see https://github.com/help-me-mom/ng-mocks/issues/10960
 describe('issue-10960', () => {
   // Standalone components are only supported by the repo matrix from Angular 14.
   // Older targets still compile this file, so we keep the compatibility guard in
@@ -97,37 +85,32 @@ describe('issue-10960', () => {
   MockInstance.scope();
 
   beforeEach(() =>
-    // We intentionally keep the host and the standalone accessor real.
-    // That forces ng-mocks through the skipMock path that used to rewrite the
-    // self-referencing useExisting provider incorrectly.
+    // The host stays real while its standalone accessor dependency is mocked.
     MockBuilder(TargetComponent).keep(ReactiveFormsModule),
   );
 
-  it('keeps the standalone value accessor intact', () => {
+  it('connects the mocked standalone value accessor to the host form', () => {
     const writeValue =
       typeof jest === 'undefined'
         ? jasmine.createSpy('writeValue')
         : jest.fn();
 
-    // We spy on writeValue instead of asserting DOM details so that the test
-    // stays focused on the value-accessor handshake:
-    // - the parent form should initialize the accessor with the form value
-    // - later parent-driven updates should still reach the accessor
+    // Capture host writes to the mock, whose original inner input is not rendered.
     MockInstance(StandaloneCVAComponent, 'writeValue', writeValue);
 
-    // Before the fix, this render threw while Angular was selecting the value
-    // accessor because NG_VALUE_ACCESSOR.useExisting no longer pointed at the
-    // kept standalone component.
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
     const accessor = ngMocks.find(StandaloneCVAComponent);
+
+    expect(
+      isMockOf(accessor.componentInstance, StandaloneCVAComponent),
+    ).toBe(true);
 
     // Host -> accessor on first render: Angular should push the initial form
     // value into the CVA through writeValue.
     expect(writeValue).toHaveBeenCalledWith('http://example.com');
 
-    // Accessor -> host: changing the real input should still update the host
-    // form control, proving the accessor was wired up successfully.
+    // Simulate a change through the mocked accessor's registered callback.
     ngMocks.change(accessor, 'foo');
     expect(component.form.controls['nestedForm'].value).toBe('foo');
 
