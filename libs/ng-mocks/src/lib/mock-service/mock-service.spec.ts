@@ -137,6 +137,115 @@ describe('MockService', () => {
     expect(mockService.and.identity).toBe('func:test');
   });
 
+  it('caches a custom mock function rather than its configured return value', () => {
+    let originalCalls = 0;
+    const original = (value: string) => {
+      originalCalls += 1;
+
+      return { value };
+    };
+    const result = { value: 'configured' };
+    const generated: jasmine.Spy[] = [];
+    const shape = { first: original, second: original };
+
+    ngMocks.autoSpy(name => {
+      const mock = jasmine.createSpy(name).and.returnValue(result);
+      generated.push(mock);
+
+      return mock;
+    });
+    try {
+      const mock = MockService<typeof shape>(shape, 'custom');
+
+      expect(generated.length).toBe(1);
+      expect(generated[0].and.identity).toBe('func:custom.first');
+      expect(generated[0]).not.toHaveBeenCalled();
+      expect(mock.first).toBe(generated[0]);
+      expect(mock.second).toBe(mock.first);
+      expect(originalCalls).toBe(0);
+
+      expect(mock.first('first')).toBe(result);
+      expect(mock.second('second')).toBe(result);
+      expect(generated[0]).toHaveBeenCalledTimes(2);
+      expect(generated[0].calls.allArgs()).toEqual([
+        ['first'],
+        ['second'],
+      ]);
+      expect(originalCalls).toBe(0);
+      expect(shape.first).toBe(original);
+      expect(shape.second).toBe(original);
+    } finally {
+      ngMocks.autoSpy('reset');
+    }
+  });
+
+  it('does not invoke a throwing custom mock while creating it', () => {
+    const originalError = new Error('configured mock failure');
+    const generated = jasmine
+      .createSpy('throwing mock')
+      .and.callFake(() => {
+        throw originalError;
+      });
+    const factory = jasmine
+      .createSpy('factory')
+      .and.returnValue(generated);
+    let originalCalls = 0;
+    const original = () => {
+      originalCalls += 1;
+    };
+
+    ngMocks.autoSpy(factory);
+    try {
+      const mock = MockService<() => void>(original, 'direct');
+
+      expect(factory).toHaveBeenCalledTimes(1);
+      expect(factory).toHaveBeenCalledWith('func:direct');
+      expect(mock).toBe(generated);
+      expect(generated).not.toHaveBeenCalled();
+      expect(originalCalls).toBe(0);
+      expect(() => mock()).toThrow(originalError);
+      expect(generated).toHaveBeenCalledTimes(1);
+      expect(originalCalls).toBe(0);
+    } finally {
+      ngMocks.autoSpy('reset');
+    }
+  });
+
+  it('keeps default functions and prototype methods independent between mocks', () => {
+    const original = () => 'real';
+    const shape = { first: original, second: original };
+
+    ngMocks.autoSpy('default');
+    try {
+      const first = MockService<typeof original>(original);
+      const second = MockService<typeof original>(original);
+      const mock = MockService<typeof shape>(shape);
+      const firstInstance = MockService(DeepParentClass);
+      const secondInstance = MockService(DeepParentClass);
+
+      expect(first).not.toBe(original);
+      expect(first).not.toBe(second);
+      expect(jasmine.isSpy(first)).toBe(false);
+      expect(first()).toBeUndefined();
+      expect(second()).toBeUndefined();
+      expect(mock.first).toBe(mock.second);
+      expect(mock.first()).toBeUndefined();
+      expect(firstInstance.deepParentMethod).not.toBe(
+        DeepParentClass.prototype.deepParentMethod,
+      );
+      expect(firstInstance.deepParentMethod).not.toBe(
+        secondInstance.deepParentMethod,
+      );
+      expect(jasmine.isSpy(firstInstance.deepParentMethod)).toBe(
+        false,
+      );
+      expect(firstInstance.deepParentMethod()).toBeUndefined();
+      expect(secondInstance.deepParentMethod()).toBeUndefined();
+    } finally {
+      ngMocks.autoSpy('reset');
+    }
+  });
+
   it('should convert normal class to an empty object', () => {
     const mockService = MockService(
       class Test {

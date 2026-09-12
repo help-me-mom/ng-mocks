@@ -23,7 +23,7 @@ const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
     checkIsFunc,
     (cache, service, prefix) => {
       const value = helperMockService.mockFunction(`func:${prefix || funcGetName(service)}`);
-      cache.set(service, value());
+      cache.set(service, value);
 
       return value;
     },
