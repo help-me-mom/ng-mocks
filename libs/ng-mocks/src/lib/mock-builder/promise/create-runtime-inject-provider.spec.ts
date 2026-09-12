@@ -1,5 +1,6 @@
-import { Injector, Provider } from '@angular/core';
+import { FactoryProvider, Injector, Provider } from '@angular/core';
 
+import coreDefineProperty from '../../common/core.define-property';
 import { NG_MOCKS_TOUCHES } from '../../common/core.tokens';
 import { resetRuntimeInject } from '../../common/ng-mocks-runtime-inject';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
@@ -82,6 +83,90 @@ describe('create-runtime-inject-provider', () => {
     );
 
     destroyCallbacks[0]();
+  });
+
+  it('preserves kept alias, class, and value provider recipes', () => {
+    class AliasTarget {}
+    class ClassTarget {}
+    class ValueTarget {}
+    class Implementation {}
+    const deps = ['dependency'];
+    const implementation = new Implementation();
+    const classFactory = jasmine
+      .createSpy('classFactory')
+      .and.returnValue(implementation);
+    const destroyCallbacks: Array<() => void> = [];
+    const value = Object.freeze({ name: 'value' });
+    const aliasProvider = Object.freeze({
+      provide: AliasTarget,
+      useExisting: Implementation,
+    });
+    const classProvider = Object.freeze({
+      deps,
+      provide: ClassTarget,
+      useClass: Implementation,
+    });
+    const valueProvider = Object.freeze({
+      provide: ValueTarget,
+      useValue: value,
+    });
+    const providers: Provider[] = [
+      aliasProvider,
+      classProvider,
+      valueProvider,
+    ];
+    Object.freeze(deps);
+    for (const def of [AliasTarget, ValueTarget]) {
+      coreDefineProperty(def, 'ɵprov', { factory: () => undefined });
+    }
+    coreDefineProperty(ClassTarget, 'ɵprov', {
+      factory: classFactory,
+    });
+    ngMocksUniverse.builtProviders.set(AliasTarget, aliasProvider);
+    ngMocksUniverse.builtProviders.set(ClassTarget, classProvider);
+    ngMocksUniverse.builtProviders.set(ValueTarget, valueProvider);
+
+    try {
+      createRuntimeInjectProvider(
+        new Set([AliasTarget, ClassTarget, ValueTarget]),
+        new Map([
+          [AliasTarget, { shallow: false }],
+          [ClassTarget, { shallow: false }],
+          [ValueTarget, { shallow: false }],
+        ]),
+        providers,
+        false,
+        new Set(),
+      );
+
+      expect(providers[0]).toBe(aliasProvider);
+      const wrappedClass = providers[1] as FactoryProvider;
+      const injector = {
+        get: () => undefined,
+        onDestroy: (callback: () => void) =>
+          destroyCallbacks.push(callback),
+      };
+      expect(wrappedClass.provide).toBe(ClassTarget);
+      expect(wrappedClass.deps).toEqual([Injector, NG_MOCKS_TOUCHES]);
+      expect(wrappedClass.useFactory(injector, new Set())).toBe(
+        implementation,
+      );
+      expect(classFactory).toHaveBeenCalledTimes(1);
+      expect(classFactory).toHaveBeenCalledWith();
+      expect(providers[2]).toBe(valueProvider);
+      expect(aliasProvider.useExisting).toBe(Implementation);
+      expect(classProvider.useClass).toBe(Implementation);
+      expect(classProvider.deps).toBe(deps);
+      expect(deps).toEqual(['dependency']);
+      expect(valueProvider.useValue).toBe(value);
+    } finally {
+      for (const destroy of destroyCallbacks) {
+        destroy();
+      }
+      ngMocksUniverse.builtProviders.delete(AliasTarget);
+      ngMocksUniverse.builtProviders.delete(ClassTarget);
+      ngMocksUniverse.builtProviders.delete(ValueTarget);
+    }
   });
 
   describe('explicit keeps in default auto-spy mode', () => {

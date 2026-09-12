@@ -1,6 +1,6 @@
 import collectDeclarations from '../../resolve/collect-declarations';
 
-export default (parameter: any): undefined | any => {
+export default (parameter: unknown) => {
   if (typeof parameter !== 'function') {
     return undefined;
   }
@@ -13,6 +13,28 @@ export default (parameter: any): undefined | any => {
       ...(injectable.deps === undefined ? {} : { deps: injectable.deps }),
       provide: parameter,
       useFactory,
+    };
+  }
+
+  if (injectable?.useClass) {
+    return {
+      ...(injectable.deps === undefined ? {} : { deps: injectable.deps }),
+      provide: parameter,
+      useClass: injectable.useClass,
+    };
+  }
+
+  if (injectable && 'useValue' in injectable) {
+    return {
+      provide: parameter,
+      useValue: injectable.useValue,
+    };
+  }
+
+  if (injectable?.useExisting) {
+    return {
+      provide: parameter,
+      useExisting: injectable.useExisting,
     };
   }
 
