@@ -138,13 +138,13 @@ export class MockBuilderPromise implements IMockBuilder {
   public keep(input: any, config?: IMockBuilderConfig): this {
     const { def, providers } = normaliseModule(input);
 
-    const existing = this.keepDef.has(def) ? this.defProviders.get(def) : [];
+    const existing = this.keepDef.has(def) ? this.defProviders.get(def) : undefined;
     this.wipe(def);
     this.keepDef.add(def);
 
     // a magic to support modules with providers.
-    if (providers) {
-      this.defProviders.set(def, [...(existing || /* istanbul ignore next */ []), ...providers]);
+    if (providers || existing) {
+      this.defProviders.set(def, [...(existing ?? []), ...(providers ?? [])]);
     }
 
     this.setConfigDef(def, config);
@@ -165,13 +165,13 @@ export class MockBuilderPromise implements IMockBuilder {
       );
     }
 
-    const existing = this.mockDef.has(def) ? this.defProviders.get(def) : [];
+    const existing = this.mockDef.has(def) ? this.defProviders.get(def) : undefined;
     this.wipe(def);
     this.mockDef.add(def);
 
     // a magic to support modules with providers.
-    if (providers) {
-      this.defProviders.set(def, [...(existing || /* istanbul ignore next */ []), ...providers]);
+    if (providers || existing) {
+      this.defProviders.set(def, [...(existing ?? []), ...(providers ?? [])]);
     }
 
     this.setDefValue(def, mock);
