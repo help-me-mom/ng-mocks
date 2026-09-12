@@ -2,6 +2,13 @@ import { NG_MOCKS_GUARDS, NG_MOCKS_RESOLVERS } from '../common/core.tokens';
 import { isNgDef } from '../common/func.is-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
+interface CacheEntry {
+  containers: object[];
+  mock: object;
+  parents: Set<CacheEntry>;
+  updated: boolean;
+}
+
 const handleSection = (section: any[]) => {
   const guards: any[] = [];
 
@@ -19,10 +26,11 @@ const handleSection = (section: any[]) => {
   return guards;
 };
 
-const handleArray = (cache: Map<any, any>, value: any[], callback: any): [boolean, any[]] => {
+const handleArray = (cache: Map<unknown, CacheEntry>, value: any[], callback: any): any[] => {
   const mock: Array<any> = [];
+  const entry: CacheEntry = { containers: [mock], mock, parents: new Set(), updated: false };
   let updated = false;
-  cache.set(value, mock);
+  cache.set(value, entry);
 
   for (const valueItem of value) {
     if (ngMocksUniverse.isExcludedDef(valueItem)) {
@@ -30,10 +38,16 @@ const handleArray = (cache: Map<any, any>, value: any[], callback: any): [boolea
       continue;
     }
     mock.push(callback(valueItem, cache));
-    updated = updated || mock[mock.length - 1] !== valueItem;
+    const child = cache.get(valueItem);
+    if (child) {
+      child.parents.add(entry);
+    } else {
+      updated = updated || mock[mock.length - 1] !== valueItem;
+    }
   }
 
-  return [updated, mock];
+  entry.updated = updated;
+  return mock;
 };
 
 const handleItemKeys = ['canActivate', 'canActivateChild', 'canDeactivate', 'canMatch', 'canLoad'];
@@ -41,13 +55,14 @@ const handleItemGetGuards = (mock: any, section: string) =>
   Array.isArray(mock[section]) ? handleSection(mock[section]) : mock[section];
 
 const handleItem = (
-  cache: Map<any, any>,
+  cache: Map<unknown, CacheEntry>,
   value: Record<keyof any, any>,
   callback: any,
-): [boolean, Record<keyof any, any>] => {
-  let mock: Record<keyof any, any> = {};
+): Record<keyof any, any> => {
+  const mock: Record<keyof any, any> = {};
+  const entry: CacheEntry = { containers: [mock], mock, parents: new Set(), updated: false };
   let updated = false;
-  cache.set(value, mock);
+  cache.set(value, entry);
 
   for (const key of Object.keys(value)) {
     if (ngMocksUniverse.isExcludedDef(value[key])) {
@@ -55,7 +70,12 @@ const handleItem = (
       continue;
     }
     mock[key] = callback(value[key], cache);
-    updated = updated || mock[key] !== value[key];
+    const child = cache.get(value[key]);
+    if (child) {
+      child.parents.add(entry);
+    } else {
+      updated = updated || mock[key] !== value[key];
+    }
   }
 
   // Removal of guards.
@@ -63,7 +83,8 @@ const handleItem = (
     const guards: any[] = handleItemGetGuards(mock, section);
     if (guards && mock[section].length !== guards.length) {
       updated = updated || true;
-      mock = { ...mock, [section]: guards };
+      mock[section] = guards;
+      entry.containers.push(guards);
     }
   }
 
@@ -84,48 +105,77 @@ const handleItem = (
     }
     if (resolveUpdated) {
       updated = updated || true;
-      mock = { ...mock, resolve };
+      mock.resolve = resolve;
+      entry.containers.push(resolve);
     }
   }
 
-  return [updated, mock];
+  entry.updated = updated;
+  return mock;
 };
 
-const replaceWithMocks = (value: any, cache: Map<any, any>): any => {
+const replaceWithMocks = (value: any, cache: Map<unknown, CacheEntry>): any => {
+  if (ngMocksUniverse.getResolution(value) === 'replace') {
+    return ngMocksUniverse.getBuildDeclaration(value);
+  }
   if (ngMocksUniverse.cacheDeclarations.has(value)) {
     return ngMocksUniverse.cacheDeclarations.get(value);
   }
-  if (typeof value !== 'object') {
+  if (typeof value !== 'object' || !value || isNgDef(value, 't')) {
     return value;
   }
-  if (cache.has(value)) {
-    return value;
+  const cached = cache.get(value);
+  if (cached) {
+    return cached.mock;
   }
-
-  let mock: any;
-  let updated = false;
 
   if (Array.isArray(value)) {
-    [updated, mock] = handleArray(cache, value, replaceWithMocks);
-  } else if (value) {
-    [updated, mock] = handleItem(cache, value, replaceWithMocks);
+    return handleArray(cache, value, replaceWithMocks);
   }
 
-  if (updated) {
-    Object.setPrototypeOf(mock, Object.getPrototypeOf(value));
-
-    return mock;
-  }
-
-  return value;
+  return handleItem(cache, value, replaceWithMocks);
 };
 
 const replaceWithMocksWrapper = (value: any) => {
-  const cache = new Map();
+  const cache = new Map<unknown, CacheEntry>();
   const result = replaceWithMocks(value, cache);
+  const updated: CacheEntry[] = [];
+  for (const entry of cache.values()) {
+    if (entry.updated) {
+      updated.push(entry);
+    }
+  }
+
+  // A provisional clone is not a change: unchanged cycles must retain their original identities.
+  for (let index = 0; index < updated.length; index += 1) {
+    for (const parent of updated[index].parents) {
+      if (!parent.updated) {
+        parent.updated = true;
+        updated.push(parent);
+      }
+    }
+  }
+
+  const replacements = new Map<unknown, unknown>();
+  for (const [original, entry] of cache) {
+    replacements.set(entry.mock, entry.updated ? entry.mock : original);
+    if (entry.updated) {
+      Object.setPrototypeOf(entry.mock, Object.getPrototypeOf(original));
+    }
+  }
+  for (const entry of updated) {
+    for (const container of entry.containers) {
+      const properties = container as Record<string, unknown>;
+      for (const key of Object.keys(properties)) {
+        if (replacements.has(properties[key])) {
+          properties[key] = replacements.get(properties[key]);
+        }
+      }
+    }
+  }
   cache.clear();
 
-  return result;
+  return replacements.has(result) ? replacements.get(result) : result;
 };
 
 export default (() => replaceWithMocksWrapper)();
