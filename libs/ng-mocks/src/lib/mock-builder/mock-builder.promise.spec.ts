@@ -190,6 +190,102 @@ describe('MockBuilderPromise', () => {
     );
   });
 
+  const modes: Array<'keep' | 'mock'> = ['keep', 'mock'];
+  for (const mode of modes) {
+    for (const providerFirst of [true, false]) {
+      it(`preserves ${mode} providers with the bare module ${providerFirst ? 'last' : 'first'}`, async () => {
+        const value = { label: 'configured' };
+        const token = new InjectionToken<typeof value>('configured');
+        const providers = [{ provide: token, useValue: value }];
+        const moduleWithProviders = {
+          ngModule: TargetModule,
+          providers,
+        };
+        const builder = MockBuilder().keep(token);
+
+        if (providerFirst) {
+          builder[mode](moduleWithProviders)[mode](TargetModule);
+        } else {
+          builder[mode](TargetModule)[mode](moduleWithProviders);
+        }
+        await builder;
+
+        expect(mockHelperGet(token)).toBe(value);
+        expect(moduleWithProviders.providers).toBe(providers);
+        expect(providers).toEqual([
+          { provide: token, useValue: value },
+        ]);
+      });
+    }
+
+    it(`discards ${mode} providers when changing the module mode`, async () => {
+      const token = new InjectionToken<string>('discarded');
+      const nextMode = mode === 'keep' ? 'mock' : 'keep';
+      await MockBuilder()
+        [mode]({
+          ngModule: TargetModule,
+          providers: [{ provide: token, useValue: 'discarded' }],
+        })
+        [nextMode](TargetModule)
+        .keep(token);
+
+      expect(() => mockHelperGet(token)).toThrowError(
+        /Cannot find an instance/,
+      );
+    });
+  }
+
+  it('accumulates kept multi values across repeated mock module entries', async () => {
+    const token = new InjectionToken<number[]>('multi');
+    const first = [{ provide: token, useValue: 1, multi: true }];
+    const second = [{ provide: token, useValue: 2, multi: true }];
+    await MockBuilder()
+      .mock({ ngModule: TargetModule, providers: first })
+      .mock(TargetModule)
+      .mock({ ngModule: TargetModule, providers: second })
+      .keep(token);
+
+    expect(mockHelperGet(token)).toEqual([1, 2]);
+    expect(first).toEqual([
+      { provide: token, useValue: 1, multi: true },
+    ]);
+    expect(second).toEqual([
+      { provide: token, useValue: 2, multi: true },
+    ]);
+  });
+
+  it('discards prior module providers after exclusion and a later keep', async () => {
+    const token = new InjectionToken<string>('excluded');
+    await MockBuilder()
+      .keep({
+        ngModule: TargetModule,
+        providers: [{ provide: token, useValue: 'discarded' }],
+      })
+      .exclude(TargetModule)
+      .keep(TargetModule)
+      .keep(token);
+
+    expect(() => mockHelperGet(token)).toThrowError(
+      /Cannot find an instance/,
+    );
+  });
+
+  it('keeps an explicit provider override above repeated module providers', async () => {
+    const value = { label: 'override' };
+    const token = new InjectionToken<typeof value>('overridden');
+    const factory = jasmine.createSpy('module provider');
+    await MockBuilder()
+      .provide({ provide: token, useValue: value })
+      .keep({
+        ngModule: TargetModule,
+        providers: [{ provide: token, useFactory: factory }],
+      })
+      .keep(TargetModule);
+
+    expect(mockHelperGet(token)).toBe(value);
+    expect(factory).not.toHaveBeenCalled();
+  });
+
   it('throws an error on a services replacement', () => {
     expect(() =>
       MockBuilder().replace(TargetModule, TargetService),
