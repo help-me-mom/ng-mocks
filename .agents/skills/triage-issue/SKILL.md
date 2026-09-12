@@ -235,6 +235,8 @@ PR rules:
 - Do not commit, push, post GitHub comments, or create a PR when the requester explicitly asks to review locally first.
 - Follow [Validation Expectations](../../../AGENTS.md#validation-expectations) when reporting CI status.
   If green CI is requested, verify all required checks on the pushed commit before handing back the PR.
+- Review repository security-tool findings and verified GitHub Advanced Security comments while CI runs,
+  and confirm valid findings are fixed on the current PR head as required by `AGENTS.md`.
 
 ## Guardrails
 

@@ -80,9 +80,9 @@ describe('core.define-property', () => {
 
   it('ignores missing instances', () => {
     for (const instance of [undefined, null, false, 0, '']) {
-      expect(
-        coreDefineProperty(instance, 'value', 'ignored'),
-      ).toBeUndefined();
+      expect(() => {
+        coreDefineProperty(instance, 'value', 'ignored');
+      }).not.toThrow();
     }
   });
 

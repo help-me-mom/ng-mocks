@@ -258,6 +258,10 @@
 - Report CI status for the current PR head. When the task requires green CI, wait for all required jobs and
   resolve failures within scope, or report the specific blocker. Do not infer success from local checks or a
   previous green commit.
+- While CI runs, review repository security-tool findings, including `Code scanning results / CodeQL`,
+  and comments from the verified GitHub Advanced Security app (`github-advanced-security[bot]`). Fix valid
+  findings and confirm their resolution on the current PR head; green check statuses alone do not mean
+  these findings are resolved.
 
 ## Commit and Release Semantics
 
