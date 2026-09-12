@@ -1,4 +1,5 @@
-import { getInjection } from '../../common/core.helpers';
+import { getTestBed } from '@angular/core/testing';
+
 import { Type } from '../../common/core.types';
 import { getSourceOfMock } from '../../common/func.get-source-of-mock';
 import { isNgDef } from '../../common/func.is-ng-def';
@@ -39,10 +40,16 @@ export default <T>(...args: any[]): T[] => {
       );
     }
   } else {
-    try {
-      result.push(getInjection(declaration));
-    } catch {
-      // nothing to do
+    const testBed = getTestBed();
+    const notFoundValue = {};
+    const instance = testBed.inject
+      ? testBed.inject(declaration, notFoundValue)
+      : /* istanbul ignore next */ (testBed as typeof testBed & { get: typeof testBed.inject }).get(
+          declaration,
+          notFoundValue,
+        );
+    if (instance !== notFoundValue) {
+      result.push(instance);
     }
   }
 

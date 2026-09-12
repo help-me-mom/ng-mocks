@@ -28,15 +28,16 @@ const parseArgs = <T>(
 
 export default <T>(...args: any[]) => {
   if (args.length === 1) {
-    try {
-      return TestBed.inject ? TestBed.inject(args[0]) : /* istanbul ignore next */ (TestBed as any).get(args[0]);
-    } catch (error) {
-      // forwarding unexpected errors: https://github.com/help-me-mom/ng-mocks/issues/7041
-      if (!error || typeof error !== 'object' || (error as any).ngTokenPath === undefined) {
-        throw error;
-      }
-      throw new Error(`Cannot find an instance via ngMocks.get(${funcParseFindArgsName(args[0])})`);
+    const instance = TestBed.inject
+      ? TestBed.inject(args[0], defaultNotFoundValue)
+      : /* istanbul ignore next */ (TestBed as typeof TestBed & { get: typeof TestBed.inject }).get(
+          args[0],
+          defaultNotFoundValue,
+        );
+    if (instance !== defaultNotFoundValue) {
+      return instance;
     }
+    throw new Error(`Cannot find an instance via ngMocks.get(${funcParseFindArgsName(args[0])})`);
   }
 
   const { el, sel, notFoundValue } = parseArgs<T>(args);

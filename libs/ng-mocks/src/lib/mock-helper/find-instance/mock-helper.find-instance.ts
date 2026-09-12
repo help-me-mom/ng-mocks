@@ -1,4 +1,5 @@
-import { getInjection } from '../../common/core.helpers';
+import { getTestBed } from '@angular/core/testing';
+
 import { Type } from '../../common/core.types';
 import { getSourceOfMock } from '../../common/func.get-source-of-mock';
 import { isNgDef } from '../../common/func.is-ng-def';
@@ -36,13 +37,15 @@ export default <T>(...args: any[]): T => {
       true,
     );
   } else {
-    try {
-      result.push(getInjection(declaration));
-    } catch (error) {
-      // forwarding unexpected errors: https://github.com/help-me-mom/ng-mocks/issues/7041
-      if (!error || typeof error !== 'object' || (error as any).ngTokenPath === undefined) {
-        throw error;
-      }
+    const testBed = getTestBed();
+    const instance = testBed.inject
+      ? testBed.inject(declaration, defaultNotFoundValue)
+      : /* istanbul ignore next */ (testBed as typeof testBed & { get: typeof testBed.inject }).get(
+          declaration,
+          defaultNotFoundValue,
+        );
+    if (instance !== defaultNotFoundValue) {
+      result.push(instance);
     }
   }
 
