@@ -103,11 +103,13 @@ describe('issue-14919:local', () => {
         const fixture = TestBed.createComponent(HostComponent);
         fixture.detectChanges();
         const host = fixture.componentInstance;
+        // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
         const componentElement = ngMocks.find(
           fixture,
           LocalTimepickerComponent,
         );
         const component = componentElement.componentInstance;
+        // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
         const directiveElement = ngMocks.find(fixture, 'input');
         const directive = ngMocks.get(
           directiveElement,

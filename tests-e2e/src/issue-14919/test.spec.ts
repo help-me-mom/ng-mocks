@@ -125,8 +125,10 @@ describe('issue-14919:library', () => {
 
           const fixture = MockRender(HostComponent);
           const host = fixture.point.componentInstance;
+          // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
           const pickerElement = ngMocks.find(MatTimepicker);
           const picker = pickerElement.componentInstance;
+          // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
           const inputElement = ngMocks.find('input');
           const input = ngMocks.get(inputElement, MatTimepickerInput);
           const legacy = ngMocks.get(inputElement, MatInput);
