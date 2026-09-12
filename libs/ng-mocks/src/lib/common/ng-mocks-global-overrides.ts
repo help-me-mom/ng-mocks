@@ -24,37 +24,12 @@ import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
-import {
-  rememberInjectedDeclaration,
-  rememberMockDeclarations,
-  resetInjectedDeclarations,
-} from './ng-mocks-injected-declarations';
+import { rememberMockDeclarations, resetInjectedDeclarations } from './ng-mocks-injected-declarations';
 import { resetRuntimeInject } from './ng-mocks-runtime-inject';
+import { installTestBedInjection } from './ng-mocks-test-bed-injection';
 import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
-type NgMocksTestBed = TestBedStatic & {
-  get?: (token: any, ...args: any[]) => any;
-  inject?: (token: any, ...args: any[]) => any;
-  ngMocksGetInstalled?: boolean;
-  ngMocksInjectInstalled?: boolean;
-};
-const createTestBedInjection = (original: (token: any, ...args: any[]) => any, instance: NgMocksTestBed) =>
-  helperCreateClone(original, undefined, undefined, (token: any, ...args: any[]) => {
-    // Tests often mutate the object returned by TestBed.inject before Angular constructs the
-    // declaration instance used inside the render tree, so remember that seed for later replay.
-    return rememberInjectedDeclaration(token, original.call(instance, token, ...args));
-  });
-const installTestBedInjection = (instance: NgMocksTestBed): void => {
-  if (instance.inject && !instance.ngMocksInjectInstalled) {
-    coreDefineProperty(instance, 'inject', createTestBedInjection(instance.inject, instance), true);
-    coreDefineProperty(instance, 'ngMocksInjectInstalled', true);
-  }
-  // istanbul ignore next: TestBed.get exists only on legacy Angular targets, but it must share the same seed registry.
-  if (instance.get && !instance.ngMocksGetInstalled) {
-    coreDefineProperty(instance, 'get', createTestBedInjection(instance.get, instance), true);
-    coreDefineProperty(instance, 'ngMocksGetInstalled', true);
-  }
-};
+
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
   for (const [def, [override, original]] of [...overrides]) {
