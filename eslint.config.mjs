@@ -292,6 +292,15 @@ export default defineConfig([
     rules: tsEslintPlugin.configs['eslint-recommended'].overrides[0].rules,
   },
   {
+    files: ['tests-e2e/**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        // CI lints before these dependencies are installed; local installs must not change the rules.
+        project: false,
+      },
+    },
+  },
+  {
     files: ['**/*.spec.ts'],
     rules: {
       // Test fixtures may intentionally exercise eager change detection.
