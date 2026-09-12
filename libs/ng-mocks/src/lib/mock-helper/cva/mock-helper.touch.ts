@@ -9,6 +9,7 @@ import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
 
+import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
 
 // default html behavior
@@ -73,7 +74,16 @@ export default (sel: DebugElement | DebugNodeSelector, methodName?: string): voi
     throw new Error(`Cannot find an element via ngMocks.touch(${funcParseFindArgsName(sel)})`);
   }
 
-  const valueAccessor = funcGetVca(el, hasListener(el)) || {};
+  let valueAccessor = funcGetVca(el, true);
+  if (!valueAccessor) {
+    const modelControl = funcGetModelControl(el);
+    if (modelControl?.touch) {
+      modelControl.touch();
+
+      return;
+    }
+    valueAccessor = funcGetVca(el, hasListener(el)) || {};
+  }
   if (handleKnown(valueAccessor) || hasListener(el)) {
     triggerTouch(el);
 

@@ -1,6 +1,6 @@
 ---
 title: How to test signal forms in Angular
-description: Test signal form validation, field state, model updates, and mocked ControlValueAccessor dependencies with ng-mocks
+description: Test signal form validation, field state, model updates, and mocked ControlValueAccessor or FormValueControl dependencies with ng-mocks
 sidebar_label: Signal Forms
 ---
 
@@ -8,8 +8,8 @@ When testing a component that owns a signal form, keep the form binding real so 
 can observe how input events update the model, validation, and rendered feedback.
 Application controls can still be mocked when their implementation is outside the test's scope.
 
-The examples below use Angular 22 and Jasmine. They cover a native text input and a
-custom control that implements `ControlValueAccessor`.
+The examples below use Angular 22 and Jasmine. They cover a native text input and
+custom controls that implement `ControlValueAccessor` or `FormValueControl`.
 
 ## Related tools
 
@@ -288,7 +288,115 @@ describe('TestSignalForms:cva', () => {
 });
 ```
 
+## Test a form with a mocked signal control
+
+A `FormValueControl` uses a `value` model to exchange values with `FormField`.
+In Angular 22, its `touch` output reports blur, while its `touched` input receives
+the resulting field state. Keep `FormField` real when mocking this child so the test
+exercises both directions of those bindings.
+
+```ts
+import { Component, input, model, output, signal } from '@angular/core';
+import { form, FormField, FormValueControl } from '@angular/forms/signals';
+
+@Component({
+  selector: 'signal-name-control',
+  template: `
+    <input
+      [value]="value()"
+      (input)="value.set($any($event.target).value)"
+      (blur)="touch.emit()"
+    />
+  `,
+})
+class NameControl implements FormValueControl<string> {
+  public readonly value = model('');
+  public readonly touched = input(false);
+  public readonly touch = output<void>();
+}
+
+@Component({
+  selector: 'target-signal-forms-model',
+  imports: [FormField, NameControl],
+  template: `
+    <signal-name-control [formField]="f.name" />
+    <span class="name">{{ model().name }}</span>
+  `,
+})
+class TargetComponent {
+  public readonly model = signal({ name: 'Ada' });
+  public readonly f = form(this.model);
+}
+```
+
+Pass the mocked child's host element to `ngMocks.change` to update its model.
+This marks the field dirty and updates the parent's rendered name. Touching the
+control is a separate interaction: `ngMocks.touch` emits `touch`, and change detection
+delivers the updated field state to the child's `touched` input.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts"
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
+
+describe('TestSignalForms:model', () => {
+  beforeEach(() =>
+    MockBuilder(TargetComponent)
+      .keep(FormField)
+      .keep(NG_MOCKS_ROOT_PROVIDERS)
+      .mock(NameControl),
+  );
+
+  it('updates the parent and rendered name through the mocked model', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
+
+    expect(control.value()).toBe('Ada');
+
+    // The mocked component still exposes the model output used by FormField.
+    ngMocks.change(child, 'Grace');
+    fixture.detectChanges();
+
+    expect(component.model()).toEqual({ name: 'Grace' });
+    expect(component.f.name().dirty()).toBe(true);
+    expect(component.f.name().touched()).toBe(false);
+    expect(control.value()).toBe('Grace');
+    expect(control.touched()).toBe(false);
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Grace');
+  });
+
+  it('feeds touched state back into the mock without changing the name', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
+
+    expect(control.touched()).toBe(false);
+
+    // The touch output marks the field touched; its input receives that state.
+    ngMocks.touch(child);
+    fixture.detectChanges();
+
+    expect(component.model()).toEqual({ name: 'Ada' });
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(true);
+    expect(control.value()).toBe('Ada');
+    expect(control.touched()).toBe(true);
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Ada');
+  });
+});
+```
+
 ## Complete example specs
 
 - [Native fields, validation, and model updates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts)
 - [Signal form with a mocked CVA child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts)
+- [Signal form with a mocked model-based child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts)

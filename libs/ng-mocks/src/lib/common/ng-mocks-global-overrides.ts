@@ -16,6 +16,7 @@ import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
+import { resetDeclarationFactories } from './ng-mocks-declaration-factories';
 import { rememberMockDeclarations, resetInjectedDeclarations } from './ng-mocks-injected-declarations';
 import { applyPlatformOverrides, defineTouches } from './ng-mocks-platform-overrides';
 import { resetRuntimeInject } from './ng-mocks-runtime-inject';
@@ -243,6 +244,9 @@ const resetTestingModule =
       result = original.call(instance);
     } catch (error) {
       errors.push(error);
+    } finally {
+      // Older Ivy TestBed versions restore directive definitions but leave recompiled factories behind.
+      resetDeclarationFactories();
     }
     if (errors.length > 0) {
       throw errors[0];

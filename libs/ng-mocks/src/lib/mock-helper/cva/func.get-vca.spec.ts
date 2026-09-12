@@ -14,6 +14,58 @@ import { MockControlValueAccessorProxy } from '../../common/mock-control-value-a
 import funcGetVca from './func.get-vca';
 
 describe('func.get-vca', () => {
+  for (const missing of [null, undefined]) {
+    it(`does not instantiate an accessor when the local NgControl resolves to ${missing}`, () => {
+      const accessor = new MockControlValueAccessorProxy();
+      const createAccessor = jasmine
+        .createSpy('createAccessor')
+        .and.returnValue([accessor]);
+      const node: any = {
+        injector: Injector.create({
+          providers: [
+            { provide: NgControl, useValue: missing },
+            {
+              provide: NG_VALUE_ACCESSOR,
+              useFactory: createAccessor,
+            },
+          ],
+        }),
+        providerTokens: [NgControl, NG_VALUE_ACCESSOR],
+      };
+
+      expect(funcGetVca(node, true)).toBeUndefined();
+      expect(() => funcGetVca(node)).toThrowError(
+        /Cannot find ControlValueAccessor on the element/,
+      );
+      expect(createAccessor).not.toHaveBeenCalled();
+    });
+
+    it(`does not fall back to a parent accessor when the local accessor provider resolves to ${missing}`, () => {
+      const parentAccessor = new MockControlValueAccessorProxy();
+      const parent = Injector.create({
+        providers: [
+          { provide: NG_VALUE_ACCESSOR, useValue: [parentAccessor] },
+        ],
+      });
+      const node: any = {
+        injector: Injector.create({
+          parent,
+          providers: [
+            { provide: NgControl, useValue: { valueAccessor: null } },
+            { provide: NG_VALUE_ACCESSOR, useValue: missing },
+          ],
+        }),
+        providerTokens: [NgControl, NG_VALUE_ACCESSOR],
+      };
+
+      expect(funcGetVca(node, true)).toBeUndefined();
+      expect(() => funcGetVca(node)).toThrowError(
+        /Cannot find ControlValueAccessor on the element/,
+      );
+      expect(parent.get(NG_VALUE_ACCESSOR)).toEqual([parentAccessor]);
+    });
+  }
+
   it('preserves the accessor already selected by NgControl', () => {
     const accessor = new MockControlValueAccessorProxy();
     const otherAccessor = new MockControlValueAccessorProxy();
@@ -238,6 +290,36 @@ describe('func.get-vca', () => {
       providerTokens: [NG_VALUE_ACCESSOR],
     };
 
+    expect(() => funcGetVca(node)).toThrowError(
+      /Cannot find ControlValueAccessor on the element/,
+    );
+    expect(funcGetVca(node, true)).toBeUndefined();
+  });
+
+  it('does not bind an unbound child accessor through an ancestor NgControl', () => {
+    const parentAccessor = new MockControlValueAccessorProxy();
+    const childAccessor = new MockControlValueAccessorProxy();
+    const parent = Injector.create({
+      providers: [
+        {
+          provide: NgControl,
+          useValue: { valueAccessor: parentAccessor },
+        },
+      ],
+    });
+    const node: any = {
+      injector: Injector.create({
+        parent,
+        providers: [
+          { provide: NG_VALUE_ACCESSOR, useValue: [childAccessor] },
+        ],
+      }),
+      providerTokens: [NG_VALUE_ACCESSOR],
+    };
+
+    expect(node.injector.get(NgControl).valueAccessor).toBe(
+      parentAccessor,
+    );
     expect(() => funcGetVca(node)).toThrowError(
       /Cannot find ControlValueAccessor on the element/,
     );

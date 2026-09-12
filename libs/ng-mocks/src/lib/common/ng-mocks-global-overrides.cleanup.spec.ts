@@ -79,6 +79,10 @@ describe('ng-mocks-global-overrides:cleanup', () => {
   });
 
   it('restores pending overrides and resets Angular when the preliminary flush throws', () => {
+    const descriptor = Object.getOwnPropertyDescriptor(
+      TargetComponent,
+      'ɵfac',
+    );
     const failure = new Error('flush failed');
     flush.and.callFake(() => {
       throw failure;
@@ -92,7 +96,15 @@ describe('ng-mocks-global-overrides:cleanup', () => {
     const instance = {};
     const nativeReset = jasmine
       .createSpy('nativeReset')
-      .and.returnValue(instance);
+      .and.callFake(() => {
+        // Angular can leave a new factory behind even after restoring directive metadata.
+        Object.defineProperty(TargetComponent, 'ɵfac', {
+          configurable: true,
+          value: jasmine.createSpy('recompiled factory'),
+        });
+
+        return instance;
+      });
     const reset = mockHelperFasterInstall().after[0](
       nativeReset,
       instance as never,
@@ -114,6 +126,9 @@ describe('ng-mocks-global-overrides:cleanup', () => {
     expect((TestBed as any).ngMocksOverrides).toBeUndefined();
     expect(nativeReset).toHaveBeenCalledTimes(1);
     expect(nativeReset.calls.mostRecent()?.object).toBe(instance);
+    expect(
+      Object.getOwnPropertyDescriptor(TargetComponent, 'ɵfac'),
+    ).toEqual(descriptor);
   });
 
   it('continues restoring later overrides and resets Angular when one restoration throws', () => {
@@ -159,6 +174,10 @@ describe('ng-mocks-global-overrides:cleanup', () => {
 
   for (const failure of [new Error('flush failed'), undefined]) {
     it(`preserves the first ${failure === undefined ? 'undefined' : 'Error'} failure when native reset also throws`, () => {
+      const descriptor = Object.getOwnPropertyDescriptor(
+        TargetComponent,
+        'ɵfac',
+      );
       flush.and.callFake(() => {
         throw failure;
       });
@@ -170,6 +189,10 @@ describe('ng-mocks-global-overrides:cleanup', () => {
       const nativeReset = jasmine
         .createSpy('nativeReset')
         .and.callFake(() => {
+          Object.defineProperty(TargetComponent, 'ɵfac', {
+            configurable: true,
+            value: jasmine.createSpy('recompiled factory'),
+          });
           throw nativeFailure;
         });
       const reset = mockHelperFasterInstall().after[0](
@@ -194,6 +217,9 @@ describe('ng-mocks-global-overrides:cleanup', () => {
       ]);
       expect((TestBed as any).ngMocksOverrides).toBeUndefined();
       expect(nativeReset).toHaveBeenCalledTimes(1);
+      expect(
+        Object.getOwnPropertyDescriptor(TargetComponent, 'ɵfac'),
+      ).toEqual(descriptor);
     });
   }
 

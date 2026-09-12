@@ -12,7 +12,8 @@ const message = [
 ].join(' ');
 
 export default (el: DebugNode, optional = false): Record<keyof any, any> | undefined => {
-  const ngControl = coreForm && coreInjector(coreForm.NgControl, el.injector);
+  const ngControl =
+    coreForm && el.providerTokens.indexOf(coreForm.NgControl) !== -1 && coreInjector(coreForm.NgControl, el.injector);
   const valueAccessor = ngControl?.valueAccessor;
   if (valueAccessor) {
     return valueAccessor;

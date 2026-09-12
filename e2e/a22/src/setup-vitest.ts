@@ -4,6 +4,10 @@ import { BrowserModule } from '@angular/platform-browser'; // eslint-disable-lin
 import { DefaultTitleStrategy, TitleStrategy } from '@angular/router'; // eslint-disable-line import-x/order
 import { MockService, ngMocks } from 'ng-mocks'; // eslint-disable-line import-x/order
 
+// Vitest keeps Node's Date, while date inputs use JSDOM's separate constructor.
+// Angular must recognize the Dates returned by native controls with instanceof.
+(globalThis as any).jsdom.window.Date = Date;
+
 ngMocks.autoSpy('vitest');
 
 // In case, if you use @angular/router and Angular 14+.

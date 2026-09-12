@@ -3,31 +3,14 @@ import { ChangeDetectorRef, DebugElement } from '@angular/core';
 import coreForm from '../../common/core.form';
 import { DebugNodeSelector } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
-import helperDefinePropertyDescriptor from '../../mock-service/helper.define-property-descriptor';
 import helperExtractMethodsFromPrototype from '../../mock-service/helper.extract-methods-from-prototype';
-import mockHelperTrigger from '../events/mock-helper.trigger';
 import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
-import mockHelperStubMember from '../mock-helper.stub-member';
 
+import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
-
-// default html behavior
-const triggerInput = (el: DebugElement, value: any): void => {
-  mockHelperTrigger(el, 'focus');
-
-  const descriptor = Object.getOwnPropertyDescriptor(el.nativeElement, 'value');
-  mockHelperStubMember(el.nativeElement, 'value', value);
-  mockHelperTrigger(el, 'input');
-  mockHelperTrigger(el, 'change');
-  if (descriptor) {
-    helperDefinePropertyDescriptor(el.nativeElement, 'value', descriptor);
-    el.nativeElement.value = value;
-  }
-
-  mockHelperTrigger(el, 'blur');
-};
+import triggerInput from './func.trigger-input';
 
 const handleKnown = (valueAccessor: any, value: any): boolean => {
   if (coreForm && valueAccessor instanceof coreForm.AbstractControl) {
@@ -101,7 +84,17 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
   }
 
-  const valueAccessor = funcGetVca(el, hasListener(el)) || {};
+  let valueAccessor = funcGetVca(el, true);
+  if (!valueAccessor) {
+    const modelControl = funcGetModelControl(el);
+    if (modelControl) {
+      modelControl.change(value);
+      markForNextCheck(el);
+
+      return;
+    }
+    valueAccessor = funcGetVca(el, hasListener(el)) || {};
+  }
   if (handleKnown(valueAccessor, value) || hasListener(el)) {
     triggerInput(el, value);
     markForNextCheck(el);
