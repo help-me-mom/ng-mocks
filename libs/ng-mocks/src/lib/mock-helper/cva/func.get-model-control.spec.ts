@@ -57,6 +57,33 @@ class OutputOnly {
 }
 
 describe('func.get-model-control', () => {
+  it('skips declarations without inputs or outputs while preserving a co-located model control', () => {
+    @Directive({ selector: '[unboundState]', standalone: false })
+    class UnboundState {
+      public readonly value = signal('unbound');
+    }
+    const unbound = new UnboundState();
+    const instance = new ValueModel();
+    const node: any = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: UnboundState, useValue: unbound },
+          { provide: ValueModel, useValue: instance },
+        ],
+      }),
+      providerTokens: [NgControl, UnboundState, ValueModel],
+    };
+
+    const control = funcGetModelControl(node);
+    expect(control?.touch).toBeUndefined();
+    control!.change('updated');
+
+    expect(instance.current()).toBe('updated');
+    expect(unbound.value()).toBe('unbound');
+  });
+
   it('changes an aliased real model without replacing its signal or requiring a touch output', () => {
     const instance = new ValueModel();
     const value = instance.current;

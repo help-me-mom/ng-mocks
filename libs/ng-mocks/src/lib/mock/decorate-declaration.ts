@@ -82,96 +82,98 @@ export default <T extends Component & Directive>(
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
   }
 
-  const options: T & { imports?: any[]; hostDirectives?: any[]; standalone?: boolean } = {
-    ...params,
-  };
+  try {
+    const options: T & { imports?: any[]; hostDirectives?: any[]; standalone?: boolean } = {
+      ...params,
+    };
 
-  if (meta.exportAs !== undefined) {
-    options.exportAs = meta.exportAs;
-  }
-  if (meta.selector !== undefined) {
-    options.selector = meta.selector;
-  }
-  // istanbul ignore else
-  if (meta.standalone !== undefined) {
-    options.standalone = meta.standalone;
-  }
+    if (meta.exportAs !== undefined) {
+      options.exportAs = meta.exportAs;
+    }
+    if (meta.selector !== undefined) {
+      options.selector = meta.selector;
+    }
+    // istanbul ignore else
+    if (meta.standalone !== undefined) {
+      options.standalone = meta.standalone;
+    }
 
-  if (meta.imports) {
-    const [, { imports }] = mockNgDef({ imports: meta.imports, skipExports: true });
-    if (imports?.length) {
-      options.imports = imports as never;
+    if (meta.imports) {
+      const [, { imports }] = mockNgDef({ imports: meta.imports, skipExports: true });
+      if (imports?.length) {
+        options.imports = imports as never;
+      }
+    }
+
+    if (meta.hostDirectives) {
+      const [, { hostDirectives }] = mockNgDef({ hostDirectives: meta.hostDirectives, skipExports: true });
+      if (hostDirectives?.length) {
+        options.hostDirectives = hostDirectives;
+      }
+    }
+
+    const { setControlValueAccessor, providers } = cloneProviders(
+      source,
+      mock,
+      meta.providers || [],
+      ngMocksUniverse.config.get('mockNgDefResolver'),
+    );
+    providers.push(toExistingProvider(source, mock));
+    options.providers = providers;
+
+    const { providers: viewProviders } = cloneProviders(
+      source,
+      mock,
+      meta.viewProviders || [],
+      ngMocksUniverse.config.get('mockNgDefResolver'),
+    );
+    if (viewProviders.length > 0) {
+      options.viewProviders = viewProviders;
+    }
+
+    const properties = [
+      ...Object.keys(meta.queries || {}),
+      ...(meta.hostBindings || []).map(([name]) => name),
+      ...(meta.hostListeners || []).map(([name]) => name),
+    ];
+    const methods = helperMockService.extractMethodsFromPrototype(source.prototype, properties);
+    const outputs = getMockOutputs(meta.inputs, meta.outputs, [...properties, ...methods]);
+    const config: ngMocksMockConfig = buildConfig(
+      source,
+      { ...meta, outputs },
+      setControlValueAccessor ?? methods.indexOf('writeValue') !== -1,
+    );
+    decorateMock(mock, source, config);
+
+    // istanbul ignore else
+    if (meta.queries) {
+      decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
+    }
+    decorateOutputs(mock, outputs);
+    config.queryScanKeys = decorateQueries(mock, meta.queries);
+
+    config.hostBindings = [];
+    for (const [key] of meta.hostBindings || /* istanbul ignore next */ []) {
+      // mock declarations should not have side effects based on host bindings.
+      // HostBinding(...args)(mock.prototype, key);
+      if (config.hostBindings.indexOf(key) === -1) {
+        config.hostBindings.push(key);
+      }
+    }
+
+    config.hostListeners = [];
+    for (const [key] of meta.hostListeners || /* istanbul ignore next */ []) {
+      // mock declarations should not have side effects based on host bindings.
+      // HostListener(...args)(mock.prototype, key);
+      if (config.hostListeners.indexOf(key) === -1) {
+        config.hostListeners.push(key);
+      }
+    }
+
+    return options;
+  } finally {
+    if (!hasResolver) {
+      ngMocksUniverse.config.delete('mockNgDefResolver');
     }
   }
-
-  if (meta.hostDirectives) {
-    const [, { hostDirectives }] = mockNgDef({ hostDirectives: meta.hostDirectives, skipExports: true });
-    if (hostDirectives?.length) {
-      options.hostDirectives = hostDirectives;
-    }
-  }
-
-  const { setControlValueAccessor, providers } = cloneProviders(
-    source,
-    mock,
-    meta.providers || [],
-    ngMocksUniverse.config.get('mockNgDefResolver'),
-  );
-  providers.push(toExistingProvider(source, mock));
-  options.providers = providers;
-
-  const { providers: viewProviders } = cloneProviders(
-    source,
-    mock,
-    meta.viewProviders || [],
-    ngMocksUniverse.config.get('mockNgDefResolver'),
-  );
-  if (viewProviders.length > 0) {
-    options.viewProviders = viewProviders;
-  }
-
-  const properties = [
-    ...Object.keys(meta.queries || {}),
-    ...(meta.hostBindings || []).map(([name]) => name),
-    ...(meta.hostListeners || []).map(([name]) => name),
-  ];
-  const methods = helperMockService.extractMethodsFromPrototype(source.prototype, properties);
-  const outputs = getMockOutputs(meta.inputs, meta.outputs, [...properties, ...methods]);
-  const config: ngMocksMockConfig = buildConfig(
-    source,
-    { ...meta, outputs },
-    setControlValueAccessor ?? methods.indexOf('writeValue') !== -1,
-  );
-  decorateMock(mock, source, config);
-
-  // istanbul ignore else
-  if (meta.queries) {
-    decorateInputs(mock, meta.inputs, Object.keys(meta.queries));
-  }
-  decorateOutputs(mock, outputs);
-  config.queryScanKeys = decorateQueries(mock, meta.queries);
-
-  config.hostBindings = [];
-  for (const [key] of meta.hostBindings || /* istanbul ignore next */ []) {
-    // mock declarations should not have side effects based on host bindings.
-    // HostBinding(...args)(mock.prototype, key);
-    if (config.hostBindings.indexOf(key) === -1) {
-      config.hostBindings.push(key);
-    }
-  }
-
-  config.hostListeners = [];
-  for (const [key] of meta.hostListeners || /* istanbul ignore next */ []) {
-    // mock declarations should not have side effects based on host bindings.
-    // HostListener(...args)(mock.prototype, key);
-    if (config.hostListeners.indexOf(key) === -1) {
-      config.hostListeners.push(key);
-    }
-  }
-
-  if (!hasResolver) {
-    ngMocksUniverse.config.delete('mockNgDefResolver');
-  }
-
-  return options;
 };

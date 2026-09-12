@@ -67,8 +67,8 @@ export default (el: DebugNode): ModelControl | undefined => {
       continue;
     }
 
-    const outputs = meta.outputs || [];
-    for (const definition of meta.inputs || []) {
+    const outputs = meta.outputs!;
+    for (const definition of meta.inputs!) {
       const input = funcDirectiveIoParse(definition);
       const name = input.alias || input.name;
       if (!input.isSignal || (name !== 'value' && name !== 'checked') || typeof instance[input.name] !== 'function') {
