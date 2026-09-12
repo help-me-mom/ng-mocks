@@ -307,6 +307,137 @@ describe('MockService', () => {
     );
   });
 
+  it('mocks an own getter without reading it and permits writes and explicit stubbing', () => {
+    const getter = jasmine
+      .createSpy('original getter')
+      .and.throwError('real getter');
+    const shape = {
+      get value(): string {
+        return getter();
+      },
+    };
+    const descriptor = Object.getOwnPropertyDescriptor(
+      shape,
+      'value',
+    );
+
+    const mock = MockService(shape);
+    const sibling = MockService(shape);
+
+    expect(mock.value).toBeUndefined();
+    mock.value = 'mock';
+    expect(mock.value).toBe('mock');
+    expect(sibling.value).toBeUndefined();
+    spyOnProperty(mock, 'value', 'get').and.returnValue('stubbed');
+    expect(mock.value).toBe('stubbed');
+    expect(getter).not.toHaveBeenCalled();
+    expect(Object.getOwnPropertyDescriptor(shape, 'value')).toEqual(
+      descriptor,
+    );
+  });
+
+  it('mocks an own setter without calling it and provides readable mock state', () => {
+    const setter = jasmine
+      .createSpy('original setter')
+      .and.throwError('real setter');
+    const shape = {
+      set value(value: string) {
+        setter(value);
+      },
+    };
+    const descriptor = Object.getOwnPropertyDescriptor(
+      shape,
+      'value',
+    );
+
+    const mock = MockService(shape);
+    const mockDescriptor = Object.getOwnPropertyDescriptor(
+      mock,
+      'value',
+    );
+
+    expect(mockDescriptor?.get).toEqual(jasmine.any(Function));
+    expect(mockDescriptor?.set).toEqual(jasmine.any(Function));
+    expect(mock.value).toBeUndefined();
+    mock.value = 'mock';
+    expect(mock.value).toBe('mock');
+    expect(setter).not.toHaveBeenCalled();
+    expect(Object.getOwnPropertyDescriptor(shape, 'value')).toEqual(
+      descriptor,
+    );
+  });
+
+  it('mocks own accessors that shadow prototype methods and accessors', () => {
+    const original = jasmine
+      .createSpy('prototype member')
+      .and.throwError('real prototype member');
+    const getter = jasmine
+      .createSpy('own getter')
+      .and.throwError('real own getter');
+    const setter = jasmine
+      .createSpy('own setter')
+      .and.throwError('real own setter');
+    class Target {
+      public method(): string {
+        return original();
+      }
+
+      public get value(): string {
+        return original();
+      }
+    }
+    const shape: object = Object.create(Target.prototype);
+    Object.defineProperty(shape, 'method', {
+      configurable: true,
+      enumerable: true,
+      get: getter,
+    });
+    Object.defineProperty(shape, 'value', {
+      configurable: true,
+      enumerable: true,
+      get: getter,
+      set: setter,
+    });
+    const ownMethod = Object.getOwnPropertyDescriptor(
+      shape,
+      'method',
+    );
+    const ownValue = Object.getOwnPropertyDescriptor(shape, 'value');
+    const prototypeMethod = Object.getOwnPropertyDescriptor(
+      Target.prototype,
+      'method',
+    );
+    const prototypeValue = Object.getOwnPropertyDescriptor(
+      Target.prototype,
+      'value',
+    );
+
+    const mock = MockService(shape);
+
+    expect(mock instanceof Target).toBe(true);
+    expect(mock.method).toBeUndefined();
+    expect(mock.value).toBeUndefined();
+    mock.method = 'method';
+    mock.value = 'value';
+    expect(mock.method).toBe('method');
+    expect(mock.value).toBe('value');
+    expect(original).not.toHaveBeenCalled();
+    expect(getter).not.toHaveBeenCalled();
+    expect(setter).not.toHaveBeenCalled();
+    expect(Object.getOwnPropertyDescriptor(shape, 'method')).toEqual(
+      ownMethod,
+    );
+    expect(Object.getOwnPropertyDescriptor(shape, 'value')).toEqual(
+      ownValue,
+    );
+    expect(
+      Object.getOwnPropertyDescriptor(Target.prototype, 'method'),
+    ).toEqual(prototypeMethod);
+    expect(
+      Object.getOwnPropertyDescriptor(Target.prototype, 'value'),
+    ).toEqual(prototypeValue);
+  });
+
   it('mocks getters, setters and methods in a way that jasmine can mock them w/o an issue', () => {
     const mock: GetterSetterMethodHuetod = MockService(
       GetterSetterMethodHuetod,

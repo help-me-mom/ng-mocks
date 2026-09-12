@@ -35,6 +35,12 @@ const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
       const value = helperMockService.createMockFromPrototype(service.constructor.prototype);
       cache.set(service, value);
       for (const property of Object.keys(service)) {
+        const { get, set } = helperMockService.extractPropertyDescriptor(service, property) as PropertyDescriptor;
+        if (get || set) {
+          helperMockService.mock(value, property, 'get', prefix || 'instance');
+          helperMockService.mock(value, property, 'set', prefix || 'instance');
+          continue;
+        }
         const mock: any = callback(cache, service[property], `${prefix || 'instance'}.${property}`);
         if (mock !== undefined) {
           value[property] = mock;
