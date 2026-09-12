@@ -419,6 +419,57 @@ describe('ng-mocks-reveal:test', () => {
     );
   });
 
+  it('matches only inputs declared on the current node', () => {
+    ngMocks.flushTestBed();
+    const localFixture = MockRender(`
+      <ng-container #parent block="parent">
+        <span>plain</span>
+        <ng-container #child block="child"><span>nested</span></ng-container>
+        <ng-template #template block="template"></ng-template>
+      </ng-container>
+    `);
+    const parent = ngMocks.reveal(localFixture, '#parent');
+    const child = ngMocks.reveal(localFixture, '#child');
+    const template = ngMocks.reveal(localFixture, '#template');
+
+    // View Engine can share the parent's provider map with nodes without providers.
+    expect(ngMocks.revealAll(localFixture, BlockDirective)).toEqual([
+      parent,
+      child,
+      template,
+    ]);
+    expect(ngMocks.revealAll(localFixture, ['block'])).toEqual([
+      parent,
+      child,
+      template,
+    ]);
+    expect(
+      ngMocks.revealAll(localFixture, ['block', 'parent']),
+    ).toEqual([parent]);
+    expect(
+      ngMocks.revealAll(localFixture, ['block', 'child']),
+    ).toEqual([child]);
+    expect(
+      ngMocks.revealAll(localFixture, ['block', 'template']),
+    ).toEqual([template]);
+    expect(ngMocks.revealAll(parent, ['block'])).toEqual([
+      child,
+      template,
+    ]);
+    expect(ngMocks.revealAll(child, ['block'])).toEqual([]);
+    expect(
+      ngMocks
+        .findTemplateRefs(localFixture, ['block'])
+        .map(ref => ref.elementRef.nativeElement),
+    ).toEqual([template.nativeNode]);
+    expect(
+      ngMocks.findTemplateRefs(localFixture, ['block', 'parent']),
+    ).toEqual([]);
+    expect(
+      ngMocks.findTemplateRefs(localFixture, ['block', 'child']),
+    ).toEqual([]);
+  });
+
   it('skips itself', () => {
     ngMocks.flushTestBed();
     const loFixture = MockRender(`

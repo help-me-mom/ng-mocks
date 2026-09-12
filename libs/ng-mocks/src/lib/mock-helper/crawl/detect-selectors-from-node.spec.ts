@@ -50,6 +50,11 @@ describe('detect-selectors-from-node', () => {
         providerTokens: [],
       };
 
+      node.injector.elDef.element.publicProviders.test.parent =
+        node.injector.elDef;
+      node.injector.elDef.element.publicProviders.testDuplicate.parent =
+        node.injector.elDef;
+
       expect(detectSelectorsFromNode(node)).toEqual([[], ['attr']]);
     });
   });

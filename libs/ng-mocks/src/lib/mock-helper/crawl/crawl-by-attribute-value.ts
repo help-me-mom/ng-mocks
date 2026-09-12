@@ -1,6 +1,6 @@
+import coreReflectDirectiveResolve from '../../common/core.reflect.directive-resolve';
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { MockedDebugNode } from '../../mock-render/types';
-import mockHelperAttributes from '../mock-helper.attributes';
 
 import funcGetPublicProviderKeys from './func.get-public-provider-keys';
 import funcParseInputsAndRequiresAttributes from './func.parse-inputs-and-requires-attributes';
@@ -32,16 +32,43 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
       continue;
     }
     const attr = attrs[index];
-    if (attr !== attribute || !(node.injector as any)._tNode.inputs?.[attr]) {
+    if (attr !== attribute) {
       continue;
     }
-    for (const attrIndex of (node.injector as any)._tNode.inputs[attr]) {
-      if (typeof attrIndex !== 'number') {
+    const { directiveStart, inputs, hostDirectiveInputs } = (
+      node.injector as unknown as {
+        _tNode: {
+          directiveStart: number;
+          inputs?: Record<string, Array<number | string>>;
+          hostDirectiveInputs?: Record<string, Array<number | string>>;
+        };
+      }
+    )._tNode;
+    const hostInputs = hostDirectiveInputs?.[attr] || [];
+    for (const attrIndex of [...(inputs?.[attr] || []), ...hostInputs]) {
+      // Input flags are numeric too, but fall below the node's directive indices.
+      if (typeof attrIndex !== 'number' || attrIndex < directiveStart) {
         continue;
       }
 
-      const lViewValue = (node.injector as any)._lView?.[attrIndex][attr];
-      const attributeValue = mockHelperAttributes('', 'inputs', node, attr, lViewValue);
+      // Host mappings pair each index with the directive's original public alias.
+      const hostIndex = hostInputs.indexOf(attrIndex);
+      const inputName = hostIndex === -1 ? attr : hostInputs[hostIndex + 1];
+      const instance = (node.injector as { _lView?: Record<number, Record<string, unknown>> })._lView?.[attrIndex];
+      let attributeValue = instance?.[inputName];
+      try {
+        // Several directives can share an alias, so resolve the current instance's own input.
+        for (const input of coreReflectDirectiveResolve(instance?.constructor).inputs!) {
+          const parsed = funcDirectiveIoParse(input);
+          if (inputName === (parsed.alias || parsed.name)) {
+            const inputValue = instance![parsed.name];
+            attributeValue = parsed.isSignal && typeof inputValue === 'function' ? inputValue() : inputValue;
+            break;
+          }
+        }
+      } catch {
+        // Keep direct property lookup when declaration metadata is unavailable.
+      }
 
       if (value === attributeValue) {
         return true;
