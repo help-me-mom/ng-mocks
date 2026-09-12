@@ -45,8 +45,14 @@ export default (
         continue;
       }
 
-      const useFactory = provider === def ? def.ɵfac : provider.useFactory;
-      const dependencies = provider === def ? [] : (provider.deps ?? []);
+      // A retained class recipe's injectable factory resolves its own dependencies.
+      const useFactory = provider === def ? def.ɵfac : provider.useClass ? def.ɵprov.factory : provider.useFactory;
+      // Alias and value recipes are resolved directly by Angular.
+      if (!useFactory) {
+        continue;
+      }
+
+      const dependencies = provider === def || provider.useClass ? [] : (provider.deps ?? []);
       providers[providerIndex] = {
         deps: [Injector, NG_MOCKS_TOUCHES, ...dependencies],
         provide: def,
