@@ -1,3 +1,7 @@
+import { ChangeDetectionStrategy } from '@angular/core';
+
+import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
+
 import funcInheritDefinition from './func.inherit-definition';
 
 describe('funcInheritDefinition', () => {
@@ -33,6 +37,7 @@ describe('funcInheritDefinition', () => {
         },
       ],
       hostVars: 1,
+      onPush: true,
       resolveHostDirectives: jasmine.createSpy(
         'resolveHostDirectives',
       ),
@@ -43,6 +48,7 @@ describe('funcInheritDefinition', () => {
         retained: 'value',
       },
       hostVars: 2,
+      onPush: false,
     };
     const child: any = { definition };
     Object.defineProperty(child, 'ɵcmp', {
@@ -62,6 +68,7 @@ describe('funcInheritDefinition', () => {
       descriptor,
     );
     expect(child.ɵcmp).toBe(definition);
+    expect(definition.onPush).toBe(true);
     expect(definition.hostBindings).toBe(original.hostBindings);
     expect(definition.hostVars).toBe(1);
     expect(definition.hostAttrs).toEqual(['role', 'button']);
@@ -90,6 +97,7 @@ describe('funcInheritDefinition', () => {
     );
     expect(original.data.animation).toEqual(['original']);
     expect(original.hostVars).toBe(1);
+    expect(original.onPush).toBe(true);
   });
 
   it('copies inherited side effects without mutating original metadata or other clone fields', () => {
@@ -231,10 +239,18 @@ describe('funcInheritDefinition', () => {
         { directive: 'original', inputs: {}, outputs: {} },
       ],
       hostVars: 1,
+      onPush: true,
     };
-    const template: any = { ɵcmp: firstOriginal };
+    // Angular 22 annotations can report Default for a compiled OnPush component.
+    const annotations = [
+      { changeDetection: ChangeDetectionStrategy.Default },
+    ];
+    const template: any = {
+      __annotations__: annotations,
+      ɵcmp: firstOriginal,
+    };
     const child: any = {
-      definition: { data: { retained: 'first' } },
+      definition: { data: { retained: 'first' }, onPush: false },
     };
     Object.defineProperty(child, 'ɵcmp', {
       configurable: true,
@@ -248,6 +264,7 @@ describe('funcInheritDefinition', () => {
     funcInheritDefinition(child, template);
     const firstDefinition = child.ɵcmp;
     expect(firstDefinition.data.animation).toEqual(['original']);
+    expect(firstDefinition.onPush).toBe(true);
 
     // A metadata override can remove inherited effects instead of adding them.
     template.ɵcmp = {
@@ -256,6 +273,7 @@ describe('funcInheritDefinition', () => {
       hostBindings: null,
       hostDirectives: null,
       hostVars: 0,
+      onPush: false,
       resolveHostDirectives: null,
     };
 
@@ -268,22 +286,46 @@ describe('funcInheritDefinition', () => {
     expect(firstDefinition.resolveHostDirectives).toBeNull();
     expect(firstDefinition.data.animation).toBeUndefined();
     expect(firstDefinition.data.retained).toBe('first');
+    expect(firstDefinition.onPush).toBe(false);
     expect(firstOriginal.hostAttrs).toEqual(['role', 'button']);
     expect(firstOriginal.data.animation).toEqual(['original']);
+    expect(firstOriginal.onPush).toBe(true);
 
     const replacement = {
       data: { animation: ['stale'], retained: 'replacement' },
+      onPush: true,
     };
     child.ɵcmp = replacement;
 
     expect(child.ɵcmp).toBe(replacement);
     expect(child.definition).toBe(replacement);
+    expect(replacement.onPush).toBe(false);
+    expect(template.ɵcmp.onPush).toBe(false);
+    expect(template.__annotations__).toBe(annotations);
+    expect(annotations).toEqual([
+      { changeDetection: ChangeDetectionStrategy.Default },
+    ]);
     expect(child.ɵcmp.hostBindings).toBeNull();
     expect(child.ɵcmp.hostDirectives).toBeNull();
     expect(child.ɵcmp.data).toEqual({
       animation: undefined,
       retained: 'replacement',
     });
+  });
+
+  it('preserves the clone strategy when the original has no compiled strategy', () => {
+    const original = { hostVars: 0 };
+    const definition = { onPush: false };
+    const child: any = {};
+    helperDefinePropertyDescriptor(child, 'ɵcmp', {
+      get: () => definition,
+    });
+
+    funcInheritDefinition(child, { ɵcmp: original });
+
+    expect(child.ɵcmp).toBe(definition);
+    expect(definition.onPush).toBe(false);
+    expect(original).toEqual({ hostVars: 0 });
   });
 
   it('waits for directive definitions and leaves component-only data absent', () => {
@@ -319,5 +361,8 @@ describe('funcInheritDefinition', () => {
     expect(child.ɵdir.data).toBeUndefined();
     expect(child.ɵdir.findHostDirectiveDefs).toBeUndefined();
     expect(child.ɵdir.resolveHostDirectives).toBeUndefined();
+    expect(
+      Object.getOwnPropertyDescriptor(child.ɵdir, 'onPush'),
+    ).toBeUndefined();
   });
 });
