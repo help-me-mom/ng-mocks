@@ -311,6 +311,10 @@
 
 - Prefer existing library helpers when their semantics fit the task, including in tests; for example, use
   `coreDefineProperty` for compatible property definitions.
+- Make a best effort to avoid `any`, including in tests. Prefer inference, concrete types, or narrower object
+  shapes; consider `unknown` with narrowing or `never` when their semantics fit and the target TypeScript version
+  supports them. Try a different declaration or approach before accepting `any`, and do not use casts merely to
+  hide a type error.
 - Follow `Spec and Documentation Examples` before changing specs or docs. If current guidance and the selected
   examples still leave a pattern unclear, inspect analogous local history or recent merged non-bot PRs. Prefer human-authored examples over generated dependency-update text.
 - Keep implementation narrow and follow `Test Style` for issue reproducers, compatibility gates, layered coverage,

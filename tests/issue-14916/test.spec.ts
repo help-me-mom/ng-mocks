@@ -43,7 +43,8 @@ describe('issue-14916', () => {
     ngMocks.autoSpy(
       typeof jest === 'undefined'
         ? 'jasmine'
-        : typeof (window as any).vi === 'undefined'
+        : typeof (window as Window & { vi?: object }).vi ===
+            'undefined'
           ? 'jest'
           : 'vitest',
     ),
