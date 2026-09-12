@@ -47,20 +47,24 @@ const renderDeclaration = (fixture: any, template: any, params: any): void => {
 };
 
 const renderInjection = (fixture: any, template: any, params: any, valueKeys: string[]): void => {
-  let instance: any;
-  try {
-    instance = getInjection(template);
-  } catch (error) {
-    if (isNgDef(template, 'p')) {
-      throw new Error(
-        [
-          `Cannot render ${funcGetName(template)}.`,
-          'Did you forget to set $implicit param, or add the pipe to providers?',
-          'https://ng-mocks.sudo.eu/guides/pipe',
-        ].join(' '),
-      );
-    }
-    throw error;
+  const testBed = getTestBed();
+  const notFoundValue = {};
+  const instance = isNgDef(template, 'p')
+    ? testBed.inject
+      ? testBed.inject(template, notFoundValue)
+      : /* istanbul ignore next */ (testBed as typeof testBed & { get: typeof testBed.inject }).get(
+          template,
+          notFoundValue,
+        )
+    : getInjection(template);
+  if (instance === notFoundValue) {
+    throw new Error(
+      [
+        `Cannot render ${funcGetName(template)}.`,
+        'Did you forget to set $implicit param, or add the pipe to providers?',
+        'https://ng-mocks.sudo.eu/guides/pipe',
+      ].join(' '),
+    );
   }
   if (params) {
     ngMocks.stub(instance, params);
