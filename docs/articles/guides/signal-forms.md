@@ -15,6 +15,8 @@ custom controls that implement `ControlValueAccessor` or `FormValueControl`.
 
 - [`MockBuilder`](/api/MockBuilder.md)
 - [`MockRender`](/api/MockRender.md)
+- [`ngMocks.find`](/api/ngMocks/find.md)
+- [`ngMocks.findAll`](/api/ngMocks/findAll.md)
 - [`ngMocks.change`](/api/ngMocks/change.md)
 - [`ngMocks.touch`](/api/ngMocks/touch.md)
 - [`MockInstance`](/api/MockInstance.md)
@@ -37,6 +39,140 @@ beforeEach(() =>
 
 Keeping this token affects root providers throughout the test. Use explicit `.mock(MyService)`
 calls for application services you want to replace.
+
+## Select fields after migrating from classic forms
+
+When replacing `formControlName` with `[formField]`, update selectors that depended on the
+old attribute. The new binding does not recreate it:
+
+```html
+<!-- Before -->
+<input formControlName="firstName" />
+
+<!-- After -->
+<input data-testid="first-name" [formField]="f.firstName" />
+```
+
+```ts
+// Before
+ngMocks.find('[formControlName="firstName"]');
+
+// After
+ngMocks.find('[data-testid="first-name"]');
+```
+
+For multiple native fields, give each one an explicit attribute such as `data-testid`.
+The real `FormField` generates native `name` attributes, but tests do not need to depend
+on their generated formatting. With a mocked `FormField`, those generated attributes are
+absent; explicit attributes from your template remain available.
+
+Finding an element and exercising its form binding are separate concerns. Keep `FormField`
+and its root services when using `ngMocks.change` to update the form. An explicit selector
+still works with a mocked binding, but it does not restore form behavior.
+
+This example selects the first name and verifies that the last name stays unchanged:
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/selectors.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Aselectors)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/selectors.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Aselectors)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/selectors.spec.ts"
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+import { MockBuilder, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
+
+@Component({
+  selector: 'target-signal-forms-selectors',
+  imports: [FormField],
+  template: `
+    <input data-testid="first-name" [formField]="f.firstName" />
+    <input data-testid="last-name" [formField]="f.lastName" />
+  `,
+})
+class TargetComponent {
+  public readonly model = signal({ firstName: 'Ada', lastName: 'Lovelace' });
+  public readonly f = form(this.model);
+}
+
+describe('TestSignalForms:selectors', () => {
+  beforeEach(() =>
+    MockBuilder(TargetComponent)
+      .keep(FormField)
+      .keep(NG_MOCKS_ROOT_PROVIDERS),
+  );
+
+  it('changes only the selected field', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const first = ngMocks.find<HTMLInputElement>('[data-testid="first-name"]');
+    const last = ngMocks.find<HTMLInputElement>('[data-testid="last-name"]');
+
+    expect(ngMocks.findAll('[formControlName]')).toEqual([]);
+    expect(first.nativeElement.value).toBe('Ada');
+    expect(last.nativeElement.value).toBe('Lovelace');
+
+    ngMocks.change(first, 'Grace');
+    fixture.detectChanges();
+
+    expect(component.model()).toEqual({ firstName: 'Grace', lastName: 'Lovelace' });
+    expect(first.nativeElement.value).toBe('Grace');
+    expect(last.nativeElement.value).toBe('Lovelace');
+    expect(component.f.firstName().dirty()).toBe(true);
+    expect(component.f.lastName().dirty()).toBe(false);
+    expect(component.f.lastName().touched()).toBe(false);
+  });
+});
+```
+
+### Select custom control hosts
+
+A custom `FormValueControl` can declare an optional `name` input. `FormField` writes the
+field name into that input, but does not automatically add a DOM `name` attribute to the
+component host. A selector such as `signal-text-control[name]` therefore finds nothing
+unless the component or template explicitly adds that attribute.
+
+For example, this control receives its name without reflecting it to the DOM:
+
+```ts
+import { Component, input, model } from '@angular/core';
+import { FormValueControl } from '@angular/forms/signals';
+
+@Component({
+  selector: 'signal-text-control',
+  template: '{{ value() }}',
+})
+class TextControl implements FormValueControl<string> {
+  public readonly value = model('');
+  public readonly name = input('');
+}
+```
+
+Use `ngMocks.find(TextControl)` when there is one instance, or `ngMocks.findAll(TextControl)`
+to find all instances. Give repeated controls explicit attributes to select a particular field:
+
+```html
+<signal-text-control data-testid="first-name" [formField]="f.firstName" />
+<signal-text-control data-testid="last-name" [formField]="f.lastName" />
+```
+
+```ts
+const first = ngMocks.find('[data-testid="first-name"]');
+const control = ngMocks.get(first, TextControl);
+
+expect(control.name()).toBe(component.f.firstName().name());
+expect(ngMocks.findAll('signal-text-control[name]')).toEqual([]);
+
+ngMocks.change(first, 'Grace');
+fixture.detectChanges();
+
+expect(component.model()).toEqual({ firstName: 'Grace', lastName: 'Lovelace' });
+```
+
+These selectors work for real and mocked child controls. Keep the parent component and
+`FormField` real in either case. The complete example below covers both setups and verifies
+that the sibling control keeps its value and remains pristine and untouched.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/selectors-model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Aselectors-model)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/selectors-model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Aselectors-model)
 
 ## Test validation and rendered feedback
 
@@ -482,6 +618,8 @@ describe('TestSignalForms:model', () => {
 
 ## Complete example specs
 
+- [Native field selectors with real and mocked form bindings](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/selectors.spec.ts)
+- [Custom control selectors with real and mocked children](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/selectors-model.spec.ts)
 - [Native fields, validation, and model updates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts)
 - [Field trees passed through custom templates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts)
 - [Signal form with a mocked CVA child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts)
