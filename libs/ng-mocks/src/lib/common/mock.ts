@@ -234,6 +234,9 @@ export class Mock {
       coreDefineProperty(this, `__ngMocksVcr_${key}`, undefined);
     }
     for (const key of this.__ngMocksConfig.hostBindings || /* istanbul ignore next */ []) {
+      if (this.__ngMocksConfig.outputs?.some(output => funcDirectiveIoParse(output).name === key)) {
+        continue;
+      }
       helperMockService.mock(this, key, 'get');
       helperMockService.mock(this, key, 'set');
     }
