@@ -231,6 +231,9 @@ export function MockInstance<T>(declaration: AnyDeclaration<T>, ...args: any[]) 
 
   if (args.length > 0) {
     const { key, value, accessor } = parseMockInstanceArgs(args);
+    if (key === undefined && value === undefined) {
+      return;
+    }
 
     return mockInstanceConfig(declaration, key, value, accessor);
   }
