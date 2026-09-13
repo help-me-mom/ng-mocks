@@ -40,7 +40,9 @@ const processOwnUseExisting = (sourceType: AnyType<any>, mockType: AnyType<any>,
   }
 
   if (provider !== provide && funcExtractForwardRef(provider.useExisting) === sourceType) {
-    return toExistingProvider(provide, mockType);
+    const mockProvider = toExistingProvider(provide, mockType);
+
+    return provider.multi ? { ...mockProvider, multi: true } : mockProvider;
   }
 
   return undefined;
