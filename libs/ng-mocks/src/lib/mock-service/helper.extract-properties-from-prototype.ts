@@ -1,8 +1,10 @@
+import checkIsObjectPrototype from './check.is-object-prototype';
+
 export default <T>(service: T): Array<string | symbol> => {
   const result: Array<string | symbol> = [];
   const properties = new Set<string | symbol>();
   let prototype = service;
-  while (prototype && Object.getPrototypeOf(prototype) !== null) {
+  while (prototype && !checkIsObjectPrototype(prototype)) {
     for (const prop of [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)]) {
       if (prop === 'constructor') {
         continue;

@@ -9,6 +9,7 @@ import {
   NG_MOCKS_GUARDS,
   NG_MOCKS_INTERCEPTORS,
 } from '../common/core.tokens';
+import funcGetName from '../common/func.get-name';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -930,5 +931,278 @@ describe('resolveProvider', () => {
     expect(actual).not.toEqual(
       jasmine.arrayContaining([false, true]),
     );
+  });
+});
+
+// @see https://github.com/help-me-mom/ng-mocks/issues/15003
+describe('helperMockService:prototype extraction', () => {
+  it('discovers terminal user prototypes and copies their complete descriptors', () => {
+    const key = Symbol('read');
+    const calls: string[] = [];
+    const source = {
+      read: () => {
+        calls.push('read');
+        return 'real';
+      },
+      [key]: () => {
+        calls.push('symbol');
+        return 'real symbol';
+      },
+      get value(): string {
+        calls.push('get');
+        return 'real';
+      },
+      set value(value: string) {
+        calls.push(value);
+      },
+    };
+    Object.setPrototypeOf(source, null);
+    const child: object = Object.create(source);
+    const method = Object.getOwnPropertyDescriptor(source, 'read');
+    const symbol = Object.getOwnPropertyDescriptor(source, key);
+    const accessor = Object.getOwnPropertyDescriptor(source, 'value');
+    const properties: Array<string | symbol> = [];
+
+    // A null parent ends the chain after this user-owned prototype is inspected.
+    expect(
+      helperMockService.extractMethodsFromPrototype(
+        child,
+        properties,
+      ),
+    ).toEqual(['read', key]);
+    expect(properties).toEqual(['value']);
+    expect(
+      helperMockService.extractPropertiesFromPrototype(child),
+    ).toEqual(['value']);
+
+    const target = {};
+    ngMocks.stub(target, source);
+    expect(Object.getOwnPropertyDescriptor(target, 'read')).toEqual(
+      method,
+    );
+    expect(Object.getOwnPropertyDescriptor(target, key)).toEqual(
+      symbol,
+    );
+    expect(Object.getOwnPropertyDescriptor(target, 'value')).toEqual(
+      accessor,
+    );
+    expect(Object.getPrototypeOf(target) === Object.prototype).toBe(
+      true,
+    );
+    expect(Object.getPrototypeOf(source)).toBeNull();
+    expect(Object.getOwnPropertyDescriptor(source, 'read')).toEqual(
+      method,
+    );
+    expect(Object.getOwnPropertyDescriptor(source, key)).toEqual(
+      symbol,
+    );
+    expect(Object.getOwnPropertyDescriptor(source, 'value')).toEqual(
+      accessor,
+    );
+    expect(calls).toEqual([]);
+  });
+
+  it('mocks terminal prototypes with unrelated constructor data', () => {
+    const calls: string[] = [];
+    const arrowConstructor = () => calls.push('constructor');
+    expect(
+      Object.getOwnPropertyDescriptor(arrowConstructor, 'prototype'),
+    ).toBeUndefined();
+    for (const constructor of [Object, arrowConstructor]) {
+      const source = {
+        constructor,
+        read: () => {
+          calls.push('read');
+          return 'real';
+        },
+        get value(): string {
+          calls.push('get');
+          return 'real';
+        },
+      };
+      Object.setPrototypeOf(source, null);
+      const child: object = Object.create(source);
+      const constructorDescriptor = Object.getOwnPropertyDescriptor(
+        source,
+        'constructor',
+      );
+      const method = Object.getOwnPropertyDescriptor(source, 'read');
+      const accessor = Object.getOwnPropertyDescriptor(
+        source,
+        'value',
+      );
+
+      const mock = helperMockService.createMockFromPrototype(child);
+
+      expect(Object.prototype.hasOwnProperty.call(mock, 'read')).toBe(
+        true,
+      );
+      expect(mock.read).not.toBe(source.read);
+      expect(mock.read()).toBeUndefined();
+      expect(mock.value).toBeUndefined();
+      expect(
+        Object.getOwnPropertyDescriptor(mock, 'value')?.get,
+      ).toBeDefined();
+      expect(
+        Object.getOwnPropertyDescriptor(mock, 'value')?.get,
+      ).not.toBe(accessor?.get);
+      expect(
+        helperMockService.extractPropertyDescriptor(child, 'read'),
+      ).toEqual(method);
+      expect(Object.getPrototypeOf(mock) === child).toBe(true);
+      expect(Object.getPrototypeOf(child) === source).toBe(true);
+      expect(Object.getPrototypeOf(source)).toBeNull();
+      expect(
+        Object.getOwnPropertyDescriptor(source, 'constructor'),
+      ).toEqual(constructorDescriptor);
+      expect(Object.getOwnPropertyDescriptor(source, 'read')).toEqual(
+        method,
+      );
+      expect(
+        Object.getOwnPropertyDescriptor(source, 'value'),
+      ).toEqual(accessor);
+    }
+    expect(calls).toEqual([]);
+  });
+
+  it('mocks a terminal user class named Object without calling its toString', () => {
+    const calls: string[] = [];
+    const nativeSource = Function.prototype.toString.call(Object);
+    const Target = class Object {
+      public static toString(): string {
+        calls.push('toString');
+        return nativeSource;
+      }
+
+      public constructor() {
+        calls.push('constructor');
+      }
+
+      public read(): string {
+        calls.push('read');
+        return 'real';
+      }
+
+      public get value(): string {
+        calls.push('get');
+        return 'real';
+      }
+    };
+    expect(Target.name).toBe('Object');
+    Object.setPrototypeOf(Target.prototype, null);
+    const child: object = Object.create(Target.prototype);
+    const constructorDescriptor = Object.getOwnPropertyDescriptor(
+      Target.prototype,
+      'constructor',
+    );
+    const method = Object.getOwnPropertyDescriptor(
+      Target.prototype,
+      'read',
+    );
+    const accessor = Object.getOwnPropertyDescriptor(
+      Target.prototype,
+      'value',
+    );
+    const toString = Object.getOwnPropertyDescriptor(
+      Target,
+      'toString',
+    );
+
+    const mock = helperMockService.createMockFromPrototype(child);
+
+    expect(Object.prototype.hasOwnProperty.call(mock, 'read')).toBe(
+      true,
+    );
+    expect(mock.read).not.toBe(Target.prototype.read);
+    expect(mock.read()).toBeUndefined();
+    expect(mock.value).toBeUndefined();
+    expect(
+      Object.getOwnPropertyDescriptor(mock, 'value')?.get,
+    ).toBeDefined();
+    expect(
+      Object.getOwnPropertyDescriptor(mock, 'value')?.get,
+    ).not.toBe(accessor?.get);
+    expect(
+      helperMockService.extractPropertyDescriptor(child, 'read'),
+    ).toEqual(method);
+    expect(Object.getPrototypeOf(mock) === child).toBe(true);
+    expect(Object.getPrototypeOf(child) === Target.prototype).toBe(
+      true,
+    );
+    expect(Object.getPrototypeOf(Target.prototype)).toBeNull();
+    expect(
+      Object.getOwnPropertyDescriptor(
+        Target.prototype,
+        'constructor',
+      ),
+    ).toEqual(constructorDescriptor);
+    expect(
+      Object.getOwnPropertyDescriptor(Target.prototype, 'read'),
+    ).toEqual(method);
+    expect(
+      Object.getOwnPropertyDescriptor(Target.prototype, 'value'),
+    ).toEqual(accessor);
+    expect(
+      Object.getOwnPropertyDescriptor(Target, 'toString'),
+    ).toEqual(toString);
+    expect(calls).toEqual([]);
+  });
+
+  it('keeps Object.prototype built-ins out of member discovery', () => {
+    const properties: Array<string | symbol> = [];
+
+    expect(
+      helperMockService.extractMethodsFromPrototype({}, properties),
+    ).toEqual([]);
+    expect(
+      helperMockService.extractMethodsFromPrototype(Object.prototype),
+    ).toEqual([]);
+    expect(
+      helperMockService.extractPropertiesFromPrototype({}),
+    ).toEqual([]);
+    expect(
+      helperMockService.extractPropertiesFromPrototype(
+        Object.prototype,
+      ),
+    ).toEqual([]);
+    expect(properties).toEqual([]);
+  });
+
+  it("keeps another realm's Object.prototype built-ins out of member discovery", () => {
+    const frame = document.createElement('iframe');
+    document.body.append(frame);
+    try {
+      let prototype: object = Object.getPrototypeOf(
+        frame.contentDocument,
+      );
+      while (Object.getPrototypeOf(prototype) !== null) {
+        prototype = Object.getPrototypeOf(prototype);
+      }
+      const properties: Array<string | symbol> = [];
+
+      expect(prototype === Object.prototype).toBe(false);
+      expect(
+        Object.getOwnPropertyDescriptor(prototype, 'toString'),
+      ).toBeDefined();
+      expect(
+        helperMockService.extractMethodsFromPrototype(
+          prototype,
+          properties,
+        ),
+      ).toEqual([]);
+      expect(
+        helperMockService.extractPropertiesFromPrototype(prototype),
+      ).toEqual([]);
+      expect(
+        helperMockService.extractPropertyDescriptor(
+          prototype,
+          'toString',
+        ),
+      ).toBeUndefined();
+      expect(properties).toEqual([]);
+      expect(funcGetName(prototype)).toEqual('Object');
+    } finally {
+      frame.remove();
+    }
   });
 });
