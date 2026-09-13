@@ -24,7 +24,7 @@ export const guessClass = (name: string, proto: string, value: any): boolean => 
   }
 
   // let's consider an existing 'prototype' as a class
-  if (Object.keys(value.prototype).length > 0) {
+  if (Object.keys(value.prototype).length > 0 || Object.getOwnPropertySymbols(value.prototype).length > 0) {
     return true;
   }
 

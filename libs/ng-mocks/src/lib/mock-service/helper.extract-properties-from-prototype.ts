@@ -1,10 +1,10 @@
-export default <T>(service: T): string[] => {
-  const result: string[] = [];
-  const properties = new Set<string>();
+export default <T>(service: T): Array<string | symbol> => {
+  const result: Array<string | symbol> = [];
+  const properties = new Set<string | symbol>();
   let prototype = service;
   while (prototype && Object.getPrototypeOf(prototype) !== null) {
-    for (const prop of Object.getOwnPropertyNames(prototype)) {
-      if ((prop as any) === 'constructor') {
+    for (const prop of [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)]) {
+      if (prop === 'constructor') {
         continue;
       }
 

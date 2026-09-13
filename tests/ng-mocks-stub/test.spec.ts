@@ -117,4 +117,64 @@ describe('ng-mocks-stub', () => {
       descriptor,
     );
   });
+
+  it('preserves replacement function metadata over source symbol and string properties', () => {
+    const member = Symbol('metadata');
+    const calls: string[] = [];
+    const source = Object.assign(
+      () => {
+        calls.push('source');
+
+        return 'source';
+      },
+      {
+        [member]: () => calls.push('source metadata'),
+        label: 'source',
+        extra: 'source extra',
+      },
+    );
+    const replacement = Object.assign(
+      () => {
+        calls.push('replacement');
+
+        return 'replacement';
+      },
+      {
+        [member]: () => calls.push('replacement metadata'),
+        label: 'replacement',
+      },
+    );
+    const symbolDescriptor = Object.getOwnPropertyDescriptor(
+      replacement,
+      member,
+    );
+    const stringDescriptor = Object.getOwnPropertyDescriptor(
+      replacement,
+      'label',
+    );
+    const sourceDescriptor = Object.getOwnPropertyDescriptor(
+      source,
+      member,
+    );
+
+    const actual = ngMocks.stub(source, replacement);
+
+    expect(actual).not.toBe(replacement);
+    expect(Object.getOwnPropertyDescriptor(actual, member)).toEqual(
+      symbolDescriptor,
+    );
+    expect(Object.getOwnPropertyDescriptor(actual, 'label')).toEqual(
+      stringDescriptor,
+    );
+    expect(actual.extra).toBe('source extra');
+    expect(calls).toEqual([]);
+    expect(actual()).toBe('replacement');
+    expect(calls).toEqual(['replacement']);
+    expect(Object.getOwnPropertyDescriptor(source, member)).toEqual(
+      sourceDescriptor,
+    );
+    expect(
+      Object.getOwnPropertyDescriptor(replacement, member),
+    ).toEqual(symbolDescriptor);
+  });
 });

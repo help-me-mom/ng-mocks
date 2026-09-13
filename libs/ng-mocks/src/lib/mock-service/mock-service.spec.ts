@@ -645,6 +645,148 @@ describe('MockService', () => {
     expect(def.set).toBeDefined();
   });
 
+  it('labels symbol mocks without merging distinct keys or changing string labels', () => {
+    const first = Symbol('member');
+    const second = Symbol('member');
+    const instance: Record<string | symbol, unknown> = {};
+    const factory = spyOn(
+      helperMockService,
+      'mockFunction',
+    ).and.callThrough();
+
+    const firstMock = helperMockService.mock<jasmine.Spy>(
+      instance,
+      first,
+      'target',
+    );
+    const secondMock = helperMockService.mock<jasmine.Spy>(
+      instance,
+      second,
+      'target',
+    );
+    const stringMock = helperMockService.mock<jasmine.Spy>(
+      instance,
+      'method',
+      'target',
+    );
+
+    expect(factory.calls.allArgs()).toEqual([
+      ['target.Symbol(member)', false],
+      ['target.Symbol(member)', false],
+      ['target.method', false],
+    ]);
+    expect(instance[first]).toBe(firstMock);
+    expect(instance[second]).toBe(secondMock);
+    expect(firstMock).not.toBe(secondMock);
+    expect(instance.method).toBe(stringMock);
+    expect(firstMock).not.toHaveBeenCalled();
+    expect(secondMock).not.toHaveBeenCalled();
+    expect(stringMock).not.toHaveBeenCalled();
+    expect(helperMockService.mock(instance, first, 'target')).toBe(
+      firstMock,
+    );
+    expect(factory).toHaveBeenCalledTimes(3);
+
+    expect(firstMock('first')).toBeUndefined();
+    expect(secondMock('second')).toBeUndefined();
+    expect(stringMock('string')).toBeUndefined();
+    expect(firstMock.calls.allArgs()).toEqual([['first']]);
+    expect(secondMock.calls.allArgs()).toEqual([['second']]);
+    expect(stringMock.calls.allArgs()).toEqual([['string']]);
+  });
+
+  it('preserves symbol and string accessor counterparts without invoking them', () => {
+    const member = Symbol('value');
+    const originalGetter = jasmine
+      .createSpy('original getter')
+      .and.throwError('real getter');
+    const originalSetter = jasmine
+      .createSpy('original setter')
+      .and.throwError('real setter');
+    const getterOnly = {
+      get [member](): string {
+        return originalGetter();
+      },
+      get value(): string {
+        return originalGetter();
+      },
+    };
+    const setterOnly = {
+      set [member](value: string) {
+        originalSetter(value);
+      },
+      set value(value: string) {
+        originalSetter(value);
+      },
+    };
+    const symbolGetter = Object.getOwnPropertyDescriptor(
+      getterOnly,
+      member,
+    );
+    const symbolSetter = Object.getOwnPropertyDescriptor(
+      setterOnly,
+      member,
+    );
+    const stringGetter = Object.getOwnPropertyDescriptor(
+      getterOnly,
+      'value',
+    );
+    const stringSetter = Object.getOwnPropertyDescriptor(
+      setterOnly,
+      'value',
+    );
+    const factory = spyOn(
+      helperMockService,
+      'mockFunction',
+    ).and.callThrough();
+
+    const mockSymbolSetter = helperMockService.mock<
+      (value: string) => void
+    >(getterOnly, member, 'set', 'target');
+    const mockSymbolGetter = helperMockService.mock<
+      () => string | undefined
+    >(setterOnly, member, 'get', 'target');
+    const mockStringSetter = helperMockService.mock<
+      (value: string) => void
+    >(getterOnly, 'value', 'set', 'target');
+    const mockStringGetter = helperMockService.mock<
+      () => string | undefined
+    >(setterOnly, 'value', 'get', 'target');
+
+    expect(factory.calls.allArgs()).toEqual([
+      ['target.Symbol(value)set', true],
+      ['target.Symbol(value)get', true],
+      ['target.valueset', true],
+      ['target.valueget', true],
+    ]);
+    expect(
+      Object.getOwnPropertyDescriptor(getterOnly, member),
+    ).toEqual({ ...symbolGetter, set: mockSymbolSetter });
+    expect(
+      Object.getOwnPropertyDescriptor(setterOnly, member),
+    ).toEqual({ ...symbolSetter, get: mockSymbolGetter });
+    expect(
+      Object.getOwnPropertyDescriptor(getterOnly, 'value'),
+    ).toEqual({ ...stringGetter, set: mockStringSetter });
+    expect(
+      Object.getOwnPropertyDescriptor(setterOnly, 'value'),
+    ).toEqual({ ...stringSetter, get: mockStringGetter });
+    expect(helperMockService.mock(getterOnly, member, 'get')).toBe(
+      symbolGetter?.get,
+    );
+    expect(helperMockService.mock(setterOnly, member, 'set')).toBe(
+      symbolSetter?.set,
+    );
+    expect(factory).toHaveBeenCalledTimes(4);
+
+    mockSymbolSetter('symbol');
+    mockStringSetter('string');
+    expect(mockSymbolGetter()).toBeUndefined();
+    expect(mockStringGetter()).toBeUndefined();
+    expect(originalGetter).not.toHaveBeenCalled();
+    expect(originalSetter).not.toHaveBeenCalled();
+  });
+
   it('returns undefined on undefined in replaceWithMocks', () => {
     expect(helperMockService.replaceWithMocks(null)).toEqual(null);
   });

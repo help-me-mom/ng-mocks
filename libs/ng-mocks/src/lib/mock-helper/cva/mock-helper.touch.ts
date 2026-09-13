@@ -98,7 +98,7 @@ export default (sel: DebugElement | DebugNodeSelector, methodName?: string): voi
     }
   }
 
-  const methods = helperExtractMethodsFromPrototype(valueAccessor);
+  const methods = helperExtractMethodsFromPrototype(valueAccessor).filter(method => typeof method === 'string');
   throw new Error(
     [
       'Unsupported type of ControlValueAccessor,',

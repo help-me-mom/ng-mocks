@@ -14,8 +14,8 @@ const extraMethods: Record<string, undefined | string[]> = {
   Sanitizer: sanitizerMethods,
 };
 
-const getOwnPropertyNames = (prototype: any): string[] => {
-  const result: string[] = Object.getOwnPropertyNames(prototype);
+const getOwnKeys = (prototype: object): Array<string | symbol> => {
+  const result = [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)];
   for (const method of extraMethods[funcGetName(prototype)] ?? []) {
     result.push(method);
   }
@@ -24,15 +24,15 @@ const getOwnPropertyNames = (prototype: any): string[] => {
 };
 
 // Callers that need accessors too can collect both in the same prototype walk.
-export default <T>(service: T, properties?: string[]): string[] => {
-  const result: string[] = [];
-  const methods = new Set<string>();
+export default <T>(service: T, properties?: Array<string | symbol>): Array<string | symbol> => {
+  const result: Array<string | symbol> = [];
+  const methods = new Set<string | symbol>();
   const accessors = properties ? new Set(properties) : undefined;
 
   let prototype = service;
   while (prototype && Object.getPrototypeOf(prototype) !== null) {
-    for (const method of getOwnPropertyNames(prototype)) {
-      if ((method as any) === 'constructor') {
+    for (const method of getOwnKeys(prototype)) {
+      if (method === 'constructor') {
         continue;
       }
 
