@@ -373,6 +373,146 @@ describe('TestSignalForms:cva', () => {
 });
 ```
 
+## Keep a CVA child's validation rule
+
+In Angular 22, `FormField` also integrates synchronous validators provided through
+`NG_VALIDATORS` on a CVA control. Keep the child when the test needs its real `validate()`
+implementation. Keeping only `FormField` still leaves the standalone component's child
+imports mocked.
+
+This control rejects the value `invalid`. It provides both `NG_VALUE_ACCESSOR` and
+`NG_VALIDATORS`, and reads the current value from the control passed to `validate()`:
+
+```ts
+import { Component, forwardRef, signal } from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'validated-name-control',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CvaComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => CvaComponent),
+      multi: true,
+    },
+  ],
+  template: `
+    <input
+      [value]="value"
+      (input)="value = $any($event.target).value; onChange(value)"
+      (blur)="onTouched()"
+    />
+  `,
+})
+class CvaComponent implements ControlValueAccessor, Validator {
+  public value = '';
+  public onChange: (value: string) => void = () => undefined;
+  public onTouched: () => void = () => undefined;
+
+  public writeValue(value: string): void {
+    this.value = value;
+  }
+
+  public registerOnChange(callback: (value: string) => void): void {
+    this.onChange = callback;
+  }
+
+  public registerOnTouched(callback: () => void): void {
+    this.onTouched = callback;
+  }
+
+  public validate(control: AbstractControl): ValidationErrors | null {
+    return control.value === 'invalid' ? { custom: true } : null;
+  }
+}
+
+@Component({
+  selector: 'target-signal-forms-cva-validator',
+  imports: [FormField, CvaComponent],
+  template: '<validated-name-control [formField]="f.name" />',
+})
+class TargetComponent {
+  public readonly model = signal({ name: 'invalid' });
+  public readonly f = form(this.model);
+}
+```
+
+Angular converts each returned `ValidationErrors` key into a signal-form error's `kind`.
+Here `{ custom: true }` produces `kind: 'custom'`. Returning `null` clears that error.
+The test checks the field's errors and the form's aggregate validity, then edits the
+retained child's native input to exercise its real template and CVA callback.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/cva-validator.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva-validator)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/cva-validator.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva-validator)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva-validator.spec.ts"
+import { MockBuilder, MockInstance, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
+
+describe('TestSignalForms:cva-validator', () => {
+  beforeEach(() =>
+    MockBuilder(TargetComponent)
+      .keep(FormField)
+      .keep(NG_MOCKS_ROOT_PROVIDERS)
+      .keep(CvaComponent),
+  );
+
+  it('maps the real validator error to field state and clears it after an edit', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const child = ngMocks.find(CvaComponent);
+    const control = ngMocks.get(child, CvaComponent);
+    const input = ngMocks.find<HTMLInputElement>(child, 'input');
+
+    expect(ngMocks.get(child, NG_VALIDATORS)).toEqual([control]);
+    expect(control.value).toBe('invalid');
+    expect(input.nativeElement.value).toBe('invalid');
+    expect(component.f.name().errors().map(error => error.kind)).toEqual(['custom']);
+    expect(component.f.name().invalid()).toBe(true);
+    expect(component.f().invalid()).toBe(true);
+
+    ngMocks.change(input, 'Ada');
+    fixture.detectChanges();
+
+    expect(component.model()).toEqual({ name: 'Ada' });
+    expect(control.value).toBe('Ada');
+    expect(input.nativeElement.value).toBe('Ada');
+    expect(component.f.name().errors()).toEqual([]);
+    expect(component.f.name().valid()).toBe(true);
+    expect(component.f().valid()).toBe(true);
+  });
+});
+```
+
+Using `.mock(CvaComponent)` replaces the child's validation rule along with its other
+methods. The default mock does not reject `invalid`. To test the parent's response to a
+controlled error, use `MockInstance.scope()` in the suite and customize the mock's
+`validate` method **before** `MockRender`:
+
+```ts
+MockInstance(CvaComponent, 'validate', () => ({ controlled: true }));
+const fixture = MockRender(TargetComponent);
+const component = fixture.point.componentInstance;
+
+expect(component.f.name().errors().map(error => error.kind)).toEqual(['controlled']);
+expect(component.f().invalid()).toBe(true);
+```
+
+The complete spec includes both mock cases. Use the retained child to test its validation
+rule, and the controlled mock result when that rule is outside the parent's test scope.
+
 ## Test a form with a mocked signal control
 
 A `FormValueControl` uses a `value` model to exchange values with `FormField`.
@@ -485,4 +625,5 @@ describe('TestSignalForms:model', () => {
 - [Native fields, validation, and model updates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts)
 - [Field trees passed through custom templates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts)
 - [Signal form with a mocked CVA child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts)
+- [Signal form with a retained CVA validator](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva-validator.spec.ts)
 - [Signal form with a mocked model-based child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts)
