@@ -77,7 +77,8 @@ describe('issue-4641:test', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [TargetComponent],
-      imports: [MockModule(Dep1Module), Dep2Module, ReplaceModule],
+      // Ivy visits the shared module through its first importing consumer.
+      imports: [Dep2Module, MockModule(Dep1Module), ReplaceModule],
     })
       .overrideModule(ReplaceModule, {
         remove: {
@@ -98,8 +99,9 @@ describe('issue-4641:test', () => {
     // dep1 is mock and should have an empty template
     expect(ngMocks.formatText(fixture)).not.toContain('dep1:replace');
     // dep2 was kept, but it should rely on the replaced declaration.
-    // TODO it looks like Angular bug itself, it doesn't redefine nested imports
-    // expect(ngMocks.formatText(fixture)).toContain('dep2:replace-mock');
+    expect(ngMocks.formatText(fixture)).toContain(
+      'dep2:replace-mock',
+    );
     // replace was replaced, therefore, it should rely on the replaced declaration.
     expect(ngMocks.formatText(fixture)).toContain(
       'replace:replace-mock',

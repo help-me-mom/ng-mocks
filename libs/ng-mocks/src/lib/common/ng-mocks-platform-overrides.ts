@@ -11,6 +11,7 @@ import coreReflectMeta from './core.reflect.meta';
 import coreReflectProvidedIn from './core.reflect.provided-in';
 import { NG_MOCKS_TOUCHES } from './core.tokens';
 import { dependencyKeys } from './core.types';
+import funcExtractForwardRef from './func.extract-forward-ref';
 import funcGetType from './func.get-type';
 import { isNgDef } from './func.is-ng-def';
 import { isNgModuleDefWithProviders } from './func.is-ng-module-def-with-providers';
@@ -18,8 +19,9 @@ import ngMocksUniverse from './ng-mocks-universe';
 
 const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touches: Set<any>): void => {
   for (const key of coreConfig.dependencies) {
-    for (const item of moduleDef[key] ? flatten(moduleDef[key]) : []) {
-      const def = funcGetType(item);
+    for (const entry of moduleDef[key] ? flatten(moduleDef[key]) : []) {
+      const item = funcExtractForwardRef(entry);
+      const def = funcExtractForwardRef(funcGetType(item));
       if (isNgModuleDefWithProviders(item)) {
         generateTouches(item, touches);
       }
@@ -32,17 +34,13 @@ const generateTouches = (moduleDef: Partial<Record<dependencyKeys, any>>, touche
       }
 
       if (!Object.prototype.hasOwnProperty.call(def, '__ngMocksTouches')) {
-        const local = new Set<any>();
         const meta = coreReflectMeta(def);
+        // Direct dependencies stay complete when a cycle returns to a declaration still being traversed.
+        const local = meta ? flatten(coreConfig.dependencies.map(key => meta[key] || [])) : [];
         coreDefineProperty(def, '__ngMocksTouches', local, false);
-        if (meta) {
-          generateTouches(meta, local);
-        }
       }
 
-      for (const value of def.__ngMocksTouches) {
-        touches.add(value);
-      }
+      generateTouches({ providers: def.__ngMocksTouches }, touches);
     }
   }
 };
