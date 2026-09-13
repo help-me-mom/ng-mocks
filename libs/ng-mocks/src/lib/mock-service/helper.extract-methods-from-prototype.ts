@@ -26,16 +26,17 @@ const getOwnKeys = (prototype: object): Array<string | symbol> => {
 // Callers that need accessors too can collect both in the same prototype walk.
 export default <T>(service: T, properties?: Array<string | symbol>): Array<string | symbol> => {
   const result: Array<string | symbol> = [];
-  const methods = new Set<string | symbol>();
+  const seen = new Set<string | symbol>();
   const accessors = properties ? new Set(properties) : undefined;
 
   let prototype = service;
   while (prototype && Object.getPrototypeOf(prototype) !== null) {
     for (const method of getOwnKeys(prototype)) {
-      if (method === 'constructor') {
+      if (method === 'constructor' || seen.has(method)) {
         continue;
       }
 
+      seen.add(method);
       const descriptor = Object.getOwnPropertyDescriptor(prototype, method);
       const isGetterSetter = descriptor && (descriptor.get || descriptor.set);
       if (isGetterSetter) {
@@ -45,10 +46,6 @@ export default <T>(service: T, properties?: Array<string | symbol>): Array<strin
         }
         continue;
       }
-      if (methods.has(method)) {
-        continue;
-      }
-      methods.add(method);
       result.push(method);
     }
     prototype = Object.getPrototypeOf(prototype);
