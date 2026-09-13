@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { MockBuilder, MockService, ngMocks } from 'ng-mocks';
 
+// A computed key avoids older TypeScript rejecting constructor accessors on object literals.
+const constructorKey = 'constructor';
 const providerCalls: string[] = [];
 const providerRequest = (value: string): string => {
   providerCalls.push(value);
@@ -153,7 +155,7 @@ describe('issue-15003', () => {
   it('does not read an own constructor getter', () => {
     const calls: string[] = [];
     const shape = {
-      get constructor(): typeof Object {
+      get [constructorKey](): typeof Object {
         calls.push('constructor getter');
 
         return Object;
@@ -189,7 +191,7 @@ describe('issue-15003', () => {
   it('does not read a constructor getter on the actual prototype', () => {
     const calls: string[] = [];
     const prototype = {
-      get constructor(): typeof Object {
+      get [constructorKey](): typeof Object {
         calls.push('constructor getter');
 
         return Object;
