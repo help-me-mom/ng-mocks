@@ -52,10 +52,10 @@ const createDeclarations = (parent: Partial<Declaration>): Declaration => ({
   hostBindings: parent.hostBindings ? [...parent.hostBindings] : [],
   hostListeners: parent.hostListeners ? [...parent.hostListeners] : [],
   attributes: parent.attributes ? [...parent.attributes] : [],
-  inputs: parent.inputs ? [...parent.inputs] : [],
+  inputs: [],
   outputs: parent.outputs ? [...parent.outputs] : [],
   propDecorators: parent.propDecorators ? { ...parent.propDecorators } : {},
-  queries: parent.queries ? { ...parent.queries } : {},
+  queries: {},
   decorators: parent.decorators ? [...parent.decorators] : [],
 });
 
@@ -637,8 +637,41 @@ const parse = (def: any): any => {
   parseDecorators(def, declaration);
   parsePropDecorators(def, declaration);
   parsePropMetadata(def, declaration);
+  const ownInputs = (
+    [...declaration.inputs, ...(declaration.Component?.inputs ?? declaration.Directive?.inputs ?? [])] as DirectiveIo[]
+  ).map(funcDirectiveIoParse);
   parseNgDef(def, declaration);
   parseReflectComponentType(def, declaration);
+  // Collect child metadata before inheritance, preserving the original binding
+  // order so multiple aliases on one property keep their decorator precedence.
+  const inputs = declaration.inputs;
+  declaration.inputs = [...(parentDeclarations.inputs || [])];
+  for (const input of inputs.reverse()) {
+    const parsed = funcDirectiveIoParse(input);
+    let index = -1;
+    for (let position = 0; position < declaration.inputs.length; position += 1) {
+      const inherited = funcDirectiveIoParse(declaration.inputs[position]);
+      if (parsed.name === inherited.name && parsed.alias === inherited.alias) {
+        index = position;
+        break;
+      }
+    }
+    if (index === -1) {
+      declaration.inputs.unshift(input);
+    } else {
+      const inherited = funcDirectiveIoParse(declaration.inputs[index]);
+      declaration.inputs[index] = funcDirectiveIoBuild({
+        ...inherited,
+        ...parsed,
+        required: ownInputs.some(own => own.name === parsed.name && own.alias === parsed.alias)
+          ? parsed.required
+          : inherited.required,
+        isSignal: parsed.isSignal,
+        transform: parsed.transform,
+      });
+    }
+  }
+  declaration.queries = { ...parentDeclarations.queries, ...declaration.queries };
   buildDeclaration(declaration.Directive, declaration);
   buildDeclaration(declaration.Component, declaration);
   buildDeclaration(declaration.Pipe, declaration);
