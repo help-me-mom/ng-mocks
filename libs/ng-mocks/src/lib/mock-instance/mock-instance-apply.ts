@@ -7,12 +7,12 @@ export default (def: any): any[] => {
   const config = ngMocksUniverse.configInstance.get(def);
   if (config?.overloads) {
     for (const [name, stub, encapsulation] of config.overloads) {
-      if (name) {
+      if (name === undefined) {
+        callbacks.push(stub);
+      } else {
         callbacks.push((instance: any) => {
           mockHelperStubMember(instance, name, stub, encapsulation);
         });
-      } else {
-        callbacks.push(stub);
       }
     }
   }
