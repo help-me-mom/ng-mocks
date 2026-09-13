@@ -20,6 +20,7 @@ import { resetDeclarationFactories } from './ng-mocks-declaration-factories';
 import { rememberMockDeclarations, resetInjectedDeclarations } from './ng-mocks-injected-declarations';
 import { applyPlatformOverrides, defineTouches } from './ng-mocks-platform-overrides';
 import { resetRuntimeInject } from './ng-mocks-runtime-inject';
+import { installTemplateOverrides, resetTemplateOverrides } from './ng-mocks-template-overrides';
 import { installTestBedInjection } from './ng-mocks-test-bed-injection';
 import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
@@ -66,6 +67,7 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map
 const initTestBed = () => {
   installTestBedInjection(TestBed as never);
   installTestBedInjection(getTestBed() as never);
+  installTemplateOverrides(getTestBed());
   if (!(TestBed as any).ngMocksSelectors) {
     coreDefineProperty(TestBed, 'ngMocksSelectors', new Map());
   }
@@ -272,6 +274,7 @@ const resetTestingModule =
     } finally {
       // Older Ivy TestBed versions restore directive definitions but leave recompiled factories behind.
       resetDeclarationFactories();
+      resetTemplateOverrides();
     }
     if (errors.length > 0) {
       throw errors[0];

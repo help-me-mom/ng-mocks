@@ -3,15 +3,16 @@ import { TestBed } from '@angular/core/testing';
 
 import { extendClass } from '../common/core.helpers';
 import coreReflectDirectiveResolve from '../common/core.reflect.directive-resolve';
-import { AnyType, DirectiveIo } from '../common/core.types';
+import { AnyType, DirectiveIo, Type } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import funcDirectiveIoParse from '../common/func.directive-io-parse';
 import { isNgDef } from '../common/func.is-ng-def';
 import { isStandalone } from '../common/func.is-standalone';
+import { rememberTemplateOverrides } from '../common/ng-mocks-template-overrides';
 
 import funcInheritDefinition from './func.inherit-definition';
 
-const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): void => {
+const registerTemplateMiddleware = (template: Type<unknown>, meta: Directive): void => {
   const child = extendClass(template);
 
   const alias = {
@@ -56,6 +57,7 @@ const registerTemplateMiddleware = (template: AnyType<any>, meta: Directive): vo
     })(child);
   }
   funcInheritDefinition(child, template);
+  rememberTemplateOverrides(alias);
   TestBed.configureTestingModule({
     [isStandalone(child) ? 'imports' : 'declarations']: [child],
   });
