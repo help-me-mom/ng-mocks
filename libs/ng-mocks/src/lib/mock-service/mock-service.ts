@@ -32,7 +32,7 @@ const mockVariableMap: Array<[(def: any) => boolean, MockServiceHandler]> = [
   [
     checkIsInst,
     (cache, service, prefix, callback) => {
-      const value = helperMockService.createMockFromPrototype(service.constructor.prototype);
+      const value = helperMockService.createMockFromPrototype(Object.getPrototypeOf(service));
       cache.set(service, value);
       for (const property of [...Object.keys(service), ...Object.getOwnPropertySymbols(service)]) {
         const { get, set } = helperMockService.extractPropertyDescriptor(service, property) as PropertyDescriptor;

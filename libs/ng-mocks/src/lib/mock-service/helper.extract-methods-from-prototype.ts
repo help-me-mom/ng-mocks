@@ -1,5 +1,7 @@
 import funcGetName from '../common/func.get-name';
 
+import checkIsObjectPrototype from './check.is-object-prototype';
+
 const sanitizerMethods = [
   'sanitize',
   'bypassSecurityTrustHtml',
@@ -30,7 +32,7 @@ export default <T>(service: T, properties?: Array<string | symbol>): Array<strin
   const accessors = properties ? new Set(properties) : undefined;
 
   let prototype = service;
-  while (prototype && Object.getPrototypeOf(prototype) !== null) {
+  while (prototype && !checkIsObjectPrototype(prototype)) {
     for (const method of getOwnKeys(prototype)) {
       if (method === 'constructor' || seen.has(method)) {
         continue;
