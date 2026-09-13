@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { Injector, PLATFORM_ID } from '@angular/core';
 
 import coreDefineProperty from './core.define-property';
 
@@ -11,6 +11,10 @@ export default (register: (injector: Injector) => void, manager?: unknown): unkn
   const injector: Injector = Object.create(Injector.prototype);
   coreDefineProperty(injector, 'get', (provide: unknown) => {
     if (waitingForManager) {
+      // Angular 18 checks this discovery injector's platform before the render manager.
+      if (provide === PLATFORM_ID) {
+        return 'browser';
+      }
       if (provide !== manager) {
         throw new Error('Unexpected Angular after-render manager');
       }

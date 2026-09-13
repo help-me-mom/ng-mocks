@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { Injector, PLATFORM_ID } from '@angular/core';
 
 import coreExtractRuntimeProvider from './core.extract-runtime-provider';
 
@@ -61,6 +61,23 @@ describe('core.extract-runtime-provider', () => {
     ).toThrowError('Unexpected Angular after-render manager');
 
     expect(constructions).toBe(0);
+  });
+
+  it('handles the Angular 18 platform check before the known manager', () => {
+    let manager: RuntimeManager | undefined;
+    let registrations = 0;
+    const result = coreExtractRuntimeProvider(injector => {
+      expect(injector.get(PLATFORM_ID)).toBe('browser');
+      manager = injector.get(RuntimeManager);
+      manager.impl = injector.get(RuntimeProvider);
+      registrations += 1;
+    }, RuntimeManager);
+
+    expect(result).toBe(RuntimeProvider);
+    expect(manager).toEqual({ impl: null });
+    expect(manager instanceof RuntimeManager).toBe(false);
+    expect(constructions).toBe(0);
+    expect(registrations).toBe(0);
   });
 
   it('preserves an unrelated native error', () => {
