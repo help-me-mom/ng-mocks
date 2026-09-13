@@ -436,6 +436,173 @@ describe('crawl-by-attribute-value', () => {
       );
     });
 
+    it('resolves remapped host private names alongside ordinary owners in older input tuples', () => {
+      @Directive({ selector: '[remappedHost]', standalone: false })
+      class HostDirective {
+        @Input('backingField') public collision = 'collision';
+        @Input('original') public backingField: string | undefined =
+          'host';
+        public readonly exposed = 'decoy';
+      }
+
+      @Directive({ selector: '[ordinaryOwner]', standalone: false })
+      class OrdinaryDirective {
+        @Input('exposed') public ordinaryValue = 'ordinary';
+      }
+
+      // Angular 15 stores private-name pairs; Angular 17 adds input flags to each tuple.
+      for (const withFlags of [false, true]) {
+        const host = new HostDirective();
+        const ordinary = new OrdinaryDirective();
+        const instances = new Map<unknown, unknown>([
+          [HostDirective, host],
+          [OrdinaryDirective, ordinary],
+        ]);
+        const inputs = withFlags
+          ? [5, 'backingField', 0, 6, 'ordinaryValue', 0]
+          : [5, 'backingField', 6, 'ordinaryValue'];
+        const node = {
+          nativeNode: { nodeName: '#comment' },
+          providerTokens: [HostDirective, OrdinaryDirective],
+          injector: {
+            get: (token: unknown) => instances.get(token),
+            _lView: {
+              0: { nodeName: '#comment' },
+              1: {},
+              2: 0,
+              5: host,
+              6: ordinary,
+            },
+            _tNode: {
+              attrs: [3, 'exposed'],
+              directiveStart: 5,
+              inputs: { exposed: inputs },
+            },
+          },
+        } as unknown as MockedDebugNode;
+
+        expect(crawlByAttributeValue('exposed', 'host')(node)).toBe(
+          true,
+        );
+        expect(
+          crawlByAttributeValue('exposed', 'ordinary')(node),
+        ).toBe(true);
+        expect(crawlByAttributeValue('exposed', 'decoy')(node)).toBe(
+          false,
+        );
+        expect(
+          crawlByAttributeValue('exposed', 'collision')(node),
+        ).toBe(false);
+        expect(
+          crawlByAttributeValue('exposed', 'missing')(node),
+        ).toBe(false);
+        expect(
+          crawlByAttributeValue('exposed', undefined)(node),
+        ).toBe(false);
+        expect(
+          crawlByAttributeValue('missing', undefined)(node),
+        ).toBe(false);
+
+        host.backingField = 'updated';
+
+        expect(
+          crawlByAttributeValue('exposed', 'updated')(node),
+        ).toBe(true);
+        expect(crawlByAttributeValue('exposed', 'host')(node)).toBe(
+          false,
+        );
+        expect(
+          crawlByAttributeValue('exposed', 'ordinary')(node),
+        ).toBe(true);
+
+        host.backingField = undefined;
+
+        expect(
+          crawlByAttributeValue('exposed', undefined)(node),
+        ).toBe(true);
+        expect(
+          crawlByAttributeValue('exposed', 'updated')(node),
+        ).toBe(false);
+        expect(crawlByAttributeValue('exposed', 'decoy')(node)).toBe(
+          false,
+        );
+        expect(inputs).toEqual(
+          withFlags
+            ? [5, 'backingField', 0, 6, 'ordinaryValue', 0]
+            : [5, 'backingField', 6, 'ordinaryValue'],
+        );
+      }
+    });
+
+    it('unwraps remapped signal inputs identified by private names in older flagged tuples', () => {
+      @Directive({ selector: '[remappedSignal]', standalone: false })
+      class HostDirective {
+        // Compiler-equivalent metadata keeps this unit independent of signal input compilation.
+        @Input({ alias: 'original', isSignal: true } as never)
+        public readonly backingField = signal<string | undefined>(
+          'initial',
+        );
+        public readonly exposed = 'decoy';
+      }
+
+      const instance = new HostDirective();
+      const state = instance.backingField;
+      const node = {
+        nativeNode: { nodeName: '#comment' },
+        providerTokens: [HostDirective],
+        injector: {
+          get: (token: unknown) =>
+            token === HostDirective ? instance : undefined,
+          _lView: {
+            0: { nodeName: '#comment' },
+            1: {},
+            2: 0,
+            5: instance,
+          },
+          _tNode: {
+            attrs: [3, 'exposed'],
+            directiveStart: 5,
+            inputs: { exposed: [5, 'backingField', 1] },
+          },
+        },
+      } as unknown as MockedDebugNode;
+
+      expect(crawlByAttributeValue('exposed', 'initial')(node)).toBe(
+        true,
+      );
+      expect(crawlByAttributeValue('exposed', state)(node)).toBe(
+        false,
+      );
+      expect(crawlByAttributeValue('exposed', 'decoy')(node)).toBe(
+        false,
+      );
+      expect(crawlByAttributeValue('exposed', undefined)(node)).toBe(
+        false,
+      );
+
+      state.set('updated');
+
+      expect(instance.backingField).toBe(state);
+      expect(crawlByAttributeValue('exposed', 'updated')(node)).toBe(
+        true,
+      );
+      expect(crawlByAttributeValue('exposed', 'initial')(node)).toBe(
+        false,
+      );
+
+      state.set(undefined);
+
+      expect(crawlByAttributeValue('exposed', undefined)(node)).toBe(
+        true,
+      );
+      expect(crawlByAttributeValue('exposed', 'updated')(node)).toBe(
+        false,
+      );
+      expect(crawlByAttributeValue('exposed', 'decoy')(node)).toBe(
+        false,
+      );
+    });
+
     it('ignores empty nodes', () => {
       const node: any = {
         injector: {},

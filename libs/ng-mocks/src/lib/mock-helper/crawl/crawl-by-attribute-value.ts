@@ -44,23 +44,26 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
         };
       }
     )._tNode;
-    const hostInputs = hostDirectiveInputs?.[attr] || [];
-    for (const attrIndex of [...(inputs?.[attr] || []), ...hostInputs]) {
+    const nodeInputs = inputs?.[attr] || [];
+    const inputEntries = [...nodeInputs, ...(hostDirectiveInputs?.[attr] || [])];
+    for (let inputIndex = 0; inputIndex < inputEntries.length; inputIndex += 1) {
+      const attrIndex = inputEntries[inputIndex];
       // Input flags are numeric too, but fall below the node's directive indices.
       if (typeof attrIndex !== 'number' || attrIndex < directiveStart) {
         continue;
       }
 
-      // Host mappings pair each index with the directive's original public alias.
-      const hostIndex = hostInputs.indexOf(attrIndex);
-      const inputName = hostIndex === -1 ? attr : hostInputs[hostIndex + 1];
+      // Older node tuples store private names; separate host tuples store public aliases.
+      const mappedName = inputEntries[inputIndex + 1];
+      const isPrivateName = inputIndex < nodeInputs.length && typeof mappedName === 'string';
+      const inputName = typeof mappedName === 'string' ? mappedName : attr;
       const instance = (node.injector as { _lView?: Record<number, Record<string, unknown>> })._lView?.[attrIndex];
       let attributeValue = instance?.[inputName];
       try {
         // Several directives can share an alias, so resolve the current instance's own input.
         for (const input of coreReflectDirectiveResolve(instance?.constructor).inputs!) {
           const parsed = funcDirectiveIoParse(input);
-          if (inputName === (parsed.alias || parsed.name)) {
+          if (inputName === (isPrivateName ? parsed.name : parsed.alias || parsed.name)) {
             const inputValue = instance![parsed.name];
             attributeValue = parsed.isSignal && typeof inputValue === 'function' ? inputValue() : inputValue;
             break;
