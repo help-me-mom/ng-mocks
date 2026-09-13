@@ -419,6 +419,11 @@ This marks the field dirty and updates the parent's rendered name. Touching the
 control is a separate interaction: `ngMocks.touch` emits `touch`, and change detection
 delivers the updated field state to the child's `touched` input.
 
+The last test updates the parent's model after rendering. Change detection sends that
+value to the mocked child and updates the rendered name, without emitting the child's
+`valueChange` output or making the field dirty or touched. This checks parent-to-child
+synchronization separately from the interactions simulated by `ngMocks.change` and `ngMocks.touch`.
+
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
 
@@ -476,6 +481,29 @@ describe('TestSignalForms:model', () => {
     expect(control.value()).toBe('Ada');
     expect(control.touched()).toBe(true);
     expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Ada');
+  });
+
+  it('updates the mock from the parent without emitting a child change', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
+    const values: string[] = [];
+    ngMocks.output(child, 'valueChange').subscribe(value => values.push(value));
+
+    expect(control.value()).toBe('Ada');
+
+    // A parent write updates the binding without simulating child interaction.
+    component.model.set({ name: 'Katherine' });
+    fixture.detectChanges();
+
+    expect(control.value()).toBe('Katherine');
+    expect(component.f.name().value()).toBe('Katherine');
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Katherine');
+    expect(values).toEqual([]);
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(false);
+    expect(control.touched()).toBe(false);
   });
 });
 ```
