@@ -112,4 +112,36 @@ describe('ng-mocks-touch:mock', () => {
       );
     }
   });
+
+  it('keeps unknown CVA diagnostics readable when symbol callbacks are present', () => {
+    MockRender(TargetComponent);
+    const valueAccessorEl = ngMocks.find('custom');
+    const member = Symbol('unrelated-callback');
+    let calls = 0;
+    Object.assign(ngMocks.get(valueAccessorEl, CustomDirective), {
+      [member]: () => {
+        calls += 1;
+      },
+      customCallback: () => {
+        calls += 1;
+      },
+    });
+
+    try {
+      ngMocks.touch(valueAccessorEl);
+      fail('an error expected');
+    } catch (error) {
+      const message = (error as Error).message;
+      expect(message).toContain(
+        'Unsupported type of ControlValueAccessor',
+      );
+      expect(message).toContain(
+        "please ensure it has 'onTouched' method",
+      );
+      expect(message).toContain('Possible Names:');
+      expect(message).toContain('customCallback');
+      expect(message).not.toContain(String(member));
+    }
+    expect(calls).toBe(0);
+  });
 });

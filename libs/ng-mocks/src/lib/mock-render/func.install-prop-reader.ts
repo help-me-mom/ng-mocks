@@ -43,10 +43,10 @@ const createPropertySet = (key: keyof any & string, reader: Record<keyof any, an
 };
 
 const extractAllKeys = (instance: object) => {
-  const properties: string[] = [];
+  const properties: Array<string | symbol> = [];
   const methods = helperMockService.extractMethodsFromPrototype(Object.getPrototypeOf(instance), properties);
 
-  return [...properties, ...methods, ...Object.keys(instance)];
+  return [...properties, ...methods, ...Object.keys(instance)].filter((key): key is string => typeof key === 'string');
 };
 
 const extractOwnKeys = (instance: object) => new Set(Object.getOwnPropertyNames(instance));

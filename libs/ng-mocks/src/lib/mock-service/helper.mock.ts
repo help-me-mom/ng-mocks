@@ -4,8 +4,8 @@ import helperMockService from './helper.mock-service';
 import { MockedFunction } from './types';
 
 // istanbul ignore next
-const createName = (name: string, mockName?: string, instance?: any, accessType?: string) =>
-  `${mockName ?? (typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance))}.${name}${
+const createName = (name: string | symbol, mockName?: string, instance?: any, accessType?: string) =>
+  `${mockName ?? (typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance))}.${String(name)}${
     accessType ?? ''
   }`;
 
@@ -52,7 +52,7 @@ const parseArgs = (
   return { accessType, mockName };
 };
 
-export default <T = MockedFunction>(instance: any, name: string, ...args: Array<string | undefined>): T => {
+export default <T = MockedFunction>(instance: any, name: string | symbol, ...args: Array<string | undefined>): T => {
   const { accessType, mockName } = parseArgs(args);
 
   const def = Object.getOwnPropertyDescriptor(instance, name);

@@ -153,7 +153,7 @@ const applyInputs = (instance: MockConfig & Record<keyof any, any>) => {
 };
 
 const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
-  const properties: string[] = [];
+  const properties: Array<string | symbol> = [];
   const methods = helperMockService.extractMethodsFromPrototype(prototype, properties);
   for (const prop of [...methods, ...properties]) {
     const descriptor = helperMockService.extractPropertyDescriptor(prototype, prop);
@@ -161,7 +161,7 @@ const applyPrototype = (instance: Mock, prototype: AnyType<any>) => {
   }
 };
 
-const applyMethods = (instance: Mock & Record<keyof any, any>, methods: string[]) => {
+const applyMethods = (instance: Mock & Record<keyof any, any>, methods: Array<string | symbol>) => {
   for (const method of methods) {
     if (instance[method] || Object.getOwnPropertyDescriptor(instance, method)) {
       continue;
@@ -170,7 +170,7 @@ const applyMethods = (instance: Mock & Record<keyof any, any>, methods: string[]
   }
 };
 
-const applyProps = (instance: Mock & Record<keyof any, any>, properties: string[]) => {
+const applyProps = (instance: Mock & Record<keyof any, any>, properties: Array<string | symbol>) => {
   for (const prop of properties) {
     if (instance[prop] || Object.getOwnPropertyDescriptor(instance, prop)) {
       continue;
@@ -247,7 +247,7 @@ export class Mock {
       applyInputs(this);
       applyOutputs(this);
       applyPrototype(this, Object.getPrototypeOf(this));
-      const properties: string[] = [];
+      const properties: Array<string | symbol> = [];
       const methods = helperMockService.extractMethodsFromPrototype(mockOf.prototype, properties);
       applyMethods(this, methods);
       applyProps(this, properties);
