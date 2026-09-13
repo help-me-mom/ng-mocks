@@ -1,4 +1,5 @@
 import { DebugElement } from '@angular/core';
+import { RadioControlValueAccessor } from '@angular/forms';
 
 import funcTriggerInput from './func.trigger-input';
 
@@ -72,19 +73,256 @@ describe('func.trigger-input', () => {
     ).toBeUndefined();
   });
 
-  it('changes checkbox state without replacing its option value', () => {
+  it('uses checkbox booleans as checked state even for boolean-looking option strings', () => {
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.value = 'true';
+    const values: boolean[] = [];
+    input.addEventListener('input', () => values.push(input.checked));
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      'true',
+    );
+    funcTriggerInput({ nativeElement: input } as DebugElement, true);
+    funcTriggerInput({ nativeElement: input } as DebugElement, false);
+
+    expect(values).toEqual([true, true, false]);
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('true');
+  });
+
+  it('preserves legacy checkbox truthiness without replacing its option value', () => {
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.value = 'option';
     const values: boolean[] = [];
-    input.addEventListener('input', () => values.push(input.checked));
+    input.addEventListener('change', () =>
+      values.push(input.checked),
+    );
+
+    for (const value of [
+      'other',
+      '',
+      0,
+      1,
+      null,
+      undefined,
+      [],
+      {},
+    ]) {
+      funcTriggerInput(
+        { nativeElement: input } as DebugElement,
+        value,
+      );
+    }
+
+    expect(values).toEqual([
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+    ]);
+    expect(input.checked).toBe(true);
+    expect(input.value).toBe('option');
+  });
+
+  it('checks and unchecks a radio without changing its option value or emitting an unchecked selection', () => {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.value = 'option';
+    const events: Array<[string, boolean, string]> = [];
+    for (const name of ['focus', 'input', 'change', 'blur']) {
+      input.addEventListener(name, () =>
+        events.push([name, input.checked, input.value]),
+      );
+    }
 
     funcTriggerInput({ nativeElement: input } as DebugElement, true);
     funcTriggerInput({ nativeElement: input } as DebugElement, false);
 
-    expect(values).toEqual([true, false]);
+    expect(events).toEqual([
+      ['focus', false, 'option'],
+      ['input', true, 'option'],
+      ['change', true, 'option'],
+      ['blur', true, 'option'],
+      ['focus', true, 'option'],
+      ['blur', false, 'option'],
+    ]);
     expect(input.checked).toBe(false);
     expect(input.value).toBe('option');
+  });
+
+  it('preserves legacy radio value events without changing checked state', () => {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.value = 'option';
+    const values: string[] = [];
+    input.addEventListener('change', () => values.push(input.value));
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      'option',
+    );
+    expect(input.checked).toBe(false);
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      'other',
+      {},
+    );
+
+    expect(values).toEqual(['option', 'other']);
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('other');
+  });
+
+  it('uses radio booleans as checked state without replacing a string option', () => {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.value = 'false';
+    const values: string[] = [];
+    input.addEventListener('change', () => values.push(input.value));
+
+    funcTriggerInput({ nativeElement: input } as DebugElement, true);
+
+    expect(input.checked).toBe(true);
+    expect(input.value).toBe('false');
+    expect(values).toEqual(['false']);
+
+    funcTriggerInput({ nativeElement: input } as DebugElement, false);
+
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('false');
+    expect(values).toEqual(['false']);
+  });
+
+  it('preserves raw numeric radio arguments in legacy events', () => {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.value = '42';
+    const values: Array<string | number> = [];
+    input.addEventListener('input', () => values.push(input.value));
+    const accessor: RadioControlValueAccessor = Object.create(
+      RadioControlValueAccessor.prototype,
+    );
+    accessor.value = 42;
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      42,
+      accessor,
+    );
+    expect(input.checked).toBe(false);
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      '42',
+      accessor,
+    );
+
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('42');
+    expect(values).toEqual([42, '42']);
+  });
+
+  it('uses boolean checked states even when the bound radio option is false', () => {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.value = 'false';
+    const values: string[] = [];
+    input.addEventListener('change', () => values.push(input.value));
+    const accessor: RadioControlValueAccessor = Object.create(
+      RadioControlValueAccessor.prototype,
+    );
+    accessor.value = false;
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      true,
+      accessor,
+    );
+
+    expect(input.checked).toBe(true);
+    expect(values).toEqual(['false']);
+
+    funcTriggerInput(
+      { nativeElement: input } as DebugElement,
+      false,
+      accessor,
+    );
+
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('false');
+    expect(values).toEqual(['false']);
+  });
+
+  it('selects a radio before listeners and preserves its group values', () => {
+    const form = document.createElement('form');
+    const first = document.createElement('input');
+    first.type = 'radio';
+    first.name = 'trigger-input-choice';
+    first.value = 'first';
+    const second = document.createElement('input');
+    second.type = 'radio';
+    second.name = 'trigger-input-choice';
+    second.value = 'second';
+    const other = document.createElement('input');
+    other.type = 'radio';
+    other.name = 'trigger-input-other';
+    other.value = 'other';
+    form.append(first);
+    form.append(second);
+    form.append(other);
+    document.body.append(form);
+
+    try {
+      first.checked = true;
+      other.checked = true;
+      const checked: boolean[][] = [];
+      const values: string[] = [];
+      for (const name of ['input', 'change']) {
+        second.addEventListener(name, () => {
+          checked.push([
+            first.checked,
+            second.checked,
+            other.checked,
+          ]);
+          values.push(second.value);
+        });
+      }
+
+      funcTriggerInput(
+        { nativeElement: second } as DebugElement,
+        true,
+      );
+
+      expect(checked).toEqual([
+        [false, true, true],
+        [false, true, true],
+      ]);
+      expect(values).toEqual(['second', 'second']);
+      expect(first.checked).toBe(false);
+      expect(second.checked).toBe(true);
+      expect(other.checked).toBe(true);
+      expect(first.value).toBe('first');
+      expect(second.value).toBe('second');
+      expect(other.value).toBe('other');
+      expect(
+        Object.getOwnPropertyDescriptor(second, 'value'),
+      ).toBeUndefined();
+
+      first.checked = true;
+      expect(first.checked).toBe(true);
+      expect(second.checked).toBe(false);
+      expect(other.checked).toBe(true);
+    } finally {
+      form.remove();
+    }
   });
 
   it('preserves raw file input events without invoking the restricted native setter', () => {
@@ -280,6 +518,132 @@ describe('func.trigger-input', () => {
 
     select.value = 'first';
     expect(select.selectedIndex).toBe(0);
+  });
+
+  it('does not send native multiple-selection edits back through a custom writeValue', () => {
+    const select = document.createElement('select');
+    select.multiple = true;
+    const first = document.createElement('option');
+    first.value = 'first';
+    const second = document.createElement('option');
+    second.value = 'second';
+    select.append(first);
+    select.append(second);
+    first.selected = true;
+    const accessor = { writeValue: jasmine.createSpy('writeValue') };
+
+    funcTriggerInput(
+      { nativeElement: select } as DebugElement,
+      ['second'],
+      accessor,
+    );
+
+    expect(first.selected).toBe(false);
+    expect(second.selected).toBe(true);
+    expect(accessor.writeValue).not.toHaveBeenCalled();
+  });
+
+  it('selects multiple string values before listeners and clears the selection', () => {
+    const select = document.createElement('select');
+    select.multiple = true;
+    select.innerHTML =
+      '<option value="first">First</option><option value="second">Second</option>' +
+      '<option value="third">Third</option>';
+    select.options[1].selected = true;
+    const selected: string[][] = [];
+    for (const name of ['input', 'change']) {
+      select.addEventListener(name, () =>
+        selected.push(
+          Array.prototype.slice
+            .call(select.selectedOptions)
+            .map((option: HTMLOptionElement) => option.value),
+        ),
+      );
+    }
+
+    funcTriggerInput({ nativeElement: select } as DebugElement, [
+      'first',
+      'third',
+    ]);
+
+    expect(selected).toEqual([
+      ['first', 'third'],
+      ['first', 'third'],
+    ]);
+    expect(select.options[0].selected).toBe(true);
+    expect(select.options[1].selected).toBe(false);
+    expect(select.options[2].selected).toBe(true);
+    expect(select.value).toBe('first');
+    expect(
+      Object.getOwnPropertyDescriptor(select, 'value'),
+    ).toBeUndefined();
+
+    funcTriggerInput({ nativeElement: select } as DebugElement, []);
+
+    expect(selected).toEqual([
+      ['first', 'third'],
+      ['first', 'third'],
+      [],
+      [],
+    ]);
+    expect(select.selectedOptions.length).toBe(0);
+    expect(select.selectedIndex).toBe(-1);
+    expect(select.value).toBe('');
+    expect(
+      Object.getOwnPropertyDescriptor(select, 'value'),
+    ).toBeUndefined();
+
+    select.value = 'second';
+    expect(select.selectedIndex).toBe(1);
+    expect(select.options[0].selected).toBe(false);
+    expect(select.options[1].selected).toBe(true);
+    expect(select.options[2].selected).toBe(false);
+
+    select.options[2].selected = true;
+    expect(
+      Array.prototype.slice
+        .call(select.selectedOptions)
+        .map((option: HTMLOptionElement) => option.value),
+    ).toEqual(['second', 'third']);
+  });
+
+  it('preserves multiple selection normalized by an input listener', () => {
+    const select = document.createElement('select');
+    select.multiple = true;
+    select.innerHTML =
+      '<option value="first">First</option><option value="second">Second</option>' +
+      '<option value="third">Third</option>';
+    const selected: string[][] = [];
+    select.addEventListener('input', () => {
+      select.options[0].selected = false;
+      select.options[1].selected = true;
+    });
+    for (const name of ['change', 'blur']) {
+      select.addEventListener(name, () =>
+        selected.push(
+          Array.prototype.slice
+            .call(select.selectedOptions)
+            .map((option: HTMLOptionElement) => option.value),
+        ),
+      );
+    }
+
+    funcTriggerInput({ nativeElement: select } as DebugElement, [
+      'first',
+      'third',
+    ]);
+
+    expect(selected).toEqual([
+      ['second', 'third'],
+      ['second', 'third'],
+    ]);
+    expect(select.options[0].selected).toBe(false);
+    expect(select.options[1].selected).toBe(true);
+    expect(select.options[2].selected).toBe(true);
+    expect(select.value).toBe('second');
+    expect(
+      Object.getOwnPropertyDescriptor(select, 'value'),
+    ).toBeUndefined();
   });
 
   it('preserves an unmatched select value in events without leaving a shadow property', () => {

@@ -31,14 +31,8 @@ class TextControl implements FormValueControl<string> {
   selector: 'target-signal-forms-selectors-model',
   imports: [FormField, TextControl],
   template: `
-    <signal-text-control
-      data-testid="first-name"
-      [formField]="f.firstName"
-    />
-    <signal-text-control
-      data-testid="last-name"
-      [formField]="f.lastName"
-    />
+    <signal-text-control [formField]="f.firstName" />
+    <signal-text-control [formField]="f.lastName" />
   `,
 })
 class TargetComponent {
@@ -80,16 +74,33 @@ describe('TestSignalForms:selectors-model', () => {
           : builder.mock(TextControl);
       });
 
-      it('selects custom hosts whose name inputs are not DOM attributes', () => {
+      it('selects custom hosts by their bound field trees', () => {
         const fixture = MockRender(TargetComponent);
         const component = fixture.point.componentInstance;
-        const first = ngMocks.find('[data-testid="first-name"]');
-        const last = ngMocks.find('[data-testid="last-name"]');
+        const first = ngMocks.reveal([
+          'formField',
+          component.f.firstName,
+        ]);
+        const last = ngMocks.reveal([
+          'formField',
+          component.f.lastName,
+        ]);
         const control = ngMocks.get(first, TextControl);
         const sibling = ngMocks.get(last, TextControl);
 
-        expect(ngMocks.findAll(TextControl)).toEqual([first, last]);
+        expect([first, last]).toEqual(ngMocks.findAll(TextControl));
         expect(ngMocks.findAll('[formControlName]')).toEqual([]);
+        expect(ngMocks.findAll('[formField]')).toEqual([]);
+        expect(ngMocks.revealAll(['formField'])).toEqual([
+          first,
+          last,
+        ]);
+        expect(
+          ngMocks.reveal(
+            ['formField', component.f.firstName()],
+            null,
+          ),
+        ).toBeNull();
         // FormField writes the component input, not a DOM name on its host.
         expect(control.name()).toBe(component.f.firstName().name());
         expect(sibling.name()).toBe(component.f.lastName().name());

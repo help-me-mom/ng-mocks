@@ -25,9 +25,9 @@ import {
   template: 'dependency',
 })
 class CvaComponent implements ControlValueAccessor {
-  public registerOnChange = (fn: any): void => fn;
-  public registerOnTouched = (fn: any): void => fn;
-  public writeValue = (obj: any): void => obj;
+  public registerOnChange(): void {}
+  public registerOnTouched(): void {}
+  public writeValue(): void {}
 
   public cvaMockForms() {}
 }
@@ -35,10 +35,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-  template: ` <cva [(ngModel)]="value"></cva> `,
+  template: '<cva name="inputName" [(ngModel)]="inputValue"></cva>',
 })
 class TargetComponent {
-  public value: any;
+  public inputValue: string | null = null;
 
   public targetMockForms() {}
 }
@@ -55,51 +55,43 @@ describe('MockForms', () => {
   // automatic resetting in test.ts.
   MockInstance.scope();
 
-  beforeEach(() => {
-    // DependencyComponent is a declaration in ItsModule.
-    return (
-      MockBuilder(TargetComponent, ItsModule)
-        // FormsModule is an import in ItsModule.
-        .keep(FormsModule)
-    );
-  });
+  beforeEach(() =>
+    MockBuilder(TargetComponent, ItsModule).keep(FormsModule),
+  );
 
   it('sends the correct value to the mock form component', async () => {
-    // That is our spy on writeValue calls.
-    // With auto spy this code is not needed.
+    // Prepare the writeValue spy before rendering.
     const writeValue =
       typeof jest === 'undefined'
         ? jasmine.createSpy('writeValue')
         : jest.fn();
-    // in case of jest
-    // const writeValue = jest.fn();
-
-    // Because of early calls of writeValue, we need to install
-    // the spy via MockInstance before the render.
     MockInstance(CvaComponent, 'writeValue', writeValue);
 
+    // Render the component.
     const fixture = MockRender(TargetComponent);
-    // FormsModule needs fixture.whenStable()
-    // right after MockRender to install all hooks.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
 
-    // During initialization, it should be called
-    // with null.
+    // Find the mocked control.
+    const mockControlEl = ngMocks.find(CvaComponent);
+
+    // Read the initial value and the write received by the mock.
+    expect(component.inputValue).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's find the form control element
-    // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(CvaComponent);
+    // Change the value through the mocked control.
     ngMocks.change(mockControlEl, 'foo');
-    expect(component.value).toBe('foo');
 
-    // Let's check that change on existing value
-    // causes calls of `writeValue` on the mock component.
-    component.value = 'bar';
-    // Both below are needed to trigger writeValue.
+    // Assert the result.
+    expect(component.inputValue).toBe('foo');
+
+    // Change the parent value.
+    component.inputValue = 'bar';
     fixture.detectChanges();
     await fixture.whenStable();
+
+    // Assert the value written to the mocked control.
+    expect(component.inputValue).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });

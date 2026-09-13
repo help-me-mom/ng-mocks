@@ -26,9 +26,10 @@ import {
   template: 'dependency',
 })
 class CvaComponent implements ControlValueAccessor {
-  public registerOnChange = (fn: any): void => fn;
-  public registerOnTouched = (fn: any): void => fn;
-  public writeValue = (obj: any): void => obj;
+  public registerOnChange(): void {}
+  public registerOnTouched(): void {}
+  public setDisabledState(): void {}
+  public writeValue(): void {}
 
   public cvaMockReactiveForms() {}
 }
@@ -36,10 +37,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-  template: ' <cva [formControl]="formControl"></cva> ',
+  template: '<cva [formControl]="inputValue"></cva>',
 })
 class TargetComponent {
-  public readonly formControl = new FormControl();
+  public readonly inputValue = new FormControl();
 
   public targetMockReactiveForms() {}
 }
@@ -54,45 +55,92 @@ describe('MockReactiveForms', () => {
   // Helps to reset MockInstance customizations after each test.
   MockInstance.scope();
 
-  beforeEach(() => {
-    // DependencyComponent is a declaration in ItsModule.
-    return (
-      MockBuilder(TargetComponent, ItsModule)
-        // ReactiveFormsModule is an import in ItsModule.
-        .keep(ReactiveFormsModule)
-    );
-  });
+  beforeEach(() =>
+    MockBuilder(TargetComponent, ItsModule).keep(ReactiveFormsModule),
+  );
 
   it('sends the correct value to the mock form component', () => {
-    // That is our spy on writeValue calls.
-    // With auto spy this code is not needed.
+    // Prepare the writeValue spy before rendering.
     const writeValue =
       typeof jest === 'undefined'
         ? jasmine.createSpy('writeValue')
         : jest.fn();
-    // in case of jest
-    // const writeValue = jest.fn();
-
-    // Because of early calls of writeValue, we need to install
-    // the spy via MockInstance before the render.
     MockInstance(CvaComponent, 'writeValue', writeValue);
 
+    // Render the component.
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // During initialization, it should be called
-    // with null.
+    // Find the mocked control.
+    const mockControlEl = ngMocks.find(CvaComponent);
+
+    // Read the initial value and the write received by the mock.
+    expect(component.inputValue.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's find the form control element
-    // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(CvaComponent);
+    // Change the value through the mocked control.
     ngMocks.change(mockControlEl, 'foo');
-    expect(component.formControl.value).toBe('foo');
 
-    // Let's check that change on existing formControl
-    // causes calls of `writeValue` on the mock component.
-    component.formControl.setValue('bar');
+    // Assert the result.
+    expect(component.inputValue.value).toBe('foo');
+
+    // Change the parent value.
+    component.inputValue.setValue('bar');
+
+    // Assert the value written to the mocked control.
+    expect(component.inputValue.value).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
+  });
+
+  it('touches the mocked control without changing its value', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const mockControlEl = ngMocks.find(CvaComponent);
+
+    expect(component.inputValue.touched).toBe(false);
+    expect(component.inputValue.pristine).toBe(true);
+
+    ngMocks.touch(mockControlEl);
+
+    expect(component.inputValue.touched).toBe(true);
+    expect(component.inputValue.pristine).toBe(true);
+    expect(component.inputValue.value).toBeNull();
+  });
+
+  it('passes disabled state to the mock without changing its value or interaction state', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const mockControlEl = ngMocks.find(CvaComponent);
+    const setDisabledState =
+      typeof jest === 'undefined'
+        ? jasmine.createSpy('setDisabledState')
+        : jest.fn();
+    ngMocks.stubMember(
+      ngMocks.get(mockControlEl, CvaComponent),
+      'setDisabledState',
+      setDisabledState,
+    );
+
+    expect(component.inputValue.enabled).toBe(true);
+
+    // Disable the real control and observe the call to its mocked child.
+    component.inputValue.disable();
+
+    expect(component.inputValue.disabled).toBe(true);
+    expect(setDisabledState).toHaveBeenCalledTimes(1);
+    expect(setDisabledState).toHaveBeenCalledWith(true);
+    expect(component.inputValue.value).toBeNull();
+    expect(component.inputValue.pristine).toBe(true);
+    expect(component.inputValue.touched).toBe(false);
+
+    // Enabling the control also reaches the same child.
+    component.inputValue.enable();
+
+    expect(component.inputValue.enabled).toBe(true);
+    expect(setDisabledState).toHaveBeenCalledTimes(2);
+    expect(setDisabledState).toHaveBeenCalledWith(false);
+    expect(component.inputValue.value).toBeNull();
+    expect(component.inputValue.pristine).toBe(true);
+    expect(component.inputValue.touched).toBe(false);
   });
 });

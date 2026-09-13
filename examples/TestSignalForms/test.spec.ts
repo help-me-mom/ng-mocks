@@ -14,10 +14,13 @@ import {
   template: `
     <label>
       Name
-      <input [formField]="profile.name" />
+      <input [formField]="profile.inputValue" />
     </label>
-    @if (profile.name().touched()) {
-      @for (error of profile.name().errors(); track error.kind) {
+    @if (profile.inputValue().touched()) {
+      @for (
+        error of profile.inputValue().errors();
+        track error.kind
+      ) {
         <span role="alert">{{ error.message }}</span>
       }
     }
@@ -27,9 +30,9 @@ import {
   `,
 })
 class TargetComponent {
-  public readonly model = signal({ name: '' });
+  public readonly model = signal({ inputValue: '' });
   public readonly profile = form(this.model, schema => {
-    required(schema.name, { message: 'Name is required' });
+    required(schema.inputValue, { message: 'Name is required' });
   });
 }
 
@@ -45,9 +48,9 @@ describe('TestSignalForms', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    expect(component.profile.name().invalid()).toBe(true);
-    expect(component.profile.name().touched()).toBe(false);
-    expect(component.profile.name().dirty()).toBe(false);
+    expect(component.profile.inputValue().invalid()).toBe(true);
+    expect(component.profile.inputValue().touched()).toBe(false);
+    expect(component.profile.inputValue().dirty()).toBe(false);
     expect(ngMocks.find('[role="alert"]', undefined)).toBeUndefined();
     expect(
       ngMocks.find<HTMLButtonElement>('button').nativeElement
@@ -58,12 +61,12 @@ describe('TestSignalForms', () => {
     ngMocks.touch('input');
     fixture.detectChanges();
 
-    expect(component.model()).toEqual({ name: '' });
-    expect(component.profile.name().touched()).toBe(true);
-    expect(component.profile.name().dirty()).toBe(false);
+    expect(component.model()).toEqual({ inputValue: '' });
+    expect(component.profile.inputValue().touched()).toBe(true);
+    expect(component.profile.inputValue().dirty()).toBe(false);
     expect(
       component.profile
-        .name()
+        .inputValue()
         .errors()
         .map(error => error.kind),
     ).toEqual(['required']);
@@ -86,11 +89,11 @@ describe('TestSignalForms', () => {
     ngMocks.change('input', 'Ada');
     fixture.detectChanges();
 
-    expect(component.model()).toEqual({ name: 'Ada' });
-    expect(component.profile.name().value()).toBe('Ada');
-    expect(component.profile.name().dirty()).toBe(true);
-    expect(component.profile.name().touched()).toBe(true);
-    expect(component.profile.name().errors()).toEqual([]);
+    expect(component.model()).toEqual({ inputValue: 'Ada' });
+    expect(component.profile.inputValue().value()).toBe('Ada');
+    expect(component.profile.inputValue().dirty()).toBe(true);
+    expect(component.profile.inputValue().touched()).toBe(true);
+    expect(component.profile.inputValue().errors()).toEqual([]);
     expect(ngMocks.find('[role="alert"]', undefined)).toBeUndefined();
     expect(
       ngMocks.find<HTMLButtonElement>('button').nativeElement
@@ -103,15 +106,15 @@ describe('TestSignalForms', () => {
     const component = fixture.point.componentInstance;
 
     // Model updates exercise the opposite direction from native input events.
-    component.model.set({ name: 'Grace' });
+    component.model.set({ inputValue: 'Grace' });
     fixture.detectChanges();
 
     expect(
       ngMocks.find<HTMLInputElement>('input').nativeElement.value,
     ).toBe('Grace');
-    expect(component.profile.name().value()).toBe('Grace');
-    expect(component.profile.name().dirty()).toBe(false);
-    expect(component.profile.name().touched()).toBe(false);
+    expect(component.profile.inputValue().value()).toBe('Grace');
+    expect(component.profile.inputValue().dirty()).toBe(false);
+    expect(component.profile.inputValue().touched()).toBe(false);
     expect(
       ngMocks.find<HTMLButtonElement>('button').nativeElement
         .disabled,

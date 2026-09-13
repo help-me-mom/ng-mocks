@@ -18,9 +18,9 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `
     <form
       [formGroup]="form"
-      (ngSubmit)="save(form.controls.name.value, $event)"
+      (ngSubmit)="save(form.controls.inputValue.value, $event)"
     >
-      <input formControlName="name" />
+      <input formControlName="inputValue" />
       <button type="submit" [disabled]="disabled">Save</button>
     </form>
   `,
@@ -28,7 +28,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetComponent {
   public disabled = false;
   public readonly form = new FormGroup({
-    name: new FormControl('initial', {
+    inputValue: new FormControl('initial', {
       updateOn: 'submit',
     }),
   });
@@ -53,33 +53,37 @@ describe('TestNgSubmit:reactive', () => {
   );
 
   it('calls save with the submitted value and event', () => {
-    // Rendering the component and finding its form directive.
-    const component =
-      MockRender(TargetComponent).point.componentInstance;
-    const form = ngMocks.findInstance(FormGroupDirective);
-
-    // Replacing the application handler with a spy.
+    // Render the component.
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
         : jest.fn();
     component.save = save;
 
-    expect(form.submitted).toBe(false);
-    expect(component.form.value).toEqual({ name: 'initial' });
+    // Find the input and form.
+    const input = ngMocks.find('input');
+    const form = ngMocks.findInstance(FormGroupDirective);
 
-    // The value stays pending until the form is submitted.
-    ngMocks.change('input', 'updated');
-    expect(component.form.value).toEqual({ name: 'initial' });
+    // Read the initial value.
+    expect(form.submitted).toBe(false);
+    expect(component.form.value).toEqual({ inputValue: 'initial' });
+
+    // Change the input. Its value stays pending until submission.
+    ngMocks.change(input, 'updated');
+
+    expect(component.form.value).toEqual({ inputValue: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
-    // Angular handles submit and emits ngSubmit to call save.
+    // Submit the form.
     const event = ngMocks.event('submit');
     ngMocks.trigger('form', event);
 
+    // Assert the result.
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith('updated', event);
-    expect(component.form.value).toEqual({ name: 'updated' });
+    expect(component.form.value).toEqual({ inputValue: 'updated' });
     expect(form.submitted).toBe(true);
     expect(event.defaultPrevented).toBe(true);
   });
@@ -111,7 +115,7 @@ describe('TestNgSubmit:reactive', () => {
         defaultPrevented: true,
       }),
     );
-    expect(component.form.value).toEqual({ name: 'updated' });
+    expect(component.form.value).toEqual({ inputValue: 'updated' });
     expect(form.submitted).toBe(true);
   });
 
@@ -136,7 +140,7 @@ describe('TestNgSubmit:reactive', () => {
     button.click();
 
     expect(save).not.toHaveBeenCalled();
-    expect(component.form.value).toEqual({ name: 'initial' });
+    expect(component.form.value).toEqual({ inputValue: 'initial' });
     expect(form.submitted).toBe(false);
   });
 });

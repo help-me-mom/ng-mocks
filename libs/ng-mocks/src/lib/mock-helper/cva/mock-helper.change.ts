@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
+import coreReflectDirectiveResolve from '../../common/core.reflect.directive-resolve';
 import { DebugNodeSelector } from '../../common/core.types';
+import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import helperExtractMethodsFromPrototype from '../../mock-service/helper.extract-methods-from-prototype';
+import funcGetPublicProviderKeys from '../crawl/func.get-public-provider-keys';
 import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
@@ -36,6 +39,42 @@ const handleKnown = (valueAccessor: any, value: any): boolean => {
 
 const hasListener = (el: DebugElement): boolean =>
   el.listeners.some(listener => listener.name === 'input' || listener.name === 'change');
+
+const formInputs = ['ngModel', 'formControl', 'formControlName', 'formField'];
+
+const isUnboundNativeControl = (el: DebugElement): boolean => {
+  if (['INPUT', 'TEXTAREA', 'SELECT'].indexOf(el.nativeNode.tagName) === -1) {
+    return false;
+  }
+
+  // Inspect attached input bindings without constructing unrelated DI providers.
+  const injector = el.injector as any;
+  const node = injector._tNode;
+  if (node) {
+    for (const input of formInputs) {
+      if (node.inputs?.[input] || node.hostDirectiveInputs?.[input]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return !funcGetPublicProviderKeys(el).some(key => {
+    const config = injector.elDef.element.publicProviders[key];
+    if (config.bindings.length === 0) {
+      return false;
+    }
+    const bindings = config.bindings.map(
+      (binding: { name: string; nonMinifiedName?: string }) => binding.nonMinifiedName || binding.name,
+    );
+    return coreReflectDirectiveResolve(config.provider.value).inputs!.some(input => {
+      const { name, alias } = funcDirectiveIoParse(input);
+
+      return bindings.indexOf(name) !== -1 && formInputs.indexOf(alias || name) !== -1;
+    });
+  });
+};
 
 // ngMocks.change can update a CVA without Angular's normal input event path.
 // Mark the changed element so OnPush views render on the next fixture check.
@@ -85,6 +124,7 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
   }
 
   let valueAccessor = funcGetVca(el, true);
+  let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);
     if (modelControl) {
@@ -93,10 +133,11 @@ export default (selector: DebugNodeSelector, value: any, methodName?: string): v
 
       return;
     }
-    valueAccessor = funcGetVca(el, hasListener(el)) || {};
+    nativeControl = !hasListener(el) && isUnboundNativeControl(el);
+    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl) || {};
   }
-  if (handleKnown(valueAccessor, value) || hasListener(el)) {
-    triggerInput(el, value);
+  if (handleKnown(valueAccessor, value) || hasListener(el) || nativeControl) {
+    triggerInput(el, value, valueAccessor);
     markForNextCheck(el);
 
     return;

@@ -12,8 +12,8 @@ import {
   selector: 'target-signal-forms-selectors',
   imports: [FormField],
   template: `
-    <input data-testid="first-name" [formField]="f.firstName" />
-    <input data-testid="last-name" [formField]="f.lastName" />
+    <input [formField]="f.firstName" />
+    <input [formField]="f.lastName" />
   `,
 })
 class TargetComponent {
@@ -33,27 +33,37 @@ describe('TestSignalForms:selectors', () => {
         .keep(NG_MOCKS_ROOT_PROVIDERS),
     );
 
-    it('selects a native field without relying on generated names', () => {
+    it('selects native fields by their field tree without extra attributes', () => {
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
-      const first = ngMocks.find<HTMLInputElement>(
-        '[data-testid="first-name"]',
-      );
-      const last = ngMocks.find<HTMLInputElement>(
-        '[data-testid="last-name"]',
-      );
+      const first = ngMocks.reveal([
+        'formField',
+        component.f.firstName,
+      ]);
+      const last = ngMocks.reveal([
+        'formField',
+        component.f.lastName,
+      ]);
 
-      // Signal form bindings do not recreate classic formControlName attributes.
+      // Match the bound field tree, not its state or a DOM attribute.
+      expect([first, last]).toEqual(ngMocks.findAll('input'));
+      expect(
+        ngMocks.reveal(
+          ['formField', component.f.firstName()],
+          undefined,
+        ),
+      ).toBeUndefined();
+      expect(ngMocks.findAll('[formField]')).toEqual([]);
       expect(ngMocks.findAll('[formControlName]')).toEqual([]);
-      expect(ngMocks.findAll('input[name]')).toEqual([first, last]);
-      expect(first.nativeElement.getAttribute('name')).toBe(
+      expect([first, last]).toEqual(ngMocks.findAll('input[name]'));
+      expect(first.nativeNode.getAttribute('name')).toBe(
         component.f.firstName().name(),
       );
-      expect(last.nativeElement.getAttribute('name')).toBe(
+      expect(last.nativeNode.getAttribute('name')).toBe(
         component.f.lastName().name(),
       );
-      expect(first.nativeElement.value).toBe('Ada');
-      expect(last.nativeElement.value).toBe('Lovelace');
+      expect(first.nativeNode.value).toBe('Ada');
+      expect(last.nativeNode.value).toBe('Lovelace');
 
       ngMocks.change(first, 'Grace');
       fixture.detectChanges();
@@ -62,9 +72,10 @@ describe('TestSignalForms:selectors', () => {
         firstName: 'Grace',
         lastName: 'Lovelace',
       });
-      expect(first.nativeElement.value).toBe('Grace');
-      expect(last.nativeElement.value).toBe('Lovelace');
+      expect(first.nativeNode.value).toBe('Grace');
+      expect(last.nativeNode.value).toBe('Lovelace');
       expect(component.f.firstName().dirty()).toBe(true);
+      expect(component.f.firstName().touched()).toBe(true);
       expect(component.f.lastName().dirty()).toBe(false);
       expect(component.f.lastName().touched()).toBe(false);
     });
@@ -73,21 +84,32 @@ describe('TestSignalForms:selectors', () => {
   describe('mocked form binding', () => {
     beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 
-    it('preserves explicit selectors without providing form behavior', () => {
+    it('selects bound field trees without providing form behavior', () => {
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
-      const first = ngMocks.find<HTMLInputElement>(
-        '[data-testid="first-name"]',
-      );
-      const last = ngMocks.find<HTMLInputElement>(
-        '[data-testid="last-name"]',
-      );
+      const first = ngMocks.reveal([
+        'formField',
+        component.f.firstName,
+      ]);
+      const last = ngMocks.reveal([
+        'formField',
+        component.f.lastName,
+      ]);
 
+      // Mock signal inputs preserve each bound field tree.
+      expect([first, last]).toEqual(ngMocks.findAll('input'));
+      expect(
+        ngMocks.reveal(
+          ['formField', component.f.firstName()],
+          undefined,
+        ),
+      ).toBeUndefined();
+      expect(ngMocks.findAll('[formField]')).toEqual([]);
       // Generated native attributes belong to the real FormField implementation.
       expect(ngMocks.findAll('[formControlName]')).toEqual([]);
       expect(ngMocks.findAll('input[name]')).toEqual([]);
-      expect(first.nativeElement.value).toBe('');
-      expect(last.nativeElement.value).toBe('');
+      expect(first.nativeNode.value).toBe('');
+      expect(last.nativeNode.value).toBe('');
 
       try {
         ngMocks.change(first, 'Grace');
@@ -98,14 +120,16 @@ describe('TestSignalForms:selectors', () => {
         );
       }
 
-      expect(first.nativeElement.value).toBe('');
-      expect(last.nativeElement.value).toBe('');
+      expect(first.nativeNode.value).toBe('');
+      expect(last.nativeNode.value).toBe('');
       expect(component.model()).toEqual({
         firstName: 'Ada',
         lastName: 'Lovelace',
       });
       expect(component.f.firstName().dirty()).toBe(false);
+      expect(component.f.firstName().touched()).toBe(false);
       expect(component.f.lastName().dirty()).toBe(false);
+      expect(component.f.lastName().touched()).toBe(false);
     });
   });
 });
