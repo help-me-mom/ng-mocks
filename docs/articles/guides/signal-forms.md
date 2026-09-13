@@ -156,6 +156,91 @@ describe('TestSignalForms', () => {
 });
 ```
 
+## Pass a field tree through a custom template
+
+A `FieldTree` is a callable proxy: calling it reads field state, while properties such as
+`f.name` return child fields. Automatically generated component templates preserve callable
+input values, so `MockRender(TargetComponent, { field })` does not need additional options
+when `field` is a component input.
+
+For a custom template, use
+[`valueKeys`](/api/MockRender.md#callable-values-in-params) to identify callable data in `params`.
+The keys refer to the parameters used by the template: select `f` for `[formField]="f.name"`,
+or `field` for `[formField]="field"`. Selecting the child property `name` would not preserve
+the parameter `f`.
+
+Create the wrapper before creating the form in TestBed's injection context. `MockRender`
+needs to configure TestBed, while `TestBed.runInInjectionContext` initializes its injector.
+Include the parameter key with an initial `undefined` value and use `detectChanges: false`
+so the template is not evaluated yet. Assign the tree before the first `fixture.detectChanges()`.
+
+This example checks that the wrapper and `FormField` retain the original field tree, that
+editing the input updates the model, and that a later model update renders into the input.
+The complete spec also shows a field passed directly through the `field` parameter.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts"
+import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { FieldTree, form, FormField } from '@angular/forms/signals';
+
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
+
+describe('TestSignalForms:field-tree', () => {
+  beforeEach(() =>
+    MockBuilder()
+      .keep(FormField)
+      .keep(NG_MOCKS_ROOT_PROVIDERS),
+  );
+
+  it('binds a child field from a tree passed through a custom template', () => {
+    const params: {
+      f: FieldTree<{ name: string }> | undefined;
+    } = { f: undefined };
+
+    // Configure the wrapper before creating the form in TestBed's injection context.
+    const fixture = MockRender(
+      '<input [formField]="f.name" />',
+      params,
+      { detectChanges: false, valueKeys: ['f'] },
+    );
+    const model = signal({ name: 'Ada' });
+    const f = TestBed.runInInjectionContext(() => form(model));
+
+    params.f = f;
+    fixture.detectChanges();
+
+    // Preserve the callable proxy, including the child field named "name".
+    expect(fixture.componentInstance.f).toBe(f);
+    expect(fixture.componentInstance.f!.name).toBe(f.name);
+    expect(ngMocks.get('input', FormField).field()).toBe(f.name);
+    expect(ngMocks.find<HTMLInputElement>('input').nativeElement.value).toBe('Ada');
+
+    ngMocks.change('input', 'Grace');
+    fixture.detectChanges();
+
+    expect(model()).toEqual({ name: 'Grace' });
+    expect(f.name().value()).toBe('Grace');
+    expect(f.name().dirty()).toBe(true);
+    expect(f.name().touched()).toBe(true);
+
+    model.set({ name: 'Katherine' });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.f).toBe(f);
+    expect(ngMocks.get('input', FormField).field()).toBe(f.name);
+    expect(ngMocks.find<HTMLInputElement>('input').nativeElement.value).toBe('Katherine');
+  });
+});
+```
+
 ## Test a form with a mocked CVA child
 
 A signal form can bind an existing `ControlValueAccessor` component through `[formField]`.
@@ -398,5 +483,6 @@ describe('TestSignalForms:model', () => {
 ## Complete example specs
 
 - [Native fields, validation, and model updates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts)
+- [Field trees passed through custom templates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts)
 - [Signal form with a mocked CVA child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts)
 - [Signal form with a mocked model-based child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts)
