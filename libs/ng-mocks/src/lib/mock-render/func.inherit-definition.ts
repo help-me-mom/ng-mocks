@@ -1,3 +1,8 @@
+import coreDefineProperty from '../common/core.define-property';
+import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
+
+type InheritedGetter = (() => unknown) & { ngMocksInheritedDefinition?: boolean };
+
 // Middleware declarations represent the same Angular declaration under a new
 // selector. Recompiling copied metadata must not add inherited side effects twice.
 const inheritDefinition = (definition: any, original: any): void => {
@@ -41,7 +46,10 @@ export default (child: any, template: any): void => {
     if (!descriptor?.get) {
       continue;
     }
-    const getter = descriptor.get;
+    const getter: InheritedGetter = descriptor.get;
+    if (getter.ngMocksInheritedDefinition) {
+      continue;
+    }
     if (!descriptor.configurable) {
       // Production-mode JIT getters cannot be replaced, even by TestBed.
       inheritDefinition(getter.call(child), template[key]);
@@ -50,21 +58,20 @@ export default (child: any, template: any): void => {
 
     let lastDefinition: any;
     let lastOriginal: any;
-    Object.defineProperty(child, key, {
-      ...descriptor,
-      get() {
-        const definition = getter.call(this);
-        const original = template[key];
-        if (definition !== lastDefinition || original !== lastOriginal) {
-          // TestBed can recompile the original after the middleware was reflected.
-          // Read its effective definition here so overrides also take effect once.
-          inheritDefinition(definition, original);
-          lastDefinition = definition;
-          lastOriginal = original;
-        }
+    const inheritedGetter = function (this: unknown) {
+      const definition = getter.call(this);
+      const original = template[key];
+      if (definition !== lastDefinition || original !== lastOriginal) {
+        // TestBed can recompile the original after the middleware was reflected.
+        // Read its effective definition here so overrides also take effect once.
+        inheritDefinition(definition, original);
+        lastDefinition = definition;
+        lastOriginal = original;
+      }
 
-        return definition;
-      },
-    });
+      return definition;
+    };
+    coreDefineProperty(inheritedGetter, 'ngMocksInheritedDefinition', true);
+    helperDefinePropertyDescriptor(child, key, { ...descriptor, get: inheritedGetter });
   }
 };
