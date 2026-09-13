@@ -8,7 +8,7 @@ import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
 import coreDefineProperty from './core.define-property';
 import { flatten } from './core.helpers';
 import { NG_MOCKS_ROOT_PROVIDERS } from './core.tokens';
-import { AnyDeclaration, AnyType } from './core.types';
+import { AnyDeclaration, AnyType, Type } from './core.types';
 import funcApplyTestBedOverride from './func.apply-test-bed-override';
 import { funcExtractDeps } from './func.extract-deps';
 import { getSourceOfMock } from './func.get-source-of-mock';
@@ -184,6 +184,31 @@ const configureTestingModule =
       }
 
       finalModuleDef = builder.build();
+      // Ivy's module override traversal depends on the explicit import order.
+      // Repeated ModuleWithProviders entries are already merged at their last occurrence.
+      const importOrder = new Set<Type<unknown>>();
+      for (const declaration of flatten(moduleDef.imports ?? [])) {
+        const source = getSourceOfMock(funcGetType(declaration));
+        importOrder.delete(source);
+        importOrder.add(source);
+      }
+      const imports = new Map<Type<unknown>, unknown[]>();
+      for (const declaration of finalModuleDef.imports!) {
+        const source = getSourceOfMock(funcGetType(declaration));
+        const entries = imports.get(source) ?? [];
+        entries.push(declaration);
+        imports.set(source, entries);
+      }
+      finalModuleDef.imports = [];
+      for (const source of importOrder) {
+        if (imports.has(source)) {
+          finalModuleDef.imports.push(...imports.get(source)!);
+          imports.delete(source);
+        }
+      }
+      for (const entries of imports.values()) {
+        finalModuleDef.imports.push(...entries);
+      }
       finalModuleDef = {
         ...moduleDef,
         ...finalModuleDef,
