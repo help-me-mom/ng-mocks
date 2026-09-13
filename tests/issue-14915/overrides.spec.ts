@@ -10,6 +10,7 @@ import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
+  host: { 'data-strategy': 'override-default' },
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })
@@ -19,6 +20,7 @@ class DefaultComponent {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { 'data-strategy': 'override-on-push' },
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })

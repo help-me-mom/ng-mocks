@@ -2,7 +2,7 @@ import { ResourceLoader } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 let constructions = 0;
 
@@ -81,18 +81,28 @@ describe('issue-15004:resources', () => {
       ],
     });
 
+    const loggedErrors: Error[][] = [];
+    const consoleError = console.error;
+    ngMocks.stubMember(console, 'error', (...args: Error[]) =>
+      loggedErrors.push(args),
+    );
     let rejected = false;
     try {
       await TestBed.compileComponents();
     } catch (error) {
       rejected = true;
       expect(error === failure).toBe(true);
+    } finally {
+      ngMocks.stubMember(console, 'error', consoleError);
     }
 
     expect(rejected).toBe(true);
     expect(requests.length).toBe(1);
     expect(requests[0]).toContain('native-issue-15004.css');
     expect(constructions).toBe(0);
+    for (const args of loggedErrors) {
+      expect(args).toEqual([failure]);
+    }
   });
 
   it('rejects the builder and allows a fresh compilation after resetting TestBed', async () => {
@@ -127,6 +137,11 @@ describe('issue-15004:resources', () => {
         });
       });
 
+    const loggedErrors: Error[][] = [];
+    const consoleError = console.error;
+    ngMocks.stubMember(console, 'error', (...args: Error[]) =>
+      loggedErrors.push(args),
+    );
     let rejected = false;
     try {
       // Angular's rejected compilation must settle the builder's outer promise too.
@@ -134,12 +149,17 @@ describe('issue-15004:resources', () => {
     } catch (error) {
       rejected = true;
       expect(error === failure).toBe(true);
+    } finally {
+      ngMocks.stubMember(console, 'error', consoleError);
     }
 
     expect(rejected).toBe(true);
     expect(requests.length).toBe(1);
     expect(requests[0]).toContain('builder-issue-15004.css');
     expect(constructions).toBe(0);
+    for (const args of loggedErrors) {
+      expect(args).toEqual([failure]);
+    }
 
     TestBed.resetTestingModule();
     await MockBuilder().keep(RecoveryComponent);

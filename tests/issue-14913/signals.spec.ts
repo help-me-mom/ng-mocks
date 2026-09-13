@@ -23,7 +23,7 @@ interface Item {
   selector: 'target-14913-signals',
   standalone: false,
   template: `
-    @for (item of items(); track item) {
+    @for (item of items(); track $index) {
       <span
         >{{ item.name().value() }}:{{ item.name().touched() }}</span
       >
