@@ -3,9 +3,83 @@ import {
   extendClass,
   extendClassicClass,
   extractDependency,
+  flatten,
 } from './core.helpers';
 import decorateMock from './decorate.mock';
 import funcGetGlobal from './func.get-global';
+
+describe('flatten', () => {
+  it('preserves nested wrapper order and provider identity without changing source containers', () => {
+    const factory = jasmine.createSpy('factory');
+    const first = {
+      provide: 'multi',
+      multi: true,
+      useValue: 'first',
+    };
+    const second = {
+      provide: 'multi',
+      multi: true,
+      useFactory: factory,
+    };
+    const empty = Object.freeze({ ɵproviders: Object.freeze([]) });
+    const nested = Object.freeze([empty, second]);
+    const innerProviders = Object.freeze([first, nested]);
+    const inner = Object.freeze({ ɵproviders: innerProviders });
+    const outerProviders = Object.freeze([inner]);
+    const outer = Object.freeze({ ɵproviders: outerProviders });
+    const value = Object.freeze({
+      ɵproviders: Object.freeze([first]),
+    });
+    const tail = { provide: 'data', useValue: value };
+    const repeated = Object.freeze([tail, outer]);
+    const source = Object.freeze([outer, repeated]);
+    const prefix = { provide: 'prefix', useValue: 'prefix' };
+    const destination = [prefix];
+
+    const actual = flatten<unknown>(source, destination);
+    const expected = [prefix, first, second, tail, first, second];
+
+    expect(actual).toBe(destination);
+    expect(actual).toEqual(expected);
+    for (let index = 0; index < expected.length; index += 1) {
+      expect(actual[index]).toBe(expected[index]);
+    }
+    expect(factory).not.toHaveBeenCalled();
+    expect(tail.useValue).toBe(value);
+    expect(source).toEqual([outer, [tail, outer]]);
+    expect(source[1]).toBe(repeated);
+    expect(outer.ɵproviders).toBe(outerProviders);
+    expect(outerProviders).toEqual([inner]);
+    expect(inner.ɵproviders).toBe(innerProviders);
+    expect(innerProviders).toEqual([first, [empty, second]]);
+    expect(innerProviders[1]).toBe(nested);
+    expect(empty.ɵproviders).toEqual([]);
+  });
+
+  it('preserves falsy leaves, callable tokens and objects with non-array provider fields', () => {
+    const callable = jasmine.createSpy('callable');
+    const ordinary = Object.freeze({ ɵproviders: callable });
+    const source = [
+      null,
+      undefined,
+      false,
+      0,
+      '',
+      ordinary,
+      callable,
+    ];
+    Object.freeze(source);
+
+    const actual = flatten<unknown>(source);
+
+    expect(actual).not.toBe(source);
+    expect(actual).toEqual(source);
+    expect(actual[5]).toBe(ordinary);
+    expect(actual[6]).toBe(callable);
+    expect(ordinary.ɵproviders).toBe(callable);
+    expect(callable).not.toHaveBeenCalled();
+  });
+});
 
 describe('extendClassicClass', () => {
   it('preserves custom constructor stringification and its receiver', () => {
