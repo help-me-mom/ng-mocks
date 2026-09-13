@@ -46,7 +46,25 @@ ngMocks.change(['data-testid', 'inputControl'], 123);
 
 Profit!
 
-It supports both `FormsModule` and `ReactiveFormsModule`.
+It supports `FormsModule`, `ReactiveFormsModule`, and [signal forms](/guides/signal-forms.md).
+Supported hosts include native `input`, `textarea`, and `select` elements with `[formField]`,
+and real or mocked `ControlValueAccessor`, `FormValueControl`, and `FormCheckboxControl` components.
 
-Calling `ngMocks.change` also simulates that the user removes focus from the element by triggering a **blur** event. 
-If testing form changes in combination with blur events, it is therefore not necessary to call [`ngMocks.trigger`](trigger.md) after `ngMocks.change`.
+Changing a value and marking a field touched are separate interactions. Whether
+`ngMocks.change` also triggers a **blur** event depends on the selected control:
+
+| Selected control | Blur and touched behavior |
+| --- | --- |
+| Native form element | Includes blur. Touched state follows the real form binding and its update policy. |
+| Real CVA with input/change event handlers on the selected element | Includes blur. The blur handler must report the touch to the form binding. |
+| Real CVA using its registered change callback | Invokes the registered change callback without blur or touch. Use `ngMocks.touch` for a separate touch interaction. |
+| Mocked CVA | Includes host blur, but does not call the CVA touch callback. Use `ngMocks.touch` to invoke that callback. |
+| Real or mocked `FormValueControl` / `FormCheckboxControl` | Emits `valueChange` or `checkedChange` without blur or touch. Use `ngMocks.touch` when the control exposes a touch output. |
+
+For classic controls with `updateOn: 'submit'`, a reported touch remains pending until form submission.
+
+When the change already includes blur, another [`ngMocks.trigger`](trigger.md) call is
+unnecessary to exercise that blur handler. A dispatched blur event alone does not guarantee
+that a custom field becomes touched, and it does not move actual browser focus.
+See [`ngMocks.touch`](touch.md) for separate touch interactions and the
+[signal-forms guide](/guides/signal-forms.md) for native, CVA, and signal-control examples.

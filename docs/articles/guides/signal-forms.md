@@ -252,6 +252,11 @@ detect and wire the accessor when it creates the mock.
 See [form control definitions](/extra/mock-form-controls.md#caution-about-controlvalueaccessor)
 for why function-valued properties do not work for this API.
 
+On a mocked CVA host, `ngMocks.change` also dispatches a DOM blur event, but does not
+invoke the registered touch callback. Use `ngMocks.touch` for that separate interaction.
+The [change API](/api/ngMocks/change.md) explains how blur and touched behavior differ
+for native elements and real custom controls.
+
 ```ts
 import { Component, forwardRef, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
