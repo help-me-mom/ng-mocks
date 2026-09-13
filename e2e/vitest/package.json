@@ -32,7 +32,7 @@
     "jsdom": "30.0.1",
     "ng-packagr": "22.1.1",
     "npm": "11.19.1",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.11"
   },
   "engines": {
