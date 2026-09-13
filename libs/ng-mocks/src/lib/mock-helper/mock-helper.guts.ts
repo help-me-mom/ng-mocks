@@ -16,6 +16,7 @@ import mockProvider from '../mock-service/mock-provider';
 
 type Data = {
   declarations: any[];
+  destructured: Set<unknown>;
   exclude: Set<any>;
   imports: any[];
   keep: Set<any>;
@@ -87,7 +88,7 @@ const getType = (def: any, keep: Set<any>): string => {
 };
 
 const handleModuleWithProviders = (data: Data, def: any): void => {
-  if (data.skip.has(def.ngModule)) {
+  if (data.skip.has(def.ngModule) && !def.providers?.length) {
     return;
   }
   data.skip.add(def.ngModule);
@@ -95,7 +96,14 @@ const handleModuleWithProviders = (data: Data, def: any): void => {
     return;
   }
 
-  data.imports.push(data.keep.has(def.ngModule) ? def : MockModule(def));
+  if (data.destructured.has(def.ngModule)) {
+    // Keep the declarations and providers in the scope chosen by the earlier bare module.
+    for (const provider of flatten(def.providers)) {
+      resolveProvider(data, provider);
+    }
+  } else {
+    data.imports.push(data.keep.has(def.ngModule) ? def : MockModule(def));
+  }
 };
 
 const handleDeclaration = (data: Data, def: any, callback: any, bucket: any[]): void => {
@@ -111,6 +119,7 @@ const handleDestructuring = (data: Data, def: any, callback: any): void => {
     return;
   }
 
+  data.destructured.add(def);
   const meta = coreReflectModuleResolve(def);
   for (const toMock of flatten([meta.declarations, meta.imports])) {
     callback(data, toMock);
@@ -205,6 +214,7 @@ const generateData = (protoKeep: any, protoMock: any, protoExclude: any): Data =
 
   return {
     declarations: [],
+    destructured: new Set(),
     exclude,
     imports: [],
     keep,
