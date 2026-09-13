@@ -169,6 +169,74 @@ describe('create-runtime-inject-provider', () => {
     }
   });
 
+  it('passes the kept child type to its inherited constructor factory', () => {
+    const constructed: unknown[] = [];
+    class ParentService {
+      public readonly name: string = 'parent';
+
+      public constructor() {
+        constructed.push(this.constructor);
+      }
+    }
+    class ChildService extends ParentService {
+      public readonly name = 'child';
+    }
+    const constructorFactory = jasmine
+      .createSpy('constructorFactory')
+      .and.callFake(
+        (type: typeof ParentService = ParentService) => new type(),
+      );
+    coreDefineProperty(ParentService, 'ɵfac', constructorFactory);
+    coreDefineProperty(ParentService, 'ɵprov', {
+      factory: constructorFactory,
+      providedIn: 'root',
+      token: ParentService,
+    });
+    const destroyCallbacks: Array<() => void> = [];
+    const injector = {
+      get: () => undefined,
+      onDestroy: (callback: () => void) =>
+        destroyCallbacks.push(callback),
+    };
+    const providers: Provider[] = [ChildService];
+    ngMocksUniverse.builtProviders.set(ChildService, ChildService);
+
+    try {
+      createRuntimeInjectProvider(
+        new Set([ChildService]),
+        new Map([[ChildService, { shallow: false }]]),
+        providers,
+        false,
+        new Set(),
+      );
+
+      const wrapped = providers[0] as FactoryProvider;
+      expect(wrapped.provide).toBe(ChildService);
+      expect(wrapped.deps).toEqual([Injector, NG_MOCKS_TOUCHES]);
+      expect(constructorFactory).not.toHaveBeenCalled();
+      expect(constructed).toEqual([]);
+
+      const service = wrapped.useFactory(injector, new Set());
+
+      expect(service instanceof ChildService).toBe(true);
+      expect(service.name).toBe('child');
+      expect(constructorFactory).toHaveBeenCalledTimes(1);
+      expect(constructorFactory).toHaveBeenCalledWith(ChildService);
+      expect(service).toBe(
+        constructorFactory.calls.mostRecent().returnValue,
+      );
+      expect(constructed).toEqual([ChildService]);
+      expect(ngMocksUniverse.builtProviders.get(ChildService)).toBe(
+        ChildService,
+      );
+    } finally {
+      for (const destroy of destroyCallbacks) {
+        destroy();
+      }
+      ngMocksUniverse.builtProviders.delete(ChildService);
+    }
+  });
+
   describe('explicit keeps in default auto-spy mode', () => {
     beforeEach(() => ngMocks.autoSpy('default'));
     afterEach(() => ngMocks.autoSpy('reset'));

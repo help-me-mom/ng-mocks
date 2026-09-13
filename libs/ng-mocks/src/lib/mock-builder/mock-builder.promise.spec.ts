@@ -319,3 +319,107 @@ describe('MockBuilderPromise', () => {
     ).not.toThrow();
   });
 });
+
+// @see https://github.com/help-me-mom/ng-mocks/issues/15004
+describe('MockBuilderPromise:compilation rejection', () => {
+  it('forwards a non-Error reason to then and adopts its recovery promise', async () => {
+    const reason = { resource: 'missing' };
+    const recovery = { recovered: true };
+    const received: unknown[] = [];
+    let compilations = 0;
+    let fulfillments = 0;
+    const builder = MockBuilder().beforeCompileComponents(testBed => {
+      spyOn(testBed, 'compileComponents').and.callFake(() => {
+        compilations += 1;
+        return Promise.reject(reason);
+      });
+    });
+
+    const result = await builder.then(
+      () => {
+        fulfillments += 1;
+        return recovery;
+      },
+      error => {
+        received.push(error);
+        return recovery;
+      },
+    );
+
+    expect(result).toBe(recovery);
+    expect(received.length).toBe(1);
+    expect(received[0]).toBe(reason);
+    expect(compilations).toBe(1);
+    expect(fulfillments).toBe(0);
+  });
+
+  it('forwards compilation failures to catch and adopts recovery', async () => {
+    const failure = new Error('compile catch');
+    const received: unknown[] = [];
+    let compilations = 0;
+    const builder = MockBuilder().beforeCompileComponents(testBed => {
+      spyOn(testBed, 'compileComponents').and.callFake(() => {
+        compilations += 1;
+        return Promise.reject(failure);
+      });
+    });
+
+    const result = await builder.catch(error => {
+      received.push(error);
+      return 'recovered';
+    });
+
+    expect(result).toBe('recovered');
+    expect(received.length).toBe(1);
+    expect(received[0]).toBe(failure);
+    expect(compilations).toBe(1);
+  });
+
+  it('runs finally once without replacing the compilation failure', async () => {
+    const failure = new Error('compile finally');
+    let compilations = 0;
+    let finalizations = 0;
+    const builder = MockBuilder().beforeCompileComponents(testBed => {
+      spyOn(testBed, 'compileComponents').and.callFake(() => {
+        compilations += 1;
+        return Promise.reject(failure);
+      });
+    });
+
+    let rejected = false;
+    try {
+      await builder.finally(() => {
+        finalizations += 1;
+      });
+    } catch (error) {
+      rejected = true;
+      expect(error).toBe(failure);
+    }
+
+    expect(rejected).toBe(true);
+    expect(finalizations).toBe(1);
+    expect(compilations).toBe(1);
+  });
+
+  it('rejects synchronous hook errors without starting compilation', async () => {
+    const failure = new Error('before compilation');
+    let compilations = 0;
+    const received: unknown[] = [];
+    const builder = MockBuilder().beforeCompileComponents(testBed => {
+      spyOn(testBed, 'compileComponents').and.callFake(() => {
+        compilations += 1;
+        return Promise.resolve();
+      });
+      throw failure;
+    });
+
+    await builder.then(undefined, error => {
+      received.push(error);
+      return;
+    });
+
+    expect(received.length).toBe(1);
+    expect(received[0]).toBe(failure);
+    expect(compilations).toBe(0);
+  });
+});

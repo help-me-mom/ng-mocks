@@ -499,3 +499,79 @@ describe('definitions', () => {
     expect(() => proxy.validate(undefined)).not.toThrow();
   });
 });
+
+// @see https://github.com/help-me-mom/ng-mocks/issues/15007
+describe('Mock:host-bound outputs', () => {
+  it('initializes aliased outputs separately from host-binding storage', () => {
+    class TargetComponent {}
+
+    const testComponent = extendClass(Mock);
+    decorateMock(testComponent, TargetComponent, {
+      hostBindings: ['event', 'label'],
+      inputs: ['label'],
+      outputs: ['event: changed'],
+    });
+    const first = new testComponent() as Mock & {
+      event: EventEmitter<string>;
+      label?: string;
+    };
+    const second = new testComponent() as Mock & {
+      event: EventEmitter<string>;
+    };
+    const received: string[] = [];
+
+    expect(first.event instanceof EventEmitter).toBe(true);
+    expect(second.event instanceof EventEmitter).toBe(true);
+    expect(first.event === second.event).toBe(false);
+    first.event.subscribe(value => received.push(value));
+    first.event.emit('sent');
+    expect(received).toEqual(['sent']);
+    expect(first.label).toBeUndefined();
+    first.label = 'updated';
+    expect(first.label).toBe('updated');
+  });
+
+  it('preserves an existing custom output accessor and does not call its setter', () => {
+    class TargetComponent {}
+
+    const emitter = new EventEmitter<string>();
+    const writes: EventEmitter<string>[] = [];
+    class TestMock extends Mock {
+      public get event(): EventEmitter<string> {
+        return emitter;
+      }
+      public set event(value: EventEmitter<string>) {
+        writes.push(value);
+      }
+    }
+
+    const testComponent = extendClass(TestMock);
+    decorateMock(testComponent, TargetComponent, {
+      hostBindings: ['event'],
+      outputs: ['event'],
+    });
+    const instance = new testComponent();
+    const received: string[] = [];
+    instance.event.subscribe(value => received.push(value));
+    instance.event.emit('custom');
+
+    expect(instance.event === emitter).toBe(true);
+    expect(received).toEqual(['custom']);
+    expect(writes).toEqual([]);
+  });
+
+  it('preserves ordinary host-binding storage without configured outputs', () => {
+    class TargetComponent {}
+
+    const testComponent = extendClass(Mock);
+    decorateMock(testComponent, TargetComponent, {
+      hostBindings: ['label'],
+      inputs: ['label'],
+    });
+    const instance = new testComponent() as Mock & { label?: string };
+
+    expect(instance.label).toBeUndefined();
+    instance.label = 'updated';
+    expect(instance.label).toBe('updated');
+  });
+});

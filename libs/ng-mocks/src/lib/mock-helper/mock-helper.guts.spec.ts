@@ -418,6 +418,153 @@ describe('mock-helper.guts', () => {
     }
   });
 
+  it('skips repeated wrappers with omitted providers', () => {
+    const first = { ngModule: Target1Module };
+    const ngModule = ngMocks.guts(Target1Module, [
+      first,
+      { ngModule: Target1Module },
+    ]);
+
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [first],
+      providers: [],
+    });
+    expect(ngModule.imports?.[0]).toBe(first);
+  });
+
+  // @see https://github.com/help-me-mom/ng-mocks/issues/15000
+  it('keeps repeated wrapper providers in their import order', () => {
+    const token = new InjectionToken('ORDER');
+    const firstProviders = [
+      { provide: token, useValue: 'first', multi: true },
+    ];
+    const lastProviders = [
+      { provide: token, useValue: 'last', multi: true },
+    ];
+    const first = {
+      ngModule: Target1Module,
+      providers: firstProviders,
+    };
+    const middle = {
+      ngModule: Target2Module,
+      providers: [
+        { provide: token, useValue: 'middle', multi: true },
+      ],
+    };
+    const last = {
+      ngModule: Target1Module,
+      providers: lastProviders,
+    };
+    const ngModule = ngMocks.guts(
+      [Target1Module, Target2Module],
+      [
+        first,
+        Target1Module,
+        { ngModule: Target1Module, providers: [] },
+        middle,
+        last,
+      ],
+    );
+
+    expect(ngModule.declarations).toEqual([]);
+    expect(ngModule.providers).toEqual([]);
+    expect(ngModule.imports?.length).toEqual(3);
+    if (ngModule.imports) {
+      expect(ngModule.imports[0]).toBe(first);
+      expect(ngModule.imports[1]).toBe(middle);
+      expect(ngModule.imports[2]).toBe(last);
+    }
+    expect(first.providers).toBe(firstProviders);
+    expect(firstProviders).toEqual([
+      { provide: token, useValue: 'first', multi: true },
+    ]);
+    expect(last.providers).toBe(lastProviders);
+    expect(lastProviders).toEqual([
+      { provide: token, useValue: 'last', multi: true },
+    ]);
+  });
+
+  it('mocks every wrapper provider while sharing the mock module', () => {
+    const first = {
+      ngModule: Target1Module,
+      providers: [{ provide: TARGET1, useValue: 123 }],
+    };
+    const second = {
+      ngModule: Target1Module,
+      providers: [{ provide: TARGET2, useValue: true }],
+    };
+    const ngModule = ngMocks.guts(null, [first, second]);
+
+    expect(ngModule.declarations).toEqual([]);
+    expect(ngModule.providers).toEqual([]);
+    expect(ngModule.imports?.length).toEqual(2);
+    if (ngModule.imports?.length === 2) {
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeTruthy();
+      expect(ngModule.imports[1].ngModule).toBe(
+        ngModule.imports[0].ngModule,
+      );
+      expect(ngModule.imports[0].providers).toEqual([
+        {
+          deps: [Injector],
+          provide: TARGET1,
+          useFactory: jasmine.anything(),
+        },
+      ]);
+      expect(ngModule.imports[1].providers).toEqual([
+        {
+          deps: [Injector],
+          provide: TARGET2,
+          useFactory: jasmine.anything(),
+        },
+      ]);
+      expect(
+        ngModule.imports[0].providers[0].useFactory(null),
+      ).toEqual(0);
+      expect(ngModule.imports[1].providers[0].useFactory(null)).toBe(
+        false,
+      );
+    }
+    expect(first.providers).toEqual([
+      { provide: TARGET1, useValue: 123 },
+    ]);
+    expect(second.providers).toEqual([
+      { provide: TARGET2, useValue: true },
+    ]);
+  });
+
+  it('keeps wrapper providers before or after the bare module', () => {
+    const wrapper = {
+      ngModule: Target1Module,
+      providers: [{ provide: TARGET1, useValue: 'configured' }],
+    };
+    const bareFirst = ngMocks.guts(Target1Module, [
+      Target1Module,
+      wrapper,
+    ]);
+    const wrapperFirst = ngMocks.guts(Target1Module, [
+      wrapper,
+      Target1Module,
+    ]);
+
+    expect(bareFirst).toEqual({
+      declarations: [],
+      imports: [Target1Module, wrapper],
+      providers: [],
+    });
+    expect(wrapperFirst).toEqual({
+      declarations: [],
+      imports: [wrapper],
+      providers: [],
+    });
+  });
+
   it('skips existing kept module', () => {
     const ngModule = ngMocks.guts(Target1Module, Target1Module);
     expect(ngModule.imports?.length).toEqual(1);
@@ -769,6 +916,30 @@ describe('mock-helper.guts', () => {
       { ngModule: Target1Module, providers: [] },
       Target1Module,
     );
+    expect(ngModule).toEqual({
+      declarations: [],
+      imports: [],
+      providers: [],
+    });
+  });
+
+  it('excludes repeated provider-bearing wrappers of a kept module', () => {
+    const ngModule = ngMocks.guts(
+      Target1Module,
+      [
+        {
+          ngModule: Target1Module,
+          providers: [{ provide: TARGET1, useValue: 'first' }],
+        },
+        Target1Module,
+        {
+          ngModule: Target1Module,
+          providers: [{ provide: TARGET2, useValue: 'second' }],
+        },
+      ],
+      Target1Module,
+    );
+
     expect(ngModule).toEqual({
       declarations: [],
       imports: [],

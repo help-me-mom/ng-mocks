@@ -221,7 +221,7 @@ export class MockBuilderPromise implements IMockBuilder {
     fulfill?: ((value: IMockBuilderResult) => PromiseLike<TResult1>) | undefined | null,
     reject?: ((reason: any) => PromiseLike<any>) | undefined | null,
   ): Promise<TResult1> {
-    const promise = new Promise((resolve: (value: IMockBuilderResult) => void): void => {
+    const promise = new Promise<IMockBuilderResult>((resolve, rejectCompilation): void => {
       const testBed: TestBedStatic = TestBed.configureTestingModule(this.build()) as never;
       // eslint-disable-next-line unicorn/no-useless-spread -- Callbacks added during compilation belong to the next run.
       for (const callback of [...this.beforeCC]) {
@@ -230,7 +230,7 @@ export class MockBuilderPromise implements IMockBuilder {
       const testBedPromise = testBed.compileComponents();
       testBedPromise.then(() => {
         resolve({ testBed });
-      });
+      }, rejectCompilation);
     });
 
     return promise.then(fulfill, reject);

@@ -14,6 +14,12 @@ import markProviders from '../../mock-module/mark-providers';
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
 
+type InjectableDefinition = {
+  factory?: () => unknown;
+  providedIn?: unknown;
+  token?: unknown;
+};
+
 const skipDef = (def: any): boolean =>
   ngMocksUniverse.touches.has(def) || isNgDef(def) || isNgInjectionToken(def) || typeof def === 'string';
 
@@ -172,6 +178,45 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
     } else if (globalFlags.onMockBuilderMissingDependency === 'throw') {
       throw new Error(errorMessage);
     }
+  }
+
+  // Keep class sentinels until modules have selected their own providers.
+  // JIT annotations omit recipe options, but Angular's own root factory retains them.
+  for (let index = 0; index < meta.providers.length; index += 1) {
+    const def = meta.providers[index];
+    if (typeof def !== 'function' || !keepDef.has(def)) {
+      continue;
+    }
+
+    const injectable = def as typeof def & {
+      ɵprov?: InjectableDefinition;
+      ngInjectableDef?: InjectableDefinition;
+    };
+    const definition = Object.prototype.hasOwnProperty.call(def, 'ɵprov')
+      ? injectable.ɵprov
+      : Object.prototype.hasOwnProperty.call(def, 'ngInjectableDef')
+        ? injectable.ngInjectableDef
+        : undefined;
+    if (
+      definition?.providedIn !== 'root' ||
+      typeof definition.factory !== 'function' ||
+      (definition.token !== undefined && definition.token !== def)
+    ) {
+      continue;
+    }
+
+    // Legacy static inheritance can copy a token-less definition onto the child.
+    const parent: { constructor: { ngInjectableDef?: InjectableDefinition } } | null = Object.getPrototypeOf(
+      def.prototype,
+    );
+    if (definition.token === undefined && definition === parent?.constructor.ngInjectableDef) {
+      continue;
+    }
+
+    const factory = definition.factory;
+    const provider = { provide: def, useFactory: () => factory() };
+    meta.providers[index] = provider;
+    ngMocksUniverse.builtProviders.set(def, provider);
   }
 
   return meta;

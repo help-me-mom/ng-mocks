@@ -14,10 +14,10 @@ import { MockService } from './mock-service';
 const { neverMockProvidedFunction, neverMockToken } = coreConfig;
 
 const applyMissingClassProperties = (instance: any, useClass: Type<any>) => {
-  const existing = Object.getOwnPropertyNames(instance);
+  const existing = [...Object.getOwnPropertyNames(instance), ...Object.getOwnPropertySymbols(instance)];
   const child = MockService(useClass);
 
-  for (const name of Object.getOwnPropertyNames(child)) {
+  for (const name of [...Object.getOwnPropertyNames(child), ...Object.getOwnPropertySymbols(child)]) {
     if (existing.indexOf(name) !== -1) {
       continue;
     }
