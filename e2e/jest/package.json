@@ -8,8 +8,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "npm run test:jest",
+    "test": "npm run test:jest && npm run test:jest:esm:ivy-zoned",
     "test:jest": "jest --config jest.config.ts",
+    "test:jest:esm:ivy-zoned": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.esm.ivy-zoned.mjs",
     "test:jest:debug": "jest -i --watch"
   },
   "dependencies": {
