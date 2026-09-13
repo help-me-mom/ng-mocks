@@ -109,4 +109,31 @@ describe('TestSignalForms:model', () => {
     expect(control.touched()).toBe(true);
     expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Ada');
   });
+
+  it('updates the mock from the parent without emitting a child change', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
+    const values: string[] = [];
+    ngMocks
+      .output(child, 'valueChange')
+      .subscribe(value => values.push(value));
+
+    expect(control.value()).toBe('Ada');
+
+    // A parent write updates the binding without simulating child interaction.
+    component.model.set({ name: 'Katherine' });
+    fixture.detectChanges();
+
+    expect(control.value()).toBe('Katherine');
+    expect(component.f.name().value()).toBe('Katherine');
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe(
+      'Katherine',
+    );
+    expect(values).toEqual([]);
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(false);
+    expect(control.touched()).toBe(false);
+  });
 });
