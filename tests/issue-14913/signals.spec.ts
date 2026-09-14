@@ -41,6 +41,8 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14913
 describe('issue-14913:signals', () => {
+  ngMocks.throwOnConsole();
+
   if (
     !reflectComponentType(TargetComponent)?.inputs.some(
       inputMetadata => inputMetadata.propName === 'items',

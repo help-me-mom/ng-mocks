@@ -59,6 +59,8 @@ class ChildService extends ParentService {
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14949
 describe('issue-14949:policies', () => {
+  ngMocks.throwOnConsole();
+
   beforeEach(() => {
     rootCalls = 0;
     parentConstructions = 0;
@@ -121,14 +123,11 @@ describe('issue-14949:policies', () => {
     expect(rootCalls).toBe(1);
   });
 
-  it('constructs the child when Angular provides it directly', () => {
-    const warn = console.warn;
-    const warnings: string[][] = [];
-    ngMocks.stubMember(console, 'warn', (...args: string[]) => {
-      warnings.push(args);
-    });
+  describe('inherited injectable definitions', () => {
+    // Angular warns about the undecorated inheritance exercised by these regressions.
+    ngMocks.ignoreOnConsole('warn');
 
-    try {
+    it('constructs the child when Angular provides it directly', () => {
       TestBed.configureTestingModule({ providers: [ChildService] });
 
       const service = ngMocks.get(ChildService);
@@ -137,25 +136,22 @@ describe('issue-14949:policies', () => {
       expect(service.name).toBe('child constructor');
       expect(ngMocks.get(ChildService)).toBe(service);
       expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
       for (const args of warnings) {
         expect(args.length).toBe(1);
         expect(args[0]).toMatch(
           /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
         );
       }
-    } finally {
-      ngMocks.stubMember(console, 'warn', warn);
-    }
-  });
-
-  it('preserves native child construction when static definitions are copied', async () => {
-    const warn = console.warn;
-    const warnings: string[][] = [];
-    ngMocks.stubMember(console, 'warn', (...args: string[]) => {
-      warnings.push(args);
     });
 
-    try {
+    it('preserves native child construction when static definitions are copied', async () => {
       class CopiedChildService extends ParentService {
         public readonly name = 'copied child constructor';
       }
@@ -183,25 +179,22 @@ describe('issue-14949:policies', () => {
       expect(ngMocks.get(CopiedChildService)).toBe(service);
       expect(service).not.toBe(native);
       expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
       for (const args of warnings) {
         expect(args.length).toBe(1);
         expect(args[0]).toMatch(
           /^DEPRECATED: DI is instantiating a token "CopiedChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "CopiedChildService" class\.$/,
         );
       }
-    } finally {
-      ngMocks.stubMember(console, 'warn', warn);
-    }
-  });
-
-  it('constructs a kept child instead of executing its inherited root recipe', async () => {
-    const warn = console.warn;
-    const warnings: string[][] = [];
-    ngMocks.stubMember(console, 'warn', (...args: string[]) => {
-      warnings.push(args);
     });
 
-    try {
+    it('constructs a kept child instead of executing its inherited root recipe', async () => {
       await MockBuilder().keep(ChildService);
 
       const service =
@@ -210,25 +203,22 @@ describe('issue-14949:policies', () => {
       expect(service instanceof ChildService).toBe(true);
       expect(service.name).toBe('child constructor');
       expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
       for (const args of warnings) {
         expect(args.length).toBe(1);
         expect(args[0]).toMatch(
           /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
         );
       }
-    } finally {
-      ngMocks.stubMember(console, 'warn', warn);
-    }
-  });
-
-  it('constructs a target child instead of executing its inherited root recipe', async () => {
-    const warn = console.warn;
-    const warnings: string[][] = [];
-    ngMocks.stubMember(console, 'warn', (...args: string[]) => {
-      warnings.push(args);
     });
 
-    try {
+    it('constructs a target child instead of executing its inherited root recipe', async () => {
       await MockBuilder(ChildService);
 
       const service =
@@ -237,14 +227,19 @@ describe('issue-14949:policies', () => {
       expect(service instanceof ChildService).toBe(true);
       expect(service.name).toBe('child constructor');
       expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
       for (const args of warnings) {
         expect(args.length).toBe(1);
         expect(args[0]).toMatch(
           /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
         );
       }
-    } finally {
-      ngMocks.stubMember(console, 'warn', warn);
-    }
+    });
   });
 });
