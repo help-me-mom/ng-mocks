@@ -35,7 +35,11 @@ const buildConfig = (
   };
 };
 
-const getMockOutputs = (inputs: DirectiveIo[] = [], outputs: DirectiveIo[] = [], reserved: string[]): DirectiveIo[] => {
+const getMockOutputs = (
+  inputs: DirectiveIo[] = [],
+  outputs: DirectiveIo[] = [],
+  reserved: Array<string | symbol>,
+): DirectiveIo[] => {
   const properties = new Set([...reserved, ...[...inputs, ...outputs].map(value => funcDirectiveIoParse(value).name)]);
 
   return outputs.map(output => {
@@ -131,7 +135,7 @@ export default <T extends Component & Directive>(
       options.viewProviders = viewProviders;
     }
 
-    const properties = [
+    const properties: Array<string | symbol> = [
       ...Object.keys(meta.queries || {}),
       ...(meta.hostBindings || []).map(([name]) => name),
       ...(meta.hostListeners || []).map(([name]) => name),

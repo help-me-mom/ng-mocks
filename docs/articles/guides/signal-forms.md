@@ -1,629 +1,341 @@
 ---
 title: How to test signal forms in Angular
-description: Test signal form validation, field state, model updates, and mocked ControlValueAccessor or FormValueControl dependencies with ng-mocks
+description: Find signal form controls, read their values, and change native inputs, textareas, checkboxes, radios, numbers, and selects with ng-mocks
 sidebar_label: Signal Forms
 ---
 
-When testing a component that owns a signal form, keep the form binding real so the test
-can observe how input events update the model, validation, and rendered feedback.
-Application controls can still be mocked when their implementation is outside the test's scope.
+Find a signal form's input, read its model value, and change it with
+[`ngMocks.change`](/api/ngMocks/change.md).
+Keep `FormField` real so Angular connects the input to the model.
+Signal forms require Angular 21 or newer.
 
-The examples below use Angular 22 and Jasmine. They cover a native text input and
-custom controls that implement `ControlValueAccessor` or `FormValueControl`.
+This component connects an input to `f.inputValue` through `[formField]`.
+The input initially displays `Ada`:
 
-## Related tools
+```ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
 
-- [`MockBuilder`](/api/MockBuilder.md)
-- [`MockRender`](/api/MockRender.md)
-- [`ngMocks.change`](/api/ngMocks/change.md)
-- [`ngMocks.touch`](/api/ngMocks/touch.md)
-- [`MockInstance`](/api/MockInstance.md)
+@Component({
+  selector: 'target-signal-forms-native',
+  imports: [FormField],
+  template: '<input [formField]="f.inputValue" />',
+})
+class TargetComponent {
+  public readonly model = signal({ inputValue: 'Ada' });
+  public readonly f = form(this.model);
+}
+```
 
-## Keep the form binding and its services
+## Test setup
 
-`MockBuilder(TargetComponent)` mocks the imports of a standalone component by default.
-Keep `FormField` to connect `[formField]` to the real field state. Also keep
-[`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token):
-native input handling in Angular 22 depends on root services that must retain their real implementations.
-Without them, an input event can fail with `validityMonitor.isBadInput is not a function`.
+Configure the testing module in `beforeEach` with [`MockBuilder`](/api/MockBuilder.md).
+Keep `TargetComponent`, `FormField`, and its root services real so Angular connects
+the input and the field:
 
 ```ts
 beforeEach(() =>
   MockBuilder(TargetComponent)
+    // Keep the field binding and the services used by native input events.
     .keep(FormField)
     .keep(NG_MOCKS_ROOT_PROVIDERS),
 );
 ```
 
-Keeping this token affects root providers throughout the test. Use explicit `.mock(MyService)`
+:::warning Keep root providers real
+
+Keep [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token):
+native input handling in Angular 22 needs the real root services. Without them,
+an input event can fail with `validityMonitor.isBadInput is not a function`.
+
+The token keeps root providers throughout the test. Use explicit `.mock(MyService)`
 calls for application services you want to replace.
 
-## Test validation and rendered feedback
+:::
 
-This form requires a name. Its Save button is disabled while the form is invalid,
-but its validation message appears only after the name field is touched.
+## Testing the input
 
-```ts
-import { Component, signal } from '@angular/core';
-import { form, FormField, required } from '@angular/forms/signals';
+:::warning Blur and submission
 
-@Component({
-  selector: 'target-signal-forms',
-  imports: [FormField],
-  template: `
-    <label>
-      Name
-      <input [formField]="profile.name" />
-    </label>
-    @if (profile.name().touched()) {
-      @for (error of profile.name().errors(); track error.kind) {
-        <span role="alert">{{ error.message }}</span>
-      }
-    }
-    <button type="submit" [disabled]="profile().invalid()">Save</button>
-  `,
-})
-class TargetComponent {
-  public readonly model = signal({ name: '' });
-  public readonly profile = form(this.model, schema => {
-    required(schema.name, { message: 'Name is required' });
-  });
-}
-```
+The native signal field below updates immediately. `ngMocks.change` also includes
+blur for native inputs, so the edited field becomes dirty and touched.
 
-The tests check both field state and visible feedback. A touch reveals the error without
-changing the value or making the field dirty. Editing the input then clears the error
-and enables Save. Call `fixture.detectChanges()` after each interaction to update the template.
+For [form submission](/extra/mock-ng-submit.md#signal-forms), wait for the submission
+action to finish before asserting its completed result.
 
-The last test exercises the other direction: updating the model should render a new input
-value while leaving the field pristine and untouched. Setting the model directly would
-therefore miss the event handling exercised by the first two tests.
+:::
 
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/test.spec.ts&initialpath=%3Fspec%3DTestSignalForms)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/test.spec.ts&initialpath=%3Fspec%3DTestSignalForms)
-
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts"
-import {
-  MockBuilder,
-  MockRender,
-  NG_MOCKS_ROOT_PROVIDERS,
-  ngMocks,
-} from 'ng-mocks';
-
-describe('TestSignalForms', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent)
-      .keep(FormField)
-      .keep(NG_MOCKS_ROOT_PROVIDERS),
-  );
-
-  it('shows validation after a touch without changing the value', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-
-    expect(component.profile.name().invalid()).toBe(true);
-    expect(component.profile.name().touched()).toBe(false);
-    expect(component.profile.name().dirty()).toBe(false);
-    expect(ngMocks.find('[role="alert"]', undefined)).toBeUndefined();
-    expect(ngMocks.find<HTMLButtonElement>('button').nativeElement.disabled).toBe(true);
-
-    // Blur exposes the validation message without making the field dirty.
-    ngMocks.touch('input');
-    fixture.detectChanges();
-
-    expect(component.model()).toEqual({ name: '' });
-    expect(component.profile.name().touched()).toBe(true);
-    expect(component.profile.name().dirty()).toBe(false);
-    expect(component.profile.name().errors().map(error => error.kind)).toEqual(['required']);
-    expect(ngMocks.formatText(ngMocks.find('[role="alert"]'))).toBe('Name is required');
-  });
-
-  it('updates the model and clears rendered validation after an edit', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-
-    ngMocks.touch('input');
-    fixture.detectChanges();
-    expect(ngMocks.formatText(ngMocks.find('[role="alert"]'))).toBe('Name is required');
-
-    // change includes blur, so it also marks a native field touched.
-    ngMocks.change('input', 'Ada');
-    fixture.detectChanges();
-
-    expect(component.model()).toEqual({ name: 'Ada' });
-    expect(component.profile.name().value()).toBe('Ada');
-    expect(component.profile.name().dirty()).toBe(true);
-    expect(component.profile.name().touched()).toBe(true);
-    expect(component.profile.name().errors()).toEqual([]);
-    expect(ngMocks.find('[role="alert"]', undefined)).toBeUndefined();
-    expect(ngMocks.find<HTMLButtonElement>('button').nativeElement.disabled).toBe(false);
-  });
-
-  it('renders a programmatic model update without simulating user interaction', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-
-    component.model.set({ name: 'Grace' });
-    fixture.detectChanges();
-
-    expect(ngMocks.find<HTMLInputElement>('input').nativeElement.value).toBe('Grace');
-    expect(component.profile.name().value()).toBe('Grace');
-    expect(component.profile.name().dirty()).toBe(false);
-    expect(component.profile.name().touched()).toBe(false);
-    expect(ngMocks.find<HTMLButtonElement>('button').nativeElement.disabled).toBe(false);
-    expect(ngMocks.find('[role="alert"]', undefined)).toBeUndefined();
-  });
-});
-```
-
-## Pass a field tree through a custom template
-
-A `FieldTree` is a callable proxy: calling it reads field state, while properties such as
-`f.name` return child fields. Automatically generated component templates preserve callable
-input values, so `MockRender(TargetComponent, { field })` does not need additional options
-when `field` is a component input.
-
-For a custom template, use
-[`valueKeys`](/api/MockRender.md#callable-values-in-params) to identify callable data in `params`.
-The keys refer to the parameters used by the template: select `f` for `[formField]="f.name"`,
-or `field` for `[formField]="field"`. Selecting the child property `name` would not preserve
-the parameter `f`.
-
-Create the wrapper before creating the form in TestBed's injection context. `MockRender`
-needs to configure TestBed, while `TestBed.runInInjectionContext` initializes its injector.
-Include the parameter key with an initial `undefined` value and use `detectChanges: false`
-so the template is not evaluated yet. Assign the tree before the first `fixture.detectChanges()`.
-
-This example checks that the wrapper and `FormField` retain the original field tree, that
-editing the input updates the model, and that a later model update renders into the input.
-The complete spec also shows a field passed directly through the `field` parameter.
-
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
-
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts"
-import { signal } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { FieldTree, form, FormField } from '@angular/forms/signals';
-
-import {
-  MockBuilder,
-  MockRender,
-  NG_MOCKS_ROOT_PROVIDERS,
-  ngMocks,
-} from 'ng-mocks';
-
-describe('TestSignalForms:field-tree', () => {
-  beforeEach(() =>
-    MockBuilder()
-      .keep(FormField)
-      .keep(NG_MOCKS_ROOT_PROVIDERS),
-  );
-
-  it('binds a child field from a tree passed through a custom template', () => {
-    const params: {
-      f: FieldTree<{ name: string }> | undefined;
-    } = { f: undefined };
-
-    // Configure the wrapper before creating the form in TestBed's injection context.
-    const fixture = MockRender(
-      '<input [formField]="f.name" />',
-      params,
-      { detectChanges: false, valueKeys: ['f'] },
-    );
-    const model = signal({ name: 'Ada' });
-    const f = TestBed.runInInjectionContext(() => form(model));
-
-    params.f = f;
-    fixture.detectChanges();
-
-    // Preserve the callable proxy, including the child field named "name".
-    expect(fixture.componentInstance.f).toBe(f);
-    expect(fixture.componentInstance.f!.name).toBe(f.name);
-    expect(ngMocks.get('input', FormField).field()).toBe(f.name);
-    expect(ngMocks.find<HTMLInputElement>('input').nativeElement.value).toBe('Ada');
-
-    ngMocks.change('input', 'Grace');
-    fixture.detectChanges();
-
-    expect(model()).toEqual({ name: 'Grace' });
-    expect(f.name().value()).toBe('Grace');
-    expect(f.name().dirty()).toBe(true);
-    expect(f.name().touched()).toBe(true);
-
-    model.set({ name: 'Katherine' });
-    fixture.detectChanges();
-
-    expect(fixture.componentInstance.f).toBe(f);
-    expect(ngMocks.get('input', FormField).field()).toBe(f.name);
-    expect(ngMocks.find<HTMLInputElement>('input').nativeElement.value).toBe('Katherine');
-  });
-});
-```
-
-## Test a form with a mocked CVA child
-
-A signal form can bind an existing `ControlValueAccessor` component through `[formField]`.
-To test the parent form independently, mock that child and exercise the callbacks registered
-by the real `FormField` directive.
-
-Here the child is a name input. Its CVA API uses prototype methods so `ng-mocks` can
-detect and wire the accessor when it creates the mock.
-See [form control definitions](/extra/mock-form-controls.md#caution-about-controlvalueaccessor)
-for why function-valued properties do not work for this API.
+Inside `it`, render the component with [`MockRender`](/api/MockRender.md), then use
+[`ngMocks.reveal`](/api/ngMocks/reveal.md) with the same field tree that the template binds
+to `formField`. Pass `component.f.inputValue` without calling it, so the selector matches
+the bound field tree by reference. Reuse that element in subsequent helper calls.
+Read `component.model().inputValue` for the component's
+model value and `input.nativeNode.value` for the displayed text:
 
 ```ts
-import { Component, forwardRef, signal } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { form, FormField } from '@angular/forms/signals';
-
-@Component({
-  selector: 'name-control',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CvaComponent),
-      multi: true,
-    },
-  ],
-  template: `
-    <input
-      [value]="value"
-      (input)="onChange($any($event.target).value)"
-      (blur)="onTouched()"
-    />
-  `,
-})
-class CvaComponent implements ControlValueAccessor {
-  public value = '';
-  public onChange: (value: string) => void = () => undefined;
-  public onTouched: () => void = () => undefined;
-
-  public writeValue(value: string): void {
-    this.value = value;
-  }
-
-  public registerOnChange(callback: (value: string) => void): void {
-    this.onChange = callback;
-  }
-
-  public registerOnTouched(callback: () => void): void {
-    this.onTouched = callback;
-  }
-}
-
-@Component({
-  selector: 'target-signal-forms-cva',
-  imports: [FormField, CvaComponent],
-  template: '<name-control [formField]="f.name" />',
-})
-class TargetComponent {
-  public readonly model = signal({ name: 'Ada' });
-  public readonly f = form(this.model);
-}
-```
-
-Install the `writeValue` spy through `MockInstance` **before** `MockRender`, because
-`FormField` writes the initial value during rendering. The first test checks that initial
-write, a subsequent model update, and a change emitted by the mocked child.
-
-The mock has no native input to type into. Pass its host element to `ngMocks.change`
-to invoke the CVA change callback. This callback marks the field dirty; touching the
-mock is a separate interaction, covered by the second test.
-
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/cva.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/cva.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva)
-
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts"
-import {
-  MockBuilder,
-  MockInstance,
-  MockRender,
-  NG_MOCKS_ROOT_PROVIDERS,
-  ngMocks,
-} from 'ng-mocks';
-
-describe('TestSignalForms:cva', () => {
-  MockInstance.scope();
-
-  beforeEach(() =>
-    MockBuilder(TargetComponent)
-      .keep(FormField)
-      .keep(NG_MOCKS_ROOT_PROVIDERS)
-      .mock(CvaComponent),
-  );
-
-  it('passes values between the signal model and the mocked CVA', () => {
-    const writeValue = jasmine.createSpy('writeValue');
-    // In Jest: const writeValue = jest.fn();
-
-    MockInstance(CvaComponent, 'writeValue', writeValue);
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-    const child = ngMocks.find(CvaComponent);
-
-    expect(writeValue).toHaveBeenCalledWith('Ada');
-
-    component.model.set({ name: 'Grace' });
-    fixture.detectChanges();
-
-    expect(writeValue).toHaveBeenCalledWith('Grace');
-    expect(component.f.name().dirty()).toBe(false);
-
-    ngMocks.change(child, 'Katherine');
-
-    expect(component.model()).toEqual({ name: 'Katherine' });
-    expect(component.f.name().dirty()).toBe(true);
-    expect(component.f.name().touched()).toBe(false);
-  });
-
-  it('marks the field touched without changing its value or dirty state', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-    const child = ngMocks.find(CvaComponent);
-
-    expect(component.f.name().touched()).toBe(false);
-
-    ngMocks.touch(child);
-
-    expect(component.f.name().touched()).toBe(true);
-    expect(component.f.name().dirty()).toBe(false);
-    expect(component.model()).toEqual({ name: 'Ada' });
-  });
-});
-```
-
-## Keep a CVA child's validation rule
-
-In Angular 22, `FormField` also integrates synchronous validators provided through
-`NG_VALIDATORS` on a CVA control. Keep the child when the test needs its real `validate()`
-implementation. Keeping only `FormField` still leaves the standalone component's child
-imports mocked.
-
-This control rejects the value `invalid`. It provides both `NG_VALUE_ACCESSOR` and
-`NG_VALIDATORS`, and reads the current value from the control passed to `validate()`:
-
-```ts
-import { Component, forwardRef, signal } from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
-import { form, FormField } from '@angular/forms/signals';
-
-@Component({
-  selector: 'validated-name-control',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CvaComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => CvaComponent),
-      multi: true,
-    },
-  ],
-  template: `
-    <input
-      [value]="value"
-      (input)="value = $any($event.target).value; onChange(value)"
-      (blur)="onTouched()"
-    />
-  `,
-})
-class CvaComponent implements ControlValueAccessor, Validator {
-  public value = '';
-  public onChange: (value: string) => void = () => undefined;
-  public onTouched: () => void = () => undefined;
-
-  public writeValue(value: string): void {
-    this.value = value;
-  }
-
-  public registerOnChange(callback: (value: string) => void): void {
-    this.onChange = callback;
-  }
-
-  public registerOnTouched(callback: () => void): void {
-    this.onTouched = callback;
-  }
-
-  public validate(control: AbstractControl): ValidationErrors | null {
-    return control.value === 'invalid' ? { custom: true } : null;
-  }
-}
-
-@Component({
-  selector: 'target-signal-forms-cva-validator',
-  imports: [FormField, CvaComponent],
-  template: '<validated-name-control [formField]="f.name" />',
-})
-class TargetComponent {
-  public readonly model = signal({ name: 'invalid' });
-  public readonly f = form(this.model);
-}
-```
-
-Angular converts each returned `ValidationErrors` key into a signal-form error's `kind`.
-Here `{ custom: true }` produces `kind: 'custom'`. Returning `null` clears that error.
-The test checks the field's errors and the form's aggregate validity, then edits the
-retained child's native input to exercise its real template and CVA callback.
-
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/cva-validator.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva-validator)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/cva-validator.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Acva-validator)
-
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva-validator.spec.ts"
-import { MockBuilder, MockInstance, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
-
-describe('TestSignalForms:cva-validator', () => {
-  beforeEach(() =>
-    MockBuilder(TargetComponent)
-      .keep(FormField)
-      .keep(NG_MOCKS_ROOT_PROVIDERS)
-      .keep(CvaComponent),
-  );
-
-  it('maps the real validator error to field state and clears it after an edit', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-    const child = ngMocks.find(CvaComponent);
-    const control = ngMocks.get(child, CvaComponent);
-    const input = ngMocks.find<HTMLInputElement>(child, 'input');
-
-    expect(ngMocks.get(child, NG_VALIDATORS)).toEqual([control]);
-    expect(control.value).toBe('invalid');
-    expect(input.nativeElement.value).toBe('invalid');
-    expect(component.f.name().errors().map(error => error.kind)).toEqual(['custom']);
-    expect(component.f.name().invalid()).toBe(true);
-    expect(component.f().invalid()).toBe(true);
-
-    ngMocks.change(input, 'Ada');
-    fixture.detectChanges();
-
-    expect(component.model()).toEqual({ name: 'Ada' });
-    expect(control.value).toBe('Ada');
-    expect(input.nativeElement.value).toBe('Ada');
-    expect(component.f.name().errors()).toEqual([]);
-    expect(component.f.name().valid()).toBe(true);
-    expect(component.f().valid()).toBe(true);
-  });
-});
-```
-
-Using `.mock(CvaComponent)` replaces the child's validation rule along with its other
-methods. The default mock does not reject `invalid`. To test the parent's response to a
-controlled error, use `MockInstance.scope()` in the suite and customize the mock's
-`validate` method **before** `MockRender`:
-
-```ts
-MockInstance(CvaComponent, 'validate', () => ({ controlled: true }));
+// Render the component.
 const fixture = MockRender(TargetComponent);
 const component = fixture.point.componentInstance;
 
-expect(component.f.name().errors().map(error => error.kind)).toEqual(['controlled']);
-expect(component.f().invalid()).toBe(true);
+// Find the input.
+const input = ngMocks.reveal(['formField', component.f.inputValue]);
+
+// Read the value.
+expect(component.model().inputValue).toBe('Ada');
+expect(input.nativeNode.value).toBe('Ada');
+
+// Change the value.
+ngMocks.change(input, 'Grace');
+// Render any bindings that depend on the updated model.
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().inputValue).toBe('Grace');
+expect(input.nativeNode.value).toBe('Grace');
 ```
 
-The complete spec includes both mock cases. Use the retained child to test its validation
-rule, and the controlled mock result when that rule is outside the parent's test scope.
+## Other native controls
 
-## Test a form with a mocked signal control
+For each recipe below, add the binding to `TargetComponent`'s template and the indicated
+property to its `model` signal. Keep the same test setup and render the component as above.
+Read `component.model()` for the model values and the native properties below for the displayed state.
 
-A `FormValueControl` uses a `value` model to exchange values with `FormField`.
-In Angular 22, its `touch` output reports blur, while its `touched` input receives
-the resulting field state. Keep `FormField` real when mocking this child so the test
-exercises both directions of those bindings.
+| Control | Read | Change |
+| --- | --- | --- |
+| Text input or textarea | `element.value` | A string |
+| Checkbox | `element.checked` | `true` to check; `false` to uncheck |
+| Radio option | `element.checked` | `true` to select; `false` to uncheck |
+| Number input | `element.value` (a string) | A number, or `null` / `undefined` to clear |
+| Single select | `element.value` | An option's string value |
+
+### Textarea
+
+Add `textareaValue: 'Initial notes'` to the model. The textarea reads and writes a string:
+
+```html
+<textarea [formField]="f.textareaValue"></textarea>
+```
 
 ```ts
-import { Component, input, model, output, signal } from '@angular/core';
-import { form, FormField, FormValueControl } from '@angular/forms/signals';
+// Find the textarea.
+const textarea = ngMocks.reveal(['formField', component.f.textareaValue]);
 
-@Component({
-  selector: 'signal-name-control',
-  template: `
-    <input
-      [value]="value()"
-      (input)="value.set($any($event.target).value)"
-      (blur)="touch.emit()"
-    />
-  `,
-})
-class NameControl implements FormValueControl<string> {
-  public readonly value = model('');
-  public readonly touched = input(false);
-  public readonly touch = output<void>();
-}
+// Read the value.
+expect(component.model().textareaValue).toBe('Initial notes');
+expect(textarea.nativeNode.value).toBe('Initial notes');
 
-@Component({
-  selector: 'target-signal-forms-model',
-  imports: [FormField, NameControl],
-  template: `
-    <signal-name-control [formField]="f.name" />
-    <span class="name">{{ model().name }}</span>
-  `,
-})
-class TargetComponent {
-  public readonly model = signal({ name: 'Ada' });
-  public readonly f = form(this.model);
-}
+// Change the value.
+ngMocks.change(textarea, 'Updated notes');
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().textareaValue).toBe('Updated notes');
+expect(textarea.nativeNode.value).toBe('Updated notes');
 ```
 
-Pass the mocked child's host element to `ngMocks.change` to update its model.
-This marks the field dirty and updates the parent's rendered name. Touching the
-control is a separate interaction: `ngMocks.touch` emits `touch`, and change detection
-delivers the updated field state to the child's `touched` input.
+### Checkbox
 
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/model.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amodel)
+Add `checkboxValue: false` to the model. Pass `true` to check the input or `false`
+to uncheck it. The field receives the boolean `checked` state:
 
-```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts"
-import {
-  MockBuilder,
-  MockRender,
-  NG_MOCKS_ROOT_PROVIDERS,
-  ngMocks,
-} from 'ng-mocks';
+```html
+<input type="checkbox" value="yes" [formField]="f.checkboxValue" />
+```
 
-describe('TestSignalForms:model', () => {
+```ts
+// Find the checkbox.
+const checkbox = ngMocks.reveal(['formField', component.f.checkboxValue]);
+
+// Read the checked state.
+expect(component.model().checkboxValue).toBe(false);
+expect(checkbox.nativeNode.checked).toBe(false);
+
+// Check the checkbox.
+ngMocks.change(checkbox, true);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().checkboxValue).toBe(true);
+expect(checkbox.nativeNode.checked).toBe(true);
+
+// Uncheck the checkbox.
+ngMocks.change(checkbox, false);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().checkboxValue).toBe(false);
+expect(checkbox.nativeNode.checked).toBe(false);
+```
+
+### Radio group
+
+Add `radioValue: 'first'` to the model. Both options bind the same field, so use
+[`ngMocks.find`](/api/ngMocks/find.md) to select the intended option by its value.
+Pass `true` to select it. Passing `false` unchecks that host without clearing the
+field's selected value; select another option to change the model.
+
+```html
+<input type="radio" value="first" [formField]="f.radioValue" />
+<input type="radio" value="second" [formField]="f.radioValue" />
+```
+
+```ts
+// Find the radio options.
+const first = ngMocks.find('input[type="radio"][value="first"]');
+const second = ngMocks.find('input[type="radio"][value="second"]');
+
+// Read the checked states.
+expect(component.model().radioValue).toBe('first');
+expect(first.nativeElement.checked).toBe(true);
+expect(second.nativeElement.checked).toBe(false);
+
+// Select the second option.
+ngMocks.change('input[type="radio"][value="second"]', true);
+// or ngMocks.change(second, true);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().radioValue).toBe('second');
+expect(first.nativeElement.checked).toBe(false);
+expect(second.nativeElement.checked).toBe(true);
+
+// Uncheck the second option.
+ngMocks.change('input[type="radio"][value="second"]', false);
+// or ngMocks.change(second, false);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().radioValue).toBe('second');
+expect(first.nativeElement.checked).toBe(false);
+expect(second.nativeElement.checked).toBe(false);
+```
+
+### Number input
+
+Add `numberValue: 1 as number | null` to the model. Pass `null` or `undefined` to clear
+the input; Angular writes `null` to the field and model:
+
+```html
+<input type="number" [formField]="f.numberValue" />
+```
+
+```ts
+// Find the input.
+const input = ngMocks.reveal(['formField', component.f.numberValue]);
+
+// Read the value.
+expect(component.model().numberValue).toBe(1);
+expect(input.nativeNode.value).toBe('1');
+
+// Change the value.
+ngMocks.change(input, 42);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().numberValue).toBe(42);
+expect(input.nativeNode.value).toBe('42');
+
+// Clear the value with null or undefined.
+ngMocks.change(input, null);
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().numberValue).toBeNull();
+expect(input.nativeNode.value).toBe('');
+```
+
+### Single select
+
+Add `selectValue: 'first'` to the model. Pass an option's string value to select it:
+
+```html
+<select [formField]="f.selectValue">
+  <option value="first">First</option>
+  <option value="second">Second</option>
+</select>
+```
+
+```ts
+// Find the select.
+const select = ngMocks.reveal(['formField', component.f.selectValue]);
+
+// Read the value.
+expect(component.model().selectValue).toBe('first');
+expect(select.nativeNode.value).toBe('first');
+
+// Change the value.
+ngMocks.change(select, 'second');
+fixture.detectChanges();
+
+// Assert the result.
+expect(component.model().selectValue).toBe('second');
+expect(select.nativeNode.value).toBe('second');
+expect(select.nativeNode.options[1].selected).toBe(true);
+```
+
+### Multiple select {#multiple-selections-with-a-custom-control}
+
+Angular 22's native `FormField` select binding reads a single value. For multiple
+selections, use a custom control that exchanges an array with the field. The
+[executable example](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/multi-select.spec.ts)
+shows selecting and clearing values through that control.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/multi-select.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amulti-select)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/multi-select.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Amulti-select)
+
+## Live example {#complete-example}
+
+Here is the complete text-input example. The
+[complete native-control spec](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/native.spec.ts)
+also contains the other native control examples above.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/native.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Anative)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/native.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Anative)
+
+```ts title="https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/native.spec.ts"
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+import { MockBuilder, MockRender, NG_MOCKS_ROOT_PROVIDERS, ngMocks } from 'ng-mocks';
+
+@Component({
+  selector: 'target-signal-forms-native',
+  imports: [FormField],
+  template: '<input [formField]="f.inputValue" />',
+})
+class TargetComponent {
+  public readonly model = signal({ inputValue: 'Ada' });
+  public readonly f = form(this.model);
+}
+
+describe('TestSignalForms:native', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)
+      // Keep the field binding and the services used by native input events.
       .keep(FormField)
-      .keep(NG_MOCKS_ROOT_PROVIDERS)
-      .mock(NameControl),
+      .keep(NG_MOCKS_ROOT_PROVIDERS),
   );
 
-  it('updates the parent and rendered name through the mocked model', () => {
+  it('finds, reads, and changes a text field', () => {
+    // Render the component.
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const child = ngMocks.find(NameControl);
-    const control = ngMocks.get(child, NameControl);
 
-    expect(control.value()).toBe('Ada');
+    // Find the input.
+    const input = ngMocks.reveal(['formField', component.f.inputValue]);
 
-    // The mocked component still exposes the model output used by FormField.
-    ngMocks.change(child, 'Grace');
+    // Read the value.
+    expect(component.model().inputValue).toBe('Ada');
+    expect(input.nativeNode.value).toBe('Ada');
+
+    // Change the value.
+    ngMocks.change(input, 'Grace');
+    // Render any bindings that depend on the updated model.
     fixture.detectChanges();
 
-    expect(component.model()).toEqual({ name: 'Grace' });
-    expect(component.f.name().dirty()).toBe(true);
-    expect(component.f.name().touched()).toBe(false);
-    expect(control.value()).toBe('Grace');
-    expect(control.touched()).toBe(false);
-    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Grace');
-  });
-
-  it('feeds touched state back into the mock without changing the name', () => {
-    const fixture = MockRender(TargetComponent);
-    const component = fixture.point.componentInstance;
-    const child = ngMocks.find(NameControl);
-    const control = ngMocks.get(child, NameControl);
-
-    expect(control.touched()).toBe(false);
-
-    // The touch output marks the field touched; its input receives that state.
-    ngMocks.touch(child);
-    fixture.detectChanges();
-
-    expect(component.model()).toEqual({ name: 'Ada' });
-    expect(component.f.name().dirty()).toBe(false);
-    expect(component.f.name().touched()).toBe(true);
-    expect(control.value()).toBe('Ada');
-    expect(control.touched()).toBe(true);
-    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Ada');
+    // Assert the result.
+    expect(component.model().inputValue).toBe('Grace');
+    expect(input.nativeNode.value).toBe('Grace');
   });
 });
 ```
-
-## Complete example specs
-
-- [Native fields, validation, and model updates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/test.spec.ts)
-- [Field trees passed through custom templates](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts)
-- [Signal form with a mocked CVA child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts)
-- [Signal form with a retained CVA validator](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva-validator.spec.ts)
-- [Signal form with a mocked model-based child](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/model.spec.ts)

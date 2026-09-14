@@ -159,6 +159,8 @@
   `docs/articles/guides/libraries` for integrations. Search by behavior as well as API names.
 - Record the reference paths and why they apply. Follow their filenames, suite names, setup, ng-mocks helpers,
   inline assertions, and comments. Follow the articles' teaching order, tool links, and annotated examples.
+- Use simple comments to explain what an example does and why its setup, timing, or assertions matter.
+  Preserve useful existing explanations when refactoring; step labels alone are not a replacement.
 - If those references do not settle a pattern, inspect analogous local history or merged non-bot PRs. Explain
   necessary departures, and compare the finished changes with the references before reporting completion.
 

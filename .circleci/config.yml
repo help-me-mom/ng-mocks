@@ -261,7 +261,7 @@ jobs:
             curl -fsSLO https://cli.codecov.io/v11.3.1/linux/codecov.SHA256SUM
             curl -fsSLO https://cli.codecov.io/v11.3.1/linux/codecov.SHA256SUM.sig
             curl -fsSLo codecov.asc https://keybase.io/codecovsecops/pgp_keys.asc
-            gpg --batch --no-default-keyring --keyring ./codecov-trustedkeys.gpg --import codecov.asc
+            gpg --batch --dearmor --output ./codecov-trustedkeys.gpg codecov.asc
             gpgv --keyring ./codecov-trustedkeys.gpg codecov.SHA256SUM.sig codecov.SHA256SUM
             sha256sum -c codecov.SHA256SUM
             chmod +x codecov

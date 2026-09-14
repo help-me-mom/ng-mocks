@@ -207,9 +207,12 @@ export default (
 ): Type<any> => {
   const caches = getCache();
 
-  // nulls help to detect defaults
+  // Section lengths keep identical entries in different scopes distinct.
   const cacheKey = [
     template,
+    bindings?.length,
+    flags.providers?.length,
+    flags.viewProviders?.length,
     ...(bindings ?? [null]),
     ...(flags.providers ?? [null]),
     ...(flags.viewProviders ?? [null]),

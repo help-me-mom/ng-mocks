@@ -27,7 +27,7 @@ ngMocksStack.subscribePop((state, stack) => {
 interface MockInstanceArgs {
   accessor?: 'get' | 'set';
   data?: any;
-  key?: string;
+  key?: PropertyKey;
   value?: any;
 }
 
@@ -55,7 +55,7 @@ interface MockInstanceClassConfig<T> {
 const parseMockInstanceArgs = (args: any[]): MockInstanceArgs => {
   const set: MockInstanceArgs = {};
 
-  if (typeof args[0] === 'string') {
+  if (typeof args[0] === 'string' || typeof args[0] === 'number' || typeof args[0] === 'symbol') {
     set.key = args[0];
     set.value = args[1];
     set.accessor = args[2];
@@ -81,7 +81,7 @@ if (typeof beforeEach !== 'undefined') {
 
 const mockInstanceConfig = <T>(
   declaration: AnyDeclaration<T>,
-  name: string | undefined,
+  name: PropertyKey | undefined,
   stub: any,
   encapsulation?: 'get' | 'set',
 ) => {
@@ -231,6 +231,9 @@ export function MockInstance<T>(declaration: AnyDeclaration<T>, ...args: any[]) 
 
   if (args.length > 0) {
     const { key, value, accessor } = parseMockInstanceArgs(args);
+    if (key === undefined && value === undefined) {
+      return;
+    }
 
     return mockInstanceConfig(declaration, key, value, accessor);
   }

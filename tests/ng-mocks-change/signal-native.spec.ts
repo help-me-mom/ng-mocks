@@ -9,7 +9,12 @@ import { MockRender, ngMocks } from 'ng-mocks';
   standalone: true,
   imports: [FormField],
   template: `
-    <input id="checkbox" type="checkbox" [formField]="f.enabled" />
+    <input
+      id="checkbox"
+      type="checkbox"
+      value="yes"
+      [formField]="f.enabled"
+    />
     <input id="number" type="number" [formField]="f.amount" />
     <input id="range" type="range" [formField]="f.range" />
     <input id="date" type="date" [formField]="f.date" />
@@ -94,7 +99,7 @@ describe('ng-mocks-change:signal-native', () => {
 
     expect(component.model().enabled).toBe(true);
     expect(input.checked).toBe(true);
-    expect(input.value).toBe('on');
+    expect(input.value).toBe('yes');
     expect(component.f.enabled().dirty()).toBe(true);
     expect(component.f.enabled().touched()).toBe(true);
     expect(component.f.name().dirty()).toBe(false);
@@ -104,6 +109,7 @@ describe('ng-mocks-change:signal-native', () => {
 
     expect(component.model().enabled).toBe(false);
     expect(input.checked).toBe(false);
+    expect(input.value).toBe('yes');
     expect(component.model().name).toBe('unchanged');
   });
 
@@ -237,7 +243,7 @@ describe('ng-mocks-change:signal-native', () => {
     const second =
       ngMocks.find<HTMLInputElement>('#second').nativeElement;
 
-    ngMocks.change('#second', 'second');
+    ngMocks.change('#second', true);
     fixture.detectChanges();
 
     expect(component.model().choice).toBe('second');

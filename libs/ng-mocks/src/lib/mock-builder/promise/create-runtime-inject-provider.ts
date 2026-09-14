@@ -60,7 +60,8 @@ export default (
           // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
           installRuntimeInject(injector, declarations, new Set([...touches, ...preserved]));
 
-          return runRuntimeInject(injector, () => useFactory(...args));
+          // Inherited constructor factories need the kept child type.
+          return runRuntimeInject(injector, () => (provider === def ? useFactory(def) : useFactory(...args)));
         },
       };
     }

@@ -73,23 +73,30 @@ class TargetComponent {
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14986
 describe('TestSignalForms:cva-validator', () => {
+  // Restore validator customizations between tests.
   MockInstance.scope();
 
   describe('retained validator', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent)
+        // Keep the field connection and root services used by input events.
         .keep(FormField)
         .keep(NG_MOCKS_ROOT_PROVIDERS)
+        // Run the child's original CVA methods and validation rule.
         .keep(CvaComponent),
     );
 
     it('maps the real validator error to field state and clears it after an edit', () => {
+      // Render the component with its initially invalid value.
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
+
+      // Find the child and its input to inspect the provider and displayed value.
       const child = ngMocks.find(CvaComponent);
       const control = ngMocks.get(child, CvaComponent);
       const input = ngMocks.find<HTMLInputElement>(child, 'input');
 
+      // Read the registered validator, value, and validation state.
       expect(ngMocks.get(child, NG_VALIDATORS)).toEqual([control]);
       expect(control.value).toBe('invalid');
       expect(input.nativeElement.value).toBe('invalid');
@@ -104,9 +111,11 @@ describe('TestSignalForms:cva-validator', () => {
       expect(component.f().invalid()).toBe(true);
 
       // Exercise the retained child's input and registered CVA callback.
-      ngMocks.change(input, 'Ada');
+      ngMocks.change('validated-name-control input', 'Ada');
+      // or ngMocks.change(input, 'Ada');
       fixture.detectChanges();
 
+      // Assert that the model updated and the real validator cleared its error.
       expect(component.model()).toEqual({ name: 'Ada' });
       expect(control.value).toBe('Ada');
       expect(input.nativeElement.value).toBe('Ada');
@@ -119,6 +128,7 @@ describe('TestSignalForms:cva-validator', () => {
   describe('mocked validator', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent)
+        // Keep Angular's field connection while replacing the child.
         .keep(FormField)
         .keep(NG_MOCKS_ROOT_PROVIDERS)
         .mock(CvaComponent),
@@ -128,18 +138,21 @@ describe('TestSignalForms:cva-validator', () => {
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
 
+      // Mocking the child removes its original validation rule.
       expect(component.model()).toEqual({ name: 'invalid' });
       expect(component.f.name().errors()).toEqual([]);
       expect(component.f().valid()).toBe(true);
     });
 
     it('uses a controlled validation result supplied before rendering', () => {
+      // Set the mock's result before Angular first runs validation.
       MockInstance(CvaComponent, 'validate', () => ({
         controlled: true,
       }));
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
 
+      // Assert the parent's state without depending on the original rule.
       expect(
         component.f
           .name()

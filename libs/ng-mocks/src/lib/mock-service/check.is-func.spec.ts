@@ -33,6 +33,19 @@ describe('check.is-func', () => {
     ).toEqual(true);
   });
 
+  it('detects downleveled classes with only a symbol prototype method', () => {
+    const member = Symbol('method');
+    const method = jasmine.createSpy('original method');
+    const prototype = { [member]: method };
+
+    expect(Object.keys(prototype)).toEqual([]);
+    expect(Object.getOwnPropertySymbols(prototype)).toEqual([member]);
+    expect(
+      guessClass('Target', 'function Target() {}', { prototype }),
+    ).toBe(true);
+    expect(method).not.toHaveBeenCalled();
+  });
+
   it('detects functions with a class prefix', () => {
     const classify = () => undefined;
     (classify as any).prototype = {};

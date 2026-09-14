@@ -4,12 +4,12 @@ import funcGetName from '../common/func.get-name';
 import helperMockService from './helper.mock-service';
 import { MockedFunction } from './types';
 
-export default (service: any): { [key in keyof any]: MockedFunction } => {
+export default (service: any): Record<string | symbol, MockedFunction> => {
   const mockName = funcGetName(service);
   const value: any = {};
   coreDefineProperty(value, '__ngMocks', true);
 
-  const properties: string[] = [];
+  const properties: Array<string | symbol> = [];
   const methods = helperMockService.extractMethodsFromPrototype(service, properties);
   for (const method of methods) {
     helperMockService.mock(value, method, mockName);
