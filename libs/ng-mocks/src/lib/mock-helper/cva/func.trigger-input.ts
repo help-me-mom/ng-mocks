@@ -1,5 +1,6 @@
 import { DebugElement } from '@angular/core';
 
+import coreForm from '../../common/core.form';
 import helperDefinePropertyDescriptor from '../../mock-service/helper.define-property-descriptor';
 import mockHelperTrigger from '../events/mock-helper.trigger';
 import mockHelperStubMember from '../mock-helper.stub-member';
@@ -14,8 +15,20 @@ const setNativeNumber = (element: any, value: number): boolean => {
   return true;
 };
 
-const setNativeValue = (element: any, value: any): boolean => {
+const setNativeValue = (element: any, value: any, valueAccessor?: any): boolean => {
   if (element.tagName === 'SELECT') {
+    if (element.multiple && Array.isArray(value)) {
+      if (valueAccessor instanceof coreForm.SelectMultipleControlValueAccessor) {
+        // Angular maps model values to encoded option values, including ngValue and compareWith.
+        valueAccessor.writeValue(value);
+      } else {
+        for (const option of element.options) {
+          option.selected = value.indexOf(option.value) !== -1;
+        }
+      }
+
+      return true;
+    }
     element.value = value;
 
     // Update selection state while retaining raw event values for unmatched or coerced options.
@@ -26,7 +39,16 @@ const setNativeValue = (element: any, value: any): boolean => {
   }
 
   switch (element.type) {
+    case 'radio': {
+      if (typeof value !== 'boolean') {
+        // Preserve the legacy raw-value event path for nonboolean arguments.
+        return false;
+      }
+      element.checked = value;
+      return true;
+    }
     case 'checkbox': {
+      // Keep the original DOM coercion for nonboolean arguments.
       element.checked = value;
       return true;
     }
@@ -81,12 +103,12 @@ const restoreValue = (element: any, value: any, descriptor?: PropertyDescriptor)
   }
 };
 
-export default (el: DebugElement, value: any): void => {
+export default (el: DebugElement, value: any, valueAccessor?: any): void => {
   mockHelperTrigger(el, 'focus');
 
   const element = el.nativeElement;
   const descriptor = Object.getOwnPropertyDescriptor(element, 'value');
-  const nativeValue = setNativeValue(element, value);
+  const nativeValue = setNativeValue(element, value, valueAccessor);
   if (!nativeValue) {
     // Text and custom controls historically receive the original value, including numbers.
     mockHelperStubMember(element, 'value', value);
@@ -94,8 +116,11 @@ export default (el: DebugElement, value: any): void => {
 
   let restore = !nativeValue;
   try {
-    mockHelperTrigger(el, 'input');
-    mockHelperTrigger(el, 'change');
+    // Unchecking with false must not emit a radio selection; legacy value calls still emit their events.
+    if (element.tagName !== 'INPUT' || element.type !== 'radio' || value !== false) {
+      mockHelperTrigger(el, 'input');
+      mockHelperTrigger(el, 'change');
+    }
     if (restore && descriptor) {
       // Existing accessors were restored before blur; new raw values remain visible through blur.
       restore = false;

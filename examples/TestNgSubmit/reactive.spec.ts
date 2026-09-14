@@ -46,6 +46,7 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/756
 describe('TestNgSubmit:reactive', () => {
+  // Keep Angular's form bindings real so native submit commits pending edits.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(
       ReactiveFormsModule,
@@ -53,30 +54,36 @@ describe('TestNgSubmit:reactive', () => {
   );
 
   it('calls save with the submitted value and event', () => {
-    // Rendering the component and finding its form directive.
-    const component =
-      MockRender(TargetComponent).point.componentInstance;
-    const form = ngMocks.findInstance(FormGroupDirective);
+    // Render the component.
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
 
-    // Replacing the application handler with a spy.
+    // Replace the application handler to check its submitted arguments.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
         : jest.fn();
     component.save = save;
 
+    // Find the form to read its submitted state.
+    const form = ngMocks.findInstance(FormGroupDirective);
+
+    // Read the initial value.
     expect(form.submitted).toBe(false);
     expect(component.form.value).toEqual({ name: 'initial' });
 
-    // The value stays pending until the form is submitted.
+    // Change the input. Its value stays pending until submission.
     ngMocks.change('input', 'updated');
+
+    // Assert the pending value.
     expect(component.form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
-    // Angular handles submit and emits ngSubmit to call save.
+    // Dispatch native submit so Angular commits the edit and emits ngSubmit.
     const event = ngMocks.event('submit');
     ngMocks.trigger('form', event);
 
+    // Assert the result.
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith('updated', event);
     expect(component.form.value).toEqual({ name: 'updated' });
@@ -88,6 +95,8 @@ describe('TestNgSubmit:reactive', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     const form = ngMocks.findInstance(FormGroupDirective);
+
+    // Replace the application handler to check its submitted arguments.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
@@ -99,6 +108,8 @@ describe('TestNgSubmit:reactive', () => {
     // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const button = ngMocks.find('button')
       .nativeElement as HTMLButtonElement;
+
+    // A native click submits the form and commits the pending edit.
     button.click();
 
     const assertion: any =
@@ -119,11 +130,15 @@ describe('TestNgSubmit:reactive', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
     const form = ngMocks.findInstance(FormGroupDirective);
+
+    // Replace the application handler to detect an unexpected submission.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
         : jest.fn();
     component.save = save;
+
+    // Check the view so the native button receives its disabled state.
     component.disabled = true;
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();

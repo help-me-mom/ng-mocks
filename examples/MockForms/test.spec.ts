@@ -25,9 +25,9 @@ import {
   template: 'dependency',
 })
 class CvaComponent implements ControlValueAccessor {
-  public registerOnChange = (fn: any): void => fn;
-  public registerOnTouched = (fn: any): void => fn;
-  public writeValue = (obj: any): void => obj;
+  public registerOnChange(): void {}
+  public registerOnTouched(): void {}
+  public writeValue(): void {}
 
   public cvaMockForms() {}
 }
@@ -35,10 +35,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-  template: ` <cva [(ngModel)]="value"></cva> `,
+  template: '<cva [(ngModel)]="value"></cva>',
 })
 class TargetComponent {
-  public value: any;
+  public value: string | null = null;
 
   public targetMockForms() {}
 }
@@ -55,51 +55,44 @@ describe('MockForms', () => {
   // automatic resetting in test.ts.
   MockInstance.scope();
 
-  beforeEach(() => {
-    // DependencyComponent is a declaration in ItsModule.
-    return (
-      MockBuilder(TargetComponent, ItsModule)
-        // FormsModule is an import in ItsModule.
-        .keep(FormsModule)
-    );
-  });
+  // Keep ngModel real so it connects the parent to the mocked CVA child.
+  beforeEach(() =>
+    MockBuilder(TargetComponent, ItsModule).keep(FormsModule),
+  );
 
   it('sends the correct value to the mock form component', async () => {
-    // That is our spy on writeValue calls.
-    // With auto spy this code is not needed.
+    // Observe values written to the child. With auto spy, a manual spy is unnecessary.
     const writeValue =
       typeof jest === 'undefined'
         ? jasmine.createSpy('writeValue')
         : jest.fn();
-    // in case of jest
-    // const writeValue = jest.fn();
-
-    // Because of early calls of writeValue, we need to install
-    // the spy via MockInstance before the render.
+    // Install the spy before rendering to capture Angular's initial write.
     MockInstance(CvaComponent, 'writeValue', writeValue);
 
+    // Render the parent.
     const fixture = MockRender(TargetComponent);
-    // FormsModule needs fixture.whenStable()
-    // right after MockRender to install all hooks.
+    // Wait for ngModel to register the control and write its initial value.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
 
-    // During initialization, it should be called
-    // with null.
+    // Read the initial value and the write received by the mock.
+    expect(component.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Let's find the form control element
-    // and simulate its change, like a user does it.
-    const mockControlEl = ngMocks.find(CvaComponent);
-    ngMocks.change(mockControlEl, 'foo');
+    // Find the child by its class and simulate an edit.
+    ngMocks.change(CvaComponent, 'foo');
+
+    // Assert that ngModel updated the parent property.
     expect(component.value).toBe('foo');
 
-    // Let's check that change on existing value
-    // causes calls of `writeValue` on the mock component.
+    // Change the parent value to exercise the opposite direction.
     component.value = 'bar';
-    // Both below are needed to trigger writeValue.
+    // Run the binding and wait for ngModel to write the value to the child.
     fixture.detectChanges();
     await fixture.whenStable();
+
+    // Assert the value written to the mocked control.
+    expect(component.value).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });

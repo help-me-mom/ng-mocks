@@ -1,0 +1,131 @@
+import {
+  Component,
+  input,
+  model,
+  reflectComponentType,
+  signal,
+} from '@angular/core';
+import {
+  form,
+  FormField,
+  FormValueControl,
+} from '@angular/forms/signals';
+
+import {
+  MockBuilder,
+  MockRender,
+  NG_MOCKS_ROOT_PROVIDERS,
+  ngMocks,
+} from 'ng-mocks';
+
+@Component({
+  selector: 'signal-text-control',
+  template: '{{ value() }}',
+})
+class TextControl implements FormValueControl<string> {
+  public readonly value = model('');
+  public readonly name = input('');
+}
+
+@Component({
+  selector: 'target-signal-forms-selectors-model',
+  imports: [FormField, TextControl],
+  template: `
+    <signal-text-control [formField]="f.firstName" />
+    <signal-text-control [formField]="f.lastName" />
+  `,
+})
+class TargetComponent {
+  public readonly model = signal({
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+  });
+  public readonly f = form(this.model);
+}
+
+// @see https://github.com/help-me-mom/ng-mocks/issues/14985
+describe('TestSignalForms:selectors-model', () => {
+  // The root TypeScript-only runner does not transform authoring functions.
+  // Angular-compiled spread targets exercise the name input and value model.
+  if (
+    !reflectComponentType(TextControl)?.inputs.some(
+      metadata => metadata.propName === 'name',
+    ) ||
+    !reflectComponentType(TextControl)?.inputs.some(
+      metadata => metadata.propName === 'value',
+    )
+  ) {
+    it('needs compiled input and model metadata', () => {
+      expect(true).toBeTruthy();
+    });
+
+    return;
+  }
+
+  for (const mode of ['real', 'mock']) {
+    describe(`${mode} controls`, () => {
+      beforeEach(() => {
+        const builder = MockBuilder(TargetComponent)
+          // Preserve field updates while varying only the child implementation.
+          .keep(FormField)
+          .keep(NG_MOCKS_ROOT_PROVIDERS);
+
+        return mode === 'real'
+          ? builder.keep(TextControl)
+          : builder.mock(TextControl);
+      });
+
+      it('selects custom hosts by their bound field trees', () => {
+        const fixture = MockRender(TargetComponent);
+        const component = fixture.point.componentInstance;
+        const first = ngMocks.reveal([
+          'formField',
+          component.f.firstName,
+        ]);
+        const last = ngMocks.reveal([
+          'formField',
+          component.f.lastName,
+        ]);
+        const control = ngMocks.get(first, TextControl);
+        const sibling = ngMocks.get(last, TextControl);
+
+        expect([first, last]).toEqual(ngMocks.findAll(TextControl));
+        expect(ngMocks.findAll('[formControlName]')).toEqual([]);
+        expect(ngMocks.findAll('[formField]')).toEqual([]);
+        expect(ngMocks.revealAll(['formField'])).toEqual([
+          first,
+          last,
+        ]);
+        expect(
+          ngMocks.reveal(
+            ['formField', component.f.firstName()],
+            null,
+          ),
+        ).toBeNull();
+        // FormField writes the component input, not a DOM name on its host.
+        expect(control.name()).toBe(component.f.firstName().name());
+        expect(sibling.name()).toBe(component.f.lastName().name());
+        expect(ngMocks.findAll('signal-text-control[name]')).toEqual(
+          [],
+        );
+        expect(control.value()).toBe('Ada');
+        expect(sibling.value()).toBe('Lovelace');
+
+        // Reuse the field-specific host because both children share a component class.
+        ngMocks.change(first, 'Grace');
+        // Propagate the field value back to the selected child's model input.
+        fixture.detectChanges();
+
+        expect(component.model()).toEqual({
+          firstName: 'Grace',
+          lastName: 'Lovelace',
+        });
+        expect(control.value()).toBe('Grace');
+        expect(sibling.value()).toBe('Lovelace');
+        expect(component.f.firstName().dirty()).toBe(true);
+        expect(component.f.lastName().dirty()).toBe(false);
+        expect(component.f.lastName().touched()).toBe(false);
+      });
+    });
+  }
+});
