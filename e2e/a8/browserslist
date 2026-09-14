@@ -1,12 +1,7 @@
-# This file is used by the build system to adjust CSS and JS output to support the specified browsers below.
-# For additional information regarding the format and rule options, please see:
-# https://github.com/browserslist/browserslist#queries
-
-# You can see what browsers were selected by your queries by running:
-#   npx browserslist
-
-> 0.5%
-last 2 versions
-Firefox ESR
-not dead
-not IE 9-11 # For IE 9-11 support, remove 'not'.
+# Browser releases available at Angular 8.0.0 (2019-05-28).
+chrome 73-74
+firefox 66-67
+firefox 60
+edge 17-18
+safari 11-12.1
+ios_saf 11.0-12.3
