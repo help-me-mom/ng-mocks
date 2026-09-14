@@ -35,10 +35,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-  template: '<cva name="inputName" [(ngModel)]="inputValue"></cva>',
+  template: '<cva [(ngModel)]="value"></cva>',
 })
 class TargetComponent {
-  public inputValue: string | null = null;
+  public value: string | null = null;
 
   public targetMockForms() {}
 }
@@ -76,22 +76,22 @@ describe('MockForms', () => {
     const mockControlEl = ngMocks.find(CvaComponent);
 
     // Read the initial value and the write received by the mock.
-    expect(component.inputValue).toBeNull();
+    expect(component.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
     // Change the value through the mocked control.
     ngMocks.change(mockControlEl, 'foo');
 
     // Assert the result.
-    expect(component.inputValue).toBe('foo');
+    expect(component.value).toBe('foo');
 
     // Change the parent value.
-    component.inputValue = 'bar';
+    component.value = 'bar';
     fixture.detectChanges();
     await fixture.whenStable();
 
     // Assert the value written to the mocked control.
-    expect(component.inputValue).toBe('bar');
+    expect(component.value).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });

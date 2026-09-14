@@ -20,7 +20,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'signal-input-control',
+  selector: 'signal-name-control',
   template: `
     <input
       [value]="value()"
@@ -29,7 +29,7 @@ import {
     />
   `,
 })
-class InputControl implements FormValueControl<string> {
+class NameControl implements FormValueControl<string> {
   public readonly value = model('');
   public readonly touched = input(false);
   public readonly touch = output<void>();
@@ -37,14 +37,14 @@ class InputControl implements FormValueControl<string> {
 
 @Component({
   selector: 'target-signal-forms-model',
-  imports: [FormField, InputControl],
+  imports: [FormField, NameControl],
   template: `
-    <signal-input-control [formField]="f.inputValue" />
-    <span class="input-value">{{ model().inputValue }}</span>
+    <signal-name-control [formField]="f.name" />
+    <span class="name">{{ model().name }}</span>
   `,
 })
 class TargetComponent {
-  public readonly model = signal({ inputValue: 'Ada' });
+  public readonly model = signal({ name: 'Ada' });
   public readonly f = form(this.model);
 }
 
@@ -52,7 +52,7 @@ describe('TestSignalForms:model', () => {
   // The root TypeScript-only runner does not transform authoring functions.
   // Angular 22 spread targets exercise the model binding and touch output.
   if (
-    !reflectComponentType(InputControl)?.outputs.some(
+    !reflectComponentType(NameControl)?.outputs.some(
       metadata => metadata.propName === 'touch',
     )
   ) {
@@ -67,14 +67,14 @@ describe('TestSignalForms:model', () => {
     MockBuilder(TargetComponent)
       .keep(FormField)
       .keep(NG_MOCKS_ROOT_PROVIDERS)
-      .mock(InputControl),
+      .mock(NameControl),
   );
 
-  it('updates the parent and rendered input value through the mocked model', () => {
+  it('updates the parent and rendered name through the mocked model', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const child = ngMocks.find(InputControl);
-    const control = ngMocks.get(child, InputControl);
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
 
     expect(control.value()).toBe('Ada');
 
@@ -82,21 +82,19 @@ describe('TestSignalForms:model', () => {
     ngMocks.change(child, 'Grace');
     fixture.detectChanges();
 
-    expect(component.model()).toEqual({ inputValue: 'Grace' });
-    expect(component.f.inputValue().dirty()).toBe(true);
-    expect(component.f.inputValue().touched()).toBe(false);
+    expect(component.model()).toEqual({ name: 'Grace' });
+    expect(component.f.name().dirty()).toBe(true);
+    expect(component.f.name().touched()).toBe(false);
     expect(control.value()).toBe('Grace');
     expect(control.touched()).toBe(false);
-    expect(ngMocks.formatText(ngMocks.find('.input-value'))).toBe(
-      'Grace',
-    );
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Grace');
   });
 
-  it('feeds touched state back into the mock without changing the input value', () => {
+  it('feeds touched state back into the mock without changing the name', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const child = ngMocks.find(InputControl);
-    const control = ngMocks.get(child, InputControl);
+    const child = ngMocks.find(NameControl);
+    const control = ngMocks.get(child, NameControl);
 
     expect(control.touched()).toBe(false);
 
@@ -104,13 +102,11 @@ describe('TestSignalForms:model', () => {
     ngMocks.touch(child);
     fixture.detectChanges();
 
-    expect(component.model()).toEqual({ inputValue: 'Ada' });
-    expect(component.f.inputValue().dirty()).toBe(false);
-    expect(component.f.inputValue().touched()).toBe(true);
+    expect(component.model()).toEqual({ name: 'Ada' });
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(true);
     expect(control.value()).toBe('Ada');
     expect(control.touched()).toBe(true);
-    expect(ngMocks.formatText(ngMocks.find('.input-value'))).toBe(
-      'Ada',
-    );
+    expect(ngMocks.formatText(ngMocks.find('.name'))).toBe('Ada');
   });
 });

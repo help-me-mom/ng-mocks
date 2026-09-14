@@ -11,10 +11,10 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   selector: 'target-ng-submit-template-driven',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: `
-    <form (ngSubmit)="save(inputValue, $event)">
+    <form (ngSubmit)="save(value, $event)">
       <input
-        name="inputName"
-        [(ngModel)]="inputValue"
+        name="name"
+        [(ngModel)]="value"
         [ngModelOptions]="{ updateOn: 'submit' }"
       />
       <button type="submit" [disabled]="disabled">Save</button>
@@ -23,7 +23,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 })
 class TargetComponent {
   public disabled = false;
-  public inputValue = 'initial';
+  public value = 'initial';
 
   // The test replaces this application callback with a spy.
   public save: (value: string, event: Event) => void = () =>
@@ -59,13 +59,13 @@ describe('TestNgSubmit:template-driven', () => {
 
     // Read the initial value.
     expect(form.submitted).toBe(false);
-    expect(form.value).toEqual({ inputName: 'initial' });
+    expect(form.value).toEqual({ name: 'initial' });
 
     // Change the input. Its value stays pending until submission.
     ngMocks.change(input, 'updated');
 
-    expect(component.inputValue).toBe('initial');
-    expect(form.value).toEqual({ inputName: 'initial' });
+    expect(component.value).toBe('initial');
+    expect(form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
     // Submit the form.
@@ -75,8 +75,8 @@ describe('TestNgSubmit:template-driven', () => {
     // Assert the result.
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith('updated', event);
-    expect(component.inputValue).toBe('updated');
-    expect(form.value).toEqual({ inputName: 'updated' });
+    expect(component.value).toBe('updated');
+    expect(form.value).toEqual({ name: 'updated' });
     expect(form.submitted).toBe(true);
     expect(event.defaultPrevented).toBe(true);
   });
@@ -109,7 +109,7 @@ describe('TestNgSubmit:template-driven', () => {
         defaultPrevented: true,
       }),
     );
-    expect(form.value).toEqual({ inputName: 'updated' });
+    expect(form.value).toEqual({ name: 'updated' });
     expect(form.submitted).toBe(true);
   });
 
@@ -135,8 +135,8 @@ describe('TestNgSubmit:template-driven', () => {
     button.click();
 
     expect(save).not.toHaveBeenCalled();
-    expect(component.inputValue).toBe('initial');
-    expect(form.value).toEqual({ inputName: 'initial' });
+    expect(component.value).toBe('initial');
+    expect(form.value).toEqual({ name: 'initial' });
     expect(form.submitted).toBe(false);
   });
 });

@@ -37,10 +37,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target',
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-  template: '<cva [formControl]="inputValue"></cva>',
+  template: '<cva [formControl]="formControl"></cva>',
 })
 class TargetComponent {
-  public readonly inputValue = new FormControl();
+  public readonly formControl = new FormControl();
 
   public targetMockReactiveForms() {}
 }
@@ -75,20 +75,20 @@ describe('MockReactiveForms', () => {
     const mockControlEl = ngMocks.find(CvaComponent);
 
     // Read the initial value and the write received by the mock.
-    expect(component.inputValue.value).toBeNull();
+    expect(component.formControl.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
     // Change the value through the mocked control.
     ngMocks.change(mockControlEl, 'foo');
 
     // Assert the result.
-    expect(component.inputValue.value).toBe('foo');
+    expect(component.formControl.value).toBe('foo');
 
     // Change the parent value.
-    component.inputValue.setValue('bar');
+    component.formControl.setValue('bar');
 
     // Assert the value written to the mocked control.
-    expect(component.inputValue.value).toBe('bar');
+    expect(component.formControl.value).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
   });
 
@@ -97,14 +97,14 @@ describe('MockReactiveForms', () => {
     const component = fixture.point.componentInstance;
     const mockControlEl = ngMocks.find(CvaComponent);
 
-    expect(component.inputValue.touched).toBe(false);
-    expect(component.inputValue.pristine).toBe(true);
+    expect(component.formControl.touched).toBe(false);
+    expect(component.formControl.pristine).toBe(true);
 
     ngMocks.touch(mockControlEl);
 
-    expect(component.inputValue.touched).toBe(true);
-    expect(component.inputValue.pristine).toBe(true);
-    expect(component.inputValue.value).toBeNull();
+    expect(component.formControl.touched).toBe(true);
+    expect(component.formControl.pristine).toBe(true);
+    expect(component.formControl.value).toBeNull();
   });
 
   it('passes disabled state to the mock without changing its value or interaction state', () => {
@@ -121,26 +121,26 @@ describe('MockReactiveForms', () => {
       setDisabledState,
     );
 
-    expect(component.inputValue.enabled).toBe(true);
+    expect(component.formControl.enabled).toBe(true);
 
     // Disable the real control and observe the call to its mocked child.
-    component.inputValue.disable();
+    component.formControl.disable();
 
-    expect(component.inputValue.disabled).toBe(true);
+    expect(component.formControl.disabled).toBe(true);
     expect(setDisabledState).toHaveBeenCalledTimes(1);
     expect(setDisabledState).toHaveBeenCalledWith(true);
-    expect(component.inputValue.value).toBeNull();
-    expect(component.inputValue.pristine).toBe(true);
-    expect(component.inputValue.touched).toBe(false);
+    expect(component.formControl.value).toBeNull();
+    expect(component.formControl.pristine).toBe(true);
+    expect(component.formControl.touched).toBe(false);
 
     // Enabling the control also reaches the same child.
-    component.inputValue.enable();
+    component.formControl.enable();
 
-    expect(component.inputValue.enabled).toBe(true);
+    expect(component.formControl.enabled).toBe(true);
     expect(setDisabledState).toHaveBeenCalledTimes(2);
     expect(setDisabledState).toHaveBeenCalledWith(false);
-    expect(component.inputValue.value).toBeNull();
-    expect(component.inputValue.pristine).toBe(true);
-    expect(component.inputValue.touched).toBe(false);
+    expect(component.formControl.value).toBeNull();
+    expect(component.formControl.pristine).toBe(true);
+    expect(component.formControl.touched).toBe(false);
   });
 });

@@ -14,7 +14,7 @@ import {
 } from 'ng-mocks';
 
 @Component({
-  selector: 'input-control',
+  selector: 'name-control',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -52,10 +52,10 @@ class CvaComponent implements ControlValueAccessor {
 @Component({
   selector: 'target-signal-forms-cva',
   imports: [FormField, CvaComponent],
-  template: '<input-control [formField]="f.inputValue" />',
+  template: '<name-control [formField]="f.name" />',
 })
 class TargetComponent {
-  public readonly model = signal({ inputValue: 'Ada' });
+  public readonly model = signal({ name: 'Ada' });
   public readonly f = form(this.model);
 }
 
@@ -83,22 +83,22 @@ describe('TestSignalForms:cva', () => {
     const component = fixture.point.componentInstance;
     const child = ngMocks.find(CvaComponent);
 
-    expect(component.model()).toEqual({ inputValue: 'Ada' });
+    expect(component.model()).toEqual({ name: 'Ada' });
     expect(writeValue).toHaveBeenCalledWith('Ada');
 
     // A model update reaches the CVA on the next change-detection pass.
-    component.model.set({ inputValue: 'Grace' });
+    component.model.set({ name: 'Grace' });
     fixture.detectChanges();
 
     expect(writeValue).toHaveBeenCalledWith('Grace');
-    expect(component.f.inputValue().dirty()).toBe(false);
+    expect(component.f.name().dirty()).toBe(false);
 
     // The mock has no input to type into; simulate its registered CVA callback.
     ngMocks.change(child, 'Katherine');
 
-    expect(component.model()).toEqual({ inputValue: 'Katherine' });
-    expect(component.f.inputValue().dirty()).toBe(true);
-    expect(component.f.inputValue().touched()).toBe(false);
+    expect(component.model()).toEqual({ name: 'Katherine' });
+    expect(component.f.name().dirty()).toBe(true);
+    expect(component.f.name().touched()).toBe(false);
   });
 
   it('marks the field touched without changing its value or dirty state', () => {
@@ -106,13 +106,13 @@ describe('TestSignalForms:cva', () => {
     const component = fixture.point.componentInstance;
     const child = ngMocks.find(CvaComponent);
 
-    expect(component.f.inputValue().touched()).toBe(false);
+    expect(component.f.name().touched()).toBe(false);
 
     // Touch the mock through the callback registered by FormField.
     ngMocks.touch(child);
 
-    expect(component.f.inputValue().touched()).toBe(true);
-    expect(component.f.inputValue().dirty()).toBe(false);
-    expect(component.model()).toEqual({ inputValue: 'Ada' });
+    expect(component.f.name().touched()).toBe(true);
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.model()).toEqual({ name: 'Ada' });
   });
 });

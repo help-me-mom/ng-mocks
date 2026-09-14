@@ -11,7 +11,7 @@ the parent exchanges values with the mock.
 For native inputs, start with the [ngModel guide](/guides/ng-model.md) or
 [reactive forms guide](/guides/reactive-forms.md).
 
-This parent connects its `inputValue` to the `<cva>` child through
+This parent connects its `formControl` to the `<cva>` child through
 `[formControl]`. The child declaration below is reduced to its CVA contract because
 the test replaces its implementation with a mock.
 
@@ -27,10 +27,10 @@ import {
 @Component({
   selector: 'target',
   standalone: false,
-  template: '<cva [formControl]="inputValue"></cva>',
+  template: '<cva [formControl]="formControl"></cva>',
 })
 class TargetComponent {
-  public readonly inputValue = new FormControl();
+  public readonly formControl = new FormControl();
 }
 
 @Component({
@@ -101,26 +101,26 @@ const component = fixture.point.componentInstance;
 const mockControlEl = ngMocks.find(CvaComponent);
 
 // Read the value.
-expect(component.inputValue.value).toBeNull();
+expect(component.formControl.value).toBeNull();
 
 // Change the value.
 ngMocks.change(mockControlEl, 'foo');
 
 // Assert the result.
-expect(component.inputValue.value).toBe('foo');
+expect(component.formControl.value).toBe('foo');
 ```
 
 ## A child bound with ngModel {#caution-about-ngmodel}
 
-The same approach works with `ngModel`. In the parent, bind the child to an `inputValue`
+The same approach works with `ngModel`. In the parent, bind the child to a `value`
 property:
 
 ```html
-<cva name="inputName" [(ngModel)]="inputValue"></cva>
+<cva [(ngModel)]="value"></cva>
 ```
 
 ```ts
-public inputValue: string | null = null;
+public value: string | null = null;
 ```
 
 For this version, `ItsModule` imports `FormsModule` from `@angular/forms`, and the test
@@ -146,13 +146,13 @@ const component = fixture.point.componentInstance;
 const mockControlEl = ngMocks.find(CvaComponent);
 
 // Read the value.
-expect(component.inputValue).toBeNull();
+expect(component.value).toBeNull();
 
 // Change the value.
 ngMocks.change(mockControlEl, 'foo');
 
 // Assert the result.
-expect(component.inputValue).toBe('foo');
+expect(component.value).toBe('foo');
 ```
 
 ## A child bound with signal forms
@@ -160,17 +160,17 @@ expect(component.inputValue).toBe('foo');
 In Angular 21+, a standalone CVA child can also bind through `FormField`. Use the
 standalone `CvaComponent` from the
 [signal example source](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/cva.spec.ts),
-which selects `<input-control>`, with this parent. Import `signal` from `@angular/core`, and
+which selects `<name-control>`, with this parent. Import `signal` from `@angular/core`, and
 `form` and `FormField` from `@angular/forms/signals`:
 
 ```ts
 @Component({
   selector: 'target-signal-forms-cva',
   imports: [FormField, CvaComponent],
-  template: '<input-control [formField]="f.inputValue" />',
+  template: '<name-control [formField]="f.name" />',
 })
 class TargetComponent {
-  public readonly model = signal({ inputValue: 'Ada' });
+  public readonly model = signal({ name: 'Ada' });
   public readonly f = form(this.model);
 }
 ```
@@ -199,15 +199,15 @@ const component = fixture.point.componentInstance;
 const child = ngMocks.find(CvaComponent);
 
 // Read the value.
-expect(component.model()).toEqual({ inputValue: 'Ada' });
+expect(component.model()).toEqual({ name: 'Ada' });
 
 // Change the value.
 ngMocks.change(child, 'Katherine');
 
 // Assert the result.
-expect(component.model()).toEqual({ inputValue: 'Katherine' });
-expect(component.f.inputValue().dirty()).toBe(true);
-expect(component.f.inputValue().touched()).toBe(false);
+expect(component.model()).toEqual({ name: 'Katherine' });
+expect(component.f.name().dirty()).toBe(true);
+expect(component.f.name().touched()).toBe(false);
 ```
 
 ## Values written to the child {#advanced-example}
@@ -241,7 +241,7 @@ A reactive form update calls the mocked child's `writeValue`:
 
 ```ts
 // Change the parent value.
-component.inputValue.setValue('bar');
+component.formControl.setValue('bar');
 
 // Assert the value written to the child.
 expect(writeValue).toHaveBeenCalledWith('bar');
@@ -251,7 +251,7 @@ With `ngModel`, update the parent property, run change detection, and await stab
 
 ```ts
 // Change the parent value.
-component.inputValue = 'bar';
+component.value = 'bar';
 fixture.detectChanges();
 await fixture.whenStable();
 
@@ -269,7 +269,7 @@ Use [`ngMocks.touch`](/api/ngMocks/touch.md) when the test needs a touched contr
 ngMocks.touch(mockControlEl);
 
 // Assert the touched state.
-expect(component.inputValue.touched).toBe(true);
+expect(component.formControl.touched).toBe(true);
 ```
 
 ## Disabling the child
@@ -287,13 +287,13 @@ ngMocks.stubMember(
 );
 
 // Disable the parent control.
-component.inputValue.disable();
+component.formControl.disable();
 
 // Assert the state sent to the child.
 expect(setDisabledState).toHaveBeenCalledWith(true);
 
 // Enable it again.
-component.inputValue.enable();
+component.formControl.enable();
 
 // Assert the state sent to the child.
 expect(setDisabledState).toHaveBeenCalledWith(false);
@@ -346,10 +346,10 @@ import { MockBuilder, MockInstance, MockRender, ngMocks } from 'ng-mocks';
 @Component({
   selector: 'target',
   standalone: false,
-  template: '<cva [formControl]="inputValue"></cva>',
+  template: '<cva [formControl]="formControl"></cva>',
 })
 class TargetComponent {
-  public readonly inputValue = new FormControl();
+  public readonly formControl = new FormControl();
 }
 
 @Component({
@@ -398,20 +398,20 @@ describe('MockReactiveForms', () => {
     const mockControlEl = ngMocks.find(CvaComponent);
 
     // Read the value.
-    expect(component.inputValue.value).toBeNull();
+    expect(component.formControl.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
     // Change the value.
     ngMocks.change(mockControlEl, 'foo');
 
     // Assert the result.
-    expect(component.inputValue.value).toBe('foo');
+    expect(component.formControl.value).toBe('foo');
 
     // Change the parent value.
-    component.inputValue.setValue('bar');
+    component.formControl.setValue('bar');
 
     // Assert the value written to the child.
-    expect(component.inputValue.value).toBe('bar');
+    expect(component.formControl.value).toBe('bar');
     expect(writeValue).toHaveBeenCalledWith('bar');
   });
 });

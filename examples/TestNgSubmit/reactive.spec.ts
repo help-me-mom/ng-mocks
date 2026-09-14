@@ -18,9 +18,9 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
   template: `
     <form
       [formGroup]="form"
-      (ngSubmit)="save(form.controls.inputValue.value, $event)"
+      (ngSubmit)="save(form.controls.name.value, $event)"
     >
-      <input formControlName="inputValue" />
+      <input formControlName="name" />
       <button type="submit" [disabled]="disabled">Save</button>
     </form>
   `,
@@ -28,7 +28,7 @@ import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 class TargetComponent {
   public disabled = false;
   public readonly form = new FormGroup({
-    inputValue: new FormControl('initial', {
+    name: new FormControl('initial', {
       updateOn: 'submit',
     }),
   });
@@ -68,12 +68,12 @@ describe('TestNgSubmit:reactive', () => {
 
     // Read the initial value.
     expect(form.submitted).toBe(false);
-    expect(component.form.value).toEqual({ inputValue: 'initial' });
+    expect(component.form.value).toEqual({ name: 'initial' });
 
     // Change the input. Its value stays pending until submission.
     ngMocks.change(input, 'updated');
 
-    expect(component.form.value).toEqual({ inputValue: 'initial' });
+    expect(component.form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
     // Submit the form.
@@ -83,7 +83,7 @@ describe('TestNgSubmit:reactive', () => {
     // Assert the result.
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith('updated', event);
-    expect(component.form.value).toEqual({ inputValue: 'updated' });
+    expect(component.form.value).toEqual({ name: 'updated' });
     expect(form.submitted).toBe(true);
     expect(event.defaultPrevented).toBe(true);
   });
@@ -115,7 +115,7 @@ describe('TestNgSubmit:reactive', () => {
         defaultPrevented: true,
       }),
     );
-    expect(component.form.value).toEqual({ inputValue: 'updated' });
+    expect(component.form.value).toEqual({ name: 'updated' });
     expect(form.submitted).toBe(true);
   });
 
@@ -140,7 +140,7 @@ describe('TestNgSubmit:reactive', () => {
     button.click();
 
     expect(save).not.toHaveBeenCalled();
-    expect(component.form.value).toEqual({ inputValue: 'initial' });
+    expect(component.form.value).toEqual({ name: 'initial' });
     expect(form.submitted).toBe(false);
   });
 });
