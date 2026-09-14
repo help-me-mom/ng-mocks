@@ -115,6 +115,8 @@ const keys = [
   '_cvaOnChangeCb',
   '_cvaOnChangeClb',
   '_cvaOnChangeFn',
+
+  '_controlValueAccessorChangeFn',
 ];
 
 export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?: string): void => {
