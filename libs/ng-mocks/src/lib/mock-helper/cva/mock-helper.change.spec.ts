@@ -1,11 +1,147 @@
 import { Directive, InjectionToken, Input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { NgControl } from '@angular/forms';
 
 import { MockDirective } from '../../mock-directive/mock-directive';
 import { MockRender } from '../../mock-render/mock-render';
 import { ngMocks } from '../mock-helper';
 
 describe('mock-helper.change', () => {
+  it('writes before calling the registered CVA callback exactly once', () => {
+    const calls: string[] = [];
+    const accessor = {
+      writeValue: (value: string): void => {
+        calls.push(`write:${value}`);
+      },
+      _controlValueAccessorChangeFn: (value: string): void => {
+        calls.push(`change:${value}`);
+      },
+    };
+
+    @Directive({
+      selector: '[customControl]',
+      standalone: false,
+      providers: [
+        { provide: NgControl, useValue: { valueAccessor: accessor } },
+      ],
+    })
+    class ControlDirective {}
+
+    TestBed.configureTestingModule({
+      declarations: [ControlDirective],
+    });
+    MockRender('<div customControl></div>');
+
+    // This custom host has no native event handler to update the control.
+    ngMocks.change('[customControl]', 'updated');
+
+    expect(calls).toEqual(['write:updated', 'change:updated']);
+  });
+
+  it('preserves existing callback precedence when the new name also exists', () => {
+    const accessor = {
+      writeValue: jasmine.createSpy('writeValue'),
+      onChange: jasmine.createSpy('onChange'),
+      _controlValueAccessorChangeFn: jasmine.createSpy(
+        'registeredChange',
+      ),
+    };
+
+    @Directive({
+      selector: '[customControl]',
+      standalone: false,
+      providers: [
+        { provide: NgControl, useValue: { valueAccessor: accessor } },
+      ],
+    })
+    class ControlDirective {}
+
+    TestBed.configureTestingModule({
+      declarations: [ControlDirective],
+    });
+    MockRender('<div customControl></div>');
+
+    ngMocks.change('[customControl]', 'updated');
+
+    expect(accessor.writeValue).toHaveBeenCalledOnceWith('updated');
+    expect(accessor.onChange).toHaveBeenCalledOnceWith('updated');
+    expect(
+      accessor._controlValueAccessorChangeFn,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('respects explicit callback names without falling back on an invalid name', () => {
+    const accessor = {
+      writeValue: jasmine.createSpy('writeValue'),
+      customChange: jasmine.createSpy('customChange'),
+      _controlValueAccessorChangeFn: jasmine.createSpy(
+        'registeredChange',
+      ),
+    };
+
+    @Directive({
+      selector: '[customControl]',
+      standalone: false,
+      providers: [
+        { provide: NgControl, useValue: { valueAccessor: accessor } },
+      ],
+    })
+    class ControlDirective {}
+
+    TestBed.configureTestingModule({
+      declarations: [ControlDirective],
+    });
+    MockRender('<div customControl></div>');
+
+    ngMocks.change('[customControl]', 'updated', 'customChange');
+    expect(() =>
+      ngMocks.change('[customControl]', 'ignored', 'missingChange'),
+    ).toThrowError(/please ensure it has 'missingChange' method/);
+
+    expect(accessor.writeValue).toHaveBeenCalledOnceWith('updated');
+    expect(accessor.customChange).toHaveBeenCalledOnceWith('updated');
+    expect(
+      accessor._controlValueAccessorChangeFn,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('preserves native event dispatch when the accessor has the new callback name', () => {
+    const accessor = {
+      writeValue: jasmine.createSpy('writeValue'),
+      _controlValueAccessorChangeFn: jasmine.createSpy(
+        'registeredChange',
+      ),
+    };
+
+    @Directive({
+      selector: '[customControl]',
+      standalone: false,
+      providers: [
+        { provide: NgControl, useValue: { valueAccessor: accessor } },
+      ],
+    })
+    class ControlDirective {}
+
+    TestBed.configureTestingModule({
+      declarations: [ControlDirective],
+    });
+    MockRender(
+      '<input customControl (input)="change($event.target.value)" />',
+      {
+        change: accessor._controlValueAccessorChangeFn,
+      },
+    );
+
+    // The input event already notifies the CVA; do not call it a second time.
+    ngMocks.change('[customControl]', 'updated');
+
+    expect(ngMocks.find('input').nativeElement.value).toBe('updated');
+    expect(
+      accessor._controlValueAccessorChangeFn,
+    ).toHaveBeenCalledOnceWith('updated');
+    expect(accessor.writeValue).not.toHaveBeenCalled();
+  });
+
   it('rejects a template node without rendering or changing its content', () => {
     @Directive({ selector: '[nativeTemplate]', standalone: false })
     class TemplateDirective {}
