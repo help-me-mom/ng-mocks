@@ -13,11 +13,11 @@ export default <T = MockedFunction>(instance: any, override: any, style?: 'get' 
   // so in the end the function can be called, but it also has all desired properties.
   let correctInstance = instance;
   let applyOverrides = override;
-  const skipProps = ['__zone_symbol__unconfigurables'];
+  const skipProps: Array<string | symbol> = ['__zone_symbol__unconfigurables'];
   if (typeof override === 'function') {
     correctInstance = helperMockService.createClone(override);
     applyOverrides = instance;
-    skipProps.push(...Object.getOwnPropertyNames(correctInstance));
+    skipProps.push(...Object.getOwnPropertyNames(correctInstance), ...Object.getOwnPropertySymbols(correctInstance));
   }
 
   const keys = [

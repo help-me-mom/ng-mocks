@@ -81,8 +81,8 @@ describe('TestSignalForms:cva', () => {
     MockInstance(CvaComponent, 'writeValue', writeValue);
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const child = ngMocks.find(CvaComponent);
 
+    expect(component.model()).toEqual({ name: 'Ada' });
     expect(writeValue).toHaveBeenCalledWith('Ada');
 
     // A model update reaches the CVA on the next change-detection pass.
@@ -93,7 +93,7 @@ describe('TestSignalForms:cva', () => {
     expect(component.f.name().dirty()).toBe(false);
 
     // The mock has no input to type into; simulate its registered CVA callback.
-    ngMocks.change(child, 'Katherine');
+    ngMocks.change(CvaComponent, 'Katherine');
 
     expect(component.model()).toEqual({ name: 'Katherine' });
     expect(component.f.name().dirty()).toBe(true);
@@ -103,12 +103,11 @@ describe('TestSignalForms:cva', () => {
   it('marks the field touched without changing its value or dirty state', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
-    const child = ngMocks.find(CvaComponent);
 
     expect(component.f.name().touched()).toBe(false);
 
     // Touch the mock through the callback registered by FormField.
-    ngMocks.touch(child);
+    ngMocks.touch(CvaComponent);
 
     expect(component.f.name().touched()).toBe(true);
     expect(component.f.name().dirty()).toBe(false);

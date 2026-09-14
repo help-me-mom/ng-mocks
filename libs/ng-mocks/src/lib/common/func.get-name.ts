@@ -9,8 +9,17 @@ export default (value: any): string => {
     result = 'arrowFunction';
   } else if (typeof value === 'object' && value && value.ngMetadataName === 'InjectionToken') {
     result = value._desc;
-  } else if (typeof value === 'object' && value && typeof value.constructor === 'function') {
-    result = value.constructor.name;
+  } else if (typeof value === 'object' && value) {
+    let prototype = value;
+    while (prototype) {
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, 'constructor');
+      if (descriptor) {
+        const constructor: unknown = descriptor.value;
+        result = typeof constructor === 'function' ? constructor.name : undefined;
+        break;
+      }
+      prototype = Object.getPrototypeOf(prototype);
+    }
   }
 
   result ||= 'unknown';

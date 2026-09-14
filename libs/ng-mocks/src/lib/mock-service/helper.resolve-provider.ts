@@ -197,11 +197,9 @@ export default (provider: any, resolutions: CoreDefStack<any, any>, changed?: ()
 
     return provider;
   }
-  if (resolutions.has(provide)) {
-    return createFromResolution(provide, resolutions.get(provide));
-  }
+  const mockDef = resolutions.has(provide)
+    ? createFromResolution(provide, resolutions.get(provide))
+    : createMockProvider(provider, provide, change);
 
-  const mockDef = createMockProvider(provider, provide, change);
-
-  return multi && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
+  return multi && mockDef && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };

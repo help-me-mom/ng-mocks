@@ -45,6 +45,8 @@ Create and maintain a plain Markdown checklist:
 
 ## Published Snippet Cleanup
 
+- Preserve simple comments explaining what happens and why setup, timing, or assertions matter. Keep these
+  explanations in both the article and executable example; do not replace them with step labels alone.
 - Remove redundant `standalone: true` or `standalone: false`. Keep the flag when the chosen Angular version
   requires it or the article teaches it.
 - Remove compatibility casts, Angular version or compiler guards, and compatibility `TODO` comments.

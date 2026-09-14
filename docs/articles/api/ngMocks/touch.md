@@ -43,7 +43,7 @@ Profit!
 It can exercise a native blur handler, a CVA touch callback, or a signal control's touch output.
 For `FormValueControl` and `FormCheckboxControl`, the control must expose `touch` in Angular 22.
 Angular 21 uses the `touched` model's implicit `touchedChange` output instead.
-See the [Angular 22 example](/guides/signal-forms.md#test-a-form-with-a-mocked-signal-control)
+See the [Angular 22 example](/guides/mock/signal-form-controls.md#touch)
 for the `touch` output and resulting field state.
 
 For a real CVA with focus or blur handlers on the selected element, those handlers

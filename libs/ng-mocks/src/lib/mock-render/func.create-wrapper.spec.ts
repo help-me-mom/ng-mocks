@@ -1,7 +1,175 @@
+import { InjectionToken } from '@angular/core';
+
 import funcCreateWrapper from './func.create-wrapper';
 import funcInstallPropReader from './func.install-prop-reader';
 
 describe('funcCreateWrapper', () => {
+  it('separates providers from view providers in the wrapper cache', () => {
+    class TargetComponent {}
+
+    const token = new InjectionToken<string>('cache-provider');
+    const provider = { provide: token, useValue: 'value' };
+    const meta = { selector: 'target-14998-scopes' };
+    const providersWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      { providers: [provider], viewProviders: [] },
+    );
+    const viewProvidersWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      { providers: [], viewProviders: [provider] },
+    );
+
+    expect(viewProvidersWrapper).not.toBe(providersWrapper);
+  });
+
+  it('preserves boundaries between nonempty provider sections', () => {
+    class TargetComponent {}
+
+    const token = new InjectionToken<string>('cache-partition');
+    const first = { provide: token, useValue: 'first' };
+    const second = { provide: token, useValue: 'second' };
+    const third = { provide: token, useValue: 'third' };
+    const meta = { selector: 'target-14998-partition' };
+    const firstWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      { providers: [first], viewProviders: [second, third] },
+    );
+    const secondWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      { providers: [first, second], viewProviders: [third] },
+    );
+
+    expect(secondWrapper).not.toBe(firstWrapper);
+  });
+
+  it('reuses a wrapper for the same binding and provider entries in fresh arrays', () => {
+    class TargetComponent {}
+
+    const token = new InjectionToken<string>('cache-reuse');
+    const bindings = ['value'];
+    const providers = [{ provide: token, useValue: 'provider' }];
+    const viewProviders = [
+      { provide: token, useValue: 'view-provider' },
+    ];
+    const meta = {
+      inputs: ['value'],
+      selector: 'target-14998-reuse',
+    };
+    const firstWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      bindings,
+      { providers, viewProviders },
+    );
+    const secondWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [...bindings],
+      {
+        providers: [...providers],
+        viewProviders: [...viewProviders],
+      },
+    );
+
+    expect(secondWrapper).toBe(firstWrapper);
+  });
+
+  it('preserves provider identity and order in both cache sections', () => {
+    class TargetComponent {}
+
+    const token = new InjectionToken<string>('cache-identity');
+    const first = { provide: token, useValue: 'first' };
+    const second = { provide: token, useValue: 'second' };
+    const meta = { selector: 'target-14998-identity' };
+    const wrapper = funcCreateWrapper(TargetComponent, meta, [], {
+      providers: [first, second],
+      viewProviders: [first, second],
+    });
+    const providerIdentity = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      {
+        providers: [{ ...first }, second],
+        viewProviders: [first, second],
+      },
+    );
+    const viewProviderIdentity = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      {
+        providers: [first, second],
+        viewProviders: [{ ...first }, second],
+      },
+    );
+    const providerOrder = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      {
+        providers: [second, first],
+        viewProviders: [first, second],
+      },
+    );
+    const viewProviderOrder = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      {
+        providers: [first, second],
+        viewProviders: [second, first],
+      },
+    );
+
+    expect(providerIdentity).not.toBe(wrapper);
+    expect(viewProviderIdentity).not.toBe(wrapper);
+    expect(providerOrder).not.toBe(wrapper);
+    expect(viewProviderOrder).not.toBe(wrapper);
+  });
+
+  it('keeps default binding markers separate from empty provider sections', () => {
+    class TargetComponent {}
+
+    const meta = {
+      inputs: ['value'],
+      selector: 'target-14998-defaults',
+    };
+    const DefaultWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      undefined,
+      { providers: [], viewProviders: [] },
+    );
+    const nullWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      null,
+      { providers: [], viewProviders: [] },
+    );
+    const EmptyWrapper = funcCreateWrapper(
+      TargetComponent,
+      meta,
+      [],
+      { viewProviders: [] },
+    );
+    const defaults: { value?: string | null } = new DefaultWrapper();
+    const empty: { value?: string | null } = new EmptyWrapper();
+
+    expect(nullWrapper).toBe(DefaultWrapper);
+    expect(EmptyWrapper).not.toBe(DefaultWrapper);
+    expect(defaults.value).toBeNull();
+    expect(empty.value).toBeUndefined();
+  });
+
   it('uses signal defaults until the wrapper input is changed', () => {
     class TargetComponent {}
 

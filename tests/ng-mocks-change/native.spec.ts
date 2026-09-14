@@ -37,7 +37,7 @@ describe('ng-mocks-change:native', () => {
     TestBed.configureTestingModule({ imports: [TargetModule] }),
   );
 
-  it('updates a classic checkbox through checked without changing other controls', () => {
+  it('preserves nonboolean checkbox truthiness without changing other controls', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     const input =
@@ -47,12 +47,12 @@ describe('ng-mocks-change:native', () => {
       value => values.push(value),
     );
 
-    ngMocks.change('#checkbox', true);
+    ngMocks.change('#checkbox', 'different');
     expect(component.enabled.value).toBe(true);
     expect(input.checked).toBe(true);
     expect(input.value).toBe('on');
 
-    ngMocks.change('#checkbox', false);
+    ngMocks.change('#checkbox', '');
     subscription.unsubscribe();
 
     expect(component.enabled.value).toBe(false);
@@ -63,6 +63,28 @@ describe('ng-mocks-change:native', () => {
     expect(component.amount.value).toBe(1);
     expect(component.amount.dirty).toBe(false);
     expect(component.amount.touched).toBe(false);
+  });
+
+  it('uses boolean checked states without replacing the checkbox option value', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const input =
+      ngMocks.find<HTMLInputElement>('#checkbox').nativeElement;
+
+    expect(input.checked).toBe(false);
+
+    ngMocks.change('#checkbox', true);
+
+    expect(component.enabled.value).toBe(true);
+    expect(input.checked).toBe(true);
+    expect(input.value).toBe('on');
+
+    ngMocks.change('#checkbox', false);
+
+    expect(component.enabled.value).toBe(false);
+    expect(input.checked).toBe(false);
+    expect(input.value).toBe('on');
+    expect(component.amount.value).toBe(1);
   });
 
   it('keeps numeric CVA parsing and the native value in sync', () => {

@@ -10,6 +10,7 @@ import { MockBuilder, MockRenderFactory, ngMocks } from 'ng-mocks';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
+  host: { 'data-strategy': 'override-default' },
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })
@@ -19,6 +20,7 @@ class DefaultComponent {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { 'data-strategy': 'override-on-push' },
   ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
   template: '{{ items.length }}',
 })
@@ -34,6 +36,8 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14915
 describe('issue-14915:overrides', () => {
+  ngMocks.throwOnConsole();
+
   // Angular 9-11 share the spread corpus with View Engine, which has no Ivy
   // definitions. Compiled Ivy targets execute both definition-refresh cases.
   if (
