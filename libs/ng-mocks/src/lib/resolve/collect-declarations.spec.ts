@@ -542,10 +542,6 @@ describe('collect-declarations', () => {
     };
     expect(() => collectDeclarations(def)).toThrow();
 
-    // A previous throw must not leave `def` marked as parsed without its
-    // declarations: that would make this retry silently fall back to
-    // Object.prototype's own (unrelated) cached declarations instead of
-    // actually parsing `def`.
     global.__ngMocksReflectComponentType = false;
     const actual = collectDeclarations(def);
     expect(actual.inputs).toEqual(['value']);
