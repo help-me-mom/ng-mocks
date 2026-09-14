@@ -11,6 +11,7 @@ import funcParseFindArgsName from '../func.parse-find-args-name';
 
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
+import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
 
 // default html behavior
 const triggerTouch = (el: DebugElement): void => {
@@ -74,7 +75,8 @@ export default (sel: Type<any> | DebugElement | DebugNodeSelector, methodName?: 
     throw new Error(`Cannot find an element via ngMocks.touch(${funcParseFindArgsName(sel)})`);
   }
 
-  let valueAccessor = funcGetVca(el, true);
+  let valueAccessor = funcGetVca(el, true, '__simulateTouch');
+  let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);
     if (modelControl?.touch) {
@@ -82,9 +84,10 @@ export default (sel: Type<any> | DebugElement | DebugNodeSelector, methodName?: 
 
       return;
     }
-    valueAccessor = funcGetVca(el, hasListener(el)) || {};
+    nativeControl = funcHasMockNativeAccessor(el);
+    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl, '__simulateTouch') || {};
   }
-  if (handleKnown(valueAccessor) || hasListener(el)) {
+  if (handleKnown(valueAccessor) || hasListener(el) || nativeControl) {
     triggerTouch(el);
 
     return;

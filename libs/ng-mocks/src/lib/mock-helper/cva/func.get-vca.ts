@@ -2,6 +2,8 @@ import { DebugNode } from '@angular/core';
 
 import coreForm from '../../common/core.form';
 import coreInjector from '../../common/core.injector';
+import { MockControlValueAccessor } from '../../common/mock-control-value-accessor';
+import { MockControlValueAccessorProxy } from '../../common/mock-control-value-accessor-proxy';
 
 const message = [
   'Cannot find ControlValueAccessor on the element.',
@@ -11,11 +13,18 @@ const message = [
   'because this tests ReactiveFormsModule instead of own implementation.',
 ].join(' ');
 
-export default (el: DebugNode, optional = false): Record<keyof any, any> | undefined => {
+const isUsable = (accessor: unknown, operation?: keyof MockControlValueAccessor): boolean =>
+  !operation || !(accessor instanceof MockControlValueAccessorProxy) || accessor.isRegistered(operation);
+
+export default (
+  el: DebugNode,
+  optional = false,
+  operation?: keyof MockControlValueAccessor,
+): Record<keyof any, any> | undefined => {
   const ngControl =
     coreForm && el.providerTokens.indexOf(coreForm.NgControl) !== -1 && coreInjector(coreForm.NgControl, el.injector);
   const valueAccessor = ngControl?.valueAccessor;
-  if (valueAccessor) {
+  if (valueAccessor && isUsable(valueAccessor, operation)) {
     return valueAccessor;
   }
 
@@ -31,11 +40,12 @@ export default (el: DebugNode, optional = false): Record<keyof any, any> | undef
 
   const ngModel =
     coreForm && el.providerTokens.indexOf(coreForm.NgModel) !== -1 && coreInjector(coreForm.NgModel, el.injector);
-  if (ngModel) {
+  if (ngModel && operation !== '__simulateTouch') {
     return ngModel;
   }
 
   const valueAccessors =
+    !valueAccessor &&
     coreForm &&
     ngControl &&
     el.providerTokens.indexOf(coreForm.NG_VALUE_ACCESSOR) !== -1 &&
@@ -43,7 +53,13 @@ export default (el: DebugNode, optional = false): Record<keyof any, any> | undef
   if (valueAccessors?.length) {
     // Match signal forms: Angular 22 selects custom/built-in/default accessors,
     // while Angular 21 uses the first provider.
-    return coreForm.selectValueAccessor ? coreForm.selectValueAccessor(ngControl, valueAccessors) : valueAccessors[0];
+    // Select before checking registration so invalid candidate combinations still fail.
+    const selected = coreForm.selectValueAccessor
+      ? coreForm.selectValueAccessor(ngControl, valueAccessors)
+      : valueAccessors[0];
+    if (isUsable(selected, operation)) {
+      return selected;
+    }
   }
 
   if (optional) {
